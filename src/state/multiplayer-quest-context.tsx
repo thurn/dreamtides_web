@@ -78,6 +78,15 @@ import {
   transfigurationEffectDetails,
 } from "../transfiguration/transfiguration-logic";
 import type { CardData } from "../types/cards";
+import {
+  resolveMerchantDecline,
+  resolveMerchantOffer,
+} from "../journey_v2";
+import type {
+  MerchantAcceptRequest,
+  MerchantApplyPayload,
+  MerchantDeclineRequest,
+} from "../journey_v2";
 
 export interface MultiplayerQuestProviderProps {
   children: ReactNode;
@@ -369,6 +378,72 @@ function findSite(state: QuestState, siteId: string): SiteState | null {
     }
   }
   return null;
+}
+
+function merchantRequestSummary(
+  siteId: string,
+  request: MerchantAcceptRequest | MerchantDeclineRequest,
+): Record<string, unknown> {
+  return {
+    siteId,
+    offerId: request.offerId,
+    builderId: request.rewardBuilderId ?? null,
+    needId: request.needId ?? null,
+    price:
+      "expectedPrice" in request ? request.expectedPrice : null,
+    choiceId: request.choice?.choiceId ?? null,
+  };
+}
+
+function merchantPayloadSummary(
+  payload: MerchantApplyPayload,
+): Record<string, unknown> {
+  const cardUuids = new Set<string>();
+  const cardNumbers = new Set<number>();
+  const entryIds = new Set<string>();
+  const dreamsignIds = new Set<string>();
+  const payloadKinds: string[] = [];
+
+  const collect = (current: MerchantApplyPayload): void => {
+    payloadKinds.push(current.kind);
+    switch (current.kind) {
+      case "add_catalog_card":
+        cardUuids.add(current.cardUuid);
+        cardNumbers.add(current.cardNumber);
+        break;
+      case "add_dreamsign":
+        dreamsignIds.add(current.dreamsignId);
+        break;
+      case "transfigure_deck_entry":
+      case "duplicate_deck_entry":
+      case "remove_deck_entry":
+      case "change_deck_entry_keywords":
+      case "change_deck_entry_type":
+        cardUuids.add(current.cardUuid);
+        cardNumbers.add(current.cardNumber);
+        entryIds.add(current.entryId);
+        break;
+      case "change_essence":
+        break;
+      case "change_max_essence":
+        break;
+      case "composite":
+        for (const child of current.children) {
+          collect(child);
+        }
+        break;
+    }
+  };
+
+  collect(payload);
+  return {
+    payloadKind: payload.kind,
+    payloadKinds,
+    cardUuids: [...cardUuids],
+    cardNumbers: [...cardNumbers],
+    entryIds: [...entryIds],
+    dreamsignIds: [...dreamsignIds],
+  };
 }
 
 function shuffled<T>(items: readonly T[]): T[] {
@@ -2836,6 +2911,194 @@ export function MultiplayerQuestProvider({
     });
   }, []);
 
+  const acceptDreamMerchantOffer = useCallback(
+    (siteId: string, request: MerchantAcceptRequest) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+
+          const site = findSite(room.questState, siteId);
+          if (site === null) {
+            return {
+              ...room,
+              metadata: {
+                ...room.metadata,
+                updatedAt: now,
+              },
+              actionLog: {
+                ...(room.actionLog ?? {}),
+                [actionId]: buildActionLogEntry({
+                  timestamp: now,
+                  actorId: current.session.clientId,
+                  action: "merchant_offer_validation_failed",
+                  source: "dream_merchant",
+                  summary: {
+                    ...merchantRequestSummary(siteId, request),
+                    reason: "site_unavailable",
+                  },
+                }),
+              },
+            };
+          }
+
+          const result = resolveMerchantOffer({
+            state: room.questState,
+            questContent: current.questContent,
+            site,
+            request,
+          });
+
+          if (!result.ok) {
+            return {
+              ...room,
+              metadata: {
+                ...room.metadata,
+                updatedAt: now,
+              },
+              actionLog: {
+                ...(room.actionLog ?? {}),
+                [actionId]: buildActionLogEntry({
+                  timestamp: now,
+                  actorId: current.session.clientId,
+                  action: "merchant_offer_validation_failed",
+                  source: "dream_merchant",
+                  summary: {
+                    ...merchantRequestSummary(siteId, request),
+                    reason: result.reason,
+                  },
+                }),
+              },
+            };
+          }
+
+          return {
+            ...room,
+            questState: result.state,
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "merchant_offer_accepted",
+                source: "dream_merchant",
+                summary: {
+                  ...merchantRequestSummary(siteId, request),
+                  builderId: result.offer.rewardBuilderId,
+                  needId: result.offer.needId,
+                  price: result.offer.price,
+                  ...merchantPayloadSummary(result.appliedPayload),
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
+  const declineDreamMerchant = useCallback(
+    (siteId: string, request: MerchantDeclineRequest) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+
+          const site = findSite(room.questState, siteId);
+          if (site === null) {
+            return {
+              ...room,
+              metadata: {
+                ...room.metadata,
+                updatedAt: now,
+              },
+              actionLog: {
+                ...(room.actionLog ?? {}),
+                [actionId]: buildActionLogEntry({
+                  timestamp: now,
+                  actorId: current.session.clientId,
+                  action: "merchant_offer_validation_failed",
+                  source: "dream_merchant",
+                  summary: {
+                    ...merchantRequestSummary(siteId, request),
+                    reason: "site_unavailable",
+                  },
+                }),
+              },
+            };
+          }
+
+          const result = resolveMerchantDecline({
+            state: room.questState,
+            questContent: current.questContent,
+            site,
+            request,
+          });
+
+          if (!result.ok) {
+            return {
+              ...room,
+              metadata: {
+                ...room.metadata,
+                updatedAt: now,
+              },
+              actionLog: {
+                ...(room.actionLog ?? {}),
+                [actionId]: buildActionLogEntry({
+                  timestamp: now,
+                  actorId: current.session.clientId,
+                  action: "merchant_offer_validation_failed",
+                  source: "dream_merchant",
+                  summary: {
+                    ...merchantRequestSummary(siteId, request),
+                    reason: result.reason,
+                  },
+                }),
+              },
+            };
+          }
+
+          return {
+            ...room,
+            questState: result.state,
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "merchant_offer_declined",
+                source: "dream_merchant",
+                summary: merchantRequestSummary(siteId, request),
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
   const changeOmens = useCallback((delta: number, source: string) => {
     const current = currentRef.current;
     const now = new Date().toISOString();
@@ -3937,6 +4200,8 @@ export function MultiplayerQuestProvider({
       acceptTransfigurationChoice,
       acceptDuplicationChoice,
       completeDreamJourneySite,
+      acceptDreamMerchantOffer,
+      declineDreamMerchant,
       pickDraftCard,
       addCard,
       addBaneCard: (_cardNumber: number, _source: string) => {
@@ -4015,6 +4280,8 @@ export function MultiplayerQuestProvider({
       acceptTransfigurationChoice,
       acceptDuplicationChoice,
       completeDreamJourneySite,
+      acceptDreamMerchantOffer,
+      declineDreamMerchant,
       ensureShopRuntime,
       grantFreeShopRerolls,
       grantShopOmenDiscounts,

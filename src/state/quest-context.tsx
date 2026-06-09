@@ -74,6 +74,15 @@ import {
   assignTransfiguration,
   transfigurationEffectDetails,
 } from "../transfiguration/transfiguration-logic";
+import {
+  resolveMerchantDecline,
+  resolveMerchantOffer,
+} from "../journey_v2";
+import type {
+  MerchantAcceptRequest,
+  MerchantApplyPayload,
+  MerchantDeclineRequest,
+} from "../journey_v2";
 
 export { deriveEntryIdCounter };
 
@@ -140,6 +149,14 @@ export interface QuestMutations {
    * visit-tracking bookkeeping.
    */
   completeDreamJourneySite: (siteId: string) => void;
+  acceptDreamMerchantOffer?: (
+    siteId: string,
+    request: MerchantAcceptRequest,
+  ) => void;
+  declineDreamMerchant?: (
+    siteId: string,
+    request: MerchantDeclineRequest,
+  ) => void;
   pickDraftCard: (siteId: string, cardNumber: number) => void;
   addCard: (cardNumber: number, source: string) => void;
   addBaneCard: (cardNumber: number, source: string) => void;
@@ -383,6 +400,72 @@ function findSite(state: QuestState, siteId: string): SiteState | null {
     }
   }
   return null;
+}
+
+function merchantRequestLogFields(
+  siteId: string,
+  request: MerchantAcceptRequest | MerchantDeclineRequest,
+): Record<string, unknown> {
+  return {
+    siteId,
+    offerId: request.offerId,
+    builderId: request.rewardBuilderId ?? null,
+    needId: request.needId ?? null,
+    price:
+      "expectedPrice" in request ? request.expectedPrice : null,
+    choiceId: request.choice?.choiceId ?? null,
+  };
+}
+
+function merchantPayloadLogFields(
+  payload: MerchantApplyPayload,
+): Record<string, unknown> {
+  const cardUuids = new Set<string>();
+  const cardNumbers = new Set<number>();
+  const entryIds = new Set<string>();
+  const dreamsignIds = new Set<string>();
+  const payloadKinds: string[] = [];
+
+  const collect = (current: MerchantApplyPayload): void => {
+    payloadKinds.push(current.kind);
+    switch (current.kind) {
+      case "add_catalog_card":
+        cardUuids.add(current.cardUuid);
+        cardNumbers.add(current.cardNumber);
+        break;
+      case "add_dreamsign":
+        dreamsignIds.add(current.dreamsignId);
+        break;
+      case "transfigure_deck_entry":
+      case "duplicate_deck_entry":
+      case "remove_deck_entry":
+      case "change_deck_entry_keywords":
+      case "change_deck_entry_type":
+        cardUuids.add(current.cardUuid);
+        cardNumbers.add(current.cardNumber);
+        entryIds.add(current.entryId);
+        break;
+      case "change_essence":
+        break;
+      case "change_max_essence":
+        break;
+      case "composite":
+        for (const child of current.children) {
+          collect(child);
+        }
+        break;
+    }
+  };
+
+  collect(payload);
+  return {
+    payloadKind: payload.kind,
+    payloadKinds,
+    cardUuids: [...cardUuids],
+    cardNumbers: [...cardNumbers],
+    entryIds: [...entryIds],
+    dreamsignIds: [...dreamsignIds],
+  };
 }
 
 function shuffled<T>(items: readonly T[]): T[] {
@@ -1725,6 +1808,81 @@ export function QuestProvider({
     });
   }, []);
 
+  const acceptDreamMerchantOffer = useCallback(
+    (siteId: string, request: MerchantAcceptRequest) => {
+      setState((prev) => {
+        const site = findSite(prev, siteId);
+        if (site === null) {
+          logEvent("merchant_offer_validation_failed", {
+            ...merchantRequestLogFields(siteId, request),
+            reason: "site_unavailable",
+          });
+          return prev;
+        }
+
+        const result = resolveMerchantOffer({
+          state: prev,
+          questContent,
+          site,
+          request,
+        });
+        if (!result.ok) {
+          logEvent("merchant_offer_validation_failed", {
+            ...merchantRequestLogFields(siteId, request),
+            reason: result.reason,
+          });
+          return prev;
+        }
+
+        logEvent("merchant_offer_accepted", {
+          ...merchantRequestLogFields(siteId, request),
+          builderId: result.offer.rewardBuilderId,
+          needId: result.offer.needId,
+          price: result.offer.price,
+          ...merchantPayloadLogFields(result.appliedPayload),
+        });
+        entryIdCounter.current = deriveEntryIdCounter(result.state.deck);
+        return result.state;
+      });
+    },
+    [questContent],
+  );
+
+  const declineDreamMerchant = useCallback(
+    (siteId: string, request: MerchantDeclineRequest) => {
+      setState((prev) => {
+        const site = findSite(prev, siteId);
+        if (site === null) {
+          logEvent("merchant_offer_validation_failed", {
+            ...merchantRequestLogFields(siteId, request),
+            reason: "site_unavailable",
+          });
+          return prev;
+        }
+
+        const result = resolveMerchantDecline({
+          state: prev,
+          questContent,
+          site,
+          request,
+        });
+        if (!result.ok) {
+          logEvent("merchant_offer_validation_failed", {
+            ...merchantRequestLogFields(siteId, request),
+            reason: result.reason,
+          });
+          return prev;
+        }
+
+        logEvent("merchant_offer_declined", {
+          ...merchantRequestLogFields(siteId, request),
+        });
+        return result.state;
+      });
+    },
+    [questContent],
+  );
+
   const pickDraftCard = useCallback(
     (_siteId: string, _cardNumber: number) => {
       throw new Error(
@@ -2884,6 +3042,8 @@ export function QuestProvider({
       acceptTransfigurationChoice,
       acceptDuplicationChoice,
       completeDreamJourneySite,
+      acceptDreamMerchantOffer,
+      declineDreamMerchant,
       pickDraftCard,
       addCard,
       addBaneCard,
@@ -2945,6 +3105,8 @@ export function QuestProvider({
       acceptTransfigurationChoice,
       acceptDuplicationChoice,
       completeDreamJourneySite,
+      acceptDreamMerchantOffer,
+      declineDreamMerchant,
       pickDraftCard,
       addCard,
       addBaneCard,

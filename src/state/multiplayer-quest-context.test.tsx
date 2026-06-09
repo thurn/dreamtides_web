@@ -9,6 +9,23 @@ import type { MultiplayerRoom, RoomSession } from "../multiplayer/room-types";
 import type { CardData } from "../types/cards";
 import type { DreamcallerContent, DreamsignTemplate } from "../types/content";
 import type { CardTypeChange, Dreamsign, QuestState, SiteState } from "../types/quest";
+import {
+  buildMerchantContext,
+  generateMerchantEncounter,
+} from "../journey_v2";
+import {
+  makeMerchantTestCard,
+  makeMerchantTestContent,
+  makeMerchantTestDeckEntry,
+  makeMerchantTestQuestState,
+  makeMerchantTestSite,
+} from "../journey_v2/testing/fixtures";
+import type {
+  MerchantAcceptRequest,
+  MerchantApplyPayload,
+  MerchantDeclineRequest,
+  MerchantOffer,
+} from "../journey_v2";
 import { makeTestPoolContext } from "../__test-helpers__/pool-context";
 import { useQuest, type QuestContextValue } from "./quest-context";
 import { createDefaultState } from "./quest-context";
@@ -218,6 +235,212 @@ function makeSite(
     isEnhanced: false,
     isVisited,
   };
+}
+
+const MERCHANT_UUIDS = {
+  deckHighEvent: "82000000-0000-4000-8000-000000000001",
+  deckHighCharacter: "82000000-0000-4000-8000-000000000002",
+  deckFillerA: "82000000-0000-4000-8000-000000000003",
+  deckFillerB: "82000000-0000-4000-8000-000000000004",
+  deckFillerC: "82000000-0000-4000-8000-000000000005",
+  deckFillerD: "82000000-0000-4000-8000-000000000006",
+  drawA: "82000000-0000-4000-8000-000000000101",
+  drawB: "82000000-0000-4000-8000-000000000102",
+  drawC: "82000000-0000-4000-8000-000000000103",
+  recursionA: "82000000-0000-4000-8000-000000000201",
+  recursionB: "82000000-0000-4000-8000-000000000202",
+  interactionA: "82000000-0000-4000-8000-000000000301",
+  interactionB: "82000000-0000-4000-8000-000000000302",
+  earlyA: "82000000-0000-4000-8000-000000000401",
+  earlyB: "82000000-0000-4000-8000-000000000402",
+} as const;
+
+function makeMerchantCard(
+  id: string,
+  cardNumber: number,
+  overrides: Partial<CardData> = {},
+): CardData {
+  return makeMerchantTestCard({
+    id,
+    cardNumber,
+    name: `Merchant Fixture ${String(cardNumber)}`,
+    cardType: "Character",
+    energyCost: 2,
+    spark: 1,
+    renderedText: "",
+    ...overrides,
+  });
+}
+
+function merchantFixtureCards(): CardData[] {
+  return [
+    makeMerchantCard(MERCHANT_UUIDS.deckHighEvent, 1, {
+      cardType: "Event",
+      energyCost: 5,
+      spark: null,
+      renderedText: "Fast.",
+    }),
+    makeMerchantCard(MERCHANT_UUIDS.deckHighCharacter, 2, {
+      energyCost: 5,
+      spark: 4,
+    }),
+    makeMerchantCard(MERCHANT_UUIDS.deckFillerA, 3, { energyCost: 4 }),
+    makeMerchantCard(MERCHANT_UUIDS.deckFillerB, 4, { energyCost: 4 }),
+    makeMerchantCard(MERCHANT_UUIDS.deckFillerC, 5, { energyCost: 3 }),
+    makeMerchantCard(MERCHANT_UUIDS.deckFillerD, 6, { energyCost: 3 }),
+    makeMerchantCard(MERCHANT_UUIDS.drawA, 101, {
+      renderedText: "Draw a card.",
+    }),
+    makeMerchantCard(MERCHANT_UUIDS.drawB, 102, {
+      renderedText: "Draw two cards.",
+    }),
+    makeMerchantCard(MERCHANT_UUIDS.drawC, 103, {
+      renderedText: "When this enters, draw a card.",
+    }),
+    makeMerchantCard(MERCHANT_UUIDS.recursionA, 201, {
+      renderedText: "Reclaim 1.",
+    }),
+    makeMerchantCard(MERCHANT_UUIDS.recursionB, 202, {
+      renderedText: "Return a card from your void to your hand.",
+    }),
+    makeMerchantCard(MERCHANT_UUIDS.interactionA, 301, {
+      renderedText: "Banish an enemy.",
+    }),
+    makeMerchantCard(MERCHANT_UUIDS.interactionB, 302, {
+      renderedText: "Prevent the next damage.",
+    }),
+    makeMerchantCard(MERCHANT_UUIDS.earlyA, 401, { energyCost: 1 }),
+    makeMerchantCard(MERCHANT_UUIDS.earlyB, 402, { energyCost: 1 }),
+  ];
+}
+
+function makeMerchantProviderFixture(): {
+  state: QuestState;
+  questContent: QuestContent;
+  site: SiteState;
+} {
+  const site = makeMerchantTestSite({
+    id: "site-merchant-provider",
+    type: "DreamJourney",
+  });
+  const state = makeMerchantTestQuestState({
+    seed: "merchant-provider-seed",
+    essence: 240,
+    essenceCap: 360,
+    currentDreamscape: "dreamscape-a",
+    screen: { type: "site", siteId: site.id },
+    activeSiteId: site.id,
+    deck: [1, 2, 3, 4, 5, 6].map((cardNumber, index) =>
+      makeMerchantTestDeckEntry({
+        entryId: `deck-${String(index + 1)}`,
+        cardNumber,
+      }),
+    ),
+    atlas: {
+      nodes: {
+        "dreamscape-a": {
+          id: "dreamscape-a",
+          biomeName: "Fixture",
+          biomeColor: "#123456",
+          sites: [site],
+          position: { x: 0, y: 0 },
+          status: "available",
+          enhancedSiteType: null,
+        },
+      },
+      edges: [],
+      startingNodeId: "dreamscape-a",
+    },
+  });
+  const questContent = makeMerchantTestContent({
+    cards: merchantFixtureCards(),
+  });
+  return { state, questContent, site };
+}
+
+function merchantEncounterFor(fixture: {
+  state: QuestState;
+  questContent: QuestContent;
+  site: SiteState;
+}) {
+  return generateMerchantEncounter(
+    buildMerchantContext({
+      questState: fixture.state,
+      questContent: fixture.questContent,
+      site: fixture.site,
+    }),
+  );
+}
+
+function merchantAcceptRequestFor(offer: MerchantOffer): MerchantAcceptRequest {
+  return {
+    encounterSignature: offer.encounterSignature,
+    offerId: offer.offerId,
+    expectedPrice: offer.price,
+    rewardBuilderId: offer.rewardBuilderId,
+    needId: offer.needId,
+  };
+}
+
+function merchantDeclineRequestFor(offer: MerchantOffer): MerchantDeclineRequest {
+  return {
+    encounterSignature: offer.encounterSignature,
+    offerId: offer.offerId,
+    needId: offer.needId,
+    rewardBuilderId: offer.rewardBuilderId,
+  };
+}
+
+function requireMerchantOffer(
+  offers: readonly MerchantOffer[],
+  predicate: (offer: MerchantOffer) => boolean,
+): MerchantOffer {
+  const offer = offers.find(predicate);
+  if (offer === undefined) throw new Error("Expected merchant offer");
+  return offer;
+}
+
+function merchantPayloadApplied(
+  before: QuestState,
+  after: QuestState,
+  payload: MerchantApplyPayload,
+): boolean {
+  switch (payload.kind) {
+    case "add_catalog_card":
+      return after.deck.some((entry) => entry.cardNumber === payload.cardNumber);
+    case "add_dreamsign":
+      return after.dreamsigns.some((dreamsign) => dreamsign.id === payload.dreamsignId);
+    case "transfigure_deck_entry":
+      return after.deck.some(
+        (entry) =>
+          entry.entryId === payload.entryId &&
+          entry.transfiguration === payload.transfiguration,
+      );
+    case "duplicate_deck_entry":
+      return after.deck.length === before.deck.length + 1;
+    case "remove_deck_entry":
+      return after.deck.every((entry) => entry.entryId !== payload.entryId);
+    case "change_deck_entry_keywords":
+      return after.deck.some(
+        (entry) =>
+          entry.entryId === payload.entryId &&
+          entry.keywordModification !== before.deck.find(
+            (oldEntry) => oldEntry.entryId === payload.entryId,
+          )?.keywordModification,
+      );
+    case "change_deck_entry_type":
+      return after.deck.some(
+        (entry) =>
+          entry.entryId === payload.entryId && entry.typeChange === payload.typeChange,
+      );
+    case "change_essence":
+    case "change_max_essence":
+      return after.essence !== before.essence || after.essenceCap !== before.essenceCap;
+    case "composite":
+      return payload.children.some((child) =>
+        merchantPayloadApplied(before, after, child),
+      );
+  }
 }
 
 function Probe() {
@@ -2371,6 +2594,162 @@ describe("MultiplayerQuestProvider", () => {
 
     expect(roomServiceMocks.runRoomTransaction).not.toHaveBeenCalled();
     expect(randomUUIDMock).not.toHaveBeenCalled();
+  });
+
+  it("accepts a Dream Merchant offer through one atomic room transaction", () => {
+    const captured: QuestContextValue[] = [];
+    const fixture = makeMerchantProviderFixture();
+    const offer = requireMerchantOffer(
+      merchantEncounterFor(fixture).offers,
+      (candidate) =>
+        candidate.reward.applyPayload !== undefined && !candidate.locked,
+    );
+    if (offer.reward.applyPayload === undefined) {
+      throw new Error("Expected direct merchant payload");
+    }
+    const session = makeSession(fixture.state);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={fixture.questContent}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.acceptDreamMerchantOffer!(
+      fixture.site.id,
+      merchantAcceptRequestFor(offer),
+    );
+
+    expect(roomServiceMocks.runRoomTransaction).toHaveBeenCalledTimes(1);
+    const nextRoom = latestRoomTransactionUpdater()?.(session.room);
+    const nextState = nextRoom?.questState;
+    if (nextState === undefined || nextState === null) {
+      throw new Error("Expected updated quest state");
+    }
+
+    expect(nextState.essence).toBe(fixture.state.essence - offer.price);
+    expect(merchantPayloadApplied(
+      fixture.state,
+      nextState,
+      offer.reward.applyPayload,
+    )).toBe(true);
+    expect(nextState.visitedSites).toContain(fixture.site.id);
+    expect(nextState.atlas.nodes["dreamscape-a"]?.sites[0]?.isVisited).toBe(true);
+    expect(nextState.siteRuntime[fixture.site.id]).toEqual({
+      kind: "dreamJourney",
+      completed: true,
+    });
+    expect(nextState.screen).toEqual({ type: "dreamscape" });
+    const action = nextRoom?.actionLog?.["action-1"];
+    expect(action).toEqual({
+      timestamp: nextRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "merchant_offer_accepted",
+      source: "dream_merchant",
+      summary: action?.summary,
+    });
+    expect(action?.summary).toMatchObject({
+      siteId: fixture.site.id,
+      offerId: offer.offerId,
+      builderId: offer.rewardBuilderId,
+      needId: offer.needId,
+      price: offer.price,
+      payloadKind: offer.reward.applyPayload.kind,
+    });
+  });
+
+  it("records a Dream Merchant validation failure without changing transaction quest state", () => {
+    const captured: QuestContextValue[] = [];
+    const fixture = makeMerchantProviderFixture();
+    const offer = merchantEncounterFor(fixture).offers[0];
+    if (offer === undefined) throw new Error("Expected merchant offer");
+    const session = makeSession(fixture.state);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={fixture.questContent}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.acceptDreamMerchantOffer!(
+      fixture.site.id,
+      {
+        ...merchantAcceptRequestFor(offer),
+        encounterSignature: `${offer.encounterSignature}-stale`,
+      },
+    );
+
+    expect(roomServiceMocks.runRoomTransaction).toHaveBeenCalledTimes(1);
+    const nextRoom = latestRoomTransactionUpdater()?.(session.room);
+
+    expect(nextRoom?.questState).toBe(fixture.state);
+    expect(nextRoom?.metadata.updatedAt).not.toBe(session.room.metadata.updatedAt);
+    const action = nextRoom?.actionLog?.["action-1"];
+    expect(action).toEqual({
+      timestamp: nextRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "merchant_offer_validation_failed",
+      source: "dream_merchant",
+      summary: action?.summary,
+    });
+    expect(action?.summary).toMatchObject({
+      siteId: fixture.site.id,
+      offerId: offer.offerId,
+      reason: "stale_encounter",
+    });
+  });
+
+  it("declines the Dream Merchant through a transaction and completes the site", () => {
+    const captured: QuestContextValue[] = [];
+    const fixture = makeMerchantProviderFixture();
+    const offer = merchantEncounterFor(fixture).offers[0];
+    if (offer === undefined) throw new Error("Expected merchant offer");
+    const session = makeSession(fixture.state);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={fixture.questContent}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.declineDreamMerchant!(
+      fixture.site.id,
+      merchantDeclineRequestFor(offer),
+    );
+
+    expect(roomServiceMocks.runRoomTransaction).toHaveBeenCalledTimes(1);
+    const nextRoom = latestRoomTransactionUpdater()?.(session.room);
+
+    expect(nextRoom?.questState?.deck).toEqual(fixture.state.deck);
+    expect(nextRoom?.questState?.dreamsigns).toEqual(fixture.state.dreamsigns);
+    expect(nextRoom?.questState?.essence).toBe(fixture.state.essence);
+    expect(nextRoom?.questState?.visitedSites).toContain(fixture.site.id);
+    expect(nextRoom?.questState?.siteRuntime[fixture.site.id]).toEqual({
+      kind: "dreamJourney",
+      completed: true,
+    });
+    expect(nextRoom?.questState?.screen).toEqual({ type: "dreamscape" });
+    const action = nextRoom?.actionLog?.["action-1"];
+    expect(action).toEqual({
+      timestamp: nextRoom?.metadata.updatedAt,
+      actorId: "client-1",
+      action: "merchant_offer_declined",
+      source: "dream_merchant",
+      summary: action?.summary,
+    });
+    expect(action?.summary).toMatchObject({
+      siteId: fixture.site.id,
+      offerId: offer.offerId,
+    });
   });
 
   it(
