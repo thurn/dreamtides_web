@@ -38,6 +38,9 @@ export const GENERIC_SUBDIRS = [
 /** The tag marking a card whose art is being replaced. */
 export const ART_REWORK_TAG = "Art Rework";
 
+/** The tag marking a card whose art is approved as final. */
+export const ART_OK_TAG = "Art OK";
+
 /** Default card data file used to decide which images are already in use. */
 export const DEFAULT_CARDS_TOML = join("data", "tabula", "cards_v2.toml");
 
@@ -95,6 +98,40 @@ export function readUsedImageNumbers(cardsTomlPath) {
   }
 
   return used;
+}
+
+/**
+ * Read the set of image numbers whose art is approved as final.
+ *
+ * A card marks its `image-number` as approved when it carries the `Art OK` tag.
+ * Approved images are finished art rather than candidates, so the viewer drops
+ * them entirely — this takes precedence over `Art Rework`, so a card that
+ * carries both tags still has its image excluded. Returns a `Set<string>` of
+ * image numbers (as strings, matching `imageNumberFromFilename`).
+ */
+export function readApprovedImageNumbers(cardsTomlPath) {
+  const parsed = parse(readFileSync(cardsTomlPath, "utf8"));
+  const cards = Array.isArray(parsed.cards) ? parsed.cards : [];
+  const approved = new Set();
+
+  for (const card of cards) {
+    const imageNumber = card["image-number"];
+    if (
+      imageNumber === undefined ||
+      imageNumber === null ||
+      imageNumber === "" ||
+      Number(imageNumber) <= 0
+    ) {
+      continue;
+    }
+
+    const tags = Array.isArray(card.tags) ? card.tags : [];
+    if (tags.includes(ART_OK_TAG)) {
+      approved.add(String(imageNumber));
+    }
+  }
+
+  return approved;
 }
 
 /**
@@ -206,8 +243,10 @@ export function listCategories(root) {
  * Each image entry records its category (subdirectory), filename, trailing
  * image number, the authored card name / narrative (when present in the
  * metadata JSON), the names the image has ever been published under in the
- * card-data TOMLs, and whether a non-rework card already uses the image. The
- * frontend filters this manifest by category and by the used flag.
+ * card-data TOMLs, and whether a non-rework card already uses the image. Images
+ * whose card carries the `Art OK` tag are approved final art and are dropped
+ * from the manifest entirely. The frontend filters the remainder by category
+ * and by the used flag.
  */
 export function buildImageManifest({
   root = DEFAULT_TAGGED_ROOT,
@@ -217,6 +256,9 @@ export function buildImageManifest({
   const categories = listCategories(root);
   const usedImageNumbers = existsSync(cardsTomlPath)
     ? readUsedImageNumbers(cardsTomlPath)
+    : new Set();
+  const approvedImageNumbers = existsSync(cardsTomlPath)
+    ? readApprovedImageNumbers(cardsTomlPath)
     : new Set();
   const nameHistory = readNameHistory(nameHistoryTomlPaths);
   const metadata = readImageMetadata(join(root, METADATA_FILENAME));
@@ -232,6 +274,9 @@ export function buildImageManifest({
       }
       const imageNumber = imageNumberFromFilename(filename);
       if (imageNumber === null) {
+        continue;
+      }
+      if (approvedImageNumbers.has(imageNumber)) {
         continue;
       }
 

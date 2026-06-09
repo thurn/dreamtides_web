@@ -51,35 +51,42 @@ export default function ImageGrid({ images, columns }: ImageGridProps) {
             gap: "6px",
           }}
         >
-          <div
-            style={{
-              width: "100%",
-              aspectRatio: IMAGE_BOX_ASPECT_RATIO,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              borderRadius: "8px",
-              overflow: "hidden",
-              background: "#1a2024",
-              border: image.used
-                ? "2px solid #c8893f"
-                : "1px solid rgba(247, 241, 223, 0.12)",
-            }}
+          <a
+            href={imageFileUrl(image.category, image.filename)}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ display: "block", textDecoration: "none" }}
           >
-            <img
-              src={imageFileUrl(image.category, image.filename)}
-              alt={image.cardName ?? image.filename}
-              loading="lazy"
+            <div
               style={{
-                display: "block",
-                maxWidth: "100%",
-                maxHeight: "100%",
-                width: "auto",
-                height: "auto",
-                objectFit: "contain",
+                width: "100%",
+                aspectRatio: IMAGE_BOX_ASPECT_RATIO,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                borderRadius: "8px",
+                overflow: "hidden",
+                background: "#1a2024",
+                border: image.used
+                  ? "2px solid #c8893f"
+                  : "1px solid rgba(247, 241, 223, 0.12)",
               }}
-            />
-          </div>
+            >
+              <img
+                src={imageFileUrl(image.category, image.filename)}
+                alt={image.cardName ?? image.filename}
+                loading="lazy"
+                style={{
+                  display: "block",
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                  width: "auto",
+                  height: "auto",
+                  objectFit: "contain",
+                }}
+              />
+            </div>
+          </a>
           <figcaption
             style={{ display: "flex", flexDirection: "column", gap: "2px" }}
           >

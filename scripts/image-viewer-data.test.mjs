@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
   buildImageManifest,
   imageNumberFromFilename,
+  readApprovedImageNumbers,
   readImageMetadata,
   readNameHistory,
   readUsedImageNumbers,
@@ -37,6 +38,10 @@ describe("data helpers over a temp working set", () => {
     writeFileSync(join(root, "warrior", "a-knight-1111.jpg"), "");
     writeFileSync(join(root, "warrior", "b-archer-2222.jpg"), "");
     writeFileSync(join(root, "child", "c-kid-3333.jpg"), "");
+    // 4444 is approved final art (Art OK); 5555 carries both Art OK and Art
+    // Rework. Both are dropped from the manifest entirely.
+    writeFileSync(join(root, "warrior", "d-sage-4444.jpg"), "");
+    writeFileSync(join(root, "warrior", "e-scout-5555.jpg"), "");
     // Stray file without a trailing number is ignored.
     writeFileSync(join(root, "warrior", "notes.txt"), "");
 
@@ -86,6 +91,18 @@ describe("data helpers over a temp working set", () => {
         'image-number = 2222',
         'tags = ["Art Rework"]',
         "",
+        "[[cards]]",
+        'id = "00000000-0000-0000-0000-000000000004"',
+        'name = "Sage"',
+        'image-number = 4444',
+        'tags = ["Art OK"]',
+        "",
+        "[[cards]]",
+        'id = "00000000-0000-0000-0000-000000000005"',
+        'name = "Scout"',
+        'image-number = 5555',
+        'tags = ["Art Rework", "Art OK"]',
+        "",
       ].join("\n"),
     );
   });
@@ -98,6 +115,14 @@ describe("data helpers over a temp working set", () => {
     const used = readUsedImageNumbers(cardsTomlPath);
     expect(used.has("1111")).toBe(true);
     expect(used.has("2222")).toBe(false);
+  });
+
+  it("collects Art OK image numbers, including ones also flagged Art Rework", () => {
+    const approved = readApprovedImageNumbers(cardsTomlPath);
+    expect(approved.has("4444")).toBe(true);
+    expect(approved.has("5555")).toBe(true);
+    expect(approved.has("1111")).toBe(false);
+    expect(approved.has("2222")).toBe(false);
   });
 
   it("collects distinct names per image across both card sets", () => {
@@ -130,7 +155,10 @@ describe("data helpers over a temp working set", () => {
     expect(manifest.categories).toEqual(["child", "warrior"]);
 
     const byNumber = new Map(manifest.images.map((i) => [i.imageNumber, i]));
+    // 4444 (Art OK) and 5555 (Art OK + Art Rework) are excluded entirely.
     expect(byNumber.size).toBe(3);
+    expect(byNumber.has("4444")).toBe(false);
+    expect(byNumber.has("5555")).toBe(false);
     expect(byNumber.get("1111")).toMatchObject({
       category: "warrior",
       used: true,
