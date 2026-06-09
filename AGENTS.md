@@ -6,6 +6,10 @@ Do not print a summary of changes.
 
 Dreamtides battle rules are in docs/battle_rules/battle_rules.md
 
+Do not write tests which fail when I change my production TOML files
+or change things like default algorithm chocies. Assume all TOML
+game design data is subject to change at any time.
+
 # Cards
 
 Card data lives in data/tabula/cards_v2.toml
