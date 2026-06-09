@@ -28,6 +28,7 @@
     "bake-affinity-corpus": "node scripts/bake-affinity-corpus.mjs",
     "affinity-corpus-parity": "node scripts/affinity-corpus-parity.mjs",
     "bake-merchant-corpus": "node scripts/bake-merchant-corpus.mjs",
+    "merchant-corpus-parity": "node scripts/merchant-corpus-parity.mjs",
     "bake-tides": "node scripts/bake-tides.mjs",
     "bake-tides2": "node scripts/bake-tides.mjs --out data/tides2.jsonc --doc docs/cards2/tides2_decklists.md --tide-size 70",
     "seed-tide-relationships": "node scripts/seed-tide-relationships.mjs",
