@@ -2,7 +2,7 @@ import type { FitModel } from "../draft/replay/fit-model";
 import type { QuestContent } from "../data/quest-content";
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate } from "../types/content";
-import type { MerchantRewardPrice } from "./catalog/pricing";
+import type { MerchantRewardFamily, MerchantRewardPrice } from "./catalog/pricing";
 import type {
   CardKeywordModification,
   CardTypeChange,
@@ -319,10 +319,32 @@ export interface MerchantOffer {
   choice?: MerchantChoice;
 }
 
+export type MerchantDialogueBeatKind =
+  | "greeting"
+  | "observation"
+  | "offer_framing"
+  | "price_framing"
+  | "walk_away"
+  | "accept_reaction"
+  | "decline_reaction";
+
+export interface MerchantDialogueBeat {
+  id: string;
+  templateId: string;
+  kind: MerchantDialogueBeatKind;
+  text: string;
+  offerId?: string;
+  needId?: string;
+  rewardBuilderId?: MerchantRewardBuilderId;
+  rewardFamily?: MerchantRewardFamily;
+  price?: number;
+}
+
 export interface MerchantEncounter {
   encounterSignature: string;
   siteId: string;
   offers: readonly MerchantOffer[];
+  dialogue: readonly MerchantDialogueBeat[];
 }
 
 export interface MerchantAcceptRequest {

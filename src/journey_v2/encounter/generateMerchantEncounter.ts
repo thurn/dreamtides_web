@@ -1,6 +1,7 @@
 import { sha256 } from "js-sha256";
 import { buildMerchantRewardsForNeed } from "../catalog/rewardCatalog";
 import { priceMerchantReward } from "../catalog/pricing";
+import { renderMerchantDialogue } from "../dialogue/dialogue";
 import { readMerchantDeck } from "../read/deckRead";
 import type { CardData, Rarity } from "../../types/cards";
 import type {
@@ -505,13 +506,19 @@ export function generateMerchantEncounter(
     },
   );
   const encounterSignature = signatureFor(context, unsignedOffers);
+  const offers = unsignedOffers.map((offer) => ({
+    ...offer,
+    encounterSignature,
+  }));
   const encounter: MerchantEncounter = {
     encounterSignature,
     siteId: context.site.id,
-    offers: unsignedOffers.map((offer) => ({
-      ...offer,
-      encounterSignature,
-    })),
+    offers,
+    dialogue: renderMerchantDialogue({
+      context,
+      needs,
+      offers,
+    }),
   };
 
   assertValidEncounter(encounter, needs);

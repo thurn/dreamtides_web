@@ -9,6 +9,10 @@ export {
 } from "./catalog/rewardCatalog";
 export { generateMerchantEncounter } from "./encounter/generateMerchantEncounter";
 export {
+  merchantRewardFamilyFor,
+  renderMerchantDialogue,
+} from "./dialogue/dialogue";
+export {
   MERCHANT_MARKET_JITTER_MAX,
   MERCHANT_MARKET_JITTER_MIN,
   MERCHANT_NEED_SEVERITY_MULTIPLIER_MAX,
@@ -41,6 +45,8 @@ export type {
   MerchantContext,
   MerchantDeckCard,
   MerchantDeclineRequest,
+  MerchantDialogueBeat,
+  MerchantDialogueBeatKind,
   MerchantEncounter,
   MerchantGameObject,
   MerchantNeed,
