@@ -321,9 +321,89 @@ function scoreCooccur(
 }
 
 /**
+ * The per-candidate fit score returned by {@link scoreCandidatesForDeck}.
+ * Each raw component is in its pre-normalization scale so callers (e.g. the
+ * merchant's centrality signal) can read the individual terms without re-running
+ * the scoring.
+ */
+export interface CandidateFitScore {
+  /** Blended alpha/beta/gamma score, per-call min-max normalized. */
+  fit: number;
+  /** Raw neighbour collaborative-filtering component (0 on an empty deck). */
+  neighborCf: number;
+  /** Raw IDF-weighted co-occurrence component (0 on an empty deck). */
+  cooccur: number;
+  /** Raw global play-rate prior component. */
+  prior: number;
+}
+
+/**
+ * Score a set of candidate card numbers against a given deck, returning a
+ * {@link CandidateFitScore} for each candidate.  The `fit` field is the
+ * blended, per-call min-max normalized score that {@link computeReplayOffer}
+ * uses for ranking; the three raw component fields expose the individual
+ * signals for downstream consumers (e.g. the merchant centrality signal uses
+ * `0.65 * prior + 0.35 * cooccur`).
+ *
+ * The function is pure: no RNG, no I/O, input arrays are never mutated.
+ *
+ * @param candidateNumbers Card numbers of the candidates to score.
+ * @param deckCardNumbers Cards already in the deck (card numbers).
+ * @param fitModel The model from {@link buildFitModel}.
+ * @returns A Map from candidate card number to its {@link CandidateFitScore}.
+ *   Only the card numbers supplied in `candidateNumbers` appear as keys
+ *   (unknowns are dropped).
+ */
+export function scoreCandidatesForDeck(
+  candidateNumbers: readonly number[],
+  deckCardNumbers: readonly number[],
+  fitModel: FitModel,
+): Map<number, CandidateFitScore> {
+  const { numberToName, nameIndex, prior, tuning } = fitModel;
+
+  // Translate candidate numbers to names, dropping unknowns and deduping.
+  const candidateNames = namesFromNumbers(candidateNumbers, numberToName);
+
+  const toNumber = (name: string): number => nameIndex.get(name) ?? -1;
+
+  // Deck set translated to names.
+  const deckSet = new Set(namesFromNumbers(deckCardNumbers, numberToName));
+
+  // Score each term independently in card-name space.
+  const neighborCFMap = scoreNeighborCF(candidateNames, deckSet, fitModel);
+  const cooccurMap = scoreCooccur(candidateNames, deckSet, fitModel);
+
+  // Raw arrays in the same order as candidateNames.
+  const nfRaw = candidateNames.map((c) => neighborCFMap.get(c) ?? 0);
+  const coRaw = candidateNames.map((c) => cooccurMap.get(c) ?? 0);
+  // prior is intentionally computed over ALL cards (including idf-zeroed
+  // staples) so it works as the pick-1 fallback when the deck is empty.
+  const prRaw = candidateNames.map((c) => prior.get(c) ?? 0);
+
+  // Min-max normalize each term across candidates independently.
+  const nf = minMaxNormalize(nfRaw);
+  const co = minMaxNormalize(coRaw);
+  const pr = minMaxNormalize(prRaw);
+
+  const result = new Map<number, CandidateFitScore>();
+  for (let idx = 0; idx < candidateNames.length; idx += 1) {
+    const name = candidateNames[idx];
+    result.set(toNumber(name), {
+      fit: tuning.alpha * nf[idx] + tuning.beta * co[idx] + tuning.gamma * pr[idx],
+      neighborCf: nfRaw[idx],
+      cooccur: coRaw[idx],
+      prior: prRaw[idx],
+    });
+  }
+  return result;
+}
+
+/**
  * Rank the cards of a single pack by how well they fit the player's current
  * deck and return the best `offerSize` of them. Pure and deterministic: no RNG,
  * and the input arrays are never mutated.
+ *
+ * Implemented on top of {@link scoreCandidatesForDeck}.
  *
  * @param packCardNumbers The pack the player is picking from (card numbers; may
  *   contain duplicates or numbers unknown to the model).
@@ -343,7 +423,7 @@ export function computeReplayOffer(
   fitModel: FitModel,
   offerSize: number,
 ): number[] {
-  const { numberToName, nameIndex, prior } = fitModel;
+  const { numberToName, nameIndex } = fitModel;
 
   // 1. Candidates: pack numbers -> names, drop unknowns, dedupe first-seen.
   const candidateNames = namesFromNumbers(packCardNumbers, numberToName);
@@ -363,36 +443,16 @@ export function computeReplayOffer(
 
   // 3. Deck set = picked cards ∪ signatures, translated to names and deduped.
   //    Signatures are folded in exactly like picks so they steer early offers.
-  const deckSet = new Set(
-    namesFromNumbers([...deckCardNumbers, ...signatureCardNumbers], numberToName),
-  );
+  const allDeckNumbers = [...deckCardNumbers, ...signatureCardNumbers];
 
-  // 4. Score each stage independently in card-name space. neighborCF and cooccur
-  //    both vanish on an empty deck; prior is a trivial lookup handled inline.
-  const neighborCF = scoreNeighborCF(candidateNames, deckSet, fitModel);
-  const cooccur = scoreCooccur(candidateNames, deckSet, fitModel);
+  // 4. Delegate to scoreCandidatesForDeck for the per-candidate scoring.
+  const scored = scoreCandidatesForDeck(packCardNumbers, allDeckNumbers, fitModel);
 
-  // 5. Min-max normalize each term across the candidates independently, then
-  //    blend. A term constant across candidates normalizes to all-zero and so
-  //    drops out of the ranking for this pick (it has no discriminating power).
-  const nfRaw = candidateNames.map((c) => neighborCF.get(c) ?? 0);
-  const coRaw = candidateNames.map((c) => cooccur.get(c) ?? 0);
-  // prior is intentionally computed over ALL cards (including idf-zeroed
-  // staples), so it still has a value for the popular early-pack cards and works
-  // as the pick-1 fallback when the deck is empty and the other two terms are 0.
-  const prRaw = candidateNames.map((c) => prior.get(c) ?? 0);
-  const nf = minMaxNormalize(nfRaw);
-  const co = minMaxNormalize(coRaw);
-  const pr = minMaxNormalize(prRaw);
-
-  const { tuning } = fitModel;
-  const scoredCandidates = candidateNames.map((name, idx) => ({
-    number: toNumber(name),
-    fit: tuning.alpha * nf[idx] + tuning.beta * co[idx] + tuning.gamma * pr[idx],
-  }));
-
-  // 6. Rank by fit desc, tie-break by card number asc, return the first
+  // 5. Rank by fit desc, tie-break by card number asc, return the first
   //    `offerSize` card numbers in that order.
-  scoredCandidates.sort((a, b) => (b.fit - a.fit) || (a.number - b.number));
-  return scoredCandidates.slice(0, offerSize).map((c) => c.number);
+  const candidateNumbers = candidateNames.map(toNumber);
+  candidateNumbers.sort(
+    (a, b) => (scored.get(b)?.fit ?? 0) - (scored.get(a)?.fit ?? 0) || a - b,
+  );
+  return candidateNumbers.slice(0, offerSize);
 }
