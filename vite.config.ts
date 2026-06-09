@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import type { Plugin, ViteDevServer } from "vite";
 import { createCardEditorApiMiddleware } from "./scripts/card-editor-api.mjs";
 import { createImageViewerApiMiddleware } from "./scripts/image-viewer-api.mjs";
+import { createCardImageApiMiddleware } from "./scripts/card-image-api.mjs";
 import { checkGeneratedCardData } from "./scripts/generated-card-data-drift.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -68,6 +69,22 @@ function imageViewerApiPlugin(): Plugin {
           ],
         }),
       );
+    },
+  };
+}
+
+/**
+ * Vite plugin that serves `/cards/<n>.webp` for card art added after the last
+ * `setup-assets` run. It resolves the image number from the local cache or
+ * directly from Shutterstock and lets existing symlinks fall through to the
+ * static handler.
+ */
+function cardImageApiPlugin(): Plugin {
+  return {
+    name: "card-image-api",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(createCardImageApiMiddleware({ rootDir: __dirname }));
     },
   };
 }
@@ -188,6 +205,7 @@ export default defineConfig({
     questLogPlugin(),
     cardEditorApiPlugin(),
     imageViewerApiPlugin(),
+    cardImageApiPlugin(),
     generatedCardDataDriftPlugin(),
   ],
   test: {

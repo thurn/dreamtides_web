@@ -20,7 +20,7 @@ export { stripJsonComments };
 
 const ROOT = resolve(import.meta.dirname, "..");
 const DATA_DIR = join(ROOT, "data");
-const IMAGE_CACHE_DIR = join(homedir(), "Library", "Caches", "io.github.dreamtides.tv", "image_cache");
+export const IMAGE_CACHE_DIR = join(homedir(), "Library", "Caches", "io.github.dreamtides.tv", "image_cache");
 const DREAMCALLER_ART_DIR_CANDIDATES = [
   join(homedir(), "Documents", "synty", "dreamcallers"),
   join(homedir(), "Documents", "sytny", "dreamcallers"),
@@ -411,11 +411,19 @@ export function transformDreamsign(dreamsign, altTextByImageName = new Map()) {
 }
 
 /**
+ * Build the Shutterstock preview URL for a given image number. This is the
+ * canonical source for card art: every cache filename is keyed off this URL,
+ * so the same helper is reused anywhere art is fetched or located by number.
+ */
+export function shutterstockImageUrl(imageNumber) {
+  return `https://www.shutterstock.com/image-illustration/-260nw-${imageNumber}.jpg`;
+}
+
+/**
  * Compute the SHA-256 hash of the Shutterstock URL for a given image number.
  */
 export function imageHash(imageNumber) {
-  const url = `https://www.shutterstock.com/image-illustration/-260nw-${imageNumber}.jpg`;
-  return createHash("sha256").update(url).digest("hex");
+  return createHash("sha256").update(shutterstockImageUrl(imageNumber)).digest("hex");
 }
 
 /**
