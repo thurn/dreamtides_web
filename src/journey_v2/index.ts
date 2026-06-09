@@ -7,6 +7,7 @@ export {
   makeMerchantTypeChangePayload,
   resolveMerchantChoice,
 } from "./catalog/rewardCatalog";
+export { generateMerchantEncounter } from "./encounter/generateMerchantEncounter";
 export {
   MERCHANT_MARKET_JITTER_MAX,
   MERCHANT_MARKET_JITTER_MIN,

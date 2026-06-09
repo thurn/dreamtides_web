@@ -2,6 +2,7 @@ import type { FitModel } from "../draft/replay/fit-model";
 import type { QuestContent } from "../data/quest-content";
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate } from "../types/content";
+import type { MerchantRewardPrice } from "./catalog/pricing";
 import type {
   CardKeywordModification,
   CardTypeChange,
@@ -310,6 +311,10 @@ export interface MerchantOffer {
   rewardBuilderId: MerchantRewardBuilderId;
   needId: string;
   price: number;
+  priceDetail: MerchantRewardPrice;
+  locked: boolean;
+  lockedReason?: MerchantRewardPrice["lockedReason"];
+  reward: MerchantReward;
   rewards: readonly MerchantReward[];
   choice?: MerchantChoice;
 }
