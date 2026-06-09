@@ -6,6 +6,7 @@ import type {
   SaveEditorCardArtRequest,
   SaveEditorCardFieldRequest,
   SaveEditorCardFieldResponse,
+  SaveEditorCardImageNumberRequest,
   SaveEditorCardTagsRequest,
   SaveEditorCardTidesRequest,
   SaveEditorTagRegistryRequest,
@@ -146,6 +147,25 @@ export async function saveEditorCardArt(
       "Content-Type": "application/json",
     },
     body: JSON.stringify({ id: request.id, field: "art", value: request.art }),
+  });
+
+  return readJsonResponse<SaveEditorCardFieldResponse>(response);
+}
+
+export async function saveEditorCardImageNumber(
+  request: SaveEditorCardImageNumberRequest,
+): Promise<SaveEditorCardFieldResponse> {
+  const response = await fetch(withTomlParam(`/api/editor/cards/${request.id}`), {
+    method: "PATCH",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      id: request.id,
+      field: "image-number",
+      value: request.imageNumber,
+    }),
   });
 
   return readJsonResponse<SaveEditorCardFieldResponse>(response);

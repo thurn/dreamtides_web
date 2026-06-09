@@ -46,8 +46,25 @@ export interface ArtCropEditorProps {
   card: EditorCardRecord;
   saveStatus: ArtSaveStatus;
   saveError: string | null;
+  imageNumberSaveStatus: ArtSaveStatus;
+  imageNumberSaveError: string | null;
   onSave: (art: ArtCrop) => void;
+  onSaveImageNumber: (imageNumber: number) => void;
   onClose: () => void;
+}
+
+/**
+ * Parse the image-number text field into a non-negative integer, mirroring the
+ * server's `image-number` validation. Returns null for anything else so the
+ * caller can keep the prior image and surface an inline error.
+ */
+function parseImageNumber(text: string): number | null {
+  const trimmed = text.trim();
+  if (!/^\d+$/u.test(trimmed)) {
+    return null;
+  }
+  const value = Number(trimmed);
+  return Number.isInteger(value) && value >= 0 ? value : null;
 }
 
 function clamp(value: number, min: number, max: number): number {
@@ -153,17 +170,47 @@ export default function ArtCropEditor({
   card,
   saveStatus,
   saveError,
+  imageNumberSaveStatus,
+  imageNumberSaveError,
   onSave,
+  onSaveImageNumber,
   onClose,
 }: ArtCropEditorProps) {
   const [art, setArt] = useState<ArtCrop>(() => readCardArt(card));
+
+  // The image number selects which art file the card renders. The text field is
+  // seeded from the card's current value; typing a valid number previews that
+  // image immediately, and pressing Set persists it to the TOML. While the input
+  // is blank or malformed the preview falls back to the card's saved image.
+  const [imageNumberText, setImageNumberText] = useState<string>(() =>
+    String(card.preview.imageNumber),
+  );
+  const [imageNumberInputError, setImageNumberInputError] = useState<
+    string | null
+  >(null);
+  const parsedImageNumber = parseImageNumber(imageNumberText);
+  const effectiveImageNumber = parsedImageNumber ?? card.preview.imageNumber;
+
+  const handleImageNumberSubmit = useCallback(() => {
+    const parsed = parseImageNumber(imageNumberText);
+    if (parsed === null) {
+      setImageNumberInputError("Enter a non-negative whole number.");
+      return;
+    }
+    setImageNumberInputError(null);
+    if (parsed === card.preview.imageNumber) {
+      return;
+    }
+    onSaveImageNumber(parsed);
+  }, [imageNumberText, card.preview.imageNumber, onSaveImageNumber]);
 
   // The lowest valid up-pan depends on the source aspect (and the current zoom),
   // so load the image to learn its aspect. Until it resolves, pan is clamped to
   // the editor's plain `OFFSET_MIN`; once known, `minArtOffsetY` bounds the up
   // arrow so it stops where the art would otherwise pull the watermark strip
-  // into view and expose the fill band above the rules box.
-  const imageNumber = card.preview.imageNumber;
+  // into view and expose the fill band above the rules box. The aspect tracks
+  // the previewed image number so swapping art re-derives the pan/zoom bounds.
+  const imageNumber = effectiveImageNumber;
   const [imageAspect, setImageAspect] = useState<number | null>(null);
   // The preview card measures its rules-box top and reports it here, so the
   // zoom-out floor and up-pan bound track the same box-relative safe area the
@@ -273,8 +320,17 @@ export default function ArtCropEditor({
     onClose();
   }, [flush, onClose]);
 
-  const previewCard = { ...card.preview, art };
+  const previewCard = {
+    ...card.preview,
+    art,
+    imageNumber: effectiveImageNumber,
+  };
   const statusText = saveStatusLabel(saveStatus, saveError);
+  const imageNumberStatusText =
+    imageNumberInputError ??
+    saveStatusLabel(imageNumberSaveStatus, imageNumberSaveError);
+  const imageNumberStatusIsError =
+    imageNumberInputError !== null || imageNumberSaveStatus === "error";
 
   // Per-axis offset step that moves the art the same visible fraction of the
   // card on each press, derived from the source aspect and current zoom. Falls
@@ -347,6 +403,66 @@ export default function ArtCropEditor({
               ×
             </button>
           </div>
+
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              handleImageNumberSubmit();
+            }}
+          >
+            <p style={sectionLabelStyle}>Image number</p>
+            <div style={{ display: "flex", gap: "6px" }}>
+              <input
+                type="text"
+                inputMode="numeric"
+                aria-label="Image number"
+                data-editor-art-image-number-input="true"
+                value={imageNumberText}
+                onChange={(event) => {
+                  setImageNumberText(event.target.value);
+                  setImageNumberInputError(null);
+                }}
+                style={{
+                  flex: "1 1 auto",
+                  minWidth: 0,
+                  padding: "0 10px",
+                  height: "40px",
+                  borderRadius: "8px",
+                  border: "1px solid rgba(247, 241, 223, 0.28)",
+                  background: "#16242a",
+                  color: "#f7f1df",
+                  fontSize: "0.95rem",
+                  fontWeight: 600,
+                }}
+              />
+              <button
+                type="submit"
+                style={{
+                  ...controlButtonStyle,
+                  minWidth: "auto",
+                  padding: "0 14px",
+                  fontSize: "0.85rem",
+                }}
+              >
+                Set
+              </button>
+            </div>
+            <span
+              role="status"
+              aria-live="polite"
+              data-editor-art-image-number-status="true"
+              style={{
+                display: "block",
+                marginTop: "4px",
+                minHeight: "1.1em",
+                fontSize: "0.78rem",
+                fontWeight: 700,
+                color: imageNumberStatusIsError ? "#f0a8a0" : "#8edbd1",
+              }}
+            >
+              {imageNumberStatusText}
+            </span>
+          </form>
 
           <div>
             <p style={sectionLabelStyle}>Pan</p>

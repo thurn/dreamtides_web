@@ -76,6 +76,7 @@ function makeApiClient(
     loadEditorTides: vi.fn().mockResolvedValue([]),
     saveEditorCardTides: vi.fn(),
     saveEditorCardArt: vi.fn(),
+    saveEditorCardImageNumber: vi.fn(),
     saveEditorTagRegistry: vi.fn(),
     saveEditorTideRegistry: vi.fn(),
     ...overrides,

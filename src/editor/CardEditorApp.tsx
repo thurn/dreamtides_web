@@ -6,6 +6,7 @@ import {
   loadEditorTides,
   saveEditorCardArt,
   saveEditorCardField,
+  saveEditorCardImageNumber,
   saveEditorCardTags,
   saveEditorCardTides,
   saveEditorTagRegistry,
@@ -52,6 +53,7 @@ const DEFAULT_EDITOR_API_CLIENT: EditorApiClient = {
   loadEditorTides,
   saveEditorCardTides,
   saveEditorCardArt,
+  saveEditorCardImageNumber,
   saveEditorTagRegistry,
   saveEditorTideRegistry,
 };
@@ -425,6 +427,11 @@ export default function CardEditorApp({
   const [artEditorCardId, setArtEditorCardId] = useState<string | null>(null);
   const [artSaveStatus, setArtSaveStatus] = useState<ArtSaveStatus>("idle");
   const [artSaveError, setArtSaveError] = useState<string | null>(null);
+  const [imageNumberSaveStatus, setImageNumberSaveStatus] =
+    useState<ArtSaveStatus>("idle");
+  const [imageNumberSaveError, setImageNumberSaveError] = useState<string | null>(
+    null,
+  );
   // Fitted rules-text font sizes (px) keyed by card id, reported by each card as
   // it is measured. Only populated while sorting by font size, so font-size
   // measurements do not churn the sort in any other view.
@@ -900,12 +907,16 @@ export default function CardEditorApp({
     setArtEditorCardId(card.id);
     setArtSaveStatus("idle");
     setArtSaveError(null);
+    setImageNumberSaveStatus("idle");
+    setImageNumberSaveError(null);
   }
 
   function handleCloseArtEditor() {
     setArtEditorCardId(null);
     setArtSaveStatus("idle");
     setArtSaveError(null);
+    setImageNumberSaveStatus("idle");
+    setImageNumberSaveError(null);
   }
 
   function handleArtSave(card: EditorCardRecord, art: ArtCrop) {
@@ -921,6 +932,22 @@ export default function CardEditorApp({
       .catch((error: unknown) => {
         setArtSaveStatus("error");
         setArtSaveError(errorMessageFor(error));
+      });
+  }
+
+  function handleImageNumberSave(card: EditorCardRecord, imageNumber: number) {
+    setImageNumberSaveStatus("saving");
+    setImageNumberSaveError(null);
+
+    void apiClient
+      .saveEditorCardImageNumber({ id: card.id, imageNumber })
+      .then((response) => {
+        replaceConfirmedCard(response.card);
+        setImageNumberSaveStatus("saved");
+      })
+      .catch((error: unknown) => {
+        setImageNumberSaveStatus("error");
+        setImageNumberSaveError(errorMessageFor(error));
       });
   }
 
@@ -1092,7 +1119,12 @@ export default function CardEditorApp({
           card={artEditorCard}
           saveStatus={artSaveStatus}
           saveError={artSaveError}
+          imageNumberSaveStatus={imageNumberSaveStatus}
+          imageNumberSaveError={imageNumberSaveError}
           onSave={(art) => handleArtSave(artEditorCard, art)}
+          onSaveImageNumber={(imageNumber) =>
+            handleImageNumberSave(artEditorCard, imageNumber)
+          }
           onClose={handleCloseArtEditor}
         />
       ) : null}

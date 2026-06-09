@@ -9,11 +9,16 @@ export type EditableCardField =
 
 /**
  * Card fields the editor can save. Extends the inline-editable scalar fields
- * with `art`, which is edited through the dedicated art-edit modal rather than
- * the inline field flow, and the facet lists `tags` and `tides`, saved through
- * their respective chip controls.
+ * with `art` and `image-number`, both edited through the dedicated art-edit
+ * modal rather than the inline field flow, and the facet lists `tags` and
+ * `tides`, saved through their respective chip controls.
  */
-export type SavableCardField = EditableCardField | "art" | "tags" | "tides";
+export type SavableCardField =
+  | EditableCardField
+  | "art"
+  | "image-number"
+  | "tags"
+  | "tides";
 
 export type EditorFieldValue = string | number;
 
@@ -167,6 +172,15 @@ export interface SaveEditorCardArtRequest {
   art: ArtCrop;
 }
 
+/**
+ * Request to point a card at a different art image through the art-edit modal.
+ * The number is resolved to `/cards/<imageNumber>.webp` at render time.
+ */
+export interface SaveEditorCardImageNumberRequest {
+  id: string;
+  imageNumber: number;
+}
+
 export interface EditorSaveTiming {
   readMs: number;
   patchMs: number;
@@ -231,6 +245,9 @@ export interface EditorApiClient {
   ): Promise<SaveEditorCardFieldResponse>;
   saveEditorCardArt(
     request: SaveEditorCardArtRequest,
+  ): Promise<SaveEditorCardFieldResponse>;
+  saveEditorCardImageNumber(
+    request: SaveEditorCardImageNumberRequest,
   ): Promise<SaveEditorCardFieldResponse>;
   saveEditorTagRegistry(
     request: SaveEditorTagRegistryRequest,

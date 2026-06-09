@@ -21,6 +21,7 @@ export const EDITABLE_CARD_FIELDS = new Set([
   "tags",
   "tides",
   "art",
+  "image-number",
 ]);
 
 /**
@@ -287,6 +288,25 @@ function validateArtCrop(field, rawValue) {
   });
 }
 
+function validateImageNumber(field, rawValue) {
+  // The image number selects the art file rendered for the card (resolved to
+  // `/cards/<number>.webp`), so it must be a non-negative whole number. A
+  // numeric string is accepted so a value typed into the editor's text input
+  // round-trips without the client having to coerce it first.
+  if (typeof rawValue === "number") {
+    if (Number.isInteger(rawValue) && rawValue >= 0) {
+      return validationSuccess(field, rawValue);
+    }
+    return validationFailure(field, "Image number must be a non-negative whole number.", rawValue);
+  }
+
+  if (typeof rawValue === "string" && /^\d+$/u.test(rawValue.trim())) {
+    return validationSuccess(field, Number(rawValue.trim()));
+  }
+
+  return validationFailure(field, "Image number must be a non-negative whole number.", rawValue);
+}
+
 export function validateCardEdit(field, rawValue) {
   if (!EDITABLE_CARD_FIELDS.has(field)) {
     return validationFailure(field, "This field is not editable.", rawValue);
@@ -294,6 +314,10 @@ export function validateCardEdit(field, rawValue) {
 
   if (field === "art") {
     return validateArtCrop(field, rawValue);
+  }
+
+  if (field === "image-number") {
+    return validateImageNumber(field, rawValue);
   }
 
   if (field === "energy-cost") {

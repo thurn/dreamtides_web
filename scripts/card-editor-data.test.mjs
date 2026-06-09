@@ -274,6 +274,34 @@ describe("validateCardEdit", () => {
     ).toBe(false);
   });
 
+  it("accepts a non-negative image number from a number or numeric string", () => {
+    expect(validateCardEdit("image-number", 436090600)).toMatchObject({
+      ok: true,
+      value: 436090600,
+    });
+    expect(validateCardEdit("image-number", "436090600")).toMatchObject({
+      ok: true,
+      value: 436090600,
+    });
+    expect(validateCardEdit("image-number", " 1001 ")).toMatchObject({
+      ok: true,
+      value: 1001,
+    });
+    expect(validateCardEdit("image-number", 0)).toMatchObject({
+      ok: true,
+      value: 0,
+    });
+  });
+
+  it("rejects malformed image numbers", () => {
+    expect(validateCardEdit("image-number", -1).ok).toBe(false);
+    expect(validateCardEdit("image-number", 1.5).ok).toBe(false);
+    expect(validateCardEdit("image-number", "12a").ok).toBe(false);
+    expect(validateCardEdit("image-number", "").ok).toBe(false);
+    expect(validateCardEdit("image-number", null).ok).toBe(false);
+    expect(validateCardEdit("image-number", [1001]).ok).toBe(false);
+  });
+
   it("accepts rendered text containing TOML string delimiter markers", () => {
     expect(validateCardEdit("rendered-text", 'Before\n""" after')).toMatchObject({
       ok: true,
@@ -451,6 +479,22 @@ card-number = 2
     expect(parsed.cards[1].spark).toBe(4);
     expect(parsed.cards[1].subtype).toBe("Oracle");
     expect(parsed.cards[1]["energy-cost"]).toBe(3);
+  });
+
+  it("replaces an existing image number in place", () => {
+    const source = fixtureToml();
+
+    const patched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "image-number",
+      value: 436090600,
+    });
+    const parsed = parse(patched.source);
+
+    expect(parsed.cards[0]["image-number"]).toBe(436090600);
+    expect(parsed.cards[1]["image-number"]).toBe(1002);
+    expect(patched.source).toContain("image-number = 436090600");
+    expect(patched.source).not.toContain("image-number = 1001");
   });
 
   it("patches following top-level fields after an escaped delimiter in multiline basic rendered text", () => {
