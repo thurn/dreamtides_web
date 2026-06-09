@@ -59,9 +59,7 @@ const DRAFT_OFFER_CARD_STYLE = {
 /** Strip the `A:`/`D:` source tag and title-case a theme label for display. */
 function prettyTheme(theme: string): string {
   const body = theme.replace(/^[AD]:/u, "");
-  return body
-    .replace(/-/g, " ")
-    .replace(/\b\w/gu, (c) => c.toUpperCase());
+  return body.replace(/-/g, " ").replace(/\b\w/gu, (c) => c.toUpperCase());
 }
 
 function sortCardsByCost(cards: CardData[]): CardData[] {
@@ -284,8 +282,7 @@ function FullDeckOverlay({
         <div
           className="mx-auto grid max-w-6xl gap-3 md:gap-4"
           style={{
-            gridTemplateColumns:
-              "repeat(auto-fill, minmax(150px, 1fr))",
+            gridTemplateColumns: "repeat(auto-fill, minmax(150px, 1fr))",
             alignItems: "start",
           }}
         >
@@ -496,8 +493,7 @@ export default function DraftTestApp() {
         if (records.length === 0 || !fitModel) return;
 
         const nameIndex = buildNameIndex(database);
-        const seed =
-          poolSeed ?? (Math.floor(Math.random() * 2 ** 32) >>> 0);
+        const seed = poolSeed ?? Math.floor(Math.random() * 2 ** 32) >>> 0;
         const index = selectReplayRecordIndex(
           dreamcaller.signatureCards ?? [],
           records,
@@ -773,7 +769,9 @@ export default function DraftTestApp() {
                           ? "1px solid rgba(148, 163, 184, 0.4)"
                           : "1px solid rgba(16, 185, 129, 0.5)",
                       color:
-                        poolInfo.variant === "color_pool" ? "#cbd5e1" : "#34d399",
+                        poolInfo.variant === "color_pool"
+                          ? "#cbd5e1"
+                          : "#34d399",
                     }}
                   >
                     {poolInfo.variant}
@@ -789,8 +787,8 @@ export default function DraftTestApp() {
                     {poolInfo.identity.toUpperCase()}
                   </span>
                   <span className="opacity-70">
-                    {String(poolInfo.size)} cards · {String(poolInfo.uniqueCount)}{" "}
-                    unique
+                    {String(poolInfo.size)} cards ·{" "}
+                    {String(poolInfo.uniqueCount)} unique
                   </span>
                   <span className="opacity-60">
                     {poolInfo.themes.map(prettyTheme).join(" + ")}
