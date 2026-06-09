@@ -1,6 +1,3 @@
-Unless a prompt starts with "master", please load the `wt` skill for all requests
-and perform all work in a temporary git worktree as described there.
-
 *Always* commit changes with detailed description, then `git push` immediately.
 
 Do not create new branches unless explicitly requested.
