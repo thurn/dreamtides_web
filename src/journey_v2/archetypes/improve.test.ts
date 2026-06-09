@@ -15,9 +15,13 @@ import type { CardData } from "../../types/cards";
 import type { DeckEntry } from "../../types/quest";
 import type { MerchantContext } from "../types";
 import {
+  keywordModBuilder,
+  keywordModCandidatePairs,
   starterTransfigureBuilder,
   transfigureBuilder,
   transfigureCandidatePairs,
+  TRIBES,
+  tribalChangeBuilder,
 } from "./improve";
 
 function uuid(n: number): string {
@@ -341,5 +345,271 @@ describe("improve family — starter_transfigure", () => {
         }
       }
     }
+  });
+});
+
+// --- Task 12: keyword_mod -----------------------------------------------------
+
+describe("improve family — keyword_mod", () => {
+  function eventCard(
+    overrides: Partial<CardData> & Pick<CardData, "id" | "cardNumber">,
+  ): CardData {
+    return makeMerchantTestCard({
+      cardType: "Event",
+      spark: null,
+      isFast: false,
+      renderedText: "Deal damage.",
+      ...overrides,
+    });
+  }
+
+  it("offers add_reclaim/add_fast/reduce_reclaim for the right Events", () => {
+    // A plain non-fast Event with no reclaim: add_reclaim + add_fast (2 pairs).
+    const plain = eventCard({ id: uuid(1000), cardNumber: 1000 });
+    // A fast Event with reclaimCost 3: reduce_reclaim only (no add_fast since
+    // already fast; no add_reclaim since it already has Reclaim).
+    const reclaimer = eventCard({
+      id: uuid(1001),
+      cardNumber: 1001,
+      isFast: true,
+      reclaimCost: 3,
+      renderedText: "Deal damage. Reclaim 3●",
+    });
+    const context = makeContext({
+      cards: [plain, reclaimer],
+      deckEntries: [
+        makeMerchantTestDeckEntry({ entryId: "plain", cardNumber: 1000 }),
+        makeMerchantTestDeckEntry({ entryId: "reclaimer", cardNumber: 1001 }),
+      ],
+    });
+    const pairs = keywordModCandidatePairs(context);
+    const byEntry = (id: string) =>
+      new Set(pairs.filter((p) => p.entryId === id).map((p) => p.variant));
+    expect(byEntry("plain")).toEqual(new Set(["add_reclaim", "add_fast"]));
+    expect(byEntry("reclaimer")).toEqual(new Set(["reduce_reclaim"]));
+  });
+
+  it("never pairs non-Events", () => {
+    const character = makeMerchantTestCard({
+      id: uuid(1100),
+      cardNumber: 1100,
+      cardType: "Character",
+    });
+    const context = makeContext({
+      cards: [character],
+      deckEntries: [
+        makeMerchantTestDeckEntry({ entryId: "c", cardNumber: 1100 }),
+      ],
+    });
+    expect(keywordModCandidatePairs(context)).toHaveLength(0);
+    expect(keywordModBuilder.eligible(context)).toBe(false);
+  });
+
+  it("respects an existing keywordModification.reclaim (no add_reclaim stacking)", () => {
+    const ev = eventCard({ id: uuid(1200), cardNumber: 1200 });
+    const context = makeContext({
+      cards: [ev],
+      deckEntries: [
+        makeMerchantTestDeckEntry({
+          entryId: "e",
+          cardNumber: 1200,
+          keywordModification: { reclaim: 1 },
+        }),
+      ],
+    });
+    const variants = new Set(
+      keywordModCandidatePairs(context).map((p) => p.variant),
+    );
+    // It already has modified Reclaim 1: add_reclaim is excluded. add_fast still
+    // applies (still non-fast). reduce_reclaim needs effective cost > 1, but the
+    // modified cost is exactly 1, so it is excluded too.
+    expect(variants.has("add_reclaim")).toBe(false);
+    expect(variants.has("add_fast")).toBe(true);
+    expect(variants.has("reduce_reclaim")).toBe(false);
+  });
+
+  it("offers reduce_reclaim against the effective (modified) cost", () => {
+    const ev = eventCard({
+      id: uuid(1300),
+      cardNumber: 1300,
+      isFast: true,
+    });
+    const context = makeContext({
+      cards: [ev],
+      deckEntries: [
+        makeMerchantTestDeckEntry({
+          entryId: "e",
+          cardNumber: 1300,
+          keywordModification: { setReclaim: 4 },
+        }),
+      ],
+    });
+    const reduce = keywordModCandidatePairs(context).find(
+      (p) => p.variant === "reduce_reclaim",
+    );
+    expect(reduce).toBeDefined();
+    expect(reduce?.payload.kind).toBe("change_deck_entry_keywords");
+    if (reduce?.payload.kind === "change_deck_entry_keywords") {
+      // Effective cost 4 -> setReclaim 3.
+      expect(reduce.payload.keywords.setReclaim).toBe(3);
+    }
+  });
+
+  it("samples uniformly and applies the payload", () => {
+    const ev = eventCard({ id: uuid(1400), cardNumber: 1400 });
+    const deckEntries = [
+      makeMerchantTestDeckEntry({ entryId: "e", cardNumber: 1400 }),
+    ];
+    const context = makeContext({ cards: [ev], deckEntries });
+    const variants = new Set<string>();
+    for (let s = 0; s < 40; s += 1) {
+      const draft = keywordModBuilder.build(context, merchantRng("k", String(s)));
+      expect(draft).not.toBeNull();
+      if (draft?.applyPayload?.kind === "change_deck_entry_keywords") {
+        const kw = draft.applyPayload.keywords;
+        if (kw.reclaim !== undefined) variants.add("add_reclaim");
+        if (kw.fast === true) variants.add("add_fast");
+      }
+    }
+    // Both variants seen across seeds (uniform, not argmax to one).
+    expect(variants).toEqual(new Set(["add_reclaim", "add_fast"]));
+
+    const draft = keywordModBuilder.build(context, merchantRng("k", "0"));
+    const questState = makeMerchantTestQuestState({ deck: deckEntries });
+    const questContent = makeMerchantTestContent({ cards: [ev] });
+    const next = applyMerchantPayloadToState({
+      state: questState,
+      questContent,
+      payload: draft!.applyPayload!,
+    });
+    expect(next).not.toBeNull();
+    expect(next?.deck[0].keywordModification).toBeDefined();
+  });
+});
+
+// --- Task 12: tribal_change ---------------------------------------------------
+
+describe("improve family — tribal_change", () => {
+  function tribeChar(
+    n: number,
+    subtype: string,
+    extra: Partial<CardData> = {},
+  ): CardData {
+    return makeMerchantTestCard({
+      id: uuid(n),
+      cardNumber: n,
+      cardType: "Character",
+      subtype,
+      ...extra,
+    });
+  }
+
+  it("is ineligible at 3 in-tribe Characters and eligible at 4", () => {
+    // 3 Warriors + 1 off-tribe Character. Threshold 4: not active.
+    const warriors3 = [0, 1, 2].map((i) => tribeChar(1500 + i, "Warrior"));
+    const off = tribeChar(1599, "Spirit Animal");
+    const ctx3 = makeContext({
+      cards: [...warriors3, off],
+      deckEntries: [
+        ...warriors3.map((c, i) =>
+          makeMerchantTestDeckEntry({ entryId: `w${i}`, cardNumber: c.cardNumber }),
+        ),
+        makeMerchantTestDeckEntry({ entryId: "off", cardNumber: 1599 }),
+      ],
+    });
+    expect(tribalChangeBuilder.eligible(ctx3)).toBe(false);
+
+    // 4 Warriors + 1 off-tribe Character. Active.
+    const warriors4 = [0, 1, 2, 3].map((i) => tribeChar(1600 + i, "Warrior"));
+    const off2 = tribeChar(1699, "Spirit Animal");
+    const ctx4 = makeContext({
+      cards: [...warriors4, off2],
+      deckEntries: [
+        ...warriors4.map((c, i) =>
+          makeMerchantTestDeckEntry({ entryId: `w${i}`, cardNumber: c.cardNumber }),
+        ),
+        makeMerchantTestDeckEntry({ entryId: "off", cardNumber: 1699 }),
+      ],
+    });
+    expect(tribalChangeBuilder.eligible(ctx4)).toBe(true);
+  });
+
+  it("excludes in-tribe Characters, Events, and entries with a prior typeChange", () => {
+    const warriors = [0, 1, 2, 3].map((i) => tribeChar(1700 + i, "Warrior"));
+    const offChar = tribeChar(1798, "Survivor");
+    const event = makeMerchantTestCard({
+      id: uuid(1799),
+      cardNumber: 1799,
+      cardType: "Event",
+      subtype: "Survivor",
+      spark: null,
+    });
+    const alreadyChanged = tribeChar(1797, "Outsider");
+    const context = makeContext({
+      cards: [...warriors, offChar, event, alreadyChanged],
+      deckEntries: [
+        ...warriors.map((c, i) =>
+          makeMerchantTestDeckEntry({ entryId: `w${i}`, cardNumber: c.cardNumber }),
+        ),
+        makeMerchantTestDeckEntry({ entryId: "off", cardNumber: 1798 }),
+        makeMerchantTestDeckEntry({ entryId: "evt", cardNumber: 1799 }),
+        makeMerchantTestDeckEntry({
+          entryId: "changed",
+          cardNumber: 1797,
+          typeChange: {
+            predicateId: "x",
+            cardType: "Character",
+            subtype: "Warrior",
+            label: "x",
+          },
+        }),
+      ],
+    });
+
+    const seen = new Set<string>();
+    for (let s = 0; s < 40; s += 1) {
+      const draft = tribalChangeBuilder.build(context, merchantRng("t", String(s)));
+      if (draft === null) continue;
+      const payload = draft.applyPayload;
+      if (payload?.kind === "change_deck_entry_type") {
+        seen.add(payload.entryId);
+      }
+    }
+    // Only the off-tribe Character with no prior typeChange is a candidate.
+    expect(seen).toEqual(new Set(["off"]));
+  });
+
+  it("applies a Character subtype change preserving the Character type", () => {
+    const warriors = [0, 1, 2, 3].map((i) => tribeChar(1800 + i, "Warrior"));
+    const off = tribeChar(1899, "Spirit Animal");
+    const deckEntries = [
+      ...warriors.map((c, i) =>
+        makeMerchantTestDeckEntry({ entryId: `w${i}`, cardNumber: c.cardNumber }),
+      ),
+      makeMerchantTestDeckEntry({ entryId: "off", cardNumber: 1899 }),
+    ];
+    const cards = [...warriors, off];
+    const context = makeContext({ cards, deckEntries });
+    const draft = tribalChangeBuilder.build(context, merchantRng("t"));
+    expect(draft).not.toBeNull();
+    const payload = draft?.applyPayload;
+    expect(payload?.kind).toBe("change_deck_entry_type");
+    if (payload?.kind !== "change_deck_entry_type") return;
+    expect(payload.typeChange.cardType).toBe("Character");
+    expect(TRIBES).toContain(payload.typeChange.subtype);
+    expect(payload.typeChange.predicateId).toBe(
+      `merchant:tribal:${payload.typeChange.subtype}`,
+    );
+
+    const questState = makeMerchantTestQuestState({ deck: deckEntries });
+    const questContent = makeMerchantTestContent({ cards });
+    const next = applyMerchantPayloadToState({
+      state: questState,
+      questContent,
+      payload,
+    });
+    expect(next).not.toBeNull();
+    const changed = next?.deck.find((e) => e.entryId === "off");
+    expect(changed?.typeChange?.cardType).toBe("Character");
   });
 });

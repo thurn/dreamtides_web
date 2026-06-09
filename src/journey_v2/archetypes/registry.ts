@@ -9,7 +9,12 @@ import {
   strongCardBuilder,
   transfiguredDraftBuilder,
 } from "./grant";
-import { starterTransfigureBuilder, transfigureBuilder } from "./improve";
+import {
+  keywordModBuilder,
+  starterTransfigureBuilder,
+  transfigureBuilder,
+  tribalChangeBuilder,
+} from "./improve";
 import type { MerchantArchetypeBuilder } from "./types";
 
 /**
@@ -32,5 +37,7 @@ export const MERCHANT_ARCHETYPE_BUILDERS: readonly MerchantArchetypeBuilder[] = 
   transfiguredDraftBuilder,
   transfigureBuilder,
   starterTransfigureBuilder,
+  keywordModBuilder,
+  tribalChangeBuilder,
   dreamsignBuilder,
 ];

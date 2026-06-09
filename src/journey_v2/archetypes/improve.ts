@@ -1,9 +1,10 @@
+import { applyDeckEntryCardModification } from "../../card-type-change";
 import {
   applyTransfigurationToCard,
   eligibleTransfigurations,
 } from "../../transfiguration/transfiguration-logic";
 import type { CardData } from "../../types/cards";
-import type { TransfigurationType } from "../../types/quest";
+import type { CardTypeChange, DeckEntry, TransfigurationType } from "../../types/quest";
 import { centrality } from "../signals/fit";
 import { bandSample, type MerchantRng } from "../signals/rng";
 import { MERCHANT_TUNING } from "../tuning";
@@ -18,6 +19,25 @@ import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
 /** Clamp a value to [0, 1]. */
 function clamp01(v: number): number {
   return Math.max(0, Math.min(1, v));
+}
+
+/**
+ * Computes the EFFECTIVE card of a deck entry: the base card with the entry's
+ * transfiguration applied first, then its type change, then its keyword
+ * modification (the `getEffectiveCard` ordering). The improve archetypes read
+ * this so they respect modifications already on the entry (e.g. an existing
+ * Reclaim grant) rather than the base card.
+ */
+function effectiveCardFor(deckCard: MerchantDeckCard): CardData {
+  const entry: DeckEntry = deckCard.deckEntry;
+  const transfigured =
+    entry.transfiguration === null
+      ? deckCard.card
+      : applyTransfigurationToCard(deckCard.card, entry.transfiguration);
+  return applyDeckEntryCardModification(transfigured, {
+    typeChange: entry.typeChange,
+    keywords: entry.keywordModification,
+  });
 }
 
 /**
@@ -278,6 +298,278 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
             : "",
         )
         .join(","),
+    };
+  },
+};
+
+// --- keyword_mod --------------------------------------------------------------
+
+/** The three keyword-modification variants offered for deck Events. */
+export type KeywordModVariant = "add_reclaim" | "add_fast" | "reduce_reclaim";
+
+/** A single (deck entry, keyword variant) candidate with its built payload. */
+export interface KeywordModCandidatePair {
+  deckCard: MerchantDeckCard;
+  entryId: string;
+  variant: KeywordModVariant;
+  payload: MerchantApplyPayload;
+  preview: CardData;
+}
+
+/** Effective Reclaim cost of a card; 0 when the card has no Reclaim. */
+function effectiveReclaimCost(card: CardData): number {
+  const cost = card.reclaimCost;
+  return cost === null || cost === undefined ? 0 : cost;
+}
+
+/**
+ * Enumerates the flat (deck Event entry, keyword variant) candidate list,
+ * reading each entry's EFFECTIVE card so modifications already on the entry are
+ * respected:
+ * - `add_reclaim` for Events whose effective card has no Reclaim.
+ * - `add_fast` for Events whose effective card is not fast.
+ * - `reduce_reclaim` for Events whose effective Reclaim cost is > 1.
+ */
+export function keywordModCandidatePairs(
+  context: MerchantContext,
+): readonly KeywordModCandidatePair[] {
+  const pairs: KeywordModCandidatePair[] = [];
+  for (const deckCard of context.deckCards) {
+    const effective = effectiveCardFor(deckCard);
+    if (effective.cardType !== "Event") continue;
+
+    const reclaimCost = effectiveReclaimCost(effective);
+
+    if (reclaimCost <= 0) {
+      pairs.push(
+        buildKeywordModPair(deckCard, "add_reclaim", { reclaim: 1 }),
+      );
+    }
+    if (!effective.isFast) {
+      pairs.push(buildKeywordModPair(deckCard, "add_fast", { fast: true }));
+    }
+    if (reclaimCost > 1) {
+      pairs.push(
+        buildKeywordModPair(deckCard, "reduce_reclaim", {
+          setReclaim: reclaimCost - 1,
+        }),
+      );
+    }
+  }
+  return pairs;
+}
+
+function buildKeywordModPair(
+  deckCard: MerchantDeckCard,
+  variant: KeywordModVariant,
+  keywords: { reclaim?: number; fast?: boolean; setReclaim?: number },
+): KeywordModCandidatePair {
+  const previewBase = applyDeckEntryCardModification(
+    effectiveCardFor(deckCard),
+    { keywords },
+  );
+  return {
+    deckCard,
+    entryId: deckCard.entryId,
+    variant,
+    preview: previewBase,
+    payload: {
+      kind: "change_deck_entry_keywords",
+      entryId: deckCard.entryId,
+      cardUuid: deckCard.cardUuid,
+      cardNumber: deckCard.cardNumber,
+      keywords,
+    },
+  };
+}
+
+function keywordModSummary(variant: KeywordModVariant): string {
+  switch (variant) {
+    case "add_reclaim":
+      return "Add Reclaim to an event.";
+    case "add_fast":
+      return "Make an event fast.";
+    case "reduce_reclaim":
+      return "Reduce a Reclaim cost.";
+  }
+}
+
+/**
+ * `keyword_mod` — *Add Reclaim to an event / make an event fast / reduce a
+ * Reclaim cost.*
+ *
+ * Builds the flat (entry, variant) candidate list off each Event's effective
+ * card, then seeded-samples one pair uniformly — no Legendary/cost argmax.
+ * Face-up with a preview. Eligible when >= 1 pair exists.
+ */
+export const keywordModBuilder: MerchantArchetypeBuilder = {
+  archetypeId: "keyword_mod",
+  family: "improve",
+  eligible(context: MerchantContext): boolean {
+    return keywordModCandidatePairs(context).length > 0;
+  },
+  build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
+    const pairs = keywordModCandidatePairs(context);
+    if (pairs.length === 0) return null;
+    // Uniform seeded sample: a flat band over the whole list.
+    const target = bandSample(pairs, () => 0, 1, rng, {
+      bandFraction: 1,
+      bandMinimum: pairs.length,
+    })[0];
+    if (target === undefined) return null;
+
+    return {
+      archetypeId: "keyword_mod",
+      family: "improve",
+      title: `${target.deckCard.displayName}: ${keywordModSummary(target.variant)}`,
+      summary: keywordModSummary(target.variant),
+      gameObjects: [
+        {
+          objectType: "deckCard",
+          entryId: target.entryId,
+          cardUuid: target.deckCard.cardUuid,
+          cardNumber: target.deckCard.cardNumber,
+          deckEntry: target.deckCard.deckEntry,
+          card: target.preview,
+          displayName: target.deckCard.displayName,
+          previewCard: target.preview,
+        },
+      ],
+      hiddenUntilCommit: false,
+      applyPayload: target.payload,
+      targetKey: `${target.entryId}:${target.variant}`,
+    };
+  },
+};
+
+// --- tribal_change ------------------------------------------------------------
+
+/** The four main tribes a deck can commit to. */
+export const TRIBES = [
+  "Warrior",
+  "Spirit Animal",
+  "Survivor",
+  "Outsider",
+] as const;
+
+export type Tribe = (typeof TRIBES)[number];
+
+/** A (off-tribe Character entry, active tribe) candidate pair. */
+export interface TribalChangeCandidatePair {
+  deckCard: MerchantDeckCard;
+  entryId: string;
+  tribe: Tribe;
+}
+
+/** Tribes the deck is committed to: >= `tribalThreshold` effective Characters. */
+function activeTribes(context: MerchantContext): ReadonlySet<Tribe> {
+  const counts = new Map<Tribe, number>();
+  for (const deckCard of context.deckCards) {
+    const effective = effectiveCardFor(deckCard);
+    if (effective.cardType !== "Character") continue;
+    const tribe = TRIBES.find((t) => t === effective.subtype);
+    if (tribe === undefined) continue;
+    counts.set(tribe, (counts.get(tribe) ?? 0) + 1);
+  }
+  const active = new Set<Tribe>();
+  for (const [tribe, count] of counts) {
+    if (count >= MERCHANT_TUNING.tribalThreshold) active.add(tribe);
+  }
+  return active;
+}
+
+/**
+ * Enumerates (off-tribe Character entry with no prior type change, active
+ * tribe) pairs. The entry's effective subtype must differ from the tribe.
+ */
+export function tribalChangeCandidatePairs(
+  context: MerchantContext,
+): readonly TribalChangeCandidatePair[] {
+  const active = activeTribes(context);
+  if (active.size === 0) return [];
+  const pairs: TribalChangeCandidatePair[] = [];
+  for (const deckCard of context.deckCards) {
+    if (deckCard.deckEntry.typeChange != null) continue;
+    const effective = effectiveCardFor(deckCard);
+    if (effective.cardType !== "Character") continue;
+    for (const tribe of active) {
+      if (effective.subtype === tribe) continue;
+      pairs.push({ deckCard, entryId: deckCard.entryId, tribe });
+    }
+  }
+  return pairs;
+}
+
+function tribalTypeChange(tribe: Tribe): CardTypeChange {
+  return {
+    predicateId: `merchant:tribal:${tribe}`,
+    cardType: "Character",
+    subtype: tribe,
+    label: `Becomes a ${tribe}`,
+  };
+}
+
+/**
+ * `tribal_change` — *Change a character's subtype to your tribe.*
+ *
+ * Candidates: (off-tribe Character entry with no prior type change, active
+ * tribe) pairs. A tribe is active at >= `tribalThreshold` effective Characters
+ * of that subtype. Signal: the entry's `centrality` — converting your better
+ * off-tribe characters matters more. Band-sample one pair. Face-up with a
+ * preview. Eligible when >= 1 pair exists.
+ */
+export const tribalChangeBuilder: MerchantArchetypeBuilder = {
+  archetypeId: "tribal_change",
+  family: "improve",
+  eligible(context: MerchantContext): boolean {
+    return tribalChangeCandidatePairs(context).length > 0;
+  },
+  build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
+    const pairs = tribalChangeCandidatePairs(context);
+    if (pairs.length === 0) return null;
+
+    const deck = context.deckCards.map((deckCard) => deckCard.card);
+    const target = bandSample(
+      pairs,
+      (pair) => centrality(pair.deckCard.card, deck, context.fitModel),
+      1,
+      rng,
+    )[0];
+    if (target === undefined) return null;
+
+    const typeChange = tribalTypeChange(target.tribe);
+    const preview = applyDeckEntryCardModification(
+      effectiveCardFor(target.deckCard),
+      { typeChange },
+    );
+
+    return {
+      archetypeId: "tribal_change",
+      family: "improve",
+      title: `${target.deckCard.displayName} becomes a ${target.tribe}`,
+      summary: `Change a character's subtype to ${target.tribe}.`,
+      gameObjects: [
+        {
+          objectType: "deckCard",
+          entryId: target.entryId,
+          cardUuid: target.deckCard.cardUuid,
+          cardNumber: target.deckCard.cardNumber,
+          deckEntry: target.deckCard.deckEntry,
+          card: preview,
+          displayName: target.deckCard.displayName,
+          badge: { label: `Becomes a ${target.tribe}` },
+          previewCard: preview,
+        },
+      ],
+      hiddenUntilCommit: false,
+      applyPayload: {
+        kind: "change_deck_entry_type",
+        entryId: target.entryId,
+        cardUuid: target.deckCard.cardUuid,
+        cardNumber: target.deckCard.cardNumber,
+        typeChange,
+      },
+      targetKey: `${target.entryId}:${target.tribe}`,
     };
   },
 };
