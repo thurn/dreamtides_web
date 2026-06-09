@@ -3677,7 +3677,7 @@ card-number = 200
 
 [[cards]]
 name = "Liminal Striker"
-mtg-name = "Blade of Unity"
+mtg-name = "Michiko's Reign of Truth // Portrait of Michiko"
 id = "7947e9db-a85e-4277-a42a-8d45f7475295"
 rendered-text = "This character has +1✦ for each allied warrior."
 energy-cost = 2
@@ -6933,7 +6933,7 @@ art = { x = 0.21, y = 1, scale = 1.17 }
 name = "Horizon Follower"
 mtg-name = "Walking Ballista"
 id = "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3"
-rendered-text = "4●: Gain 1⍟."
+rendered-text = "4●: Gain 1⍟. This character gains +1✦."
 energy-cost = 2
 card-type = "Character"
 subtype = "Warrior"
@@ -8963,7 +8963,7 @@ art-owned = true
 card-number = 487
 
 [[cards]]
-name = "Soulrender"
+name = "Dune Reaper"
 mtg-name = "Altar of Dementia"
 id = "77f31db4-0397-49a7-8886-f5459ee960e9"
 rendered-text = "Abandon a character: Chosen player erodes X, where X is that character's cost."
@@ -8975,9 +8975,10 @@ is-fast = false
 is-interrupt = false
 spark = 3
 tags = ["Art Rework"]
-image-number = 2018053220
+image-number = 2639857441
 art-owned = false
 card-number = 488
+art = { x = -0.322, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Burning Revenant"
