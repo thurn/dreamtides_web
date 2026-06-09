@@ -1,366 +1,132 @@
 import { describe, expect, it } from "vitest";
-import { buildMerchantContext } from "../context/buildMerchantContext";
-import { readMerchantDeck } from "../read/deckRead";
-import {
-  generateMerchantEncounter,
-  generateMerchantEncounterWithDebug,
-} from "./generateMerchantEncounter";
 import type { CardData } from "../../types/cards";
-import type { SiteState } from "../../types/quest";
-import type { MerchantContext, MerchantNeed } from "../types";
+import type { QuestContent } from "../../data/quest-content";
+import type { MerchantCorpusCard } from "../../data/merchant-corpus";
+import type { DreamsignProfile } from "../../data/dreamsign-profiles";
+import type { QuestState } from "../../types/quest";
 import {
   makeMerchantTestCard,
   makeMerchantTestContent,
-  makeMerchantTestDeckEntry,
+  makeMerchantTestCorpus,
+  makeMerchantTestDreamsignProfile,
+  makeMerchantTestDreamsignTemplate,
   makeMerchantTestQuestState,
   makeMerchantTestSite,
 } from "../testing/fixtures";
+import { buildMerchantContext } from "../context/buildMerchantContext";
+import { generateMerchantEncounter } from "./generateMerchantEncounter";
 
-const UUIDS = {
-  deckHighEvent: "70000000-0000-4000-8000-000000000001",
-  deckHighCharacter: "70000000-0000-4000-8000-000000000002",
-  deckFillerA: "70000000-0000-4000-8000-000000000003",
-  deckFillerB: "70000000-0000-4000-8000-000000000004",
-  deckFillerC: "70000000-0000-4000-8000-000000000005",
-  deckFillerD: "70000000-0000-4000-8000-000000000006",
-  drawA: "70000000-0000-4000-8000-000000000101",
-  drawB: "70000000-0000-4000-8000-000000000102",
-  drawC: "70000000-0000-4000-8000-000000000103",
-  drawD: "70000000-0000-4000-8000-000000000104",
-  recursionA: "70000000-0000-4000-8000-000000000201",
-  recursionB: "70000000-0000-4000-8000-000000000202",
-  recursionC: "70000000-0000-4000-8000-000000000203",
-  interactionA: "70000000-0000-4000-8000-000000000301",
-  interactionB: "70000000-0000-4000-8000-000000000302",
-  interactionC: "70000000-0000-4000-8000-000000000303",
-  earlyA: "70000000-0000-4000-8000-000000000401",
-  earlyB: "70000000-0000-4000-8000-000000000402",
-  earlyC: "70000000-0000-4000-8000-000000000403",
-  deckAlternate: "70000000-0000-4000-8000-000000000901",
-} as const;
-
-function card(
-  id: string,
-  cardNumber: number,
-  overrides: Partial<CardData> = {},
-): CardData {
-  return makeMerchantTestCard({
-    id,
-    cardNumber,
-    name: `Encounter Fixture ${cardNumber}`,
-    cardType: "Character",
-    energyCost: 2,
-    spark: 1,
-    renderedText: "",
-    ...overrides,
-  });
+function poolCards(count: number): {
+  cards: CardData[];
+  corpus: Record<string, Partial<MerchantCorpusCard> & { quality: number }>;
+} {
+  const cards: CardData[] = [];
+  const corpus: Record<string, Partial<MerchantCorpusCard> & { quality: number }> = {};
+  for (let i = 0; i < count; i += 1) {
+    const cardNumber = 1000 + i;
+    const id = `aaaa0000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`;
+    cards.push(
+      makeMerchantTestCard({ id, cardNumber, name: `Pool ${String(cardNumber)}` }),
+    );
+    // Quality varies so the strong band has multiple distinct members.
+    corpus[id] = { quality: (i % 20) / 20 + 0.01 * i };
+  }
+  return { cards, corpus };
 }
 
-function fixtureCards(): CardData[] {
-  return [
-    card(UUIDS.deckHighEvent, 1, {
-      name: "High Event",
-      cardType: "Event",
-      energyCost: 5,
-      spark: null,
-      renderedText: "Fast.",
-    }),
-    card(UUIDS.deckHighCharacter, 2, {
-      name: "High Character",
-      energyCost: 5,
-      spark: 4,
-    }),
-    card(UUIDS.deckFillerA, 3, { energyCost: 4 }),
-    card(UUIDS.deckFillerB, 4, { energyCost: 4 }),
-    card(UUIDS.deckFillerC, 5, { energyCost: 3 }),
-    card(UUIDS.deckFillerD, 6, { energyCost: 3 }),
-    card(UUIDS.drawA, 101, { renderedText: "Draw a card." }),
-    card(UUIDS.drawB, 102, { renderedText: "Draw two cards." }),
-    card(UUIDS.drawC, 103, { renderedText: "When this enters, draw a card." }),
-    card(UUIDS.drawD, 104, {
-      rarity: "Legendary",
-      renderedText: "Draw a card, then gain 1 spark.",
-    }),
-    card(UUIDS.recursionA, 201, { renderedText: "Reclaim 1." }),
-    card(UUIDS.recursionB, 202, {
-      renderedText: "Return a card from your void to your hand.",
-    }),
-    card(UUIDS.recursionC, 203, { renderedText: "Reclaim 2." }),
-    card(UUIDS.interactionA, 301, { renderedText: "Banish an enemy." }),
-    card(UUIDS.interactionB, 302, { renderedText: "Prevent the next damage." }),
-    card(UUIDS.interactionC, 303, {
-      renderedText: "Return an enemy to its owner's hand.",
-    }),
-    card(UUIDS.earlyA, 401, { energyCost: 1 }),
-    card(UUIDS.earlyB, 402, { energyCost: 1 }),
-    card(UUIDS.earlyC, 403, { energyCost: 0 }),
-    card(UUIDS.deckAlternate, 901, { energyCost: 2, renderedText: "Draw a card." }),
-  ];
-}
-
-function deckCardNumbers(): number[] {
-  return [1, 2, 3, 4, 5, 6];
-}
-
-const CANDIDATE_CARD_NUMBERS = [
-  101,
-  102,
-  103,
-  104,
-  201,
-  202,
-  203,
-  301,
-  302,
-  303,
-  401,
-  402,
-  403,
-] as const;
-
-function contextFor(
-  overrides: {
-    seed?: string;
-    essence?: number;
-    essenceCap?: number;
-    site?: Partial<SiteState>;
-    deckNumbers?: readonly number[];
-    cardOverridesByNumber?: ReadonlyMap<number, Partial<CardData>>;
-  } = {},
-): MerchantContext {
-  const cards = fixtureCards().map((testCard) => ({
-    ...testCard,
-    ...(overrides.cardOverridesByNumber?.get(testCard.cardNumber) ?? {}),
-  }));
-  return buildMerchantContext({
-    questState: makeMerchantTestQuestState({
-      seed: overrides.seed ?? "merchant-encounter-seed",
-      essence: overrides.essence ?? 180,
-      essenceCap: overrides.essenceCap ?? 360,
-      deck: (overrides.deckNumbers ?? deckCardNumbers()).map((cardNumber, index) =>
-        makeMerchantTestDeckEntry({
-          entryId: `deck-entry-${String(index + 1).padStart(2, "0")}`,
-          cardNumber,
-        }),
-      ),
-    }),
-    questContent: makeMerchantTestContent({
-      cards,
-    }),
-    site: makeMerchantTestSite(overrides.site),
+function dreamsignTemplates(count: number) {
+  const templates = [];
+  const profiles: Record<string, DreamsignProfile> = {};
+  for (let i = 0; i < count; i += 1) {
+    const id = `dsign-${String(i)}`;
+    templates.push(makeMerchantTestDreamsignTemplate({ id, name: `Sign ${String(i)}` }));
+    profiles[id] = makeMerchantTestDreamsignProfile({
+      id,
+      quality: ((i % 3) + 1) as 1 | 2 | 3,
     });
+  }
+  return { templates, profiles };
 }
 
-function insufficientCandidateContext(): MerchantContext {
-  const onlyCard = card(UUIDS.deckHighEvent, 1, {
-    cardType: "Event",
-    energyCost: 5,
-    spark: null,
-    isFast: true,
-    reclaimCost: 1,
-    renderedText: "Fast. Reclaim 1.",
+function fixtureContent(input: {
+  poolCount?: number;
+  dreamsignCount?: number;
+}): QuestContent {
+  const { cards, corpus } = poolCards(input.poolCount ?? 30);
+  const { templates, profiles } = dreamsignTemplates(input.dreamsignCount ?? 10);
+  return makeMerchantTestContent({
+    cards,
+    dreamsignTemplates: templates,
+    merchantCorpus: makeMerchantTestCorpus({ cards: corpus }),
+    dreamsignProfiles: new Map(Object.entries(profiles)),
   });
+}
+
+function contextFor(content: QuestContent, state: QuestState) {
   return buildMerchantContext({
-    questState: makeMerchantTestQuestState({
-      seed: "merchant-insufficient-candidates",
-      essence: 180,
-      essenceCap: 360,
-      deck: [
-        makeMerchantTestDeckEntry({
-          entryId: "only-entry",
-          cardNumber: onlyCard.cardNumber,
-        }),
-      ],
-    }),
-    questContent: makeMerchantTestContent({
-      cards: [onlyCard],
-    }),
-    site: makeMerchantTestSite(),
+    questState: state,
+    questContent: content,
+    site: makeMerchantTestSite({ id: "site-gen-fixture" }),
   });
-}
-
-function targetForNeed(need: MerchantNeed): string {
-  if (need.needType === "card") return `${need.entryId}:${need.cardUuid}`;
-  if (need.needKind === "missing_role" || need.needKind === "curve_problem") {
-    return `${need.themeId}:${need.role}`;
-  }
-  if (need.needKind === "dreamsign_gap") return need.dreamsignId;
-  return "need:unknown";
-}
-
-function expectHonestBrokerInvariants(context: MerchantContext): void {
-  const needs = readMerchantDeck(context);
-  const needIds = new Set(needs.map((need) => need.needId));
-  const encounter = generateMerchantEncounter(context);
-
-  expect(encounter.offers).toHaveLength(2);
-  expect(encounter.offers.map((offer) => offer.offerId)).toEqual(["A", "B"]);
-  for (const offer of encounter.offers) {
-    expect(needIds.has(offer.needId)).toBe(true);
-    expect(offer.rewards.length).toBeGreaterThan(0);
-    expect(offer.reward.answersNeedIds).toContain(offer.needId);
-    expect(offer.price).toBeGreaterThanOrEqual(0);
-    expect(offer.priceDetail.price).toBe(offer.price);
-    expect(offer.reward.applyPayload !== undefined ||
-      (offer.reward.choiceRequest?.candidates.length ?? 0) > 0).toBe(true);
-  }
 }
 
 describe("generateMerchantEncounter", () => {
-  it("generates exactly two normal-context offers with ids A and B", () => {
-    const encounter = generateMerchantEncounter(contextFor());
-
-    expect(encounter.offers).toHaveLength(2);
-    expect(encounter.offers.map((offer) => offer.offerId)).toEqual(["A", "B"]);
-  });
-
-  it("returns enough generation debug to reconstruct selected offers", () => {
-    const { encounter, debug } = generateMerchantEncounterWithDebug(contextFor());
-
-    expect(debug.encounterSignature).toBe(encounter.encounterSignature);
-    expect(debug.input.questSeed).toBe("merchant-encounter-seed");
-    expect(debug.selectionPolicy.offerIds).toEqual(["A", "B"]);
-    expect(debug.needs.length).toBeGreaterThan(0);
-    expect(JSON.stringify(debug.needs)).not.toContain("displayName");
-    expect(debug.candidates.length).toBeGreaterThan(0);
-    expect(debug.selectedCandidates.map((candidate) => candidate.selectedOfferId)).toEqual([
-      "A",
-      "B",
-    ]);
-    expect(debug.offers.map((offer) => offer.offerId)).toEqual(["A", "B"]);
-    for (const offer of debug.offers) {
-      expect(
-        debug.candidates.some(
-          (candidate) => candidate.candidateId === offer.selectedCandidateId,
-        ),
-      ).toBe(true);
+  it("produces exactly two offers from different families across seeds", () => {
+    const content = fixtureContent({});
+    for (let s = 0; s < 30; s += 1) {
+      const state = makeMerchantTestQuestState({ seed: `seed-${String(s)}` });
+      const encounter = generateMerchantEncounter(contextFor(content, state));
+      expect(encounter.offers).toHaveLength(2);
+      const [a, b] = encounter.offers;
+      expect(a.family).not.toBe(b.family);
+      for (const offer of encounter.offers) {
+        const choiceCount = offer.choiceRequest?.candidates.length ?? 0;
+        expect(offer.applyPayload !== undefined || choiceCount > 0).toBe(true);
+        expect(choiceCount).toBeLessThanOrEqual(4);
+      }
     }
-    expect(
-      debug.candidates.some(
-        (candidate) =>
-          candidate.reward.choiceRequest?.candidates.some(
-            (choice) => choice.debug?.source === "catalog_rank",
-          ) === true,
-      ),
-    ).toBe(true);
   });
 
-  it("makes both offers answer existing detected need ids", () => {
-    const context = contextFor();
-    const needIds = new Set(readMerchantDeck(context).map((need) => need.needId));
-    const encounter = generateMerchantEncounter(context);
-
-    expect(encounter.offers.every((offer) => needIds.has(offer.needId))).toBe(true);
+  it("is deterministic for the same (seed, site, state)", () => {
+    const content = fixtureContent({});
+    const state = makeMerchantTestQuestState({ seed: "stable-seed" });
+    const a = generateMerchantEncounter(contextFor(content, state));
+    const b = generateMerchantEncounter(contextFor(content, state));
+    expect(a).toEqual(b);
   });
 
-  it("prefers offers that are meaningfully distinct by builder, need, or target", () => {
-    const context = contextFor();
-    const needsById = new Map(readMerchantDeck(context).map((need) => [need.needId, need]));
-    const [first, second] = generateMerchantEncounter(context).offers;
-    if (first === undefined || second === undefined) {
-      throw new Error("expected two offers");
-    }
-    const firstNeed = needsById.get(first.needId);
-    const secondNeed = needsById.get(second.needId);
-    if (firstNeed === undefined || secondNeed === undefined) {
-      throw new Error("expected offers to reference detected needs");
-    }
-
-    expect(
-      first.rewardBuilderId !== second.rewardBuilderId ||
-        first.needId !== second.needId ||
-        targetForNeed(firstNeed) !== targetForNeed(secondNeed),
-    ).toBe(true);
-  });
-
-  it("produces stable signatures for unchanged context", () => {
-    const context = contextFor({ seed: "stable-encounter-seed" });
-
-    expect(generateMerchantEncounter(context).encounterSignature).toBe(
-      generateMerchantEncounter(context).encounterSignature,
-    );
-  });
-
-  it("changes signatures when deck, resource, or site inputs change", () => {
-    const base = generateMerchantEncounter(contextFor()).encounterSignature;
-    const deckChanged = generateMerchantEncounter(
-      contextFor({ deckNumbers: [901, 2, 3, 4, 5, 6] }),
-    ).encounterSignature;
-    const resourceChanged = generateMerchantEncounter(
-      contextFor({ essence: 179 }),
-    ).encounterSignature;
-    const siteChanged = generateMerchantEncounter(
-      contextFor({ site: { id: "site-merchant-fixture-b", isEnhanced: true } }),
-    ).encounterSignature;
-
-    expect(deckChanged).not.toBe(base);
-    expect(resourceChanged).not.toBe(base);
-    expect(siteChanged).not.toBe(base);
-  });
-
-  it("does not change signatures when offered candidate names change", () => {
-    const base = generateMerchantEncounter(contextFor()).encounterSignature;
-    const candidateNamesChanged = generateMerchantEncounter(
-      contextFor({
-        cardOverridesByNumber: new Map(
-          CANDIDATE_CARD_NUMBERS.map((cardNumber) => [
-            cardNumber,
-            { name: `Altered Candidate ${cardNumber}` },
-          ]),
-        ),
-      }),
-    ).encounterSignature;
-
-    expect(candidateNamesChanged).toBe(base);
-  });
-
-  it("changes signatures when offered choice identity changes", () => {
-    const base = generateMerchantEncounter(contextFor()).encounterSignature;
-    const candidateIdentityChanged = generateMerchantEncounter(
-      contextFor({
-        cardOverridesByNumber: new Map(
-          CANDIDATE_CARD_NUMBERS.map((cardNumber) => [
-            cardNumber,
-            {
-              id: `80000000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`,
-            },
-          ]),
-        ),
-      }),
-    ).encounterSignature;
-
-    expect(candidateIdentityChanged).not.toBe(base);
-  });
-
-  it("falls back to alternate builders instead of returning a partial encounter", () => {
-    const encounter = generateMerchantEncounter(insufficientCandidateContext());
-
-    expect(encounter.offers).toHaveLength(2);
-    expect(encounter.offers.map((offer) => offer.offerId)).toEqual(["A", "B"]);
-    expect(encounter.offers.some((offer) =>
-      offer.rewardBuilderId === "gain_essence" ||
-      offer.rewardBuilderId === "raise_essence_cap" ||
-      offer.rewardBuilderId === "grant_dreamsign",
-    )).toBe(true);
-  });
-
-  it("satisfies honest-broker invariants across 25 deterministic seeds", () => {
-    for (let index = 0; index < 25; index += 1) {
-      expectHonestBrokerInvariants(
-        contextFor({ seed: `merchant-encounter-seed-${index}` }),
+  it("yields varied outcomes when only the seed changes", () => {
+    const content = fixtureContent({});
+    const tuples = new Set<string>();
+    for (let s = 0; s < 30; s += 1) {
+      const state = makeMerchantTestQuestState({ seed: `vary-${String(s)}` });
+      const encounter = generateMerchantEncounter(contextFor(content, state));
+      const [a, b] = encounter.offers;
+      tuples.add(
+        `${a.archetypeId}:${a.targetKey}|${b.archetypeId}:${b.targetKey}`,
       );
     }
+    expect(tuples.size).toBeGreaterThanOrEqual(5);
   });
 
-  it("keeps locked offers present when essence is low", () => {
-    const encounter = generateMerchantEncounter(
-      contextFor({ essence: 0, essenceCap: 360 }),
-    );
-
+  it("still yields a valid encounter for an empty deck", () => {
+    const content = fixtureContent({});
+    const state = makeMerchantTestQuestState({ seed: "empty-deck", deck: [] });
+    const encounter = generateMerchantEncounter(contextFor(content, state));
     expect(encounter.offers).toHaveLength(2);
-    expect(encounter.offers.every((offer) => offer.locked)).toBe(true);
-    expect(encounter.offers.every((offer) =>
-      offer.lockedReason === "insufficient_essence",
-    )).toBe(true);
+    expect(encounter.offers[0].family).not.toBe(encounter.offers[1].family);
+  });
+
+  it("renders a single dialogue line and an accept reaction", () => {
+    const content = fixtureContent({});
+    const state = makeMerchantTestQuestState({ seed: "dialogue" });
+    const encounter = generateMerchantEncounter(contextFor(content, state));
+    expect(encounter.dialogue.line.length).toBeGreaterThan(0);
+    expect(
+      encounter.offers.some(
+        (offer) => offer.offerId === encounter.dialogue.offerId,
+      ),
+    ).toBe(true);
+    expect(encounter.acceptReaction.length).toBeGreaterThan(0);
   });
 });

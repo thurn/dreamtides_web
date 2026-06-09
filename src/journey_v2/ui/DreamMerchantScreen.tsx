@@ -35,26 +35,15 @@ export function DreamMerchantScreen({
     ReadonlyMap<string, MerchantChoice>
   >(new Map());
   const [validationMessage, setValidationMessage] = useState<string | null>(null);
+  const [accepted, setAccepted] = useState(false);
 
   const choosingOffer = useMemo(
     () => encounter.offers.find((offer) => offer.offerId === choosingOfferId),
     [choosingOfferId, encounter.offers],
   );
-  const preActionDialogue = encounter.dialogue.filter(
-    (beat) => beat.phase === "pre_offer",
-  );
 
   function selectedChoiceFor(offer: MerchantOffer): MerchantChoice | undefined {
     return selectedChoices.get(offer.offerId);
-  }
-
-  function needReadFor(offer: MerchantOffer): string {
-    const observation = preActionDialogue.find(
-      (beat) =>
-        beat.kind === "observation" &&
-        (beat.offerId === offer.offerId || beat.needId === offer.needId),
-    );
-    return observation?.text ?? offer.reward.summary;
   }
 
   function acceptOffer(offer: MerchantOffer) {
@@ -63,15 +52,15 @@ export function DreamMerchantScreen({
     const request: MerchantAcceptRequest = {
       encounterSignature: encounter.encounterSignature,
       offerId: offer.offerId,
-      expectedPrice: offer.price,
-      rewardBuilderId: offer.rewardBuilderId,
-      needId: offer.needId,
+      archetypeId: offer.archetypeId,
       ...(choice === undefined ? {} : { choice }),
     };
     const result = onAcceptOffer(request);
     if (result?.ok === false) {
       setValidationMessage(validationMessageFor(result.reason));
+      return;
     }
+    setAccepted(true);
   }
 
   function declineEncounter() {
@@ -79,18 +68,11 @@ export function DreamMerchantScreen({
     const request: MerchantDeclineRequest = {
       encounterSignature: encounter.encounterSignature,
       offerId: declineOffer?.offerId ?? "A",
-      ...(declineOffer?.needId === undefined
-        ? {}
-        : { needId: declineOffer.needId }),
-      ...(declineOffer?.rewardBuilderId === undefined
-        ? {}
-        : { rewardBuilderId: declineOffer.rewardBuilderId }),
     };
     onDecline(request);
   }
 
   function openChooser(offer: MerchantOffer) {
-    if (offer.locked) return;
     setValidationMessage(null);
     setChoosingOfferId(offer.offerId);
   }
@@ -120,7 +102,6 @@ export function DreamMerchantScreen({
             <OfferCard
               offer={encounter.offers[0]}
               label="A"
-              needRead={needReadFor(encounter.offers[0])}
               isChooserOpen={choosingOfferId === encounter.offers[0].offerId}
               selectedChoice={selectedChoiceFor(encounter.offers[0])}
               onTake={acceptOffer}
@@ -143,18 +124,21 @@ export function DreamMerchantScreen({
             data-testid="merchant-dialogue"
           >
             <h2 className="text-lg font-bold text-slate-50">Dream Merchant</h2>
-            <div className="mt-3 grid gap-2">
-              {preActionDialogue.map((beat) => (
-                <p
-                  key={beat.id}
-                  className="text-sm leading-relaxed text-slate-200"
-                  data-dialogue-kind={beat.kind}
-                  data-testid={`merchant-dialogue-beat-${beat.kind}`}
-                >
-                  {beat.text}
-                </p>
-              ))}
-            </div>
+            <p
+              className="mt-3 text-sm leading-relaxed text-slate-200"
+              data-dialogue-offer-id={encounter.dialogue.offerId}
+              data-testid="merchant-dialogue-line"
+            >
+              {encounter.dialogue.line}
+            </p>
+            {accepted && (
+              <p
+                className="mt-3 text-sm leading-relaxed text-emerald-200"
+                data-testid="merchant-accept-reaction"
+              >
+                {encounter.acceptReaction}
+              </p>
+            )}
           </section>
 
           {validationMessage !== null && (
@@ -181,7 +165,6 @@ export function DreamMerchantScreen({
             <OfferCard
               offer={encounter.offers[1]}
               label="B"
-              needRead={needReadFor(encounter.offers[1])}
               isChooserOpen={choosingOfferId === encounter.offers[1].offerId}
               selectedChoice={selectedChoiceFor(encounter.offers[1])}
               onTake={acceptOffer}
@@ -191,11 +174,11 @@ export function DreamMerchantScreen({
         </div>
       </div>
 
-      {choosingOffer?.reward.choiceRequest !== undefined && (
+      {choosingOffer?.choiceRequest !== undefined && (
         <div className="fixed inset-x-3 bottom-24 top-4 z-40 overflow-y-auto sm:left-1/2 sm:w-[min(760px,calc(100vw-2rem))] sm:-translate-x-1/2">
           <MerchantChooserPanel
             offer={choosingOffer}
-            choiceRequest={choosingOffer.reward.choiceRequest}
+            choiceRequest={choosingOffer.choiceRequest}
             selectedChoiceId={selectedChoiceFor(choosingOffer)?.choiceId}
             onSelect={(candidate) => selectCandidate(choosingOffer, candidate)}
             onClose={() => setChoosingOfferId(null)}
@@ -209,14 +192,10 @@ export function DreamMerchantScreen({
 function validationMessageFor(reason: string): string {
   if (
     reason === "stale_encounter" ||
-    reason === "price_changed" ||
-    reason === "reward_mismatch" ||
-    reason === "need_mismatch"
+    reason === "archetype_mismatch" ||
+    reason === "offer_not_found"
   ) {
     return "The offer changed while you were deciding. Review the new deal and try again.";
-  }
-  if (reason === "insufficient_essence" || reason === "offer_locked") {
-    return "That offer is out of reach right now.";
   }
   return "The merchant cannot complete that trade. Review the offer and try again.";
 }

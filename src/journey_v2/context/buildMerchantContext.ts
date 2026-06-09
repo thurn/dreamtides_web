@@ -1,4 +1,3 @@
-import buildaroundSupport from "../../../data/buildaround_support.json";
 import type { QuestContent } from "../../data/quest-content";
 import type { CardData } from "../../types/cards";
 import type { DreamsignTemplate } from "../../types/content";
@@ -7,7 +6,6 @@ import type {
   MerchantContext,
   MerchantCatalogCard,
   MerchantDeckCard,
-  MerchantSupportMeta,
 } from "../types";
 
 interface BuildMerchantContextInput {
@@ -15,15 +13,6 @@ interface BuildMerchantContextInput {
   questContent: QuestContent;
   site: SiteState;
 }
-
-interface BuildaroundSupportData {
-  cards?: Record<string, MerchantSupportMeta>;
-}
-
-const supportCards = (buildaroundSupport as BuildaroundSupportData).cards ?? {};
-const SUPPORT_META_BY_UUID: ReadonlyMap<string, MerchantSupportMeta> = new Map(
-  Object.entries(supportCards),
-);
 
 function buildCardByUuid(
   cardDatabase: ReadonlyMap<number, CardData>,
@@ -151,13 +140,14 @@ export function buildMerchantContext({
     cardByUuid,
     cardByNumber,
     deckEntryById,
-    supportMetaByUuid: SUPPORT_META_BY_UUID,
     ownedCardUuids,
     heldDreamsignIds,
     heldDreamsignFallbackNames,
     candidateGrantCards,
     candidateDreamsigns,
     fitModel: questContent.fitModel,
+    merchantCorpus: questContent.merchantCorpus,
+    dreamsignProfiles: questContent.dreamsignProfiles,
     cardDatabase: questContent.cardDatabase,
     dreamsignTemplates: questContent.dreamsignTemplates,
   };

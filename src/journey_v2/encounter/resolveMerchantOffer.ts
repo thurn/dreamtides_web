@@ -2,22 +2,18 @@ import { mergeCardKeywordModification } from "../../card-type-change";
 import { createDreamsign } from "../../data/dreamsigns";
 import type { QuestContent } from "../../data/quest-content";
 import { deriveEntryIdCounter } from "../../state/deck-entry-ids";
-import {
-  clampEssence,
-  completeQuestSite,
-  setQuestScreen,
-} from "../../state/quest-state-actions";
+import { completeQuestSite, setQuestScreen } from "../../state/quest-state-actions";
 import type {
   DeckEntry,
   Dreamsign,
   QuestState,
   SiteState,
 } from "../../types/quest";
-import { resolveMerchantChoice } from "../catalog/rewardCatalog";
 import { buildMerchantContext } from "../context/buildMerchantContext";
 import type {
   MerchantAcceptRequest,
   MerchantApplyPayload,
+  MerchantChoice,
   MerchantDeclineRequest,
   MerchantOffer,
 } from "../types";
@@ -27,11 +23,7 @@ export type MerchantResolveFailureReason =
   | "encounter_unavailable"
   | "stale_encounter"
   | "offer_not_found"
-  | "price_changed"
-  | "reward_mismatch"
-  | "need_mismatch"
-  | "offer_locked"
-  | "insufficient_essence"
+  | "archetype_mismatch"
   | "missing_choice"
   | "invalid_choice"
   | "target_unavailable"
@@ -247,18 +239,10 @@ function applyMerchantPayload(
         ),
       };
     }
-    case "change_essence":
-      return {
-        ...state,
-        essence: clampEssence(state.essence + payload.amount, state.essenceCap),
-      };
-    case "change_max_essence": {
-      const essenceCap = Math.max(0, state.essenceCap + payload.amount);
-      return {
-        ...state,
-        essenceCap,
-        essence: clampEssence(state.essence, essenceCap),
-      };
+    case "add_site": {
+      // The real placement lands in Task 14; the payload kind exists now so the
+      // union is stable. Until then, applying it is a safe no-op.
+      return state;
     }
     case "composite": {
       let next: QuestState | null = state;
@@ -306,23 +290,33 @@ function findCurrentOffer(input: {
   if (encounter.encounterSignature !== request.encounterSignature) {
     return "stale_encounter";
   }
-  const offer = encounter.offers.find((candidate) => candidate.offerId === request.offerId);
+  const offer = encounter.offers.find(
+    (candidate) => candidate.offerId === request.offerId,
+  );
   if (offer === undefined) return "offer_not_found";
-  if (offer.price !== request.expectedPrice) return "price_changed";
-  if (offer.rewardBuilderId !== request.rewardBuilderId) return "reward_mismatch";
-  if (offer.needId !== request.needId) return "need_mismatch";
+  if (offer.archetypeId !== request.archetypeId) return "archetype_mismatch";
   return offer;
+}
+
+function payloadForChoice(
+  offer: MerchantOffer,
+  choice: MerchantChoice,
+): MerchantApplyPayload | null {
+  const candidate = offer.choiceRequest?.candidates.find(
+    (entry) => entry.choiceId === choice.choiceId,
+  );
+  return candidate?.applyPayload ?? null;
 }
 
 function payloadForRequest(
   offer: MerchantOffer,
   request: MerchantAcceptRequest,
 ): MerchantApplyPayload | MerchantResolveFailureReason {
-  if (offer.reward.choiceRequest !== undefined) {
+  if (offer.choiceRequest !== undefined) {
     if (request.choice === undefined) return "missing_choice";
-    return resolveMerchantChoice(offer.reward, request.choice) ?? "invalid_choice";
+    return payloadForChoice(offer, request.choice) ?? "invalid_choice";
   }
-  return offer.reward.applyPayload ?? "target_unavailable";
+  return offer.applyPayload ?? "target_unavailable";
 }
 
 export function resolveMerchantOffer({
@@ -333,18 +327,12 @@ export function resolveMerchantOffer({
 }: ResolveMerchantOfferInput): ResolveMerchantOfferResult {
   const offer = findCurrentOffer({ state, questContent, site, request });
   if (typeof offer === "string") return fail(state, offer);
-  if (offer.locked) return fail(state, "offer_locked");
-  if (state.essence < offer.price) return fail(state, "insufficient_essence");
 
   const payload = payloadForRequest(offer, request);
   if (typeof payload === "string") return fail(state, payload);
 
-  const paidState: QuestState = {
-    ...state,
-    essence: clampEssence(state.essence - offer.price, state.essenceCap),
-  };
   const rewardedState = applyMerchantPayload(
-    paidState,
+    state,
     questContent,
     payload,
     createEntryIdAllocator(state.deck),

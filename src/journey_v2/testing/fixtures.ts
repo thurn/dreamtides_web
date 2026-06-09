@@ -1,4 +1,10 @@
 import type { FitModel } from "../../draft/replay/fit-model";
+import type {
+  MerchantCorpus,
+  MerchantCorpusCard,
+  MerchantCluster,
+} from "../../data/merchant-corpus";
+import type { DreamsignProfile } from "../../data/dreamsign-profiles";
 import type { QuestContent } from "../../data/quest-content";
 import type { CardData } from "../../types/cards";
 import type {
@@ -129,16 +135,57 @@ export function makeMerchantTestContent({
   cards,
   dreamsignTemplates = [],
   fitModel,
+  merchantCorpus,
+  dreamsignProfiles,
 }: {
   cards: readonly CardData[];
   dreamsignTemplates?: readonly DreamsignTemplate[];
   fitModel?: FitModel;
+  merchantCorpus?: MerchantCorpus;
+  dreamsignProfiles?: ReadonlyMap<string, DreamsignProfile>;
 }): QuestContent {
   return {
     cardDatabase: new Map(cards.map((card) => [card.cardNumber, card])),
     dreamcallers: [],
     dreamsignTemplates,
     fitModel,
+    merchantCorpus,
+    dreamsignProfiles,
+  };
+}
+
+/**
+ * Builds a synthetic merchant corpus. `qualityByUuid` assigns a quality score
+ * to each card UUID; cards absent from the map get no corpus record.
+ */
+export function makeMerchantTestCorpus(input: {
+  cards?: Record<string, Partial<MerchantCorpusCard> & { quality: number }>;
+  clusters?: readonly MerchantCluster[];
+}): MerchantCorpus {
+  const cards = new Map<string, MerchantCorpusCard>();
+  for (const [uuid, entry] of Object.entries(input.cards ?? {})) {
+    cards.set(uuid, {
+      quality: entry.quality,
+      multiplicity: entry.multiplicity ?? 0,
+      df: entry.df ?? 50,
+      ...(entry.cluster === undefined ? {} : { cluster: entry.cluster }),
+    });
+  }
+  return { cards, clusters: input.clusters ?? [] };
+}
+
+export function makeMerchantTestDreamsignProfile(
+  overrides: Partial<DreamsignProfile> & Pick<DreamsignProfile, "id">,
+): DreamsignProfile {
+  const { id, ...rest } = overrides;
+  return {
+    id,
+    subtypes: [],
+    cardTypes: [],
+    costBands: [],
+    keywords: [],
+    quality: 2,
+    ...rest,
   };
 }
 

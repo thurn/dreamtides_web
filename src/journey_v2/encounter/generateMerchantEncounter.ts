@@ -1,118 +1,23 @@
 import { sha256 } from "js-sha256";
-import {
-  buildMerchantRewardWithBuilder,
-  buildMerchantRewardsForNeed,
-} from "../catalog/rewardCatalog";
-import { priceMerchantReward } from "../catalog/pricing";
-import { renderMerchantDialogue } from "../dialogue/dialogue";
-import { readMerchantDeck } from "../read/deckRead";
-import type { CardData, Rarity } from "../../types/cards";
+import { MERCHANT_ARCHETYPE_BUILDERS } from "../archetypes/registry";
 import type {
-  MerchantApplyPayload,
+  MerchantArchetypeBuilder,
+  MerchantArchetypeId,
+  MerchantOfferDraft,
+} from "../archetypes/types";
+import { renderMerchantDialogue } from "../dialogue/dialogue";
+import { merchantRng, weightedSample } from "../signals/rng";
+import { MERCHANT_TUNING } from "../tuning";
+import type {
   MerchantContext,
   MerchantEncounter,
-  MerchantNeed,
   MerchantOffer,
-  MerchantReward,
-  MerchantRewardBuilderId,
-  MerchantRoleNeed,
 } from "../types";
-import type {
-  MerchantRewardFamily,
-  MerchantRewardPrice,
-} from "../catalog/pricing";
-
-interface MerchantOfferCandidate {
-  need: MerchantNeed;
-  reward: MerchantReward;
-  needRank: number;
-  rewardRank: number;
-  targetKey: string;
-}
-
-export interface MerchantNeedDebug {
-  needRank: number;
-  needId: string;
-  needType: MerchantNeed["needType"];
-  needKind: MerchantNeed["needKind"];
-  score: number;
-  severity: number;
-  confidence: number;
-  role?: MerchantRoleNeed;
-  themeId?: string;
-  dreamsignId?: string;
-  entryId?: string;
-  cardUuid?: string;
-  cardNumber?: number;
-  compatibleRewardBuilderIds: readonly string[];
-  observationMetric?: MerchantNeed["observation"]["metric"];
-  support?: Extract<
-    MerchantNeed,
-    { needKind: "under_supported_payoff" | "missing_role" | "curve_problem" }
-  >["support"];
-  curveDirection?: Extract<MerchantNeed, { needKind: "curve_problem" }>["curveDirection"];
-  projection?: {
-    transfiguration: Extract<
-      MerchantNeed,
-      { needKind: "upgrade_target" }
-    >["projection"]["transfiguration"];
-    metric?: MerchantNeed["observation"]["metric"];
-    previewCard: ReturnType<typeof summarizeCardState>;
-  };
-  references?: readonly {
-    cardUuid: string;
-    cardNumber: number;
-    entryId?: string;
-    dreamsignId?: string;
-  }[];
-}
-
-export interface MerchantOfferCandidateDebug {
-  candidateId: string;
-  candidateIndex: number;
-  selectable: boolean;
-  selectedOfferId?: string;
-  baseRank: number | null;
-  distinctivenessFromFirst: number | null;
-  needRank: number;
-  rewardRank: number;
-  targetKey: string;
-  needId: string;
-  needKind: MerchantNeed["needKind"];
-  needScore: number;
-  needSeverity: number;
-  rewardBuilderId: MerchantReward["builderId"];
-  rewardValueEssence: number;
-  rewardFamily: MerchantRewardFamily;
-  rewardHasApplyPayload: boolean;
-  rewardChoiceCount: number;
-  baseSortKey: readonly number[];
-  reward: ReturnType<typeof summarizeReward>;
-}
-
-export interface MerchantGeneratedOfferDebug {
-  offerId: string;
-  selectedCandidateId: string;
-  needId: string;
-  rewardBuilderId: MerchantReward["builderId"];
-  price: number;
-  priceDetail: MerchantRewardPrice;
-  locked: boolean;
-  lockedReason?: MerchantRewardPrice["lockedReason"];
-  reward: ReturnType<typeof summarizeReward>;
-}
 
 export interface MerchantEncounterGenerationDebug {
-  input: ReturnType<typeof inputSignature>;
-  selectionPolicy: {
-    offerIds: readonly string[];
-    firstOfferRule: string;
-    secondOfferRule: string;
-  };
-  needs: readonly MerchantNeedDebug[];
-  candidates: readonly MerchantOfferCandidateDebug[];
-  selectedCandidates: readonly MerchantOfferCandidateDebug[];
-  offers: readonly MerchantGeneratedOfferDebug[];
+  eligibleArchetypeIds: readonly MerchantArchetypeId[];
+  rolledA: MerchantArchetypeId | null;
+  rolledB: MerchantArchetypeId | null;
   encounterSignature: string;
 }
 
@@ -125,29 +30,6 @@ type StableJsonValue =
   | { readonly [key: string]: StableJsonValue };
 
 const OFFER_IDS = ["A", "B"] as const;
-const FALLBACK_BUILDER_IDS: readonly MerchantRewardBuilderId[] = [
-  "transfigure_card",
-  "purge_weak_card",
-  "grant_dreamsign",
-  "gain_essence",
-  "raise_essence_cap",
-];
-
-const BUILDER_FAMILY: Readonly<Record<MerchantReward["builderId"], MerchantRewardFamily>> = {
-  grant_support_card: "cardGrant",
-  grant_dreamsign: "dreamsign",
-  transfigure_card: "transfiguration",
-  purge_weak_card: "purge",
-  duplicate_keystone: "duplicate",
-  replace_weak_with_fit: "cardGrant",
-  gain_essence: "essence",
-  raise_essence_cap: "essence",
-  add_reclaim_to_event: "other",
-  add_fast_to_event: "other",
-  reduce_reclaim_cost: "other",
-  convert_event_to_role: "other",
-  grant_exact_card: "cardGrant",
-};
 
 function stableJson(value: unknown): string {
   return JSON.stringify(toStableJsonValue(value));
@@ -179,471 +61,65 @@ function toStableJsonValue(value: unknown): StableJsonValue {
   return null;
 }
 
-function targetKeyForNeed(need: MerchantNeed): string {
-  if (need.needType === "card") return `card:${need.entryId}:${need.cardUuid}`;
-  if (need.needKind === "dreamsign_gap") return `dreamsign:${need.dreamsignId}`;
-  if (need.needKind === "missing_role" || need.needKind === "curve_problem") {
-    return `theme:${need.themeId}:${need.role}`;
-  }
-  return "need:unknown";
+function weightFor(builder: MerchantArchetypeBuilder): number {
+  return MERCHANT_TUNING.weights[builder.archetypeId];
 }
 
-function rewardHasPayload(reward: MerchantReward): boolean {
-  return (
-    reward.applyPayload !== undefined ||
-    (reward.choiceRequest?.candidates.length ?? 0) > 0
-  );
-}
-
-function buildCandidates(
+/**
+ * Rolls one archetype slot: weighted-sample an eligible builder, call `build`,
+ * and on a null build remove that archetype and redraw. A build/eligibility
+ * mismatch must not abort the encounter, so we keep drawing until the candidate
+ * pool is exhausted.
+ */
+function rollSlot(
+  eligible: readonly MerchantArchetypeBuilder[],
   context: MerchantContext,
-  needs: readonly MerchantNeed[],
-): MerchantOfferCandidate[] {
-  const candidates = needs.flatMap((need, needRank) =>
-    buildMerchantRewardsForNeed(context, need).map((reward, rewardRank) => ({
-      need,
-      reward,
-      needRank,
-      rewardRank,
-      targetKey: targetKeyForNeed(need),
-    })),
-  );
-  const seen = new Set(
-    candidates.map(
-      (candidate) =>
-        `${candidate.need.needId}:${candidate.reward.builderId}:${candidate.targetKey}`,
-    ),
-  );
-
-  for (const [needRank, need] of needs.entries()) {
-    for (const [fallbackRank, builderId] of FALLBACK_BUILDER_IDS.entries()) {
-      const key = `${need.needId}:${builderId}:${targetKeyForNeed(need)}`;
-      if (seen.has(key)) continue;
-      const reward = buildMerchantRewardWithBuilder(context, need, builderId);
-      if (reward === null) continue;
-      seen.add(key);
-      candidates.push({
-        need,
-        reward,
-        needRank,
-        rewardRank: 100 + fallbackRank,
-        targetKey: targetKeyForNeed(need),
-      });
+  saltParts: readonly string[],
+): { builder: MerchantArchetypeBuilder; draft: MerchantOfferDraft } | null {
+  let pool = [...eligible];
+  let attempt = 0;
+  while (pool.length > 0) {
+    const rng = merchantRng(...saltParts, "archetype", String(attempt));
+    const builder = weightedSample(pool, weightFor, rng);
+    if (builder === null) return null;
+    const buildRng = merchantRng(...saltParts, "target", builder.archetypeId);
+    const draft = builder.build(context, buildRng);
+    if (draft !== null) {
+      return { builder, draft };
     }
+    pool = pool.filter((candidate) => candidate !== builder);
+    attempt += 1;
   }
-
-  return candidates;
+  return null;
 }
 
-function candidateId(candidate: MerchantOfferCandidate): string {
-  return `${candidate.need.needId}:${candidate.reward.builderId}:${candidate.targetKey}`;
-}
-
-function candidateSortKey(candidate: MerchantOfferCandidate): readonly number[] {
-  return [
-    candidate.needRank,
-    candidate.rewardRank,
-    -candidate.need.score,
-    -candidate.need.severity,
-  ];
-}
-
-function compareCandidateBase(
-  a: MerchantOfferCandidate,
-  b: MerchantOfferCandidate,
-): number {
-  const aKey = candidateSortKey(a);
-  const bKey = candidateSortKey(b);
-  for (let index = 0; index < aKey.length; index += 1) {
-    const delta = aKey[index] - bKey[index];
-    if (delta !== 0) return delta;
-  }
-  return (
-    a.need.needId.localeCompare(b.need.needId) ||
-    a.reward.builderId.localeCompare(b.reward.builderId) ||
-    a.targetKey.localeCompare(b.targetKey)
-  );
-}
-
-function distinctivenessScore(
-  candidate: MerchantOfferCandidate,
-  selected: MerchantOfferCandidate,
-): number {
-  let score = 0;
-  if (candidate.need.needId !== selected.need.needId) score += 8;
-  if (candidate.need.needKind !== selected.need.needKind) score += 4;
-  if (candidate.targetKey !== selected.targetKey) score += 3;
-  if (candidate.reward.builderId !== selected.reward.builderId) score += 2;
-  return score;
-}
-
-function selectCandidates(
-  candidates: readonly MerchantOfferCandidate[],
-): MerchantOfferCandidate[] {
-  const validCandidates = candidates
-    .filter((candidate) => rewardHasPayload(candidate.reward))
-    .sort(compareCandidateBase);
-  const first = validCandidates[0];
-  if (first === undefined) return [];
-
-  const selected = [first];
-  const second = validCandidates
-    .slice(1)
-    .sort(
-      (a, b) =>
-        distinctivenessScore(b, first) - distinctivenessScore(a, first) ||
-        compareCandidateBase(a, b),
-    )[0];
-  if (second !== undefined) selected.push(second);
-  return selected;
-}
-
-function collectPayloads(payload: MerchantApplyPayload): MerchantApplyPayload[] {
-  if (payload.kind !== "composite") return [payload];
-  return [payload, ...payload.children.flatMap(collectPayloads)];
-}
-
-function payloadCardUuids(reward: MerchantReward): readonly string[] {
-  const payloads = [
-    ...(reward.applyPayload === undefined ? [] : collectPayloads(reward.applyPayload)),
-    ...(reward.choiceRequest?.candidates.flatMap((candidate) =>
-      collectPayloads(candidate.applyPayload),
-    ) ?? []),
-  ];
-  return payloads
-    .map((payload) => ("cardUuid" in payload ? payload.cardUuid : undefined))
-    .filter((cardUuid): cardUuid is string => cardUuid !== undefined);
-}
-
-function rarityForReward(
-  context: MerchantContext,
-  reward: MerchantReward,
-): Rarity | null {
-  const rarities = payloadCardUuids(reward)
-    .map((cardUuid) => context.cardByUuid.get(cardUuid)?.rarity ?? null)
-    .filter((rarity): rarity is Rarity => rarity !== null);
-  if (rarities.includes("Legendary")) return "Legendary";
-  return rarities[0] ?? null;
-}
-
-function broadCatalogReachFor(
-  context: MerchantContext,
-  reward: MerchantReward,
-): number {
-  const chooserCount = reward.choiceRequest?.candidates.length ?? 0;
-  if (chooserCount === 0 || context.candidateGrantCards.length === 0) return 0;
-  return Math.min(1, chooserCount / context.candidateGrantCards.length);
-}
-
-function priceForCandidate(input: {
-  context: MerchantContext;
-  offerId: string;
-  candidate: MerchantOfferCandidate;
-}): MerchantRewardPrice {
-  const { context, offerId, candidate } = input;
-  const reward = candidate.reward;
-  return priceMerchantReward({
-    questSeed: context.questSeed,
-    siteId: context.site.id,
-    offerId,
-    rewardBuilderId: reward.builderId,
-    valueEssence: reward.valueEssence,
-    currentEssence: context.essence,
-    essenceCap: context.essenceCap,
-    need: candidate.need,
-    rewardFamily: BUILDER_FAMILY[reward.builderId],
-    chooserCount: reward.choiceRequest?.candidates.length ?? 1,
-    rarity: rarityForReward(context, reward),
-    broadCatalogReach: broadCatalogReachFor(context, reward),
-    outsidePool: false,
-  });
-}
-
-function summarizeCardState(card: CardData) {
-  return {
-    id: card.id,
-    cardNumber: card.cardNumber,
-    cardType: card.cardType,
-    subtype: card.subtype,
-    isStarter: card.isStarter,
-    rarity: card.rarity,
-    energyCost: card.energyCost,
-    energyCosts: card.energyCosts,
-    spark: card.spark,
-    sparkVariable: card.sparkVariable,
-    isFast: card.isFast,
-    isInterrupt: card.isInterrupt,
-    reclaimCost: card.reclaimCost,
-  };
-}
-
-function summarizeNeed(need: MerchantNeed, needRank: number): MerchantNeedDebug {
-  const references =
-    "references" in need
-      ? need.references.map((reference) => ({
-          cardUuid: reference.cardUuid,
-          cardNumber: reference.cardNumber,
-          ...(reference.entryId === undefined ? {} : { entryId: reference.entryId }),
-          ...(reference.dreamsignId === undefined
-            ? {}
-            : { dreamsignId: reference.dreamsignId }),
-        }))
-      : undefined;
-  const base = {
-    needRank,
-    needId: need.needId,
-    needType: need.needType,
-    needKind: need.needKind,
-    score: need.score,
-    severity: need.severity,
-    confidence: need.confidence,
-    role: "role" in need ? need.role : undefined,
-    themeId: "themeId" in need ? need.themeId : undefined,
-    dreamsignId: "dreamsignId" in need ? need.dreamsignId : undefined,
-    entryId: "entryId" in need ? need.entryId : undefined,
-    cardUuid: "cardUuid" in need ? need.cardUuid : undefined,
-    cardNumber: "cardNumber" in need ? need.cardNumber : undefined,
-    compatibleRewardBuilderIds: need.compatibleRewardBuilderIds,
-    observationMetric: need.observation.metric,
-    support: "support" in need ? need.support : undefined,
-    curveDirection: "curveDirection" in need ? need.curveDirection : undefined,
-    references,
-  };
-
-  if (need.needKind !== "upgrade_target") {
-    return base;
-  }
-
-  return {
-    ...base,
-    projection: {
-      transfiguration: need.projection.transfiguration,
-      metric: need.projection.metric,
-      previewCard: summarizeCardState(need.projection.previewCard),
-    },
-  };
-}
-
-function summarizeApplyPayload(payload: MerchantApplyPayload): unknown {
-  switch (payload.kind) {
-    case "add_catalog_card":
-      return {
-        kind: payload.kind,
-        cardUuid: payload.cardUuid,
-        cardNumber: payload.cardNumber,
-      };
-    case "add_dreamsign":
-      return {
-        kind: payload.kind,
-        dreamsignId: payload.dreamsignId,
-        dreamsignTemplateId: payload.dreamsignTemplate.id,
-      };
-    case "transfigure_deck_entry":
-      return {
-        kind: payload.kind,
-        entryId: payload.entryId,
-        cardUuid: payload.cardUuid,
-        cardNumber: payload.cardNumber,
-        transfiguration: payload.transfiguration,
-        previewCard: summarizeCardState(payload.previewCard),
-      };
-    case "duplicate_deck_entry":
-    case "remove_deck_entry":
-      return {
-        kind: payload.kind,
-        entryId: payload.entryId,
-        cardUuid: payload.cardUuid,
-        cardNumber: payload.cardNumber,
-      };
-    case "change_deck_entry_keywords":
-      return {
-        kind: payload.kind,
-        entryId: payload.entryId,
-        cardUuid: payload.cardUuid,
-        cardNumber: payload.cardNumber,
-        keywords: payload.keywords,
-      };
-    case "change_deck_entry_type":
-      return {
-        kind: payload.kind,
-        entryId: payload.entryId,
-        cardUuid: payload.cardUuid,
-        cardNumber: payload.cardNumber,
-        typeChange: {
-          predicateId: payload.typeChange.predicateId,
-          cardType: payload.typeChange.cardType,
-          subtype: payload.typeChange.subtype,
-        },
-      };
-    case "change_essence":
-    case "change_max_essence":
-      return {
-        kind: payload.kind,
-        amount: payload.amount,
-      };
-    case "composite":
-      return {
-        kind: payload.kind,
-        children: payload.children.map(summarizeApplyPayload),
-      };
-  }
-}
-
-function summarizeGameObject(object: MerchantReward["gameObjects"][number]) {
-  switch (object.objectType) {
-    case "catalogCard":
-      return {
-        objectType: object.objectType,
-        cardUuid: object.cardUuid,
-        cardNumber: object.cardNumber,
-      };
-    case "deckCard":
-      return {
-        objectType: object.objectType,
-        entryId: object.entryId,
-        cardUuid: object.cardUuid,
-        cardNumber: object.cardNumber,
-        previewCardNumber: object.previewCard?.cardNumber,
-        previewCard:
-          object.previewCard === undefined
-            ? undefined
-            : summarizeCardState(object.previewCard),
-      };
-    case "dreamsign":
-      return {
-        objectType: object.objectType,
-        dreamsignId: object.dreamsignId,
-        dreamsignTemplateId: object.dreamsignTemplate.id,
-      };
-    case "essence":
-      return {
-        objectType: object.objectType,
-        amount: object.amount,
-      };
-  }
-}
-
-function summarizeReward(reward: MerchantReward) {
-  return {
-    builderId: reward.builderId,
-    answersNeedIds: reward.answersNeedIds,
-    valueEssence: reward.valueEssence,
-    applyPayload:
-      reward.applyPayload === undefined
-        ? undefined
-        : summarizeApplyPayload(reward.applyPayload),
-    choiceRequest:
-      reward.choiceRequest === undefined
-        ? undefined
-        : {
-            choiceType: reward.choiceRequest.choiceType,
-            candidates: reward.choiceRequest.candidates.map((candidate) => ({
-              choiceId: candidate.choiceId,
-              needId: candidate.needId,
-              builderId: candidate.builderId,
-              cardUuid: candidate.cardUuid,
-              cardNumber: candidate.cardNumber,
-              dreamsignId: candidate.dreamsignId,
-              valueEssence: candidate.valueEssence,
-              debug: candidate.debug,
-              applyPayload: summarizeApplyPayload(candidate.applyPayload),
-              gameObjects: candidate.gameObjects.map(summarizeGameObject),
-            })),
-          },
-    gameObjects: reward.gameObjects.map(summarizeGameObject),
-  };
-}
-
-function inputSignature(context: MerchantContext) {
-  return {
-    questSeed: context.questSeed,
-    site: {
-      id: context.site.id,
-      type: context.site.type,
-      isEnhanced: context.site.isEnhanced,
-      isVisited: context.site.isVisited,
-    },
-    resources: {
-      essence: context.essence,
-      essenceCap: context.essenceCap,
-    },
-    deck: context.deckCards.map((deckCard) => ({
-      entryId: deckCard.entryId,
-      cardUuid: deckCard.cardUuid,
-      cardNumber: deckCard.cardNumber,
-      transfiguration: deckCard.deckEntry.transfiguration,
-      keywordModification: deckCard.deckEntry.keywordModification,
-      typeChange: deckCard.deckEntry.typeChange,
-      isBane: deckCard.deckEntry.isBane,
-    })),
-    heldDreamsignIds: [...context.heldDreamsignIds].sort(),
-  };
-}
-
-function buildBaseRankByCandidateId(
-  candidates: readonly MerchantOfferCandidate[],
-): ReadonlyMap<string, number> {
-  return new Map(
-    candidates
-      .filter((candidate) => rewardHasPayload(candidate.reward))
-      .sort(compareCandidateBase)
-      .map((candidate, index) => [candidateId(candidate), index + 1]),
-  );
-}
-
-function summarizeCandidate(
-  candidate: MerchantOfferCandidate,
-  input: {
-    candidateIndex: number;
-    baseRankByCandidateId: ReadonlyMap<string, number>;
-    firstSelected: MerchantOfferCandidate | undefined;
-    offerIdByCandidateId: ReadonlyMap<string, string>;
-  },
-): MerchantOfferCandidateDebug {
-  const id = candidateId(candidate);
-  return {
-    candidateId: id,
-    candidateIndex: input.candidateIndex,
-    selectable: rewardHasPayload(candidate.reward),
-    selectedOfferId: input.offerIdByCandidateId.get(id),
-    baseRank: input.baseRankByCandidateId.get(id) ?? null,
-    distinctivenessFromFirst:
-      input.firstSelected === undefined || id === candidateId(input.firstSelected)
-        ? null
-        : distinctivenessScore(candidate, input.firstSelected),
-    needRank: candidate.needRank + 1,
-    rewardRank: candidate.rewardRank + 1,
-    targetKey: candidate.targetKey,
-    needId: candidate.need.needId,
-    needKind: candidate.need.needKind,
-    needScore: candidate.need.score,
-    needSeverity: candidate.need.severity,
-    rewardBuilderId: candidate.reward.builderId,
-    rewardValueEssence: candidate.reward.valueEssence,
-    rewardFamily: BUILDER_FAMILY[candidate.reward.builderId],
-    rewardHasApplyPayload: candidate.reward.applyPayload !== undefined,
-    rewardChoiceCount: candidate.reward.choiceRequest?.candidates.length ?? 0,
-    baseSortKey: candidateSortKey(candidate),
-    reward: summarizeReward(candidate.reward),
-  };
-}
-
-function summarizeOffer(
-  offer: MerchantOffer,
-  selectedCandidate: MerchantOfferCandidate,
-): MerchantGeneratedOfferDebug {
+function offerIdentity(offer: MerchantOffer): unknown {
   return {
     offerId: offer.offerId,
-    selectedCandidateId: candidateId(selectedCandidate),
-    needId: offer.needId,
-    rewardBuilderId: offer.rewardBuilderId,
-    price: offer.price,
-    priceDetail: offer.priceDetail,
-    locked: offer.locked,
-    ...(offer.lockedReason === undefined
-      ? {}
-      : { lockedReason: offer.lockedReason }),
-    reward: summarizeReward(offer.reward),
+    archetypeId: offer.archetypeId,
+    family: offer.family,
+    title: offer.title,
+    summary: offer.summary,
+    hiddenUntilCommit: offer.hiddenUntilCommit,
+    targetKey: offer.targetKey,
+  };
+}
+
+function inputSignature(context: MerchantContext): unknown {
+  return {
+    questSeed: context.questSeed,
+    siteId: context.site.id,
+    deck: context.deckCards
+      .map((deckCard) => ({
+        entryId: deckCard.entryId,
+        cardNumber: deckCard.cardNumber,
+        transfiguration: deckCard.deckEntry.transfiguration,
+        keywordModification: deckCard.deckEntry.keywordModification ?? null,
+        typeChange: deckCard.deckEntry.typeChange ?? null,
+        isBane: deckCard.deckEntry.isBane,
+      }))
+      .sort((a, b) => a.entryId.localeCompare(b.entryId)),
+    heldDreamsignIds: [...context.heldDreamsignIds].sort(),
   };
 }
 
@@ -654,62 +130,65 @@ function signatureFor(
   return sha256(
     stableJson({
       input: inputSignature(context),
-      offers: offers.map((offer) => ({
-        offerId: offer.offerId,
-        needId: offer.needId,
-        rewardBuilderId: offer.rewardBuilderId,
-        price: offer.price,
-        priceDetail: offer.priceDetail,
-        reward: summarizeReward(offer.reward),
-      })),
+      offers: offers.map((offer) => offerIdentity(offer as MerchantOffer)),
     }),
   );
 }
 
-function assertValidEncounter(
-  encounter: MerchantEncounter,
-  needs: readonly MerchantNeed[],
-): void {
+function draftToOffer(
+  draft: MerchantOfferDraft,
+  offerId: string,
+): Omit<MerchantOffer, "encounterSignature"> {
+  return {
+    offerId,
+    archetypeId: draft.archetypeId,
+    family: draft.family,
+    title: draft.title,
+    summary: draft.summary,
+    hiddenUntilCommit: draft.hiddenUntilCommit,
+    targetKey: draft.targetKey,
+    gameObjects: draft.gameObjects,
+    ...(draft.applyPayload === undefined
+      ? {}
+      : { applyPayload: draft.applyPayload }),
+    ...(draft.choiceRequest === undefined
+      ? {}
+      : { choiceRequest: draft.choiceRequest }),
+  };
+}
+
+function assertValidEncounter(encounter: MerchantEncounter): void {
   if (encounter.offers.length !== OFFER_IDS.length) {
     throw new Error(
-      `Dream Merchant encounter requires exactly two offers; generated ${encounter.offers.length}`,
+      `Dream Merchant encounter requires exactly two offers; generated ${String(encounter.offers.length)}`,
+    );
+  }
+  const [offerA, offerB] = encounter.offers;
+  if (offerA === undefined || offerB === undefined) {
+    throw new Error("Dream Merchant encounter is missing an offer");
+  }
+  if (offerA.family === offerB.family) {
+    throw new Error(
+      `Dream Merchant offers must come from different families; both were ${offerA.family}`,
     );
   }
   for (const [index, expectedOfferId] of OFFER_IDS.entries()) {
     const offer = encounter.offers[index];
     if (offer?.offerId !== expectedOfferId) {
       throw new Error(
-        `Dream Merchant offer ${index + 1} must have id ${expectedOfferId}`,
+        `Dream Merchant offer ${String(index + 1)} must have id ${expectedOfferId}`,
       );
     }
-  }
-
-  const needIds = new Set(needs.map((need) => need.needId));
-  const offerIds = new Set<string>();
-  for (const offer of encounter.offers) {
-    if (offerIds.has(offer.offerId)) {
-      throw new Error(`Duplicate merchant offer id: ${offer.offerId}`);
-    }
-    offerIds.add(offer.offerId);
-    if (!needIds.has(offer.needId)) {
-      throw new Error(`Merchant offer ${offer.offerId} answers unknown need ${offer.needId}`);
-    }
-    if (offer.rewards.length === 0) {
-      throw new Error(`Merchant offer ${offer.offerId} has no rewards`);
-    }
-    if (!offer.reward.answersNeedIds.includes(offer.needId)) {
+    const choiceCount = offer.choiceRequest?.candidates.length ?? 0;
+    if (offer.applyPayload === undefined && choiceCount === 0) {
       throw new Error(
-        `Merchant offer ${offer.offerId} reward does not answer ${offer.needId}`,
+        `Dream Merchant offer ${offer.offerId} has neither a payload nor a chooser`,
       );
     }
-    if (!rewardHasPayload(offer.reward)) {
-      throw new Error(`Merchant offer ${offer.offerId} has no apply payload`);
-    }
-    if (!Number.isFinite(offer.price) || offer.price < 0) {
-      throw new Error(`Merchant offer ${offer.offerId} has invalid price`);
-    }
-    if (!Number.isFinite(offer.priceDetail.price)) {
-      throw new Error(`Merchant offer ${offer.offerId} has invalid price detail`);
+    if (choiceCount > 4) {
+      throw new Error(
+        `Dream Merchant offer ${offer.offerId} chooser exceeds 4 candidates`,
+      );
     }
   }
 }
@@ -717,86 +196,54 @@ function assertValidEncounter(
 export function generateMerchantEncounterWithDebug(
   context: MerchantContext,
 ): { encounter: MerchantEncounter; debug: MerchantEncounterGenerationDebug } {
-  const needs = readMerchantDeck(context);
-  const candidates = buildCandidates(context, needs);
-  const selected = selectCandidates(candidates).slice(0, OFFER_IDS.length);
-  if (selected.length !== OFFER_IDS.length) {
-    throw new Error(
-      `Dream Merchant encounter requires exactly two buildable offers; selected ${selected.length}`,
-    );
+  const eligible = MERCHANT_ARCHETYPE_BUILDERS.filter((builder) =>
+    builder.eligible(context),
+  );
+  const eligibleArchetypeIds = eligible.map((builder) => builder.archetypeId);
+
+  const slotASalt = [context.questSeed, context.site.id, "A"];
+  const rolledA = rollSlot(eligible, context, slotASalt);
+  if (rolledA === null) {
+    throw new Error("Dream Merchant could not roll a first offer");
   }
 
-  const unsignedOffers = selected.map<Omit<MerchantOffer, "encounterSignature">>(
-    (candidate, index) => {
-      const offerId = OFFER_IDS[index];
-      const priceDetail = priceForCandidate({ context, offerId, candidate });
-      return {
-        offerId,
-        rewardBuilderId: candidate.reward.builderId,
-        needId: candidate.need.needId,
-        price: priceDetail.price,
-        priceDetail,
-        locked: priceDetail.locked,
-        ...(priceDetail.lockedReason === undefined
-          ? {}
-          : { lockedReason: priceDetail.lockedReason }),
-        reward: candidate.reward,
-        rewards: [candidate.reward],
-      };
-    },
+  const eligibleB = eligible.filter(
+    (builder) => builder.family !== rolledA.builder.family,
   );
+  const slotBSalt = [context.questSeed, context.site.id, "B"];
+  const rolledB = rollSlot(eligibleB, context, slotBSalt);
+  if (rolledB === null) {
+    throw new Error("Dream Merchant could not roll a second offer");
+  }
+
+  const unsignedOffers = [
+    draftToOffer(rolledA.draft, OFFER_IDS[0]),
+    draftToOffer(rolledB.draft, OFFER_IDS[1]),
+  ];
   const encounterSignature = signatureFor(context, unsignedOffers);
-  const offers = unsignedOffers.map((offer) => ({
+  const offers: MerchantOffer[] = unsignedOffers.map((offer) => ({
     ...offer,
     encounterSignature,
   }));
+
+  const dialogue = renderMerchantDialogue({ context, offers });
+
   const encounter: MerchantEncounter = {
     encounterSignature,
     siteId: context.site.id,
     offers,
-    dialogue: renderMerchantDialogue({
-      context,
-      needs,
-      offers,
-    }),
+    dialogue: dialogue.line,
+    acceptReaction: dialogue.acceptReaction,
   };
 
-  assertValidEncounter(encounter, needs);
-  const offerIdByCandidateId = new Map(
-    selected.map((candidate, index) => [candidateId(candidate), OFFER_IDS[index]]),
-  );
-  const baseRankByCandidateId = buildBaseRankByCandidateId(candidates);
-  const candidateDebug = candidates.map((candidate, index) =>
-    summarizeCandidate(candidate, {
-      candidateIndex: index + 1,
-      baseRankByCandidateId,
-      firstSelected: selected[0],
-      offerIdByCandidateId,
-    }),
-  );
-  const selectedCandidateDebug = selected
-    .map((candidate) =>
-      candidateDebug.find((debug) => debug.candidateId === candidateId(candidate)),
-    )
-    .filter(
-      (debug): debug is MerchantOfferCandidateDebug => debug !== undefined,
-    );
+  assertValidEncounter(encounter);
 
   return {
     encounter,
     debug: {
-      input: inputSignature(context),
-      selectionPolicy: {
-        offerIds: OFFER_IDS,
-        firstOfferRule:
-          "Choose the selectable candidate with the lowest base rank after sorting by need rank, reward rank, need score, severity, and stable ids.",
-        secondOfferRule:
-          "Choose the remaining selectable candidate with the highest distinctiveness from offer A, then lowest base rank.",
-      },
-      needs: needs.map((need, index) => summarizeNeed(need, index + 1)),
-      candidates: candidateDebug,
-      selectedCandidates: selectedCandidateDebug,
-      offers: offers.map((offer, index) => summarizeOffer(offer, selected[index])),
+      eligibleArchetypeIds,
+      rolledA: rolledA.builder.archetypeId,
+      rolledB: rolledB.builder.archetypeId,
       encounterSignature,
     },
   };

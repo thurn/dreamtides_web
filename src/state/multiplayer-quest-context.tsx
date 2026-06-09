@@ -387,10 +387,7 @@ function merchantRequestSummary(
   return {
     siteId,
     offerId: request.offerId,
-    builderId: request.rewardBuilderId ?? null,
-    needId: request.needId ?? null,
-    price:
-      "expectedPrice" in request ? request.expectedPrice : null,
+    archetypeId: "archetypeId" in request ? request.archetypeId : null,
     choiceId: request.choice?.choiceId ?? null,
   };
 }
@@ -423,9 +420,7 @@ function merchantPayloadSummary(
         cardNumbers.add(current.cardNumber);
         entryIds.add(current.entryId);
         break;
-      case "change_essence":
-        break;
-      case "change_max_essence":
+      case "add_site":
         break;
       case "composite":
         for (const child of current.children) {
@@ -2994,9 +2989,8 @@ export function MultiplayerQuestProvider({
                 source: "dream_merchant",
                 summary: {
                   ...merchantRequestSummary(siteId, request),
-                  builderId: result.offer.rewardBuilderId,
-                  needId: result.offer.needId,
-                  price: result.offer.price,
+                  archetypeId: result.offer.archetypeId,
+                  targetKey: result.offer.targetKey,
                   ...merchantPayloadSummary(result.appliedPayload),
                 },
               }),

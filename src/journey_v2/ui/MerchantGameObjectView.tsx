@@ -119,32 +119,6 @@ function DreamsignObjectView({
   );
 }
 
-function EssenceObjectView({
-  object,
-}: {
-  object: Extract<MerchantGameObject, { objectType: "essence" }>;
-}) {
-  const sign = object.amount >= 0 ? "+" : "";
-  return (
-    <article
-      className="flex min-h-[58px] items-center justify-between gap-3 rounded-md border border-amber-300/35 bg-amber-950/20 p-3 text-left"
-      data-testid="merchant-game-object-essence"
-    >
-      <div className="min-w-0">
-        <h4 className="text-sm font-semibold text-amber-100">Essence</h4>
-        <p className="text-xs text-slate-300">Immediate resource change</p>
-      </div>
-      <div className="flex shrink-0 items-center gap-2">
-        <span className="text-lg font-bold tabular-nums text-amber-100">
-          {sign}
-          {object.amount}
-        </span>
-        <ObjectBadge badge={object.badge} />
-      </div>
-    </article>
-  );
-}
-
 export function MerchantGameObjectView({
   object,
   compact = false,
@@ -152,10 +126,7 @@ export function MerchantGameObjectView({
   if (object.objectType === "catalogCard" || object.objectType === "deckCard") {
     return <CardObjectView object={object} compact={compact} />;
   }
-  if (object.objectType === "dreamsign") {
-    return <DreamsignObjectView object={object} />;
-  }
-  return <EssenceObjectView object={object} />;
+  return <DreamsignObjectView object={object} />;
 }
 
 export function MerchantGameObjectList({
@@ -185,8 +156,5 @@ function gameObjectKey(object: MerchantGameObject, index: number): string {
   if (object.objectType === "deckCard") {
     return `deck:${object.entryId}:${object.cardUuid}:${index}`;
   }
-  if (object.objectType === "dreamsign") {
-    return `dreamsign:${object.dreamsignId}:${index}`;
-  }
-  return `essence:${object.amount}:${index}`;
+  return `dreamsign:${object.dreamsignId}:${index}`;
 }

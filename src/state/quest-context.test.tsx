@@ -20,7 +20,9 @@ import {
 import {
   makeMerchantTestCard,
   makeMerchantTestContent,
+  makeMerchantTestCorpus,
   makeMerchantTestDeckEntry,
+  makeMerchantTestDreamsignTemplate,
   makeMerchantTestQuestState,
   makeMerchantTestSite,
 } from "../journey_v2/testing/fixtures";
@@ -310,8 +312,19 @@ function makeMerchantProviderFixture(): {
       startingNodeId: "dreamscape-a",
     },
   });
+  const cards = merchantFixtureCards();
+  const corpus: Record<string, { quality: number }> = {};
+  for (const [index, card] of cards.entries()) {
+    corpus[card.id] = { quality: 0.1 + (index % 10) / 10 };
+  }
   const questContent = makeMerchantTestContent({
-    cards: merchantFixtureCards(),
+    cards,
+    dreamsignTemplates: [
+      makeMerchantTestDreamsignTemplate({ id: "sign-a", name: "Sign A" }),
+      makeMerchantTestDreamsignTemplate({ id: "sign-b", name: "Sign B" }),
+    ],
+    merchantCorpus: makeMerchantTestCorpus({ cards: corpus }),
+    dreamsignProfiles: new Map(),
   });
   return { state, questContent, site };
 }
@@ -334,9 +347,7 @@ function merchantAcceptRequestFor(offer: MerchantOffer): MerchantAcceptRequest {
   return {
     encounterSignature: offer.encounterSignature,
     offerId: offer.offerId,
-    expectedPrice: offer.price,
-    rewardBuilderId: offer.rewardBuilderId,
-    needId: offer.needId,
+    archetypeId: offer.archetypeId,
   };
 }
 
@@ -344,8 +355,6 @@ function merchantDeclineRequestFor(offer: MerchantOffer): MerchantDeclineRequest
   return {
     encounterSignature: offer.encounterSignature,
     offerId: offer.offerId,
-    needId: offer.needId,
-    rewardBuilderId: offer.rewardBuilderId,
   };
 }
 
@@ -402,7 +411,8 @@ describe("Dream Merchant v2 mutations", () => {
     const offer = requireMerchantOffer(
       merchantEncounterFor(fixture).offers,
       (candidate) =>
-        candidate.reward.applyPayload !== undefined && !candidate.locked,
+        candidate.applyPayload !== undefined ||
+        (candidate.choiceRequest?.candidates.length ?? 0) > 0,
     );
     const quest = mountQuestContext({
       cardDatabase: fixture.questContent.cardDatabase,
@@ -417,7 +427,6 @@ describe("Dream Merchant v2 mutations", () => {
       );
     });
 
-    expect(quest.state.essence).toBe(fixture.state.essence - offer.price);
     expect(quest.state.visitedSites).toContain(fixture.site.id);
     expect(quest.state.atlas.nodes["dreamscape-a"]?.sites[0]?.isVisited).toBe(true);
     expect(quest.state.siteRuntime[fixture.site.id]).toEqual({
@@ -431,9 +440,8 @@ describe("Dream Merchant v2 mutations", () => {
           event: "merchant_offer_accepted",
           siteId: fixture.site.id,
           offerId: offer.offerId,
-          builderId: offer.rewardBuilderId,
-          needId: offer.needId,
-          price: offer.price,
+          archetypeId: offer.archetypeId,
+          targetKey: offer.targetKey,
         }),
       ]),
     );

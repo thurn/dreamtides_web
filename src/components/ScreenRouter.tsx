@@ -425,7 +425,7 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
 }
 
 function collectVisibleGrantCards(
-  offers: readonly { reward: { gameObjects: readonly MerchantGameObject[]; choiceRequest?: { candidates: readonly { gameObjects: readonly MerchantGameObject[] }[] } } }[],
+  offers: readonly { gameObjects: readonly MerchantGameObject[]; choiceRequest?: { candidates: readonly { gameObjects: readonly MerchantGameObject[] }[] } }[],
 ): MerchantCatalogCard[] {
   const byUuid = new Map<string, MerchantCatalogCard>();
   const collect = (objects: readonly MerchantGameObject[]) => {
@@ -437,8 +437,8 @@ function collectVisibleGrantCards(
   };
 
   for (const offer of offers) {
-    collect(offer.reward.gameObjects);
-    for (const candidate of offer.reward.choiceRequest?.candidates ?? []) {
+    collect(offer.gameObjects);
+    for (const candidate of offer.choiceRequest?.candidates ?? []) {
       collect(candidate.gameObjects);
     }
   }

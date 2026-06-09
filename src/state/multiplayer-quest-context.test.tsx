@@ -16,7 +16,9 @@ import {
 import {
   makeMerchantTestCard,
   makeMerchantTestContent,
+  makeMerchantTestCorpus,
   makeMerchantTestDeckEntry,
+  makeMerchantTestDreamsignTemplate,
   makeMerchantTestQuestState,
   makeMerchantTestSite,
 } from "../journey_v2/testing/fixtures";
@@ -352,8 +354,19 @@ function makeMerchantProviderFixture(): {
       startingNodeId: "dreamscape-a",
     },
   });
+  const cards = merchantFixtureCards();
+  const corpus: Record<string, { quality: number }> = {};
+  for (const [index, card] of cards.entries()) {
+    corpus[card.id] = { quality: 0.1 + (index % 10) / 10 };
+  }
   const questContent = makeMerchantTestContent({
-    cards: merchantFixtureCards(),
+    cards,
+    dreamsignTemplates: [
+      makeMerchantTestDreamsignTemplate({ id: "sign-a", name: "Sign A" }),
+      makeMerchantTestDreamsignTemplate({ id: "sign-b", name: "Sign B" }),
+    ],
+    merchantCorpus: makeMerchantTestCorpus({ cards: corpus }),
+    dreamsignProfiles: new Map(),
   });
   return { state, questContent, site };
 }
@@ -376,9 +389,7 @@ function merchantAcceptRequestFor(offer: MerchantOffer): MerchantAcceptRequest {
   return {
     encounterSignature: offer.encounterSignature,
     offerId: offer.offerId,
-    expectedPrice: offer.price,
-    rewardBuilderId: offer.rewardBuilderId,
-    needId: offer.needId,
+    archetypeId: offer.archetypeId,
   };
 }
 
@@ -386,8 +397,6 @@ function merchantDeclineRequestFor(offer: MerchantOffer): MerchantDeclineRequest
   return {
     encounterSignature: offer.encounterSignature,
     offerId: offer.offerId,
-    needId: offer.needId,
-    rewardBuilderId: offer.rewardBuilderId,
   };
 }
 
@@ -433,9 +442,8 @@ function merchantPayloadApplied(
         (entry) =>
           entry.entryId === payload.entryId && entry.typeChange === payload.typeChange,
       );
-    case "change_essence":
-    case "change_max_essence":
-      return after.essence !== before.essence || after.essenceCap !== before.essenceCap;
+    case "add_site":
+      return true;
     case "composite":
       return payload.children.some((child) =>
         merchantPayloadApplied(before, after, child),
@@ -2601,10 +2609,9 @@ describe("MultiplayerQuestProvider", () => {
     const fixture = makeMerchantProviderFixture();
     const offer = requireMerchantOffer(
       merchantEncounterFor(fixture).offers,
-      (candidate) =>
-        candidate.reward.applyPayload !== undefined && !candidate.locked,
+      (candidate) => candidate.applyPayload !== undefined,
     );
-    if (offer.reward.applyPayload === undefined) {
+    if (offer.applyPayload === undefined) {
       throw new Error("Expected direct merchant payload");
     }
     const session = makeSession(fixture.state);
@@ -2630,11 +2637,10 @@ describe("MultiplayerQuestProvider", () => {
       throw new Error("Expected updated quest state");
     }
 
-    expect(nextState.essence).toBe(fixture.state.essence - offer.price);
     expect(merchantPayloadApplied(
       fixture.state,
       nextState,
-      offer.reward.applyPayload,
+      offer.applyPayload,
     )).toBe(true);
     expect(nextState.visitedSites).toContain(fixture.site.id);
     expect(nextState.atlas.nodes["dreamscape-a"]?.sites[0]?.isVisited).toBe(true);
@@ -2654,10 +2660,9 @@ describe("MultiplayerQuestProvider", () => {
     expect(action?.summary).toMatchObject({
       siteId: fixture.site.id,
       offerId: offer.offerId,
-      builderId: offer.rewardBuilderId,
-      needId: offer.needId,
-      price: offer.price,
-      payloadKind: offer.reward.applyPayload.kind,
+      archetypeId: offer.archetypeId,
+      targetKey: offer.targetKey,
+      payloadKind: offer.applyPayload.kind,
     });
   });
 

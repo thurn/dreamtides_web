@@ -1,13 +1,5 @@
 export { buildMerchantContext } from "./context/buildMerchantContext";
 export {
-  MERCHANT_REWARD_BUILDERS,
-  buildMerchantRewardCatalog,
-  buildMerchantRewardWithBuilder,
-  buildMerchantRewardsForNeed,
-  makeMerchantTypeChangePayload,
-  resolveMerchantChoice,
-} from "./catalog/rewardCatalog";
-export {
   generateMerchantEncounter,
   generateMerchantEncounterWithDebug,
 } from "./encounter/generateMerchantEncounter";
@@ -23,70 +15,44 @@ export {
   resolveMerchantDecline,
   resolveMerchantOffer,
 } from "./encounter/resolveMerchantOffer";
+export { renderMerchantDialogue } from "./dialogue/dialogue";
 export {
-  merchantRewardFamilyFor,
-  renderMerchantDialogue,
-} from "./dialogue/dialogue";
+  MERCHANT_ARCHETYPE_BUILDERS,
+} from "./archetypes/registry";
 export {
-  MERCHANT_MARKET_JITTER_MAX,
-  MERCHANT_MARKET_JITTER_MIN,
-  MERCHANT_NEED_SEVERITY_MULTIPLIER_MAX,
-  MERCHANT_NEED_SEVERITY_MULTIPLIER_MIN,
-  MERCHANT_PRICE_MINIMUM,
-  marketJitterFor,
-  needSeverityMultiplierFor,
-  priceMerchantReward,
-  scarcityMultiplierFor,
-  valueEssenceForCardGrant,
-} from "./catalog/pricing";
-export { readMerchantDeck } from "./read/deckRead";
+  MERCHANT_ARCHETYPE_FAMILIES,
+} from "./archetypes/types";
+export { MERCHANT_TUNING } from "./tuning";
 export type {
-  MerchantRewardFamily,
-  MerchantRewardPrice,
-  MerchantRewardScarcityInput,
-  PriceMerchantRewardInput,
-} from "./catalog/pricing";
+  MerchantEncounterGenerationDebug,
+} from "./encounter/generateMerchantEncounter";
 export type {
   MerchantResolveFailureReason,
   ResolveMerchantDeclineResult,
   ResolveMerchantOfferResult,
 } from "./encounter/resolveMerchantOffer";
 export type {
-  BuildMerchantRewardsOptions,
-  MerchantRewardOption,
-} from "./catalog/rewardCatalog";
-export type {
   DreamMerchantScreenProps,
 } from "./ui/DreamMerchantScreen";
 export type {
-  MerchantEncounterGenerationDebug,
-  MerchantGeneratedOfferDebug,
-  MerchantNeedDebug,
-  MerchantOfferCandidateDebug,
-} from "./encounter/generateMerchantEncounter";
+  MerchantArchetypeBuilder,
+  MerchantArchetypeId,
+  MerchantOfferDraft,
+  MerchantOfferFamily,
+} from "./archetypes/types";
 export type {
   MerchantApplyPayload,
   MerchantAcceptRequest,
   MerchantCatalogCard,
   MerchantChoice,
   MerchantChoiceCandidate,
-  MerchantChoiceCandidateDebug,
   MerchantChoiceRequest,
   MerchantContext,
   MerchantDeckCard,
   MerchantDeclineRequest,
-  MerchantDialogueBeat,
-  MerchantDialogueBeatKind,
+  MerchantDialogueLine,
   MerchantEncounter,
   MerchantGameObject,
-  MerchantNeed,
-  MerchantNeedKind,
-  MerchantNeedObservation,
-  MerchantNeedProjection,
-  MerchantNeedReference,
   MerchantOffer,
   MerchantOfferActionResult,
-  MerchantRewardBuilderId,
-  MerchantRoleNeed,
-  MerchantReward,
 } from "./types";

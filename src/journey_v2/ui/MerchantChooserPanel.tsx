@@ -40,12 +40,6 @@ export function MerchantChooserPanel({
           <h3 className="mt-1 break-words text-lg font-bold text-slate-50">
             {choiceRequest.prompt}
           </h3>
-          <p
-            className="mt-1 text-sm text-amber-100"
-            data-testid="merchant-chooser-price-context"
-          >
-            Offer {offer.offerId}: {offer.price} essence
-          </p>
         </div>
         <button
           type="button"

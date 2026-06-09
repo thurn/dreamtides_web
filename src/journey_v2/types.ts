@@ -1,15 +1,21 @@
 import type { FitModel } from "../draft/replay/fit-model";
+import type { MerchantCorpus } from "../data/merchant-corpus";
+import type { DreamsignProfile } from "../data/dreamsign-profiles";
 import type { QuestContent } from "../data/quest-content";
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate } from "../types/content";
-import type { MerchantRewardFamily, MerchantRewardPrice } from "./catalog/pricing";
 import type {
   CardKeywordModification,
   CardTypeChange,
   DeckEntry,
   SiteState,
+  SiteType,
   TransfigurationType,
 } from "../types/quest";
+import type {
+  MerchantArchetypeId,
+  MerchantOfferFamily,
+} from "./archetypes/types";
 
 export interface MerchantGameObjectBadge {
   label: string;
@@ -40,176 +46,32 @@ export interface MerchantCatalogCard extends MerchantCardIdentity {
   badge?: MerchantGameObjectBadge;
 }
 
-export interface MerchantSupportNeed {
-  theme: string;
-  tier: number;
-}
-
-export interface MerchantSupportMeta {
-  name?: string;
-  needs?: readonly MerchantSupportNeed[];
-  supports?: readonly string[];
-}
-
 export interface MerchantContext {
   questSeed: string;
   site: SiteState;
+  /** Retained on the context for other screens; the merchant ignores it. */
   essence: number;
+  /** Retained on the context for other screens; the merchant ignores it. */
   essenceCap: number;
   deckCards: readonly MerchantDeckCard[];
   cardByUuid: ReadonlyMap<string, CardData>;
   cardByNumber: ReadonlyMap<number, CardData>;
   deckEntryById: ReadonlyMap<string, MerchantDeckCard>;
-  supportMetaByUuid: ReadonlyMap<string, MerchantSupportMeta>;
   ownedCardUuids: ReadonlySet<string>;
   heldDreamsignIds: ReadonlySet<string>;
   heldDreamsignFallbackNames: ReadonlySet<string>;
+  /** Non-starter pool cards eligible as grant targets. */
   candidateGrantCards: readonly MerchantCatalogCard[];
+  /** Unheld dreamsign templates. */
   candidateDreamsigns: readonly DreamsignTemplate[];
   fitModel?: FitModel;
+  /** Baked quality/multiplicity/cluster signals; absent before the bake step. */
+  merchantCorpus?: MerchantCorpus;
+  /** Curated dreamsign profiles keyed by dreamsign UUID. */
+  dreamsignProfiles?: ReadonlyMap<string, DreamsignProfile>;
   cardDatabase: QuestContent["cardDatabase"];
   dreamsignTemplates: readonly DreamsignTemplate[];
 }
-
-export type MerchantNeedKind =
-  | "under_supported_payoff"
-  | "missing_role"
-  | "upgrade_target"
-  | "curve_problem"
-  | "weak_card"
-  | "dreamsign_gap";
-
-export type MerchantRoleNeed =
-  | "draw"
-  | "recursion"
-  | "interaction"
-  | "cheap_early_play"
-  | "events"
-  | "characters"
-  | "abandon_outlet"
-  | "finisher";
-
-export interface MerchantNeedObservation {
-  summary: string;
-  subject?: string;
-  roleLabel?: string;
-  theme?: string;
-  metric?: {
-    label: string;
-    value?: string | number;
-    from?: string | number | null;
-    to?: string | number | null;
-  };
-}
-
-export interface MerchantNeedReference extends MerchantCardIdentity {
-  displayName?: string;
-}
-
-export interface MerchantNeedProjection {
-  transfiguration: TransfigurationType;
-  description: string;
-  metric?: MerchantNeedObservation["metric"];
-  previewCard: CardData;
-}
-
-export interface MerchantNeedBase {
-  needId: string;
-  needType: "card" | "theme";
-  needKind: MerchantNeedKind;
-  label: string;
-  score: number;
-  severity: number;
-  confidence: number;
-  observation: MerchantNeedObservation;
-  compatibleRewardBuilderIds: readonly string[];
-  dreamsignId?: string;
-}
-
-export interface MerchantCardTargetNeed extends MerchantNeedBase {
-  needType: "card";
-  cardUuid: string;
-  cardNumber: number;
-  entryId: string;
-  references: readonly MerchantNeedReference[];
-}
-
-export interface MerchantThemeNeed extends MerchantNeedBase {
-  needType: "theme";
-  themeId?: string;
-}
-
-export interface MerchantUnderSupportedPayoffNeed extends MerchantCardTargetNeed {
-  needKind: "under_supported_payoff";
-  themeId: string;
-  support: {
-    theme: string;
-    tier: number;
-    supportCount: number;
-    adequacy: number;
-  };
-}
-
-export interface MerchantUpgradeTargetNeed extends MerchantCardTargetNeed {
-  needKind: "upgrade_target";
-  projection: MerchantNeedProjection;
-}
-
-export interface MerchantWeakCardNeed extends MerchantCardTargetNeed {
-  needKind: "weak_card";
-}
-
-export interface MerchantMissingRoleNeed extends MerchantThemeNeed {
-  needKind: "missing_role";
-  themeId: string;
-  role?: MerchantRoleNeed;
-  support: {
-    theme: string;
-    supportCount?: number;
-    requiredCount?: number;
-  };
-}
-
-export interface MerchantCurveProblemNeed extends MerchantThemeNeed {
-  needKind: "curve_problem";
-  themeId: "curve";
-  role: "cheap_early_play";
-  curveDirection: "top_heavy" | "early_plays";
-  support: {
-    theme: "curve";
-    supportCount: number;
-    requiredCount: number;
-  };
-}
-
-export interface MerchantDreamsignGapNeed extends MerchantThemeNeed {
-  needKind: "dreamsign_gap";
-  themeId: "dreamsign";
-  dreamsignId: string;
-}
-
-export type MerchantNeed =
-  | MerchantUnderSupportedPayoffNeed
-  | MerchantUpgradeTargetNeed
-  | MerchantWeakCardNeed
-  | MerchantMissingRoleNeed
-  | MerchantCurveProblemNeed
-  | MerchantDreamsignGapNeed;
-
-export type MerchantRewardBuilderId =
-  | "grant_support_card"
-  | "grant_dreamsign"
-  | "transfigure_card"
-  | "purge_weak_card"
-  | "duplicate_keystone"
-  | "replace_weak_with_fit"
-  | "gain_essence"
-  | "raise_essence_cap"
-  | "add_reclaim_to_event"
-  | "add_fast_to_event"
-  | "reduce_reclaim_cost"
-  | "convert_event_to_role"
-  | "grant_exact_card";
 
 export type MerchantApplyPayload =
   | {
@@ -258,12 +120,8 @@ export type MerchantApplyPayload =
       typeChange: CardTypeChange;
     }
   | {
-      kind: "change_essence";
-      amount: number;
-    }
-  | {
-      kind: "change_max_essence";
-      amount: number;
+      kind: "add_site";
+      siteType: SiteType;
     }
   | {
       kind: "composite";
@@ -280,99 +138,50 @@ export interface MerchantChoice {
   choiceId: string;
 }
 
-export interface MerchantChoiceCandidateDebug {
-  source: "catalog_rank" | "dreamsign_rank";
-  rank: number;
-  score?: number;
-  matchScore?: number;
-  roleScore?: number;
-  supportFit?: number;
-  curveScore?: number;
-  modelFit?: number;
-  rarityValueScore?: number;
-  tieBreak: number;
-}
-
 export interface MerchantChoiceCandidate {
   choiceId: string;
   title: string;
   summary: string;
-  needId: string;
-  builderId: MerchantRewardBuilderId;
   gameObjects: readonly MerchantGameObject[];
-  valueEssence: number;
   applyPayload: MerchantApplyPayload;
   cardUuid?: string;
   cardNumber?: number;
   dreamsignId?: string;
-  debug?: MerchantChoiceCandidateDebug;
-}
-
-export interface MerchantReward {
-  builderId: MerchantRewardBuilderId;
-  title: string;
-  summary: string;
-  answersNeedIds: readonly string[];
-  gameObjects: readonly MerchantGameObject[];
-  valueEssence: number;
-  applyPayload?: MerchantApplyPayload;
-  choiceRequest?: MerchantChoiceRequest;
 }
 
 export interface MerchantOffer {
   offerId: string;
   encounterSignature: string;
-  rewardBuilderId: MerchantRewardBuilderId;
-  needId: string;
-  price: number;
-  priceDetail: MerchantRewardPrice;
-  locked: boolean;
-  lockedReason?: MerchantRewardPrice["lockedReason"];
-  reward: MerchantReward;
-  rewards: readonly MerchantReward[];
-  choice?: MerchantChoice;
+  archetypeId: MerchantArchetypeId;
+  family: MerchantOfferFamily;
+  title: string;
+  summary: string;
+  hiddenUntilCommit: boolean;
+  targetKey: string;
+  gameObjects: readonly MerchantGameObject[];
+  applyPayload?: MerchantApplyPayload;
+  choiceRequest?: MerchantChoiceRequest;
 }
 
-export type MerchantDialogueBeatKind =
-  | "greeting"
-  | "observation"
-  | "offer_framing"
-  | "price_framing"
-  | "walk_away"
-  | "accept_reaction"
-  | "decline_reaction";
-
-export type MerchantDialogueBeatPhase =
-  | "pre_offer"
-  | "accept_reaction"
-  | "decline_reaction";
-
-export interface MerchantDialogueBeat {
-  id: string;
-  templateId: string;
-  kind: MerchantDialogueBeatKind;
-  phase: MerchantDialogueBeatPhase;
-  text: string;
-  offerId?: string;
-  needId?: string;
-  rewardBuilderId?: MerchantRewardBuilderId;
-  rewardFamily?: MerchantRewardFamily;
-  price?: number;
+/** A single merchant line hinting at one seeded-chosen offer. */
+export interface MerchantDialogueLine {
+  line: string;
+  offerId: string;
 }
 
 export interface MerchantEncounter {
   encounterSignature: string;
   siteId: string;
   offers: readonly MerchantOffer[];
-  dialogue: readonly MerchantDialogueBeat[];
+  dialogue: MerchantDialogueLine;
+  /** Short reaction shown after the player accepts. */
+  acceptReaction: string;
 }
 
 export interface MerchantAcceptRequest {
   encounterSignature: string;
   offerId: string;
-  expectedPrice: number;
-  rewardBuilderId: MerchantRewardBuilderId;
-  needId: string;
+  archetypeId: MerchantArchetypeId;
   choice?: MerchantChoice;
 }
 
@@ -388,8 +197,6 @@ export type MerchantOfferActionResult =
 export interface MerchantDeclineRequest {
   encounterSignature: string;
   offerId: string;
-  needId?: string;
-  rewardBuilderId?: string;
   choice?: MerchantChoice;
 }
 
@@ -401,10 +208,5 @@ export type MerchantGameObject =
       dreamsignId: string;
       dreamsignTemplate: DreamsignTemplate;
       displayName: string;
-      badge?: MerchantGameObjectBadge;
-    }
-  | {
-      objectType: "essence";
-      amount: number;
       badge?: MerchantGameObjectBadge;
     };

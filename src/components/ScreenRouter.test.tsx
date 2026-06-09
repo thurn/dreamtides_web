@@ -16,7 +16,9 @@ import type { CardSourceDebugState, QuestState, SiteState } from "../types/quest
 import {
   makeMerchantTestCard,
   makeMerchantTestContent,
+  makeMerchantTestCorpus,
   makeMerchantTestDeckEntry,
+  makeMerchantTestDreamsignTemplate,
   makeMerchantTestQuestState,
 } from "../journey_v2/testing/fixtures";
 import { getLogEntries, resetLog } from "../logging";
@@ -108,6 +110,23 @@ function fixtureCards(): CardData[] {
     card(UUIDS.earlyA, 401, { energyCost: 1 }),
     card(UUIDS.earlyB, 402, { energyCost: 1 }),
   ];
+}
+
+function merchantContent() {
+  const cards = fixtureCards();
+  const corpus: Record<string, { quality: number }> = {};
+  for (const [index, c] of cards.entries()) {
+    corpus[c.id] = { quality: 0.1 + (index % 10) / 10 };
+  }
+  return makeMerchantTestContent({
+    cards,
+    dreamsignTemplates: [
+      makeMerchantTestDreamsignTemplate({ id: "router-sign-a", name: "Router Sign A" }),
+      makeMerchantTestDreamsignTemplate({ id: "router-sign-b", name: "Router Sign B" }),
+    ],
+    merchantCorpus: makeMerchantTestCorpus({ cards: corpus }),
+    dreamsignProfiles: new Map(),
+  });
 }
 
 function makeMutations(): QuestMutations {
@@ -287,7 +306,7 @@ describe("ScreenRouter DreamJourney routing", () => {
     const state = makeStateFor(site);
     const container = renderWithQuest({
       state,
-      questContent: makeMerchantTestContent({ cards: fixtureCards() }),
+      questContent: merchantContent(),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />,
     });
 
@@ -300,7 +319,7 @@ describe("ScreenRouter DreamJourney routing", () => {
     const state = makeStateFor(site);
     renderWithQuest({
       state,
-      questContent: makeMerchantTestContent({ cards: fixtureCards() }),
+      questContent: merchantContent(),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />,
       strict: true,
     });
@@ -312,16 +331,17 @@ describe("ScreenRouter DreamJourney routing", () => {
     expect(shownLogs[0]?.offerCount).toBe(2);
     expect(shownLogs[0]?.debug).toMatchObject({
       encounterSignature: shownLogs[0]?.encounterSignature,
-      selectionPolicy: {
-        offerIds: ["A", "B"],
-      },
     });
     const debug = shownLogs[0]?.debug as
-      | { needs?: unknown[]; candidates?: unknown[]; offers?: unknown[] }
+      | {
+          eligibleArchetypeIds?: unknown[];
+          rolledA?: string;
+          rolledB?: string;
+        }
       | undefined;
-    expect(debug?.needs?.length).toBeGreaterThan(0);
-    expect(debug?.candidates?.length).toBeGreaterThan(0);
-    expect(debug?.offers?.length).toBe(2);
+    expect((debug?.eligibleArchetypeIds?.length ?? 0)).toBeGreaterThan(0);
+    expect(debug?.rolledA).toBeDefined();
+    expect(debug?.rolledB).toBeDefined();
   });
 
   it("sets card source debug for visible merchant grant cards", () => {
@@ -331,7 +351,7 @@ describe("ScreenRouter DreamJourney routing", () => {
     renderWithQuest({
       state,
       mutations,
-      questContent: makeMerchantTestContent({ cards: fixtureCards() }),
+      questContent: merchantContent(),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />,
     });
 
@@ -351,7 +371,7 @@ describe("ScreenRouter DreamJourney routing", () => {
     const state = makeStateFor(site);
     const container = renderWithQuest({
       state,
-      questContent: makeMerchantTestContent({ cards: fixtureCards() }),
+      questContent: merchantContent(),
       children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />,
     });
 
