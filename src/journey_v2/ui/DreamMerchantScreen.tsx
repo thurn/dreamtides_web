@@ -94,6 +94,7 @@ export function DreamMerchantScreen({
       next.set(offer.offerId, { choiceId: candidate.choiceId });
       return next;
     });
+    setChoosingOfferId(null);
   }
 
   return (
@@ -148,16 +149,6 @@ export function DreamMerchantScreen({
             </div>
           </section>
 
-          {choosingOffer?.reward.choiceRequest !== undefined && (
-            <MerchantChooserPanel
-              offer={choosingOffer}
-              choiceRequest={choosingOffer.reward.choiceRequest}
-              selectedChoiceId={selectedChoiceFor(choosingOffer)?.choiceId}
-              onSelect={(candidate) => selectCandidate(choosingOffer, candidate)}
-              onClose={() => setChoosingOfferId(null)}
-            />
-          )}
-
           <button
             type="button"
             className="min-h-12 rounded-md border border-slate-600 bg-slate-900 px-5 py-3 text-sm font-bold text-slate-100 transition hover:bg-slate-800"
@@ -182,6 +173,18 @@ export function DreamMerchantScreen({
           )}
         </div>
       </div>
+
+      {choosingOffer?.reward.choiceRequest !== undefined && (
+        <div className="fixed inset-x-3 bottom-24 top-4 z-40 overflow-y-auto sm:left-1/2 sm:w-[min(760px,calc(100vw-2rem))] sm:-translate-x-1/2">
+          <MerchantChooserPanel
+            offer={choosingOffer}
+            choiceRequest={choosingOffer.reward.choiceRequest}
+            selectedChoiceId={selectedChoiceFor(choosingOffer)?.choiceId}
+            onSelect={(candidate) => selectCandidate(choosingOffer, candidate)}
+            onClose={() => setChoosingOfferId(null)}
+          />
+        </div>
+      )}
     </div>
   );
 }

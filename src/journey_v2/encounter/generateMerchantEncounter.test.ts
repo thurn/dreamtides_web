@@ -153,7 +153,9 @@ function insufficientCandidateContext(): MerchantContext {
     cardType: "Event",
     energyCost: 5,
     spark: null,
-    renderedText: "Fast.",
+    isFast: true,
+    reclaimCost: 1,
+    renderedText: "Fast. Reclaim 1.",
   });
   return buildMerchantContext({
     questState: makeMerchantTestQuestState({
