@@ -189,6 +189,7 @@ const NON_GLOSSARY_WORDS = new Set<string>(
     "fewer",
     "fewest",
     "first",
+    "flagged",
     "focused",
     "for",
     "forgo",

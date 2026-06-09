@@ -352,8 +352,7 @@ same singular/distributive split.
 - **The opponent** is always `the opponent` (never `your opponent` or `each
   opponent`).
 - Ownership is expressed with `ally`/`allied`, never the word `control`. State a
-  board-count condition with `If there are … in play,`: `If there are 3 allied
-  warriors in play, draw a card.`
+  board-count condition with `With …,`: `With ≥3 allied warriors, draw a card.`
 
 ---
 
@@ -386,9 +385,11 @@ You may play that card from your void this turn.
 
 ## 11. Conditions and thresholds
 
-- A leading condition that counts characters in play is written `If there are
-  <condition> in play,` and the effect follows: `If there are 3 or more allied
-  characters in play, reveal the top card of your deck.`
+- A leading condition that counts allied or enemy characters in play is written
+  `With <condition>,` and the effect follows: `With ≥3 allied characters, reveal
+  the top card of your deck.` Use the `≥` and `≤` symbols for numeric thresholds
+  in this form: `With ≥2 allied warriors, your events cost 1● less.`, `With ≤1
+  enemy, draw a card.`, `With no allies, gain 1●.`
 - A cost or spark threshold on a noun is a glued symbol prefix on the noun, not a
   trailing `with …` clause. Use `≤` for "or less" and `≥` for "or more", and
   spell out `cost` for an energy threshold: `a ≤2● cost character`, `≤2● cost
@@ -396,8 +397,9 @@ You may play that card from your void this turn.
   prefix sits directly before the head noun, after any other adjectives — `a
   played ≤2● cost card`, `a random ≤2● cost character` — and the article before
   it is always `a`, never `an` (`a ≤2✦ enemy`).
-- A pure count of objects keeps the words `or less`/`or more`: `If there are 7 or
-  more cards in your void, …`, `When you discard one or more cards, …`.
+- A pure count of non-character objects keeps the words `or less`/`or more`: `If
+  there are 7 or more cards in your void, …`, `When you discard one or more
+  cards, …`.
 - An equality threshold against a variable amount spells out the comparison:
   `with cost less than or equal to the stored ⧗`.
 
@@ -424,6 +426,7 @@ You may play that card from your void this turn.
   opponent`.
 - Temporary state change → `until end of turn`; counting or permission window →
   `this turn`.
-- Cost/spark thresholds are glued symbol prefixes (`a ≤2● cost character`, `a
-  ≤2✦ enemy`, `a ≥3● cost character`), with article `a`; pure counts keep `or
-  less`/`or more`.
+- Board-count conditions use `With ≥N …,`; cost/spark thresholds are glued
+  symbol prefixes (`a ≤2● cost character`, `a ≤2✦ enemy`, `a ≥3● cost
+  character`), with article `a`; non-character pure counts keep `or less`/`or
+  more`.

@@ -60,9 +60,19 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     variants: ["dawn"],
   },
   {
+    term: "Day",
+    definition: "The turn phase when the active player plays standard cards.",
+    variants: ["day"],
+  },
+  {
     term: "Materialize",
     definition: "Put a character into play",
     variants: ["materialize", "materializes"],
+  },
+  {
+    term: "Rematerialize",
+    definition: "Trigger an in-play character's materialization again.",
+    variants: ["rematerialize"],
   },
   {
     term: "Judgment",
@@ -109,6 +119,11 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     variants: ["discover"],
   },
   {
+    term: "Erode",
+    definition: "Put cards from the top of your deck into your void.",
+    variants: ["erode", "eroded", "erodes"],
+  },
+  {
     term: "Fast",
     definition: "Can be played during the opponent's turn.",
     variants: ["fast"],
@@ -137,6 +152,26 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     term: "Supported",
     definition: "Characters directly in front of this character.",
     variants: ["supported", "supporting"],
+  },
+  {
+    term: "Front Rank",
+    definition: "The row where characters challenge and defend.",
+    variants: ["front", "rank"],
+  },
+  {
+    term: "Back Rank",
+    definition: "The row whose characters can support the front rank.",
+    variants: ["back"],
+  },
+  {
+    term: "Challenger",
+    definition: "A front-rank character attacking during the Challenge phase.",
+    variants: ["challenger", "challengers"],
+  },
+  {
+    term: "Unpaired",
+    definition: "A challenger with no defender opposite it.",
+    variants: ["unpaired"],
   },
   {
     term: "Deployed",
