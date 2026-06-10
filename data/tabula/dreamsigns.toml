@@ -26,7 +26,7 @@ tags = ["Tag OK"]
 id = "49990864-1DB0-4C08-91AE-40A1F04223E4"
 name = "Algae"
 image_name = "algae.png"
-rendered-text = "The first character you draw each turn costs 2● less until your next Dawn phase."
+rendered-text = "Once per turn, when you draw a character, reduce its cost by 1● until end of turn."
 tags = ["Tag OK"]
 
 [[dreamsign]]
@@ -193,27 +193,31 @@ name = "Spider Jar"
 image_name = "black_widow.png"
 tides = ["character_chain", "figment_swarm", "warrior_pressure", "ally_wide", "materialize_value"]
 rendered-text = "When you play your second character each turn, materialize a 1✦ warrior figment."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "1DFA4D90-8270-4B7C-87BE-D95AB6201E00"
 name = "Blue Feather"
 image_name = "blue_feather.png"
 tides = ["warrior_pressure", "warrior_bastion", "topdeck_setup", "judgment_engines"]
-rendered-text = "[FLAGGED] ▸Dawn: If the top card of your deck is a warrior, materialize it instead of drawing a card this turn."
+rendered-text = "If the first card you draw during your turn is a warrior, reduce its cost by 1● and it gains +2✦."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "59D44948-210A-4703-B031-CB938C917150"
 name = "Carved Bone"
 image_name = "bone.png"
 tides = ["warrior_pressure", "warrior_bastion", "spark_growth"]
-rendered-text = "Allied warriors have Preeminence."
+rendered-text = "Allied warriors have preeminence."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "DBBADE86-9FB6-4283-B2DC-9C1EF66FD531"
 name = "Skull Drum"
 image_name = "drum.png"
 tides = ["warrior_pressure", "warrior_bastion", "event_chain", "cost_reduction", "resource_burst"]
-rendered-text = "With ≥2 allied warriors, your events cost 1● less."
+rendered-text = "When you play an event with ≥3 allied spirit animals, it costs 1● less."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "21AE8473-AFA7-4384-B7D4-AFBF1D84E691"
@@ -221,13 +225,15 @@ name = "Ivory Claw"
 image_name = "claw.png"
 tides = ["warrior_pressure", "warrior_bastion", "judgment_engines", "card_flow"]
 rendered-text = "▸Dawn: With ≥3 allied warriors, draw a card."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "6B5C0F18-198C-44E7-92E8-D639298B8CF6"
 name = "Charm Staff"
 image_name = "magic_stick_6.png"
 tides = ["warrior_bastion", "spark_growth", "warrior_pressure", "character_curve"]
-rendered-text = "Supported allied warriors have +1✦ and Preeminence."
+rendered-text = "Once per turn, when an allied spirit animal is dissolved, draw a card."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "246AC924-74DD-4387-9FD6-5BC8E563907A"
@@ -235,13 +241,15 @@ name = "Curved Blade"
 image_name = "knife.png"
 tides = ["warrior_pressure", "warrior_bastion", "cost_reduction", "spark_growth"]
 rendered-text = "Allied warriors cost 1● less."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "1ECE0E16-08DE-4C99-8552-2D1D3A2BD517"
 name = "Shadow Droplet"
 image_name = "dark-essense.png"
 tides = ["void_recursion", "reclaim_characters", "warrior_bastion", "warrior_pressure"]
-rendered-text = "Warriors in your void have Reclaim X● where X is their ● cost."
+rendered-text = "Survivors in your void have reclaim."
+tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "3D86F8CE-42AC-43DC-96D5-121E6D1A6167"
@@ -307,7 +315,7 @@ id = "1A524712-EF7E-43D9-BD79-5DEA5250BF08"
 name = "Rainbow Horn"
 image_name = "horn_rainbow .png"
 tides = ["fast_setup", "fast_tempo", "card_flow", "judgment_engines"]
-rendered-text = "▸Dawn: Add a random Fast card from the card pool to your hand."
+rendered-text = "▸Dawn: Add a random ❖ card from the card pool to your hand."
 
 [[dreamsign]]
 id = "6F4E2D9F-38A4-4F6A-8FDE-7D942977A6DF"
@@ -321,7 +329,7 @@ id = "C75CD943-5E8B-4A56-8C09-D975571570D4"
 name = "Butterfly Wings"
 image_name = "butterfly_wings.png"
 tides = ["judgment_engines", "judgment_repeaters", "trigger_reuse", "judgment_bodies"]
-rendered-text = "[FLAGGED] A random allied ▸Dawn ability each turn gains Echo."
+rendered-text = "A random allied ▸Dawn ability triggers an additional time each turn."
 
 [[dreamsign]]
 id = "7EC00DA2-2B2D-4613-9A2A-8611D38199CA"
@@ -377,7 +385,7 @@ id = "56523397-6C48-4DF6-846B-9E4F15D7FDEE"
 name = "Clover"
 image_name = "clover.png"
 tides = ["event_chain", "copy_effects", "finishers", "event_setup"]
-rendered-text = "[FLAGGED] With no allies in play, your events gain Echo."
+rendered-text = "When you play an event with no allies in play, copy it."
 
 [[dreamsign]]
 id = "6DAC6BFF-AF3A-4749-8547-01FDED1C81C9"
@@ -391,7 +399,7 @@ id = "396DA354-9F4D-4AE7-A9DC-02D1330A2678"
 name = "Crow"
 image_name = "crow.png"
 tides = ["event_chain", "spark_growth", "point_pressure", "event_setup"]
-rendered-text = "[FLAGGED] When you play an event, each focused ally gains +1✦."
+rendered-text = "When you play an event, each allied front-rank character gains +1✦ this turn."
 
 [[dreamsign]]
 id = "A09F60DF-EC9F-4608-873C-1372AF18DAA2"
@@ -412,7 +420,7 @@ id = "B6333EBA-5573-441C-B286-1CD7F7CB6916"
 name = "Eye Grimoire"
 image_name = "book_3.png"
 tides = ["copy_effects", "event_chain", "reclaim_events", "void_recursion", "trigger_reuse"]
-rendered-text = "[FLAGGED] The first event you reclaim each turn gains Echo."
+rendered-text = "Copy the first event you play from your void each turn."
 
 [[dreamsign]]
 id = "B2626645-827C-46EC-8204-017862D1A398"
@@ -447,7 +455,7 @@ id = "D2A916C1-321A-4AE3-9A50-0B7F13C5EFF6"
 name = "Flash Powder"
 image_name = "Alchemical_Powder.png"
 tides = ["fast_setup", "fast_tempo", "cost_reduction", "event_chain"]
-rendered-text = "You may play Fast events for 1●."
+rendered-text = "You may play ❖ events for 1●."
 
 [[dreamsign]]
 id = "10F27800-99F8-4504-9D94-26BCB3C32788"
@@ -468,42 +476,42 @@ id = "89C83D7E-5617-49B4-B6CD-214680FE0627"
 name = "Candle"
 image_name = "candle.png"
 tides = ["event_chain", "spark_growth", "event_setup", "card_flow"]
-rendered-text = "[FLAGGED] When you play an event, kindle 1."
+rendered-text = "When you play an event, your ally with the highest ✦ gains +1✦."
 
 [[dreamsign]]
 id = "8B87B0C7-E7D5-4C53-B99B-B1E2407CB519"
 name = "Red Heart"
 image_name = "heart.png"
 tides = ["void_setup", "spark_growth", "recursion_fuel", "void_threshold"]
-rendered-text = "[FLAGGED] When a card enters your void from your deck, kindle 1."
+rendered-text = "When a card enters your void from your deck, a random ally gains +1✦."
 
 [[dreamsign]]
 id = "73EFD845-6009-4686-860C-01C7F5B1C074"
 name = "Black Feather"
 image_name = "feather.png"
 tides = ["abandon_value", "spark_tall", "leave_play_enablers", "spark_growth"]
-rendered-text = "[FLAGGED] When you abandon an ally, kindle X where X is that ally's ✦."
+rendered-text = "When you abandon an ally, give another ally +X✦ where X is the abandoned ally's ✦."
 
 [[dreamsign]]
 id = "ADC23870-55F8-4F23-B973-A358FC257414"
 name = "Gold Feather"
 image_name = "feather_gold.png"
 tides = ["abandon_value", "leave_play_enablers", "spark_growth", "point_pressure"]
-rendered-text = "[FLAGGED] When you abandon a character, kindle 1."
+rendered-text = "When you abandon a character, a random allied front-rank character gains +1✦."
 
 [[dreamsign]]
 id = "1A21186C-CAFD-4E0F-9304-1AC0EF55340A"
 name = "Gray Feather"
 image_name = "feathers.png"
 tides = ["spark_tall", "spark_growth", "point_pressure", "finishers"]
-rendered-text = "[FLAGGED] When you kindle, double the amount of ✦ gained."
+rendered-text = "When an ally gains ✦, it gains 1 additional ✦."
 
 [[dreamsign]]
 id = "FF8D8D4A-FE7B-4511-8192-E6E2E7712DAF"
 name = "Amber Eye"
 image_name = "eye_3.png"
 tides = ["void_threshold", "event_chain", "card_flow", "void_recursion", "void_setup"]
-rendered-text = "While you have 8 or more cards in your void, draw a card when you play an event."
+rendered-text = "With ≥8 cards in your void, when you play an event, draw a card."
 
 [[dreamsign]]
 id = "A92D2B95-C63D-4C1C-831B-902C44DEEE57"
@@ -531,7 +539,7 @@ id = "268341C7-BB5B-49FB-AD8D-A792B7D631A0"
 name = "Witch Hat"
 image_name = "hat.png"
 tides = ["event_chain", "card_flow", "event_setup", "hand_cycling"]
-rendered-text = "When you play your second event in a turn, draw a card."
+rendered-text = "When you play your second event each turn, draw a card."
 
 [[dreamsign]]
 id = "9AAED05A-2223-42F2-9B9D-81A53EAB811C"
@@ -545,7 +553,7 @@ id = "5190A8B8-25A0-4C60-A4DE-2E2C5A73AF77"
 name = "Cactus"
 image_name = "cactus .png"
 tides = ["discard_velocity", "void_recursion", "cost_reduction", "hand_cycling"]
-rendered-text = "If you have discarded a card this turn, the first card you play from your void costs 1 less."
+rendered-text = "If you have discarded a card this turn, the first card you play from your void costs 1● less."
 
 [[dreamsign]]
 id = "86F64A29-7338-4759-81DA-4C7656E543D2"
@@ -566,7 +574,7 @@ id = "3A22A33F-5682-4D00-B0EC-86E43B6ED9DF"
 name = "Magic Fish"
 image_name = "magic_fish.png"
 tides = ["spirit_growth", "card_flow", "character_curve", "materialize_value"]
-rendered-text = "The first time each turn you play a Spirit Animal, draw a card."
+rendered-text = "The first time each turn you play a spirit animal, draw a card."
 
 [[dreamsign]]
 id = "B3403800-7004-4775-915B-A19840E416B0"
@@ -620,7 +628,7 @@ id = "87239E3F-04F7-45BD-9B73-944EF36AD445"
 name = "Eyeball Slime"
 image_name = "monster_jelly.png"
 tides = ["ally_formation", "spark_growth", "point_pressure", "ally_wide"]
-rendered-text = "[FLAGGED] Supported allies have +1✦ and Dread 1."
+rendered-text = "Supported allies have +1✦ and Vengeful."
 
 [[dreamsign]]
 id = "11018E32-F47E-45FD-A8CF-3A9E3F3BE71B"
@@ -647,7 +655,7 @@ id = "4F5BDCAC-64CB-4A45-8121-E37F5E4D3074"
 name = "Notes"
 image_name = "note_2.png"
 tides = ["bounce_blink_tools", "materialize_tempo", "spark_growth", "leave_play_enablers", "materialize_value"]
-rendered-text = "Characters you return to hand gain +2✦."
+rendered-text = "Allied spirit animals have +1✦."
 
 [[dreamsign]]
 id = "1CCD8D69-E14C-4788-BE1D-CB6A1B703225"
@@ -675,7 +683,7 @@ id = "C92438FC-8E1F-4F97-9DCF-8CA0EDAA8607"
 name = "Black Horn"
 image_name = "leech.png"
 tides = ["cheap_removal", "premium_removal", "resource_burst", "card_flow"]
-rendered-text = "When you dissolve or banish an enemy character, gain 2● and draw a card."
+rendered-text = "When you dissolve or banish an enemy character, gain 2●."
 
 [[dreamsign]]
 id = "9DD7D53F-D4DB-4EEC-919D-D701774AF359"
@@ -689,7 +697,7 @@ id = "BB8BB233-7CB1-43B3-AF30-E71AB9E832C5"
 name = "Sealed Letter"
 image_name = "letter_2.png"
 tides = ["abandon_value", "trigger_reuse", "survivor_dissolve", "leave_play_enablers"]
-rendered-text = "[FLAGGED] When you abandon an ally, its ▸Dissolved ability gains Echo."
+rendered-text = "When you abandon an ally, its ▸Dissolved ability triggers an additional time."
 
 [[dreamsign]]
 id = "FDFBD522-C2BE-4B77-A63F-E9A64CA3DE3B"
@@ -731,28 +739,28 @@ id = "05F69D01-F8A3-4044-B7CD-0BFD9ED980CD"
 name = "Philosopher's Stone"
 image_name = "philosopher's_Stone.png"
 tides = ["big_energy", "resource_burst", "event_chain", "finishers"]
-rendered-text = "Your ● is conserved between turns."
+rendered-text = "Your unspent ● carries over between turns."
 
 [[dreamsign]]
 id = "64A28F37-54A4-4152-8C72-2EBC61E19AAC"
 name = "Steel Wand"
 image_name = "Magicwand.png"
 tides = ["fast_tempo", "fast_interaction", "card_flow", "fast_setup"]
-rendered-text = "Once per turn, when you play a Fast card, draw a card."
+rendered-text = "Once per turn, when you play a ❖ card, draw a card."
 
 [[dreamsign]]
 id = "206049AE-9F28-4A90-9F75-63D9EE5F4A27"
 name = "Gold Key"
 image_name = "key_3.png"
 tides = ["character_chain", "character_curve", "big_energy", "cost_reduction", "resource_burst"]
-rendered-text = "When you play your second character each turn, gain 1●."
+rendered-text = "When you play your third character each turn, gain 2●."
 
 [[dreamsign]]
 id = "9204FBC8-BA40-4E33-9FBC-F62CCC4A43D1"
 name = "Powder Bowl"
 image_name = "powder_magic.png"
-tides = ["point_pressure", "cost_reduction", "character_curve", "finishers"]
-rendered-text = "Characters cost you 1● less if an allied character scored ⍟ this turn."
+tides = ["point_pressure", "cost_rfeduction", "character_curve", "finishers"]
+rendered-text = "Characters cost you 1● less if an ally scored ⍟ last turn."
 
 [[dreamsign]]
 id = "FB87262C-5BDE-409E-92F1-58CC7A4E5491"
@@ -773,7 +781,7 @@ id = "4BB408A8-7941-42DC-9FF6-DBC1400C99ED"
 name = "Red Pin"
 image_name = "pin.png"
 tides = ["point_pressure", "judgment_engines", "card_flow", "finishers"]
-rendered-text = "When you score ⍟ during Dawn, draw a card."
+rendered-text = "Once per turn, when an ally scores ⍟, draw a card."
 
 [[dreamsign]]
 id = "FDD2FFE4-40F4-49CF-BC2E-2496E1042F76"
@@ -970,7 +978,7 @@ id = "8E2D26A8-FF39-48A4-A30E-434479C4675F"
 name = "Toad"
 image_name = "toad.png"
 tides = ["survivor_dissolve", "character_curve", "defensive_curve"]
-rendered-text = "All character cards in your deck are Survivors in addition to their original card types."
+rendered-text = "Character cards in your deck are survivors in addition to their other subtypes."
 
 [[dreamsign]]
 id = "108841CE-4FEB-4C73-972E-0277C727C63E"
@@ -1043,7 +1051,7 @@ id = "1CD25B9A-B176-4C51-8349-BB4DF35CBF05"
 name = "Twisted Herbs"
 image_name = "twisting_herbs.png"
 tides = ["big_energy", "cost_reduction", "finishers"]
-rendered-text = "When you gain this dreamsign, add 2 Nightmare cards to your deck. ≥4● cost cards cost 1● less."
+rendered-text = "When you gain this dreamsign, add 2 Bane cards to your deck. ≥4● cost cards cost you 1● less."
 
 [[dreamsign]]
 id = "B8590328-CA72-4869-A795-C7F4B6802BED"
