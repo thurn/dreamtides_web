@@ -261,3 +261,135 @@ card-type = "Dreamwell"
 image-number = 1633431259
 art-owned = true
 card-number = 23
+
+[[dreamwell]]
+name = "Forest Trailhead"
+id = "f61431f3-33bd-42ff-a229-b4013582e86e"
+rendered-text = "Discover a ≤1● cost card."
+order = 1
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 384639405
+art-owned = false
+card-number = 24
+
+[[dreamwell]]
+name = "Foxfire Thicket"
+id = "51caf26d-83bf-45a9-bc80-010d353277db"
+rendered-text = "Create a Spirit Animal figment."
+order = 1
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 1972047656
+art-owned = false
+card-number = 25
+
+[[dreamwell]]
+name = "Stillwater Mirror"
+id = "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a"
+rendered-text = "Look at the opponent's hand."
+order = 1
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 832308570
+art-owned = false
+card-number = 26
+
+[[dreamwell]]
+name = "Slumbering Hollow"
+id = "e843c891-0fe2-4c7b-84e5-02e0b4467ff4"
+rendered-text = "Exhaust an enemy."
+order = 2
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 101939862
+art-owned = false
+card-number = 27
+
+[[dreamwell]]
+name = "Tidewrack Shore"
+id = "1369ca59-e06d-4024-b86d-a2608facb966"
+rendered-text = "Erode 2. You may return an eroded card to your hand."
+order = 2
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 1027354635
+art-owned = false
+card-number = 28
+
+[[dreamwell]]
+name = "Wellspring Eddy"
+id = "01ecf5a3-fb38-45a2-82b5-436d2ccecc00"
+rendered-text = "Look at the top 2 cards of the Dreamwell deck. You may put them back in either order."
+order = 2
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 1563654855
+art-owned = false
+card-number = 29
+
+[[dreamwell]]
+name = "Borrowed Starlight"
+id = "5825ad28-8803-42f4-9cff-bd992a51a449"
+rendered-text = "Banish the top card of the opponent's deck. You may play it this turn."
+order = 3
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 621692537
+art-owned = false
+card-number = 30
+
+[[dreamwell]]
+name = "The Brimming Well"
+id = "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf"
+rendered-text = "The opponent gains 1 maximum ●."
+order = 3
+energy-added = 2
+card-type = "Dreamwell"
+image-number = 926233292
+art-owned = false
+card-number = 31
+
+[[dreamwell]]
+name = "Echo Cascade"
+id = "2ad68489-044a-40d1-9be6-e62497a4e1fd"
+rendered-text = "Rematerialize an ally."
+order = 3
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 550123285
+art-owned = false
+card-number = 32
+
+[[dreamwell]]
+name = "The Crossroads"
+id = "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c"
+rendered-text = "Choose one: draw 2 cards; gain 3●; or gain 2⍟."
+order = 4
+energy-added = 0
+card-type = "Dreamwell"
+image-number = 2027964669
+art-owned = false
+card-number = 33
+
+[[dreamwell]]
+name = "Twinmoon Lake"
+id = "70df22c0-88ef-4bba-ab9a-68fb022f004d"
+rendered-text = "Create a figment copy of an ally."
+order = 4
+energy-added = 0
+card-type = "Dreamwell"
+image-number = 2076321586
+art-owned = false
+card-number = 34
+
+[[dreamwell]]
+name = "Worldsedge Aurora"
+id = "74f82589-a790-4899-acce-de7d244713aa"
+rendered-text = "Each player gains 2⍟."
+order = 4
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 1172265928
+art-owned = false
+card-number = 35
