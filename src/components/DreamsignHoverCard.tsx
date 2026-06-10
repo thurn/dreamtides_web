@@ -1,5 +1,9 @@
 import { useState } from "react";
 import { RulesText } from "./RulesText";
+import { CardTermDefinitions } from "./CardTermDefinitions";
+import { definitionSideForCardHover } from "./CardHoverPreview";
+import { extractGlossaryTerms } from "../data/glossary-terms";
+import type { PopoverPlacementSide } from "./hover-popover-placement";
 import type { Dreamsign } from "../types/quest";
 
 /**
@@ -7,6 +11,11 @@ import type { Dreamsign } from "../types/quest";
  * Bane badge, and full effect rules text. Sized for use as `HoverPopover`
  * content from compressed Dreamsign rows or smaller Dreamsign cards where
  * the in-flow rules text is too dense to read at a glance.
+ *
+ * When the effect text references glossary terms and the caller passes the
+ * resolved popover `side` + `anchorRect`, the definitions for those terms
+ * stack immediately beside the dreamsign card (on the side facing the
+ * viewport interior), matching the term-definition panel shown beside cards.
  *
  * The popover is purely presentational — it ships no interactivity of its
  * own. Callers wrap it in a `HoverPopover` (or render it inline) so it can
@@ -27,17 +36,27 @@ export const DREAMSIGN_HOVER_DELAY_MS = 300;
 interface DreamsignHoverCardProps {
   dreamsign: Dreamsign;
   /**
-   * Override for the `data-testid` attribute on the root element. Callers
-   * that already had a distinct testid (e.g. the HUD row's compact tile
-   * popover) can keep that testid for stable test selectors. Defaults to
+   * Override for the `data-testid` attribute on the dreamsign card element.
+   * Callers that already had a distinct testid (e.g. the HUD row's compact
+   * tile popover) can keep that testid for stable test selectors. Defaults to
    * `"dreamsign-hover-card"`.
    */
   testid?: string;
+  /**
+   * The side the host `HoverPopover` resolved the popover onto, used to pick
+   * which side the term-definitions panel sits on. Omit it (or `anchorRect`)
+   * to render the dreamsign card alone with no definitions panel.
+   */
+  popoverSide?: PopoverPlacementSide;
+  /** Anchor rect captured by the host `HoverPopover` when it opened. */
+  anchorRect?: Pick<DOMRect, "left" | "right">;
 }
 
 export function DreamsignHoverCard({
   dreamsign,
   testid = "dreamsign-hover-card",
+  popoverSide,
+  anchorRect,
 }: DreamsignHoverCardProps) {
   const [imageBroken, setImageBroken] = useState(false);
   const showImage = Boolean(dreamsign.imageName) && !imageBroken;
@@ -45,10 +64,10 @@ export function DreamsignHoverCard({
     ? "rgba(239, 68, 68, 0.55)"
     : "rgba(168, 85, 247, 0.55)";
 
-  return (
+  const cardNode = (
     <div
       data-testid={testid}
-      className="flex flex-col items-center gap-2 rounded-lg p-3 shadow-lg"
+      className="flex shrink-0 flex-col items-center gap-2 rounded-lg p-3 shadow-lg"
       style={{
         background: "rgba(15, 10, 24, 0.97)",
         border: `1px solid ${accent}`,
@@ -97,6 +116,42 @@ export function DreamsignHoverCard({
       >
         <RulesText text={dreamsign.effectDescription} />
       </div>
+    </div>
+  );
+
+  const terms = extractGlossaryTerms(dreamsign.effectDescription);
+  if (
+    terms.length === 0 ||
+    popoverSide === undefined ||
+    anchorRect === undefined
+  ) {
+    return cardNode;
+  }
+
+  const viewportWidth =
+    typeof window === "undefined" ? POPOVER_WIDTH_PX : window.innerWidth;
+  const definitionSide = definitionSideForCardHover({
+    anchorRect,
+    popoverSide,
+    viewportWidth,
+  });
+  const definitions = (
+    <CardTermDefinitions
+      text={dreamsign.effectDescription}
+      testId={`${testid}-definition-stack`}
+      side={definitionSide}
+    />
+  );
+
+  return (
+    <div
+      className="flex max-w-[calc(100vw-12px)] items-start gap-2"
+      data-dreamsign-hover-layout=""
+      data-definition-side={definitionSide}
+    >
+      {definitionSide === "left" && definitions}
+      {cardNode}
+      {definitionSide === "right" && definitions}
     </div>
   );
 }

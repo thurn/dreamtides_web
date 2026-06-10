@@ -142,7 +142,13 @@ export function DreamsignOfferingScreen({
                   triggerAs="div"
                   delayMs={DREAMSIGN_HOVER_DELAY_MS}
                   maxWidthPx={null}
-                  content={<DreamsignHoverCard dreamsign={dreamsign} />}
+                  content={({ side, anchorRect }) => (
+                    <DreamsignHoverCard
+                      dreamsign={dreamsign}
+                      popoverSide={side}
+                      anchorRect={anchorRect}
+                    />
+                  )}
                 >
                   <div
                     data-testid={`dreamsign-offering-hover-trigger-${triggerId}`}

@@ -84,12 +84,14 @@ function HudDreamsignIcon({ dreamsign }: { dreamsign: Dreamsign }) {
       triggerAs="span"
       delayMs={250}
       maxWidthPx={null}
-      content={
+      content={({ side, anchorRect }) => (
         <DreamsignHoverCard
           dreamsign={dreamsign}
           testid="hud-dreamsign-popover"
+          popoverSide={side}
+          anchorRect={anchorRect}
         />
-      }
+      )}
       className="inline-block"
     >
       <span

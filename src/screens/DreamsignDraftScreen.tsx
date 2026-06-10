@@ -147,7 +147,13 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
                   delayMs={DREAMSIGN_HOVER_DELAY_MS}
                   placement="left"
                   maxWidthPx={null}
-                  content={<DreamsignHoverCard dreamsign={dreamsign} />}
+                  content={({ side, anchorRect }) => (
+                    <DreamsignHoverCard
+                      dreamsign={dreamsign}
+                      popoverSide={side}
+                      anchorRect={anchorRect}
+                    />
+                  )}
                 >
                   <div
                     data-testid={`dreamsign-draft-hover-trigger-${triggerId}`}
