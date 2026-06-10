@@ -49,8 +49,16 @@ export const MERCHANT_TUNING = {
   premiumBlend: { quality: 0.8, fit: 0.2 },
   /** Transfigure signal blend over benefit and centrality. */
   transfigureBlend: { benefit: 0.7, centrality: 0.3 },
-  /** Duplicate signal blend over multiplicity and leave-one-out fit. */
-  duplicateBlend: { multiplicity: 0.6, fitLoo: 0.4 },
+  /**
+   * Duplicate signal blend over corpus quality and the entry's leave-one-out
+   * fit within the deck — "duplicate your strongest, most synergistic card."
+   */
+  duplicateBlend: { quality: 0.5, fitLoo: 0.5 },
+  /**
+   * Copies-draft signal blend over fit-to-deck and corpus quality, so the
+   * doubled card is both a deck fit and genuinely strong.
+   */
+  copiesBlend: { fit: 0.6, quality: 0.4 },
   /** Card-bundle grow-step blend over seed/bundle affinity and fit. */
   bundleBlend: { seed: 0.5, bundle: 0.3, fit: 0.2 },
   /** Weight on deck-affine categories in category sampling (vs the full universe). */
@@ -63,10 +71,6 @@ export const MERCHANT_TUNING = {
   purgeMisfitFraction: 0.2,
   /** Misfit bonus applied to starter entries when ranking purge candidates. */
   starterPurgeBonus: 0.25,
-  /** Minimum multiplicity for the copies-draft candidate filter. */
-  copiesMultiplicityMin: 0.15,
-  /** Minimum multiplicity for the duplicate candidate filter. */
-  duplicateMultiplicityMin: 0.1,
   /** Characters of a subtype required for that tribe to be active. */
   tribalThreshold: 4,
   /** Minimum candidate cards for a category to be offerable. */

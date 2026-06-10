@@ -1,5 +1,5 @@
 import { fitScores } from "../signals/fit";
-import { multiplicityOf, qualityOf } from "../signals/corpus";
+import { qualityOf } from "../signals/corpus";
 import {
   bandSample,
   merchantRng,
@@ -254,37 +254,52 @@ export const fitCardDraftBuilder: MerchantArchetypeBuilder = {
 /**
  * `copies_draft` — *Draft 1 of 4 cards; receive 2 copies of your pick.*
  *
- * Same as `fit_card_draft`, additionally filtered to cards real decks run as
- * multiples (`multiplicityOf >= copiesMultiplicityMin`). Each chooser
+ * Candidates: non-starter, unowned pool cards (the shared grant pool). Signal:
+ * `copiesBlend.fit * fitNorm + copiesBlend.quality * qualityNorm`, so the
+ * doubled card is both a deck fit and genuinely strong. Below `minDeckForFit`
+ * the deck is too small for fit to be meaningful, so the signal falls back to
+ * corpus quality alone (as `card_bundle` does for its seed). Each chooser
  * candidate's payload is a composite of two `add_catalog_card` children, so the
- * accepted card enters the deck twice. Eligible when the filtered band holds
- * >= 4 cards.
+ * accepted card enters the deck twice. Eligible when the band holds >= 4 cards.
  */
-function copiesCandidatePool(
+function copiesScoreByUuid(
   context: MerchantContext,
-): readonly MerchantCatalogCard[] {
+  pool: readonly MerchantCatalogCard[],
+): Map<string, number> {
+  // Cold start: too few deck cards for fit to be meaningful, so rank on
+  // quality alone — still surfaces strong doubling targets early.
+  if (context.deckCards.length < MERCHANT_TUNING.minDeckForFit) {
+    return qualityValueByUuid(context, pool);
+  }
+  const fitByUuid = fitValueByUuid(context, pool);
+  const fitRaw = pool.map((card) => fitByUuid.get(card.cardUuid) ?? 0);
   const corpus = context.merchantCorpus;
-  if (corpus === undefined) return [];
-  return grantCandidatePool(context).filter(
-    (card) =>
-      multiplicityOf(corpus, card.cardUuid) >= MERCHANT_TUNING.copiesMultiplicityMin,
+  const qualityRaw = pool.map((card) =>
+    corpus === undefined ? 0 : qualityOf(corpus, card.cardUuid),
   );
+  const fitNorm = minMaxNormalize(fitRaw);
+  const qualityNorm = minMaxNormalize(qualityRaw);
+  const { fit, quality } = MERCHANT_TUNING.copiesBlend;
+  const result = new Map<string, number>();
+  pool.forEach((card, i) => {
+    result.set(card.cardUuid, fit * fitNorm[i] + quality * qualityNorm[i]);
+  });
+  return result;
 }
 
 export const copiesDraftBuilder: MerchantArchetypeBuilder = {
   archetypeId: "copies_draft",
   family: "grant",
   eligible(context: MerchantContext): boolean {
-    if (context.deckCards.length < MERCHANT_TUNING.minDeckForFit) return false;
-    const pool = copiesCandidatePool(context);
+    const pool = grantCandidatePool(context);
     return bandSizeFor(pool.length, MERCHANT_TUNING.bandFraction) >= 4;
   },
   build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
-    const pool = copiesCandidatePool(context);
-    const fitByUuid = fitValueByUuid(context, pool);
+    const pool = grantCandidatePool(context);
+    const scoreByUuid = copiesScoreByUuid(context, pool);
     const sampled = bandSample(
       pool,
-      (card) => fitByUuid.get(card.cardUuid) ?? 0,
+      (card) => scoreByUuid.get(card.cardUuid) ?? 0,
       4,
       rng,
     );

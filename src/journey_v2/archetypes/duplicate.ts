@@ -1,5 +1,5 @@
 import { fitLooByEntry } from "../signals/fit";
-import { multiplicityOf } from "../signals/corpus";
+import { qualityOf } from "../signals/corpus";
 import { bandSample, type MerchantRng } from "../signals/rng";
 import { MERCHANT_TUNING } from "../tuning";
 import type {
@@ -15,8 +15,8 @@ import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
 // ---------------------------------------------------------------------------
 
 /**
- * A duplicate candidate: a non-starter deck entry with multiplicity >=
- * `duplicateMultiplicityMin`, plus its blended signal score.
+ * A duplicate candidate: a non-starter deck entry, plus its blended signal
+ * score.
  */
 interface DuplicateCandidate {
   deckCard: MerchantDeckCard;
@@ -25,47 +25,40 @@ interface DuplicateCandidate {
 }
 
 /**
- * Returns all non-starter deck entries whose card has multiplicity >=
- * `duplicateMultiplicityMin`, scored by
- * `duplicateBlend.multiplicity * multiplicityNorm + duplicateBlend.fitLoo * fitLooNorm`.
+ * Returns all non-starter deck entries, scored by
+ * `duplicateBlend.quality * qualityNorm + duplicateBlend.fitLoo * fitLooNorm`.
  *
- * FitLoo scores come from `fitLooByEntry`, normalized over the candidate set.
- * Multiplicity values are normalized over the candidate set.
- * Missing fitLoo entries default to 0 (no corpus signal for that card →
- * neutral fit contribution).
+ * The format runs every card as a singleton, so duplication value comes from
+ * picking out the player's strongest, best-fitting card to run twice: corpus
+ * quality of the entry's card plus the entry's leave-one-out fit within the
+ * deck (how much it pulls with its current teammates). Both terms are min-max
+ * normalized over the candidate set; missing quality / fitLoo default to 0.
  */
 function duplicateCandidates(context: MerchantContext): readonly DuplicateCandidate[] {
-  const corpus = context.merchantCorpus;
-  if (corpus === undefined) return [];
-
-  // Filter non-starters with sufficient multiplicity.
-  const eligible = context.deckCards.filter((dc) => {
-    if (dc.card.isStarter) return false;
-    return multiplicityOf(corpus, dc.cardUuid) >= MERCHANT_TUNING.duplicateMultiplicityMin;
-  });
+  // Every non-starter deck entry is a candidate.
+  const eligible = context.deckCards.filter((dc) => !dc.card.isStarter);
   if (eligible.length === 0) return [];
 
-  // Compute LOO scores for ALL deck cards (not just eligible), then look up
-  // per-entry scores for eligible ones.
+  const corpus = context.merchantCorpus;
+
+  // Leave-one-out fit per entry, normalized over the candidate set.
   const fitModel = context.fitModel;
   const looScores: Map<string, number> =
     fitModel !== undefined ? fitLooByEntry(context.deckCards, fitModel) : new Map<string, number>();
 
-  // Raw multiplicity values for eligible entries.
-  const multiplicities = eligible.map((dc) =>
-    multiplicityOf(corpus, dc.cardUuid),
+  const qualities = eligible.map((dc) =>
+    corpus === undefined ? 0 : qualityOf(corpus, dc.cardUuid),
   );
   const looValues = eligible.map((dc) => looScores.get(dc.entryId) ?? 0);
 
-  // Min-max normalize within the eligible set.
-  const multNorm = minMaxNormalize(multiplicities);
+  const qualityNorm = minMaxNormalize(qualities);
   const looNorm = minMaxNormalize(looValues);
 
   const blend = MERCHANT_TUNING.duplicateBlend;
   return eligible.map((dc, i) => ({
     deckCard: dc,
     entryId: dc.entryId,
-    signal: blend.multiplicity * multNorm[i] + blend.fitLoo * looNorm[i],
+    signal: blend.quality * qualityNorm[i] + blend.fitLoo * looNorm[i],
   }));
 }
 
@@ -91,12 +84,11 @@ function minMaxNormalize(values: readonly number[]): number[] {
 /**
  * `duplicate` — *Duplicate a deck card (pick 1 of up to 3).*
  *
- * Candidates: non-starter deck entries with
- * `multiplicityOf(card) >= duplicateMultiplicityMin`. Signal:
- * `duplicateBlend.multiplicity * multiplicityNorm + duplicateBlend.fitLoo *
- * fitLooNorm` (cards real decks run as multiples, weighted toward ones that
- * pull with this deck). Band-sample up to 3 as a face-up chooser; a single
- * candidate renders as a direct offer. Eligible when >= 1 candidate exists.
+ * Candidates: non-starter deck entries. Signal:
+ * `duplicateBlend.quality * qualityNorm + duplicateBlend.fitLoo * fitLooNorm`
+ * — duplicate the player's strongest, most synergistic card. Band-sample up to
+ * 3 as a face-up chooser; a single candidate renders as a direct offer.
+ * Eligible whenever the deck holds >= 1 non-starter entry.
  */
 export const duplicateBuilder: MerchantArchetypeBuilder = {
   archetypeId: "duplicate",

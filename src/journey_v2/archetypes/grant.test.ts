@@ -179,11 +179,11 @@ describe("grant family — fit_card_draft", () => {
 });
 
 describe("grant family — copies_draft", () => {
-  it("adds exactly 2 deck entries for the chosen UUID through apply", () => {
+  it("offers 4 distinct unowned candidates and adds exactly 2 deck entries through apply", () => {
     const pool = makePoolCards(8);
-    const corpusCards: Record<string, { quality: number; multiplicity?: number }> = {};
+    const corpusCards: Record<string, { quality: number }> = {};
     for (const card of pool) {
-      corpusCards[card.id] = { quality: 0.5, multiplicity: 0.5 };
+      corpusCards[card.id] = { quality: 0.5 };
     }
     const deckEntries = Array.from({ length: 6 }, (_, i) => ({
       entryId: `deck-${String(i)}`,
@@ -202,9 +202,17 @@ describe("grant family — copies_draft", () => {
 
     const draft = copiesDraftBuilder.build(context, merchantRng("copies"));
     expect(draft).not.toBeNull();
-    const candidate = draft?.choiceRequest?.candidates[0] as MerchantChoiceCandidate;
-    expect(candidate).toBeDefined();
+    const candidates = draft?.choiceRequest?.candidates ?? [];
+    expect(candidates.length).toBe(4);
+    // All distinct, none owned (deck cards are 300+, pool is 100+).
+    const uuids = candidates.map((c) => c.cardUuid);
+    expect(new Set(uuids).size).toBe(4);
+    for (const c of candidates) {
+      expect(deckEntries.some((e) => uuid(e.cardNumber) === c.cardUuid)).toBe(false);
+    }
 
+    const candidate = candidates[0];
+    expect(candidate).toBeDefined();
     const questContent = makeMerchantTestContent({ cards: allCards });
     const questState = makeMerchantTestQuestState({
       deck: deckEntries.map((e) =>
@@ -223,22 +231,32 @@ describe("grant family — copies_draft", () => {
     expect(added.length).toBe(2);
   });
 
-  it("is ineligible when fewer than 4 candidates meet the multiplicity floor", () => {
+  it("is eligible cold-start (deck < minDeckForFit) when the pool band holds 4 cards", () => {
+    // No multiplicity data and a small deck: copies_draft falls back to a
+    // quality band so it is not dead early.
     const pool = makePoolCards(8);
-    const corpusCards: Record<string, { quality: number; multiplicity?: number }> = {};
-    // Only 2 cards meet the multiplicity floor.
+    const corpusCards: Record<string, { quality: number }> = {};
     pool.forEach((card, i) => {
-      corpusCards[card.id] = {
-        quality: 0.5,
-        multiplicity: i < 2 ? 0.5 : 0,
-      };
+      corpusCards[card.id] = { quality: i / pool.length };
     });
     const context = makeContext({
       poolCards: pool,
-      deckEntries: Array.from({ length: 6 }, (_, i) => ({
-        entryId: `d${String(i)}`,
-        cardNumber: 400 + i,
-      })),
+      deckEntries: [],
+      corpusCards,
+      fitModel: makeRankedFitModel(pool),
+    });
+    expect(copiesDraftBuilder.eligible(context)).toBe(true);
+    const draft = copiesDraftBuilder.build(context, merchantRng("copies-cold"));
+    expect(draft?.choiceRequest?.candidates.length).toBe(4);
+  });
+
+  it("is ineligible when the unowned pool band is smaller than 4", () => {
+    const pool = makePoolCards(3);
+    const corpusCards: Record<string, { quality: number }> = {};
+    for (const card of pool) corpusCards[card.id] = { quality: 0.5 };
+    const context = makeContext({
+      poolCards: pool,
+      deckEntries: [],
       corpusCards,
       fitModel: makeRankedFitModel(pool),
     });

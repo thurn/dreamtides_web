@@ -362,7 +362,11 @@ describe("ScreenRouter DreamJourney routing", () => {
       merchantCorpus: makeMerchantTestCorpus({ cards: corpus }),
       dreamsignProfiles: new Map(),
     });
-    const state = makeStateFor(site);
+    // An empty deck keeps the deck-targeting families (duplicate / purge) and
+    // fit-gated drafts ineligible, so both offer slots come from the
+    // always-eligible face-up grant families (strong_card / card_bundle) and the
+    // encounter reliably surfaces visible catalog grant cards.
+    const state = { ...makeStateFor(site), deck: [] };
     const mutations = makeMutations();
     renderWithQuest({
       state,
