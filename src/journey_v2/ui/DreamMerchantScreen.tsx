@@ -20,9 +20,9 @@ export interface DreamMerchantScreenProps {
   onAcceptOffer: (request: MerchantAcceptRequest) => MerchantOfferActionResult | void;
   onDecline: (request: MerchantDeclineRequest) => void;
   /**
-   * Called when the player commits to a `hiddenUntilCommit` offer. Task 16
-   * builds the UI that triggers this; the plumbing is wired here so the prop
-   * is available on the component when Task 16 consumes it.
+   * Called when the player commits to a `hiddenUntilCommit` offer. Records the
+   * committed offer id in quest state and forfeits the other offer, then the
+   * revealed chooser is shown.
    */
   onCommit?: (request: MerchantCommitRequest) => MerchantOfferActionResult | void;
   context?: MerchantContext;
@@ -34,9 +34,7 @@ export function DreamMerchantScreen({
   encounter,
   onAcceptOffer,
   onDecline,
-  // onCommit is consumed by Task 16's commit-then-reveal UI; declared here
-  // so callers can pass it through before the UI is built.
-  onCommit: _onCommit,
+  onCommit,
   context,
   questState,
 }: DreamMerchantScreenProps) {
@@ -46,6 +44,15 @@ export function DreamMerchantScreen({
   >(new Map());
   const [validationMessage, setValidationMessage] = useState<string | null>(null);
   const [accepted, setAccepted] = useState(false);
+
+  // Read the committed offer id from quest state (set by resolveMerchantCommit).
+  const committedOfferId = useMemo(() => {
+    const runtime = questState?.siteRuntime[site.id];
+    if (runtime?.kind === "dreamJourney") {
+      return runtime.merchantCommittedOfferId ?? null;
+    }
+    return null;
+  }, [questState, site.id]);
 
   const choosingOffer = useMemo(
     () => encounter.offers.find((offer) => offer.offerId === choosingOfferId),
@@ -71,6 +78,20 @@ export function DreamMerchantScreen({
       return;
     }
     setAccepted(true);
+  }
+
+  function commitOffer(offer: MerchantOffer) {
+    setValidationMessage(null);
+    if (onCommit === undefined) return;
+    const request: MerchantCommitRequest = {
+      encounterSignature: encounter.encounterSignature,
+      offerId: offer.offerId,
+      archetypeId: offer.archetypeId,
+    };
+    const result = onCommit(request);
+    if (result?.ok === false) {
+      setValidationMessage(validationMessageFor(result.reason));
+    }
   }
 
   function declineEncounter() {
@@ -114,8 +135,10 @@ export function DreamMerchantScreen({
               label="A"
               isChooserOpen={choosingOfferId === encounter.offers[0].offerId}
               selectedChoice={selectedChoiceFor(encounter.offers[0])}
+              committedOfferId={committedOfferId}
               onTake={acceptOffer}
               onChoose={openChooser}
+              onCommit={commitOffer}
             />
           )}
         </div>
@@ -160,14 +183,18 @@ export function DreamMerchantScreen({
             </p>
           )}
 
-          <button
-            type="button"
-            className="min-h-12 rounded-md border border-slate-600 bg-slate-900 px-5 py-3 text-sm font-bold text-slate-100 transition hover:bg-slate-800"
-            data-testid="merchant-walk-away"
-            onClick={declineEncounter}
-          >
-            Walk away
-          </button>
+          {/* Walk away is hidden after commit — the player must pick from the
+              revealed chooser set; declining is no longer available. */}
+          {committedOfferId === null && (
+            <button
+              type="button"
+              className="min-h-12 rounded-md border border-slate-600 bg-slate-900 px-5 py-3 text-sm font-bold text-slate-100 transition hover:bg-slate-800"
+              data-testid="merchant-walk-away"
+              onClick={declineEncounter}
+            >
+              Walk away
+            </button>
+          )}
         </main>
 
         <div className="order-4 lg:order-3">
@@ -177,8 +204,10 @@ export function DreamMerchantScreen({
               label="B"
               isChooserOpen={choosingOfferId === encounter.offers[1].offerId}
               selectedChoice={selectedChoiceFor(encounter.offers[1])}
+              committedOfferId={committedOfferId}
               onTake={acceptOffer}
               onChoose={openChooser}
+              onCommit={commitOffer}
             />
           )}
         </div>

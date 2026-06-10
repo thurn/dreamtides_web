@@ -5,9 +5,11 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../../types/cards";
+import type { QuestState } from "../../types/quest";
 import type {
   MerchantAcceptRequest,
   MerchantChoiceCandidate,
+  MerchantCommitRequest,
   MerchantEncounter,
   MerchantGameObject,
   MerchantOffer,
@@ -304,5 +306,203 @@ describe("DreamMerchantScreen", () => {
     );
     click(byTestId(container, "merchant-walk-away"));
     expect(declined).toBe(true);
+  });
+});
+
+// --- Hidden offer (hiddenUntilCommit) tests ---
+
+/** Builds a hiddenUntilCommit offer with 4 candidates whose names must not
+ *  appear in the DOM before the player commits. */
+function hiddenDraftOffer(): MerchantOffer {
+  const secretCard = (suffix: string) => {
+    const c = card({
+      id: `81000000-0000-4000-8000-0000000000${suffix}`,
+      cardNumber: Number(suffix),
+      name: `Secret Card ${suffix}`,
+    });
+    return c;
+  };
+  const candidate = (suffix: string): MerchantChoiceCandidate => {
+    const c = secretCard(suffix);
+    return {
+      choiceId: `hidden-choice-${suffix}`,
+      title: c.name,
+      summary: "Premium pick.",
+      gameObjects: [catalogObject(c)],
+      applyPayload: {
+        kind: "add_catalog_card",
+        cardUuid: c.id,
+        cardNumber: c.cardNumber,
+      },
+      cardUuid: c.id,
+      cardNumber: c.cardNumber,
+    };
+  };
+  return {
+    offerId: "A",
+    encounterSignature: "sig-hidden",
+    archetypeId: "premium_draft",
+    family: "grant",
+    title: "Four exceptionally strong cards",
+    summary: "Draft 1 of 4 premium cards.",
+    hiddenUntilCommit: true,
+    targetKey: "premium",
+    gameObjects: [],
+    choiceRequest: {
+      choiceType: "catalogCard",
+      prompt: "Draft a premium card",
+      candidates: [
+        candidate("31"),
+        candidate("32"),
+        candidate("33"),
+        candidate("34"),
+      ],
+    },
+  };
+}
+
+/** Builds a minimal QuestState with a committed offer id for a given site. */
+function questStateWithCommit(siteId: string, committedOfferId: string): QuestState {
+  return {
+    siteRuntime: {
+      [siteId]: {
+        kind: "dreamJourney",
+        completed: false,
+        merchantCommittedOfferId: committedOfferId,
+      },
+    },
+  } as unknown as QuestState;
+}
+
+describe("DreamMerchantScreen — hidden offers", () => {
+  it("pre-commit: hidden offer shows concealed treatment with NO candidate card names in the DOM", () => {
+    // Bug class: leaking the hidden shelf through the DOM before commit.
+    const container = mount(
+      <DreamMerchantScreen
+        site={site}
+        encounter={encounter([hiddenDraftOffer(), dreamsignOffer()])}
+        onAcceptOffer={() => undefined}
+        onDecline={() => undefined}
+      />,
+    );
+
+    const offerCard = byTestId(container, "merchant-offer-card-A");
+
+    // The hidden body placeholder must be present.
+    expect(
+      container.querySelector('[data-testid="merchant-offer-hidden-body-A"]'),
+    ).not.toBeNull();
+
+    // The commit button must be present (not the accept/choose button).
+    expect(
+      container.querySelector('[data-testid="merchant-offer-commit-A"]'),
+    ).not.toBeNull();
+
+    // The accept/choose action button must NOT be present for the hidden offer.
+    expect(
+      container.querySelector('[data-testid="merchant-offer-action-A"]'),
+    ).toBeNull();
+
+    // INVARIANT: none of the candidate card names appear anywhere in the DOM.
+    const domText = offerCard.textContent ?? "";
+    expect(domText).not.toContain("Secret Card 31");
+    expect(domText).not.toContain("Secret Card 32");
+    expect(domText).not.toContain("Secret Card 33");
+    expect(domText).not.toContain("Secret Card 34");
+
+    // The offer title IS shown (it's part of the concealed treatment).
+    expect(domText).toContain("Four exceptionally strong cards");
+  });
+
+  it("pre-commit: commit button fires onCommit callback with correct offer and signature", () => {
+    const commits: MerchantCommitRequest[] = [];
+    const container = mount(
+      <DreamMerchantScreen
+        site={site}
+        encounter={encounter([hiddenDraftOffer(), dreamsignOffer()])}
+        onAcceptOffer={() => undefined}
+        onDecline={() => undefined}
+        onCommit={(req) => {
+          commits.push(req);
+          return { ok: true };
+        }}
+      />,
+    );
+    click(
+      container.querySelector('[data-testid="merchant-offer-commit-A"]') as HTMLElement,
+    );
+    expect(commits).toHaveLength(1);
+    expect(commits[0]).toMatchObject({
+      offerId: "A",
+      archetypeId: "premium_draft",
+      // encounterSignature comes from the encounter, not the offer fixture.
+      encounterSignature: "sig-1",
+    });
+  });
+
+  it("post-commit: committed offer shows chooser accept control; forfeited offer shows no accept control", () => {
+    // Bug class: post-commit state not correctly hiding the forfeited offer's
+    // accept control or not revealing the committed offer's chooser.
+    const qs = questStateWithCommit(site.id, "A");
+    const container = mount(
+      <DreamMerchantScreen
+        site={site}
+        encounter={encounter([hiddenDraftOffer(), dreamsignOffer()])}
+        onAcceptOffer={() => undefined}
+        onDecline={() => undefined}
+        questState={qs}
+      />,
+    );
+
+    // The committed offer (A) must expose the accept/choose action button.
+    expect(
+      container.querySelector('[data-testid="merchant-offer-action-A"]'),
+    ).not.toBeNull();
+
+    // The committed offer must NOT show the commit button any more.
+    expect(
+      container.querySelector('[data-testid="merchant-offer-commit-A"]'),
+    ).toBeNull();
+
+    // The forfeited offer (B) must have no accept button.
+    expect(
+      container.querySelector('[data-testid="merchant-offer-action-B"]'),
+    ).toBeNull();
+
+    // After commit the walk-away button is hidden.
+    expect(
+      container.querySelector('[data-testid="merchant-walk-away"]'),
+    ).toBeNull();
+  });
+
+  it("post-commit: choosing a candidate and confirming sends the choice to onAcceptOffer", () => {
+    const requests: MerchantAcceptRequest[] = [];
+    const qs = questStateWithCommit(site.id, "A");
+    const container = mount(
+      <DreamMerchantScreen
+        site={site}
+        encounter={encounter([hiddenDraftOffer(), dreamsignOffer()])}
+        onAcceptOffer={(req) => {
+          requests.push(req);
+          return { ok: true };
+        }}
+        onDecline={() => undefined}
+        questState={qs}
+      />,
+    );
+
+    // Open chooser for committed offer.
+    click(byTestId(container, "merchant-offer-action-A"));
+    // Select a candidate.
+    click(byTestId(container, "merchant-choice-hidden-choice-33"));
+    // Confirm.
+    click(byTestId(container, "merchant-offer-action-A"));
+
+    expect(requests).toHaveLength(1);
+    expect(requests[0]).toMatchObject({
+      offerId: "A",
+      archetypeId: "premium_draft",
+    });
+    expect(requests[0].choice?.choiceId).toBe("hidden-choice-33");
   });
 });
