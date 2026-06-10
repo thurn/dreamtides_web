@@ -1,0 +1,267 @@
+# Dreamwell cards
+# ---------------
+# Shared cards drawn one per turn during the Dreamwell phase (see
+# docs/battle_rules/battle_rules.md). Each card permanently raises the drawing
+# player's maximum ● by its `energy-added` value and may carry a bonus effect in
+# `rendered-text`, formatted per docs/cards2/style_guide.md.
+#
+# `order` sets the card's position in the Dreamwell deck (0-4): all #1 cards are
+# shuffled above the #2 cards, and so on. #0 cards appear only during the first
+# cycle and are the starting cards for each player.
+
+[[dreamwell]]
+name = "Dawning Horizon"
+id = "32d64cb6-9856-43a2-9451-fcb14007a9a6"
+rendered-text = ""
+order = 0
+energy-added = 2
+card-type = "Dreamwell"
+image-number = 1963305268
+art-owned = true
+card-number = 1
+
+[[dreamwell]]
+name = "Sunrise Cavern"
+id = "5e17dc4b-b654-4962-ba5a-7b042852a980"
+rendered-text = ""
+order = 0
+energy-added = 2
+card-type = "Dreamwell"
+image-number = 565499323
+art-owned = true
+card-number = 2
+
+[[dreamwell]]
+name = "Meteor Meadow"
+id = "5ec17498-9028-4a01-80a0-67c91b03d505"
+rendered-text = "Draw a card."
+order = 2
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 2421338077
+art-owned = true
+card-number = 3
+
+[[dreamwell]]
+name = "Skypath"
+id = "f9b479cf-02cb-40e1-bb64-70b29977bf15"
+rendered-text = "Foresee 1."
+order = 1
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 1897537165
+art-owned = true
+card-number = 4
+
+[[dreamwell]]
+name = "Autumn Glade"
+id = "02e8ea92-1218-413c-9f0b-4c865a3921d3"
+rendered-text = "Gain 2⍟."
+order = 1
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 1789989917
+art-owned = true
+card-number = 5
+
+[[dreamwell]]
+name = "Twilight Radiance"
+id = "de98477c-e216-4618-bff1-0e24bd982fdb"
+rendered-text = "Gain 1●."
+order = 1
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 1786390154
+art-owned = true
+card-number = 6
+
+[[dreamwell]]
+name = "Astral Interface"
+id = "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d"
+rendered-text = "Draw a card, then discard a card."
+order = 1
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 1011222385
+art-owned = true
+card-number = 7
+
+[[dreamwell]]
+name = "Glimmering Horizon"
+id = "cf0f0a05-2a94-407c-8c22-e41b925f9c03"
+rendered-text = "If you have fewer than 2 cards in hand, draw until you have 2 cards in hand."
+order = 2
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 2419795157
+art-owned = true
+card-number = 8
+
+[[dreamwell]]
+name = "Ruin Tree"
+id = "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5"
+rendered-text = "You may play a ≤2● cost character from your void."
+order = 3
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 2155438699
+art-owned = true
+card-number = 9
+
+[[dreamwell]]
+name = "Lily Lake"
+id = "558a1f1b-7dc1-4d83-9f00-c6af2187a954"
+rendered-text = "Draw an additional Dreamwell card."
+order = 3
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 1302572581
+art-owned = true
+card-number = 10
+
+[[dreamwell]]
+name = "Firmament Mirror"
+id = "14dec460-3ec6-40c1-978f-67e70cb0b227"
+rendered-text = "A card in your void gains reclaim until end of turn."
+order = 2
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 1068256580
+art-owned = true
+card-number = 11
+
+[[dreamwell]]
+name = "Shadow Passage"
+id = "03e4e701-4720-4278-8198-9b7e0514d4cf"
+rendered-text = "Erode 3."
+order = 1
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 1068256757
+art-owned = true
+card-number = 12
+
+[[dreamwell]]
+name = "Summer Blossom"
+id = "662b7393-751c-4aa9-8150-5f20b4d176a4"
+rendered-text = ""
+order = 2
+energy-added = 2
+card-type = "Dreamwell"
+image-number = 1924168808
+art-owned = true
+card-number = 13
+
+[[dreamwell]]
+name = "The Voltsurge"
+id = "7171ff89-ebe4-42d0-8863-9b4b0531cad2"
+rendered-text = "Each player draws 2 cards."
+order = 3
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 1125132389
+art-owned = true
+card-number = 14
+
+# Image 1721490835 is assigned to "Graywatch" (no Art Rework tag) in cards_v2.toml
+# and cannot be reused here.
+[[dreamwell]]
+name = "Sunset's Last Gaze"
+id = "fa8704fe-759f-408d-992d-d8f9d5ffd760"
+rendered-text = "You may discard 2 cards, then draw 2 cards."
+order = 3
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 0
+art-owned = false
+card-number = 15
+
+[[dreamwell]]
+name = "Leaf Light Canopy"
+id = "2b23a60c-209c-4c75-b63c-b7f73b2e1a56"
+rendered-text = "Return a card from your void to your hand."
+order = 3
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 2030910782
+art-owned = true
+card-number = 16
+
+[[dreamwell]]
+name = "Silent Winter"
+id = "9954cede-8a16-4053-b6e9-da745f4540f5"
+rendered-text = "Banish an enemy until end of turn."
+order = 3
+energy-added = 0
+card-type = "Dreamwell"
+image-number = 1950881323
+art-owned = true
+card-number = 17
+
+[[dreamwell]]
+name = "Shining Beacon"
+id = "3a4293da-55a1-4094-898a-df402ffa1c92"
+rendered-text = "Look at the top 2 cards of your deck. Put one of them into your hand and the other on the bottom of your deck."
+order = 3
+energy-added = 0
+card-type = "Dreamwell"
+image-number = 1252796548
+art-owned = true
+card-number = 18
+
+[[dreamwell]]
+name = "Prismatic Pastures"
+id = "d585b78a-dfe3-4e12-95ac-432c3c880540"
+rendered-text = "Gain 3●."
+order = 4
+energy-added = 0
+card-type = "Dreamwell"
+image-number = 2295991867
+art-owned = true
+card-number = 19
+
+# Image 2256745741 is assigned to "Rift Pilgrim" (no Art Rework tag) in
+# cards_v2.toml and cannot be reused here.
+[[dreamwell]]
+name = "Celestial Gateway"
+id = "a3033051-8eb7-4fbf-93d6-f947ed68974d"
+rendered-text = "Return a random character from each player's void to play."
+order = 4
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 0
+art-owned = false
+card-number = 20
+
+[[dreamwell]]
+name = "Luminous Enigma"
+id = "556057bb-b134-497e-86c2-c6f30049e9e3"
+rendered-text = "You may put a card from your void on top of your deck."
+order = 4
+energy-added = 1
+card-type = "Dreamwell"
+image-number = 2285036621
+art-owned = true
+card-number = 21
+
+[[dreamwell]]
+name = "The Bastion"
+id = "20be0fdd-d691-40a9-b4f8-15689ea7ebaa"
+rendered-text = "You may abandon a character to draw 2 cards."
+order = 4
+energy-added = 0
+card-type = "Dreamwell"
+image-number = 748956883
+art-owned = true
+card-number = 22
+
+[[dreamwell]]
+name = "Eternal Horizon"
+id = "a57f1276-3fb6-4527-b538-953fbace35cf"
+rendered-text = "Allied characters gain +1✦."
+order = 4
+energy-added = 0
+card-type = "Dreamwell"
+image-number = 1633431259
+art-owned = true
+card-number = 23
