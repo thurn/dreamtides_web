@@ -76,12 +76,14 @@ import {
   transfigurationEffectDetails,
 } from "../transfiguration/transfiguration-logic";
 import {
+  resolveMerchantCommit,
   resolveMerchantDecline,
   resolveMerchantOffer,
 } from "../journey_v2";
 import type {
   MerchantAcceptRequest,
   MerchantApplyPayload,
+  MerchantCommitRequest,
   MerchantDeclineRequest,
   MerchantOfferActionResult,
 } from "../journey_v2";
@@ -151,6 +153,17 @@ export interface QuestMutations {
    * visit-tracking bookkeeping.
    */
   completeDreamJourneySite: (siteId: string) => void;
+  /**
+   * Records a commit to a `hiddenUntilCommit` offer. Validates the encounter
+   * signature, verifies the offer is hidden, writes
+   * `merchantCommittedOfferId` into `siteRuntime[siteId]`, and forfeits the
+   * other offer. The site is NOT completed — the player must follow up with
+   * `acceptDreamMerchantOffer` to pick from the revealed candidate set.
+   */
+  commitDreamMerchantOffer: (
+    siteId: string,
+    request: MerchantCommitRequest,
+  ) => MerchantOfferActionResult | void;
   acceptDreamMerchantOffer: (
     siteId: string,
     request: MerchantAcceptRequest,
@@ -406,13 +419,13 @@ function findSite(state: QuestState, siteId: string): SiteState | null {
 
 function merchantRequestLogFields(
   siteId: string,
-  request: MerchantAcceptRequest | MerchantDeclineRequest,
+  request: MerchantAcceptRequest | MerchantDeclineRequest | MerchantCommitRequest,
 ): Record<string, unknown> {
   return {
     siteId,
     offerId: request.offerId,
     archetypeId: "archetypeId" in request ? request.archetypeId : null,
-    choiceId: request.choice?.choiceId ?? null,
+    choiceId: "choice" in request ? (request.choice?.choiceId ?? null) : null,
   };
 }
 
@@ -1805,6 +1818,48 @@ export function QuestProvider({
     });
   }, []);
 
+  const commitDreamMerchantOffer = useCallback(
+    (siteId: string, request: MerchantCommitRequest) => {
+      let outcome: MerchantOfferActionResult = { ok: true };
+      setState((prev) => {
+        const site = findSite(prev, siteId);
+        if (site === null) {
+          outcome = { ok: false, reason: "site_unavailable" };
+          logEvent("merchant_offer_validation_failed", {
+            ...merchantRequestLogFields(siteId, request),
+            reason: "site_unavailable",
+          });
+          return prev;
+        }
+
+        const result = resolveMerchantCommit({
+          state: prev,
+          questContent,
+          site,
+          request,
+        });
+        if (!result.ok) {
+          outcome = { ok: false, reason: result.reason };
+          logEvent("merchant_offer_validation_failed", {
+            ...merchantRequestLogFields(siteId, request),
+            reason: result.reason,
+          });
+          return prev;
+        }
+
+        outcome = { ok: true };
+        logEvent("merchant_offer_committed", {
+          ...merchantRequestLogFields(siteId, request),
+          archetypeId: result.offer.archetypeId,
+          targetKey: result.offer.targetKey,
+        });
+        return result.state;
+      });
+      return outcome;
+    },
+    [questContent],
+  );
+
   const acceptDreamMerchantOffer = useCallback(
     (siteId: string, request: MerchantAcceptRequest) => {
       let outcome: MerchantOfferActionResult = { ok: true };
@@ -3064,6 +3119,7 @@ export function QuestProvider({
       acceptTransfigurationChoice,
       acceptDuplicationChoice,
       completeDreamJourneySite,
+      commitDreamMerchantOffer,
       acceptDreamMerchantOffer,
       declineDreamMerchant,
       pickDraftCard,
@@ -3127,6 +3183,7 @@ export function QuestProvider({
       acceptTransfigurationChoice,
       acceptDuplicationChoice,
       completeDreamJourneySite,
+      commitDreamMerchantOffer,
       acceptDreamMerchantOffer,
       declineDreamMerchant,
       pickDraftCard,

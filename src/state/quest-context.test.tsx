@@ -401,14 +401,16 @@ describe("Dream Merchant v2 mutations", () => {
   it("accepts one generated offer and completes the site", () => {
     const fixture = makeMerchantProviderFixture();
     const encounter = merchantEncounterFor(fixture);
-    // Prefer a direct-payload offer (no chooser selection needed); fall back to
-    // a chooser offer using its first candidate if the encounter generated only
-    // choosers. Both acceptance paths lead to the same site-completion outcome.
+    // Prefer a direct-payload (non-hidden) offer; fall back to a face-up
+    // chooser offer using its first candidate. `hiddenUntilCommit` offers are
+    // excluded because they require a prior commit step — tested separately in
+    // the commit-then-reveal suite.
     const directOffer = encounter.offers.find(
-      (candidate) => candidate.applyPayload !== undefined,
+      (candidate) => candidate.applyPayload !== undefined && !candidate.hiddenUntilCommit,
     );
     const offerWithFirstCandidate = (() => {
       for (const candidate of encounter.offers) {
+        if (candidate.hiddenUntilCommit) continue;
         const first = candidate.choiceRequest?.candidates[0];
         if (first !== undefined) return { offer: candidate, choice: first };
       }
@@ -416,7 +418,7 @@ describe("Dream Merchant v2 mutations", () => {
     })();
 
     const offerId = directOffer?.offerId ?? offerWithFirstCandidate?.offer.offerId;
-    if (offerId === undefined) throw new Error("Expected at least one usable offer");
+    if (offerId === undefined) throw new Error("Expected at least one usable non-hidden offer");
     const offer = encounter.offers.find((o) => o.offerId === offerId);
     if (offer === undefined) throw new Error("Expected merchant offer");
 

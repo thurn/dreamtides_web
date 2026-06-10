@@ -30,6 +30,7 @@ import {
   generateMerchantEncounterWithDebug,
   type MerchantAcceptRequest,
   type MerchantCatalogCard,
+  type MerchantCommitRequest,
   type MerchantDeclineRequest,
   type MerchantGameObject,
 } from "../journey_v2";
@@ -364,6 +365,12 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
     [mutations],
   );
 
+  const handleCommitOffer = useCallback(
+    (request: MerchantCommitRequest) => {
+      return mutations.commitDreamMerchantOffer(site.id, request);
+    },
+    [mutations, site.id],
+  );
   const handleAcceptOffer = useCallback(
     (request: MerchantAcceptRequest) => {
       return mutations.acceptDreamMerchantOffer(site.id, request);
@@ -418,6 +425,7 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
       context={merchantContext}
       questState={state}
       encounter={encounterResult.encounter}
+      onCommit={handleCommitOffer}
       onAcceptOffer={handleAcceptOffer}
       onDecline={handleDecline}
     />

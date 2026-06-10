@@ -191,6 +191,20 @@ export interface MerchantAcceptRequest {
   choice?: MerchantChoice;
 }
 
+/**
+ * Request to commit to a `hiddenUntilCommit` offer. Committing:
+ * - Validates the encounter signature and that the offer is `hiddenUntilCommit`.
+ * - Records the committed offer id in `siteRuntime[site.id]`, forfeiting the
+ *   other offer.
+ * - Does NOT complete the site; the player must then pick from the revealed
+ *   candidate set via `resolveMerchantOffer`.
+ */
+export interface MerchantCommitRequest {
+  encounterSignature: string;
+  offerId: string;
+  archetypeId: MerchantArchetypeId;
+}
+
 export type MerchantOfferActionResult =
   | {
       ok: true;

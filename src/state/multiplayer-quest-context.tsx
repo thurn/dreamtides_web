@@ -79,12 +79,14 @@ import {
 } from "../transfiguration/transfiguration-logic";
 import type { CardData } from "../types/cards";
 import {
+  resolveMerchantCommit,
   resolveMerchantDecline,
   resolveMerchantOffer,
 } from "../journey_v2";
 import type {
   MerchantAcceptRequest,
   MerchantApplyPayload,
+  MerchantCommitRequest,
   MerchantDeclineRequest,
 } from "../journey_v2";
 
@@ -382,13 +384,13 @@ function findSite(state: QuestState, siteId: string): SiteState | null {
 
 function merchantRequestSummary(
   siteId: string,
-  request: MerchantAcceptRequest | MerchantDeclineRequest,
+  request: MerchantAcceptRequest | MerchantDeclineRequest | MerchantCommitRequest,
 ): Record<string, unknown> {
   return {
     siteId,
     offerId: request.offerId,
     archetypeId: "archetypeId" in request ? request.archetypeId : null,
-    choiceId: request.choice?.choiceId ?? null,
+    choiceId: "choice" in request ? (request.choice?.choiceId ?? null) : null,
   };
 }
 
@@ -2906,6 +2908,92 @@ export function MultiplayerQuestProvider({
     });
   }, []);
 
+  const commitDreamMerchantOffer = useCallback(
+    (siteId: string, request: MerchantCommitRequest) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+
+          const site = findSite(room.questState, siteId);
+          if (site === null) {
+            return {
+              ...room,
+              metadata: { ...room.metadata, updatedAt: now },
+              actionLog: {
+                ...(room.actionLog ?? {}),
+                [actionId]: buildActionLogEntry({
+                  timestamp: now,
+                  actorId: current.session.clientId,
+                  action: "merchant_offer_validation_failed",
+                  source: "dream_merchant",
+                  summary: {
+                    ...merchantRequestSummary(siteId, request),
+                    reason: "site_unavailable",
+                  },
+                }),
+              },
+            };
+          }
+
+          const result = resolveMerchantCommit({
+            state: room.questState,
+            questContent: current.questContent,
+            site,
+            request,
+          });
+
+          if (!result.ok) {
+            return {
+              ...room,
+              metadata: { ...room.metadata, updatedAt: now },
+              actionLog: {
+                ...(room.actionLog ?? {}),
+                [actionId]: buildActionLogEntry({
+                  timestamp: now,
+                  actorId: current.session.clientId,
+                  action: "merchant_offer_validation_failed",
+                  source: "dream_merchant",
+                  summary: {
+                    ...merchantRequestSummary(siteId, request),
+                    reason: result.reason,
+                  },
+                }),
+              },
+            };
+          }
+
+          return {
+            ...room,
+            questState: result.state,
+            metadata: { ...room.metadata, updatedAt: now },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "merchant_offer_committed",
+                source: "dream_merchant",
+                summary: {
+                  ...merchantRequestSummary(siteId, request),
+                  archetypeId: result.offer.archetypeId,
+                  targetKey: result.offer.targetKey,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
   const acceptDreamMerchantOffer = useCallback(
     (siteId: string, request: MerchantAcceptRequest) => {
       const current = currentRef.current;
@@ -4194,6 +4282,7 @@ export function MultiplayerQuestProvider({
       acceptTransfigurationChoice,
       acceptDuplicationChoice,
       completeDreamJourneySite,
+      commitDreamMerchantOffer,
       acceptDreamMerchantOffer,
       declineDreamMerchant,
       pickDraftCard,

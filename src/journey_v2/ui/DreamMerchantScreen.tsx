@@ -2,6 +2,7 @@ import type {
   MerchantAcceptRequest,
   MerchantChoice,
   MerchantChoiceCandidate,
+  MerchantCommitRequest,
   MerchantContext,
   MerchantDeclineRequest,
   MerchantEncounter,
@@ -18,6 +19,12 @@ export interface DreamMerchantScreenProps {
   encounter: MerchantEncounter;
   onAcceptOffer: (request: MerchantAcceptRequest) => MerchantOfferActionResult | void;
   onDecline: (request: MerchantDeclineRequest) => void;
+  /**
+   * Called when the player commits to a `hiddenUntilCommit` offer. Task 16
+   * builds the UI that triggers this; the plumbing is wired here so the prop
+   * is available on the component when Task 16 consumes it.
+   */
+  onCommit?: (request: MerchantCommitRequest) => MerchantOfferActionResult | void;
   context?: MerchantContext;
   questState?: QuestState;
 }
@@ -27,6 +34,9 @@ export function DreamMerchantScreen({
   encounter,
   onAcceptOffer,
   onDecline,
+  // onCommit is consumed by Task 16's commit-then-reveal UI; declared here
+  // so callers can pass it through before the UI is built.
+  onCommit: _onCommit,
   context,
   questState,
 }: DreamMerchantScreenProps) {

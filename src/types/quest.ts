@@ -262,6 +262,16 @@ export type CardChoiceSiteRuntime = {
 export interface DreamJourneySiteRuntime {
   kind: "dreamJourney";
   completed: boolean;
+  /**
+   * Set by `resolveMerchantCommit` when the player commits to a
+   * `hiddenUntilCommit` offer. Records the committed offer id so that:
+   * - A reload cannot recover the forfeited offer (the site knows the choice
+   *   has been made).
+   * - `resolveMerchantOffer` accepts ONLY this offer id after commit.
+   * Cleared implicitly when the site completes (site runtime is discarded by
+   * `completeQuestSite` via the siteRuntime map).
+   */
+  merchantCommittedOfferId?: string;
 }
 
 /** Serialized runtime state keyed by site id. */
