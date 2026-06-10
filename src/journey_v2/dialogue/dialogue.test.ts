@@ -1,0 +1,227 @@
+import { describe, expect, it } from "vitest";
+import { buildMerchantContext } from "../context/buildMerchantContext";
+import {
+  makeMerchantTestCard,
+  makeMerchantTestContent,
+  makeMerchantTestQuestState,
+  makeMerchantTestSite,
+} from "../testing/fixtures";
+import type { MerchantArchetypeId } from "../archetypes/types";
+import { MERCHANT_ARCHETYPE_FAMILIES } from "../archetypes/types";
+import type { MerchantContext, MerchantOffer } from "../types";
+import {
+  fillMerchantDialogueName,
+  MERCHANT_ACCEPT_REACTIONS,
+  MERCHANT_DIALOGUE_BANKS,
+  renderMerchantDialogue,
+} from "./dialogue";
+
+const ALL_ARCHETYPE_IDS = Object.keys(
+  MERCHANT_ARCHETYPE_FAMILIES,
+) as MerchantArchetypeId[];
+
+/** A worst-case display name: four words, so slot fill maximises word count. */
+const WORST_CASE_NAME = "Grand Fixture Mirror Sovereign";
+
+const NAME_SLOT = "{name}";
+
+function wordCount(text: string): number {
+  const trimmed = text.trim();
+  if (trimmed.length === 0) return 0;
+  return trimmed.split(/\s+/).length;
+}
+
+function makeContext(input?: { seed?: string; siteId?: string }): MerchantContext {
+  const questContent = makeMerchantTestContent({
+    cards: [
+      makeMerchantTestCard({
+        id: "11111111-1111-4111-8111-111111111111",
+        cardNumber: 1,
+      }),
+    ],
+  });
+  const questState = makeMerchantTestQuestState({
+    seed: input?.seed ?? "dialogue-fixture-seed",
+  });
+  const site = makeMerchantTestSite({
+    id: input?.siteId ?? "site-dialogue-fixture",
+  });
+  return buildMerchantContext({ questState, questContent, site });
+}
+
+function makeOffer(input: {
+  archetypeId: MerchantArchetypeId;
+  offerId: string;
+  displayName?: string;
+}): MerchantOffer {
+  const card = makeMerchantTestCard({
+    id: "22222222-2222-4222-8222-222222222222",
+    cardNumber: 2,
+  });
+  return {
+    offerId: input.offerId,
+    encounterSignature: "fixture-signature",
+    archetypeId: input.archetypeId,
+    family: MERCHANT_ARCHETYPE_FAMILIES[input.archetypeId],
+    title: "Fixture offer title",
+    summary: "Fixture offer summary",
+    hiddenUntilCommit: false,
+    targetKey: "fixture-target",
+    gameObjects:
+      input.displayName === undefined
+        ? []
+        : [
+            {
+              objectType: "catalogCard",
+              cardUuid: card.id,
+              cardNumber: card.cardNumber,
+              card,
+              displayName: input.displayName,
+            },
+          ],
+    applyPayload: {
+      kind: "add_catalog_card",
+      cardUuid: card.id,
+      cardNumber: card.cardNumber,
+    },
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Bug-class: verbose copy creeping back into the banks
+// ---------------------------------------------------------------------------
+
+describe("dialogue banks — word limits", () => {
+  it("covers all 18 archetypes with 6-10 templates each", () => {
+    const bankIds = Object.keys(MERCHANT_DIALOGUE_BANKS).sort();
+    expect(bankIds).toEqual([...ALL_ARCHETYPE_IDS].sort());
+    for (const archetypeId of ALL_ARCHETYPE_IDS) {
+      const bank = MERCHANT_DIALOGUE_BANKS[archetypeId];
+      expect(bank.length).toBeGreaterThanOrEqual(6);
+      expect(bank.length).toBeLessThanOrEqual(10);
+    }
+  });
+
+  it("every template renders to <= 10 words with a 4-word name", () => {
+    for (const archetypeId of ALL_ARCHETYPE_IDS) {
+      for (const template of MERCHANT_DIALOGUE_BANKS[archetypeId]) {
+        const rendered = fillMerchantDialogueName(template, WORST_CASE_NAME);
+        expect(
+          wordCount(rendered),
+          `${archetypeId}: "${rendered}"`,
+        ).toBeLessThanOrEqual(10);
+      }
+    }
+  });
+
+  it("every template has at most one {name} slot", () => {
+    for (const archetypeId of ALL_ARCHETYPE_IDS) {
+      for (const template of MERCHANT_DIALOGUE_BANKS[archetypeId]) {
+        const slots = template.split(NAME_SLOT).length - 1;
+        expect(slots, `${archetypeId}: "${template}"`).toBeLessThanOrEqual(1);
+      }
+    }
+  });
+
+  it("every accept reaction is <= 6 words and the bank is non-empty", () => {
+    expect(MERCHANT_ACCEPT_REACTIONS.length).toBeGreaterThan(0);
+    for (const reaction of MERCHANT_ACCEPT_REACTIONS) {
+      expect(wordCount(reaction), `"${reaction}"`).toBeLessThanOrEqual(6);
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Bug-class: non-determinism (same encounter must produce the same line)
+// ---------------------------------------------------------------------------
+
+describe("renderMerchantDialogue — determinism", () => {
+  it("returns identical output for the same context and offers", () => {
+    const context = makeContext();
+    const offers = [
+      makeOffer({ archetypeId: "strong_card", offerId: "A", displayName: "Fixture Blade" }),
+      makeOffer({ archetypeId: "purge", offerId: "B", displayName: "Fixture Husk" }),
+    ];
+    const first = renderMerchantDialogue({ context, offers });
+    const second = renderMerchantDialogue({ context, offers });
+    expect(second).toEqual(first);
+  });
+
+  it("hints at exactly one of the two offers", () => {
+    const context = makeContext();
+    const offers = [
+      makeOffer({ archetypeId: "strong_card", offerId: "A", displayName: "Fixture Blade" }),
+      makeOffer({ archetypeId: "purge", offerId: "B", displayName: "Fixture Husk" }),
+    ];
+    const rendered = renderMerchantDialogue({ context, offers });
+    expect(["A", "B"]).toContain(rendered.line.offerId);
+  });
+
+  it("seeds the offer choice: both offers get hinted across sites", () => {
+    const hinted = new Set<string>();
+    for (let index = 0; index < 20; index += 1) {
+      const context = makeContext({ siteId: `site-dialogue-${String(index)}` });
+      const offers = [
+        makeOffer({ archetypeId: "strong_card", offerId: "A", displayName: "Fixture Blade" }),
+        makeOffer({ archetypeId: "purge", offerId: "B", displayName: "Fixture Husk" }),
+      ];
+      hinted.add(renderMerchantDialogue({ context, offers }).line.offerId);
+    }
+    expect([...hinted].sort()).toEqual(["A", "B"]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Bug-class: unfilled slots leaking into player-facing copy
+// ---------------------------------------------------------------------------
+
+describe("renderMerchantDialogue — slot fill", () => {
+  it("never leaves a literal {name} in the rendered line", () => {
+    for (const archetypeId of ALL_ARCHETYPE_IDS) {
+      for (const displayName of ["Fixture Target", undefined]) {
+        const context = makeContext();
+        const offer = makeOffer({
+          archetypeId,
+          offerId: "A",
+          ...(displayName === undefined ? {} : { displayName }),
+        });
+        const rendered = renderMerchantDialogue({ context, offers: [offer] });
+        expect(rendered.line.line).not.toContain(NAME_SLOT);
+        expect(wordCount(rendered.line.line)).toBeLessThanOrEqual(10);
+        expect(wordCount(rendered.acceptReaction)).toBeLessThanOrEqual(6);
+      }
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Bug-class: unintended copy drift (golden snapshot per archetype)
+// ---------------------------------------------------------------------------
+
+describe("renderMerchantDialogue — golden copy snapshot", () => {
+  it("renders a stable line for one fixture encounter per archetype", () => {
+    const renderedByArchetype: Record<string, string> = {};
+    for (const archetypeId of ALL_ARCHETYPE_IDS) {
+      const context = makeContext();
+      const offer = makeOffer({
+        archetypeId,
+        offerId: "A",
+        displayName: "Fixture Direwolf",
+      });
+      const rendered = renderMerchantDialogue({ context, offers: [offer] });
+      renderedByArchetype[archetypeId] = rendered.line.line;
+    }
+    expect(renderedByArchetype).toMatchSnapshot();
+  });
+
+  it("renders a stable accept reaction for the fixture encounter", () => {
+    const context = makeContext();
+    const offer = makeOffer({
+      archetypeId: "strong_card",
+      offerId: "A",
+      displayName: "Fixture Direwolf",
+    });
+    const rendered = renderMerchantDialogue({ context, offers: [offer] });
+    expect(rendered.acceptReaction).toMatchSnapshot();
+  });
+});

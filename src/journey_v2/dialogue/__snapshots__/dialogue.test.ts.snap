@@ -1,0 +1,26 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`renderMerchantDialogue — golden copy snapshot > renders a stable accept reaction for the fixture encounter 1`] = `"Done. A clean trade."`;
+
+exports[`renderMerchantDialogue — golden copy snapshot > renders a stable line for one fixture encounter per archetype 1`] = `
+{
+  "add_site": "Let me widen your horizon a little.",
+  "card_bundle": "I don't split sets that sing.",
+  "category_draft_known": "What's inside matches the sign outside.",
+  "copies_draft": "One choice, two arrivals. Generous, I know.",
+  "dreamsign": "Signs like Fixture Direwolf choose their bearers.",
+  "dreamsign_draft": "Pick your patron; they're all listening.",
+  "duplicate": "A mirror for whichever card you cherish.",
+  "fit_card_draft": "Choose freely; I matched them to you.",
+  "fit_card_grant": "Fixture Direwolf is exactly the missing piece.",
+  "keyword_mod": "Small change, large difference for Fixture Direwolf.",
+  "premium_draft": "I only hide what's worth hiding.",
+  "purge": "I take castoffs. Fixture Direwolf qualifies.",
+  "purge_replace": "Swap Fixture Direwolf out. You won't miss it.",
+  "starter_transfigure": "Even first cards deserve a second draft.",
+  "strong_card": "Fixture Direwolf wins games. I've watched it.",
+  "transfigure": "There's a better Fixture Direwolf waiting inside.",
+  "transfigured_draft": "Finished pieces, not raw material. Look.",
+  "tribal_change": "Fixture Direwolf only needs a change of company.",
+}
+`;
