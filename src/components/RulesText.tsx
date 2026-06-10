@@ -1,8 +1,6 @@
 import { type CSSProperties, type ReactNode } from "react";
 import { tokenizeRulesText, type TextSegment } from "./card-text";
-import { HoverPopover } from "./HoverPopover";
 import { PipBadge } from "./PipBadge";
-import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
 import {
   BOLT_ICON_CLASS,
   ENERGY_ICON_CLASS,
@@ -22,8 +20,10 @@ import {
  *     trigger keeping its muted slate
  *   - the fast `↯` glyph colored
  *   - glossary terms (Materialized, Judgment, Reclaim, Foresee, void,
- *     spark, ally, fast, etc.) wrapped in an underlined hover popover
- *     showing their plain-language definition
+ *     spark, ally, fast, etc.) as plain prose; a few keyword effects (e.g.
+ *     `Prevent`) carry a spark-amber emphasis so the eye catches them. The
+ *     plain-language definitions for every term on a card surface beside it
+ *     in the card's hover-help panel (see `CardTermDefinitions`).
  *
  * Used by `CardDisplay`, `DreamcallerPopover`, and the dreamsign cards on
  * `DreamsignDraftScreen` / `DreamsignOfferingScreen`. Single source of
@@ -73,20 +73,11 @@ const SYMBOL_ICON_CLASSES: Readonly<
   store: { className: "bxf bx-hourglass", label: "stored time" },
 };
 
-/** Inline-block trigger styling so the underline stays close to the word. */
-const TERM_STYLE: CSSProperties = {
-  textDecoration: "underline dotted",
-  textUnderlineOffset: 2,
-  cursor: "help",
-  pointerEvents: "auto",
-};
-
 /**
  * Glossary terms that render in the spark amber color wherever they appear in
- * rules text, on top of the usual glossary underline/popover. These are
- * keyword effects worth drawing the eye to (e.g. `Prevent`). Matched against
- * `GlossaryEntry.term` so every authored variant (`prevent`, `prevented`)
- * picks up the same emphasis.
+ * rules text. These are keyword effects worth drawing the eye to (e.g.
+ * `Prevent`). Matched against `GlossaryEntry.term` so every authored variant
+ * (`prevent`, `prevented`) picks up the same emphasis.
  */
 const EMPHASIZED_TERMS: ReadonlySet<string> = new Set(["Prevent"]);
 
@@ -106,12 +97,6 @@ interface RulesTextProps {
 
 interface RenderRulesTextOptions {
   pipScale?: number;
-  /**
-   * When true, glossary terms render as plain text instead of underlined hover
-   * popovers. Surfaces that present many cards at once (e.g. the card editor)
-   * use this to keep the rules text calm and non-distracting.
-   */
-  disableGlossary?: boolean;
 }
 
 function renderSegment(
@@ -132,24 +117,16 @@ function renderSegment(
     );
   }
   if (segment.kind === "term") {
+    // Glossary terms read as plain prose; their definitions surface beside the
+    // card in its hover-help panel rather than as per-word tooltips. A few
+    // keyword effects keep a spark-amber emphasis so the eye still catches them.
     const emphasis = EMPHASIZED_TERMS.has(segment.entry.term)
       ? EMPHASIZED_TERM_STYLE
       : undefined;
-    if (options.disableGlossary === true) {
-      return (
-        <span key={key} style={emphasis}>
-          {segment.word}
-        </span>
-      );
-    }
     return (
-      <HoverPopover
-        key={key}
-        style={{ ...TERM_STYLE, ...emphasis }}
-        content={<GlossaryDefinitionCard entry={segment.entry} />}
-      >
+      <span key={key} style={emphasis}>
         {segment.word}
-      </HoverPopover>
+      </span>
     );
   }
   if (segment.kind === "sparkPip") {
@@ -315,8 +292,7 @@ export function renderRulesText(
  *
  * Use as a drop-in for any place that prints `card.renderedText`,
  * `dreamcaller.renderedText`, or `dreamsign.effectDescription` raw — the
- * tokenizer handles the symbol substitution and the glossary tooltip
- * lookup.
+ * tokenizer handles the symbol substitution and glossary-term emphasis.
  */
 export function RulesText({ text, color, pipScale }: RulesTextProps) {
   if (color !== undefined) {

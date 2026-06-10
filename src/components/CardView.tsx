@@ -18,6 +18,7 @@ import { computeCardTextScale } from "./card-display-scale";
 import { BOLT_ICON_CLASS } from "./GlowIcon";
 import { CardStatOrb } from "./CardStatOrb";
 import { renderRulesText } from "./RulesText";
+import { useCardTermPopover } from "./useCardTermPopover";
 import { useFitText } from "./useFitText";
 
 /**
@@ -683,9 +684,11 @@ export interface CardViewProps {
   /** Hide rules text for dense card surfaces that show identity and stats. */
   hideRulesText?: boolean;
   /**
-   * When true, the corner stat tooltips and inline glossary-term popovers are
-   * suppressed. Surfaces that show many cards at once (the card editor) use
-   * this to keep hover behavior calm and non-distracting.
+   * When true, the corner stat tooltips and the card's term-definition hover
+   * panel are suppressed. The card editor uses this to keep hover behavior calm
+   * across a dense grid, and the card-preview surfaces
+   * (`CardHoverPreview` / `BattleCardHoverPreview`) use it on the enlarged card
+   * because they render their own definitions panel alongside the preview.
    */
   suppressHoverHelp?: boolean;
   /** Optional editor wrappers for individual rendered card slots. */
@@ -751,6 +754,17 @@ export function CardView({
   const [boxTopFrac, setBoxTopFrac] = useState<number | null>(null);
   const bandBoxRef = useRef<HTMLDivElement | null>(null);
   const { cardRef, textScale, widthPx } = useCardMetrics(large);
+
+  // Hover help: while the card is hovered, a panel defining every glossary
+  // term on it portals in beside the card (never on top). Suppressed for the
+  // card editor and for the enlarged card inside the hover-preview surfaces,
+  // which render their own definitions panel. Dense surfaces that hide rules
+  // text have no terms to explain, so they opt out too.
+  const termPopover = useCardTermPopover({
+    anchorRef: cardRef,
+    text: card.renderedText,
+    enabled: !suppressHoverHelp && !hideRulesText,
+  });
 
   // Auto-shrink the rules body so a card needing more than the reserved three
   // lines still fits the fixed text box. The ceiling sits just above the
@@ -1018,7 +1032,6 @@ export function CardView({
     >
       {renderRulesText(card.renderedText, {
         pipScale: textScale,
-        disableGlossary: suppressHoverHelp,
       })}
     </div>
   ) : null;
@@ -1149,6 +1162,7 @@ export function CardView({
         } as CSSProperties
       }
       onClick={onClick}
+      {...termPopover.triggerHandlers}
       {...(isInteractive
         ? {
             role: "button" as const,
@@ -1161,6 +1175,7 @@ export function CardView({
           }
         : {})}
     >
+      {termPopover.popoverPortal}
       {/* Full-bleed art covering the entire card. */}
       {identiconUri !== null ? (
         <img

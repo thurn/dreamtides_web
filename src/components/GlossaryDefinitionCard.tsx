@@ -4,15 +4,16 @@ import type { GlossaryEntry } from "../data/glossary";
  * Shared visual card used to render a single glossary entry as a
  * term-and-definition tile.
  *
- * Two surfaces consume this component so both stay visually consistent:
- *   * `RulesText.tsx` shows it inside a hover popover when the player
- *     hovers an underlined gameplay term inside card / Dreamcaller /
- *     Dreamsign rules text.
+ * Several surfaces consume this component so they stay visually consistent:
+ *   * `CardTermDefinitions` stacks one per gameplay term in the hover-help
+ *     panel that appears beside a card (full cards, compact-row previews, and
+ *     the battle card preview).
  *   * `GlossaryPopup.tsx` shows it once per entry in the glossary popup
  *     opened from the HUD.
+ *   * `JourneyHoverCard` lists the terms referenced by a journey tooltip.
  *
  * Keeping the card here means tweaks to typography or chrome propagate
- * to both surfaces automatically.
+ * to every surface automatically.
  */
 export function GlossaryDefinitionCard({
   entry,

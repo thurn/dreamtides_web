@@ -48,7 +48,7 @@ export function CardHoverPreview({
       className="shrink-0"
       style={{ width: widthPx }}
     >
-      <CardDisplay card={card} />
+      <CardDisplay card={card} suppressHoverHelp />
     </div>
   );
 

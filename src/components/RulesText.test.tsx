@@ -5,7 +5,7 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { ENERGY_PIP_COLOR } from "./PipBadge";
-import { renderRulesText, RulesText } from "./RulesText";
+import { RulesText } from "./RulesText";
 
 function mount(element: ReactElement): {
   container: HTMLDivElement;
@@ -33,31 +33,15 @@ afterEach(() => {
 });
 
 describe("RulesText", () => {
-  it("wraps recognized glossary terms with role=tooltip-able trigger spans", () => {
+  it("renders recognized glossary terms as plain text without an underline", () => {
     const { container, root } = mount(
       <RulesText text="Reclaim this card." />,
     );
 
-    // The "Reclaim" word should be rendered inside an interactive trigger span
-    // (the underline styling indicates a glossary-recognized term).
+    // The "Reclaim" word renders as plain prose; its definition surfaces in the
+    // card's hover-help panel rather than as a per-word underline/tooltip.
     const allSpans = container.querySelectorAll("span");
-    const triggerSpan = Array.from(allSpans).find(
-      (s) => s.textContent === "Reclaim",
-    );
-    expect(triggerSpan).toBeDefined();
-    expect(triggerSpan?.getAttribute("style")).toContain("text-decoration");
-
-    act(() => {
-      root.unmount();
-    });
-  });
-
-  it("renders glossary terms as plain text when glossary is disabled", () => {
-    const { container, root } = mount(
-      <div>{renderRulesText("Reclaim this card.", { disableGlossary: true })}</div>,
-    );
-
-    const reclaimSpan = Array.from(container.querySelectorAll("span")).find(
+    const reclaimSpan = Array.from(allSpans).find(
       (s) => s.textContent === "Reclaim",
     );
     expect(reclaimSpan).toBeDefined();
@@ -154,17 +138,28 @@ describe("RulesText", () => {
     });
   });
 
-  it("preserves keyword nobreak grouping with a glossary-wrapped trigger keyword", () => {
+  it("keeps the trigger keyword on one line and renders it as plain text", () => {
     const { container, root } = mount(
       <RulesText text="▸ Judgment: Draw a card." />,
     );
 
-    // The Judgment keyword should still be a glossary trigger span.
+    // The Judgment keyword renders as plain prose (no per-word underline).
     const judgmentSpan = Array.from(container.querySelectorAll("span")).find(
       (s) => s.textContent === "Judgment",
     );
     expect(judgmentSpan).toBeDefined();
-    expect(judgmentSpan?.getAttribute("style")).toContain("text-decoration");
+    expect(judgmentSpan?.getAttribute("style") ?? "").not.toContain(
+      "text-decoration",
+    );
+
+    // The caret + keyword still sit inside a nowrap group so they never wrap
+    // apart across a line break.
+    const nowrapGroup = Array.from(container.querySelectorAll("span")).some(
+      (s) =>
+        (s.getAttribute("style") ?? "").includes("nowrap") &&
+        s.textContent?.includes("Judgment") === true,
+    );
+    expect(nowrapGroup).toBe(true);
 
     act(() => {
       root.unmount();
