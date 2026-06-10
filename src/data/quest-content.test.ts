@@ -116,7 +116,17 @@ describe("loadQuestContent", () => {
             json: () => Promise.resolve(affinityCorpus),
           });
         }
-        return Promise.reject(new Error(`Unexpected fetch path: ${path}`));
+        // Any other asset the loader requests is an optional, variant-specific
+        // artifact (a tides bundle, the merchant corpus, dreamsign profiles,
+        // etc.). The loaders all treat a non-ok response as "absent" and fall
+        // back gracefully, so returning a 404 here keeps these tests green no
+        // matter which pool variant is the default — they exercise the load
+        // path itself, not any one variant's pool construction.
+        return Promise.resolve({
+          ok: false,
+          status: 404,
+          json: () => Promise.resolve(null),
+        });
       }),
     );
   }
