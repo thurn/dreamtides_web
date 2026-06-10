@@ -98,8 +98,11 @@ export function QuestStartScreen() {
       >
         {offered.map((dreamcaller, index) => {
           const accentColor = DREAMCALLER_ACCENT;
-          const signatureCards = dreamcaller.signatureCards ?? [];
           const tides = tidesByDreamcaller.get(dreamcaller.id) ?? [];
+          // A `tides4` run shows the dealt tides in place of the signature
+          // cards, so suppress the signature-card list whenever tides exist.
+          const signatureCards =
+            tides.length > 0 ? [] : (dreamcaller.signatureCards ?? []);
           return (
             <motion.div
               key={dreamcaller.name}
@@ -286,7 +289,7 @@ export function QuestStartScreen() {
                       />
                     </HoverPopover>
                   </span>
-                  <div className="flex w-full flex-wrap gap-1.5">
+                  <div className="flex w-full flex-col items-start gap-1.5">
                     {tides.map((tide) => (
                       <HoverPopover
                         key={`${dreamcaller.id}-${tide.id}`}
