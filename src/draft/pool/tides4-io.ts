@@ -45,6 +45,16 @@ export interface Tides4DeckJson {
   id: string;
   /** Human-readable tide name (its Dreamcaller, its lean card, or its breadth). */
   name: string;
+  /**
+   * A short hand-authored label (1-3 words) for the mechanical identity the tide
+   * expresses, e.g. "Sacrifice Aggro" or "Spell Tempo". Present once the tide has
+   * been annotated; preserved across bakes by stable id.
+   */
+  shortName?: string;
+  /** A one-sentence summary of what the tide does and how it differs from peers. */
+  summary?: string;
+  /** A one-paragraph description of the tide's structure, engine, and contrasts. */
+  description?: string;
   /** Whether this is a signature floor, a directional facet, or a broad tide. */
   role: Tides4Role;
   /** The decklist as UUID + copies entries. */

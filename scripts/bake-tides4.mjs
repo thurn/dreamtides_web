@@ -102,6 +102,33 @@ function readJson(rel) {
   return JSON.parse(readFileSync(path, "utf8"));
 }
 
+/**
+ * Read the hand-authored identity annotations (shortName/summary/description)
+ * from a previously baked tides4 artifact, keyed by stable tide id. Returns an
+ * empty map when the file is absent (a first bake). The artifact is JSONC: the
+ * `//` header comments are stripped before parsing.
+ */
+function readTideAnnotations(outPath) {
+  const map = new Map();
+  if (!existsSync(outPath)) return map;
+  const body = readFileSync(outPath, "utf8").replace(/^\s*\/\/.*$/gm, "");
+  let parsed;
+  try {
+    parsed = JSON.parse(body);
+  } catch {
+    return map;
+  }
+  for (const tide of parsed.tides ?? []) {
+    if (!tide || typeof tide.id !== "string") continue;
+    const anno = {};
+    for (const key of ["shortName", "summary", "description"]) {
+      if (typeof tide[key] === "string" && tide[key] !== "") anno[key] = tide[key];
+    }
+    if (Object.keys(anno).length > 0) map.set(tide.id, anno);
+  }
+  return map;
+}
+
 function str(argv, flag, fallback) {
   const i = argv.indexOf(flag);
   if (i !== -1 && argv[i + 1] != null) return argv[i + 1];
@@ -255,9 +282,12 @@ const HEADER = `// data/tides4.jsonc — the committed tide decks the \`tides4\`
 // \`sigseed\` gets from a random signature subset.
 //
 // Cards are keyed by stable cards_v2 UUID; \`name\` fields are informational,
-// refreshed at bake time. \`tidePoolByDreamcaller\` is keyed by Dreamcaller UUID;
-// each entry has \`starter\` (the always-joined signature tide, or null), \`facets\`
-// (a random subset is drawn each run) and \`neutral\` (the broad tail).
+// refreshed at bake time. Each tide may also carry hand-authored identity
+// annotations — \`shortName\` (a 1-3 word mechanical label), \`summary\` (one
+// sentence), and \`description\` (one paragraph) — which a re-bake preserves by
+// stable tide id. \`tidePoolByDreamcaller\` is keyed by Dreamcaller UUID; each
+// entry has \`starter\` (the always-joined signature tide, or null), \`facets\` (a
+// random subset is drawn each run) and \`neutral\` (the broad tail).
 //
 // To update: edit the tuning block in scripts/bake-tides4.mjs (or let new draft
 // records / signature changes flow in), then:
@@ -271,10 +301,19 @@ function serializeArtifact(json) {
       (c, i) =>
         `        ${JSON.stringify(c)}${i < tide.cards.length - 1 ? "," : ""}`,
     );
+    // Hand-authored identity annotations (preserved across bakes by tide id) are
+    // emitted right after `name` when present, so the deck body stays readable.
+    const anno = [];
+    for (const key of ["shortName", "summary", "description"]) {
+      if (typeof tide[key] === "string" && tide[key] !== "") {
+        anno.push(`      ${JSON.stringify(key)}: ${JSON.stringify(tide[key])},`);
+      }
+    }
     return [
       "    {",
       `      "id": ${JSON.stringify(tide.id)},`,
       `      "name": ${JSON.stringify(tide.name)},`,
+      ...anno,
       `      "role": ${JSON.stringify(tide.role)},`,
       `      "cards": [`,
       ...cards,
@@ -355,7 +394,7 @@ function renderMarkdown(json, dreamcallers) {
     const owner = tide.dreamcallerId
       ? dcById.get(tide.dreamcallerId)?.name
       : undefined;
-    lines.push(`## ${tide.name}`);
+    lines.push(`## ${tide.name}${tide.shortName ? ` — ${tide.shortName}` : ""}`);
     lines.push("");
     lines.push(
       `\`${tide.id}\` — ${tide.role} tide, ${String(tide.cards.length)} distinct cards, ` +
@@ -363,6 +402,14 @@ function renderMarkdown(json, dreamcallers) {
         (owner ? `, ${owner}'s signature` : ""),
     );
     lines.push("");
+    if (tide.summary) {
+      lines.push(`*${tide.summary}*`);
+      lines.push("");
+    }
+    if (tide.description) {
+      lines.push(tide.description);
+      lines.push("");
+    }
     for (const card of tide.cards) {
       lines.push(`- ${String(card.copies)}× ${card.name}`);
     }
@@ -522,11 +569,30 @@ function run() {
     }
   }
 
+  // Hand-authored identity annotations (shortName/summary/description) are carried
+  // forward from the prior bake by stable tide id, so re-baking from fresh draft
+  // records keeps the curated text. They describe a tide's mechanical identity; a
+  // large content shift for a tide may warrant re-annotating it.
+  const priorAnnotations = readTideAnnotations(resolve(ROOT, outRel));
+  for (const tide of tides) {
+    const anno = priorAnnotations.get(tide.id);
+    if (anno) Object.assign(tide, anno);
+  }
+
   // Strip the bake-only `dreamcallerId`/`anchorKey` from the serialized tides (the
-  // runtime schema carries id/name/role/cards only); the doc render keeps them.
+  // runtime schema carries id/name/role/cards plus optional annotations); the doc
+  // render keeps them.
   const json = {
     version: 1,
-    tides: tides.map(({ id, name, role, cards }) => ({ id, name, role, cards })),
+    tides: tides.map(({ id, name, shortName, summary, description, role, cards }) => {
+      const out = { id, name };
+      if (shortName !== undefined) out.shortName = shortName;
+      if (summary !== undefined) out.summary = summary;
+      if (description !== undefined) out.description = description;
+      out.role = role;
+      out.cards = cards;
+      return out;
+    }),
     tidePoolByDreamcaller,
   };
 
