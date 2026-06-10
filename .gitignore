@@ -31,4 +31,5 @@ logs/
 .DS_Store
 .claude/worktrees
 .worktrees/
+merchant-metric-report.json
 .superpowers/
