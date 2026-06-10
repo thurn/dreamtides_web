@@ -256,21 +256,24 @@ id = "3D86F8CE-42AC-43DC-96D5-121E6D1A6167"
 name = "Theater Mask"
 image_name = "mask_2.png"
 tides = ["figment_swarm", "warrior_pressure", "warrior_bastion", "spark_growth"]
-rendered-text = "Allied figments count as warriors."
+rendered-text = "When you gain this dreamsign, pick a character type. All cards in your deck that mention character types in their text now refer to that character type."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "DEC81FA2-7865-448C-95BC-622B884CEA9E"
 name = "Rune Stone"
 image_name = "rune.png"
 tides = ["figment_swarm", "judgment_engines", "spark_growth", "ally_wide"]
-rendered-text = "▸Dawn: Each allied figment gains +1✦."
+rendered-text = "Allied figments have +1✦."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "4DC47625-73BD-4518-A4EF-29DDA2171594"
 name = "Rune Sack"
 image_name = "runes.png"
 tides = ["figment_swarm", "judgment_engines", "big_energy", "ally_wide"]
-rendered-text = "▸Dawn: With ≥4 allied figments, gain 2●."
+rendered-text = "▸Dawn: With ≥3 allied figments, gain 2●."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "4A91C56C-D828-482A-A46C-1299D69FA011"
@@ -278,72 +281,87 @@ name = "Purple Crystal"
 image_name = "crystal.png"
 tides = ["discard_velocity", "figment_swarm", "materialize_value", "hand_cycling"]
 rendered-text = "When you discard a card, materialize a 2✦ radiant figment."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "26786698-FDF2-493D-905B-4273A20586C9"
 name = "Potion Mortar"
 image_name = "bowl.png"
 rendered-text = "▸Dawn: A random card in your hand costs 1● this turn."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "B7F8A4EA-C067-47ED-B251-2876B609108C"
 name = "Broomstick"
 image_name = "broomstick.png"
 rendered-text = "▸Dawn: Lose 1●. Draw a card."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "253A106D-F64E-4A60-9471-446A18EE8959"
 name = "Ice Crystals"
 image_name = "ice.png"
 tides = ["void_setup", "recursion_fuel", "judgment_engines", "void_recursion"]
-rendered-text = "▸Dawn: Erode 2."
+rendered-text = "▸Dawn: Erode 1."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "5A22F358-BC84-44B1-A201-5F9F57940C51"
 name = "Tarot Card"
 image_name = "card.png"
-rendered-text = "▸Dawn: With ≥2 allied front-rank characters, draw a card, then discard a card."
+rendered-text = "When you challenge with 2 or more characters, draw a card."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "6B95D6BD-C970-4465-9536-4F21E7630D0A"
 name = "Mushroom Caps"
 image_name = "Champignon.png"
-rendered-text = "▸Dawn: Gain 1●. When drafting cards, see 1 fewer choice."
+rendered-text = '''
+When drafting cards, see 1 fewer choice.
+
+
+▸Dawn: Gain 1●.'''
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "1A524712-EF7E-43D9-BD79-5DEA5250BF08"
 name = "Rainbow Horn"
 image_name = "horn_rainbow .png"
 tides = ["fast_setup", "fast_tempo", "card_flow", "judgment_engines"]
-rendered-text = "▸Dawn: Add a random ❖ card from the card pool to your hand."
+rendered-text = "▸Dawn: Add a random ≤2● cost event from the card pool to your hand."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "6F4E2D9F-38A4-4F6A-8FDE-7D942977A6DF"
 name = "Hourglass"
 image_name = "hourglass.png"
 tides = ["judgment_engines", "judgment_repeaters", "trigger_reuse", "judgment_bodies"]
-rendered-text = "Your leftmost ally's ▸Dawn ability triggers an additional time."
+rendered-text = "If 3 or more ▸Dawn abilities trigger during your Dawn phase, draw a card."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "C75CD943-5E8B-4A56-8C09-D975571570D4"
 name = "Butterfly Wings"
 image_name = "butterfly_wings.png"
 tides = ["judgment_engines", "judgment_repeaters", "trigger_reuse", "judgment_bodies"]
-rendered-text = "A random allied ▸Dawn ability triggers an additional time each turn."
+rendered-text = "A random ally's ▸Dawn ability triggers an additional time each turn."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "7EC00DA2-2B2D-4613-9A2A-8611D38199CA"
 name = "Dreamcatcher"
 image_name = "dreamcatcher.png"
 tides = ["copy_effects", "event_chain", "event_setup", "judgment_engines"]
-rendered-text = "▸Dawn: Play a copy of the last event you played last turn for 0●."
+rendered-text = "▸Dawn: Add an ethereal copy of the first event you played last turn to your hand."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "064CFB53-FCB4-4471-80DE-27ECCD23D3C0"
 name = "Carved Relic"
 image_name = "idol.png"
 tides = ["event_chain", "reclaim_events", "void_recursion", "event_setup"]
-rendered-text = "▸Dawn: Return a random event you played last turn from your void to your hand."
+rendered-text = "▸Dawn: Return a random event from your void to your hand."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "A7CDC8FD-5827-4D73-AE0C-AA594A69FA8A"
@@ -351,6 +369,7 @@ name = "Rope Doll"
 image_name = "doll.png"
 tides = ["reclaim_characters", "survivor_dissolve", "void_recursion", "judgment_engines"]
 rendered-text = "▸Dawn: Return a random survivor from your void to your hand."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "BFEC4F5D-9B0D-4ED2-B470-DB73D852448F"
@@ -358,6 +377,7 @@ name = "Dead Rat"
 image_name = "dead_rat.png"
 tides = ["abandon_value", "leave_play_enablers", "card_flow", "judgment_engines"]
 rendered-text = "▸Dawn: You may abandon a character to draw a card."
+tags = ["J10"]
 
 [[dreamsign]]
 id = "FB7316C9-EF29-42FD-993E-D3337CB06921"
@@ -365,6 +385,7 @@ name = "Gem Codex"
 image_name = "book_9.png"
 tides = ["copy_effects", "event_chain", "event_setup"]
 rendered-text = "When you copy an event, copy it an additional time."
+tags = ["J10"]
 
 [[dreamsign]]
 id = "257C160F-7D70-4EBD-BB0F-F83E61907310"
@@ -372,6 +393,7 @@ name = "Black Cat"
 image_name = "cat.png"
 tides = ["copy_effects", "event_chain", "event_setup"]
 rendered-text = "Copy the first event you play each turn."
+tags = ["J10"]
 
 [[dreamsign]]
 id = "49F216A2-0596-4124-BB40-60AC9AFE6E0B"
@@ -379,6 +401,7 @@ name = "Storm Tome"
 image_name = "book_2.png"
 tides = ["copy_effects", "event_chain", "event_setup", "cost_reduction", "finishers"]
 rendered-text = "When you play a ≤2● cost event, copy it."
+tags = ["J10"]
 
 [[dreamsign]]
 id = "56523397-6C48-4DF6-846B-9E4F15D7FDEE"
@@ -386,6 +409,7 @@ name = "Clover"
 image_name = "clover.png"
 tides = ["event_chain", "copy_effects", "finishers", "event_setup"]
 rendered-text = "When you play an event with no allies in play, copy it."
+tags = ["J10"]
 
 [[dreamsign]]
 id = "6DAC6BFF-AF3A-4749-8547-01FDED1C81C9"
@@ -393,6 +417,7 @@ name = "Flaming Button"
 image_name = "damned_button.png"
 tides = ["copy_effects", "event_chain", "resource_burst", "event_setup"]
 rendered-text = "Once per turn, when you copy an event, gain 1●."
+tags = ["J10"]
 
 [[dreamsign]]
 id = "396DA354-9F4D-4AE7-A9DC-02D1330A2678"
@@ -400,6 +425,7 @@ name = "Crow"
 image_name = "crow.png"
 tides = ["event_chain", "spark_growth", "point_pressure", "event_setup"]
 rendered-text = "When you play an event, each allied front-rank character gains +1✦ this turn."
+tags = ["J10"]
 
 [[dreamsign]]
 id = "A09F60DF-EC9F-4608-873C-1372AF18DAA2"
@@ -407,6 +433,7 @@ name = "Cauldron"
 image_name = "cauldron.png"
 tides = ["event_chain", "reclaim_events", "void_recursion", "recursion_fuel"]
 rendered-text = "Your events have Reclaim X● where X is their ● cost."
+tags = ["J10"]
 
 [[dreamsign]]
 id = "044F856B-C08B-4B82-81E3-5417962BF868"
@@ -414,6 +441,7 @@ name = "Skull Dagger"
 image_name = "dark_knife.png"
 tides = ["cost_reduction", "event_chain", "reclaim_events", "void_recursion"]
 rendered-text = "The first event you play from your void each turn costs 0●."
+tags = ["J10"]
 
 [[dreamsign]]
 id = "B6333EBA-5573-441C-B286-1CD7F7CB6916"
@@ -421,6 +449,7 @@ name = "Eye Grimoire"
 image_name = "book_3.png"
 tides = ["copy_effects", "event_chain", "reclaim_events", "void_recursion", "trigger_reuse"]
 rendered-text = "Copy the first event you play from your void each turn."
+tags = ["J10"]
 
 [[dreamsign]]
 id = "B2626645-827C-46EC-8204-017862D1A398"
