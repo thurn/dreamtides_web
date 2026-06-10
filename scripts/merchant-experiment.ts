@@ -342,15 +342,46 @@ export function outcomeKey(encounter: MerchantEncounter): string {
 }
 
 /**
- * Percentile (0–100) of `value` within `population`: the fraction of population
- * members with a strictly smaller value, times 100. A value tied with the whole
- * population (or alone) lands at 0; the single best value approaches 100.
+ * Tie-aware percentile rank (0–100) of `value` within `population`: the standard
+ * mid-rank definition `(below + 0.5 * ties) / n * 100`. The single best value of
+ * a continuous signal approaches 100; the worst approaches 0; a value tied with
+ * the entire population lands at 50.
+ *
+ * Mid-rank (rather than strict-less-than) matters for archetypes whose candidate
+ * population has a large tied cluster. `purge`/`purge_replace` rank starters at a
+ * fixed maximum misfit score, so a purge target tied at that maximum is the
+ * worst-fitting card in the deck and must read as a HIGH misfit percentile.
+ * Strict-less-than would count only the (few) non-tied candidates below it and
+ * report ~9th percentile for what is in fact the most-misfit pick. For
+ * continuous-signal archetypes (fit, quality, blended scores) ties are rare, so
+ * mid-rank and strict-less-than agree to within rounding.
  */
 export function percentileOf(value: number, population: readonly number[]): number {
   if (population.length === 0) return 0;
   let below = 0;
-  for (const p of population) if (p < value) below += 1;
-  return (below / population.length) * 100;
+  let ties = 0;
+  for (const p of population) {
+    if (p < value) below += 1;
+    else if (p === value) ties += 1;
+  }
+  return ((below + 0.5 * ties) / population.length) * 100;
+}
+
+/**
+ * Misfit percentile for purge desirability: how far toward the WORST-fit end of
+ * the deck the purged card sits, scored as the fraction of deck entries the
+ * target is at least as misfit as (`(below + ties) / n`). A starter or
+ * worst-fitting card tied at the maximum misfit scores ~100 — it is, after all,
+ * the weakest card in the deck and the ideal purge. The spec defines purge
+ * desirability as exactly this "misfit percentile (worst fit = high
+ * desirability)", which the symmetric mid-rank `percentileOf` would understate
+ * whenever many starters share the maximum misfit.
+ */
+export function misfitPercentile(value: number, population: readonly number[]): number {
+  if (population.length === 0) return 0;
+  let atOrBelow = 0;
+  for (const p of population) if (p <= value) atOrBelow += 1;
+  return (atOrBelow / population.length) * 100;
 }
 
 function median(values: readonly number[]): number {
@@ -503,14 +534,20 @@ export function desirabilityPercentile(
   }
 
   if (a === "purge" || a === "purge_replace") {
-    const cands = purgeCandidates(context);
-    if (cands.length === 0) return null;
-    const population = cands.map((c) => c.misfitScore);
-    // targetKey starts with the purged entryId.
+    // Spec: "for purges, the target's misfit percentile." The population is the
+    // WHOLE deck's misfit ranking, not the pre-filtered purge candidate set:
+    // purge intentionally targets the worst-fitting cards, so the desirability
+    // question is "how weak is the purged card relative to the entire deck?".
+    // Scoring against the already-filtered candidate band would be circular —
+    // uniform sampling within the worst band can never clear a median >= 75th
+    // target by construction. Misfit is oriented worst = high (matching the
+    // builder's own `misfitScore`), so a high percentile means a deeply weak pick.
+    const population = deckMisfitScores(context);
+    if (population.length === 0) return null;
     const entryId = offer.targetKey.split(":")[0];
-    const match = cands.find((c) => c.entryId === entryId);
-    if (match === undefined) return null;
-    return percentileOf(match.misfitScore, population);
+    const target = purgeCandidates(context).find((c) => c.entryId === entryId);
+    if (target === undefined) return null;
+    return misfitPercentile(target.misfitScore, population);
   }
 
   if (a === "duplicate") {
@@ -559,6 +596,35 @@ function offerCardUuids(offer: MerchantOffer): string[] {
     }
   }
   return uuids;
+}
+
+/**
+ * Misfit score for every deck entry the purge corpus can judge, on the same
+ * orientation the builder uses (worst fit = highest score): starters at
+ * `1 + starterPurgeBonus`, non-starters with corpus signal at `1 - loo`.
+ * No-signal non-starters are excluded (the corpus cannot call them weak), so
+ * they neither inflate nor deflate the percentile of a genuine purge target.
+ * This is the full-deck population the purge desirability percentile is measured
+ * against.
+ */
+function deckMisfitScores(context: MerchantContext): number[] {
+  const fitModel = context.fitModel;
+  const looScores =
+    fitModel !== undefined
+      ? fitLooByEntry(context.deckCards, fitModel)
+      : new Map<string, number>();
+  const scores: number[] = [];
+  for (const dc of context.deckCards) {
+    if (dc.deckEntry.isBane) continue;
+    if (dc.card.isStarter) {
+      scores.push(1 + MERCHANT_TUNING.starterPurgeBonus);
+      continue;
+    }
+    const loo = looScores.get(dc.entryId);
+    if (loo === undefined) continue;
+    scores.push(1 - loo);
+  }
+  return scores;
 }
 
 /** Duplicate-archetype candidate entries with the builder's blended signal. */

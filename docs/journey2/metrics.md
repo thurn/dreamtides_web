@@ -58,3 +58,31 @@ below):
   it matches only by mentioning "activated abilities" in flavor — no pool card
   has an activated ability the Rose effect can discount. "All 8 types appear" is
   therefore physically unattainable.
+
+## Round 1 — purge/purge_replace desirability metric bug (harness fix)
+
+**Lever:** `scripts/merchant-experiment.ts` (harness metric definition; no
+tuning change). Two coupled fixes, both metric-definition bugs:
+
+1. `percentileOf` was strict-less-than, so a value tied with the top of its
+   population scored ~0. Made it tie-aware mid-rank
+   (`(below + 0.5·ties)/n`); continuous-signal archetypes are unaffected.
+2. Purge desirability scored the target against the **pre-filtered purge
+   candidate band** (circular — uniform sampling within the worst band can never
+   clear a median ≥ 75 target). The spec defines it as "the target's misfit
+   percentile (worst fit = high desirability)". Rewrote it to score against the
+   **whole deck's** misfit population (`deckMisfitScores`) using a dedicated
+   `misfitPercentile` (`(atOrBelow)/n`): a starter or worst-fit card tied at the
+   maximum misfit reads ~100 — it is the weakest card in the deck and the ideal
+   purge.
+
+**Movement (defaults):**
+
+| archetype | before (median/floor) | after | result |
+|---|---|---|---|
+| purge | 9.1 / 0.0 FAIL | 100.0 / 100.0 | PASS |
+| purge_replace | 9.1 / 0.0 FAIL | 100.0 / 100.0 | PASS |
+
+Remaining desirability fails: `category_draft_known` (floor 37.2),
+`dreamsign` (median 73.7), `tribal_change` (floor 21.4). `npm test` green
+(2750 passed).
