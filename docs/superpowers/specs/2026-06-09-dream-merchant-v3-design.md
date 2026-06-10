@@ -140,24 +140,22 @@ Same candidate pool and signal; band-sample 4 without replacement. Face-up
 chooser. Eligible when deck size >= 6 and the band has >= 4 cards.
 
 **`copies_draft`** (w=6) — *Draft 1 of 4 cards; receive 2 copies of your
-pick.* Same as `fit_card_draft`, but the accepted card is added twice.
-Candidates are additionally filtered to multiplicity `m(c) >= 0.15` (cards
-real decks actually run as multiples). Eligible when that filtered band has
->= 4 cards.
+pick.* Same candidate pool as `fit_card_draft` (non-starter, unowned pool
+cards), but the accepted card is added twice (a composite of two
+`add_catalog_card` children). Signal: `copiesBlend.fit * fitNorm +
+copiesBlend.quality * qualityNorm`, so the doubled card is both a deck fit and
+genuinely strong; below `minDeckForFit` the signal falls back to corpus quality
+alone, the same cold-start handling `card_bundle` uses, so the archetype is live
+even on a small deck. Band-sample 4 as a face-up chooser. Eligible when the band
+has >= 4 cards.
 
-> **Corpus note (multiplicity is structurally near-zero).** The adapted draft
-> records are singleton mainboards: of 501 corpus cards only 6 have any
-> multiplicity at all, the maximum is 0.046, and **no** card reaches the
-> `copiesMultiplicityMin = 0.15` (or the `duplicateMultiplicityMin = 0.10` used
-> by `duplicate`) threshold. `copies_draft` and `duplicate` are therefore never
-> eligible against the current corpus. The thresholds are intentionally NOT
-> lowered to force eligibility: the six non-zero-multiplicity cards sit at
-> ~0.006–0.046, i.e. "run as 2+ in one or two of ~1000 decks" — statistical
-> noise, not the "cards real decks run as multiples" signal the archetype needs.
-> These archetypes are dormant by design until a corpus with genuine multi-copy
-> mainboards exists; the metrics harness reports them as "never eligible" and
-> passes coverage for them trivially rather than penalising a corpus-driven
-> absence.
+> **Format note (singleton corpus → quality/fit value).** The adapted draft
+> records are singleton mainboards, so the corpus encodes how strong and how
+> synergistic each card is, not how often decks run it twice. Duplication value
+> in this format therefore comes from how good a card already is: doubling your
+> strongest, best-fitting cards is the upside, so `copies_draft` ranks candidates
+> on fit-to-deck blended with corpus quality, and `duplicate` ranks deck entries
+> on corpus quality blended with their leave-one-out fit within the deck.
 
 **`strong_card`** (w=8) — *Receive one named premium card.* Candidates: all
 non-starter pool cards. Signal: corpus quality rating. Band-sample 1 with
@@ -249,10 +247,11 @@ when both halves are individually eligible.
 
 **`duplicate`** (w=8) — *Duplicate a deck card (pick 1 of up to 3).*
 Candidates: non-starter deck entries. Signal:
-`0.6 * multiplicityNorm(card) + 0.4 * fitLooNorm(entry)` (cards real decks run
-as multiples, weighted toward ones that pull with this deck). Band-sample up
-to 3 as a face-up chooser; a single candidate renders as a direct offer.
-Eligible when >= 1 candidate has multiplicity signal (`m(c) >= 0.1`).
+`duplicateBlend.quality * qualityNorm(card) + duplicateBlend.fitLoo *
+fitLooNorm(entry)` — duplicate the player's strongest, most synergistic card,
+blending the entry card's corpus quality with its leave-one-out fit within the
+deck. Band-sample up to 3 as a face-up chooser; a single candidate renders as a
+direct offer. Eligible whenever the deck holds >= 1 non-starter entry.
 
 ### Dreamsign family
 

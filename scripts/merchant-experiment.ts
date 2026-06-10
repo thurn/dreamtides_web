@@ -50,7 +50,7 @@ import type {
 
 // Signal accessors and candidate enumerators reused so desirability percentiles
 // are computed against the EXACT same signals the builders sample on.
-import { qualityOf, multiplicityOf } from "../src/journey_v2/signals/corpus";
+import { qualityOf } from "../src/journey_v2/signals/corpus";
 import { fitScores, fitLooByEntry, centrality } from "../src/journey_v2/signals/fit";
 import { dreamsignMatchScore } from "../src/journey_v2/signals/dreamsignMatch";
 import { grantCandidatePool } from "../src/journey_v2/archetypes/grant";
@@ -497,8 +497,32 @@ function grantSignalByUuid(
     }
     return result;
   }
-  // Fit-driven grant archetypes.
   const fitModel = context.fitModel;
+  // copies_draft ranks on a fit+quality blend, falling back to quality alone
+  // when the deck is too small for fit to be meaningful (mirrors the builder).
+  if (archetypeId === "copies_draft") {
+    const belowFit = context.deckCards.length < MERCHANT_TUNING.minDeckForFit;
+    if (belowFit || fitModel === undefined) {
+      for (const card of pool) {
+        result.set(card.cardUuid, corpus === undefined ? 0 : qualityOf(corpus, card.cardUuid));
+      }
+      return result;
+    }
+    const deckCards = context.deckCards.map((dc) => dc.card);
+    const scores = fitScores(pool.map((c) => c.card), deckCards, fitModel);
+    const fitRaw = pool.map((card) => scores.get(card.cardUuid)?.fit ?? 0);
+    const qualityRaw = pool.map((card) =>
+      corpus === undefined ? 0 : qualityOf(corpus, card.cardUuid),
+    );
+    const fitNorm = minMaxNormalize(fitRaw);
+    const qualityNorm = minMaxNormalize(qualityRaw);
+    const { fit, quality } = MERCHANT_TUNING.copiesBlend;
+    pool.forEach((card, i) => {
+      result.set(card.cardUuid, fit * fitNorm[i] + quality * qualityNorm[i]);
+    });
+    return result;
+  }
+  // Fit-driven grant archetypes.
   if (fitModel === undefined) {
     for (const card of pool) result.set(card.cardUuid, 0);
     return result;
@@ -710,27 +734,24 @@ function deckMisfitScores(context: MerchantContext): number[] {
 function duplicateSignalEntries(
   context: MerchantContext,
 ): Array<{ entryId: string; signal: number }> {
-  const corpus = context.merchantCorpus;
-  if (corpus === undefined) return [];
-  const eligible = context.deckCards.filter(
-    (dc) =>
-      !dc.card.isStarter &&
-      multiplicityOf(corpus, dc.cardUuid) >= MERCHANT_TUNING.duplicateMultiplicityMin,
-  );
+  const eligible = context.deckCards.filter((dc) => !dc.card.isStarter);
   if (eligible.length === 0) return [];
+  const corpus = context.merchantCorpus;
   const fitModel = context.fitModel;
   const looScores =
     fitModel !== undefined
       ? fitLooByEntry(context.deckCards, fitModel)
       : new Map<string, number>();
-  const mult = eligible.map((dc) => multiplicityOf(corpus, dc.cardUuid));
+  const quality = eligible.map((dc) =>
+    corpus === undefined ? 0 : qualityOf(corpus, dc.cardUuid),
+  );
   const loo = eligible.map((dc) => looScores.get(dc.entryId) ?? 0);
-  const multNorm = minMaxNormalize(mult);
+  const qualityNorm = minMaxNormalize(quality);
   const looNorm = minMaxNormalize(loo);
   const blend = MERCHANT_TUNING.duplicateBlend;
   return eligible.map((dc, i) => ({
     entryId: dc.entryId,
-    signal: blend.multiplicity * multNorm[i] + blend.fitLoo * looNorm[i],
+    signal: blend.quality * qualityNorm[i] + blend.fitLoo * looNorm[i],
   }));
 }
 

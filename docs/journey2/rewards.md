@@ -82,9 +82,12 @@ candidate pool and signal; band-sample 4 without replacement. Face-up chooser.
 Eligible when deck size ≥ 6 and the band has ≥ 4 cards.
 
 **`copies_draft`** (w=6) — Draft 1 of 4 cards and receive 2 copies of the pick.
-Same as `fit_card_draft`, but the accepted card is added twice. Candidates are
-additionally filtered to multiplicity `m(c) ≥ 0.15` — cards that corpus decks
-actually run as multiples. Eligible when the filtered band has ≥ 4 cards.
+Candidates: non-starter, unowned pool cards (the shared grant pool); the
+accepted card is added twice. Signal: `copiesBlend.fit * fitNorm +
+copiesBlend.quality * qualityNorm`, so the doubled card is both a deck fit and
+genuinely strong; below `minDeckForFit` it falls back to corpus quality alone so
+the archetype is live on a small deck. Band-sample 4 as a face-up chooser.
+Eligible when the band has ≥ 4 cards.
 
 **`strong_card`** (w=8) — Receive one named premium card. Candidates: all
 non-starter pool cards. Signal: corpus quality rating. Band-sample 1 with
@@ -159,10 +162,12 @@ when both halves are individually eligible.
 ### Duplicate family
 
 **`duplicate`** (w=8) — Duplicate a deck card (pick 1 of up to 3). Candidates:
-non-starter deck entries. Signal: `0.6 * multiplicityNorm + 0.4 * fitLooNorm`
-(cards corpus decks run as multiples, weighted toward ones that fit this deck).
-Band-sample up to 3 as a face-up chooser; a single candidate renders as a direct
-offer. Eligible when ≥ 1 candidate has multiplicity signal (`m(c) ≥ 0.10`).
+non-starter deck entries. Signal: `duplicateBlend.quality * qualityNorm +
+duplicateBlend.fitLoo * fitLooNorm` — duplicate the player's strongest, most
+synergistic card, blending the entry card's corpus quality with its
+leave-one-out fit within the deck. Band-sample up to 3 as a face-up chooser; a
+single candidate renders as a direct offer. Eligible whenever the deck holds ≥ 1
+non-starter entry.
 
 ### Dreamsign family
 

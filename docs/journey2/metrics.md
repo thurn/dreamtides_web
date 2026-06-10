@@ -249,3 +249,64 @@ clean.
 
 The purge desirability population, archetype-coverage expected share, and
 category-draft desirability population were CORRECTED (metric bugs), not relaxed.
+
+## Round 7 — copies_draft / duplicate signal redesign (2026-06-09)
+
+**Problem.** Both archetypes gated on corpus **multiplicity**
+(`m(c) = mainboardsWith2+ / mainboardsWith1+`). The adapted corpus is singleton
+mainboards, so `m(c)` is ~0 for every card and neither archetype could ever
+reach its multiplicity floor — both were permanently ineligible. The harness
+counted them "never eligible" and passed their coverage trivially; they never
+appeared in any offer.
+
+**Redesign.** Multiplicity is the wrong signal for a singleton format. Both
+archetypes now use data the corpus does provide — how strong and how synergistic
+a card is — encoding the design intent "in a format where you normally run one
+copy, duplication is valuable for your strongest, best-fitting cards."
+
+- **`duplicate`** — candidates: all non-starter deck entries (no gate). Signal:
+  `duplicateBlend.quality * qualityNorm + duplicateBlend.fitLoo * fitLooNorm`
+  (`{ quality: 0.5, fitLoo: 0.5 }`), normalized over the deck's non-starter
+  entries. Eligible whenever the deck holds ≥ 1 non-starter entry.
+- **`copies_draft`** — candidates: non-starter, unowned pool cards (no gate).
+  Signal: `copiesBlend.fit * fitNorm + copiesBlend.quality * qualityNorm`
+  (`{ fit: 0.6, quality: 0.4 }`), falling back to corpus quality alone below
+  `minDeckForFit` (the `card_bundle` cold-start pattern). Eligible when the band
+  holds ≥ 4 cards.
+
+`copiesMultiplicityMin` and `duplicateMultiplicityMin` removed;
+`duplicateBlend` re-typed over `{ quality, fitLoo }` and `copiesBlend` added.
+The bake artifact still computes corpus multiplicity (parity unchanged); the two
+archetypes simply no longer consume it. `multiplicityOf` remains as a vestigial
+accessor.
+
+**Harness revert.** The Task-19 dormancy handling is reverted: the harness
+duplicate-signal mirror drops the multiplicity filter and blends quality+fitLoo,
+`grantSignalByUuid` scores `copies_draft` on its fit/quality blend (quality-only
+cold start), and both archetypes are counted normally in archetype-coverage and
+deck-target / content coverage. With them eligible the `everEligible` guard no
+longer special-cases them.
+
+**Before / after sample counts (defaults, 60 records × 40 seeds × 4 buckets):**
+
+| archetype | desirability samples (before) | desirability samples (after) | coverage eligible-samples (after) |
+|---|---|---|---|
+| copies_draft | 0 (never eligible) | 728 | 9600 |
+| duplicate | 0 (never eligible) | 1029 | 7200 |
+
+No weight rebalancing was needed: with both archetypes live, every eligible
+archetype's coverage ratio sits in 0.96–1.08× (within the 2× target), so
+`MERCHANT_TUNING.weights` is unchanged.
+
+**Final table — Round 7, 5/5 at defaults:**
+
+| Metric family | Result | Key numbers |
+|---|---|---|
+| distinct_outcomes | PASS | pick-0 = 2392, pick-5 = 2385 distinct (target ≥ 50) |
+| desirability | PASS | every archetype clears its target; copies_draft 95.8/79.7, duplicate 90.0/50.0 |
+| repetition | PASS | mean P(identical pair) = 0.000% (target < 2%) |
+| archetype_coverage | PASS | every eligible archetype ratio 0.96–1.08× (copies_draft 1.04, duplicate 0.98) |
+| content_coverage | PASS | transfig 7/7 reachable; dreamsign 77/77 band-reachable; cards 494/509 = 97.1%; duplicate deck-target diversity 20 distinct (perplexity 13.2) |
+
+`npm test` green (2751 passed); `npm run lint`, `npm run typecheck` clean;
+`npm run merchant-corpus-parity` OK.
