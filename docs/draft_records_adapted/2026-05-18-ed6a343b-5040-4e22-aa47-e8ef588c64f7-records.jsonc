@@ -46,7 +46,7 @@
         "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
         "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
         "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
         "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
         "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
@@ -99,7 +99,7 @@
         "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
         "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
         "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
         "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
         "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
@@ -156,12 +156,11 @@
           "packCards": [
             "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
@@ -190,7 +189,7 @@
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
@@ -507,7 +506,7 @@
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
@@ -520,15 +519,15 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ],
           "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
           "packCards": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
@@ -774,7 +773,7 @@
           "pick": [],
           "pickId": "bd7567df-b4d8-41a8-8eac-c05afa784bfe",
           "packCards": [
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
             "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
@@ -796,7 +795,7 @@
           "packCards": [
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe

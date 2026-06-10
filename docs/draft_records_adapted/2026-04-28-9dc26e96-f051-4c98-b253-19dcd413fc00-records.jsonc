@@ -47,7 +47,7 @@
         "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
         "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
         "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
         "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
@@ -99,7 +99,7 @@
         "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
         "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
         "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
         "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
         "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
@@ -238,7 +238,6 @@
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
@@ -520,7 +519,7 @@
           "packCards": [
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
@@ -533,14 +532,14 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
-            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Blood Moon Ronin
           ],
           "pickId": "58c9e9a7-e170-4361-b7d5-22fc0771c489",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
@@ -554,7 +553,7 @@
           "pick": [],
           "pickId": "2f607e7e-30c0-45e9-8f61-bf6e9fe63f2b",
           "packCards": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
@@ -702,7 +701,7 @@
           "pickId": "20296a5b-4e15-4f07-8bce-9a37abb35729",
           "packCards": [
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
@@ -796,7 +795,7 @@
           "packCards": [
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
@@ -818,7 +817,7 @@
           "pickId": "726e8b29-13e9-4138-b6a9-d2a0d8188d1c",
           "packCards": [
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker

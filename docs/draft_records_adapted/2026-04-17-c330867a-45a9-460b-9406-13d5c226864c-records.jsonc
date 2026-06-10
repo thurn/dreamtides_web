@@ -129,7 +129,7 @@
             "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
@@ -245,7 +245,7 @@
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
@@ -263,7 +263,7 @@
           "packCards": [
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
@@ -406,12 +406,12 @@
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
@@ -524,7 +524,7 @@
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ]
         },
         {
@@ -575,7 +575,7 @@
           "pickId": "811b2dda-e1b7-4a46-83cc-5cdc17554836",
           "packCards": [
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
@@ -660,7 +660,7 @@
           "packCards": [
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ]
         },
         {
@@ -752,7 +752,6 @@
           "packCards": [
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light

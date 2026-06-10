@@ -44,7 +44,7 @@
         "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
         "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
         "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
         "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
@@ -52,11 +52,11 @@
         "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
         "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
         "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "8a6fc6ea-9a88-441e-bdc2-d40dfec37481" // Fading Farewell
       ],
       "sideboard": [
@@ -72,7 +72,7 @@
         "fcb830e5-85ff-48f3-be1e-46e102a5c8e8" // Shatterpoint Agent
       ],
       "pool": [
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
         "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
         "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
@@ -80,7 +80,7 @@
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
         "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
         "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
         "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
         "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
@@ -101,7 +101,7 @@
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
         "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
         "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
         "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
         "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
@@ -120,12 +120,12 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ],
           "pickId": "c60174d6-1f9d-4870-b3db-34d6fcb3f6ab",
           "packCards": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
@@ -264,11 +264,11 @@
           "pack": 2,
           "pickInPack": 1,
           "pick": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Assault Trooper
           ],
           "pickId": "b34bf7fd-9fe3-43e2-8cfe-7ce7cff08afe",
           "packCards": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
@@ -309,7 +309,7 @@
           "packCards": [
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
@@ -604,11 +604,11 @@
           "pack": 4,
           "pickInPack": 4,
           "pick": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ],
           "pickId": "005dae9a-dddc-4a11-95bb-cce319edcce4",
           "packCards": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran

@@ -120,7 +120,7 @@
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
@@ -148,7 +148,7 @@
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
@@ -294,7 +294,7 @@
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
@@ -477,7 +477,7 @@
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
@@ -665,7 +665,7 @@
             "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
@@ -690,7 +690,7 @@
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
@@ -809,7 +809,7 @@
           "pickId": "3ff91245-57d8-4020-b260-495c938a515b",
           "packCards": [
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance

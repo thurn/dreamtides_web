@@ -31,7 +31,7 @@
       "mainboard": [
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
         "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
@@ -85,7 +85,7 @@
         "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
         "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
         "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
         "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
@@ -129,7 +129,7 @@
           "pick": [],
           "pickId": "ea1feac0-d3a7-45eb-9719-1cdaf51ea0b6",
           "packCards": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
@@ -154,8 +154,8 @@
           "packCards": [
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
@@ -183,7 +183,7 @@
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de" // Depthwalker
@@ -271,7 +271,7 @@
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
@@ -335,11 +335,11 @@
           "pack": 1,
           "pickInPack": 11,
           "pick": [
-            "629fe4d4-826f-41b9-a913-458a503856a8" // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8" // Clifftop Marksman
           ],
           "pickId": "c1195ec5-979b-4c4a-9c04-62bb53c2b011",
           "packCards": [
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de" // Depthwalker
@@ -720,7 +720,7 @@
           "packCards": [
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
@@ -745,7 +745,7 @@
           "packCards": [
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
@@ -770,7 +770,7 @@
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
@@ -820,7 +820,7 @@
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -944,7 +944,7 @@
           "pickId": "f94e888b-6eeb-4ef3-ab21-5ed2bf0036a3",
           "packCards": [
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {

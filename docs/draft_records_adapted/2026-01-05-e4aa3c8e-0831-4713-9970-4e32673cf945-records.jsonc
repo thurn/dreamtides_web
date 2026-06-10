@@ -136,7 +136,7 @@
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
@@ -208,13 +208,13 @@
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
-            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver2
           ]
         },
         {
@@ -231,7 +231,7 @@
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039" // Skyflame Commander
           ]
         },
@@ -283,12 +283,12 @@
           "packCards": [
             "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
             "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6" // Fell the Mighty
           ]
         },
@@ -348,7 +348,7 @@
           "pickId": "24a5cc2c-0fbf-4a5f-b175-6e0ffd0d0787",
           "packCards": [
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
-            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver2
           ]
         },
         {
@@ -361,7 +361,7 @@
           "pickId": "32cf273e-b8f7-434b-9d5d-883dfd6f7423",
           "packCards": [
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039" // Skyflame Commander
           ]
         },
@@ -410,7 +410,7 @@
             "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
             "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]
         },
         {
@@ -488,7 +488,7 @@
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
             "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
@@ -555,7 +555,7 @@
             "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
             "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]
         },
         {
@@ -724,7 +724,7 @@
           "packCards": [
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
@@ -785,7 +785,7 @@
           "packCards": [
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent

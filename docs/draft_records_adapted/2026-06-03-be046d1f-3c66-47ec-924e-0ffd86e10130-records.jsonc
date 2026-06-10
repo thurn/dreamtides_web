@@ -130,7 +130,7 @@
           "pickId": "45fd6e91-df76-497f-b642-33dc3d5f6a5a",
           "packCards": [
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
@@ -188,7 +188,6 @@
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
@@ -216,7 +215,7 @@
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
@@ -277,7 +276,7 @@
           "pickId": "2b922fc5-602b-4f92-9588-00a77a9d803c",
           "packCards": [
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
@@ -450,7 +449,7 @@
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "848b41b3-9f87-45fb-b86f-b52fc913d201" // Genesis Burst
           ]
@@ -597,7 +596,7 @@
           "packCards": [
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "848b41b3-9f87-45fb-b86f-b52fc913d201" // Genesis Burst
           ]
@@ -704,7 +703,7 @@
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "831bc7cf-e8c9-4943-8156-91b7397ef849" // Resilient Wanderer
@@ -720,7 +719,7 @@
           "pickId": "69c68c95-b788-43b1-9f22-1b22c5a00b25",
           "packCards": [
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
@@ -810,7 +809,7 @@
           "pickId": "04ef8493-d986-45f8-a718-617b028f7ad4",
           "packCards": [
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
@@ -863,7 +862,7 @@
           "pickId": "e3378fe8-3355-48aa-90d4-9cb739200160",
           "packCards": [
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "831bc7cf-e8c9-4943-8156-91b7397ef849" // Resilient Wanderer

@@ -139,7 +139,7 @@
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "87aba308-00b4-40d8-a46f-4e6f58a664a8" // Breach Artist
@@ -205,7 +205,7 @@
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "6d6ce556-60df-486f-b2d8-5df168a6f75e" // Wreckborn
           ]
         },
@@ -226,7 +226,7 @@
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
             "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "85251f03-c873-46d8-81be-ab421c901a53" // Fractured Vessel
           ]
         },
@@ -260,7 +260,7 @@
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6" // Exiles of the Last Light
           ]
@@ -293,7 +293,7 @@
           "pickId": "068bb15a-fc2d-42a2-859b-837b946d23c0",
           "packCards": [
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "87aba308-00b4-40d8-a46f-4e6f58a664a8" // Breach Artist
@@ -336,7 +336,7 @@
           "pickId": "bb979a96-a57d-4fb5-8ebe-0bd398272abe",
           "packCards": [
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "6d6ce556-60df-486f-b2d8-5df168a6f75e" // Wreckborn
           ]
         },
@@ -352,7 +352,7 @@
           "packCards": [
             "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
             "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "85251f03-c873-46d8-81be-ab421c901a53" // Fractured Vessel
           ]
         },
@@ -420,7 +420,7 @@
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
@@ -551,7 +551,7 @@
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
@@ -589,7 +589,7 @@
           "packCards": [
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
@@ -684,7 +684,7 @@
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
@@ -719,8 +719,8 @@
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ]
         },
         {
@@ -843,7 +843,7 @@
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481" // Fading Farewell
           ]
         },
@@ -878,8 +878,8 @@
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ]
         },
         {

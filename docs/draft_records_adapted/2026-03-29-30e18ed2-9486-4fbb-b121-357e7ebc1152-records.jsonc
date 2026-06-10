@@ -33,7 +33,7 @@
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
         "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
         "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
         "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
@@ -62,7 +62,7 @@
         "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
         "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
         "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
         "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83", // Epiphany Unfolded
         "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
@@ -103,10 +103,10 @@
         "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
         "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
         "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
         "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
         "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
         "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
@@ -126,7 +126,7 @@
           "packCards": [
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
@@ -149,9 +149,9 @@
           "packCards": [
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
@@ -171,7 +171,7 @@
           "pickId": "99ff731b-8399-40c8-b539-ba6ba5783771",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
@@ -262,7 +262,7 @@
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
@@ -460,7 +460,7 @@
             "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "33874387-2490-48ed-93bc-a47a16e399ad" // Soulbinder
@@ -762,11 +762,11 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
-            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Blood Moon Ronin
           ],
           "pickId": "58c9e9a7-e170-4361-b7d5-22fc0771c489",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
@@ -831,11 +831,11 @@
           "pack": 3,
           "pickInPack": 8,
           "pick": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ],
           "pickId": "be065962-f2ed-4ab9-be6b-bfc66d63ff4e",
           "packCards": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift

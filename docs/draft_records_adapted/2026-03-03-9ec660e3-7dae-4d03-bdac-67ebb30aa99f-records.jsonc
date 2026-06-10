@@ -31,7 +31,7 @@
       "mainboard": [
         "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
         "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
@@ -129,7 +129,7 @@
         "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
         "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
@@ -189,7 +189,7 @@
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
@@ -207,7 +207,7 @@
           "packCards": [
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0" // Ashborn Necromancer
           ]
@@ -243,7 +243,7 @@
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Assault Trooper
           ]
         },
         {
@@ -329,7 +329,7 @@
             "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6" // Ochre Prospector
           ]
@@ -349,7 +349,7 @@
             "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
@@ -443,7 +443,7 @@
           "packCards": [
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6" // Ochre Prospector
           ]
@@ -881,7 +881,7 @@
           "packCards": [
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
@@ -935,7 +935,7 @@
           "pickId": "06462b57-1b0e-4c9c-9531-c14b9f2d5a3b",
           "packCards": [
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
@@ -952,13 +952,13 @@
           "pickInPack": 6,
           "pick": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ],
           "pickId": "329a8738-3e17-403a-857a-0ba529ce8cd1",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif

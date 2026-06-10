@@ -27,14 +27,14 @@
       "seat": 0,
       "name": "WBR",
       "mainboard": [
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
         "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
         "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
         "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
         "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
         "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
         "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
@@ -74,7 +74,7 @@
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
         "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
         "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
@@ -92,7 +92,7 @@
         "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
         "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
         "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
         "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
@@ -171,7 +171,7 @@
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "2a828466-450a-4637-9c68-6b54522450c0" // Rusted Monolith
           ]
         },
@@ -225,11 +225,11 @@
           "pack": 1,
           "pickInPack": 8,
           "pick": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ],
           "pickId": "169356e0-46dc-4096-8e66-36726454f104",
           "packCards": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "2a828466-450a-4637-9c68-6b54522450c0" // Rusted Monolith
           ]
         },
@@ -415,7 +415,6 @@
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
@@ -483,7 +482,6 @@
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
@@ -550,7 +548,7 @@
           "pickId": "068bb15a-fc2d-42a2-859b-837b946d23c0",
           "packCards": [
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
@@ -562,12 +560,12 @@
           "pack": 4,
           "pickInPack": 3,
           "pick": [
-            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Blood Moon Ronin
           ],
           "pickId": "58c9e9a7-e170-4361-b7d5-22fc0771c489",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
@@ -708,7 +706,7 @@
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7" // Planetgazer
           ]
         },

@@ -27,7 +27,7 @@
       "seat": 0,
       "name": "WUBR",
       "mainboard": [
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
         "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
         "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
@@ -45,7 +45,7 @@
         "73fc1b7f-3c2b-4993-9590-924240515c2f", // Lunar Hart
         "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
         "d217303e-b115-484a-b22c-0e44d5701389" // Broadcast Array
       ],
@@ -66,7 +66,7 @@
         "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
         "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
         "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
         "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
         "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
@@ -74,7 +74,7 @@
         "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
         "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
         "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
@@ -140,7 +140,7 @@
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
@@ -152,7 +152,7 @@
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
             "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
@@ -193,7 +193,7 @@
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
@@ -217,7 +217,7 @@
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
@@ -225,8 +225,8 @@
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
@@ -287,15 +287,15 @@
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
@@ -418,7 +418,7 @@
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
@@ -430,7 +430,7 @@
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
             "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
@@ -462,7 +462,7 @@
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
@@ -480,7 +480,7 @@
           "pickId": "006cbb74-7447-45fb-b44b-bac31832b392",
           "packCards": [
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
@@ -488,8 +488,8 @@
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
@@ -533,19 +533,19 @@
           "pack": 1,
           "pickInPack": 14,
           "pick": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ],
           "pickId": "c60174d6-1f9d-4870-b3db-34d6fcb3f6ab",
           "packCards": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
@@ -650,7 +650,7 @@
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
             "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
@@ -675,7 +675,7 @@
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
@@ -694,8 +694,8 @@
           "packCards": [
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
@@ -731,11 +731,11 @@
           "pack": 1,
           "pickInPack": 22,
           "pick": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Young Huntress
           ],
           "pickId": "00427d72-b140-45eb-b2ec-2ac2dab16966",
           "packCards": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
@@ -808,7 +808,7 @@
           "pickId": "bba1650f-eddf-49a9-820e-489cb8d5b6fa",
           "packCards": [
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist

@@ -46,12 +46,12 @@
         "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
         "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
         "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
@@ -89,8 +89,8 @@
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
         "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
-        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
+        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
         "ca37f80e-8474-4d40-b793-7a900f6ca467" // Shadow Reflection
       ],

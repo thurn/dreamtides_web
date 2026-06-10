@@ -164,7 +164,7 @@
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
@@ -192,7 +192,7 @@
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
@@ -214,7 +214,7 @@
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
@@ -233,7 +233,7 @@
           "packCards": [
             "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
@@ -427,13 +427,13 @@
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
             "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83", // Epiphany Unfolded
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137" // Scrapyard Custodian
@@ -448,7 +448,7 @@
           "packCards": [
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
@@ -456,7 +456,7 @@
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
@@ -591,7 +591,7 @@
           "packCards": [
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
@@ -611,7 +611,7 @@
           "packCards": [
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137" // Scrapyard Custodian
@@ -628,7 +628,7 @@
           "packCards": [
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
@@ -722,7 +722,7 @@
           "packCards": [
             "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
             "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
@@ -754,7 +754,6 @@
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
@@ -912,7 +911,6 @@
           "packCards": [
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded

@@ -29,8 +29,8 @@
       "seat": 0,
       "name": "WUR",
       "mainboard": [
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
         "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
@@ -39,7 +39,7 @@
         "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
         "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
         "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
         "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
@@ -61,7 +61,6 @@
       "sideboard": [
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
@@ -79,7 +78,7 @@
       ],
       "pool": [
         "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
@@ -105,7 +104,6 @@
         "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
         "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
@@ -113,10 +111,10 @@
         "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
         "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
         "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
@@ -157,11 +155,11 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ],
           "pickId": "8c1cce91-7c81-45d9-bbec-b085e794791d",
           "packCards": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
@@ -189,7 +187,7 @@
           "pickId": "425bff89-ad15-4d22-bce9-a4a07dbafd87",
           "packCards": [
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
@@ -444,7 +442,7 @@
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
@@ -533,7 +531,7 @@
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34" // Searcher in the Mists
@@ -555,7 +553,6 @@
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
@@ -677,13 +674,11 @@
           "pack": 2,
           "pickInPack": 15,
           "pick": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
@@ -731,7 +726,7 @@
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
@@ -832,11 +827,11 @@
           "pack": 3,
           "pickInPack": 7,
           "pick": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ],
           "pickId": "119a814f-0325-4b69-a0b6-4c623b981f4a",
           "packCards": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
@@ -891,11 +886,11 @@
           "pack": 3,
           "pickInPack": 10,
           "pick": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Assault Trooper
           ],
           "pickId": "b34bf7fd-9fe3-43e2-8cfe-7ce7cff08afe",
           "packCards": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit

@@ -27,10 +27,10 @@
       "seat": 0,
       "name": "WU Artifact Control",
       "mainboard": [
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
         "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
         "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
@@ -48,11 +48,11 @@
         "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
         "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
         "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
-        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
         "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
@@ -94,7 +94,7 @@
         "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
         "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
-        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
@@ -102,15 +102,15 @@
         "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
         "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
         "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
         "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
         "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
         "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
@@ -411,12 +411,12 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039" // Skyflame Commander
           ],
           "pickId": "169b74e2-72cf-47df-b128-b632313cd24c",
           "packCards": [
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
@@ -542,9 +542,9 @@
             "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19" // Cinderheart
           ]
@@ -554,11 +554,11 @@
           "pack": 4,
           "pickInPack": 2,
           "pick": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ],
           "pickId": "005dae9a-dddc-4a11-95bb-cce319edcce4",
           "packCards": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
@@ -607,13 +607,13 @@
           "pack": 4,
           "pickInPack": 5,
           "pick": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ],
           "pickId": "be065962-f2ed-4ab9-be6b-bfc66d63ff4e",
           "packCards": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19" // Cinderheart
           ]
@@ -677,14 +677,14 @@
           "pack": 5,
           "pickInPack": 1,
           "pick": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Young Huntress
           ],
           "pickId": "22bb9825-ad45-44ad-ace2-eb6b66e3f724",
           "packCards": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
@@ -703,7 +703,7 @@
           "packCards": [
             "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
             "0637b453-4362-4f01-b3e6-07c27af9c847" // Herald of the Last Light

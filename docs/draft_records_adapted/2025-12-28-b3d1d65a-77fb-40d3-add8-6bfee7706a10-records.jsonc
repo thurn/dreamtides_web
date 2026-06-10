@@ -29,7 +29,7 @@
       "seat": 0,
       "name": "WUBG",
       "mainboard": [
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
@@ -64,19 +64,19 @@
         "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
         "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
-        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
         "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
         "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
         "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
-        "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
       ],
       "sideboard": [],
       "pool": [
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
@@ -94,7 +94,7 @@
         "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
         "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
         "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
         "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
@@ -111,7 +111,7 @@
         "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
         "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
         "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
-        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
         "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
@@ -193,11 +193,11 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ],
           "pickId": "c2152030-6007-493f-a616-545723a00249",
           "packCards": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
@@ -223,7 +223,7 @@
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
@@ -245,7 +245,7 @@
           "packCards": [
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
@@ -460,11 +460,11 @@
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
@@ -569,7 +569,7 @@
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1" // Whisper of the Past
@@ -616,11 +616,11 @@
           "pack": 2,
           "pickInPack": 11,
           "pick": [
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ],
           "pickId": "91ca97db-2c83-4c87-9491-e5878293afe5",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
@@ -694,7 +694,7 @@
             "f860e815-3ed9-463d-ac4d-ed8d2778f8ad", // Lone Castaway
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
             "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
@@ -757,10 +757,10 @@
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "21e376da-f4c3-4a60-bd63-a272b35db5a6" // Infernal Rest
           ]
@@ -840,7 +840,7 @@
           "pickId": "825969b9-3c70-4fca-8cab-696e9ca7cdb2",
           "packCards": [
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "516dbd2d-dae4-4873-937e-adfeeee4444d" // Gateway Defender
           ]
@@ -908,15 +908,15 @@
           "pack": 3,
           "pickInPack": 11,
           "pick": [
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039" // Skyflame Commander
           ],
           "pickId": "169b74e2-72cf-47df-b128-b632313cd24c",
           "packCards": [
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "21e376da-f4c3-4a60-bd63-a272b35db5a6" // Infernal Rest
           ]

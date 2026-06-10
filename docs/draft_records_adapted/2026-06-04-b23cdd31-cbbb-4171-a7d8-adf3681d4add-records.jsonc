@@ -144,7 +144,7 @@
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
@@ -163,7 +163,7 @@
           "pickId": "e7b28650-cddc-4878-b1d1-b5a764f4df49",
           "packCards": [
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
@@ -421,7 +421,7 @@
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
             "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
@@ -469,7 +469,7 @@
           "packCards": [
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
@@ -701,7 +701,7 @@
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "79b37916-c05d-4818-9d67-3b90e340926e" // Fleeting Reunion
@@ -727,7 +727,6 @@
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
@@ -855,7 +854,7 @@
           "pickId": "2b74bb81-fb9a-40e5-a941-e517430b52f5",
           "packCards": [
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "79b37916-c05d-4818-9d67-3b90e340926e" // Fleeting Reunion
@@ -873,7 +872,6 @@
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller

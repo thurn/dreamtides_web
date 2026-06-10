@@ -29,7 +29,7 @@
       "seat": 0,
       "name": "UR",
       "mainboard": [
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
         "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
         "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
@@ -46,9 +46,9 @@
         "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
         "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
         "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "f860e815-3ed9-463d-ac4d-ed8d2778f8ad", // Lone Castaway
         "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
         "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
@@ -85,7 +85,7 @@
         "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
         "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
         "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
         "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
         "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
@@ -124,10 +124,10 @@
         "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
         "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
         "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
         "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
         "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
         "724a1362-3f0f-4b77-b14e-22c0b877349a" // Radiants' Captain
@@ -171,7 +171,7 @@
           "packCards": [
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
@@ -223,7 +223,7 @@
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49" // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49" // Ethereal Trailblazer
           ]
         },
         {
@@ -231,11 +231,11 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ],
           "pickId": "c2152030-6007-493f-a616-545723a00249",
           "packCards": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
             "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
@@ -278,7 +278,7 @@
           "packCards": [
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
@@ -371,7 +371,7 @@
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49" // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49" // Ethereal Trailblazer
           ]
         },
         {
@@ -709,10 +709,10 @@
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
@@ -739,7 +739,7 @@
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]
         },
         {
@@ -755,7 +755,7 @@
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
@@ -784,7 +784,7 @@
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "0e1209c3-1041-4079-9b1c-f96816a7deb5", // Wistful Angler
             "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "50267984-eaa3-415e-a23f-581c54b0ad2d" // Reunion
           ]
         },
@@ -805,7 +805,7 @@
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ]
         },
         {
@@ -839,7 +839,7 @@
           "pickId": "1a6c19cc-6469-4958-a547-1d0fe97c70e8",
           "packCards": [
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
@@ -875,14 +875,14 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
-            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Blood Moon Ronin
           ],
           "pickId": "58c9e9a7-e170-4361-b7d5-22fc0771c489",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
@@ -901,7 +901,7 @@
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]
         },
         {
@@ -924,11 +924,11 @@
           "pack": 3,
           "pickInPack": 12,
           "pick": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ],
           "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
           "packCards": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "50267984-eaa3-415e-a23f-581c54b0ad2d" // Reunion
           ]
         },
@@ -942,7 +942,7 @@
           "pickId": "218af707-cc60-407e-af20-e21879a0e902",
           "packCards": [
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ]
         },
         {

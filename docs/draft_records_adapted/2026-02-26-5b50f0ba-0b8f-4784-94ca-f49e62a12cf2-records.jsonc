@@ -41,14 +41,14 @@
         "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
         "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
         "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
         "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
         "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
         "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
         "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
         "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
@@ -74,11 +74,11 @@
         "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
         "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
         "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
         "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
         "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15" // Specter of Silent Snow
       ],
       "pool": [
@@ -94,7 +94,7 @@
         "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
         "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
         "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
         "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
         "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
@@ -104,7 +104,7 @@
         "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
         "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
@@ -112,7 +112,7 @@
         "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
         "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
         "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
         "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
@@ -124,7 +124,7 @@
         "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
         "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
         "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
         "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
         "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
@@ -191,7 +191,7 @@
           "packCards": [
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
@@ -242,7 +242,7 @@
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
@@ -382,11 +382,11 @@
           "pack": 1,
           "pickInPack": 13,
           "pick": [
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ],
           "pickId": "91ca97db-2c83-4c87-9491-e5878293afe5",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
@@ -457,7 +457,7 @@
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
             "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
@@ -484,10 +484,10 @@
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "69552516-14bc-42b9-b4b6-3a0cdc29686b" // Archive of the Forgotten
           ]
@@ -503,7 +503,7 @@
           "packCards": [
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
@@ -517,13 +517,13 @@
           "pack": 2,
           "pickInPack": 5,
           "pick": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56" // Dream Garden Visitor
           ],
           "pickId": "bf4b9a8a-b42a-46fb-b0d0-9cf800f63c8a",
           "packCards": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
@@ -554,7 +554,7 @@
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
@@ -621,11 +621,11 @@
           "pack": 2,
           "pickInPack": 10,
           "pick": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ],
           "pickId": "c60174d6-1f9d-4870-b3db-34d6fcb3f6ab",
           "packCards": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
@@ -644,7 +644,7 @@
           "packCards": [
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "69552516-14bc-42b9-b4b6-3a0cdc29686b" // Archive of the Forgotten
           ]
@@ -863,13 +863,13 @@
           "pack": 3,
           "pickInPack": 8,
           "pick": [
-            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Blood Moon Ronin
           ],
           "pickId": "58c9e9a7-e170-4361-b7d5-22fc0771c489",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian

@@ -160,7 +160,7 @@
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
@@ -290,7 +290,7 @@
           "packCards": [
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
             "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
@@ -416,7 +416,7 @@
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e" // Doorlight Foundling
           ]
@@ -491,7 +491,6 @@
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
@@ -559,7 +558,7 @@
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
             "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
@@ -575,7 +574,7 @@
           "packCards": [
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
@@ -595,7 +594,7 @@
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e" // Doorlight Foundling
           ]
@@ -650,7 +649,6 @@
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
@@ -797,7 +795,7 @@
           "packCards": [
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss

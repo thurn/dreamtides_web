@@ -29,7 +29,6 @@
       "seat": 0,
       "name": "WBRG",
       "mainboard": [
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
@@ -63,7 +62,7 @@
         "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
         "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
         "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
         "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
@@ -82,7 +81,7 @@
       ],
       "pool": [
         "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
         "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
         "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
@@ -96,7 +95,6 @@
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
         "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
         "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
@@ -144,7 +142,7 @@
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
@@ -163,11 +161,11 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ],
           "pickId": "169356e0-46dc-4096-8e66-36726454f104",
           "packCards": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
@@ -195,7 +193,7 @@
           "packCards": [
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
@@ -270,7 +268,7 @@
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
             "78599234-6054-4df1-8e79-c38782517f9a" // Sundown Surfer
           ]
@@ -444,13 +442,11 @@
           "pack": 2,
           "pickInPack": 2,
           "pick": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
@@ -498,7 +494,7 @@
           "pickId": "93bd7e73-63dc-45b2-aaa8-984be8b900ab",
           "packCards": [
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom

@@ -28,7 +28,6 @@
       "seat": 0,
       "name": "WBRG",
       "mainboard": [
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
@@ -66,7 +65,7 @@
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
         "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
         "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
-        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
         "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
@@ -82,7 +81,7 @@
       "sideboard": [],
       "pool": [
         "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
-        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
         "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
@@ -92,7 +91,6 @@
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
         "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
         "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
@@ -159,12 +157,12 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039" // Skyflame Commander
           ],
           "pickId": "169b74e2-72cf-47df-b128-b632313cd24c",
           "packCards": [
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
@@ -225,7 +223,6 @@
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
@@ -312,13 +309,11 @@
           "pack": 1,
           "pickInPack": 11,
           "pick": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
@@ -562,7 +557,7 @@
           "pickId": "3c66c54b-b2d1-494d-ae10-a950c184a52f",
           "packCards": [
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
@@ -701,7 +696,7 @@
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
             "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence

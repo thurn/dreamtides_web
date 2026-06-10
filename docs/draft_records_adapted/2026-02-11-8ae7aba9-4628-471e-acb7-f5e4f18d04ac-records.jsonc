@@ -121,7 +121,7 @@
           "packCards": [
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
@@ -139,10 +139,9 @@
           "pickId": "aced2c55-7543-4076-bcdd-36c4d649b8ae",
           "packCards": [
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
@@ -177,7 +176,7 @@
           "pickId": "400382a4-aea2-4827-b06a-1b0b3745908b",
           "packCards": [
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
@@ -214,7 +213,6 @@
           "packCards": [
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
@@ -273,7 +271,6 @@
           "pick": [],
           "pickId": "ea49c01f-3f32-4c66-893c-56931e0e8981",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
@@ -367,7 +364,7 @@
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48" // The Thinning
@@ -435,7 +432,7 @@
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48" // The Thinning
@@ -725,7 +722,7 @@
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
             "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
@@ -798,7 +795,7 @@
           "pick": [],
           "pickId": "b0d161fc-4a2a-4f1d-82b4-a746552552df",
           "packCards": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag

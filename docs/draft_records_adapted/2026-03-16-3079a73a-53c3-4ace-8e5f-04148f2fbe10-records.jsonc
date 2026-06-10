@@ -29,8 +29,8 @@
       "seat": 0,
       "name": "UB",
       "mainboard": [
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
@@ -53,13 +53,13 @@
         "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
         "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
         "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
-        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
         "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
         "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
         "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
         "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
         "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
@@ -72,7 +72,7 @@
         "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
         "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
         "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "2305722e-59c1-47d7-9e05-dc1c32c946a2" // Intermezzo Balladeer
       ],
       "sideboard": [
@@ -95,9 +95,9 @@
         "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
         "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
         "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
-        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
         "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
         "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
         "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
@@ -108,14 +108,14 @@
         "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
         "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
         "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
         "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
         "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
         "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
         "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
@@ -137,9 +137,9 @@
             "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
@@ -453,14 +453,14 @@
           "pack": 2,
           "pickInPack": 2,
           "pick": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver2
           ],
           "pickId": "cfdf9706-acdb-48fc-89db-93bc50b3b9ad",
           "packCards": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
@@ -519,11 +519,11 @@
           "pack": 2,
           "pickInPack": 5,
           "pick": [
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49" // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49" // Ethereal Trailblazer
           ],
           "pickId": "56001a36-126b-4c08-af98-a6cc4d84210e",
           "packCards": [
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
@@ -714,15 +714,15 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ],
           "pickId": "005dae9a-dddc-4a11-95bb-cce319edcce4",
           "packCards": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
             "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
@@ -807,11 +807,11 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ],
           "pickId": "c60174d6-1f9d-4870-b3db-34d6fcb3f6ab",
           "packCards": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
@@ -819,7 +819,6 @@
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05" // Seeker for the Way
@@ -830,11 +829,11 @@
           "pack": 3,
           "pickInPack": 6,
           "pick": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ],
           "pickId": "c2152030-6007-493f-a616-545723a00249",
           "packCards": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
@@ -872,11 +871,11 @@
           "pack": 3,
           "pickInPack": 8,
           "pick": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Assault Trooper
           ],
           "pickId": "b34bf7fd-9fe3-43e2-8cfe-7ce7cff08afe",
           "packCards": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
@@ -963,7 +962,6 @@
           "pickId": "0149c119-83ea-46f5-9e22-33a674ddddb6",
           "packCards": [
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05" // Seeker for the Way

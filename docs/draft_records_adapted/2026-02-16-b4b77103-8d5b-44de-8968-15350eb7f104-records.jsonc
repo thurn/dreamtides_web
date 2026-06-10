@@ -50,7 +50,7 @@
         "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
         "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
         "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
         "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
         "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
@@ -117,7 +117,7 @@
         "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
         "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
         "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
         "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
         "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
@@ -208,7 +208,7 @@
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b" // Scrap Reclaimer
           ]
@@ -266,7 +266,7 @@
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
@@ -327,7 +327,7 @@
           "packCards": [
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b" // Scrap Reclaimer
           ]
@@ -421,13 +421,13 @@
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8" // Carrion Lord
           ]
@@ -466,7 +466,7 @@
           "packCards": [
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
@@ -486,7 +486,7 @@
           "pickId": "6920c895-bc98-4871-a53f-219fa27a74e5",
           "packCards": [
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
@@ -549,7 +549,7 @@
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8" // Carrion Lord
           ]
@@ -638,7 +638,7 @@
           "packCards": [
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
@@ -656,11 +656,11 @@
           "pack": 3,
           "pickInPack": 2,
           "pick": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ],
           "pickId": "0cb33b46-4d1b-4f97-bfdc-d815aee111da",
           "packCards": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
@@ -898,7 +898,7 @@
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists

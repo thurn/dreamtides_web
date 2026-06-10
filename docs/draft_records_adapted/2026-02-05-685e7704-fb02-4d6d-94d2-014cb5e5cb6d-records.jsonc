@@ -182,10 +182,10 @@
           "packCards": [
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
@@ -271,7 +271,7 @@
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
@@ -441,7 +441,7 @@
           "pickId": "24a5cc2c-0fbf-4a5f-b175-6e0ffd0d0787",
           "packCards": [
             "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
@@ -509,7 +509,7 @@
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
@@ -547,7 +547,7 @@
           "packCards": [
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
@@ -747,7 +747,7 @@
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ]
         },
         {
@@ -811,7 +811,7 @@
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
@@ -833,7 +833,7 @@
           "packCards": [
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
@@ -880,7 +880,7 @@
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
@@ -921,7 +921,7 @@
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ]
         },
         {

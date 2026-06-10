@@ -33,7 +33,6 @@
         "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
         "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
         "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
@@ -115,7 +114,6 @@
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
         "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
         "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
@@ -175,7 +173,7 @@
           "packCards": [
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
@@ -209,7 +207,7 @@
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "f68774ce-0e94-489f-90a5-68e03a549ff6" // Deathwalker
@@ -349,7 +347,7 @@
           "pickId": "019b51b0-e5c6-4208-922b-7736686dddcd",
           "packCards": [
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "f68774ce-0e94-489f-90a5-68e03a549ff6" // Deathwalker
@@ -694,7 +692,7 @@
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
@@ -707,13 +705,11 @@
           "pack": 3,
           "pickInPack": 2,
           "pick": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
@@ -738,7 +734,7 @@
           "pickId": "4c454a20-8ec8-41d9-b9c3-acaa510d050b",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
@@ -811,8 +807,8 @@
           "pickId": "0049e68d-0caf-474f-9523-dad343f1250a",
           "packCards": [
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
@@ -875,7 +871,7 @@
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover

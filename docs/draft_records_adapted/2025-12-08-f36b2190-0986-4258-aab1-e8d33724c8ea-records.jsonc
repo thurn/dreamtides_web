@@ -72,7 +72,7 @@
         "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
         "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
         "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "123baf70-305a-4583-bdba-a10b5153fbeb" // Dustborn Veteran
       ],
       "pool": [
@@ -113,7 +113,7 @@
         "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
         "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
         "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
         "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
         "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
@@ -184,7 +184,7 @@
           "packCards": [
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
@@ -563,7 +563,7 @@
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
             "fbf32510-0bad-4567-859f-b3db6d7be5d5" // Break the Veil
@@ -578,7 +578,7 @@
           "packCards": [
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
@@ -754,7 +754,6 @@
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
@@ -773,14 +772,14 @@
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
@@ -822,7 +821,7 @@
           "packCards": [
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
@@ -922,7 +921,6 @@
           "packCards": [
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
@@ -934,11 +932,11 @@
           "pack": 3,
           "pickInPack": 12,
           "pick": [
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ],
           "pickId": "91ca97db-2c83-4c87-9491-e5878293afe5",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden

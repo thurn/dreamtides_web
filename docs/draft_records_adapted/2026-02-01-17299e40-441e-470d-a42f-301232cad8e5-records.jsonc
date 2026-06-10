@@ -167,7 +167,7 @@
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {
@@ -230,7 +230,7 @@
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
@@ -258,7 +258,7 @@
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
@@ -307,10 +307,10 @@
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ]
         },
         {
@@ -343,7 +343,7 @@
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {
@@ -456,7 +456,7 @@
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
@@ -481,7 +481,7 @@
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129" // Surge of Fury
           ]
@@ -633,7 +633,7 @@
           "packCards": [
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129" // Surge of Fury
           ]
@@ -713,10 +713,10 @@
             "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
             "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
@@ -739,7 +739,7 @@
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
@@ -842,7 +842,7 @@
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6" // Peak Plunder
@@ -878,7 +878,7 @@
           "packCards": [
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
             "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn

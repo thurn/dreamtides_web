@@ -45,12 +45,12 @@
         "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
         "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
         "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
         "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
         "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
         "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
@@ -92,7 +92,7 @@
         "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
         "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
         "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
         "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
         "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
@@ -109,7 +109,7 @@
         "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
         "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
         "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
@@ -157,7 +157,7 @@
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
@@ -198,7 +198,7 @@
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
@@ -279,7 +279,7 @@
           "pick": [],
           "pickId": "6f4bcadd-7eff-4294-94d5-52482a734d5b",
           "packCards": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
@@ -319,7 +319,7 @@
           "pickId": "c68a6226-6dd7-4e1a-9e8a-124eef2caa13",
           "packCards": [
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
@@ -413,7 +413,7 @@
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1" // Blade of Oblivion
           ]
         },
@@ -433,7 +433,7 @@
             "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
             "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
@@ -480,7 +480,7 @@
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1" // Graywatch
@@ -585,7 +585,7 @@
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1" // Blade of Oblivion
           ]
         },
@@ -626,11 +626,11 @@
           "pack": 2,
           "pickInPack": 12,
           "pick": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ],
           "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
           "packCards": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1" // Graywatch
@@ -695,7 +695,7 @@
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11" // Verdant Pioneer
@@ -713,8 +713,8 @@
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
@@ -765,7 +765,7 @@
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
@@ -867,7 +867,7 @@
           "packCards": [
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11" // Verdant Pioneer
@@ -913,13 +913,13 @@
           "pack": 3,
           "pickInPack": 12,
           "pick": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56" // Dream Garden Visitor
           ],
           "pickId": "bf4b9a8a-b42a-46fb-b0d0-9cf800f63c8a",
           "packCards": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant

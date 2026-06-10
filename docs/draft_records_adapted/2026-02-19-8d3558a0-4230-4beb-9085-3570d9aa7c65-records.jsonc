@@ -30,15 +30,15 @@
       "name": "WU",
       "mainboard": [
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
         "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
         "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
@@ -61,7 +61,7 @@
       "sideboard": [
         "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
         "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
         "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
@@ -90,7 +90,7 @@
         "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
         "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
@@ -122,12 +122,12 @@
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
         "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
@@ -240,13 +240,13 @@
           "pickInPack": 5,
           "pick": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ],
           "pickId": "329a8738-3e17-403a-857a-0ba529ce8cd1",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
@@ -494,7 +494,7 @@
             "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
@@ -735,7 +735,7 @@
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
@@ -776,11 +776,11 @@
           "pack": 3,
           "pickInPack": 3,
           "pick": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ],
           "pickId": "8c1cce91-7c81-45d9-bbec-b085e794791d",
           "packCards": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
             "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
@@ -840,14 +840,14 @@
           "pack": 3,
           "pickInPack": 6,
           "pick": [
-            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Blood Moon Ronin
           ],
           "pickId": "58c9e9a7-e170-4361-b7d5-22fc0771c489",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
@@ -861,11 +861,11 @@
           "pack": 3,
           "pickInPack": 7,
           "pick": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ],
           "pickId": "be065962-f2ed-4ab9-be6b-bfc66d63ff4e",
           "packCards": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
@@ -901,11 +901,11 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Assault Trooper
           ],
           "pickId": "b34bf7fd-9fe3-43e2-8cfe-7ce7cff08afe",
           "packCards": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths

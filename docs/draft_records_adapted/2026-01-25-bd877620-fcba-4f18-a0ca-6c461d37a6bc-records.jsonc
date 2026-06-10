@@ -141,7 +141,7 @@
           "packCards": [
             "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
             "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
@@ -217,7 +217,7 @@
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "41d0aa36-f15a-487d-b97c-7fd765973921" // Sage of the Prelude
@@ -233,7 +233,7 @@
           "pickId": "811b2dda-e1b7-4a46-83cc-5cdc17554836",
           "packCards": [
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
@@ -417,7 +417,7 @@
           "pickId": "01e3c2e9-d8df-4a7a-be86-7be8c6254fa2",
           "packCards": [
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
@@ -530,7 +530,7 @@
           "pickId": "06462b57-1b0e-4c9c-9531-c14b9f2d5a3b",
           "packCards": [
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver

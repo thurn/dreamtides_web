@@ -31,7 +31,7 @@
       "mainboard": [
         "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
         "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
@@ -112,7 +112,7 @@
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
         "f860e815-3ed9-463d-ac4d-ed8d2778f8ad", // Lone Castaway
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
         "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
@@ -136,7 +136,7 @@
             "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
             "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
@@ -233,7 +233,7 @@
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
@@ -292,7 +292,7 @@
           "pickId": "2c860286-9807-4ab5-b66f-e8696e9e6ac9",
           "packCards": [
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
@@ -420,7 +420,6 @@
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
@@ -703,7 +702,7 @@
           "pickId": "3d8dcd5e-d4d0-49ae-a591-78d80322105d",
           "packCards": [
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
@@ -732,7 +731,7 @@
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "7df5255e-bf23-4c14-b31b-be89fb864ee0" // Grounded
           ]
         },
@@ -754,7 +753,7 @@
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
@@ -769,17 +768,17 @@
           "pickInPack": 4,
           "pick": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ],
           "pickId": "329a8738-3e17-403a-857a-0ba529ce8cd1",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
@@ -897,7 +896,7 @@
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "7df5255e-bf23-4c14-b31b-be89fb864ee0" // Grounded
           ]
         },

@@ -37,7 +37,6 @@
         "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
         "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
@@ -77,7 +76,7 @@
       "sideboard": [
         "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
         "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
-        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
         "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
         "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
         "8367b757-c3d2-4c22-9043-8baadee1c5ba" // Invoker of Myths
@@ -115,7 +114,7 @@
         "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
         "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
         "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
-        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
         "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
         "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
@@ -126,7 +125,6 @@
         "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
         "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
         "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
@@ -272,7 +270,7 @@
           "pick": [],
           "pickId": "1c7d50d6-b63a-4d8c-88fa-1d78ae693a45",
           "packCards": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
@@ -449,7 +447,7 @@
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
@@ -559,7 +557,7 @@
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9" // Nomad of Endless Paths
@@ -684,12 +682,12 @@
           "pack": 2,
           "pickInPack": 14,
           "pick": [
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ],
           "pickId": "2ec1c088-c1ec-4e2e-a5d2-5a7a1399cbd5",
           "packCards": [
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9" // Nomad of Endless Paths
@@ -714,7 +712,7 @@
           "pick": [],
           "pickId": "45fd6e91-df76-497f-b642-33dc3d5f6a5a",
           "packCards": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
@@ -741,7 +739,6 @@
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
@@ -761,7 +758,7 @@
           "pickId": "22ce657c-2092-419a-b35f-7b9786adc621",
           "packCards": [
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
@@ -810,7 +807,7 @@
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "69552516-14bc-42b9-b4b6-3a0cdc29686b" // Archive of the Forgotten
@@ -845,7 +842,7 @@
           "pickId": "039d62b0-3309-4424-a2ea-5a0d88d4bd72",
           "packCards": [
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
@@ -867,7 +864,7 @@
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
@@ -898,13 +895,11 @@
           "pack": 3,
           "pickInPack": 10,
           "pick": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin

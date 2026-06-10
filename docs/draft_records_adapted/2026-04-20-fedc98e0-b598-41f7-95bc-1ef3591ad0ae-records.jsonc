@@ -51,7 +51,7 @@
         "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
         "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
         "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
         "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
         "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
@@ -98,7 +98,7 @@
         "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
         "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
         "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
         "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
         "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
@@ -157,7 +157,7 @@
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
@@ -413,10 +413,10 @@
           "pickId": "3f290ed2-d1a8-4a90-a3a7-8240652dc109",
           "packCards": [
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
@@ -461,11 +461,11 @@
           "pack": 2,
           "pickInPack": 3,
           "pick": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ],
           "pickId": "005dae9a-dddc-4a11-95bb-cce319edcce4",
           "packCards": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
@@ -487,7 +487,7 @@
           "pick": [],
           "pickId": "cdad38f7-9dfa-4f1b-9fac-41ab2b253f53",
           "packCards": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
@@ -563,7 +563,7 @@
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ]
         },
@@ -726,7 +726,6 @@
           "pickId": "19fc5956-286c-4e1d-bc4a-2974fc0f4dbc",
           "packCards": [
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
@@ -784,7 +783,7 @@
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc" // Liminal Dreamer
           ]

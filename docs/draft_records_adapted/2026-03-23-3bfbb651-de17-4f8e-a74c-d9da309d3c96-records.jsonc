@@ -29,7 +29,7 @@
       "seat": 0,
       "name": "WU",
       "mainboard": [
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
         "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
@@ -38,20 +38,20 @@
         "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
         "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
         "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
         "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
         "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
         "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
         "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
         "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
         "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
         "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
-        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
         "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
         "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
         "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
@@ -76,14 +76,14 @@
         "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
         "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
         "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
         "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
         "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
         "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
         "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
-        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
         "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
         "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
@@ -92,12 +92,12 @@
         "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
         "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
         "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
         "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
@@ -147,7 +147,7 @@
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {
@@ -218,7 +218,7 @@
             "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -241,11 +241,11 @@
           "pack": 1,
           "pickInPack": 8,
           "pick": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ],
           "pickId": "119a814f-0325-4b69-a0b6-4c623b981f4a",
           "packCards": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
             "41c14462-86b9-42a4-8a61-859d59ffa466" // Summons of the Bonded
           ]
@@ -276,7 +276,7 @@
           "packCards": [
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {
@@ -339,11 +339,11 @@
           "pack": 2,
           "pickInPack": 3,
           "pick": [
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49" // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49" // Ethereal Trailblazer
           ],
           "pickId": "56001a36-126b-4c08-af98-a6cc4d84210e",
           "packCards": [
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
@@ -491,13 +491,13 @@
           "pack": 3,
           "pickInPack": 2,
           "pick": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56" // Dream Garden Visitor
           ],
           "pickId": "20fec02d-77af-4975-b410-7097c7c28e7e",
           "packCards": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
@@ -554,11 +554,11 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Young Huntress
           ],
           "pickId": "00427d72-b140-45eb-b2ec-2ac2dab16966",
           "packCards": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning

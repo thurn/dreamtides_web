@@ -140,7 +140,7 @@
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
@@ -162,7 +162,7 @@
             "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
@@ -302,7 +302,7 @@
           "pickId": "ff971ba7-68b8-482a-9cb1-741f6893550c",
           "packCards": [
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
@@ -321,7 +321,7 @@
           "pickId": "20296a5b-4e15-4f07-8bce-9a37abb35729",
           "packCards": [
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
@@ -416,7 +416,7 @@
             "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
@@ -588,7 +588,7 @@
           "packCards": [
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
@@ -744,7 +744,7 @@
           "pickId": "3f7ad50f-19e9-4dcd-97c2-49ab308b6030",
           "packCards": [
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
@@ -770,7 +770,7 @@
             "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
             "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
             "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
@@ -811,7 +811,7 @@
           "pick": [],
           "pickId": "4a08ca06-58db-4ce6-b490-be4bea8956a1",
           "packCards": [
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
@@ -834,7 +834,7 @@
           "pickId": "01978fe5-00a9-4add-ae2a-b4c2572ffb9a",
           "packCards": [
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
             "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
             "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain

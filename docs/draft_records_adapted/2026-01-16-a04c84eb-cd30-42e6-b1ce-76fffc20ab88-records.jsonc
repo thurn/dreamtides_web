@@ -62,7 +62,7 @@
         "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
         "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
         "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
         "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
@@ -79,7 +79,6 @@
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
@@ -91,7 +90,6 @@
       ],
       "pool": [
         "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
@@ -114,7 +112,7 @@
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
         "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
         "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
         "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
@@ -157,12 +155,12 @@
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
@@ -203,13 +201,11 @@
           "pack": 1,
           "pickInPack": 3,
           "pick": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
@@ -223,7 +219,7 @@
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa" // Vessel of Echoes
           ]
@@ -249,7 +245,7 @@
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
-            "629fe4d4-826f-41b9-a913-458a503856a8" // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8" // Clifftop Marksman
           ]
         },
         {
@@ -264,7 +260,7 @@
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
@@ -394,7 +390,7 @@
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
@@ -432,7 +428,7 @@
           "packCards": [
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa" // Vessel of Echoes
           ]
@@ -450,7 +446,7 @@
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
-            "629fe4d4-826f-41b9-a913-458a503856a8" // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8" // Clifftop Marksman
           ]
         },
         {
@@ -552,11 +548,11 @@
           "pack": 2,
           "pickInPack": 3,
           "pick": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ],
           "pickId": "005dae9a-dddc-4a11-95bb-cce319edcce4",
           "packCards": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
@@ -676,7 +672,7 @@
           "packCards": [
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
@@ -896,7 +892,7 @@
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
@@ -1003,7 +999,7 @@
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7" // Starbound Striker
           ]
         },

@@ -212,7 +212,7 @@
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
             "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "20896b2e-59cc-4494-942c-eb95b75adaf9" // Hope's Vanguard
           ]
@@ -251,7 +251,7 @@
           "packCards": [
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
@@ -273,7 +273,7 @@
           "pickId": "a1b6f13e-63d0-46bf-aa57-23c2dbdf62dd",
           "packCards": [
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
@@ -368,7 +368,7 @@
           "packCards": [
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
             "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "20896b2e-59cc-4494-942c-eb95b75adaf9" // Hope's Vanguard
           ]
@@ -581,7 +581,6 @@
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
@@ -700,8 +699,8 @@
           "pickId": "6982a82c-dd32-40d2-8dd2-ec92d0fc6c2d",
           "packCards": [
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
@@ -748,10 +747,10 @@
           "packCards": [
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
@@ -818,7 +817,7 @@
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner

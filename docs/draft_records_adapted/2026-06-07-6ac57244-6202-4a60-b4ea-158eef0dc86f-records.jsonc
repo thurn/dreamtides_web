@@ -64,7 +64,7 @@
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "1dc8f23e-58bd-47e5-9510-b48315fba1df" // Lanternhearted
       ],
       "pool": [
@@ -95,7 +95,7 @@
         "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
         "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
         "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
         "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
         "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
@@ -141,7 +141,7 @@
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
@@ -181,7 +181,7 @@
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
             "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
             "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
@@ -268,7 +268,7 @@
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ]
         },
@@ -430,7 +430,7 @@
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
-            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Blood Moon Ronin
           ]
         },
         {
@@ -570,7 +570,7 @@
           "pickId": "3c54b71a-f4cb-4418-b886-5253151ad36a",
           "packCards": [
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
-            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Blood Moon Ronin
           ]
         },
         {
@@ -643,7 +643,7 @@
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0" // The Rising God
           ]
         },
@@ -730,7 +730,7 @@
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
@@ -742,11 +742,11 @@
           "pack": 3,
           "pickInPack": 6,
           "pick": [
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ],
           "pickId": "0f2d0ee5-3173-4a03-be45-2fe9ea49cdc3",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
@@ -808,7 +808,7 @@
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0" // The Rising God
           ]
         },

@@ -155,7 +155,7 @@
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
@@ -173,11 +173,11 @@
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ]
         },
         {
@@ -275,7 +275,7 @@
           "packCards": [
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ]
         },
         {
@@ -347,7 +347,7 @@
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "61060827-8bed-4b63-b63d-6c3b0536e941" // Sunshadow Eagle
           ]
         },
@@ -369,7 +369,7 @@
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56" // Dream Garden Visitor
           ]
@@ -446,7 +446,7 @@
           "pick": [],
           "pickId": "9d471e36-a3ab-4a96-ba4b-8eca921ea37a",
           "packCards": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "61060827-8bed-4b63-b63d-6c3b0536e941" // Sunshadow Eagle
           ]
         },
@@ -460,7 +460,7 @@
           "pickId": "1d6603e3-0680-4ba3-951b-cd9919eefd4f",
           "packCards": [
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56" // Dream Garden Visitor
           ]
@@ -565,7 +565,7 @@
           "packCards": [
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
@@ -705,7 +705,7 @@
             "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "7c9f3a38-1434-4db4-a856-24fe744e8322" // Canopy of Stars
@@ -726,7 +726,7 @@
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {
@@ -818,7 +818,7 @@
           "pickId": "2da5f3f8-5eef-498f-ba2c-2f3fbc3745aa",
           "packCards": [
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {

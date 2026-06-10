@@ -129,7 +129,7 @@
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
@@ -194,7 +194,7 @@
           "pickId": "7f430794-0d86-4f6a-97e0-4bbb6716d613",
           "packCards": [
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
@@ -242,7 +242,7 @@
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
@@ -261,11 +261,10 @@
           "packCards": [
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
@@ -300,7 +299,7 @@
           "packCards": [
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
@@ -414,7 +413,7 @@
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "3fab0780-59d4-45f1-8aac-a870ad8729ac" // Gilded Catalyst
           ]
         },
@@ -477,8 +476,8 @@
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
@@ -582,7 +581,7 @@
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "3fab0780-59d4-45f1-8aac-a870ad8729ac" // Gilded Catalyst
           ]
         },
@@ -738,7 +737,7 @@
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
@@ -757,7 +756,7 @@
           "pickId": "3dc48b87-62cb-48f6-8979-e6fb98717b52",
           "packCards": [
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
@@ -804,7 +803,7 @@
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "738a5af0-f848-4d48-bceb-9a43c9b11066" // Reclaimer of Lost Paths
           ]
         },
@@ -821,7 +820,7 @@
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "374ec185-b0f7-40e6-9988-09e96abccebe" // Celestial Lookout
           ]
         },

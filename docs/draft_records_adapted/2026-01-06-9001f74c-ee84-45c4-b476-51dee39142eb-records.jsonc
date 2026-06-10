@@ -180,7 +180,7 @@
           "pickId": "59a43ef5-08f0-44fc-802d-b6cfd56b7d1f",
           "packCards": [
             "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
@@ -227,7 +227,7 @@
           "packCards": [
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
@@ -250,7 +250,7 @@
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
             "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
             "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
@@ -419,7 +419,7 @@
           "pickId": "45026d57-0324-4312-8b86-2e7d4f581ee9",
           "packCards": [
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
@@ -464,7 +464,7 @@
             "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
             "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
             "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
@@ -488,7 +488,7 @@
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
@@ -717,7 +717,7 @@
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e" // Doorlight Foundling
           ]
         },
@@ -733,7 +733,7 @@
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
@@ -846,7 +846,7 @@
           "packCards": [
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
@@ -883,7 +883,7 @@
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e" // Doorlight Foundling
           ]
         },

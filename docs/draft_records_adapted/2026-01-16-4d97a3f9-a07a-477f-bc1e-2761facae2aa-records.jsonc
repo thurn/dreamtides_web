@@ -30,7 +30,7 @@
       "name": "WUG",
       "mainboard": [
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
@@ -86,7 +86,7 @@
         "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
         "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
@@ -171,7 +171,7 @@
             "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
@@ -191,13 +191,13 @@
           "pickInPack": 3,
           "pick": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ],
           "pickId": "329a8738-3e17-403a-857a-0ba529ce8cd1",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
@@ -245,7 +245,7 @@
           "pickId": "63971a64-c5f3-4d1f-ae0d-489d7d5b18f0",
           "packCards": [
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
@@ -295,7 +295,7 @@
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f" // Twilight Suppressor
           ]
         },
@@ -523,7 +523,7 @@
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
@@ -735,13 +735,13 @@
           "packCards": [
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
@@ -849,7 +849,7 @@
           "packCards": [
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
@@ -874,7 +874,7 @@
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
@@ -909,7 +909,7 @@
           "pickId": "2b9b0195-beda-403e-bc27-7ae3be9f318c",
           "packCards": [
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell

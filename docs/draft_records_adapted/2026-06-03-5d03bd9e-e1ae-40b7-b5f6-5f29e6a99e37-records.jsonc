@@ -74,7 +74,7 @@
         "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
         "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
         "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
-        "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
       ],
       "pool": [
         "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
@@ -117,7 +117,7 @@
         "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
         "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
         "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
         "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
         "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
@@ -159,7 +159,7 @@
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1" // A New Adventure
@@ -469,7 +469,7 @@
           "packCards": [
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
             "cd4d689d-1442-4a19-8e6a-182b425d066d" // Warfield Stalwart
@@ -697,7 +697,7 @@
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890" // Shoreline Penitent
@@ -756,11 +756,11 @@
           "pack": 5,
           "pickInPack": 5,
           "pick": [
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ],
           "pickId": "91ca97db-2c83-4c87-9491-e5878293afe5",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890" // Shoreline Penitent

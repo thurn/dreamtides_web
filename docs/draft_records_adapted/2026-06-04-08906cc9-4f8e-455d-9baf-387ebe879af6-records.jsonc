@@ -31,7 +31,7 @@
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
         "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
         "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
         "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
         "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
@@ -55,7 +55,7 @@
         "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
         "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
         "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
         "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
         "fbf725ca-8837-46d4-970c-922153e27b6e" // Infernal Ascendant
@@ -91,7 +91,7 @@
         "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
         "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
         "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
@@ -114,7 +114,7 @@
         "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
         "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
         "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
         "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
@@ -145,7 +145,7 @@
           "pickId": "9efbfd67-e0f5-43e0-9fff-1eb4a2bed0d8",
           "packCards": [
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
@@ -168,7 +168,7 @@
           "packCards": [
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
@@ -392,11 +392,11 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ],
           "pickId": "005dae9a-dddc-4a11-95bb-cce319edcce4",
           "packCards": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
@@ -458,7 +458,7 @@
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ]
         },
         {
@@ -512,7 +512,7 @@
           "pickId": "520e5505-429b-4da0-b25e-14b8d4e81ce3",
           "packCards": [
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ]
         },
         {
@@ -543,7 +543,7 @@
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb" // Heroic Rescue
           ]
@@ -556,7 +556,7 @@
           "pickId": "6f4bcadd-7eff-4294-94d5-52482a734d5b",
           "packCards": [
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
             "4cec92f2-9bac-4949-a602-cd0a44618aaf" // The Ringleader
           ]
@@ -606,7 +606,7 @@
           "packCards": [
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb" // Heroic Rescue
           ]
@@ -676,7 +676,7 @@
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
@@ -693,7 +693,7 @@
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "2a8dff0b-759f-40cc-af40-393a4e7129d4" // Weight of Memory
@@ -731,7 +731,7 @@
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -739,11 +739,11 @@
           "pack": 5,
           "pickInPack": 5,
           "pick": [
-            "629fe4d4-826f-41b9-a913-458a503856a8" // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8" // Clifftop Marksman
           ],
           "pickId": "c1195ec5-979b-4c4a-9c04-62bb53c2b011",
           "packCards": [
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
@@ -760,7 +760,7 @@
           "pickId": "bddcec63-a60a-4d73-af6d-9ac978703811",
           "packCards": [
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "2a8dff0b-759f-40cc-af40-393a4e7129d4" // Weight of Memory
@@ -789,7 +789,7 @@
           "pickId": "729238ee-b3ea-4c1d-852c-2dc9a2c58356",
           "packCards": [
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {

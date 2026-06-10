@@ -34,7 +34,7 @@
         "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
         "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
         "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
@@ -42,7 +42,7 @@
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
         "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
         "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
         "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
         "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
@@ -62,9 +62,9 @@
         "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
         "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
-        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
         "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
         "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
         "50267984-eaa3-415e-a23f-581c54b0ad2d" // Reunion
@@ -74,9 +74,9 @@
         "b4754e5a-29e6-418c-bdfa-8e0230a21b7b" // Featherlight Summoner
       ],
       "pool": [
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
@@ -88,7 +88,7 @@
         "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
         "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
         "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
         "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
         "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
@@ -113,7 +113,7 @@
         "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
         "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
         "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
-        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
         "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
       ],
       "picks": [
@@ -141,11 +141,11 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ],
           "pickId": "0cb33b46-4d1b-4f97-bfdc-d815aee111da",
           "packCards": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
             "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
@@ -197,8 +197,8 @@
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
@@ -212,18 +212,18 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56" // Dream Garden Visitor
           ],
           "pickId": "bf4b9a8a-b42a-46fb-b0d0-9cf800f63c8a",
           "packCards": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
@@ -244,7 +244,7 @@
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
@@ -421,11 +421,11 @@
           "pack": 2,
           "pickInPack": 2,
           "pick": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ],
           "pickId": "c60174d6-1f9d-4870-b3db-34d6fcb3f6ab",
           "packCards": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
@@ -480,7 +480,7 @@
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {
@@ -623,7 +623,7 @@
           "pickId": "4a08ca06-58db-4ce6-b490-be4bea8956a1",
           "packCards": [
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {
@@ -675,7 +675,6 @@
           "pickId": "54992fda-45a9-4ed1-b380-34d167feec90",
           "packCards": [
             "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
@@ -820,7 +819,7 @@
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ]
         },
@@ -944,12 +943,12 @@
           "pack": 3,
           "pickInPack": 15,
           "pick": [
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ],
           "pickId": "2ec1c088-c1ec-4e2e-a5d2-5a7a1399cbd5",
           "packCards": [
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ]
         }

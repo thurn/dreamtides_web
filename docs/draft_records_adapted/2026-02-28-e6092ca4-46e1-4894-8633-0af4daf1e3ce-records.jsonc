@@ -180,7 +180,7 @@
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30" // Dawnrunner
           ]
         },
@@ -416,7 +416,7 @@
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
@@ -464,7 +464,7 @@
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ]
         },
         {
@@ -582,7 +582,7 @@
           "pick": [],
           "pickId": "6d09be4f-785a-4faf-b03b-ca462cd375ca",
           "packCards": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ]
         },
         {
@@ -662,7 +662,7 @@
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
@@ -724,7 +724,7 @@
           "pickId": "74b4c336-5d4c-4bc5-b82a-35084a6ad808",
           "packCards": [
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
@@ -743,9 +743,8 @@
           "pickId": "2f314ca8-19fa-4cc9-9d23-c280de3b79bc",
           "packCards": [
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
@@ -764,7 +763,7 @@
           "packCards": [
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]
         },
         {

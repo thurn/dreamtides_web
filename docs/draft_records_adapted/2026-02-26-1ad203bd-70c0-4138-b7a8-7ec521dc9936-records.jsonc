@@ -180,13 +180,13 @@
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "9629a58a-9f30-40f0-9199-835ea2dddc76" // Vault Infiltrator
           ]
         },
@@ -277,7 +277,6 @@
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
@@ -345,7 +344,7 @@
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa" // Borrowed Minutes
           ]
@@ -362,7 +361,7 @@
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "9629a58a-9f30-40f0-9199-835ea2dddc76" // Vault Infiltrator
           ]
         },
@@ -466,7 +465,7 @@
           "pickId": "24b25c06-d320-4b2f-bd35-bc650f620e0a",
           "packCards": [
             "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
@@ -500,7 +499,7 @@
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
@@ -519,8 +518,8 @@
           "packCards": [
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
@@ -612,7 +611,7 @@
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b" // Featherlight Summoner
@@ -671,7 +670,7 @@
           "pickId": "5bbb9479-d019-4ffe-a508-1db81a28847f",
           "packCards": [
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
@@ -760,7 +759,7 @@
           "packCards": [
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
@@ -858,7 +857,7 @@
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188" // Aurora Confluence
           ]
@@ -1005,7 +1004,7 @@
           "packCards": [
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188" // Aurora Confluence
           ]
@@ -1070,7 +1069,7 @@
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
@@ -1119,9 +1118,9 @@
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender

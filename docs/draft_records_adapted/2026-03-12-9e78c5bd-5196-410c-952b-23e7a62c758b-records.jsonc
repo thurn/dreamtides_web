@@ -29,7 +29,7 @@
       "seat": 0,
       "name": "BRG",
       "mainboard": [
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
         "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
@@ -61,7 +61,7 @@
         "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
         "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
         "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
         "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
         "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
@@ -82,7 +82,7 @@
         "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
         "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
         "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
       ],
       "pool": [
@@ -90,10 +90,10 @@
         "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
         "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
         "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
         "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
@@ -101,7 +101,7 @@
         "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
         "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
         "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
         "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
@@ -149,7 +149,7 @@
           "pickId": "5f6927e1-c580-483a-8e2a-6e2deb74800e",
           "packCards": [
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
@@ -170,7 +170,6 @@
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
@@ -212,7 +211,7 @@
             "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "312e42cb-e8ee-43da-9ef8-173a69583c97" // Reforged Automaton
           ]
         },
@@ -228,7 +227,7 @@
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
             "747859fb-6fca-49fc-a653-08011a9bb44c" // Forsworn Champion
@@ -253,11 +252,11 @@
           "pack": 1,
           "pickInPack": 7,
           "pick": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ],
           "pickId": "169356e0-46dc-4096-8e66-36726454f104",
           "packCards": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
@@ -299,11 +298,11 @@
           "pack": 1,
           "pickInPack": 10,
           "pick": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ],
           "pickId": "119a814f-0325-4b69-a0b6-4c623b981f4a",
           "packCards": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "312e42cb-e8ee-43da-9ef8-173a69583c97" // Reforged Automaton
           ]
         },
@@ -370,7 +369,7 @@
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa" // Borrowed Minutes
           ]
@@ -404,7 +403,7 @@
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
             "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8" // Northlight Maestro
           ]
@@ -463,11 +462,11 @@
           "pack": 2,
           "pickInPack": 9,
           "pick": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ],
           "pickId": "c2152030-6007-493f-a616-545723a00249",
           "packCards": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa" // Borrowed Minutes
           ]
@@ -699,7 +698,7 @@
           "packCards": [
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
@@ -736,7 +735,7 @@
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
             "6e2188f8-580e-4a66-a3e3-267d509de903" // Terminus
@@ -790,7 +789,7 @@
           "packCards": [
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "4eb42989-7498-4995-a3ab-89eb026b0c13" // Ferryman's Tithe
@@ -971,7 +970,7 @@
           "packCards": [
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "c7c95f67-a838-4e39-879c-cfbf0591540c" // Cosmonaut of Tides

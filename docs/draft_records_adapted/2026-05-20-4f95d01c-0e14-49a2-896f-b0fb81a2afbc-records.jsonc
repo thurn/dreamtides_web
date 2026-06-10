@@ -44,8 +44,8 @@
         "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
         "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
         "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
         "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
         "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
@@ -60,18 +60,18 @@
         "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
         "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
         "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
         "8367b757-c3d2-4c22-9043-8baadee1c5ba" // Invoker of Myths
       ],
       "pool": [
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
         "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
         "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
         "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
@@ -91,7 +91,7 @@
         "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
         "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
         "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
         "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
         "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
@@ -108,18 +108,18 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ],
           "pickId": "0cb33b46-4d1b-4f97-bfdc-d815aee111da",
           "packCards": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de" // Depthwalker
           ]
@@ -143,15 +143,15 @@
           "pack": 1,
           "pickInPack": 3,
           "pick": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Young Huntress
           ],
           "pickId": "22bb9825-ad45-44ad-ace2-eb6b66e3f724",
           "packCards": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd" // Simulacra
@@ -183,7 +183,7 @@
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de" // Depthwalker
           ]
@@ -207,11 +207,11 @@
           "pack": 1,
           "pickInPack": 7,
           "pick": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ],
           "pickId": "8c1cce91-7c81-45d9-bbec-b085e794791d",
           "packCards": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd" // Simulacra
@@ -526,7 +526,7 @@
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
@@ -544,7 +544,7 @@
           "packCards": [
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d" // Smoldering Ancient
@@ -586,11 +586,11 @@
           "pack": 4,
           "pickInPack": 5,
           "pick": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ],
           "pickId": "c2152030-6007-493f-a616-545723a00249",
           "packCards": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar

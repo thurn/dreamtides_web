@@ -34,7 +34,7 @@
         "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
         "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
         "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
         "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
         "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
@@ -42,7 +42,7 @@
         "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
         "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
         "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
         "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
         "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
@@ -75,7 +75,7 @@
         "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
         "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
         "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
         "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
         "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
@@ -108,7 +108,7 @@
         "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
         "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
         "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
         "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
         "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
@@ -127,7 +127,7 @@
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
@@ -163,7 +163,6 @@
           "pickId": "5403b49d-03a7-4cc3-af3c-df098c1c9c2e",
           "packCards": [
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "0e1209c3-1041-4079-9b1c-f96816a7deb5", // Wistful Angler
@@ -179,11 +178,11 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Assault Trooper
           ],
           "pickId": "b34bf7fd-9fe3-43e2-8cfe-7ce7cff08afe",
           "packCards": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
@@ -418,7 +417,7 @@
           "packCards": [
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
@@ -545,12 +544,12 @@
           "packCards": [
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "f7ffe999-685d-4ea2-85de-2e567eb2a042" // Key to the Moment
           ]
@@ -568,7 +567,7 @@
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6" // Cinderfang
           ]
@@ -614,7 +613,7 @@
           "pickId": "054f2276-2dd5-43da-bb26-c57c560861fe",
           "packCards": [
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "f7ffe999-685d-4ea2-85de-2e567eb2a042" // Key to the Moment
           ]
@@ -632,7 +631,7 @@
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6" // Cinderfang
           ]
@@ -736,11 +735,11 @@
           "pack": 5,
           "pickInPack": 4,
           "pick": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver2
           ],
           "pickId": "cfdf9706-acdb-48fc-89db-93bc50b3b9ad",
           "packCards": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow

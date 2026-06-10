@@ -53,7 +53,7 @@
         "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
         "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
         "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
-        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
         "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
         "8bf53fe6-8a25-401e-9a99-84343a026bb0" // Burning Pursuit
       ],
@@ -69,7 +69,7 @@
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
         "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56" // Dream Garden Visitor
       ],
@@ -83,7 +83,7 @@
         "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
         "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
-        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
         "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
         "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
         "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
@@ -97,7 +97,7 @@
         "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
         "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
         "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
@@ -292,12 +292,12 @@
           "pack": 2,
           "pickInPack": 3,
           "pick": [
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ],
           "pickId": "2ec1c088-c1ec-4e2e-a5d2-5a7a1399cbd5",
           "packCards": [
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
@@ -410,7 +410,7 @@
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
-            "629fe4d4-826f-41b9-a913-458a503856a8" // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8" // Clifftop Marksman
           ]
         },
         {
@@ -443,7 +443,7 @@
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
@@ -480,7 +480,7 @@
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
-            "629fe4d4-826f-41b9-a913-458a503856a8" // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8" // Clifftop Marksman
           ]
         },
         {
@@ -503,13 +503,13 @@
           "pack": 3,
           "pickInPack": 7,
           "pick": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56" // Dream Garden Visitor
           ],
           "pickId": "bf4b9a8a-b42a-46fb-b0d0-9cf800f63c8a",
           "packCards": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
@@ -545,7 +545,7 @@
           "pick": [],
           "pickId": "14065271-d942-42a8-aa38-d8a622c0375d",
           "packCards": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
@@ -581,7 +581,7 @@
           "packCards": [
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
@@ -600,7 +600,7 @@
           "packCards": [
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes

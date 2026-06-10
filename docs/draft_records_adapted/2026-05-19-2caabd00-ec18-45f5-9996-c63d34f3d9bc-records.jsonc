@@ -29,7 +29,7 @@
       "seat": 0,
       "name": "WB Weenie",
       "mainboard": [
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
         "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
@@ -49,12 +49,12 @@
         "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
         "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
         "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
         "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
         "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
         "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
@@ -67,7 +67,7 @@
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
         "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
         "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
         "2305722e-59c1-47d7-9e05-dc1c32c946a2" // Intermezzo Balladeer
       ],
@@ -81,7 +81,7 @@
       "pool": [
         "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
         "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
@@ -98,11 +98,11 @@
         "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
         "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
         "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
         "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
@@ -181,11 +181,11 @@
           "pack": 1,
           "pickInPack": 3,
           "pick": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Assault Trooper
           ],
           "pickId": "b34bf7fd-9fe3-43e2-8cfe-7ce7cff08afe",
           "packCards": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
@@ -442,7 +442,7 @@
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c" // Duskmount
           ]
@@ -480,7 +480,7 @@
           "pickId": "08950015-eee5-4327-888c-82dfd13bb9ad",
           "packCards": [
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
@@ -520,11 +520,11 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ],
           "pickId": "c2152030-6007-493f-a616-545723a00249",
           "packCards": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
@@ -556,11 +556,11 @@
           "pack": 2,
           "pickInPack": 8,
           "pick": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ],
           "pickId": "169356e0-46dc-4096-8e66-36726454f104",
           "packCards": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
@@ -594,11 +594,11 @@
           "pack": 2,
           "pickInPack": 10,
           "pick": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ],
           "pickId": "119a814f-0325-4b69-a0b6-4c623b981f4a",
           "packCards": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c" // Duskmount
           ]
@@ -687,7 +687,6 @@
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
@@ -809,7 +808,7 @@
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ]
         },
@@ -938,7 +937,7 @@
           "pickId": "5b012532-1186-4dc8-9d42-867e418b0280",
           "packCards": [
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ]
         },

@@ -157,7 +157,7 @@
           "pickId": "501599d6-1072-4124-b05d-01f96de153f3",
           "packCards": [
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
@@ -292,7 +292,7 @@
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "45e3d703-7efc-4dc2-b854-33211f8d4f11" // Gleam Below
           ]
         },
@@ -427,7 +427,7 @@
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
@@ -475,7 +475,7 @@
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
@@ -689,7 +689,7 @@
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
@@ -783,12 +783,11 @@
           "pickId": "34dea310-8738-4fd9-b790-0361afe1e150",
           "packCards": [
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist

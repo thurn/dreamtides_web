@@ -54,7 +54,7 @@
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "be72bd04-21a6-4035-a117-2b7213ad1a34" // Arc Gate Opening
           ]
         },
@@ -66,7 +66,7 @@
           "pickId": "6d09be4f-785a-4faf-b03b-ca462cd375ca",
           "packCards": [
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d" // Inferno's Herald
@@ -167,7 +167,6 @@
           "pickId": "01794178-cf41-454c-ac37-1d8b18e42db2",
           "packCards": [
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
@@ -216,7 +215,7 @@
           "pickId": "12917e60-cea1-460b-b3f1-8d47cc24afdc",
           "packCards": [
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "d26d31c0-7bd2-4d58-bed9-444e032a1087" // Door to Possibility
           ]
@@ -231,7 +230,7 @@
           "pickId": "0003aa31-d42e-4972-9fb9-086aefe29a2c",
           "packCards": [
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "be72bd04-21a6-4035-a117-2b7213ad1a34" // Arc Gate Opening
           ]
         },

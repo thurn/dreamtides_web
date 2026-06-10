@@ -23,7 +23,7 @@
         "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
         "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
         "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
@@ -49,7 +49,7 @@
         "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
         "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
         "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
@@ -90,14 +90,14 @@
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
         "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
-        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
         "f860e815-3ed9-463d-ac4d-ed8d2778f8ad", // Lone Castaway
-        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d" // Evacuation Enforcer
       ],
       "sideboard": [],

@@ -46,7 +46,7 @@
         "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
         "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
         "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
@@ -54,7 +54,7 @@
         "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
         "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
         "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
         "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
         "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
@@ -92,7 +92,7 @@
         "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
         "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
         "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
         "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
@@ -118,7 +118,7 @@
         "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
         "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
         "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "3fab0780-59d4-45f1-8aac-a870ad8729ac" // Gilded Catalyst
@@ -249,7 +249,7 @@
           "packCards": [
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
@@ -408,11 +408,11 @@
           "pack": 2,
           "pickInPack": 1,
           "pick": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ],
           "pickId": "0cb33b46-4d1b-4f97-bfdc-d815aee111da",
           "packCards": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
@@ -463,7 +463,7 @@
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
@@ -572,7 +572,6 @@
           "packCards": [
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
@@ -706,7 +705,7 @@
             "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
             "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
@@ -813,7 +812,7 @@
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
@@ -869,7 +868,7 @@
           "pickId": "1d023d44-482e-4f60-b9b1-eede9bfb732f",
           "packCards": [
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
@@ -940,13 +939,13 @@
           "pack": 3,
           "pickInPack": 14,
           "pick": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56" // Dream Garden Visitor
           ],
           "pickId": "bf4b9a8a-b42a-46fb-b0d0-9cf800f63c8a",
           "packCards": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows

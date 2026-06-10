@@ -33,7 +33,7 @@
         "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
         "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
         "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
         "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
         "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
@@ -59,10 +59,10 @@
         "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
         "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
         "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
         "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
         "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
         "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
@@ -94,12 +94,12 @@
         "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
         "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
         "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
         "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
         "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
         "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
@@ -204,7 +204,7 @@
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
@@ -329,7 +329,7 @@
           "packCards": [
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
@@ -421,11 +421,11 @@
           "pickId": "54992fda-45a9-4ed1-b380-34d167feec90",
           "packCards": [
             "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
@@ -447,18 +447,18 @@
           "pickId": "54c93c11-448c-402d-ac55-8d5ab4c83d7b",
           "packCards": [
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb" // Endless Projection
           ]
         },
@@ -505,9 +505,9 @@
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9" // Glimmerwood Scout
@@ -555,11 +555,11 @@
           "pack": 2,
           "pickInPack": 7,
           "pick": [
-            "629fe4d4-826f-41b9-a913-458a503856a8" // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8" // Clifftop Marksman
           ],
           "pickId": "c1195ec5-979b-4c4a-9c04-62bb53c2b011",
           "packCards": [
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
@@ -579,12 +579,12 @@
           "pickId": "435cdb9a-ded1-4183-9118-5c26f168c20d",
           "packCards": [
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb" // Endless Projection
           ]
         },
@@ -612,13 +612,13 @@
           "pack": 2,
           "pickInPack": 10,
           "pick": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ],
           "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
           "packCards": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9" // Glimmerwood Scout
@@ -672,11 +672,11 @@
           "pack": 2,
           "pickInPack": 14,
           "pick": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ],
           "pickId": "c60174d6-1f9d-4870-b3db-34d6fcb3f6ab",
           "packCards": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb" // Endless Projection
           ]
         },
@@ -821,7 +821,7 @@
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "79b37916-c05d-4818-9d67-3b90e340926e" // Fleeting Reunion
           ]
@@ -929,7 +929,7 @@
           "pickId": "312a6058-de08-487d-95bd-b3c56807fdd6",
           "packCards": [
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "79b37916-c05d-4818-9d67-3b90e340926e" // Fleeting Reunion
           ]

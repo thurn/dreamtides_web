@@ -32,7 +32,7 @@
         "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
         "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
         "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
         "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
@@ -103,7 +103,7 @@
         "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
         "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
         "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
         "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
@@ -134,7 +134,7 @@
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
@@ -174,7 +174,7 @@
           "pickId": "248c76d3-b5cb-4582-be17-7cd1d0cb0f58",
           "packCards": [
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
@@ -431,7 +431,7 @@
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ]
         },
         {
@@ -463,7 +463,7 @@
           "pickId": "1d6603e3-0680-4ba3-951b-cd9919eefd4f",
           "packCards": [
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
@@ -499,7 +499,7 @@
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ]
         },
         {
@@ -543,11 +543,11 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ],
           "pickId": "be065962-f2ed-4ab9-be6b-bfc66d63ff4e",
           "packCards": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ]
         },
         {
@@ -580,8 +580,8 @@
           "pickId": "265522eb-4f6a-40e7-b374-3833fa63c80b",
           "packCards": [
             "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
@@ -712,7 +712,7 @@
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
             "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ]
         },
@@ -780,7 +780,7 @@
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
             "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ]
         },

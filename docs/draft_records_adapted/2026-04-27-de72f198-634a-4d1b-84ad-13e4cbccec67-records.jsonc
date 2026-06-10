@@ -30,7 +30,7 @@
       "name": "BR",
       "mainboard": [
         "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
         "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
@@ -93,7 +93,7 @@
         "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
         "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
         "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
         "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
         "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
@@ -201,7 +201,7 @@
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
@@ -250,7 +250,7 @@
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "006e2f95-59a2-4cda-a777-e64f4aa31060" // Unleashed Destruction
           ]
@@ -405,21 +405,21 @@
           "pack": 2,
           "pickInPack": 1,
           "pick": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ],
           "pickId": "0cb33b46-4d1b-4f97-bfdc-d815aee111da",
           "packCards": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
@@ -473,7 +473,7 @@
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481" // Fading Farewell
           ]
         },
@@ -497,7 +497,6 @@
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
@@ -518,7 +517,7 @@
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
@@ -598,7 +597,7 @@
           "packCards": [
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
@@ -635,7 +634,7 @@
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481" // Fading Farewell
           ]
         },
@@ -769,7 +768,7 @@
           "packCards": [
             "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow

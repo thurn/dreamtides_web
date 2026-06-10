@@ -124,7 +124,7 @@
           "packCards": [
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
@@ -133,9 +133,9 @@
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "73fc1b7f-3c2b-4993-9590-924240515c2f" // Lunar Hart
           ]
@@ -188,7 +188,7 @@
           "pickId": "19d1ad9f-e217-49fb-8b27-025ca133b6c9",
           "packCards": [
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
@@ -216,7 +216,7 @@
             "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a" // Iron Executor
@@ -247,10 +247,10 @@
           "pickId": "16c8d2fa-54a7-46e8-980c-905258497c90",
           "packCards": [
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
-            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver2
           ]
         },
         {
@@ -278,9 +278,9 @@
           "packCards": [
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "73fc1b7f-3c2b-4993-9590-924240515c2f" // Lunar Hart
           ]
@@ -375,7 +375,7 @@
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
@@ -392,14 +392,14 @@
           "pick": [],
           "pickId": "26d40e03-6de4-4373-9fbf-04c1dd79e995",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
@@ -419,7 +419,7 @@
             "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
@@ -559,7 +559,7 @@
           "pickId": "107081ae-dfda-4e54-9963-ac01161cc437",
           "packCards": [
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
@@ -676,7 +676,7 @@
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
@@ -758,7 +758,7 @@
           "packCards": [
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
@@ -809,7 +809,7 @@
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
             "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83", // Epiphany Unfolded
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ]
         },
         {

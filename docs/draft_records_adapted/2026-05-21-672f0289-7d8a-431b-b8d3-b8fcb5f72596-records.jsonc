@@ -152,7 +152,6 @@
           "pick": [],
           "pickId": "fce07335-cc78-4683-b2f0-9c98a06ea1d8",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
@@ -262,7 +261,7 @@
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "967c714f-40c5-4a77-8e22-40691a2755d4" // Passage Through Oblivion
@@ -330,7 +329,7 @@
           "packCards": [
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "967c714f-40c5-4a77-8e22-40691a2755d4" // Passage Through Oblivion
@@ -449,8 +448,8 @@
           "pickId": "1066a94a-8e4f-4d77-820b-7a77a18116f0",
           "packCards": [
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "ea118471-164b-4d7f-bb02-044c862ed07e" // Wreckland Maverick
           ]
         },
@@ -664,7 +663,7 @@
           "packCards": [
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
@@ -690,7 +689,7 @@
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ]
         },
         {
@@ -754,7 +753,7 @@
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ]
         },
         {

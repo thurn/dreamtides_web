@@ -40,7 +40,7 @@
         "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
         "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
         "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
         "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
         "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
@@ -73,7 +73,7 @@
         "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
         "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
         "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
         "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
@@ -119,7 +119,7 @@
           "pickId": "312a6058-de08-487d-95bd-b3c56807fdd6",
           "packCards": [
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
@@ -206,12 +206,12 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ],
           "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
           "packCards": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
@@ -390,7 +390,7 @@
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
@@ -458,7 +458,7 @@
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
@@ -470,7 +470,7 @@
           "pick": [],
           "pickId": "0c2c39fc-b564-4ab5-833c-ff029760b7a7",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
             "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
             "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
@@ -479,7 +479,7 @@
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "ccbefadc-aab8-4f8c-a705-07bd70c91731" // Mirrorlight Architect
           ]
         },
@@ -611,7 +611,7 @@
           "pickId": "13c5a1ce-932a-4b3d-8b86-ed920e646afc",
           "packCards": [
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "ccbefadc-aab8-4f8c-a705-07bd70c91731" // Mirrorlight Architect
           ]
         },
@@ -764,7 +764,7 @@
           "pickId": "36a3345d-1190-45f4-8191-897b4dcec376",
           "packCards": [
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened

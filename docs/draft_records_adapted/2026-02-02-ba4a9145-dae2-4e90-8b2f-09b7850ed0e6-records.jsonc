@@ -57,7 +57,7 @@
         "f7ffe999-685d-4ea2-85de-2e567eb2a042" // Key to the Moment
       ],
       "sideboard": [
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
         "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
@@ -86,7 +86,7 @@
         "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
         "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
         "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
         "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
@@ -158,14 +158,14 @@
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ]
         },
         {
@@ -185,7 +185,7 @@
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
@@ -330,7 +330,7 @@
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ]
         },
         {
@@ -338,11 +338,11 @@
           "pack": 1,
           "pickInPack": 11,
           "pick": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Young Huntress
           ],
           "pickId": "22bb9825-ad45-44ad-ace2-eb6b66e3f724",
           "packCards": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
@@ -425,7 +425,7 @@
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
@@ -444,7 +444,7 @@
             "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
@@ -479,7 +479,7 @@
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be" // Moonlit Dancer
@@ -495,7 +495,7 @@
           "pickId": "7eb39e97-53c2-4df0-9fb3-a3d6a24ec41f",
           "packCards": [
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
@@ -562,7 +562,7 @@
           "packCards": [
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
@@ -602,7 +602,7 @@
           "pickId": "17e50157-bf49-4c5f-9b8a-bf73484e63a5",
           "packCards": [
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
@@ -640,7 +640,7 @@
           "packCards": [
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be" // Moonlit Dancer
@@ -714,7 +714,7 @@
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
@@ -844,7 +844,6 @@
           "packCards": [
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
@@ -867,7 +866,7 @@
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7" // Stargazer Adrift
           ]

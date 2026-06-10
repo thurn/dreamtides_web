@@ -38,7 +38,7 @@
         "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
         "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
         "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
         "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
         "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
@@ -118,7 +118,7 @@
         "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
         "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
         "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89" // Prism Caller
       ],
@@ -159,7 +159,7 @@
           "pickId": "312a6058-de08-487d-95bd-b3c56807fdd6",
           "packCards": [
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
@@ -272,7 +272,7 @@
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "54471b31-4449-453d-9a6e-814d6225520a" // Shadow March
@@ -293,7 +293,7 @@
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
             "69552516-14bc-42b9-b4b6-3a0cdc29686b" // Archive of the Forgotten
@@ -413,7 +413,7 @@
           "pick": [],
           "pickId": "17db2b6a-eaa8-4a08-9e86-370bbd058574",
           "packCards": [
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
@@ -437,7 +437,7 @@
           "pick": [],
           "pickId": "ff2f5f58-9a95-4ca6-93a0-813738f0072f",
           "packCards": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "f860e815-3ed9-463d-ac4d-ed8d2778f8ad", // Lone Castaway
@@ -738,7 +738,6 @@
           "pick": [],
           "pickId": "15faa763-b897-4e86-b094-73f3236291a9",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
@@ -791,8 +790,8 @@
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
@@ -812,7 +811,7 @@
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc" // Torchbearer of the Abyss
           ]
@@ -925,11 +924,11 @@
           "pack": 3,
           "pickInPack": 13,
           "pick": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ],
           "pickId": "be065962-f2ed-4ab9-be6b-bfc66d63ff4e",
           "packCards": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]

@@ -30,8 +30,8 @@
       "name": "WG",
       "mainboard": [
         "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
         "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
         "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
@@ -93,13 +93,13 @@
         "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
         "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
         "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
         "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
         "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
         "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
         "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
         "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
@@ -137,12 +137,11 @@
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
@@ -209,7 +208,7 @@
           "packCards": [
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
@@ -292,7 +291,7 @@
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ]
         },
         {
@@ -419,7 +418,7 @@
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a" // Standard Bearer
           ]
         },
@@ -468,7 +467,7 @@
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
@@ -502,11 +501,11 @@
           "pack": 2,
           "pickInPack": 5,
           "pick": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ],
           "pickId": "c2152030-6007-493f-a616-545723a00249",
           "packCards": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
@@ -583,7 +582,7 @@
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ]
         },
         {
@@ -602,7 +601,7 @@
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a" // Standard Bearer
           ]
         },
@@ -629,11 +628,11 @@
           "pack": 2,
           "pickInPack": 11,
           "pick": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Assault Trooper
           ],
           "pickId": "b34bf7fd-9fe3-43e2-8cfe-7ce7cff08afe",
           "packCards": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence

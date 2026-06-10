@@ -44,7 +44,7 @@
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
         "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
         "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
@@ -53,10 +53,10 @@
         "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
         "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
         "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
-        "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
       ],
       "sideboard": [
         "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
@@ -65,7 +65,7 @@
         "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
         "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
         "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
         "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
         "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
@@ -103,18 +103,18 @@
         "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
         "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
         "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
         "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
         "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
         "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
         "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
         "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
         "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
@@ -135,7 +135,7 @@
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
@@ -157,7 +157,7 @@
           "packCards": [
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
@@ -511,7 +511,7 @@
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d" // Smoldering Ancient
@@ -648,11 +648,11 @@
           "pack": 2,
           "pickInPack": 13,
           "pick": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ],
           "pickId": "8c1cce91-7c81-45d9-bbec-b085e794791d",
           "packCards": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d" // Smoldering Ancient
@@ -697,7 +697,7 @@
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
@@ -736,11 +736,11 @@
           "pack": 3,
           "pickInPack": 3,
           "pick": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ],
           "pickId": "005dae9a-dddc-4a11-95bb-cce319edcce4",
           "packCards": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
@@ -750,7 +750,7 @@
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0" // The Rising God
@@ -771,7 +771,7 @@
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
@@ -786,11 +786,11 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
-            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Blood Moon Ronin
           ],
           "pickId": "58c9e9a7-e170-4361-b7d5-22fc0771c489",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
@@ -899,11 +899,11 @@
           "pack": 3,
           "pickInPack": 11,
           "pick": [
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ],
           "pickId": "91ca97db-2c83-4c87-9491-e5878293afe5",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0" // The Rising God

@@ -30,9 +30,9 @@
       "name": "WUB",
       "mainboard": [
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
         "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
         "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
@@ -76,7 +76,7 @@
         "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
         "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
         "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
@@ -92,7 +92,7 @@
       "pool": [
         "73fc1b7f-3c2b-4993-9590-924240515c2f", // Lunar Hart
         "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
         "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
@@ -116,7 +116,7 @@
         "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
         "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
         "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
@@ -124,7 +124,7 @@
         "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
         "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
         "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
         "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
         "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
@@ -192,11 +192,11 @@
           "pack": 1,
           "pickInPack": 3,
           "pick": [
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ],
           "pickId": "91ca97db-2c83-4c87-9491-e5878293afe5",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
@@ -549,13 +549,13 @@
           "pickInPack": 4,
           "pick": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ],
           "pickId": "329a8738-3e17-403a-857a-0ba529ce8cd1",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
@@ -653,11 +653,11 @@
           "pack": 4,
           "pickInPack": 1,
           "pick": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ],
           "pickId": "c2152030-6007-493f-a616-545723a00249",
           "packCards": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
@@ -863,7 +863,7 @@
           "pickId": "ff84ea71-e477-44f7-a3f8-77fef708efeb",
           "packCards": [
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
@@ -886,10 +886,10 @@
             "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
             "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "738a5af0-f848-4d48-bceb-9a43c9b11066" // Reclaimer of Lost Paths
           ]

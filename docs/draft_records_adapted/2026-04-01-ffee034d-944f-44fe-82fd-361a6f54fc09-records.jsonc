@@ -56,7 +56,7 @@
         "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
         "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
         "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
         "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
         "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
@@ -114,7 +114,7 @@
         "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
         "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
         "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
         "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
         "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
@@ -292,7 +292,7 @@
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "fbf725ca-8837-46d4-970c-922153e27b6e" // Infernal Ascendant
           ]
         },
@@ -407,7 +407,7 @@
           "pickId": "aa7bd814-9f88-4e01-932d-07ac1abc060e",
           "packCards": [
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
             "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
@@ -481,13 +481,12 @@
           "packCards": [
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "123baf70-305a-4583-bdba-a10b5153fbeb" // Dustborn Veteran
@@ -547,7 +546,7 @@
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "2a230602-a39b-4ec2-a467-97b92b389aff" // Scuttled Fortune
           ]
@@ -636,7 +635,6 @@
           "packCards": [
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "123baf70-305a-4583-bdba-a10b5153fbeb" // Dustborn Veteran
@@ -736,11 +734,11 @@
           "pack": 3,
           "pickInPack": 3,
           "pick": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ],
           "pickId": "005dae9a-dddc-4a11-95bb-cce319edcce4",
           "packCards": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
@@ -831,7 +829,7 @@
           "packCards": [
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
             "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude

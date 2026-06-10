@@ -422,7 +422,7 @@
           "packCards": [
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
@@ -451,7 +451,7 @@
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
@@ -476,7 +476,7 @@
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
             "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
@@ -541,8 +541,8 @@
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb" // Thronebound Arbiter
@@ -722,7 +722,6 @@
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
@@ -811,7 +810,7 @@
           "packCards": [
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
@@ -832,7 +831,7 @@
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
@@ -849,7 +848,7 @@
           "pickId": "247939d9-87e9-4f01-b223-fb4cfa7dbbe1",
           "packCards": [
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter

@@ -29,7 +29,7 @@
       "seat": 0,
       "name": "WBG",
       "mainboard": [
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
         "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
         "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
@@ -38,11 +38,11 @@
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
         "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
         "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
         "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
         "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
         "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
@@ -70,16 +70,16 @@
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
         "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
         "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
         "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
         "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
         "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
@@ -138,12 +138,12 @@
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
             "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
@@ -209,11 +209,11 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Assault Trooper
           ],
           "pickId": "b34bf7fd-9fe3-43e2-8cfe-7ce7cff08afe",
           "packCards": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
@@ -276,7 +276,7 @@
           "packCards": [
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
@@ -310,11 +310,11 @@
           "pack": 1,
           "pickInPack": 10,
           "pick": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ],
           "pickId": "169356e0-46dc-4096-8e66-36726454f104",
           "packCards": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
             "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
@@ -416,18 +416,17 @@
           "pack": 2,
           "pickInPack": 2,
           "pick": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ],
           "pickId": "005dae9a-dddc-4a11-95bb-cce319edcce4",
           "packCards": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
@@ -541,7 +540,7 @@
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
@@ -575,7 +574,6 @@
           "packCards": [
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
@@ -795,7 +793,7 @@
           "pickId": "eb1a16f9-13d4-4188-8e1e-0f2394349c7a",
           "packCards": [
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph

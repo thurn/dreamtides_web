@@ -38,7 +38,7 @@
         "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
         "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
         "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
         "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
         "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
@@ -113,7 +113,7 @@
         "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
         "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
         "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
         "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
         "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
@@ -156,7 +156,7 @@
           "packCards": [
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
@@ -258,7 +258,7 @@
           "pickId": "5b5f03d2-608c-4fae-9a05-1695e277adf8",
           "packCards": [
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a" // Stoneborn Eternal
@@ -363,10 +363,10 @@
           "packCards": [
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
             "61060827-8bed-4b63-b63d-6c3b0536e941" // Sunshadow Eagle
@@ -451,7 +451,7 @@
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83" // Key Sifter
           ]
@@ -483,7 +483,7 @@
           "pick": [],
           "pickId": "01006833-6007-4c16-9ebb-20d31c60a57a",
           "packCards": [
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
             "61060827-8bed-4b63-b63d-6c3b0536e941" // Sunshadow Eagle
@@ -541,11 +541,11 @@
           "pack": 2,
           "pickInPack": 11,
           "pick": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ],
           "pickId": "8c1cce91-7c81-45d9-bbec-b085e794791d",
           "packCards": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83" // Key Sifter
           ]
@@ -589,7 +589,7 @@
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f" // Frost Visionary
           ]
         },
@@ -713,7 +713,7 @@
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f" // Frost Visionary
           ]
         },

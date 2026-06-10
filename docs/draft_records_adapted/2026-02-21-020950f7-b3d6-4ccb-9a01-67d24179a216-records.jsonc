@@ -225,7 +225,7 @@
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
@@ -244,7 +244,7 @@
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
             "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
@@ -289,7 +289,7 @@
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
@@ -517,7 +517,7 @@
           "pickId": "15299d85-ee28-41a3-9952-f50e8e1d40eb",
           "packCards": [
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
@@ -681,13 +681,12 @@
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
             "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
             "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
@@ -719,7 +718,7 @@
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6" // Eternal Stag
           ]
@@ -871,7 +870,7 @@
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6" // Eternal Stag
           ]

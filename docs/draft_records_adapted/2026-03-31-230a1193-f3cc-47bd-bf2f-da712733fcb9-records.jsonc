@@ -55,14 +55,14 @@
         "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
         "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
         "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
         "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
         "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
         "8a6fc6ea-9a88-441e-bdc2-d40dfec37481" // Fading Farewell
       ],
@@ -76,9 +76,9 @@
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
         "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
         "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
         "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
@@ -124,9 +124,9 @@
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
@@ -149,9 +149,9 @@
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
             "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
@@ -271,11 +271,11 @@
           "pack": 1,
           "pickInPack": 8,
           "pick": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ],
           "pickId": "169356e0-46dc-4096-8e66-36726454f104",
           "packCards": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
@@ -309,11 +309,11 @@
           "pack": 1,
           "pickInPack": 10,
           "pick": [
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ],
           "pickId": "91ca97db-2c83-4c87-9491-e5878293afe5",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
@@ -549,7 +549,7 @@
           "packCards": [
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
@@ -577,7 +577,7 @@
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ]
         },
         {
@@ -690,7 +690,7 @@
           "packCards": [
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
@@ -715,7 +715,6 @@
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
@@ -760,7 +759,7 @@
           "pickId": "d16f8670-f038-400a-83e7-a53a7f8c47ac",
           "packCards": [
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
@@ -872,7 +871,6 @@
           "pick": [],
           "pickId": "0a26d900-c652-4f9c-8681-a35c5f8b1937",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March

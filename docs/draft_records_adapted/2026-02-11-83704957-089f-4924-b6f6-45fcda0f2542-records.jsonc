@@ -38,12 +38,12 @@
         "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
         "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
         "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
         "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
         "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
         "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
@@ -87,12 +87,12 @@
         "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
         "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
         "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
         "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
         "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
         "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
@@ -133,14 +133,14 @@
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ]
         },
         {
@@ -220,14 +220,14 @@
           "pickId": "a1b6f13e-63d0-46bf-aa57-23c2dbdf62dd",
           "packCards": [
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ]
         },
         {
@@ -298,7 +298,7 @@
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ]
         },
         {
@@ -355,7 +355,7 @@
           "pickId": "683a5707-cddb-494d-9b41-51b4584ded69",
           "packCards": [
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ]
         },
         {
@@ -631,11 +631,11 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver2
           ],
           "pickId": "cfdf9706-acdb-48fc-89db-93bc50b3b9ad",
           "packCards": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
@@ -701,7 +701,7 @@
           "pickId": "1066a94a-8e4f-4d77-820b-7a77a18116f0",
           "packCards": [
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
@@ -770,11 +770,11 @@
           "pack": 3,
           "pickInPack": 8,
           "pick": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ],
           "pickId": "169356e0-46dc-4096-8e66-36726454f104",
           "packCards": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded

@@ -146,7 +146,7 @@
           "pickId": "ff590af2-2d6c-4f16-a9b8-1a6dab6e9ad5",
           "packCards": [
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
@@ -172,7 +172,7 @@
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
@@ -448,7 +448,6 @@
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
@@ -492,11 +491,11 @@
           "pickId": "c6e466d1-943d-41e6-a47d-c9d951ca4262",
           "packCards": [
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
@@ -603,7 +602,6 @@
           "pickId": "006cbb74-7447-45fb-b44b-bac31832b392",
           "packCards": [
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
@@ -678,7 +676,7 @@
           "pickId": "1959f078-4b7b-4df2-a256-d43b2d97e853",
           "packCards": [
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
@@ -745,14 +743,14 @@
           "packCards": [
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
@@ -805,7 +803,7 @@
           "pick": [],
           "pickId": "acc4115b-4bbb-4bb7-81c6-466130982a9c",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
             "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest

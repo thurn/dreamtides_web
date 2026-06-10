@@ -62,7 +62,7 @@
       ],
       "sideboard": [
         "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
         "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
         "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
@@ -123,7 +123,7 @@
         "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
         "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
         "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "954e8d50-d494-4fb2-b4c7-74979083b774" // Driftrider
       ],
       "picks": [
@@ -184,7 +184,7 @@
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
@@ -228,7 +228,7 @@
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
@@ -248,7 +248,7 @@
           "pickId": "e2a01edd-dbc0-4ed4-b827-9b608290e9a1",
           "packCards": [
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
@@ -292,7 +292,7 @@
           "pickId": "aecdc315-95e5-450c-bedc-998eea46cf8c",
           "packCards": [
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
@@ -491,10 +491,9 @@
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
@@ -743,7 +742,7 @@
           "pickId": "d79b8974-796c-4f88-a0cb-5afbaf26fd24",
           "packCards": [
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
             "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
@@ -794,7 +793,7 @@
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
@@ -815,7 +814,7 @@
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "fcb830e5-85ff-48f3-be1e-46e102a5c8e8" // Shatterpoint Agent
           ]
         },
@@ -945,11 +944,11 @@
           "pack": 3,
           "pickInPack": 14,
           "pick": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ],
           "pickId": "8c1cce91-7c81-45d9-bbec-b085e794791d",
           "packCards": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "fcb830e5-85ff-48f3-be1e-46e102a5c8e8" // Shatterpoint Agent
           ]
         },

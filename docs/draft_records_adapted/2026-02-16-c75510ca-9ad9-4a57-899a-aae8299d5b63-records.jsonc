@@ -146,7 +146,7 @@
             "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
             "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e" // Doorlight Foundling
@@ -168,11 +168,11 @@
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
@@ -191,10 +191,10 @@
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "f68774ce-0e94-489f-90a5-68e03a549ff6" // Deathwalker
@@ -213,7 +213,7 @@
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
@@ -308,7 +308,7 @@
             "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
             "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e" // Doorlight Foundling
@@ -326,7 +326,7 @@
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
@@ -439,7 +439,7 @@
           "pickId": "6d9efacb-9d7c-41f4-9b11-59df1be50e11",
           "packCards": [
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
             "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
@@ -706,7 +706,7 @@
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
@@ -781,7 +781,6 @@
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "831bc7cf-e8c9-4943-8156-91b7397ef849" // Resilient Wanderer
@@ -928,7 +927,6 @@
           "pickId": "bd111dc9-b8de-4e92-a63d-75a961b2db3b",
           "packCards": [
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "831bc7cf-e8c9-4943-8156-91b7397ef849" // Resilient Wanderer

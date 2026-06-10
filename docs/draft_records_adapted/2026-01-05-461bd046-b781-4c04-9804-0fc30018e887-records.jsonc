@@ -60,13 +60,13 @@
         "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
         "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
         "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
-        "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
       ],
       "pool": [
         "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
         "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
         "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
         "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
         "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
@@ -129,7 +129,7 @@
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97" // Barrage Specialist
@@ -148,7 +148,7 @@
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
@@ -179,11 +179,11 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ],
           "pickId": "0f2d0ee5-3173-4a03-be45-2fe9ea49cdc3",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
@@ -293,7 +293,7 @@
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
@@ -470,7 +470,7 @@
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover

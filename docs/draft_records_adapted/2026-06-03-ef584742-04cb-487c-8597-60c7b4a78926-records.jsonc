@@ -30,8 +30,8 @@
       "name": "WUBG Artifact Control",
       "mainboard": [
         "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
         "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
         "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
@@ -44,7 +44,7 @@
         "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
         "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
         "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
@@ -83,7 +83,7 @@
         "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
         "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
         "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
@@ -105,7 +105,7 @@
         "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
         "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
         "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
@@ -116,7 +116,7 @@
         "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
         "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
         "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
         "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
@@ -162,13 +162,13 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56" // Dream Garden Visitor
           ],
           "pickId": "bf4b9a8a-b42a-46fb-b0d0-9cf800f63c8a",
           "packCards": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
@@ -449,7 +449,7 @@
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
             "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
@@ -566,11 +566,11 @@
           "pack": 2,
           "pickInPack": 8,
           "pick": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ],
           "pickId": "8c1cce91-7c81-45d9-bbec-b085e794791d",
           "packCards": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
@@ -703,7 +703,7 @@
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ]
         },
         {
@@ -783,11 +783,11 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Young Huntress
           ],
           "pickId": "22bb9825-ad45-44ad-ace2-eb6b66e3f724",
           "packCards": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
@@ -869,7 +869,7 @@
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ]
         },
         {

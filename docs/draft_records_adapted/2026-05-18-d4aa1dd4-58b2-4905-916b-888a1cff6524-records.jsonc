@@ -45,14 +45,14 @@
         "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
         "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
         "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
         "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
         "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
         "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
         "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
         "3e83cbe2-2b21-4804-9906-4b4735db9869" // Phantom Flotilla
@@ -63,15 +63,15 @@
         "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
         "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
         "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "pool": [
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
         "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
         "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
@@ -91,7 +91,7 @@
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
         "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
         "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
         "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
@@ -140,7 +140,7 @@
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
@@ -181,11 +181,11 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ],
           "pickId": "91ca97db-2c83-4c87-9491-e5878293afe5",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
@@ -207,7 +207,7 @@
           "packCards": [
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
@@ -223,13 +223,13 @@
           "pack": 1,
           "pickInPack": 6,
           "pick": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ],
           "pickId": "c60174d6-1f9d-4870-b3db-34d6fcb3f6ab",
           "packCards": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
@@ -431,13 +431,12 @@
           "pickId": "bddcec63-a60a-4d73-af6d-9ac978703811",
           "packCards": [
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
@@ -671,11 +670,11 @@
           "pack": 3,
           "pickInPack": 2,
           "pick": [
-            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Blood Moon Ronin
           ],
           "pickId": "58c9e9a7-e170-4361-b7d5-22fc0771c489",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
@@ -786,7 +785,7 @@
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "c96c6c7f-c0fe-4272-b856-a54ace01f596" // Veil Shatter
           ]
         },
@@ -798,7 +797,7 @@
           "pickId": "1c7d50d6-b63a-4d8c-88fa-1d78ae693a45",
           "packCards": [
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage

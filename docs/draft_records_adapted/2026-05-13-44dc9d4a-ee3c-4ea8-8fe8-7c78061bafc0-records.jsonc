@@ -121,7 +121,7 @@
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
@@ -171,7 +171,7 @@
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
@@ -193,7 +193,7 @@
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
@@ -458,7 +458,7 @@
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
@@ -766,7 +766,7 @@
           "pickId": "312a6058-de08-487d-95bd-b3c56807fdd6",
           "packCards": [
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
@@ -791,7 +791,6 @@
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw

@@ -425,12 +425,12 @@
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "85251f03-c873-46d8-81be-ab421c901a53" // Fractured Vessel
           ]
         },
@@ -446,7 +446,7 @@
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
@@ -550,9 +550,9 @@
           "packCards": [
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "85251f03-c873-46d8-81be-ab421c901a53" // Fractured Vessel
           ]
         },
@@ -666,7 +666,7 @@
           "pickId": "fbee1e10-0b8c-44ea-b0e5-44cdd0bfcd76",
           "packCards": [
             "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
@@ -695,7 +695,7 @@
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
@@ -712,7 +712,7 @@
           "pickId": "67b369c4-faa8-45c8-a1b9-98f228b69682",
           "packCards": [
             "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
@@ -733,7 +733,7 @@
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
@@ -818,7 +818,7 @@
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
@@ -848,7 +848,7 @@
           "pickId": "f00192e0-439d-43b2-882c-90a2d52103f8",
           "packCards": [
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter

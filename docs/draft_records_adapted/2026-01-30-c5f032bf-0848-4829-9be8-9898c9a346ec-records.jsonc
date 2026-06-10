@@ -31,7 +31,7 @@
       "mainboard": [
         "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
         "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
         "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
         "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
@@ -101,7 +101,7 @@
         "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
         "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
         "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
         "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
@@ -131,7 +131,7 @@
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
@@ -205,7 +205,7 @@
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
@@ -466,7 +466,7 @@
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1" // Graywatch
@@ -625,7 +625,7 @@
           "packCards": [
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1" // Graywatch
@@ -691,19 +691,19 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Young Huntress
           ],
           "pickId": "22bb9825-ad45-44ad-ace2-eb6b66e3f724",
           "packCards": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
@@ -745,7 +745,7 @@
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
@@ -868,7 +868,7 @@
           "pickId": "4e117771-5a8b-4812-b487-32ba34b7f724",
           "packCards": [
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen

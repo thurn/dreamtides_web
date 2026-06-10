@@ -146,7 +146,7 @@
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
@@ -169,7 +169,7 @@
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
@@ -189,10 +189,10 @@
           "packCards": [
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
@@ -430,14 +430,14 @@
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
             "0e1209c3-1041-4079-9b1c-f96816a7deb5", // Wistful Angler
             "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {
@@ -462,7 +462,6 @@
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
@@ -499,7 +498,7 @@
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
@@ -598,7 +597,7 @@
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {
@@ -614,7 +613,6 @@
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
@@ -682,7 +680,7 @@
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
@@ -766,7 +764,7 @@
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
@@ -817,7 +815,7 @@
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de" // Eternal Sentry

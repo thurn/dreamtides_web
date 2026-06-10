@@ -31,13 +31,13 @@
       "mainboard": [
         "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
         "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
         "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
         "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
         "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
         "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
         "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
@@ -71,7 +71,7 @@
       "pool": [
         "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
         "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
         "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
@@ -103,7 +103,7 @@
         "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
         "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
         "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "21e376da-f4c3-4a60-bd63-a272b35db5a6" // Infernal Rest
       ],
       "picks": [
@@ -184,12 +184,12 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ],
           "pickId": "005dae9a-dddc-4a11-95bb-cce319edcce4",
           "packCards": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
@@ -210,7 +210,7 @@
           "packCards": [
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
@@ -673,17 +673,17 @@
           "pickId": "aa7bd814-9f88-4e01-932d-07ac1abc060e",
           "packCards": [
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
@@ -792,7 +792,7 @@
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a" // Iron Executor
           ]
         },
@@ -804,7 +804,7 @@
           "pickId": "47033ba4-8f26-4a6b-97bd-5b366327325e",
           "packCards": [
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
@@ -843,7 +843,7 @@
           "packCards": [
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
@@ -918,11 +918,11 @@
           "pack": 3,
           "pickInPack": 14,
           "pick": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ],
           "pickId": "be065962-f2ed-4ab9-be6b-bfc66d63ff4e",
           "packCards": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a" // Iron Executor
           ]
         },

@@ -29,7 +29,6 @@
       "mainboard": [
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
@@ -48,7 +47,7 @@
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
         "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
         "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
         "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
         "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
@@ -71,7 +70,7 @@
         "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
         "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
         "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
         "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
         "d24ea640-638d-4ce2-b15d-b3f4588bda6b" // Echoes of Eternity
@@ -103,20 +102,19 @@
         "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
         "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
         "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
         "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
         "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
         "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
         "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
         "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
         "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
         "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
         "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
@@ -537,11 +535,11 @@
           "pack": 4,
           "pickInPack": 1,
           "pick": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ],
           "pickId": "005dae9a-dddc-4a11-95bb-cce319edcce4",
           "packCards": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
@@ -667,19 +665,17 @@
           "pack": 5,
           "pickInPack": 1,
           "pick": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
@@ -733,7 +729,7 @@
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "4cec92f2-9bac-4949-a602-cd0a44618aaf" // The Ringleader
           ]
         },
@@ -742,11 +738,11 @@
           "pack": 5,
           "pickInPack": 5,
           "pick": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ],
           "pickId": "119a814f-0325-4b69-a0b6-4c623b981f4a",
           "packCards": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom

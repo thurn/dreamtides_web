@@ -30,7 +30,7 @@
       "name": "WBRG",
       "mainboard": [
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
         "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
@@ -82,7 +82,7 @@
         "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
         "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
@@ -138,16 +138,16 @@
           "packCards": [
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "14ac6804-ed1d-4148-aad7-11796b6fff6c" // Undying Fang
@@ -164,7 +164,7 @@
           "packCards": [
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
@@ -184,13 +184,13 @@
           "pickInPack": 3,
           "pick": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ],
           "pickId": "329a8738-3e17-403a-857a-0ba529ce8cd1",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
@@ -324,7 +324,7 @@
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "14ac6804-ed1d-4148-aad7-11796b6fff6c" // Undying Fang
@@ -505,7 +505,7 @@
           "pickId": "5faba6c8-3463-47c1-ba01-09eb87fcb2d5",
           "packCards": [
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
@@ -532,7 +532,7 @@
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15" // Specter of Silent Snow
@@ -594,7 +594,6 @@
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
@@ -753,7 +752,7 @@
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b" // Dawnprowler Panther
           ]
         },
@@ -908,7 +907,7 @@
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b" // Dawnprowler Panther
           ]
         },

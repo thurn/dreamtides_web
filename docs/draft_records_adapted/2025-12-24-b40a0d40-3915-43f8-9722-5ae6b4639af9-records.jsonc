@@ -40,7 +40,7 @@
         "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
         "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
         "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
         "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
         "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
@@ -95,7 +95,7 @@
         "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
         "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
         "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
         "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
         "161482b6-af07-4d9e-822d-8c738672beb9" // Starlight Guide
@@ -168,7 +168,6 @@
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
@@ -209,7 +208,7 @@
           "pickId": "420bf1e9-f2ec-4dff-b540-e64de71e58be",
           "packCards": [
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
@@ -328,7 +327,6 @@
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
@@ -401,10 +399,10 @@
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
@@ -425,7 +423,7 @@
             "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
@@ -559,7 +557,7 @@
           "pickId": "139b90cd-8272-457a-be32-1298145345be",
           "packCards": [
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
@@ -663,7 +661,7 @@
           "packCards": [
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
@@ -762,7 +760,7 @@
             "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
             "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1" // Graywatch
           ]
@@ -896,11 +894,11 @@
           "pack": 3,
           "pickInPack": 13,
           "pick": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ],
           "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
           "packCards": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1" // Graywatch
           ]

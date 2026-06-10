@@ -29,7 +29,7 @@
       "seat": 0,
       "name": "WURG",
       "mainboard": [
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
         "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
         "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
@@ -114,7 +114,7 @@
         "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
         "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
         "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
@@ -143,7 +143,7 @@
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "f860e815-3ed9-463d-ac4d-ed8d2778f8ad", // Lone Castaway
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
@@ -234,7 +234,7 @@
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
@@ -260,7 +260,7 @@
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34" // Searcher in the Mists
@@ -738,13 +738,13 @@
           "pack": 3,
           "pickInPack": 3,
           "pick": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Assault Trooper
           ],
           "pickId": "b34bf7fd-9fe3-43e2-8cfe-7ce7cff08afe",
           "packCards": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
@@ -812,7 +812,7 @@
           "pickId": "48f0a970-452a-405f-bd4d-ac4d2e89ab40",
           "packCards": [
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
@@ -835,7 +835,7 @@
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge

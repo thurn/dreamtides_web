@@ -156,7 +156,7 @@
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
@@ -175,7 +175,7 @@
           "packCards": [
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
@@ -230,7 +230,7 @@
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30" // Dawnrunner
@@ -327,7 +327,7 @@
           "packCards": [
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
@@ -487,7 +487,7 @@
           "pickId": "1d6603e3-0680-4ba3-951b-cd9919eefd4f",
           "packCards": [
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
@@ -777,7 +777,7 @@
           "packCards": [
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing

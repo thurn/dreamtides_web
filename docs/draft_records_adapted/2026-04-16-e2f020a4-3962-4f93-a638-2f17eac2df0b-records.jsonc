@@ -53,7 +53,7 @@
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
         "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
@@ -91,7 +91,7 @@
         "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
         "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
         "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
         "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
@@ -161,10 +161,10 @@
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a" // Iron Executor
           ]
         },
@@ -183,7 +183,6 @@
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
@@ -319,10 +318,10 @@
           "pickId": "4e117771-5a8b-4812-b487-32ba34b7f724",
           "packCards": [
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a" // Iron Executor
           ]
         },
@@ -336,7 +335,6 @@
           "pickId": "2e1fb442-68ff-4249-8e44-87edf6fae211",
           "packCards": [
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
@@ -418,7 +416,7 @@
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
@@ -479,11 +477,11 @@
           "pack": 2,
           "pickInPack": 4,
           "pick": [
-            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Blood Moon Ronin
           ],
           "pickId": "58c9e9a7-e170-4361-b7d5-22fc0771c489",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
@@ -492,10 +490,10 @@
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
             "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ]
         },
         {
@@ -512,7 +510,7 @@
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
@@ -585,7 +583,7 @@
           "pickId": "2be39749-ad6f-4160-99eb-c677eee7f1b2",
           "packCards": [
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
@@ -635,10 +633,10 @@
           "pickId": "3e1766e9-2fa7-4446-a255-7beea1467ece",
           "packCards": [
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
             "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ]
         },
         {
@@ -689,7 +687,7 @@
           "pickId": "aced2c55-7543-4076-bcdd-36c4d649b8ae",
           "packCards": [
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
@@ -788,7 +786,7 @@
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
             "fd355778-abea-4513-844c-91bf75929ebe" // Dune Reaper

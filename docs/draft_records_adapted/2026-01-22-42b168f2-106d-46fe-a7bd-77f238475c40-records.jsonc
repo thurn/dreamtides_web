@@ -28,7 +28,6 @@
       "seat": 0,
       "name": "WUBR",
       "mainboard": [
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
@@ -48,14 +47,14 @@
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
         "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
         "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
         "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
         "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
         "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
         "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
         "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
@@ -68,7 +67,7 @@
         "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
         "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
-        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
@@ -77,7 +76,7 @@
       "sideboard": [],
       "pool": [
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
         "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
@@ -88,10 +87,9 @@
         "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
         "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
         "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
-        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
@@ -107,7 +105,7 @@
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
         "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
@@ -181,11 +179,11 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ],
           "pickId": "119a814f-0325-4b69-a0b6-4c623b981f4a",
           "packCards": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
@@ -311,7 +309,6 @@
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
@@ -390,12 +387,12 @@
           "pack": 2,
           "pickInPack": 5,
           "pick": [
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039" // Skyflame Commander
           ],
           "pickId": "169b74e2-72cf-47df-b128-b632313cd24c",
           "packCards": [
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
@@ -425,13 +422,11 @@
           "pack": 2,
           "pickInPack": 7,
           "pick": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
@@ -592,7 +587,7 @@
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ]
         },
         {
@@ -672,11 +667,11 @@
           "pack": 3,
           "pickInPack": 11,
           "pick": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ],
           "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
           "packCards": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ]
         },
         {
@@ -698,7 +693,7 @@
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "d217303e-b115-484a-b22c-0e44d5701389" // Broadcast Array
           ]
         },
@@ -809,7 +804,7 @@
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "d217303e-b115-484a-b22c-0e44d5701389" // Broadcast Array
           ]
         },

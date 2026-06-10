@@ -30,9 +30,9 @@
       "name": "WUR",
       "mainboard": [
         "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
         "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
         "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
@@ -80,7 +80,7 @@
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
         "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
         "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
@@ -106,7 +106,7 @@
         "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
         "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
@@ -177,12 +177,12 @@
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
@@ -225,13 +225,13 @@
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "c32ef131-d283-4bf1-bf65-2d5e5d232168" // Harrowing Officiant
           ]
         },
@@ -260,7 +260,7 @@
           "pick": [],
           "pickId": "4a08ca06-58db-4ce6-b490-be4bea8956a1",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
@@ -330,11 +330,11 @@
           "pack": 1,
           "pickInPack": 11,
           "pick": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ],
           "pickId": "be065962-f2ed-4ab9-be6b-bfc66d63ff4e",
           "packCards": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
@@ -368,7 +368,7 @@
           "pickId": "2aebe7a8-b982-4be4-83ca-3594e8f606b4",
           "packCards": [
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "c32ef131-d283-4bf1-bf65-2d5e5d232168" // Harrowing Officiant
           ]
         },
@@ -532,7 +532,7 @@
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
@@ -552,7 +552,7 @@
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
@@ -703,7 +703,7 @@
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
@@ -847,7 +847,7 @@
           "packCards": [
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
@@ -863,11 +863,11 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
-            "629fe4d4-826f-41b9-a913-458a503856a8" // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8" // Clifftop Marksman
           ],
           "pickId": "c1195ec5-979b-4c4a-9c04-62bb53c2b011",
           "packCards": [
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer

@@ -29,7 +29,7 @@
       "name": "WBG",
       "mainboard": [
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
         "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
@@ -108,7 +108,7 @@
         "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
         "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
         "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
@@ -319,7 +319,7 @@
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb" // Crucible Warlord
           ]
         },
@@ -426,7 +426,7 @@
           "packCards": [
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb" // Crucible Warlord
           ]
         },
@@ -748,7 +748,7 @@
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
             "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ]
         },
         {
@@ -757,13 +757,13 @@
           "pickInPack": 5,
           "pick": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ],
           "pickId": "329a8738-3e17-403a-857a-0ba529ce8cd1",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
@@ -784,7 +784,7 @@
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
@@ -841,7 +841,7 @@
           "pick": [],
           "pickId": "99ff731b-8399-40c8-b539-ba6ba5783771",
           "packCards": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ]
         },
         {

@@ -33,7 +33,6 @@
         "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
         "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
         "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
@@ -118,7 +117,6 @@
         "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
         "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
         "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
@@ -439,7 +437,7 @@
           "packCards": [
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
@@ -539,7 +537,7 @@
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19" // Cinderheart
@@ -599,7 +597,7 @@
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "0211963d-d097-4427-9d16-5e857621e481" // Sanctum Awakened
@@ -723,7 +721,7 @@
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
@@ -759,17 +757,15 @@
           "pack": 3,
           "pickInPack": 3,
           "pick": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere

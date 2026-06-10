@@ -31,16 +31,16 @@
       "mainboard": [
         "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
         "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
         "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
         "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
         "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
         "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
         "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
         "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
@@ -61,7 +61,7 @@
         "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
         "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
         "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
         "73fc1b7f-3c2b-4993-9590-924240515c2f", // Lunar Hart
         "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
@@ -81,13 +81,13 @@
         "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
         "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
         "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
         "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
         "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
         "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
         "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
         "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
         "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
@@ -101,7 +101,7 @@
         "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
         "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
         "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
         "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
         "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
@@ -113,7 +113,7 @@
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
         "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
         "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
         "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
         "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
@@ -283,11 +283,11 @@
           "pack": 1,
           "pickInPack": 8,
           "pick": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ],
           "pickId": "be065962-f2ed-4ab9-be6b-bfc66d63ff4e",
           "packCards": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
@@ -404,17 +404,17 @@
           "pack": 2,
           "pickInPack": 1,
           "pick": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ],
           "pickId": "0cb33b46-4d1b-4f97-bfdc-d815aee111da",
           "packCards": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
@@ -487,7 +487,6 @@
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "2a230602-a39b-4ec2-a467-97b92b389aff" // Scuttled Fortune
@@ -634,7 +633,6 @@
           "packCards": [
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "2a230602-a39b-4ec2-a467-97b92b389aff" // Scuttled Fortune
@@ -685,11 +683,11 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
-            "629fe4d4-826f-41b9-a913-458a503856a8" // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8" // Clifftop Marksman
           ],
           "pickId": "c1195ec5-979b-4c4a-9c04-62bb53c2b011",
           "packCards": [
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
@@ -719,7 +717,7 @@
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
@@ -768,11 +766,11 @@
             "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7" // Stargazer Adrift
@@ -815,7 +813,7 @@
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
@@ -924,11 +922,11 @@
           "pack": 3,
           "pickInPack": 12,
           "pick": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ],
           "pickId": "8c1cce91-7c81-45d9-bbec-b085e794791d",
           "packCards": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7" // Stargazer Adrift

@@ -34,7 +34,6 @@
         "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
@@ -74,7 +73,7 @@
         "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
         "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
         "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
-        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
         "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
         "8bf53fe6-8a25-401e-9a99-84343a026bb0" // Burning Pursuit
       ],
@@ -117,7 +116,6 @@
         "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
         "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
         "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
@@ -127,7 +125,7 @@
         "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
         "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
         "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
-        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
         "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
       ],
       "picks": [
@@ -315,7 +313,7 @@
             "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
@@ -531,7 +529,7 @@
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
@@ -594,7 +592,7 @@
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "1c8e6736-13d6-42d1-8668-46f422fec11e" // Burst of Obliteration
           ]
         },
@@ -720,7 +718,7 @@
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976" // Nocturne
@@ -731,13 +729,11 @@
           "pack": 4,
           "pickInPack": 3,
           "pick": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
@@ -784,7 +780,7 @@
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ]
         },
@@ -867,12 +863,12 @@
           "pack": 4,
           "pickInPack": 11,
           "pick": [
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ],
           "pickId": "2ec1c088-c1ec-4e2e-a5d2-5a7a1399cbd5",
           "packCards": [
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ]
         }

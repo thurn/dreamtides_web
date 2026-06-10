@@ -123,7 +123,7 @@
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
@@ -131,7 +131,7 @@
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ]
         },
         {
@@ -280,7 +280,6 @@
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
@@ -302,7 +301,7 @@
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ]
         },
         {
@@ -403,12 +402,12 @@
           "pickId": "48f0a970-452a-405f-bd4d-ac4d2e89ab40",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
@@ -426,7 +425,7 @@
           "pickId": "2f607e7e-30c0-45e9-8f61-bf6e9fe63f2b",
           "packCards": [
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
@@ -820,7 +819,7 @@
           "pickId": "31b770cc-09e7-4c0b-b2a4-462ab4f7200d",
           "packCards": [
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest

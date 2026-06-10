@@ -50,7 +50,7 @@
         "874d5e8f-4e12-4426-a2e7-1ab761d2ca12" // Echoes of the Journey
       ],
       "sideboard": [
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
         "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
         "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
@@ -91,7 +91,7 @@
         "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
         "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
         "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
         "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
@@ -158,7 +158,7 @@
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
@@ -189,7 +189,7 @@
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613" // Infernal Cavalier
           ]
         },
@@ -247,7 +247,7 @@
           "pickId": "05aa5b50-0f8a-4f8a-8b48-3c52512ea615",
           "packCards": [
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
@@ -274,7 +274,7 @@
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613" // Infernal Cavalier
           ]
         },
@@ -345,7 +345,7 @@
           "packCards": [
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613" // Infernal Cavalier
           ]
         },
@@ -411,11 +411,11 @@
           "pack": 2,
           "pickInPack": 1,
           "pick": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ],
           "pickId": "c2152030-6007-493f-a616-545723a00249",
           "packCards": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
@@ -470,7 +470,7 @@
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
@@ -560,7 +560,7 @@
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
@@ -778,7 +778,7 @@
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8" // Carrion Lord
@@ -857,7 +857,7 @@
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8" // Carrion Lord
@@ -927,7 +927,7 @@
           "pickId": "19d1ad9f-e217-49fb-8b27-025ca133b6c9",
           "packCards": [
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8" // Carrion Lord

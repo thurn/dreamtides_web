@@ -131,7 +131,7 @@
           "pickId": "a211d505-4d40-4914-a9da-220770d6ddbc",
           "packCards": [
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
@@ -420,7 +420,7 @@
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
@@ -467,7 +467,7 @@
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
@@ -486,7 +486,7 @@
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
             "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
@@ -696,7 +696,7 @@
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
@@ -749,7 +749,6 @@
             "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
             "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
@@ -766,7 +765,7 @@
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
@@ -785,7 +784,7 @@
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
@@ -924,7 +923,6 @@
           "pick": [],
           "pickId": "435cdb9a-ded1-4183-9118-5c26f168c20d",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant

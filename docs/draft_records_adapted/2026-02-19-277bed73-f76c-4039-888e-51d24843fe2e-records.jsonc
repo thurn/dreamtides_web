@@ -196,7 +196,7 @@
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
@@ -257,7 +257,7 @@
           "packCards": [
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
@@ -430,7 +430,7 @@
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
@@ -493,7 +493,7 @@
           "packCards": [
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
@@ -502,7 +502,6 @@
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6" // Starsea Traveler
@@ -541,9 +540,9 @@
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "2a828466-450a-4637-9c68-6b54522450c0" // Rusted Monolith
           ]
         },
@@ -596,7 +595,7 @@
           "packCards": [
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
@@ -645,7 +644,6 @@
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6" // Starsea Traveler
@@ -708,7 +706,7 @@
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
@@ -795,7 +793,7 @@
           "pickId": "36ab760e-93e0-4dbc-aaa1-02316f62ed3f",
           "packCards": [
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
@@ -814,15 +812,15 @@
           "pickId": "7832abb5-5107-4603-904e-491b221bd3e3",
           "packCards": [
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {
@@ -956,7 +954,7 @@
           "pickId": "1a6c19cc-6469-4958-a547-1d0fe97c70e8",
           "packCards": [
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {

@@ -65,7 +65,7 @@
         "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
         "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "8bf53fe6-8a25-401e-9a99-84343a026bb0" // Burning Pursuit
       ],
       "sideboard": [
@@ -120,7 +120,7 @@
         "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
         "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
         "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
         "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
@@ -134,7 +134,7 @@
           "pick": [],
           "pickId": "aced2c55-7543-4076-bcdd-36c4d649b8ae",
           "packCards": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
@@ -239,7 +239,7 @@
           "pickId": "981b3a2e-de94-428d-8e5d-5a7ba6afe4a2",
           "packCards": [
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
@@ -283,7 +283,7 @@
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
@@ -453,7 +453,7 @@
           "pickId": "1d023d44-482e-4f60-b9b1-eede9bfb732f",
           "packCards": [
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
@@ -549,7 +549,7 @@
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3" // Unleash Ruin
@@ -734,7 +734,7 @@
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
@@ -766,7 +766,7 @@
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "14ac6804-ed1d-4148-aad7-11796b6fff6c" // Undying Fang
@@ -787,7 +787,7 @@
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "20896b2e-59cc-4494-942c-eb95b75adaf9" // Hope's Vanguard
@@ -825,7 +825,7 @@
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
@@ -917,11 +917,11 @@
           "pack": 3,
           "pickInPack": 11,
           "pick": [
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ],
           "pickId": "91ca97db-2c83-4c87-9491-e5878293afe5",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "14ac6804-ed1d-4148-aad7-11796b6fff6c" // Undying Fang
@@ -934,7 +934,7 @@
           "pick": [],
           "pickId": "139b90cd-8272-457a-be32-1298145345be",
           "packCards": [
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "20896b2e-59cc-4494-942c-eb95b75adaf9" // Hope's Vanguard

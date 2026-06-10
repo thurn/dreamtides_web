@@ -62,7 +62,7 @@
         "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
         "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
         "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
         "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
         "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
@@ -79,7 +79,7 @@
         "21e376da-f4c3-4a60-bd63-a272b35db5a6" // Infernal Rest
       ],
       "pool": [
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
         "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
         "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
@@ -132,16 +132,16 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver2
           ],
           "pickId": "cfdf9706-acdb-48fc-89db-93bc50b3b9ad",
           "packCards": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
@@ -488,13 +488,13 @@
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
@@ -556,7 +556,7 @@
           "packCards": [
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
@@ -725,7 +725,7 @@
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
@@ -750,7 +750,7 @@
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
@@ -823,7 +823,6 @@
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker

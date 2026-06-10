@@ -28,7 +28,7 @@
       "seat": 0,
       "name": "UBR",
       "mainboard": [
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
         "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
@@ -76,7 +76,7 @@
         "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
         "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
         "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
         "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
         "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
@@ -202,11 +202,11 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Young Huntress
           ],
           "pickId": "22bb9825-ad45-44ad-ace2-eb6b66e3f724",
           "packCards": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
@@ -555,7 +555,7 @@
           "pickId": "0a07cba3-2e8d-48ec-a6f8-4d2edfcd833d",
           "packCards": [
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
@@ -769,7 +769,7 @@
           "pickId": "24b25c06-d320-4b2f-bd35-bc650f620e0a",
           "packCards": [
             "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
@@ -794,7 +794,7 @@
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039" // Skyflame Commander
           ]
         },
@@ -833,7 +833,7 @@
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
             "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40" // Ashwalker
@@ -902,7 +902,7 @@
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039" // Skyflame Commander
           ]
         },

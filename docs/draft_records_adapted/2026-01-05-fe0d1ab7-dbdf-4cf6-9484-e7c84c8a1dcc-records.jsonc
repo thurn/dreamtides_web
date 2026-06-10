@@ -164,7 +164,7 @@
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
@@ -247,7 +247,7 @@
           "pickId": "0a26d900-c652-4f9c-8681-a35c5f8b1937",
           "packCards": [
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
@@ -446,7 +446,7 @@
           "packCards": [
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
@@ -486,7 +486,7 @@
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
@@ -541,9 +541,9 @@
           "pickId": "48ef7938-7c68-4aeb-9403-4ab1af944a81",
           "packCards": [
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
@@ -693,7 +693,7 @@
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
@@ -730,7 +730,7 @@
           "packCards": [
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
@@ -755,7 +755,7 @@
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
@@ -776,7 +776,7 @@
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
@@ -798,7 +798,7 @@
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
@@ -855,7 +855,7 @@
           "packCards": [
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise

@@ -29,8 +29,8 @@
       "seat": 0,
       "name": "WUR",
       "mainboard": [
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
         "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
@@ -40,7 +40,7 @@
         "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
         "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
         "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
@@ -63,13 +63,13 @@
         "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
         "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
         "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
         "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
         "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
         "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
       ],
       "sideboard": [
         "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
@@ -80,7 +80,7 @@
       ],
       "pool": [
         "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
@@ -90,7 +90,7 @@
         "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
         "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
         "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
         "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
         "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
@@ -98,11 +98,11 @@
         "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
         "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
         "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
         "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
         "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
@@ -116,7 +116,7 @@
         "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
         "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
         "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
         "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
@@ -160,13 +160,13 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56" // Dream Garden Visitor
           ],
           "pickId": "bf4b9a8a-b42a-46fb-b0d0-9cf800f63c8a",
           "packCards": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
@@ -178,7 +178,7 @@
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
@@ -242,7 +242,7 @@
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
@@ -298,7 +298,7 @@
           "pickId": "2dc16614-5cf8-444d-a5ae-cac25018af68",
           "packCards": [
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
@@ -333,11 +333,11 @@
           "pack": 1,
           "pickInPack": 10,
           "pick": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Young Huntress
           ],
           "pickId": "22bb9825-ad45-44ad-ace2-eb6b66e3f724",
           "packCards": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
@@ -506,17 +506,17 @@
           "pack": 2,
           "pickInPack": 5,
           "pick": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Assault Trooper
           ],
           "pickId": "b34bf7fd-9fe3-43e2-8cfe-7ce7cff08afe",
           "packCards": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
@@ -572,11 +572,11 @@
           "pack": 2,
           "pickInPack": 8,
           "pick": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ],
           "pickId": "169356e0-46dc-4096-8e66-36726454f104",
           "packCards": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
@@ -797,11 +797,11 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ],
           "pickId": "c60174d6-1f9d-4870-b3db-34d6fcb3f6ab",
           "packCards": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten

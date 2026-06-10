@@ -177,7 +177,7 @@
           "packCards": [
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
@@ -223,7 +223,7 @@
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
@@ -435,7 +435,7 @@
           "pickId": "15f01a3c-0a66-48da-a7d2-46260e3b721f",
           "packCards": [
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
@@ -461,9 +461,9 @@
           "packCards": [
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
@@ -504,7 +504,7 @@
           "pickId": "1e3a5af6-5423-442b-a207-364e97a871d8",
           "packCards": [
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
@@ -557,7 +557,7 @@
             "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
             "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
@@ -596,7 +596,7 @@
           "packCards": [
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
@@ -776,14 +776,13 @@
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
@@ -944,7 +943,6 @@
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]

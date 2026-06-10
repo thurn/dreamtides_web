@@ -73,7 +73,7 @@
         "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
         "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
       ],
       "sideboard": [],
       "pool": [
@@ -88,7 +88,7 @@
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
         "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
         "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
         "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
@@ -250,7 +250,7 @@
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ]
         },
         {
@@ -282,7 +282,7 @@
           "pickId": "9efbfd67-e0f5-43e0-9fff-1eb4a2bed0d8",
           "packCards": [
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
             "86fd585b-e9d0-4dc1-bce9-488014b9316d" // Cloudmantle Ray
@@ -367,11 +367,11 @@
           "pack": 1,
           "pickInPack": 14,
           "pick": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ],
           "pickId": "c60174d6-1f9d-4870-b3db-34d6fcb3f6ab",
           "packCards": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ]
         },
         {
@@ -399,16 +399,16 @@
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
-            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver2
           ]
         },
         {
@@ -547,7 +547,7 @@
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ]
         },
@@ -564,10 +564,10 @@
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
-            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver2
           ]
         },
         {
@@ -675,7 +675,7 @@
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]
         },
         {
@@ -698,7 +698,7 @@
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56" // Dream Garden Visitor
           ]
@@ -758,7 +758,7 @@
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
@@ -837,7 +837,7 @@
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]
         },
         {
@@ -853,7 +853,7 @@
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56" // Dream Garden Visitor
           ]

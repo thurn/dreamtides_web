@@ -134,7 +134,7 @@
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
@@ -165,10 +165,10 @@
             "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ]
         },
         {
@@ -313,10 +313,10 @@
           "pickId": "4b205bc3-379a-4790-90a0-c589bbbb1803",
           "packCards": [
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ]
         },
         {
@@ -515,7 +515,7 @@
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
@@ -535,7 +535,7 @@
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
-            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver2
           ]
         },
         {
@@ -700,7 +700,7 @@
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]
         },
         {
@@ -754,7 +754,7 @@
           "packCards": [
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
@@ -796,7 +796,7 @@
             "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
             "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
             "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
@@ -817,7 +817,7 @@
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
@@ -849,7 +849,7 @@
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]
         },
         {

@@ -199,7 +199,7 @@
           "packCards": [
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
@@ -208,7 +208,7 @@
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf" // Scorched Crusader
@@ -248,7 +248,7 @@
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
@@ -336,7 +336,6 @@
           "packCards": [
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
@@ -380,7 +379,7 @@
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf" // Scorched Crusader
@@ -413,7 +412,7 @@
           "pickId": "ca5297a5-bcaa-41fd-a397-e44dc4e00ba3",
           "packCards": [
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
@@ -495,7 +494,7 @@
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "4644db03-fbcd-4af5-a229-17962ce093d5" // Duskreaper
@@ -555,7 +554,7 @@
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
@@ -595,7 +594,7 @@
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
@@ -637,7 +636,7 @@
           "packCards": [
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
@@ -658,7 +657,7 @@
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "4644db03-fbcd-4af5-a229-17962ce093d5" // Duskreaper
@@ -800,7 +799,7 @@
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
@@ -1114,7 +1113,7 @@
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
@@ -1135,7 +1134,7 @@
           "packCards": [
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide

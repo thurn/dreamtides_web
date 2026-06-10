@@ -220,7 +220,7 @@
           "packCards": [
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
             "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
@@ -411,7 +411,7 @@
           "packCards": [
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
@@ -465,7 +465,7 @@
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
@@ -486,7 +486,7 @@
           "packCards": [
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
@@ -536,7 +536,7 @@
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1" // Graywatch
           ]
@@ -710,7 +710,7 @@
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant

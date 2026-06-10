@@ -30,7 +30,7 @@
       "mainboard": [
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
         "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
         "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
@@ -104,7 +104,7 @@
         "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
         "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
         "bedee263-27b9-4d73-ab77-6b5c747dff69" // Wasteland Arbitrator
       ],
@@ -311,12 +311,11 @@
           "packCards": [
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
@@ -374,7 +373,7 @@
           "pickId": "4a08ca06-58db-4ce6-b490-be4bea8956a1",
           "packCards": [
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
@@ -392,7 +391,7 @@
           "pickId": "de911c88-f5c8-4955-9fa5-1f28a9b17236",
           "packCards": [
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
@@ -425,7 +424,6 @@
           "pickId": "4742800a-4872-4c2d-b884-01e0ba16950c",
           "packCards": [
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
@@ -607,7 +605,7 @@
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
@@ -756,7 +754,7 @@
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
             "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "a952f833-825a-435f-82b1-8d85f872d274" // Virtuoso of Harmony
           ]
         },
@@ -794,7 +792,7 @@
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1" // Wired Duelist
           ]
@@ -859,7 +857,7 @@
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
             "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "a952f833-825a-435f-82b1-8d85f872d274" // Virtuoso of Harmony
           ]
         },
@@ -882,11 +880,11 @@
           "pack": 4,
           "pickInPack": 10,
           "pick": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ],
           "pickId": "8c1cce91-7c81-45d9-bbec-b085e794791d",
           "packCards": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1" // Wired Duelist
           ]

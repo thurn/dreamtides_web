@@ -121,12 +121,12 @@
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead" // Rootspring Summons
@@ -162,9 +162,9 @@
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1" // Wired Duelist
           ]
@@ -274,7 +274,7 @@
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead" // Rootspring Summons
@@ -302,7 +302,7 @@
           "pickId": "bb979a96-a57d-4fb5-8ebe-0bd398272abe",
           "packCards": [
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1" // Wired Duelist
           ]
@@ -389,7 +389,7 @@
           "pick": [],
           "pickId": "f19a6f20-8ca1-4a8b-8488-bcb5d86868dc",
           "packCards": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
@@ -459,7 +459,7 @@
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
@@ -503,7 +503,6 @@
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
             "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "f7084ba7-8c85-4847-80df-b0c98ec77d78" // Carrion Shepherd
@@ -674,7 +673,7 @@
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883" // Marrow Drinker
@@ -725,7 +724,7 @@
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
@@ -840,7 +839,7 @@
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883" // Marrow Drinker

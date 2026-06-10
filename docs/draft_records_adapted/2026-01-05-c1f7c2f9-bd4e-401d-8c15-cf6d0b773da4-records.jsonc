@@ -148,7 +148,7 @@
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ]
         },
         {
@@ -189,7 +189,7 @@
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "a911ef71-799c-4240-ad13-8fabd3caeafa" // Moment Rewound
@@ -213,7 +213,7 @@
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]
         },
         {
@@ -280,7 +280,7 @@
           "pick": [],
           "pickId": "4acf970d-d2d7-413d-aba7-587ee53d8d5c",
           "packCards": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
             "45e3d703-7efc-4dc2-b854-33211f8d4f11" // Gleam Below
@@ -299,7 +299,7 @@
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ]
         },
         {
@@ -328,7 +328,7 @@
           "pick": [],
           "pickId": "4acf970d-d2d7-413d-aba7-587ee53d8d5c",
           "packCards": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "a911ef71-799c-4240-ad13-8fabd3caeafa" // Moment Rewound
@@ -348,7 +348,7 @@
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]
         },
         {
@@ -427,7 +427,7 @@
           "packCards": [
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
@@ -520,7 +520,7 @@
           "packCards": [
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
@@ -724,10 +724,10 @@
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "29d25251-8b42-4d3d-97e6-6c3abaabd9a2" // Hatching Ground
           ]
         },
@@ -802,7 +802,7 @@
           "packCards": [
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
@@ -820,7 +820,7 @@
           "packCards": [
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
@@ -870,7 +870,7 @@
           "pickId": "0ee0f160-7339-4d98-8a8c-f08889ee52f5",
           "packCards": [
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "29d25251-8b42-4d3d-97e6-6c3abaabd9a2" // Hatching Ground
           ]
         },

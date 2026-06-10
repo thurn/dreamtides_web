@@ -27,7 +27,7 @@
       "seat": 0,
       "name": "WU Artifact Control",
       "mainboard": [
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
@@ -39,7 +39,7 @@
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
         "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
         "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
         "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
@@ -47,9 +47,9 @@
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
-        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
         "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
@@ -61,7 +61,7 @@
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
         "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
-        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
         "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
@@ -92,7 +92,7 @@
         "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
         "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
@@ -103,7 +103,7 @@
         "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
         "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
         "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
@@ -113,15 +113,15 @@
         "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
         "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
-        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
         "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
-        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
         "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
@@ -142,7 +142,7 @@
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137" // Scrapyard Custodian
           ]
@@ -214,7 +214,7 @@
           "pickId": "bb979a96-a57d-4fb5-8ebe-0bd398272abe",
           "packCards": [
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137" // Scrapyard Custodian
           ]
@@ -333,11 +333,11 @@
           "pack": 2,
           "pickInPack": 4,
           "pick": [
-            "629fe4d4-826f-41b9-a913-458a503856a8" // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8" // Clifftop Marksman
           ],
           "pickId": "c1195ec5-979b-4c4a-9c04-62bb53c2b011",
           "packCards": [
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
@@ -424,7 +424,7 @@
             "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
@@ -496,13 +496,13 @@
           "pickInPack": 5,
           "pick": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ],
           "pickId": "329a8738-3e17-403a-857a-0ba529ce8cd1",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
@@ -580,7 +580,7 @@
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039" // Skyflame Commander
           ]
         },
@@ -597,7 +597,7 @@
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "967c714f-40c5-4a77-8e22-40691a2755d4" // Passage Through Oblivion
@@ -648,7 +648,7 @@
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039" // Skyflame Commander
           ]
         },
@@ -657,11 +657,11 @@
           "pack": 4,
           "pickInPack": 6,
           "pick": [
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49" // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49" // Ethereal Trailblazer
           ],
           "pickId": "56001a36-126b-4c08-af98-a6cc4d84210e",
           "packCards": [
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "967c714f-40c5-4a77-8e22-40691a2755d4" // Passage Through Oblivion
@@ -701,12 +701,12 @@
           "pack": 4,
           "pickInPack": 9,
           "pick": [
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039" // Skyflame Commander
           ],
           "pickId": "169b74e2-72cf-47df-b128-b632313cd24c",
           "packCards": [
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039" // Skyflame Commander
           ]
         },
@@ -737,11 +737,11 @@
           "pack": 5,
           "pickInPack": 2,
           "pick": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ],
           "pickId": "119a814f-0325-4b69-a0b6-4c623b981f4a",
           "packCards": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
             "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger

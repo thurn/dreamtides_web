@@ -32,7 +32,6 @@
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
@@ -67,7 +66,7 @@
       ],
       "sideboard": [
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
         "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
@@ -96,13 +95,12 @@
         "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
         "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
@@ -285,7 +283,7 @@
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
@@ -431,18 +429,16 @@
           "pack": 2,
           "pickInPack": 1,
           "pick": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
@@ -464,7 +460,7 @@
           "pickId": "bd7567df-b4d8-41a8-8eac-c05afa784bfe",
           "packCards": [
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
@@ -499,7 +495,7 @@
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -508,13 +504,13 @@
           "pickInPack": 4,
           "pick": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ],
           "pickId": "329a8738-3e17-403a-857a-0ba529ce8cd1",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
@@ -522,7 +518,7 @@
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9" // Glimmerwood Scout
@@ -654,7 +650,7 @@
           "pickId": "22ce657c-2092-419a-b35f-7b9786adc621",
           "packCards": [
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -741,7 +737,7 @@
           "pick": [],
           "pickId": "981b3a2e-de94-428d-8e5d-5a7ba6afe4a2",
           "packCards": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
@@ -822,10 +818,10 @@
           "packCards": [
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
@@ -845,7 +841,7 @@
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity

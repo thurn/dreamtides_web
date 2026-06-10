@@ -29,7 +29,7 @@
       "seat": 0,
       "name": "UBG",
       "mainboard": [
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
         "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
@@ -75,7 +75,7 @@
         "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
         "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
         "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
         "491e4233-0911-46ed-bced-0498e69b5bba" // Conjured Zenith
       ],
@@ -85,7 +85,7 @@
         "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
         "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
         "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
         "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
         "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
@@ -118,7 +118,7 @@
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
         "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
         "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
         "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
@@ -188,11 +188,11 @@
           "pickId": "d4a3a921-3b7f-474c-b8c3-67a1a6ba5cc1",
           "packCards": [
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
@@ -239,7 +239,7 @@
           "pickId": "a249be17-73ed-4108-89c0-f7e87939beb8",
           "packCards": [
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
             "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
@@ -257,11 +257,11 @@
           "pack": 1,
           "pickInPack": 6,
           "pick": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Assault Trooper
           ],
           "pickId": "b34bf7fd-9fe3-43e2-8cfe-7ce7cff08afe",
           "packCards": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
@@ -460,7 +460,7 @@
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
@@ -516,7 +516,7 @@
           "pickId": "0eee981e-5d26-4810-90e1-432f3c3107f2",
           "packCards": [
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
@@ -564,7 +564,7 @@
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
@@ -705,7 +705,7 @@
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
@@ -756,7 +756,7 @@
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b" // Rubble Diviner
@@ -875,11 +875,11 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ],
           "pickId": "169356e0-46dc-4096-8e66-36726454f104",
           "packCards": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
@@ -916,7 +916,7 @@
           "pickId": "ab1d1461-1625-4163-aacd-a939f4871fad",
           "packCards": [
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b" // Rubble Diviner

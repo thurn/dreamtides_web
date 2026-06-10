@@ -58,7 +58,7 @@
         "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
         "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
         "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
         "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
@@ -105,7 +105,7 @@
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
         "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
         "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
         "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
@@ -176,7 +176,7 @@
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
@@ -217,7 +217,7 @@
           "packCards": [
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "85251f03-c873-46d8-81be-ab421c901a53" // Fractured Vessel
@@ -273,7 +273,6 @@
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
@@ -473,7 +472,7 @@
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
@@ -730,7 +729,7 @@
             "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
@@ -746,11 +745,11 @@
           "pack": 3,
           "pickInPack": 4,
           "pick": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ],
           "pickId": "119a814f-0325-4b69-a0b6-4c623b981f4a",
           "packCards": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond

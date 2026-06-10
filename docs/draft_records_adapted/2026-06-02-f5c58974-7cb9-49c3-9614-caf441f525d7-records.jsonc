@@ -46,7 +46,7 @@
         "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
         "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
         "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
@@ -98,7 +98,7 @@
         "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
         "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
         "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
@@ -161,7 +161,7 @@
           "pickId": "17e50157-bf49-4c5f-9b8a-bf73484e63a5",
           "packCards": [
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
@@ -179,7 +179,7 @@
           "pickId": "039d62b0-3309-4424-a2ea-5a0d88d4bd72",
           "packCards": [
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "49641e8e-93a8-46cb-92a9-246b0fd57899" // Harvester of Despair
@@ -440,7 +440,7 @@
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -455,7 +455,7 @@
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb" // Defiant Holdout
@@ -473,7 +473,7 @@
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137" // Scrapyard Custodian
           ]
@@ -505,7 +505,7 @@
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -528,13 +528,13 @@
           "pickInPack": 8,
           "pick": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ],
           "pickId": "329a8738-3e17-403a-857a-0ba529ce8cd1",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137" // Scrapyard Custodian
           ]

@@ -30,7 +30,7 @@
       "name": "WBG",
       "mainboard": [
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
         "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
@@ -49,7 +49,7 @@
         "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
         "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
         "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
         "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
         "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
@@ -73,9 +73,9 @@
         "34ef6c0c-1a23-4870-a52c-90d34e9769be" // Moonlit Dancer
       ],
       "pool": [
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
         "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
@@ -120,18 +120,18 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ],
           "pickId": "0cb33b46-4d1b-4f97-bfdc-d815aee111da",
           "packCards": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
@@ -147,13 +147,13 @@
           "pickInPack": 2,
           "pick": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ],
           "pickId": "329a8738-3e17-403a-857a-0ba529ce8cd1",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
@@ -179,7 +179,7 @@
           "packCards": [
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
@@ -407,8 +407,8 @@
           "pickId": "14dee5be-94fd-4b5d-9265-edd1b58c8026",
           "packCards": [
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
@@ -758,7 +758,7 @@
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
@@ -815,7 +815,7 @@
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial

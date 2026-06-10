@@ -57,7 +57,7 @@
       ],
       "sideboard": [
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
         "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
@@ -105,7 +105,7 @@
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
         "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
         "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
         "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
@@ -158,12 +158,12 @@
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6" // Exiles of the Last Light
           ]
@@ -180,7 +180,7 @@
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
@@ -205,7 +205,7 @@
           "pickId": "268403bc-733d-446e-a7c1-abc957c42bc2",
           "packCards": [
             "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
@@ -233,7 +233,7 @@
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "738a5af0-f848-4d48-bceb-9a43c9b11066" // Reclaimer of Lost Paths
@@ -334,7 +334,7 @@
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6" // Exiles of the Last Light
           ]
@@ -447,10 +447,10 @@
           "pickId": "27394079-924a-4fdb-8be2-f853193eca80",
           "packCards": [
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
@@ -458,7 +458,7 @@
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ]
         },
         {
@@ -510,7 +510,7 @@
           "pickId": "0c9ebec9-3474-4062-9607-2e2a72f78299",
           "packCards": [
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
@@ -607,7 +607,7 @@
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ]
         },
         {
@@ -685,7 +685,7 @@
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
             "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
@@ -748,11 +748,11 @@
           "pack": 3,
           "pickInPack": 4,
           "pick": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ],
           "pickId": "c2152030-6007-493f-a616-545723a00249",
           "packCards": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
@@ -798,7 +798,6 @@
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward

@@ -31,7 +31,7 @@
       "mainboard": [
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
         "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
@@ -59,7 +59,7 @@
         "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
         "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
         "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
@@ -88,7 +88,7 @@
         "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
         "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
         "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
         "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
         "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
@@ -103,7 +103,7 @@
         "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
         "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
         "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
@@ -136,7 +136,7 @@
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
             "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
@@ -156,9 +156,9 @@
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3" // Weblight Waif
           ]
         },
@@ -300,7 +300,7 @@
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
             "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
@@ -316,7 +316,7 @@
           "pickId": "f97a6d34-03ab-49f1-b02e-405b733f8843",
           "packCards": [
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3" // Weblight Waif
           ]
         },
@@ -408,8 +408,8 @@
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "c430ed7b-523e-4580-9a53-d43d11265633" // Flash of Power
           ]
         },
@@ -421,7 +421,7 @@
           "pickId": "99ff731b-8399-40c8-b539-ba6ba5783771",
           "packCards": [
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
@@ -438,7 +438,7 @@
           "pick": [],
           "pickId": "63c59228-c742-4abd-b4d7-9f7880190e95",
           "packCards": [
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
@@ -458,11 +458,11 @@
           "pack": 2,
           "pickInPack": 4,
           "pick": [
-            "629fe4d4-826f-41b9-a913-458a503856a8" // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8" // Clifftop Marksman
           ],
           "pickId": "c1195ec5-979b-4c4a-9c04-62bb53c2b011",
           "packCards": [
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
@@ -491,7 +491,7 @@
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ]
         },
         {
@@ -565,8 +565,8 @@
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "c430ed7b-523e-4580-9a53-d43d11265633" // Flash of Power
           ]
         },
@@ -626,7 +626,7 @@
           "packCards": [
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ]
         },
         {
@@ -724,7 +724,7 @@
           "pickId": "0027e5ca-8046-40a0-bd73-79be55f28bff",
           "packCards": [
             "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
@@ -741,13 +741,13 @@
           "pickInPack": 4,
           "pick": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ],
           "pickId": "329a8738-3e17-403a-857a-0ba529ce8cd1",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
@@ -775,7 +775,7 @@
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse

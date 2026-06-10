@@ -73,7 +73,7 @@
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
         "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
         "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
         "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
         "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
@@ -125,7 +125,7 @@
         "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
         "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
         "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
         "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
         "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
@@ -182,7 +182,7 @@
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "de946f5a-1e27-4d40-ae44-9ef8cc041949" // Mother of Flames
@@ -195,7 +195,7 @@
           "pick": [],
           "pickId": "bb54233c-0844-4965-9cde-e8a4ef3e11b8",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
@@ -412,10 +412,10 @@
           "pick": [],
           "pickId": "0324641d-af55-4c53-b4dc-c8262e967da5",
           "packCards": [
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "6b1c0e39-0e70-4061-b037-0e10026cfabb" // Seedling Sage
           ]
         },
@@ -542,7 +542,7 @@
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
             "cc21a902-e482-46c0-bf07-e04035f39190" // Steel Abomination
@@ -560,9 +560,9 @@
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "f9a65b32-537b-457c-9eaf-b512cf1f3791" // Still Dreamer
@@ -778,11 +778,11 @@
           "pack": 4,
           "pickInPack": 5,
           "pick": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver2
           ],
           "pickId": "cfdf9706-acdb-48fc-89db-93bc50b3b9ad",
           "packCards": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
             "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
@@ -917,7 +917,7 @@
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars

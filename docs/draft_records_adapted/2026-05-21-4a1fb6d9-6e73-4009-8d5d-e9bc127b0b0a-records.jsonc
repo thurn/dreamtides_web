@@ -27,7 +27,7 @@
       "seat": 0,
       "name": "UR Spellslinger",
       "mainboard": [
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
         "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
         "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
@@ -75,7 +75,7 @@
         "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
         "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
         "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
       ],
       "pool": [
         "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
@@ -103,7 +103,7 @@
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
         "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
         "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
         "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
@@ -123,7 +123,7 @@
         "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
         "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
         "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "965ce3b2-a722-475c-99c5-5b35685d2404" // Dreamvale Monarch
       ],
       "picks": [
@@ -142,7 +142,7 @@
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "a7820b34-9fdc-46cc-8357-53c8caa056b1" // Mirror Protocol
           ]
@@ -212,7 +212,7 @@
           "pickId": "317a8ed5-1ec2-4a5d-a606-8c6ba781c8a3",
           "packCards": [
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "a7820b34-9fdc-46cc-8357-53c8caa056b1" // Mirror Protocol
           ]
@@ -447,7 +447,7 @@
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
@@ -465,7 +465,7 @@
           "pickId": "7ea4b5bc-18a4-45db-a56a-ab3f8bd2fb0d",
           "packCards": [
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
@@ -508,11 +508,11 @@
           "pack": 3,
           "pickInPack": 6,
           "pick": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ],
           "pickId": "c60174d6-1f9d-4870-b3db-34d6fcb3f6ab",
           "packCards": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
@@ -766,9 +766,9 @@
           "pick": [],
           "pickId": "efd35cb4-862d-4699-a197-b744989b3ceb",
           "packCards": [
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "1268a899-b209-46bb-bce4-6def1dcd0404" // Woodland Apparition
           ]
         },
@@ -824,11 +824,11 @@
           "pack": 5,
           "pickInPack": 8,
           "pick": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Young Huntress
           ],
           "pickId": "22bb9825-ad45-44ad-ace2-eb6b66e3f724",
           "packCards": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "1268a899-b209-46bb-bce4-6def1dcd0404" // Woodland Apparition
           ]
         },

@@ -108,7 +108,6 @@
           "pick": [],
           "pickId": "68c72226-6f52-4322-8b14-18737293dfa0",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
@@ -139,7 +138,7 @@
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
@@ -183,7 +182,7 @@
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
@@ -203,10 +202,10 @@
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
@@ -245,7 +244,7 @@
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
@@ -385,7 +384,7 @@
           "packCards": [
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
@@ -537,7 +536,7 @@
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "18ff6a45-148a-40bf-85ae-4a51f32f406a" // Blazing Emberwing
@@ -664,7 +663,7 @@
             "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
             "73fc1b7f-3c2b-4993-9590-924240515c2f", // Lunar Hart
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
@@ -673,7 +672,7 @@
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
             "a75c22ac-e343-4757-964e-a0bb981b5a28" // Spiritbound Alpha
@@ -735,12 +734,12 @@
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "41d0aa36-f15a-487d-b97c-7fd765973921" // Sage of the Prelude
           ]
         },
@@ -834,7 +833,7 @@
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
             "a75c22ac-e343-4757-964e-a0bb981b5a28" // Spiritbound Alpha
@@ -887,7 +886,7 @@
           "packCards": [
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "41d0aa36-f15a-487d-b97c-7fd765973921" // Sage of the Prelude
           ]
         },

@@ -29,7 +29,7 @@
       "seat": 0,
       "name": "WUG",
       "mainboard": [
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
         "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
         "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
@@ -42,7 +42,7 @@
         "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
         "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
-        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
         "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
         "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
@@ -72,8 +72,8 @@
         "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
         "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
         "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
-        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
         "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
         "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
@@ -187,13 +187,13 @@
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "54471b31-4449-453d-9a6e-814d6225520a" // Shadow March
           ]
         },
@@ -208,8 +208,8 @@
           "packCards": [
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
@@ -225,11 +225,11 @@
           "pack": 1,
           "pickInPack": 6,
           "pick": [
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49" // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49" // Ethereal Trailblazer
           ],
           "pickId": "56001a36-126b-4c08-af98-a6cc4d84210e",
           "packCards": [
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
@@ -248,11 +248,11 @@
           "pack": 1,
           "pickInPack": 7,
           "pick": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Assault Trooper
           ],
           "pickId": "b34bf7fd-9fe3-43e2-8cfe-7ce7cff08afe",
           "packCards": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
@@ -343,7 +343,7 @@
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "54471b31-4449-453d-9a6e-814d6225520a" // Shadow March
           ]
         },
@@ -427,11 +427,11 @@
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
@@ -692,7 +692,7 @@
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
@@ -718,7 +718,7 @@
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ]
         },
@@ -759,7 +759,7 @@
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
             "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
@@ -875,7 +875,7 @@
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ]
         },

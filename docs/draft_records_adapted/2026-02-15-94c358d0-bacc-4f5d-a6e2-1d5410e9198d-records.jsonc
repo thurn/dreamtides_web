@@ -42,7 +42,7 @@
         "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
         "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
         "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
@@ -62,12 +62,12 @@
         "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
         "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
         "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
         "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
-        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
         "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
@@ -80,13 +80,13 @@
       ],
       "sideboard": [],
       "pool": [
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
         "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
-        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
         "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
@@ -110,7 +110,7 @@
         "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
         "f860e815-3ed9-463d-ac4d-ed8d2778f8ad", // Lone Castaway
         "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
         "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
@@ -136,13 +136,13 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56" // Dream Garden Visitor
           ],
           "pickId": "bf4b9a8a-b42a-46fb-b0d0-9cf800f63c8a",
           "packCards": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
@@ -223,12 +223,12 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039" // Skyflame Commander
           ],
           "pickId": "169b74e2-72cf-47df-b128-b632313cd24c",
           "packCards": [
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
@@ -647,11 +647,11 @@
           "pack": 3,
           "pickInPack": 3,
           "pick": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver2
           ],
           "pickId": "cfdf9706-acdb-48fc-89db-93bc50b3b9ad",
           "packCards": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
@@ -833,7 +833,7 @@
           "packCards": [
             "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
             "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
@@ -899,7 +899,7 @@
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince

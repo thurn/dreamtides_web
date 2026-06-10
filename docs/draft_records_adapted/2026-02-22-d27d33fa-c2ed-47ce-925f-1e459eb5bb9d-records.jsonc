@@ -67,7 +67,7 @@
         "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
         "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
         "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
         "831bc7cf-e8c9-4943-8156-91b7397ef849" // Resilient Wanderer
@@ -81,7 +81,7 @@
         "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
         "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
         "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
         "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
         "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
@@ -158,7 +158,7 @@
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
             "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "57bb1572-6075-4efd-a592-102b134132fd" // Inspiring Templar
           ]
@@ -179,7 +179,7 @@
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
@@ -242,7 +242,7 @@
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
@@ -319,7 +319,7 @@
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
             "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "57bb1572-6075-4efd-a592-102b134132fd" // Inspiring Templar
           ]
@@ -329,11 +329,11 @@
           "pack": 1,
           "pickInPack": 11,
           "pick": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ],
           "pickId": "169356e0-46dc-4096-8e66-36726454f104",
           "packCards": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
@@ -452,7 +452,6 @@
             "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
@@ -475,7 +474,7 @@
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
@@ -605,7 +604,6 @@
           "packCards": [
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
@@ -676,8 +674,8 @@
           "packCards": [
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
@@ -687,7 +685,7 @@
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "f256a0e7-e396-492b-8881-284ecd36025b" // Fern Treader
           ]
@@ -703,7 +701,7 @@
           "packCards": [
             "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
@@ -734,7 +732,7 @@
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1" // Wired Duelist
           ]
         },
@@ -814,7 +812,7 @@
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "967c714f-40c5-4a77-8e22-40691a2755d4" // Passage Through Oblivion
@@ -853,7 +851,7 @@
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "f256a0e7-e396-492b-8881-284ecd36025b" // Fern Treader
           ]
@@ -887,7 +885,7 @@
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1" // Wired Duelist
           ]
         },

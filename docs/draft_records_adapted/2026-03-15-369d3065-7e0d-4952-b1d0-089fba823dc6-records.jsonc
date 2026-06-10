@@ -158,7 +158,7 @@
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
@@ -464,7 +464,7 @@
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
@@ -501,8 +501,8 @@
           "pickId": "27db5cf4-e023-4bd8-9f51-4dc42957007e",
           "packCards": [
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
@@ -519,7 +519,7 @@
           "pickId": "2dc16614-5cf8-444d-a5ae-cac25018af68",
           "packCards": [
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
@@ -527,7 +527,7 @@
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {
@@ -615,7 +615,7 @@
           "pickId": "317a8ed5-1ec2-4a5d-a606-8c6ba781c8a3",
           "packCards": [
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
@@ -661,7 +661,7 @@
           "pickId": "9675b8ea-47f9-440e-9535-de879da53f76",
           "packCards": [
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {
@@ -695,7 +695,7 @@
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
@@ -720,7 +720,7 @@
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "21e376da-f4c3-4a60-bd63-a272b35db5a6" // Infernal Rest
           ]
@@ -869,7 +869,7 @@
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
@@ -888,7 +888,7 @@
           "packCards": [
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "21e376da-f4c3-4a60-bd63-a272b35db5a6" // Infernal Rest
           ]

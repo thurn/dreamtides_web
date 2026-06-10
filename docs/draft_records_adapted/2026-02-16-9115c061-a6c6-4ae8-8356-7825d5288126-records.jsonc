@@ -29,7 +29,6 @@
       "seat": 0,
       "name": "BR",
       "mainboard": [
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
@@ -105,7 +104,6 @@
         "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
         "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
@@ -147,7 +145,7 @@
           "pickId": "fadb218d-29e2-42d1-a7a1-1066741d63ad",
           "packCards": [
             "f860e815-3ed9-463d-ac4d-ed8d2778f8ad", // Lone Castaway
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
@@ -176,7 +174,7 @@
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
@@ -242,7 +240,7 @@
           "pickId": "9f5ba065-2806-4e99-a330-168cfe76250f",
           "packCards": [
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
@@ -342,7 +340,7 @@
           "packCards": [
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
@@ -437,7 +435,7 @@
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
@@ -523,13 +521,11 @@
           "pack": 2,
           "pickInPack": 5,
           "pick": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
@@ -811,7 +807,7 @@
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -846,7 +842,7 @@
           "pickId": "aec6b2b7-625a-451d-bc0b-4456f5bf2719",
           "packCards": [
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
@@ -960,7 +956,7 @@
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {

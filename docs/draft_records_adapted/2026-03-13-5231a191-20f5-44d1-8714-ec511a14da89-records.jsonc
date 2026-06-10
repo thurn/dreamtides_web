@@ -69,7 +69,7 @@
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
         "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
         "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
@@ -106,7 +106,7 @@
         "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
         "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
         "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
         "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
@@ -141,7 +141,7 @@
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
@@ -182,7 +182,7 @@
           "pick": [],
           "pickId": "981b3a2e-de94-428d-8e5d-5a7ba6afe4a2",
           "packCards": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
@@ -204,7 +204,7 @@
           "pick": [],
           "pickId": "5faba6c8-3463-47c1-ba01-09eb87fcb2d5",
           "packCards": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
@@ -441,7 +441,7 @@
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
@@ -536,7 +536,7 @@
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
@@ -561,7 +561,7 @@
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {
@@ -684,11 +684,11 @@
           "pack": 2,
           "pickInPack": 15,
           "pick": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ],
           "pickId": "8c1cce91-7c81-45d9-bbec-b085e794791d",
           "packCards": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {
@@ -708,7 +708,7 @@
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
@@ -883,7 +883,7 @@
           "pickId": "d96198a7-dd19-4940-bf8f-23135011fc84",
           "packCards": [
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves

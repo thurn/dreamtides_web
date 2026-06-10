@@ -37,7 +37,7 @@
         "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
         "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
         "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
@@ -52,7 +52,7 @@
         "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
         "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
         "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
         "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
@@ -83,7 +83,7 @@
         "290ea9db-0340-4838-842a-0dea09b5340a" // Volcanic Channeler
       ],
       "pool": [
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
@@ -122,7 +122,7 @@
         "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
         "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
         "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
         "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
         "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
@@ -160,13 +160,13 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56" // Dream Garden Visitor
           ],
           "pickId": "bf4b9a8a-b42a-46fb-b0d0-9cf800f63c8a",
           "packCards": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
@@ -431,7 +431,7 @@
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
@@ -541,7 +541,7 @@
           "packCards": [
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
@@ -600,7 +600,7 @@
           "pickId": "2bca6f8b-6e6a-43dd-b6a4-9eedfcc24281",
           "packCards": [
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
@@ -713,7 +713,7 @@
           "packCards": [
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
@@ -768,9 +768,9 @@
           "packCards": [
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
@@ -851,11 +851,11 @@
           "pack": 3,
           "pickInPack": 7,
           "pick": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ],
           "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
           "packCards": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion

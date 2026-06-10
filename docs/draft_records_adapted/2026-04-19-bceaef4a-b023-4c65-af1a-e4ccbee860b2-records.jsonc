@@ -139,7 +139,7 @@
           "pickId": "5006eae5-3b77-45ab-a907-f5094b2eaf1f",
           "packCards": [
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
@@ -179,7 +179,7 @@
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
             "1658d9a0-c3b0-4eb7-babc-4933acf362c4" // Glimpse of Infinity
           ]
@@ -336,7 +336,7 @@
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
             "1658d9a0-c3b0-4eb7-babc-4933acf362c4" // Glimpse of Infinity
           ]
@@ -469,7 +469,7 @@
           "pickId": "1a6c19cc-6469-4958-a547-1d0fe97c70e8",
           "packCards": [
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
@@ -500,7 +500,7 @@
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
@@ -524,7 +524,6 @@
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
@@ -715,13 +714,13 @@
           "packCards": [
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
         },
@@ -743,7 +742,7 @@
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]
         },
         {
@@ -798,7 +797,7 @@
           "packCards": [
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
@@ -868,7 +867,7 @@
           "packCards": [
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
         },
@@ -886,7 +885,7 @@
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]
         },
         {

@@ -40,7 +40,7 @@
         "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
         "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
         "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
         "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
         "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
@@ -80,7 +80,7 @@
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
         "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
         "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
         "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
         "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
@@ -131,7 +131,7 @@
             "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
@@ -181,7 +181,7 @@
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
@@ -211,7 +211,6 @@
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
@@ -223,11 +222,11 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Blood Moon Ronin
           ],
           "pickId": "58c9e9a7-e170-4361-b7d5-22fc0771c489",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
@@ -360,7 +359,6 @@
           "pick": [],
           "pickId": "02138fbb-3962-4348-8d31-faaefba0b8b2",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
@@ -428,7 +426,7 @@
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "cd4d689d-1442-4a19-8e6a-182b425d066d" // Warfield Stalwart
           ]
@@ -516,7 +514,7 @@
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
             "0e1209c3-1041-4079-9b1c-f96816a7deb5", // Wistful Angler
             "db4618f6-121b-4c97-98d3-c29849c5824e" // Ashen Avenger
@@ -534,7 +532,7 @@
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
@@ -595,7 +593,7 @@
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "cd4d689d-1442-4a19-8e6a-182b425d066d" // Warfield Stalwart
           ]
@@ -770,7 +768,7 @@
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
@@ -790,7 +788,7 @@
           "packCards": [
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
@@ -812,11 +810,11 @@
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb" // Heroic Rescue

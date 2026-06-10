@@ -161,7 +161,6 @@
           "packCards": [
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
@@ -173,7 +172,7 @@
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b" // Echoes of Eternity
@@ -336,7 +335,7 @@
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b" // Echoes of Eternity
@@ -430,7 +429,7 @@
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15" // Specter of Silent Snow
           ]
         },
@@ -472,7 +471,7 @@
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "4f0f0811-1a4c-4d42-a804-77dba8707792" // Curio Dealer
           ]
         },
@@ -486,7 +485,7 @@
           "pickId": "01978fe5-00a9-4add-ae2a-b4c2572ffb9a",
           "packCards": [
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
             "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
@@ -510,7 +509,7 @@
           "pickId": "09521f23-52d6-482d-9f3b-c4d12fcc08cc",
           "packCards": [
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
@@ -549,7 +548,7 @@
           "pick": [],
           "pickId": "9e1e76a2-ec37-4fd8-8185-f98f675ff0cb",
           "packCards": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
@@ -596,7 +595,7 @@
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15" // Specter of Silent Snow
           ]
         },
@@ -624,7 +623,7 @@
           "pickId": "a249b1f4-2b22-4b67-a207-e0c4ae95d2e1",
           "packCards": [
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "4f0f0811-1a4c-4d42-a804-77dba8707792" // Curio Dealer
           ]
         },
@@ -836,7 +835,7 @@
           "packCards": [
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol

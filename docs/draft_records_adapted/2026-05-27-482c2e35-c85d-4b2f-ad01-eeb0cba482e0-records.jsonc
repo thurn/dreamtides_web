@@ -54,7 +54,7 @@
         "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
         "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
         "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
         "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
         "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
@@ -67,7 +67,7 @@
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
         "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
         "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
         "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb" // Thronebound Arbiter
       ],
@@ -100,12 +100,12 @@
         "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
         "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
         "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
         "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
         "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
@@ -310,7 +310,7 @@
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ]
         },
         {
@@ -373,7 +373,7 @@
           "packCards": [
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ]
         },
         {
@@ -453,7 +453,7 @@
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf" // Scorched Crusader
           ]
@@ -466,7 +466,7 @@
           "pickId": "1c7d50d6-b63a-4d8c-88fa-1d78ae693a45",
           "packCards": [
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b" // Desolation's Edge
           ]
@@ -509,7 +509,7 @@
           "packCards": [
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf" // Scorched Crusader
           ]
@@ -544,11 +544,11 @@
           "pack": 4,
           "pickInPack": 1,
           "pick": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ],
           "pickId": "005dae9a-dddc-4a11-95bb-cce319edcce4",
           "packCards": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
@@ -556,7 +556,7 @@
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -620,7 +620,7 @@
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -667,11 +667,11 @@
           "pack": 4,
           "pickInPack": 9,
           "pick": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ],
           "pickId": "169356e0-46dc-4096-8e66-36726454f104",
           "packCards": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {

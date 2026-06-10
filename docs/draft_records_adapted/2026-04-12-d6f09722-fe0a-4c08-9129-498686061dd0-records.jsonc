@@ -120,7 +120,7 @@
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
@@ -189,7 +189,7 @@
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
@@ -528,7 +528,7 @@
           "pickId": "45026d57-0324-4312-8b86-2e7d4f581ee9",
           "packCards": [
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
@@ -543,7 +543,7 @@
           "pick": [],
           "pickId": "99ff731b-8399-40c8-b539-ba6ba5783771",
           "packCards": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "ce09ddfa-c349-4b32-b524-fb74444cddcb" // Pallid Arbiter
@@ -713,11 +713,10 @@
           "pick": [],
           "pickId": "26d40e03-6de4-4373-9fbf-04c1dd79e995",
           "packCards": [
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge

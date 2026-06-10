@@ -67,7 +67,7 @@
         "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
         "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
         "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
-        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
         "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
         "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
@@ -103,7 +103,7 @@
         "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
         "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
         "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
-        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+        "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
         "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
@@ -138,7 +138,7 @@
           "packCards": [
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
@@ -167,7 +167,7 @@
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
@@ -218,7 +218,7 @@
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
@@ -304,7 +304,7 @@
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15" // Specter of Silent Snow
           ]
         },
@@ -436,7 +436,7 @@
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
@@ -457,7 +457,7 @@
           "packCards": [
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
@@ -605,12 +605,12 @@
           "pack": 2,
           "pickInPack": 9,
           "pick": [
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ],
           "pickId": "2ec1c088-c1ec-4e2e-a5d2-5a7a1399cbd5",
           "packCards": [
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
@@ -730,7 +730,7 @@
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
@@ -887,7 +887,6 @@
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034" // Dreadweaver

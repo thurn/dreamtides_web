@@ -29,7 +29,6 @@
       "seat": 0,
       "name": "UBR",
       "mainboard": [
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
@@ -77,7 +76,6 @@
         "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
         "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
         "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
@@ -158,7 +156,7 @@
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
             "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
@@ -226,7 +224,7 @@
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea" // Apocalypse
           ]
@@ -236,13 +234,11 @@
           "pack": 1,
           "pickInPack": 6,
           "pick": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
@@ -279,7 +275,7 @@
           "packCards": [
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd" // Charnel Seraph
           ]
         },
@@ -312,7 +308,7 @@
           "pickId": "f00192e0-439d-43b2-882c-90a2d52103f8",
           "packCards": [
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
             "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
@@ -403,7 +399,7 @@
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
@@ -413,7 +409,7 @@
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
@@ -488,7 +484,7 @@
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {
@@ -546,7 +542,7 @@
             "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
@@ -583,7 +579,7 @@
           "packCards": [
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
@@ -639,7 +635,7 @@
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ]
         },
         {
@@ -788,7 +784,7 @@
           "pickId": "247939d9-87e9-4f01-b223-fb4cfa7dbbe1",
           "packCards": [
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha

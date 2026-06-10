@@ -258,10 +258,10 @@
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137" // Scrapyard Custodian
           ]
@@ -409,10 +409,10 @@
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b" // Rubble Diviner
           ]
@@ -472,7 +472,7 @@
           "packCards": [
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
@@ -532,7 +532,7 @@
           "packCards": [
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
@@ -569,10 +569,10 @@
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b" // Rubble Diviner
           ]
@@ -707,7 +707,7 @@
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
@@ -835,7 +835,7 @@
           "pickId": "0b5bb062-eb03-4d9a-b028-91c089442187",
           "packCards": [
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
@@ -874,7 +874,7 @@
           "packCards": [
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer

@@ -59,7 +59,7 @@
         "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
         "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
         "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
         "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
         "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
@@ -124,7 +124,7 @@
         "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
         "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
         "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
         "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
         "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
@@ -148,7 +148,6 @@
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
@@ -217,7 +216,7 @@
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89" // Prism Caller
           ]
@@ -275,7 +274,7 @@
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
@@ -344,7 +343,7 @@
           "packCards": [
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89" // Prism Caller
           ]
@@ -679,7 +678,7 @@
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "4644db03-fbcd-4af5-a229-17962ce093d5" // Duskreaper
           ]
@@ -691,7 +690,7 @@
           "pick": [],
           "pickId": "9e1e76a2-ec37-4fd8-8185-f98f675ff0cb",
           "packCards": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
@@ -743,7 +742,7 @@
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
@@ -822,7 +821,7 @@
           "packCards": [
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "4644db03-fbcd-4af5-a229-17962ce093d5" // Duskreaper
           ]
@@ -938,17 +937,17 @@
           "pack": 4,
           "pickInPack": 2,
           "pick": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ],
           "pickId": "0cb33b46-4d1b-4f97-bfdc-d815aee111da",
           "packCards": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
@@ -966,7 +965,7 @@
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
@@ -999,9 +998,9 @@
           "pickId": "748e6a61-9c1f-4225-9f04-e54002f63ac3",
           "packCards": [
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
@@ -1075,7 +1074,7 @@
           "pickId": "7271436b-897a-4b24-a5d2-d29dbea8c1bf",
           "packCards": [
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter

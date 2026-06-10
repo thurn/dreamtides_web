@@ -121,7 +121,7 @@
           "pick": [],
           "pickId": "0f7585c8-9e21-4eef-afc1-2852de23db2f",
           "packCards": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
@@ -148,7 +148,7 @@
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
@@ -174,7 +174,7 @@
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
@@ -195,9 +195,9 @@
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
@@ -226,7 +226,7 @@
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb" // Thronebound Arbiter
           ]
         },
@@ -374,7 +374,7 @@
           "pickId": "06025c01-1d70-4e8d-b030-60a773631b54",
           "packCards": [
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb" // Thronebound Arbiter
           ]
         },
@@ -419,7 +419,7 @@
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
@@ -464,7 +464,7 @@
           "packCards": [
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
@@ -716,7 +716,7 @@
             "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
@@ -778,7 +778,7 @@
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
@@ -876,7 +876,7 @@
           "packCards": [
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide

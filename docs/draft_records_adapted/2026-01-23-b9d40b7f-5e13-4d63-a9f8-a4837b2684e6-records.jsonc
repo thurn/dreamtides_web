@@ -35,7 +35,7 @@
         "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
         "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
         "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
         "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
@@ -58,7 +58,7 @@
         "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
         "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
         "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
@@ -178,11 +178,11 @@
           "pack": 2,
           "pickInPack": 3,
           "pick": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ],
           "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
           "packCards": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d" // Smoldering Ancient
@@ -416,7 +416,7 @@
           "pickId": "2da5f3f8-5eef-498f-ba2c-2f3fbc3745aa",
           "packCards": [
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a" // Miraculous Arrival
           ]

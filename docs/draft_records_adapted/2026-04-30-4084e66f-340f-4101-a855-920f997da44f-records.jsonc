@@ -256,7 +256,7 @@
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
@@ -274,7 +274,7 @@
           "pickId": "67629212-a080-4245-8d7d-20d38cc4ad87",
           "packCards": [
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
@@ -294,7 +294,7 @@
           "pickId": "7d8adb0c-a322-4447-bf2e-7a74e3b735c4",
           "packCards": [
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
@@ -446,16 +446,16 @@
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ]
         },
         {
@@ -621,7 +621,7 @@
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ]
         },
         {
@@ -707,7 +707,7 @@
           "pickId": "f00192e0-439d-43b2-882c-90a2d52103f8",
           "packCards": [
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
@@ -752,7 +752,7 @@
           "pick": [],
           "pickId": "8c2996d9-3287-4480-8c04-7a378e37e3cf",
           "packCards": [
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
@@ -772,7 +772,7 @@
           "pick": [],
           "pickId": "02138fbb-3962-4348-8d31-faaefba0b8b2",
           "packCards": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
@@ -840,7 +840,6 @@
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant

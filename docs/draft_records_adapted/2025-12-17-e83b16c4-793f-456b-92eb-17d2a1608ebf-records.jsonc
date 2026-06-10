@@ -42,7 +42,7 @@
         "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
         "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
         "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
@@ -95,7 +95,7 @@
         "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
         "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
@@ -170,7 +170,7 @@
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -181,7 +181,7 @@
           "pickId": "8dcaa85c-c4f1-4a3a-8328-6fcf865299e0",
           "packCards": [
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
@@ -327,7 +327,7 @@
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -415,7 +415,7 @@
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
@@ -449,13 +449,13 @@
           "pack": 2,
           "pickInPack": 3,
           "pick": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56" // Dream Garden Visitor
           ],
           "pickId": "bf4b9a8a-b42a-46fb-b0d0-9cf800f63c8a",
           "packCards": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
@@ -591,7 +591,7 @@
           "pickId": "2aebe7a8-b982-4be4-83ca-3594e8f606b4",
           "packCards": [
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
@@ -706,7 +706,7 @@
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
@@ -773,7 +773,7 @@
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
@@ -833,7 +833,6 @@
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard

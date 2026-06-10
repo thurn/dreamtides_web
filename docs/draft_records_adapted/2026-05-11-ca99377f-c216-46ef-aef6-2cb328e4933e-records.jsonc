@@ -131,7 +131,7 @@
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
@@ -140,7 +140,7 @@
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -157,14 +157,13 @@
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
@@ -251,7 +250,7 @@
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1" // Wired Duelist
@@ -312,7 +311,7 @@
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -329,7 +328,6 @@
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
@@ -517,7 +515,7 @@
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
@@ -694,7 +692,7 @@
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
@@ -717,7 +715,7 @@
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
@@ -866,7 +864,7 @@
           "pickId": "07313dd3-d0dc-40ca-98a3-fa4d39e5bcae",
           "packCards": [
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter

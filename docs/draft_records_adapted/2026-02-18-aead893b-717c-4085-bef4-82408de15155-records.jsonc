@@ -29,8 +29,8 @@
       "seat": 0,
       "name": "WURG",
       "mainboard": [
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
         "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
@@ -42,7 +42,7 @@
         "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
         "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
         "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
         "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
         "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
@@ -83,10 +83,10 @@
         "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
         "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
         "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
         "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
         "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
@@ -96,7 +96,7 @@
         "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
         "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
         "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
         "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
@@ -125,7 +125,7 @@
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
@@ -145,7 +145,7 @@
           "packCards": [
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
@@ -192,7 +192,7 @@
           "packCards": [
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
@@ -271,7 +271,7 @@
           "packCards": [
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
@@ -289,7 +289,7 @@
           "pickId": "3e1766e9-2fa7-4446-a255-7beea1467ece",
           "packCards": [
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
@@ -389,11 +389,11 @@
           "pack": 2,
           "pickInPack": 1,
           "pick": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ],
           "pickId": "0cb33b46-4d1b-4f97-bfdc-d815aee111da",
           "packCards": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
@@ -419,7 +419,7 @@
           "pickId": "1453f92e-df2d-4789-aa1b-a5b5c51567d4",
           "packCards": [
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
@@ -447,7 +447,7 @@
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
             "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
@@ -465,11 +465,11 @@
           "pack": 2,
           "pickInPack": 4,
           "pick": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Assault Trooper
           ],
           "pickId": "b34bf7fd-9fe3-43e2-8cfe-7ce7cff08afe",
           "packCards": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
@@ -539,7 +539,7 @@
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11" // Verdant Pioneer
@@ -719,11 +719,11 @@
           "pack": 3,
           "pickInPack": 3,
           "pick": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Young Huntress
           ],
           "pickId": "22bb9825-ad45-44ad-ace2-eb6b66e3f724",
           "packCards": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
@@ -811,7 +811,7 @@
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4" // Call of Calamity
           ]
         },

@@ -129,7 +129,7 @@
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "7c9f3a38-1434-4db4-a856-24fe744e8322" // Canopy of Stars
           ]
         },
@@ -145,7 +145,7 @@
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
             "128d1878-a505-4766-91a2-e5a29498bc4e" // Echoing Denial
           ]
@@ -161,7 +161,7 @@
           "packCards": [
             "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
@@ -255,7 +255,7 @@
           "pickId": "8ce3a3a1-3569-4909-a604-f78d4888781e",
           "packCards": [
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
             "bedee263-27b9-4d73-ab77-6b5c747dff69" // Wasteland Arbitrator
@@ -272,7 +272,7 @@
           "packCards": [
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "7c9f3a38-1434-4db4-a856-24fe744e8322" // Canopy of Stars
           ]
         },
@@ -286,7 +286,7 @@
           "pickId": "2d50685e-1905-4a48-a7bf-82afcf5b6838",
           "packCards": [
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
             "128d1878-a505-4766-91a2-e5a29498bc4e" // Echoing Denial
           ]
@@ -415,7 +415,7 @@
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7" // Ironclad Marksman
           ]
@@ -567,14 +567,14 @@
           "pickId": "7271436b-897a-4b24-a5d2-d29dbea8c1bf",
           "packCards": [
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
             "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
             "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
@@ -595,7 +595,7 @@
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
@@ -641,13 +641,13 @@
           "pickId": "0ee4a931-5d61-49ba-affc-f022263938ca",
           "packCards": [
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ]
         },
         {
@@ -683,7 +683,7 @@
           "pickId": "1ab94f16-778d-4437-a1b9-2f67cd214cc0",
           "packCards": [
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
@@ -732,7 +732,7 @@
           "pick": [],
           "pickId": "cc520518-2063-4b57-a0d4-10cf62a7175e",
           "packCards": [
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
@@ -776,7 +776,7 @@
           "pick": [],
           "pickId": "1066a94a-8e4f-4d77-820b-7a77a18116f0",
           "packCards": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ]
         },
         {

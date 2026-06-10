@@ -58,7 +58,7 @@
         "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
         "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
         "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
@@ -108,7 +108,7 @@
         "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
         "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
         "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
@@ -139,7 +139,7 @@
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
@@ -482,7 +482,7 @@
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
@@ -504,13 +504,13 @@
           "packCards": [
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
@@ -679,7 +679,7 @@
           "packCards": [
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
@@ -714,7 +714,7 @@
           "packCards": [
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
@@ -821,11 +821,11 @@
           "pack": 3,
           "pickInPack": 2,
           "pick": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver2
           ],
           "pickId": "cfdf9706-acdb-48fc-89db-93bc50b3b9ad",
           "packCards": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
             "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
@@ -836,7 +836,7 @@
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
@@ -854,7 +854,6 @@
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
@@ -1046,7 +1045,7 @@
           "pickId": "ff971ba7-68b8-482a-9cb1-741f6893550c",
           "packCards": [
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner

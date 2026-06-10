@@ -153,7 +153,7 @@
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ]
         },
@@ -192,7 +192,7 @@
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
@@ -215,7 +215,7 @@
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
@@ -309,7 +309,7 @@
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ]
         },
@@ -442,13 +442,13 @@
           "packCards": [
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff" // Pilgrim of Old Stones
           ]
@@ -546,7 +546,6 @@
             "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
@@ -600,7 +599,7 @@
           "pickId": "05bd329b-5707-42fc-af1c-084cc604e805",
           "packCards": [
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff" // Pilgrim of Old Stones
           ]
@@ -676,7 +675,7 @@
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
@@ -698,10 +697,10 @@
           "packCards": [
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored

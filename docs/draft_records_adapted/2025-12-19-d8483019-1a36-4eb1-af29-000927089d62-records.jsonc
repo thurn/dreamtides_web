@@ -46,7 +46,7 @@
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
         "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
@@ -88,7 +88,7 @@
         "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
         "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
         "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
         "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
@@ -123,7 +123,7 @@
           "pickId": "bd8fa327-dd41-4737-8f19-2cf5eb1f7cdd",
           "packCards": [
             "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
@@ -157,7 +157,7 @@
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
             "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
@@ -226,7 +226,7 @@
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ]
         },
@@ -260,7 +260,7 @@
           "pickId": "27db5cf4-e023-4bd8-9f51-4dc42957007e",
           "packCards": [
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
             "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
@@ -316,7 +316,7 @@
           "pickId": "1aa4eba9-9e91-4beb-9296-a18baa73a318",
           "packCards": [
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
             "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
@@ -364,7 +364,7 @@
           "packCards": [
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07" // Last Beacon
           ]
         },
@@ -476,11 +476,11 @@
           "pack": 2,
           "pickInPack": 4,
           "pick": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ],
           "pickId": "005dae9a-dddc-4a11-95bb-cce319edcce4",
           "packCards": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
@@ -699,7 +699,7 @@
           "pickId": "3c189fe5-a5f9-4057-bb70-0a88ae3169de",
           "packCards": [
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
@@ -709,7 +709,7 @@
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
-            "629fe4d4-826f-41b9-a913-458a503856a8" // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8" // Clifftop Marksman
           ]
         },
         {
@@ -741,7 +741,7 @@
           "pick": [],
           "pickId": "2f607e7e-30c0-45e9-8f61-bf6e9fe63f2b",
           "packCards": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
@@ -749,7 +749,7 @@
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
             "ccbefadc-aab8-4f8c-a705-07bd70c91731" // Mirrorlight Architect
@@ -789,7 +789,7 @@
           "pick": [],
           "pickId": "68c72226-6f52-4322-8b14-18737293dfa0",
           "packCards": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
@@ -867,7 +867,7 @@
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
-            "629fe4d4-826f-41b9-a913-458a503856a8" // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8" // Clifftop Marksman
           ]
         },
         {
@@ -897,7 +897,7 @@
           "packCards": [
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
             "ccbefadc-aab8-4f8c-a705-07bd70c91731" // Mirrorlight Architect

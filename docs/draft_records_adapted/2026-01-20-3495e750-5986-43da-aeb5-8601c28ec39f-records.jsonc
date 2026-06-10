@@ -38,7 +38,7 @@
         "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
         "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
         "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
         "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
         "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
@@ -73,7 +73,7 @@
       ],
       "sideboard": [],
       "pool": [
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
         "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
         "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
@@ -123,11 +123,11 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ],
           "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
           "packCards": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
@@ -418,10 +418,10 @@
           "packCards": [
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
@@ -473,7 +473,7 @@
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "cd4d689d-1442-4a19-8e6a-182b425d066d" // Warfield Stalwart
           ]
         },
@@ -492,7 +492,7 @@
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
@@ -535,7 +535,7 @@
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
@@ -590,7 +590,7 @@
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "cd4d689d-1442-4a19-8e6a-182b425d066d" // Warfield Stalwart
           ]
         },
@@ -711,7 +711,7 @@
           "pickId": "1ddc5922-f62a-4f91-809e-f959edfcfc6a",
           "packCards": [
             "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
             "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
@@ -736,8 +736,8 @@
           "pickId": "3d8dcd5e-d4d0-49ae-a591-78d80322105d",
           "packCards": [
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner

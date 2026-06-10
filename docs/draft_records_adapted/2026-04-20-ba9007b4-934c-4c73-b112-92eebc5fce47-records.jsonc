@@ -416,7 +416,6 @@
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
@@ -440,7 +439,7 @@
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
@@ -472,7 +471,7 @@
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
@@ -635,7 +634,7 @@
           "pickId": "5aa91a9e-2fe2-43bc-aa9c-cfb8a71829ff",
           "packCards": [
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
@@ -759,7 +758,7 @@
             "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
             "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
@@ -866,7 +865,7 @@
           "pickId": "7ba6a508-3286-4938-b0a5-94b794ab6456",
           "packCards": [
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "87aba308-00b4-40d8-a46f-4e6f58a664a8" // Breach Artist

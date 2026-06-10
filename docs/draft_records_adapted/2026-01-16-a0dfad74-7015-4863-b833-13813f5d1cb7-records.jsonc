@@ -71,7 +71,7 @@
         "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "8a6fc6ea-9a88-441e-bdc2-d40dfec37481" // Fading Farewell
       ],
       "pool": [
@@ -95,7 +95,7 @@
         "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
         "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
         "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
         "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
         "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
@@ -131,7 +131,7 @@
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
@@ -202,7 +202,7 @@
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
             "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
@@ -405,7 +405,7 @@
           "packCards": [
             "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
@@ -518,7 +518,7 @@
           "packCards": [
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
@@ -552,11 +552,11 @@
           "pack": 2,
           "pickInPack": 8,
           "pick": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ],
           "pickId": "c60174d6-1f9d-4870-b3db-34d6fcb3f6ab",
           "packCards": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
@@ -686,7 +686,7 @@
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
@@ -737,7 +737,7 @@
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
@@ -800,7 +800,7 @@
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "2e8571c0-4faf-4e7a-a702-26952d2035ee" // Soulreaver

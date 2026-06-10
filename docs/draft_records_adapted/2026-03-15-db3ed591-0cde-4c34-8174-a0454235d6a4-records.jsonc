@@ -36,7 +36,7 @@
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
         "73fc1b7f-3c2b-4993-9590-924240515c2f", // Lunar Hart
         "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
@@ -63,7 +63,7 @@
         "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
         "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
         "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
         "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
@@ -85,7 +85,7 @@
         "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
         "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
         "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
         "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
@@ -118,7 +118,7 @@
         "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
         "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
         "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
         "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
         "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
@@ -187,7 +187,7 @@
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
@@ -245,7 +245,7 @@
           "packCards": [
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
@@ -334,11 +334,11 @@
           "pack": 1,
           "pickInPack": 11,
           "pick": [
-            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Blood Moon Ronin
           ],
           "pickId": "58c9e9a7-e170-4361-b7d5-22fc0771c489",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
@@ -434,7 +434,7 @@
           "pick": [],
           "pickId": "054f2276-2dd5-43da-bb26-c57c560861fe",
           "packCards": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
@@ -487,7 +487,7 @@
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
@@ -709,7 +709,7 @@
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "290ea9db-0340-4838-842a-0dea09b5340a" // Volcanic Channeler
           ]
@@ -776,8 +776,8 @@
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "2c9711c7-800c-4e55-a488-17ea5a6813c6" // Angel of the Eclipse
@@ -836,7 +836,7 @@
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e" // Starcatcher
@@ -849,9 +849,9 @@
           "pick": [],
           "pickId": "54f449ff-4025-465e-9ec5-a5cf42c4c9d3",
           "packCards": [
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
@@ -871,7 +871,7 @@
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "290ea9db-0340-4838-842a-0dea09b5340a" // Volcanic Channeler
           ]
@@ -915,11 +915,11 @@
           "pack": 3,
           "pickInPack": 12,
           "pick": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ],
           "pickId": "169356e0-46dc-4096-8e66-36726454f104",
           "packCards": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "2c9711c7-800c-4e55-a488-17ea5a6813c6" // Angel of the Eclipse

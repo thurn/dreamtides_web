@@ -150,7 +150,7 @@
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
-            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver2
           ]
         },
         {
@@ -212,7 +212,7 @@
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
@@ -253,7 +253,7 @@
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
@@ -280,7 +280,7 @@
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
             "1658d9a0-c3b0-4eb7-babc-4933acf362c4" // Glimpse of Infinity
           ]
@@ -316,7 +316,7 @@
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
-            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver2
           ]
         },
         {
@@ -412,14 +412,14 @@
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
             "73fc1b7f-3c2b-4993-9590-924240515c2f", // Lunar Hart
@@ -489,7 +489,7 @@
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
             "a911ef71-799c-4240-ad13-8fabd3caeafa" // Moment Rewound
@@ -506,7 +506,7 @@
             "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "be6a2712-cfe3-4d61-b62c-fab8990786a1" // Wolfbond Chieftain
           ]
@@ -529,7 +529,7 @@
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ]
         },
@@ -582,7 +582,7 @@
           "packCards": [
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
             "73fc1b7f-3c2b-4993-9590-924240515c2f", // Lunar Hart
@@ -630,7 +630,7 @@
           "packCards": [
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
             "a911ef71-799c-4240-ad13-8fabd3caeafa" // Moment Rewound
@@ -657,7 +657,7 @@
           "pickId": "4acf970d-d2d7-413d-aba7-587ee53d8d5c",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ]
         },
@@ -684,7 +684,7 @@
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
@@ -736,7 +736,7 @@
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
             "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale

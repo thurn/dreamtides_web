@@ -56,14 +56,14 @@
         "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
         "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
         "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "8bf53fe6-8a25-401e-9a99-84343a026bb0" // Burning Pursuit
       ],
       "sideboard": [
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
         "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
         "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
@@ -80,7 +80,7 @@
         "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
         "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
         "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
         "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
         "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
@@ -91,7 +91,7 @@
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
         "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
         "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
         "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
@@ -149,7 +149,7 @@
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
@@ -179,7 +179,7 @@
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
-            "629fe4d4-826f-41b9-a913-458a503856a8" // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8" // Clifftop Marksman
           ]
         },
         {
@@ -196,10 +196,10 @@
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b" // Featherlight Summoner
@@ -273,7 +273,7 @@
           "packCards": [
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
@@ -327,7 +327,7 @@
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
-            "629fe4d4-826f-41b9-a913-458a503856a8" // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8" // Clifftop Marksman
           ]
         },
         {
@@ -335,11 +335,11 @@
           "pack": 1,
           "pickInPack": 12,
           "pick": [
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ],
           "pickId": "91ca97db-2c83-4c87-9491-e5878293afe5",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b" // Featherlight Summoner
@@ -467,7 +467,7 @@
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0" // The Rising God
@@ -486,11 +486,11 @@
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
             "a7820b34-9fdc-46cc-8357-53c8caa056b1" // Mirror Protocol
@@ -531,7 +531,7 @@
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
@@ -610,11 +610,11 @@
           "pack": 2,
           "pickInPack": 12,
           "pick": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Young Huntress
           ],
           "pickId": "22bb9825-ad45-44ad-ace2-eb6b66e3f724",
           "packCards": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0" // The Rising God

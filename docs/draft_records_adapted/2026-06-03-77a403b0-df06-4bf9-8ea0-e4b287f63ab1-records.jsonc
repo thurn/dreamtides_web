@@ -29,7 +29,7 @@
       "mainboard": [
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
         "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
         "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
         "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
@@ -47,7 +47,7 @@
         "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
         "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
         "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
         "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
         "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
@@ -59,7 +59,7 @@
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
         "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
-        "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
       ],
       "sideboard": [
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
@@ -96,7 +96,7 @@
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
         "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
         "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
         "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
@@ -105,7 +105,7 @@
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
         "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
         "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
         "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
@@ -122,7 +122,7 @@
         "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
         "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
         "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
@@ -289,7 +289,6 @@
           "packCards": [
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
@@ -313,7 +312,7 @@
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e" // Doorlight Foundling
           ]
         },
@@ -373,11 +372,11 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ],
           "pickId": "be065962-f2ed-4ab9-be6b-bfc66d63ff4e",
           "packCards": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e" // Doorlight Foundling
           ]
         },
@@ -437,7 +436,7 @@
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
             "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
             "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
@@ -500,11 +499,11 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ],
           "pickId": "c2152030-6007-493f-a616-545723a00249",
           "packCards": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
@@ -730,11 +729,11 @@
           "pack": 5,
           "pickInPack": 2,
           "pick": [
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ],
           "pickId": "91ca97db-2c83-4c87-9491-e5878293afe5",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen

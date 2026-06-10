@@ -65,7 +65,7 @@
         "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
         "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
         "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
@@ -115,7 +115,7 @@
         "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
         "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
         "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
         "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
         "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
@@ -266,7 +266,7 @@
           "packCards": [
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
@@ -458,7 +458,7 @@
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
@@ -529,7 +529,7 @@
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "4cec92f2-9bac-4949-a602-cd0a44618aaf" // The Ringleader
@@ -545,7 +545,7 @@
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
@@ -738,7 +738,7 @@
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
@@ -755,11 +755,11 @@
           "pack": 3,
           "pickInPack": 3,
           "pick": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ],
           "pickId": "0cb33b46-4d1b-4f97-bfdc-d815aee111da",
           "packCards": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes

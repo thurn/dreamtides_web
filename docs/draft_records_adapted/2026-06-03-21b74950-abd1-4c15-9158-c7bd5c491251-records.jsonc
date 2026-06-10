@@ -46,9 +46,9 @@
         "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
         "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
         "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83", // Epiphany Unfolded
         "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
@@ -67,26 +67,26 @@
         "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
         "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
         "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
         "b6bad2a1-b857-4dd7-8b22-050eb68433a5" // Ferryman of the Falls
       ],
       "pool": [
         "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
         "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
         "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
         "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
         "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83", // Epiphany Unfolded
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
         "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
@@ -99,7 +99,7 @@
         "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
         "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
         "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
         "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
         "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
@@ -149,7 +149,7 @@
           "pickId": "47033ba4-8f26-4a6b-97bd-5b366327325e",
           "packCards": [
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
             "3725379c-676d-4efd-81ee-7e45d80db6d0" // Fragments of Vision
           ]
@@ -176,11 +176,11 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Assault Trooper
           ],
           "pickId": "b34bf7fd-9fe3-43e2-8cfe-7ce7cff08afe",
           "packCards": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
@@ -209,11 +209,11 @@
           "pack": 1,
           "pickInPack": 6,
           "pick": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ],
           "pickId": "119a814f-0325-4b69-a0b6-4c623b981f4a",
           "packCards": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
             "3725379c-676d-4efd-81ee-7e45d80db6d0" // Fragments of Vision
           ]
@@ -297,13 +297,13 @@
           "pickInPack": 3,
           "pick": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ],
           "pickId": "329a8738-3e17-403a-857a-0ba529ce8cd1",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
@@ -430,9 +430,9 @@
           "pickId": "7e4becff-8280-4e29-a370-bf82fb6734d5",
           "packCards": [
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb" // Endless Projection
           ]
@@ -494,11 +494,11 @@
           "pack": 3,
           "pickInPack": 6,
           "pick": [
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ],
           "pickId": "91ca97db-2c83-4c87-9491-e5878293afe5",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb" // Endless Projection
           ]
@@ -728,7 +728,7 @@
           "packCards": [
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "be6a2712-cfe3-4d61-b62c-fab8990786a1" // Wolfbond Chieftain

@@ -125,7 +125,7 @@
           "pickId": "45fd6e91-df76-497f-b642-33dc3d5f6a5a",
           "packCards": [
             "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
@@ -198,7 +198,7 @@
           "pickId": "f00192e0-439d-43b2-882c-90a2d52103f8",
           "packCards": [
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
@@ -260,7 +260,7 @@
           "pickId": "06a981cd-1951-438e-95c9-68294795638e",
           "packCards": [
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
@@ -490,7 +490,7 @@
           "packCards": [
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
@@ -680,7 +680,7 @@
             "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
@@ -702,7 +702,7 @@
           "pickId": "59a43ef5-08f0-44fc-802d-b6cfd56b7d1f",
           "packCards": [
             "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
@@ -771,7 +771,7 @@
           "packCards": [
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan

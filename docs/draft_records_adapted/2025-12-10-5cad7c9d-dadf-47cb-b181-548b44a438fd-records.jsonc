@@ -30,7 +30,7 @@
       "name": "WBRG",
       "mainboard": [
         "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
         "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
@@ -85,7 +85,7 @@
         "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
         "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
         "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
         "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
         "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
@@ -189,7 +189,7 @@
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
@@ -212,14 +212,13 @@
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "49641e8e-93a8-46cb-92a9-246b0fd57899" // Harvester of Despair
@@ -230,11 +229,11 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ],
           "pickId": "be065962-f2ed-4ab9-be6b-bfc66d63ff4e",
           "packCards": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
             "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
@@ -375,7 +374,6 @@
           "packCards": [
             "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "49641e8e-93a8-46cb-92a9-246b0fd57899" // Harvester of Despair
@@ -478,7 +476,7 @@
           "packCards": [
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
@@ -789,7 +787,7 @@
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
@@ -854,7 +852,7 @@
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher

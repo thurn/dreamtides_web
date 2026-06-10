@@ -49,10 +49,10 @@
         "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
         "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
         "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
         "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
@@ -105,7 +105,7 @@
         "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
         "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
         "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
         "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
         "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
@@ -115,7 +115,7 @@
         "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
         "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
         "f68774ce-0e94-489f-90a5-68e03a549ff6" // Deathwalker
@@ -151,7 +151,6 @@
           "pickId": "aa7bd814-9f88-4e01-932d-07ac1abc060e",
           "packCards": [
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
@@ -443,7 +442,7 @@
           "pickId": "57948c65-4324-42bc-97ae-7cc700eb3817",
           "packCards": [
             "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
@@ -555,11 +554,11 @@
           "pack": 4,
           "pickInPack": 1,
           "pick": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ],
           "pickId": "005dae9a-dddc-4a11-95bb-cce319edcce4",
           "packCards": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
@@ -594,7 +593,7 @@
           "pickId": "02902fcc-eefc-4e81-aafd-59fa203a71d7",
           "packCards": [
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
@@ -693,7 +692,7 @@
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
@@ -730,7 +729,7 @@
           "packCards": [
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "a7820b34-9fdc-46cc-8357-53c8caa056b1" // Mirror Protocol
           ]
@@ -754,13 +753,13 @@
           "pickInPack": 5,
           "pick": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ],
           "pickId": "329a8738-3e17-403a-857a-0ba529ce8cd1",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel

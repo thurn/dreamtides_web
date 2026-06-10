@@ -77,7 +77,7 @@
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
         "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
         "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
         "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
         "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15" // Specter of Silent Snow
@@ -104,7 +104,7 @@
         "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
         "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
         "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
@@ -148,7 +148,7 @@
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
             "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
@@ -449,7 +449,7 @@
             "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
@@ -473,7 +473,7 @@
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
             "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
@@ -557,11 +557,11 @@
           "pack": 2,
           "pickInPack": 7,
           "pick": [
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ],
           "pickId": "91ca97db-2c83-4c87-9491-e5878293afe5",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
@@ -795,7 +795,7 @@
           "pickId": "eb1a16f9-13d4-4188-8e1e-0f2394349c7a",
           "packCards": [
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
@@ -820,7 +820,7 @@
           "pickId": "96b6b2e1-c3e6-464c-8a13-b15deb34e862",
           "packCards": [
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
@@ -886,7 +886,7 @@
           "pickId": "c060c178-3c0e-493f-b6f0-ead5b1d6f191",
           "packCards": [
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse

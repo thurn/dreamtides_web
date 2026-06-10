@@ -127,7 +127,7 @@
           "pickId": "0a07cba3-2e8d-48ec-a6f8-4d2edfcd833d",
           "packCards": [
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
@@ -460,10 +460,10 @@
             "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
             "fbf32510-0bad-4567-859f-b3db6d7be5d5" // Break the Veil
@@ -559,7 +559,7 @@
           "packCards": [
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
@@ -614,7 +614,7 @@
           "pickId": "f254239c-c07a-4c41-98f7-8f4de539c73e",
           "packCards": [
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
             "fbf32510-0bad-4567-859f-b3db6d7be5d5" // Break the Veil
@@ -696,7 +696,7 @@
             "f860e815-3ed9-463d-ac4d-ed8d2778f8ad", // Lone Castaway
             "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
@@ -726,7 +726,7 @@
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ]
         },
         {
@@ -793,7 +793,7 @@
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
@@ -813,7 +813,6 @@
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
@@ -837,7 +836,7 @@
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc" // Liminal Dreamer
           ]
@@ -895,7 +894,7 @@
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ]
         },
         {

@@ -43,11 +43,11 @@
         "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
         "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
         "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
         "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
         "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
         "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
         "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
@@ -94,7 +94,7 @@
         "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
         "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
         "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
         "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
@@ -116,7 +116,7 @@
         "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
         "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
         "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
         "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
         "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
@@ -275,9 +275,9 @@
           "pickId": "75fdce80-e338-4a50-bdc6-786511feaeef",
           "packCards": [
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c" // Seaside Requiem
@@ -341,7 +341,7 @@
           "pickId": "4c454a20-8ec8-41d9-b9c3-acaa510d050b",
           "packCards": [
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c" // Seaside Requiem
@@ -405,11 +405,11 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ],
           "pickId": "005dae9a-dddc-4a11-95bb-cce319edcce4",
           "packCards": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
@@ -447,7 +447,7 @@
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56" // Twice-Lit Portal
@@ -548,7 +548,7 @@
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
@@ -620,7 +620,7 @@
           "packCards": [
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
@@ -696,7 +696,7 @@
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
@@ -766,11 +766,11 @@
           "pack": 5,
           "pickInPack": 5,
           "pick": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Assault Trooper
           ],
           "pickId": "b34bf7fd-9fe3-43e2-8cfe-7ce7cff08afe",
           "packCards": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer

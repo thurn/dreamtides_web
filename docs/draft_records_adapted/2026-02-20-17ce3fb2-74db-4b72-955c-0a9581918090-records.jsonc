@@ -30,7 +30,7 @@
       "name": "WUBG",
       "mainboard": [
         "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
         "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
         "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
@@ -39,7 +39,7 @@
       ],
       "sideboard": [],
       "pool": [
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
         "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
@@ -53,11 +53,11 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Blood Moon Ronin
           ],
           "pickId": "58c9e9a7-e170-4361-b7d5-22fc0771c489",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb" // Heroic Rescue

@@ -31,7 +31,7 @@
       "mainboard": [
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
         "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
         "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
         "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
@@ -59,7 +59,7 @@
         "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
         "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
         "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
@@ -81,11 +81,11 @@
         "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
         "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
         "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
         "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
-        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
         "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
         "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
@@ -190,8 +190,8 @@
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "382dafa1-f8ff-47b4-9151-15b84067a5b2" // Tidecaller
@@ -215,7 +215,6 @@
             "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
             "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
             "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
@@ -340,12 +339,12 @@
           "pack": 1,
           "pickInPack": 12,
           "pick": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ],
           "pickId": "be065962-f2ed-4ab9-be6b-bfc66d63ff4e",
           "packCards": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "382dafa1-f8ff-47b4-9151-15b84067a5b2" // Tidecaller
@@ -397,11 +396,11 @@
           "pack": 2,
           "pickInPack": 1,
           "pick": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ],
           "pickId": "005dae9a-dddc-4a11-95bb-cce319edcce4",
           "packCards": [
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
@@ -411,7 +410,7 @@
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
@@ -477,7 +476,7 @@
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
@@ -502,8 +501,8 @@
           "packCards": [
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
@@ -547,7 +546,7 @@
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "cd4d689d-1442-4a19-8e6a-182b425d066d" // Warfield Stalwart
           ]
@@ -581,7 +580,7 @@
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
@@ -719,7 +718,7 @@
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative

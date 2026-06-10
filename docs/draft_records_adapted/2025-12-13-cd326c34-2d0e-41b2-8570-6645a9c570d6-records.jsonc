@@ -42,10 +42,10 @@
         "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
         "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
         "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
-        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
         "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
         "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
         "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
@@ -58,13 +58,13 @@
         "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
         "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
         "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
-        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
         "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
       ],
       "sideboard": [
         "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
@@ -91,11 +91,11 @@
         "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
         "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
         "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
         "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
@@ -105,13 +105,13 @@
         "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
         "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
         "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
-        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+        "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
-        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+        "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
-        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+        "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
         "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
         "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
@@ -131,7 +131,7 @@
             "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
@@ -167,7 +167,7 @@
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
             "c96c6c7f-c0fe-4272-b856-a54ace01f596" // Veil Shatter
           ]
@@ -207,7 +207,7 @@
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
@@ -326,7 +326,7 @@
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
             "c96c6c7f-c0fe-4272-b856-a54ace01f596" // Veil Shatter
           ]
@@ -418,7 +418,7 @@
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "33874387-2490-48ed-93bc-a47a16e399ad" // Soulbinder
           ]
         },
@@ -427,11 +427,11 @@
           "pack": 2,
           "pickInPack": 2,
           "pick": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ],
           "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
           "packCards": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
@@ -459,7 +459,7 @@
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
@@ -480,7 +480,7 @@
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
@@ -551,11 +551,11 @@
           "pack": 2,
           "pickInPack": 8,
           "pick": [
-            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Blood Moon Ronin
           ],
           "pickId": "58c9e9a7-e170-4361-b7d5-22fc0771c489",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
@@ -579,7 +579,7 @@
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "33874387-2490-48ed-93bc-a47a16e399ad" // Soulbinder
           ]
         },
@@ -680,11 +680,11 @@
           "pickId": "bd8fa327-dd41-4737-8f19-2cf5eb1f7cdd",
           "packCards": [
             "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
@@ -744,12 +744,12 @@
           "pack": 3,
           "pickInPack": 4,
           "pick": [
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039" // Skyflame Commander
           ],
           "pickId": "169b74e2-72cf-47df-b128-b632313cd24c",
           "packCards": [
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
@@ -767,11 +767,11 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49" // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49" // Ethereal Trailblazer
           ],
           "pickId": "56001a36-126b-4c08-af98-a6cc4d84210e",
           "packCards": [
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
@@ -795,7 +795,7 @@
           "packCards": [
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
@@ -851,11 +851,11 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
           ],
           "pickId": "c60174d6-1f9d-4870-b3db-34d6fcb3f6ab",
           "packCards": [
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach

@@ -51,7 +51,7 @@
         "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "54471b31-4449-453d-9a6e-814d6225520a" // Shadow March
       ],
       "sideboard": [
@@ -115,7 +115,7 @@
         "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
         "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
         "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
         "f7b135ea-4894-46ab-b41d-ba2f74b070a1" // A New Adventure
@@ -152,7 +152,7 @@
           "pickId": "ab1d1461-1625-4163-aacd-a939f4871fad",
           "packCards": [
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
@@ -180,7 +180,7 @@
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
             "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
@@ -425,7 +425,7 @@
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
@@ -512,7 +512,7 @@
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
@@ -721,7 +721,7 @@
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
             "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
             "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
@@ -776,7 +776,7 @@
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
             "50267984-eaa3-415e-a23f-581c54b0ad2d" // Reunion
           ]
@@ -921,11 +921,11 @@
           "pack": 3,
           "pickInPack": 12,
           "pick": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ],
           "pickId": "169356e0-46dc-4096-8e66-36726454f104",
           "packCards": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
             "50267984-eaa3-415e-a23f-581c54b0ad2d" // Reunion
           ]

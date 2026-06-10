@@ -197,7 +197,7 @@
           "pickId": "716c415e-5eb8-4644-ac64-5ba7c3f0ea65",
           "packCards": [
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
@@ -223,7 +223,7 @@
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
@@ -286,7 +286,6 @@
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
@@ -330,7 +329,7 @@
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
@@ -632,7 +631,7 @@
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
             "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
             "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
@@ -656,7 +655,7 @@
           "packCards": [
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
@@ -820,7 +819,7 @@
           "packCards": [
             "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
             "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
@@ -935,7 +934,7 @@
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
@@ -961,7 +960,7 @@
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "625fe37e-8059-481c-99fd-109fd02ceedd" // Maelstrom Denial
           ]
@@ -981,7 +980,7 @@
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3" // Unleash Ruin
@@ -1020,7 +1019,7 @@
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "123baf70-305a-4583-bdba-a10b5153fbeb" // Dustborn Veteran
           ]
         },

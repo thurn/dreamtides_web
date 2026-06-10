@@ -164,7 +164,7 @@
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -222,7 +222,7 @@
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f" // Frost Visionary
@@ -239,7 +239,7 @@
           "packCards": [
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
@@ -318,7 +318,7 @@
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -458,7 +458,7 @@
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
             "831bc7cf-e8c9-4943-8156-91b7397ef849" // Resilient Wanderer
@@ -477,7 +477,7 @@
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
@@ -529,7 +529,6 @@
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
@@ -621,7 +620,7 @@
           "packCards": [
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
             "831bc7cf-e8c9-4943-8156-91b7397ef849" // Resilient Wanderer
@@ -720,7 +719,7 @@
           "pickId": "0eee981e-5d26-4810-90e1-432f3c3107f2",
           "packCards": [
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
@@ -747,7 +746,7 @@
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
@@ -768,7 +767,7 @@
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
             "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded

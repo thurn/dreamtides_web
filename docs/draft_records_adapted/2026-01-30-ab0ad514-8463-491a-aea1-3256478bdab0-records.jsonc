@@ -141,7 +141,7 @@
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "5e1b943f-9fa2-4055-b613-5dd09a048c99" // Call to the Unknown
           ]
         },
@@ -159,7 +159,6 @@
             "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
@@ -178,7 +177,7 @@
           "packCards": [
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
@@ -262,7 +261,7 @@
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "5e1b943f-9fa2-4055-b613-5dd09a048c99" // Call to the Unknown
           ]
         },
@@ -276,7 +275,6 @@
           "pickId": "9675b8ea-47f9-440e-9535-de879da53f76",
           "packCards": [
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
@@ -412,7 +410,7 @@
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
@@ -457,7 +455,7 @@
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
             "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7" // Ironclad Marksman
           ]
         },
@@ -565,7 +563,7 @@
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
@@ -627,7 +625,7 @@
           "pickId": "56995b84-2307-4955-9c7c-dc4f04acdc07",
           "packCards": [
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
@@ -650,9 +648,9 @@
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
@@ -670,7 +668,7 @@
           "packCards": [
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
             "fcb830e5-85ff-48f3-be1e-46e102a5c8e8" // Shatterpoint Agent
@@ -793,7 +791,7 @@
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies

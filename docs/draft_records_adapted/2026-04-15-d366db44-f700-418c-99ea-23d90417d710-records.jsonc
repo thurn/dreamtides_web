@@ -52,7 +52,7 @@
         "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
         "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
         "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
         "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
         "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
@@ -103,7 +103,7 @@
         "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
         "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
         "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
         "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
         "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
@@ -162,7 +162,7 @@
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
@@ -229,7 +229,7 @@
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
@@ -331,7 +331,7 @@
           "packCards": [
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
@@ -419,7 +419,7 @@
           "pickId": "310a1c46-8331-4a09-9fcb-d942f8102364",
           "packCards": [
             "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
@@ -466,7 +466,7 @@
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
@@ -529,7 +529,7 @@
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
@@ -681,11 +681,11 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver2
           ],
           "pickId": "cfdf9706-acdb-48fc-89db-93bc50b3b9ad",
           "packCards": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
@@ -739,7 +739,7 @@
           "packCards": [
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
@@ -786,7 +786,7 @@
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
             "0e1209c3-1041-4079-9b1c-f96816a7deb5", // Wistful Angler
             "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
@@ -836,7 +836,7 @@
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "6d6ce556-60df-486f-b2d8-5df168a6f75e" // Wreckborn
           ]
@@ -851,7 +851,7 @@
           "pickId": "f3d62dbd-63db-4ac9-950f-9852627f23f2",
           "packCards": [
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant

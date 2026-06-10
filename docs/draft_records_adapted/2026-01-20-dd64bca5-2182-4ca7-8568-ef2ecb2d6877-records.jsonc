@@ -31,7 +31,6 @@
         "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
         "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
         "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
@@ -102,7 +101,6 @@
         "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
         "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
         "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
@@ -217,7 +215,7 @@
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
@@ -407,10 +405,10 @@
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "401fdd0a-356b-49c1-806d-d50617b084d2" // Enginespeaker
@@ -482,7 +480,7 @@
           "pick": [],
           "pickId": "24a5cc2c-0fbf-4a5f-b175-6e0ffd0d0787",
           "packCards": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
@@ -535,10 +533,10 @@
           "packCards": [
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "401fdd0a-356b-49c1-806d-d50617b084d2" // Enginespeaker
@@ -688,7 +686,6 @@
             "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
             "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
@@ -739,7 +736,7 @@
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "ca37f80e-8474-4d40-b793-7a900f6ca467" // Shadow Reflection
@@ -780,7 +777,7 @@
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "0637b453-4362-4f01-b3e6-07c27af9c847" // Herald of the Last Light
           ]
         },
@@ -813,13 +810,11 @@
           "pack": 3,
           "pickInPack": 7,
           "pick": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
@@ -870,7 +865,7 @@
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "ca37f80e-8474-4d40-b793-7a900f6ca467" // Shadow Reflection
@@ -900,7 +895,7 @@
           "pickId": "a2c56479-4bee-4edb-80d7-4af010b7c793",
           "packCards": [
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "0637b453-4362-4f01-b3e6-07c27af9c847" // Herald of the Last Light
           ]
         },

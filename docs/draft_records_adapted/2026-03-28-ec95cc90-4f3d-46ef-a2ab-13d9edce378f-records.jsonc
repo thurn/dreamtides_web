@@ -29,24 +29,24 @@
       "seat": 0,
       "name": "WUR",
       "mainboard": [
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
         "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
         "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
         "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
         "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
         "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
         "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
         "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83", // Epiphany Unfolded
         "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
         "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
@@ -54,7 +54,7 @@
         "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
         "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
@@ -91,11 +91,11 @@
         "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
         "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
         "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
         "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
-        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
-        "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+        "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
+        "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
         "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
@@ -105,7 +105,7 @@
         "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
         "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
         "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
@@ -116,14 +116,14 @@
         "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
         "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
         "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
         "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
         "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
         "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
         "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
@@ -168,7 +168,7 @@
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "b1bea643-1a7b-4e5e-b072-7174d3405421" // Silent Observer
@@ -235,7 +235,7 @@
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
             "0e1209c3-1041-4079-9b1c-f96816a7deb5", // Wistful Angler
             "db4618f6-121b-4c97-98d3-c29849c5824e" // Ashen Avenger
@@ -275,7 +275,7 @@
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
             "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
             "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]
         },
         {
@@ -316,11 +316,11 @@
           "pack": 1,
           "pickInPack": 10,
           "pick": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ],
           "pickId": "c2152030-6007-493f-a616-545723a00249",
           "packCards": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "b1bea643-1a7b-4e5e-b072-7174d3405421" // Silent Observer
@@ -358,11 +358,11 @@
           "pack": 1,
           "pickInPack": 13,
           "pick": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Young Huntress
           ],
           "pickId": "00427d72-b140-45eb-b2ec-2ac2dab16966",
           "packCards": [
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
             "0e1209c3-1041-4079-9b1c-f96816a7deb5", // Wistful Angler
             "db4618f6-121b-4c97-98d3-c29849c5824e" // Ashen Avenger
@@ -381,11 +381,11 @@
           "pack": 1,
           "pickInPack": 15,
           "pick": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ],
           "pickId": "0cb33b46-4d1b-4f97-bfdc-d815aee111da",
           "packCards": [
-            "881e3a5f-280f-413a-b927-352aeb3bda71" // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]
         },
         {
@@ -431,7 +431,7 @@
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
@@ -474,13 +474,13 @@
           "packCards": [
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "ca0e9275-7fbe-47ce-b776-da5b2607145e" // Vertiginous Leap
           ]
@@ -514,13 +514,13 @@
           "pickId": "0559352e-95c1-403b-bd8f-d0679717cfa2",
           "packCards": [
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
             "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ]
         },
         {
@@ -580,11 +580,11 @@
           "pack": 2,
           "pickInPack": 10,
           "pick": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ],
           "pickId": "169356e0-46dc-4096-8e66-36726454f104",
           "packCards": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
@@ -617,7 +617,7 @@
           "pickId": "7f5342d5-b8a6-46ee-afd7-b333bb836a7c",
           "packCards": [
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "ca0e9275-7fbe-47ce-b776-da5b2607145e" // Vertiginous Leap
           ]
@@ -646,7 +646,7 @@
           "pickId": "0359f212-9564-41a9-870b-d2c57455a695",
           "packCards": [
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
-            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269" // Dreadcall Warden
           ]
         },
         {
@@ -724,7 +724,7 @@
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
@@ -747,7 +747,7 @@
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "bf323913-3695-49ee-8d13-8165657e3dc9" // Dreadwood Emissary
           ]
         },
@@ -756,11 +756,11 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ],
           "pickId": "119a814f-0325-4b69-a0b6-4c623b981f4a",
           "packCards": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
@@ -878,11 +878,11 @@
           "pack": 3,
           "pickInPack": 12,
           "pick": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ],
           "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
           "packCards": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "bf323913-3695-49ee-8d13-8165657e3dc9" // Dreadwood Emissary
           ]
         },

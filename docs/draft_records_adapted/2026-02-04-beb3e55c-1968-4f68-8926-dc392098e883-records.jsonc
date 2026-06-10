@@ -195,7 +195,7 @@
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "2a230602-a39b-4ec2-a467-97b92b389aff" // Scuttled Fortune
           ]
@@ -254,7 +254,7 @@
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
             "3e83cbe2-2b21-4804-9906-4b4735db9869" // Phantom Flotilla
@@ -297,7 +297,7 @@
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "fd355778-abea-4513-844c-91bf75929ebe" // Dune Reaper
           ]
@@ -349,7 +349,7 @@
           "packCards": [
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "2a230602-a39b-4ec2-a467-97b92b389aff" // Scuttled Fortune
           ]
@@ -484,7 +484,7 @@
           "packCards": [
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
@@ -492,7 +492,7 @@
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "fcb830e5-85ff-48f3-be1e-46e102a5c8e8" // Shatterpoint Agent
           ]
@@ -537,7 +537,7 @@
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
             "742a376f-68db-466a-b087-405188634ba4" // Assault Leader
           ]
@@ -552,7 +552,7 @@
           "pickId": "d16f8670-f038-400a-83e7-a53a7f8c47ac",
           "packCards": [
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
@@ -572,7 +572,7 @@
           "pickId": "f3537373-ef54-4578-9d05-6216420ee349",
           "packCards": [
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
@@ -644,7 +644,7 @@
           "packCards": [
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "fcb830e5-85ff-48f3-be1e-46e102a5c8e8" // Shatterpoint Agent
           ]
@@ -776,14 +776,13 @@
             "0e1209c3-1041-4079-9b1c-f96816a7deb5", // Wistful Angler
             "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
@@ -931,7 +930,6 @@
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]

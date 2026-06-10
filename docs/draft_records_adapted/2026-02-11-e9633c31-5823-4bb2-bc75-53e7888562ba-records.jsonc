@@ -46,7 +46,7 @@
         "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
         "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
         "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
         "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
@@ -81,7 +81,7 @@
         "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
         "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
-        "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
         "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
@@ -126,7 +126,7 @@
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
@@ -199,13 +199,13 @@
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "de946f5a-1e27-4d40-ae44-9ef8cc041949" // Mother of Flames
@@ -343,11 +343,11 @@
           "pack": 1,
           "pickInPack": 12,
           "pick": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ],
           "pickId": "169356e0-46dc-4096-8e66-36726454f104",
           "packCards": [
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "de946f5a-1e27-4d40-ae44-9ef8cc041949" // Mother of Flames
@@ -497,7 +497,7 @@
             "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
@@ -537,7 +537,7 @@
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188" // Aurora Confluence
@@ -701,7 +701,7 @@
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
@@ -730,7 +730,7 @@
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
@@ -814,7 +814,7 @@
           "packCards": [
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer

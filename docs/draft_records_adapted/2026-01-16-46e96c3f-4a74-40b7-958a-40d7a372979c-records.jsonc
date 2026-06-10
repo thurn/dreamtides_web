@@ -233,7 +233,7 @@
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
@@ -255,9 +255,9 @@
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
             "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
             "f4c570d4-c500-4b66-ad97-e8ccbef19392" // Standoff
@@ -306,7 +306,7 @@
           "packCards": [
             "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
@@ -454,7 +454,7 @@
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
@@ -476,7 +476,7 @@
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
@@ -497,7 +497,7 @@
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
             "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
@@ -558,7 +558,7 @@
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1" // Young Huntress
           ]
         },
         {
@@ -748,7 +748,7 @@
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
             "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell

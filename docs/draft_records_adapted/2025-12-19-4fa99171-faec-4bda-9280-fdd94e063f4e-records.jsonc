@@ -65,7 +65,7 @@
         "d24ea640-638d-4ce2-b15d-b3f4588bda6b" // Echoes of Eternity
       ],
       "sideboard": [
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
         "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
         "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
@@ -103,7 +103,7 @@
         "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
         "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
         "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
-        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+        "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
         "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
         "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
@@ -140,10 +140,10 @@
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
@@ -232,7 +232,7 @@
           "packCards": [
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
@@ -314,7 +314,7 @@
           "pickId": "4c454a20-8ec8-41d9-b9c3-acaa510d050b",
           "packCards": [
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
@@ -435,7 +435,7 @@
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
@@ -573,14 +573,13 @@
           "pack": 2,
           "pickInPack": 8,
           "pick": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144" // Frontline Martyr
           ],
           "pickId": "030b7ddc-dcf0-433a-b09e-27f117430e7b",
           "packCards": [
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
@@ -702,7 +701,7 @@
           "packCards": [
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
@@ -727,7 +726,7 @@
           "pickId": "bd8fa327-dd41-4737-8f19-2cf5eb1f7cdd",
           "packCards": [
             "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
@@ -735,7 +734,7 @@
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
@@ -782,7 +781,7 @@
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
@@ -799,7 +798,7 @@
           "pickId": "c062caf7-f0eb-44db-9f74-e6711a13fada",
           "packCards": [
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
@@ -865,7 +864,7 @@
           "pickId": "07313dd3-d0dc-40ca-98a3-fa4d39e5bcae",
           "packCards": [
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
@@ -897,7 +896,7 @@
           "pickId": "811b2dda-e1b7-4a46-83cc-5cdc17554836",
           "packCards": [
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse

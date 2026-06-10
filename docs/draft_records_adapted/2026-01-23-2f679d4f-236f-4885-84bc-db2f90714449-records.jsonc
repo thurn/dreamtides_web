@@ -28,7 +28,7 @@
       "seat": 0,
       "name": "UBR",
       "mainboard": [
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
         "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
         "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
@@ -76,7 +76,7 @@
         "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
         "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
         "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
         "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
@@ -148,7 +148,7 @@
           "packCards": [
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
@@ -182,11 +182,11 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
-            "629fe4d4-826f-41b9-a913-458a503856a8" // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8" // Clifftop Marksman
           ],
           "pickId": "c1195ec5-979b-4c4a-9c04-62bb53c2b011",
           "packCards": [
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
@@ -203,7 +203,7 @@
           "pick": [],
           "pickId": "af7091c9-5f98-4078-a42b-c9e057346d9b",
           "packCards": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
@@ -502,14 +502,14 @@
           "pickId": "ea1feac0-d3a7-45eb-9719-1cdaf51ea0b6",
           "packCards": [
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "b8a66998-f2d8-401d-8262-d5a658563936" // Spent Courier
           ]
         },
@@ -521,8 +521,8 @@
           "pickId": "995486ce-58bb-4753-a812-0ca73ef1a235",
           "packCards": [
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
             "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
@@ -545,7 +545,6 @@
             "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
@@ -616,7 +615,7 @@
           "packCards": [
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "b8a66998-f2d8-401d-8262-d5a658563936" // Spent Courier
           ]
         },

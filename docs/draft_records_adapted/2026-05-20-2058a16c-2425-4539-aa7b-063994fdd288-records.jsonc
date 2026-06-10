@@ -60,12 +60,12 @@
         "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
         "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "f4c570d4-c500-4b66-ad97-e8ccbef19392" // Standoff
       ],
       "sideboard": [
         "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
         "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
         "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
@@ -77,7 +77,7 @@
       "pool": [
         "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
         "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
-        "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+        "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
         "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
         "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
@@ -102,7 +102,7 @@
         "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
         "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
         "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
-        "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
         "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
@@ -130,7 +130,7 @@
           "packCards": [
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
             "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
@@ -188,11 +188,11 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "448abb34-d77d-40ac-8292-58db03176247" // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247" // Shadowbinder
           ],
           "pickId": "91ca97db-2c83-4c87-9491-e5878293afe5",
           "packCards": [
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
             "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
@@ -405,7 +405,7 @@
           "packCards": [
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
@@ -540,11 +540,11 @@
           "pack": 4,
           "pickInPack": 1,
           "pick": [
-            "629fe4d4-826f-41b9-a913-458a503856a8" // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8" // Clifftop Marksman
           ],
           "pickId": "c1195ec5-979b-4c4a-9c04-62bb53c2b011",
           "packCards": [
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance

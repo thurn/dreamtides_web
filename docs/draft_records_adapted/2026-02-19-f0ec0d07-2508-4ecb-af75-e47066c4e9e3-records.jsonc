@@ -144,7 +144,7 @@
             "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
@@ -216,7 +216,7 @@
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
@@ -276,7 +276,7 @@
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "c73f978e-8196-4589-a432-845265115555" // Lightningborn
           ]
         },
@@ -420,7 +420,7 @@
           "pickId": "377cee38-e769-47b0-abd5-0f528600f36a",
           "packCards": [
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
@@ -507,7 +507,6 @@
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
@@ -679,7 +678,7 @@
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf" // Cinderblade Legionnaire
           ]
@@ -695,7 +694,7 @@
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
@@ -844,7 +843,7 @@
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf" // Cinderblade Legionnaire
           ]

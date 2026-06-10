@@ -140,7 +140,7 @@
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
             "d26d31c0-7bd2-4d58-bed9-444e032a1087" // Door to Possibility
@@ -291,7 +291,7 @@
           "pickId": "2135ac5a-187b-4dc9-8f82-34e8d1603416",
           "packCards": [
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
             "d26d31c0-7bd2-4d58-bed9-444e032a1087" // Door to Possibility
@@ -400,7 +400,7 @@
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "d217303e-b115-484a-b22c-0e44d5701389" // Broadcast Array
           ]
@@ -418,9 +418,9 @@
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
@@ -467,7 +467,7 @@
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220" // Ecliptic Vantage
           ]
@@ -559,7 +559,7 @@
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "d217303e-b115-484a-b22c-0e44d5701389" // Broadcast Array
           ]
@@ -1103,7 +1103,7 @@
           "packCards": [
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
@@ -1130,7 +1130,7 @@
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
             "d26d31c0-7bd2-4d58-bed9-444e032a1087" // Door to Possibility
@@ -1323,7 +1323,7 @@
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
             "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
@@ -1397,7 +1397,7 @@
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "d217303e-b115-484a-b22c-0e44d5701389" // Broadcast Array
           ]
@@ -1410,7 +1410,7 @@
           "pickId": "4acf970d-d2d7-413d-aba7-587ee53d8d5c",
           "packCards": [
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
@@ -1445,7 +1445,7 @@
           "pickId": "0e9aeaa8-9a75-4719-992f-cbb316f72175",
           "packCards": [
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220" // Ecliptic Vantage
           ]

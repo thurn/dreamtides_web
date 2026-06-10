@@ -35,7 +35,7 @@
         "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
         "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
         "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
@@ -97,7 +97,7 @@
         "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
         "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
-        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+        "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
         "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
@@ -418,16 +418,16 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56" // Dream Garden Visitor
           ],
           "pickId": "bf4b9a8a-b42a-46fb-b0d0-9cf800f63c8a",
           "packCards": [
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
@@ -466,7 +466,7 @@
           "pickId": "218af707-cc60-407e-af20-e21879a0e902",
           "packCards": [
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
@@ -565,7 +565,7 @@
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7" // Stargazer Adrift
           ]
@@ -599,10 +599,10 @@
           "pickId": "0827c728-5526-4abe-ad21-311594a0bc13",
           "packCards": [
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "37d9165f-2b3a-44a2-848b-401cf4466a7c" // Silent Avenger
           ]
         },
@@ -629,7 +629,7 @@
           "pickId": "025b0f0f-daf6-4071-82e7-39c015447ce4",
           "packCards": [
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7" // Stargazer Adrift
           ]
@@ -749,7 +749,7 @@
           "packCards": [
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner

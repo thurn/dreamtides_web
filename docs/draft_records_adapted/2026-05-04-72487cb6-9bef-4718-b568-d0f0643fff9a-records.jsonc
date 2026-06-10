@@ -65,7 +65,7 @@
         "2690912e-0295-4d12-a603-5946d37902d3" // Call of the Lost
       ],
       "sideboard": [
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
         "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
         "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
@@ -95,7 +95,7 @@
         "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
         "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
         "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
         "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
         "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
@@ -158,7 +158,7 @@
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
@@ -200,12 +200,11 @@
           "packCards": [
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
@@ -247,7 +246,7 @@
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
@@ -330,7 +329,7 @@
           "pickId": "0049e68d-0caf-474f-9523-dad343f1250a",
           "packCards": [
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
@@ -473,8 +472,8 @@
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
@@ -497,7 +496,7 @@
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
@@ -622,11 +621,11 @@
           "pack": 2,
           "pickInPack": 11,
           "pick": [
-            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Blood Moon Ronin
           ],
           "pickId": "58c9e9a7-e170-4361-b7d5-22fc0771c489",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
@@ -700,7 +699,7 @@
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "f68774ce-0e94-489f-90a5-68e03a549ff6" // Deathwalker
           ]
         },
@@ -860,7 +859,7 @@
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "f68774ce-0e94-489f-90a5-68e03a549ff6" // Deathwalker
           ]
         },

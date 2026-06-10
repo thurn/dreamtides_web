@@ -156,7 +156,7 @@
           "pickId": "70496f16-c4c0-4c03-beef-454eb4824cd1",
           "packCards": [
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
@@ -270,7 +270,6 @@
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
@@ -290,10 +289,10 @@
           "pickId": "19719b9b-a384-4ebe-9a5a-7f51132f3c44",
           "packCards": [
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
@@ -418,7 +417,7 @@
           "packCards": [
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
             "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
@@ -439,9 +438,9 @@
           "pickId": "9dda7531-82a1-4f49-8858-601ddbc6e2bc",
           "packCards": [
             "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
-            "881e3a5f-280f-413a-b927-352aeb3bda71", // Emberfang
+            "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
             "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
@@ -548,7 +547,7 @@
           "packCards": [
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
@@ -746,10 +745,10 @@
           "pickId": "1ddcd76b-a7a1-4ae6-bf4a-f929c6574bdc",
           "packCards": [
             "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
@@ -799,7 +798,7 @@
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
             "4b20e66e-2466-4518-8ef9-67f580bd6f14" // Looming Oracle
@@ -818,7 +817,7 @@
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening

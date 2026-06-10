@@ -558,7 +558,7 @@
             "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
@@ -584,8 +584,8 @@
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
@@ -719,7 +719,7 @@
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00" // Echo Architect
           ]
         },
@@ -910,7 +910,7 @@
           "pickId": "c24018e8-b8f1-44a5-9355-8b79f363569d",
           "packCards": [
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
             "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
@@ -950,7 +950,7 @@
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "f95cae7b-6502-4dbe-ae26-16853959d9a3" // Sunset Chronicler
           ]
         },
@@ -1079,13 +1079,13 @@
           "packCards": [
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
@@ -1164,7 +1164,7 @@
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "f95cae7b-6502-4dbe-ae26-16853959d9a3" // Sunset Chronicler
           ]
         },

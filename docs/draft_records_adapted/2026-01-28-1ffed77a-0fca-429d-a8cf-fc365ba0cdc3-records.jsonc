@@ -31,11 +31,10 @@
       "name": "BRG",
       "mainboard": [
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
@@ -103,7 +102,7 @@
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
         "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+        "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
         "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
@@ -134,7 +133,6 @@
         "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
         "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
@@ -215,7 +213,7 @@
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
@@ -255,7 +253,7 @@
             "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
             "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "ea118471-164b-4d7f-bb02-044c862ed07e" // Wreckland Maverick
           ]
         },
@@ -440,15 +438,15 @@
           "pickInPack": 5,
           "pick": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72" // Ashen Harbinger
           ],
           "pickId": "329a8738-3e17-403a-857a-0ba529ce8cd1",
           "packCards": [
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
@@ -618,7 +616,7 @@
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
@@ -639,7 +637,7 @@
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "acefcfcf-cba5-46ec-913e-32f1091afbda" // Spiral Offering
           ]
         },
@@ -785,7 +783,7 @@
           "packCards": [
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
@@ -832,7 +830,6 @@
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0" // Ashborn Necromancer
@@ -850,7 +847,7 @@
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
@@ -963,13 +960,11 @@
           "pack": 4,
           "pickInPack": 11,
           "pick": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0" // Ashborn Necromancer

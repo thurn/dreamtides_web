@@ -199,7 +199,7 @@
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
@@ -224,7 +224,7 @@
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb" // Endless Projection
           ]
         },
@@ -371,7 +371,7 @@
           "pickId": "0c9ebec9-3474-4062-9607-2e2a72f78299",
           "packCards": [
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb" // Endless Projection
           ]
         },
@@ -477,7 +477,7 @@
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
@@ -700,11 +700,11 @@
           "pickId": "045ce37b-86d2-4e56-84af-b6625b53d13c",
           "packCards": [
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
@@ -750,7 +750,7 @@
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit

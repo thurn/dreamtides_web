@@ -164,7 +164,7 @@
           "packCards": [
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
-            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
+            "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
@@ -172,7 +172,7 @@
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "76766584-a8fb-41cc-8c4b-09655f478703" // Ebonwing
           ]
         },
@@ -219,7 +219,7 @@
           "pickId": "75fdce80-e338-4a50-bdc6-786511feaeef",
           "packCards": [
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
             "41c14462-86b9-42a4-8a61-859d59ffa466" // Summons of the Bonded
@@ -267,7 +267,7 @@
           "packCards": [
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "76766584-a8fb-41cc-8c4b-09655f478703" // Ebonwing
           ]
         },
@@ -361,7 +361,7 @@
           "packCards": [
             "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
@@ -572,7 +572,7 @@
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a" // Oathbound Pair
           ]
         },
@@ -674,7 +674,7 @@
           "pickId": "bb979a96-a57d-4fb5-8ebe-0bd398272abe",
           "packCards": [
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a" // Oathbound Pair
           ]
         },
@@ -786,7 +786,7 @@
           "pickId": "66d80dd1-b944-4cb2-8578-b4dbcabbbc1e",
           "packCards": [
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen

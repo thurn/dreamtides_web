@@ -30,11 +30,11 @@
       "name": "WBR",
       "mainboard": [
         "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
         "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
         "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
         "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
         "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
@@ -104,12 +104,12 @@
         "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
         "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
-        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
         "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
         "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
         "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
-        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+        "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
         "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
         "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
@@ -166,7 +166,7 @@
           "packCards": [
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
@@ -238,7 +238,7 @@
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "89c0d03c-2199-415a-bc66-89e451034328" // Sylvan Matriarch
@@ -275,7 +275,7 @@
           "pickId": "019b51b0-e5c6-4208-922b-7736686dddcd",
           "packCards": [
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
@@ -514,7 +514,7 @@
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188" // Aurora Confluence
@@ -590,11 +590,11 @@
           "pack": 2,
           "pickInPack": 8,
           "pick": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc" // Assault Trooper
           ],
           "pickId": "b34bf7fd-9fe3-43e2-8cfe-7ce7cff08afe",
           "packCards": [
-            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+            "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
@@ -662,11 +662,11 @@
           "pack": 2,
           "pickInPack": 12,
           "pick": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22" // Emberfang
           ],
           "pickId": "8c1cce91-7c81-45d9-bbec-b085e794791d",
           "packCards": [
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188" // Aurora Confluence
@@ -719,11 +719,11 @@
           "packCards": [
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
-            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+            "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
@@ -749,7 +749,7 @@
             "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
@@ -780,7 +780,7 @@
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "831bc7cf-e8c9-4943-8156-91b7397ef849" // Resilient Wanderer
           ]
         },
@@ -842,7 +842,7 @@
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
@@ -937,7 +937,7 @@
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
-            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
+            "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "831bc7cf-e8c9-4943-8156-91b7397ef849" // Resilient Wanderer
           ]
         },

@@ -135,7 +135,7 @@
           "pickId": "2b5315a4-6a78-456f-8d5a-fea9d62f3f0e",
           "packCards": [
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
@@ -163,7 +163,7 @@
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
-            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Dreadlord
+            "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
@@ -190,7 +190,7 @@
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
@@ -474,7 +474,7 @@
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613" // Infernal Cavalier
           ]
@@ -489,7 +489,7 @@
           "pickId": "15c34f32-49d9-4a0d-83b2-28172f54fdd1",
           "packCards": [
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
@@ -562,7 +562,7 @@
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
@@ -636,7 +636,7 @@
           "pickId": "520e5505-429b-4da0-b25e-14b8d4e81ce3",
           "packCards": [
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613" // Infernal Cavalier
           ]
@@ -804,7 +804,6 @@
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator

@@ -161,7 +161,7 @@
           "packCards": [
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
             "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
@@ -186,7 +186,7 @@
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -270,7 +270,7 @@
           "pickId": "006cbb74-7447-45fb-b44b-bac31832b392",
           "packCards": [
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
-            "77f31db4-0397-49a7-8886-f5459ee960e9" // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9" // Dune Reaper
           ]
         },
         {
@@ -323,7 +323,7 @@
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
-            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
+            "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
@@ -664,9 +664,9 @@
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "954e8d50-d494-4fb2-b4c7-74979083b774" // Driftrider
@@ -725,7 +725,6 @@
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
@@ -778,7 +777,7 @@
           "pickId": "c47931c9-685d-4b83-8299-bc347224b4e8",
           "packCards": [
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
-            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
+            "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "954e8d50-d494-4fb2-b4c7-74979083b774" // Driftrider

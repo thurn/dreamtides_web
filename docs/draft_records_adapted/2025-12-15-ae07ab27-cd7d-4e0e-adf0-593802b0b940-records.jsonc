@@ -29,7 +29,6 @@
       "seat": 0,
       "name": "WBRG",
       "mainboard": [
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
@@ -45,7 +44,7 @@
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
         "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
         "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
@@ -55,7 +54,7 @@
         "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
         "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
         "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
         "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
         "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
@@ -77,7 +76,7 @@
         "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
         "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
         "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
-        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
+        "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
         "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
         "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
@@ -88,7 +87,6 @@
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
         "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
-        "Forgotten Titan",
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
@@ -103,7 +101,7 @@
         "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
         "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
         "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
-        "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+        "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
@@ -182,8 +180,8 @@
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "2a828466-450a-4637-9c68-6b54522450c0" // Rusted Monolith
           ]
@@ -226,7 +224,7 @@
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ]
         },
         {
@@ -248,7 +246,7 @@
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432" // Urban Cipher
           ]
@@ -326,12 +324,12 @@
           "pack": 1,
           "pickInPack": 12,
           "pick": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Tranquil Duelist
+            "4b2f044c-0afe-432a-a121-2ea785bb1182" // Cinderblade Legionnaire
           ],
           "pickId": "119a814f-0325-4b69-a0b6-4c623b981f4a",
           "packCards": [
-            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "2a828466-450a-4637-9c68-6b54522450c0" // Rusted Monolith
           ]
@@ -363,7 +361,7 @@
           "pickId": "72ad8e04-f3be-4bc8-b62d-e92291317aab",
           "packCards": [
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ]
         },
         {
@@ -393,7 +391,6 @@
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
@@ -505,8 +502,8 @@
           "pickId": "d16f8670-f038-400a-83e7-a53a7f8c47ac",
           "packCards": [
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
-            "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
+            "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
@@ -557,13 +554,11 @@
           "pack": 2,
           "pickInPack": 9,
           "pick": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
-            "Forgotten Titan",
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
@@ -716,7 +711,7 @@
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "8b5eb29c-146f-46fb-9407-55004128fba7" // Keeper of Forgotten Light
@@ -860,11 +855,11 @@
           "pack": 3,
           "pickInPack": 11,
           "pick": [
-            "e3193b23-2002-40a9-91fc-e0713200355e" // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e" // Blood Moon Ronin
           ],
           "pickId": "58c9e9a7-e170-4361-b7d5-22fc0771c489",
           "packCards": [
-            "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist
+            "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "8b5eb29c-146f-46fb-9407-55004128fba7" // Keeper of Forgotten Light

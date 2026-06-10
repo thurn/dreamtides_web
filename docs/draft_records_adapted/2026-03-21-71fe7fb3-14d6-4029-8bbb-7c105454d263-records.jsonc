@@ -29,9 +29,9 @@
       "seat": 0,
       "name": "WB",
       "mainboard": [
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
@@ -45,7 +45,7 @@
         "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
         "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
         "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
         "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
         "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
@@ -80,7 +80,7 @@
         "145f72b9-5ff7-4477-b7f5-55ca89a135ae" // Defiant Parry
       ],
       "pool": [
-        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+        "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
         "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
@@ -100,9 +100,9 @@
         "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
         "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
-        "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
-        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+        "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
         "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
         "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
         "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
@@ -134,11 +134,11 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3" // Blight Weaver2
           ],
           "pickId": "cfdf9706-acdb-48fc-89db-93bc50b3b9ad",
           "packCards": [
-            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver
+            "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
@@ -161,7 +161,7 @@
           "pickId": "96b6b2e1-c3e6-464c-8a13-b15deb34e862",
           "packCards": [
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
-            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+            "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
@@ -190,7 +190,7 @@
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
             "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
-            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
@@ -466,11 +466,11 @@
           "pack": 2,
           "pickInPack": 3,
           "pick": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d" // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d" // Barrage Specialist
           ],
           "pickId": "be065962-f2ed-4ab9-be6b-bfc66d63ff4e",
           "packCards": [
-            "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+            "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
@@ -511,11 +511,11 @@
           "pack": 2,
           "pickInPack": 5,
           "pick": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef" // Tranquil Duelist
           ],
           "pickId": "c2152030-6007-493f-a616-545723a00249",
           "packCards": [
-            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
+            "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
@@ -540,7 +540,7 @@
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
-            "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
@@ -714,7 +714,7 @@
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
-            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
+            "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
@@ -809,7 +809,7 @@
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
-            "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
+            "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "2a828466-450a-4637-9c68-6b54522450c0" // Rusted Monolith
@@ -864,7 +864,7 @@
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
-            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
+            "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
