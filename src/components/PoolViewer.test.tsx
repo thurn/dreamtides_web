@@ -7,6 +7,7 @@ import type { CardData } from "../types/cards";
 import type {
   ResolvedDreamcallerPackage,
   SeedProvenanceSummary,
+  Tides4ProvenanceSummary,
 } from "../types/content";
 import type { DraftState } from "../types/draft";
 import type { DraftRecord } from "../data/cards-v2-database";
@@ -139,6 +140,7 @@ function renderPool(
     replayRecord: DraftRecord | null;
     resolvedPackage: ResolvedDreamcallerPackage | null;
     seedProvenance: SeedProvenanceSummary | null;
+    tides4Provenance: Tides4ProvenanceSummary | null;
   }> = {},
 ) {
   return mount(
@@ -153,11 +155,59 @@ function renderPool(
       poolVariant={overrides.poolVariant ?? null}
       replayRecord={overrides.replayRecord ?? null}
       seedProvenance={overrides.seedProvenance ?? null}
+      tides4Provenance={overrides.tides4Provenance ?? null}
       isOpen
       onClose={vi.fn()}
       onPoolCardDragStart={overrides.onPoolCardDragStart}
     />,
   );
+}
+
+function makeTides4Provenance(): Tides4ProvenanceSummary {
+  return {
+    dreamcallerId: "dc-test",
+    signatureless: false,
+    borrowedArchetypeName: null,
+    dealSize: 150,
+    cap: 2,
+    facetDrawnCount: 2,
+    facetAvailableCount: 6,
+    tides: [
+      {
+        id: "tide-sig-1",
+        name: "Test Signature",
+        role: "signature",
+        selection: "starter",
+        joined: true,
+        cardNumbers: [1, 2],
+        contributedCardCount: 2,
+      },
+      {
+        id: "tide-fac-1",
+        name: "Stormcaller",
+        role: "facet",
+        selection: "facet-drawn",
+        joined: true,
+        cardNumbers: [3],
+        contributedCardCount: 1,
+      },
+      {
+        id: "tide-neu-1",
+        name: "Broadwater",
+        role: "neutral",
+        selection: "neutral-fill",
+        joined: true,
+        cardNumbers: [4],
+        contributedCardCount: 1,
+      },
+    ],
+    cardProvenanceByNumber: {
+      "1": { copies: 2, tideIds: ["tide-sig-1"], primaryTideId: "tide-sig-1" },
+      "2": { copies: 1, tideIds: ["tide-sig-1"], primaryTideId: "tide-sig-1" },
+      "3": { copies: 1, tideIds: ["tide-fac-1"], primaryTideId: "tide-fac-1" },
+      "4": { copies: 2, tideIds: ["tide-neu-1"], primaryTideId: "tide-neu-1" },
+    },
+  };
 }
 
 function setInputValue(input: HTMLInputElement, value: string): void {
@@ -220,6 +270,68 @@ describe("PoolViewer", () => {
     expect(
       container.querySelector('[data-pool-algo="seed"]'),
     ).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("shows the tide construction banner and opens each individual tide deck", () => {
+    const resolvedPackage = makeResolvedPackage();
+    resolvedPackage.draftPoolCopiesByCard = { "1": 2, "2": 1, "3": 1, "4": 2 };
+    const { container, root } = renderPool({
+      poolVariant: "tides4",
+      resolvedPackage,
+      tides4Provenance: makeTides4Provenance(),
+    });
+
+    // The construction banner summarises how the pool was built.
+    const banner = container.querySelector('[data-pool-tides-banner=""]');
+    expect(banner).not.toBeNull();
+    const bannerText = banner?.textContent ?? "";
+    expect(bannerText).toContain("Test Signature");
+    expect(bannerText).toContain("2 of 6 theme tides");
+    expect(bannerText).toContain("150 cards");
+
+    // The algorithm chip names the tides4 strategy.
+    expect(container.querySelector('[data-pool-algo="tides4"]')).not.toBeNull();
+
+    // The "Tide Decks" source toggle is available; activate it.
+    const tidesToggle = container.querySelector<HTMLButtonElement>(
+      '[data-pool-source="tides"]',
+    );
+    expect(tidesToggle).not.toBeNull();
+    act(() => {
+      tidesToggle?.click();
+    });
+
+    // One nav button per tide that took part in the run.
+    expect(container.querySelectorAll("[data-pool-tide-button]").length).toBe(3);
+
+    // The default-selected tide is the signature tide, showing its two cards.
+    expect(
+      container.querySelector('[data-pool-card-number="1"]'),
+    ).not.toBeNull();
+    expect(
+      container.querySelector('[data-pool-card-number="2"]'),
+    ).not.toBeNull();
+
+    // Selecting the theme tide shows that tide's decklist instead.
+    const facetButton = container.querySelector<HTMLButtonElement>(
+      '[data-pool-tide-button="tide-fac-1"]',
+    );
+    expect(facetButton).not.toBeNull();
+    act(() => {
+      facetButton?.click();
+    });
+    expect(
+      container.querySelector('[data-pool-card-number="3"]'),
+    ).not.toBeNull();
+    expect(container.querySelector('[data-pool-card-number="1"]')).toBeNull();
+
+    // The caption explains why this theme tide was part of the run.
+    const caption = container.querySelector('[data-pool-tide-caption=""]');
+    expect(caption?.textContent ?? "").toContain("random subset");
 
     act(() => {
       root.unmount();

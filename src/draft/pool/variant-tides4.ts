@@ -41,6 +41,10 @@ import type { PoolStrategy } from "./strategy.ts";
 import {
   missingPoolData,
   type PoolData,
+  type Tides4PoolCardProvenance,
+  type Tides4PoolProvenance,
+  type Tides4PoolTide,
+  type Tides4PoolTideSelection,
   type VariantResult,
 } from "./types.ts";
 import type { Tides4DecksJson } from "./tides4-io.ts";
@@ -108,8 +112,9 @@ export function generateTides4(
   // a blend of unrelated facet leans. The archetype draw consumes one `rng()` and
   // happens only for signatureless Dreamcallers, so a signatured Dreamcaller's draw
   // is unchanged.
+  const signatureless = own !== undefined && own.starter === null;
   let entry = own;
-  if (own && own.starter === null) {
+  if (signatureless) {
     const archetypes = Object.values(data.tidePoolByDreamcaller)
       .filter((e) => e.starter !== null)
       .sort((a, b) => ((a.starter ?? "") < (b.starter ?? "") ? -1 : 1));
@@ -117,47 +122,106 @@ export function generateTides4(
       entry = archetypes[Math.floor(rng() * archetypes.length)];
     }
   }
-  const joinOrder: string[] = [];
+  const tideById = new Map(data.tides.map((t) => [t.id, t]));
+  // The borrowed archetype's name (for a signatureless Dreamcaller): the name of
+  // the signature tide the pool leaned on this run, surfaced by the debug
+  // surfaces so the player can read which coherent archetype they got.
+  const borrowedArchetypeName =
+    signatureless && entry && entry.starter !== null
+      ? (tideById.get(entry.starter)?.name ?? null)
+      : null;
+
+  // The full selection order for this run's pool, each tide tagged with WHY it
+  // was joined: the always-joined starter, the random facet subset (the variety
+  // engine), then the fill (undrawn facets, kept ahead of the broad tail so a
+  // pool only reaches for generic cards once its own theme is exhausted).
+  const joinSelections: { id: string; selection: Tides4PoolTideSelection }[] = [];
+  let facetAvailableCount = 0;
+  let facetDrawnCount = 0;
   if (entry) {
-    if (entry.starter !== null) joinOrder.push(entry.starter);
+    if (entry.starter !== null) {
+      joinSelections.push({ id: entry.starter, selection: "starter" });
+    }
     // The random facet subset — `sigseed`'s subset draw, over baked facets. Draw
     // its size first (uniform in [1, min(maxFacetDraw, facets)]), then take that
     // many from a shuffled copy of the facet list.
     const facets = shuffle(rng, [...entry.facets]);
+    facetAvailableCount = facets.length;
     const hi = Math.max(1, Math.min(TIDES4.maxFacetDraw, facets.length));
     const drawCount = 1 + Math.floor(rng() * hi);
-    const drawn = facets.slice(0, Math.min(drawCount, facets.length));
-    joinOrder.push(...drawn);
-    // Fill, joined only if the starter plus the drawn facets cannot fill the pool:
-    // any undrawn (on-identity) facets first, then the broad neutral tail. Keeping
-    // the on-theme facets ahead of the neutral tail means a pool only reaches for
-    // generic cards once its own theme is exhausted.
-    joinOrder.push(...facets.slice(Math.min(drawCount, facets.length)));
-    joinOrder.push(...shuffle(rng, [...entry.neutral]));
+    const split = Math.min(drawCount, facets.length);
+    facetDrawnCount = split;
+    for (const id of facets.slice(0, split)) {
+      joinSelections.push({ id, selection: "facet-drawn" });
+    }
+    for (const id of facets.slice(split)) {
+      joinSelections.push({ id, selection: "facet-fill" });
+    }
+    for (const id of shuffle(rng, [...entry.neutral])) {
+      joinSelections.push({ id, selection: "neutral-fill" });
+    }
   } else {
-    joinOrder.push(...shuffle(rng, data.tides.map((t) => t.id)));
+    // Robustness fallback (load-time validation requires an entry per
+    // Dreamcaller): shuffle every tide together, tagging each by its own role.
+    for (const id of shuffle(rng, data.tides.map((t) => t.id))) {
+      const role = tideById.get(id)?.role;
+      joinSelections.push({
+        id,
+        selection:
+          role === "signature"
+            ? "starter"
+            : role === "facet"
+              ? "facet-drawn"
+              : "neutral-fill",
+      });
+    }
   }
 
   // The bag: every copy of every card in the joined tides, as current display
-  // names — in `joinOrder`, joining only as far as needed for a full pool.
+  // names — in selection order, folding only as far as needed for a full pool.
   // `dealable` counts the copies the deal below can actually use (the bag total
   // minus copies beyond the per-card cap), so the pool keeps joining tides until
   // it reaches full size. When no card index is available (the synthetic pools
   // some tests build), the artifact's informational names are used directly.
-  const tideById = new Map(data.tides.map((t) => [t.id, t]));
+  //
+  // Every tide in the selection is also recorded for provenance — its full
+  // resolvable decklist and why it was joined — even past the point the bag is
+  // full, so the Pool Viewer can show each individual tide deck and the "Why
+  // Cards" surface can attribute every pooled card to the tide it rode in on.
+  // Folding stops at the same point as before, so the dealt pool is unchanged.
   const bag: string[] = [];
   const bagCounts = new Map<string, number>();
   let dealable = 0;
   const deckIds: string[] = [];
-  const joinTide = (id: string): void => {
+  const tides: Tides4PoolTide[] = [];
+  // Card name -> joined tide ids that contain it, in join order. The first id is
+  // the card's "home" (primary) tide.
+  const containingTides = new Map<string, string[]>();
+  const recordTide = (
+    id: string,
+    selection: Tides4PoolTideSelection,
+    fold: boolean,
+  ): void => {
     const tide = tideById.get(id);
     if (!tide) return;
-    deckIds.push(id);
+    const cardNames: string[] = [];
+    const seenInTide = new Set<string>();
     for (const card of tide.cards) {
       const name = poolData.cardNameById
         ? poolData.cardNameById.get(card.id)
         : card.name;
       if (name === undefined) continue;
+      if (!seenInTide.has(name)) {
+        seenInTide.add(name);
+        cardNames.push(name);
+      }
+      if (!fold) continue;
+      let homes = containingTides.get(name);
+      if (homes === undefined) {
+        homes = [];
+        containingTides.set(name, homes);
+      }
+      if (!homes.includes(id)) homes.push(id);
       for (let i = 0; i < card.copies; i += 1) {
         const have = bagCounts.get(name) ?? 0;
         bagCounts.set(name, have + 1);
@@ -165,10 +229,19 @@ export function generateTides4(
         if (have < TIDES4.cap) dealable += 1;
       }
     }
+    if (fold) deckIds.push(id);
+    tides.push({
+      id,
+      name: tide.name,
+      role: tide.role,
+      selection,
+      joined: fold,
+      cardNames,
+      contributedCardCount: 0,
+    });
   };
-  for (const id of joinOrder) {
-    if (dealable >= dealSize) break;
-    joinTide(id);
+  for (const { id, selection } of joinSelections) {
+    recordTide(id, selection, dealable < dealSize);
   }
 
   // One shuffle, one deal: take cards in bag order, skipping any already at the
@@ -184,9 +257,49 @@ export function generateTides4(
     size += 1;
   }
 
+  // Per-card provenance over the dealt pool, plus each tide's contribution (the
+  // pooled cards whose home tide is that one).
+  const cardProvenanceByName: Record<string, Tides4PoolCardProvenance> = {};
+  const contributionByTide = new Map<string, number>();
+  for (const [name, copies] of counts) {
+    const homes = containingTides.get(name) ?? [];
+    const primaryTideId = homes[0] ?? "";
+    cardProvenanceByName[name] = {
+      copies,
+      tideIds: [...homes],
+      primaryTideId,
+    };
+    if (primaryTideId !== "") {
+      contributionByTide.set(
+        primaryTideId,
+        (contributionByTide.get(primaryTideId) ?? 0) + 1,
+      );
+    }
+  }
+  for (const tide of tides) {
+    tide.contributedCardCount = contributionByTide.get(tide.id) ?? 0;
+  }
+
+  const tides4Provenance: Tides4PoolProvenance = {
+    dreamcallerId: dreamcallerId ?? "",
+    signatureless,
+    borrowedArchetypeName,
+    dealSize,
+    cap: TIDES4.cap,
+    facetDrawnCount,
+    facetAvailableCount,
+    tides,
+    cardProvenanceByName,
+  };
+
   // No color identity (this variant reads nothing but the tide decks); the labels
   // record the algorithm and the tide ids the pool was dealt from.
-  return { C: new Set(), selected: ["tides4", ...deckIds], counts };
+  return {
+    C: new Set(),
+    selected: ["tides4", ...deckIds],
+    counts,
+    tides4Provenance,
+  };
 }
 
 /** Strategy adapter for the `tides4` algorithm. */

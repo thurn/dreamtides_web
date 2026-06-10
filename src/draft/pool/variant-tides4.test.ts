@@ -191,6 +191,81 @@ describe("generateTides4", () => {
   });
 });
 
+describe("generateTides4 provenance", () => {
+  it("records the joined tides in selection order, tagged by why", () => {
+    const poolData = makePoolData(makeTides4(6, 30));
+    const provenance = generateTides4(makeRng(7), poolData, "dc-a")
+      .tides4Provenance;
+    expect(provenance).toBeDefined();
+    if (provenance === undefined) return;
+
+    expect(provenance.dreamcallerId).toBe("dc-a");
+    expect(provenance.signatureless).toBe(false);
+    expect(provenance.borrowedArchetypeName).toBeNull();
+    expect(provenance.cap).toBe(TIDES4.cap);
+    expect(provenance.dealSize).toBe(TIDES4.dealSize);
+    expect(provenance.facetAvailableCount).toBe(6);
+    expect(provenance.facetDrawnCount).toBeGreaterThanOrEqual(1);
+    expect(provenance.facetDrawnCount).toBeLessThanOrEqual(TIDES4.maxFacetDraw);
+
+    // The starter is the first tide and is always joined.
+    expect(provenance.tides[0].selection).toBe("starter");
+    expect(provenance.tides[0].id).toBe("tide-sig-1");
+    expect(provenance.tides[0].joined).toBe(true);
+
+    // Exactly facetDrawnCount tides are tagged as the random draw.
+    const drawn = provenance.tides.filter((t) => t.selection === "facet-drawn");
+    expect(drawn.length).toBe(provenance.facetDrawnCount);
+
+    // Every tide carries its full resolvable decklist (30 disjoint cards each).
+    for (const tide of provenance.tides) {
+      expect(tide.cardNames.length).toBe(30);
+    }
+  });
+
+  it("attributes every pooled card to a joined source tide", () => {
+    const poolData = makePoolData(makeTides4(6, 30));
+    const result = generateTides4(makeRng(3), poolData, "dc-a");
+    const provenance = result.tides4Provenance;
+    expect(provenance).toBeDefined();
+    if (provenance === undefined) return;
+
+    const joinedIds = new Set(
+      provenance.tides.filter((t) => t.joined).map((t) => t.id),
+    );
+    const entries = Object.entries(provenance.cardProvenanceByName);
+    // One provenance entry per distinct pooled card, copies matching the deal.
+    expect(entries.length).toBe(result.counts.size);
+    for (const [name, card] of entries) {
+      expect(card.copies).toBe(result.counts.get(name));
+      expect(card.tideIds.length).toBeGreaterThanOrEqual(1);
+      expect(joinedIds.has(card.primaryTideId)).toBe(true);
+      // Disjoint synthetic decks: each card belongs to exactly one tide.
+      expect(card.tideIds).toEqual([card.primaryTideId]);
+    }
+
+    // Each tide's contribution sums to the distinct pooled-card count.
+    const totalContribution = provenance.tides.reduce(
+      (sum, tide) => sum + tide.contributedCardCount,
+      0,
+    );
+    expect(totalContribution).toBe(result.counts.size);
+  });
+
+  it("marks a signatureless Dreamcaller and names the borrowed archetype", () => {
+    const poolData = makePoolData(makeTides4(6, 30));
+    const provenance = generateTides4(makeRng(5), poolData, "dc-b")
+      .tides4Provenance;
+    expect(provenance).toBeDefined();
+    if (provenance === undefined) return;
+
+    expect(provenance.signatureless).toBe(true);
+    // dc-b borrows the only signatured archetype, whose signature tide is "Sig 1".
+    expect(provenance.borrowedArchetypeName).toBe("Sig 1");
+    expect(provenance.tides[0].selection).toBe("starter");
+  });
+});
+
 describe("validateTides4Decks (smoke)", () => {
   it("accepts the synthetic fixture", () => {
     const data = makeTides4(3, 2);

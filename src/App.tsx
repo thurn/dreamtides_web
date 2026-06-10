@@ -6,7 +6,9 @@ import {
   AFFINITY_GROWN_POOL_VARIANTS,
   buildDreamcallerProvenance,
   buildDreamcallerSeedProvenance,
+  buildDreamcallerTides4Provenance,
   loadQuestContent,
+  poolVariantNeedsTides4,
 } from "./data/quest-content";
 import { getFirebaseDatabase } from "./firebase/app-config";
 import { MultiplayerRoomGate } from "./multiplayer/MultiplayerRoomGate";
@@ -143,6 +145,34 @@ export function QuestApp({
     return buildDreamcallerSeedProvenance(dreamcaller, poolContext, state.seed);
   }, [
     seedProvenanceNeeded,
+    questContent.poolContext,
+    questContent.dreamcallers,
+    resolvedDreamcallerId,
+    state.seed,
+  ]);
+
+  // Tide provenance: which preconstructed tides the run's pool was dealt from
+  // (the signature tide, the random subset of theme tides, the broad tail) and
+  // which tide each pooled card rode in on. Recomputed on demand (same
+  // determinism guarantees as the provenance above) for the "Why Cards" overlay
+  // and the Pool Viewer, so both surfaces describe the exact pool the player
+  // drafts from. Computed only for the `tides4` variant; null otherwise.
+  const isTides4Variant =
+    runtimeConfig.poolVariant !== undefined &&
+    poolVariantNeedsTides4(runtimeConfig.poolVariant);
+  const tides4ProvenanceNeeded =
+    isTides4Variant && (cardSourceOverlayOpen || poolViewerOpen);
+  const tides4Provenance = useMemo(() => {
+    const poolContext = questContent.poolContext;
+    if (!tides4ProvenanceNeeded || poolContext === undefined) return null;
+    if (resolvedDreamcallerId === null) return null;
+    const dreamcaller = questContent.dreamcallers.find(
+      (dc) => dc.id === resolvedDreamcallerId,
+    );
+    if (dreamcaller === undefined) return null;
+    return buildDreamcallerTides4Provenance(dreamcaller, poolContext, state.seed);
+  }, [
+    tides4ProvenanceNeeded,
     questContent.poolContext,
     questContent.dreamcallers,
     resolvedDreamcallerId,
@@ -291,6 +321,7 @@ export function QuestApp({
             poolVariant={runtimeConfig.poolVariant}
             replayRecord={replayRecord}
             seedProvenance={seedProvenance}
+            tides4Provenance={tides4Provenance}
             isOpen={poolViewerOpen}
             onClose={handleClosePoolViewer}
           />
@@ -328,6 +359,7 @@ export function QuestApp({
             cardSourceDebug={state.cardSourceDebug}
             idf3Provenance={cardSourceProvenance}
             seedProvenance={seedProvenance}
+            tides4Provenance={tides4Provenance}
             isOpen={cardSourceOverlayOpen}
             onClose={handleCloseCardSourceOverlay}
           />

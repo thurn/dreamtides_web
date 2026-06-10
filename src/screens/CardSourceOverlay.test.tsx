@@ -9,6 +9,7 @@ import type { CardSourceDebugEntry, CardSourceDebugState } from "../types/quest"
 import type {
   Idf3ProvenanceSummary,
   SeedProvenanceSummary,
+  Tides4ProvenanceSummary,
 } from "../types/content";
 
 vi.mock("framer-motion", () => ({
@@ -156,7 +157,85 @@ function makeSeedProvenance(): SeedProvenanceSummary {
   };
 }
 
+function makeTides4Provenance(): Tides4ProvenanceSummary {
+  return {
+    dreamcallerId: "dc-x",
+    signatureless: false,
+    borrowedArchetypeName: null,
+    dealSize: 150,
+    cap: 2,
+    facetDrawnCount: 2,
+    facetAvailableCount: 6,
+    tides: [
+      {
+        id: "tide-sig-1",
+        name: "Reaper Signature",
+        role: "signature",
+        selection: "starter",
+        joined: true,
+        cardNumbers: [11],
+        contributedCardCount: 1,
+      },
+      {
+        id: "tide-fac-1",
+        name: "Tidal Theme",
+        role: "facet",
+        selection: "facet-drawn",
+        joined: true,
+        cardNumbers: [12],
+        contributedCardCount: 1,
+      },
+      {
+        id: "tide-neu-1",
+        name: "Broadwater",
+        role: "neutral",
+        selection: "neutral-fill",
+        joined: false,
+        cardNumbers: [],
+        contributedCardCount: 0,
+      },
+    ],
+    cardProvenanceByNumber: {
+      "11": { copies: 1, tideIds: ["tide-sig-1"], primaryTideId: "tide-sig-1" },
+      "12": { copies: 2, tideIds: ["tide-fac-1"], primaryTideId: "tide-fac-1" },
+    },
+  };
+}
+
 describe("CardSourceOverlay", () => {
+  it("walks the tide construction story and names each card's source tide", () => {
+    const { container, root } = mount(
+      <CardSourceOverlay
+        cardSourceDebug={makeOverlayState()}
+        idf3Provenance={makeProvenance()}
+        seedProvenance={makeSeedProvenance()}
+        tides4Provenance={makeTides4Provenance()}
+        isOpen
+        onClose={vi.fn()}
+      />,
+    );
+
+    const text = container.textContent ?? "";
+    // Tide provenance takes precedence over both seed and idf3.
+    expect(text).toContain("dealt from your Dreamcaller's tides");
+    expect(text).toContain("How this pool was built");
+    expect(text).toContain("Signature tide");
+    expect(text).toContain("Theme tides");
+    expect(text).toContain("2 of 6 theme tides");
+    expect(text).toContain("Deal");
+    // Not the seed or idf3 walkthroughs.
+    expect(text).not.toContain("Anchor decks");
+    expect(text).not.toContain("Seed card");
+    // Per-card tide attribution.
+    expect(text).toContain("From your signature tide Reaper Signature");
+    expect(text).toContain("From the theme tide Tidal Theme");
+    expect(text).toContain("one of the 2 drawn");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("walks the seed -> affinity -> growth story and traces each card in seed mode", () => {
     const { container, root } = mount(
       <CardSourceOverlay

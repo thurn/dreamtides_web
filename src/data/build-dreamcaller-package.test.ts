@@ -8,8 +8,10 @@ import { STARTER_CARD_NUMBERS } from "./starter-cards";
 import {
   buildDreamcallerPackage,
   buildDreamcallerProvenance,
+  buildDreamcallerTides4Provenance,
   type RunPoolContext,
 } from "./quest-content";
+import type { Tides4DecksJson } from "../draft/pool/tides4-io.ts";
 
 // Two card names that the name index maps to starter card numbers. These names
 // also appear in a decklist below, so a correct builder must still keep them out
@@ -300,6 +302,112 @@ describe("buildDreamcallerProvenance", () => {
   it("is deterministic for the same inputs", () => {
     const a = buildDreamcallerProvenance(makeDreamcaller(), makeContext(), "seed-abc");
     const b = buildDreamcallerProvenance(makeDreamcaller(), makeContext(), "seed-abc");
+    expect(a).toEqual(b);
+  });
+});
+
+// A tides4 run context: four small tides (a signature floor, two facets, a broad
+// tail) keyed by name through the artifact, plus a Dreamcaller pool combining
+// them. The signature tide also carries STARTER_NAME_A so the builder must drop
+// the resulting starter card number from both the tide decklist and the per-card
+// map. Synthetic, never the committed `data/tides4.jsonc`.
+function makeTides4Context(): RunPoolContext {
+  const nameIndex = new Map<string, number>();
+  for (let i = 0; i < 24; i += 1) {
+    nameIndex.set(`Card ${String(i)}`, i + 1);
+  }
+  // STARTER_NAME_A maps to a real starter card number (must be dropped).
+  nameIndex.set(STARTER_NAME_A, 510);
+
+  const range = (from: number, to: number): string[] =>
+    Array.from({ length: to - from }, (_, i) => `Card ${String(from + i)}`);
+  const mkCards = (names: string[]) =>
+    names.map((name) => ({ id: `${name}-id`, name, copies: 2 }));
+
+  const tides4Decks: Tides4DecksJson = {
+    version: 1,
+    tides: [
+      {
+        id: "tide-sig-1",
+        name: "Signature Floor",
+        role: "signature",
+        cards: mkCards([...range(0, 6), STARTER_NAME_A]),
+      },
+      { id: "tide-fac-1", name: "Facet A", role: "facet", cards: mkCards(range(6, 12)) },
+      { id: "tide-fac-2", name: "Facet B", role: "facet", cards: mkCards(range(12, 18)) },
+      { id: "tide-neu-1", name: "Broad Tail", role: "neutral", cards: mkCards(range(18, 24)) },
+    ],
+    tidePoolByDreamcaller: {
+      "dc-test": {
+        starter: "tide-sig-1",
+        facets: ["tide-fac-1", "tide-fac-2"],
+        neutral: ["tide-neu-1"],
+      },
+    },
+  };
+
+  const poolData = buildPoolData([], []);
+  poolData.tides4Decks = tides4Decks;
+
+  return {
+    poolData,
+    nameIndex,
+    allDreamsignPoolIds: [],
+    poolVariant: "tides4",
+  };
+}
+
+describe("buildDreamcallerTides4Provenance", () => {
+  it("resolves the run's tides and per-card tide attribution by card number", () => {
+    const provenance = buildDreamcallerTides4Provenance(
+      makeDreamcaller(),
+      makeTides4Context(),
+      "seed-t4",
+    );
+    expect(provenance).not.toBeNull();
+    if (provenance === null) return;
+
+    expect(provenance.signatureless).toBe(false);
+    expect(provenance.borrowedArchetypeName).toBeNull();
+    expect(provenance.facetAvailableCount).toBe(2);
+
+    // The signature tide is the always-joined starter.
+    const starter = provenance.tides.find((t) => t.selection === "starter");
+    expect(starter).toBeDefined();
+    expect(starter?.id).toBe("tide-sig-1");
+
+    // The starter-mapped card (510) is dropped from the tide's decklist...
+    expect(starter?.cardNumbers).not.toContain(510);
+    expect(starter?.cardNumbers).toContain(1);
+    // ...and from the per-card provenance map.
+    expect(provenance.cardProvenanceByNumber["510"]).toBeUndefined();
+
+    // Every pooled card traces to a tide that took part in the run.
+    const tideIds = new Set(provenance.tides.map((t) => t.id));
+    for (const card of Object.values(provenance.cardProvenanceByNumber)) {
+      expect(tideIds.has(card.primaryTideId)).toBe(true);
+      expect(card.copies).toBeGreaterThanOrEqual(1);
+      expect(card.copies).toBeLessThanOrEqual(provenance.cap);
+    }
+  });
+
+  it("returns null for a non-tides4 pool variant", () => {
+    expect(
+      buildDreamcallerTides4Provenance(makeDreamcaller(), makeContext(), "seed-abc"),
+    ).toBeNull();
+  });
+
+  it("is deterministic for the same inputs", () => {
+    const a = buildDreamcallerTides4Provenance(
+      makeDreamcaller(),
+      makeTides4Context(),
+      "seed-t4",
+    );
+    const b = buildDreamcallerTides4Provenance(
+      makeDreamcaller(),
+      makeTides4Context(),
+      "seed-t4",
+    );
     expect(a).toEqual(b);
   });
 });

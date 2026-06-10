@@ -152,6 +152,94 @@ export interface SeedProvenanceSummary {
   cardProvenanceByNumber: Record<string, SeedCardProvenance>;
 }
 
+/** The role a tide plays in `tides4` pool construction. */
+export type Tides4Role = "signature" | "facet" | "neutral";
+
+/** Why a tide was joined into a `tides4` pool this run. */
+export type Tides4TideSelection =
+  | "starter"
+  | "facet-drawn"
+  | "facet-fill"
+  | "neutral-fill";
+
+/**
+ * One tide that took part in a `tides4` run, resolved for the debug surface. The
+ * Pool Viewer renders each as a separately viewable tide deck and the "Why Cards"
+ * overlay names a card's source tide from these.
+ */
+export interface Tides4TideSummary {
+  /** Stable tide id, e.g. "tide-sig-01" / "tide-fac-01" / "tide-neu-01". */
+  id: string;
+  /** Human-readable tide name. */
+  name: string;
+  /** Whether the tide is a signature floor, a directional facet, or a broad tide. */
+  role: Tides4Role;
+  /** Why this tide was joined this run. */
+  selection: Tides4TideSelection;
+  /**
+   * Whether the tide was folded into the pool. A run stops joining once a full
+   * pool is dealable, so trailing fill tides can go unjoined; an unjoined tide
+   * contributes no cards but is still shown so the candidate set is legible.
+   */
+  joined: boolean;
+  /**
+   * This tide's full decklist as card numbers that resolve in the catalog, in
+   * deck order, deduped, with starter cards (never draftable) removed.
+   */
+  cardNumbers: number[];
+  /** Distinct pooled cards whose home (earliest join-order) tide is this one. */
+  contributedCardCount: number;
+}
+
+/** Per-card provenance within a `tides4` pool, resolved by card number. */
+export interface Tides4CardProvenance {
+  /** Copies of this card in the pool (1 or 2). */
+  copies: number;
+  /** Joined tide ids that contain this card, in join order. */
+  tideIds: string[];
+  /** The earliest joined tide (in join order) that contains this card — its home tide. */
+  primaryTideId: string;
+}
+
+/**
+ * Full provenance for one Dreamcaller's resolved `tides4` pool, keyed by card
+ * number. Records the tides the pool combined — the always-joined signature
+ * tide, the random subset of theme tides, and the broad tail — and which tide
+ * each pooled card came from, so the Pool Viewer can show every individual tide
+ * deck and the "Why Cards" surface can explain why each offered card is in the
+ * pool. Recomputed on demand from the run seed and the tide artifact; never
+ * persisted.
+ */
+export interface Tides4ProvenanceSummary {
+  /** The Dreamcaller this pool was built for. */
+  dreamcallerId: string;
+  /**
+   * Whether the Dreamcaller has no signature. A signatureless Dreamcaller borrows
+   * a random signatured Dreamcaller's whole pool, leaning a coherent archetype.
+   */
+  signatureless: boolean;
+  /**
+   * For a signatureless Dreamcaller, the name of the borrowed signature tide (the
+   * archetype it leaned this run); null for a signatured Dreamcaller.
+   */
+  borrowedArchetypeName: string | null;
+  /** Total copies dealt into the pool. */
+  dealSize: number;
+  /** Max copies of any single card (the 2-copy rule). */
+  cap: number;
+  /** How many facet (theme) tides were drawn in the random variety subset. */
+  facetDrawnCount: number;
+  /** How many facet tides were available to draw the subset from. */
+  facetAvailableCount: number;
+  /**
+   * Every tide that took part in the run, in join order: the starter (when
+   * present), the drawn facets, then the fill (undrawn facets and broad tides).
+   */
+  tides: Tides4TideSummary[];
+  /** Per-card provenance, keyed by card number (as a string). */
+  cardProvenanceByNumber: Record<string, Tides4CardProvenance>;
+}
+
 export interface ResolvedDreamcallerPackage {
   dreamcaller: DreamcallerContent;
   draftPoolCopiesByCard: Record<string, number>;

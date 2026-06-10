@@ -74,8 +74,15 @@ export function generatePoolFromData(
   const resolvedSeed =
     seed === undefined ? (Math.random() * 2 ** 32) >>> 0 : seed >>> 0;
   const rng = makeRng(resolvedSeed);
-  const { C, selected, counts, starterDeck, idf3Provenance, seedProvenance } =
-    poolStrategyFor(variant).generate({
+  const {
+    C,
+    selected,
+    counts,
+    starterDeck,
+    idf3Provenance,
+    seedProvenance,
+    tides4Provenance,
+  } = poolStrategyFor(variant).generate({
       rng,
       poolData,
       seedArchetypes,
@@ -101,5 +108,6 @@ export function generatePoolFromData(
     starterDeck: starterDeck ?? [],
     idf3Provenance,
     seedProvenance,
+    tides4Provenance,
   };
 }

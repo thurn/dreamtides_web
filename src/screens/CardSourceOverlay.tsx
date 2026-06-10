@@ -9,6 +9,9 @@ import type {
   Idf3ProvenanceSummary,
   SeedCardProvenance,
   SeedProvenanceSummary,
+  Tides4CardProvenance,
+  Tides4ProvenanceSummary,
+  Tides4TideSummary,
 } from "../types/content";
 import { seedProvenanceVariantCopy } from "../draft/pool/seed-provenance-copy";
 
@@ -27,6 +30,13 @@ interface CardSourceOverlayProps {
    * chain and explains each shown card by how it grew out from the seed.
    */
   seedProvenance?: SeedProvenanceSummary | null;
+  /**
+   * Full `tides4`-variant provenance, recomputed on demand. When present the
+   * overlay walks the signature-tide -> theme-tide draw -> deal story and names
+   * the source tide of each shown card, so the player can see which tide it came
+   * from and why that tide was part of the run.
+   */
+  tides4Provenance?: Tides4ProvenanceSummary | null;
   isOpen: boolean;
   onClose: () => void;
 }
@@ -58,6 +68,21 @@ function seedSurfaceCopy(
     case "BattleReward":
     case "Reward":
       return `Rewards are drawn ${grown}`;
+  }
+}
+
+function tides4SurfaceCopy(surface: CardSourceDebugState["surface"]): string {
+  const dealt =
+    "dealt from your Dreamcaller's tides — preconstructed decks shuffled together: its signature tide plus a random few theme tides, topped up with broad tides.";
+  switch (surface) {
+    case "Draft":
+      return `These draft cards were ${dealt}`;
+    case "Shop":
+    case "SpecialtyShop":
+      return `Shop cards are ${dealt}`;
+    case "BattleReward":
+    case "Reward":
+      return `Rewards are ${dealt}`;
   }
 }
 
@@ -562,10 +587,237 @@ function SeedCardExplanation({
   );
 }
 
+/** Role-based badge styling for a tide card's source tide. */
+function tideRoleBadge(role: Tides4TideSummary["role"]): {
+  label: string;
+  bg: string;
+  border: string;
+} {
+  switch (role) {
+    case "signature":
+      return {
+        label: "Signature tide",
+        bg: "rgba(34, 197, 94, 0.28)",
+        border: "rgba(34, 197, 94, 0.5)",
+      };
+    case "facet":
+      return {
+        label: "Theme tide",
+        bg: "rgba(45, 212, 191, 0.26)",
+        border: "rgba(45, 212, 191, 0.5)",
+      };
+    case "neutral":
+      return {
+        label: "Broad tide",
+        bg: "rgba(148, 163, 184, 0.22)",
+        border: "rgba(148, 163, 184, 0.4)",
+      };
+  }
+}
+
+/** The `tides4` walkthrough: signature tide -> theme-tide draw -> broad fill -> deal. */
+function Tides4ProvenanceWalkthrough({
+  provenance,
+}: {
+  provenance: Tides4ProvenanceSummary;
+}) {
+  const starterTide = provenance.tides.find((t) => t.selection === "starter");
+  const drawnFacetNames = provenance.tides
+    .filter((t) => t.selection === "facet-drawn")
+    .map((t) => t.name);
+  const broadNames = provenance.tides
+    .filter(
+      (t) =>
+        t.joined &&
+        (t.selection === "neutral-fill" || t.selection === "facet-fill"),
+    )
+    .map((t) => t.name);
+  const joinedCount = provenance.tides.filter((t) => t.joined).length;
+  const distinctCardCount = Object.keys(
+    provenance.cardProvenanceByNumber,
+  ).length;
+
+  return (
+    <div className="space-y-2.5">
+      <Step index={1} title="Signature tide">
+        {provenance.signatureless ? (
+          <p>
+            This Dreamcaller has <strong>no signature</strong>, so the pool
+            borrowed the{" "}
+            <strong>{provenance.borrowedArchetypeName ?? "a random"}</strong>{" "}
+            archetype this run — its signature tide is the pool's identity floor,
+            always joined.
+          </p>
+        ) : (
+          <p>
+            Your Dreamcaller's <strong>signature tide</strong> is the pool's
+            identity floor — always joined, never random.
+          </p>
+        )}
+        <CardChips names={starterTide ? [starterTide.name] : []} />
+      </Step>
+
+      <Step index={2} title="Theme tides">
+        <p>
+          A random <strong>{String(provenance.facetDrawnCount)}</strong> of{" "}
+          {String(provenance.facetAvailableCount)} theme tides were drawn and
+          shuffled in. Drawing a different few each run is the variety engine —
+          it leans the same identity a different way every time.
+        </p>
+        <CardChips names={drawnFacetNames} />
+      </Step>
+
+      <Step index={3} title="Broad fill">
+        {broadNames.length > 0 ? (
+          <>
+            <p>
+              Broad, format-spanning tides topped the pool up to full size once
+              the signature and theme tides were in.
+            </p>
+            <CardChips names={broadNames} />
+          </>
+        ) : (
+          <p className="opacity-70">
+            The signature and theme tides alone filled the pool — no broad tides
+            were needed this run.
+          </p>
+        )}
+      </Step>
+
+      <Step index={4} title="Deal">
+        <p>
+          The {String(joinedCount)} joined tides were shuffled into one bag and
+          dealt to <strong>{String(provenance.dealSize)}</strong> cards, at most{" "}
+          <strong>{String(provenance.cap)}</strong> copies of any card.
+        </p>
+        <div
+          className="grid grid-cols-3 gap-2 rounded-md p-2 text-center"
+          style={{ background: "rgba(30, 41, 59, 0.5)", border: PANEL_BORDER }}
+        >
+          <div>
+            <p className="text-base font-bold" style={{ color: "#f8fafc" }}>
+              {String(joinedCount)}
+            </p>
+            <p className="text-[10px] opacity-60">tides joined</p>
+          </div>
+          <div>
+            <p className="text-base font-bold" style={{ color: "#f8fafc" }}>
+              {String(provenance.facetDrawnCount)}
+            </p>
+            <p className="text-[10px] opacity-60">theme tides drawn</p>
+          </div>
+          <div>
+            <p className="text-base font-bold" style={{ color: "#f8fafc" }}>
+              {String(distinctCardCount)}
+            </p>
+            <p className="text-[10px] opacity-60">distinct cards</p>
+          </div>
+        </div>
+      </Step>
+    </div>
+  );
+}
+
+/** Per-card "why is THIS card here" explanation for the `tides4` variant. */
+function Tides4CardExplanation({
+  entry,
+  provenance,
+  tideById,
+}: {
+  entry: CardSourceDebugEntry;
+  provenance: Tides4ProvenanceSummary;
+  tideById: ReadonlyMap<string, Tides4TideSummary>;
+}) {
+  const cardProvenance: Tides4CardProvenance | null =
+    provenance.cardProvenanceByNumber[String(entry.cardNumber)] ?? null;
+  const primaryTide =
+    cardProvenance !== null
+      ? (tideById.get(cardProvenance.primaryTideId) ?? null)
+      : null;
+  const copies = cardProvenance?.copies ?? entry.draftPoolCopies ?? 0;
+  const copiesLabel = `${String(copies)} ${copies === 1 ? "copy" : "copies"} in the pool`;
+  const otherTideCount =
+    cardProvenance !== null ? Math.max(0, cardProvenance.tideIds.length - 1) : 0;
+
+  const badge =
+    primaryTide !== null
+      ? tideRoleBadge(primaryTide.role)
+      : {
+          label: "Pool",
+          bg: "rgba(148, 163, 184, 0.22)",
+          border: "rgba(148, 163, 184, 0.4)",
+        };
+
+  return (
+    <div
+      className="rounded-lg p-3"
+      style={{ background: PANEL_BG, border: PANEL_BORDER }}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <div>
+          <p className="text-sm font-semibold" style={{ color: "#f8fafc" }}>
+            {entry.cardName}
+          </p>
+          <p className="text-[11px] opacity-50">#{String(entry.cardNumber)}</p>
+        </div>
+        <span
+          className="rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide"
+          style={{
+            background: badge.bg,
+            color: "#f1f5f9",
+            border: `1px solid ${badge.border}`,
+          }}
+        >
+          {badge.label}
+        </span>
+      </div>
+
+      <div className="mt-3 space-y-2 text-xs opacity-85">
+        {primaryTide !== null ? (
+          <p>
+            {tideCardReason(primaryTide, provenance)} {copiesLabel}.
+            {otherTideCount > 0
+              ? ` Also appears in ${String(otherTideCount)} other of your tides.`
+              : ""}
+          </p>
+        ) : (
+          <p>
+            Dealt from your Dreamcaller's tides. {copiesLabel}.
+          </p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/** Player-facing reason a card's source tide was part of the run. */
+function tideCardReason(
+  tide: Tides4TideSummary,
+  provenance: Tides4ProvenanceSummary,
+): string {
+  switch (tide.selection) {
+    case "starter":
+      return provenance.signatureless
+        ? `From the borrowed signature tide ${tide.name} — the ${
+            provenance.borrowedArchetypeName ?? "borrowed"
+          } archetype's identity floor.`
+        : `From your signature tide ${tide.name} — the pool's identity floor.`;
+    case "facet-drawn":
+      return `From the theme tide ${tide.name}, one of the ${String(
+        provenance.facetDrawnCount,
+      )} drawn at random this run.`;
+    case "facet-fill":
+      return `From ${tide.name}, an on-theme tide folded in to top the pool up.`;
+    case "neutral-fill":
+      return `From the broad tide ${tide.name}, folded in to top the pool up.`;
+  }
+}
+
 export function CardSourceOverlay({
   cardSourceDebug,
   idf3Provenance,
   seedProvenance = null,
+  tides4Provenance = null,
   isOpen,
   onClose,
 }: CardSourceOverlayProps) {
@@ -598,6 +850,14 @@ export function CardSourceOverlay({
     [idf3Provenance],
   );
 
+  const tideById = useMemo(() => {
+    const map = new Map<string, Tides4TideSummary>();
+    for (const tide of tides4Provenance?.tides ?? []) {
+      map.set(tide.id, tide);
+    }
+    return map;
+  }, [tides4Provenance]);
+
   return (
     <AnimatePresence>
       {isOpen && cardSourceDebug !== null && (
@@ -628,13 +888,15 @@ export function CardSourceOverlay({
                 {cardSourceDebug.screenLabel}
               </h2>
               <p className="mt-1 text-xs opacity-70">
-                {seedProvenance !== null
-                  ? seedSurfaceCopy(
-                      cardSourceDebug.surface,
-                      seedProvenanceVariantCopy(seedProvenance.variant)
-                        .headerAffinityTail,
-                    )
-                  : surfaceCopy(cardSourceDebug.surface)}
+                {tides4Provenance !== null
+                  ? tides4SurfaceCopy(cardSourceDebug.surface)
+                  : seedProvenance !== null
+                    ? seedSurfaceCopy(
+                        cardSourceDebug.surface,
+                        seedProvenanceVariantCopy(seedProvenance.variant)
+                          .headerAffinityTail,
+                      )
+                    : surfaceCopy(cardSourceDebug.surface)}
               </p>
             </div>
             <button
@@ -648,7 +910,14 @@ export function CardSourceOverlay({
           </div>
 
           <div className="min-h-0 flex-1 space-y-3 overflow-y-auto p-4">
-            {seedProvenance !== null ? (
+            {tides4Provenance !== null ? (
+              <section className="space-y-2">
+                <p className="text-[11px] font-bold tracking-[0.18em] uppercase opacity-50">
+                  How this pool was built
+                </p>
+                <Tides4ProvenanceWalkthrough provenance={tides4Provenance} />
+              </section>
+            ) : seedProvenance !== null ? (
               <section className="space-y-2">
                 <p className="text-[11px] font-bold tracking-[0.18em] uppercase opacity-50">
                   How this pool was built
@@ -669,7 +938,14 @@ export function CardSourceOverlay({
                 The cards in front of you
               </p>
               {(cardSourceDebug.entries ?? []).map((entry) =>
-                seedProvenance !== null ? (
+                tides4Provenance !== null ? (
+                  <Tides4CardExplanation
+                    key={`${String(entry.cardNumber)}-${cardSourceDebug.surface}`}
+                    entry={entry}
+                    provenance={tides4Provenance}
+                    tideById={tideById}
+                  />
+                ) : seedProvenance !== null ? (
                   <SeedCardExplanation
                     key={`${String(entry.cardNumber)}-${cardSourceDebug.surface}`}
                     entry={entry}

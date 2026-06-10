@@ -11,6 +11,9 @@ import {
   type ResolvedDreamcallerPackage,
   type SeedCardProvenance,
   type SeedProvenanceSummary,
+  type Tides4CardProvenance,
+  type Tides4ProvenanceSummary,
+  type Tides4TideSummary,
 } from "../types/content";
 import type { CardData } from "../types/cards";
 import type { GeneratedPool, PoolData, PoolVariant } from "../draft/pool/types.ts";
@@ -474,6 +477,84 @@ export function buildDreamcallerSeedProvenance(
     totalCopies: provenance.totalCopies,
     doubledCardCount: provenance.doubledCardCount,
     topPartnerCardNames: [...provenance.topPartnerCardNames],
+    cardProvenanceByNumber,
+  };
+}
+
+/**
+ * Recompute the full `tides4` tide provenance for one Dreamcaller's pool,
+ * resolved against the run's name index so per-card entries and per-tide
+ * decklists are keyed by card number. Reproduces the exact pool
+ * {@link buildDreamcallerPackage} built (same seed and inputs), so the Pool
+ * Viewer can show each individual tide deck and the "Why Cards" surface can
+ * attribute every offered card to its source tide without the provenance ever
+ * being persisted. Returns `null` for non-`tides4` pools. Starter cards (never
+ * draftable) are dropped from both the per-tide decklists and the per-card map,
+ * and each tide's `contributedCardCount` is recounted over the dropped-starter
+ * pool so it matches what a player actually sees.
+ */
+export function buildDreamcallerTides4Provenance(
+  dreamcaller: DreamcallerContent,
+  ctx: RunPoolContext,
+  questSeed: string,
+): Tides4ProvenanceSummary | null {
+  const pool = generateDreamcallerPool(dreamcaller, ctx, questSeed);
+  const provenance = pool.tides4Provenance;
+  if (provenance === undefined) return null;
+
+  const starterSet = new Set(STARTER_CARD_NUMBERS);
+  const toNumbers = (names: readonly string[]): number[] => {
+    const out: number[] = [];
+    const seen = new Set<number>();
+    for (const name of names) {
+      const cardNumber = ctx.nameIndex.get(name);
+      if (cardNumber === undefined) continue;
+      if (starterSet.has(cardNumber)) continue;
+      if (seen.has(cardNumber)) continue;
+      seen.add(cardNumber);
+      out.push(cardNumber);
+    }
+    return out;
+  };
+
+  const cardProvenanceByNumber: Record<string, Tides4CardProvenance> = {};
+  const contributionByTide = new Map<string, number>();
+  for (const [name, entry] of Object.entries(provenance.cardProvenanceByName)) {
+    const cardNumber = ctx.nameIndex.get(name);
+    if (cardNumber === undefined) continue;
+    if (starterSet.has(cardNumber)) continue;
+    cardProvenanceByNumber[String(cardNumber)] = {
+      copies: entry.copies,
+      tideIds: [...entry.tideIds],
+      primaryTideId: entry.primaryTideId,
+    };
+    if (entry.primaryTideId !== "") {
+      contributionByTide.set(
+        entry.primaryTideId,
+        (contributionByTide.get(entry.primaryTideId) ?? 0) + 1,
+      );
+    }
+  }
+
+  const tides: Tides4TideSummary[] = provenance.tides.map((tide) => ({
+    id: tide.id,
+    name: tide.name,
+    role: tide.role,
+    selection: tide.selection,
+    joined: tide.joined,
+    cardNumbers: toNumbers(tide.cardNames),
+    contributedCardCount: contributionByTide.get(tide.id) ?? 0,
+  }));
+
+  return {
+    dreamcallerId: provenance.dreamcallerId,
+    signatureless: provenance.signatureless,
+    borrowedArchetypeName: provenance.borrowedArchetypeName,
+    dealSize: provenance.dealSize,
+    cap: provenance.cap,
+    facetDrawnCount: provenance.facetDrawnCount,
+    facetAvailableCount: provenance.facetAvailableCount,
+    tides,
     cardProvenanceByNumber,
   };
 }

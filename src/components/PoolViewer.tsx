@@ -5,6 +5,9 @@ import type { CardData } from "../types/cards";
 import type {
   ResolvedDreamcallerPackage,
   SeedProvenanceSummary,
+  Tides4ProvenanceSummary,
+  Tides4TideSelection,
+  Tides4TideSummary,
 } from "../types/content";
 import type { DraftState } from "../types/draft";
 import type { DraftRecord } from "../data/cards-v2-database";
@@ -26,6 +29,7 @@ import { CardOverlay } from "./CardOverlay";
 
 type PoolViewerSource =
   | "run"
+  | "tides"
   | "catalog"
   | "idf3"
   | "signature"
@@ -35,6 +39,7 @@ type PoolViewerVariant = "overlay" | "floating";
 
 const SOURCE_LABELS: Record<PoolViewerSource, string> = {
   run: "Run Pool",
+  tides: "Tide Decks",
   catalog: "All Cards",
   idf3: "IDF3 Decklist",
   signature: "Signature Cards",
@@ -44,11 +49,27 @@ const SOURCE_LABELS: Record<PoolViewerSource, string> = {
 
 const EMPTY_BASE_MESSAGES: Record<PoolViewerSource, string> = {
   run: "No run pool cards are available.",
+  tides: "This run was not built from tide decks.",
   catalog: "No cards match the current filters.",
   idf3: "No IDF3 starting decklist is available for this run.",
   signature: "This Dreamcaller has no signature cards.",
   deck: "The replay record has no resolvable deck cards.",
   history: "The replay record has no pick history.",
+};
+
+/**
+ * Per-selection display metadata for the run's tides: a short tag and an accent
+ * colour distinguishing the always-joined signature tide, the random theme draw
+ * (the variety engine), the on-theme fill, and the broad neutral tail.
+ */
+const TIDE_SELECTION_META: Record<
+  Tides4TideSelection,
+  { tag: string; accent: string }
+> = {
+  starter: { tag: "Signature", accent: "#34c759" },
+  "facet-drawn": { tag: "Theme · drawn", accent: "#2d8a80" },
+  "facet-fill": { tag: "Theme · fill", accent: "#7c8a86" },
+  "neutral-fill": { tag: "Broad", accent: "#5b6b78" },
 };
 type FloatingPosition = { x: number; y: number };
 type FloatingDragState = { offsetX: number; offsetY: number } | null;
@@ -103,6 +124,12 @@ function sourceButtonStyle(active: boolean): CSSProperties {
  * "Pick History" panel walking their pack-by-pack picks. The algorithm chip
  * then reads `algo: replay` rather than the IDF3 fallback the pool generator
  * resolves for the run.
+ *
+ * For the `tides4` variant, `tides4Provenance` adds a construction banner (the
+ * starting signature tide, the random theme-tide draw, the broad fill) and a
+ * "Tide Decks" source whose sub-navigation lets the player open each individual
+ * tide that built the pool and see which of its cards landed, so the tide
+ * relationships and the reason each tide was picked are legible.
  */
 export function PoolViewer({
   cardDatabase,
@@ -115,6 +142,7 @@ export function PoolViewer({
   replayRecord = null,
   resolvedPackage = null,
   seedProvenance = null,
+  tides4Provenance = null,
   title = "Pool Viewer",
   variant = "overlay",
 }: {
@@ -128,10 +156,12 @@ export function PoolViewer({
   replayRecord?: DraftRecord | null;
   resolvedPackage?: ResolvedDreamcallerPackage | null;
   seedProvenance?: SeedProvenanceSummary | null;
+  tides4Provenance?: Tides4ProvenanceSummary | null;
   title?: string;
   variant?: PoolViewerVariant;
 }) {
   const [source, setSource] = useState<PoolViewerSource>("run");
+  const [selectedTideId, setSelectedTideId] = useState<string | null>(null);
   const [values, setValues] = useState<CardBrowserToolbarValues>(
     DEFAULT_CARD_BROWSER_VALUES,
   );
@@ -243,6 +273,50 @@ export function PoolViewer({
     [cardsByName, replayRecord],
   );
 
+  // The run's tides, in join order. Present only for the `tides4` variant.
+  const tideList = tides4Provenance?.tides ?? [];
+  const hasTides = tideList.length > 0 && !isReplay;
+
+  // Keep the selected tide valid as the provenance loads or changes: default to
+  // the first tide (the signature tide when present), and re-anchor if the
+  // current selection is no longer in the list.
+  useEffect(() => {
+    const list = tides4Provenance?.tides ?? [];
+    if (list.length === 0) {
+      setSelectedTideId(null);
+      return;
+    }
+    setSelectedTideId((current) =>
+      current !== null && list.some((tide) => tide.id === current)
+        ? current
+        : list[0].id,
+    );
+  }, [tides4Provenance]);
+
+  const selectedTide =
+    tideList.find((tide) => tide.id === selectedTideId) ?? null;
+
+  // The constructed draft-pool copy counts, used to badge tide cards with how
+  // many copies of each landed in the pool (so "didn't make the cut" reads as a
+  // missing badge against the tide's full decklist).
+  const poolCopiesByNumber = useMemo(() => {
+    const counts = new Map<number, number>();
+    for (const [key, copies] of Object.entries(
+      resolvedPackage?.draftPoolCopiesByCard ?? {},
+    )) {
+      const cardNumber = Number(key);
+      if (Number.isFinite(cardNumber)) {
+        counts.set(cardNumber, copies);
+      }
+    }
+    return counts;
+  }, [resolvedPackage]);
+
+  const tideEntries = useMemo<PoolCardEntry[]>(
+    () => buildTideEntries(selectedTide, cardDatabase, poolCopiesByNumber),
+    [cardDatabase, poolCopiesByNumber, selectedTide],
+  );
+
   const availableSources = useMemo<PoolViewerSource[]>(() => {
     if (isReplay) {
       const sources: PoolViewerSource[] = ["deck", "history", "catalog"];
@@ -251,7 +325,11 @@ export function PoolViewer({
       }
       return sources;
     }
-    const sources: PoolViewerSource[] = ["run", "catalog"];
+    const sources: PoolViewerSource[] = ["run"];
+    if (hasTides) {
+      sources.push("tides");
+    }
+    sources.push("catalog");
     if (idf3Entries.length > 0) {
       sources.push("idf3");
     }
@@ -259,7 +337,7 @@ export function PoolViewer({
       sources.push("signature");
     }
     return sources;
-  }, [idf3Entries.length, isReplay, signatureEntries.length]);
+  }, [hasTides, idf3Entries.length, isReplay, signatureEntries.length]);
 
   // Fall back to the first available source if the selected one loses its
   // backing data (a new run dropping the signature cards, or switching between
@@ -274,6 +352,8 @@ export function PoolViewer({
     switch (source) {
       case "run":
         return buildRunPoolEntries(draftState, cardDatabase);
+      case "tides":
+        return tideEntries;
       case "idf3":
         return idf3Entries;
       case "deck":
@@ -289,7 +369,15 @@ export function PoolViewer({
           copies: null,
         }));
     }
-  }, [cardDatabase, deckEntries, draftState, idf3Entries, signatureEntries, source]);
+  }, [
+    cardDatabase,
+    deckEntries,
+    draftState,
+    idf3Entries,
+    signatureEntries,
+    source,
+    tideEntries,
+  ]);
 
   const baseCards = useMemo(
     () => baseEntries.map((entry) => entry.card),
@@ -526,6 +614,27 @@ export function PoolViewer({
                       .poolViewerAffinityBasis
                   } to the seed and to the cards already chosen.`}
                 </div>
+              ) : null}
+
+              {tides4Provenance !== null ? (
+                <Tides4Banner provenance={tides4Provenance} />
+              ) : null}
+
+              {source === "tides" && tides4Provenance !== null ? (
+                <TideDeckNav
+                  tides={tideList}
+                  selectedTideId={selectedTideId}
+                  onSelect={setSelectedTideId}
+                />
+              ) : null}
+
+              {source === "tides" &&
+              selectedTide !== null &&
+              tides4Provenance !== null ? (
+                <TideDeckCaption
+                  tide={selectedTide}
+                  provenance={tides4Provenance}
+                />
               ) : null}
 
               {source === "deck" && replayRecord !== null ? (
@@ -841,6 +950,212 @@ function buildSignatureEntries(
     entries.push({ card, copies: null });
   }
   return entries;
+}
+
+/**
+ * Resolve one tide's decklist (card numbers) into pool entries. The copy badge
+ * shows how many copies of each tide card landed in the run's draft pool, so a
+ * card with no badge is one this tide carried but that did not make the cut.
+ */
+function buildTideEntries(
+  tide: Tides4TideSummary | null,
+  cardDatabase: ReadonlyMap<number, CardData>,
+  poolCopiesByNumber: ReadonlyMap<number, number>,
+): PoolCardEntry[] {
+  if (tide === null) {
+    return [];
+  }
+  const entries: PoolCardEntry[] = [];
+  for (const cardNumber of tide.cardNumbers) {
+    const card = cardDatabase.get(cardNumber);
+    if (card === undefined) {
+      continue;
+    }
+    const copies = poolCopiesByNumber.get(cardNumber) ?? 0;
+    entries.push({ card, copies: copies > 0 ? copies : null });
+  }
+  return entries;
+}
+
+/**
+ * One-paragraph summary of how the `tides4` pool was constructed: the starting
+ * signature tide (or the borrowed archetype for a signatureless Dreamcaller),
+ * the random theme-tide draw that gives the run its variety, and the deal rule.
+ */
+function Tides4Banner({
+  provenance,
+}: {
+  provenance: Tides4ProvenanceSummary;
+}) {
+  const starterTide = provenance.tides.find(
+    (tide) => tide.selection === "starter",
+  );
+  return (
+    <div
+      data-pool-tides-banner=""
+      style={{ fontSize: "0.78rem", color: "#9fb0ac", lineHeight: 1.5 }}
+    >
+      {provenance.signatureless ? (
+        <>
+          {"This Dreamcaller has no signature, so its pool borrowed the "}
+          <span style={{ color: "#f4c453", fontWeight: 700 }}>
+            {provenance.borrowedArchetypeName ?? "a random"}
+          </span>
+          {" archetype this run: "}
+        </>
+      ) : (
+        <>
+          {"Built from tides — the "}
+          <span style={{ color: "#34c759", fontWeight: 700 }}>
+            {starterTide?.name ?? "signature"}
+          </span>
+          {" tide (always joined), "}
+        </>
+      )}
+      {"drawing "}
+      <span style={{ color: "#8edbd1", fontWeight: 600 }}>
+        {`${String(provenance.facetDrawnCount)} of ${String(
+          provenance.facetAvailableCount,
+        )} theme tides`}
+      </span>
+      {" at random, then broad tides to fill — shuffled together and dealt to "}
+      <span style={{ color: "#8edbd1", fontWeight: 600 }}>
+        {`${String(provenance.dealSize)} cards`}
+      </span>
+      {`, at most ${String(provenance.cap)} copies each.`}
+    </div>
+  );
+}
+
+/**
+ * The tide selector: one button per tide that took part in the run, in join
+ * order, tagged by why it was joined. Selecting a tide shows its decklist in the
+ * grid. Unjoined fill tides (the run filled up before reaching them) read dimmed.
+ */
+function TideDeckNav({
+  tides,
+  selectedTideId,
+  onSelect,
+}: {
+  tides: readonly Tides4TideSummary[];
+  selectedTideId: string | null;
+  onSelect: (tideId: string) => void;
+}) {
+  return (
+    <div
+      role="group"
+      aria-label="Tide decks"
+      data-pool-tide-nav=""
+      style={{ display: "flex", flexWrap: "wrap", gap: "6px" }}
+    >
+      {tides.map((tide) => {
+        const meta = TIDE_SELECTION_META[tide.selection];
+        const active = tide.id === selectedTideId;
+        return (
+          <button
+            key={tide.id}
+            type="button"
+            data-pool-tide-button={tide.id}
+            aria-pressed={active}
+            onClick={() => onSelect(tide.id)}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              borderRadius: "6px",
+              border: active
+                ? `1px solid ${meta.accent}`
+                : "1px solid rgba(247, 241, 223, 0.16)",
+              background: active ? "rgba(45, 138, 128, 0.22)" : "#16242a",
+              color: tide.joined ? "#f7f1df" : "#8a9590",
+              padding: "4px 9px",
+              font: "inherit",
+              fontSize: "0.74rem",
+              fontWeight: 700,
+              cursor: "pointer",
+            }}
+          >
+            <span
+              aria-hidden="true"
+              style={{
+                width: "8px",
+                height: "8px",
+                borderRadius: "999px",
+                background: meta.accent,
+                opacity: tide.joined ? 1 : 0.4,
+              }}
+            />
+            {tide.name}
+            <span
+              style={{
+                fontSize: "0.64rem",
+                fontWeight: 600,
+                opacity: 0.7,
+                letterSpacing: "0.02em",
+              }}
+            >
+              {meta.tag}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/** Why the selected tide was part of the run, and what it contributed. */
+function TideDeckCaption({
+  tide,
+  provenance,
+}: {
+  tide: Tides4TideSummary;
+  provenance: Tides4ProvenanceSummary;
+}) {
+  const reason = tideSelectionReason(tide, provenance);
+  const contribution = tide.joined
+    ? `Contributed ${String(tide.contributedCardCount)} ${
+        tide.contributedCardCount === 1 ? "card" : "cards"
+      } to your draft pool.`
+    : "Not joined this run — the pool filled up before reaching it.";
+  return (
+    <div
+      data-pool-tide-caption=""
+      style={{ fontSize: "0.78rem", color: "#9fb0ac", lineHeight: 1.5 }}
+    >
+      <span style={{ color: "#f7f1df", fontWeight: 600 }}>{reason}</span>{" "}
+      {contribution}{" "}
+      <span style={{ opacity: 0.75 }}>
+        {
+          "Badges show how many copies of each card landed in your pool; an unbadged card did not make the cut."
+        }
+      </span>
+    </div>
+  );
+}
+
+/** Player-facing reason a tide was joined, by its selection role. */
+function tideSelectionReason(
+  tide: Tides4TideSummary,
+  provenance: Tides4ProvenanceSummary,
+): string {
+  switch (tide.selection) {
+    case "starter":
+      return provenance.signatureless
+        ? `Borrowed signature tide — this signatureless Dreamcaller leaned the ${
+            provenance.borrowedArchetypeName ?? "borrowed"
+          } archetype, and its signature is the pool's identity floor.`
+        : "Your Dreamcaller's signature tide — the pool's identity floor, always joined.";
+    case "facet-drawn":
+      return `A theme tide drawn in this run's random subset (${String(
+        provenance.facetDrawnCount,
+      )} of ${String(
+        provenance.facetAvailableCount,
+      )}). Drawing a different few each run is what makes pools vary.`;
+    case "facet-fill":
+      return "An on-theme tide outside this run's draw, folded in only to top the pool up to full size.";
+    case "neutral-fill":
+      return "A broad, format-spanning tide folded in to top the pool up with generic cards.";
+  }
 }
 
 function clamp(value: number, min: number, max: number): number {

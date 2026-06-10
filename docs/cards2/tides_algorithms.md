@@ -607,6 +607,34 @@ reaches for the neutral tail that carries the format's fringe. Widening the face
 library would lift coverage at the cost of either deck count or on-theme density;
 84% is the balance struck for a readable 64-deck set.
 
+### 5.5 Reading a pool back: the Pool Viewer and "Why Cards" surfaces
+
+A `tides4` run records full **tide provenance** as it builds the pool
+(`Tides4PoolProvenance` in `src/draft/pool/types.ts`): every tide that took part
+in the run, tagged by *why* it was joined (`starter`, `facet-drawn`,
+`facet-fill`, `neutral-fill`), its full resolvable decklist, and, per pooled
+card, the joined tides that contain it and which one is its home (the earliest in
+join order). The summary is recomputed on demand and resolved to card numbers by
+`buildDreamcallerTides4Provenance` (`src/data/quest-content.ts`); it is never
+persisted, because the pool is deterministic per `(seed, dreamcallerId)` and
+reproduces exactly.
+
+Two player-facing surfaces read it:
+
+- The **Pool Viewer** (`src/components/PoolViewer.tsx`) shows a construction
+  banner — the starting signature tide (or, for a signatureless Dreamcaller, the
+  borrowed archetype), how many of how many theme tides were drawn, and the deal
+  rule — and adds a **Tide Decks** source. Its sub-navigation opens each
+  individual tide that built the pool: selecting a tide shows its decklist, with a
+  copy badge on each card recording how many copies landed in the draft pool, so
+  a card the tide carried that did not make the cut reads as an unbadged tile. The
+  **Run Pool** source shows the final dealt pool and the **Signature Cards**
+  source shows the Dreamcaller's signature.
+- The **"Why Cards"** overlay (`src/screens/CardSourceOverlay.tsx`) walks the
+  construction story — signature tide → random theme-tide draw → broad fill →
+  deal — and, for each card on the draft screen, names its source tide, the tide's
+  role, and why that tide was part of the run.
+
 ## 6. Artifacts, scripts, and served assets
 
 | Artifact | Produced by | Served as (gitignored) | Read at runtime by |

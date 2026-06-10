@@ -4,7 +4,7 @@ import type { AffinityCorpus } from "./affinity-grower.ts";
 import type { TideDecksJson } from "./tides-io.ts";
 import type { TideRelationshipsJson } from "./tide-relationships-io.ts";
 import type { Tides3DecksJson } from "./tides3-io.ts";
-import type { Tides4DecksJson } from "./tides4-io.ts";
+import type { Tides4DecksJson, Tides4Role } from "./tides4-io.ts";
 
 // `color_pool` is the original color-identity algorithm. `diverse` is an
 // experimental variant tuned to spread cards and archetypes more evenly across
@@ -290,6 +290,92 @@ export interface SeedPoolProvenance {
   cardProvenanceByName: Record<string, SeedPoolCardProvenance>;
 }
 
+/**
+ * Why a tide was joined into a `tides4` pool this run:
+ *   * `starter` — the Dreamcaller's signature tide, the always-joined identity
+ *     floor (for a signatureless Dreamcaller, the borrowed archetype's signature);
+ *   * `facet-drawn` — a theme tide drawn in the random variety subset, the
+ *     variety engine that leans the identity a different way each run;
+ *   * `facet-fill` — an on-identity theme tide NOT in the drawn subset, joined
+ *     only to top the pool up after the starter and drawn facets fall short;
+ *   * `neutral-fill` — a broad, format-spanning tide joined to top the pool up.
+ */
+export type Tides4PoolTideSelection =
+  | "starter"
+  | "facet-drawn"
+  | "facet-fill"
+  | "neutral-fill";
+
+/** One tide that took part in a `tides4` run, summarised for the debug surface. */
+export interface Tides4PoolTide {
+  /** Stable tide id, e.g. "tide-sig-01" / "tide-fac-01" / "tide-neu-01". */
+  id: string;
+  /** Human-readable tide name. */
+  name: string;
+  /** Whether the tide is a signature floor, a directional facet, or a broad tide. */
+  role: Tides4Role;
+  /** Why this tide was joined this run. */
+  selection: Tides4PoolTideSelection;
+  /**
+   * Whether the tide was actually folded into the bag. A run stops joining tides
+   * once a full pool is dealable, so trailing fill tides in the selection order
+   * can go unjoined; only joined tides contribute cards.
+   */
+  joined: boolean;
+  /** This tide's full decklist as card names that resolve in the catalog, in deck order. */
+  cardNames: string[];
+  /** Distinct pool cards whose earliest (join-order) source tide is this one. */
+  contributedCardCount: number;
+}
+
+/** Per-card provenance within a `tides4` pool, keyed by card name. */
+export interface Tides4PoolCardProvenance {
+  /** Copies of this card in the pool (1 or 2). */
+  copies: number;
+  /** Joined tide ids that contain this card, in join order. */
+  tideIds: string[];
+  /** The earliest joined tide (in join order) that contains this card — its "home" tide. */
+  primaryTideId: string;
+}
+
+/**
+ * Full provenance for one generated `tides4` pool, keyed by card name. Records
+ * the tides the pool combined — the always-joined signature tide, the random
+ * subset of theme tides, and the broad tail — and which tide each pooled card
+ * came from, so a debug surface can show every individual tide deck and explain
+ * why each offered card is in the pool. Only the `tides4` variant produces this;
+ * the field is absent on every other variant's result.
+ */
+export interface Tides4PoolProvenance {
+  /** The Dreamcaller this pool was built for. */
+  dreamcallerId: string;
+  /**
+   * Whether the Dreamcaller has no signature. A signatureless Dreamcaller borrows
+   * a random signatured Dreamcaller's whole pool, leaning a coherent archetype.
+   */
+  signatureless: boolean;
+  /**
+   * For a signatureless Dreamcaller, the name of the borrowed signature tide
+   * (the archetype it leaned this run); null for a signatured Dreamcaller.
+   */
+  borrowedArchetypeName: string | null;
+  /** Total copies dealt into the pool (`TIDES4.dealSize`). */
+  dealSize: number;
+  /** Max copies of any single card (`TIDES4.cap`, the 2-copy rule). */
+  cap: number;
+  /** How many facet (theme) tides were drawn in the random variety subset. */
+  facetDrawnCount: number;
+  /** How many facet tides were available to draw the subset from. */
+  facetAvailableCount: number;
+  /**
+   * Every tide that took part in the run, in join order: the starter (when
+   * present), the drawn facets, then the fill (undrawn facets and broad tides).
+   */
+  tides: Tides4PoolTide[];
+  /** Per-card provenance for the dealt pool, keyed by card name. */
+  cardProvenanceByName: Record<string, Tides4PoolCardProvenance>;
+}
+
 /** Result of one pool generation. */
 export interface GeneratedPool {
   /** Chosen color identity as ordered w/u/b/r/g letters, e.g. "ubr". */
@@ -322,6 +408,13 @@ export interface GeneratedPool {
    * grew around it. Undefined for other variants.
    */
   seedProvenance?: SeedPoolProvenance;
+  /**
+   * Full tide provenance for the run, set only by the `tides4` variant. The Pool
+   * Viewer reads it to show each individual tide deck and the construction story;
+   * the "Why Cards" surface reads it to explain which tide each card came from.
+   * Undefined for other variants.
+   */
+  tides4Provenance?: Tides4PoolProvenance;
 }
 
 /**
@@ -349,4 +442,9 @@ export interface VariantResult {
    * onto {@link GeneratedPool}. Undefined for other variants.
    */
   seedProvenance?: SeedPoolProvenance;
+  /**
+   * Full tide provenance, set only by the `tides4` variant; threaded straight
+   * onto {@link GeneratedPool}. Undefined for other variants.
+   */
+  tides4Provenance?: Tides4PoolProvenance;
 }
