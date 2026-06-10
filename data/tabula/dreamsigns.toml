@@ -408,8 +408,8 @@ id = "56523397-6C48-4DF6-846B-9E4F15D7FDEE"
 name = "Clover"
 image_name = "clover.png"
 tides = ["event_chain", "copy_effects", "finishers", "event_setup"]
-rendered-text = "When you play an event with no allies in play, copy it."
-tags = ["J10"]
+rendered-text = "Once per turn, when you play an event with no allies in play, copy it."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "6DAC6BFF-AF3A-4749-8547-01FDED1C81C9"
@@ -417,23 +417,23 @@ name = "Flaming Button"
 image_name = "damned_button.png"
 tides = ["copy_effects", "event_chain", "resource_burst", "event_setup"]
 rendered-text = "Once per turn, when you copy an event, gain 1●."
-tags = ["J10"]
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "396DA354-9F4D-4AE7-A9DC-02D1330A2678"
 name = "Crow"
 image_name = "crow.png"
 tides = ["event_chain", "spark_growth", "point_pressure", "event_setup"]
-rendered-text = "When you play an event, each allied front-rank character gains +1✦ this turn."
-tags = ["J10"]
+rendered-text = "When you play an event, a random character gains +1✦ until end of turn."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "A09F60DF-EC9F-4608-873C-1372AF18DAA2"
 name = "Cauldron"
 image_name = "cauldron.png"
 tides = ["event_chain", "reclaim_events", "void_recursion", "recursion_fuel"]
-rendered-text = "Your events have Reclaim X● where X is their ● cost."
-tags = ["J10"]
+rendered-text = "When you play an event, a random event in your void gains reclaim until end of turn."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "044F856B-C08B-4B82-81E3-5417962BF868"
@@ -441,15 +441,15 @@ name = "Skull Dagger"
 image_name = "dark_knife.png"
 tides = ["cost_reduction", "event_chain", "reclaim_events", "void_recursion"]
 rendered-text = "The first event you play from your void each turn costs 0●."
-tags = ["J10"]
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "B6333EBA-5573-441C-B286-1CD7F7CB6916"
 name = "Eye Grimoire"
 image_name = "book_3.png"
 tides = ["copy_effects", "event_chain", "reclaim_events", "void_recursion", "trigger_reuse"]
-rendered-text = "Copy the first event you play from your void each turn."
-tags = ["J10"]
+rendered-text = "Once per turn, when you play an event from your void, copy it."
+tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "B2626645-827C-46EC-8204-017862D1A398"
