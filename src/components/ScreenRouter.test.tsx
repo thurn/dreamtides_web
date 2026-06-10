@@ -295,7 +295,9 @@ describe("ScreenRouter DreamJourney routing", () => {
     const container = renderWithQuest({
       state,
       questContent: makeMerchantTestContent({ cards: fixtureCards() }),
-      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("")} />,
+      children: (
+        <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=classic")} />
+      ),
     });
 
     expect(container.querySelector('[data-testid="classic-journey-screen"]')).not.toBeNull();

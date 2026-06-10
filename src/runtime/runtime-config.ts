@@ -76,7 +76,7 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
 }
 
 function parseJourneyVariant(rawJourney: string | null): JourneyVariant {
-  return rawJourney === "v2" ? "v2" : "classic";
+  return rawJourney === "classic" ? "classic" : "v2";
 }
 
 function parseDraftMode(rawAlgo: string | null): "pool" | "replay" | "fresh20" {

@@ -174,9 +174,9 @@ http://localhost:5173/draft_test?algo=diverse   # draft harness, diverse algorit
 
 ## `journey`
 
-When set to exactly `v2`, `parseRuntimeConfig` sets
-`runtimeConfig.journeyVariant` to `"v2"`. Any other value (including empty or
-absent) sets `journeyVariant` to `"classic"`.
+`parseRuntimeConfig` sets `runtimeConfig.journeyVariant` to `"v2"` by default.
+Set to exactly `classic` to use the classic journey variant; any other value
+(including empty or absent) keeps `journeyVariant` at `"v2"`.
 
 ## Dream Journey Debug Harness
 

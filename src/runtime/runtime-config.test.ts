@@ -11,7 +11,7 @@ describe("parseRuntimeConfig", () => {
       basicAutomation: true,
       gameId: null,
       databaseMode: "emulator",
-      journeyVariant: "classic",
+      journeyVariant: "v2",
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "pool",
       fresh20PackSize: undefined,
@@ -48,22 +48,22 @@ describe("parseRuntimeConfig", () => {
   });
 
   describe("journeyVariant", () => {
-    it("defaults to classic when journey is absent", () => {
-      expect(parseRuntimeConfig("").journeyVariant).toBe("classic");
+    it("defaults to v2 when journey is absent", () => {
+      expect(parseRuntimeConfig("").journeyVariant).toBe("v2");
     });
 
-    it("returns v2 only when journey=v2", () => {
-      expect(parseRuntimeConfig("?journey=v2").journeyVariant).toBe("v2");
-    });
-
-    it("returns classic for any other journey value", () => {
-      expect(parseRuntimeConfig("?journey=").journeyVariant).toBe("classic");
+    it("returns classic only when journey=classic", () => {
       expect(parseRuntimeConfig("?journey=classic").journeyVariant).toBe(
         "classic",
       );
-      expect(parseRuntimeConfig("?journey=V2").journeyVariant).toBe("classic");
-      expect(parseRuntimeConfig("?journey=v2x").journeyVariant).toBe("classic");
-      expect(parseRuntimeConfig("?journey=other").journeyVariant).toBe("classic");
+    });
+
+    it("returns v2 for any other journey value", () => {
+      expect(parseRuntimeConfig("?journey=").journeyVariant).toBe("v2");
+      expect(parseRuntimeConfig("?journey=v2").journeyVariant).toBe("v2");
+      expect(parseRuntimeConfig("?journey=Classic").journeyVariant).toBe("v2");
+      expect(parseRuntimeConfig("?journey=classicx").journeyVariant).toBe("v2");
+      expect(parseRuntimeConfig("?journey=other").journeyVariant).toBe("v2");
     });
   });
 
