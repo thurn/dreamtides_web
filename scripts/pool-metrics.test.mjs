@@ -1,19 +1,19 @@
 import { describe, expect, it } from "vitest";
 import {
-  big5ThemeScore,
+  archetypeKind,
+  archetypeSupportSet,
   buildableThemes,
   cardBestAdequacies,
+  cardLifts,
   draftableUniverse,
-  dreamcallerFamilies,
   giniCoefficient,
   normalizedEntropy,
-  onThemeShare,
   poolPayoffThemes,
   poolSupportShares,
-  scoreDreamcallerPool,
   scorePool,
-  themeCompleteness,
-  themeUniverseCards,
+  signatureDecks,
+  supportSetCompleteness,
+  supportSetShare,
   TIER_TARGET,
   trapCards,
 } from "./pool-metrics.mjs";
@@ -301,109 +301,83 @@ describe("draftableUniverse", () => {
   });
 });
 
-// --- Dreamcaller-support metric ---------------------------------------------
+// --- Dreamcaller-support metric (label-free, learned from decklists) --------
 
-// Metadata for the dreamcaller tests: a warrior body + payoff, an outsider, and
-// inert filler. "On theme" counts a card that supports OR needs the theme.
-const DC_META = {
-  themes: {
-    warriors: { name: "Warriors" },
-    outsiders: { name: "Outsiders" },
-  },
-  cards: {
-    Warrior: { needs: [], supports: ["warriors"] },
-    WarChief: { needs: [{ theme: "warriors", tier: 3 }], supports: ["warriors"] },
-    WarFan: { needs: [{ theme: "warriors", tier: 2 }], supports: [] },
-    Outsider: { needs: [], supports: ["outsiders"] },
-  },
-};
+// A toy corpus: "Spirit" decks pair the signature with Wolf/Eagle; an off-theme
+// deck and a goodstuff card (in every deck) exercise the lift math.
+const SIG = ["SpiritLord"];
+const CORPUS = [
+  ["SpiritLord", "Wolf", "Eagle", "Goodstuff"],
+  ["SpiritLord", "Wolf", "Eagle", "Goodstuff"],
+  ["SpiritLord", "Wolf", "Goodstuff"],
+  ["Warrior", "Axe", "Goodstuff"],
+  ["Warrior", "Axe", "Goodstuff"],
+];
 
-describe("dreamcallerFamilies", () => {
-  it("maps themeArchetypes to distinct families in first-seen order", () => {
-    expect(dreamcallerFamilies(["warrior-aggro", "warrior-combo"])).toEqual(["warriors"]);
-    // Kell Tarn: a small family and a big5 family.
-    expect(dreamcallerFamilies(["cheap-characters", "reclaim-combo"])).toEqual([
-      "cheap",
-      "survivors",
-    ]);
-    // Yveth: blink folds into the creatures family.
-    expect(dreamcallerFamilies(["blink", "celestial-reverie-combo"])).toEqual(["creatures"]);
-  });
-
-  it("is empty for a neutral or unmapped Dreamcaller", () => {
-    expect(dreamcallerFamilies([])).toEqual([]);
-    expect(dreamcallerFamilies(undefined)).toEqual([]);
-    expect(dreamcallerFamilies(["not-a-real-archetype"])).toEqual([]);
+describe("signatureDecks", () => {
+  it("keeps decks with at least k signature cards", () => {
+    expect(signatureDecks(CORPUS, SIG, 1).length).toBe(3);
+    expect(signatureDecks(CORPUS, ["SpiritLord", "Wolf"], 2).length).toBe(3);
+    expect(signatureDecks(CORPUS, [], 1).length).toBe(0);
   });
 });
 
-describe("onThemeShare", () => {
-  it("counts cards that are or care about the theme, capped, over pool size", () => {
-    // size 10: Warrior(2) + WarChief(1) + WarFan(1) on-theme = 4 of 10.
-    const counts = withFiller(
-      new Map([["Warrior", 2], ["WarChief", 1], ["WarFan", 1]]),
-      6,
-    );
-    expect(onThemeShare(counts, DC_META, ["warriors"])).toBeCloseTo(0.4, 10);
-  });
-
-  it("is 0 for an empty pool", () => {
-    expect(onThemeShare(new Map(), DC_META, ["warriors"])).toBe(0);
-  });
-});
-
-describe("big5ThemeScore", () => {
-  it("is 0 below the floor, ramps linearly, and caps at 1", () => {
-    expect(big5ThemeScore(0.2)).toBe(0); // below 30%
-    expect(big5ThemeScore(0.3)).toBeCloseTo(0, 10); // at floor
-    expect(big5ThemeScore(0.4)).toBeCloseTo(0.5, 10); // halfway to ideal
-    expect(big5ThemeScore(0.5)).toBe(1); // at ideal
-    expect(big5ThemeScore(0.7)).toBe(1); // beyond ideal
+describe("cardLifts", () => {
+  it("ranks signature-only cards high and ubiquitous goodstuff at ~1", () => {
+    const sigDecks = signatureDecks(CORPUS, SIG, 1);
+    const lifts = cardLifts(CORPUS, sigDecks);
+    // Goodstuff is in all 5 decks and all 3 signature decks => lift 1.
+    expect(lifts.get("Goodstuff").lift).toBeCloseTo(1, 10);
+    // Wolf: 3/3 in signature decks, 3/5 in corpus => lift 5/3.
+    expect(lifts.get("Wolf").lift).toBeCloseTo(5 / 3, 10);
+    expect(lifts.get("Wolf").presence).toBeCloseTo(1, 10);
+    // Off-theme cards never appear in signature decks.
+    expect(lifts.has("Axe")).toBe(false);
   });
 });
 
-describe("themeUniverseCards / themeCompleteness", () => {
-  it("finds the theme's cards and scores full-set completeness", () => {
-    const universe = new Set(["Warrior", "WarChief", "Outsider", "Filler0"]);
-    const outsiders = themeUniverseCards(universe, DC_META, ["outsiders"]);
-    expect([...outsiders]).toEqual(["Outsider"]);
-
-    const warriors = themeUniverseCards(universe, DC_META, ["warriors"]);
-    expect(warriors).toEqual(new Set(["Warrior", "WarChief"]));
-    // Only Warrior is a 2-of, so 1 of 2 warrior cards is a full set.
-    const counts = new Map([["Warrior", 2], ["WarChief", 1]]);
-    expect(themeCompleteness(counts, warriors)).toBeCloseTo(0.5, 10);
-  });
-
-  it("is vacuously complete when the theme has no cards", () => {
-    expect(themeCompleteness(new Map(), new Set())).toBe(1);
+describe("archetypeSupportSet", () => {
+  it("includes high-lift on-theme cards and excludes goodstuff", () => {
+    const { cards, sigDeckCount } = archetypeSupportSet(CORPUS, SIG, {
+      k: 1,
+      lift: 1.3,
+      presence: 0.2,
+    });
+    expect(sigDeckCount).toBe(3);
+    expect(cards.has("Wolf")).toBe(true);
+    expect(cards.has("Eagle")).toBe(true);
+    expect(cards.has("Goodstuff")).toBe(false); // lift ~1, below threshold
+    expect(cards.has("Axe")).toBe(false); // off-theme
   });
 });
 
-describe("scoreDreamcallerPool", () => {
-  it("scores a big5 family on density and a small family on completeness", () => {
-    const universe = new Set(["Warrior", "WarChief", "Outsider"]);
-    const themeUniverseByFamily = new Map([
-      ["outsiders", themeUniverseCards(universe, DC_META, ["outsiders"])],
-    ]);
-    // size 10: warriors on-theme = 4 (Warrior x2, WarChief, WarFan) => share .40
-    // => big5 score 0.5. Outsider present as a 2-of => outsiders completeness 1.0.
-    const counts = withFiller(
-      new Map([["Warrior", 2], ["WarChief", 1], ["WarFan", 1], ["Outsider", 2]]),
-      4,
-    );
-    const insts = scoreDreamcallerPool(
-      counts,
-      DC_META,
-      ["warriors", "outsiders"],
-      themeUniverseByFamily,
-    );
-    const warriors = insts.find((i) => i.family === "warriors");
-    const outsiders = insts.find((i) => i.family === "outsiders");
-    expect(warriors.kind).toBe("big5");
-    expect(warriors.score).toBeCloseTo(0.5, 10);
-    expect(warriors.passesFloor).toBe(true);
-    expect(outsiders.kind).toBe("small");
-    expect(outsiders.score).toBe(1);
+describe("supportSetShare", () => {
+  it("is copy-weighted support over pool size", () => {
+    const support = new Set(["Wolf", "Eagle"]);
+    // size 10: Wolf x2 + Eagle x1 = 3 on-theme copies => share 0.3.
+    const counts = withFiller(new Map([["Wolf", 2], ["Eagle", 1]]), 7);
+    expect(supportSetShare(counts, support)).toBeCloseTo(0.3, 10);
+    expect(supportSetShare(new Map(), support)).toBe(0);
+  });
+});
+
+describe("supportSetCompleteness", () => {
+  it("is the fraction of the support set present as a full 2-of playset", () => {
+    const support = new Set(["Wolf", "Eagle", "Bear"]);
+    // Wolf is a 2-of, Eagle a 1-of (not full), Bear absent => 1/3 complete.
+    const counts = new Map([["Wolf", 2], ["Eagle", 1]]);
+    expect(supportSetCompleteness(counts, support)).toBeCloseTo(1 / 3, 10);
+    // Empty support set is vacuously complete.
+    expect(supportSetCompleteness(new Map(), new Set())).toBe(1);
+  });
+});
+
+describe("archetypeKind", () => {
+  it("is big5 only when a 2-of playset could fill at least the target share", () => {
+    // 50 cards x2 = 100 copies = 50% of a 200 pool => exactly reaches target.
+    expect(archetypeKind(50, 200, 0.5)).toBe("big5");
+    expect(archetypeKind(49, 200, 0.5)).toBe("small");
+    // A small support set cannot be a backbone at any reasonable pool size.
+    expect(archetypeKind(13, 200, 0.5)).toBe("small");
   });
 });
