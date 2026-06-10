@@ -14,9 +14,9 @@ export interface DreamcallerContent {
   renderedText: string;
   imageNumber: string;
   /**
-   * Per-Dreamcaller starting essence. Tuned in `dreamcallers.toml` to
-   * compensate for differences in opening power and engine ramp speed.
-   * Defaults to `DEFAULT_STARTING_ESSENCE` when omitted from source data.
+   * Per-Dreamcaller starting essence, compensating for differences in opening
+   * power and engine ramp speed. Defaults to `DEFAULT_STARTING_ESSENCE` when
+   * omitted from source data.
    */
   startingEssence: number;
   /**

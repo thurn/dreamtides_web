@@ -26,7 +26,7 @@ What `npm start` does:
 1. Starts the Firebase Realtime Database emulator on `127.0.0.1:9000` with
    project `demo-quest-prototype`.
 2. Starts the Emulator UI on `127.0.0.1:4000`.
-3. Refreshes `public/card-data.json`, `public/dreamcaller-data.json`,
+3. Refreshes `public/card-data.json`, `public/dreamcallers-v2-data.json`,
    `public/dreamsign-data.json`, and the symlinks under `public/cards/`,
    `public/dreamcallers/`, and `public/dreamsigns/`.
 4. Starts Vite on `http://localhost:5173/` with `--strictPort` so a port

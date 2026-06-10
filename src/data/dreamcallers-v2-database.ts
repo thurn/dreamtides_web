@@ -1,8 +1,7 @@
 /**
  * Loads the v2 Dreamcaller identities (`dreamcallers_v2.toml`, normalized by
  * `scripts/setup-assets.mjs`) for the standalone draft test harness. Served from
- * the public directory at `/dreamcallers-v2-data.json`, separate from the
- * runtime `/dreamcaller-data.json`.
+ * the public directory at `/dreamcallers-v2-data.json`.
  */
 
 /** A v2 Dreamcaller as consumed by the draft test harness. */

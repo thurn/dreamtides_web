@@ -32,7 +32,7 @@ describe("setupAssets", () => {
     const dreamcallerArtDir = join(tempRoot, "dreamcaller-art");
     const dreamsignArtDir = join(tempRoot, "dreamsign-art");
     const cardTomlPath = join(tempRoot, "rendered-cards.toml");
-    const dreamcallerTomlPath = join(tempRoot, "dreamcallers.toml");
+    const dreamcallerV2TomlPath = join(tempRoot, "dreamcallers_v2.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
     const cachedImagePath = join(imageCacheDir, imageHash(101));
 
@@ -91,15 +91,13 @@ art-owned = true
 `,
     );
     writeFileSync(
-      dreamcallerTomlPath,
+      dreamcallerV2TomlPath,
       `[[dreamcaller]]
 id = "dc-1"
 name = "Dreamcaller One"
 title = "Keeper of Test Cases"
-rendered-text = "Choose tides."
+rendered-text = "Trigger an ability."
 image-number = "0007"
-mandatory-tides = ["core", "bridge"]
-optional-tides = ["support", "tempo", "finish", "value"]
 `,
     );
     writeFileSync(
@@ -116,7 +114,7 @@ rendered-text = "Use the canonical Dreamsign text."
 
     setupAssets({
       cardTomlPath,
-      dreamcallerTomlPath,
+      dreamcallerV2TomlPath,
       dreamsignTomlPath,
       publicDir,
       imageCacheDir,
@@ -128,7 +126,7 @@ rendered-text = "Use the canonical Dreamsign text."
       readFileSync(join(publicDir, "card-data.json"), "utf8"),
     );
     const dreamcallers = JSON.parse(
-      readFileSync(join(publicDir, "dreamcaller-data.json"), "utf8"),
+      readFileSync(join(publicDir, "dreamcallers-v2-data.json"), "utf8"),
     );
     const dreamsigns = JSON.parse(
       readFileSync(join(publicDir, "dreamsign-data.json"), "utf8"),
@@ -184,11 +182,9 @@ rendered-text = "Use the canonical Dreamsign text."
         id: "dc-1",
         name: "Dreamcaller One",
         title: "Keeper of Test Cases",
-        renderedText: "Choose tides.",
+        renderedText: "Trigger an ability.",
         imageNumber: "0007",
         startingEssence: 250,
-        mandatoryTides: ["core", "bridge"],
-        optionalTides: ["support", "tempo", "finish", "value"],
       },
     ]);
     expect(dreamsigns).toEqual([
@@ -212,7 +208,7 @@ rendered-text = "Use the canonical Dreamsign text."
     const dreamcallerArtDir = join(tempRoot, "dreamcaller-art");
     const dreamsignArtDir = join(tempRoot, "dreamsign-art");
     const cardTomlPath = join(tempRoot, "rendered-cards.toml");
-    const dreamcallerTomlPath = join(tempRoot, "dreamcallers.toml");
+    const dreamcallerV2TomlPath = join(tempRoot, "dreamcallers_v2.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
 
     mkdirSync(imageCacheDir, { recursive: true });
@@ -239,7 +235,7 @@ art-owned = true
 `,
     );
     writeFileSync(
-      dreamcallerTomlPath,
+      dreamcallerV2TomlPath,
       `[[dreamcaller]]
 id = "dc-low"
 name = "Discount Caller"
@@ -247,8 +243,6 @@ title = "Cheap Engine"
 rendered-text = "Strong opener."
 image-number = "0007"
 starting-essence = 220
-mandatory-tides = ["core"]
-optional-tides = ["a", "b", "c", "d"]
 
 [[dreamcaller]]
 id = "dc-default"
@@ -256,8 +250,6 @@ name = "Steady Caller"
 title = "Average Engine"
 rendered-text = "Even keel."
 image-number = "0008"
-mandatory-tides = ["core"]
-optional-tides = ["a", "b", "c", "d"]
 `,
     );
     writeFileSync(
@@ -276,7 +268,7 @@ rendered-text = ""
 
     setupAssets({
       cardTomlPath,
-      dreamcallerTomlPath,
+      dreamcallerV2TomlPath,
       dreamsignTomlPath,
       publicDir,
       imageCacheDir,
@@ -285,7 +277,7 @@ rendered-text = ""
     });
 
     const dreamcallers = JSON.parse(
-      readFileSync(join(publicDir, "dreamcaller-data.json"), "utf8"),
+      readFileSync(join(publicDir, "dreamcallers-v2-data.json"), "utf8"),
     );
     expect(dreamcallers[0].startingEssence).toBe(220);
     expect(dreamcallers[1].startingEssence).toBe(250);
@@ -298,7 +290,7 @@ rendered-text = ""
     const dreamcallerArtDir = join(tempRoot, "dreamcaller-art");
     const dreamsignArtDir = join(tempRoot, "dreamsign-art");
     const cardTomlPath = join(tempRoot, "rendered-cards.toml");
-    const dreamcallerTomlPath = join(tempRoot, "dreamcallers.toml");
+    const dreamcallerV2TomlPath = join(tempRoot, "dreamcallers_v2.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
 
     mkdirSync(imageCacheDir, { recursive: true });
@@ -337,15 +329,13 @@ art-owned = true
 `,
     );
     writeFileSync(
-      dreamcallerTomlPath,
+      dreamcallerV2TomlPath,
       `[[dreamcaller]]
 id = "dc-1"
 name = "Caller"
 title = "Title"
 rendered-text = ""
 image-number = "0007"
-mandatory-tides = ["core"]
-optional-tides = ["a", "b", "c", "d"]
 `,
     );
     writeFileSync(
@@ -364,7 +354,7 @@ rendered-text = ""
 
     setupAssets({
       cardTomlPath,
-      dreamcallerTomlPath,
+      dreamcallerV2TomlPath,
       dreamsignTomlPath,
       publicDir,
       imageCacheDir,

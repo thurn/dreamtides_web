@@ -19,13 +19,13 @@ npm run dev          # runs setup-assets.mjs then starts Vite
 Vite. The setup script is idempotent and:
 
 1. Parses `rendered-cards.toml` into `public/card-data.json`.
-2. Parses `dreamcallers.toml` into `public/dreamcaller-data.json`.
+2. Parses `dreamcallers_v2.toml` into `public/dreamcallers-v2-data.json`.
 3. Symlinks `public/cards/{cardNumber}.webp` into the local image cache at
    `~/Library/Caches/io.github.dreamtides.tv/image_cache/`.
 4. Copies the tide PNGs into `public/tides/`.
 
 The generated `public/cards/`, `public/tides/`, `public/card-data.json`, and
-`public/dreamcaller-data.json` paths are gitignored.
+`public/dreamcallers-v2-data.json` paths are gitignored.
 
 Other commands:
 

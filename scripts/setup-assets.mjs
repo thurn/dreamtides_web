@@ -481,7 +481,6 @@ export function transformDreamsignProfile(profile) {
 export function setupAssets({
   cardTomlPath = join(DATA_DIR, "tabula", "rendered-cards.toml"),
   cardV2TomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
-  dreamcallerTomlPath = join(DATA_DIR, "tabula", "dreamcallers.toml"),
   dreamcallerV2TomlPath = join(DATA_DIR, "tabula", "dreamcallers_v2.toml"),
   dreamsignTomlPath = join(DATA_DIR, "tabula", "dreamsigns.toml"),
   dreamsignProfilesTomlPath = join(DATA_DIR, "tabula", "dreamsign_profiles.toml"),
@@ -503,7 +502,6 @@ export function setupAssets({
   const decklistsJsonPath = join(publicDir, "decklists-data.json");
   const draftRecordsAdaptedDir = join(ROOT, "docs", "draft_records_adapted");
   const draftRecordsJsonPath = join(publicDir, "draft-records-data.json");
-  const dreamcallerJsonPath = join(publicDir, "dreamcaller-data.json");
   const dreamcallerV2JsonPath = join(publicDir, "dreamcallers-v2-data.json");
   const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
   const dreamsignProfilesJsonPath = join(publicDir, "dreamsign-profiles-data.json");
@@ -697,30 +695,11 @@ export function setupAssets({
     );
   }
 
-  console.log("Parsing dreamcallers.toml...");
-  const dreamcallerTomlContent = readFileSync(dreamcallerTomlPath, "utf8");
-  const parsedDreamcallers = parse(dreamcallerTomlContent);
-  const allDreamcallers = parsedDreamcallers.dreamcaller;
-
-  if (!Array.isArray(allDreamcallers)) {
-    throw new Error("Expected [[dreamcaller]] array in dreamcallers.toml");
-  }
-
-  const jsonDreamcallers = allDreamcallers.map(transformDreamcaller);
-  writeFileSync(
-    dreamcallerJsonPath,
-    JSON.stringify(jsonDreamcallers, null, 2) + "\n",
-  );
-  console.log(
-    `Wrote ${jsonDreamcallers.length} dreamcallers to dreamcaller-data.json`,
-  );
-
   // The v2 Dreamcaller identities (`dreamcallers_v2.toml`) drive the standalone
-  // draft test harness. They reuse the same portrait art pool and the same
-  // kebab->camel normalization, and carry a `signature-cards` list that steers
-  // the standard `idf3` pool variant. The `draft-archetypes` the non-`idf3`
-  // variants seed from live in TypeScript ({@link DREAMCALLER_ARCHETYPES}) and
-  // are merged in below.
+  // draft test harness. They carry a kebab->camel normalization and a
+  // `signature-cards` list that steers the standard `idf3` pool variant. The
+  // `draft-archetypes` the non-`idf3` variants seed from live in TypeScript
+  // ({@link DREAMCALLER_ARCHETYPES}) and are merged in below.
   console.log("Parsing dreamcallers_v2.toml...");
   const dreamcallerV2TomlContent = readFileSync(dreamcallerV2TomlPath, "utf8");
   const parsedDreamcallersV2 = parse(dreamcallerV2TomlContent);
@@ -890,10 +869,10 @@ export function setupAssets({
   let linkedDreamcallerArt = 0;
   let missingDreamcallerArt = 0;
 
-  // Link portraits for both the runtime and v2 draft-test Dreamcallers, keyed by
-  // image number so a portrait shared between the two pools is linked once.
+  // Link portraits for the v2 draft-test Dreamcallers, keyed by image number so
+  // a portrait shared between several Dreamcallers is linked once.
   const dreamcallerArtByImageNumber = new Map();
-  for (const dreamcaller of [...jsonDreamcallers, ...jsonDreamcallersV2]) {
+  for (const dreamcaller of jsonDreamcallersV2) {
     if (!dreamcallerArtByImageNumber.has(dreamcaller.imageNumber)) {
       dreamcallerArtByImageNumber.set(dreamcaller.imageNumber, dreamcaller.name);
     }

@@ -89,7 +89,7 @@ npm run dev
 script is idempotent and refreshes:
 
 - `public/card-data.json`
-- `public/dreamcaller-data.json`
+- `public/dreamcallers-v2-data.json`
 - `public/cards/` symlinks into the local image cache
 
 Useful one-offs:
