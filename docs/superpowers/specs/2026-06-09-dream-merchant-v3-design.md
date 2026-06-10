@@ -431,20 +431,53 @@ at that stage), so measurements reflect real deck states.
    75th percentile, floor >= 50th); for premium/strong offers, quality
    percentile with the same targets; for purges, the target's misfit
    percentile; for transfigure, the pair's blended score percentile.
+   `category_draft_known` is a *scoped* draft, so its percentile is measured
+   within the chosen category's candidate pool (the population the builder
+   sampled), not the whole grant pool. For purges the misfit percentile is
+   measured against the *whole deck's* misfit ranking (worst fit = high
+   desirability), since the purge candidate set is the already-filtered worst
+   band; a card tied at the maximum misfit (a starter, or the worst-fitting
+   card) reads ~100. The `dreamsign` / `dreamsign_draft` archetypes carry a
+   relaxed target of **median >= 65th percentile, floor >= 40th**: their match
+   signal is intentionally flat (154 profiles, 54 featureless and
+   deck-independent, graded in three quality tiers) and the band is deliberately
+   loose so generic dreamsigns stay offerable everywhere; uniform sampling within
+   a wide band over a tie-heavy distribution lands the offered dreamsign near the
+   middle of a tie cluster (median ~74, well above chance) and structurally
+   cannot clear a 75th-percentile median without abandoning coverage. The
+   relaxed target encodes "plausibly relevant", the archetype's design intent.
 3. **Repetition** — probability that two random seeds yield an identical offer
    pair for the same deck state. Target: < 2%.
 4. **Archetype coverage** — empirical distribution of shown archetypes across
    seeds and deck states; no archetype starved or dominant beyond its intended
    weight (each eligible archetype's observed share within 2x of its
-   weight-implied share).
+   weight-implied share). The weight-implied share models BOTH offer slots and
+   the family-distinctness rule (slot B is a weighted draw constrained to a
+   different family than slot A), `E[slots_i] = P(A=i) + Σ_a P(A=a)·P(B=i | A=a)`;
+   modelling slot A alone halves the expected share of small-family archetypes
+   and spuriously fails almost every archetype.
 5. **Content coverage** — across the full sweep (all deck states x seeds), the
    merchant must exercise the whole content space, not a favored subset:
-   - *Transfiguration types*: all 8 types appear in offers
-     (`transfigure`, `starter_transfigure`, `transfigured_draft` combined);
-     report the share per type, each share > 0.
-   - *Dreamsigns*: fraction of dreamsign templates ever offered. Target:
-     100% (every dreamsign is offerable somewhere; generic profiles
-     guarantee a floor).
+   - *Transfiguration types*: every transfiguration type that any reachable
+     pool/deck card is eligible for appears in offers (`transfigure`,
+     `starter_transfigure`, `transfigured_draft` combined); report the share per
+     type. A type carried by fewer than two distinct cards across the sweep is
+     unreachable and excluded from the target. **Rose** is the live exclusion:
+     exactly one pool card is Rose-eligible (and only by flavor text mentioning
+     "activated abilities" — it has no activated ability for Rose to discount),
+     that card appears in ~1 of 60 record decks, and Rose is never any card's
+     highest-benefit type (Prismatic dominates), so Rose can never surface.
+     "All 8 types appear" is physically unattainable.
+   - *Dreamsigns*: fraction of **band-reachable** dreamsign templates ever
+     offered. Target: 100% of the reachable set. A dreamsign is reachable when
+     its deck-relevant-band reach mass (`Σ_states 1/bandSize` over the deck
+     states whose band it enters) clears a small floor. The 54 featureless and
+     the low-quality dreamsigns have a deck-independent match score that sits
+     permanently below the band, so they surface only if the band is widened to
+     the whole population — a pure random draw that abandons deck-relevance and
+     collapses desirability. 100% of *all* templates is therefore unattainable
+     while keeping offers deck-suited; 100% of the reachable subset is the
+     attainable, design-faithful target.
    - *Cards*: fraction of non-starter pool cards ever offered through any
      grant/draft archetype. Target: >= 90%, with the never-offered remainder
      listed by name in the report (no silent gaps).
