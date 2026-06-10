@@ -34,7 +34,7 @@ function callHotUpdate(plugin, context) {
 describe("generated card data drift Vite integration", () => {
   it("keeps editor-written card data files out of Vite's reload watcher", () => {
     // The whole data/tabula directory is ignored so editor writes to any card
-    // or tag TOML (not just the default rendered-cards.toml) never trigger a
+    // or tag TOML (not just the default cards_v2.toml) never trigger a
     // full page reload, alongside the generated card data paths.
     expect(viteConfig.server?.watch?.ignored).toEqual([
       resolve(join(rootDir, "data", "tabula")) + "/**",
@@ -49,7 +49,7 @@ describe("generated card data drift Vite integration", () => {
       callHotUpdate(
         plugin,
         makeHotUpdateContext(
-          join(rootDir, "data", "tabula", "rendered-cards.toml"),
+          join(rootDir, "data", "tabula", "cards_v2.toml"),
         ),
       ),
     ).toEqual([]);

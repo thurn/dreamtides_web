@@ -46,13 +46,11 @@ export const DEFAULT_CARDS_TOML = join("data", "tabula", "cards_v2.toml");
 
 /**
  * Card data files scanned for the names an image number has ever been given.
- * `cards_v2.toml` is the live card set and `rendered-cards.toml` is the legacy
- * set kept for historical reference; together they record every name a given
+ * `cards_v2.toml` is the live card set; it records every name a given
  * Shutterstock image has been published under.
  */
 export const DEFAULT_NAME_HISTORY_TOMLS = [
   join("data", "tabula", "cards_v2.toml"),
-  join("data", "tabula", "rendered-cards.toml"),
 ];
 
 /**

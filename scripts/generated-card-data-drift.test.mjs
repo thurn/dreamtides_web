@@ -15,7 +15,7 @@ function writeFixtureToml(rootDir, rarityLine = 'rarity = "Legendary"\n') {
   const tabulaDir = join(rootDir, "data", "tabula");
   mkdirSync(tabulaDir, { recursive: true });
   writeFileSync(
-    join(tabulaDir, "rendered-cards.toml"),
+    join(tabulaDir, "cards_v2.toml"),
     `[[cards]]
 name = "Knowledge Restored"
 id = "ded25ef2-3c3f-4012-8717-8dec3def1854"

@@ -396,7 +396,7 @@ export default function CardEditorApp({
   );
   const activeTomlLabel = useMemo(() => {
     const param = editorTomlParam();
-    const path = param ?? "rendered-cards.toml";
+    const path = param ?? "cards_v2.toml";
     const fileName = path.split(/[\\/]/u).pop();
     return fileName !== undefined && fileName !== "" ? fileName : path;
   }, []);

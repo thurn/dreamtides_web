@@ -87,13 +87,13 @@ function writeFixtureRoot() {
   const rootDir = mkdtempSync(join(tmpdir(), "quest-card-editor-api-"));
   mkdirSync(join(rootDir, "data", "tabula"), { recursive: true });
   mkdirSync(join(rootDir, "public"), { recursive: true });
-  writeFileSync(join(rootDir, "data", "tabula", "rendered-cards.toml"), fixtureToml());
+  writeFileSync(join(rootDir, "data", "tabula", "cards_v2.toml"), fixtureToml());
   writeFileSync(join(rootDir, "public", "card-data.json"), "[]\n");
   return rootDir;
 }
 
 function readToml(rootDir) {
-  return readFileSync(join(rootDir, "data", "tabula", "rendered-cards.toml"), "utf8");
+  return readFileSync(join(rootDir, "data", "tabula", "cards_v2.toml"), "utf8");
 }
 
 function readCardJson(rootDir) {
@@ -713,11 +713,11 @@ card-number = 1
 `;
 }
 
-function writeAltFixture(rootDir, fileName = "cards_v2.toml") {
+function writeAltFixture(rootDir, fileName = "cards_alt.toml") {
   writeFileSync(join(rootDir, "data", "tabula", fileName), altFixtureToml());
 }
 
-function readAltToml(rootDir, fileName = "cards_v2.toml") {
+function readAltToml(rootDir, fileName = "cards_alt.toml") {
   return readFileSync(join(rootDir, "data", "tabula", fileName), "utf8");
 }
 
@@ -729,7 +729,7 @@ describe("createCardEditorApiMiddleware toml selection", () => {
 
     const { response, body } = await requestJson(
       origin,
-      "/api/editor/cards?toml=data/tabula/cards_v2.toml",
+      "/api/editor/cards?toml=data/tabula/cards_alt.toml",
     );
 
     expect(response.status).toBe(200);
@@ -741,7 +741,7 @@ describe("createCardEditorApiMiddleware toml selection", () => {
     writeAltFixture(rootDir);
     const origin = await startApi(rootDir);
 
-    const { response, body } = await requestJson(origin, "/api/editor/cards?toml=cards_v2.toml");
+    const { response, body } = await requestJson(origin, "/api/editor/cards?toml=cards_alt.toml");
 
     expect(response.status).toBe(200);
     expect(body.cards.map((card) => card.id)).toEqual([ALT_ID]);
@@ -755,7 +755,7 @@ describe("createCardEditorApiMiddleware toml selection", () => {
 
     const { response, body } = await requestJson(
       origin,
-      `/api/editor/cards/${ALT_ID}?toml=cards_v2.toml`,
+      `/api/editor/cards/${ALT_ID}?toml=cards_alt.toml`,
       {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },

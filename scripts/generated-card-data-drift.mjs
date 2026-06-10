@@ -68,12 +68,12 @@ function firstCardDifference(expected, actual) {
 }
 
 export function expectedCardDataFromToml({ rootDir = ROOT } = {}) {
-  const cardTomlPath = join(rootDir, "data", "tabula", "rendered-cards.toml");
+  const cardTomlPath = join(rootDir, "data", "tabula", "cards_v2.toml");
   const parsedCards = parse(readFileSync(cardTomlPath, "utf8"));
   const allCards = parsedCards.cards;
 
   if (!Array.isArray(allCards)) {
-    throw new Error("Expected [[cards]] array in rendered-cards.toml");
+    throw new Error("Expected [[cards]] array in cards_v2.toml");
   }
 
   // Mirror the runtime filter in setup-assets.mjs: Special-rarity cards are
@@ -109,7 +109,7 @@ export function checkGeneratedCardData({ rootDir = ROOT } = {}) {
     return {
       ok: true,
       durationMs,
-      message: `Generated card data matches rendered-cards.toml in ${durationMs.toFixed(1)} ms.`,
+      message: `Generated card data matches cards_v2.toml in ${durationMs.toFixed(1)} ms.`,
     };
   } catch (error) {
     const durationMs = performance.now() - startedAt;

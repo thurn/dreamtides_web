@@ -13,7 +13,7 @@ import { checkGeneratedCardData } from "./scripts/generated-card-data-drift.mjs"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const generatedCardDataWatchPaths = [
-  path.join(__dirname, "data", "tabula", "rendered-cards.toml"),
+  path.join(__dirname, "data", "tabula", "cards_v2.toml"),
   path.join(__dirname, "public", "card-data.json"),
 ].map((filePath) => path.resolve(filePath));
 
@@ -77,7 +77,6 @@ function imageViewerApiPlugin(): Plugin {
           cardsTomlPath: path.join(__dirname, "data", "tabula", "cards_v2.toml"),
           nameHistoryTomlPaths: [
             path.join(__dirname, "data", "tabula", "cards_v2.toml"),
-            path.join(__dirname, "data", "tabula", "rendered-cards.toml"),
           ],
         }),
       );

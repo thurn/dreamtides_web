@@ -26,12 +26,12 @@ describe("imageNumberFromFilename", () => {
 describe("data helpers over a temp working set", () => {
   let root;
   let cardsTomlPath;
-  let legacyTomlPath;
+  let extraTomlPath;
 
   beforeEach(() => {
     root = mkdtempSync(join(tmpdir(), "image-viewer-"));
     cardsTomlPath = join(root, "cards.toml");
-    legacyTomlPath = join(root, "rendered-cards.toml");
+    extraTomlPath = join(root, "cards_extra.toml");
 
     mkdirSync(join(root, "warrior"));
     mkdirSync(join(root, "child"));
@@ -45,10 +45,10 @@ describe("data helpers over a temp working set", () => {
     // Stray file without a trailing number is ignored.
     writeFileSync(join(root, "warrior", "notes.txt"), "");
 
-    // The legacy set published image 1111 under an older name, and shares the
+    // A second card file published image 1111 under an older name, and shares the
     // current name for 2222 (recorded once). 3333 has no card history.
     writeFileSync(
-      legacyTomlPath,
+      extraTomlPath,
       [
         "[[cards]]",
         'name = "Old Gate Knight"',
@@ -126,7 +126,7 @@ describe("data helpers over a temp working set", () => {
   });
 
   it("collects distinct names per image across both card sets", () => {
-    const history = readNameHistory([cardsTomlPath, legacyTomlPath]);
+    const history = readNameHistory([cardsTomlPath, extraTomlPath]);
     expect(history.get("1111")).toEqual(["Gate Knight", "Old Gate Knight"]);
     // "Archer" appears in both files but is recorded once.
     expect(history.get("2222")).toEqual(["Archer"]);
@@ -150,7 +150,7 @@ describe("data helpers over a temp working set", () => {
     const manifest = buildImageManifest({
       root,
       cardsTomlPath,
-      nameHistoryTomlPaths: [cardsTomlPath, legacyTomlPath],
+      nameHistoryTomlPaths: [cardsTomlPath, extraTomlPath],
     });
     expect(manifest.categories).toEqual(["child", "warrior"]);
 

@@ -17,8 +17,8 @@ import type { AffinityCorpusJson } from "../draft/pool";
 /**
  * Fetches the experimental v2 card pool (generated from `cards_v2.toml` by
  * `scripts/setup-assets.mjs`) and returns a Map keyed by card number. Served
- * from the public directory at `/cards_v2-data.json`, separate from the
- * runtime `/card-data.json`.
+ * from the public directory at `/cards_v2-data.json`, which carries the
+ * draft-pool metadata merged in alongside the base card fields.
  */
 export async function loadCardsV2Database(): Promise<Map<number, CardData>> {
   const response = await fetch("/cards_v2-data.json");

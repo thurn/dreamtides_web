@@ -9,7 +9,7 @@ import {
 import { BANE_NAMES, transformCard } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
-export const DEFAULT_CARD_TOML_PATH = join("data", "tabula", "rendered-cards.toml");
+export const DEFAULT_CARD_TOML_PATH = join("data", "tabula", "cards_v2.toml");
 const CARD_JSON_PATH = join("public", "card-data.json");
 
 export const EDITABLE_CARD_FIELDS = new Set([

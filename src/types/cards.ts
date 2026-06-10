@@ -7,7 +7,7 @@ export type CardType = "Character" | "Event";
  * `CardDisplay`), `Starter` (cards that seed the fixed starter deck), and
  * `Special` (bane content like Nightmare that journey effects reference by
  * name to add to the player's deck — see `addBaneCardById` and
- * `pushTemporaryBaneGrant`). Sourced from `data/tabula/rendered-cards.toml`
+ * `pushTemporaryBaneGrant`). Sourced from `data/tabula/cards_v2.toml`
  * and surfaced through the setup-assets transform.
  */
 export type Rarity = "Legendary" | "Starter" | "Special";

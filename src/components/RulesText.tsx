@@ -256,7 +256,7 @@ function renderSegment(
 /**
  * Splits rules text into ability paragraphs.
  *
- * Cards in `data/tabula/rendered-cards.toml` separate distinct abilities with
+ * Cards in `data/tabula/cards_v2.toml` separate distinct abilities with
  * a blank line (`\n\n`). Each chunk between blank lines is one ability and
  * renders as its own paragraph block so the player can tell adjacent
  * abilities apart. A single-ability card produces exactly one paragraph and

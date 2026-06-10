@@ -18,7 +18,7 @@ npm run dev          # runs setup-assets.mjs then starts Vite
 `npm run dev` invokes `scripts/setup-assets.mjs` automatically before starting
 Vite. The setup script is idempotent and:
 
-1. Parses `rendered-cards.toml` into `public/card-data.json`.
+1. Parses `cards_v2.toml` into `public/card-data.json`.
 2. Parses `dreamcallers_v2.toml` into `public/dreamcallers-v2-data.json`.
 3. Symlinks `public/cards/{cardNumber}.webp` into the local image cache at
    `~/Library/Caches/io.github.dreamtides.tv/image_cache/`.

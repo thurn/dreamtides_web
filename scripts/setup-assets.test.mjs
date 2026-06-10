@@ -31,7 +31,7 @@ describe("setupAssets", () => {
     const imageCacheDir = join(tempRoot, "image-cache");
     const dreamcallerArtDir = join(tempRoot, "dreamcaller-art");
     const dreamsignArtDir = join(tempRoot, "dreamsign-art");
-    const cardTomlPath = join(tempRoot, "rendered-cards.toml");
+    const cardTomlPath = join(tempRoot, "cards_v2.toml");
     const dreamcallerV2TomlPath = join(tempRoot, "dreamcallers_v2.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
     const cachedImagePath = join(imageCacheDir, imageHash(101));
@@ -207,7 +207,7 @@ rendered-text = "Use the canonical Dreamsign text."
     const imageCacheDir = join(tempRoot, "image-cache");
     const dreamcallerArtDir = join(tempRoot, "dreamcaller-art");
     const dreamsignArtDir = join(tempRoot, "dreamsign-art");
-    const cardTomlPath = join(tempRoot, "rendered-cards.toml");
+    const cardTomlPath = join(tempRoot, "cards_v2.toml");
     const dreamcallerV2TomlPath = join(tempRoot, "dreamcallers_v2.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
 
@@ -289,7 +289,7 @@ rendered-text = ""
     const imageCacheDir = join(tempRoot, "image-cache");
     const dreamcallerArtDir = join(tempRoot, "dreamcaller-art");
     const dreamsignArtDir = join(tempRoot, "dreamsign-art");
-    const cardTomlPath = join(tempRoot, "rendered-cards.toml");
+    const cardTomlPath = join(tempRoot, "cards_v2.toml");
     const dreamcallerV2TomlPath = join(tempRoot, "dreamcallers_v2.toml");
     const dreamsignTomlPath = join(tempRoot, "dreamsigns.toml");
 

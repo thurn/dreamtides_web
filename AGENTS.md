@@ -17,9 +17,6 @@ no need to update this code when making changes.
 
 Card data lives in data/tabula/cards_v2.toml
 
-Legacy cards are in data/tabula/rendered-cards.toml, this is
-no longer used and kept for historical reference.
-
 Dreamcallers live in data/tabula/dreamcallers_v2.toml
 
 Ignore all metadata systems on cards like "tides", "tags",

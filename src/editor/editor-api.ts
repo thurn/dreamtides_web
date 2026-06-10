@@ -86,8 +86,8 @@ async function readJsonResponse<T>(response: Response): Promise<T> {
 
 /**
  * The `toml` URL parameter selects which source TOML file under `data/tabula`
- * the editor reads and writes. When absent the canonical rendered-cards file
- * is used. The same value is forwarded to every editor API request so loads
+ * the editor reads and writes. When absent the canonical card file
+ * (cards_v2.toml) is used. The same value is forwarded to every editor API request so loads
  * and saves stay pinned to the selected file.
  */
 export function editorTomlParam(): string | null {

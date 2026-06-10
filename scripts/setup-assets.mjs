@@ -479,7 +479,7 @@ export function transformDreamsignProfile(profile) {
 }
 
 export function setupAssets({
-  cardTomlPath = join(DATA_DIR, "tabula", "rendered-cards.toml"),
+  cardTomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
   cardV2TomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
   dreamcallerV2TomlPath = join(DATA_DIR, "tabula", "dreamcallers_v2.toml"),
   dreamsignTomlPath = join(DATA_DIR, "tabula", "dreamsigns.toml"),
@@ -508,7 +508,7 @@ export function setupAssets({
   const merchantCorpusPublicPath = join(publicDir, "merchant-corpus-data.json");
   const journeyExtensionJsonPath = join(journeysDir, "imageId-extension.json");
 
-  console.log("Parsing rendered-cards.toml...");
+  console.log("Parsing cards_v2.toml for the runtime card catalog...");
   const cardTomlContent = readFileSync(cardTomlPath, "utf8");
   const parsedCards = parse(cardTomlContent);
   const allCards = parsedCards.cards;
@@ -538,10 +538,10 @@ export function setupAssets({
 
   // Experimental v2 card pool used by the standalone `/draft_test` page. It is
   // transformed with the same kebab->camel rules as the runtime pool and
-  // written to its own JSON so the draft test harness can fetch it without
-  // disturbing card-data.json (which the dev drift guard pins to
-  // rendered-cards.toml). Special-rarity filtering is intentionally skipped:
-  // cards_v2 carries no rarities and the harness shows the whole pool.
+  // written to its own JSON so the draft test harness can fetch it with the
+  // draft-pool metadata merged in, separate from card-data.json (which the dev
+  // drift guard pins to cards_v2.toml). Special-rarity filtering is
+  // intentionally skipped here: the harness shows the whole pool.
   console.log("Parsing cards_v2.toml...");
   const cardV2TomlContent = readFileSync(cardV2TomlPath, "utf8");
   const parsedCardsV2 = parse(cardV2TomlContent);
