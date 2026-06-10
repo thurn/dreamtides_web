@@ -59,6 +59,7 @@
         "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
         "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
@@ -100,6 +101,7 @@
         "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
         "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
         "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
         "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
@@ -482,10 +484,12 @@
           "pack": 2,
           "pickInPack": 5,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
@@ -720,6 +724,7 @@
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
@@ -868,6 +873,7 @@
           "packCards": [
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher

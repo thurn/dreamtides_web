@@ -164,6 +164,7 @@
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
@@ -190,6 +191,7 @@
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1" // Graywatch
           ]
@@ -331,6 +333,7 @@
           "packCards": [
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
@@ -350,6 +353,7 @@
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1" // Graywatch
           ]

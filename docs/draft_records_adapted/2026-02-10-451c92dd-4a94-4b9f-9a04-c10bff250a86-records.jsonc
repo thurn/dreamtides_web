@@ -237,6 +237,7 @@
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
@@ -749,6 +750,7 @@
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
@@ -912,6 +914,7 @@
           "pickId": "05bd329b-5707-42fc-af1c-084cc604e805",
           "packCards": [
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse

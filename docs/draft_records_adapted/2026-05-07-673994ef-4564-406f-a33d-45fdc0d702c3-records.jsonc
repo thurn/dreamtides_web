@@ -30,6 +30,7 @@
       "name": "UBRG",
       "mainboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
         "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
@@ -89,6 +90,7 @@
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
         "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
         "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
@@ -128,6 +130,7 @@
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
             "edb479be-68a5-45bc-bd19-2602156edb57" // Mystic Runefish
@@ -288,6 +291,7 @@
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
             "edb479be-68a5-45bc-bd19-2602156edb57" // Mystic Runefish
@@ -488,6 +492,7 @@
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
             "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "382dafa1-f8ff-47b4-9151-15b84067a5b2" // Tidecaller
           ]
@@ -622,11 +627,13 @@
           "pickInPack": 13,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "382dafa1-f8ff-47b4-9151-15b84067a5b2" // Tidecaller
           ]

@@ -139,6 +139,7 @@
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -183,6 +184,7 @@
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "1b341984-d32e-42a7-ae56-b22059c59737" // Wreckheap Survivor
@@ -303,6 +305,7 @@
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -334,6 +337,7 @@
           "packCards": [
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "1b341984-d32e-42a7-ae56-b22059c59737" // Wreckheap Survivor

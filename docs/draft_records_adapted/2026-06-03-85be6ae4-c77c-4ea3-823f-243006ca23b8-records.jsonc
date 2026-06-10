@@ -209,6 +209,7 @@
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
@@ -722,6 +723,7 @@
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
@@ -877,6 +879,7 @@
           "pickId": "efd35cb4-862d-4699-a197-b744989b3ceb",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter

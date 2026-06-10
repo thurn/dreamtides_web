@@ -139,6 +139,7 @@
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
@@ -270,6 +271,7 @@
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
@@ -309,6 +311,7 @@
           "packCards": [
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer

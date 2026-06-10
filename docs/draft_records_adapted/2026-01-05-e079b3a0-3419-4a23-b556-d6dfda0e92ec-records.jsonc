@@ -67,6 +67,7 @@
         "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
         "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
@@ -116,6 +117,7 @@
         "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
         "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
         "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
@@ -333,6 +335,7 @@
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
@@ -508,11 +511,13 @@
           "pickInPack": 3,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality

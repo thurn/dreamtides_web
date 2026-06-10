@@ -68,6 +68,7 @@
         "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
@@ -108,6 +109,7 @@
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
         "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
@@ -550,6 +552,7 @@
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "8904714c-38a9-491f-92ce-5cb5ece26ab1" // The Grand Heist
           ]
@@ -649,10 +652,12 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "8904714c-38a9-491f-92ce-5cb5ece26ab1" // The Grand Heist
           ]

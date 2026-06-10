@@ -198,6 +198,7 @@
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "89c0d03c-2199-415a-bc66-89e451034328" // Sylvan Matriarch
           ]
@@ -280,6 +281,7 @@
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
@@ -346,6 +348,7 @@
           "packCards": [
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "89c0d03c-2199-415a-bc66-89e451034328" // Sylvan Matriarch
           ]

@@ -169,6 +169,7 @@
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
@@ -318,6 +319,7 @@
           "pickId": "509a1a3a-d9a6-4903-95f6-dae6b330f4ea",
           "packCards": [
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation

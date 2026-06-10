@@ -64,6 +64,7 @@
         "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
         "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
         "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
         "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
@@ -101,6 +102,7 @@
         "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
         "f860e815-3ed9-463d-ac4d-ed8d2778f8ad", // Lone Castaway
         "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
         "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
@@ -507,10 +509,12 @@
           "pack": 2,
           "pickInPack": 5,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler

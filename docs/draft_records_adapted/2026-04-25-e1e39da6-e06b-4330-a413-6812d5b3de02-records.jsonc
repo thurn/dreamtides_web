@@ -215,6 +215,7 @@
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
@@ -477,6 +478,7 @@
           "packCards": [
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow

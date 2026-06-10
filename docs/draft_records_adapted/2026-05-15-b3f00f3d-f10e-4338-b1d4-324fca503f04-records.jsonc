@@ -58,6 +58,7 @@
         "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
         "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
@@ -108,6 +109,7 @@
         "f860e815-3ed9-463d-ac4d-ed8d2778f8ad", // Lone Castaway
         "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
         "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
         "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
@@ -285,6 +287,7 @@
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
@@ -536,10 +539,12 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
             "e3193b23-2002-40a9-91fc-e0713200355e", // Rebirth Ritualist

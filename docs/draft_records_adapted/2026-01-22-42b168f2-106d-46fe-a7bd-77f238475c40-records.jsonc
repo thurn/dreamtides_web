@@ -29,6 +29,7 @@
       "name": "WUBR",
       "mainboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
@@ -91,6 +92,7 @@
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
         "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
@@ -310,6 +312,7 @@
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
@@ -423,11 +426,13 @@
           "pickInPack": 7,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright

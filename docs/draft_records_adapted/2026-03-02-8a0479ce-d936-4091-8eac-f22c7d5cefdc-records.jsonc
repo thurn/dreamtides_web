@@ -164,6 +164,7 @@
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
@@ -339,6 +340,7 @@
           "packCards": [
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
@@ -1136,6 +1138,7 @@
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "f68774ce-0e94-489f-90a5-68e03a549ff6" // Deathwalker
           ]

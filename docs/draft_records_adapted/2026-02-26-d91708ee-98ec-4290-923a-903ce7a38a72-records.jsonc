@@ -76,6 +76,7 @@
         "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
         "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
         "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
         "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
@@ -126,6 +127,7 @@
         "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
         "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
         "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
         "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
@@ -771,6 +773,7 @@
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -858,10 +861,12 @@
           "pack": 4,
           "pickInPack": 11,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

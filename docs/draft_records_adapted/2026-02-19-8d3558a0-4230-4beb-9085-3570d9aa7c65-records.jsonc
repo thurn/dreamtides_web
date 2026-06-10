@@ -54,6 +54,7 @@
         "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "e72245f2-c153-4e79-ba8e-956d18202b48" // Forge Inheritor
       ],
@@ -86,6 +87,7 @@
         "73fc1b7f-3c2b-4993-9590-924240515c2f", // Lunar Hart
         "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
         "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
         "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
@@ -213,10 +215,12 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall

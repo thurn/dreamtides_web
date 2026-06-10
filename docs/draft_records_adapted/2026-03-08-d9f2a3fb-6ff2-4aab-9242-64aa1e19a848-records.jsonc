@@ -233,6 +233,7 @@
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "5a747998-7219-4e23-be42-b8cb3be12348" // Salvage Engine
           ]
@@ -376,6 +377,7 @@
           "packCards": [
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "5a747998-7219-4e23-be42-b8cb3be12348" // Salvage Engine
           ]

@@ -31,6 +31,7 @@
       "name": "BRG",
       "mainboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
@@ -105,6 +106,7 @@
         "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
         "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
         "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
@@ -265,11 +267,13 @@
           "pickInPack": 5,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
@@ -766,6 +770,7 @@
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "cc21a902-e482-46c0-bf07-e04035f39190" // Steel Abomination
@@ -914,6 +919,7 @@
           "pick": [],
           "pickId": "5faba6c8-3463-47c1-ba01-09eb87fcb2d5",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "cc21a902-e482-46c0-bf07-e04035f39190" // Steel Abomination

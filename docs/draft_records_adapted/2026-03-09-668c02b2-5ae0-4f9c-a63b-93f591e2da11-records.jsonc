@@ -30,6 +30,7 @@
       "name": "BG",
       "mainboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
         "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
@@ -122,6 +123,7 @@
         "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
         "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
         "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
@@ -225,6 +227,7 @@
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
@@ -590,6 +593,7 @@
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -717,11 +721,13 @@
           "pickInPack": 15,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },

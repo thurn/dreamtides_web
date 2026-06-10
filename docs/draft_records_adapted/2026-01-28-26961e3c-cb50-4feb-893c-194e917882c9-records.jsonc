@@ -69,6 +69,7 @@
         "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
         "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
         "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "c430ed7b-523e-4580-9a53-d43d11265633" // Flash of Power
       ],
@@ -83,6 +84,7 @@
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
         "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
         "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
         "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
@@ -230,6 +232,7 @@
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "8b5eb29c-146f-46fb-9407-55004128fba7" // Keeper of Forgotten Light
@@ -367,10 +370,12 @@
           "pack": 1,
           "pickInPack": 13,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "8b5eb29c-146f-46fb-9407-55004128fba7" // Keeper of Forgotten Light
@@ -540,6 +545,7 @@
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "c430ed7b-523e-4580-9a53-d43d11265633" // Flash of Power

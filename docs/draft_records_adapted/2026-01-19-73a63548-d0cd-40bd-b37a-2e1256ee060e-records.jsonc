@@ -225,6 +225,7 @@
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb" // Endless Projection
@@ -380,6 +381,7 @@
           "pickId": "f3537373-ef54-4578-9d05-6216420ee349",
           "packCards": [
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb" // Endless Projection
@@ -832,6 +834,7 @@
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance

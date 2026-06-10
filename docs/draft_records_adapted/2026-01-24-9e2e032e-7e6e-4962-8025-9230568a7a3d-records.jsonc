@@ -577,6 +577,7 @@
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
@@ -805,6 +806,7 @@
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0" // The Rising God
           ]
@@ -940,6 +942,7 @@
           "pickId": "4b205bc3-379a-4790-90a0-c589bbbb1803",
           "packCards": [
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0" // The Rising God
           ]

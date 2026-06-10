@@ -238,6 +238,7 @@
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0" // Ashborn Necromancer
           ]
@@ -376,6 +377,7 @@
           "pick": [],
           "pickId": "1e3a5af6-5423-442b-a207-364e97a871d8",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0" // Ashborn Necromancer
           ]

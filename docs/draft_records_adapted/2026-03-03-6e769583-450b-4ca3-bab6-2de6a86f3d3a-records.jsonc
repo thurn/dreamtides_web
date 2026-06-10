@@ -68,6 +68,7 @@
         "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
         "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
@@ -96,6 +97,7 @@
         "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
         "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
@@ -287,8 +289,10 @@
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -410,10 +414,12 @@
           "pack": 1,
           "pickInPack": 15,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

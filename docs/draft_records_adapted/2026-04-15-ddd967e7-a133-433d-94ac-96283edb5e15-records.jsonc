@@ -60,6 +60,7 @@
       ],
       "sideboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
         "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
@@ -91,6 +92,7 @@
         "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
         "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
         "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
@@ -211,6 +213,7 @@
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
             "fcb830e5-85ff-48f3-be1e-46e102a5c8e8" // Shatterpoint Agent
@@ -361,11 +364,13 @@
           "pickInPack": 12,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
             "fcb830e5-85ff-48f3-be1e-46e102a5c8e8" // Shatterpoint Agent
@@ -548,6 +553,7 @@
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
             "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -686,6 +692,7 @@
           "pickId": "d8a9bf68-a07a-4296-823f-072a5df0b5c7",
           "packCards": [
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

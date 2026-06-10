@@ -55,6 +55,7 @@
         "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
         "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
         "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
         "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
@@ -107,6 +108,7 @@
         "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
         "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
         "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
         "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
@@ -552,6 +554,7 @@
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
@@ -715,10 +718,12 @@
           "pack": 3,
           "pickInPack": 2,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning

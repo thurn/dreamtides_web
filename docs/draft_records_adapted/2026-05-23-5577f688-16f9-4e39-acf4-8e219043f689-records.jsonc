@@ -182,6 +182,7 @@
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
@@ -724,6 +725,7 @@
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },

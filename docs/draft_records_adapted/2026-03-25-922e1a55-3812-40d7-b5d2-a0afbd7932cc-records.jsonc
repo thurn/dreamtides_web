@@ -71,6 +71,7 @@
       ],
       "sideboard": [
         "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "2a230602-a39b-4ec2-a467-97b92b389aff" // Scuttled Fortune
       ],
@@ -102,6 +103,7 @@
         "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
         "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
         "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
         "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
@@ -288,6 +290,7 @@
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
@@ -472,6 +475,7 @@
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
@@ -627,10 +631,12 @@
           "pack": 2,
           "pickInPack": 11,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant

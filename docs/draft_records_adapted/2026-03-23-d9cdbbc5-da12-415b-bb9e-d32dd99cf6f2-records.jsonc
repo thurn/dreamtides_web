@@ -135,6 +135,7 @@
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -310,6 +311,7 @@
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -528,6 +530,7 @@
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -661,6 +664,7 @@
           "pickId": "36ab760e-93e0-4dbc-aaa1-02316f62ed3f",
           "packCards": [
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

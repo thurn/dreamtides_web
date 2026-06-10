@@ -233,6 +233,7 @@
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
@@ -305,6 +306,7 @@
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -478,6 +480,7 @@
           "packCards": [
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

@@ -149,6 +149,7 @@
             "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
@@ -324,6 +325,7 @@
             "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
@@ -482,6 +484,7 @@
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -636,6 +639,7 @@
           "packCards": [
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

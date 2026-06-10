@@ -70,6 +70,7 @@
         "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
@@ -109,6 +110,7 @@
         "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
         "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
         "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
@@ -440,6 +442,7 @@
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
             "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c" // Seaside Requiem
@@ -575,6 +578,7 @@
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
             "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c" // Seaside Requiem
@@ -673,10 +677,12 @@
           "pack": 2,
           "pickInPack": 13,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c" // Seaside Requiem

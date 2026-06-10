@@ -68,6 +68,7 @@
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
         "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
@@ -102,6 +103,7 @@
         "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
         "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
         "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
         "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
@@ -253,6 +255,7 @@
             "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
@@ -365,6 +368,7 @@
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
@@ -479,10 +483,12 @@
           "pack": 2,
           "pickInPack": 7,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry

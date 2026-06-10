@@ -32,6 +32,7 @@
         "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
         "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
@@ -101,6 +102,7 @@
         "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
         "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
@@ -354,6 +356,7 @@
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
@@ -403,6 +406,7 @@
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -477,11 +481,13 @@
           "pickInPack": 7,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
@@ -518,6 +524,7 @@
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

@@ -477,6 +477,7 @@
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
@@ -520,6 +521,7 @@
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -652,6 +654,7 @@
           "pickId": "4e117771-5a8b-4812-b487-32ba34b7f724",
           "packCards": [
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

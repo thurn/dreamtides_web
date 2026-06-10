@@ -70,6 +70,7 @@
         "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
         "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
         "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
@@ -112,6 +113,7 @@
         "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
         "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
         "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
         "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
@@ -148,6 +150,7 @@
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb" // Defiant Holdout
@@ -248,6 +251,7 @@
           "packCards": [
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb" // Defiant Holdout
@@ -742,10 +746,12 @@
           "pack": 4,
           "pickInPack": 4,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March

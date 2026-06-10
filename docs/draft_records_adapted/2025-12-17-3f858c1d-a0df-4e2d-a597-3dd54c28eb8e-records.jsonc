@@ -236,6 +236,7 @@
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
@@ -461,6 +462,7 @@
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
@@ -630,6 +632,7 @@
           "packCards": [
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer

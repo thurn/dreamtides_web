@@ -29,6 +29,7 @@
       "name": "WBRG",
       "mainboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
         "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
@@ -92,6 +93,7 @@
         "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
         "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
         "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
@@ -224,6 +226,7 @@
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -310,11 +313,13 @@
           "pickInPack": 11,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -332,6 +337,7 @@
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist

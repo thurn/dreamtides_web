@@ -68,6 +68,7 @@
         "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
         "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
         "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
         "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
@@ -102,6 +103,7 @@
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
         "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
         "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
         "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
@@ -160,6 +162,7 @@
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
@@ -555,6 +558,7 @@
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -670,10 +674,12 @@
           "pack": 2,
           "pickInPack": 15,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

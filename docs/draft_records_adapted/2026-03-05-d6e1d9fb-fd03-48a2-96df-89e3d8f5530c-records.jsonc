@@ -56,6 +56,7 @@
         "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
         "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
         "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "d95533f4-7809-44a8-a882-7675c61cee1c" // Tethered Hollow
@@ -103,6 +104,7 @@
         "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
         "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
         "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
         "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
@@ -195,6 +197,7 @@
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
@@ -301,10 +304,12 @@
           "pack": 1,
           "pickInPack": 8,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout

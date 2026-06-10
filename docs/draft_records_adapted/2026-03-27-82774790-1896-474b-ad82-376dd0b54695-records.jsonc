@@ -980,6 +980,7 @@
       ],
       "sideboard": [
         "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
         "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
@@ -1001,6 +1002,7 @@
         "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
         "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
         "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
         "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
@@ -1317,13 +1319,16 @@
           "pack": 2,
           "pickInPack": 1,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer

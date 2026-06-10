@@ -60,6 +60,7 @@
       ],
       "sideboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
         "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
@@ -108,6 +109,7 @@
         "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
         "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83", // Epiphany Unfolded
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "0e1209c3-1041-4079-9b1c-f96816a7deb5", // Wistful Angler
         "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
@@ -760,11 +762,13 @@
           "pickInPack": 4,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker

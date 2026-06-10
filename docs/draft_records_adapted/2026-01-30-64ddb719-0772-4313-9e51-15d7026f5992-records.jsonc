@@ -29,6 +29,7 @@
       "name": "UBR",
       "mainboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
         "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
@@ -98,6 +99,7 @@
         "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
         "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
         "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
@@ -407,6 +409,7 @@
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2" // Abyssal Enforcer
@@ -503,11 +506,13 @@
           "pickInPack": 10,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2" // Abyssal Enforcer

@@ -277,6 +277,7 @@
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
@@ -504,6 +505,7 @@
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "ea118471-164b-4d7f-bb02-044c862ed07e" // Wreckland Maverick
           ]
@@ -640,6 +642,7 @@
           "packCards": [
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "ea118471-164b-4d7f-bb02-044c862ed07e" // Wreckland Maverick
           ]

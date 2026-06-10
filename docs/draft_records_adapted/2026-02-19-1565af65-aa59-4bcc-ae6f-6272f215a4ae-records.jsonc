@@ -746,6 +746,7 @@
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -789,6 +790,7 @@
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
             "a7820b34-9fdc-46cc-8357-53c8caa056b1" // Mirror Protocol
@@ -906,6 +908,7 @@
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -936,6 +939,7 @@
           "pickId": "4736aae2-5136-4f8f-9283-baf6b542a6a8",
           "packCards": [
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
             "a7820b34-9fdc-46cc-8357-53c8caa056b1" // Mirror Protocol

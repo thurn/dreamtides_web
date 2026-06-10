@@ -138,6 +138,7 @@
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
@@ -189,6 +190,7 @@
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
           ]
@@ -327,6 +329,7 @@
           "pickId": "0c9ebec9-3474-4062-9607-2e2a72f78299",
           "packCards": [
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
           ]

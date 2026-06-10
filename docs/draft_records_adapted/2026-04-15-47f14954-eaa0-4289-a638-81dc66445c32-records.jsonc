@@ -74,6 +74,7 @@
         "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
         "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
         "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
         "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
@@ -130,6 +131,7 @@
         "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
         "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
         "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
         "cc98441a-a8f9-421f-9895-423bd7fc31b4" // Starfall
@@ -776,6 +778,7 @@
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "c430ed7b-523e-4580-9a53-d43d11265633" // Flash of Power
           ]
@@ -798,6 +801,7 @@
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
@@ -932,6 +936,7 @@
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "c430ed7b-523e-4580-9a53-d43d11265633" // Flash of Power
           ]
@@ -941,10 +946,12 @@
           "pack": 3,
           "pickInPack": 12,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount

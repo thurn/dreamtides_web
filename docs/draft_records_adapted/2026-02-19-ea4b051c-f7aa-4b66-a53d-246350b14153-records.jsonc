@@ -152,6 +152,7 @@
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
@@ -255,6 +256,7 @@
           "pick": [],
           "pickId": "af7091c9-5f98-4078-a42b-c9e057346d9b",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth

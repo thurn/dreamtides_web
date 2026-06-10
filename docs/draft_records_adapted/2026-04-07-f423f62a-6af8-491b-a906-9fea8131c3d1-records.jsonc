@@ -265,6 +265,7 @@
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
@@ -763,6 +764,7 @@
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
@@ -922,6 +924,7 @@
           "pickId": "c87ebffe-5907-427b-9f9b-7c36a12b4a03",
           "packCards": [
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder

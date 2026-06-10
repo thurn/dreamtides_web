@@ -52,6 +52,7 @@
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
         "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
@@ -84,6 +85,7 @@
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
         "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
         "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
@@ -162,6 +164,7 @@
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
@@ -304,10 +307,12 @@
           "pack": 1,
           "pickInPack": 10,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag

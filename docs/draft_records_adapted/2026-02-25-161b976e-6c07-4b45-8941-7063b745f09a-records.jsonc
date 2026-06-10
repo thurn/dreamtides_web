@@ -468,6 +468,7 @@
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
@@ -631,6 +632,7 @@
           "packCards": [
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
@@ -782,6 +784,7 @@
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -942,6 +945,7 @@
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },

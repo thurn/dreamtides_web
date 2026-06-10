@@ -60,6 +60,7 @@
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
         "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
@@ -109,6 +110,7 @@
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
@@ -489,6 +491,7 @@
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
@@ -636,10 +639,12 @@
           "pack": 2,
           "pickInPack": 11,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline

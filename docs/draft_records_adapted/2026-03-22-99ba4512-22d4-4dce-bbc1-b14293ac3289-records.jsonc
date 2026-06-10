@@ -745,6 +745,7 @@
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
@@ -936,6 +937,7 @@
       ],
       "sideboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
         "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
@@ -960,6 +962,7 @@
       "pool": [
         "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
         "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
@@ -1046,11 +1049,13 @@
           "pickInPack": 2,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "1514e8f1-3c94-42f0-8f61-7c2856227e57",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
@@ -1588,6 +1593,7 @@
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout

@@ -64,6 +64,7 @@
       "sideboard": [
         "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
         "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
@@ -131,6 +132,7 @@
         "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
         "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
@@ -599,6 +601,7 @@
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -726,11 +729,13 @@
           "pickInPack": 15,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },

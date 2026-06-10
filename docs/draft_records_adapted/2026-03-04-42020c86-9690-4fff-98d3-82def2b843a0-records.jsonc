@@ -70,6 +70,7 @@
         "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
         "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
         "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
         "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
@@ -101,6 +102,7 @@
         "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
         "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
         "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
@@ -186,6 +188,7 @@
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd" // Cascade of Reflections
@@ -227,6 +230,7 @@
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
             "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129" // Surge of Fury
           ]
@@ -295,6 +299,7 @@
           "packCards": [
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd" // Cascade of Reflections
@@ -319,10 +324,12 @@
           "pack": 1,
           "pickInPack": 10,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129" // Surge of Fury
           ]

@@ -53,6 +53,7 @@
         "73fc1b7f-3c2b-4993-9590-924240515c2f", // Lunar Hart
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
         "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "ca37f80e-8474-4d40-b793-7a900f6ca467" // Shadow Reflection
@@ -102,6 +103,7 @@
         "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
         "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
         "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
         "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
@@ -557,6 +559,7 @@
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
@@ -569,10 +572,12 @@
           "pack": 2,
           "pickInPack": 7,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse

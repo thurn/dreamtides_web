@@ -67,6 +67,7 @@
         "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
@@ -106,6 +107,7 @@
         "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
         "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
         "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
         "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
@@ -139,6 +141,7 @@
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
@@ -511,6 +514,7 @@
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
             "a7820b34-9fdc-46cc-8357-53c8caa056b1" // Mirror Protocol
@@ -652,10 +656,12 @@
           "pack": 2,
           "pickInPack": 13,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
             "a7820b34-9fdc-46cc-8357-53c8caa056b1" // Mirror Protocol

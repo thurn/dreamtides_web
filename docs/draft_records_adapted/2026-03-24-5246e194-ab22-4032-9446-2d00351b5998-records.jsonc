@@ -140,6 +140,7 @@
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
@@ -307,6 +308,7 @@
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
@@ -445,6 +447,7 @@
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
@@ -602,6 +605,7 @@
           "packCards": [
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage

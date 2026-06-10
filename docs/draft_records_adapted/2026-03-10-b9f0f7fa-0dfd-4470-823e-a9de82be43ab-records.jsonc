@@ -48,6 +48,7 @@
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
@@ -61,6 +62,7 @@
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
         "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
@@ -95,6 +97,7 @@
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
         "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
@@ -103,6 +106,7 @@
         "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
         "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
@@ -552,6 +556,7 @@
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -560,10 +565,12 @@
           "pack": 2,
           "pickInPack": 8,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
@@ -671,11 +678,13 @@
           "pickInPack": 15,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },

@@ -80,6 +80,7 @@
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
@@ -91,6 +92,7 @@
       "pool": [
         "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
@@ -202,11 +204,13 @@
           "pickInPack": 3,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
@@ -369,6 +373,7 @@
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller

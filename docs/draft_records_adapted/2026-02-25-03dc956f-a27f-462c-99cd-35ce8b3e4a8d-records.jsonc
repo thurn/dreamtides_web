@@ -41,6 +41,7 @@
         "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
         "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
         "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
         "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
@@ -104,6 +105,7 @@
         "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
         "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
         "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
@@ -775,10 +777,12 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
@@ -803,6 +807,7 @@
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail

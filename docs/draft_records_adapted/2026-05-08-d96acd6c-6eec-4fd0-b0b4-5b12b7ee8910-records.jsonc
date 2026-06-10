@@ -444,6 +444,7 @@
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
@@ -545,6 +546,7 @@
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -593,6 +595,7 @@
           "packCards": [
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan

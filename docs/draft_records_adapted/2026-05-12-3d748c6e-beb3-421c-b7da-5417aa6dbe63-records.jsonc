@@ -65,6 +65,7 @@
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
@@ -107,6 +108,7 @@
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
         "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
@@ -545,10 +547,12 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
@@ -592,6 +596,7 @@
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift

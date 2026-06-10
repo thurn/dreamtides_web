@@ -169,6 +169,7 @@
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b" // Dawnprowler Panther
           ]
@@ -319,6 +320,7 @@
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b" // Dawnprowler Panther
           ]
@@ -406,6 +408,7 @@
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
@@ -576,6 +579,7 @@
           "packCards": [
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker

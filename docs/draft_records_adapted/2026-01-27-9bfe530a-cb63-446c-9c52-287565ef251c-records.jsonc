@@ -68,6 +68,7 @@
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
         "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
         "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
@@ -94,6 +95,7 @@
         "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
         "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
         "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
         "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
@@ -363,6 +365,7 @@
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
@@ -470,10 +473,12 @@
           "pack": 2,
           "pickInPack": 8,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion

@@ -66,6 +66,7 @@
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
         "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
@@ -171,6 +172,7 @@
         "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
         "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
         "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
         "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
@@ -883,6 +885,7 @@
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
@@ -1201,6 +1204,7 @@
             "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
@@ -1366,10 +1370,12 @@
           "pack": 4,
           "pickInPack": 12,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance

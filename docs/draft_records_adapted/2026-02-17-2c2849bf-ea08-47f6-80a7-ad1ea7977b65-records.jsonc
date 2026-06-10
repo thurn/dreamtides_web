@@ -51,6 +51,7 @@
         "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
         "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
         "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
         "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
@@ -108,6 +109,7 @@
         "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
         "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
         "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
         "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
@@ -463,6 +465,7 @@
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40" // Ashwalker
           ]
@@ -615,6 +618,7 @@
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40" // Ashwalker
           ]
@@ -832,10 +836,12 @@
           "pack": 3,
           "pickInPack": 8,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser

@@ -64,6 +64,7 @@
         "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83", // Epiphany Unfolded
         "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
         "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
         "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
@@ -101,6 +102,7 @@
         "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
         "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
@@ -216,6 +218,7 @@
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
@@ -247,6 +250,7 @@
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
@@ -570,6 +574,7 @@
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
@@ -596,6 +601,7 @@
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
@@ -868,6 +874,7 @@
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
@@ -882,10 +889,12 @@
           "pack": 1,
           "pickInPack": 19,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
@@ -1102,6 +1111,7 @@
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge

@@ -59,6 +59,7 @@
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
         "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
@@ -101,6 +102,7 @@
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
         "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
@@ -187,6 +189,7 @@
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
@@ -393,10 +396,12 @@
           "pack": 1,
           "pickInPack": 12,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
@@ -629,6 +634,7 @@
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow

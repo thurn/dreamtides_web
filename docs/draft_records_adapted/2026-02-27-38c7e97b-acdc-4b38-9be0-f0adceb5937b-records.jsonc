@@ -59,6 +59,7 @@
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
         "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
@@ -114,6 +115,7 @@
         "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
         "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
         "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
@@ -726,6 +728,7 @@
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
@@ -897,10 +900,12 @@
           "pack": 3,
           "pickInPack": 10,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner

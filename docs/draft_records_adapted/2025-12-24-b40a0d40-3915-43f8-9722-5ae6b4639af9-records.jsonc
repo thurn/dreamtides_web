@@ -169,6 +169,7 @@
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
             "9af63811-7fef-4e28-b672-95ea82796f45" // Astral Angler
@@ -328,6 +329,7 @@
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
             "9af63811-7fef-4e28-b672-95ea82796f45" // Astral Angler
@@ -720,6 +722,7 @@
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -869,6 +872,7 @@
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

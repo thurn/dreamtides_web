@@ -160,6 +160,7 @@
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
@@ -182,6 +183,7 @@
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "8904714c-38a9-491f-92ce-5cb5ece26ab1" // The Grand Heist
           ]
@@ -275,6 +277,7 @@
           "packCards": [
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
@@ -292,6 +295,7 @@
           "packCards": [
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "8904714c-38a9-491f-92ce-5cb5ece26ab1" // The Grand Heist
           ]

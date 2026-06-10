@@ -442,6 +442,7 @@
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
@@ -618,6 +619,7 @@
           "packCards": [
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
@@ -785,6 +787,7 @@
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -923,6 +926,7 @@
           "packCards": [
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

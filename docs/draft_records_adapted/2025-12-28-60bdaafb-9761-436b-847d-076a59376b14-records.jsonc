@@ -75,6 +75,7 @@
         "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
         "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
         "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
         "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
@@ -127,6 +128,7 @@
         "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
         "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
         "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
@@ -168,6 +170,7 @@
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c" // Shadowcaller
           ]
@@ -338,6 +341,7 @@
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c" // Shadowcaller
           ]
@@ -836,6 +840,7 @@
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa" // Vessel of Echoes
@@ -964,10 +969,12 @@
           "pack": 3,
           "pickInPack": 14,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa" // Vessel of Echoes

@@ -56,6 +56,7 @@
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
         "31ecf933-c897-41a5-ab94-822ea65898d8" // Lumen Rover
@@ -107,6 +108,7 @@
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
         "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
         "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
@@ -457,6 +459,7 @@
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
@@ -587,6 +590,7 @@
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
@@ -614,10 +618,12 @@
           "pack": 2,
           "pickInPack": 10,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence

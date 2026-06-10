@@ -128,6 +128,7 @@
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -294,6 +295,7 @@
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -717,6 +719,7 @@
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder

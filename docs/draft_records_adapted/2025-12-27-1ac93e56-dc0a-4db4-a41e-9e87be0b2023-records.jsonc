@@ -34,6 +34,7 @@
         "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
         "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
         "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
@@ -118,6 +119,7 @@
         "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
         "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
         "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
@@ -758,11 +760,13 @@
           "pickInPack": 3,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender

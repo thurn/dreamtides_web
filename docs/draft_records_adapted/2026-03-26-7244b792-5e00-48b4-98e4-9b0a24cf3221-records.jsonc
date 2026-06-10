@@ -38,6 +38,7 @@
         "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
         "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
@@ -126,6 +127,7 @@
         "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
         "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
         "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
@@ -740,6 +742,7 @@
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
@@ -896,11 +899,13 @@
           "pickInPack": 10,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner

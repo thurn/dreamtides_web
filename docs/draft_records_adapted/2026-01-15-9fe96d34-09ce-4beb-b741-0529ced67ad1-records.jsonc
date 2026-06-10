@@ -155,6 +155,7 @@
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
@@ -500,6 +501,7 @@
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
@@ -651,6 +653,7 @@
           "pickId": "24da9431-7e52-44f5-bc18-2f2d8a4ca81e",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher

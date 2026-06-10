@@ -59,6 +59,7 @@
       ],
       "sideboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
         "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
@@ -96,6 +97,7 @@
         "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
         "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
         "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
@@ -436,6 +438,7 @@
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "2690912e-0295-4d12-a603-5946d37902d3" // Call of the Lost
           ]
@@ -491,11 +494,13 @@
           "pickInPack": 5,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "1514e8f1-3c94-42f0-8f61-7c2856227e57",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
@@ -585,6 +590,7 @@
           "pick": [],
           "pickId": "17db2b6a-eaa8-4a08-9e86-370bbd058574",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "2690912e-0295-4d12-a603-5946d37902d3" // Call of the Lost
           ]
@@ -1270,6 +1276,7 @@
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
@@ -1378,6 +1385,7 @@
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "2690912e-0295-4d12-a603-5946d37902d3" // Call of the Lost
           ]

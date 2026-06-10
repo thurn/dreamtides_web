@@ -35,6 +35,7 @@
         "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
         "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
         "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
@@ -118,6 +119,7 @@
         "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
         "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
         "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
@@ -562,6 +564,7 @@
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "ed4d5342-0690-40b7-ab48-6b76035466f2" // Shadowpaw
           ]
@@ -700,11 +703,13 @@
           "pickInPack": 14,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "ed4d5342-0690-40b7-ab48-6b76035466f2" // Shadowpaw
           ]

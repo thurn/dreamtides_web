@@ -72,6 +72,7 @@
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
         "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
         "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
         "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
@@ -107,6 +108,7 @@
         "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
         "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
         "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
         "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
@@ -527,6 +529,7 @@
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
@@ -670,10 +673,12 @@
           "pack": 2,
           "pickInPack": 13,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
@@ -761,6 +766,7 @@
           "packCards": [
             "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light

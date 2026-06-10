@@ -64,6 +64,7 @@
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
@@ -71,6 +72,7 @@
       ],
       "sideboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
         "9a18d375-1b6d-4df4-95ec-c7c5c3f36379" // Pattern Seeker
@@ -101,6 +103,7 @@
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
         "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
         "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
@@ -117,6 +120,7 @@
         "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "5e1b943f-9fa2-4055-b613-5dd09a048c99" // Call to the Unknown
       ],
@@ -502,6 +506,7 @@
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
             "78673e2b-a6d1-43de-8850-3d3327de5cc6" // Spirit Field Reclaimer
@@ -634,10 +639,12 @@
           "pack": 2,
           "pickInPack": 13,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
             "78673e2b-a6d1-43de-8850-3d3327de5cc6" // Spirit Field Reclaimer
@@ -804,6 +811,7 @@
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
           ]
@@ -927,11 +935,13 @@
           "pickInPack": 14,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
           ]

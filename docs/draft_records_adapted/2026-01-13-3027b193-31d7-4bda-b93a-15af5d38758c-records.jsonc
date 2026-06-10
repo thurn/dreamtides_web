@@ -173,6 +173,7 @@
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432" // Urban Cipher
@@ -322,6 +323,7 @@
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432" // Urban Cipher
@@ -753,6 +755,7 @@
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c" // Duskmount
@@ -900,6 +903,7 @@
           "packCards": [
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c" // Duskmount

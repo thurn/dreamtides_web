@@ -208,6 +208,7 @@
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
             "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
@@ -398,6 +399,7 @@
           "pickId": "0eee981e-5d26-4810-90e1-432f3c3107f2",
           "packCards": [
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
             "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
@@ -887,6 +889,7 @@
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
@@ -1087,6 +1090,7 @@
           "packCards": [
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop

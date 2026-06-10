@@ -117,6 +117,7 @@
           "pick": [],
           "pickId": "63c59228-c742-4abd-b4d7-9f7880190e95",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
@@ -462,6 +463,7 @@
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -613,6 +615,7 @@
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },

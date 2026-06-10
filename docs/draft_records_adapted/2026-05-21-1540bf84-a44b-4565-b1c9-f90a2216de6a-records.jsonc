@@ -59,6 +59,7 @@
         "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
         "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
@@ -113,6 +114,7 @@
         "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
@@ -613,6 +615,7 @@
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8" // Lanternwood Scout
@@ -669,10 +672,12 @@
           "pack": 4,
           "pickInPack": 7,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8" // Lanternwood Scout

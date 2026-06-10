@@ -33,6 +33,7 @@
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
         "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
         "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
@@ -94,6 +95,7 @@
         "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
         "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
         "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
@@ -410,6 +412,7 @@
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
@@ -477,11 +480,13 @@
           "pickInPack": 4,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart

@@ -80,6 +80,7 @@
         "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
         "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
         "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
         "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
@@ -130,6 +131,7 @@
         "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
         "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
         "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
@@ -692,6 +694,7 @@
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -781,10 +784,12 @@
           "pack": 3,
           "pickInPack": 12,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

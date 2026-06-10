@@ -74,6 +74,7 @@
         "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
         "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
         "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
@@ -139,6 +140,7 @@
         "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
         "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
         "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
@@ -757,6 +759,7 @@
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
@@ -784,6 +787,7 @@
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "fd355778-abea-4513-844c-91bf75929ebe" // Dune Reaper
           ]
@@ -877,10 +881,12 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
@@ -903,6 +909,7 @@
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "fd355778-abea-4513-844c-91bf75929ebe" // Dune Reaper
           ]

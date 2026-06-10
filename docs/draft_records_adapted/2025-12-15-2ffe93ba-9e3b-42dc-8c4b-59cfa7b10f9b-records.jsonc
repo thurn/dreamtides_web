@@ -686,6 +686,7 @@
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
@@ -848,6 +849,7 @@
           "pick": [],
           "pickId": "47033ba4-8f26-4a6b-97bd-5b366327325e",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger

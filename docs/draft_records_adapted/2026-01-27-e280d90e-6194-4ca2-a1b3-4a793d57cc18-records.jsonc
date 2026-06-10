@@ -65,6 +65,7 @@
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
         "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
         "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
@@ -92,6 +93,7 @@
         "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
         "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
         "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
@@ -213,10 +215,12 @@
           "packCards": [
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
@@ -356,10 +360,12 @@
           "pack": 1,
           "pickInPack": 12,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty

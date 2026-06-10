@@ -52,6 +52,7 @@
         "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
         "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
         "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
       ],
       "sideboard": [
@@ -112,6 +113,7 @@
         "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
         "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
         "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
       ],
       "picks": [
@@ -818,6 +820,7 @@
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -939,10 +942,12 @@
           "pack": 3,
           "pickInPack": 15,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         }

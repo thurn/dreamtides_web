@@ -222,6 +222,7 @@
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1" // Wired Duelist
           ]
@@ -363,6 +364,7 @@
           "pickId": "9675b8ea-47f9-440e-9535-de879da53f76",
           "packCards": [
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1" // Wired Duelist
           ]
@@ -456,6 +458,7 @@
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
@@ -619,6 +622,7 @@
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning

@@ -64,6 +64,7 @@
         "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
         "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
         "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
         "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
@@ -104,6 +105,7 @@
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
         "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
         "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
         "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
@@ -579,6 +581,7 @@
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -662,10 +665,12 @@
           "pack": 3,
           "pickInPack": 11,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

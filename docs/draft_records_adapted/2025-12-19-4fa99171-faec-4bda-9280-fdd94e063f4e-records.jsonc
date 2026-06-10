@@ -73,6 +73,7 @@
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
         "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
         "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
         "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
@@ -94,6 +95,7 @@
         "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
         "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
         "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
         "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
@@ -278,6 +280,7 @@
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -407,10 +410,12 @@
           "pack": 1,
           "pickInPack": 15,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -576,6 +581,7 @@
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner

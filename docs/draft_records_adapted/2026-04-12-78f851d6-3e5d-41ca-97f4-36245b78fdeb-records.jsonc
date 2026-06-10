@@ -68,6 +68,7 @@
         "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
         "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
@@ -107,6 +108,7 @@
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
         "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
@@ -254,6 +256,7 @@
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -392,6 +395,7 @@
           "packCards": [
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -568,10 +572,12 @@
           "pack": 2,
           "pickInPack": 7,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall

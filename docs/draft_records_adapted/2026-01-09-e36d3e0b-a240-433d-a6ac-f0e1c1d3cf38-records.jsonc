@@ -62,6 +62,7 @@
       ],
       "sideboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
         "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
@@ -126,6 +127,7 @@
         "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
         "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
         "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
@@ -816,11 +818,13 @@
           "pickInPack": 5,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
@@ -848,6 +852,7 @@
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer

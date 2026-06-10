@@ -176,12 +176,14 @@
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
@@ -335,6 +337,7 @@
           "packCards": [
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester

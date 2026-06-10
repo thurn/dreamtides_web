@@ -226,6 +226,7 @@
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7" // Stargazer Adrift
           ]
@@ -380,6 +381,7 @@
           "packCards": [
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7" // Stargazer Adrift
           ]

@@ -72,6 +72,7 @@
         "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
         "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
@@ -124,6 +125,7 @@
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
         "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
         "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
         "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
@@ -638,6 +640,7 @@
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "312e42cb-e8ee-43da-9ef8-173a69583c97" // Reforged Automaton
           ]
@@ -754,10 +757,12 @@
           "pack": 3,
           "pickInPack": 11,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "312e42cb-e8ee-43da-9ef8-173a69583c97" // Reforged Automaton
           ]

@@ -833,6 +833,7 @@
             "55340736-7fc5-4555-8f47-081d770a6e8d", // Ironclad Holdout
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -849,6 +850,7 @@
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
@@ -969,6 +971,7 @@
           "pickId": "5ca23782-80d3-4656-afba-f8440c813253",
           "packCards": [
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

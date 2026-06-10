@@ -70,6 +70,7 @@
         "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
         "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
         "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
         "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
@@ -101,6 +102,7 @@
         "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
         "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
         "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
@@ -551,10 +553,12 @@
           "pack": 2,
           "pickInPack": 7,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
@@ -829,6 +833,7 @@
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator

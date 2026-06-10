@@ -31,6 +31,7 @@
       "name": "WUR",
       "mainboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
         "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
@@ -73,6 +74,7 @@
       ],
       "pool": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
         "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
@@ -118,11 +120,13 @@
           "pickInPack": 1,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "1514e8f1-3c94-42f0-8f61-7c2856227e57",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair

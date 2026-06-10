@@ -524,6 +524,7 @@
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "bedee263-27b9-4d73-ab77-6b5c747dff69" // Wasteland Arbitrator
           ]
@@ -666,6 +667,7 @@
           "packCards": [
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "bedee263-27b9-4d73-ab77-6b5c747dff69" // Wasteland Arbitrator
           ]
@@ -868,6 +870,7 @@
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths

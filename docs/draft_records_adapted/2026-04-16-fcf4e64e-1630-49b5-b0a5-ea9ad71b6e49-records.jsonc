@@ -69,6 +69,7 @@
         "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
         "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
         "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
         "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
@@ -107,6 +108,7 @@
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
         "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
@@ -472,6 +474,7 @@
             "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
@@ -628,10 +631,12 @@
           "pack": 2,
           "pickInPack": 11,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince

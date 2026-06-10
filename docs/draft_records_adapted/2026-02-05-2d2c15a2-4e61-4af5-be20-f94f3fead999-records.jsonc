@@ -232,6 +232,7 @@
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -255,6 +256,7 @@
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6" // Cinderfang
@@ -369,6 +371,7 @@
           "pickId": "aecdc315-95e5-450c-bedc-998eea46cf8c",
           "packCards": [
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

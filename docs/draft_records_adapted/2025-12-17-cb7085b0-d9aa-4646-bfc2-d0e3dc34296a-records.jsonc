@@ -30,6 +30,7 @@
       "name": "BR",
       "mainboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
         "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
@@ -79,6 +80,7 @@
       ],
       "pool": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
         "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
@@ -131,11 +133,13 @@
           "pickInPack": 1,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
@@ -510,6 +514,7 @@
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -648,6 +653,7 @@
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

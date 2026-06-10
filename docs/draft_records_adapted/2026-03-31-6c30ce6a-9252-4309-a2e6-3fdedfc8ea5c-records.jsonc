@@ -66,6 +66,7 @@
         "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
         "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
         "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
         "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
@@ -101,6 +102,7 @@
         "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
         "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
         "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
@@ -567,10 +569,12 @@
           "pack": 2,
           "pickInPack": 7,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout

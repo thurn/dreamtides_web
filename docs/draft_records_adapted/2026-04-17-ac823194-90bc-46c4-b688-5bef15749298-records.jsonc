@@ -449,6 +449,7 @@
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
@@ -603,6 +604,7 @@
           "packCards": [
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
@@ -753,6 +755,7 @@
             "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -894,6 +897,7 @@
           "packCards": [
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

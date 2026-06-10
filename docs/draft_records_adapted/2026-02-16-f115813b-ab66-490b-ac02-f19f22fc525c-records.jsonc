@@ -253,6 +253,7 @@
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -399,6 +400,7 @@
           "packCards": [
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -562,6 +564,7 @@
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness

@@ -62,6 +62,7 @@
         "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
         "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
         "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
@@ -102,6 +103,7 @@
         "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
         "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
         "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
         "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
@@ -315,10 +317,12 @@
           "pack": 1,
           "pickInPack": 8,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
@@ -450,6 +454,7 @@
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb" // Endless Projection
@@ -626,6 +631,7 @@
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb" // Endless Projection

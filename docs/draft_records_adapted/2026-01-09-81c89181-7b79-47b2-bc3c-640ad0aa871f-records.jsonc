@@ -415,6 +415,7 @@
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
@@ -910,6 +911,7 @@
         "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
         "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Blade of Unity
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
         "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
@@ -953,6 +955,7 @@
       ],
       "pool": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
         "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
@@ -1004,11 +1007,13 @@
           "pickInPack": 1,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "1514e8f1-3c94-42f0-8f61-7c2856227e57",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction

@@ -31,6 +31,7 @@
       "mainboard": [
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
@@ -98,6 +99,7 @@
         "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
         "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
         "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
@@ -558,11 +560,13 @@
           "pickInPack": 8,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth

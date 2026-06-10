@@ -54,6 +54,7 @@
         "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
         "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
         "56411ed4-bda9-4fdf-82e5-b5492de67039" // Skyflame Commander
@@ -119,6 +120,7 @@
         "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
         "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
@@ -428,6 +430,7 @@
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
@@ -755,6 +758,7 @@
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "f860e815-3ed9-463d-ac4d-ed8d2778f8ad" // Lone Castaway
           ]
@@ -883,10 +887,12 @@
           "pack": 3,
           "pickInPack": 12,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "f860e815-3ed9-463d-ac4d-ed8d2778f8ad" // Lone Castaway
           ]
@@ -967,6 +973,7 @@
       ],
       "sideboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
         "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
@@ -1000,6 +1007,7 @@
         "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
         "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
         "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
@@ -1398,11 +1406,13 @@
           "pickInPack": 5,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "1514e8f1-3c94-42f0-8f61-7c2856227e57",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
@@ -1721,6 +1731,7 @@
           "packCards": [
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "f860e815-3ed9-463d-ac4d-ed8d2778f8ad" // Lone Castaway
           ]

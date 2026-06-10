@@ -47,6 +47,7 @@
         "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
         "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
         "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
@@ -94,6 +95,7 @@
         "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
         "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
@@ -226,6 +228,7 @@
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
@@ -366,10 +369,12 @@
           "pack": 1,
           "pickInPack": 12,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God

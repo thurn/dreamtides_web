@@ -215,6 +215,7 @@
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "2a230602-a39b-4ec2-a467-97b92b389aff" // Scuttled Fortune
@@ -362,6 +363,7 @@
           "pickId": "c88acaa8-ad4d-4321-a6f6-9361916e5b5e",
           "packCards": [
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "2a230602-a39b-4ec2-a467-97b92b389aff" // Scuttled Fortune

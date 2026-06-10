@@ -797,6 +797,7 @@
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "42427d15-c019-4786-9d7e-285829c4f3cb" // Signal Resonant
@@ -950,6 +951,7 @@
           "pickId": "36a3345d-1190-45f4-8191-897b4dcec376",
           "packCards": [
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "42427d15-c019-4786-9d7e-285829c4f3cb" // Signal Resonant

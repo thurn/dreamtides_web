@@ -38,6 +38,7 @@
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
         "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
@@ -113,6 +114,7 @@
         "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
         "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
@@ -767,11 +769,13 @@
           "pickInPack": 4,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
@@ -846,6 +850,7 @@
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613" // Infernal Cavalier

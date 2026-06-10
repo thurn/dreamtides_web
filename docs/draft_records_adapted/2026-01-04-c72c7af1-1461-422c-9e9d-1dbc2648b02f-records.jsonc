@@ -64,6 +64,7 @@
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
@@ -133,6 +134,7 @@
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
         "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
         "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "4b2f044c-0afe-432a-a121-2ea785bb1182", // Tranquil Duelist
         "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
@@ -331,6 +333,7 @@
           "packCards": [
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
@@ -811,10 +814,12 @@
           "pack": 3,
           "pickInPack": 4,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade

@@ -203,6 +203,7 @@
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
@@ -356,6 +357,7 @@
           "pickId": "f254239c-c07a-4c41-98f7-8f4de539c73e",
           "packCards": [
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang

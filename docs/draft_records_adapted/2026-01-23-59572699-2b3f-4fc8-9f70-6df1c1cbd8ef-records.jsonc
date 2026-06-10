@@ -344,6 +344,7 @@
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
@@ -366,6 +367,7 @@
             "0e1209c3-1041-4079-9b1c-f96816a7deb5", // Wistful Angler
             "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
@@ -449,6 +451,7 @@
           "pickId": "8870ef0b-cb1f-463b-8509-fece4743d3d4",
           "packCards": [
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet

@@ -406,6 +406,7 @@
             "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
@@ -790,6 +791,7 @@
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "bd43b120-2503-406c-8b72-ea3dc55198a0" // Selfless Rescuer
           ]
@@ -936,6 +938,7 @@
           "packCards": [
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "bd43b120-2503-406c-8b72-ea3dc55198a0" // Selfless Rescuer
           ]

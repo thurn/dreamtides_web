@@ -59,6 +59,7 @@
         "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
         "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
         "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
         "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
@@ -77,6 +78,7 @@
       "pool": [
         "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
         "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
         "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
@@ -186,10 +188,12 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman

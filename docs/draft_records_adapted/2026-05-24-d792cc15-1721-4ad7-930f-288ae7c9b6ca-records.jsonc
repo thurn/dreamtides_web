@@ -72,6 +72,7 @@
         "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
@@ -111,6 +112,7 @@
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
@@ -526,6 +528,7 @@
             "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
@@ -741,11 +744,13 @@
           "pickInPack": 12,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger

@@ -54,6 +54,7 @@
         "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
         "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
         "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
         "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277" // Nexus Wayfinder
@@ -71,6 +72,7 @@
         "cd2d4eaf-6295-451d-aaa2-ea74188bac3b" // Young Beastcaller
       ],
       "pool": [
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
         "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
@@ -116,10 +118,12 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
@@ -654,6 +658,7 @@
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
@@ -1778,6 +1783,7 @@
       "name": "BR",
       "mainboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
         "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
@@ -1857,6 +1863,7 @@
         "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
         "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
         "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
@@ -2459,11 +2466,13 @@
           "pickInPack": 3,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "1514e8f1-3c94-42f0-8f61-7c2856227e57",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist

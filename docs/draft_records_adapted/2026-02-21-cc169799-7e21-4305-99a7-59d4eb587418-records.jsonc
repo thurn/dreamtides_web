@@ -719,6 +719,7 @@
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "1654d50f-815d-4172-b46b-8baa34a124db" // Cragfall
@@ -868,6 +869,7 @@
           "packCards": [
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "1654d50f-815d-4172-b46b-8baa34a124db" // Cragfall
@@ -1761,6 +1763,7 @@
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "1654d50f-815d-4172-b46b-8baa34a124db" // Cragfall
@@ -1907,6 +1910,7 @@
         "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
         "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
         "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
         "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
@@ -1974,6 +1978,7 @@
         "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
         "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
         "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
         "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
@@ -2630,6 +2635,7 @@
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "1654d50f-815d-4172-b46b-8baa34a124db" // Cragfall
@@ -2753,10 +2759,12 @@
           "pack": 3,
           "pickInPack": 13,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "1654d50f-815d-4172-b46b-8baa34a124db" // Cragfall

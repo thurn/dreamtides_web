@@ -43,6 +43,7 @@
         "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
         "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
         "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
@@ -104,6 +105,7 @@
         "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
         "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
@@ -173,6 +175,7 @@
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
             "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Demonbane
@@ -328,10 +331,12 @@
           "pack": 1,
           "pickInPack": 8,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier

@@ -473,6 +473,7 @@
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
@@ -505,6 +506,7 @@
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "9d14885c-a757-40cc-b43e-87dbec7ec379" // Forsaken Skyline
@@ -650,6 +652,7 @@
           "packCards": [
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "9d14885c-a757-40cc-b43e-87dbec7ec379" // Forsaken Skyline

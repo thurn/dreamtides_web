@@ -67,6 +67,7 @@
         "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
         "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
         "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "fcb830e5-85ff-48f3-be1e-46e102a5c8e8" // Shatterpoint Agent
       ],
@@ -104,6 +105,7 @@
         "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
         "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
         "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
         "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
@@ -554,6 +556,7 @@
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -621,6 +624,7 @@
           "packCards": [
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -673,10 +677,12 @@
           "pack": 4,
           "pickInPack": 9,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

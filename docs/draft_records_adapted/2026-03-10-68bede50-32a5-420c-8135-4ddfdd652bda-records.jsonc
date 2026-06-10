@@ -31,6 +31,7 @@
       "mainboard": [
         "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
         "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
@@ -121,6 +122,7 @@
         "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
         "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden
         "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
@@ -794,6 +796,7 @@
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
             "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
@@ -930,11 +933,13 @@
           "pickInPack": 12,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
             "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched

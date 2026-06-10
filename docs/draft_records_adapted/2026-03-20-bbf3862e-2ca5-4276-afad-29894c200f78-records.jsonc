@@ -250,6 +250,7 @@
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -379,6 +380,7 @@
           "pickId": "3e1766e9-2fa7-4446-a255-7beea1467ece",
           "packCards": [
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

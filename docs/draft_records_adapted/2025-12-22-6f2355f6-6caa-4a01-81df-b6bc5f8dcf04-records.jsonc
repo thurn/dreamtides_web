@@ -505,6 +505,7 @@
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -648,6 +649,7 @@
           "pickId": "efeae088-9ac5-4d2f-a15c-d8675a471ac5",
           "packCards": [
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

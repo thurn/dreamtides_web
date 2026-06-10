@@ -55,6 +55,7 @@
         "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
         "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
         "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
         "33cf7dca-d8d2-42b7-854a-b3f503b03488" // Lumin-Gate Seer
@@ -91,6 +92,7 @@
         "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
         "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
         "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
@@ -617,12 +619,15 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector

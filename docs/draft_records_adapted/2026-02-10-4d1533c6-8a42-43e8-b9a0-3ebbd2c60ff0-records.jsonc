@@ -202,6 +202,7 @@
             "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Luminwings
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
@@ -439,6 +440,7 @@
           "packCards": [
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
@@ -1097,6 +1099,7 @@
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

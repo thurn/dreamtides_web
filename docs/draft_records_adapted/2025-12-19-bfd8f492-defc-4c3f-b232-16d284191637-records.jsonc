@@ -58,6 +58,7 @@
         "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
         "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
         "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
         "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
@@ -91,6 +92,7 @@
         "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
         "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
@@ -247,6 +249,7 @@
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "de946f5a-1e27-4d40-ae44-9ef8cc041949" // Mother of Flames
@@ -418,6 +421,7 @@
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
@@ -578,10 +582,12 @@
           "pack": 2,
           "pickInPack": 9,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness

@@ -64,6 +64,7 @@
         "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
         "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
         "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
@@ -93,6 +94,7 @@
         "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
         "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
         "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
@@ -475,10 +477,12 @@
           "pack": 2,
           "pickInPack": 4,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen

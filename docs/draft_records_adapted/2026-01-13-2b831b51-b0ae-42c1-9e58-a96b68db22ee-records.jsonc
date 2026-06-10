@@ -406,6 +406,7 @@
             "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
             "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
@@ -576,6 +577,7 @@
           "pick": [],
           "pickId": "0a26d900-c652-4f9c-8681-a35c5f8b1937",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry

@@ -57,6 +57,7 @@
       "sideboard": [
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
@@ -108,6 +109,7 @@
         "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
         "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
         "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
@@ -597,6 +599,7 @@
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2" // Abyssal Enforcer
           ]
@@ -653,11 +656,13 @@
           "pickInPack": 7,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2" // Abyssal Enforcer
           ]

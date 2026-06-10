@@ -71,6 +71,7 @@
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
         "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
         "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
         "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b" // Shardwoven Tyrant
@@ -100,6 +101,7 @@
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
         "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
         "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
         "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
@@ -475,6 +477,7 @@
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
@@ -617,10 +620,12 @@
           "pack": 2,
           "pickInPack": 11,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift

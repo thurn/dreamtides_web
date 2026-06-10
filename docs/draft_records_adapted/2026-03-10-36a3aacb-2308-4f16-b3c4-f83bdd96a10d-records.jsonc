@@ -236,6 +236,7 @@
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -374,6 +375,7 @@
           "packCards": [
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -870,6 +872,7 @@
           "packCards": [
             "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist

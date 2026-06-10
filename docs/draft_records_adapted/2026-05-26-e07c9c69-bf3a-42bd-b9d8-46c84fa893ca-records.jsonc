@@ -30,6 +30,7 @@
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
         "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
         "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
@@ -86,6 +87,7 @@
         "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
         "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
         "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
@@ -264,6 +266,7 @@
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
@@ -328,11 +331,13 @@
           "pickInPack": 5,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
@@ -574,6 +579,7 @@
           "packCards": [
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver

@@ -63,6 +63,7 @@
         "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
         "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
         "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
@@ -96,6 +97,7 @@
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
         "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
@@ -464,11 +466,13 @@
           "pickInPack": 4,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
@@ -578,6 +582,7 @@
           "packCards": [
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
             "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f" // Emerald Guardian
           ]

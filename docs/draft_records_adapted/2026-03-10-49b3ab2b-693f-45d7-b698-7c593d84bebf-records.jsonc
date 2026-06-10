@@ -62,6 +62,7 @@
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
@@ -142,6 +143,7 @@
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
         "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
         "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
@@ -488,6 +490,7 @@
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
@@ -777,6 +780,7 @@
             "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
@@ -947,10 +951,12 @@
           "pack": 3,
           "pickInPack": 10,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past

@@ -71,6 +71,7 @@
         "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
         "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
         "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
@@ -88,6 +89,7 @@
         "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
         "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
         "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
@@ -234,10 +236,12 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair

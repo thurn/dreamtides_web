@@ -131,6 +131,7 @@
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
@@ -310,6 +311,7 @@
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
@@ -510,6 +512,7 @@
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -646,6 +649,7 @@
           "packCards": [
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

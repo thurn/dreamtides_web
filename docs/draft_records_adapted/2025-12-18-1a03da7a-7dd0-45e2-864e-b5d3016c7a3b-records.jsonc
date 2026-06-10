@@ -440,6 +440,7 @@
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -588,6 +589,7 @@
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -775,6 +777,7 @@
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -909,6 +912,7 @@
           "packCards": [
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },

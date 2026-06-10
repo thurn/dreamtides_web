@@ -56,6 +56,7 @@
       ],
       "sideboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
         "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
@@ -121,6 +122,7 @@
         "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
         "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "ed4d5342-0690-40b7-ab48-6b76035466f2" // Shadowpaw
       ],
@@ -148,6 +150,7 @@
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d" // Veilpiercer
           ]
@@ -321,6 +324,7 @@
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d" // Veilpiercer
           ]
@@ -829,6 +833,7 @@
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "f95cae7b-6502-4dbe-ae26-16853959d9a3" // Sunset Chronicler
           ]
@@ -956,11 +961,13 @@
           "pickInPack": 14,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "f95cae7b-6502-4dbe-ae26-16853959d9a3" // Sunset Chronicler
           ]

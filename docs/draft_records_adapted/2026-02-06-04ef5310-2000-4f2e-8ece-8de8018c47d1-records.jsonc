@@ -30,6 +30,7 @@
       "name": "WUBR",
       "mainboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
@@ -92,6 +93,7 @@
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
         "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
@@ -213,6 +215,7 @@
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
@@ -357,11 +360,13 @@
           "pickInPack": 12,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
@@ -568,6 +573,7 @@
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue

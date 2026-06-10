@@ -162,6 +162,7 @@
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
@@ -717,6 +718,7 @@
           "pick": [],
           "pickId": "4acf970d-d2d7-413d-aba7-587ee53d8d5c",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
@@ -1153,6 +1155,7 @@
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver

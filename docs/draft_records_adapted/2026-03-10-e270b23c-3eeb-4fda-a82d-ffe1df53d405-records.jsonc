@@ -74,6 +74,7 @@
       "sideboard": [
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
         "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
@@ -134,6 +135,7 @@
         "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
         "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
         "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
@@ -735,6 +737,7 @@
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
@@ -905,11 +908,13 @@
           "pickInPack": 9,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
@@ -1125,6 +1130,7 @@
           "packCards": [
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars

@@ -74,6 +74,7 @@
         "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Spirit Reaping
       ],
       "sideboard": [
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "09332e5b-3b4e-458f-9df0-3fc0419f65c3" // Unleash Ruin
       ],
@@ -89,6 +90,7 @@
         "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
         "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
         "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
@@ -248,6 +250,7 @@
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2" // Oblivion Guide
@@ -268,6 +271,7 @@
             "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
@@ -388,10 +392,12 @@
           "pack": 1,
           "pickInPack": 14,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2" // Oblivion Guide

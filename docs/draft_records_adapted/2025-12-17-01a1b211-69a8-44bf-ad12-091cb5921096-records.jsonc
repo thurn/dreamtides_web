@@ -133,6 +133,7 @@
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa" // Architect of Memory
@@ -294,6 +295,7 @@
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa" // Architect of Memory
@@ -781,6 +783,7 @@
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "0637b453-4362-4f01-b3e6-07c27af9c847" // Herald of the Last Light
           ]
@@ -923,6 +926,7 @@
           "pickId": "0ee0f160-7339-4d98-8a8c-f08889ee52f5",
           "packCards": [
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "0637b453-4362-4f01-b3e6-07c27af9c847" // Herald of the Last Light
           ]

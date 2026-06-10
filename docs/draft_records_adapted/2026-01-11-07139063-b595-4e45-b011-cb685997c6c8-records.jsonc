@@ -524,6 +524,7 @@
             "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
@@ -890,6 +891,7 @@
       "name": "BG",
       "mainboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
@@ -959,6 +961,7 @@
         "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
         "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
@@ -1318,6 +1321,7 @@
             "2ce84a16-1295-4738-9e2d-1f57590b2269", // Thundercatcher
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
@@ -1457,11 +1461,13 @@
           "pickInPack": 12,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "1514e8f1-3c94-42f0-8f61-7c2856227e57",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance

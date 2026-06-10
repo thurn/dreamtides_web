@@ -30,6 +30,7 @@
       "name": "UBRG",
       "mainboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
         "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Horizon Follower
@@ -77,6 +78,7 @@
         "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
         "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
         "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
@@ -196,6 +198,7 @@
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
@@ -344,11 +347,13 @@
           "pickInPack": 12,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
@@ -733,6 +738,7 @@
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
@@ -887,6 +893,7 @@
           "packCards": [
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine

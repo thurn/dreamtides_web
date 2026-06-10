@@ -30,6 +30,7 @@
       "name": "WBRG",
       "mainboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
         "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
@@ -96,6 +97,7 @@
         "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
         "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
         "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
@@ -443,11 +445,13 @@
           "pickInPack": 2,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
@@ -518,6 +522,7 @@
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
             "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
             "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver

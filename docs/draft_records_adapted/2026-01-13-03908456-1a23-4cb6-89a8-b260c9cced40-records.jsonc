@@ -222,6 +222,7 @@
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
             "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Meadowlight Charger
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "2a230602-a39b-4ec2-a467-97b92b389aff" // Scuttled Fortune
           ]
@@ -369,6 +370,7 @@
           "pickId": "6040ba5e-7042-4095-9000-89bcb8ce1ea6",
           "packCards": [
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "2a230602-a39b-4ec2-a467-97b92b389aff" // Scuttled Fortune
           ]
@@ -532,6 +534,7 @@
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher

@@ -58,6 +58,7 @@
         "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
         "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
         "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
@@ -119,6 +120,7 @@
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
         "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
         "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "de946f5a-1e27-4d40-ae44-9ef8cc041949" // Mother of Flames
       ],
@@ -786,6 +788,7 @@
           "packCards": [
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
@@ -814,6 +817,7 @@
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "5e1b943f-9fa2-4055-b613-5dd09a048c99" // Call to the Unknown
           ]
@@ -940,10 +944,12 @@
           "pack": 3,
           "pickInPack": 14,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "5e1b943f-9fa2-4055-b613-5dd09a048c99" // Call to the Unknown
           ]

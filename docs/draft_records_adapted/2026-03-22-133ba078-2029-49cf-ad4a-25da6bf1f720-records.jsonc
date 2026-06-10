@@ -245,6 +245,7 @@
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -392,6 +393,7 @@
           "pickId": "2c723fc9-d5c9-4126-a9a6-f80c247a4b6b",
           "packCards": [
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -803,6 +805,7 @@
             "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Pyrewatcher
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor

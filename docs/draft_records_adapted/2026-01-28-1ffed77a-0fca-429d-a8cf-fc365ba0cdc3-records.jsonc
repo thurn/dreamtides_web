@@ -36,6 +36,7 @@
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
@@ -71,6 +72,7 @@
         "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
         "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
         "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
@@ -94,6 +96,7 @@
         "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
         "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
         "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
@@ -132,6 +135,7 @@
         "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2" // Oblivion Guide
@@ -216,6 +220,7 @@
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -330,10 +335,12 @@
           "pack": 1,
           "pickInPack": 12,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -826,6 +833,7 @@
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0" // Ashborn Necromancer
           ]
@@ -956,11 +964,13 @@
           "pickInPack": 11,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0" // Ashborn Necromancer
           ]

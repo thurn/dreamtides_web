@@ -55,6 +55,7 @@
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
         "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
         "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
@@ -119,6 +120,7 @@
         "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
         "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
         "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "448abb34-d77d-40ac-8292-58db03176247", // Arc Disciple
         "c73f978e-8196-4589-a432-845265115555", // Lightningborn
@@ -288,6 +290,7 @@
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
@@ -707,10 +710,12 @@
           "pack": 5,
           "pickInPack": 1,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light

@@ -69,6 +69,7 @@
         "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
         "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
         "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
         "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
@@ -84,6 +85,7 @@
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
         "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
         "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
         "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
@@ -165,6 +167,7 @@
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
@@ -332,10 +335,12 @@
           "pack": 1,
           "pickInPack": 10,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
@@ -559,6 +564,7 @@
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser

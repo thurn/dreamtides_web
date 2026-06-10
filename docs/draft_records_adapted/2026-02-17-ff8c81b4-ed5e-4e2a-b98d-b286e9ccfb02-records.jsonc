@@ -135,6 +135,7 @@
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
@@ -255,6 +256,7 @@
           "packCards": [
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration

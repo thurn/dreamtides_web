@@ -53,6 +53,7 @@
         "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
         "73fc1b7f-3c2b-4993-9590-924240515c2f", // Lunar Hart
         "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
@@ -112,6 +113,7 @@
         "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
         "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
       ],
       "picks": [
@@ -286,6 +288,7 @@
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
             "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -796,6 +799,7 @@
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -904,10 +908,12 @@
           "pack": 3,
           "pickInPack": 15,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         }
@@ -1093,6 +1099,7 @@
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
             "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -1237,6 +1244,7 @@
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
             "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -1604,6 +1612,7 @@
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -1747,6 +1756,7 @@
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

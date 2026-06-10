@@ -34,6 +34,7 @@
         "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
         "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
         "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
@@ -61,6 +62,7 @@
         "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
         "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
         "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
         "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
@@ -87,6 +89,7 @@
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
         "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
         "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
         "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
@@ -104,6 +107,7 @@
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
         "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
@@ -166,6 +170,7 @@
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
@@ -327,10 +332,12 @@
           "pack": 1,
           "pickInPack": 10,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
@@ -537,6 +544,7 @@
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "831bc7cf-e8c9-4943-8156-91b7397ef849" // Resilient Wanderer
           ]
@@ -663,11 +671,13 @@
           "pickInPack": 14,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "831bc7cf-e8c9-4943-8156-91b7397ef849" // Resilient Wanderer
           ]

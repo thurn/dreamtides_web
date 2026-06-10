@@ -68,6 +68,7 @@
         "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
         "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
         "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
         "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
@@ -88,6 +89,7 @@
         "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
         "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
         "629fe4d4-826f-41b9-a913-458a503856a8", // Saffron Trailblazer
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
         "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
@@ -219,10 +221,12 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith

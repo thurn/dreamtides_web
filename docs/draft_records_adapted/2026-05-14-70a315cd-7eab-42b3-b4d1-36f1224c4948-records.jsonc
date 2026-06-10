@@ -54,6 +54,7 @@
         "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
         "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Last Light Herald
@@ -95,6 +96,7 @@
         "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
         "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
         "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
         "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Sandglider
@@ -517,10 +519,12 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
@@ -701,6 +705,7 @@
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "bedee263-27b9-4d73-ab77-6b5c747dff69" // Wasteland Arbitrator
           ]
@@ -871,6 +876,7 @@
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "bedee263-27b9-4d73-ab77-6b5c747dff69" // Wasteland Arbitrator
           ]

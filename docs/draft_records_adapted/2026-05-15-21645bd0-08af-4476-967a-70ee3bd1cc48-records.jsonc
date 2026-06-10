@@ -55,6 +55,7 @@
         "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
         "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
@@ -90,6 +91,7 @@
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
         "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
         "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
@@ -206,6 +208,7 @@
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "3cc9253a-4db6-4b02-92d6-a37805d192fb" // Ancient Descent
           ]
@@ -344,6 +347,7 @@
           "packCards": [
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "3cc9253a-4db6-4b02-92d6-a37805d192fb" // Ancient Descent
           ]
@@ -511,10 +515,12 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides

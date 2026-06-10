@@ -29,6 +29,7 @@
       "name": "WUBRG",
       "mainboard": [
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
@@ -85,6 +86,7 @@
         "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
         "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
         "Forgotten Titan",
+        "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
         "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
@@ -217,6 +219,7 @@
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -300,11 +303,13 @@
           "pickInPack": 11,
           "pick": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ],
           "pickId": "d99a9a7d-d9ca-4c11-80ab-e39d5943a315",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },

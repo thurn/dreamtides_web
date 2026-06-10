@@ -41,6 +41,7 @@
         "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
         "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
         "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
         "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
@@ -86,6 +87,7 @@
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
         "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
         "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
@@ -215,6 +217,7 @@
             "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
@@ -302,6 +305,7 @@
             "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Spirit Reaping
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
@@ -371,10 +375,12 @@
           "pack": 1,
           "pickInPack": 12,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes

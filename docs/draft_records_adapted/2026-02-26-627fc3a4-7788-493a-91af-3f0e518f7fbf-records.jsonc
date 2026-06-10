@@ -449,6 +449,7 @@
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
             "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1" // Wired Duelist
@@ -556,6 +557,7 @@
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },
@@ -613,6 +615,7 @@
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
             "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1" // Wired Duelist
@@ -687,6 +690,7 @@
           "pick": [],
           "pickId": "ea49c01f-3f32-4c66-893c-56931e0e8981",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ]
         },

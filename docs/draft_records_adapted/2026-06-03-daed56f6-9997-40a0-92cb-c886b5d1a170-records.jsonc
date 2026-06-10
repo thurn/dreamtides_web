@@ -65,6 +65,7 @@
         "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
         "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
         "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
@@ -87,6 +88,7 @@
         "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
         "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
         "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
         "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
@@ -207,6 +209,7 @@
             "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6" // Eternal Stag
@@ -287,10 +290,12 @@
           "pack": 1,
           "pickInPack": 10,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6" // Eternal Stag
@@ -363,6 +368,7 @@
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -459,6 +465,7 @@
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },

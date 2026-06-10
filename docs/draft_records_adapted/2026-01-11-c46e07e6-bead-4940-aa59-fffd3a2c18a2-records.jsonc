@@ -477,6 +477,7 @@
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
@@ -633,6 +634,7 @@
           "pick": [],
           "pickId": "2b74bb81-fb9a-40e5-a941-e517430b52f5",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
@@ -720,6 +722,7 @@
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -883,6 +886,7 @@
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },

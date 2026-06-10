@@ -55,6 +55,7 @@
         "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
         "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
         "77f31db4-0397-49a7-8886-f5459ee960e9", // Soulrender
@@ -71,6 +72,7 @@
         "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
         "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
         "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
+        "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
         "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
@@ -223,10 +225,12 @@
           "pack": 1,
           "pickInPack": 6,
           "pick": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
           ],
           "pickId": "74f12c23-5c15-4ae6-8f4d-c5e6c1878817",
           "packCards": [
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides

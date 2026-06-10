@@ -972,6 +972,7 @@
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -1067,6 +1068,7 @@
           "pickId": "0a26d900-c652-4f9c-8681-a35c5f8b1937",
           "packCards": [
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },

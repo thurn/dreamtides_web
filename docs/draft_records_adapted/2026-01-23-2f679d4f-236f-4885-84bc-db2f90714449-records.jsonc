@@ -488,6 +488,7 @@
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
             "738a5af0-f848-4d48-bceb-9a43c9b11066" // Reclaimer of Lost Paths
@@ -545,6 +546,7 @@
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
@@ -599,6 +601,7 @@
           "pickId": "3ca1e1de-b916-445f-b3b2-0f4d0cc7ceeb",
           "packCards": [
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
             "738a5af0-f848-4d48-bceb-9a43c9b11066" // Reclaimer of Lost Paths

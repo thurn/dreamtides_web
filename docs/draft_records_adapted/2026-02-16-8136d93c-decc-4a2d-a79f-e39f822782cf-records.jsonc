@@ -249,6 +249,7 @@
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -390,6 +391,7 @@
           "packCards": [
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },

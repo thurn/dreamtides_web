@@ -141,6 +141,7 @@
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
@@ -313,6 +314,7 @@
           "pickId": "d96198a7-dd19-4940-bf8f-23135011fc84",
           "packCards": [
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
+            "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
@@ -522,6 +524,7 @@
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
@@ -666,6 +669,7 @@
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "Forgotten Titan",
+            "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6" // Harborwarden
           ]
         },
