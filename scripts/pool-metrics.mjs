@@ -666,6 +666,104 @@ function str(argv, flag, fallback) {
   return eq ? eq.slice(flag.length + 1) : fallback;
 }
 
+// Every recognized CLI flag, split by whether it consumes the following token as
+// a value. Used to validate argv (unknown flags are a hard error) and to skip a
+// flag's value when scanning for stray arguments. Keep in sync with the flags the
+// `num`/`str`/`includes` readers above actually consult.
+const VALUE_FLAGS = new Set([
+  "--metric",
+  "--seeds",
+  "--variant",
+  "--pool-size",
+  "--dreamcaller",
+  "--top",
+  "--themes",
+  "--trap-tau",
+  "--standalone-themes",
+  "--buildable-share",
+  "--present-share",
+  "--ubiquity",
+  "--theme-floor",
+  "--theme-ideal",
+]);
+const BOOLEAN_FLAGS = new Set(["--compare", "--traps", "--json", "--help", "-h"]);
+
+const HELP = `Usage: node scripts/pool-metrics.mjs [options]
+
+Evaluate the draft pools an algorithm generates against one of four metrics,
+measured on the real-draft simulation (every Dreamcaller, full signature, many
+seeds). See the header comment in this file for what each metric measures.
+
+Mode:
+  --metric <name>        Which metric to run: adequacy (default) | traps |
+                         diversity | dreamcaller.
+  --traps                Back-compat alias for --metric traps.
+  --compare              Run the chosen metric across every algorithm (defaults
+                         to ${DEFAULT_COMPARE_SEEDS} seeds; override with --seeds).
+  -h, --help             Show this help and exit.
+
+Shared options (every metric):
+  --seeds <n>            Seeds per Dreamcaller (default ${DEFAULT_SEEDS}; --compare default ${DEFAULT_COMPARE_SEEDS}).
+  --variant <id>         Pool algorithm to evaluate (default idf3).
+  --pool-size <n>        Target pool size in copies (default ${POOL_TARGET_SIZE}).
+  --dreamcaller <name|id>  Restrict the simulation to a single Dreamcaller.
+  --top <n>              How many rows to show in "top N" listings (default ${DEFAULT_TOP}).
+  --json                 Emit the full result as JSON instead of a text report.
+
+Adequacy options (--metric adequacy):
+  --themes <short|all>   Score the standalone themes only (short, default) or
+                         every theme (all).
+
+Trap options (--metric traps):
+  --trap-tau <n>         A payoff is a trap when its best-supportable theme is
+                         under this fraction of its demand target (default ${DEFAULT_TRAP_TAU}).
+
+Diversity options (--metric diversity):
+  --standalone-themes <a,b,c>  Override the standalone archetype set.
+  --buildable-share <n>  Support share at which a standalone theme is "buildable"
+                         (default ${DEFAULT_BUILDABLE_SHARE}).
+  --present-share <n>    Support share at which a supporting theme counts as
+                         "present" (default ${DEFAULT_PRESENT_SHARE}).
+  --ubiquity <n>         A card is "ubiquitous" once it appears in this fraction
+                         of pools (default ${DEFAULT_UBIQUITY}).
+
+Dreamcaller options (--metric dreamcaller):
+  --theme-floor <n>      big5 on-theme share scored 0 below this (default ${BIG5_THEME_FLOOR}).
+  --theme-ideal <n>      big5 on-theme share scored 1.0 at this (default ${BIG5_THEME_IDEAL}).
+`;
+
+/**
+ * Validate argv against the known flag set. Prints help and exits 0 on
+ * --help/-h; exits 1 on any unrecognized flag or stray positional argument.
+ * A value flag in `--flag value` form consumes the following token so it is not
+ * mistaken for a positional.
+ */
+function validateArgv(argv) {
+  if (argv.includes("--help") || argv.includes("-h")) {
+    console.log(HELP);
+    process.exit(0);
+  }
+  for (let i = 0; i < argv.length; i++) {
+    const tok = argv[i];
+    if (tok.startsWith("-")) {
+      const name = tok.startsWith("--") ? tok.split("=")[0] : tok;
+      if (!VALUE_FLAGS.has(name) && !BOOLEAN_FLAGS.has(name)) {
+        console.error(
+          `Unrecognized flag "${tok}". Run with --help to see the available flags.`,
+        );
+        process.exit(1);
+      }
+      // `--flag value` (no `=`) consumes the next token as its value.
+      if (VALUE_FLAGS.has(name) && !tok.includes("=")) i++;
+    } else {
+      console.error(
+        `Unexpected argument "${tok}". Run with --help to see the available flags.`,
+      );
+      process.exit(1);
+    }
+  }
+}
+
 const mean = (xs) => (xs.length ? xs.reduce((s, x) => s + x, 0) / xs.length : 0);
 
 /** Mean/append accumulator keyed by an arbitrary string. */
@@ -1681,6 +1779,7 @@ function runCompare(argv, metric) {
 
 function run() {
   const argv = process.argv.slice(2);
+  validateArgv(argv);
   const metric = resolveMetric(argv);
   if (argv.includes("--compare")) {
     runCompare(argv, metric);
