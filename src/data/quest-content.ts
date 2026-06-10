@@ -26,6 +26,7 @@ import {
   loadTideDecks,
   loadTides2Decks,
   loadTides2Relationships,
+  loadTides3Decks,
   resolvePool,
   type DraftRecord,
 } from "./cards-v2-database";
@@ -160,6 +161,20 @@ export function poolVariantNeedsTides2(variant: PoolVariant): boolean {
 }
 
 /**
+ * Pool variants that combine the committed `tides3` artifact (`data/tides3.jsonc`,
+ * served as `/tides3-data.json`): the tide decks and the per-Dreamcaller tide
+ * pools in one file. In pool mode the artifact is fetched only for these variants
+ * and set on `poolData.tides3Decks`.
+ */
+const POOL_VARIANTS_NEEDING_TIDES3: ReadonlySet<PoolVariant> =
+  new Set<PoolVariant>(["tides3"]);
+
+/** Whether `variant` combines the committed `tides3` artifact. */
+export function poolVariantNeedsTides3(variant: PoolVariant): boolean {
+  return POOL_VARIANTS_NEEDING_TIDES3.has(variant);
+}
+
+/**
  * Pool variants that draw one random seed card and grow a pool around it, so
  * each produces a {@link SeedProvenanceSummary}: the `seed` variant (decklist
  * co-occurrence) plus the pick-record variants. These are the variants whose
@@ -235,7 +250,7 @@ function roundTo3(value: number): number {
  * top {@link POOL_CONSTRUCTED_LOG_TOP_CARDS} cards by blended admission score —
  * each with the order it joined, copies, and its seed/pool affinities. Read it
  * from `logs/quest-log.jsonl` filtered by the run's `gameId`. The tide variants
- * (`tides`/`tides2`) add `tideDeckIds` — the lead and ally tide decks the pool
+ * (`tides`/`tides2`/`tides3`) add `tideDeckIds` — the lead and fill tide decks the pool
  * was dealt from, to cross-reference against `data/<algo>.jsonc`. Other variants
  * with no seed-growth story (e.g. `idf3`, `color_pool`) log the base fields only.
  */
@@ -255,7 +270,7 @@ function logPoolConstructed(
 
   const provenance = pool.seedProvenance;
   if (provenance === undefined) {
-    // The tide variants (`tides`/`tides2`) carry no seed-growth story, but their
+    // The tide variants (`tides`/`tides2`/`tides3`) carry no seed-growth story, but their
     // pool is composed entirely of preconstructed tide decks recorded in
     // `pool.themes` as `["<algo>", ...tideDeckIds]`. Logging those ids is the
     // "which tides made up my pool" record — cross-reference them against
@@ -263,7 +278,9 @@ function logPoolConstructed(
     // answer "why does my warrior Dreamcaller have so few warrior cards" without
     // re-running the build.
     const tideDeckIds =
-      pool.variant === "tides" || pool.variant === "tides2"
+      pool.variant === "tides" ||
+      pool.variant === "tides2" ||
+      pool.variant === "tides3"
         ? pool.themes.slice(1)
         : undefined;
     logEvent(
@@ -482,6 +499,9 @@ export async function loadQuestContent(
   // The `tides2` variant combines its own (smaller) tide decks and their curated
   // relationships; only it fetches `/tides2-data.json` and the relationships.
   const poolNeedsTides2 = POOL_VARIANTS_NEEDING_TIDES2.has(poolVariant);
+  // The `tides3` variant combines its own committed artifact; only it fetches
+  // `/tides3-data.json`.
+  const poolNeedsTides3 = POOL_VARIANTS_NEEDING_TIDES3.has(poolVariant);
   const [
     cardDatabase,
     draftDreamcallers,
@@ -491,6 +511,7 @@ export async function loadQuestContent(
     affinityCorpus,
     tideDecks,
     tides2Decks,
+    tides3Decks,
     merchantCorpus,
     dreamsignProfiles,
   ] = await Promise.all([
@@ -512,6 +533,8 @@ export async function loadQuestContent(
     poolNeedsTides ? loadTideDecks() : Promise.resolve(null),
     // Fetch the committed `tides2` tide decks only for the `tides2` variant.
     poolNeedsTides2 ? loadTides2Decks() : Promise.resolve(null),
+    // Fetch the committed `tides3` artifact only for the `tides3` variant.
+    poolNeedsTides3 ? loadTides3Decks() : Promise.resolve(null),
     // The merchant corpus and dreamsign profiles are small and always loaded
     // unconditionally so the v2 journey's merchant has signals on every path.
     loadMerchantCorpus().catch(() => undefined as MerchantCorpus | undefined),
@@ -555,6 +578,9 @@ export async function loadQuestContent(
     const tides2Relationships = await loadTides2Relationships(tides2Decks);
     if (tides2Relationships) poolData.tides2Relationships = tides2Relationships;
   }
+  // The `tides3` variant reads its committed artifact (decks + per-Dreamcaller
+  // tide pools) from here; every other variant ignores it.
+  if (tides3Decks) poolData.tides3Decks = tides3Decks;
 
   const poolContext: RunPoolContext = {
     poolData,

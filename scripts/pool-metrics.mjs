@@ -109,6 +109,7 @@ import {
   POOL_VARIANT_IDS,
   validateTideDecks,
   validateTideRelationships,
+  validateTides3Decks,
 } from "../src/draft/pool/index.ts";
 import { stripJsonComments, supportEntryByName } from "./lib/card-refs.mjs";
 
@@ -828,6 +829,13 @@ function loadContext(argv) {
         tideIds,
       );
     }
+  }
+  // The `tides3` variant combines its own committed tide decks (with the
+  // per-Dreamcaller tide pools baked into the same file); load them (when
+  // present) so it runs under `--compare`/`--variant tides3`.
+  const tides3Path = resolve(ROOT, "data/tides3.jsonc");
+  if (existsSync(tides3Path)) {
+    poolData.tides3Decks = validateTides3Decks(readJsonc("data/tides3.jsonc"));
   }
   return { dreamcallers, meta, poolData, decklists };
 }

@@ -4,11 +4,13 @@ import type {
   GeneratedPool,
   TideDecksJson,
   TideRelationshipsJson,
+  Tides3DecksJson,
 } from "../draft/pool";
 import {
   deserializeCorpus,
   validateTideDecks,
   validateTideRelationships,
+  validateTides3Decks,
 } from "../draft/pool";
 import type { AffinityCorpusJson } from "../draft/pool";
 
@@ -115,6 +117,19 @@ export async function loadTides2Decks(): Promise<TideDecksJson | null> {
   const response = await fetch("/tides2-data.json");
   if (!response.ok) return null;
   return validateTideDecks(await response.json());
+}
+
+/**
+ * Fetch the committed `tides3` artifact (`data/tides3.jsonc`, copied to
+ * `/tides3-data.json` by `scripts/setup-assets.mjs`) the `tides3` pool variant
+ * combines into pools — the 32 tide decks and the per-Dreamcaller tide pools in
+ * one file. Returns `null` if the asset is missing so the caller can surface a
+ * clear configuration error when the variant runs.
+ */
+export async function loadTides3Decks(): Promise<Tides3DecksJson | null> {
+  const response = await fetch("/tides3-data.json");
+  if (!response.ok) return null;
+  return validateTides3Decks(await response.json());
 }
 
 /**

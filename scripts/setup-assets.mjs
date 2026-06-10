@@ -679,6 +679,23 @@ export function setupAssets({
         "unavailable until `npm run bake-tides2` is run.",
     );
   }
+  // The committed `tides3` artifact (decks + per-Dreamcaller tide pools in one
+  // file) the `tides3` pool variant combines into pools. Baked by
+  // `npm run bake-tides3`, committed as JSONC with a provenance header.
+  const tides3SourcePath = join(DATA_DIR, "tides3.jsonc");
+  const tides3JsonPath = join(publicDir, "tides3-data.json");
+  if (existsSync(tides3SourcePath)) {
+    const tides3Jsonc = readFileSync(tides3SourcePath, "utf8");
+    const served = JSON.stringify(JSON.parse(stripJsonComments(tides3Jsonc)));
+    writeFileSync(tides3JsonPath, served + "\n");
+    console.log("Copied tides3.jsonc to tides3-data.json (comments stripped)");
+  } else {
+    console.log(
+      "No data/tides3.jsonc found; the `tides3` pool variant will be " +
+        "unavailable until `npm run bake-tides3` is run.",
+    );
+  }
+
   const tides2RelSourcePath = join(DATA_DIR, "tides2_relationships.jsonc");
   const tides2RelJsonPath = join(publicDir, "tides2-relationships-data.json");
   if (existsSync(tides2RelSourcePath)) {

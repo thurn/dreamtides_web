@@ -112,6 +112,14 @@ provides:
   as `docs/cards2/tides2_decklists.md`). Requires the baked decks
   (`npm run bake-tides2`) and the seeded relationships
   (`npm run seed-tide-relationships`).
+- `algo=tides3` — the human-legible counterpart of `sigseed`. Combines the 32
+  preconstructed tides in `data/tides3.jsonc` (rendered as
+  `docs/cards2/tides3_decklists.md`): a signatured Dreamcaller's own signature
+  tide leads, shuffled together with broad tides until a 150-card pool can be
+  dealt (at most 2 copies of any card). Each signature tide is a Dreamcaller's
+  full-signature `sigseed` pool baked as a deck, so a pool delivers the
+  Dreamcaller's identity the way `sigseed` does. Requires the baked artifact
+  (`npm run bake-tides3`); see `docs/cards2/tides3_algorithm.md`.
 
 Most of these are described in `docs/cards2/draft_pool_algorithms.md`. Any value
 not registered (including empty or absent) falls back to `DEFAULT_POOL_VARIANT`,

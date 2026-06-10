@@ -36,6 +36,7 @@ import {
   isPoolVariant,
   validateTideDecks,
   validateTideRelationships,
+  validateTides3Decks,
 } from "../src/draft/pool/index.ts";
 import { stripJsonComments } from "./lib/card-refs.mjs";
 
@@ -94,6 +95,9 @@ function loadContext(argv) {
         tideIds,
       );
     }
+  }
+  if (existsSync(resolve(ROOT, "data/tides3.jsonc"))) {
+    poolData.tides3Decks = validateTides3Decks(readJsonc("data/tides3.jsonc"));
   }
   return { dreamcallers, poolData };
 }
