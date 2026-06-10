@@ -3,7 +3,7 @@
 // Unit tests for the pure helpers of the replay deck-fit eval harness. Every
 // test uses a small hand-built corpus and name->number index -- no real assets
 // -- so each assertion exercises one understandable property of the JS scoring
-// mirror, the way scripts/buildaround-support-experiment.test.mjs does for the
+// mirror, the way scripts/pool-metrics.test.mjs does for the
 // support metric.
 
 import { describe, expect, it } from "vitest";

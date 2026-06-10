@@ -219,8 +219,10 @@ function roundTo3(value: number): number {
  * blend weight, the seed's strongest partners that landed in the pool, and the
  * top {@link POOL_CONSTRUCTED_LOG_TOP_CARDS} cards by blended admission score —
  * each with the order it joined, copies, and its seed/pool affinities. Read it
- * from `logs/quest-log.jsonl` filtered by the run's `gameId`. Variants with no
- * seed-growth story (e.g. `idf3`, `color_pool`) log the base fields only.
+ * from `logs/quest-log.jsonl` filtered by the run's `gameId`. The tide variants
+ * (`tides`/`tides2`) add `tideDeckIds` — the lead and ally tide decks the pool
+ * was dealt from, to cross-reference against `data/<algo>.jsonc`. Other variants
+ * with no seed-growth story (e.g. `idf3`, `color_pool`) log the base fields only.
  */
 function logPoolConstructed(
   dreamcaller: DreamcallerContent,
@@ -238,7 +240,21 @@ function logPoolConstructed(
 
   const provenance = pool.seedProvenance;
   if (provenance === undefined) {
-    logEvent("draft_pool_constructed", base);
+    // The tide variants (`tides`/`tides2`) carry no seed-growth story, but their
+    // pool is composed entirely of preconstructed tide decks recorded in
+    // `pool.themes` as `["<algo>", ...tideDeckIds]`. Logging those ids is the
+    // "which tides made up my pool" record — cross-reference them against
+    // `data/<algo>.jsonc` to see each tide's theme and cards, which is how you
+    // answer "why does my warrior Dreamcaller have so few warrior cards" without
+    // re-running the build.
+    const tideDeckIds =
+      pool.variant === "tides" || pool.variant === "tides2"
+        ? pool.themes.slice(1)
+        : undefined;
+    logEvent(
+      "draft_pool_constructed",
+      tideDeckIds === undefined ? base : { ...base, tideDeckIds },
+    );
     return;
   }
 

@@ -244,7 +244,7 @@ its served path. The browser fetches the served copies through loaders in
 `loadTides2Relationships`); `src/data/quest-content.ts` and the
 `src/draft_test/DraftTestApp.tsx` harness fetch them only for the variant that
 needs them. The metric harnesses
-(`scripts/buildaround-support-experiment.mjs`,
+(`scripts/pool-metrics.mjs`,
 `scripts/tides-similarity-experiment.mjs`) read the committed `.jsonc` files
 directly.
 
@@ -284,9 +284,9 @@ Because `tides2` concentrates each pool on a coherent archetype, its per-card
 generator, not an idf3 mimic). Run the comparisons with:
 
 ```bash
-npm run buildaround-metric -- --variant tides2 --seeds 200 --metric traps
-npm run buildaround-metric -- --variant tides2 --seeds 200            # adequacy
-npm run buildaround-metric -- --variant tides2 --seeds 100 --metric diversity
+npm run pool-metrics -- --variant tides2 --seeds 200 --metric traps
+npm run pool-metrics -- --variant tides2 --seeds 200            # adequacy
+npm run pool-metrics -- --variant tides2 --seeds 100 --metric diversity
 npm run tides-similarity   -- --a tides2 --b idf3 --seeds 100
 ```
 

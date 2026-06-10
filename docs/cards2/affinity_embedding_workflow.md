@@ -80,8 +80,8 @@ This asserts three things and exits non-zero on any failure:
 
 You can also inspect the variant directly with the existing quality metric:
 ```bash
-npm run buildaround-metric -- --variant embedded
-npm run buildaround-metric -- --compare        # embedded alongside every algorithm
+npm run pool-metrics -- --variant embedded
+npm run pool-metrics -- --compare        # embedded alongside every algorithm
 ```
 
 ## Re-baking after new drafts

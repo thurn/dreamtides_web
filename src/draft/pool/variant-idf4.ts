@@ -46,7 +46,7 @@ const IDF4_POOL_SIZE = 100;
 const IDF4_PRUNE_FRACTION = 0.2;
 
 // Demand-tier -> target support share (fraction of the pool, in copies). Ported
-// from `TIER_TARGET` in `scripts/buildaround-support-experiment.mjs` so the prune
+// from `TIER_TARGET` in `scripts/pool-metrics.mjs` so the prune
 // scores decks against the same target the headline metric uses.
 const TIER_TARGET: Record<number, number> = { 1: 0.1, 2: 0.18, 3: 0.25 };
 

@@ -39,7 +39,7 @@ Quality is measured two ways. (a) **Similarity to idf3**:
 compares two algorithms across 32 Dreamcallers × N seeds — per-card
 inclusion-frequency cosine read against idf3's own seed-split self-similarity
 ceiling, best-match pool Jaccard, and pool shape. (b) **Pool quality**:
-`npm run buildaround-metric` (`scripts/buildaround-support-experiment.mjs`)
+`npm run pool-metrics` (`scripts/pool-metrics.mjs`)
 scores adequacy (do pools carry support for the build-around payoffs they
 contain), traps (payoffs a pool cannot support), and diversity
 (card-utilization evenness + theme-spread evenness), using per-card metadata
@@ -226,7 +226,7 @@ Fisher-Yates shuffle of the bag → deal. Change only the selection:
   `loadTideRelationships()` in `src/data/cards-v2-database.ts`, gated fetch in
   `src/data/quest-content.ts` (`POOL_VARIANTS_NEEDING_TIDES` already exists),
   the same in `src/draft_test/DraftTestApp.tsx`, and direct file reads in
-  `scripts/buildaround-support-experiment.mjs` (`loadContext`) and
+  `scripts/pool-metrics.mjs` (`loadContext`) and
   `scripts/tides-similarity-experiment.mjs` (`loadContext`). Follow the
   existing `tideDecks` plumbing line-for-line; it was built as the template.
 - Schema/validation: new `tide-relationships-io.ts` (mirror
@@ -288,9 +288,9 @@ node scripts/seed-tide-relationships.mjs --force   # determinism: run twice, dif
 
 ```bash
 npm run tides-similarity -- --seeds 100
-npm run buildaround-metric -- --variant tides --seeds 200                    # adequacy
-npm run buildaround-metric -- --variant tides --seeds 200 --metric traps
-npm run buildaround-metric -- --variant tides --seeds 100 --metric diversity
+npm run pool-metrics -- --variant tides --seeds 200                    # adequacy
+npm run pool-metrics -- --variant tides --seeds 200 --metric traps
+npm run pool-metrics -- --variant tides --seeds 100 --metric diversity
 # and the same three with --variant idf3 for the side-by-side
 ```
 

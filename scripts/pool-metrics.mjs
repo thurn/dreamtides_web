@@ -5,12 +5,13 @@
 // the aggregate reflects what players actually draft -- nothing is omitted or
 // re-weighted. Each generated pool is one sample.
 //
-//   --metric adequacy   (default)  build-around support adequacy
-//   --metric traps                 trap-card frequency
-//   --metric diversity             card-utilization + theme spread
-//   --compare                      run the chosen metric across every algorithm
+//   --metric adequacy    (default)  build-around support adequacy
+//   --metric traps                  trap-card frequency
+//   --metric diversity              card-utilization + theme spread
+//   --metric dreamcaller            does the pool match its Dreamcaller's theme?
+//   --compare                       run the chosen metric across every algorithm
 //
-// The three metrics answer three different questions about a pool generator:
+// The four metrics answer four different questions about a pool generator:
 //
 // 1) ADEQUACY -- when a build-around payoff is in a pool, does the pool carry
 //    enough of the support it references? A *build-around* (catalogued in
@@ -51,6 +52,21 @@
 //    The diversity headline blends the card-utilization and theme-spread evenness
 //    scores.
 //
+// 4) DREAMCALLER -- does each pool actually deliver the theme its Dreamcaller was
+//    built to play? Adequacy is theme-agnostic: a flawless abandon pool scores a
+//    perfect adequacy even for a warrior Dreamcaller, because it only asks whether
+//    the build-arounds that happened to land are supported. This metric instead
+//    scores every pool against ITS OWN Dreamcaller's intended theme (from
+//    DREAMCALLER_THEMES, grouped into families by ARCHETYPE_TO_FAMILY). The "big
+//    5" backbone themes (warriors; spirit animals; survivors/void; abandon;
+//    storm/events) need real density -- on-theme share scored 0 below 30% of the
+//    pool, ramping to 1.0 at 50% (a card is on-theme if it IS the theme or CARES
+//    about it). The smaller themes (discard, outsiders, cheap characters) ride a
+//    tempo/removal shell and are scored on completeness instead: the fraction of
+//    the theme's cards present as full 2-ofs. A Dreamcaller's pool score is the
+//    mean of its families' scores; the headline is the mean over all themed
+//    Dreamcallers' pools. Neutral Dreamcallers (no themed archetype) are skipped.
+//
 // The support classification lives in data/buildaround_support.json: per card,
 // `needs` (themes it is a build-around payoff for, each with a demand tier 1/2/3)
 // and `supports` (themes it provides support for). It was produced by a
@@ -65,20 +81,22 @@
 //   headline = mean(adequacy) over all payoff instances, x100  (per-instance)
 //
 // Usage:
-//   node scripts/buildaround-support-experiment.mjs                    # adequacy
-//   node scripts/buildaround-support-experiment.mjs --metric traps
-//   node scripts/buildaround-support-experiment.mjs --metric diversity
-//   node scripts/buildaround-support-experiment.mjs --compare          # all algos
-//   node scripts/buildaround-support-experiment.mjs --metric diversity --compare
-//   node scripts/buildaround-support-experiment.mjs --themes all       # adequacy only
-//   node scripts/buildaround-support-experiment.mjs --seeds 500
-//   node scripts/buildaround-support-experiment.mjs --variant idf4
-//   node scripts/buildaround-support-experiment.mjs --dreamcaller "Kell Tarn"
-//   node scripts/buildaround-support-experiment.mjs --json > result.json
+//   node scripts/pool-metrics.mjs                    # adequacy
+//   node scripts/pool-metrics.mjs --metric traps
+//   node scripts/pool-metrics.mjs --metric diversity
+//   node scripts/pool-metrics.mjs --metric dreamcaller
+//   node scripts/pool-metrics.mjs --metric dreamcaller --compare
+//   node scripts/pool-metrics.mjs --compare          # all algos
+//   node scripts/pool-metrics.mjs --metric diversity --compare
+//   node scripts/pool-metrics.mjs --themes all       # adequacy only
+//   node scripts/pool-metrics.mjs --seeds 500
+//   node scripts/pool-metrics.mjs --variant idf4
+//   node scripts/pool-metrics.mjs --dreamcaller "Kell Tarn"
+//   node scripts/pool-metrics.mjs --json > result.json
 // Shared flags: --seeds, --variant, --pool-size, --dreamcaller, --top, --json.
 // Metric flags: --themes short|all (adequacy), --trap-tau N (traps),
 //   --standalone-themes a,b,c / --buildable-share N / --present-share N /
-//   --ubiquity N (diversity).
+//   --ubiquity N (diversity), --theme-floor N / --theme-ideal N (dreamcaller).
 // `--traps` is a back-compat alias for `--metric traps`.
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -92,6 +110,7 @@ import {
   validateTideDecks,
   validateTideRelationships,
 } from "../src/draft/pool/index.ts";
+import { DREAMCALLER_THEMES } from "../src/data/dreamcallers-v2-database.ts";
 import { stripJsonComments, supportEntryByName } from "./lib/card-refs.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -140,6 +159,84 @@ export const STANDALONE_THEMES = new Set([
   "warriors",
   "abandon",
 ]);
+
+// --- Dreamcaller-support metric configuration -------------------------------
+//
+// The dreamcaller metric asks a different question from adequacy: not "are the
+// build-arounds that happened to land in the pool supported?" but "does the pool
+// actually carry the theme this Dreamcaller was built to play?" Adequacy is
+// theme-agnostic (a flawless abandon pool scores perfectly for a warrior
+// Dreamcaller); this metric scores each pool against its own Dreamcaller's
+// intended theme, so an off-theme pool fails no matter how internally coherent.
+//
+// Themes fall into two tiers:
+//   big5  -- the five archetypes that must be a pool's backbone. The pool needs
+//            real density: at least BIG5_THEME_FLOOR of it on-theme, with
+//            BIG5_THEME_IDEAL the point where the theme is fully delivered. "On
+//            theme" = a card that IS the theme or CARES about it (its support
+//            metadata `supports` or `needs` names one of the family's themes).
+//   small -- secondary identities (discard, outsiders, cheap characters) that
+//            ride along a tempo/removal shell rather than filling the pool. They
+//            do not need density, but the pool had better contain a full set
+//            (2 copies of every card of the theme), so they are scored on
+//            completeness, not share.
+//
+// A "family" groups the card-theme tags (from data/buildaround_support.json)
+// that read as one playable identity. Card themes referenced here: warriors,
+// spirit-animals, survivors, void, reclaim, abandon, storm, events, discard,
+// outsiders, cheap-characters. Edit a family's `themes` to change what counts as
+// on-theme support for it.
+export const THEME_FAMILIES = {
+  warriors: { kind: "big5", label: "Warriors", themes: ["warriors"] },
+  // Spirit animals / celestial reverie combo / creatureball: scored on
+  // spirit-animals only (figments are tracked elsewhere, not folded in here).
+  creatures: { kind: "big5", label: "Spirit Animals", themes: ["spirit-animals"] },
+  // Survivors / void recursion: survivors plus the void + reclaim engine.
+  survivors: {
+    kind: "big5",
+    label: "Survivors / Void",
+    themes: ["survivors", "void", "reclaim"],
+  },
+  abandon: { kind: "big5", label: "Abandon", themes: ["abandon"] },
+  storm: { kind: "big5", label: "Storm / Events", themes: ["storm", "events"] },
+  discard: { kind: "small", label: "Discard", themes: ["discard"] },
+  outsiders: { kind: "small", label: "Outsiders", themes: ["outsiders"] },
+  cheap: { kind: "small", label: "Cheap Characters", themes: ["cheap-characters"] },
+};
+
+// Maps each Dreamcaller themeArchetype slug (from DREAMCALLER_THEMES) to the
+// family it asks the pool to deliver. A Dreamcaller's required families are the
+// distinct families its themeArchetypes map to, so e.g. Kell Tarn
+// (cheap-characters + reclaim-combo) is scored on BOTH the cheap-characters small
+// theme and the survivors/void big5 family. Slugs with no family entry (none at
+// present) contribute no requirement; a Dreamcaller with no mapped family is
+// neutral and is left out of the metric entirely.
+export const ARCHETYPE_TO_FAMILY = {
+  "warrior-aggro": "warriors",
+  "warrior-combo": "warriors",
+  "spirit-animals": "creatures",
+  "celestial-reverie-combo": "creatures",
+  blink: "creatures",
+  survivors: "survivors",
+  "reclaim-combo": "survivors",
+  abandon: "abandon",
+  storm: "storm",
+  events: "storm",
+  "discard-madness": "discard",
+  outsiders: "outsiders",
+  "cheap-characters": "cheap",
+};
+
+// big5 share -> score ramp: 0 below the floor, linear up to 1 at the ideal. A
+// pool that misses the 30% floor scores 0 for that theme however coherent it is;
+// 50% on-theme is treated as fully delivering the theme. Overridable with
+// `--theme-floor` / `--theme-ideal`.
+export const BIG5_THEME_FLOOR = 0.3;
+export const BIG5_THEME_IDEAL = 0.5;
+// A small theme wants a full set: this many copies (the pool-wide cap) of every
+// card of the theme. Completeness = fraction of the theme's cards present at this
+// many copies.
+export const SMALL_THEME_COPIES = 2;
 
 /**
  * The dominant theme a Dreamcaller's signature steers toward: the theme cited
@@ -416,6 +513,144 @@ export function draftableUniverse(poolData) {
   return universe;
 }
 
+// --- Dreamcaller-support helpers (pure, unit-tested) ------------------------
+
+/** Every theme a card touches: the union of its `supports` and its `needs`. */
+function cardThemeSet(entry) {
+  const themes = new Set();
+  if (!entry) return themes;
+  for (const t of entry.supports ?? []) themes.add(t);
+  for (const n of entry.needs ?? []) themes.add(n.theme);
+  return themes;
+}
+
+/** True when a card is on-theme for `themes`: it is, or cares about, one of them. */
+function cardOnTheme(entry, themes) {
+  const ts = cardThemeSet(entry);
+  for (const t of themes) if (ts.has(t)) return true;
+  return false;
+}
+
+/**
+ * The distinct families a Dreamcaller asks the pool to deliver, derived from its
+ * themeArchetypes via {@link ARCHETYPE_TO_FAMILY}. Empty for a neutral
+ * Dreamcaller (no themed archetypes), which the metric then skips.
+ *
+ * @returns string[] of family ids, in first-seen order, deduplicated.
+ */
+export function dreamcallerFamilies(themeArchetypes) {
+  const out = [];
+  const seen = new Set();
+  for (const slug of themeArchetypes ?? []) {
+    const fam = ARCHETYPE_TO_FAMILY[slug];
+    if (fam && !seen.has(fam)) {
+      seen.add(fam);
+      out.push(fam);
+    }
+  }
+  return out;
+}
+
+/**
+ * The on-theme share of a pool for a set of card themes: copies (capped at 2) of
+ * every card that is or cares about one of `themes`, divided by the pool size.
+ * The big5 density read -- "how much of this pool is actually about the theme".
+ *
+ * @returns share in [0,1].
+ */
+export function onThemeShare(counts, meta, themes) {
+  const size = poolSizeOf(counts);
+  if (size === 0) return 0;
+  let on = 0;
+  for (const [name, raw] of counts) {
+    if (cardOnTheme(supportEntryByName(meta, name), themes)) on += cap(raw);
+  }
+  return on / size;
+}
+
+/**
+ * The cards in the draftable universe that belong to a theme (are it or care
+ * about it) -- the denominator for a small theme's completeness check.
+ *
+ * @returns Set<cardName>.
+ */
+export function themeUniverseCards(universe, meta, themes) {
+  const cards = new Set();
+  for (const name of universe) {
+    if (cardOnTheme(supportEntryByName(meta, name), themes)) cards.add(name);
+  }
+  return cards;
+}
+
+/**
+ * A small theme's completeness in a pool: the fraction of the theme's universe
+ * cards present at a full set ({@link SMALL_THEME_COPIES} copies). 1 means every
+ * card of the theme is in the pool as a 2-of. Vacuously 1 when the theme has no
+ * cards.
+ *
+ * @returns completeness in [0,1].
+ */
+export function themeCompleteness(counts, themeCards, copies = SMALL_THEME_COPIES) {
+  if (themeCards.size === 0) return 1;
+  let full = 0;
+  for (const name of themeCards) {
+    if ((counts.get(name) ?? 0) >= copies) full += 1;
+  }
+  return full / themeCards.size;
+}
+
+/** Convert a big5 on-theme share to a score: 0 below `floor`, linear to 1 at `ideal`. */
+export function big5ThemeScore(share, floor = BIG5_THEME_FLOOR, ideal = BIG5_THEME_IDEAL) {
+  if (ideal <= floor) return share >= ideal ? 1 : 0;
+  return Math.min(1, Math.max(0, (share - floor) / (ideal - floor)));
+}
+
+/**
+ * Score one pool against one Dreamcaller's intended theme. Emits one instance per
+ * required family: big5 families on on-theme density (ramped 30%->50%), small
+ * families on full-set completeness. A Dreamcaller's pool score is the mean of
+ * these per-family scores (most have one family; e.g. Kell Tarn has two).
+ *
+ * @param familyIds            from {@link dreamcallerFamilies}.
+ * @param themeUniverseByFamily Map<familyId, Set<cardName>> for the small
+ *   families, precomputed once over the draftable universe.
+ * @returns array of { family, kind, score, ... } instances.
+ */
+export function scoreDreamcallerPool(
+  counts,
+  meta,
+  familyIds,
+  themeUniverseByFamily,
+  { floor = BIG5_THEME_FLOOR, ideal = BIG5_THEME_IDEAL } = {},
+) {
+  const out = [];
+  for (const famId of familyIds) {
+    const fam = THEME_FAMILIES[famId];
+    if (!fam) continue;
+    if (fam.kind === "big5") {
+      const share = onThemeShare(counts, meta, fam.themes);
+      out.push({
+        family: famId,
+        kind: "big5",
+        share,
+        passesFloor: share >= floor,
+        score: big5ThemeScore(share, floor, ideal),
+      });
+    } else {
+      const themeCards = themeUniverseByFamily.get(famId) ?? new Set();
+      const completeness = themeCompleteness(counts, themeCards);
+      out.push({
+        family: famId,
+        kind: "small",
+        completeness,
+        universeSize: themeCards.size,
+        score: completeness,
+      });
+    }
+  }
+  return out;
+}
+
 // --- CLI plumbing -----------------------------------------------------------
 
 function num(argv, flag, fallback) {
@@ -461,8 +696,8 @@ function group() {
 function resolveMetric(argv) {
   if (argv.includes("--traps")) return "traps";
   const m = str(argv, "--metric", "adequacy");
-  if (!["adequacy", "traps", "diversity"].includes(m)) {
-    console.error(`--metric must be adequacy|traps|diversity (got "${m}").`);
+  if (!["adequacy", "traps", "diversity", "dreamcaller"].includes(m)) {
+    console.error(`--metric must be adequacy|traps|diversity|dreamcaller (got "${m}").`);
     process.exit(1);
   }
   return m;
@@ -475,6 +710,13 @@ function loadContext(argv) {
   const draftRecords = readJson("public/draft-records-data.json");
   let dreamcallers = readJson("public/dreamcallers-v2-data.json");
   const meta = readJson("data/buildaround_support.json");
+
+  // The dreamcaller JSON carries no themeArchetypes (they are attached at runtime
+  // in the TS database from DREAMCALLER_THEMES, keyed by name); mirror that here
+  // so the dreamcaller metric knows each Dreamcaller's intended theme.
+  for (const dc of dreamcallers) {
+    dc.themeArchetypes = DREAMCALLER_THEMES[dc.name] ?? [];
+  }
 
   const dcFilter = str(argv, "--dreamcaller", null);
   if (dcFilter) {
@@ -1132,6 +1374,181 @@ function runDiversity(argv) {
   });
 }
 
+// --- Metric: dreamcaller ----------------------------------------------------
+
+function computeDreamcaller(ctx, { seeds, poolSize, variant, floor, ideal }) {
+  const universe = draftableUniverse(ctx.poolData);
+  // Precompute each small family's card universe once (the completeness
+  // denominator); big5 families read density per pool and need no precompute.
+  const themeUniverseByFamily = new Map();
+  for (const [famId, fam] of Object.entries(THEME_FAMILIES)) {
+    if (fam.kind === "small") {
+      themeUniverseByFamily.set(
+        famId,
+        themeUniverseCards(universe, ctx.meta, fam.themes),
+      );
+    }
+  }
+
+  const familiesByDc = new Map();
+  for (const dc of ctx.dreamcallers) {
+    familiesByDc.set(dc.name, dreamcallerFamilies(dc.themeArchetypes));
+  }
+  const scoredDcNames = new Set(
+    [...familiesByDc].filter(([, f]) => f.length).map(([n]) => n),
+  );
+
+  const byFamily = group();
+  const byDreamcaller = group();
+  // Per-family floor-pass tally (big5 only): how often the pool cleared the floor.
+  const floorPass = new Map(); // famId -> { pass, total }
+  const poolScores = [];
+
+  for (const { dc, pool } of simulateRealDrafts(ctx, { seeds, variant, poolSize })) {
+    const fams = familiesByDc.get(dc.name);
+    if (!fams.length) continue; // neutral Dreamcaller: no intended theme to score
+    const instances = scoreDreamcallerPool(
+      pool.counts,
+      ctx.meta,
+      fams,
+      themeUniverseByFamily,
+      { floor, ideal },
+    );
+    const poolScore = mean(instances.map((i) => i.score));
+    poolScores.push(poolScore);
+    byDreamcaller.add(dc.name, poolScore, poolScore);
+    for (const inst of instances) {
+      const measure = inst.kind === "big5" ? inst.share : inst.completeness;
+      byFamily.add(inst.family, inst.score, measure);
+      if (inst.kind === "big5") {
+        const fp = floorPass.get(inst.family) ?? { pass: 0, total: 0 };
+        fp.total += 1;
+        if (inst.passesFloor) fp.pass += 1;
+        floorPass.set(inst.family, fp);
+      }
+    }
+  }
+
+  const headline = mean(poolScores) * 100;
+  return {
+    variant,
+    headline,
+    floor,
+    ideal,
+    scoredDreamcallers: scoredDcNames.size,
+    totalDreamcallers: ctx.dreamcallers.length,
+    scoredPools: poolScores.length,
+    byFamily,
+    byDreamcaller,
+    floorPass,
+    familiesByDc,
+  };
+}
+
+function reportDreamcaller(res, ctx, { seeds, poolSize, variant, floor, ideal, asJson }) {
+  const kindOf = (famId) => THEME_FAMILIES[famId]?.kind ?? "?";
+  const labelOf = (famId) => THEME_FAMILIES[famId]?.label ?? famId;
+  const familyRows = res.byFamily
+    .entries()
+    .map((e) => {
+      const fp = res.floorPass.get(e.key);
+      return {
+        family: e.key,
+        label: labelOf(e.key),
+        kind: kindOf(e.key),
+        meanScore: e.meanAdequacy,
+        meanMeasure: e.meanShare,
+        floorPassRate: fp && fp.total ? fp.pass / fp.total : null,
+        instances: e.count,
+      };
+    })
+    .sort((a, b) => a.meanScore - b.meanScore);
+  const dcRows = res.byDreamcaller
+    .entries()
+    .map((e) => ({
+      dreamcaller: e.key,
+      families: (res.familiesByDc.get(e.key) ?? []).map(labelOf),
+      meanScore: e.meanAdequacy,
+      pools: e.count,
+    }))
+    .sort((a, b) => a.meanScore - b.meanScore);
+
+  if (asJson) {
+    console.log(
+      JSON.stringify(
+        {
+          metric: "dreamcaller",
+          config: {
+            variant,
+            poolSize,
+            seeds,
+            dreamcallers: ctx.dreamcallers.length,
+            scoredDreamcallers: res.scoredDreamcallers,
+            floor,
+            ideal,
+            smallThemeCopies: SMALL_THEME_COPIES,
+            families: THEME_FAMILIES,
+          },
+          headline: res.headline,
+          scoredPools: res.scoredPools,
+          byFamily: familyRows,
+          byDreamcaller: dcRows,
+        },
+        null,
+        2,
+      ),
+    );
+    return;
+  }
+
+  const pct = (x) => `${(x * 100).toFixed(0)}%`;
+  console.log(
+    `Dreamcaller-support metric (${variant}, pool size ${poolSize}, ${seeds} seeds x ${res.scoredDreamcallers}/${res.totalDreamcallers} themed Dreamcallers = ${res.scoredPools} pools)`,
+  );
+  console.log(
+    `  big5 themes: on-theme share scored 0 below ${pct(floor)}, ramping to 1.0 at ${pct(ideal)}.`,
+  );
+  console.log(
+    `  small themes (discard, outsiders, cheap characters): completeness = fraction of the theme's cards present as ${SMALL_THEME_COPIES}-ofs.`,
+  );
+  console.log("");
+  console.log(`  ===  DREAMCALLER-SUPPORT HEADLINE: ${res.headline.toFixed(1)} / 100  ===`);
+  console.log(
+    `  (mean per-pool theme score; each pool scored against its own Dreamcaller's intended theme)`,
+  );
+
+  console.log("\nBy theme family (mean score, worst first):");
+  console.log(
+    `  ${"family".padEnd(20)} ${"kind".padEnd(6)} ${"score".padStart(6)} ${"on-theme".padStart(9)} ${"floor ok".padStart(9)} ${"pools".padStart(7)}`,
+  );
+  for (const r of familyRows) {
+    const measure = r.kind === "big5" ? `${pct(r.meanMeasure)} share` : `${pct(r.meanMeasure)} set`;
+    const floorCol = r.floorPassRate === null ? "-" : pct(r.floorPassRate);
+    console.log(
+      `  ${r.label.padEnd(20)} ${r.kind.padEnd(6)} ${(r.meanScore * 100).toFixed(0).padStart(5)}% ${measure.padStart(9)} ${floorCol.padStart(9)} ${String(r.instances).padStart(7)}`,
+    );
+  }
+
+  console.log("\nBy Dreamcaller (mean score, worst first):");
+  for (const r of dcRows) {
+    console.log(
+      `  ${r.dreamcaller.padEnd(20)} ${(r.meanScore * 100).toFixed(0).padStart(5)}%   ${r.families.join(" + ")}`,
+    );
+  }
+}
+
+function runDreamcaller(argv) {
+  const ctx = loadContext(argv);
+  const seeds = num(argv, "--seeds", DEFAULT_SEEDS);
+  const poolSize = num(argv, "--pool-size", POOL_TARGET_SIZE);
+  const variant = str(argv, "--variant", "idf3");
+  const asJson = argv.includes("--json");
+  const floor = num(argv, "--theme-floor", BIG5_THEME_FLOOR);
+  const ideal = num(argv, "--theme-ideal", BIG5_THEME_IDEAL);
+  const res = computeDreamcaller(ctx, { seeds, poolSize, variant, floor, ideal });
+  reportDreamcaller(res, ctx, { seeds, poolSize, variant, floor, ideal, asJson });
+}
+
 // --- Mode: compare across every algorithm -----------------------------------
 
 function runCompare(argv, metric) {
@@ -1149,6 +1566,8 @@ function runCompare(argv, metric) {
   const buildableShare = num(argv, "--buildable-share", DEFAULT_BUILDABLE_SHARE);
   const presentShare = num(argv, "--present-share", DEFAULT_PRESENT_SHARE);
   const ubiquity = num(argv, "--ubiquity", DEFAULT_UBIQUITY);
+  const floor = num(argv, "--theme-floor", BIG5_THEME_FLOOR);
+  const ideal = num(argv, "--theme-ideal", BIG5_THEME_IDEAL);
 
   const rows = [];
   for (const variant of variants) {
@@ -1160,6 +1579,20 @@ function runCompare(argv, metric) {
         headline: r.headline,
         poolsWithPayoffsPct: r.totalPools ? r.poolsWithPayoffs / r.totalPools : 0,
         meanPoolSize: r.meanPoolSize,
+      });
+    } else if (metric === "dreamcaller") {
+      const r = computeDreamcaller(ctx, { seeds, poolSize, variant, floor, ideal });
+      const big5 = r.byFamily
+        .entries()
+        .filter((e) => THEME_FAMILIES[e.key]?.kind === "big5");
+      const small = r.byFamily
+        .entries()
+        .filter((e) => THEME_FAMILIES[e.key]?.kind === "small");
+      rows.push({
+        variant,
+        headline: r.headline,
+        big5Score: big5.length ? mean(big5.map((e) => e.meanAdequacy)) * 100 : 0,
+        smallScore: small.length ? mean(small.map((e) => e.meanAdequacy)) * 100 : 0,
       });
     } else if (metric === "traps") {
       const r = computeTraps(ctx, { seeds, poolSize, variant, tau });
@@ -1215,6 +1648,16 @@ function runCompare(argv, metric) {
         `  ${r.variant.padEnd(12)} ${r.headline.toFixed(1).padStart(9)} ${pctd(r.poolsWithPayoffsPct).padStart(9)} ${r.meanPoolSize.toFixed(0).padStart(9)}`,
       );
     }
+  } else if (metric === "dreamcaller") {
+    rows.sort((a, b) => b.headline - a.headline);
+    console.log(
+      `  ${"algorithm".padEnd(12)} ${"dc-support".padStart(11)} ${"big5".padStart(7)} ${"small".padStart(7)}`,
+    );
+    for (const r of rows) {
+      console.log(
+        `  ${r.variant.padEnd(12)} ${r.headline.toFixed(1).padStart(11)} ${r.big5Score.toFixed(0).padStart(7)} ${r.smallScore.toFixed(0).padStart(7)}`,
+      );
+    }
   } else if (metric === "traps") {
     rows.sort((a, b) => a.expectedTrapsPerPool - b.expectedTrapsPerPool);
     console.log(`  ${"algorithm".padEnd(12)} ${"traps/pool".padStart(11)} ${"pools w/trap".padStart(13)}`);
@@ -1245,6 +1688,7 @@ function run() {
   }
   if (metric === "traps") return runTraps(argv);
   if (metric === "diversity") return runDiversity(argv);
+  if (metric === "dreamcaller") return runDreamcaller(argv);
   return runAdequacy(argv);
 }
 

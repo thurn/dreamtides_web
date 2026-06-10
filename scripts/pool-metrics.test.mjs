@@ -1,16 +1,22 @@
 import { describe, expect, it } from "vitest";
 import {
+  big5ThemeScore,
   buildableThemes,
   cardBestAdequacies,
   draftableUniverse,
+  dreamcallerFamilies,
   giniCoefficient,
   normalizedEntropy,
+  onThemeShare,
   poolPayoffThemes,
   poolSupportShares,
+  scoreDreamcallerPool,
   scorePool,
+  themeCompleteness,
+  themeUniverseCards,
   TIER_TARGET,
   trapCards,
-} from "./buildaround-support-experiment.mjs";
+} from "./pool-metrics.mjs";
 
 // Minimal hand-built metadata: a Warrior lord (payoff + support), a plain Warrior
 // body (support only), inert filler, and an event payoff with one event.
@@ -292,5 +298,112 @@ describe("draftableUniverse", () => {
   it("tolerates missing optional sources", () => {
     const poolData = { core: new Set(["Only"]), archLists: new Map(), draftLists: new Map() };
     expect([...draftableUniverse(poolData)]).toEqual(["Only"]);
+  });
+});
+
+// --- Dreamcaller-support metric ---------------------------------------------
+
+// Metadata for the dreamcaller tests: a warrior body + payoff, an outsider, and
+// inert filler. "On theme" counts a card that supports OR needs the theme.
+const DC_META = {
+  themes: {
+    warriors: { name: "Warriors" },
+    outsiders: { name: "Outsiders" },
+  },
+  cards: {
+    Warrior: { needs: [], supports: ["warriors"] },
+    WarChief: { needs: [{ theme: "warriors", tier: 3 }], supports: ["warriors"] },
+    WarFan: { needs: [{ theme: "warriors", tier: 2 }], supports: [] },
+    Outsider: { needs: [], supports: ["outsiders"] },
+  },
+};
+
+describe("dreamcallerFamilies", () => {
+  it("maps themeArchetypes to distinct families in first-seen order", () => {
+    expect(dreamcallerFamilies(["warrior-aggro", "warrior-combo"])).toEqual(["warriors"]);
+    // Kell Tarn: a small family and a big5 family.
+    expect(dreamcallerFamilies(["cheap-characters", "reclaim-combo"])).toEqual([
+      "cheap",
+      "survivors",
+    ]);
+    // Yveth: blink folds into the creatures family.
+    expect(dreamcallerFamilies(["blink", "celestial-reverie-combo"])).toEqual(["creatures"]);
+  });
+
+  it("is empty for a neutral or unmapped Dreamcaller", () => {
+    expect(dreamcallerFamilies([])).toEqual([]);
+    expect(dreamcallerFamilies(undefined)).toEqual([]);
+    expect(dreamcallerFamilies(["not-a-real-archetype"])).toEqual([]);
+  });
+});
+
+describe("onThemeShare", () => {
+  it("counts cards that are or care about the theme, capped, over pool size", () => {
+    // size 10: Warrior(2) + WarChief(1) + WarFan(1) on-theme = 4 of 10.
+    const counts = withFiller(
+      new Map([["Warrior", 2], ["WarChief", 1], ["WarFan", 1]]),
+      6,
+    );
+    expect(onThemeShare(counts, DC_META, ["warriors"])).toBeCloseTo(0.4, 10);
+  });
+
+  it("is 0 for an empty pool", () => {
+    expect(onThemeShare(new Map(), DC_META, ["warriors"])).toBe(0);
+  });
+});
+
+describe("big5ThemeScore", () => {
+  it("is 0 below the floor, ramps linearly, and caps at 1", () => {
+    expect(big5ThemeScore(0.2)).toBe(0); // below 30%
+    expect(big5ThemeScore(0.3)).toBeCloseTo(0, 10); // at floor
+    expect(big5ThemeScore(0.4)).toBeCloseTo(0.5, 10); // halfway to ideal
+    expect(big5ThemeScore(0.5)).toBe(1); // at ideal
+    expect(big5ThemeScore(0.7)).toBe(1); // beyond ideal
+  });
+});
+
+describe("themeUniverseCards / themeCompleteness", () => {
+  it("finds the theme's cards and scores full-set completeness", () => {
+    const universe = new Set(["Warrior", "WarChief", "Outsider", "Filler0"]);
+    const outsiders = themeUniverseCards(universe, DC_META, ["outsiders"]);
+    expect([...outsiders]).toEqual(["Outsider"]);
+
+    const warriors = themeUniverseCards(universe, DC_META, ["warriors"]);
+    expect(warriors).toEqual(new Set(["Warrior", "WarChief"]));
+    // Only Warrior is a 2-of, so 1 of 2 warrior cards is a full set.
+    const counts = new Map([["Warrior", 2], ["WarChief", 1]]);
+    expect(themeCompleteness(counts, warriors)).toBeCloseTo(0.5, 10);
+  });
+
+  it("is vacuously complete when the theme has no cards", () => {
+    expect(themeCompleteness(new Map(), new Set())).toBe(1);
+  });
+});
+
+describe("scoreDreamcallerPool", () => {
+  it("scores a big5 family on density and a small family on completeness", () => {
+    const universe = new Set(["Warrior", "WarChief", "Outsider"]);
+    const themeUniverseByFamily = new Map([
+      ["outsiders", themeUniverseCards(universe, DC_META, ["outsiders"])],
+    ]);
+    // size 10: warriors on-theme = 4 (Warrior x2, WarChief, WarFan) => share .40
+    // => big5 score 0.5. Outsider present as a 2-of => outsiders completeness 1.0.
+    const counts = withFiller(
+      new Map([["Warrior", 2], ["WarChief", 1], ["WarFan", 1], ["Outsider", 2]]),
+      4,
+    );
+    const insts = scoreDreamcallerPool(
+      counts,
+      DC_META,
+      ["warriors", "outsiders"],
+      themeUniverseByFamily,
+    );
+    const warriors = insts.find((i) => i.family === "warriors");
+    const outsiders = insts.find((i) => i.family === "outsiders");
+    expect(warriors.kind).toBe("big5");
+    expect(warriors.score).toBeCloseTo(0.5, 10);
+    expect(warriors.passesFloor).toBe(true);
+    expect(outsiders.kind).toBe("small");
+    expect(outsiders.score).toBe(1);
   });
 });

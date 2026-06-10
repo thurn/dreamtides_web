@@ -83,7 +83,7 @@ const TUNING = {
 };
 
 // Demand-tier -> target support share (mirrors TIER_TARGET in
-// buildaround-support-experiment.mjs). A payoff's needed theme is a trap when
+// pool-metrics.mjs). A payoff's needed theme is a trap when
 // its support share is under `trapTau` x this target.
 const TIER_TARGET = { 1: 0.1, 2: 0.18, 3: 0.25 };
 const TRAP_TAU = 0.35;

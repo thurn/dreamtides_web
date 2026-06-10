@@ -26,7 +26,7 @@ cards are authored in a **committed overlay** of "resembles" recipes that are fo
 into the embedding at bake time. The historical records become an upstream bake
 input rather than the live source. The embedding is a low-rank distillation of the
 record-derived synergy, validated as **metric-equivalent** to the exact generator
-against the existing `buildaround-support-experiment.mjs` quality metric.
+against the existing `pool-metrics.mjs` quality metric.
 
 > Motivation is **editability**, not artifact size: this prototype is not served
 > over the internet, so the byte size of the records is not itself a concern. The
@@ -173,7 +173,7 @@ served over the internet, so the records' byte size is not itself a concern.)
 ## 4. Validated findings (evidence base — reproduce, do not re-derive)
 
 A throwaway harness rebuilt `sigseed` against swappable corpora and scored each
-with the **existing** quality metric (`scripts/buildaround-support-experiment.mjs`,
+with the **existing** quality metric (`scripts/pool-metrics.mjs`,
 see Section 11). The metric simulates every Dreamcaller × N seeds and reports, per
 generator:
 
@@ -451,8 +451,8 @@ reproducible. `rank` is tunable; **16–32 is the validated band, 32 is the defa
 
 ## 10. Validation & acceptance criteria
 
-The metric is `scripts/buildaround-support-experiment.mjs`
-(`npm run buildaround-metric`). Add a committed acceptance script
+The metric is `scripts/pool-metrics.mjs`
+(`npm run pool-metrics`). Add a committed acceptance script
 (`scripts/affinity-corpus-parity.mjs`, adapted from Section 11) asserting:
 
 1. **Bake-pipeline fidelity (the matrix step must be exact).** Build the matrix
@@ -552,7 +552,7 @@ controls, and (c) scores each with the metric's **exported** pure functions
 | runtime fetch / build | `cards-v2-database.ts:~66` / `quest-content.ts:~421` | where the 19 MB loads today |
 | variant gate | `quest-content.ts:84` (`POOL_VARIANTS_NEEDING_RECORDS`) | extend to fetch the embedding |
 | asset bake | `setup-assets.mjs:228`, `:599` | wire the copy-to-public here |
-| quality metric | `buildaround-support-experiment.mjs` (`npm run buildaround-metric`) | acceptance oracle |
+| quality metric | `pool-metrics.mjs` (`npm run pool-metrics`) | acceptance oracle |
 | metric card metadata | `data/buildaround_support.json` | add entries for new cards |
 
 ## Appendix B. Glossary

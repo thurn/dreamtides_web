@@ -23,7 +23,7 @@
     "setup-assets": "node scripts/setup-assets.mjs",
     "generate-pool": "node scripts/generate-color-pool.mjs",
     "simulate-pools": "node scripts/simulate-dreamcaller-pools.mjs",
-    "buildaround-metric": "node scripts/buildaround-support-experiment.mjs",
+    "pool-metrics": "node scripts/pool-metrics.mjs",
     "draft-replay-metric": "node scripts/draft-replay-experiment.mjs",
     "bake-affinity-corpus": "node scripts/bake-affinity-corpus.mjs",
     "affinity-corpus-parity": "node scripts/affinity-corpus-parity.mjs",

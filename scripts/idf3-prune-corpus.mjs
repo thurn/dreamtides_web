@@ -7,7 +7,7 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 import { buildPoolData, generatePoolFromData } from "../src/draft/pool/index.ts";
-import { scorePool, TIER_TARGET } from "./buildaround-support-experiment.mjs";
+import { scorePool, TIER_TARGET } from "./pool-metrics.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));

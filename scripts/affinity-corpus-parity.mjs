@@ -39,7 +39,7 @@ import {
   TIER_TARGET,
   normalizedEntropy,
   dominantSignatureTheme,
-} from "./buildaround-support-experiment.mjs";
+} from "./pool-metrics.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));

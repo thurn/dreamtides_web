@@ -9,7 +9,7 @@ import { dirname, resolve } from "node:path";
 import { buildPoolData } from "../src/draft/pool/index.ts";
 import { idf2Corpus } from "../src/draft/pool/variant-idf2.ts";
 import { idfCosine, growIdfPool } from "../src/draft/pool/variant-idf.ts";
-import { scorePool, TIER_TARGET } from "./buildaround-support-experiment.mjs";
+import { scorePool, TIER_TARGET } from "./pool-metrics.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));

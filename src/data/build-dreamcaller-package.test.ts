@@ -194,6 +194,51 @@ describe("buildDreamcallerPackage draft_pool_constructed logging", () => {
       expect(card.copies).toBeGreaterThanOrEqual(1);
     }
   });
+
+  it("records the tide decks the pool was dealt from for tide variants", () => {
+    // A synthetic tides2 artifact: three disjoint tides, a Dreamcaller pool with
+    // one lead, and an ally ring so the fill has somewhere to go. cardNameById is
+    // left unset, so the tide cards' own names are used directly.
+    const tides2Decks = {
+      version: 1 as const,
+      favoredTidesByDreamcaller: {},
+      tides: Array.from({ length: 3 }, (_, t) => ({
+        id: `tide-${String(t + 1)}`,
+        name: `Tide ${String(t + 1)}`,
+        cards: Array.from({ length: 40 }, (_, i) => ({
+          id: `tide-${String(t + 1)}-card-${String(i)}`,
+          name: `Tide ${String(t + 1)} Card ${String(i)}`,
+          copies: 2,
+        })),
+      })),
+    };
+    const tides2Relationships = {
+      version: 1 as const,
+      alliesByTide: {
+        "tide-1": ["tide-2", "tide-3"],
+        "tide-2": ["tide-3", "tide-1"],
+        "tide-3": ["tide-1", "tide-2"],
+      },
+      tidePoolByDreamcaller: { "dc-test": ["tide-1"] },
+    };
+    const ctx: RunPoolContext = {
+      ...makeContext(),
+      poolVariant: "tides2",
+      poolData: { ...makeContext().poolData, tides2Decks, tides2Relationships },
+    };
+    buildDreamcallerPackage(makeDreamcaller(), ctx, "seed-abc");
+    const event = constructedEvent();
+
+    expect(event.algo).toBe("tides2");
+    const tideDeckIds = event.tideDeckIds as string[];
+    expect(Array.isArray(tideDeckIds)).toBe(true);
+    expect(tideDeckIds.length).toBeGreaterThan(0);
+    // The algo label is stripped; every entry is a real tide id from the pool.
+    expect(tideDeckIds).not.toContain("tides2");
+    for (const id of tideDeckIds) {
+      expect(id).toMatch(/^tide-\d+$/);
+    }
+  });
 });
 
 describe("buildDreamcallerProvenance", () => {

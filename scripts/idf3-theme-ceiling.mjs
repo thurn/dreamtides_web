@@ -10,7 +10,7 @@ import { dirname, resolve } from "node:path";
 import { buildPoolData } from "../src/draft/pool/index.ts";
 import { idf2Corpus } from "../src/draft/pool/variant-idf2.ts";
 import { growIdfPool } from "../src/draft/pool/variant-idf.ts";
-import { TIER_TARGET } from "./buildaround-support-experiment.mjs";
+import { TIER_TARGET } from "./pool-metrics.mjs";
 import { supportEntryByName } from "./lib/card-refs.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
