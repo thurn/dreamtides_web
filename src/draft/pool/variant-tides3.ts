@@ -21,15 +21,18 @@
 //
 // So all of `sigseed`'s "magic" happens at bake time, where it is inspectable;
 // at runtime the entire algorithm is the tide selection, one shuffle, and one
-// deal below. A pool LEADS with the Dreamcaller's own signature tide (kept under
-// the deal size so a broad fill tide always joins — every pool genuinely
-// combines decks) and FILLS with shuffled broad tides until the deal size is
-// dealable. The lead dominates, so the pool stays anchored on the Dreamcaller's
-// identity the way a `sigseed` pool does, while the shuffled fill gives
-// run-to-run variety. A neutral Dreamcaller leads with a broad tide and fills
-// with more, so its pool spreads across the format like `sigseed`'s neutral
-// (`pickcohere`) pools. Cards are keyed by cards_v2 UUID and mapped to current
-// names through `poolData.cardNameById`.
+// deal below. A pool draws ONE lead tide and always joins it, then FILLS with
+// shuffled broad tides until the deal size is dealable. The lead is a coherent
+// signature tide, so the pool stays anchored on a single identity the way a
+// `sigseed` pool does, while the shuffled fill and the deal of 150 from a larger
+// bag give run-to-run variety. A signatured Dreamcaller has one lead candidate —
+// its own signature tide — so it always leans the same way. A neutral Dreamcaller
+// has many lead candidates (the signature tides, the format's coherent
+// archetypes); one is drawn at random each run, so its pool is a coherent pool
+// that leans toward a different archetype each time — exactly how `sigseed`
+// reduces to a coherent, randomly-themed `pickcohere` pool for a signatureless
+// Dreamcaller. Cards are keyed by cards_v2 UUID and mapped to current names
+// through `poolData.cardNameById`.
 
 import { shuffle } from "./rng.ts";
 import type { PoolStrategy } from "./strategy.ts";
@@ -61,15 +64,18 @@ export const TIDES3: Tides3Tuning = {
 };
 
 /**
- * Build a pool by combining tide decks: take the Dreamcaller's baked tide pool
- * (its lead tide first, then fill tides), shuffle the fill tides, join the lead
- * and then fill tides until the combined cards can deal a full pool, shuffle
- * everything into one bag, and deal `TIDES3.dealSize` copies with at most
- * `TIDES3.cap` copies of any card. Tide-deck cards are keyed by cards_v2 UUID
- * and mapped to current display names through `poolData.cardNameById`; UUIDs
- * absent from that map (cards no longer in the catalog) are skipped. Without a
- * `dreamcallerId` or a baked tide pool, every tide is shuffled together (a
- * robustness fallback; load-time validation requires an entry per Dreamcaller).
+ * Build a pool by combining tide decks: draw one of the Dreamcaller's lead tides
+ * at random, shuffle its fill tides, join the lead and then fill tides until the
+ * combined cards can deal a full pool, shuffle everything into one bag, and deal
+ * `TIDES3.dealSize` copies with at most `TIDES3.cap` copies of any card. A
+ * signatured Dreamcaller has a single lead candidate (its own signature tide), so
+ * its lead is fixed; a neutral Dreamcaller has many (the signature tides), so its
+ * pool leans toward a random coherent archetype each run. Tide-deck cards are
+ * keyed by cards_v2 UUID and mapped to current display names through
+ * `poolData.cardNameById`; UUIDs absent from that map (cards no longer in the
+ * catalog) are skipped. Without a `dreamcallerId` or a baked tide pool, every
+ * tide is shuffled together (a robustness fallback; load-time validation requires
+ * an entry per Dreamcaller).
  */
 export function generateTides3(
   rng: () => number,
@@ -85,21 +91,31 @@ export function generateTides3(
   }
   const dealSize = TIDES3.dealSize;
 
-  // Tide selection. The lead is fixed (the Dreamcaller's own signature tide for
-  // a signatured Dreamcaller); the fill tides are shuffled for run-to-run
-  // variety. A missing or empty pool falls back to a shuffled draw over every
-  // tide so the variant still produces a pool.
-  const pool = dreamcallerId
-    ? (data.tidePoolByDreamcaller[dreamcallerId] ?? [])
-    : [];
+  // Tide selection. Draw one lead tide at random from the Dreamcaller's
+  // candidates (a signatured Dreamcaller has exactly one; a neutral Dreamcaller
+  // has many, so it leans toward a random coherent archetype each run), then
+  // shuffle the fill tides. A missing entry falls back to a shuffled draw over
+  // every tide so the variant still produces a pool.
+  const entry = dreamcallerId
+    ? data.tidePoolByDreamcaller[dreamcallerId]
+    : undefined;
   let lead: string | undefined;
   let fill: string[];
-  if (pool.length > 0) {
-    lead = pool[0];
-    fill = shuffle(rng, pool.slice(1));
+  // The minimum number of fill tides to mix in. A single-lead (signatured) pool
+  // forces one broad tail tide, so its fixed lead still combines decks and the
+  // deal of 150 from a larger bag gives run-to-run variety. A multi-lead
+  // (neutral) pool draws a different coherent archetype each run, so its variety
+  // is already covered by the lead draw; it forces no tail and stays a pure,
+  // on-theme archetype rather than a lead diluted by an off-theme broad deck.
+  let minFill: number;
+  if (entry && entry.leads.length > 0) {
+    lead = shuffle(rng, [...entry.leads])[0];
+    fill = shuffle(rng, [...entry.fill]);
+    minFill = entry.leads.length > 1 ? 0 : TIDES3.minFillTides;
   } else {
     lead = undefined;
     fill = shuffle(rng, data.tides.map((t) => t.id));
+    minFill = TIDES3.minFillTides;
   }
 
   // The bag: every copy of every card in the joined tides, as current display
@@ -134,7 +150,7 @@ export function generateTides3(
   if (lead !== undefined) joinTide(lead);
   let joinedFill = 0;
   for (const id of fill) {
-    if (dealable >= dealSize && joinedFill >= TIDES3.minFillTides) break;
+    if (dealable >= dealSize && joinedFill >= minFill) break;
     joinTide(id);
     joinedFill += 1;
   }

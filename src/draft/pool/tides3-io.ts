@@ -12,10 +12,14 @@
 //     one signatured Dreamcaller's full-signature `sigseed` pool baked as a deck;
 //     a `neutral` tide is a broad, format-spanning deck used as the generic tail
 //     of a pool and as the body of a neutral Dreamcaller's pool.
-//   * `tidePoolByDreamcaller` — per Dreamcaller UUID, the ordered tide ids a pool
-//     combines. The first id is the LEAD (always joined; a signatured
-//     Dreamcaller's own signature tide); the rest are FILL (shuffled, joined
-//     until the pool is full). Every Dreamcaller (signatured or neutral) has an
+//   * `tidePoolByDreamcaller` — per Dreamcaller UUID, the tides a pool combines,
+//     split into `leads` and `fill`. One lead is drawn at random per run and
+//     always joined; the fill tides are shuffled and joined until the pool is
+//     full. A signatured Dreamcaller has a single lead (its own signature tide);
+//     a neutral Dreamcaller has many lead candidates — the signature tides, which
+//     are the format's coherent archetypes — so each run leans toward a random
+//     one, the way `sigseed` falls back to a coherent, randomly-themed
+//     `pickcohere` pool for a signatureless Dreamcaller. Every Dreamcaller has an
 //     entry.
 //
 // Cards are keyed by their stable cards_v2 UUID; the `name` fields are
@@ -44,18 +48,30 @@ export interface Tides3DeckJson {
   cards: TideDeckCardJson[];
 }
 
+/**
+ * The tides one Dreamcaller's pool combines. One of `leads` is drawn at random
+ * each run and always joined; `fill` is shuffled and joined until the pool is
+ * full. A signatured Dreamcaller has one lead (its own signature tide); a neutral
+ * Dreamcaller has many lead candidates (the signature tides as coherent
+ * archetypes) so each run leans toward a random one.
+ */
+export interface Tides3DreamcallerPool {
+  /** Candidate lead tides; one is drawn at random per run (at least one). */
+  leads: string[];
+  /** Tail tides, shuffled and joined until the pool is full (at least one). */
+  fill: string[];
+}
+
 /** The committed `tides3` artifact (`data/tides3.jsonc`). */
 export interface Tides3DecksJson {
   version: number;
   /** All 32 tide decks. */
   tides: Tides3DeckJson[];
   /**
-   * Per Dreamcaller UUID: the ordered tide ids a pool combines. Index 0 is the
-   * lead (always joined); the rest are fill (shuffled, joined until the pool is
-   * full). Every Dreamcaller has an entry naming at least one tide; every id
-   * names a tide in {@link tides}.
+   * Per Dreamcaller UUID: the leads and fill its pool combines. Every Dreamcaller
+   * has an entry; every id in it names a tide in {@link tides}.
    */
-  tidePoolByDreamcaller: Record<string, string[]>;
+  tidePoolByDreamcaller: Record<string, Tides3DreamcallerPool>;
 }
 
 function fail(detail: string): never {
@@ -107,13 +123,19 @@ export function validateTides3Decks(json: unknown): Tides3DecksJson {
   if (typeof pools !== "object" || pools === null || Array.isArray(pools)) {
     fail("missing `tidePoolByDreamcaller` object");
   }
-  for (const [dreamcallerId, tideIds] of Object.entries(pools)) {
-    if (!Array.isArray(tideIds) || tideIds.length === 0) {
-      fail(`tide pool for "${dreamcallerId}" is not a non-empty array`);
+  for (const [dreamcallerId, entry] of Object.entries(pools)) {
+    if (typeof entry !== "object" || entry === null || Array.isArray(entry)) {
+      fail(`tide pool for "${dreamcallerId}" is not an object`);
     }
-    for (const tideId of tideIds) {
-      if (typeof tideId !== "string" || !ids.has(tideId)) {
-        fail(`tide "${String(tideId)}" for "${dreamcallerId}" names no tide`);
+    for (const key of ["leads", "fill"] as const) {
+      const list = entry[key];
+      if (!Array.isArray(list) || list.length === 0) {
+        fail(`tide pool for "${dreamcallerId}" has no \`${key}\``);
+      }
+      for (const tideId of list) {
+        if (typeof tideId !== "string" || !ids.has(tideId)) {
+          fail(`tide "${String(tideId)}" in "${dreamcallerId}".${key} names no tide`);
+        }
       }
     }
   }

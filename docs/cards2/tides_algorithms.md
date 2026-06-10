@@ -11,8 +11,8 @@ exist side by side so they can be compared directly:
 | Pool size | 200 | 200 | 150 |
 | Tide decks | `data/tides.jsonc` (32, ~160 copies each) | `data/tides2.jsonc` (32, ~70 copies each) | `data/tides3.jsonc` (32: 20 signature ~150, 12 neutral ~30) |
 | Relationships | none | `data/tides2_relationships.jsonc` | baked into the same file |
-| Lead tide | one of the Dreamcaller's *favored* tides | drawn from the Dreamcaller's curated *tide pool* | the Dreamcaller's own *signature tide* (a broad tide for a neutral) |
-| Fill tides | drawn uniformly at random | the lead's curated *allied tides* | the nearest *broad* tides |
+| Lead tide | one of the Dreamcaller's *favored* tides | drawn from the Dreamcaller's curated *tide pool* | the Dreamcaller's own *signature tide* (a random signature archetype for a neutral) |
+| Fill tides | drawn uniformly at random | the lead's curated *allied tides* | the *broad* tides (forced only for a signatured lead) |
 | Bake | `npm run bake-tides` | `npm run bake-tides2` + `npm run seed-tide-relationships` | `npm run bake-tides3` |
 | Runtime module | `src/draft/pool/variant-tides.ts` | `src/draft/pool/variant-tides2.ts` | `src/draft/pool/variant-tides3.ts` |
 | Rendered decklists | `docs/cards2/tide_decklists.md` | `docs/cards2/tides2_decklists.md` | `docs/cards2/tides3_decklists.md` |
@@ -329,33 +329,45 @@ well-played card, then repeatedly adds the played card whose affinity is most
 different regions of the format rather than clustering. Each anchor is then grown
 into a roughly 30-card deck. (Only cards that clear a play-rate floor are eligible
 as anchors, so neutral decks are built around genuinely-played cards rather than
-fringe singletons.) Neutral tides do double duty: they are the generic tail mixed
-into a signatured pool, and they are the body of a neutral Dreamcaller's pool.
+fringe singletons.) Neutral tides serve as the **generic tail** every signatured
+pool mixes in — the removal, card draw, and efficient bodies a `sigseed` pool's
+play-rate prior pulls in — and they keep the format's tail of less-signatured cards
+covered so no part of the format goes undraftable.
 
 ### 4.3 The per-Dreamcaller tide pools
 
 `tides2` keeps its relationships in a separate, hand-curated file; `tides3` keeps
 its per-Dreamcaller pools in the **same baked artifact** as the decks, because they
-are derived, not curated. For every Dreamcaller the bake writes an ordered list of
-tide ids: the first is the **lead**, always joined; the rest are **fill**, joined
-in shuffled order until the pool is full.
+are derived, not curated. For every Dreamcaller the bake writes two lists: **leads**
+and **fill**. One lead is drawn at random each run and always joined; the fill tides
+are the broad tail, shuffled and joined until the pool is full. The split between a
+signatured and a neutral Dreamcaller is entirely in the leads.
 
-A **signatured** Dreamcaller leads with its own signature tide and fills from the
+A **signatured** Dreamcaller has a single lead candidate — its own signature tide —
+so every one of its pools leans the same way, on its own identity. Its fill is the
 nearest broad tides, ranked by cosine similarity between the tides' card lists. The
 choice of *broad* tides for fill, rather than other Dreamcallers' signature tides,
 is deliberate and was settled by measurement. An allied signature tide would carry
-a second Dreamcaller's identity into the pool, and mixing it in measurably pulls
-the pool toward that second theme and drops the home Dreamcaller's theme share — it
-hurts exactly the metric `tides3` exists to match. A broad tide instead supplies
-the generically-good cards that `sigseed`'s play-rate prior naturally pulls into
-its pools — removal, card draw, efficient bodies — without importing a competing
-identity. So the fill keeps the pool mono-theme, the way `sigseed` keeps it.
+a second Dreamcaller's identity into the pool, and mixing it in measurably pulls the
+pool toward that second theme and drops the home Dreamcaller's theme share — it hurts
+exactly the metric `tides3` exists to match. A broad tide instead supplies generic
+goodstuff without importing a competing identity, so the fill keeps the pool
+mono-theme, the way `sigseed` keeps it.
 
-A **neutral** Dreamcaller leads with a broad tide and fills with a farthest-point
-spread of *every* tide. The lead broad tide is rotated across the twelve neutral
-Dreamcallers so each one has its own starting identity rather than all sharing one,
-and the broad farthest-point fill lets a neutral pool range widely over the format
-the way a uniform-seeded `pickcohere` pool does.
+A **neutral** Dreamcaller has *every signature tide* as a lead candidate. This
+mirrors how `sigseed` handles a signatureless Dreamcaller: with nothing to anchor
+on it falls back to `pickcohere`, a coherent pool grown from a uniformly-drawn seed,
+which lands on a different coherent archetype each run. A neutral `tides3` pool does
+the same by drawing one of the twenty signature tides at random and leaning on it —
+so each run is a *coherent, single-archetype* pool, just a different archetype every
+time. This is the crucial point for how a neutral pool *feels*: leading with a
+whole coherent archetype is what keeps it from playing as a disjointed grab-bag.
+Anchoring a neutral pool on a broad, themeless deck and filling it with unrelated
+tides — which is the obvious thing to try — produces pools with no centre of
+gravity; leading with a real archetype fixes that, and measured pool coherence
+(the mean pairwise pick-affinity of a pool's cards) confirms it: a neutral `tides3`
+pool is as internally coherent as a signatured one, well above what a broad-led
+neutral pool reaches.
 
 ### 4.4 Building the pool at runtime
 
@@ -366,20 +378,20 @@ default variant `sigseed` itself ships 150-card pools, and several of the metric
 the two are compared on (trap counts especially) scale with pool size, so matching
 the size is what lets `tides3` and `sigseed` line up at all.
 
-Selection then proceeds in three steps. The **lead** tide — the Dreamcaller's own
-signature tide, for a signatured Dreamcaller — is always joined first. The
-**fill** tides are shuffled and joined one at a time until enough copies are
-dealable, with the rule that at least one fill tide always joins. That minimum is
-the point where the "combine decks" promise becomes literally true for every pool:
-a signature tide is already a full 150-card `sigseed` pool, so the lead alone could
-fill the deal, but the rule still mixes in one broad tide. Because the combined bag
-is therefore larger than 150, dealing 150 from it leaves some cards out, and which
-cards drop changes with the seed. That is where a signatured pool's run-to-run
-variety comes from, and it stands in for the variety `sigseed` gets by drawing a
-different random signature subset each run. Pleasingly, the broad fill also nudges
-`tides3` *closer* to `sigseed` rather than away: the generic cards a neutral tide
-contributes are the same kind of goodstuff `sigseed`'s prior pulls into its own
-pools, so they overlap rather than conflict.
+Selection then proceeds in three steps. One **lead** tide is drawn at random from
+the Dreamcaller's lead candidates and always joined first — a fixed choice for a
+signatured Dreamcaller (it has one candidate), a different coherent archetype each
+run for a neutral one. The **fill** tides are shuffled and joined one at a time
+until the pool is full. Whether a tail tide is *forced* depends on where the pool's
+variety comes from. A signatured pool has a fixed lead, so its variety has to come
+from the tail and the deal: it forces in at least one broad tide even though the
+150-card signature lead could fill the deal alone, which makes the combined bag
+larger than 150 so that dealing 150 from it drops a different handful of cards each
+run. A neutral pool already gets its variety from the *random archetype lead*, so it
+forces no tail at all — its coherent 150-card archetype lead fills the deal by
+itself, leaving the pool a pure, on-theme archetype rather than one diluted by an
+off-theme broad deck. (Both still join more tides whenever a lead cannot fill the
+pool on its own.)
 
 The **deal** is identical in spirit to the other tides. Each card's UUID is mapped
 to its current display name (cards absent from the current catalog are skipped), the

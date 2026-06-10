@@ -32,8 +32,8 @@ function makeArtifact(): Tides3DecksJson {
       },
     ],
     tidePoolByDreamcaller: {
-      "dc-a": ["tide-sig-01", "tide-neu-01"],
-      "dc-b": ["tide-neu-01"],
+      "dc-a": { leads: ["tide-sig-01"], fill: ["tide-neu-01"] },
+      "dc-b": { leads: ["tide-sig-01"], fill: ["tide-neu-01"] },
     },
   };
 }
@@ -99,15 +99,21 @@ describe("validateTides3Decks", () => {
     expect(() => validateTides3Decks(data)).toThrow(/tidePoolByDreamcaller/);
   });
 
-  it("rejects an empty tide pool", () => {
+  it("rejects an empty leads list", () => {
     const data = makeArtifact();
-    data.tidePoolByDreamcaller["dc-a"] = [];
-    expect(() => validateTides3Decks(clone(data))).toThrow(/non-empty array/);
+    data.tidePoolByDreamcaller["dc-a"].leads = [];
+    expect(() => validateTides3Decks(clone(data))).toThrow(/no `leads`/);
+  });
+
+  it("rejects an empty fill list", () => {
+    const data = makeArtifact();
+    data.tidePoolByDreamcaller["dc-a"].fill = [];
+    expect(() => validateTides3Decks(clone(data))).toThrow(/no `fill`/);
   });
 
   it("rejects a tide-pool id that names no tide (a stale combination)", () => {
     const data = makeArtifact();
-    data.tidePoolByDreamcaller["dc-a"] = ["tide-sig-01", "tide-missing"];
+    data.tidePoolByDreamcaller["dc-a"].leads = ["tide-sig-01", "tide-missing"];
     expect(() => validateTides3Decks(clone(data))).toThrow(/names no tide/);
   });
 });

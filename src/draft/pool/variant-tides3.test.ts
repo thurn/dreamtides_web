@@ -14,32 +14,40 @@ import type { PoolData } from "./types.ts";
 import { TIDES3, generateTides3 } from "./variant-tides3.ts";
 
 // A synthetic artifact of disjoint tides. Tide 1 is the signature lead for
-// "dc-a" (whose pool lists every tide so fill always has candidates); "dc-b"
-// leads with tide 2. Card UUIDs are `<tide>-card-<i>`; copies default to 2.
+// The first third of the tides are `signature`, the rest `neutral`. "dc-a" is a
+// signatured Dreamcaller (a single lead — tide 1 — plus the neutral tides as
+// fill); "dc-b" is a neutral Dreamcaller (every signature tide as a lead
+// candidate, neutral tides as fill). Card UUIDs are `<tide>-card-<i>`; copies
+// default to 2.
 function makeTides3(
   tideCount: number,
   cardsPerTide: number,
   copies = 2,
 ): Tides3DecksJson {
+  const sigCount = Math.max(1, Math.floor(tideCount / 3));
   const tides: Tides3DecksJson["tides"] = Array.from(
     { length: tideCount },
     (_, t) => ({
-    id: `tide-${String(t + 1)}`,
-    name: `Tide ${String(t + 1)}`,
-    role: t === 0 ? "signature" : "neutral",
-    cards: Array.from({ length: cardsPerTide }, (_, i) => ({
-      id: `tide-${String(t + 1)}-card-${String(i)}`,
-      name: `Card ${String(t + 1)}.${String(i)}`,
-      copies,
-    })),
-  }));
-  const allIds = tides.map((t) => t.id);
+      id: `tide-${String(t + 1)}`,
+      name: `Tide ${String(t + 1)}`,
+      role: t < sigCount ? "signature" : "neutral",
+      cards: Array.from({ length: cardsPerTide }, (_, i) => ({
+        id: `tide-${String(t + 1)}-card-${String(i)}`,
+        name: `Card ${String(t + 1)}.${String(i)}`,
+        copies,
+      })),
+    }),
+  );
+  const signatureIds = tides.filter((t) => t.role === "signature").map((t) => t.id);
+  const neutralIds = tides.filter((t) => t.role === "neutral").map((t) => t.id);
+  // Fall back to any tide id so tiny fixtures still have a non-empty fill.
+  const fill = neutralIds.length > 0 ? neutralIds : [tides[0].id];
   return {
     version: 1,
     tides,
     tidePoolByDreamcaller: {
-      "dc-a": allIds,
-      "dc-b": [allIds[1], ...allIds.filter((id) => id !== allIds[1])],
+      "dc-a": { leads: [tides[0].id], fill },
+      "dc-b": { leads: signatureIds, fill },
     },
   };
 }
@@ -85,27 +93,46 @@ describe("generateTides3", () => {
     expect(poolSize(result.counts)).toBe(12);
   });
 
-  it("always leads with the Dreamcaller's first pool tide", () => {
+  it("always leads a single-lead (signatured) Dreamcaller with its one lead tide", () => {
     const poolData = makePoolData(makeTides3(10, 30));
     for (let seed = 0; seed < 20; seed += 1) {
       const result = generateTides3(makeRng(seed), poolData, "dc-a");
       expect(result.selected[0]).toBe("tides3");
-      // The lead (pool[0] = "tide-1") joins first, before any shuffled fill.
+      // The single lead ("tide-1") joins first, before any shuffled fill.
       expect(result.selected[1]).toBe("tide-1");
     }
   });
 
-  it("mixes in at least one fill tide even when the lead alone fills the pool", () => {
-    // A single 200-copy lead tide already exceeds the 150-copy deal size, but the
-    // minimum-fill rule still joins one broad tide, so every pool combines decks.
-    const data = makeTides3(6, 100); // each tide: 100 cards x 2 copies = 200 copies
+  it("leans a multi-lead (neutral) Dreamcaller on a varying signature lead", () => {
+    const data = makeTides3(12, 30);
     const poolData = makePoolData(data);
-    for (let seed = 0; seed < 10; seed += 1) {
-      const result = generateTides3(makeRng(seed), poolData, "dc-a");
-      const joined = result.selected.slice(1);
-      expect(joined[0]).toBe("tide-1");
-      expect(joined.length).toBeGreaterThanOrEqual(1 + TIDES3.minFillTides);
+    const signatureIds = new Set(
+      data.tides.filter((t) => t.role === "signature").map((t) => t.id),
+    );
+    const leadsSeen = new Set<string>();
+    for (let seed = 0; seed < 30; seed += 1) {
+      const result = generateTides3(makeRng(seed), poolData, "dc-b");
+      const lead = result.selected[1];
+      // The lead is always one of the candidate signature tides.
+      expect(signatureIds.has(lead)).toBe(true);
+      leadsSeen.add(lead);
     }
+    // Across runs a neutral Dreamcaller draws more than one archetype lead.
+    expect(leadsSeen.size).toBeGreaterThan(1);
+  });
+
+  it("forces a fill tide for a single-lead pool but not for a multi-lead pool", () => {
+    // Each tide is 100 cards x 2 copies = 200, already above the 150 deal size.
+    const data = makeTides3(12, 100);
+    const poolData = makePoolData(data);
+    // Single-lead (signatured): the minimum-fill rule still joins one broad tide.
+    const single = generateTides3(makeRng(4), poolData, "dc-a");
+    expect(single.selected[1]).toBe("tide-1");
+    expect(single.selected.slice(1).length).toBeGreaterThanOrEqual(2);
+    // Multi-lead (neutral): the random archetype lead is the variety, so a lead
+    // that already fills the pool joins no fill — a pure, coherent archetype.
+    const multi = generateTides3(makeRng(4), poolData, "dc-b");
+    expect(multi.selected.slice(1).length).toBe(1);
   });
 
   it("shuffles all tides together without a dreamcaller id or pool entry", () => {

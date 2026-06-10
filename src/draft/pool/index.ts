@@ -49,6 +49,7 @@ export { validateTides3Decks } from "./tides3-io.ts";
 export type {
   Tides3DeckJson,
   Tides3DecksJson,
+  Tides3DreamcallerPool,
   Tides3Role,
 } from "./tides3-io.ts";
 export { DEFAULT_POOL_VARIANT } from "./types.ts";
