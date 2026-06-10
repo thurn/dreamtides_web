@@ -362,8 +362,11 @@ describe("QuestStartScreen", () => {
       );
     });
 
+    // The screen mints the run seed up front (so the tides4 preview matches the
+    // dealt pool) and hands it to startQuest alongside the chosen Dreamcaller.
     expect(currentMutations.startQuest).toHaveBeenCalledWith(
       OFFERED_DREAMCALLERS[1],
+      expect.any(String),
     );
 
     act(() => {

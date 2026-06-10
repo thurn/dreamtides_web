@@ -661,15 +661,18 @@ export function MultiplayerQuestProvider({
     });
   }, []);
 
-  const startQuest = useCallback((dreamcaller: DreamcallerContent) => {
+  const startQuest = useCallback(
+    (dreamcaller: DreamcallerContent, seedOverride?: string) => {
     const current = currentRef.current;
     const now = new Date().toISOString();
     const actionId = crypto.randomUUID();
     // Seed once, outside the transaction updater, so RTDB retries reuse the
     // same per-quest seed instead of producing a new one on every retry.
     // The same value is then passed into `startQuestFromDreamcaller` via
-    // the `seedOverride` so the resulting `QuestState.seed` is stable.
-    const seed = generateQuestSeed();
+    // the `seedOverride` so the resulting `QuestState.seed` is stable. When the
+    // caller already minted a seed (the select screen previews the tides4 pool
+    // from it), reuse it so the preview matches the dealt pool.
+    const seed = seedOverride ?? generateQuestSeed();
     const actionEntry = buildActionLogEntry({
       timestamp: now,
       actorId: current.session.clientId,

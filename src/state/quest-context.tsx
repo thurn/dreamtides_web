@@ -94,7 +94,7 @@ export { deriveEntryIdCounter };
 /** Mutation functions exposed by the quest context. */
 export interface QuestMutations {
   changeEssence: (delta: number, source: string) => void;
-  startQuest: (dreamcaller: DreamcallerContent) => void;
+  startQuest: (dreamcaller: DreamcallerContent, seedOverride?: string) => void;
   completeSite: (siteId: string, source: string) => void;
   ensureRewardSiteRuntime: (siteId: string) => void;
   /**
@@ -810,7 +810,7 @@ export function QuestProvider({
   }, []);
 
   const startQuest = useCallback(
-    (dreamcaller: DreamcallerContent) => {
+    (dreamcaller: DreamcallerContent, seedOverride?: string) => {
       setState((prev) => {
         const starterCardNumbers = STARTER_CARD_NUMBERS.filter(
           (cardNumber) =>
@@ -820,6 +820,7 @@ export function QuestProvider({
           prev,
           dreamcaller,
           questContent,
+          seedOverride,
         });
 
         for (const cardNumber of starterCardNumbers) {

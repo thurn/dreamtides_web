@@ -1,10 +1,13 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useMemo, useRef } from "react";
 import { motion } from "framer-motion";
 import { useQuest } from "../state/quest-context";
 import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
+import { selectedTides4Decks } from "../data/tides4-preview";
+import { generateQuestSeed } from "../state/quest-state-actions";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
 import { HoverPopover } from "../components/HoverPopover";
 import { RulesText } from "../components/RulesText";
+import type { Tides4DeckJson } from "../draft/pool/tides4-io";
 import type { DreamcallerContent } from "../types/content";
 
 const DREAMCALLER_ACCENT = "#c084fc";
@@ -12,6 +15,8 @@ const DREAMCALLER_HOVER_TRANSITION = { duration: 0.12, delay: 0 } as const;
 const DREAMCALLER_TAP_TRANSITION = { duration: 0.08, delay: 0 } as const;
 const SIGNATURE_CARDS_LABEL_HOVER_BLURB =
   "These signature cards define this Dreamcaller's strategy and steer the draft pool toward them.";
+const TIDES_LABEL_HOVER_BLURB =
+  "Tides are the preconstructed decks combined into this Dreamcaller's draft pool. Hover a tide to see what it does.";
 
 /** Intro screen where the player picks a dreamcaller to start the quest. */
 export function QuestStartScreen() {
@@ -23,11 +28,33 @@ export function QuestStartScreen() {
   }
   const offered = offeredRef.current;
 
+  // Mint the run seed now, before any pick. The `tides4` tide preview below is
+  // generated from this seed, and the same seed is handed to `startQuest` so the
+  // dealt pool matches the tides shown.
+  const seedRef = useRef<string | null>(null);
+  if (seedRef.current === null) {
+    seedRef.current = generateQuestSeed();
+  }
+  const questSeed = seedRef.current;
+
+  // For a `tides4` run, the tide decks each offered Dreamcaller's pool will be
+  // dealt from. Empty for every other algorithm, which hides the preview.
+  const tidesByDreamcaller = useMemo(() => {
+    const map = new Map<string, Tides4DeckJson[]>();
+    for (const dreamcaller of offered) {
+      map.set(
+        dreamcaller.id,
+        selectedTides4Decks(questContent.poolContext, dreamcaller, questSeed),
+      );
+    }
+    return map;
+  }, [offered, questContent.poolContext, questSeed]);
+
   const handlePickDreamcaller = useCallback(
     (dreamcaller: DreamcallerContent) => {
-      mutations.startQuest(dreamcaller);
+      mutations.startQuest(dreamcaller, questSeed);
     },
-    [mutations],
+    [mutations, questSeed],
   );
 
   return (
@@ -72,6 +99,7 @@ export function QuestStartScreen() {
         {offered.map((dreamcaller, index) => {
           const accentColor = DREAMCALLER_ACCENT;
           const signatureCards = dreamcaller.signatureCards ?? [];
+          const tides = tidesByDreamcaller.get(dreamcaller.id) ?? [];
           return (
             <motion.div
               key={dreamcaller.name}
@@ -214,6 +242,88 @@ export function QuestStartScreen() {
                           <span>{cardName}</span>
                         </span>
                       </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+              {tides.length > 0 && (
+                <div
+                  className="flex w-full flex-col gap-2 px-1"
+                  data-dreamcaller-tides={dreamcaller.id}
+                >
+                  <span className="inline-flex w-fit items-center gap-1.5">
+                    <span
+                      className="text-xs font-medium"
+                      data-dreamcaller-tides-label={dreamcaller.id}
+                      style={{ color: "#94a3b8" }}
+                    >
+                      Draft Tides:
+                    </span>
+                    <HoverPopover
+                      content={
+                        <span
+                          className="block rounded-lg border px-3 py-2 text-left text-xs leading-relaxed shadow-2xl"
+                          style={{
+                            background: "#000000",
+                            borderColor: "rgba(255, 255, 255, 0.16)",
+                            color: "#ffffff",
+                          }}
+                          data-dreamcaller-tides-tooltip={dreamcaller.id}
+                        >
+                          {TIDES_LABEL_HOVER_BLURB}
+                        </span>
+                      }
+                    >
+                      <i
+                        aria-label="About draft tides"
+                        className="bx bx-info-circle text-sm leading-none"
+                        data-dreamcaller-tides-info-icon={dreamcaller.id}
+                        style={{
+                          color: "#94a3b8",
+                          cursor: "help",
+                          pointerEvents: "auto",
+                        }}
+                      />
+                    </HoverPopover>
+                  </span>
+                  <div className="flex w-full flex-wrap gap-1.5">
+                    {tides.map((tide) => (
+                      <HoverPopover
+                        key={`${dreamcaller.id}-${tide.id}`}
+                        content={
+                          <span
+                            className="block rounded-lg border px-3 py-2 text-left text-xs leading-relaxed shadow-2xl"
+                            style={{
+                              background: "#000000",
+                              borderColor: "rgba(255, 255, 255, 0.16)",
+                              color: "#ffffff",
+                            }}
+                            data-dreamcaller-tide-tooltip={`${dreamcaller.id}:${tide.id}`}
+                          >
+                            {tide.summary ?? tide.description ?? tide.name}
+                          </span>
+                        }
+                      >
+                        <span
+                          className="inline-flex max-w-full items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium"
+                          data-dreamcaller-tide={`${dreamcaller.id}:${tide.id}`}
+                          style={{
+                            background: `${accentColor}14`,
+                            borderColor: `${accentColor}40`,
+                            color: "#ffffff",
+                            cursor: "help",
+                          }}
+                        >
+                          <i
+                            aria-hidden="true"
+                            className="bx bx-water text-sm leading-none"
+                            style={{ color: accentColor }}
+                          />
+                          <span className="truncate">
+                            {tide.shortName ?? tide.name}
+                          </span>
+                        </span>
+                      </HoverPopover>
                     ))}
                   </div>
                 </div>
