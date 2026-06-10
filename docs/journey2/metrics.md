@@ -86,3 +86,24 @@ tuning change). Two coupled fixes, both metric-definition bugs:
 Remaining desirability fails: `category_draft_known` (floor 37.2),
 `dreamsign` (median 73.7), `tribal_change` (floor 21.4). `npm test` green
 (2750 passed).
+
+## Round 2 — archetype coverage expected-share metric bug (harness fix)
+
+**Lever:** `scripts/merchant-experiment.ts` (harness metric definition; no
+tuning change). The expected ("weight-implied") share modelled **slot A only**
+(`weight / Σ eligible weight`) but the observed share counts **both** offer
+slots, and slot B is a weighted draw constrained to a *different family* than
+slot A. Ignoring slot B and the family-distinctness rule systematically halved
+the expected share of small-family archetypes, producing a spurious ~2.2–2.6×
+ratio for almost every archetype even though the generator was behaving
+correctly.
+
+Replaced the expected model with `twoSlotExpectedSlots`, the exact two-slot
+draw with the family constraint:
+`E[slots_i] = P(A=i) + Σ_a P(A=a)·P(B=i | A=a)`, summing to 2 per encounter.
+
+**Movement (defaults):** every eligible archetype moved from ratio ≈ 2.2–2.6
+(FAIL) to **0.96–1.07 (PASS)**. Metric 4 result FAIL → **PASS**. Confirms the
+two-stage lottery distributes archetypes as designed. `npm test` green.
+
+**Running total: 3/5 (distinct_outcomes, repetition, archetype_coverage).**

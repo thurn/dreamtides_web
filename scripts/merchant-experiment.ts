@@ -37,7 +37,10 @@ import {
   type MerchantEncounterGenerationDebug,
 } from "../src/journey_v2/encounter/generateMerchantEncounter";
 import { MERCHANT_ARCHETYPE_BUILDERS } from "../src/journey_v2/archetypes/registry";
-import type { MerchantArchetypeId } from "../src/journey_v2/archetypes/types";
+import {
+  MERCHANT_ARCHETYPE_FAMILIES,
+  type MerchantArchetypeId,
+} from "../src/journey_v2/archetypes/types";
 import { MERCHANT_TUNING } from "../src/journey_v2/tuning";
 import type {
   MerchantContext,
@@ -767,6 +770,50 @@ export interface ArchetypeCoverageRow {
   eligibleSamples: number;
 }
 
+/**
+ * Expected number of the two encounter slots each eligible archetype fills,
+ * given the eligible set, the stage-1 weights, and the family-distinctness rule.
+ *
+ * Slot A is a weighted draw over the eligible set. Slot B is a weighted draw
+ * over the eligible archetypes whose family differs from slot A's. The expected
+ * slot count for archetype `i` is therefore
+ *   `P(A=i) + Σ_a P(A=a) · P(B=i | A=a)`,
+ * which, summed over all eligible `i`, totals 2. This is the correct
+ * "weight-implied share among eligible archetypes" for the two-offer encounter;
+ * dividing by 2 puts it on the same per-slot scale as the observed share.
+ */
+function twoSlotExpectedSlots(
+  eligibleIds: readonly MerchantArchetypeId[],
+): Map<MerchantArchetypeId, number> {
+  const result = new Map<MerchantArchetypeId, number>();
+  const weightOf = (id: MerchantArchetypeId): number => MERCHANT_TUNING.weights[id];
+  const familyOf = (id: MerchantArchetypeId): string => MERCHANT_ARCHETYPE_FAMILIES[id];
+
+  let totalWeight = 0;
+  for (const id of eligibleIds) totalWeight += weightOf(id);
+  if (totalWeight <= 0) return result;
+
+  for (const id of eligibleIds) result.set(id, 0);
+
+  for (const a of eligibleIds) {
+    const pA = weightOf(a) / totalWeight;
+    // Slot A directly fills `a`.
+    result.set(a, (result.get(a) ?? 0) + pA);
+    // Slot B: weighted draw over eligible archetypes of a different family.
+    let denomB = 0;
+    for (const j of eligibleIds) {
+      if (familyOf(j) !== familyOf(a)) denomB += weightOf(j);
+    }
+    if (denomB <= 0) continue;
+    for (const j of eligibleIds) {
+      if (familyOf(j) === familyOf(a)) continue;
+      const pBgivenA = weightOf(j) / denomB;
+      result.set(j, (result.get(j) ?? 0) + pA * pBgivenA);
+    }
+  }
+  return result;
+}
+
 export function computeArchetypeCoverage(
   samples: readonly SampledEncounter[],
 ): ArchetypeCoverageRow[] {
@@ -789,13 +836,18 @@ export function computeArchetypeCoverage(
       totalSlots += 1;
     }
     const eligibleIds = s.debug.eligibleArchetypeIds;
-    let weightTotal = 0;
-    for (const id of eligibleIds) weightTotal += MERCHANT_TUNING.weights[id];
     for (const id of eligibleIds) {
       eligibleCount.set(id, (eligibleCount.get(id) ?? 0) + 1);
-      const share = weightTotal > 0 ? MERCHANT_TUNING.weights[id] / weightTotal : 0;
-      // Two slots per encounter: expected number of slots the archetype fills.
-      expectedSum.set(id, (expectedSum.get(id) ?? 0) + share);
+    }
+    // Expected slots each archetype fills, modelling BOTH slots and the
+    // family-distinctness rule (slot B must differ in family from slot A) — the
+    // core design constraint the observed distribution obeys. Ignoring it
+    // (modelling slot A only) systematically halves the expected share of
+    // archetypes in small families and produced a spurious ~2x inflation for
+    // every such archetype. See `twoSlotExpectedSlots`.
+    const expectedSlots = twoSlotExpectedSlots(eligibleIds);
+    for (const [id, slots] of expectedSlots) {
+      expectedSum.set(id, (expectedSum.get(id) ?? 0) + slots);
     }
   }
 
