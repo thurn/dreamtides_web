@@ -187,6 +187,7 @@
           "pick": [],
           "pickId": "794a2b79-8c55-4423-8843-7e6e96f84071",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
@@ -324,6 +325,7 @@
           "pick": [],
           "pickId": "435cdb9a-ded1-4183-9118-5c26f168c20d",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
@@ -689,6 +691,7 @@
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed" // Beacon of Tomorrow
@@ -789,6 +792,7 @@
           "packCards": [
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed" // Beacon of Tomorrow

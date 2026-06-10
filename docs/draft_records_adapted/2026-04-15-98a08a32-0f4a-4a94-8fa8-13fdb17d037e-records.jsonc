@@ -37,6 +37,7 @@
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
         "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
         "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
@@ -69,6 +70,7 @@
         "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
         "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
         "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
@@ -86,6 +88,7 @@
         "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
         "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
         "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
@@ -122,6 +125,7 @@
         "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
         "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
         "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
       ],
       "picks": [
@@ -166,6 +170,7 @@
             "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
@@ -324,10 +329,12 @@
           "pack": 1,
           "pickInPack": 10,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
@@ -476,6 +483,7 @@
           "packCards": [
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
@@ -859,6 +867,7 @@
             "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -872,6 +881,7 @@
           "pickId": "c87ebffe-5907-427b-9f9b-7c36a12b4a03",
           "packCards": [
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
@@ -983,10 +993,12 @@
           "pack": 3,
           "pickInPack": 15,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         }

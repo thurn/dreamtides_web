@@ -71,6 +71,7 @@
         "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
         "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
         "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
@@ -98,6 +99,7 @@
         "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
         "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
         "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
@@ -499,6 +501,7 @@
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -529,10 +532,12 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
@@ -642,6 +647,7 @@
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

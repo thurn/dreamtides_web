@@ -65,6 +65,7 @@
         "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
         "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
         "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
@@ -100,6 +101,7 @@
         "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
         "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
@@ -460,6 +462,7 @@
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
@@ -525,6 +528,7 @@
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
@@ -606,10 +610,12 @@
           "pack": 2,
           "pickInPack": 11,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
@@ -782,6 +788,7 @@
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis

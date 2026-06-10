@@ -66,6 +66,7 @@
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
       ],
@@ -82,6 +83,7 @@
       "pool": [
         "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
         "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
@@ -185,10 +187,12 @@
           "pack": 1,
           "pickInPack": 3,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
@@ -285,6 +289,7 @@
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "c97b0a5b-64d0-480f-8db7-3fde93738d86" // Vaultbreaker
           ]

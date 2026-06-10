@@ -69,6 +69,7 @@
         "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
         "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [
@@ -132,6 +133,7 @@
         "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
         "4733876a-d6b1-48d2-b322-5f71aee9f3d6" // Cinderfang
@@ -559,6 +561,7 @@
           "pickId": "4a08ca06-58db-4ce6-b490-be4bea8956a1",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
@@ -850,6 +853,7 @@
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e" // Doorlight Foundling
           ]
@@ -969,10 +973,12 @@
           "pack": 3,
           "pickInPack": 14,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e" // Doorlight Foundling
           ]

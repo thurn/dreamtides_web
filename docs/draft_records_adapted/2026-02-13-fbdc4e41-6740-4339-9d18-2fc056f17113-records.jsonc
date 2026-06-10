@@ -39,6 +39,7 @@
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
         "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
         "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
@@ -49,6 +50,7 @@
         "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
         "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
         "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
@@ -99,6 +101,7 @@
         "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
         "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
         "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
@@ -107,6 +110,7 @@
         "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
         "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
         "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
@@ -183,6 +187,7 @@
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
@@ -289,6 +294,7 @@
           "packCards": [
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
@@ -604,10 +610,12 @@
           "pack": 3,
           "pickInPack": 2,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
@@ -800,10 +808,12 @@
           "pack": 4,
           "pickInPack": 1,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall

@@ -53,6 +53,7 @@
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [
@@ -84,6 +85,7 @@
         "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
         "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
         "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
@@ -130,6 +132,7 @@
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
@@ -257,6 +260,7 @@
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00" // Echo Architect
@@ -347,10 +351,12 @@
           "pack": 1,
           "pickInPack": 11,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
@@ -512,6 +518,7 @@
             "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
@@ -780,6 +787,7 @@
             "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
@@ -850,6 +858,7 @@
             "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver

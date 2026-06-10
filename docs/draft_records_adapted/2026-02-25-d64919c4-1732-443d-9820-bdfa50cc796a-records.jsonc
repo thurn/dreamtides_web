@@ -66,6 +66,7 @@
         "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
         "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
         "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
         "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
@@ -93,6 +94,7 @@
         "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
         "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
         "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
@@ -177,6 +179,7 @@
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8" // Lanternwood Scout
@@ -242,6 +245,7 @@
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
@@ -345,6 +349,7 @@
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8" // Lanternwood Scout
@@ -387,10 +392,12 @@
           "pack": 1,
           "pickInPack": 13,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
@@ -737,6 +744,7 @@
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach

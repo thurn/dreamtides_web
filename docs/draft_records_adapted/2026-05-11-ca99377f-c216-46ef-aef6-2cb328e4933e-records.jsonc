@@ -289,6 +289,7 @@
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
@@ -538,6 +539,7 @@
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -571,7 +573,8 @@
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -661,6 +664,7 @@
           "pickId": "5bc9d645-0220-4a65-bbc7-abc64ded548e",
           "packCards": [
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -829,6 +833,7 @@
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
             "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath

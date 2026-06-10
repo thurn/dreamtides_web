@@ -36,6 +36,7 @@
         "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
         "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
         "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
         "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
@@ -77,6 +78,7 @@
         "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
         "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
         "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
         "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
@@ -189,6 +191,7 @@
             "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "1b341984-d32e-42a7-ae56-b22059c59737" // Wreckheap Survivor
@@ -225,6 +228,7 @@
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
@@ -329,11 +333,13 @@
           "pack": 1,
           "pickInPack": 12,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "1b341984-d32e-42a7-ae56-b22059c59737" // Wreckheap Survivor
@@ -717,6 +723,7 @@
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -868,6 +875,7 @@
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },

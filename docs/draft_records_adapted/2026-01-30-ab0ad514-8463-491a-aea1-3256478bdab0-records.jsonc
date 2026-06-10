@@ -351,6 +351,7 @@
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
@@ -469,6 +470,7 @@
           "pickId": "ca5297a5-bcaa-41fd-a397-e44dc4e00ba3",
           "packCards": [
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
@@ -775,6 +777,7 @@
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -810,6 +813,7 @@
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
@@ -885,6 +889,7 @@
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

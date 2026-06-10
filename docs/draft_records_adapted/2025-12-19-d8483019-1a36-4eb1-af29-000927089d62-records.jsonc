@@ -43,6 +43,7 @@
         "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
         "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
         "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
@@ -62,6 +63,7 @@
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
         "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
         "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [
@@ -73,6 +75,7 @@
       ],
       "pool": [
         "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
         "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
@@ -81,6 +84,7 @@
         "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
         "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
         "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
@@ -146,14 +150,17 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
@@ -177,6 +184,7 @@
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
@@ -328,10 +336,12 @@
           "pack": 1,
           "pickInPack": 11,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory

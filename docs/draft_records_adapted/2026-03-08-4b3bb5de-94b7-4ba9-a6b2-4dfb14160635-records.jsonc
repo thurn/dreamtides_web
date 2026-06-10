@@ -49,6 +49,7 @@
         "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
         "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
         "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
         "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
@@ -113,6 +114,7 @@
         "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
         "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
@@ -216,6 +218,7 @@
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -367,6 +370,7 @@
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -755,6 +759,7 @@
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -824,10 +829,12 @@
           "pack": 3,
           "pickInPack": 7,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
@@ -913,6 +920,7 @@
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

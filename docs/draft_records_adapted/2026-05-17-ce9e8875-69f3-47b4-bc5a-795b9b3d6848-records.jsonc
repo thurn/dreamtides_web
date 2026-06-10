@@ -46,6 +46,7 @@
         "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
         "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
         "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "881e3a5f-280f-413a-b927-352aeb3bda71", // Bloodpact Berserker
         "f860e815-3ed9-463d-ac4d-ed8d2778f8ad", // Lone Castaway
@@ -109,6 +110,7 @@
         "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
         "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
         "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
         "920ef495-5560-4fa6-9a95-b9584ef6a4cf" // Scorched Crusader
@@ -428,6 +430,7 @@
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a" // Iron Executor
@@ -589,6 +592,7 @@
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a" // Iron Executor
@@ -669,6 +673,7 @@
           "pickId": "fadb218d-29e2-42d1-a7a1-1066741d63ad",
           "packCards": [
             "f860e815-3ed9-463d-ac4d-ed8d2778f8ad", // Lone Castaway
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
@@ -747,6 +752,7 @@
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
@@ -768,6 +774,7 @@
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
@@ -891,10 +898,12 @@
           "pack": 3,
           "pickInPack": 12,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif

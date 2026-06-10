@@ -749,6 +749,7 @@
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -769,6 +770,7 @@
             "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
             "9d14885c-a757-40cc-b43e-87dbec7ec379" // Forsaken Skyline
@@ -785,6 +787,7 @@
           "packCards": [
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
@@ -894,6 +897,7 @@
           "packCards": [
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -909,6 +913,7 @@
           "packCards": [
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
             "9d14885c-a757-40cc-b43e-87dbec7ec379" // Forsaken Skyline

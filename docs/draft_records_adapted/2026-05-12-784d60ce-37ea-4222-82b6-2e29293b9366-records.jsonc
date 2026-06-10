@@ -34,6 +34,7 @@
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
         "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
         "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
         "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
@@ -41,6 +42,7 @@
         "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
         "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
         "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
         "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
@@ -113,6 +115,7 @@
         "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
         "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
@@ -126,6 +129,7 @@
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
         "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
         "161482b6-af07-4d9e-822d-8c738672beb9" // Starlight Guide
@@ -239,6 +243,7 @@
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
@@ -263,7 +268,8 @@
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -391,7 +397,8 @@
           "pickId": "07313dd3-d0dc-40ca-98a3-fa4d39e5bcae",
           "packCards": [
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -556,6 +563,7 @@
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -676,10 +684,12 @@
           "pack": 2,
           "pickInPack": 15,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "08e01310-d192-41e9-a6f0-0edbd6fb3cfb",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -747,6 +757,7 @@
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
             "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
@@ -814,6 +825,7 @@
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110" // Voidcaller
@@ -945,10 +957,12 @@
           "pack": 3,
           "pickInPack": 14,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110" // Voidcaller

@@ -837,7 +837,8 @@
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -854,6 +855,7 @@
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee" // Ethereal Courser
           ]
@@ -972,7 +974,8 @@
           "pickId": "06462b57-1b0e-4c9c-9531-c14b9f2d5a3b",
           "packCards": [
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {

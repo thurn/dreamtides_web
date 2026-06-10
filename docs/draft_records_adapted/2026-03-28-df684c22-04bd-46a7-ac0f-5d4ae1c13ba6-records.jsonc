@@ -121,6 +121,7 @@
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
@@ -278,6 +279,7 @@
           "pick": [],
           "pickId": "15faa763-b897-4e86-b094-73f3236291a9",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
@@ -364,6 +366,7 @@
           "packCards": [
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
             "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
@@ -450,6 +453,7 @@
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder

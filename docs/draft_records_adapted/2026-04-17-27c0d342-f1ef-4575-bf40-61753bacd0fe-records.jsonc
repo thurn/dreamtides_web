@@ -65,11 +65,13 @@
         "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "8bf53fe6-8a25-401e-9a99-84343a026bb0" // Burning Pursuit
       ],
       "sideboard": [],
       "pool": [
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
         "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
@@ -115,10 +117,12 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
@@ -147,8 +151,10 @@
           "packCards": [
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
             "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
@@ -406,6 +412,7 @@
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
@@ -573,6 +580,7 @@
           "pickId": "76d1b5c5-cc47-465f-8549-4fd1ca4280df",
           "packCards": [
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin

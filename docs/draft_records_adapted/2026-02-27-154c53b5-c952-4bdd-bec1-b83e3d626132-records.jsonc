@@ -395,6 +395,7 @@
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
@@ -618,6 +619,7 @@
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "2a230602-a39b-4ec2-a467-97b92b389aff" // Scuttled Fortune
@@ -766,6 +768,7 @@
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
@@ -1000,6 +1003,7 @@
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "4b20e66e-2466-4518-8ef9-67f580bd6f14" // Looming Oracle
           ]

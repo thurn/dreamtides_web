@@ -185,6 +185,7 @@
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
@@ -244,6 +245,7 @@
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f" // Augur Crow
           ]
@@ -434,6 +436,7 @@
           "packCards": [
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f" // Augur Crow
           ]
@@ -504,6 +507,7 @@
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
@@ -597,6 +601,7 @@
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7" // Planetgazer
           ]
@@ -801,6 +806,7 @@
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7" // Planetgazer
           ]

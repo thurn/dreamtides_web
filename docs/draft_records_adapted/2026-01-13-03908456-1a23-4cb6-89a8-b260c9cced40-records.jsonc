@@ -195,6 +195,7 @@
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
@@ -533,6 +534,7 @@
           "pickId": "47033ba4-8f26-4a6b-97bd-5b366327325e",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
@@ -576,6 +578,7 @@
             "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
@@ -729,6 +732,7 @@
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd" // Charnel Seraph
@@ -887,6 +891,7 @@
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd" // Charnel Seraph

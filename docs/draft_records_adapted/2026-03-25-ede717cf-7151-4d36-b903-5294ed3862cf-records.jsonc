@@ -155,6 +155,7 @@
             "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
@@ -203,6 +204,7 @@
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
@@ -703,6 +705,7 @@
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
@@ -872,6 +875,7 @@
           "pickId": "509a1a3a-d9a6-4903-95f6-dae6b330f4ea",
           "packCards": [
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil

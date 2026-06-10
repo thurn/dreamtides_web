@@ -37,6 +37,7 @@
         "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
         "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
         "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
@@ -45,6 +46,7 @@
         "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
         "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
         "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
         "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
@@ -87,8 +89,10 @@
         "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
         "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
         "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
         "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
@@ -256,10 +260,12 @@
           "pack": 1,
           "pickInPack": 6,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
@@ -290,6 +296,7 @@
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
@@ -301,10 +308,12 @@
           "pack": 1,
           "pickInPack": 8,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
@@ -540,6 +549,7 @@
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves

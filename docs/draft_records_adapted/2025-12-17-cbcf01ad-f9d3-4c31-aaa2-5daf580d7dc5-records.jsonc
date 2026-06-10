@@ -37,6 +37,7 @@
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
         "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
         "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
         "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
@@ -96,6 +97,7 @@
         "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
         "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
         "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
         "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
@@ -180,6 +182,7 @@
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "382dafa1-f8ff-47b4-9151-15b84067a5b2" // Tidecaller
@@ -256,6 +259,7 @@
           "pick": [],
           "pickId": "b0d161fc-4a2a-4f1d-82b4-a746552552df",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
@@ -337,6 +341,7 @@
           "packCards": [
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "382dafa1-f8ff-47b4-9151-15b84067a5b2" // Tidecaller
@@ -440,6 +445,7 @@
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab" // Ridge Vortex Explorer
@@ -593,6 +599,7 @@
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab" // Ridge Vortex Explorer
@@ -674,11 +681,13 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths

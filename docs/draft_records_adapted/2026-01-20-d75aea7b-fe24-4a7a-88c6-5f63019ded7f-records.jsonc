@@ -31,6 +31,7 @@
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
         "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
         "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
         "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
@@ -76,6 +77,7 @@
         "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
         "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
         "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
         "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
@@ -204,6 +206,7 @@
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -221,6 +224,7 @@
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -287,6 +291,7 @@
           "pickId": "b83cfbaa-7890-4f6f-878b-4edb45677371",
           "packCards": [
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -295,10 +300,12 @@
           "pack": 1,
           "pickInPack": 12,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -607,6 +614,7 @@
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
             "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
             "cf173b05-7bf2-465b-91e2-41f213c536d1" // Phantasmal Recruiter
@@ -736,6 +744,7 @@
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "18979c10-39b8-42fb-ac1d-dd784da498d1" // Fell Swoop
           ]
         },
@@ -842,6 +851,7 @@
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "18979c10-39b8-42fb-ac1d-dd784da498d1" // Fell Swoop
           ]
         },

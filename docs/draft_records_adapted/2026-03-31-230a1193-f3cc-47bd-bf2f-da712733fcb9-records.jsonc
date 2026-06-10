@@ -41,6 +41,7 @@
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
         "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
         "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
         "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
@@ -91,6 +92,7 @@
         "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
         "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
         "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
         "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
@@ -170,12 +172,14 @@
           "packCards": [
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
             "f68774ce-0e94-489f-90a5-68e03a549ff6" // Deathwalker
@@ -236,6 +240,7 @@
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
@@ -282,6 +287,7 @@
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
             "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb" // Defiant Holdout
           ]
@@ -335,6 +341,7 @@
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
             "f68774ce-0e94-489f-90a5-68e03a549ff6" // Deathwalker
@@ -415,6 +422,7 @@
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
@@ -543,10 +551,12 @@
           "pack": 2,
           "pickInPack": 7,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
             "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
@@ -588,6 +598,7 @@
           "pickId": "748e6a61-9c1f-4225-9f04-e54002f63ac3",
           "packCards": [
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado

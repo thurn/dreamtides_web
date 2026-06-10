@@ -745,6 +745,7 @@
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
@@ -789,6 +790,7 @@
             "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
@@ -904,6 +906,7 @@
           "pickId": "26d40e03-6de4-4373-9fbf-04c1dd79e995",
           "packCards": [
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince

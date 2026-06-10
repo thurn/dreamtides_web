@@ -150,7 +150,8 @@
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -192,6 +193,7 @@
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
@@ -259,6 +261,7 @@
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
@@ -325,7 +328,8 @@
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -429,6 +433,7 @@
             "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
@@ -530,6 +535,7 @@
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -669,6 +675,7 @@
           "pickId": "4736aae2-5136-4f8f-9283-baf6b542a6a8",
           "packCards": [
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

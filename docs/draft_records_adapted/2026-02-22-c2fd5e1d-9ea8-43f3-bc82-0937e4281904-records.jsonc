@@ -64,6 +64,7 @@
         "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
         "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
         "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
@@ -76,6 +77,7 @@
         "c97b0a5b-64d0-480f-8db7-3fde93738d86" // Vaultbreaker
       ],
       "pool": [
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
         "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
@@ -126,10 +128,12 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
@@ -220,6 +224,7 @@
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9" // Through the Rift
           ]
         },
@@ -271,6 +276,7 @@
           "pickId": "2b73d294-6ab1-4051-9b0f-d8e335d37674",
           "packCards": [
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
@@ -356,6 +362,7 @@
           "packCards": [
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9" // Through the Rift
           ]
         },
@@ -483,6 +490,7 @@
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
@@ -1078,6 +1086,7 @@
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9" // Through the Rift
           ]
         },
@@ -1141,6 +1150,7 @@
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
@@ -1237,6 +1247,7 @@
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9" // Through the Rift
           ]
         },
@@ -1470,6 +1481,7 @@
           "packCards": [
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
@@ -1886,6 +1898,7 @@
         "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
         "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
         "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
         "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
@@ -1948,6 +1961,7 @@
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
         "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
         "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
         "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
@@ -1998,6 +2012,7 @@
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
@@ -2117,6 +2132,7 @@
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9" // Through the Rift
           ]
         },
@@ -2237,11 +2253,13 @@
           "pack": 1,
           "pickInPack": 14,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9" // Through the Rift
           ]
         },
@@ -2297,6 +2315,7 @@
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant

@@ -64,6 +64,7 @@
         "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
         "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [
@@ -110,6 +111,7 @@
         "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
         "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
@@ -205,6 +207,7 @@
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
@@ -364,6 +367,7 @@
           "pickId": "420bf1e9-f2ec-4dff-b540-e64de71e58be",
           "packCards": [
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
@@ -505,6 +509,7 @@
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -558,10 +563,12 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
@@ -664,6 +671,7 @@
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -732,6 +740,7 @@
           "packCards": [
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness

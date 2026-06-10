@@ -160,6 +160,7 @@
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
@@ -325,6 +326,7 @@
           "packCards": [
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
@@ -443,6 +445,7 @@
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
@@ -465,6 +468,7 @@
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
@@ -559,6 +563,7 @@
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
@@ -787,7 +792,8 @@
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -935,7 +941,8 @@
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {

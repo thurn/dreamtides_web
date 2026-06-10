@@ -62,6 +62,7 @@
         "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
         "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
         "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
@@ -111,6 +112,7 @@
         "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
         "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
         "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
@@ -168,6 +170,7 @@
           "pickId": "f3d62dbd-63db-4ac9-950f-9852627f23f2",
           "packCards": [
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
@@ -439,6 +442,7 @@
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
@@ -467,6 +471,7 @@
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
@@ -516,6 +521,7 @@
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
@@ -565,6 +571,7 @@
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "0637b453-4362-4f01-b3e6-07c27af9c847" // Herald of the Last Light
           ]
         },
@@ -629,6 +636,7 @@
           "packCards": [
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
@@ -662,6 +670,7 @@
           "pickId": "02902fcc-eefc-4e81-aafd-59fa203a71d7",
           "packCards": [
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
@@ -687,11 +696,13 @@
           "pack": 2,
           "pickInPack": 14,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "0637b453-4362-4f01-b3e6-07c27af9c847" // Herald of the Last Light
           ]
         },
@@ -742,6 +753,7 @@
           "packCards": [
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection

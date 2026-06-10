@@ -68,6 +68,7 @@
         "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
         "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
         "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [
@@ -113,6 +114,7 @@
         "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
         "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
@@ -191,6 +193,7 @@
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00" // Echo Architect
           ]
@@ -349,6 +352,7 @@
           "packCards": [
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00" // Echo Architect
           ]
@@ -438,6 +442,7 @@
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf" // Emberwolf Triad
           ]
@@ -453,6 +458,7 @@
           "packCards": [
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
@@ -539,6 +545,7 @@
             "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
             "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0" // The Rising God
@@ -605,6 +612,7 @@
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf" // Emberwolf Triad
           ]
@@ -814,10 +822,12 @@
           "pack": 3,
           "pickInPack": 6,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer

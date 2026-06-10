@@ -280,6 +280,8 @@
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
@@ -497,6 +499,7 @@
           "pickId": "4a0bb5dc-75a6-4bd6-81f8-611197fb0fba",
           "packCards": [
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded

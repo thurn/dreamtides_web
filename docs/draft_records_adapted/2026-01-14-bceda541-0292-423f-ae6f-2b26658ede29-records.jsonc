@@ -225,6 +225,7 @@
           "packCards": [
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
@@ -278,6 +279,7 @@
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "f4082c01-fdc8-4583-afdb-76bac980b3bf" // Wasteland Holdout
           ]
         },
@@ -416,6 +418,7 @@
             "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
@@ -577,6 +580,7 @@
           "pickId": "5c4a8469-f9d8-447f-8143-fa6a694531ec",
           "packCards": [
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
@@ -1034,11 +1038,13 @@
           "pickId": "87ead6ac-b1c5-4852-8413-7fa43c6cfc57",
           "packCards": [
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
@@ -1107,6 +1113,7 @@
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "f4082c01-fdc8-4583-afdb-76bac980b3bf" // Wasteland Holdout
           ]
         },
@@ -1244,6 +1251,7 @@
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "f4082c01-fdc8-4583-afdb-76bac980b3bf" // Wasteland Holdout
           ]
         },
@@ -1409,6 +1417,7 @@
             "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer

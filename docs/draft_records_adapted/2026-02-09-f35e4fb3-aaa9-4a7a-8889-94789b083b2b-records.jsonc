@@ -445,6 +445,7 @@
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
@@ -577,6 +578,7 @@
           "packCards": [
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
@@ -724,6 +726,7 @@
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "f68774ce-0e94-489f-90a5-68e03a549ff6" // Deathwalker
           ]
@@ -860,6 +863,7 @@
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "f68774ce-0e94-489f-90a5-68e03a549ff6" // Deathwalker
           ]
@@ -964,6 +968,7 @@
           "pickId": "04ef8493-d986-45f8-a718-617b028f7ad4",
           "packCards": [
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "f68774ce-0e94-489f-90a5-68e03a549ff6" // Deathwalker
           ]
@@ -1039,6 +1044,7 @@
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -1160,6 +1166,7 @@
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -1253,6 +1260,7 @@
           "pickId": "729238ee-b3ea-4c1d-852c-2dc9a2c58356",
           "packCards": [
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

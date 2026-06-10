@@ -658,6 +658,7 @@
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
             "af739e3d-bc61-4fab-bf81-a22e78d7e524" // Silent Gatherer
@@ -721,6 +722,7 @@
           "pickId": "377cee38-e769-47b0-abd5-0f528600f36a",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
             "af739e3d-bc61-4fab-bf81-a22e78d7e524" // Silent Gatherer

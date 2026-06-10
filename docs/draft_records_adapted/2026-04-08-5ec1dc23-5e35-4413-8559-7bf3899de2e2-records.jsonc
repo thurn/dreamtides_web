@@ -57,6 +57,7 @@
         "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
         "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
         "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
         "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
@@ -113,6 +114,7 @@
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
         "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
         "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
@@ -229,6 +231,7 @@
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
@@ -800,7 +803,8 @@
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -808,10 +812,12 @@
           "pack": 3,
           "pickInPack": 6,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
@@ -941,7 +947,8 @@
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {

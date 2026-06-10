@@ -38,6 +38,7 @@
         "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
         "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
         "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
@@ -99,6 +100,7 @@
         "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
         "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
         "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
@@ -430,11 +432,13 @@
           "pack": 2,
           "pickInPack": 1,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
@@ -512,6 +516,7 @@
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner

@@ -154,6 +154,7 @@
           "pick": [],
           "pickId": "068bb15a-fc2d-42a2-859b-837b946d23c0",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
             "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
@@ -362,6 +363,7 @@
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder

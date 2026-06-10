@@ -71,6 +71,7 @@
         "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
         "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
         "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
         "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
@@ -110,6 +111,7 @@
         "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
         "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
         "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
@@ -545,6 +547,7 @@
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -640,6 +643,7 @@
           "packCards": [
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -708,10 +712,12 @@
           "pack": 4,
           "pickInPack": 3,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
@@ -768,6 +774,7 @@
           "packCards": [
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering

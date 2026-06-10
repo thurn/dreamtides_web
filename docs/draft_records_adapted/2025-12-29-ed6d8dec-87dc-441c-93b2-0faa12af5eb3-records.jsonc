@@ -38,6 +38,7 @@
         "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
         "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
         "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
         "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
@@ -79,6 +80,7 @@
         "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
         "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
         "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
         "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
@@ -124,6 +126,7 @@
           "packCards": [
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
@@ -275,10 +278,12 @@
           "pack": 1,
           "pickInPack": 8,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
@@ -416,6 +421,7 @@
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
@@ -588,6 +594,7 @@
           "packCards": [
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor

@@ -35,6 +35,7 @@
         "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
         "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
         "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
         "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
@@ -84,6 +85,7 @@
         "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
         "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
         "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
         "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
@@ -137,6 +139,7 @@
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
@@ -204,6 +207,7 @@
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2" // Kindlehorn
           ]
@@ -285,10 +289,12 @@
           "pack": 1,
           "pickInPack": 9,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
@@ -334,6 +340,7 @@
           "packCards": [
             "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2" // Kindlehorn
           ]
@@ -681,6 +688,7 @@
           "packCards": [
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks

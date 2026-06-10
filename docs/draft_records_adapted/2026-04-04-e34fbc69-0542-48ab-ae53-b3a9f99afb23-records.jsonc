@@ -730,6 +730,7 @@
             "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
@@ -1014,6 +1015,7 @@
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
@@ -1113,6 +1115,7 @@
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f" // Frost Visionary
           ]
@@ -1190,6 +1193,7 @@
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
@@ -1257,6 +1261,7 @@
           "pickId": "bbcc1d84-9772-475d-924a-75bb54c9bc20",
           "packCards": [
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f" // Frost Visionary
           ]

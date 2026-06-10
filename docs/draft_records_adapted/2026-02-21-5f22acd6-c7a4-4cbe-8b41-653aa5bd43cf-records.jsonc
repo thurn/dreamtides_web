@@ -69,6 +69,7 @@
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
         "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277" // Nexus Wayfinder
       ],
@@ -124,6 +125,7 @@
         "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
         "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
         "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
         "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
@@ -222,6 +224,7 @@
           "pickId": "168ef687-5797-4b45-b75b-393d8117cebd",
           "packCards": [
             "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315" // Veilseeker
@@ -879,17 +882,20 @@
           "pack": 5,
           "pickInPack": 2,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
             "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "738a5af0-f848-4d48-bceb-9a43c9b11066" // Reclaimer of Lost Paths
@@ -996,6 +1002,7 @@
           "pickId": "c4a5f86f-44a8-4735-909a-770586d33a15",
           "packCards": [
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "738a5af0-f848-4d48-bceb-9a43c9b11066" // Reclaimer of Lost Paths

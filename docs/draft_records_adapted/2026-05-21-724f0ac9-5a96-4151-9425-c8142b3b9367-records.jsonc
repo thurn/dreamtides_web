@@ -245,7 +245,8 @@
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -372,7 +373,8 @@
           "pickId": "f254239c-c07a-4c41-98f7-8f4de539c73e",
           "packCards": [
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -799,6 +801,7 @@
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad

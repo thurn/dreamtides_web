@@ -176,6 +176,7 @@
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15" // Specter of Silent Snow
@@ -337,6 +338,7 @@
           "packCards": [
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15" // Specter of Silent Snow
@@ -455,6 +457,7 @@
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
@@ -613,6 +616,7 @@
           "packCards": [
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler

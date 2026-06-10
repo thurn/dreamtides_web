@@ -411,6 +411,7 @@
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "3fab0780-59d4-45f1-8aac-a870ad8729ac" // Gilded Catalyst
           ]
@@ -452,7 +453,8 @@
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -482,6 +484,7 @@
           "packCards": [
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "3fab0780-59d4-45f1-8aac-a870ad8729ac" // Gilded Catalyst
           ]
@@ -513,7 +516,8 @@
           "pickId": "9f5ba065-2806-4e99-a330-168cfe76250f",
           "packCards": [
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {

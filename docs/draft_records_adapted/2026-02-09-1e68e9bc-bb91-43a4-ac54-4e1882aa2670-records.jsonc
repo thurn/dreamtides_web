@@ -34,6 +34,7 @@
         "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
         "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
         "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
         "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
@@ -71,6 +72,7 @@
         "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
         "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "pool": [
@@ -81,6 +83,7 @@
         "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
         "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
         "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
         "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
@@ -92,6 +95,7 @@
         "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
         "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
         "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
@@ -228,6 +232,7 @@
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "fbf725ca-8837-46d4-970c-922153e27b6e" // Infernal Ascendant
           ]
@@ -273,10 +278,12 @@
           "pack": 1,
           "pickInPack": 8,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
@@ -353,6 +360,7 @@
           "pickId": "4ab981aa-d815-439a-b8ff-2043bf42c392",
           "packCards": [
             "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "fbf725ca-8837-46d4-970c-922153e27b6e" // Infernal Ascendant
           ]
@@ -495,10 +503,12 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth

@@ -71,6 +71,7 @@
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [
@@ -78,6 +79,7 @@
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
         "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
         "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
         "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
@@ -110,6 +112,7 @@
         "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
@@ -129,6 +132,7 @@
         "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
         "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
@@ -571,10 +575,12 @@
           "pack": 2,
           "pickInPack": 7,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
@@ -731,6 +737,7 @@
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
@@ -758,6 +765,7 @@
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
@@ -896,10 +904,12 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
@@ -919,6 +929,7 @@
           "packCards": [
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick

@@ -156,6 +156,7 @@
             "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
@@ -436,6 +437,7 @@
             "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
@@ -585,6 +587,7 @@
           "packCards": [
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw

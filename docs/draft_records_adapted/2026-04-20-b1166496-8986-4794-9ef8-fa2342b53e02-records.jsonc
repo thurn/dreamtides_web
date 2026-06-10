@@ -73,7 +73,8 @@
         "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
         "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
         "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
-        "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+        "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
       ],
       "pool": [
         "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
@@ -117,6 +118,7 @@
         "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
         "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
         "123baf70-305a-4583-bdba-a10b5153fbeb" // Dustborn Veteran
       ],
@@ -750,6 +752,7 @@
           "pickId": "e7b28650-cddc-4878-b1d1-b5a764f4df49",
           "packCards": [
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
@@ -799,8 +802,10 @@
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11" // Verdant Pioneer
@@ -939,11 +944,13 @@
           "pack": 3,
           "pickInPack": 13,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11" // Verdant Pioneer

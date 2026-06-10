@@ -308,7 +308,8 @@
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -533,6 +534,7 @@
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15" // Specter of Silent Snow
@@ -591,6 +593,7 @@
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
@@ -832,6 +835,7 @@
           "packCards": [
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance

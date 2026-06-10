@@ -54,6 +54,7 @@
         "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
         "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
         "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
         "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
@@ -65,6 +66,7 @@
         "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
         "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
         "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
         "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
@@ -250,10 +252,12 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "08e01310-d192-41e9-a6f0-0edbd6fb3cfb",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
@@ -319,6 +323,7 @@
           "pickId": "006cbb74-7447-45fb-b44b-bac31832b392",
           "packCards": [
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer

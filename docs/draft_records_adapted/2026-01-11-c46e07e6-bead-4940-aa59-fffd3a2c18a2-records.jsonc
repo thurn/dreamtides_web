@@ -54,6 +54,7 @@
         "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [
@@ -104,6 +105,7 @@
         "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
         "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
         "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
         "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
@@ -492,10 +494,12 @@
           "pickId": "14065271-d942-42a8-aa38-d8a622c0375d",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
@@ -646,10 +650,12 @@
           "pack": 2,
           "pickInPack": 12,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer

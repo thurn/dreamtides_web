@@ -83,6 +83,7 @@
         "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "pool": [
@@ -136,6 +137,7 @@
         "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
         "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
         "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "61060827-8bed-4b63-b63d-6c3b0536e941" // Sunshadow Eagle
       ],
@@ -260,6 +262,7 @@
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
@@ -503,6 +506,7 @@
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0" // The Rising God
           ]
@@ -704,6 +708,7 @@
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0" // The Rising God
           ]
@@ -840,6 +845,7 @@
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40" // Ashwalker
           ]
         },
@@ -994,6 +1000,7 @@
             "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
             "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "81074582-dfb3-497c-8c04-f97a24d6b1d4" // Pit Descender
           ]
@@ -1055,6 +1062,7 @@
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40" // Ashwalker
           ]
         },
@@ -1150,10 +1158,12 @@
           "pack": 3,
           "pickInPack": 16,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "81074582-dfb3-497c-8c04-f97a24d6b1d4" // Pit Descender
           ]

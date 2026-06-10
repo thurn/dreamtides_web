@@ -244,6 +244,7 @@
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
@@ -308,7 +309,8 @@
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -493,6 +495,7 @@
           "packCards": [
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
@@ -532,6 +535,7 @@
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
             "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler

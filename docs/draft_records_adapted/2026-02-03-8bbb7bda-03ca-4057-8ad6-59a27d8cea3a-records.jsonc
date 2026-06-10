@@ -58,6 +58,7 @@
         "3e83cbe2-2b21-4804-9906-4b4735db9869" // Phantom Flotilla
       ],
       "sideboard": [
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
         "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
@@ -103,6 +104,7 @@
         "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
         "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
         "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "f9a65b32-537b-457c-9eaf-b512cf1f3791" // Still Dreamer
       ],
@@ -138,6 +140,7 @@
           "pickId": "99ff731b-8399-40c8-b539-ba6ba5783771",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
@@ -785,6 +788,7 @@
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee" // Ethereal Courser
           ]
@@ -917,10 +921,12 @@
           "pack": 3,
           "pickInPack": 14,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee" // Ethereal Courser
           ]

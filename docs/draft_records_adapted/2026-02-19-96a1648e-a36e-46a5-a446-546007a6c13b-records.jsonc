@@ -242,6 +242,7 @@
           "packCards": [
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "6e2188f8-580e-4a66-a3e3-267d509de903" // Terminus
@@ -695,6 +696,7 @@
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f" // Forgotten Factory Titan
           ]
@@ -779,7 +781,8 @@
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -794,6 +797,7 @@
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f" // Forgotten Factory Titan
           ]
@@ -946,6 +950,7 @@
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
             "3e6a5236-9850-4a69-9fe1-48389365a399" // Dusk Duelist

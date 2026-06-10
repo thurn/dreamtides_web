@@ -35,6 +35,7 @@
         "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
         "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
         "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
         "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
@@ -113,6 +114,7 @@
         "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
         "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
         "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
         "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
@@ -553,6 +555,7 @@
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "42427d15-c019-4786-9d7e-285829c4f3cb" // Signal Resonant
           ]
@@ -592,6 +595,7 @@
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -682,10 +686,12 @@
           "pack": 2,
           "pickInPack": 14,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "42427d15-c019-4786-9d7e-285829c4f3cb" // Signal Resonant
           ]

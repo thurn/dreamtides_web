@@ -132,6 +132,7 @@
             "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
@@ -425,6 +426,7 @@
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
@@ -572,6 +574,7 @@
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f" // Augur Crow

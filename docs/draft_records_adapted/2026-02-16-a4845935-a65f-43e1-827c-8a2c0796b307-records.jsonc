@@ -72,6 +72,7 @@
         "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
         "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
         "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "5e1b943f-9fa2-4055-b613-5dd09a048c99" // Call to the Unknown
       ],
@@ -105,6 +106,7 @@
         "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
         "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
         "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
@@ -188,8 +190,10 @@
             "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
             "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -204,6 +208,7 @@
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
@@ -347,8 +352,10 @@
             "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
             "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -468,6 +475,7 @@
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
@@ -711,10 +719,12 @@
           "pack": 3,
           "pickInPack": 2,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
             "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin

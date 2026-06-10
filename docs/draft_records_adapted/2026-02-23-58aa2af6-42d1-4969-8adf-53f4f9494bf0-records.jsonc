@@ -128,6 +128,7 @@
           "pickId": "ea49c01f-3f32-4c66-893c-56931e0e8981",
           "packCards": [
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
@@ -241,6 +242,7 @@
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "8b5eb29c-146f-46fb-9407-55004128fba7" // Keeper of Forgotten Light
@@ -257,6 +259,7 @@
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00" // Echo Architect
@@ -498,6 +501,7 @@
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner

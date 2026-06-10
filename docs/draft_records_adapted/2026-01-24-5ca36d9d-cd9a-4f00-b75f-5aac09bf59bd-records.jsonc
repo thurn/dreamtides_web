@@ -147,7 +147,8 @@
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -318,7 +319,8 @@
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -426,6 +428,7 @@
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
@@ -473,6 +476,7 @@
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
@@ -520,6 +524,7 @@
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -558,6 +563,7 @@
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b" // Young Beastcaller
@@ -659,6 +665,7 @@
           "packCards": [
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },

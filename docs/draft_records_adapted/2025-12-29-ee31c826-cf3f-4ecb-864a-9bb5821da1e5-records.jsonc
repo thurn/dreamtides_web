@@ -35,6 +35,7 @@
         "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
         "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
         "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
         "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
@@ -75,6 +76,7 @@
         "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
         "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
         "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
         "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
@@ -124,6 +126,7 @@
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
@@ -174,6 +177,7 @@
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
@@ -220,6 +224,7 @@
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
@@ -263,6 +268,7 @@
           "packCards": [
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
@@ -298,10 +304,12 @@
           "pack": 1,
           "pickInPack": 9,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
@@ -661,6 +669,7 @@
           "pickId": "3e1766e9-2fa7-4446-a255-7beea1467ece",
           "packCards": [
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
@@ -985,6 +994,7 @@
         "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
         "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
@@ -1018,6 +1028,7 @@
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
         "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
         "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
         "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
@@ -1079,6 +1090,7 @@
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
@@ -1127,6 +1139,7 @@
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
@@ -1169,6 +1182,7 @@
           "packCards": [
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
@@ -1210,6 +1224,7 @@
           "pickId": "bbcc1d84-9772-475d-924a-75bb54c9bc20",
           "packCards": [
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
@@ -1605,10 +1620,12 @@
           "pack": 3,
           "pickInPack": 2,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor

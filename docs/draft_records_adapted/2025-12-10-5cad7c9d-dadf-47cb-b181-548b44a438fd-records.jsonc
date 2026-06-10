@@ -74,9 +74,11 @@
         "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
         "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
         "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
-        "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+        "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
       ],
       "sideboard": [],
       "pool": [
@@ -95,6 +97,7 @@
         "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
         "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
         "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
@@ -127,7 +130,8 @@
         "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
         "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
         "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
-        "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+        "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
       ],
       "picks": [
         {
@@ -242,6 +246,7 @@
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
@@ -384,10 +389,12 @@
           "pack": 1,
           "pickInPack": 13,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
@@ -523,6 +530,7 @@
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
@@ -857,7 +865,8 @@
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -979,11 +988,13 @@
           "pack": 3,
           "pickInPack": 15,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         }
       ]

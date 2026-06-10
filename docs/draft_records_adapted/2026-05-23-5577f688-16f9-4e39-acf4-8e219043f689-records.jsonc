@@ -41,6 +41,7 @@
         "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
         "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
         "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
         "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
@@ -105,6 +106,7 @@
         "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
         "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
         "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
         "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
@@ -566,10 +568,12 @@
           "pack": 2,
           "pickInPack": 4,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
@@ -604,6 +608,7 @@
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b" // Dawnprowler Panther
@@ -648,6 +653,7 @@
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
@@ -859,6 +865,7 @@
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "0e1209c3-1041-4079-9b1c-f96816a7deb5", // Wistful Angler
@@ -965,6 +972,7 @@
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -1152,6 +1160,7 @@
           "pickId": "fce07335-cc78-4683-b2f0-9c98a06ea1d8",
           "packCards": [
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

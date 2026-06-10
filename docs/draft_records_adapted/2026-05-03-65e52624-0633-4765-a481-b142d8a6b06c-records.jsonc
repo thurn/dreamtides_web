@@ -38,6 +38,7 @@
         "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
         "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
         "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
         "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
@@ -105,6 +106,7 @@
         "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
         "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
@@ -278,6 +280,7 @@
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de" // Eternal Sentry
           ]
@@ -471,6 +474,7 @@
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "a911ef71-799c-4240-ad13-8fabd3caeafa" // Moment Rewound
@@ -608,10 +612,12 @@
           "pack": 2,
           "pickInPack": 11,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "08e01310-d192-41e9-a6f0-0edbd6fb3cfb",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "a911ef71-799c-4240-ad13-8fabd3caeafa" // Moment Rewound
@@ -726,6 +732,7 @@
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
@@ -957,6 +964,7 @@
         "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "06f8cfff-92ec-4668-afbc-f33a274c3b1a" // Fractured Veil
       ],
@@ -1006,6 +1014,7 @@
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
         "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
         "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
         "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
@@ -1086,6 +1095,7 @@
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de" // Eternal Sentry
           ]
@@ -1428,6 +1438,7 @@
           "packCards": [
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "a911ef71-799c-4240-ad13-8fabd3caeafa" // Moment Rewound
@@ -1582,6 +1593,7 @@
             "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
             "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
@@ -1681,10 +1693,12 @@
           "pack": 3,
           "pickInPack": 7,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen

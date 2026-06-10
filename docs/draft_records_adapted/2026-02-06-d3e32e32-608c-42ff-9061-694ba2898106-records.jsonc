@@ -141,6 +141,7 @@
           "packCards": [
             "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
@@ -283,6 +284,7 @@
           "packCards": [
             "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
@@ -495,6 +497,7 @@
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -660,6 +663,7 @@
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

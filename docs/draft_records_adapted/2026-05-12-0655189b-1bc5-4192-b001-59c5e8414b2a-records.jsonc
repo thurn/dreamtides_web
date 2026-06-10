@@ -60,6 +60,7 @@
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [
@@ -111,6 +112,7 @@
         "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
         "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
         "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
@@ -222,6 +224,7 @@
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
@@ -476,6 +479,7 @@
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
@@ -530,6 +534,7 @@
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "86881031-393f-4359-96f5-3adde6bdd74d" // Abomination of Memory
@@ -714,6 +719,7 @@
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb" // Endless Projection
           ]
@@ -747,10 +753,12 @@
           "pack": 3,
           "pickInPack": 3,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
@@ -880,6 +888,7 @@
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb" // Endless Projection
           ]

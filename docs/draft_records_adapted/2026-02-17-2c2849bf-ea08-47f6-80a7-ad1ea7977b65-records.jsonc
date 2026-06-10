@@ -212,6 +212,7 @@
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -356,6 +357,7 @@
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -509,6 +511,7 @@
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "123baf70-305a-4583-bdba-a10b5153fbeb" // Dustborn Veteran
           ]
@@ -531,7 +534,8 @@
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -643,6 +647,7 @@
           "pickId": "87ead6ac-b1c5-4852-8413-7fa43c6cfc57",
           "packCards": [
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "123baf70-305a-4583-bdba-a10b5153fbeb" // Dustborn Veteran
           ]
@@ -657,7 +662,8 @@
           "pickId": "278e97cf-312d-4e9e-bc39-023f4e547121",
           "packCards": [
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {

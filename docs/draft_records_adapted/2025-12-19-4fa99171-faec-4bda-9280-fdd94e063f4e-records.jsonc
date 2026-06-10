@@ -33,6 +33,7 @@
         "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
         "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
         "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
         "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
@@ -81,6 +82,7 @@
       ],
       "pool": [
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
         "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
@@ -157,11 +159,13 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
@@ -189,6 +193,7 @@
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
@@ -301,6 +306,7 @@
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2" // Oblivion Guide
@@ -563,6 +569,7 @@
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "8b5eb29c-146f-46fb-9407-55004128fba7" // Keeper of Forgotten Light
@@ -707,6 +714,7 @@
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter

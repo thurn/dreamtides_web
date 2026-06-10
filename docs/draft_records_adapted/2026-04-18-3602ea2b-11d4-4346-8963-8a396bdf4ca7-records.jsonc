@@ -249,6 +249,7 @@
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
@@ -731,6 +732,7 @@
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -853,7 +855,8 @@
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -886,6 +889,7 @@
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

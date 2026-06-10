@@ -41,6 +41,7 @@
         "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
         "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
         "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
@@ -88,6 +89,7 @@
         "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
         "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
         "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
@@ -138,6 +140,7 @@
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb" // Heroic Rescue
           ]
         },
@@ -217,6 +220,7 @@
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
@@ -307,6 +311,7 @@
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb" // Heroic Rescue
           ]
         },
@@ -443,10 +448,12 @@
           "pack": 2,
           "pickInPack": 3,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
             "f860e815-3ed9-463d-ac4d-ed8d2778f8ad", // Lone Castaway
@@ -839,6 +846,7 @@
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
             "c96c6c7f-c0fe-4272-b856-a54ace01f596" // Veil Shatter
           ]
@@ -850,6 +858,7 @@
           "pick": [],
           "pickId": "dcaa1ff6-304e-4660-9df3-36de8e89592e",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest

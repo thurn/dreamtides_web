@@ -511,6 +511,7 @@
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "f68774ce-0e94-489f-90a5-68e03a549ff6" // Deathwalker
           ]
@@ -723,6 +724,7 @@
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
@@ -867,6 +869,7 @@
           "pick": [],
           "pickId": "ced4c824-2dfc-42ae-84e6-09f8e3f51b5b",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail

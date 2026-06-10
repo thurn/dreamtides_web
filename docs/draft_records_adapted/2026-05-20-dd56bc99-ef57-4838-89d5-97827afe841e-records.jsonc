@@ -51,6 +51,7 @@
         "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
         "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
         "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
@@ -77,6 +78,7 @@
         "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
         "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
         "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
         "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
@@ -147,6 +149,7 @@
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
@@ -213,10 +216,12 @@
           "pack": 1,
           "pickInPack": 6,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
@@ -310,6 +315,7 @@
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
             "9d14885c-a757-40cc-b43e-87dbec7ec379" // Forsaken Skyline
           ]
@@ -555,6 +561,7 @@
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "08fe3190-f559-4152-941d-33ec4180f509" // Data Pulse
           ]
@@ -620,6 +627,7 @@
           "packCards": [
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "08fe3190-f559-4152-941d-33ec4180f509" // Data Pulse
           ]

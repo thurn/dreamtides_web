@@ -190,6 +190,7 @@
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
@@ -994,6 +995,7 @@
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
         "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
         "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [],
@@ -1005,6 +1007,7 @@
         "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
         "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "0e1209c3-1041-4079-9b1c-f96816a7deb5", // Wistful Angler
         "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
@@ -1184,10 +1187,12 @@
           "pack": 1,
           "pickInPack": 7,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
@@ -1632,6 +1637,7 @@
           "pickId": "2c723fc9-d5c9-4126-a9a6-f80c247a4b6b",
           "packCards": [
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol

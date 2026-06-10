@@ -264,12 +264,14 @@
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
             "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
             "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
@@ -640,6 +642,7 @@
           "packCards": [
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
             "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
@@ -760,6 +763,7 @@
           "packCards": [
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
@@ -1030,6 +1034,7 @@
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e" // Doorlight Foundling
           ]
         },
@@ -1217,6 +1222,7 @@
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e" // Doorlight Foundling
           ]
         },

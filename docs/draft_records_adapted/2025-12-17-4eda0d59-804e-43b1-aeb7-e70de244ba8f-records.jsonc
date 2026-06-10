@@ -74,6 +74,7 @@
         "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
         "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
         "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
         "af739e3d-bc61-4fab-bf81-a22e78d7e524" // Silent Gatherer
@@ -106,6 +107,7 @@
         "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
         "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
         "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
         "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
@@ -195,6 +197,7 @@
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
             "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
@@ -551,6 +554,7 @@
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3" // Unleash Ruin
           ]
@@ -571,6 +575,7 @@
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b" // Dawnprowler Panther
           ]
         },
@@ -674,10 +679,12 @@
           "pack": 2,
           "pickInPack": 14,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3" // Unleash Ruin
           ]
@@ -717,6 +724,7 @@
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7" // Packcaller of Shadows
           ]
@@ -784,6 +792,7 @@
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
@@ -892,6 +901,7 @@
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7" // Packcaller of Shadows
           ]

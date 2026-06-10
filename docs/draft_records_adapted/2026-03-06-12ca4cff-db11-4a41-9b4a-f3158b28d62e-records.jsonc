@@ -371,6 +371,7 @@
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -477,6 +478,7 @@
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -720,6 +722,7 @@
           "pick": [],
           "pickId": "54f449ff-4025-465e-9ec5-a5cf42c4c9d3",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies

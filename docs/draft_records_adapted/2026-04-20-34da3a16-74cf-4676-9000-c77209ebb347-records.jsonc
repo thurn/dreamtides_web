@@ -49,6 +49,7 @@
         "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
         "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
         "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
         "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
@@ -82,6 +83,7 @@
         "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
         "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
         "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
         "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
@@ -273,11 +275,13 @@
           "pack": 1,
           "pickInPack": 8,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
@@ -320,6 +324,7 @@
           "packCards": [
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
@@ -837,6 +842,7 @@
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer

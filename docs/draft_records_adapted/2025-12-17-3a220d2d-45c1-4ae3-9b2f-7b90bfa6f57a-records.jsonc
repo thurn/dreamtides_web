@@ -185,6 +185,7 @@
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
@@ -211,6 +212,7 @@
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -354,6 +356,7 @@
           "pickId": "327cf118-cc92-4073-85d0-94d2a0a6989a",
           "packCards": [
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -668,6 +671,7 @@
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
@@ -827,6 +831,7 @@
           "packCards": [
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant

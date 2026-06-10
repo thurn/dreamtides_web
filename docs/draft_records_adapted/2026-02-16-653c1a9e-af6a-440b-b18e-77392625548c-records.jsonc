@@ -39,6 +39,7 @@
         "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
         "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
         "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
@@ -90,6 +91,7 @@
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
         "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
         "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
         "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
@@ -294,6 +296,7 @@
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
@@ -476,10 +479,12 @@
           "pack": 2,
           "pickInPack": 4,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
@@ -712,6 +717,7 @@
           "packCards": [
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign

@@ -39,6 +39,7 @@
         "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
         "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
@@ -116,6 +117,7 @@
         "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
         "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
         "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
         "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
@@ -178,6 +180,7 @@
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa" // Vessel of Echoes
           ]
@@ -266,6 +269,7 @@
             "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
@@ -349,6 +353,7 @@
           "packCards": [
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
@@ -388,6 +393,7 @@
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa" // Vessel of Echoes
           ]
@@ -572,6 +578,7 @@
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
@@ -1014,10 +1021,12 @@
           "pack": 3,
           "pickInPack": 8,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
@@ -1073,6 +1082,7 @@
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f" // Field Reverent

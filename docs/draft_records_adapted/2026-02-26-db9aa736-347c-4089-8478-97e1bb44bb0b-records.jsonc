@@ -318,6 +318,7 @@
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa" // Vessel of Echoes
@@ -599,6 +600,7 @@
           "pickId": "367ef35a-528b-407c-8b8d-679109662bae",
           "packCards": [
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
@@ -865,6 +867,7 @@
           "packCards": [
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
@@ -1027,6 +1030,7 @@
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
@@ -1054,6 +1058,7 @@
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
             "7977748d-02c1-4702-ba68-5c49f7f0759b" // Light of Emergence
@@ -1206,6 +1211,7 @@
           "packCards": [
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
             "7977748d-02c1-4702-ba68-5c49f7f0759b" // Light of Emergence

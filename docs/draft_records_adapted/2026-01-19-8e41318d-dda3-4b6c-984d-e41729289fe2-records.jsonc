@@ -72,6 +72,8 @@
         "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
         "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
         "c97b0a5b-64d0-480f-8db7-3fde93738d86" // Vaultbreaker
@@ -81,6 +83,7 @@
         "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
         "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
         "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
         "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
@@ -94,6 +97,7 @@
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
         "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
         "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
@@ -236,10 +240,12 @@
           "pack": 1,
           "pickInPack": 6,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
@@ -394,11 +400,13 @@
           "pack": 2,
           "pickInPack": 1,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
@@ -793,6 +801,7 @@
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "1658d9a0-c3b0-4eb7-babc-4933acf362c4" // Glimpse of Infinity

@@ -704,6 +704,7 @@
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
@@ -804,6 +805,7 @@
           "pickId": "27933adb-9c7a-4248-9908-f01e6a6bf12c",
           "packCards": [
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894" // Ride of the Vanguard
@@ -921,7 +923,8 @@
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -1030,7 +1033,8 @@
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {

@@ -68,6 +68,7 @@
         "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
         "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
         "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "8a6fc6ea-9a88-441e-bdc2-d40dfec37481" // Fading Farewell
       ],
@@ -78,6 +79,7 @@
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
         "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
@@ -219,10 +221,12 @@
           "pack": 1,
           "pickInPack": 6,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner

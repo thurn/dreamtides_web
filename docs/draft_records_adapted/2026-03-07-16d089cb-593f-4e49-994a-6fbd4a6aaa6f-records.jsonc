@@ -56,6 +56,7 @@
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "2305722e-59c1-47d7-9e05-dc1c32c946a2" // Intermezzo Balladeer
       ],
@@ -96,6 +97,7 @@
         "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
         "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
@@ -448,10 +450,12 @@
           "pack": 2,
           "pickInPack": 3,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer

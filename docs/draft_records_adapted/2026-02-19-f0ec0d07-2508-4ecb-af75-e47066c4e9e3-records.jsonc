@@ -64,6 +64,7 @@
         "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
         "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
         "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [],
@@ -83,6 +84,7 @@
         "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
         "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
         "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
         "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
@@ -408,6 +410,7 @@
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "49641e8e-93a8-46cb-92a9-246b0fd57899" // Harvester of Despair
           ]
@@ -519,12 +522,15 @@
           "pack": 2,
           "pickInPack": 7,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
@@ -567,6 +573,7 @@
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "49641e8e-93a8-46cb-92a9-246b0fd57899" // Harvester of Despair
           ]

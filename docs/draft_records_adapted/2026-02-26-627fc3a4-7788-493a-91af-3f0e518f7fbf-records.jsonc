@@ -66,6 +66,7 @@
         "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
         "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
         "50267984-eaa3-415e-a23f-581c54b0ad2d" // Reunion
       ],
@@ -99,6 +100,7 @@
         "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent
         "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
         "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
         "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
@@ -160,6 +162,7 @@
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
@@ -184,6 +187,7 @@
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
@@ -329,11 +333,13 @@
           "pack": 1,
           "pickInPack": 9,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
@@ -487,6 +493,7 @@
           "packCards": [
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
@@ -872,6 +879,7 @@
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93" // Obliterator of Worlds
           ]

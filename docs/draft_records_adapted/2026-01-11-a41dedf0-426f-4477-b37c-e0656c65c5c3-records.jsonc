@@ -75,6 +75,7 @@
         "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
         "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "pool": [
@@ -96,6 +97,7 @@
         "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
         "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
@@ -507,6 +509,7 @@
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
@@ -520,10 +523,12 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
@@ -789,6 +794,7 @@
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
         },
@@ -915,6 +921,7 @@
           "pickId": "2d9d4f2e-5a41-410d-b1c3-47e4aca07177",
           "packCards": [
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
         },
@@ -1333,6 +1340,7 @@
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
@@ -1354,6 +1362,7 @@
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
@@ -1596,6 +1605,7 @@
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
@@ -1607,6 +1617,7 @@
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
         },
@@ -1776,6 +1787,7 @@
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
         },

@@ -46,6 +46,7 @@
         "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
         "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
         "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
@@ -106,6 +107,7 @@
         "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
         "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
         "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
@@ -494,6 +496,7 @@
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "c32ef131-d283-4bf1-bf65-2d5e5d232168" // Harrowing Officiant
           ]
@@ -632,6 +635,7 @@
           "pickId": "2be39749-ad6f-4160-99eb-c677eee7f1b2",
           "packCards": [
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "c32ef131-d283-4bf1-bf65-2d5e5d232168" // Harrowing Officiant
           ]
@@ -676,6 +680,7 @@
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
@@ -726,7 +731,8 @@
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -836,10 +842,12 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
@@ -883,7 +891,8 @@
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {

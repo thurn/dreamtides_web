@@ -33,6 +33,7 @@
         "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
         "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
@@ -91,6 +92,7 @@
         "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
         "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
         "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
@@ -175,6 +177,7 @@
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
@@ -340,10 +343,12 @@
           "pack": 1,
           "pickInPack": 10,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
@@ -473,6 +478,7 @@
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
@@ -632,6 +638,7 @@
           "pickId": "683a5707-cddb-494d-9b41-51b4584ded69",
           "packCards": [
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol

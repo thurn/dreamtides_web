@@ -491,6 +491,7 @@
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
             "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
@@ -517,6 +518,7 @@
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12" // Echoes of the Journey
           ]
@@ -649,6 +651,7 @@
           "pickId": "c2089ec9-0665-448f-bfe9-d181de127814",
           "packCards": [
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12" // Echoes of the Journey
           ]
@@ -839,6 +842,7 @@
             "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2" // Duneveil Vanguard

@@ -41,6 +41,7 @@
         "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
         "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
         "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
         "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
@@ -109,6 +110,7 @@
         "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
         "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
         "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
         "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
@@ -501,6 +503,7 @@
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b" // Shardwoven Tyrant
@@ -644,6 +647,7 @@
           "pickId": "c060c178-3c0e-493f-b6f0-ead5b1d6f191",
           "packCards": [
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b" // Shardwoven Tyrant
@@ -689,6 +693,7 @@
             "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
@@ -759,6 +764,7 @@
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb" // Endless Projection
@@ -854,10 +860,12 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
@@ -910,6 +918,7 @@
           "pickId": "4720b4f2-e6af-4223-9250-a0ed21ed5693",
           "packCards": [
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb" // Endless Projection

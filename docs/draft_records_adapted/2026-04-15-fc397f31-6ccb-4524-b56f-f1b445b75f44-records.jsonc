@@ -31,6 +31,7 @@
       "mainboard": [
         "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
         "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
         "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
@@ -79,6 +80,7 @@
         "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
         "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
         "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
         "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
@@ -202,11 +204,13 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
@@ -786,6 +790,7 @@
           "packCards": [
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
@@ -834,6 +839,7 @@
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a" // Iron Executor

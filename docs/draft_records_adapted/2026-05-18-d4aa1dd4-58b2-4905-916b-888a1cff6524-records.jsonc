@@ -64,10 +64,12 @@
         "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
         "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
         "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "pool": [
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
@@ -157,10 +159,12 @@
           "pack": 1,
           "pickInPack": 3,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
@@ -173,6 +177,7 @@
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "954e8d50-d494-4fb2-b4c7-74979083b774" // Driftrider
           ]
         },
@@ -321,6 +326,7 @@
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "954e8d50-d494-4fb2-b4c7-74979083b774" // Driftrider
           ]
         },

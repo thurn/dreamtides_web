@@ -56,6 +56,7 @@
         "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
         "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
         "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
         "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
@@ -106,6 +107,7 @@
         "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
         "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
         "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
         "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
@@ -139,6 +141,7 @@
             "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
@@ -310,6 +313,7 @@
           "packCards": [
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
@@ -717,10 +721,12 @@
           "pack": 3,
           "pickInPack": 2,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
@@ -796,6 +802,7 @@
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker

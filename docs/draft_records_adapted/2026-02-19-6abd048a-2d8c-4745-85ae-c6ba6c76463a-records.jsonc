@@ -43,7 +43,9 @@
         "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
         "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
         "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
@@ -94,6 +96,7 @@
         "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
         "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
         "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
         "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
@@ -118,6 +121,7 @@
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
         "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
         "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
       ],
       "picks": [
@@ -519,10 +523,12 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
@@ -836,6 +842,7 @@
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -957,10 +964,12 @@
           "pack": 3,
           "pickInPack": 15,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         }

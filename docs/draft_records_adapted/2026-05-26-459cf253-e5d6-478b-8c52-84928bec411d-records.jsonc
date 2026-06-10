@@ -62,6 +62,7 @@
         "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
         "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
         "d24ea640-638d-4ce2-b15d-b3f4588bda6b" // Echoes of Eternity
       ],
@@ -113,6 +114,7 @@
         "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
         "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
         "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
@@ -209,6 +211,7 @@
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -351,6 +354,7 @@
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
@@ -399,6 +403,7 @@
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93" // Obliterator of Worlds
           ]
@@ -434,6 +439,7 @@
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -529,11 +535,13 @@
           "pack": 2,
           "pickInPack": 1,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
@@ -567,6 +575,7 @@
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
@@ -670,6 +679,7 @@
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick

@@ -82,7 +82,8 @@
         "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
         "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
         "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
-        "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+        "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
       ],
       "pool": [
         "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
@@ -118,6 +119,7 @@
         "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
         "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
         "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
         "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
@@ -562,6 +564,7 @@
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
             "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c" // Shadowcaller
           ]
         },
@@ -700,11 +703,13 @@
           "pack": 2,
           "pickInPack": 14,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c" // Shadowcaller
           ]
         },

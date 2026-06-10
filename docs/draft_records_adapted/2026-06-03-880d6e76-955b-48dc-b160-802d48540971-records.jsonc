@@ -294,6 +294,7 @@
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7" // Planetgazer
           ]
         },
@@ -362,6 +363,7 @@
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7" // Planetgazer
           ]
         },
@@ -696,6 +698,7 @@
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb" // Thronebound Arbiter
           ]
@@ -735,7 +738,8 @@
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
             "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -764,6 +768,7 @@
           "pickId": "ccd5f98a-7ab5-44b3-850c-b50963dace66",
           "packCards": [
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb" // Thronebound Arbiter
           ]
@@ -794,7 +799,8 @@
           "packCards": [
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
             "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {

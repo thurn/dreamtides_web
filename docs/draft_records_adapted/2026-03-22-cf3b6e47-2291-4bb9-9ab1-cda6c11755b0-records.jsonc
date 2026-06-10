@@ -36,6 +36,7 @@
         "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
         "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
         "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
@@ -87,6 +88,7 @@
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
         "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
@@ -144,6 +146,7 @@
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
@@ -310,10 +313,12 @@
           "pack": 1,
           "pickInPack": 9,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
@@ -448,6 +453,7 @@
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
@@ -498,6 +504,7 @@
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
@@ -742,6 +749,7 @@
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist

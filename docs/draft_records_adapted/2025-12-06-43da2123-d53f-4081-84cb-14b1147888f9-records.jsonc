@@ -53,6 +53,7 @@
         "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
         "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
         "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
       ],
@@ -123,6 +124,7 @@
         "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
         "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
         "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
         "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
@@ -250,6 +252,7 @@
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -389,6 +392,7 @@
           "pickId": "e3378fe8-3355-48aa-90d4-9cb739200160",
           "packCards": [
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -735,7 +739,9 @@
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
@@ -905,11 +911,14 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow

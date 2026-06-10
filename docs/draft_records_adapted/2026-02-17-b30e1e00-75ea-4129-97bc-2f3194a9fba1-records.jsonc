@@ -135,6 +135,7 @@
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
             "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
@@ -171,6 +172,7 @@
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
@@ -344,6 +346,7 @@
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
@@ -877,7 +880,8 @@
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {

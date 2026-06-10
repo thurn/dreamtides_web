@@ -60,6 +60,7 @@
       ],
       "sideboard": [
         "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
         "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
@@ -93,6 +94,7 @@
         "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
         "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
         "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
@@ -272,6 +274,7 @@
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034" // Dreadweaver
           ]
@@ -403,10 +406,12 @@
           "pack": 1,
           "pickInPack": 14,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034" // Dreadweaver
           ]
@@ -582,6 +587,7 @@
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
             "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb" // Crucible Warlord

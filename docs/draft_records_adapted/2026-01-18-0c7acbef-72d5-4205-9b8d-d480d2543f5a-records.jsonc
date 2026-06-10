@@ -51,6 +51,7 @@
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
         "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
         "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
         "f4c570d4-c500-4b66-ad97-e8ccbef19392" // Standoff
@@ -103,6 +104,7 @@
         "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
@@ -540,8 +542,10 @@
           "pickId": "0f7585c8-9e21-4eef-afc1-2852de23db2f",
           "packCards": [
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f" // Emerald Guardian
@@ -683,6 +687,7 @@
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
@@ -709,6 +714,7 @@
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c" // Starchaser
@@ -751,6 +757,7 @@
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
         },
@@ -794,10 +801,12 @@
           "pack": 3,
           "pickInPack": 8,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
@@ -825,6 +834,7 @@
           "pickId": "2135ac5a-187b-4dc9-8f82-34e8d1603416",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
@@ -869,6 +879,7 @@
           "packCards": [
             "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
         },

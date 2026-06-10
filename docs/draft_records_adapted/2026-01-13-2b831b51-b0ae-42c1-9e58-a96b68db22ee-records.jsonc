@@ -430,6 +430,7 @@
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
@@ -729,7 +730,8 @@
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -790,6 +792,7 @@
           "packCards": [
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
@@ -890,7 +893,8 @@
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {

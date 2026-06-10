@@ -211,6 +211,7 @@
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
@@ -407,6 +408,7 @@
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -446,6 +448,7 @@
           "packCards": [
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
@@ -562,6 +565,7 @@
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -736,6 +740,7 @@
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
             "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw

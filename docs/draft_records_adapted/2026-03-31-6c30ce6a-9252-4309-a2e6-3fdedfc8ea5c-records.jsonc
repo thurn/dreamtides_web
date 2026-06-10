@@ -49,6 +49,7 @@
         "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
         "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
         "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
         "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
@@ -86,6 +87,7 @@
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
         "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
         "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
@@ -151,6 +153,7 @@
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
             "f95cae7b-6502-4dbe-ae26-16853959d9a3" // Sunset Chronicler
           ]
@@ -291,10 +294,12 @@
           "pack": 1,
           "pickInPack": 8,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
@@ -323,6 +328,7 @@
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
             "f95cae7b-6502-4dbe-ae26-16853959d9a3" // Sunset Chronicler
           ]
@@ -728,6 +734,7 @@
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
@@ -754,6 +761,7 @@
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
@@ -867,6 +875,7 @@
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "af739e3d-bc61-4fab-bf81-a22e78d7e524" // Silent Gatherer
           ]
@@ -884,6 +893,7 @@
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
@@ -902,6 +912,7 @@
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
@@ -919,6 +930,7 @@
           "packCards": [
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer

@@ -39,6 +39,7 @@
         "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
         "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
         "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
@@ -115,6 +116,7 @@
         "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
         "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
         "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
         "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
@@ -570,6 +572,7 @@
             "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -680,10 +683,12 @@
           "pack": 2,
           "pickInPack": 15,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -726,6 +731,7 @@
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
@@ -825,6 +831,7 @@
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "8a5d7d67-91c9-41c4-b22e-8287954efa09" // Dreaming Obelisk
@@ -844,6 +851,7 @@
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "c32ef131-d283-4bf1-bf65-2d5e5d232168" // Harrowing Officiant

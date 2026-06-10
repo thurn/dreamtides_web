@@ -38,6 +38,7 @@
         "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
         "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
         "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
         "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
@@ -84,6 +85,7 @@
         "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
         "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
         "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
         "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
@@ -126,6 +128,7 @@
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "831bc7cf-e8c9-4943-8156-91b7397ef849" // Resilient Wanderer
@@ -197,6 +200,7 @@
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "831bc7cf-e8c9-4943-8156-91b7397ef849" // Resilient Wanderer
@@ -259,6 +263,7 @@
           "pick": [],
           "pickId": "1785cb18-c291-4fd5-b8c7-ace893c32e49",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "831bc7cf-e8c9-4943-8156-91b7397ef849" // Resilient Wanderer
@@ -343,6 +348,7 @@
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
             "fb967cc1-4199-4a08-8070-724e07cebea5" // Cascading Detonation
@@ -415,6 +421,7 @@
           "packCards": [
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
             "fb967cc1-4199-4a08-8070-724e07cebea5" // Cascading Detonation
@@ -471,10 +478,12 @@
           "pack": 2,
           "pickInPack": 10,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
             "fb967cc1-4199-4a08-8070-724e07cebea5" // Cascading Detonation

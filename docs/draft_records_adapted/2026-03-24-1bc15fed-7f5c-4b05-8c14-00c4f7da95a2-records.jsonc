@@ -216,11 +216,13 @@
           "packCards": [
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
@@ -503,10 +505,12 @@
           "pick": [],
           "pickId": "1c7d50d6-b63a-4d8c-88fa-1d78ae693a45",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel

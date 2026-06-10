@@ -211,6 +211,7 @@
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
@@ -229,9 +230,11 @@
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
@@ -273,6 +276,7 @@
           "pickId": "19fc5956-286c-4e1d-bc4a-2974fc0f4dbc",
           "packCards": [
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
@@ -360,6 +364,7 @@
           "pickId": "4e117771-5a8b-4812-b487-32ba34b7f724",
           "packCards": [
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare

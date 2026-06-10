@@ -426,6 +426,7 @@
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
@@ -527,6 +528,7 @@
             "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
@@ -580,6 +582,7 @@
           "pickId": "01006833-6007-4c16-9ebb-20d31c60a57a",
           "packCards": [
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
@@ -788,6 +791,7 @@
           "packCards": [
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader

@@ -248,6 +248,7 @@
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
@@ -365,6 +366,7 @@
           "packCards": [
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
@@ -512,6 +514,7 @@
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
@@ -756,6 +759,7 @@
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
@@ -900,6 +904,7 @@
           "pickId": "20296a5b-4e15-4f07-8bce-9a37abb35729",
           "packCards": [
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol

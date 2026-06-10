@@ -42,6 +42,7 @@
         "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
         "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
         "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
         "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
@@ -85,6 +86,7 @@
         "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
         "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
         "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
         "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
@@ -162,6 +164,7 @@
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
@@ -193,6 +196,7 @@
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -320,10 +324,12 @@
           "pack": 1,
           "pickInPack": 10,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
@@ -349,6 +355,7 @@
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -525,6 +532,7 @@
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1" // Grotto Seer
           ]
@@ -666,6 +674,7 @@
           "packCards": [
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1" // Grotto Seer
           ]

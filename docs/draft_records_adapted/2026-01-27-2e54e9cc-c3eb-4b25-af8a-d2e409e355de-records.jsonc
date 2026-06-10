@@ -31,6 +31,7 @@
       "mainboard": [
         "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
         "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
         "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
@@ -85,6 +86,7 @@
         "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
         "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
         "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
@@ -227,11 +229,13 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
@@ -300,6 +304,7 @@
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
@@ -439,6 +444,7 @@
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -598,6 +604,7 @@
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },

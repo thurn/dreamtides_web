@@ -48,6 +48,7 @@
         "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
         "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
         "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
@@ -112,6 +113,7 @@
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
         "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
         "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
         "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
@@ -758,6 +760,7 @@
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
@@ -900,10 +903,12 @@
           "pack": 3,
           "pickInPack": 12,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer

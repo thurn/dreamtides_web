@@ -54,6 +54,7 @@
         "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
         "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
         "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
@@ -65,6 +66,7 @@
       ],
       "sideboard": [
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
         "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
         "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
@@ -149,11 +151,13 @@
         "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
         "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
         "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
         "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
@@ -341,6 +345,7 @@
             "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
@@ -760,6 +765,7 @@
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
@@ -834,6 +840,7 @@
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c" // Duskmount
           ]
@@ -858,6 +865,7 @@
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "fb41a90e-279c-419c-80fc-7c3469ba0c74" // Lord of Hidden Paths
           ]
         },
@@ -929,6 +937,7 @@
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
@@ -979,6 +988,7 @@
           "pickId": "f29f3415-971c-4a5d-aae9-3893f4bdab1e",
           "packCards": [
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c" // Duskmount
           ]
@@ -988,11 +998,13 @@
           "pack": 3,
           "pickInPack": 13,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "fb41a90e-279c-419c-80fc-7c3469ba0c74" // Lord of Hidden Paths
           ]
         },
@@ -1114,10 +1126,12 @@
           "pack": 4,
           "pickInPack": 5,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper

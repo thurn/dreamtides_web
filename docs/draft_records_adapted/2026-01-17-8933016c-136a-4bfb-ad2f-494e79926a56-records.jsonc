@@ -469,6 +469,7 @@
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
             "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
@@ -642,6 +643,7 @@
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -657,6 +659,7 @@
           "packCards": [
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
             "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
@@ -779,6 +782,7 @@
           "pickId": "1a67768a-6cd9-4163-b941-752f29c87a8d",
           "packCards": [
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

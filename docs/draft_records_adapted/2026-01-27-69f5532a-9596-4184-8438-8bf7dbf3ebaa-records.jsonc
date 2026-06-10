@@ -363,6 +363,7 @@
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
@@ -403,7 +404,8 @@
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -463,6 +465,7 @@
           "pickId": "0cf8cb1e-314a-4894-82df-f9812825f52e",
           "packCards": [
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
@@ -496,7 +499,8 @@
           "packCards": [
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {

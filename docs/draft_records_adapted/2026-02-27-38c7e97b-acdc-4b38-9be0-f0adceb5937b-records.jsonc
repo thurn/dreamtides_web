@@ -65,6 +65,7 @@
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [
@@ -75,6 +76,7 @@
         "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
         "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
         "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
       ],
       "pool": [
@@ -84,7 +86,9 @@
         "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
         "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
         "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
         "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
@@ -162,12 +166,14 @@
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -284,10 +290,12 @@
           "pack": 1,
           "pickInPack": 8,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
@@ -320,16 +328,19 @@
           "pack": 1,
           "pickInPack": 10,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {

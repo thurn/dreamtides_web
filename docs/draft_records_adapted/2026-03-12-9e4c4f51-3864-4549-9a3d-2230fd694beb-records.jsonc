@@ -815,7 +815,8 @@
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -899,6 +900,7 @@
           "packCards": [
             "73fc1b7f-3c2b-4993-9590-924240515c2f", // Lunar Hart
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse

@@ -166,7 +166,8 @@
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -325,7 +326,8 @@
           "packCards": [
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -817,6 +819,7 @@
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -965,6 +968,7 @@
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -1031,6 +1035,7 @@
           "packCards": [
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
@@ -1084,6 +1089,7 @@
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
@@ -1155,6 +1161,7 @@
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
         },

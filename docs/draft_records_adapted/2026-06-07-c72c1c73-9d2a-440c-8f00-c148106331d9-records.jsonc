@@ -65,6 +65,7 @@
       ],
       "sideboard": [
         "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
         "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
@@ -76,6 +77,7 @@
         "f7ffe999-685d-4ea2-85de-2e567eb2a042" // Key to the Moment
       ],
       "pool": [
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
         "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
@@ -126,10 +128,12 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
@@ -471,6 +475,7 @@
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
@@ -509,6 +514,7 @@
           "packCards": [
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars

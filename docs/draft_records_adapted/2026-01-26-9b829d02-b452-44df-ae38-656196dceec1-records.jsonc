@@ -207,6 +207,7 @@
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
@@ -253,6 +254,7 @@
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -363,6 +365,7 @@
           "packCards": [
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
@@ -394,6 +397,7 @@
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -440,6 +444,7 @@
             "34ea77a8-66e4-49b8-a934-a9d95cb74376", // Tidewreck Navigator
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
@@ -589,6 +594,7 @@
             "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
@@ -603,6 +609,7 @@
           "pickId": "4c454a20-8ec8-41d9-b9c3-acaa510d050b",
           "packCards": [
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
@@ -863,6 +870,7 @@
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper

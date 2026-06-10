@@ -82,6 +82,7 @@
         "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
         "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
         "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
@@ -114,6 +115,7 @@
         "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
         "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
         "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
         "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
@@ -414,6 +416,7 @@
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d" // Smoldering Ancient
@@ -506,10 +509,12 @@
           "pack": 2,
           "pickInPack": 10,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d" // Smoldering Ancient
@@ -784,7 +789,8 @@
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
             "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -876,7 +882,8 @@
           "pickId": "2da5f3f8-5eef-498f-ba2c-2f3fbc3745aa",
           "packCards": [
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {

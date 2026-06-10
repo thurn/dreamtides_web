@@ -169,7 +169,8 @@
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -312,7 +313,8 @@
           "packCards": [
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -414,6 +416,7 @@
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
@@ -776,6 +779,7 @@
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer

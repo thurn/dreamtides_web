@@ -38,6 +38,7 @@
         "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
         "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
         "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
         "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
@@ -107,6 +108,7 @@
         "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
         "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
         "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
@@ -363,6 +365,7 @@
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -375,6 +378,7 @@
           "packCards": [
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
@@ -465,6 +469,7 @@
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -571,11 +576,13 @@
           "pack": 3,
           "pickInPack": 4,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation

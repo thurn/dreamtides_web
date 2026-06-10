@@ -210,6 +210,7 @@
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
@@ -421,7 +422,9 @@
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
@@ -577,6 +580,7 @@
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
@@ -592,6 +596,7 @@
           "pickId": "0a26d900-c652-4f9c-8681-a35c5f8b1937",
           "packCards": [
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
@@ -840,6 +845,7 @@
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
             "bedee263-27b9-4d73-ab77-6b5c747dff69" // Wasteland Arbitrator

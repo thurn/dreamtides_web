@@ -173,6 +173,7 @@
           "pick": [],
           "pickId": "0f7585c8-9e21-4eef-afc1-2852de23db2f",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
@@ -422,6 +423,7 @@
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -455,6 +457,7 @@
           "packCards": [
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
@@ -568,6 +571,7 @@
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "d217303e-b115-484a-b22c-0e44d5701389" // Broadcast Array
@@ -590,6 +594,7 @@
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },

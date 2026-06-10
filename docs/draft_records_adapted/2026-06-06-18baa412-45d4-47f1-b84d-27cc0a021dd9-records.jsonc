@@ -209,6 +209,7 @@
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "3fab0780-59d4-45f1-8aac-a870ad8729ac" // Gilded Catalyst
           ]
@@ -347,6 +348,7 @@
           "pickId": "0c2c39fc-b564-4ab5-833c-ff029760b7a7",
           "packCards": [
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "3fab0780-59d4-45f1-8aac-a870ad8729ac" // Gilded Catalyst
           ]
@@ -740,6 +742,7 @@
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
             "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
@@ -857,6 +860,7 @@
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

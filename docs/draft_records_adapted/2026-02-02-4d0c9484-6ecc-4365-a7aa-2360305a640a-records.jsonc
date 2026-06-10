@@ -197,6 +197,7 @@
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
@@ -493,6 +494,7 @@
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
@@ -549,6 +551,7 @@
           "packCards": [
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer

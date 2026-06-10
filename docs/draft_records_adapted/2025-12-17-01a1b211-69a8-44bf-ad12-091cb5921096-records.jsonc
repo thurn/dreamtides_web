@@ -56,7 +56,8 @@
         "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
         "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
-        "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+        "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
       ],
       "sideboard": [
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
@@ -70,6 +71,7 @@
         "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
         "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
         "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "pool": [
@@ -82,6 +84,7 @@
         "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
         "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
         "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
         "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
@@ -105,6 +108,7 @@
         "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
         "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
         "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
@@ -219,6 +223,7 @@
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9" // Through the Rift
@@ -351,10 +356,12 @@
           "pack": 1,
           "pickInPack": 13,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9" // Through the Rift
@@ -682,6 +689,7 @@
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
@@ -729,6 +737,7 @@
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
@@ -759,6 +768,7 @@
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de" // Depthwalker
@@ -852,11 +862,13 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
@@ -909,6 +921,7 @@
           "pickId": "36ab760e-93e0-4dbc-aaa1-02316f62ed3f",
           "packCards": [
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de" // Depthwalker

@@ -454,6 +454,7 @@
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
@@ -850,6 +851,7 @@
           "packCards": [
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "84fd9c6e-79c6-4b65-878b-1534f3e4b220", // Ecliptic Vantage

@@ -260,6 +260,7 @@
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -391,6 +392,7 @@
           "pickId": "8d2176a5-66f8-4a21-bbe2-969c82ca36bd",
           "packCards": [
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -713,6 +715,7 @@
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
@@ -769,6 +772,7 @@
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -859,6 +863,7 @@
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -925,6 +930,7 @@
           "packCards": [
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },

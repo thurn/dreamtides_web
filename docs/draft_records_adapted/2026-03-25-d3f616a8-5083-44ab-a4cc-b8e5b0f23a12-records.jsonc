@@ -456,6 +456,7 @@
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
@@ -675,6 +676,7 @@
           "packCards": [
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
             "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
@@ -763,6 +765,7 @@
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
@@ -917,6 +920,7 @@
           "pickId": "8d2176a5-66f8-4a21-bbe2-969c82ca36bd",
           "packCards": [
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran

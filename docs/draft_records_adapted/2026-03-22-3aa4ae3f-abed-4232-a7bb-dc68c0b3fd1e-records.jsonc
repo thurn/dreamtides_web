@@ -179,6 +179,7 @@
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
             "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
@@ -300,6 +301,7 @@
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
@@ -338,6 +340,7 @@
           "pickId": "22bb9825-ad45-44ad-ace2-eb6b66e3f724",
           "packCards": [
             "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
@@ -562,6 +565,7 @@
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b" // Echoes of Eternity
@@ -713,6 +717,7 @@
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
@@ -808,6 +813,7 @@
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -880,6 +886,7 @@
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
@@ -946,6 +953,7 @@
           "pickId": "cc520518-2063-4b57-a0d4-10cf62a7175e",
           "packCards": [
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },

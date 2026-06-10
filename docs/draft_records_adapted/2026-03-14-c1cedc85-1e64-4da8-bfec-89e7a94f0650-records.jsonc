@@ -231,6 +231,7 @@
           "pickId": "2bca6f8b-6e6a-43dd-b6a4-9eedfcc24281",
           "packCards": [
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
@@ -416,6 +417,7 @@
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
             "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
@@ -728,6 +730,7 @@
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
@@ -890,6 +893,7 @@
           "packCards": [
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop

@@ -472,6 +472,7 @@
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2" // Abyssal Enforcer
@@ -628,6 +629,7 @@
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2" // Abyssal Enforcer
@@ -778,6 +780,7 @@
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
@@ -839,6 +842,7 @@
           "pickId": "4a08ca06-58db-4ce6-b490-be4bea8956a1",
           "packCards": [
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion

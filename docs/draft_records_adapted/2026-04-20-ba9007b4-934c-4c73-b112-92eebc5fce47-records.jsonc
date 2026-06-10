@@ -172,7 +172,8 @@
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -328,7 +329,8 @@
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -518,6 +520,7 @@
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation

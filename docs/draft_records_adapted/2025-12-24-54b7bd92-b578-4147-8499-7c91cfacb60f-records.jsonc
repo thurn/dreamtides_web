@@ -29,6 +29,7 @@
       "mainboard": [
         "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
         "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
         "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
@@ -91,6 +92,7 @@
         "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
         "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
         "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
@@ -149,6 +151,7 @@
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
@@ -172,6 +175,7 @@
             "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "3fdf265c-8aa2-4367-9fee-43e242bdb462" // Shared Revelation
           ]
@@ -283,6 +287,7 @@
           "packCards": [
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "3fdf265c-8aa2-4367-9fee-43e242bdb462" // Shared Revelation
           ]
@@ -395,6 +400,7 @@
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "1658d9a0-c3b0-4eb7-babc-4933acf362c4" // Glimpse of Infinity
           ]
         },
@@ -414,6 +420,7 @@
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
@@ -509,6 +516,7 @@
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "1658d9a0-c3b0-4eb7-babc-4933acf362c4" // Glimpse of Infinity
           ]
         },
@@ -594,11 +602,13 @@
           "pack": 2,
           "pickInPack": 14,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "1658d9a0-c3b0-4eb7-babc-4933acf362c4" // Glimpse of Infinity
           ]
         },
@@ -742,6 +752,7 @@
           "pickId": "9426c906-e665-40a4-823a-0245bc39fbda",
           "packCards": [
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
@@ -997,6 +1008,7 @@
             "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "3fdf265c-8aa2-4367-9fee-43e242bdb462" // Shared Revelation
           ]
@@ -1120,6 +1132,7 @@
           "packCards": [
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "3fdf265c-8aa2-4367-9fee-43e242bdb462" // Shared Revelation
           ]
@@ -1314,6 +1327,7 @@
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "1658d9a0-c3b0-4eb7-babc-4933acf362c4" // Glimpse of Infinity
           ]
         },
@@ -1332,6 +1346,7 @@
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
@@ -1422,6 +1437,7 @@
           "packCards": [
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "1658d9a0-c3b0-4eb7-babc-4933acf362c4" // Glimpse of Infinity
           ]
         },
@@ -1563,6 +1579,7 @@
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
@@ -1790,6 +1807,7 @@
         "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
         "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
         "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
         "50267984-eaa3-415e-a23f-581c54b0ad2d" // Reunion
@@ -1825,6 +1843,7 @@
         "8c117d3f-09af-4312-9897-694a76bd23c6", // Worldbreacher
         "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
         "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
         "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
@@ -1949,6 +1968,7 @@
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
@@ -1972,6 +1992,7 @@
             "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "3fdf265c-8aa2-4367-9fee-43e242bdb462" // Shared Revelation
           ]
@@ -2066,11 +2087,13 @@
           "pack": 1,
           "pickInPack": 11,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "3fdf265c-8aa2-4367-9fee-43e242bdb462" // Shared Revelation
           ]
@@ -2143,6 +2166,7 @@
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
@@ -2253,6 +2277,7 @@
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "1658d9a0-c3b0-4eb7-babc-4933acf362c4" // Glimpse of Infinity
           ]
         },
@@ -2268,6 +2293,7 @@
           "packCards": [
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
@@ -2346,6 +2372,7 @@
           "pickId": "579743fe-f71e-4cb2-8629-d6b02ed1591d",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "1658d9a0-c3b0-4eb7-babc-4933acf362c4" // Glimpse of Infinity
           ]
         },
@@ -2424,6 +2451,7 @@
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter

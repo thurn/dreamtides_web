@@ -69,6 +69,7 @@
         "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
         "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
         "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "290ea9db-0340-4838-842a-0dea09b5340a" // Volcanic Channeler
       ],
@@ -77,6 +78,7 @@
         "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
         "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
         "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
         "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
@@ -260,10 +262,12 @@
           "pack": 1,
           "pickInPack": 7,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
@@ -722,6 +726,7 @@
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
@@ -744,6 +749,7 @@
             "0e1209c3-1041-4079-9b1c-f96816a7deb5", // Wistful Angler
             "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
             "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair

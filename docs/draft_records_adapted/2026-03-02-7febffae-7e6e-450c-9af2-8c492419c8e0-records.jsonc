@@ -469,6 +469,7 @@
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -540,7 +541,8 @@
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -627,6 +629,7 @@
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -672,7 +675,8 @@
           "pickId": "bd111dc9-b8de-4e92-a63d-75a961b2db3b",
           "packCards": [
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {

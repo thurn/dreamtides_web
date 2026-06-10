@@ -458,6 +458,7 @@
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6" // Peak Plunder
@@ -614,6 +615,7 @@
           "packCards": [
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6" // Peak Plunder
@@ -690,6 +692,7 @@
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
@@ -737,6 +740,7 @@
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
@@ -786,9 +790,11 @@
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
             "5ce69085-aa75-4654-8abe-f9e773931e63" // Sunset Chapel Rest
@@ -862,6 +868,7 @@
           "pickId": "93bd7e73-63dc-45b2-aaa8-984be8b900ab",
           "packCards": [
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist

@@ -449,6 +449,7 @@
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
@@ -611,6 +612,7 @@
           "packCards": [
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor

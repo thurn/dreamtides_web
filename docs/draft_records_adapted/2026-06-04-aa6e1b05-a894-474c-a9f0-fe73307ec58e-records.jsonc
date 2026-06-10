@@ -68,6 +68,7 @@
         "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
         "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
         "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "0e1209c3-1041-4079-9b1c-f96816a7deb5", // Wistful Angler
         "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
@@ -82,6 +83,7 @@
         "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
         "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
         "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
         "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
@@ -139,6 +141,7 @@
             "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -202,6 +205,7 @@
             "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -247,10 +251,12 @@
           "pack": 1,
           "pickInPack": 9,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -452,6 +458,7 @@
           "packCards": [
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet

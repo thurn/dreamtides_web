@@ -157,6 +157,7 @@
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "f95cae7b-6502-4dbe-ae26-16853959d9a3" // Sunset Chronicler
           ]
@@ -259,6 +260,7 @@
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "cbabe603-1333-42bd-85c0-555c664b60b3" // Avatar of Cosmic Reckoning
           ]
         },
@@ -297,6 +299,7 @@
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "f95cae7b-6502-4dbe-ae26-16853959d9a3" // Sunset Chronicler
           ]
@@ -425,6 +428,7 @@
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
@@ -555,6 +559,7 @@
           "pickId": "eb0e0404-4846-4891-acfa-bd0951ecf9c6",
           "packCards": [
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
@@ -720,6 +725,7 @@
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter

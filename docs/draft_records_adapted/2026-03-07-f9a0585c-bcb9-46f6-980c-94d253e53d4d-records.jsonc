@@ -40,6 +40,7 @@
         "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
         "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
         "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
         "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
@@ -108,6 +109,7 @@
         "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
         "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
         "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
         "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
@@ -226,6 +228,7 @@
           "pickId": "3f290ed2-d1a8-4a90-a3a7-8240652dc109",
           "packCards": [
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
@@ -293,6 +296,7 @@
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3" // Unleash Ruin
@@ -490,6 +494,7 @@
           "pickId": "54c93c11-448c-402d-ac55-8d5ab4c83d7b",
           "packCards": [
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
@@ -713,6 +718,7 @@
             "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
@@ -772,11 +778,13 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
             "3cc9253a-4db6-4b02-92d6-a37805d192fb", // Ancient Descent

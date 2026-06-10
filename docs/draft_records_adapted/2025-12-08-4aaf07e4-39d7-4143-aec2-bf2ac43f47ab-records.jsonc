@@ -37,6 +37,7 @@
         "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
         "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
         "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
@@ -84,6 +85,7 @@
         "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
         "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
         "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
         "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
@@ -474,6 +476,7 @@
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "87aba308-00b4-40d8-a46f-4e6f58a664a8" // Breach Artist
           ]
@@ -483,10 +486,12 @@
           "pack": 2,
           "pickInPack": 5,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
@@ -626,6 +631,7 @@
           "packCards": [
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "87aba308-00b4-40d8-a46f-4e6f58a664a8" // Breach Artist
           ]

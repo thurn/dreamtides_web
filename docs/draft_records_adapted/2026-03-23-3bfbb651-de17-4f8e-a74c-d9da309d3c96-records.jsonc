@@ -347,6 +347,7 @@
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
@@ -482,6 +483,7 @@
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7" // Ironclad Marksman
           ]
@@ -541,6 +543,7 @@
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
@@ -623,6 +626,7 @@
           "pickId": "2aebe7a8-b982-4be4-83ca-3594e8f606b4",
           "packCards": [
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7" // Ironclad Marksman
           ]

@@ -28,6 +28,7 @@
       "seat": 0,
       "name": "WB",
       "mainboard": [
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
         "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
@@ -74,10 +75,12 @@
         "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
         "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [],
       "pool": [
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
         "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
@@ -112,6 +115,7 @@
         "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
         "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
         "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
         "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
@@ -132,10 +136,12 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
@@ -655,6 +661,7 @@
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -738,10 +745,12 @@
           "pack": 3,
           "pickInPack": 12,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -819,6 +828,7 @@
           "packCards": [
             "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls

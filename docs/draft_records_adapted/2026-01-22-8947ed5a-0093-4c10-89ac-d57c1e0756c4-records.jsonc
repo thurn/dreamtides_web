@@ -656,6 +656,7 @@
           "pickId": "202011d5-755e-497b-b4a7-f2b6e6a0b464",
           "packCards": [
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
@@ -732,6 +733,7 @@
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
             "bd27a996-bcdd-4f49-95c2-92c9d5875344" // Lurking Dread
           ]
@@ -1549,6 +1551,7 @@
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
             "bd27a996-bcdd-4f49-95c2-92c9d5875344" // Lurking Dread
           ]
@@ -1701,6 +1704,7 @@
           "packCards": [
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
             "bd27a996-bcdd-4f49-95c2-92c9d5875344" // Lurking Dread
           ]
@@ -2541,6 +2545,7 @@
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
             "bd27a996-bcdd-4f49-95c2-92c9d5875344" // Lurking Dread
           ]

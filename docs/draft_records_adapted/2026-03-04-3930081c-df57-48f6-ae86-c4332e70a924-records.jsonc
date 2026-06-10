@@ -45,6 +45,7 @@
         "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
         "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
         "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
         "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
@@ -115,6 +116,7 @@
         "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
         "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
         "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
         "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
@@ -136,6 +138,7 @@
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
             "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
@@ -237,6 +240,7 @@
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "33874387-2490-48ed-93bc-a47a16e399ad" // Soulbinder
@@ -707,6 +711,7 @@
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
@@ -875,10 +880,12 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion

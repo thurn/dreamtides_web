@@ -129,6 +129,7 @@
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
@@ -297,6 +298,7 @@
           "pickId": "b0d161fc-4a2a-4f1d-82b4-a746552552df",
           "packCards": [
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
@@ -496,6 +498,7 @@
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds

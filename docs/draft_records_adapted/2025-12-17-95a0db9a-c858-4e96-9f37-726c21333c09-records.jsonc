@@ -39,6 +39,7 @@
         "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
         "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
         "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
         "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
@@ -83,6 +84,7 @@
         "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
         "0e1209c3-1041-4079-9b1c-f96816a7deb5", // Wistful Angler
@@ -117,6 +119,7 @@
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
             "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
@@ -518,10 +521,12 @@
           "pack": 2,
           "pickInPack": 8,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths

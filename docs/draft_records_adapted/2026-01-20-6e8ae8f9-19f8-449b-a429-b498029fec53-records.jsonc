@@ -76,6 +76,7 @@
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
         "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "2305722e-59c1-47d7-9e05-dc1c32c946a2" // Intermezzo Balladeer
       ],
@@ -90,6 +91,7 @@
         "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
@@ -198,6 +200,7 @@
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
@@ -317,10 +320,12 @@
           "pack": 1,
           "pickInPack": 9,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
@@ -539,6 +544,7 @@
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -654,6 +660,7 @@
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

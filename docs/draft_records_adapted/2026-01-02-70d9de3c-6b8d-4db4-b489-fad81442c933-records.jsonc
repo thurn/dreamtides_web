@@ -156,6 +156,7 @@
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
@@ -231,7 +232,8 @@
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -325,6 +327,7 @@
           "packCards": [
             "98f16d26-be71-49ad-9034-5fafb5d3f053", // Frostbound Defiant
             "b8ecc46d-bd92-4826-a416-7ce177e69cbf", // Emberwolf Triad
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
@@ -372,7 +375,8 @@
           "packCards": [
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -777,6 +781,7 @@
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin

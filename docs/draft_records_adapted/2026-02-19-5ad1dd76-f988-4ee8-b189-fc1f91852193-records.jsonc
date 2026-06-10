@@ -72,6 +72,7 @@
         "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
         "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
         "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
@@ -118,6 +119,7 @@
         "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
         "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
         "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
         "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
@@ -162,6 +164,7 @@
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -178,6 +181,7 @@
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
@@ -196,6 +200,7 @@
           "pickId": "bd111dc9-b8de-4e92-a63d-75a961b2db3b",
           "packCards": [
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
@@ -266,6 +271,7 @@
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -527,6 +533,7 @@
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
@@ -592,6 +599,7 @@
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "c7c95f67-a838-4e39-879c-cfbf0591540c" // Cosmonaut of Tides
           ]
         },
@@ -641,6 +649,7 @@
           "packCards": [
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
             "181b4924-743b-49c3-8056-6afd08ebde1d", // Shadow Soloist
@@ -682,11 +691,13 @@
           "pack": 3,
           "pickInPack": 10,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "c7c95f67-a838-4e39-879c-cfbf0591540c" // Cosmonaut of Tides
           ]
         },
@@ -775,6 +786,7 @@
           "packCards": [
             "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
             "d2a3d344-613c-449e-9a87-0f720a85585d" // Overstory Explorer

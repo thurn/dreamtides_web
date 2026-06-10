@@ -36,6 +36,7 @@
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
         "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
         "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
@@ -89,6 +90,7 @@
         "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
         "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
         "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
@@ -450,10 +452,12 @@
           "pack": 2,
           "pickInPack": 3,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
@@ -747,6 +751,7 @@
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
@@ -834,6 +839,7 @@
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f" // Fury of the Clan
           ]
@@ -900,6 +906,7 @@
           "pickId": "ab1d1461-1625-4163-aacd-a939f4871fad",
           "packCards": [
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout

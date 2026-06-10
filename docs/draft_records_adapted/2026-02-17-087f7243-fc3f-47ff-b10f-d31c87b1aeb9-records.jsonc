@@ -201,6 +201,7 @@
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "4b20e66e-2466-4518-8ef9-67f580bd6f14" // Looming Oracle
           ]
@@ -358,6 +359,7 @@
           "packCards": [
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "4b20e66e-2466-4518-8ef9-67f580bd6f14" // Looming Oracle
           ]
@@ -741,6 +743,7 @@
           "pick": [],
           "pickId": "7f430794-0d86-4f6a-97e0-4bbb6716d613",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
@@ -811,6 +814,7 @@
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol

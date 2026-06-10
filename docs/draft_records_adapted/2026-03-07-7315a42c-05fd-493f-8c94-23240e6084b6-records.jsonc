@@ -40,6 +40,7 @@
         "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
         "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
         "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
         "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
@@ -80,6 +81,7 @@
       ],
       "pool": [
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
@@ -157,10 +159,12 @@
           "pack": 1,
           "pickInPack": 2,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
@@ -217,7 +221,8 @@
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -356,7 +361,8 @@
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -774,6 +780,7 @@
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
@@ -918,6 +925,7 @@
           "pickId": "b782ffb4-3c9d-4d5c-a927-8988166c2d94",
           "packCards": [
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination

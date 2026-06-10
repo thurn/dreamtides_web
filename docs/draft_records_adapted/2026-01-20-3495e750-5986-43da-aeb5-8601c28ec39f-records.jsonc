@@ -68,6 +68,7 @@
         "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
         "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
         "d24ea640-638d-4ce2-b15d-b3f4588bda6b" // Echoes of Eternity
       ],
@@ -95,6 +96,7 @@
         "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
         "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
         "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
         "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
@@ -528,11 +530,13 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
@@ -767,6 +771,7 @@
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant

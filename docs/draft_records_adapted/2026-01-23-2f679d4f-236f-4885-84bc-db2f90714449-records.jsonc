@@ -34,6 +34,7 @@
         "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
         "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
         "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
         "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger
@@ -41,6 +42,7 @@
         "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
         "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
         "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
         "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
@@ -91,6 +93,7 @@
         "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
         "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
         "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
@@ -114,6 +117,7 @@
         "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
         "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
         "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
       ],
       "picks": [
@@ -328,6 +332,7 @@
           "packCards": [
             "650b2ed4-f016-46c0-815a-f53fffe08a9a", // Part the Veil
             "770b21e4-ea6a-4910-8fca-2ec5b8813da1", // Grotto Seer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "08fe3190-f559-4152-941d-33ec4180f509", // Data Pulse
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
@@ -349,6 +354,7 @@
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
@@ -443,10 +449,12 @@
           "pack": 2,
           "pickInPack": 9,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
@@ -762,6 +770,7 @@
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -844,10 +853,12 @@
           "pack": 4,
           "pickInPack": 11,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         }

@@ -699,6 +699,7 @@
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
@@ -870,6 +871,7 @@
           "packCards": [
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair

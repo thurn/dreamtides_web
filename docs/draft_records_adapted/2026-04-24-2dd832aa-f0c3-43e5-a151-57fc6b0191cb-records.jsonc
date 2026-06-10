@@ -242,6 +242,7 @@
             "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
             "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
@@ -285,6 +286,7 @@
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
@@ -409,6 +411,7 @@
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
@@ -585,6 +588,7 @@
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
@@ -786,6 +790,7 @@
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d", // Evacuation Enforcer
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
@@ -810,6 +815,7 @@
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "4124a05c-b6dd-4334-b202-59fa17d77668" // Unbroken
           ]
         },

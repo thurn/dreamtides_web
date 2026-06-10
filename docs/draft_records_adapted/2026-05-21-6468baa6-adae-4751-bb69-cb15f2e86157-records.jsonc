@@ -66,6 +66,7 @@
         "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
         "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
         "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
         "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
@@ -105,6 +106,7 @@
         "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
         "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
         "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
         "f4b34207-2ad4-421b-8798-9c20320607ae", // The Power Within
@@ -248,6 +250,7 @@
           "packCards": [
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
@@ -287,7 +290,8 @@
             "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -546,6 +550,7 @@
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -672,10 +677,12 @@
           "pack": 2,
           "pickInPack": 15,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -717,6 +724,7 @@
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened

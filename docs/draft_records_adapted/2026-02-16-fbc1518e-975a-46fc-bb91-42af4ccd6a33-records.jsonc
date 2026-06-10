@@ -218,6 +218,7 @@
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0" // Ashborn Necromancer
@@ -279,6 +280,7 @@
             "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "42427d15-c019-4786-9d7e-285829c4f3cb" // Signal Resonant
           ]
@@ -366,6 +368,7 @@
           "packCards": [
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0" // Ashborn Necromancer
@@ -793,6 +796,7 @@
             "475fcc5b-c82d-4ef7-8020-90a8aeb2df53", // Break the Sequence
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
             "b4df0b25-0c46-4faa-8db6-84f5f3c3444b", // Pyre Challenger

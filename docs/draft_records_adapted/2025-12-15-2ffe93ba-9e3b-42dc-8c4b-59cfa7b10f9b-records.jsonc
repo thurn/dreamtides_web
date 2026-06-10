@@ -53,6 +53,7 @@
         "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
         "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
         "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
@@ -88,6 +89,7 @@
         "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
         "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
         "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
@@ -154,6 +156,7 @@
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
@@ -247,6 +250,7 @@
           "packCards": [
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
@@ -324,6 +328,7 @@
           "pickId": "320fdf89-e158-41c5-b0bf-fee9dec36a75",
           "packCards": [
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
@@ -434,10 +439,12 @@
           "pack": 2,
           "pickInPack": 2,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
@@ -713,6 +720,7 @@
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
@@ -870,6 +878,7 @@
           "pickId": "8ce3a3a1-3569-4909-a604-f78d4888781e",
           "packCards": [
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser

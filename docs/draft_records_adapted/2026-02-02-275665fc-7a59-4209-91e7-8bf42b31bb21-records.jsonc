@@ -412,6 +412,7 @@
           "pickId": "2398892d-28e9-4009-81ec-0d544af79d2b",
           "packCards": [
             "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83", // Epiphany Unfolded
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
@@ -444,6 +445,7 @@
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab" // Ridge Vortex Explorer
           ]
@@ -609,6 +611,7 @@
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab" // Ridge Vortex Explorer
           ]
@@ -775,6 +778,7 @@
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
             "b957466e-f748-4a95-89b2-8509dc762223", // Iconoclast
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher

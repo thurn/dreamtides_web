@@ -194,6 +194,7 @@
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
@@ -542,6 +543,7 @@
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
             "cd4d689d-1442-4a19-8e6a-182b425d066d", // Warfield Stalwart
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
@@ -762,6 +764,7 @@
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -918,6 +921,7 @@
           "packCards": [
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

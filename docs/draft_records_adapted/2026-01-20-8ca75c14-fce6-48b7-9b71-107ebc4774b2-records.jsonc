@@ -35,6 +35,7 @@
         "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
         "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
         "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
@@ -52,6 +53,7 @@
         "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
         "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
         "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
         "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
@@ -92,12 +94,14 @@
         "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
         "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
         "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
         "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
         "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
         "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
         "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
@@ -416,6 +420,7 @@
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40" // Ruptured Dynamo
           ]
@@ -498,11 +503,13 @@
           "pack": 2,
           "pickInPack": 11,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40" // Ruptured Dynamo
           ]
@@ -550,6 +557,7 @@
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa" // Borrowed Minutes
@@ -653,10 +661,12 @@
           "pack": 3,
           "pickInPack": 8,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa" // Borrowed Minutes

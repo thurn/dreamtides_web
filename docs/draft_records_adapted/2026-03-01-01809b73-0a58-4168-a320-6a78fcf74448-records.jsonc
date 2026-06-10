@@ -41,6 +41,7 @@
         "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
         "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
         "73fc1b7f-3c2b-4993-9590-924240515c2f", // Lunar Hart
@@ -111,6 +112,7 @@
         "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
         "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
         "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
         "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
@@ -700,6 +702,7 @@
             "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
             "76766584-a8fb-41cc-8c4b-09655f478703", // Ebonwing
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
@@ -777,6 +780,7 @@
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f" // Forgotten Factory Titan
           ]
@@ -870,10 +874,12 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
@@ -926,6 +932,7 @@
           "packCards": [
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f" // Forgotten Factory Titan
           ]

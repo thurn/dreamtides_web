@@ -40,6 +40,7 @@
         "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
         "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
         "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
         "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
@@ -92,6 +93,7 @@
         "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
         "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
         "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
         "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
@@ -239,6 +241,7 @@
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "2e8571c0-4faf-4e7a-a702-26952d2035ee" // Soulreaver
@@ -265,7 +268,8 @@
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
             "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -277,6 +281,7 @@
           "packCards": [
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
@@ -379,10 +384,12 @@
           "pack": 1,
           "pickInPack": 13,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "2e8571c0-4faf-4e7a-a702-26952d2035ee" // Soulreaver
@@ -398,7 +405,8 @@
           "pickId": "2bca6f8b-6e6a-43dd-b6a4-9eedfcc24281",
           "packCards": [
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -759,7 +767,8 @@
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -916,7 +925,8 @@
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {

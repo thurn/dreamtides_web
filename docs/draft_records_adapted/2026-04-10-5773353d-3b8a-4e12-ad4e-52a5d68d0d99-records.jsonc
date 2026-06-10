@@ -65,6 +65,7 @@
         "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
         "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
         "50267984-eaa3-415e-a23f-581c54b0ad2d" // Reunion
@@ -118,6 +119,7 @@
         "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
         "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
         "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
         "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
@@ -167,6 +169,7 @@
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
@@ -811,10 +814,12 @@
           "pack": 3,
           "pickInPack": 7,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below

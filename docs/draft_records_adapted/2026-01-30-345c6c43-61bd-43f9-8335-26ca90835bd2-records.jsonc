@@ -196,6 +196,7 @@
             "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
             "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "16f4962d-2950-4360-8f55-bc47428480ef", // Sorrow Watcher
@@ -263,6 +264,7 @@
           "packCards": [
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
@@ -523,6 +525,7 @@
           "packCards": [
             "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
@@ -730,6 +733,7 @@
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "20fd609a-7529-4582-a362-b8151b0ae011", // Rite of Summoning
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
@@ -801,6 +805,7 @@
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage

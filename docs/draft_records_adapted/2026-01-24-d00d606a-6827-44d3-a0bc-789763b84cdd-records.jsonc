@@ -133,6 +133,7 @@
           "pickId": "ad7ac9a5-340f-4509-826c-7b9416d47887",
           "packCards": [
             "be6a2712-cfe3-4d61-b62c-fab8990786a1", // Wolfbond Chieftain
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
@@ -175,6 +176,7 @@
             "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
@@ -817,6 +819,7 @@
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
@@ -840,6 +843,7 @@
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "5a747998-7219-4e23-be42-b8cb3be12348" // Salvage Engine
           ]

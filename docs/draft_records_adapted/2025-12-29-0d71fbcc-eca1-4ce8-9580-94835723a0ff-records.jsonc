@@ -33,6 +33,7 @@
         "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
         "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
         "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
         "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
@@ -97,6 +98,7 @@
         "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
         "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
         "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
         "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
@@ -191,6 +193,7 @@
             "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
@@ -423,11 +426,13 @@
           "pack": 2,
           "pickInPack": 1,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer

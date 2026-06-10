@@ -473,6 +473,7 @@
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
@@ -584,6 +585,7 @@
           "pickId": "6aa5cc65-f8f1-4f6f-8b4e-2fedccbda684",
           "packCards": [
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
@@ -674,6 +676,7 @@
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
@@ -797,6 +800,7 @@
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn

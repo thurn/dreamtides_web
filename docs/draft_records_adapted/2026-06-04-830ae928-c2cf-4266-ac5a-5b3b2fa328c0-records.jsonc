@@ -39,6 +39,7 @@
         "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
         "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
         "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
         "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
@@ -103,6 +104,7 @@
         "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
         "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
         "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
         "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
@@ -164,6 +166,7 @@
           "packCards": [
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "a8bca1eb-abc8-42e0-b770-0f03af250b81", // Annular Recall
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
@@ -712,10 +715,12 @@
           "pack": 5,
           "pickInPack": 3,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer

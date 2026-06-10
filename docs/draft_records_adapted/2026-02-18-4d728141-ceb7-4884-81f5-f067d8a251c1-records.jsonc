@@ -48,6 +48,7 @@
         "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
         "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
         "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
         "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
@@ -94,6 +95,7 @@
         "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
         "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
         "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
         "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
@@ -229,7 +231,8 @@
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -333,7 +336,8 @@
           "packCards": [
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -411,10 +415,12 @@
           "pack": 2,
           "pickInPack": 3,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
@@ -858,6 +864,7 @@
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
             "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
@@ -971,6 +978,7 @@
           "pick": [],
           "pickId": "f97a6d34-03ab-49f1-b02e-405b733f8843",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
             "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla

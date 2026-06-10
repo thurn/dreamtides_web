@@ -59,6 +59,7 @@
         "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
         "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
         "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
         "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
@@ -90,6 +91,7 @@
         "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
         "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
         "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
         "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
@@ -142,6 +144,7 @@
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "691883df-63d8-4664-a1fe-d5f3b5becd11" // Dawnhorn Elder
@@ -274,6 +277,7 @@
             "01d53e49-7833-4122-a970-b72c73ad2c28", // Crimson Pilgrimage
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "691883df-63d8-4664-a1fe-d5f3b5becd11" // Dawnhorn Elder
@@ -368,10 +372,12 @@
           "pack": 1,
           "pickInPack": 13,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "691883df-63d8-4664-a1fe-d5f3b5becd11" // Dawnhorn Elder
@@ -700,6 +706,7 @@
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
@@ -847,6 +854,7 @@
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince
             "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer

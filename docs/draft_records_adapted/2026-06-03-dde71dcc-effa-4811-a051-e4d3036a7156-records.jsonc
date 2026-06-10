@@ -141,6 +141,7 @@
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
@@ -225,6 +226,7 @@
           "pickId": "de911c88-f5c8-4955-9fa5-1f28a9b17236",
           "packCards": [
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
@@ -301,6 +303,7 @@
           "packCards": [
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
@@ -418,6 +421,7 @@
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe", // Eruption
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
@@ -704,6 +708,7 @@
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0" // The Rising God
@@ -868,6 +873,7 @@
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0" // The Rising God

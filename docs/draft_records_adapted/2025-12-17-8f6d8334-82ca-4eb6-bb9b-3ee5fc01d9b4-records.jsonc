@@ -202,6 +202,7 @@
           "pickId": "bb9ad57f-cca2-4717-a951-cbe3c7782efe",
           "packCards": [
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
@@ -746,6 +747,7 @@
             "c6d8a7cc-3856-4030-96eb-450e406dec33", // Thornwood Delver
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
@@ -823,6 +825,7 @@
           "pick": [],
           "pickId": "4a08ca06-58db-4ce6-b490-be4bea8956a1",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
@@ -901,6 +904,7 @@
           "pickId": "d79b8974-796c-4f88-a0cb-5afbaf26fd24",
           "packCards": [
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker

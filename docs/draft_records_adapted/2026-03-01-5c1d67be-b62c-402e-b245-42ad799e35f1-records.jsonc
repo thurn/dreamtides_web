@@ -256,6 +256,7 @@
             "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
@@ -293,6 +294,7 @@
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -494,7 +496,8 @@
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -630,7 +633,8 @@
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -784,7 +788,8 @@
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -916,7 +921,8 @@
           "packCards": [
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {

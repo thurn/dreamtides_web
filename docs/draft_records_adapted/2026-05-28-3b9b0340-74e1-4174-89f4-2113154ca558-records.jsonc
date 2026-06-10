@@ -182,6 +182,7 @@
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
@@ -706,6 +707,7 @@
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
@@ -732,6 +734,7 @@
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
@@ -800,6 +803,7 @@
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883" // Marrow Drinker
           ]

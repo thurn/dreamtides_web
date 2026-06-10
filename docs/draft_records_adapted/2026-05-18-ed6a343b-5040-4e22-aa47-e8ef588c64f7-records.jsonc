@@ -134,6 +134,7 @@
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
@@ -484,6 +485,7 @@
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
@@ -532,7 +534,8 @@
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -548,6 +551,7 @@
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
@@ -658,7 +662,8 @@
           "pickId": "7e4becff-8280-4e29-a370-bf82fb6734d5",
           "packCards": [
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -687,6 +692,7 @@
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol

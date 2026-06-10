@@ -205,6 +205,7 @@
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "41c14462-86b9-42a4-8a61-859d59ffa466" // Summons of the Bonded
           ]
         },
@@ -218,6 +219,7 @@
           "pickId": "c060c178-3c0e-493f-b6f0-ead5b1d6f191",
           "packCards": [
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
@@ -285,6 +287,7 @@
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "f95cae7b-6502-4dbe-ae26-16853959d9a3" // Sunset Chronicler
@@ -353,6 +356,7 @@
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "41c14462-86b9-42a4-8a61-859d59ffa466" // Summons of the Bonded
           ]
         },
@@ -745,7 +749,8 @@
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -893,7 +898,8 @@
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {

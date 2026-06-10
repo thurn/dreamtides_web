@@ -30,6 +30,7 @@
         "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
         "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
         "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
         "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
@@ -102,6 +103,7 @@
         "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
         "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "0e1209c3-1041-4079-9b1c-f96816a7deb5", // Wistful Angler
         "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
         "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
@@ -752,11 +754,13 @@
           "pack": 3,
           "pickInPack": 4,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay

@@ -298,6 +298,7 @@
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "0458658d-7e02-4286-9249-93674d16620b" // Nightmare Manifest
           ]
@@ -492,6 +493,7 @@
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
@@ -701,7 +703,8 @@
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -865,7 +868,8 @@
             "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {

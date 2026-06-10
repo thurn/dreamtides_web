@@ -124,6 +124,7 @@
           "pick": [],
           "pickId": "ed0216a0-c5c9-4a99-b869-53e4d0256326",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
@@ -173,6 +174,7 @@
           "packCards": [
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
@@ -423,6 +425,7 @@
             "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
@@ -732,6 +735,7 @@
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -772,6 +776,7 @@
           "packCards": [
             "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
@@ -891,6 +896,7 @@
           "packCards": [
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },

@@ -171,6 +171,7 @@
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
             "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", // Ridge Vortex Explorer
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
@@ -197,7 +198,8 @@
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -342,7 +344,8 @@
           "packCards": [
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -807,6 +810,7 @@
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "ed4d5342-0690-40b7-ab48-6b76035466f2", // Shadowpaw
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer

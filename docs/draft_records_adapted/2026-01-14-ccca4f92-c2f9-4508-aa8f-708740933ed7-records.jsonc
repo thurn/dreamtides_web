@@ -37,6 +37,7 @@
         "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
         "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
         "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
         "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
@@ -84,6 +85,7 @@
         "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
         "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
         "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
         "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
@@ -212,10 +214,12 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
@@ -227,7 +231,8 @@
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -378,7 +383,8 @@
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -880,6 +886,7 @@
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
             "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist

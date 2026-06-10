@@ -47,6 +47,7 @@
         "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
         "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
         "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
         "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
@@ -62,6 +63,7 @@
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
         "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
         "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [
@@ -72,6 +74,7 @@
         "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c" // Duskmount
       ],
       "pool": [
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
         "cfa78375-85b7-47e9-95f5-b31e6d112c52", // Ruin Scavenger
@@ -89,6 +92,7 @@
         "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
         "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
         "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
@@ -118,10 +122,12 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
@@ -248,7 +254,8 @@
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -383,7 +390,8 @@
           "pickId": "19fc5956-286c-4e1d-bc4a-2974fc0f4dbc",
           "packCards": [
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -485,6 +493,7 @@
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -493,10 +502,12 @@
           "pack": 2,
           "pickInPack": 5,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
@@ -624,6 +635,7 @@
           "pickId": "c6e466d1-943d-41e6-a47d-c9d951ca4262",
           "packCards": [
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -818,6 +830,7 @@
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer

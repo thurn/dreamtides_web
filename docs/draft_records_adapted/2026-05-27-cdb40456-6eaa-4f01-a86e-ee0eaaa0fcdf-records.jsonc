@@ -39,6 +39,7 @@
         "82749215-ed35-44e3-a745-72ca76036c7c", // Colossal Convergence
         "747859fb-6fca-49fc-a653-08011a9bb44c", // Forsworn Champion
         "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
         "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
@@ -87,6 +88,7 @@
         "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
         "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "f860e815-3ed9-463d-ac4d-ed8d2778f8ad", // Lone Castaway
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
@@ -276,6 +278,7 @@
             "33cf7dca-d8d2-42b7-854a-b3f503b03488", // Lumin-Gate Seer
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -389,10 +392,12 @@
           "pack": 1,
           "pickInPack": 15,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -759,6 +764,7 @@
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "3e6a5236-9850-4a69-9fe1-48389365a399" // Dusk Duelist
           ]
         },
@@ -898,6 +904,7 @@
           "packCards": [
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "3e6a5236-9850-4a69-9fe1-48389365a399" // Dusk Duelist
           ]
         },

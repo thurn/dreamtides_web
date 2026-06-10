@@ -41,9 +41,11 @@
         "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
         "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
         "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
         "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
         "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
@@ -82,6 +84,7 @@
         "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
         "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
         "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
         "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
@@ -103,6 +106,7 @@
         "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
         "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
         "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "48257e3e-9600-4edf-a905-e73a41ab5ec1", // Ethereal Trailblazer
         "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
@@ -212,6 +216,7 @@
             "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -296,10 +301,12 @@
           "pack": 1,
           "pickInPack": 11,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -589,6 +596,7 @@
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -665,10 +673,12 @@
           "pack": 3,
           "pickInPack": 11,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

@@ -246,6 +246,7 @@
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -376,6 +377,7 @@
           "pickId": "66d80dd1-b944-4cb2-8578-b4dbcabbbc1e",
           "packCards": [
             "f7084ba7-8c85-4847-80df-b0c98ec77d78", // Carrion Shepherd
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -407,6 +409,7 @@
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
             "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
@@ -427,6 +430,7 @@
           "pick": [],
           "pickId": "15faa763-b897-4e86-b094-73f3236291a9",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
@@ -559,6 +563,7 @@
           "pickId": "7d48d622-f397-4f31-b1a5-0c23f60aa71c",
           "packCards": [
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light

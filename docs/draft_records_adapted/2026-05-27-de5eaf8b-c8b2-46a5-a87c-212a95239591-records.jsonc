@@ -46,6 +46,7 @@
         "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
         "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
         "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
         "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
@@ -88,6 +89,7 @@
         "4f7cb174-6324-46a8-9973-44adfa7fef9f" // Field Reverent
       ],
       "pool": [
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
         "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
@@ -149,10 +151,12 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
@@ -306,6 +310,7 @@
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "b977afaf-f583-45ec-8e34-99fbfa4e9190", // Grim Reclaimer
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
             "d30bd488-f921-49cb-a44f-353c54cb6548" // Starrunner
@@ -999,7 +1004,8 @@
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -1164,7 +1170,8 @@
             "de946f5a-1e27-4d40-ae44-9ef8cc041949", // Mother of Flames
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {

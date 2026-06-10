@@ -74,6 +74,7 @@
         "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
         "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
         "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "pool": [
@@ -109,6 +110,7 @@
         "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
         "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
         "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
         "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
@@ -164,6 +166,7 @@
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
@@ -665,6 +668,7 @@
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
             "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
@@ -746,10 +750,12 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
@@ -827,6 +833,7 @@
           "pickId": "0e9aeaa8-9a75-4719-992f-cbb316f72175",
           "packCards": [
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
             "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded
@@ -1151,6 +1158,7 @@
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
@@ -1562,6 +1570,7 @@
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
@@ -1656,6 +1665,7 @@
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "b6d1df72-d989-4689-a599-4490a0c2568d", // Gateweaver
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
             "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83" // Epiphany Unfolded

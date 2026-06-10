@@ -33,10 +33,12 @@
         "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
         "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
         "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
         "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
         "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
@@ -74,6 +76,7 @@
         "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
         "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
         "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "3e802ecd-a83b-491b-9528-a4672d0e986f" // Paradox Enforcer
       ],
@@ -81,6 +84,7 @@
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
         "68978d92-aa8b-4873-bb0b-6e52f12b0849", // Chronicle Reclaimer
@@ -100,6 +104,7 @@
         "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
         "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
@@ -118,6 +123,7 @@
         "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
         "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
         "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
@@ -223,10 +229,12 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
@@ -467,6 +475,7 @@
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "a911ef71-799c-4240-ad13-8fabd3caeafa" // Moment Rewound
           ]
@@ -523,10 +532,12 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
@@ -611,6 +622,7 @@
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "a911ef71-799c-4240-ad13-8fabd3caeafa" // Moment Rewound
           ]
@@ -729,6 +741,7 @@
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a" // Stoneborn Eternal
@@ -777,6 +790,7 @@
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
@@ -874,10 +888,12 @@
           "pack": 3,
           "pickInPack": 11,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a" // Stoneborn Eternal
@@ -1029,6 +1045,7 @@
             "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
             "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
@@ -1324,6 +1341,7 @@
           "packCards": [
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
@@ -1431,6 +1449,7 @@
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "a911ef71-799c-4240-ad13-8fabd3caeafa" // Moment Rewound
           ]
@@ -1570,6 +1589,7 @@
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
@@ -1700,6 +1720,7 @@
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "3811a0a2-66af-4c06-b179-948dfa9b2ee3", // Weblight Waif
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a" // Stoneborn Eternal
@@ -1732,6 +1753,7 @@
           "pickId": "40fd5347-c0ac-4b4a-b65b-34bfb737c5a9",
           "packCards": [
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "95711262-8510-475c-a572-c1cd144d54cb", // Somber Flockmaster
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist

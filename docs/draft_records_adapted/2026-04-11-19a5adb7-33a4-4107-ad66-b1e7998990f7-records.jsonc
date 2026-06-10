@@ -146,6 +146,7 @@
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
@@ -268,6 +269,7 @@
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
             "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -323,6 +325,7 @@
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
@@ -405,6 +408,7 @@
           "pickId": "aecdc315-95e5-450c-bedc-998eea46cf8c",
           "packCards": [
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -462,6 +466,7 @@
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -612,6 +617,7 @@
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

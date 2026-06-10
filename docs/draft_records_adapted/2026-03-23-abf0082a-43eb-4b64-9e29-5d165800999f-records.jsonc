@@ -78,6 +78,7 @@
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
         "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
         "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
         "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
@@ -127,6 +128,7 @@
         "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
         "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
         "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
@@ -206,7 +208,8 @@
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -368,7 +371,8 @@
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -499,6 +503,7 @@
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc" // Liminal Dreamer
           ]
@@ -575,6 +580,7 @@
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "c97b0a5b-64d0-480f-8db7-3fde93738d86" // Vaultbreaker
@@ -646,6 +652,7 @@
           "packCards": [
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc" // Liminal Dreamer
           ]
@@ -767,6 +774,7 @@
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "f10a9ba9-f5eb-4011-9426-a89c5de3b550", // Veil Crosser
@@ -791,6 +799,7 @@
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
             "06f8cfff-92ec-4668-afbc-f33a274c3b1a", // Fractured Veil
@@ -871,10 +880,12 @@
           "pack": 3,
           "pickInPack": 8,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse

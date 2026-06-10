@@ -290,6 +290,7 @@
             "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "ce84b8af-b802-42d3-8a31-36827cff17b2" // Ripple of Defiance
@@ -353,6 +354,7 @@
           "pick": [],
           "pickId": "17c6ba55-2470-4dde-a7fa-137a60716c96",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "ce84b8af-b802-42d3-8a31-36827cff17b2" // Ripple of Defiance

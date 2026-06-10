@@ -74,6 +74,7 @@
         "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
         "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
         "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "2a828466-450a-4637-9c68-6b54522450c0" // Rusted Monolith
       ],
@@ -110,6 +111,7 @@
         "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed
         "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
         "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
         "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
@@ -570,6 +572,7 @@
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40" // Ashwalker
@@ -775,10 +778,12 @@
           "pack": 3,
           "pickInPack": 4,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
@@ -787,6 +792,7 @@
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -929,6 +935,7 @@
           "packCards": [
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },

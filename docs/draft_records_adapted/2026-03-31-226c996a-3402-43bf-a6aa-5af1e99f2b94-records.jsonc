@@ -179,6 +179,7 @@
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "49641e8e-93a8-46cb-92a9-246b0fd57899" // Harvester of Despair
@@ -217,6 +218,7 @@
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
             "eae700c9-5005-4627-b8d6-a5c2c273e61a", // Secrets of the Deep
@@ -239,6 +241,7 @@
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
@@ -342,6 +345,7 @@
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "5a747998-7219-4e23-be42-b8cb3be12348", // Salvage Engine
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "49641e8e-93a8-46cb-92a9-246b0fd57899" // Harvester of Despair
@@ -454,6 +458,7 @@
           "packCards": [
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
             "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy

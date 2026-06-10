@@ -175,8 +175,10 @@
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -334,8 +336,10 @@
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -518,6 +522,7 @@
             "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8" // Carrion Lord
           ]
@@ -554,6 +559,7 @@
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
             "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
@@ -653,6 +659,7 @@
           "pickId": "17be21c8-d7bb-405e-addd-5aba1125b709",
           "packCards": [
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8" // Carrion Lord
           ]
@@ -818,6 +825,7 @@
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows

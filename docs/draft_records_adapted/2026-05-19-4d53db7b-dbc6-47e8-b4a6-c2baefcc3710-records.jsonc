@@ -48,6 +48,7 @@
         "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
         "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
         "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
         "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
@@ -96,6 +97,7 @@
         "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
         "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
         "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
         "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
@@ -427,10 +429,12 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado

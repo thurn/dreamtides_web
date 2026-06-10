@@ -171,6 +171,7 @@
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c" // Duskmount
           ]
@@ -340,6 +341,7 @@
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c" // Duskmount
           ]
@@ -502,6 +504,7 @@
             "7ea13d02-9d97-492e-9edb-f326eb3b4d1c", // Seaside Requiem
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
@@ -525,6 +528,7 @@
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -656,6 +660,7 @@
           "pick": [],
           "pickId": "1785cb18-c291-4fd5-b8c7-ace893c32e49",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },

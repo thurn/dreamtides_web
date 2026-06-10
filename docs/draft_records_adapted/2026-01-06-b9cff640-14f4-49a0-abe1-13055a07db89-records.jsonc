@@ -35,6 +35,7 @@
         "4fe9f53e-149a-4b9f-8fac-f75560c986f2", // Oblivion Guide
         "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
         "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
         "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
@@ -81,6 +82,7 @@
         "f7c68226-def4-4eb0-bdfe-b028482e1351", // Forgotten Sleeper
         "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
         "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
         "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
@@ -254,7 +256,8 @@
             "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -378,11 +381,13 @@
           "pack": 1,
           "pickInPack": 15,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -540,6 +545,7 @@
             "d9434b04-217c-4b37-b763-c46404d8fef9", // Dreamcatcher's Call
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
             "87f075b1-b058-4570-a75f-c4f8f544e192" // Wondrous Clearing
@@ -757,6 +763,7 @@
             "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
             "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
             "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
             "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale

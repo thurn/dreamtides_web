@@ -44,6 +44,7 @@
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
         "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry
         "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
         "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
@@ -97,6 +98,7 @@
         "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
         "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
         "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
@@ -487,10 +489,12 @@
           "pack": 2,
           "pickInPack": 5,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "08e01310-d192-41e9-a6f0-0edbd6fb3cfb",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
@@ -772,6 +776,7 @@
           "packCards": [
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
@@ -831,6 +836,7 @@
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
             "f860e815-3ed9-463d-ac4d-ed8d2778f8ad" // Lone Castaway
           ]
@@ -1061,6 +1067,7 @@
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
             "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
@@ -1331,6 +1338,7 @@
             "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
             "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
@@ -1605,6 +1613,7 @@
             "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "a031eada-2c47-49c6-8c19-d2fe85f8ce97", // Barrage Specialist
@@ -1672,6 +1681,7 @@
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
             "f860e815-3ed9-463d-ac4d-ed8d2778f8ad" // Lone Castaway
           ]
@@ -1813,6 +1823,7 @@
           "packCards": [
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst
             "f860e815-3ed9-463d-ac4d-ed8d2778f8ad" // Lone Castaway
           ]

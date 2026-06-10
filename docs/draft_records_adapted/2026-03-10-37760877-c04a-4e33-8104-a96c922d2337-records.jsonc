@@ -69,6 +69,7 @@
         "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
         "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [
@@ -144,6 +145,7 @@
         "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
         "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
         "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
         "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
@@ -170,6 +172,7 @@
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
@@ -343,6 +346,7 @@
           "packCards": [
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
@@ -501,11 +505,13 @@
             "724a1362-3f0f-4b77-b14e-22c0b877349a", // Radiants' Captain
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -663,6 +669,7 @@
             "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
             "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -1055,10 +1062,12 @@
           "pack": 4,
           "pickInPack": 3,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony

@@ -44,6 +44,7 @@
         "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
         "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
         "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
         "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
@@ -86,6 +87,7 @@
         "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
         "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
         "b78d776b-15dd-4d0c-ad12-68b97b8d9fb6", // Starsea Traveler
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
@@ -421,16 +423,19 @@
           "pack": 2,
           "pickInPack": 2,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
@@ -780,7 +785,8 @@
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
             "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -892,7 +898,8 @@
             "4f7cb174-6324-46a8-9973-44adfa7fef9f", // Field Reverent
             "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {

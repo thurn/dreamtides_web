@@ -48,6 +48,7 @@
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
         "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
         "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
@@ -61,6 +62,7 @@
         "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
         "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
         "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
         "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
@@ -130,6 +132,7 @@
         "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
         "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
@@ -149,6 +152,7 @@
         "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge
         "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
         "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
@@ -534,10 +538,12 @@
           "pack": 2,
           "pickInPack": 3,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "1434440c-c86f-4b7d-83e7-3bd1f7dde63e", // Pulse of Sacrifice
             "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
@@ -612,6 +618,7 @@
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
@@ -874,10 +881,12 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
@@ -1168,6 +1177,7 @@
             "8951e112-92d2-4246-9859-39320620231b", // Spirit of Smoldering Echoes
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
             "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "7e2f2ac0-4e3c-4520-80c6-c830581b40de", // Eternal Sentry

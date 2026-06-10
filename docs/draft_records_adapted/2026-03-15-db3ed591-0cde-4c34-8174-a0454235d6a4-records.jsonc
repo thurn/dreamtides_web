@@ -33,7 +33,9 @@
         "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
         "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
         "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
         "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
@@ -99,6 +101,7 @@
         "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
         "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
         "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
         "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
@@ -108,6 +111,7 @@
         "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
         "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
         "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
         "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
@@ -144,6 +148,7 @@
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40" // Ashwalker
           ]
@@ -252,7 +257,8 @@
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -311,6 +317,7 @@
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40" // Ashwalker
           ]
@@ -386,7 +393,8 @@
           "pickId": "7d48d622-f397-4f31-b1a5-0c23f60aa71c",
           "packCards": [
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -462,6 +470,7 @@
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
@@ -566,10 +575,12 @@
           "pack": 2,
           "pickInPack": 8,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
             "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", // Gearwright
@@ -694,10 +705,12 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline

@@ -51,6 +51,7 @@
         "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
         "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
       ],
@@ -88,6 +89,7 @@
         "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
         "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
         "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
         "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
@@ -233,6 +235,7 @@
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
             "cd4d689d-1442-4a19-8e6a-182b425d066d" // Warfield Stalwart
@@ -374,10 +377,12 @@
           "pack": 1,
           "pickInPack": 13,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
             "cd4d689d-1442-4a19-8e6a-182b425d066d" // Warfield Stalwart

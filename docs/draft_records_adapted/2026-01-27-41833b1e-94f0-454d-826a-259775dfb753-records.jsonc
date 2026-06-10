@@ -63,6 +63,7 @@
         "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
         "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
         "f7ffe999-685d-4ea2-85de-2e567eb2a042" // Key to the Moment
@@ -71,6 +72,7 @@
       "pool": [
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
         "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
@@ -193,10 +195,12 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
@@ -223,6 +227,7 @@
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "5a747998-7219-4e23-be42-b8cb3be12348" // Salvage Engine
           ]
@@ -785,6 +790,7 @@
             "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
             "867b98cf-171b-497b-9252-9af5dcf70726", // Crescendo Channeler
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "29d25251-8b42-4d3d-97e6-6c3abaabd9a2", // Hatching Ground
             "31501d09-5dde-44f4-a938-7ca95ad988a0", // Sorrowful Prince

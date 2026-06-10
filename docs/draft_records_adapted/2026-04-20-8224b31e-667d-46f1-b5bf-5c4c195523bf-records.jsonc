@@ -165,6 +165,7 @@
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b" // Shardwoven Tyrant
@@ -323,6 +324,7 @@
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "8b5eb29c-146f-46fb-9407-55004128fba7", // Keeper of Forgotten Light
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b" // Shardwoven Tyrant
@@ -572,8 +574,10 @@
           "pick": [],
           "pickId": "14065271-d942-42a8-aa38-d8a622c0375d",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch

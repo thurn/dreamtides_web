@@ -68,6 +68,7 @@
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
         "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
@@ -99,6 +100,7 @@
         "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
@@ -195,6 +197,7 @@
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "401fdd0a-356b-49c1-806d-d50617b084d2" // Enginespeaker
           ]
@@ -339,10 +342,12 @@
           "pack": 1,
           "pickInPack": 9,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
@@ -407,6 +412,7 @@
             "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "401fdd0a-356b-49c1-806d-d50617b084d2" // Enginespeaker
           ]
@@ -587,6 +593,7 @@
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "a7c2ee76-48c9-4587-8f01-81d00ae280cb", // Defiant Holdout
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
@@ -1030,6 +1037,7 @@
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
             "09332e5b-3b4e-458f-9df0-3fc0419f65c3", // Unleash Ruin
@@ -1055,6 +1063,7 @@
           "packCards": [
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
             "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout

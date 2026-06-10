@@ -55,6 +55,7 @@
         "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
         "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
         "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [
@@ -70,6 +71,7 @@
         "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
         "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
         "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "2e8571c0-4faf-4e7a-a702-26952d2035ee" // Soulreaver
       ],
@@ -101,10 +103,12 @@
         "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
         "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
         "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
@@ -222,6 +226,7 @@
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
             "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
@@ -276,6 +281,7 @@
           "packCards": [
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "006e2f95-59a2-4cda-a777-e64f4aa31060" // Unleashed Destruction
@@ -524,6 +530,7 @@
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
             "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -538,6 +545,7 @@
           "packCards": [
             "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
@@ -650,10 +658,12 @@
           "pack": 2,
           "pickInPack": 15,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -760,10 +770,12 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "848b41b3-9f87-45fb-b86f-b52fc913d201", // Genesis Burst

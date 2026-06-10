@@ -64,8 +64,10 @@
         "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
         "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
         "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
         "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
         "d24ea640-638d-4ce2-b15d-b3f4588bda6b" // Echoes of Eternity
@@ -100,12 +102,14 @@
         "fcb830e5-85ff-48f3-be1e-46e102a5c8e8", // Shatterpoint Agent
         "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "97bc4b48-9ea1-40e9-94bb-a88ae4f55d83", // Epiphany Unfolded
         "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
         "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
         "20896b2e-59cc-4494-942c-eb95b75adaf9", // Hope's Vanguard
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
         "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
         "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
@@ -548,6 +552,7 @@
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -664,10 +669,12 @@
           "pack": 2,
           "pickInPack": 15,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -680,6 +687,7 @@
           "packCards": [
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
@@ -807,11 +815,13 @@
           "pack": 3,
           "pickInPack": 7,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "8fed2e20-09c6-43e0-b6e0-5a4a417529a1", // Young Huntress
             "58f96494-87ec-4145-9e1c-95951d0ab711", // Sanctum Approach
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
@@ -837,6 +847,7 @@
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
             "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

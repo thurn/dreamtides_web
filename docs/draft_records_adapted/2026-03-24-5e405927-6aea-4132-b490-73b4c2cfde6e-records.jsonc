@@ -149,6 +149,7 @@
             "90a6a7a0-b739-475e-8379-647741aab423", // Voidsire
             "b5fbff03-f850-4627-94eb-12ed4dc15334", // Worldsong Behemoth
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
@@ -157,6 +158,7 @@
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "312e42cb-e8ee-43da-9ef8-173a69583c97" // Reforged Automaton
           ]
@@ -331,6 +333,7 @@
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "312e42cb-e8ee-43da-9ef8-173a69583c97" // Reforged Automaton
           ]
@@ -479,6 +482,7 @@
             "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
             "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
             "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
@@ -787,6 +791,7 @@
           "packCards": [
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "691883df-63d8-4664-a1fe-d5f3b5becd11", // Dawnhorn Elder
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
@@ -833,6 +838,7 @@
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager

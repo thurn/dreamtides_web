@@ -36,6 +36,7 @@
         "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
         "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
         "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
         "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
@@ -58,6 +59,7 @@
         "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
         "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
         "c06b993d-a1f4-42ad-85a9-ebf611d9a129" // Surge of Fury
       ],
@@ -85,6 +87,7 @@
         "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
         "1658d9a0-c3b0-4eb7-babc-4933acf362c4", // Glimpse of Infinity
         "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
         "cc98441a-a8f9-421f-9895-423bd7fc31b4", // Starfall
@@ -94,6 +97,7 @@
         "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
         "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
         "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
         "465d3463-1d8a-466d-b91f-b1993332b4d3", // Blight Weaver2
@@ -253,6 +257,7 @@
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
             "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf" // Cinderblade Legionnaire
@@ -388,6 +393,7 @@
             "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
@@ -426,10 +432,12 @@
           "pack": 2,
           "pickInPack": 3,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
@@ -485,6 +493,7 @@
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "5a747998-7219-4e23-be42-b8cb3be12348" // Salvage Engine
@@ -563,6 +572,7 @@
           "pickId": "ced4c824-2dfc-42ae-84e6-09f8e3f51b5b",
           "packCards": [
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
             "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
@@ -621,11 +631,13 @@
           "pack": 2,
           "pickInPack": 13,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
             "5a747998-7219-4e23-be42-b8cb3be12348" // Salvage Engine
@@ -762,6 +774,7 @@
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "312e42cb-e8ee-43da-9ef8-173a69583c97", // Reforged Automaton
             "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition

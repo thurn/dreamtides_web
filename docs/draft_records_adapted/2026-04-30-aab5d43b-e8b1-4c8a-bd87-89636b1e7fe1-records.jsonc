@@ -185,6 +185,7 @@
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
@@ -299,6 +300,7 @@
           "pickId": "71e2f832-6601-4232-b250-fd1c88538fbd",
           "packCards": [
             "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
@@ -817,7 +819,8 @@
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -951,7 +954,8 @@
           "packCards": [
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {

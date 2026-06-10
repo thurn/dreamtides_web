@@ -445,6 +445,7 @@
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
             "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
@@ -542,6 +543,7 @@
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "174a5909-48e2-4aab-8cc5-fa3292281d1d", // Twilight Troubadour
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
             "fcb830e5-85ff-48f3-be1e-46e102a5c8e8" // Shatterpoint Agent
@@ -762,6 +764,7 @@
             "e26e0ac8-d6c9-4b0c-8672-4f73651f2586", // Manufactured Abomination
             "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
@@ -862,7 +865,9 @@
           "packCards": [
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter

@@ -495,6 +495,7 @@
             "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
@@ -771,6 +772,7 @@
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b" // Young Beastcaller
@@ -926,6 +928,7 @@
           "packCards": [
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b" // Young Beastcaller

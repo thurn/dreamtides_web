@@ -315,6 +315,7 @@
           "packCards": [
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "8b5eb29c-146f-46fb-9407-55004128fba7" // Keeper of Forgotten Light
@@ -331,7 +332,8 @@
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -449,6 +451,7 @@
             "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity

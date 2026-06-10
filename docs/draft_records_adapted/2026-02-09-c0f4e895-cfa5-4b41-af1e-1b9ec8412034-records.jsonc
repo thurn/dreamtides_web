@@ -156,6 +156,7 @@
           "packCards": [
             "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea", // Bloomweaver
             "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
@@ -202,6 +203,7 @@
           "pickId": "67629212-a080-4245-8d7d-20d38cc4ad87",
           "packCards": [
             "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15", // Specter of Silent Snow
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
             "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
@@ -250,6 +252,7 @@
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "6fa9c440-3912-4b1e-868c-840ae772fe1c", // The Devourer
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8" // Northlight Maestro
           ]
@@ -488,6 +491,7 @@
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8" // Carrion Lord
           ]
@@ -657,6 +661,7 @@
             "f46490a5-7030-4ade-93e9-bedb5813f590", // Rooftop Prophet
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8" // Carrion Lord
           ]
@@ -735,6 +740,7 @@
             "1654d50f-815d-4172-b46b-8baa34a124db", // Cragfall
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "c750af2e-8185-4af0-bb38-4a41430c71b3", // Fangbound
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
@@ -764,6 +770,7 @@
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -914,6 +921,7 @@
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "d89f4c33-ffd3-4313-8106-0a9f7013cad8", // Lanternwood Scout
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

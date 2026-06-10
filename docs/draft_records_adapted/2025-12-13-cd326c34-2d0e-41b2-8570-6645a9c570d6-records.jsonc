@@ -63,6 +63,7 @@
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
         "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
       ],
@@ -92,6 +93,7 @@
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
         "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
         "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
@@ -137,6 +139,7 @@
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
@@ -471,10 +474,12 @@
           "pack": 2,
           "pickInPack": 4,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
             "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
@@ -562,7 +567,8 @@
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {

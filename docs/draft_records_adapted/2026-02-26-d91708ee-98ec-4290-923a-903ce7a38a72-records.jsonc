@@ -36,6 +36,7 @@
         "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
         "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
         "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
         "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
@@ -83,6 +84,7 @@
         "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
         "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
         "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [],
@@ -98,11 +100,13 @@
         "18ff6a45-148a-40bf-85ae-4a51f32f406a", // Blazing Emberwing
         "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
         "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
         "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
         "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
         "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
         "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
@@ -363,6 +367,7 @@
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
             "69552516-14bc-42b9-b4b6-3a0cdc29686b" // Archive of the Forgotten
@@ -391,16 +396,19 @@
           "pack": 2,
           "pickInPack": 5,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "6b739127-1a23-4c5d-877a-8829dd7a8b8c", // Entropy Spike
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
             "2e8571c0-4faf-4e7a-a702-26952d2035ee", // Soulreaver
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -479,11 +487,13 @@
           "pack": 2,
           "pickInPack": 11,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {

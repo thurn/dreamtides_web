@@ -43,10 +43,12 @@
         "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
         "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
         "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
         "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "123baf70-305a-4583-bdba-a10b5153fbeb", // Dustborn Veteran
         "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
@@ -74,6 +76,7 @@
         "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f" // Prophet of the Consumed
       ],
       "pool": [
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
         "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
@@ -105,6 +108,7 @@
         "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
         "0458658d-7e02-4286-9249-93674d16620b", // Nightmare Manifest
         "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
         "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
@@ -122,10 +126,12 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "c11eb833-a45b-4983-949d-848039d0504c", // Shadowprowler
             "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
@@ -185,10 +191,12 @@
             "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "1dc8f23e-58bd-47e5-9510-b48315fba1df" // Lanternhearted
           ]
@@ -341,6 +349,7 @@
             "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
             "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
             "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "1dc8f23e-58bd-47e5-9510-b48315fba1df" // Lanternhearted
           ]
@@ -729,6 +738,7 @@
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "6d6ce556-60df-486f-b2d8-5df168a6f75e" // Wreckborn
@@ -806,10 +816,12 @@
           "pack": 3,
           "pickInPack": 6,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
@@ -855,6 +867,7 @@
             "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "4cece464-2fde-483d-af92-04cd0341be5b", // Collateral Damage
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
@@ -889,6 +902,7 @@
             "c73f978e-8196-4589-a432-845265115555", // Lightningborn
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "6d6ce556-60df-486f-b2d8-5df168a6f75e" // Wreckborn

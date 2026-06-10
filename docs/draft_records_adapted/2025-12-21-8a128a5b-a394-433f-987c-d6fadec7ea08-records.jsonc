@@ -40,6 +40,7 @@
         "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
         "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
         "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
         "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
@@ -67,6 +68,7 @@
         "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
         "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
         "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
         "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
@@ -90,6 +92,7 @@
         "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist
         "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
         "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
         "ac2b2fc5-90d3-47e0-8332-25f7ba767035", // Forsaken Pact
@@ -100,6 +103,7 @@
         "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
         "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
         "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
         "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
@@ -185,6 +189,7 @@
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
             "6196d53d-a226-490d-a3bb-159a78d1b2b7", // Null Sphere
@@ -234,6 +239,7 @@
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
@@ -371,10 +377,12 @@
           "pack": 1,
           "pickInPack": 13,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
@@ -565,10 +573,12 @@
           "pack": 2,
           "pickInPack": 8,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
@@ -843,6 +853,7 @@
             "bd27a996-bcdd-4f49-95c2-92c9d5875344", // Lurking Dread
             "4cec92f2-9bac-4949-a602-cd0a44618aaf", // The Ringleader
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
             "f0a70e7d-46af-4d32-92cc-9d510e97a07e", // Fathomscourge

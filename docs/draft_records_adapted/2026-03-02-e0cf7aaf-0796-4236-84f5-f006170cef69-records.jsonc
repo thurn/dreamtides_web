@@ -63,6 +63,7 @@
         "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
         "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
         "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
         "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller
@@ -114,6 +115,7 @@
         "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
         "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
         "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
         "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
@@ -454,6 +456,7 @@
             "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
@@ -622,6 +625,7 @@
           "packCards": [
             "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
@@ -713,6 +717,7 @@
             "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
@@ -744,6 +749,7 @@
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1" // Graywatch
@@ -891,10 +897,12 @@
           "pack": 3,
           "pickInPack": 9,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
@@ -922,6 +930,7 @@
             "20a6474c-55b8-4b1b-9155-baac62a06f1e", // Cindermarch
             "245b49b9-e1e5-4dd0-ae18-718c437b8eb0", // Conduit of Resonance
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1" // Graywatch

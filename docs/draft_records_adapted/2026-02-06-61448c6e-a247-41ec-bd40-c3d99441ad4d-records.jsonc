@@ -71,6 +71,7 @@
         "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "25d00336-5ad7-433b-8ced-71720a9f074a", // Wheel of the Heavens
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "8a6fc6ea-9a88-441e-bdc2-d40dfec37481" // Fading Farewell
       ],
@@ -95,6 +96,7 @@
         "bbdc6ee7-e9b1-488b-90b9-19337b65fee6", // Revered Prince
         "cd3d8e4a-618e-4c2f-be60-0363b81887f1", // Echo Technician
         "96e2c30c-930c-47af-abb0-d4fbab454d56", // Dream Garden Visitor
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "4b4cc613-2e28-4851-975f-14146286a062", // Forge-Twin
         "7e4cca36-5134-415a-b30a-c4876b58976c", // Speaker for the Forgotten
@@ -212,6 +214,7 @@
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
             "2a8dff0b-759f-40cc-af40-393a4e7129d4", // Weight of Memory
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
@@ -454,10 +457,12 @@
           "pack": 2,
           "pickInPack": 2,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
@@ -580,6 +585,7 @@
             "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
             "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
             "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
@@ -723,9 +729,11 @@
             "09e17f29-8ee1-477f-8175-ff37eb1f254a", // Seer of the Fallen
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034" // Dreadweaver
@@ -878,9 +886,11 @@
           "pickId": "2aebe7a8-b982-4be4-83ca-3594e8f606b4",
           "packCards": [
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
             "ecf77f27-df0f-47c4-99c2-48d7fa46a137", // Scrapyard Custodian
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034" // Dreadweaver

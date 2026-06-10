@@ -142,6 +142,7 @@
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
@@ -161,6 +162,7 @@
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "af739e3d-bc61-4fab-bf81-a22e78d7e524", // Silent Gatherer
             "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
@@ -257,6 +259,7 @@
             "eed92573-8052-494c-adae-9838de5375a1", // Mountainwatch Alpha
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -310,6 +313,7 @@
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
             "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "c96c6c7f-c0fe-4272-b856-a54ace01f596", // Veil Shatter
@@ -390,6 +394,7 @@
           "pickId": "2c860286-9807-4ab5-b66f-e8696e9e6ac9",
           "packCards": [
             "57bb1572-6075-4efd-a592-102b134132fd", // Inspiring Templar
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -736,6 +741,7 @@
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e" // Doorlight Foundling
           ]
@@ -889,6 +895,7 @@
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e" // Doorlight Foundling
           ]

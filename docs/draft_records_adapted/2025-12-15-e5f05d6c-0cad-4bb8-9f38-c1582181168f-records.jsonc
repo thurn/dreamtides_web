@@ -245,7 +245,8 @@
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -374,7 +375,8 @@
           "pickId": "6040ba5e-7042-4095-9000-89bcb8ce1ea6",
           "packCards": [
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -458,6 +460,7 @@
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d" // Veilpiercer
@@ -474,6 +477,7 @@
           "packCards": [
             "ca0e9275-7fbe-47ce-b776-da5b2607145e", // Vertiginous Leap
             "78673e2b-a6d1-43de-8850-3d3327de5cc6", // Spirit Field Reclaimer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
@@ -605,6 +609,7 @@
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
             "cd2d4eaf-6295-451d-aaa2-ea74188bac3b", // Young Beastcaller
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "5e1b943f-9fa2-4055-b613-5dd09a048c99", // Call to the Unknown
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d" // Veilpiercer
@@ -710,6 +715,7 @@
           "pick": [],
           "pickId": "981b3a2e-de94-428d-8e5d-5a7ba6afe4a2",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel

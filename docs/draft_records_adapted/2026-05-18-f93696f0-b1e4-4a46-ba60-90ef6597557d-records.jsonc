@@ -76,6 +76,7 @@
         "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
         "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
         "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "cd7ff671-2317-4a54-b9da-acfefb90e6b0", // The Rising God
         "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
@@ -100,6 +101,7 @@
         "e4e8d3b9-3463-4b92-8fbe-35064f72402d", // Pinnacle Ascendant
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
         "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
         "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
@@ -181,6 +183,7 @@
             "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
             "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
             "7ad10754-690c-45fa-abe6-28944da6eef6", // Pyrestone Avatar
@@ -277,6 +280,7 @@
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
             "e4ab6a18-c3b2-4149-a446-c7c1e8d66714", // Marrow Mimic
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -420,10 +424,12 @@
           "pack": 1,
           "pickInPack": 14,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -827,6 +833,7 @@
             "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
             "28c3ef90-c0dc-4b85-92c8-40758b99e0ce", // Petal-Seer

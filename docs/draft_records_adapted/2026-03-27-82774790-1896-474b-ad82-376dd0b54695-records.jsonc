@@ -702,6 +702,7 @@
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "86fd585b-e9d0-4dc1-bce9-488014b9316d" // Cloudmantle Ray
@@ -828,6 +829,7 @@
             "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
         },
@@ -860,6 +862,7 @@
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "86fd585b-e9d0-4dc1-bce9-488014b9316d" // Cloudmantle Ray
@@ -1667,6 +1670,7 @@
             "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
         },
@@ -1706,6 +1710,7 @@
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "86fd585b-e9d0-4dc1-bce9-488014b9316d" // Cloudmantle Ray
@@ -1794,6 +1799,7 @@
           "pickId": "15af0592-a1cb-4b1e-b051-dde978939706",
           "packCards": [
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
         },
@@ -1842,6 +1848,7 @@
         "49641e8e-93a8-46cb-92a9-246b0fd57899", // Harvester of Despair
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
         "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
         "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
@@ -1935,6 +1942,7 @@
         "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
         "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
         "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
         "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
@@ -2288,6 +2296,7 @@
           "pick": [],
           "pickId": "0a26d900-c652-4f9c-8681-a35c5f8b1937",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
@@ -2522,6 +2531,7 @@
             "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
         },
@@ -2564,6 +2574,7 @@
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "86fd585b-e9d0-4dc1-bce9-488014b9316d" // Cloudmantle Ray
@@ -2682,6 +2693,7 @@
             "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
         },
@@ -2706,10 +2718,12 @@
           "pack": 3,
           "pickInPack": 11,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "08e01310-d192-41e9-a6f0-0edbd6fb3cfb",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "4f29a241-9265-4669-a189-5a2a91923e12", // Vanishing Inquisitor
             "86fd585b-e9d0-4dc1-bce9-488014b9316d" // Cloudmantle Ray

@@ -133,6 +133,7 @@
             "956aaeb1-5280-4294-bf80-73079f35c5f6", // Harborwarden
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
@@ -232,6 +233,7 @@
           "pickId": "07365d4e-2252-43c9-89cb-706d00dfea61",
           "packCards": [
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
             "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
@@ -255,6 +257,7 @@
             "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
             "85251f03-c873-46d8-81be-ab421c901a53", // Fractured Vessel
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "a911ef71-799c-4240-ad13-8fabd3caeafa" // Moment Rewound
           ]
@@ -378,6 +381,7 @@
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
             "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
             "967c714f-40c5-4a77-8e22-40691a2755d4", // Passage Through Oblivion
@@ -487,6 +491,7 @@
           "pickId": "0559352e-95c1-403b-bd8f-d0679717cfa2",
           "packCards": [
             "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110", // Voidcaller

@@ -322,6 +322,7 @@
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -379,6 +380,7 @@
           "pickId": "d79b8974-796c-4f88-a0cb-5afbaf26fd24",
           "packCards": [
             "3fab0780-59d4-45f1-8aac-a870ad8729ac", // Gilded Catalyst
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

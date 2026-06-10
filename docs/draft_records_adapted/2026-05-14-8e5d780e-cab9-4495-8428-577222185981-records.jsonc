@@ -75,6 +75,7 @@
         "8896c178-757e-4775-b117-a4357ebfe30f", // Minstrel of Falling Light
         "c86c1364-6ac4-4c90-8053-4e49441a2c83", // Key Sifter
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
         "50267984-eaa3-415e-a23f-581c54b0ad2d" // Reunion
       ],
@@ -86,6 +87,7 @@
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
         "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
         "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
@@ -228,11 +230,13 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
             "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
             "88994286-96db-4ba6-a660-b30ae9b52cff", // Gleamharvester
@@ -732,6 +736,7 @@
             "243a15d3-a4eb-415c-b106-86d4a2b7ec6a", // Sundown Ronin
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
@@ -780,6 +785,7 @@
           "pickId": "f3537373-ef54-4578-9d05-6216420ee349",
           "packCards": [
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
@@ -827,6 +833,7 @@
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "79b37916-c05d-4818-9d67-3b90e340926e" // Fleeting Reunion
           ]
         },

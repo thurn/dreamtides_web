@@ -56,6 +56,7 @@
         "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
         "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
         "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
         "d24ea640-638d-4ce2-b15d-b3f4588bda6b" // Echoes of Eternity
@@ -92,6 +93,7 @@
         "9a18d375-1b6d-4df4-95ec-c7c5c3f36379", // Pattern Seeker
         "2931e20b-1a80-4ddd-8944-20e68d182886", // Sunken Radiance
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
         "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
         "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
@@ -158,6 +160,7 @@
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
@@ -214,6 +217,7 @@
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "738a5af0-f848-4d48-bceb-9a43c9b11066" // Reclaimer of Lost Paths
@@ -224,11 +228,13 @@
           "pack": 1,
           "pickInPack": 4,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
             "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
@@ -325,6 +331,7 @@
           "pickId": "0827c728-5526-4abe-ad21-311594a0bc13",
           "packCards": [
             "be72bd04-21a6-4035-a117-2b7213ad1a34", // Arc Gate Opening
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
             "1268a899-b209-46bb-bce4-6def1dcd0404", // Woodland Apparition
@@ -365,6 +372,7 @@
           "packCards": [
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "738a5af0-f848-4d48-bceb-9a43c9b11066" // Reclaimer of Lost Paths
@@ -804,6 +812,7 @@
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "6f0b709d-0f57-46de-bfba-6a8b4df2b991", // Derelict Voyage
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant

@@ -477,6 +477,7 @@
             "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f", // Junkfield Renegade
             "d26d31c0-7bd2-4d58-bed9-444e032a1087", // Door to Possibility
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
@@ -524,6 +525,7 @@
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
             "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0" // Ashborn Necromancer
           ]
         },
@@ -582,6 +584,7 @@
             "2ce84a16-1295-4738-9e2d-1f57590b2269", // Dreadcall Warden
             "3e802ecd-a83b-491b-9528-a4672d0e986f", // Paradox Enforcer
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
             "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
@@ -635,6 +638,7 @@
           "pickId": "b7d6b117-0c14-4455-92fc-29555ee75d97",
           "packCards": [
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
@@ -670,6 +674,7 @@
           "packCards": [
             "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "2d180bd7-4cc7-49fb-b76c-0990656cedc0" // Ashborn Necromancer
           ]
         },
@@ -838,6 +843,7 @@
             "e3431bd0-5a81-497f-9ec9-18275b568c00", // Return to Nowhere
             "13c45db4-ebab-4364-a14a-59a2e9c52bb5", // Dreaming Groves
             "77f31db4-0397-49a7-8886-f5459ee960e9", // Dune Reaper
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel

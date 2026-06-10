@@ -459,6 +459,7 @@
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
@@ -606,6 +607,7 @@
           "packCards": [
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
@@ -798,6 +800,7 @@
             "7df5255e-bf23-4c14-b31b-be89fb864ee0", // Grounded
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -932,6 +935,7 @@
           "pickId": "e3378fe8-3355-48aa-90d4-9cb739200160",
           "packCards": [
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },

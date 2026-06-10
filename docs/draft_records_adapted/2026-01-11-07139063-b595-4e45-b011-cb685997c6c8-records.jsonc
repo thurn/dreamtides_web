@@ -428,6 +428,7 @@
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]
@@ -570,6 +571,7 @@
           "pickId": "24a5cc2c-0fbf-4a5f-b175-6e0ffd0d0787",
           "packCards": [
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]
@@ -931,6 +933,7 @@
         "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
         "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
         "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
         "4ccb9bb6-e4db-48c3-a534-b0ab454f0f15" // Specter of Silent Snow
@@ -948,6 +951,7 @@
         "db4618f6-121b-4c97-98d3-c29849c5824e", // Ashen Avenger
         "9495f501-f627-4b74-a848-b3d928641229", // Emberwatch Veteran
         "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", // Vessel of Echoes
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
         "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
@@ -1262,10 +1266,12 @@
           "pack": 2,
           "pickInPack": 2,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed", // Dread Arbiter
@@ -1385,6 +1391,7 @@
             "91d9afed-ea29-43af-9021-0f3ecbdc252e", // Starcatcher
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "2f5cc27f-db6e-4bc8-bfa2-eeacebae57f7", // Headtaker Wurm
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "881e3a5f-280f-413a-b927-352aeb3bda71" // Bloodpact Berserker
           ]

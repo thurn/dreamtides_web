@@ -444,6 +444,7 @@
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -604,6 +605,7 @@
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -780,6 +782,7 @@
           "pick": [],
           "pickId": "245e16ae-4514-42fa-b409-2c3ae084436c",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan

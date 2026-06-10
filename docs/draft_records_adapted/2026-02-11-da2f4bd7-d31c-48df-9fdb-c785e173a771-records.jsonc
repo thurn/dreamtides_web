@@ -47,6 +47,7 @@
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
         "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
         "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
         "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
@@ -91,6 +92,7 @@
         "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
         "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
         "44ae8838-4714-43a5-a7bd-e9f806f35ca9", // Nomad of Endless Paths
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "29088c75-c2c9-40dc-a77a-65360e464b45", // Abolish
         "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
@@ -276,6 +278,7 @@
             "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
             "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
             "4124a05c-b6dd-4334-b202-59fa17d77668", // Unbroken
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -408,10 +411,12 @@
           "pack": 1,
           "pickInPack": 15,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -454,6 +459,7 @@
             "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
             "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "2d0a7c62-29b5-433b-9b0e-c3dd7630ccc7", // Packcaller of Shadows
@@ -525,6 +531,7 @@
             "8a5d7d67-91c9-41c4-b22e-8287954efa09", // Dreaming Obelisk
             "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
             "7697da0e-d759-4c75-8c9c-477e9058b035", // Apocalypse Vigilante
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "f7ffe999-685d-4ea2-85de-2e567eb2a042", // Key to the Moment
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative

@@ -228,6 +228,7 @@
             "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
             "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
             "c92a7dc0-04b0-4c54-9485-59a92505eabc", // Assault Trooper
@@ -571,6 +572,7 @@
             "7f90d17b-9146-4550-a372-a9d77e814ce6", // Collapse Protocol
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
             "6da831c8-6fda-4078-9f2b-873db2416aad", // Cloaked Sentinel
@@ -738,6 +740,7 @@
             "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
             "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f" // Augur Crow
@@ -785,6 +788,7 @@
             "ccff822e-e2ae-4d38-9720-6df289dbe4cd", // Simulacra
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f" // Field Reverent
@@ -887,6 +891,7 @@
           "pickId": "bb979a96-a57d-4fb5-8ebe-0bd398272abe",
           "packCards": [
             "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f" // Augur Crow
@@ -917,6 +922,7 @@
           "pickId": "333406d5-abcc-4629-a33b-395d0662ba1b",
           "packCards": [
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "7fb4b7f5-0dfc-4151-8a88-82f822960b61", // Boundless Wanderer
             "4f7cb174-6324-46a8-9973-44adfa7fef9f" // Field Reverent

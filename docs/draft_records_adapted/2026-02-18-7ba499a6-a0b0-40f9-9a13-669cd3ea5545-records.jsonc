@@ -52,6 +52,7 @@
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
         "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a" // Blood Reaver
       ],
@@ -100,6 +101,7 @@
         "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", // Conduit of Ashes
         "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
         "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
         "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
@@ -419,6 +421,7 @@
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
             "629fe4d4-826f-41b9-a913-458a503856a8", // Clifftop Marksman
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
@@ -487,6 +490,7 @@
             "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
             "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
@@ -585,10 +589,12 @@
           "pack": 2,
           "pickInPack": 9,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
@@ -859,6 +865,7 @@
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf" // Cinderblade Legionnaire
           ]

@@ -169,6 +169,7 @@
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
             "caaee8a9-0c22-41b4-950f-4c1131b98221", // Celestial Reverie
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -231,6 +232,7 @@
           "pickId": "13c5a1ce-932a-4b3d-8b86-ed920e646afc",
           "packCards": [
             "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -316,7 +318,8 @@
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -377,7 +380,8 @@
           "packCards": [
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {

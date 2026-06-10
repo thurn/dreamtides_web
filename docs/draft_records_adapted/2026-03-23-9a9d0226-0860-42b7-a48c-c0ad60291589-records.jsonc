@@ -70,6 +70,7 @@
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
         "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
         "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
@@ -98,6 +99,7 @@
         "b64f0beb-6ba4-4559-b6ab-091c2f60a613", // Infernal Cavalier
         "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
         "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "d95533f4-7809-44a8-a882-7675c61cee1c", // Tethered Hollow
         "fc0c6f10-8864-4660-904a-8e90d261c6ef", // Tranquil Duelist
@@ -492,10 +494,12 @@
           "pack": 2,
           "pickInPack": 4,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
             "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
@@ -795,6 +799,7 @@
           "packCards": [
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
@@ -863,6 +868,7 @@
           "pickId": "8945f5e0-c143-47ca-910e-32ad9ac34487",
           "packCards": [
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below

@@ -38,6 +38,7 @@
         "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
         "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
         "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
         "73fc1b7f-3c2b-4993-9590-924240515c2f", // Lunar Hart
@@ -56,6 +57,7 @@
         "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
         "c430ed7b-523e-4580-9a53-d43d11265633", // Flash of Power
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
         "6cf545ba-b014-4333-a0da-573e8f97d734", // Clockwork Prodigy
         "128d1878-a505-4766-91a2-e5a29498bc4e", // Echoing Denial
@@ -79,6 +81,7 @@
         "50267984-eaa3-415e-a23f-581c54b0ad2d", // Reunion
         "0d848dc8-a1a2-410b-b19a-b5f65375e141", // Path to Redemption
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
         "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
         "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
@@ -107,6 +110,7 @@
         "f7b135ea-4894-46ab-b41d-ba2f74b070a1", // A New Adventure
         "3725379c-676d-4efd-81ee-7e45d80db6d0", // Fragments of Vision
         "7b55efd1-6d9f-4156-9de7-1c71ccc410cb", // Stolen Genesis
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
         "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
@@ -153,6 +157,7 @@
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
@@ -191,6 +196,7 @@
           "packCards": [
             "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "e455225f-c444-44a2-8796-805cae2b755f", // Oracle of Shifting Skies
             "29c4c45d-33df-42ac-bf28-387eb00264aa", // Architect of Memory
@@ -296,11 +302,13 @@
           "pack": 1,
           "pickInPack": 10,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
             "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
@@ -699,6 +707,7 @@
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
             "c32ef131-d283-4bf1-bf65-2d5e5d232168", // Harrowing Officiant
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
@@ -863,10 +872,12 @@
           "pack": 3,
           "pickInPack": 10,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse

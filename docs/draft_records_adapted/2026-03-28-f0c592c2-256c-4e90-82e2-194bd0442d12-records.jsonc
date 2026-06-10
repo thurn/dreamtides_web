@@ -37,6 +37,7 @@
         "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
         "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "99101fce-f2b4-4032-b999-317ce3e4a6dd", // Keeper of the Tides
         "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
@@ -96,6 +97,7 @@
         "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
         "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
         "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
         "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
@@ -524,6 +526,7 @@
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
             "61060827-8bed-4b63-b63d-6c3b0536e941", // Sunshadow Eagle
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
@@ -683,6 +686,7 @@
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
             "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
@@ -792,6 +796,7 @@
           "packCards": [
             "7530e916-e4b9-4988-b3ac-0e400c7a04ff", // Pilgrim of Old Stones
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
@@ -827,10 +832,12 @@
           "pack": 3,
           "pickInPack": 8,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "2a230602-a39b-4ec2-a467-97b92b389aff", // Scuttled Fortune
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald

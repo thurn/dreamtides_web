@@ -723,6 +723,7 @@
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f" // Frost Visionary
@@ -789,6 +790,7 @@
           "pickId": "eb1a16f9-13d4-4188-8e1e-0f2394349c7a",
           "packCards": [
             "f160fd01-b3c3-4904-b15f-339f6fcf5ca5", // Luminous Ascent
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f" // Frost Visionary

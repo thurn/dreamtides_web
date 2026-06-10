@@ -41,12 +41,14 @@
         "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
         "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
         "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
         "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
         "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
         "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne
         "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
         "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
@@ -66,7 +68,8 @@
         "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
         "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
         "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
-        "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+        "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
       ],
       "sideboard": [],
       "pool": [
@@ -93,7 +96,9 @@
         "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
         "86881031-393f-4359-96f5-3adde6bdd74d", // Abomination of Memory
         "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
         "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
@@ -105,6 +110,7 @@
         "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7", // Ironclad Marksman
         "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
         "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
         "435ed83c-f7a6-4a73-a684-67fcc4e49bc4" // Call of Calamity
@@ -213,6 +219,7 @@
           "packCards": [
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
             "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", // Pathwalker
             "975f49d3-213a-43fc-8079-5fe40f126a7b", // Scrap Reclaimer
@@ -545,6 +552,7 @@
             "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7", // Heavenward Penitent
             "3995100d-cdde-4c6a-9bf9-87167c8deb57", // Immolate and Rise
             "6475483c-07de-43a0-b419-aaae6f436ec6", // Peak Plunder
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
         },
@@ -663,10 +671,12 @@
           "pack": 2,
           "pickInPack": 15,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ]
         },
@@ -675,10 +685,12 @@
           "pack": 3,
           "pickInPack": 1,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c", // Starchaser
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
@@ -780,6 +792,7 @@
             "d1b7d5c6-cde9-48c6-80ba-642ddc9f35ad", // Ripple Through Reality
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "4cec92f2-9bac-4949-a602-cd0a44618aaf" // The Ringleader
           ]
@@ -907,11 +920,13 @@
           "pack": 3,
           "pickInPack": 13,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "0211963d-d097-4427-9d16-5e857621e481", // Sanctum Awakened
             "4cec92f2-9bac-4949-a602-cd0a44618aaf" // The Ringleader
           ]

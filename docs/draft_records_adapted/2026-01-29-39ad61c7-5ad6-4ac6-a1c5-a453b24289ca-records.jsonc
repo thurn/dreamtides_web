@@ -47,6 +47,7 @@
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
         "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
         "9d63ba3e-fafb-466e-8418-ce5f8941ba30", // Dawnrunner
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "6d6ce556-60df-486f-b2d8-5df168a6f75e", // Wreckborn
         "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
@@ -71,6 +72,7 @@
         "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "448abb34-d77d-40ac-8292-58db03176247", // Shadowbinder
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "f7ffe999-685d-4ea2-85de-2e567eb2a042" // Key to the Moment
       ],
@@ -78,8 +80,10 @@
       "pool": [
         "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
         "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
@@ -177,10 +181,12 @@
           "pack": 1,
           "pickInPack": 3,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "795a7b54-40d5-42f9-bc3a-9e92bc938c2d", // Crumbling Covenant
             "bf323913-3695-49ee-8d13-8165657e3dc9", // Dreadwood Emissary
@@ -222,10 +228,12 @@
           "pack": 1,
           "pickInPack": 5,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "7762759b-c1df-4c86-9dbb-a49d152f3616", // Shatter the Frail
             "5931e388-1856-4e5a-85f8-a5aa34f867b1", // Whisper of the Past
@@ -470,6 +478,7 @@
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
             "37d9165f-2b3a-44a2-848b-401cf4466a7c" // Silent Avenger
@@ -641,6 +650,7 @@
             "d6ec65a2-d61e-4617-bdd0-75d5573c063d", // Smoldering Ancient
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
             "37d9165f-2b3a-44a2-848b-401cf4466a7c" // Silent Avenger
@@ -734,11 +744,13 @@
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
             "1bae969b-0bc4-4777-86f3-1e860d601c5c", // Riftwalker
             "25173cac-333f-4efc-9a03-b532d5783419", // Ridgecutter
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "14ac6804-ed1d-4148-aad7-11796b6fff6c", // Undying Fang
             "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
@@ -804,6 +816,7 @@
           "packCards": [
             "0fde04ac-8552-45ce-83a3-5ab2384b36da", // Toll of Passage
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
@@ -892,6 +905,7 @@
           "packCards": [
             "e7c93c3b-14db-4131-ab50-71d152331777", // Rootbound Witness
             "dcaba429-6fbc-4ea5-b063-871134ccd03b", // Skies of Change
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder

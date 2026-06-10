@@ -46,6 +46,7 @@
         "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
         "2d180bd7-4cc7-49fb-b76c-0990656cedc0", // Ashborn Necromancer
         "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "d09a6760-6630-4964-9c77-decc641df713", // Urban Desperado
         "ae90a3e1-c650-4f21-83af-de3208151b11", // Verdant Pioneer
@@ -66,6 +67,7 @@
         "60feb0d0-89b8-48fc-b01a-ce54e2c9941f", // Twilight Suppressor
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
         "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
       ],
       "sideboard": [
@@ -82,6 +84,7 @@
         "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
         "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
         "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
@@ -97,6 +100,7 @@
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
         "f1452b45-51dc-453a-916e-88bd9d29e36e", // The Calling Night
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
         "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
@@ -162,6 +166,7 @@
           "packCards": [
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
             "6e019832-2e0c-4166-81c3-54f7995425df", // Momentum of the Fallen
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
@@ -230,6 +235,7 @@
             "be7cf049-29df-4801-9ca6-0e39dc1101af", // Shattering Gambit
             "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6", // Ochre Prospector
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
@@ -243,10 +249,12 @@
           "pack": 1,
           "pickInPack": 6,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "ca37f80e-8474-4d40-b793-7a900f6ca467", // Shadow Reflection
             "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
@@ -255,6 +263,7 @@
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c", // Ossuary Overlord
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -388,6 +397,7 @@
           "pickId": "2c723fc9-d5c9-4126-a9a6-f80c247a4b6b",
           "packCards": [
             "a5056a4c-542b-4a7c-8fe6-895126c7d4c8", // Carrion Lord
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -549,10 +559,12 @@
           "pack": 2,
           "pickInPack": 7,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
             "1b341984-d32e-42a7-ae56-b22059c59737", // Wreckheap Survivor

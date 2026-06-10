@@ -67,6 +67,7 @@
         "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
         "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
         "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "d2c22fdc-bf86-4233-8a6b-c8a4bd418b7c", // Aftermath Bloom
         "1ce0f0f2-4b1a-483d-b93b-74c36e946a08" // The Deathsworn
@@ -100,6 +101,7 @@
         "31ecf933-c897-41a5-ab94-822ea65898d8", // Lumen Rover
         "e656cfd3-7481-46e5-934d-4dd242b00031", // Ordained Collapse
         "491e4233-0911-46ed-bced-0498e69b5bba", // Conjured Zenith
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
@@ -180,6 +182,7 @@
             "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f", // Battlefield Medic
             "56411ed4-bda9-4fdf-82e5-b5492de67039", // Skyflame Commander
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
             "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
@@ -457,6 +460,7 @@
           "pickId": "47fde349-010e-4a2e-838e-e924dbeec355",
           "packCards": [
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
@@ -556,6 +560,7 @@
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
             "18979c10-39b8-42fb-ac1d-dd784da498d1", // Fell Swoop
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -679,10 +684,12 @@
           "pack": 2,
           "pickInPack": 15,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -792,6 +799,7 @@
             "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
             "bedee263-27b9-4d73-ab77-6b5c747dff69", // Wasteland Arbitrator
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "41d0aa36-f15a-487d-b97c-7fd765973921" // Sage of the Prelude
           ]
@@ -829,6 +837,7 @@
             "aba40bc6-3e9e-4874-be8a-6984cbf13146", // The Forsaker
             "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
@@ -928,6 +937,7 @@
           "pick": [],
           "pickId": "0a26d900-c652-4f9c-8681-a35c5f8b1937",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "41d0aa36-f15a-487d-b97c-7fd765973921" // Sage of the Prelude
           ]

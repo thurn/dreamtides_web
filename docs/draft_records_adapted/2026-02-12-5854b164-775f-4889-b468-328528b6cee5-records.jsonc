@@ -33,6 +33,7 @@
         "ed02e610-2e68-4457-95a6-c7c6db60ca40", // Ruptured Dynamo
         "f860e815-3ed9-463d-ac4d-ed8d2778f8ad", // Lone Castaway
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
         "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
         "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
@@ -73,6 +74,7 @@
       ],
       "pool": [
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
         "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
         "d30bd488-f921-49cb-a44f-353c54cb6548", // Starrunner
@@ -118,11 +120,13 @@
           "pack": 1,
           "pickInPack": 1,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "5ce69085-aa75-4654-8abe-f9e773931e63", // Sunset Chapel Rest
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d", // Veilpiercer
@@ -245,6 +249,7 @@
           "packCards": [
             "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder
             "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a", // Together Against the Tide
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "f79c63f6-7cf1-4030-be39-217fd3c2fb7f", // Fury of the Clan
             "41044897-b70a-4e2b-8eb6-baf843a14a43", // Spellweaver
@@ -526,6 +531,7 @@
             "41c14462-86b9-42a4-8a61-859d59ffa466", // Summons of the Bonded
             "01a8482b-5b4f-4c49-8791-2702cb5dfd3d", // Inferno's Herald
             "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", // Ashen Remnant
             "648237c5-ceff-4a28-aaf8-4aa099eae80d", // The Dread Sovereign
@@ -789,6 +795,7 @@
             "2c9711c7-800c-4e55-a488-17ea5a6813c6", // Angel of the Eclipse
             "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker
             "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "cf173b05-7bf2-465b-91e2-41f213c536d1", // Phantasmal Recruiter
             "2708c635-9332-4cfb-b43d-889ba2e329b6", // Voidshield Guardian

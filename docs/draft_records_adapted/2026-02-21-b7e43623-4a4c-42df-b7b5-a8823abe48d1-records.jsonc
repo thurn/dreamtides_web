@@ -70,6 +70,7 @@
         "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd", // Charnel Seraph
         "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
         "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "764b62f6-6af9-40ad-8d1f-653cc1a11030", // Eclipse Herald
         "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
@@ -115,6 +116,7 @@
         "8cb543d7-e70b-4526-b473-bb17dcaee2a7", // Planetgazer
         "f4c570d4-c500-4b66-ad97-e8ccbef19392", // Standoff
         "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
         "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
@@ -555,6 +557,7 @@
             "47b1d6b7-0388-4bb9-abfc-ed832d902e9f", // The Waking Titan
             "8d35aec1-29ad-432c-9c23-25a52804cbae", // Duskshore Virtuoso
             "acefcfcf-cba5-46ec-913e-32f1091afbda", // Spiral Offering
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
@@ -769,11 +772,13 @@
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
             "7c9f3a38-1434-4db4-a856-24fe744e8322", // Canopy of Stars
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -914,15 +919,18 @@
           "pack": 3,
           "pickInPack": 12,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
             "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", // Ghostlight Wolves
             "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", // Eternal Stag
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {

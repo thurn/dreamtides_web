@@ -38,6 +38,7 @@
         "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
         "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
         "9b9c2743-75b3-499d-b5fb-c3429c92d420", // Driftcaller Sovereign
         "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", // Stoneborn Eternal
@@ -106,6 +107,7 @@
         "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
         "86fd585b-e9d0-4dc1-bce9-488014b9316d", // Cloudmantle Ray
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
         "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
         "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
@@ -234,6 +236,7 @@
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "f4082c01-fdc8-4583-afdb-76bac980b3bf", // Wasteland Holdout
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
             "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
@@ -468,11 +471,13 @@
           "pack": 2,
           "pickInPack": 2,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline

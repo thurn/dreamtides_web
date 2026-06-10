@@ -54,6 +54,7 @@
         "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
         "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "69552516-14bc-42b9-b4b6-3a0cdc29686b", // Archive of the Forgotten
         "7947e9db-a85e-4277-a42a-8d45f7475295", // Liminal Striker
         "d6e8842f-c0a4-4b4c-93bd-377cfae60894", // Ride of the Vanguard
@@ -68,6 +69,7 @@
       ],
       "sideboard": [
         "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
         "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", // Graywatch
@@ -79,6 +81,7 @@
         "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
         "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
         "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
         "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
@@ -89,6 +92,7 @@
         "8bf53fe6-8a25-401e-9a99-84343a026bb0", // Burning Pursuit
         "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
         "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "74e82d0d-e107-4207-ad2a-73d016ea54a9", // Nightmare
         "3e83cbe2-2b21-4804-9906-4b4735db9869", // Phantom Flotilla
@@ -173,11 +177,13 @@
           "pack": 1,
           "pickInPack": 3,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "56f019a8-6b77-4bcb-bfa6-37b94e188ead", // Rootspring Summons
             "41d0aa36-f15a-487d-b97c-7fd765973921", // Sage of the Prelude
             "1dc8f23e-58bd-47e5-9510-b48315fba1df", // Lanternhearted
@@ -248,6 +254,7 @@
             "7ffb1179-6c94-4f80-9613-ece2b799f19d", // Saltless Mariner
             "f3f97e2c-3bb6-4a20-9880-f59c50e5af93", // Obliterator of Worlds
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -371,10 +378,12 @@
           "pack": 1,
           "pickInPack": 14,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -761,6 +770,7 @@
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "49641e8e-93a8-46cb-92a9-246b0fd57899" // Harvester of Despair
           ]
@@ -803,6 +813,7 @@
             "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
             "9adbe3db-d872-4b75-92b5-d7f2798c22ce", // Titan of Forgotten Echoes
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "3e6a5236-9850-4a69-9fe1-48389365a399" // Dusk Duelist
           ]
         },
@@ -910,6 +921,7 @@
             "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
             "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
             "6b1c0e39-0e70-4061-b037-0e10026cfabb", // Seedling Sage
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "49641e8e-93a8-46cb-92a9-246b0fd57899" // Harvester of Despair
           ]
@@ -934,6 +946,7 @@
           "pickId": "2b9b0195-beda-403e-bc27-7ae3be9f318c",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "3e6a5236-9850-4a69-9fe1-48389365a399" // Dusk Duelist
           ]
         },

@@ -511,6 +511,7 @@
             "5f4bc2cf-4464-409f-acd5-fe4d6df28a05", // Seeker for the Way
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -522,6 +523,7 @@
           "pickId": "f19a6f20-8ca1-4a8b-8488-bcb5d86868dc",
           "packCards": [
             "ffec9fdd-d948-4756-b7df-39b9e982613e", // Skull Weaver
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "8b7883ee-a235-4793-aa56-086fb1e28d36", // Bladefall
             "0bddeb19-ff49-4a77-bc06-955377ba3ed1", // Blade of Oblivion
@@ -650,6 +652,7 @@
           "packCards": [
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ]
         },
@@ -731,6 +734,7 @@
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "4f29a241-9265-4669-a189-5a2a91923e12" // Vanishing Inquisitor
           ]
@@ -895,6 +899,7 @@
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "516dbd2d-dae4-4873-937e-adfeeee4444d", // Gateway Defender
             "4f29a241-9265-4669-a189-5a2a91923e12" // Vanishing Inquisitor
           ]

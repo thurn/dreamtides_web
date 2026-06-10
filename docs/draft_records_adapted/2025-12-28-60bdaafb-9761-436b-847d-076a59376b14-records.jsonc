@@ -36,6 +36,7 @@
         "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
         "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
         "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
         "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
@@ -84,6 +85,7 @@
         "a6866438-3632-408d-b464-c10f8a43a5c2", // Kindlehorn
         "faadc87f-98fe-4a58-b1a9-a7c0cff70e08", // Wandering Archivist
         "d1c25546-dcf2-481e-8f00-9afef3adf24b", // Rubble Diviner
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "d217303e-b115-484a-b22c-0e44d5701389" // Broadcast Array
       ],
@@ -96,6 +98,7 @@
         "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
         "4b20e66e-2466-4518-8ef9-67f580bd6f14", // Looming Oracle
         "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "15b63630-d9f8-473b-9717-15ad91ff2f16", // Threadbreaker
         "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
@@ -104,6 +107,7 @@
         "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
         "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
         "22239029-f53c-4ba9-b9b6-29f6592bb722", // Rift Pilgrim
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "21e376da-f4c3-4a60-bd63-a272b35db5a6", // Infernal Rest
         "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
@@ -162,6 +166,7 @@
             "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
             "120ea441-f6ff-434b-973c-bde459f65368", // Inverted Reflection
             "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
             "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
@@ -236,6 +241,7 @@
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
             "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", // Starshot Gunner
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "625fe37e-8059-481c-99fd-109fd02ceedd" // Maelstrom Denial
           ]
@@ -299,6 +305,7 @@
             "a37876f4-08a7-4352-bb3a-6d24f5c9407d", // Guiding Light
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
             "37d9165f-2b3a-44a2-848b-401cf4466a7c", // Silent Avenger
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40" // Ashwalker
           ]
@@ -328,10 +335,12 @@
           "pack": 1,
           "pickInPack": 9,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
             "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
@@ -477,10 +486,12 @@
           "pack": 2,
           "pickInPack": 3,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "7def28c4-d75a-47e1-ae86-5b7093cc0419", // Duskwall Delver
             "c06b993d-a1f4-42ad-85a9-ebf611d9a129", // Surge of Fury
@@ -800,7 +811,8 @@
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -945,7 +957,8 @@
             "d755cfa4-d7c0-46d8-a836-909c45c68890", // Shoreline Penitent
             "4fac8060-2644-409f-806b-c6a845ef6f31", // Dreamscatter
             "d24ea640-638d-4ce2-b15d-b3f4588bda6b", // Echoes of Eternity
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {

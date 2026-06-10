@@ -34,6 +34,7 @@
         "f0165a60-df1c-41db-87bb-a784c26835a5", // Blazebound Sentinel
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", // Dawnprowler Panther
         "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
         "920ef495-5560-4fa6-9a95-b9584ef6a4cf", // Scorched Crusader
@@ -66,12 +67,14 @@
         "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
         "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
         "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "cc21a902-e482-46c0-bf07-e04035f39190", // Steel Abomination
         "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
         "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb" // Thronebound Arbiter
       ],
       "pool": [
@@ -81,6 +84,7 @@
         "3cda9dd7-cb81-43c1-9db5-1444d7363e13", // Spirit Bond
         "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
         "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
         "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
@@ -98,6 +102,7 @@
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2", // Melodist of the Finale
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
         "e72245f2-c153-4e79-ba8e-956d18202b48", // Forge Inheritor
         "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
@@ -115,6 +120,7 @@
         "ea118471-164b-4d7f-bb02-044c862ed07e", // Wreckland Maverick
         "9629a58a-9f30-40f0-9199-835ea2dddc76", // Vault Infiltrator
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "acbc1ace-4f6d-45a3-8bf5-a560d1c8485b", // Blazepath Traveler
         "31ecf933-c897-41a5-ab94-822ea65898d8" // Lumen Rover
       ],
@@ -139,6 +145,7 @@
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "312e42cb-e8ee-43da-9ef8-173a69583c97" // Reforged Automaton
           ]
@@ -243,10 +250,12 @@
           "pack": 1,
           "pickInPack": 6,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1", // Wired Duelist
             "69d9e550-eacc-49f2-8cc5-30b8940c9eed", // Dragonward
@@ -308,6 +317,7 @@
             "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a", // Iron Executor
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
             "ccbefadc-aab8-4f8c-a705-07bd70c91731", // Mirrorlight Architect
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "312e42cb-e8ee-43da-9ef8-173a69583c97" // Reforged Automaton
           ]
@@ -445,6 +455,7 @@
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
             "78599234-6054-4df1-8e79-c38782517f9a", // Sundown Surfer
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
@@ -601,11 +612,13 @@
           "pack": 2,
           "pickInPack": 10,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
             "a952f833-825a-435f-82b1-8d85f872d274", // Virtuoso of Harmony
@@ -816,6 +829,7 @@
             "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
             "4d4618bd-4779-4953-b446-dab05e1da5db", // Nebula's Wake
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "18979c10-39b8-42fb-ac1d-dd784da498d1" // Fell Swoop
           ]
         },
@@ -937,11 +951,13 @@
           "pack": 3,
           "pickInPack": 14,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "18979c10-39b8-42fb-ac1d-dd784da498d1" // Fell Swoop
           ]
         },

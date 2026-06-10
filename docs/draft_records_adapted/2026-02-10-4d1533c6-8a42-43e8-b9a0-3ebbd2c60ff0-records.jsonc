@@ -80,6 +80,7 @@
         "34ef6c0c-1a23-4870-a52c-90d34e9769be", // Moonlit Dancer
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "f95cae7b-6502-4dbe-ae26-16853959d9a3", // Sunset Chronicler
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
         "2305722e-59c1-47d7-9e05-dc1c32c946a2" // Intermezzo Balladeer
@@ -133,6 +134,7 @@
         "8e7b0eb9-4933-420b-abee-413bf5b3d2fc", // Liminal Dreamer
         "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
         "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "680abf68-d7bb-47cf-885a-d808dc0a8e09", // Embersummoner
         "35c3e8cb-dc59-4f5c-98c8-fd764fb36d2b", // Shardwoven Tyrant
@@ -176,6 +178,7 @@
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7" // Stargazer Adrift
@@ -259,6 +262,7 @@
             "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
             "831bc7cf-e8c9-4943-8156-91b7397ef849", // Resilient Wanderer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
             "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
@@ -308,6 +312,7 @@
             "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3", // Gleamshield Knight
             "9d51dca1-28d7-4e8e-bc13-c5b665d6db72", // Ashen Harbinger
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
             "87f075b1-b058-4570-a75f-c4f8f544e192", // Wondrous Clearing
             "2690912e-0295-4d12-a603-5946d37902d3", // Call of the Lost
@@ -423,6 +428,7 @@
             "7be2e6d7-abff-4c44-a0c3-35460da1693c", // Gatebound Warden
             "161482b6-af07-4d9e-822d-8c738672beb9", // Starlight Guide
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "32f3d6f2-43c5-4510-a23e-558769a7a8c9", // Glimmerwood Scout
             "9d14885c-a757-40cc-b43e-87dbec7ec379", // Forsaken Skyline
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7" // Stargazer Adrift
@@ -705,6 +711,7 @@
             "6af8cf81-9e9e-481f-b518-f5dadad99b27", // Winterbough Monk
             "017a7b4b-3ccf-4635-9956-28a72b22274e", // Wraith of Twisting Shadows
             "7977748d-02c1-4702-ba68-5c49f7f0759b", // Light of Emergence
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110" // Voidcaller
@@ -872,10 +879,12 @@
           "pack": 2,
           "pickInPack": 17,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9", // Sky Voyager
             "40b44ed7-d737-455b-bd42-e617a263b110" // Voidcaller
@@ -1028,6 +1037,7 @@
           "packCards": [
             "b8a66998-f2d8-401d-8262-d5a658563936", // Spent Courier
             "7d5672d2-c8fa-4837-9e98-8cccdd07ff56", // Twice-Lit Portal
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "b1bea643-1a7b-4e5e-b072-7174d3405421", // Silent Observer
             "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder

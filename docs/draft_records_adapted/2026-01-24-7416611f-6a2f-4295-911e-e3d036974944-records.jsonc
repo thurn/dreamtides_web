@@ -40,6 +40,7 @@
         "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
         "edb479be-68a5-45bc-bd19-2602156edb57", // Mystic Runefish
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
         "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
         "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
@@ -125,6 +126,7 @@
         "fd5b3e85-ad7b-4d87-b4db-cd6ba0e6d277", // Nexus Wayfinder
         "fb41a90e-279c-419c-80fc-7c3469ba0c74", // Lord of Hidden Paths
         "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+        "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
         "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
         "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
         "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
@@ -907,7 +909,8 @@
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -941,11 +944,13 @@
           "pack": 4,
           "pickInPack": 3,
           "pick": [
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ],
           "pickId": "2a3790b7-0235-40fb-bf20-41515db2f800",
           "packCards": [
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "742a376f-68db-466a-b087-405188634ba4", // Assault Leader
             "94818862-2875-4ee1-8f72-7c0cdc624202", // Lumineth
             "145f72b9-5ff7-4477-b7f5-55ca89a135ae", // Defiant Parry
@@ -953,6 +958,7 @@
             "97b359ee-5a7a-4f54-bd65-e6221a893208", // Pyrokinetic Surge
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d" // Veilpiercer
@@ -1056,7 +1062,8 @@
             "f3282494-2fcf-4c06-bfbe-3474b28aa87a", // Oathbound Pair
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
             "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ]
         },
         {
@@ -1085,6 +1092,7 @@
           "packCards": [
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2", // Duneveil Vanguard
             "95d37f76-eb3d-4bcd-a8af-0ae37feabd4d" // Veilpiercer

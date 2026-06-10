@@ -36,6 +36,7 @@
         "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
         "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9", // Seeker of the Radiant Wilds
         "5b2b2188-b9f0-4b3b-9185-26a820d343c7", // Pathfinder Adrift
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
         "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
@@ -116,6 +117,7 @@
         "426825c7-7259-41af-ac1c-c042b878d69b", // Burning Revenant
         "66959155-9e79-459e-afdb-eb4c0fbdeb11", // Aspiring Guardian
         "fbf32510-0bad-4567-859f-b3db6d7be5d5", // Break the Veil
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf", // Cinderblade Legionnaire
         "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", // Kindred Sparks
@@ -440,6 +442,7 @@
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe" // Eruption
@@ -557,6 +560,7 @@
             "8436eaae-e410-4bfb-89d2-55bebf5a8144", // Frontline Martyr
             "027ae231-6569-49bb-866f-7c36ec794a11", // Scorched Reckoning
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
             "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
@@ -611,6 +615,7 @@
             "23a7aca4-3c64-4963-a9a0-d3638822df48", // The Thinning
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "21965e95-0c8c-470c-a1e1-06d7b87a8d00", // Echo Architect
             "8a8af982-d1a1-42a0-9229-5e3af13e8dbe" // Eruption
@@ -682,10 +687,12 @@
           "pack": 2,
           "pickInPack": 14,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler
             "1750c85c-f547-4d21-b7e3-9e5c5fcb3171", // Unquenched
@@ -743,6 +750,7 @@
             "382dafa1-f8ff-47b4-9151-15b84067a5b2", // Tidecaller
             "7dd2214f-8d16-453a-9f28-62712e64eae1", // Hallowed Stag
             "45e3d703-7efc-4dc2-b854-33211f8d4f11", // Gleam Below
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", // Ashwalker
             "87aba308-00b4-40d8-a46f-4e6f58a664a8", // Breach Artist

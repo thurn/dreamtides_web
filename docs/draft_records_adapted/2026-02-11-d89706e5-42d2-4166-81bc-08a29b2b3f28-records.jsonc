@@ -58,6 +58,7 @@
         "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
         "d217303e-b115-484a-b22c-0e44d5701389", // Broadcast Array
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", // Miraculous Arrival
         "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc", // Verdant Wayfarer
         "8adfa141-6864-4f5f-a9ca-59306eaf5432", // Urban Cipher
@@ -88,6 +89,7 @@
         "ce84b8af-b802-42d3-8a31-36827cff17b2", // Ripple of Defiance
         "e3193b23-2002-40a9-91fc-e0713200355e", // Blood Moon Ronin
         "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+        "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
         "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
         "1521c06c-f5ac-4d29-a6bd-7030b63a3c3e", // Doorlight Foundling
         "d2a3d344-613c-449e-9a87-0f720a85585d", // Overstory Explorer
@@ -508,11 +510,13 @@
           "pack": 2,
           "pickInPack": 6,
           "pick": [
-            "4752fc43-6696-4bc3-88d0-4d5b97622fa8" // From the Barrow
+            "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd" // Ashlight Caller
           ],
           "pickId": "23af6033-4930-48e4-821d-14cbbe1754b4",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81", // Roots of Rebirth
             "54471b31-4449-453d-9a6e-814d6225520a", // Shadow March
@@ -529,6 +533,7 @@
           "pick": [],
           "pickId": "a2c56479-4bee-4edb-80d7-4af010b7c793",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "965ce3b2-a722-475c-99c5-5b35685d2404", // Dreamvale Monarch
             "9e9efbc0-d438-48a9-9551-85c93fb33f3e", // Lithic Severance
@@ -550,6 +555,7 @@
           "packCards": [
             "a42fbd1b-7629-48c9-90da-e9a4246867d7", // Dawnblade Wanderer
             "78b5a42d-b099-48f1-a1b4-5b6bc177adeb", // Crucible Warlord
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "fd355778-abea-4513-844c-91bf75929ebe", // Dune Reaper
@@ -684,6 +690,7 @@
             "fed69d6e-acb5-40fb-b416-e6ef6c0e63fb", // Heroic Rescue
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
@@ -758,7 +765,8 @@
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {
@@ -846,6 +854,7 @@
           "packCards": [
             "5c5e316f-c499-4991-9733-bb6e3d826d7e", // Harvest the Forgotten
             "16d2e85d-f940-43dd-9867-784b3a5ec5d7", // Stargazer Adrift
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "6e2188f8-580e-4a66-a3e3-267d509de903", // Terminus
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
@@ -904,7 +913,8 @@
             "151b80b1-0a3f-48d4-9c85-99a9c274fd7f", // Radiant Trio
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
-            "7992dbb5-ca45-4066-aca3-ff1d6d87619e" // Moonbound Wolf
+            "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83" // Stoneborn Leviathan
           ]
         },
         {

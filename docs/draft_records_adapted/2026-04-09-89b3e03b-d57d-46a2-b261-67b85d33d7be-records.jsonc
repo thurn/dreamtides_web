@@ -166,6 +166,7 @@
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -322,6 +323,7 @@
             "fc4b06d6-3b30-4769-af98-88fcea5b54dd", // Cascade of Reflections
             "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", // The Deathsworn
             "4644db03-fbcd-4af5-a229-17962ce093d5", // Duskreaper
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ]
         },
@@ -570,7 +572,9 @@
           "pickId": "8dcaa85c-c4f1-4a3a-8328-6fcf865299e0",
           "packCards": [
             "42427d15-c019-4786-9d7e-285829c4f3cb", // Signal Resonant
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "33874387-2490-48ed-93bc-a47a16e399ad", // Soulbinder
             "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f", // Prophet of the Consumed

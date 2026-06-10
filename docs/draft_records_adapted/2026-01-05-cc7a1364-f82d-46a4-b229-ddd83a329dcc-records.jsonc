@@ -430,6 +430,7 @@
             "8451340c-02c5-465a-8c25-51efb2dc857a", // Crumbling Behemoth
             "331e2846-85d1-4667-8c64-dc6c21a418ed", // Beacon of Tomorrow
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40" // Ashwalker
@@ -587,6 +588,7 @@
           "pickId": "349f13c9-9a4e-4460-873e-fec58798646c",
           "packCards": [
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "bbf83d18-81b6-48c8-886f-4b9f0feb599f", // Frost Visionary
             "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40" // Ashwalker

@@ -35,6 +35,7 @@
         "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
         "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
         "7ecc1da1-dc39-4596-9a1d-262a261ffeea", // Company Commander
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "f256a0e7-e396-492b-8881-284ecd36025b", // Fern Treader
         "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
@@ -105,6 +106,7 @@
         "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", // Ambush Operative
         "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", // Desolation's Edge
         "4b2f044c-0afe-432a-a121-2ea785bb1182", // Cinderblade Legionnaire
+        "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
         "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
         "3fdf265c-8aa2-4367-9fee-43e242bdb462", // Shared Revelation
         "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
@@ -143,6 +145,7 @@
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -184,6 +187,7 @@
             "4eb42989-7498-4995-a3ab-89eb026b0c13", // Ferryman's Tithe
             "4f0f0811-1a4c-4d42-a804-77dba8707792", // Curio Dealer
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "3076694f-ffc2-46c9-8e1a-39f3878c73c9", // Through the Rift
             "c36e67ab-fbee-4d83-b57b-34d34f60e17c", // Shadowcaller
             "fb967cc1-4199-4a08-8070-724e07cebea5", // Cascading Detonation
@@ -315,6 +319,7 @@
             "1c8e6736-13d6-42d1-8668-46f422fec11e", // Burst of Obliteration
             "cc1c1acd-f0ff-46cc-94d9-401b9daf253f", // Forgotten Factory Titan
             "81074582-dfb3-497c-8c04-f97a24d6b1d4", // Pit Descender
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ]
         },
@@ -496,6 +501,7 @@
             "a7820b34-9fdc-46cc-8357-53c8caa056b1", // Mirror Protocol
             "2305722e-59c1-47d7-9e05-dc1c32c946a2", // Intermezzo Balladeer
             "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator
@@ -647,10 +653,12 @@
           "pack": 2,
           "pickInPack": 12,
           "pick": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d" // Vortex Claimant
           ],
           "pickId": "af7ef030-7bae-4820-b51a-8fad57a8ff2f",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
             "401bb341-8385-41e9-8f6f-7b48e9ce174d", // Soulflame Predator

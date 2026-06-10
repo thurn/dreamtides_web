@@ -72,6 +72,7 @@
         "3b5f5686-f63b-4998-b713-2f6777ecbb5f", // Dreadcall Warden2
         "8e003d04-e489-4c55-9c72-fc5612909d07", // Last Beacon
         "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", // Torchbearer of the Abyss
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
       ],
       "pool": [
@@ -107,6 +108,7 @@
         "374ec185-b0f7-40e6-9988-09e96abccebe", // Celestial Lookout
         "625fe37e-8059-481c-99fd-109fd02ceedd", // Maelstrom Denial
         "8f69312f-4bec-4671-99da-e752ec6d4cbc", // Desperation
+        "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
         "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
         "435ed83c-f7a6-4a73-a684-67fcc4e49bc4", // Call of Calamity
         "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", // Molten Duel
@@ -202,6 +204,7 @@
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "55340736-7fc5-4555-8f47-081d770a6e8d", // Barrage Specialist
             "ce09ddfa-c349-4b32-b524-fb74444cddcb", // Pallid Arbiter
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "bc1ffcd7-36c3-43b7-871b-bc2e6b3d0034", // Dreadweaver
             "f9a65b32-537b-457c-9eaf-b512cf1f3791", // Still Dreamer
@@ -554,6 +557,7 @@
             "dbd014b1-1ec8-4762-bd96-48a2a4824de2", // Abyssal Enforcer
             "954e8d50-d494-4fb2-b4c7-74979083b774", // Driftrider
             "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
             "374ec185-b0f7-40e6-9988-09e96abccebe" // Celestial Lookout
@@ -758,6 +762,7 @@
           "pickId": "7f430794-0d86-4f6a-97e0-4bbb6716d613",
           "packCards": [
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
             "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
             "2a6af0b8-11da-4d4b-8217-3bd7ed399dfa", // Borrowed Minutes
@@ -775,10 +780,12 @@
           "pack": 3,
           "pickInPack": 5,
           "pick": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e" // Revenant of the Lost
           ],
           "pickId": "5ad36fb2-c44e-4085-ba0d-54277841ad3a",
           "packCards": [
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "c7c95f67-a838-4e39-879c-cfbf0591540c", // Cosmonaut of Tides
             "006e2f95-59a2-4cda-a777-e64f4aa31060", // Unleashed Destruction
@@ -827,6 +834,7 @@
             "0637b453-4362-4f01-b3e6-07c27af9c847", // Herald of the Last Light
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
             "7992dbb5-ca45-4066-aca3-ff1d6d87619e", // Moonbound Wolf
+            "07ceb104-0b27-473a-bc72-e6225479ed83", // Stoneborn Leviathan
             "d3eb9472-f3e1-4b4c-a32f-b05c49ea4a1d" // Evacuation Enforcer
           ]
         },

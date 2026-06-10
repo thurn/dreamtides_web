@@ -134,6 +134,7 @@
           "pick": [],
           "pickId": "2b5315a4-6a78-456f-8d5a-fea9d62f3f0e",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", // Ethereal Trailblazer
             "89c0d03c-2199-415a-bc66-89e451034328", // Sylvan Matriarch
@@ -723,6 +724,7 @@
             "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
             "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence
@@ -890,6 +892,7 @@
             "6497d8b1-85b8-486d-99e2-5c141486d508", // Dreadmount Sovereign
             "1b4d2adc-64ab-4020-bae6-b35321898bf0", // Sigil Analyst
             "5832785d-fb97-40b5-a12b-bb660f5e04b6", // Momentum's Edge
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "290ea9db-0340-4838-842a-0dea09b5340a", // Volcanic Channeler
             "50fe6c54-4bf2-4177-a2f7-4c00a4a4c188", // Aurora Confluence

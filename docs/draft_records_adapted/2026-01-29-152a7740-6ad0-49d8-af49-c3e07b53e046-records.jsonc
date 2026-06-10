@@ -51,6 +51,7 @@
         "b4754e5a-29e6-418c-bdfa-8e0230a21b7b", // Featherlight Summoner
         "f07dfe42-566c-4e91-a250-9e2781e9d06f", // Flamestride Rider
         "8367b757-c3d2-4c22-9043-8baadee1c5ba", // Invoker of Myths
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "886c9d49-b25f-4ddd-97f0-2ec4b42eda89", // Prism Caller
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
@@ -93,6 +94,7 @@
         "8904714c-38a9-491f-92ce-5cb5ece26ab1", // The Grand Heist
         "fbf725ca-8837-46d4-970c-922153e27b6e", // Infernal Ascendant
         "a36898f6-707e-4b28-89dc-ec896f484203", // Verdant Pilgrim
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "4e1c0192-2649-489f-aad3-75ff2887c0a7", // Twilight Reclaimer
         "4733876a-d6b1-48d2-b322-5f71aee9f3d6", // Cinderfang
@@ -233,6 +235,7 @@
             "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e", // Nineborn Specter
             "8571d7b3-5401-4678-9e81-e14538c8c46e", // Fargazer
             "1d92e103-8415-433d-97d6-ac8a83660b34", // Searcher in the Mists
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8" // Northlight Maestro
           ]
@@ -324,10 +327,12 @@
           "pack": 1,
           "pickInPack": 11,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8" // Northlight Maestro
           ]
@@ -577,6 +582,7 @@
             "43628666-2ecd-47a7-b2c0-241cda0de5e8", // Void Pilgrim
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
             "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang
@@ -689,6 +695,7 @@
           "packCards": [
             "ad76c77a-e456-4e59-bbf7-6bcb56f892ee", // Ethereal Courser
             "c97b0a5b-64d0-480f-8db7-3fde93738d86", // Vaultbreaker
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "b56b3411-50c7-4cc9-90e0-d4ffcaec73c6", // Exiles of the Last Light
             "26a05558-4692-43d2-ae6c-a6eb385a6d22", // Emberfang

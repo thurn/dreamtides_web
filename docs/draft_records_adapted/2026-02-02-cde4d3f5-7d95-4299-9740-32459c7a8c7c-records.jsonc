@@ -87,6 +87,7 @@
         "5a27e236-86d7-442f-81d2-fb29a2b7f12a", // Shadowbinder
         "3a4ee059-4b6a-4a85-b3b8-a472834ea843", // Keeper of the Lightpath
         "6a3bb4ae-a537-4b79-8bdd-5093f05ec07a", // Blood Reaver
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "b6bad2a1-b857-4dd7-8b22-050eb68433a5" // Ferryman of the Falls
       ],
@@ -115,6 +116,7 @@
         "7709ea42-d73a-4d6b-b8b3-e3f66f44e9ea", // Apocalypse
         "b6bad2a1-b857-4dd7-8b22-050eb68433a5", // Ferryman of the Falls
         "11b4ae1d-ae2a-41a6-9cdc-70c6d69803d6", // Fell the Mighty
+        "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
         "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
         "6f1833a0-30f5-4718-9a3e-7620beb72bfc", // Flagbearer of Decay
         "a911ef71-799c-4240-ad13-8fabd3caeafa", // Moment Rewound
@@ -450,6 +452,7 @@
             "c6ae1899-c94c-464f-8edb-4a0b1ec2c981", // Knowledge Restored
             "570895fe-cd21-45d2-89ff-162f46978776", // Starfall Communion
             "fa036c27-2234-4f76-8857-c242530627ce", // Clockwork Conductor
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5", // Skyborne Jellyfish
             "2a828466-450a-4637-9c68-6b54522450c0", // Rusted Monolith
@@ -568,6 +571,7 @@
             "0a19c54c-7a2e-4614-99c9-2c9142729ebb", // Endless Projection
             "ffa4fa56-8897-465d-b812-3798e3cf5a1f", // Augur Crow
             "f68774ce-0e94-489f-90a5-68e03a549ff6", // Deathwalker
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "831bc7cf-e8c9-4943-8156-91b7397ef849" // Resilient Wanderer
           ]
@@ -685,10 +689,12 @@
           "pack": 2,
           "pickInPack": 14,
           "pick": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663" // Wake the Fallen
           ],
           "pickId": "799ed076-4724-47bb-94a0-11b42a9826eb",
           "packCards": [
+            "70306382-ac0d-4b08-843a-23efb3835c94", // Cradle of Storms
             "72debe2e-1f47-4a66-83c3-71bb72876663", // Wake the Fallen
             "831bc7cf-e8c9-4943-8156-91b7397ef849" // Resilient Wanderer
           ]
@@ -830,6 +836,7 @@
           "pickId": "18f23daa-bc59-456a-8a28-3823e51bc74b",
           "packCards": [
             "f8678d24-f18b-4c94-a6c2-50efb8193b7f", // Moonlit Voyage
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "46783333-78f9-4146-a8ec-0d1b81e1bf2f", // Emerald Guardian
             "071bcab4-ed02-48a0-93dc-8fd0f36611c8", // Northlight Maestro
@@ -1005,6 +1012,7 @@
             "a56e0f68-30b6-404e-9b83-a7584177f21e", // Immolate
             "b1d36337-5668-4f1d-b155-2d07fc00f872", // Across the Void
             "99ca2635-a91a-46ba-a9d3-4d2581c354f3", // Spirit of the Greenwood
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "e2f542eb-090f-4a22-a42c-a120eb6caaa3", // Dreamborne Leviathan
             "a75c22ac-e343-4757-964e-a0bb981b5a28", // Spiritbound Alpha
@@ -1093,6 +1101,7 @@
           "packCards": [
             "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", // Thronebound Arbiter
             "4752fc43-6696-4bc3-88d0-4d5b97622fa8", // From the Barrow
+            "995c570b-2d86-4f6f-8f02-dd0902e32fcd", // Ashlight Caller
             "b5a5c1ba-4784-4829-aa08-af9f8f41ebb7", // Starbound Striker
             "3e6a5236-9850-4a69-9fe1-48389365a399", // Dusk Duelist
             "455ef341-8a26-44e1-b287-19e53bdc6158", // Soulkindler

@@ -38,6 +38,7 @@
         "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
         "d8c90a33-a581-469a-9fd3-9a80d1cc5315", // Veilseeker
         "0269e363-5567-47a4-80cd-8ebc061fe7e1", // Wasteland Tamer
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
         "0d867086-8413-40c3-820f-1a5de486577e", // Fathomless Maw
@@ -90,6 +91,7 @@
         "8624f9c7-dc92-4f4a-9c79-319b9c121b19", // Cinderheart
         "01298848-1ebb-48a1-b00b-d7e0af890870", // Ashfront Lieutenant
         "f3985df4-0867-4fd6-8312-6b358dc26883", // Marrow Drinker
+        "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
         "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
         "470bbf9d-a73c-4e00-bc66-cb0fa767c8de", // Depthwalker
         "cbabe603-1333-42bd-85c0-555c664b60b3", // Avatar of Cosmic Reckoning
@@ -553,10 +555,12 @@
           "pack": 2,
           "pickInPack": 8,
           "pick": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a" // Veil of the Wastes
           ],
           "pickId": "2cdbfc1d-b8f3-4e46-ac60-7fbf8fade29e",
           "packCards": [
+            "4dc2a049-d326-463b-85c7-117d5fd5ba72", // Radiant Convergence
             "409147ec-d959-4f66-b126-564702e2cd4a", // Veil of the Wastes
             "79b37916-c05d-4818-9d67-3b90e340926e", // Fleeting Reunion
             "0be20cfb-595b-4bb1-9cea-f7c2f41fee5a", // Standard Bearer
@@ -688,6 +692,7 @@
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30" // Dawnrunner
           ]
@@ -728,6 +733,7 @@
             "bd43b120-2503-406c-8b72-ea3dc55198a0", // Selfless Rescuer
             "ce0c8dc8-67ab-4a1f-8c4c-50b211e07b0b", // Wreckage Prowler
             "9af63811-7fef-4e28-b672-95ea82796f45", // Astral Angler
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
@@ -855,6 +861,7 @@
             "874d5e8f-4e12-4426-a2e7-1ab761d2ca12", // Echoes of the Journey
             "4ef8b2e7-3525-4c25-aa30-f751467f182f", // Cosmic Puppeteer
             "f82c7407-b642-4ab1-8878-171f9121b3eb", // Blightmaw
+            "041fafeb-f159-4aba-90c2-3ce4b3038bdc", // Gloomantler
             "4ee2f0a5-c35c-4b5e-a0be-de5ef3e8639e", // Revenant of the Lost
             "9d63ba3e-fafb-466e-8418-ce5f8941ba30" // Dawnrunner
           ]
@@ -882,6 +889,7 @@
           "pick": [],
           "pickId": "73403d04-fe97-4830-8b80-16dd1a1a6cc1",
           "packCards": [
+            "70716dd8-1133-4966-b01b-757ea627874c", // Grim Pursuer
             "890970bd-475f-4da4-b835-2fb75882a84d", // Vortex Claimant
             "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", // Fading Farewell
             "58f0dba2-1bf9-4cb3-bb5d-e1b6e3067a6c", // Duskmount
