@@ -27,6 +27,7 @@ import {
   loadTides2Decks,
   loadTides2Relationships,
   loadTides3Decks,
+  loadTides4Decks,
   resolvePool,
   type DraftRecord,
 } from "./cards-v2-database";
@@ -175,6 +176,20 @@ export function poolVariantNeedsTides3(variant: PoolVariant): boolean {
 }
 
 /**
+ * Pool variants that combine the committed `tides4` artifact (`data/tides4.jsonc`,
+ * served as `/tides4-data.json`): the tide decks and the per-Dreamcaller tide
+ * pools in one file. In pool mode the artifact is fetched only for these variants
+ * and set on `poolData.tides4Decks`.
+ */
+const POOL_VARIANTS_NEEDING_TIDES4: ReadonlySet<PoolVariant> =
+  new Set<PoolVariant>(["tides4"]);
+
+/** Whether `variant` combines the committed `tides4` artifact. */
+export function poolVariantNeedsTides4(variant: PoolVariant): boolean {
+  return POOL_VARIANTS_NEEDING_TIDES4.has(variant);
+}
+
+/**
  * Pool variants that draw one random seed card and grow a pool around it, so
  * each produces a {@link SeedProvenanceSummary}: the `seed` variant (decklist
  * co-occurrence) plus the pick-record variants. These are the variants whose
@@ -280,7 +295,8 @@ function logPoolConstructed(
     const tideDeckIds =
       pool.variant === "tides" ||
       pool.variant === "tides2" ||
-      pool.variant === "tides3"
+      pool.variant === "tides3" ||
+      pool.variant === "tides4"
         ? pool.themes.slice(1)
         : undefined;
     logEvent(
@@ -502,6 +518,9 @@ export async function loadQuestContent(
   // The `tides3` variant combines its own committed artifact; only it fetches
   // `/tides3-data.json`.
   const poolNeedsTides3 = POOL_VARIANTS_NEEDING_TIDES3.has(poolVariant);
+  // The `tides4` variant combines its own committed artifact; only it fetches
+  // `/tides4-data.json`.
+  const poolNeedsTides4 = POOL_VARIANTS_NEEDING_TIDES4.has(poolVariant);
   const [
     cardDatabase,
     draftDreamcallers,
@@ -512,6 +531,7 @@ export async function loadQuestContent(
     tideDecks,
     tides2Decks,
     tides3Decks,
+    tides4Decks,
     merchantCorpus,
     dreamsignProfiles,
   ] = await Promise.all([
@@ -535,6 +555,8 @@ export async function loadQuestContent(
     poolNeedsTides2 ? loadTides2Decks() : Promise.resolve(null),
     // Fetch the committed `tides3` artifact only for the `tides3` variant.
     poolNeedsTides3 ? loadTides3Decks() : Promise.resolve(null),
+    // Fetch the committed `tides4` artifact only for the `tides4` variant.
+    poolNeedsTides4 ? loadTides4Decks() : Promise.resolve(null),
     // The merchant corpus and dreamsign profiles are small and always loaded
     // unconditionally so the v2 journey's merchant has signals on every path.
     loadMerchantCorpus().catch(() => undefined as MerchantCorpus | undefined),
@@ -581,6 +603,9 @@ export async function loadQuestContent(
   // The `tides3` variant reads its committed artifact (decks + per-Dreamcaller
   // tide pools) from here; every other variant ignores it.
   if (tides3Decks) poolData.tides3Decks = tides3Decks;
+  // The `tides4` variant reads its committed artifact (decks + per-Dreamcaller
+  // tide pools) from here; every other variant ignores it.
+  if (tides4Decks) poolData.tides4Decks = tides4Decks;
 
   const poolContext: RunPoolContext = {
     poolData,

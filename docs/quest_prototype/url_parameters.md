@@ -120,6 +120,16 @@ provides:
   full-signature `sigseed` pool baked as a deck, so a pool delivers the
   Dreamcaller's identity the way `sigseed` does. Requires the baked artifact
   (`npm run bake-tides3`); see `docs/cards2/tides3_algorithm.md`.
+- `algo=tides4` — the human-legible counterpart of `sigseed`'s run-to-run
+  *variety*. Combines the preconstructed tides in `data/tides4.jsonc` (rendered as
+  `docs/cards2/tides4_decklists.md`): the Dreamcaller's signature tide is always
+  joined as a dense on-theme core, a random subset of its small *facet* tides
+  (each a single-anchor `sigseed` pool) is mixed in to lean the pool a different
+  way each run, and broad tides top it up to a 150-card pool (at most 2 copies of
+  any card). Drawing a random facet subset reproduces the variety `sigseed` gets
+  from a random signature subset, so a Dreamcaller yields a cloud of distinct,
+  on-identity pools rather than one fixed pool. Requires the baked artifact
+  (`npm run bake-tides4`); see section 5 of `docs/cards2/tides_algorithms.md`.
 
 Most of these are described in `docs/cards2/draft_pool_algorithms.md`. Any value
 not registered (including empty or absent) falls back to `DEFAULT_POOL_VARIANT`,

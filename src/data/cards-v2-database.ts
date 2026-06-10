@@ -5,12 +5,14 @@ import type {
   TideDecksJson,
   TideRelationshipsJson,
   Tides3DecksJson,
+  Tides4DecksJson,
 } from "../draft/pool";
 import {
   deserializeCorpus,
   validateTideDecks,
   validateTideRelationships,
   validateTides3Decks,
+  validateTides4Decks,
 } from "../draft/pool";
 import type { AffinityCorpusJson } from "../draft/pool";
 
@@ -130,6 +132,19 @@ export async function loadTides3Decks(): Promise<Tides3DecksJson | null> {
   const response = await fetch("/tides3-data.json");
   if (!response.ok) return null;
   return validateTides3Decks(await response.json());
+}
+
+/**
+ * Fetch the committed `tides4` artifact (`data/tides4.jsonc`, copied to
+ * `/tides4-data.json` by `scripts/setup-assets.mjs`) the `tides4` pool variant
+ * combines into pools — the signature, facet, and neutral tide decks and the
+ * per-Dreamcaller tide pools in one file. Returns `null` if the asset is missing
+ * so the caller can surface a clear configuration error when the variant runs.
+ */
+export async function loadTides4Decks(): Promise<Tides4DecksJson | null> {
+  const response = await fetch("/tides4-data.json");
+  if (!response.ok) return null;
+  return validateTides4Decks(await response.json());
 }
 
 /**

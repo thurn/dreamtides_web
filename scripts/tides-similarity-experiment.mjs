@@ -37,6 +37,7 @@ import {
   validateTideDecks,
   validateTideRelationships,
   validateTides3Decks,
+  validateTides4Decks,
 } from "../src/draft/pool/index.ts";
 import { stripJsonComments } from "./lib/card-refs.mjs";
 
@@ -98,6 +99,9 @@ function loadContext(argv) {
   }
   if (existsSync(resolve(ROOT, "data/tides3.jsonc"))) {
     poolData.tides3Decks = validateTides3Decks(readJsonc("data/tides3.jsonc"));
+  }
+  if (existsSync(resolve(ROOT, "data/tides4.jsonc"))) {
+    poolData.tides4Decks = validateTides4Decks(readJsonc("data/tides4.jsonc"));
   }
   return { dreamcallers, poolData };
 }
