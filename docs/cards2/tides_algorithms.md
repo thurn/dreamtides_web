@@ -1,27 +1,34 @@
-# Tides and tides2 draft-pool algorithms
+# Tides, tides2, and tides3 draft-pool algorithms
 
-Two draft-pool algorithms build a Dreamcaller's 200-card draft pool by combining
-a small number of preconstructed decks called **tides**. Both are selectable
-with the `?algo=` URL parameter (`?algo=tides`, `?algo=tides2`) and exist side by
-side so they can be compared directly:
+Three draft-pool algorithms build a Dreamcaller's draft pool by combining a small
+number of preconstructed decks called **tides**. All three are selectable with
+the `?algo=` URL parameter (`?algo=tides`, `?algo=tides2`, `?algo=tides3`) and
+exist side by side so they can be compared directly:
 
-| | `tides` | `tides2` |
-| --- | --- | --- |
-| Tide decks | `data/tides.jsonc` (32, ~160 copies each) | `data/tides2.jsonc` (32, ~70 copies each) |
-| Relationships | none | `data/tides2_relationships.jsonc` |
-| Lead tide | one of the Dreamcaller's *favored* tides | drawn from the Dreamcaller's curated *tide pool* |
-| Fill tides | drawn uniformly at random | the lead's curated *allied tides* |
-| Bake | `npm run bake-tides` | `npm run bake-tides2` + `npm run seed-tide-relationships` |
-| Runtime module | `src/draft/pool/variant-tides.ts` | `src/draft/pool/variant-tides2.ts` |
-| Rendered decklists | `docs/cards2/tide_decklists.md` | `docs/cards2/tides2_decklists.md` |
+| | `tides` | `tides2` | `tides3` |
+| --- | --- | --- | --- |
+| Mirrors | `idf3` | `idf3`, sharpened | `sigseed` |
+| Pool size | 200 | 200 | 150 |
+| Tide decks | `data/tides.jsonc` (32, ~160 copies each) | `data/tides2.jsonc` (32, ~70 copies each) | `data/tides3.jsonc` (32: 20 signature ~150, 12 neutral ~30) |
+| Relationships | none | `data/tides2_relationships.jsonc` | baked into the same file |
+| Lead tide | one of the Dreamcaller's *favored* tides | drawn from the Dreamcaller's curated *tide pool* | the Dreamcaller's own *signature tide* (a broad tide for a neutral) |
+| Fill tides | drawn uniformly at random | the lead's curated *allied tides* | the nearest *broad* tides |
+| Bake | `npm run bake-tides` | `npm run bake-tides2` + `npm run seed-tide-relationships` | `npm run bake-tides3` |
+| Runtime module | `src/draft/pool/variant-tides.ts` | `src/draft/pool/variant-tides2.ts` | `src/draft/pool/variant-tides3.ts` |
+| Rendered decklists | `docs/cards2/tide_decklists.md` | `docs/cards2/tides2_decklists.md` | `docs/cards2/tides3_decklists.md` |
 
 Each algorithm has two halves: an **offline construction** step that bakes the
 committed tide lists from real draft data, and a **runtime** step that combines
-those lists into one pool. This document covers both halves for both algorithms.
+those lists into one pool. This document covers both halves for all three. The
+first three sections describe the shared decklist-corpus foundation and the two
+algorithms built on it (`tides`, `tides2`); section 4 covers `tides3`, which
+rests on a different foundation — the pick-affinity corpus `sigseed` grows from —
+and is best read on its own.
 
 ## 1. Shared foundations
 
-Both algorithms rest on the same primitives.
+`tides` and `tides2` rest on the same primitives. (`tides3` does not use these;
+it builds on the pick-affinity corpus described in section 4.)
 
 ### The decklist corpus and IDF cosine
 
@@ -230,23 +237,236 @@ tuning: `allyShuffleWindow 6`, `dealSize 200`, `cap 2`.) The shuffle of the ally
 window is what gives a Dreamcaller pool-to-pool variety for a fixed lead, while
 the allies' trap-repaired ordering keeps the expected pool low on traps.
 
-## 4. Artifacts, scripts, and served assets
+## 4. `tides3`
+
+`tides3` is the human-legible counterpart of a different generator than `tides`
+and `tides2` mirror. Both of those reproduce `idf3` — a broad, archetype-mixed
+pool grown from hundreds of real decklists. `tides3` reproduces **`sigseed`**, the
+default pool variant, whose pools are grown *only* from a Dreamcaller's signature
+cards and therefore never drift onto an unrelated identity. The promise to the
+player has the same shape as the other tides — there are 32 preconstructed decks
+a player can read, and a quest combines a few of them at the start of a run — but
+the decks themselves, and the way they are combined, are built so that the pool a
+player drafts from carries the Dreamcaller's own theme as faithfully as `sigseed`
+does. The slogan a player hears: *"your Dreamcaller's own signature tide leads,
+shuffled together with broad tides until there are enough cards, and we deal the
+first 150."*
+
+### 4.1 A different foundation: the pick-affinity corpus
+
+The first thing that sets `tides3` apart is what its decks are grown from. `tides`
+and `tides2` rest on the IDF decklist corpus of section 1 — the cards that
+co-occur in finished decks, weighted by how distinctive each one is. `sigseed`
+does not use that corpus at all, so neither does `tides3`. Both grow pools from
+the **pick-affinity corpus**, the same data `pickfit`, `pickcohere`, and `picksig`
+read, built from real draft *pick* records rather than finished decklists.
+
+A pick record knows more than a decklist does: for every pick it knows the whole
+pack that was offered and which card the drafter actually took. From that the
+corpus derives two statistics a decklist cannot. The first is an
+**availability-corrected play-rate prior** — how often a card is taken relative to
+how often it is even offered — a measure of raw desirability that controls for how
+much a card was simply *seen*. The second is a **behavioural synergy affinity** —
+the *excess* rate at which a card is taken once the drafter already holds a
+particular partner, over that card's own baseline. Because a strong card has a
+high baseline anyway, it only registers affinity to a partner when holding the
+partner makes drafters take it *more* than usual, which isolates genuine synergy
+from raw card power. Power rides in the prior; synergy rides in the affinity, so a
+pool built from both does not collapse onto globally strong staples.
+
+`sigseed` and `tides3` both expand a pool from that corpus with the shared
+**affinity grower**. Starting from one or more seed cards, the grower repeatedly
+adds the card whose blended score is highest — a blend of its affinity to the
+seeds, its affinity to the cards already chosen (so the pool stays coherent with
+itself, not just with the seed), and the play-rate prior. The most central cards
+earn a second copy; the fringe stays at one. The whole walk runs in card-UUID
+space, so a card rename never shifts the result.
+
+Where `sigseed` and `tides3` diverge from one another is only in *when* that growth
+happens. `sigseed` runs it live, once per quest, from a fresh random subset of the
+Dreamcaller's signature cards — and that random subset is where its run-to-run
+variety comes from: a single signature card leans the pool one way, a pair or
+triple blends them. `tides3` runs the same growth offline, at bake time, and
+freezes the result into readable decks, so the "magic" `sigseed` performs at
+runtime is instead inspectable in committed data.
+
+### 4.2 Two kinds of tide
+
+`tides` and `tides2` bake 32 tides of a single kind — each is one archetype
+cluster of the decklist corpus. `tides3` bakes two kinds, because `sigseed`
+behaves in two different ways depending on the Dreamcaller, and the decks have to
+stand in for both. The project owner explicitly allowed tides to play different
+roles, and `tides3` uses that latitude: its 32 decks are not homogeneous in size
+or purpose.
+
+**Twenty signature tides — one per signatured Dreamcaller.** For each of the 20
+Dreamcallers that carries a signature, the bake resolves that full signature onto
+the corpus and grows a 150-card pool from *all* of the signature cards at once.
+That deck is, quite literally, the `sigseed` pool for that Dreamcaller's complete
+signature. It is also the natural centre of the cloud of pools `sigseed` produces
+at runtime: where `sigseed` draws a random subset and leans toward it, the
+all-signatures deck sits in the middle of every lean, so it is the single best
+fixed estimate of "what this Dreamcaller's pool looks like."
+
+The size is deliberate. A signature tide is grown to exactly 150 copies, matching
+`sigseed`'s own pool size, because 150 is the *purity sweet spot*. The cards most
+tightly tied to a Dreamcaller's signature are limited in number; growing a deck
+past that point forces the grower to reach into a progressively less-on-theme
+affinity tail, and those tail cards show up as off-theme build-around payoffs the
+pool cannot support — traps. Measuring this directly, the expected traps per pool
+climb steadily as the signature tide is grown larger, while the share of the pool
+that actually delivers the Dreamcaller's theme falls. A 150-card signature tide is
+about as on-identity as a fixed deck can be.
+
+**Twelve neutral tides — broad, format-spanning decks.** Twelve of the roster's 32
+Dreamcallers carry no signature. For those, `sigseed` has nothing to anchor on, so
+it reduces to plain `pickcohere`: a coherent pool grown from one *uniformly* drawn
+seed card, which across many runs spreads over the whole format. The neutral tides
+stand in for that behaviour. Each is a small, broad deck, and the twelve together
+are chosen to span the format by **farthest-point sampling**: the bake picks one
+well-played card, then repeatedly adds the played card whose affinity is most
+*distant* from the cards already chosen, so the twelve anchors land in twelve
+different regions of the format rather than clustering. Each anchor is then grown
+into a roughly 30-card deck. (Only cards that clear a play-rate floor are eligible
+as anchors, so neutral decks are built around genuinely-played cards rather than
+fringe singletons.) Neutral tides do double duty: they are the generic tail mixed
+into a signatured pool, and they are the body of a neutral Dreamcaller's pool.
+
+### 4.3 The per-Dreamcaller tide pools
+
+`tides2` keeps its relationships in a separate, hand-curated file; `tides3` keeps
+its per-Dreamcaller pools in the **same baked artifact** as the decks, because they
+are derived, not curated. For every Dreamcaller the bake writes an ordered list of
+tide ids: the first is the **lead**, always joined; the rest are **fill**, joined
+in shuffled order until the pool is full.
+
+A **signatured** Dreamcaller leads with its own signature tide and fills from the
+nearest broad tides, ranked by cosine similarity between the tides' card lists. The
+choice of *broad* tides for fill, rather than other Dreamcallers' signature tides,
+is deliberate and was settled by measurement. An allied signature tide would carry
+a second Dreamcaller's identity into the pool, and mixing it in measurably pulls
+the pool toward that second theme and drops the home Dreamcaller's theme share — it
+hurts exactly the metric `tides3` exists to match. A broad tide instead supplies
+the generically-good cards that `sigseed`'s play-rate prior naturally pulls into
+its pools — removal, card draw, efficient bodies — without importing a competing
+identity. So the fill keeps the pool mono-theme, the way `sigseed` keeps it.
+
+A **neutral** Dreamcaller leads with a broad tide and fills with a farthest-point
+spread of *every* tide. The lead broad tide is rotated across the twelve neutral
+Dreamcallers so each one has its own starting identity rather than all sharing one,
+and the broad farthest-point fill lets a neutral pool range widely over the format
+the way a uniform-seeded `pickcohere` pool does.
+
+### 4.4 Building the pool at runtime
+
+The runtime, in `src/draft/pool/variant-tides3.ts`, is short. It pins the pool to
+**150 copies**, not the quest's usual 200, and ignores the size the quest asks
+for — exactly as `sigseed` and `pickfit` ignore it. This is not an oversight: the
+default variant `sigseed` itself ships 150-card pools, and several of the metrics
+the two are compared on (trap counts especially) scale with pool size, so matching
+the size is what lets `tides3` and `sigseed` line up at all.
+
+Selection then proceeds in three steps. The **lead** tide — the Dreamcaller's own
+signature tide, for a signatured Dreamcaller — is always joined first. The
+**fill** tides are shuffled and joined one at a time until enough copies are
+dealable, with the rule that at least one fill tide always joins. That minimum is
+the point where the "combine decks" promise becomes literally true for every pool:
+a signature tide is already a full 150-card `sigseed` pool, so the lead alone could
+fill the deal, but the rule still mixes in one broad tide. Because the combined bag
+is therefore larger than 150, dealing 150 from it leaves some cards out, and which
+cards drop changes with the seed. That is where a signatured pool's run-to-run
+variety comes from, and it stands in for the variety `sigseed` gets by drawing a
+different random signature subset each run. Pleasingly, the broad fill also nudges
+`tides3` *closer* to `sigseed` rather than away: the generic cards a neutral tide
+contributes are the same kind of goodstuff `sigseed`'s prior pulls into its own
+pools, so they overlap rather than conflict.
+
+The **deal** is identical in spirit to the other tides. Each card's UUID is mapped
+to its current display name (cards absent from the current catalog are skipped), the
+combined bag is shuffled once, and 150 copies are dealt, never more than two of any
+one card. As elsewhere, "dealable" counts the copies the deal can actually use —
+two per card across the joined tides — so overlapping tides keep joining until a
+full pool is genuinely reachable rather than merely nominally large. The result's
+label records the algorithm and the joined tide ids, which are logged on
+`draft_pool_constructed` so a pool can always be traced back to the decks it was
+combined from.
+
+### 4.5 The artifact and its staleness guard
+
+`data/tides3.jsonc` is a single self-contained file holding both the 32 decklists —
+each tagged with its role, `signature` or `neutral` — and the per-Dreamcaller tide
+pools. Its schema and validation live in `src/draft/pool/tides3-io.ts`. Because the
+tide pools reference tide ids, re-baking the decks (which can rename or renumber a
+tide) could leave a pool pointing at a tide id the new bake does not contain; the
+validator throws on any such dangling id, so a stale artifact fails loudly at load time
+rather than producing a quietly wrong pool. As with the other bakes, cards are
+keyed by stable cards_v2 UUID and the `name` fields are informational, refreshed at
+bake time, so renaming a card never invalidates the file.
+
+The bake (`npm run bake-tides3`, `scripts/bake-tides3.mjs`) uses no randomness —
+deterministic tie-breaks throughout — so re-running it on the same inputs writes a
+byte-identical body. Its dials (the signature and neutral tide sizes, the number of
+neutral tides and their play-rate floor, the fill width) live in a single `TUNING`
+block at the top of the script. It writes both the machine-readable
+`data/tides3.jsonc` and the player-facing `docs/cards2/tides3_decklists.md`, the
+rendered decklist a player is invited to read, which also tabulates each
+Dreamcaller's lead and fill tides.
+
+### 4.6 How close it comes to `sigseed`
+
+`tides3` is measured against `sigseed` on the same real-draft simulation every pool
+algorithm is scored on — every Dreamcaller, full signature, many seeds — using
+`scripts/pool-metrics.mjs`. The headline question is the **dreamcaller** metric:
+does each pool actually deliver the theme its Dreamcaller was built to play,
+measured against an archetype-support set learned from the decklist corpus rather
+than any hand label. On that metric `tides3` scores about 88 against `sigseed`'s
+89 — by far the closest of the three tide algorithms. `tides` and `tides2` score in
+the mid-50s here, not because they are weak generators but because they reproduce
+`idf3`'s broad archetype mix, which is a different goal: a `tides2` pool is a
+coherent archetype, but not necessarily *this Dreamcaller's* archetype, whereas a
+`tides3` signature tide is grown from this Dreamcaller's signature and nothing else.
+
+On the secondary pool-quality metrics `tides3` tracks `sigseed` closely. Expected
+traps per pool sit near `sigseed`'s (a little over one), because a signature tide
+is a `sigseed` pool and the single broad fill tide adds only a thin generic tail.
+The diversity headline — how evenly cards are used across all pools and how broadly
+the standalone archetypes are draftable — matches `sigseed` almost exactly, with
+both the card-utilization and theme-spread halves in line. Build-around adequacy is
+a few points below `sigseed`, the cost of the broad fill carrying a handful of
+payoffs whose support it does not fully bring along; this is the metric where the
+"combine a generic tail" choice is most visible.
+
+The one number where the gap is real rather than incidental is the per-card
+inclusion-frequency cosine — how similar the *distribution of cards* across pools
+is, run via `scripts/tides-similarity-experiment.mjs`. There `tides3` reaches about
+0.82 of the way to `sigseed`'s own seed-to-seed self-consistency. The shortfall is
+structural and expected: a `tides3` signatured pool is the *all-signatures* deck,
+which spans somewhat more cards than any single one of `sigseed`'s *random-subset*
+pools, so the two distributions differ in shape — a fixed readable deck is broader
+and flatter than a freshly grown one that leans toward whichever subset it drew.
+That breadth is the price of legibility, and it is the same trade `tides` and
+`tides2` make against `idf3`. What `tides3` buys with it is the thing the project
+asked for: a pool a player can trace to 32 decks they can read, that still delivers
+the Dreamcaller's identity the way the default generator does.
+
+## 5. Artifacts, scripts, and served assets
 
 | Artifact | Produced by | Served as (gitignored) | Read at runtime by |
 | --- | --- | --- | --- |
 | `data/tides.jsonc` | `npm run bake-tides` | `public/tides-data.json` | `tides` |
 | `data/tides2.jsonc` | `npm run bake-tides2` | `public/tides2-data.json` | `tides2` |
 | `data/tides2_relationships.jsonc` | `npm run seed-tide-relationships` | `public/tides2-relationships-data.json` | `tides2` |
+| `data/tides3.jsonc` | `npm run bake-tides3` | `public/tides3-data.json` | `tides3` |
 
 `scripts/setup-assets.mjs` copies each committed `.jsonc` (stripping comments) to
 its served path. The browser fetches the served copies through loaders in
 `src/data/cards-v2-database.ts` (`loadTideDecks`, `loadTides2Decks`,
-`loadTides2Relationships`); `src/data/quest-content.ts` and the
-`src/draft_test/DraftTestApp.tsx` harness fetch them only for the variant that
-needs them. The metric harnesses
+`loadTides2Relationships`, `loadTides3Decks`); `src/data/quest-content.ts` fetches
+them only for the variant that needs them. The metric harnesses
 (`scripts/pool-metrics.mjs`,
 `scripts/tides-similarity-experiment.mjs`) read the committed `.jsonc` files
-directly.
+directly. `tides3` is self-contained in one file — its decks and per-Dreamcaller
+tide pools live together — so it needs no separate relationships artifact.
 
 ### Re-bake / re-seed workflow
 
@@ -259,14 +479,22 @@ npm run setup-assets          # copies it to public/
 npm run bake-tides2                       # rewrites data/tides2.jsonc + the doc
 npm run seed-tide-relationships --force   # re-seeds relationships, then re-curate
 npm run setup-assets                      # copies both to public/
+
+# tides3 (the tide pools are baked into the same file, so no separate re-seed)
+npm run bake-tides3           # rewrites data/tides3.jsonc + the rendered doc
+npm run setup-assets          # copies it to public/
 ```
 
-## 5. How they differ in practice
+## 6. How they differ in practice
 
 `tides` is the human-legible counterpart of `idf3`: a favored tide plus random
 tides reproduces idf3's broad, archetype-mixed distribution. `tides2` trades that
 breadth for concentration — smaller, purer tides combined by affinity — to
-produce pools that better support the build-around payoffs they contain.
+produce pools that better support the build-around payoffs they contain. `tides3`
+mirrors a different generator entirely, `sigseed`: its signature tides are baked
+from a Dreamcaller's signature through the pick-affinity corpus, so a pool stays
+on the Dreamcaller's own identity rather than reproducing idf3's archetype mix
+(see section 4 for the full story and its measured similarity to `sigseed`).
 
 Measured over a 200-seed real-draft simulation (every Dreamcaller, full
 signatures; idf3 reference in parentheses), `tides2` improves on `tides` and
