@@ -145,6 +145,20 @@ Candidates are additionally filtered to multiplicity `m(c) >= 0.15` (cards
 real decks actually run as multiples). Eligible when that filtered band has
 >= 4 cards.
 
+> **Corpus note (multiplicity is structurally near-zero).** The adapted draft
+> records are singleton mainboards: of 501 corpus cards only 6 have any
+> multiplicity at all, the maximum is 0.046, and **no** card reaches the
+> `copiesMultiplicityMin = 0.15` (or the `duplicateMultiplicityMin = 0.10` used
+> by `duplicate`) threshold. `copies_draft` and `duplicate` are therefore never
+> eligible against the current corpus. The thresholds are intentionally NOT
+> lowered to force eligibility: the six non-zero-multiplicity cards sit at
+> ~0.006–0.046, i.e. "run as 2+ in one or two of ~1000 decks" — statistical
+> noise, not the "cards real decks run as multiples" signal the archetype needs.
+> These archetypes are dormant by design until a corpus with genuine multi-copy
+> mainboards exists; the metrics harness reports them as "never eligible" and
+> passes coverage for them trivially rather than penalising a corpus-driven
+> absence.
+
 **`strong_card`** (w=8) — *Receive one named premium card.* Candidates: all
 non-starter pool cards. Signal: corpus quality rating. Band-sample 1 with
 `bandFraction = 0.15`. Face-up. Always eligible.

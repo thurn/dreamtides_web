@@ -1131,13 +1131,16 @@ function reachableTransfigurationTypes(
  * whose band it enters. It is proportional to the expected number of offers the
  * dreamsign receives across the sweep, so a floor on it expresses "default
  * sampling can reliably surface this". Dreamsigns below the floor sit at the
- * deep edge of a few large bands; whether 40 seeds happen to hit them is pure
- * Monte-Carlo luck, so they are excluded from the reachable denominator (if they
- * are offered anyway, coverage is unaffected). 0.2 sits just below the next reach
- * tier (~0.69) and just above the band-edge tier (~0.18); the boundary is not
- * sharp, so the exact value is not load-bearing.
+ * deep edge of a few large bands; whether a given seed count happens to hit them
+ * is pure Monte-Carlo luck, so they are excluded from the reachable denominator
+ * (if they are offered anyway, coverage is unaffected). The corpus has a clear
+ * reach-mass gap — a marginal band-edge tier near ~0.18 and the next reliably-
+ * samplable tier near ~0.69 — and the floor sits inside that gap so the reachable
+ * set is stable across seed counts. (Admitting the ~0.18 tier makes the metric
+ * flap with the `--seeds` value: those dreamsigns need more than the default
+ * seeds to surface.) The exact value within the gap is not load-bearing.
  */
-const DREAMSIGN_REACHABLE_MIN_REACH_MASS = 0.2;
+const DREAMSIGN_REACHABLE_MIN_REACH_MASS = 0.4;
 
 /**
  * The set of dreamsigns reliably reachable through the deck-relevant band
