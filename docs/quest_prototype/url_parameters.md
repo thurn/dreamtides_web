@@ -103,6 +103,15 @@ provides:
   random until a full pool is dealable, then 200 cards are dealt with at most
   2 copies of any card. The human-legible counterpart of `idf3`; requires the
   baked artifact (`npm run bake-tides`).
+- `algo=tides2` — an affinity-selected counterpart to `tides`, built for direct
+  comparison. It draws a lead tide from the Dreamcaller's curated tide pool, then
+  shuffles in the lead's allied tides until a full pool is dealable, dealing 200
+  cards with at most 2 copies of any card. Tides are smaller and purer than
+  `tides`, and which tides ally and which a Dreamcaller draws from are curated in
+  `data/tides2_relationships.jsonc` (decks in `data/tides2.jsonc`, both rendered
+  as `docs/cards2/tides2_decklists.md`). Requires the baked decks
+  (`npm run bake-tides2`) and the seeded relationships
+  (`npm run seed-tide-relationships`).
 
 Most of these are described in `docs/cards2/draft_pool_algorithms.md`. Any value
 not registered (including empty or absent) falls back to `DEFAULT_POOL_VARIANT`,

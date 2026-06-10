@@ -22,6 +22,8 @@ import {
   loadDecklists,
   loadDraftRecords,
   loadTideDecks,
+  loadTides2Decks,
+  loadTides2Relationships,
   resolvePool,
   type DraftRecord,
 } from "./cards-v2-database";
@@ -126,6 +128,20 @@ const POOL_VARIANTS_NEEDING_TIDES: ReadonlySet<PoolVariant> =
 /** Whether `variant` combines the committed tide decks. */
 export function poolVariantNeedsTides(variant: PoolVariant): boolean {
   return POOL_VARIANTS_NEEDING_TIDES.has(variant);
+}
+
+/**
+ * Pool variants that combine the committed `tides2` tide decks
+ * (`data/tides2.jsonc`) and their curated relationships
+ * (`data/tides2_relationships.jsonc`). In pool mode both are fetched only for
+ * these variants and set on `poolData.tides2Decks` / `poolData.tides2Relationships`.
+ */
+const POOL_VARIANTS_NEEDING_TIDES2: ReadonlySet<PoolVariant> =
+  new Set<PoolVariant>(["tides2"]);
+
+/** Whether `variant` combines the committed `tides2` tide decks. */
+export function poolVariantNeedsTides2(variant: PoolVariant): boolean {
+  return POOL_VARIANTS_NEEDING_TIDES2.has(variant);
 }
 
 /**
@@ -432,6 +448,9 @@ export async function loadQuestContent(
   // The `tides` variant combines the committed tide decks; only it fetches
   // `/tides-data.json`.
   const poolNeedsTides = POOL_VARIANTS_NEEDING_TIDES.has(poolVariant);
+  // The `tides2` variant combines its own (smaller) tide decks and their curated
+  // relationships; only it fetches `/tides2-data.json` and the relationships.
+  const poolNeedsTides2 = POOL_VARIANTS_NEEDING_TIDES2.has(poolVariant);
   const [
     cardDatabase,
     draftDreamcallers,
@@ -440,6 +459,7 @@ export async function loadQuestContent(
     draftRecords,
     affinityCorpus,
     tideDecks,
+    tides2Decks,
   ] = await Promise.all([
     loadCardsV2Database(),
     loadDreamcallersV2(),
@@ -457,6 +477,8 @@ export async function loadQuestContent(
       : Promise.resolve(null),
     // Fetch the committed tide decks only for the `tides` variant.
     poolNeedsTides ? loadTideDecks() : Promise.resolve(null),
+    // Fetch the committed `tides2` tide decks only for the `tides2` variant.
+    poolNeedsTides2 ? loadTides2Decks() : Promise.resolve(null),
   ]);
 
   const dreamcallers: DreamcallerContent[] = draftDreamcallers.map((dc) => ({
@@ -486,6 +508,14 @@ export async function loadQuestContent(
   // The `tides` variant reads the committed tide decks from here; every other
   // variant ignores them.
   if (tideDecks) poolData.tideDecks = tideDecks;
+  // The `tides2` variant reads its own tide decks and the curated relationships
+  // (validated against those tide ids). Fetched only for `tides2` and only once
+  // its decks are in hand, since the relationship validation keys on their ids.
+  if (tides2Decks) {
+    poolData.tides2Decks = tides2Decks;
+    const tides2Relationships = await loadTides2Relationships(tides2Decks);
+    if (tides2Relationships) poolData.tides2Relationships = tides2Relationships;
+  }
 
   const poolContext: RunPoolContext = {
     poolData,

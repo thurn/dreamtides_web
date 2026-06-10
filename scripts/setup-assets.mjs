@@ -648,6 +648,39 @@ export function setupAssets({
     );
   }
 
+  // The committed `tides2` tide decks and their curated relationships. The decks
+  // are baked by `npm run bake-tides2`; the relationships are seeded once by
+  // `npm run seed-tide-relationships`, then hand-curated. Both are committed as
+  // JSONC with a provenance header and served as plain JSON.
+  const tides2SourcePath = join(DATA_DIR, "tides2.jsonc");
+  const tides2JsonPath = join(publicDir, "tides2-data.json");
+  if (existsSync(tides2SourcePath)) {
+    const tides2Jsonc = readFileSync(tides2SourcePath, "utf8");
+    const served = JSON.stringify(JSON.parse(stripJsonComments(tides2Jsonc)));
+    writeFileSync(tides2JsonPath, served + "\n");
+    console.log("Copied tides2.jsonc to tides2-data.json (comments stripped)");
+  } else {
+    console.log(
+      "No data/tides2.jsonc found; the `tides2` pool variant will be " +
+        "unavailable until `npm run bake-tides2` is run.",
+    );
+  }
+  const tides2RelSourcePath = join(DATA_DIR, "tides2_relationships.jsonc");
+  const tides2RelJsonPath = join(publicDir, "tides2-relationships-data.json");
+  if (existsSync(tides2RelSourcePath)) {
+    const tides2RelJsonc = readFileSync(tides2RelSourcePath, "utf8");
+    const served = JSON.stringify(JSON.parse(stripJsonComments(tides2RelJsonc)));
+    writeFileSync(tides2RelJsonPath, served + "\n");
+    console.log(
+      "Copied tides2_relationships.jsonc to tides2-relationships-data.json (comments stripped)",
+    );
+  } else {
+    console.log(
+      "No data/tides2_relationships.jsonc found; the `tides2` pool variant will " +
+        "be unavailable until `npm run seed-tide-relationships` is run.",
+    );
+  }
+
   console.log("Parsing dreamcallers.toml...");
   const dreamcallerTomlContent = readFileSync(dreamcallerTomlPath, "utf8");
   const parsedDreamcallers = parse(dreamcallerTomlContent);

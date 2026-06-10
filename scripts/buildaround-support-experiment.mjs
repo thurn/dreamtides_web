@@ -90,6 +90,7 @@ import {
   generatePoolFromData,
   POOL_VARIANT_IDS,
   validateTideDecks,
+  validateTideRelationships,
 } from "../src/draft/pool/index.ts";
 import { stripJsonComments, supportEntryByName } from "./lib/card-refs.mjs";
 
@@ -506,6 +507,20 @@ function loadContext(argv) {
   const tidesPath = resolve(ROOT, "data/tides.jsonc");
   if (existsSync(tidesPath)) {
     poolData.tideDecks = validateTideDecks(readJsonc("data/tides.jsonc"));
+  }
+  // The `tides2` variant combines its own tide decks and curated relationships;
+  // load them (when present) so it runs under `--compare`/`--variant tides2`.
+  const tides2Path = resolve(ROOT, "data/tides2.jsonc");
+  if (existsSync(tides2Path)) {
+    poolData.tides2Decks = validateTideDecks(readJsonc("data/tides2.jsonc"));
+    const tides2RelPath = resolve(ROOT, "data/tides2_relationships.jsonc");
+    if (existsSync(tides2RelPath)) {
+      const tideIds = new Set(poolData.tides2Decks.tides.map((t) => t.id));
+      poolData.tides2Relationships = validateTideRelationships(
+        readJsonc("data/tides2_relationships.jsonc"),
+        tideIds,
+      );
+    }
   }
   return { dreamcallers, meta, poolData };
 }

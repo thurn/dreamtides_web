@@ -34,6 +34,8 @@ import {
   loadDecklists,
   loadDraftRecords,
   loadTideDecks,
+  loadTides2Decks,
+  loadTides2Relationships,
   resolvePool,
 } from "../data/cards-v2-database";
 import type { DraftRecord } from "../data/cards-v2-database";
@@ -456,23 +458,40 @@ export default function DraftTestApp() {
           setDreamcallers(loadedDreamcallers);
           setStatus("select");
         } else {
-          const [db, loadedDreamcallers, decklists, affinityCorpus, tideDecks] =
-            await Promise.all([
-              loadCardsV2Database(),
-              loadDreamcallersV2(),
-              loadDecklists(),
-              // The committed corpus the `embedded` variant grows from; other
-              // variants ignore it, so loading it never changes their pools.
-              loadAffinityCorpus(),
-              // The committed tide decks the `tides` variant combines; other
-              // variants ignore them.
-              loadTideDecks(),
-            ]);
+          const [
+            db,
+            loadedDreamcallers,
+            decklists,
+            affinityCorpus,
+            tideDecks,
+            tides2Decks,
+          ] = await Promise.all([
+            loadCardsV2Database(),
+            loadDreamcallersV2(),
+            loadDecklists(),
+            // The committed corpus the `embedded` variant grows from; other
+            // variants ignore it, so loading it never changes their pools.
+            loadAffinityCorpus(),
+            // The committed tide decks the `tides` variant combines; other
+            // variants ignore them.
+            loadTideDecks(),
+            // The committed `tides2` tide decks; other variants ignore them.
+            loadTides2Decks(),
+          ]);
           if (cancelled) return;
 
           const poolData = buildPoolData([...db.values()], decklists);
           if (affinityCorpus) poolData.affinityCorpus = affinityCorpus;
           if (tideDecks) poolData.tideDecks = tideDecks;
+          // The `tides2` variant also reads its curated relationships, validated
+          // against its tide ids; other variants ignore them.
+          if (tides2Decks) {
+            poolData.tides2Decks = tides2Decks;
+            const tides2Relationships = await loadTides2Relationships(tides2Decks);
+            if (tides2Relationships) {
+              poolData.tides2Relationships = tides2Relationships;
+            }
+          }
           poolDataRef.current = poolData;
           setDatabase(db);
           setDreamcallers(loadedDreamcallers);

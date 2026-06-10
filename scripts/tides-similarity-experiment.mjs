@@ -35,6 +35,7 @@ import {
   generatePoolFromData,
   isPoolVariant,
   validateTideDecks,
+  validateTideRelationships,
 } from "../src/draft/pool/index.ts";
 import { stripJsonComments } from "./lib/card-refs.mjs";
 
@@ -83,6 +84,16 @@ function loadContext(argv) {
   const poolData = buildPoolData(cards, decklists, pickRecords);
   if (existsSync(resolve(ROOT, "data/tides.jsonc"))) {
     poolData.tideDecks = validateTideDecks(readJsonc("data/tides.jsonc"));
+  }
+  if (existsSync(resolve(ROOT, "data/tides2.jsonc"))) {
+    poolData.tides2Decks = validateTideDecks(readJsonc("data/tides2.jsonc"));
+    if (existsSync(resolve(ROOT, "data/tides2_relationships.jsonc"))) {
+      const tideIds = new Set(poolData.tides2Decks.tides.map((t) => t.id));
+      poolData.tides2Relationships = validateTideRelationships(
+        readJsonc("data/tides2_relationships.jsonc"),
+        tideIds,
+      );
+    }
   }
   return { dreamcallers, poolData };
 }

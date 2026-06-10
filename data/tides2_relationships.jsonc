@@ -1,0 +1,90 @@
+// data/tides2_relationships.jsonc — curated relationships the `tides2`
+// draft-pool variant reads alongside the baked tide decks (data/tides2.jsonc).
+//
+// SEEDED ONCE by `node scripts/seed-tide-relationships.mjs` from the current
+// tides2 decks, decklist corpus, Dreamcaller signatures, and the build-around
+// support metadata, then HAND-CURATED. The routine `npm run bake-tides2` does
+// NOT touch this file. Re-seed it only on a deliberate tide re-bake (`--force`),
+// which changes tide ids/contents and so invalidates this curation; the runtime
+// validation throws on any tide id here that names no tide in data/tides2.jsonc,
+// so a stale combination cannot ship silently.
+//
+// `alliesByTide`: per tide id (all 32), its ordered allied-tide ids,
+// best first — the decks that combine well with it; a pool fills from this list.
+// `tidePoolByDreamcaller`: per Dreamcaller UUID, the tides its lead is drawn
+// from.
+//
+// After editing data/tides2.jsonc:
+//   node scripts/seed-tide-relationships.mjs --force   # re-seed, then re-curate
+//   npm run setup-assets                               # copies it to public/
+{
+  "version": 1,
+  "alliesByTide": {
+    "tide-01": ["tide-15","tide-32","tide-27","tide-26","tide-30","tide-18"],
+    "tide-02": ["tide-18","tide-10","tide-11","tide-26","tide-03","tide-30"],
+    "tide-03": ["tide-04","tide-06","tide-05","tide-11","tide-20","tide-18"],
+    "tide-04": ["tide-03","tide-05","tide-06","tide-11","tide-20","tide-18"],
+    "tide-05": ["tide-06","tide-03","tide-04","tide-20","tide-18","tide-11"],
+    "tide-06": ["tide-03","tide-20","tide-05","tide-04","tide-11","tide-18"],
+    "tide-07": ["tide-31","tide-09","tide-27","tide-15","tide-16","tide-17"],
+    "tide-08": ["tide-30","tide-26","tide-27","tide-10","tide-12","tide-15"],
+    "tide-09": ["tide-27","tide-16","tide-15","tide-01","tide-32","tide-17"],
+    "tide-10": ["tide-29","tide-25","tide-22","tide-23","tide-11","tide-30"],
+    "tide-11": ["tide-20","tide-18","tide-04","tide-06","tide-03","tide-05"],
+    "tide-12": ["tide-26","tide-30","tide-32","tide-23","tide-10","tide-18"],
+    "tide-13": ["tide-05","tide-01","tide-26","tide-03","tide-11","tide-15"],
+    "tide-14": ["tide-06","tide-04","tide-28","tide-24","tide-03","tide-30"],
+    "tide-15": ["tide-01","tide-32","tide-27","tide-09","tide-30","tide-17"],
+    "tide-16": ["tide-17","tide-07","tide-31","tide-32","tide-01","tide-03"],
+    "tide-17": ["tide-32","tide-16","tide-27","tide-09","tide-15","tide-01"],
+    "tide-18": ["tide-29","tide-10","tide-22","tide-11","tide-32","tide-03"],
+    "tide-19": ["tide-03","tide-04","tide-13","tide-06","tide-05","tide-29"],
+    "tide-20": ["tide-11","tide-06","tide-18","tide-04","tide-05","tide-03"],
+    "tide-21": ["tide-03","tide-01","tide-05","tide-13","tide-04","tide-20"],
+    "tide-22": ["tide-29","tide-23","tide-25","tide-10","tide-30","tide-26"],
+    "tide-23": ["tide-22","tide-12","tide-29","tide-26","tide-25","tide-30"],
+    "tide-24": ["tide-30","tide-12","tide-17","tide-05","tide-04","tide-09"],
+    "tide-25": ["tide-22","tide-29","tide-10","tide-23","tide-26","tide-30"],
+    "tide-26": ["tide-12","tide-15","tide-23","tide-30","tide-32","tide-01"],
+    "tide-27": ["tide-01","tide-15","tide-09","tide-32","tide-17","tide-16"],
+    "tide-28": ["tide-16","tide-30","tide-09","tide-01","tide-22","tide-17"],
+    "tide-29": ["tide-22","tide-10","tide-25","tide-30","tide-12","tide-01"],
+    "tide-30": ["tide-12","tide-26","tide-27","tide-32","tide-01","tide-29"],
+    "tide-31": ["tide-16","tide-07","tide-24","tide-17","tide-11","tide-03"],
+    "tide-32": ["tide-15","tide-01","tide-26","tide-27","tide-30","tide-18"]
+  },
+  "tidePoolByDreamcaller": {
+    "BDD3A3A7-242C-4D2B-8071-EBE56891A340": ["tide-01","tide-04","tide-23","tide-07","tide-17","tide-24","tide-13","tide-20","tide-18","tide-08"],
+    "B99936CA-97F9-4930-AF5A-FA9EF92557EF": ["tide-02","tide-13","tide-28","tide-15","tide-06","tide-22","tide-31","tide-30","tide-17","tide-11"],
+    "F0F5449E-01C2-4635-BCE1-76B179FC2108": ["tide-03","tide-10","tide-15","tide-16","tide-13","tide-20","tide-12","tide-31","tide-08","tide-17"],
+    "C72CFD7B-408B-47F6-ADF1-1E486A7E20D3": ["tide-04","tide-01","tide-23","tide-07","tide-17","tide-24","tide-13","tide-20","tide-18","tide-08"],
+    "B9BF6D4B-907C-4750-B51C-811AFF29DE59": ["tide-05","tide-14","tide-22","tide-32","tide-16","tide-02","tide-20","tide-31","tide-13","tide-30"],
+    "3C4773E4-F8E1-4686-86CB-B407A42489D4": ["tide-06","tide-08","tide-32","tide-28","tide-13","tide-22","tide-12","tide-11","tide-09","tide-18"],
+    "8A2FCD65-BBA7-459C-A6B0-F0391B9293FD": ["tide-07","tide-04","tide-23","tide-01","tide-17","tide-24","tide-13","tide-20","tide-18","tide-08"],
+    "1CC5A88A-134F-42F7-A0AE-95ACE44B3745": ["tide-08","tide-01","tide-20","tide-16","tide-22","tide-19","tide-12","tide-31","tide-18","tide-21"],
+    "9E4862FD-E18C-463E-9D5F-E5D73C29A66F": ["tide-09","tide-04","tide-12","tide-13","tide-22","tide-28","tide-08","tide-20","tide-32","tide-18"],
+    "BA973428-6D90-4847-B779-CB7E25A5AC84": ["tide-10","tide-01","tide-07","tide-03","tide-17","tide-14","tide-20","tide-28","tide-13","tide-30"],
+    "9E19B3D1-12F2-43C1-9CB1-08DE7CD32E32": ["tide-11","tide-12","tide-19","tide-28","tide-31","tide-01","tide-22","tide-06","tide-08","tide-17"],
+    "6029BE40-75B9-4C07-912F-9718B6C5C747": ["tide-12","tide-03","tide-28","tide-15","tide-31","tide-13","tide-22","tide-20","tide-02","tide-17"],
+    "133E22DD-F81B-406D-B4E3-98C346D7FD4E": ["tide-01","tide-12","tide-26","tide-32","tide-13","tide-30","tide-27","tide-15"],
+    "9D64A4A2-3DC7-456E-9EB2-5FE3A48883C4": ["tide-32","tide-15","tide-01","tide-09","tide-26","tide-27","tide-30","tide-13"],
+    "16B579FE-C15B-4DF6-8262-D45CE44732AE": ["tide-27","tide-30","tide-01","tide-16","tide-31","tide-32"],
+    "86026206-1B11-4F38-A24E-FD3C697F5353": ["tide-11","tide-20","tide-06","tide-05","tide-21","tide-02","tide-15","tide-10"],
+    "6488452D-4E9E-466C-96DF-716D4EC646B1": ["tide-27","tide-15","tide-08","tide-09","tide-07","tide-20","tide-01","tide-30"],
+    "B8C1B0AB-0FE6-47D6-B576-0C2231AEB81E": ["tide-20","tide-11","tide-31","tide-07","tide-27"],
+    "81954CA0-DA36-49DD-915C-1CCB1B2D7B05": ["tide-09","tide-02","tide-13","tide-26","tide-17","tide-15","tide-31","tide-05"],
+    "60BD584B-5BC8-4EE7-8A98-CBB304EB71AB": ["tide-15","tide-01","tide-32","tide-27","tide-19","tide-26"],
+    "5E28154D-770A-4B84-8AAC-9DE44F5D7D02": ["tide-13","tide-19","tide-14","tide-20"],
+    "4D5E3933-7DD6-406B-922D-DD78ACFA044A": ["tide-13","tide-19","tide-21","tide-14"],
+    "2B7E921D-0CD7-4C20-A415-9E7EEDE7B477": ["tide-03","tide-05","tide-19","tide-04","tide-17","tide-21","tide-09","tide-06"],
+    "84E7020C-7384-4CC3-A20F-AB05F03CC375": ["tide-20","tide-11","tide-21","tide-04","tide-02","tide-03"],
+    "F6208407-C4E9-42AC-B533-346704F5E39E": ["tide-11","tide-03","tide-04","tide-02","tide-21","tide-18","tide-31"],
+    "FE2510D9-BFEE-4C35-97F9-30E0CD2E2851": ["tide-16","tide-28","tide-12","tide-09","tide-14","tide-08","tide-23","tide-17"],
+    "94E7C651-25E9-4A62-9DE4-EAF5BA20542C": ["tide-16","tide-28","tide-09","tide-07","tide-24"],
+    "3EBABA62-9000-429D-B203-2A5A9724389A": ["tide-16","tide-24","tide-28","tide-17","tide-09","tide-07","tide-02","tide-30"],
+    "2C53B1B9-9291-4BBA-8D3A-F40B545C8F3C": ["tide-16","tide-28","tide-24","tide-14","tide-09","tide-27","tide-30"],
+    "BF72ADFF-7D74-4BE8-9B93-1DB7BA13A1DB": ["tide-25","tide-22","tide-29","tide-10","tide-19","tide-04","tide-14","tide-21"],
+    "BFC40414-5264-41BF-86E1-A0F41EE4F5B5": ["tide-10","tide-25","tide-29","tide-22","tide-18","tide-04","tide-02","tide-13"],
+    "91D4C3B5-FD63-480B-9ED5-979109A227BB": ["tide-29","tide-25","tide-10","tide-22","tide-19","tide-02","tide-18"]
+  }
+}

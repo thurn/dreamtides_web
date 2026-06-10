@@ -1,6 +1,15 @@
 import type { CardData } from "../types/cards";
-import type { AffinityCorpus, GeneratedPool, TideDecksJson } from "../draft/pool";
-import { deserializeCorpus, validateTideDecks } from "../draft/pool";
+import type {
+  AffinityCorpus,
+  GeneratedPool,
+  TideDecksJson,
+  TideRelationshipsJson,
+} from "../draft/pool";
+import {
+  deserializeCorpus,
+  validateTideDecks,
+  validateTideRelationships,
+} from "../draft/pool";
 import type { AffinityCorpusJson } from "../draft/pool";
 
 /**
@@ -94,6 +103,35 @@ export async function loadTideDecks(): Promise<TideDecksJson | null> {
   const response = await fetch("/tides-data.json");
   if (!response.ok) return null;
   return validateTideDecks(await response.json());
+}
+
+/**
+ * Fetch the committed `tides2` tide decks (`data/tides2.jsonc`, copied to
+ * `/tides2-data.json` by `scripts/setup-assets.mjs`) the `tides2` pool variant
+ * combines into pools. Returns `null` if the asset is missing so the caller can
+ * surface a clear configuration error when the variant runs.
+ */
+export async function loadTides2Decks(): Promise<TideDecksJson | null> {
+  const response = await fetch("/tides2-data.json");
+  if (!response.ok) return null;
+  return validateTideDecks(await response.json());
+}
+
+/**
+ * Fetch the committed `tides2` relationships (`data/tides2_relationships.jsonc`,
+ * copied to `/tides2-relationships-data.json` by `scripts/setup-assets.mjs`) the
+ * `tides2` pool variant steers selection by, validated against the tide ids in
+ * `tideDecks`. Returns `null` if the asset is missing so the caller can surface
+ * a clear configuration error when the variant runs. A dangling tide id (e.g. a
+ * relationships file stale against a re-baked `tides2.jsonc`) throws.
+ */
+export async function loadTides2Relationships(
+  tideDecks: TideDecksJson,
+): Promise<TideRelationshipsJson | null> {
+  const response = await fetch("/tides2-relationships-data.json");
+  if (!response.ok) return null;
+  const tideIds = new Set(tideDecks.tides.map((t) => t.id));
+  return validateTideRelationships(await response.json(), tideIds);
 }
 
 /**

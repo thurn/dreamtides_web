@@ -43,6 +43,8 @@ export type {
   TideDeckJson,
   TideDecksJson,
 } from "./tides-io.ts";
+export { validateTideRelationships } from "./tide-relationships-io.ts";
+export type { TideRelationshipsJson } from "./tide-relationships-io.ts";
 export { DEFAULT_POOL_VARIANT } from "./types.ts";
 export {
   POOL_STRATEGIES,

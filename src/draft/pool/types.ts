@@ -2,6 +2,7 @@
 
 import type { AffinityCorpus } from "./affinity-grower.ts";
 import type { TideDecksJson } from "./tides-io.ts";
+import type { TideRelationshipsJson } from "./tide-relationships-io.ts";
 
 // `color_pool` is the original color-identity algorithm. `diverse` is an
 // experimental variant tuned to spread cards and archetypes more evenly across
@@ -28,7 +29,8 @@ export type PoolVariant =
   | "picksig"
   | "sigseed"
   | "embedded"
-  | "tides";
+  | "tides"
+  | "tides2";
 // The quest prototype and the draft test harness use this when `?algo=` is
 // absent. An unrecognised `?algo=` value is a hard error, not a fall-through to
 // this default.
@@ -125,6 +127,22 @@ export interface PoolData {
    * `tides`; every other variant ignores it.
    */
   tideDecks?: TideDecksJson;
+  /**
+   * The committed tide-deck artifact the `tides2` variant combines into pools
+   * (`data/tides2.jsonc`, served as `/tides2-data.json`): the same schema as
+   * {@link tideDecks}, baked with smaller, purer tides so an affinity-selected
+   * pool concentrates on a coherent archetype. Set only when the run's variant
+   * is `tides2`; every other variant ignores it.
+   */
+  tides2Decks?: TideDecksJson;
+  /**
+   * The committed tide-relationship artifact the `tides2` variant steers
+   * selection by (`data/tides2_relationships.jsonc`, served as
+   * `/tides2-relationships-data.json`): each tide's allied tides and each
+   * Dreamcaller's tide pool, keyed by tide id and Dreamcaller UUID. Set
+   * alongside {@link tides2Decks} only when the run's variant is `tides2`.
+   */
+  tides2Relationships?: TideRelationshipsJson;
   /**
    * Current display name -> stable cards_v2 UUID, built from the card records in
    * {@link buildPoolData} when they carry an `id`. The `seed` variant reads it to
