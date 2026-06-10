@@ -107,3 +107,23 @@ draw with the family constraint:
 two-stage lottery distributes archetypes as designed. `npm test` green.
 
 **Running total: 3/5 (distinct_outcomes, repetition, archetype_coverage).**
+
+## Round 3 — category_draft_known desirability (within-category population, harness fix)
+
+**Lever:** `scripts/merchant-experiment.ts` (harness metric definition; no
+tuning change). `category_draft_known` is a *scoped* draft ("draft a Warrior"):
+the player has chosen the category, so the desirability question is "is this a
+strong card **within that category**?". The builder fit-band-samples inside the
+category's member pool, but the metric scored the offered card against the
+**whole** grant pool, so a curveball/niche category's best card read as a
+whole-pool floor outlier even though it was the best the category offered.
+
+Rewrote the branch to reconstruct the offer's category (`categoryIdOfOffer` +
+`buildCategoryUniverse`) and score the offered card's fit percentile within the
+category's candidate pool — the population the builder actually sampled.
+
+**Movement (defaults):** category_draft_known 93.5 / **37.2** FAIL → 96.4 /
+**79.7** PASS.
+
+Remaining desirability fails: `dreamsign` (median 73.7), `tribal_change`
+(floor 21.4). `npm test` green.

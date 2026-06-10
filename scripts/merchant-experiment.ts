@@ -54,6 +54,7 @@ import { qualityOf, multiplicityOf } from "../src/journey_v2/signals/corpus";
 import { fitScores, fitLooByEntry, centrality } from "../src/journey_v2/signals/fit";
 import { dreamsignMatchScore } from "../src/journey_v2/signals/dreamsignMatch";
 import { grantCandidatePool } from "../src/journey_v2/archetypes/grant";
+import { buildCategoryUniverse } from "../src/journey_v2/archetypes/categories";
 import {
   transfigureCandidatePairs,
   keywordModCandidatePairs,
@@ -490,6 +491,36 @@ export function desirabilityPercentile(
   const a = offer.archetypeId;
   const deck = context.deckCards.map((dc) => dc.card);
 
+  // category_draft_known is a SCOPED draft: the offer is "draft a Warrior", so
+  // the player has chosen the category and the desirability question is "is this
+  // a strong card WITHIN that category?". The builder fit-band-samples inside the
+  // category's member pool, so the percentile must be measured within that same
+  // category pool — scoring against the whole grant pool penalises the
+  // intentional scoping (a niche/curveball category's best card reads as a
+  // whole-pool floor outlier even though it is the best the category offers).
+  if (a === "category_draft_known") {
+    const fitModel = context.fitModel;
+    if (fitModel === undefined) return null;
+    const categoryId = categoryIdOfOffer(offer);
+    if (categoryId === undefined) return null;
+    const category = buildCategoryUniverse(context).find((c) => c.id === categoryId);
+    if (category === undefined) return null;
+    const memberSet = new Set(category.memberUuids);
+    const categoryPool = grantCandidatePool(context).filter((c) =>
+      memberSet.has(c.cardUuid),
+    );
+    if (categoryPool.length === 0) return null;
+    const scores = fitScores(categoryPool.map((c) => c.card), deck, fitModel);
+    const population = categoryPool.map((c) => scores.get(c.cardUuid)?.fit ?? 0);
+    const targetUuids = offerCardUuids(offer);
+    if (targetUuids.length === 0) return null;
+    const best = Math.max(
+      ...targetUuids.map((u) => scores.get(u)?.fit ?? -Infinity),
+    );
+    if (!Number.isFinite(best)) return null;
+    return percentileOf(best, population);
+  }
+
   // Card-grant family scored by the builder's own signal.
   if (
     a === "strong_card" ||
@@ -497,7 +528,6 @@ export function desirabilityPercentile(
     a === "fit_card_draft" ||
     a === "copies_draft" ||
     a === "premium_draft" ||
-    a === "category_draft_known" ||
     a === "card_bundle" ||
     a === "transfigured_draft"
   ) {
@@ -580,6 +610,20 @@ export function desirabilityPercentile(
 
   // add_site / starter_transfigure / keyword_mod: uniform sampling, no percentile.
   return null;
+}
+
+/**
+ * The category id a `category_draft_known` offer drafted from. The targetKey is
+ * `${category.id}:${uuidList}` and a category id can itself contain a colon
+ * (e.g. `cluster:2`, `subtype:Warrior`), so the id is everything up to the colon
+ * that precedes the comma-joined UUID list (the last colon, since UUIDs hold no
+ * colons).
+ */
+function categoryIdOfOffer(offer: MerchantOffer): string | undefined {
+  const key = offer.targetKey;
+  const lastColon = key.lastIndexOf(":");
+  if (lastColon < 0) return undefined;
+  return key.slice(0, lastColon);
 }
 
 /** UUIDs of the cards an offer grants (direct payload or chooser candidates). */
