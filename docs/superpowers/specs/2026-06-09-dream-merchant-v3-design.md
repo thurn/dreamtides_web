@@ -366,9 +366,9 @@ understanding is mechanical; cards are identified by UUID throughout.
 - **Multiplicity** — `m(c) = |{corpus mainboards with >= 2 copies of c}| /
   |{corpus mainboards with >= 1 copy of c}|`, computed offline; `m(c) = 0`
   when fewer than 5 mainboards contain the card.
-- **Clusters** — offline greedy-modularity community detection over the
-  affinity graph, keeping each card's top 10 affinity edges; clusters with >= 8
-  members are retained. Each cluster's flagship is its member with maximal
+- **Clusters** — offline deterministic label propagation over the affinity
+  graph, keeping each card's top 10 affinity edges; clusters with >= 8 members
+  are retained. Each cluster's flagship is its member with maximal
   `idf(c) * quality(c)`, and the cluster is presented as "the *<flagship>*
   package".
 
@@ -431,8 +431,8 @@ or decline reactions.
 
 ## Metrics harness
 
-`scripts/merchant-experiment.mjs`, exposed as `npm run merchant-metric`,
-following the pool-experiment pattern. Simulated decks are prefixes of real
+`scripts/merchant-experiment.ts`, run via `vite-node` and exposed as
+`npm run merchant-metric`, following the pool-experiment pattern. Simulated decks are prefixes of real
 adapted draft records (a record truncated at picks 0/5/10/20 models a player
 at that stage), so measurements reflect real deck states.
 
@@ -531,7 +531,7 @@ New:
   `encounter/generateMerchantEncounter.ts` (rewritten).
 - `data/merchant_corpus.json` + bake script + parity check.
 - `data/tabula/dreamsign_profiles.toml` + subagent curation pass.
-- `scripts/merchant-experiment.mjs` + `merchant-metric` npm script.
+- `scripts/merchant-experiment.ts` (run via `vite-node`) + `merchant-metric` npm script.
 
 Deleted:
 
