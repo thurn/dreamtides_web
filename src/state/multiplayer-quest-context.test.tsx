@@ -400,15 +400,6 @@ function merchantDeclineRequestFor(offer: MerchantOffer): MerchantDeclineRequest
   };
 }
 
-function requireMerchantOffer(
-  offers: readonly MerchantOffer[],
-  predicate: (offer: MerchantOffer) => boolean,
-): MerchantOffer {
-  const offer = offers.find(predicate);
-  if (offer === undefined) throw new Error("Expected merchant offer");
-  return offer;
-}
-
 function merchantPayloadApplied(
   before: QuestState,
   after: QuestState,
@@ -2607,13 +2598,44 @@ describe("MultiplayerQuestProvider", () => {
   it("accepts a Dream Merchant offer through one atomic room transaction", () => {
     const captured: QuestContextValue[] = [];
     const fixture = makeMerchantProviderFixture();
-    const offer = requireMerchantOffer(
-      merchantEncounterFor(fixture).offers,
+    const encounter = merchantEncounterFor(fixture);
+
+    // Prefer a direct-payload offer; fall back to a chooser with its first
+    // candidate when the encounter generates only chooser-style offers.
+    const directOffer = encounter.offers.find(
       (candidate) => candidate.applyPayload !== undefined,
     );
-    if (offer.applyPayload === undefined) {
-      throw new Error("Expected direct merchant payload");
-    }
+    type OfferWithChoice =
+      | { offer: MerchantOffer; choiceId: string; payload: MerchantApplyPayload }
+      | null;
+    const chooserOffer: OfferWithChoice = (() => {
+      for (const candidate of encounter.offers) {
+        const first = candidate.choiceRequest?.candidates[0];
+        if (first !== undefined) {
+          return { offer: candidate, choiceId: first.choiceId, payload: first.applyPayload };
+        }
+      }
+      return null;
+    })();
+
+    const useDirect = directOffer !== undefined;
+    const offer = useDirect ? directOffer : chooserOffer?.offer;
+    if (offer === undefined) throw new Error("Expected at least one usable offer");
+
+    const effectivePayload: MerchantApplyPayload = useDirect
+      ? (directOffer?.applyPayload as MerchantApplyPayload)
+      : (chooserOffer?.payload as MerchantApplyPayload);
+    if (effectivePayload === undefined) throw new Error("Expected a merchant payload");
+
+    const acceptRequest: MerchantAcceptRequest = {
+      encounterSignature: offer.encounterSignature,
+      offerId: offer.offerId,
+      archetypeId: offer.archetypeId,
+      ...(!useDirect && chooserOffer !== null
+        ? { choice: { choiceId: chooserOffer.choiceId } }
+        : {}),
+    };
+
     const session = makeSession(fixture.state);
     mount(
       <MultiplayerQuestProvider
@@ -2627,7 +2649,7 @@ describe("MultiplayerQuestProvider", () => {
 
     captured[captured.length - 1]?.mutations.acceptDreamMerchantOffer(
       fixture.site.id,
-      merchantAcceptRequestFor(offer),
+      acceptRequest,
     );
 
     expect(roomServiceMocks.runRoomTransaction).toHaveBeenCalledTimes(1);
@@ -2640,7 +2662,7 @@ describe("MultiplayerQuestProvider", () => {
     expect(merchantPayloadApplied(
       fixture.state,
       nextState,
-      offer.applyPayload,
+      effectivePayload,
     )).toBe(true);
     expect(nextState.visitedSites).toContain(fixture.site.id);
     expect(nextState.atlas.nodes["dreamscape-a"]?.sites[0]?.isVisited).toBe(true);
@@ -2662,7 +2684,7 @@ describe("MultiplayerQuestProvider", () => {
       offerId: offer.offerId,
       archetypeId: offer.archetypeId,
       targetKey: offer.targetKey,
-      payloadKind: offer.applyPayload.kind,
+      payloadKind: effectivePayload.kind,
     });
   });
 

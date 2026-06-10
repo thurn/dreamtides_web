@@ -19,6 +19,8 @@ import type {
   DreamAtlas,
   QuestState,
   Screen,
+  SiteState,
+  SiteType,
 } from "../types/quest";
 import { deriveEntryIdCounter } from "./deck-entry-ids";
 
@@ -313,6 +315,62 @@ export function completeQuestSite(
     atlas: {
       ...prev.atlas,
       nodes: updatedNodes,
+    },
+  };
+}
+
+/**
+ * Count all sites across the atlas for deterministic id derivation.
+ * Using total site count (not max site-N) ensures that applying the same
+ * payload twice to states with different site counts yields distinct ids.
+ */
+function totalSiteCount(atlas: DreamAtlas): number {
+  let count = 0;
+  for (const node of Object.values(atlas.nodes)) {
+    count += node.sites.length;
+  }
+  return count;
+}
+
+/**
+ * Add a fresh, unvisited site of `siteType` to the current dreamscape.
+ * No-ops when there is no current dreamscape or the node cannot be found.
+ *
+ * Site ids derive deterministically from `(sourceId, existing total site count)`
+ * so that the regenerate-validate-apply pattern produces the same id on each
+ * apply invocation of the same payload at the same state, and distinct ids when
+ * the state already has a different number of sites (preventing id collision on
+ * repeated rewards).
+ *
+ * The v1 adapter (`src/journeys/adapter/journeyMutations.ts`) delegates to this
+ * function for the `"current"` placement so both paths share one implementation.
+ */
+export function addSiteToCurrentDreamscape(
+  prev: QuestState,
+  siteType: SiteType,
+  sourceId: string,
+): QuestState {
+  const targetId = prev.currentDreamscape;
+  if (targetId === null || prev.atlas.nodes[targetId] === undefined) {
+    return prev;
+  }
+  const count = totalSiteCount(prev.atlas);
+  const newSite: SiteState = {
+    id: `site-merchant-${sourceId}-${String(count)}`,
+    type: siteType,
+    isEnhanced: false,
+    isVisited: false,
+  };
+  const node = prev.atlas.nodes[targetId];
+  if (node === undefined) return prev;
+  return {
+    ...prev,
+    atlas: {
+      ...prev.atlas,
+      nodes: {
+        ...prev.atlas.nodes,
+        [targetId]: { ...node, sites: [...node.sites, newSite] },
+      },
     },
   };
 }

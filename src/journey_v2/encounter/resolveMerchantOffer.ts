@@ -2,7 +2,11 @@ import { mergeCardKeywordModification } from "../../card-type-change";
 import { createDreamsign } from "../../data/dreamsigns";
 import type { QuestContent } from "../../data/quest-content";
 import { deriveEntryIdCounter } from "../../state/deck-entry-ids";
-import { completeQuestSite, setQuestScreen } from "../../state/quest-state-actions";
+import {
+  addSiteToCurrentDreamscape,
+  completeQuestSite,
+  setQuestScreen,
+} from "../../state/quest-state-actions";
 import type {
   DeckEntry,
   Dreamsign,
@@ -240,9 +244,9 @@ function applyMerchantPayload(
       };
     }
     case "add_site": {
-      // The real placement lands in Task 14; the payload kind exists now so the
-      // union is stable. Until then, applying it is a safe no-op.
-      return state;
+      // Use the shared pure function; sourceId is the site type so the merchant
+      // offer identity is embedded in the generated id (deterministic per apply).
+      return addSiteToCurrentDreamscape(state, payload.siteType, payload.siteType);
     }
     case "composite": {
       let next: QuestState | null = state;

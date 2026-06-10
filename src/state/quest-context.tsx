@@ -56,6 +56,7 @@ import { deriveEntryIdCounter } from "./deck-entry-ids";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { createStartInBattleState } from "../runtime/start-in-battle-state";
 import {
+  addSiteToCurrentDreamscape,
   clampEssence,
   completeQuestSite,
   setQuestScreen,
@@ -2798,10 +2799,31 @@ export function QuestProvider({
   const addSiteToDreamscape = useCallback(
     (placement: "current" | "next", siteType: SiteType, source: string) => {
       setState((prev) => {
-        const targetId =
-          placement === "current"
-            ? prev.currentDreamscape
-            : findNextDreamscapeId(prev.atlas, prev.currentDreamscape);
+        if (placement === "current") {
+          // Delegate to the shared pure function so v2 merchant apply and v1
+          // journey rewards share one implementation.
+          const next = addSiteToCurrentDreamscape(prev, siteType, source);
+          if (next === prev) return prev;
+          const currentNodeId = prev.currentDreamscape;
+          if (currentNodeId !== null) {
+            const nextNode = next.atlas.nodes[currentNodeId];
+            const newSite: SiteState | undefined =
+              nextNode !== undefined && nextNode.sites.length > 0
+                ? nextNode.sites[nextNode.sites.length - 1]
+                : undefined;
+            if (newSite !== undefined) {
+              logEvent("site_added", {
+                siteId: newSite.id,
+                siteType,
+                dreamscapeId: currentNodeId,
+                placement,
+                source,
+              });
+            }
+          }
+          return next;
+        }
+        const targetId = findNextDreamscapeId(prev.atlas, prev.currentDreamscape);
         if (targetId === null || prev.atlas.nodes[targetId] === undefined) {
           return prev;
         }

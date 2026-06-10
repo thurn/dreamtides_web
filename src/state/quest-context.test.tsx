@@ -358,14 +358,6 @@ function merchantDeclineRequestFor(offer: MerchantOffer): MerchantDeclineRequest
   };
 }
 
-function requireMerchantOffer(
-  offers: readonly MerchantOffer[],
-  predicate: (offer: MerchantOffer) => boolean,
-): MerchantOffer {
-  const offer = offers.find(predicate);
-  if (offer === undefined) throw new Error("Expected merchant offer");
-  return offer;
-}
 
 beforeEach(() => {
   resetLog();
@@ -408,12 +400,35 @@ describe("QuestState default modifier fields", () => {
 describe("Dream Merchant v2 mutations", () => {
   it("accepts one generated offer and completes the site", () => {
     const fixture = makeMerchantProviderFixture();
-    const offer = requireMerchantOffer(
-      merchantEncounterFor(fixture).offers,
-      // A direct-payload offer accepts without a chooser selection; chooser
-      // acceptance is covered by the per-archetype builder tests.
+    const encounter = merchantEncounterFor(fixture);
+    // Prefer a direct-payload offer (no chooser selection needed); fall back to
+    // a chooser offer using its first candidate if the encounter generated only
+    // choosers. Both acceptance paths lead to the same site-completion outcome.
+    const directOffer = encounter.offers.find(
       (candidate) => candidate.applyPayload !== undefined,
     );
+    const offerWithFirstCandidate = (() => {
+      for (const candidate of encounter.offers) {
+        const first = candidate.choiceRequest?.candidates[0];
+        if (first !== undefined) return { offer: candidate, choice: first };
+      }
+      return null;
+    })();
+
+    const offerId = directOffer?.offerId ?? offerWithFirstCandidate?.offer.offerId;
+    if (offerId === undefined) throw new Error("Expected at least one usable offer");
+    const offer = encounter.offers.find((o) => o.offerId === offerId);
+    if (offer === undefined) throw new Error("Expected merchant offer");
+
+    const acceptRequest: MerchantAcceptRequest = {
+      encounterSignature: offer.encounterSignature,
+      offerId: offer.offerId,
+      archetypeId: offer.archetypeId,
+      ...(directOffer === undefined && offerWithFirstCandidate !== null
+        ? { choice: { choiceId: offerWithFirstCandidate.choice.choiceId } }
+        : {}),
+    };
+
     const quest = mountQuestContext({
       cardDatabase: fixture.questContent.cardDatabase,
       questContent: fixture.questContent,
@@ -423,7 +438,7 @@ describe("Dream Merchant v2 mutations", () => {
     act(() => {
       quest.mutations.acceptDreamMerchantOffer(
         fixture.site.id,
-        merchantAcceptRequestFor(offer),
+        acceptRequest,
       );
     });
 

@@ -233,13 +233,22 @@ describe("applyMerchantPayloadToState", () => {
     expect(next?.deck.length).toBe(fixture.state.deck.length + 1);
   });
 
-  it("treats add_site as a safe no-op for now", () => {
+  it("adds a site to the current dreamscape", () => {
     const fixture = makeFixture();
     const next = applyMerchantPayloadToState({
       state: fixture.state,
       questContent: fixture.questContent,
       payload: { kind: "add_site", siteType: "Shop" },
     });
-    expect(next).toBe(fixture.state);
+    expect(next).not.toBeNull();
+    // The current dreamscape gains one new Site of the requested type.
+    const beforeCount =
+      fixture.state.atlas.nodes["dreamscape-a"]?.sites.length ?? 0;
+    const afterCount = next?.atlas.nodes["dreamscape-a"]?.sites.length ?? 0;
+    expect(afterCount).toBe(beforeCount + 1);
+    const sites = next?.atlas.nodes["dreamscape-a"]?.sites ?? [];
+    const addedSite = sites[sites.length - 1];
+    expect(addedSite?.type).toBe("Shop");
+    expect(addedSite?.isVisited).toBe(false);
   });
 });
