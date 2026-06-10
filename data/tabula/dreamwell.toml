@@ -100,7 +100,7 @@ card-number = 8
 [[dreamwell]]
 name = "Ruin Tree"
 id = "fcce7aa2-1cb4-4a80-bda9-959f2eeb8bf5"
-rendered-text = "You may play a ≤2● cost character from your void."
+rendered-text = "You may immediately play a ≤2● cost character from your void."
 order = 3
 energy-added = 1
 card-type = "Dreamwell"
@@ -163,8 +163,6 @@ image-number = 1125132389
 art-owned = true
 card-number = 14
 
-# Image 1721490835 is assigned to "Graywatch" (no Art Rework tag) in cards_v2.toml
-# and cannot be reused here.
 [[dreamwell]]
 name = "Sunset's Last Gaze"
 id = "fa8704fe-759f-408d-992d-d8f9d5ffd760"
@@ -172,7 +170,7 @@ rendered-text = "You may discard 2 cards, then draw 2 cards."
 order = 3
 energy-added = 1
 card-type = "Dreamwell"
-image-number = 0
+image-number = 1721490835
 art-owned = false
 card-number = 15
 
@@ -220,8 +218,6 @@ image-number = 2295991867
 art-owned = true
 card-number = 19
 
-# Image 2256745741 is assigned to "Rift Pilgrim" (no Art Rework tag) in
-# cards_v2.toml and cannot be reused here.
 [[dreamwell]]
 name = "Celestial Gateway"
 id = "a3033051-8eb7-4fbf-93d6-f947ed68974d"
@@ -229,7 +225,7 @@ rendered-text = "Return a random character from each player's void to play."
 order = 4
 energy-added = 1
 card-type = "Dreamwell"
-image-number = 0
+image-number = 2256745741
 art-owned = false
 card-number = 20
 
