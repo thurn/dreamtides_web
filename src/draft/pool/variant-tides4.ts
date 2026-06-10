@@ -28,12 +28,13 @@
 // deal below: join the starter, draw a random subset of facets, top up with broad
 // tides until a full pool is dealable, shuffle everything into one bag, and deal
 // `TIDES4.dealSize` copies at most `TIDES4.cap` of any card. A signatured
-// Dreamcaller leans its own identity a different way each run (the facet subset); a
-// signatureless Dreamcaller draws its subset from the broad facet set, so it leans
-// toward a different coherent archetype each run — exactly how `sigseed` reduces to
-// a coherent, randomly-themed `pickcohere` pool for a signatureless Dreamcaller.
-// Cards are keyed by cards_v2 UUID and mapped to current names through
-// `poolData.cardNameById`.
+// Dreamcaller leans its own identity a different way each run (the facet subset).
+// A signatureless Dreamcaller has no identity to anchor on, so — exactly as
+// `sigseed` reduces to a coherent, randomly-themed `pickcohere` pool — it borrows a
+// random signatured Dreamcaller's whole pool (that archetype's signature core plus
+// its own facets), leaning toward a different coherent archetype each run rather
+// than a blend of unrelated leans. Cards are keyed by cards_v2 UUID and mapped to
+// current names through `poolData.cardNameById`.
 
 import { shuffle } from "./rng.ts";
 import type { PoolStrategy } from "./strategy.ts";
@@ -71,11 +72,13 @@ export const TIDES4: Tides4Tuning = {
  * whole bag and deal `TIDES4.dealSize` copies with at most `TIDES4.cap` copies of
  * any card. The random facet subset is the variety engine — it is the analogue of
  * `sigseed`'s random signature subset, so a Dreamcaller leans its identity a
- * different way each run. Tide-deck cards are keyed by cards_v2 UUID and mapped to
- * current display names through `poolData.cardNameById`; UUIDs absent from that map
- * (cards no longer in the catalog) are skipped. Without a `dreamcallerId` or a baked
- * tide pool, every tide is shuffled together (a robustness fallback; load-time
- * validation requires an entry per Dreamcaller).
+ * different way each run. A signatureless Dreamcaller (null starter) instead borrows
+ * a random signatured Dreamcaller's pool, so it leans a different coherent archetype
+ * each run. Tide-deck cards are keyed by cards_v2 UUID and mapped to current display
+ * names through `poolData.cardNameById`; UUIDs absent from that map (cards no longer
+ * in the catalog) are skipped. Without a `dreamcallerId` or a baked tide pool, every
+ * tide is shuffled together (a robustness fallback; load-time validation requires an
+ * entry per Dreamcaller).
  */
 export function generateTides4(
   rng: () => number,
@@ -95,9 +98,25 @@ export function generateTides4(
   // facets, and queue the neutral tail plus any undrawn facets as fill. A missing
   // entry falls back to a shuffled draw over every tide so the variant still
   // produces a pool.
-  const entry = dreamcallerId
+  const own = dreamcallerId
     ? data.tidePoolByDreamcaller[dreamcallerId]
     : undefined;
+  // A signatureless Dreamcaller (null starter) leans a random coherent archetype
+  // each run, the way `sigseed` reduces to `pickcohere`: it borrows a random
+  // signatured Dreamcaller's whole pool — that archetype's signature core plus its
+  // own on-identity facets — so the pool is a single coherent archetype rather than
+  // a blend of unrelated facet leans. The archetype draw consumes one `rng()` and
+  // happens only for signatureless Dreamcallers, so a signatured Dreamcaller's draw
+  // is unchanged.
+  let entry = own;
+  if (own && own.starter === null) {
+    const archetypes = Object.values(data.tidePoolByDreamcaller)
+      .filter((e) => e.starter !== null)
+      .sort((a, b) => ((a.starter ?? "") < (b.starter ?? "") ? -1 : 1));
+    if (archetypes.length > 0) {
+      entry = archetypes[Math.floor(rng() * archetypes.length)];
+    }
+  }
   const joinOrder: string[] = [];
   if (entry) {
     if (entry.starter !== null) joinOrder.push(entry.starter);

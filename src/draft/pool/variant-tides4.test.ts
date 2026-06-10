@@ -125,21 +125,39 @@ describe("generateTides4", () => {
     expect(firstFacetSeen.size).toBeGreaterThan(1);
   });
 
-  it("leads a signatureless Dreamcaller with a varying facet (no starter)", () => {
-    const data = makeTides4(6, 30);
+  it("leans a signatureless Dreamcaller on a varying coherent archetype core", () => {
+    // Two signatured archetypes (each its own signature core) plus a signatureless
+    // Dreamcaller "dc-b" with a null starter. The neutral pool borrows a signatured
+    // archetype each run, leading with a signature tide (a coherent archetype, not a
+    // bare facet), and across runs draws more than one archetype.
+    const data = makeTides4(4, 30);
+    data.tides.push({
+      id: "tide-sig-2",
+      name: "Sig 2",
+      role: "signature",
+      cards: Array.from({ length: 30 }, (_, i) => ({
+        id: `tide-sig-2-card-${String(i)}`,
+        name: `Card tide-sig-2.${String(i)}`,
+        copies: 2,
+      })),
+    });
+    const facetIds = data.tides.filter((t) => t.role === "facet").map((t) => t.id);
+    data.tidePoolByDreamcaller["dc-c"] = {
+      starter: "tide-sig-2",
+      facets: facetIds,
+      neutral: data.tides.filter((t) => t.role === "neutral").map((t) => t.id),
+    };
     const poolData = makePoolData(data);
-    const facetIds = new Set(
-      data.tides.filter((t) => t.role === "facet").map((t) => t.id),
-    );
+    const starterIds = new Set(["tide-sig-1", "tide-sig-2"]);
     const leadsSeen = new Set<string>();
-    for (let seed = 0; seed < 30; seed += 1) {
+    for (let seed = 0; seed < 40; seed += 1) {
       const result = generateTides4(makeRng(seed), poolData, "dc-b");
       const lead = result.selected[1];
-      // With no starter the first joined tide is a facet, and it varies.
-      expect(facetIds.has(lead)).toBe(true);
+      // The lead is a signature core (a coherent archetype), not a bare facet.
+      expect(starterIds.has(lead)).toBe(true);
       leadsSeen.add(lead);
     }
-    expect(leadsSeen.size).toBeGreaterThan(1);
+    expect(leadsSeen.size).toBe(2);
   });
 
   it("shuffles all tides together without a dreamcaller id or pool entry", () => {

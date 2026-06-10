@@ -526,10 +526,16 @@ and are always included, with the rest filled by the on-identity facets it share
 with kindred Dreamcallers. Its neutral tail is the broad tides nearest its starter
 by cosine.
 
-A **signatureless** Dreamcaller has a null starter and draws its subset from the
-*whole* facet library, so each run leans toward a different coherent archetype —
-the same way `sigseed` falls back to a coherent, randomly-themed `pickcohere`
-pool, and the same device `tides3` uses for its neutral Dreamcallers.
+A **signatureless** Dreamcaller has a null starter and nothing of its own to
+anchor on. Rather than blend unrelated facets — which yields a grab-bag pool "with
+no centre of gravity" — it **borrows a random signatured Dreamcaller's whole pool
+at runtime**: it picks one of the twenty signatured archetypes at random and draws
+that archetype's signature core plus a random subset of *its* facets. So each run
+is a single coherent archetype, a different one each time — the same device
+`tides3` uses for its neutral Dreamcallers (a random signature archetype), with
+`tides4`'s facet-subset variety layered on. This is the move `sigseed` itself
+makes, falling back to a coherent, randomly-themed `pickcohere` pool for a
+signatureless Dreamcaller.
 
 ### 5.3 Building the pool at runtime
 
@@ -561,25 +567,36 @@ bake (`npm run bake-tides4`, `scripts/bake-tides4.mjs`) is deterministic, with o
 ### 5.4 How close it comes to `sigseed`
 
 `tides4` is measured against `sigseed` on the same real-draft simulation
-(`scripts/pool-metrics.mjs`) and on the per-card frequency similarity
-(`scripts/tides-similarity-experiment.mjs`). On the headline **dreamcaller**
-metric — does each pool deliver its Dreamcaller's own theme — `tides4` scores
-about 91 against `sigseed`'s 89, matching it (the always-joined signature core is
-what carries this). The secondary pool-quality metrics track `sigseed` closely:
-the diversity headline is about 96 against 96, expected traps per pool a little
-over one against `sigseed`'s ~1.1, and build-around adequacy about 94 against 97.
+(`scripts/pool-metrics.mjs`). On the headline **dreamcaller** metric — does each
+pool deliver its Dreamcaller's own theme — `tides4` scores about 91 against
+`sigseed`'s 89, matching it (the always-joined signature core is what carries
+this). The secondary pool-quality metrics track `sigseed` closely too: the
+diversity headline is about 96 against 96, expected traps per pool about 1.1
+against `sigseed`'s 1.1, and build-around adequacy about 94 against 97.
 
-The number `tides4` exists to improve is the per-card frequency similarity — how
-similar the *distribution of cards across pools* is. There `tides4` reaches about
-0.81 of `sigseed`'s own seed-to-seed self-consistency, up from `tides3`'s 0.75,
-with the pool-to-pool correlation rising in step (Pearson ~0.60 against ~0.48).
-The reason is structural: where a `tides3` signatured pool is the fixed
-all-signatures deck (so it spans the same cards every run and reads broad and
-flat), a `tides4` pool keeps that deck as its core but leans it a different way
-each run through the random facet subset — exactly the move `sigseed` makes with
-its random signature subset. The per-Dreamcaller breadth confirms the shape lines
-up: a `tides4` Dreamcaller's pools together span about 215 distinct cards, close
-to `sigseed`'s ~240, where `tides3`'s span ~340 — too scattered.
+The property `tides4` is built to reproduce is `sigseed`'s **run-to-run variety**
+— the way one Dreamcaller yields a cloud of differently-leaning pools rather than
+the same pool every run. The right measure of this is each Dreamcaller's
+*self-diversity*: the mean pairwise dissimilarity (Jaccard distance) between its
+own pools across many seeds. On signatured Dreamcallers `sigseed` sits at about
+0.21, `tides4` at about 0.26, and `tides3` at about 0.35. Two things stand out.
+First, `tides3` is not a low-variety generator — its pools differ *more* run to
+run than `sigseed`'s — but that variety is the wrong *kind*: it comes from the
+random broad-tide splash and the deal trimming the fixed all-signatures deck, so
+the cards that change between runs are off-theme. `tides4`'s variety is *on-theme*:
+what changes between runs is which on-identity facets are emphasised, exactly the
+axis `sigseed` varies along, and its magnitude (0.26) sits closer to `sigseed`'s
+than `tides3`'s does. That on-theme lean variety, at roughly `sigseed`'s level, is
+what `tides4` buys over `tides3`.
+
+A note on the per-card *frequency-cosine* similarity
+(`scripts/tides-similarity-experiment.mjs`): on that metric `tides3` actually
+scores slightly higher than `tides4` (about 0.82 against 0.77 of `sigseed`'s
+self-consistency). That metric compares the *aggregate* card-frequency
+distribution, which rewards sitting at the centre of `sigseed`'s cloud — and
+`tides3`'s fixed all-signatures deck *is* that centre. It does not reward, and
+mildly penalises, the on-theme lean variety `tides4` adds, so it is not the right
+yardstick for `tides4`'s goal; self-diversity above is.
 
 The honest cost is **coverage**: across all pools `tides4` ever uses about 84% of
 the draftable cards against `sigseed`'s ~97%. This is the price of the 32-facet
@@ -588,8 +605,7 @@ cap. `sigseed` grows every pool live and can reach any card in the corpus;
 cards), and a signatured pool, filled by its core and its own facets, rarely
 reaches for the neutral tail that carries the format's fringe. Widening the facet
 library would lift coverage at the cost of either deck count or on-theme density;
-84% is the balance struck for a readable 64-deck set that still matches `sigseed`
-on the metric the algorithm is built to match.
+84% is the balance struck for a readable 64-deck set.
 
 ## 6. Artifacts, scripts, and served assets
 
@@ -645,9 +661,10 @@ on the Dreamcaller's own identity rather than reproducing idf3's archetype mix
 (see section 4 for the full story and its measured similarity to `sigseed`).
 `tides4` mirrors `sigseed` too, but targets its run-to-run *variety* rather than
 its centre: it keeps a Dreamcaller's signature tide as a fixed core and leans it a
-different way each run with a random subset of small *facet* tides, so it matches
-`sigseed` on the dreamcaller metric while tracking its per-card distribution more
-closely than `tides3` does (see section 5).
+different way each run with a random subset of small *facet* tides. So it matches
+`sigseed` on the dreamcaller metric while varying its pools *on-theme*, at roughly
+`sigseed`'s own self-diversity — where `tides3`'s run-to-run variety, though
+larger, is off-theme churn from its broad-tide splash (see section 5).
 
 Measured over a 200-seed real-draft simulation (every Dreamcaller, full
 signatures; idf3 reference in parentheses), `tides2` improves on `tides` and
