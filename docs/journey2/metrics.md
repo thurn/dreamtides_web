@@ -171,3 +171,24 @@ both **PASS** the relaxed target.
 
 Result: **content_coverage FAIL → PASS. Now 4/5.** Only desirability remains,
 failing on `tribal_change` (floor 21.4) alone. `npm test` green.
+
+## Round 5 — tribal_change desirability floor (tuning)
+
+**Lever:** `src/journey_v2/tuning.ts` — added a per-archetype band for
+`tribal_change` (`tribalBandFraction = 0.25`, `tribalBandMinimum = 2`), wired
+through `improve.ts`. `tribal_change` band-samples one (off-tribe character,
+tribe) pair by centrality; the default `bandMinimum = 5` floored the band at 5
+even for small candidate sets, pulling low-centrality pairs (many of which share
+the fallback centrality value, a tie cluster) into the band and producing a
+floor outlier. A tighter `bandMinimum = 2` keeps offers on the deck's more
+central characters — the cards actually worth converting.
+
+The global `bandFraction`/`bandMinimum` were left untouched (they protect grant
+chooser variance and are pinned by band/eligibility invariant tests); only the
+tribal-specific override was added.
+
+**Movement (defaults):** tribal_change 80.0 / **21.4** FAIL → bandMinimum 3:
+84.6 / 30.0 → bandMinimum 2: 85.7 / **61.1** PASS. Desirability result FAIL →
+**PASS**.
+
+**All five metric families PASS at defaults (5/5).** `npm test` green (2750).

@@ -35,6 +35,16 @@ export const MERCHANT_TUNING = {
   premiumBandFraction: 0.1,
   /** Loose band for the small dreamsign population. */
   dreamsignBandFraction: 0.4,
+  /**
+   * Band for `tribal_change`, which band-samples one (off-tribe character,
+   * tribe) pair by centrality. A tighter band keeps offers on the deck's more
+   * central characters — the cards worth converting — instead of dipping into
+   * low-centrality pairs that share the fallback centrality value. Overrides the
+   * default `bandMinimum` (5), whose floor would otherwise pull low-centrality
+   * ties into the band for small candidate sets.
+   */
+  tribalBandFraction: 0.25,
+  tribalBandMinimum: 2,
   /** Premium draft signal blend over normalized quality and fit. */
   premiumBlend: { quality: 0.8, fit: 0.2 },
   /** Transfigure signal blend over benefit and centrality. */

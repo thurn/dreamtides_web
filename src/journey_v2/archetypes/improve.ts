@@ -534,6 +534,10 @@ export const tribalChangeBuilder: MerchantArchetypeBuilder = {
       (pair) => centrality(pair.deckCard.card, deck, context.fitModel),
       1,
       rng,
+      {
+        bandFraction: MERCHANT_TUNING.tribalBandFraction,
+        bandMinimum: MERCHANT_TUNING.tribalBandMinimum,
+      },
     )[0];
     if (target === undefined) return null;
 
