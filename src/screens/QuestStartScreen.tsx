@@ -17,6 +17,28 @@ const SIGNATURE_CARDS_LABEL_HOVER_BLURB =
   "These signature cards define this Dreamcaller's strategy and steer the draft pool toward them.";
 const TIDES_LABEL_HOVER_BLURB =
   "Tides are the preconstructed decks combined into this Dreamcaller's draft pool. Hover a tide to see what it does.";
+/** The select screen shows at most this many tides per Dreamcaller. */
+const MAX_TIDES_SHOWN = 4;
+
+/** The total number of cards (counting copies) in a tide's decklist. */
+function tideCardCount(tide: Tides4DeckJson): number {
+  return tide.cards.reduce((sum, card) => sum + card.copies, 0);
+}
+
+/**
+ * Cap the tides shown for a Dreamcaller at {@link MAX_TIDES_SHOWN}, keeping the
+ * largest by card count. The kept tides are returned in their original order so
+ * the visible list is not reshuffled by the size ranking.
+ */
+export function largestTides(tides: Tides4DeckJson[]): Tides4DeckJson[] {
+  if (tides.length <= MAX_TIDES_SHOWN) return tides;
+  const kept = new Set(
+    [...tides]
+      .sort((a, b) => tideCardCount(b) - tideCardCount(a))
+      .slice(0, MAX_TIDES_SHOWN),
+  );
+  return tides.filter((tide) => kept.has(tide));
+}
 
 /** Intro screen where the player picks a dreamcaller to start the quest. */
 export function QuestStartScreen() {
@@ -98,7 +120,7 @@ export function QuestStartScreen() {
       >
         {offered.map((dreamcaller, index) => {
           const accentColor = DREAMCALLER_ACCENT;
-          const tides = tidesByDreamcaller.get(dreamcaller.id) ?? [];
+          const tides = largestTides(tidesByDreamcaller.get(dreamcaller.id) ?? []);
           // A `tides4` run shows the dealt tides in place of the signature
           // cards, so suppress the signature-card list whenever tides exist.
           const signatureCards =

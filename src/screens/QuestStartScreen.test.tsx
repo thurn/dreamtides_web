@@ -8,9 +8,10 @@ import type { QuestMutations } from "../state/quest-context";
 import type { CardData } from "../types/cards";
 import type { DreamcallerContent } from "../types/content";
 import type { QuestState } from "../types/quest";
-import { QuestStartScreen } from "./QuestStartScreen";
+import { QuestStartScreen, largestTides } from "./QuestStartScreen";
 import { useQuest } from "../state/quest-context";
 import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
+import type { Tides4DeckJson } from "../draft/pool/tides4-io";
 
 const SIGNATURE_CARDS_LABEL_HOVER_BLURB =
   "These signature cards define this Dreamcaller's strategy and steer the draft pool toward them.";
@@ -533,5 +534,71 @@ describe("QuestStartScreen", () => {
     act(() => {
       root.unmount();
     });
+  });
+});
+
+describe("largestTides", () => {
+  function tide(id: string, cardCount: number): Tides4DeckJson {
+    return {
+      id,
+      name: id,
+      role: "facet",
+      cards: Array.from({ length: cardCount }, (_, index) => ({
+        id: `${id}-card-${index}`,
+        name: `${id}-card-${index}`,
+        copies: 1,
+      })),
+    };
+  }
+
+  it("returns the input unchanged when at or below the cap", () => {
+    const tides = [tide("a", 5), tide("b", 3), tide("c", 1)];
+    expect(largestTides(tides)).toEqual(tides);
+  });
+
+  it("keeps the four largest tides by total card count", () => {
+    const tides = [
+      tide("a", 2),
+      tide("b", 10),
+      tide("c", 1),
+      tide("d", 8),
+      tide("e", 5),
+      tide("f", 3),
+    ];
+    expect(largestTides(tides).map((t) => t.id)).toEqual(["b", "d", "e", "f"]);
+  });
+
+  it("preserves the original order of the kept tides", () => {
+    const tides = [
+      tide("first", 9),
+      tide("second", 1),
+      tide("third", 8),
+      tide("fourth", 7),
+      tide("fifth", 6),
+    ];
+    expect(largestTides(tides).map((t) => t.id)).toEqual([
+      "first",
+      "third",
+      "fourth",
+      "fifth",
+    ]);
+  });
+
+  it("counts copies, not unique card entries", () => {
+    const big: Tides4DeckJson = {
+      id: "big",
+      name: "big",
+      role: "facet",
+      cards: [{ id: "x", name: "x", copies: 20 }],
+    };
+    const tides = [
+      tide("a", 5),
+      tide("b", 5),
+      tide("c", 5),
+      tide("d", 5),
+      big,
+    ];
+    expect(largestTides(tides).map((t) => t.id)).toContain("big");
+    expect(largestTides(tides)).toHaveLength(4);
   });
 });
