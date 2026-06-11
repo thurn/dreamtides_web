@@ -7,29 +7,30 @@ import {
   describeTransfiguration,
   eligibleTransfigurations,
   TRANSFIGURATION_COLORS,
+  TRANSFIGURATION_ICONS,
 } from "../transfiguration/transfiguration-logic";
 import { CardDisplay } from "./CardDisplay";
 
 /**
  * Standalone browser-QA harness for the transfigured-card treatment. Mount with
  * `?demo=transfiguration` to see, for every transfiguration type, an eligible
- * card rendered both as printed and as transfigured: a colored gem follows the
- * name, the changed stat orb takes the tint, and only the added or changed
- * rules text is painted in the transfiguration's light color.
+ * card rendered both as printed and as transfigured: the transfiguration's icon
+ * follows the name, the changed stat orb takes the tint, and only the added or
+ * changed rules text is painted in the transfiguration's light color.
  *
  * Picks the first eligible card for each type from the bundled card pool, so it
  * shows real cards without depending on any particular card existing.
  */
 
 const TYPE_ORDER: readonly TransfigurationType[] = [
-  "Viridian",
-  "Golden",
-  "Scarlet",
-  "Azure",
-  "Bronze",
-  "Magenta",
-  "Rose",
-  "Prismatic",
+  "Empowered",
+  "Amplified",
+  "Kindled",
+  "Inspired",
+  "Enduring",
+  "Resonant",
+  "Attuned",
+  "Perfected",
 ];
 
 /** Finds a readable example card eligible for the given transfiguration type. */
@@ -105,9 +106,10 @@ export function TransfigurationCardDemo() {
           Transfigured Cards
         </h1>
         <p style={{ opacity: 0.65, fontSize: 14, marginBottom: 32 }}>
-          Each pair shows a card as printed (left) and transfigured (right): a
-          colored gem follows the name, the changed stat is tinted, and only the
-          added or changed rules text is painted in the transfiguration color.
+          Each pair shows a card as printed (left) and transfigured (right): the
+          transfiguration's icon follows the name, the changed stat is tinted,
+          and only the added or changed rules text is painted in the
+          transfiguration color.
         </p>
 
         {cards === null ? (
@@ -141,14 +143,13 @@ export function TransfigurationCardDemo() {
                       marginBottom: 14,
                     }}
                   >
-                    <span
+                    <i
+                      className={`bxf ${TRANSFIGURATION_ICONS[panel.type]}`}
                       style={{
-                        width: 14,
-                        height: 14,
-                        borderRadius: 3,
-                        transform: "rotate(45deg)",
-                        background: `linear-gradient(135deg, #fff, ${color})`,
-                        boxShadow: `0 0 8px ${color}`,
+                        fontSize: 18,
+                        lineHeight: 1,
+                        color,
+                        textShadow: `0 0 8px ${color}`,
                       }}
                     />
                     <span

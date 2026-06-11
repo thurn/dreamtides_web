@@ -17,6 +17,7 @@ import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
 import { BOLT_ICON_CLASS } from "./GlowIcon";
 import { CardStatOrb } from "./CardStatOrb";
+import { TRANSFIGURATION_ICONS } from "../transfiguration/transfiguration-logic";
 import type { CardTransfigurationDisplay } from "../transfiguration/transfiguration-logic";
 import { renderRulesText } from "./RulesText";
 import { useCardTermPopover } from "./useCardTermPopover";
@@ -986,27 +987,20 @@ export function CardView({
         {card.name}
       </span>
       {transfiguration !== undefined ? (
-        <span
+        <i
+          className={`bxf ${TRANSFIGURATION_ICONS[transfiguration.type]}`}
           aria-label={`${transfiguration.type} transfiguration`}
           title={`${transfiguration.type} Transfiguration`}
           style={{
             flex: "0 0 auto",
             marginLeft: "0.35em",
-            // A small faceted gem in the transfiguration tint: a rounded square
-            // turned on its point, lit from the top-left with an inset white
-            // highlight and shaded toward the tint at the lower-right, ringed by
-            // a soft outer glow so it reads against any art behind the name bar.
-            width: "0.7em",
-            height: "0.7em",
-            borderRadius: "0.14em",
-            transform: "rotate(45deg)",
-            background: `linear-gradient(135deg, #ffffff 0%, ${transfiguration.color} 55%, ${transfiguration.color} 100%)`,
-            boxShadow: [
-              `inset 0.06em 0.06em 0.05em rgba(255, 255, 255, 0.95)`,
-              `inset -0.05em -0.05em 0.07em ${transfiguration.color}`,
-              `0 0 0.18em ${transfiguration.color}`,
-              `0 1px 1px rgba(0, 0, 0, 0.55)`,
-            ].join(", "),
+            // The transfiguration's emblem glyph in its tint color, ringed by a
+            // soft glow of the same hue and a dark drop shadow so it reads
+            // against any art behind the name bar.
+            fontSize: "1.05em",
+            lineHeight: 1,
+            color: transfiguration.color,
+            textShadow: `0 0 0.3em ${transfiguration.color}, 0 1px 1px rgba(0, 0, 0, 0.7)`,
           }}
         />
       ) : null}

@@ -531,6 +531,12 @@ export function DeckViewer({
                           card={resolved.card}
                           transfiguration={resolved.transfiguration}
                           large={cardSize === "large"}
+                          // Small and medium tiles are wrapped in a hover
+                          // preview that renders its own glossary panel, so the
+                          // in-grid card suppresses its term popover to avoid a
+                          // second, duplicate definition panel. Large tiles have
+                          // no hover preview and keep their own term help.
+                          suppressHoverHelp={cardSize !== "large"}
                           onClick={() => {
                             handleCardClick(resolved);
                           }}
@@ -570,22 +576,6 @@ export function DeckViewer({
                         key={resolved.entry.entryId}
                         className="relative"
                       >
-                        {/* Transfiguration indicator */}
-                        {resolved.entry.transfiguration !== null && (
-                          <div
-                            className="absolute -top-1 -right-1 z-10 rounded-full px-1.5 py-0.5 text-[9px] font-bold shadow-md"
-                            style={{
-                              background:
-                                TRANSFIGURATION_COLORS[
-                                  resolved.entry.transfiguration
-                                ],
-                              color: "#fff",
-                              boxShadow: `0 0 6px ${TRANSFIGURATION_COLORS[resolved.entry.transfiguration]}80`,
-                            }}
-                          >
-                            {resolved.entry.transfiguration}
-                          </div>
-                        )}
                         {resolved.entry.typeChange != null && (
                           <div
                             className="absolute -bottom-1 -right-1 z-10 rounded-full border border-emerald-200 bg-emerald-700 px-1.5 py-0.5 text-[9px] font-bold text-white shadow-md"
