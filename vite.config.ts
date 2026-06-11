@@ -242,8 +242,16 @@ export default defineConfig({
       // save. None of these are part of the module graph, so the dev watcher
       // ignores them; otherwise each editor save triggers a full page reload,
       // which would close the art editor mid-edit and discard inline edits.
+      //
+      // Git worktrees live under .worktrees and .claude/worktrees inside the
+      // project root, so they fall within the watched tree. Each checkout
+      // writes a full repo copy (including a tsconfig.json), and Vite forces a
+      // full reload on any tsconfig change. Ignoring these directories keeps
+      // creating a worktree from reloading the dev server.
       ignored: [
         path.resolve(path.join(__dirname, "data", "tabula")) + "/**",
+        path.resolve(path.join(__dirname, ".worktrees")) + "/**",
+        path.resolve(path.join(__dirname, ".claude", "worktrees")) + "/**",
         ...generatedCardDataWatchPaths,
       ],
     },
