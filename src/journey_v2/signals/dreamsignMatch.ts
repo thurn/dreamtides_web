@@ -77,11 +77,25 @@ function featureCoverage(
  * The deck coverage of a dreamsign profile, split out from quality weighting so
  * callers can distinguish *genuine deck fit* from a generic blessing.
  */
-interface DreamsignCoverage {
+export interface DreamsignCoverage {
   /** Number of features the profile declares (0 for featureless/undefined). */
   featureCount: number;
   /** Mean graded coverage across features in [0, 1]; 0 when featureless. */
   meanCoverage: number;
+}
+
+/** The components behind a single dreamsign's match score, for explainability. */
+export interface DreamsignScoreBreakdown {
+  /** Final match score (`coverageBase * qualityWeight`). */
+  score: number;
+  /** Number of features the profile declares (0 for featureless/undefined). */
+  featureCount: number;
+  /** Mean graded coverage across features in [0, 1]; 0 when featureless. */
+  meanCoverage: number;
+  /** Quality weight applied (1.2 / 1.0 / 0.8 for quality tiers 1 / 2 / 3). */
+  qualityWeight: number;
+  /** True when the sign is featureless and rode the generic baseline coverage. */
+  featureless: boolean;
 }
 
 /**
@@ -148,12 +162,30 @@ export function dreamsignMatchScore(
   profile: DreamsignProfile | undefined,
   deckCards: readonly CardData[],
 ): number {
+  return dreamsignScoreBreakdown(profile, deckCards).score;
+}
+
+/**
+ * The full component breakdown behind {@link dreamsignMatchScore}, for trace
+ * logging. The score is `coverageBase * qualityWeight`, where `coverageBase` is
+ * {@link FEATURELESS_COVERAGE} for a featureless sign and the profile's
+ * `meanCoverage` otherwise.
+ */
+export function dreamsignScoreBreakdown(
+  profile: DreamsignProfile | undefined,
+  deckCards: readonly CardData[],
+): DreamsignScoreBreakdown {
   const weight = qualityWeight(profile?.quality ?? 2);
   const coverage = profileCoverage(profile, deckCards);
-  if (coverage.featureCount === 0) {
-    return FEATURELESS_COVERAGE * weight;
-  }
-  return coverage.meanCoverage * weight;
+  const featureless = coverage.featureCount === 0;
+  const coverageBase = featureless ? FEATURELESS_COVERAGE : coverage.meanCoverage;
+  return {
+    score: coverageBase * weight,
+    featureCount: coverage.featureCount,
+    meanCoverage: coverage.meanCoverage,
+    qualityWeight: weight,
+    featureless,
+  };
 }
 
 /**

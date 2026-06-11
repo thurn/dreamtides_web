@@ -2,6 +2,11 @@ import { fitLooByEntry } from "../signals/fit";
 import { qualityOf } from "../signals/corpus";
 import { bandSample, type MerchantRng } from "../signals/rng";
 import { MERCHANT_TUNING } from "../tuning";
+import {
+  assembleOfferTrace,
+  deckEntryTraceCandidates,
+} from "../trace/buildTrace";
+import type { MerchantOfferTrace } from "../trace/types";
 import type {
   MerchantApplyPayload,
   MerchantChoiceCandidate,
@@ -22,6 +27,8 @@ interface DuplicateCandidate {
   deckCard: MerchantDeckCard;
   entryId: string;
   signal: number;
+  /** Normalized score components behind `signal`, for trace logging. */
+  components: { quality: number; fitLoo: number };
 }
 
 /**
@@ -59,7 +66,31 @@ function duplicateCandidates(context: MerchantContext): readonly DuplicateCandid
     deckCard: dc,
     entryId: dc.entryId,
     signal: blend.quality * qualityNorm[i] + blend.fitLoo * looNorm[i],
+    components: { quality: qualityNorm[i], fitLoo: looNorm[i] },
   }));
+}
+
+/** Assembles the `deck_entry_rank` trace for the duplicate candidate set. */
+function duplicateTrace(
+  candidates: readonly DuplicateCandidate[],
+  selectedEntryIds: readonly string[],
+): MerchantOfferTrace {
+  return assembleOfferTrace({
+    decision: "deck_entry_rank",
+    keyKind: "entryId",
+    candidates: deckEntryTraceCandidates(
+      candidates.map((candidate) => ({
+        deckCard: candidate.deckCard,
+        entryId: candidate.entryId,
+        score: candidate.signal,
+        components: candidate.components,
+      })),
+    ),
+    selectedKeys: selectedEntryIds,
+    selectedCount: selectedEntryIds.length,
+    bandFraction: MERCHANT_TUNING.bandFraction,
+    blend: MERCHANT_TUNING.duplicateBlend,
+  });
 }
 
 /** Min-max normalize to [0, 1]; constant input maps to 0. */
@@ -140,6 +171,7 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
         ],
         applyPayload: duplicatePayload(target.deckCard),
         targetKey: target.entryId,
+        trace: duplicateTrace(candidates, [target.entryId]),
       };
     }
 
@@ -174,6 +206,10 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
         candidates: choiceCandidates,
       },
       targetKey: sampled.map((e) => e.entryId).join(","),
+      trace: duplicateTrace(
+        candidates,
+        sampled.map((e) => e.entryId),
+      ),
     };
   },
 };

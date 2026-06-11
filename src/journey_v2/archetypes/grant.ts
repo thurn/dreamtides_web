@@ -21,9 +21,73 @@ import type {
   MerchantContext,
   MerchantCatalogCard,
 } from "../types";
+import {
+  assembleOfferTrace,
+  catalogTraceCandidates,
+} from "../trace/buildTrace";
+import type { MerchantOfferTrace } from "../trace/types";
 import { buildCategoryUniverse, type MerchantCategory } from "./categories";
 import { transfigurationBenefit } from "./improve";
 import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
+
+/** A scored grant pool plus the per-card components and cold-start branch flag. */
+interface ScoredGrantPool {
+  scoreByUuid: Map<string, number>;
+  componentsByUuid: Map<string, Record<string, number>>;
+  coldStartQualityFallback: boolean;
+}
+
+/**
+ * Assembles the shared `scored_cards` trace for the grant family — keyed by card
+ * UUID, with each candidate's quality/fit components and the cold-start fallback
+ * flag. Bounds large pools to the selected cards plus top runners-up.
+ */
+function grantScoredTrace(params: {
+  pool: readonly MerchantCatalogCard[];
+  scoreByUuid: ReadonlyMap<string, number>;
+  componentsByUuid?: ReadonlyMap<string, Readonly<Record<string, number>>>;
+  selectedUuids: readonly string[];
+  selectedCount: number;
+  bandFraction: number;
+  bandMinimum?: number;
+  coldStartQualityFallback?: boolean;
+  blend?: Readonly<Record<string, number>>;
+  notes?: readonly string[];
+}): MerchantOfferTrace {
+  return assembleOfferTrace({
+    decision: "scored_cards",
+    keyKind: "cardUuid",
+    candidates: catalogTraceCandidates(
+      params.pool,
+      params.scoreByUuid,
+      params.componentsByUuid,
+    ),
+    selectedKeys: params.selectedUuids,
+    selectedCount: params.selectedCount,
+    bandFraction: params.bandFraction,
+    ...(params.bandMinimum === undefined
+      ? {}
+      : { bandMinimum: params.bandMinimum }),
+    ...(params.coldStartQualityFallback === undefined
+      ? {}
+      : { coldStartQualityFallback: params.coldStartQualityFallback }),
+    ...(params.blend === undefined ? {} : { blend: params.blend }),
+    ...(params.notes === undefined ? {} : { notes: params.notes }),
+  });
+}
+
+/** Components map carrying a single named component per candidate UUID. */
+export function singleComponentByUuid(
+  pool: readonly MerchantCatalogCard[],
+  name: string,
+  valueByUuid: ReadonlyMap<string, number>,
+): Map<string, Record<string, number>> {
+  const result = new Map<string, Record<string, number>>();
+  for (const card of pool) {
+    result.set(card.cardUuid, { [name]: valueByUuid.get(card.cardUuid) ?? 0 });
+  }
+  return result;
+}
 
 function catalogGameObject(card: MerchantCatalogCard): MerchantCatalogCard {
   return card;
@@ -137,7 +201,7 @@ function bandSizeFor(poolSize: number, bandFraction: number): number {
 function strongScoreByUuid(
   context: MerchantContext,
   pool: readonly MerchantCatalogCard[],
-): Map<string, number> {
+): ScoredGrantPool {
   // Cold start: below `minDeckForFit` the deck is too small for the fit model to
   // produce real signal (an empty deck collapses fit to global play-rate), so
   // blending it in would just smuggle a popular off-archetype bomb back into the
@@ -145,7 +209,12 @@ function strongScoreByUuid(
   // something — matching `copies_draft` and the `card_bundle`/`transfigured_draft`
   // fit-or-quality fallback.
   if (context.deckCards.length < MERCHANT_TUNING.minDeckForFit) {
-    return qualityValueByUuid(context, pool);
+    const scoreByUuid = qualityValueByUuid(context, pool);
+    return {
+      scoreByUuid,
+      componentsByUuid: singleComponentByUuid(pool, "quality", scoreByUuid),
+      coldStartQualityFallback: true,
+    };
   }
   const corpus = context.merchantCorpus;
   const qualityRaw = pool.map((card) =>
@@ -156,11 +225,16 @@ function strongScoreByUuid(
   const qualityNorm = minMaxNormalize(qualityRaw);
   const fitNorm = minMaxNormalize(fitRaw);
   const { quality, fit } = MERCHANT_TUNING.strongBlend;
-  const result = new Map<string, number>();
+  const scoreByUuid = new Map<string, number>();
+  const componentsByUuid = new Map<string, Record<string, number>>();
   pool.forEach((card, i) => {
-    result.set(card.cardUuid, quality * qualityNorm[i] + fit * fitNorm[i]);
+    scoreByUuid.set(card.cardUuid, quality * qualityNorm[i] + fit * fitNorm[i]);
+    componentsByUuid.set(card.cardUuid, {
+      quality: qualityNorm[i],
+      fit: fitNorm[i],
+    });
   });
-  return result;
+  return { scoreByUuid, componentsByUuid, coldStartQualityFallback: false };
 }
 
 export const strongCardBuilder: MerchantArchetypeBuilder = {
@@ -171,10 +245,10 @@ export const strongCardBuilder: MerchantArchetypeBuilder = {
   },
   build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
     const pool = grantCandidatePool(context);
-    const scoreByUuid = strongScoreByUuid(context, pool);
+    const scored = strongScoreByUuid(context, pool);
     const sampled = bandSample(
       pool,
-      (card) => scoreByUuid.get(card.cardUuid) ?? 0,
+      (card) => scored.scoreByUuid.get(card.cardUuid) ?? 0,
       1,
       rng,
       { bandFraction: MERCHANT_TUNING.strongBandFraction },
@@ -190,6 +264,18 @@ export const strongCardBuilder: MerchantArchetypeBuilder = {
       gameObjects: [catalogGameObject(target)],
       applyPayload: addCatalogCardPayload(target),
       targetKey: target.cardUuid,
+      trace: grantScoredTrace({
+        pool,
+        scoreByUuid: scored.scoreByUuid,
+        componentsByUuid: scored.componentsByUuid,
+        selectedUuids: [target.cardUuid],
+        selectedCount: 1,
+        bandFraction: MERCHANT_TUNING.strongBandFraction,
+        coldStartQualityFallback: scored.coldStartQualityFallback,
+        blend: scored.coldStartQualityFallback
+          ? undefined
+          : MERCHANT_TUNING.strongBlend,
+      }),
     };
   },
 };
@@ -231,6 +317,14 @@ export const fitCardGrantBuilder: MerchantArchetypeBuilder = {
       gameObjects: [catalogGameObject(target)],
       applyPayload: addCatalogCardPayload(target),
       targetKey: target.cardUuid,
+      trace: grantScoredTrace({
+        pool,
+        scoreByUuid: fitByUuid,
+        componentsByUuid: singleComponentByUuid(pool, "fit", fitByUuid),
+        selectedUuids: [target.cardUuid],
+        selectedCount: 1,
+        bandFraction: MERCHANT_TUNING.bandFraction,
+      }),
     };
   },
 };
@@ -281,6 +375,14 @@ export const fitCardDraftBuilder: MerchantArchetypeBuilder = {
         candidates,
       },
       targetKey: sampled.map((card) => card.cardUuid).join(","),
+      trace: grantScoredTrace({
+        pool,
+        scoreByUuid: fitByUuid,
+        componentsByUuid: singleComponentByUuid(pool, "fit", fitByUuid),
+        selectedUuids: sampled.map((card) => card.cardUuid),
+        selectedCount: sampled.length,
+        bandFraction: MERCHANT_TUNING.bandFraction,
+      }),
     };
   },
 };
@@ -299,11 +401,16 @@ export const fitCardDraftBuilder: MerchantArchetypeBuilder = {
 function copiesScoreByUuid(
   context: MerchantContext,
   pool: readonly MerchantCatalogCard[],
-): Map<string, number> {
+): ScoredGrantPool {
   // Cold start: too few deck cards for fit to be meaningful, so rank on
   // quality alone — still surfaces strong doubling targets early.
   if (context.deckCards.length < MERCHANT_TUNING.minDeckForFit) {
-    return qualityValueByUuid(context, pool);
+    const scoreByUuid = qualityValueByUuid(context, pool);
+    return {
+      scoreByUuid,
+      componentsByUuid: singleComponentByUuid(pool, "quality", scoreByUuid),
+      coldStartQualityFallback: true,
+    };
   }
   const fitByUuid = fitValueByUuid(context, pool);
   const fitRaw = pool.map((card) => fitByUuid.get(card.cardUuid) ?? 0);
@@ -314,11 +421,13 @@ function copiesScoreByUuid(
   const fitNorm = minMaxNormalize(fitRaw);
   const qualityNorm = minMaxNormalize(qualityRaw);
   const { fit, quality } = MERCHANT_TUNING.copiesBlend;
-  const result = new Map<string, number>();
+  const scoreByUuid = new Map<string, number>();
+  const componentsByUuid = new Map<string, Record<string, number>>();
   pool.forEach((card, i) => {
-    result.set(card.cardUuid, fit * fitNorm[i] + quality * qualityNorm[i]);
+    scoreByUuid.set(card.cardUuid, fit * fitNorm[i] + quality * qualityNorm[i]);
+    componentsByUuid.set(card.cardUuid, { fit: fitNorm[i], quality: qualityNorm[i] });
   });
-  return result;
+  return { scoreByUuid, componentsByUuid, coldStartQualityFallback: false };
 }
 
 export const copiesDraftBuilder: MerchantArchetypeBuilder = {
@@ -330,10 +439,10 @@ export const copiesDraftBuilder: MerchantArchetypeBuilder = {
   },
   build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
     const pool = grantCandidatePool(context);
-    const scoreByUuid = copiesScoreByUuid(context, pool);
+    const scored = copiesScoreByUuid(context, pool);
     const sampled = bandSample(
       pool,
-      (card) => scoreByUuid.get(card.cardUuid) ?? 0,
+      (card) => scored.scoreByUuid.get(card.cardUuid) ?? 0,
       4,
       rng,
     );
@@ -363,6 +472,18 @@ export const copiesDraftBuilder: MerchantArchetypeBuilder = {
         candidates,
       },
       targetKey: sampled.map((card) => card.cardUuid).join(","),
+      trace: grantScoredTrace({
+        pool,
+        scoreByUuid: scored.scoreByUuid,
+        componentsByUuid: scored.componentsByUuid,
+        selectedUuids: sampled.map((card) => card.cardUuid),
+        selectedCount: sampled.length,
+        bandFraction: MERCHANT_TUNING.bandFraction,
+        coldStartQualityFallback: scored.coldStartQualityFallback,
+        blend: scored.coldStartQualityFallback
+          ? undefined
+          : MERCHANT_TUNING.copiesBlend,
+      }),
     };
   },
 };
@@ -483,6 +604,24 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
         candidates,
       },
       targetKey: `${category.id}:${sampled.map((card) => card.cardUuid).join(",")}`,
+      trace: grantScoredTrace({
+        pool,
+        scoreByUuid: fitByUuid,
+        componentsByUuid: singleComponentByUuid(pool, "fit", fitByUuid),
+        selectedUuids: sampled.map((card) => card.cardUuid),
+        selectedCount: sampled.length,
+        bandFraction: MERCHANT_TUNING.bandFraction,
+        notes: [
+          `category=${category.id}`,
+          `categoryDeckAffine=${String(category.deckAffine)}`,
+          `categoryWeight=${String(
+            category.deckAffine
+              ? MERCHANT_TUNING.categoryAffineWeight
+              : 1 - MERCHANT_TUNING.categoryAffineWeight,
+          )}`,
+          `offerableCategories=${String(categories.length)}`,
+        ],
+      }),
     };
   },
 };
@@ -530,6 +669,7 @@ export const cardBundleBuilder: MerchantArchetypeBuilder = {
     const pool = grantCandidatePool(context);
     if (pool.length === 0) return null;
 
+    const coldStart = context.deckCards.length < MERCHANT_TUNING.minDeckForFit;
     const seedSignal = fitOrQualityByUuid(context, pool);
     const seedSampled = bandSample(
       pool,
@@ -589,6 +729,33 @@ export const cardBundleBuilder: MerchantArchetypeBuilder = {
       gameObjects: bundle.map((card) => catalogGameObject(card)),
       applyPayload: payload,
       targetKey: bundle.map((card) => card.cardUuid).join(","),
+      // The trace explains the SEED pick (scored over the grant pool by
+      // fit/quality). The grown cards are sampled by a separate co-occurrence
+      // blend against the seed/bundle, recorded here as notes since they came
+      // from a different band per grow step.
+      trace: grantScoredTrace({
+        pool,
+        scoreByUuid: seedSignal,
+        componentsByUuid: singleComponentByUuid(
+          pool,
+          coldStart ? "quality" : "fit",
+          seedSignal,
+        ),
+        selectedUuids: [seed.cardUuid],
+        selectedCount: 1,
+        bandFraction: MERCHANT_TUNING.bandFraction,
+        coldStartQualityFallback: coldStart,
+        blend: MERCHANT_TUNING.bundleBlend,
+        notes: [
+          `bundleSize=${String(bundle.length)}`,
+          `seed=${seed.cardUuid}`,
+          `grown=${bundle
+            .slice(1)
+            .map((card) => card.cardUuid)
+            .join(",")}`,
+          "growScore=bundleBlend over (cooccurSeed, cooccurBundle, fit)",
+        ],
+      }),
     };
   },
 };
@@ -643,6 +810,7 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
   },
   build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
     const pool = transfigurableCandidates(context);
+    const coldStart = context.deckCards.length < MERCHANT_TUNING.minDeckForFit;
     const signal = fitOrQualityByUuid(context, pool);
     const sampled = bandSample(
       pool,
@@ -703,6 +871,22 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
       targetKey: choices
         .map((choice) => `${choice.card.cardUuid}:${choice.transfiguration}`)
         .join(","),
+      trace: grantScoredTrace({
+        pool,
+        scoreByUuid: signal,
+        componentsByUuid: singleComponentByUuid(
+          pool,
+          coldStart ? "quality" : "fit",
+          signal,
+        ),
+        selectedUuids: choices.map((choice) => choice.card.cardUuid),
+        selectedCount: choices.length,
+        bandFraction: MERCHANT_TUNING.bandFraction,
+        coldStartQualityFallback: coldStart,
+        notes: choices.map(
+          (choice) => `${choice.card.cardUuid}:${choice.transfiguration}`,
+        ),
+      }),
     };
   },
 };

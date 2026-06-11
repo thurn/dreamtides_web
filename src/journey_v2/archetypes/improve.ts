@@ -8,6 +8,11 @@ import type { CardTypeChange, DeckEntry, TransfigurationType } from "../../types
 import { centrality } from "../signals/fit";
 import { bandSample, type MerchantRng } from "../signals/rng";
 import { MERCHANT_TUNING } from "../tuning";
+import {
+  assembleOfferTrace,
+  type TraceCandidateInput,
+} from "../trace/buildTrace";
+import type { MerchantOfferTrace } from "../trace/types";
 import type {
   MerchantApplyPayload,
   MerchantContext,
@@ -15,6 +20,33 @@ import type {
   MerchantGameObject,
 } from "../types";
 import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
+
+/**
+ * Assembles the `entry_modification` trace shared by the improve family: an
+ * (entry, modification) candidate set keyed by `${entryId}:${variant}`.
+ */
+function entryModificationTrace(params: {
+  candidates: readonly TraceCandidateInput[];
+  selectedKeys: readonly string[];
+  bandFraction: number;
+  bandMinimum?: number;
+  blend?: Readonly<Record<string, number>>;
+  notes?: readonly string[];
+}): MerchantOfferTrace {
+  return assembleOfferTrace({
+    decision: "entry_modification",
+    keyKind: "entryModification",
+    candidates: params.candidates,
+    selectedKeys: params.selectedKeys,
+    selectedCount: params.selectedKeys.length,
+    bandFraction: params.bandFraction,
+    ...(params.bandMinimum === undefined
+      ? {}
+      : { bandMinimum: params.bandMinimum }),
+    ...(params.blend === undefined ? {} : { blend: params.blend }),
+    ...(params.notes === undefined ? {} : { notes: params.notes }),
+  });
+}
 
 /** Clamp a value to [0, 1]. */
 function clamp01(v: number): number {
@@ -182,14 +214,10 @@ export const transfigureBuilder: MerchantArchetypeBuilder = {
 
     const deck = context.deckCards.map((deckCard) => deckCard.card);
     const blend = MERCHANT_TUNING.transfigureBlend;
-    const sampled = bandSample(
-      pairs,
-      (pair) =>
-        blend.benefit * pair.benefit +
-        blend.centrality * centrality(pair.deckCard.card, deck, context.fitModel),
-      1,
-      rng,
-    );
+    const scoreFor = (pair: TransfigureCandidatePair): number =>
+      blend.benefit * pair.benefit +
+      blend.centrality * centrality(pair.deckCard.card, deck, context.fitModel);
+    const sampled = bandSample(pairs, scoreFor, 1, rng);
     const target = sampled[0];
     if (target === undefined) return null;
 
@@ -201,6 +229,23 @@ export const transfigureBuilder: MerchantArchetypeBuilder = {
       gameObjects: [transfigurePreviewObject(target)],
       applyPayload: transfigurePayload(target),
       targetKey: `${target.entryId}:${target.transfiguration}`,
+      trace: entryModificationTrace({
+        candidates: pairs.map((pair) => ({
+          key: `${pair.entryId}:${pair.transfiguration}`,
+          displayName: `${pair.deckCard.displayName}: ${pair.transfiguration}`,
+          cardUuid: pair.deckCard.cardUuid,
+          cardNumber: pair.deckCard.cardNumber,
+          entryId: pair.entryId,
+          score: scoreFor(pair),
+          components: {
+            benefit: pair.benefit,
+            centrality: centrality(pair.deckCard.card, deck, context.fitModel),
+          },
+        })),
+        selectedKeys: [`${target.entryId}:${target.transfiguration}`],
+        bandFraction: MERCHANT_TUNING.bandFraction,
+        blend,
+      }),
     };
   },
 };
@@ -260,6 +305,8 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
 
     const children: MerchantApplyPayload[] = [];
     const gameObjects: MerchantGameObject[] = [];
+    const selectedEntryIds: string[] = [];
+    const selectedNotes: string[] = [];
     for (const deckCard of sampledStarters) {
       const options = positiveBenefitTransfigurations(deckCard.card);
       const chosen = bandSample(options, () => 0, 1, rng, {
@@ -277,10 +324,33 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
       };
       children.push(transfigurePayload(pair));
       gameObjects.push(transfigurePreviewObject(pair));
+      selectedEntryIds.push(deckCard.entryId);
+      selectedNotes.push(`${deckCard.entryId}:${chosen}`);
     }
     if (children.length === 0) return null;
 
     const payload: MerchantApplyPayload = { kind: "composite", children };
+
+    // Uniform pick of 1-2 starters; the chosen transfiguration per starter is
+    // also uniform. Trace the starter selection keyed by entry id, with the
+    // chosen transfigurations recorded as notes.
+    const trace = assembleOfferTrace({
+      decision: "entry_modification",
+      keyKind: "entryId",
+      candidates: starters.map((starter) => ({
+        key: starter.entryId,
+        displayName: starter.displayName,
+        cardUuid: starter.cardUuid,
+        cardNumber: starter.cardNumber,
+        entryId: starter.entryId,
+        score: 0,
+      })),
+      selectedKeys: selectedEntryIds,
+      selectedCount: selectedEntryIds.length,
+      bandFraction: 1,
+      bandMinimum: starters.length,
+      notes: ["uniform", `desired=${String(desired)}`, ...selectedNotes],
+    });
 
     return {
       archetypeId: "starter_transfigure",
@@ -296,6 +366,7 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
             : "",
         )
         .join(","),
+      trace,
     };
   },
 };
@@ -435,6 +506,20 @@ export const keywordModBuilder: MerchantArchetypeBuilder = {
       ],
       applyPayload: target.payload,
       targetKey: `${target.entryId}:${target.variant}`,
+      trace: entryModificationTrace({
+        candidates: pairs.map((pair) => ({
+          key: `${pair.entryId}:${pair.variant}`,
+          displayName: `${pair.deckCard.displayName}: ${pair.variant}`,
+          cardUuid: pair.deckCard.cardUuid,
+          cardNumber: pair.deckCard.cardNumber,
+          entryId: pair.entryId,
+          score: 0,
+        })),
+        selectedKeys: [`${target.entryId}:${target.variant}`],
+        bandFraction: 1,
+        bandMinimum: pairs.length,
+        notes: ["uniform"],
+      }),
     };
   },
 };
@@ -526,16 +611,12 @@ export const tribalChangeBuilder: MerchantArchetypeBuilder = {
     if (pairs.length === 0) return null;
 
     const deck = context.deckCards.map((deckCard) => deckCard.card);
-    const target = bandSample(
-      pairs,
-      (pair) => centrality(pair.deckCard.card, deck, context.fitModel),
-      1,
-      rng,
-      {
-        bandFraction: MERCHANT_TUNING.tribalBandFraction,
-        bandMinimum: MERCHANT_TUNING.tribalBandMinimum,
-      },
-    )[0];
+    const scoreFor = (pair: TribalChangeCandidatePair): number =>
+      centrality(pair.deckCard.card, deck, context.fitModel);
+    const target = bandSample(pairs, scoreFor, 1, rng, {
+      bandFraction: MERCHANT_TUNING.tribalBandFraction,
+      bandMinimum: MERCHANT_TUNING.tribalBandMinimum,
+    })[0];
     if (target === undefined) return null;
 
     const typeChange = tribalTypeChange(target.tribe);
@@ -570,6 +651,21 @@ export const tribalChangeBuilder: MerchantArchetypeBuilder = {
         typeChange,
       },
       targetKey: `${target.entryId}:${target.tribe}`,
+      trace: entryModificationTrace({
+        candidates: pairs.map((pair) => ({
+          key: `${pair.entryId}:${pair.tribe}`,
+          displayName: `${pair.deckCard.displayName} → ${pair.tribe}`,
+          cardUuid: pair.deckCard.cardUuid,
+          cardNumber: pair.deckCard.cardNumber,
+          entryId: pair.entryId,
+          score: scoreFor(pair),
+          components: { centrality: scoreFor(pair) },
+        })),
+        selectedKeys: [`${target.entryId}:${target.tribe}`],
+        bandFraction: MERCHANT_TUNING.tribalBandFraction,
+        bandMinimum: MERCHANT_TUNING.tribalBandMinimum,
+        notes: [`activeTribes=${[...activeTribes(context)].join(",")}`],
+      }),
     };
   },
 };

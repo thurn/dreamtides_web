@@ -24,6 +24,9 @@ export {
   MERCHANT_ARCHETYPE_LABELS,
 } from "./archetypes/types";
 export { MERCHANT_TUNING } from "./tuning";
+export { buildMerchantDeckSnapshot } from "./trace/deckSnapshot";
+export type { MerchantDeckSnapshot } from "./trace/deckSnapshot";
+export type { MerchantOfferTrace } from "./trace/types";
 export type {
   MerchantEncounterGenerationDebug,
 } from "./encounter/generateMerchantEncounter";

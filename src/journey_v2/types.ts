@@ -17,6 +17,7 @@ import type {
   MerchantArchetypeId,
   MerchantOfferFamily,
 } from "./archetypes/types";
+import type { MerchantOfferTrace } from "./trace/types";
 
 export interface MerchantGameObjectBadge {
   label: string;
@@ -191,6 +192,8 @@ export interface MerchantOffer {
   gameObjects: readonly MerchantGameObject[];
   applyPayload?: MerchantApplyPayload;
   choiceRequest?: MerchantChoiceRequest;
+  /** Pure explanation of how this offer's target(s) were chosen; logged per offer. */
+  trace?: MerchantOfferTrace;
 }
 
 /** A single merchant line hinting at one seeded-chosen offer. */

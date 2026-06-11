@@ -1,9 +1,12 @@
 import {
   dreamsignHasDeckCoverage,
   dreamsignMatchScore,
+  dreamsignScoreBreakdown,
 } from "../signals/dreamsignMatch";
 import { bandSample, merchantRng, weightedSample, type MerchantRng } from "../signals/rng";
 import { MERCHANT_TUNING } from "../tuning";
+import { assembleOfferTrace } from "../trace/buildTrace";
+import type { MerchantDreamsignTier, MerchantOfferTrace } from "../trace/types";
 import type { CardData } from "../../types/cards";
 import type { DreamsignTemplate } from "../../types/content";
 import type { MerchantContext, MerchantChoiceCandidate, MerchantGameObject } from "../types";
@@ -41,19 +44,65 @@ function suitedDreamsignPool(
   context: MerchantContext,
   deck: readonly CardData[],
   minimumDesired: number,
-): readonly DreamsignTemplate[] {
+): { pool: readonly DreamsignTemplate[]; tier: MerchantDreamsignTier } {
   const profiles = context.dreamsignProfiles;
   const covered = context.candidateDreamsigns.filter((template) =>
     dreamsignHasDeckCoverage(profiles?.get(template.id), deck),
   );
-  if (covered.length >= minimumDesired) return covered;
+  if (covered.length >= minimumDesired) return { pool: covered, tier: "covered" };
 
   const suited = context.candidateDreamsigns.filter(
     (template) => dreamsignMatchScore(profiles?.get(template.id), deck) > 0,
   );
-  if (suited.length >= minimumDesired) return suited;
+  if (suited.length >= minimumDesired) return { pool: suited, tier: "generic" };
 
-  return context.candidateDreamsigns;
+  return { pool: context.candidateDreamsigns, tier: "fallback" };
+}
+
+/**
+ * Builds the `dreamsign_match` trace from a sampled dreamsign pool. Each
+ * candidate carries its match score plus the coverage components
+ * (`meanCoverage`, `featureCount`, `qualityWeight`) the score blends, so a
+ * reader sees both the chosen tier and why each sign ranked where it did.
+ */
+function buildDreamsignTrace(params: {
+  pool: readonly DreamsignTemplate[];
+  tier: MerchantDreamsignTier;
+  context: MerchantContext;
+  deck: readonly CardData[];
+  selectedIds: readonly string[];
+  selectedCount: number;
+  bandFraction: number;
+  bandMinimum: number;
+}): MerchantOfferTrace {
+  const profiles = params.context.dreamsignProfiles;
+  return assembleOfferTrace({
+    decision: "dreamsign_match",
+    keyKind: "dreamsignId",
+    dreamsignTier: params.tier,
+    candidates: params.pool.map((template) => {
+      const breakdown = dreamsignScoreBreakdown(
+        profiles?.get(template.id),
+        params.deck,
+      );
+      return {
+        key: template.id,
+        displayName: template.name,
+        dreamsignId: template.id,
+        score: breakdown.score,
+        components: {
+          meanCoverage: breakdown.meanCoverage,
+          featureCount: breakdown.featureCount,
+          qualityWeight: breakdown.qualityWeight,
+          featureless: breakdown.featureless ? 1 : 0,
+        },
+      };
+    }),
+    selectedKeys: params.selectedIds,
+    selectedCount: params.selectedCount,
+    bandFraction: params.bandFraction,
+    bandMinimum: params.bandMinimum,
+  });
 }
 
 /** Minimum count for the `dreamsign_draft` chooser. */
@@ -96,12 +145,14 @@ export const dreamsignBuilder: MerchantArchetypeBuilder = {
     const profiles = context.dreamsignProfiles;
     // A single "suited" offer should be one of the best-matched signs, not a
     // uniform draw from a loose band — sample a tight band over the suited pool.
+    const { pool, tier } = suitedDreamsignPool(context, deck, 1);
+    const bandMinimum = 2;
     const sampled = bandSample(
-      suitedDreamsignPool(context, deck, 1),
+      pool,
       (template) => dreamsignMatchScore(profiles?.get(template.id), deck),
       1,
       rng,
-      { bandFraction: MERCHANT_TUNING.dreamsignBandFraction, bandMinimum: 2 },
+      { bandFraction: MERCHANT_TUNING.dreamsignBandFraction, bandMinimum },
     );
     const target = sampled[0];
     if (target === undefined) return null;
@@ -118,6 +169,16 @@ export const dreamsignBuilder: MerchantArchetypeBuilder = {
         dreamsignTemplate: target,
       },
       targetKey: target.id,
+      trace: buildDreamsignTrace({
+        pool,
+        tier,
+        context,
+        deck,
+        selectedIds: [target.id],
+        selectedCount: 1,
+        bandFraction: MERCHANT_TUNING.dreamsignBandFraction,
+        bandMinimum,
+      }),
     };
   },
 };
@@ -143,7 +204,7 @@ export const dreamsignDraftBuilder: MerchantArchetypeBuilder = {
     // restricted to deck-suited signs so the chooser never spreads onto signs
     // the deck has no use for. We need the band size to seeded-pick the count,
     // so compute the band manually.
-    const candidates = suitedDreamsignPool(
+    const { pool: candidates, tier } = suitedDreamsignPool(
       context,
       deck,
       DREAMSIGN_DRAFT_MIN_COUNT,
@@ -212,6 +273,16 @@ export const dreamsignDraftBuilder: MerchantArchetypeBuilder = {
         candidates: choiceCandidates,
       },
       targetKey,
+      trace: buildDreamsignTrace({
+        pool: candidates,
+        tier,
+        context,
+        deck,
+        selectedIds: sampled.map((t) => t.id),
+        selectedCount: sampled.length,
+        bandFraction: MERCHANT_TUNING.dreamsignBandFraction,
+        bandMinimum: MERCHANT_TUNING.bandMinimum,
+      }),
     };
   },
 };

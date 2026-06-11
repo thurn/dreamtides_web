@@ -1,6 +1,12 @@
 import { fitScores, fitLooByEntry } from "../signals/fit";
 import { bandSample, type MerchantRng } from "../signals/rng";
 import { MERCHANT_TUNING } from "../tuning";
+import {
+  assembleOfferTrace,
+  catalogTraceCandidates,
+  deckEntryTraceCandidates,
+} from "../trace/buildTrace";
+import type { MerchantOfferTrace } from "../trace/types";
 import type {
   MerchantApplyPayload,
   MerchantCatalogCard,
@@ -10,7 +16,7 @@ import type {
 } from "../types";
 import type { FitModel } from "../../draft/replay/fit-model";
 import type { CardData } from "../../types/cards";
-import { grantCandidatePool } from "./grant";
+import { grantCandidatePool, singleComponentByUuid } from "./grant";
 import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
 
 // ---------------------------------------------------------------------------
@@ -72,6 +78,22 @@ export interface PurgeCandidateEntry {
   deckCard: MerchantDeckCard;
   entryId: string;
   misfitScore: number;
+  /** Score components behind `misfitScore`, for trace logging. */
+  components: {
+    misfit: number;
+    /** Leave-one-out fit; null for starters (no corpus signal needed). */
+    loo: number | null;
+    starter: boolean;
+  };
+}
+
+/** The purge candidate set plus the leave-one-out threshold used to gate it. */
+export interface PurgeSelection {
+  candidates: readonly PurgeCandidateEntry[];
+  /** The LOO value at/below which a non-starter entry becomes purge-eligible. */
+  looThreshold: number;
+  /** How many entries had a corpus-derived LOO score. */
+  scoredEntryCount: number;
 }
 
 /**
@@ -83,7 +105,7 @@ export interface PurgeCandidateEntry {
  *
  * Banes are excluded from all candidates.
  */
-export function purgeCandidates(context: MerchantContext): readonly PurgeCandidateEntry[] {
+export function purgeSelection(context: MerchantContext): PurgeSelection {
   const fitModel = context.fitModel;
 
   // Leave-one-out scores for non-starter deck cards with corpus signal.
@@ -112,10 +134,12 @@ export function purgeCandidates(context: MerchantContext): readonly PurgeCandida
     if (deckCard.card.isStarter) {
       // Starters are always candidates.
       // Misfit score: 1 (worst possible) + bonus to rank near the band bottom.
+      const misfitScore = 1 + MERCHANT_TUNING.starterPurgeBonus;
       candidates.push({
         deckCard,
         entryId: deckCard.entryId,
-        misfitScore: 1 + MERCHANT_TUNING.starterPurgeBonus,
+        misfitScore,
+        components: { misfit: misfitScore, loo: null, starter: true },
       });
     } else {
       // Non-starters: must have corpus signal AND be in the bottom fraction.
@@ -127,12 +151,54 @@ export function purgeCandidates(context: MerchantContext): readonly PurgeCandida
           deckCard,
           entryId: deckCard.entryId,
           misfitScore: 1 - loo,
+          components: { misfit: 1 - loo, loo, starter: false },
         });
       }
     }
   }
 
-  return candidates;
+  return { candidates, looThreshold, scoredEntryCount: looValues.length };
+}
+
+/** The purge candidate set (the misfit-ranked, banes-excluded deck entries). */
+export function purgeCandidates(
+  context: MerchantContext,
+): readonly PurgeCandidateEntry[] {
+  return purgeSelection(context).candidates;
+}
+
+/** Assembles the `deck_entry_rank` trace for a purge selection. */
+function purgeTrace(
+  selection: PurgeSelection,
+  selectedEntryIds: readonly string[],
+  extraNotes: readonly string[] = [],
+): MerchantOfferTrace {
+  return assembleOfferTrace({
+    decision: "deck_entry_rank",
+    keyKind: "entryId",
+    candidates: deckEntryTraceCandidates(
+      selection.candidates.map((candidate) => ({
+        deckCard: candidate.deckCard,
+        entryId: candidate.entryId,
+        score: candidate.misfitScore,
+        components: {
+          misfit: candidate.components.misfit,
+          loo: candidate.components.loo ?? 0,
+          starter: candidate.components.starter ? 1 : 0,
+        },
+      })),
+    ),
+    selectedKeys: selectedEntryIds,
+    selectedCount: selectedEntryIds.length,
+    bandFraction: MERCHANT_TUNING.bandFraction,
+    notes: [
+      `purgeMisfitFraction=${String(MERCHANT_TUNING.purgeMisfitFraction)}`,
+      `looThreshold=${String(selection.looThreshold)}`,
+      `scoredEntryCount=${String(selection.scoredEntryCount)}`,
+      `starterPurgeBonus=${String(MERCHANT_TUNING.starterPurgeBonus)}`,
+      ...extraNotes,
+    ],
+  });
 }
 
 function removeDeckEntryPayload(
@@ -169,7 +235,8 @@ export const purgeBuilder: MerchantArchetypeBuilder = {
   },
 
   build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
-    const candidates = purgeCandidates(context);
+    const selection = purgeSelection(context);
+    const candidates = selection.candidates;
     if (candidates.length === 0) return null;
 
     const sampled = bandSample(candidates, (entry) => entry.misfitScore, 1, rng);
@@ -194,6 +261,7 @@ export const purgeBuilder: MerchantArchetypeBuilder = {
       ],
       applyPayload: removeDeckEntryPayload(target.deckCard),
       targetKey: target.entryId,
+      trace: purgeTrace(selection, [target.entryId]),
     };
   },
 };
@@ -230,7 +298,8 @@ export const purgeReplaceBuilder: MerchantArchetypeBuilder = {
 
   build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
     // Select the removal target (same as purge).
-    const purgeCands = purgeCandidates(context);
+    const purgeSel = purgeSelection(context);
+    const purgeCands = purgeSel.candidates;
     if (purgeCands.length === 0) return null;
 
     const purgeSampled = bandSample(
@@ -300,6 +369,26 @@ export const purgeReplaceBuilder: MerchantArchetypeBuilder = {
         candidates,
       },
       targetKey: `${purgeTarget.entryId}:${replacements.map((c) => c.cardUuid).join(",")}`,
+      // The chooser the player picks among is the 4 replacements (scored by fit
+      // over the grant pool); the fixed removal target is recorded in the notes.
+      trace: assembleOfferTrace({
+        decision: "scored_cards",
+        keyKind: "cardUuid",
+        candidates: catalogTraceCandidates(
+          pool,
+          fitByUuid,
+          singleComponentByUuid(pool, "fit", fitByUuid),
+        ),
+        selectedKeys: replacements.map((c) => c.cardUuid),
+        selectedCount: replacements.length,
+        bandFraction: MERCHANT_TUNING.bandFraction,
+        notes: [
+          `removeEntry=${purgeTarget.entryId}`,
+          `removeCardUuid=${purgeTarget.deckCard.cardUuid}`,
+          `removeMisfit=${String(purgeTarget.misfitScore)}`,
+          `looThreshold=${String(purgeSel.looThreshold)}`,
+        ],
+      }),
     };
   },
 };

@@ -5,6 +5,7 @@ import type {
   MerchantContext,
   MerchantGameObject,
 } from "../types";
+import type { MerchantOfferTrace } from "../trace/types";
 
 /** The 17 offer archetypes across the 6 families. */
 export type MerchantArchetypeId =
@@ -106,6 +107,13 @@ export interface MerchantOfferDraft {
   choiceRequest?: MerchantChoiceRequest;
   /** Stable identity of the offer's target, used by metrics and repetition checks. */
   targetKey: string;
+  /**
+   * Pure explanation of how the target(s) were chosen — the candidate set,
+   * scores, band, and branch taken. Populated by the builder from the score maps
+   * it already computes and logged at the React boundary as `merchant_offer_built`.
+   * Optional so a builder can omit it; the encounter still forms without it.
+   */
+  trace?: MerchantOfferTrace;
 }
 
 /**

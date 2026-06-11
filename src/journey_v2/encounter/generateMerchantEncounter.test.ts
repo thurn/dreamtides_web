@@ -90,6 +90,36 @@ describe("generateMerchantEncounter", () => {
     }
   });
 
+  it("records roll attempts and attaches a trace to each offer", () => {
+    const content = fixtureContent({});
+    for (let s = 0; s < 10; s += 1) {
+      const state = makeMerchantTestQuestState({ seed: `rolls-${String(s)}` });
+      const { encounter, debug } = generateMerchantEncounterWithDebug(
+        contextFor(content, state),
+      );
+      // The final built archetype is the last attempt in each slot's roll log.
+      expect(debug.rollsA.length).toBeGreaterThan(0);
+      expect(debug.rollsB.length).toBeGreaterThan(0);
+      expect(debug.rollsA[debug.rollsA.length - 1]).toEqual({
+        archetypeId: debug.rolledA,
+        built: true,
+      });
+      expect(debug.rollsB[debug.rollsB.length - 1]).toEqual({
+        archetypeId: debug.rolledB,
+        built: true,
+      });
+      // Any earlier attempts are dead rolls (eligible builder, null build).
+      for (const attempt of debug.rollsA.slice(0, -1)) {
+        expect(attempt.built).toBe(false);
+      }
+      // Every offer carries a trace whose selection explains its targetKey.
+      for (const offer of encounter.offers) {
+        expect(offer.trace).toBeDefined();
+        expect(offer.trace?.candidates.length ?? 0).toBeGreaterThan(0);
+      }
+    }
+  });
+
   it("is deterministic for the same (seed, site, state)", () => {
     const content = fixtureContent({});
     const state = makeMerchantTestQuestState({ seed: "stable-seed" });

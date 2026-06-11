@@ -1,4 +1,5 @@
 import { weightedSample, type MerchantRng } from "../signals/rng";
+import { assembleOfferTrace } from "../trace/buildTrace";
 import type { SiteType } from "../../types/quest";
 import type { MerchantContext } from "../types";
 import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
@@ -81,6 +82,21 @@ export const addSiteBuilder: MerchantArchetypeBuilder = {
         siteType,
       },
       targetKey: siteType,
+      // Uniform pick over the placeable site types.
+      trace: assembleOfferTrace({
+        decision: "uniform",
+        keyKind: "siteType",
+        candidates: MERCHANT_PLACEABLE_SITE_TYPES.map((type) => ({
+          key: type,
+          displayName: siteTypeLabel(type),
+          score: 1,
+        })),
+        selectedKeys: [siteType],
+        selectedCount: 1,
+        bandFraction: 1,
+        bandMinimum: MERCHANT_PLACEABLE_SITE_TYPES.length,
+        notes: ["uniform"],
+      }),
     };
   },
 };

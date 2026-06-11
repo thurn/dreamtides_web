@@ -346,6 +346,43 @@ describe("ScreenRouter DreamJourney routing", () => {
     expect(debug?.rolledB).toBeDefined();
   });
 
+  it("emits a per-offer merchant_offer_built event joined to the encounter", () => {
+    const site = makeSite("DreamJourney");
+    const state = makeStateFor(site);
+    renderWithQuest({
+      state,
+      questContent: merchantContent(),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />,
+    });
+
+    const encounterLogs = getLogEntries().filter(
+      (entry) => entry.event === "merchant_encounter_generated",
+    );
+    const offerLogs = getLogEntries().filter(
+      (entry) => entry.event === "merchant_offer_built",
+    );
+    const signature = encounterLogs[0]?.encounterSignature;
+    expect(signature).toBeDefined();
+    // The encounter carries a deck snapshot; one offer event per offer slot.
+    expect(encounterLogs[0]?.deck).toBeDefined();
+    expect(offerLogs).toHaveLength(2);
+    for (const offer of offerLogs) {
+      // Each offer line joins back to its encounter and carries a trace.
+      expect(offer.encounterSignature).toBe(signature);
+      expect(typeof offer.archetypeId).toBe("string");
+      expect(typeof offer.targetKey).toBe("string");
+      expect(offer.deckHash).toBe(
+        (encounterLogs[0]?.deck as { hash?: unknown } | undefined)?.hash,
+      );
+      const trace = offer.trace as { decision?: unknown } | null;
+      expect(trace).not.toBeNull();
+      expect(typeof trace?.decision).toBe("string");
+    }
+    expect(new Set(offerLogs.map((o) => o.offerId))).toEqual(
+      new Set(["A", "B"]),
+    );
+  });
+
   it("sets card source debug for visible merchant grant cards", () => {
     // Use a fixture with a strong corpus quality signal so at least one
     // grant offer (strong_card or similar) appears in the encounter.

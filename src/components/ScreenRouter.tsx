@@ -27,6 +27,7 @@ import {
 import {
   DreamMerchantScreen,
   buildMerchantContext,
+  buildMerchantDeckSnapshot,
   generateMerchantEncounterWithDebug,
   type MerchantAcceptRequest,
   type MerchantArchetypeId,
@@ -324,13 +325,35 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
       return;
     }
     loggedOfferSignatureRef.current = encounterResult.encounter.encounterSignature;
+    const { encounter, debug } = encounterResult;
+    // The deck the merchant scored against — emitted once per encounter (it is
+    // shared by both offers). Each `merchant_offer_built` line back-references it
+    // by `deckSize` + `deckHash`; the raw feature tallies live only here.
+    const deck = buildMerchantDeckSnapshot(merchantContext);
     logEvent("merchant_encounter_generated", {
       siteId: site.id,
-      encounterSignature: encounterResult.encounter.encounterSignature,
-      offerCount: encounterResult.encounter.offers.length,
-      debug: encounterResult.debug,
+      encounterSignature: encounter.encounterSignature,
+      offerCount: encounter.offers.length,
+      deck,
+      debug,
     });
-  }, [encounterResult, site.id]);
+    // One per-offer event carrying the builder's trace (candidate set, scores,
+    // band, branch). Cross-linked to the encounter by `encounterSignature`.
+    for (const offer of encounter.offers) {
+      logEvent("merchant_offer_built", {
+        siteId: site.id,
+        encounterSignature: offer.encounterSignature,
+        offerId: offer.offerId,
+        archetypeId: offer.archetypeId,
+        family: offer.family,
+        targetKey: offer.targetKey,
+        isChooser: offer.choiceRequest !== undefined,
+        deckSize: deck.size,
+        deckHash: deck.hash,
+        trace: offer.trace ?? null,
+      });
+    }
+  }, [encounterResult, merchantContext, site.id]);
 
   const visibleGrantCards = useMemo(
     () =>

@@ -14,10 +14,24 @@ import type {
   MerchantOffer,
 } from "../types";
 
+/**
+ * One archetype build attempt during a slot roll. A `built: false` entry is a
+ * dead roll — an eligible builder that returned null and was dropped before the
+ * slot redrew — so the dead rolls preceding the chosen offer are not invisible.
+ */
+export interface MerchantRollAttempt {
+  archetypeId: MerchantArchetypeId;
+  built: boolean;
+}
+
 export interface MerchantEncounterGenerationDebug {
   eligibleArchetypeIds: readonly MerchantArchetypeId[];
   rolledA: MerchantArchetypeId | null;
   rolledB: MerchantArchetypeId | null;
+  /** Build attempts for slot A in order, including dead rolls (`built: false`). */
+  rollsA: readonly MerchantRollAttempt[];
+  /** Build attempts for slot B in order, including dead rolls (`built: false`). */
+  rollsB: readonly MerchantRollAttempt[];
   /** The debug-forced archetype that was honored for slot A, when any. */
   forcedArchetypeId: MerchantArchetypeId | null;
   encounterSignature: string;
@@ -80,22 +94,27 @@ function rollSlot(
   eligible: readonly MerchantArchetypeBuilder[],
   context: MerchantContext,
   saltParts: readonly string[],
-): { builder: MerchantArchetypeBuilder; draft: MerchantOfferDraft } | null {
+): {
+  result: { builder: MerchantArchetypeBuilder; draft: MerchantOfferDraft } | null;
+  attempts: MerchantRollAttempt[];
+} {
   let pool = [...eligible];
   let attempt = 0;
+  const attempts: MerchantRollAttempt[] = [];
   while (pool.length > 0) {
     const rng = merchantRng(...saltParts, "archetype", String(attempt));
     const builder = weightedSample(pool, weightFor, rng);
-    if (builder === null) return null;
+    if (builder === null) return { result: null, attempts };
     const buildRng = merchantRng(...saltParts, "target", builder.archetypeId);
     const draft = builder.build(context, buildRng);
+    attempts.push({ archetypeId: builder.archetypeId, built: draft !== null });
     if (draft !== null) {
-      return { builder, draft };
+      return { result: { builder, draft }, attempts };
     }
     pool = pool.filter((candidate) => candidate !== builder);
     attempt += 1;
   }
-  return null;
+  return { result: null, attempts };
 }
 
 /**
@@ -108,7 +127,11 @@ function forceSlot(
   builder: MerchantArchetypeBuilder,
   context: MerchantContext,
   saltParts: readonly string[],
-): { builder: MerchantArchetypeBuilder; draft: MerchantOfferDraft } | null {
+): {
+  result: { builder: MerchantArchetypeBuilder; draft: MerchantOfferDraft } | null;
+  attempts: MerchantRollAttempt[];
+} {
+  const attempts: MerchantRollAttempt[] = [];
   for (let attempt = 0; attempt < FORCE_BUILD_ATTEMPTS; attempt += 1) {
     const buildRng = merchantRng(
       ...saltParts,
@@ -117,11 +140,12 @@ function forceSlot(
       String(attempt),
     );
     const draft = builder.build(context, buildRng);
+    attempts.push({ archetypeId: builder.archetypeId, built: draft !== null });
     if (draft !== null) {
-      return { builder, draft };
+      return { result: { builder, draft }, attempts };
     }
   }
-  return null;
+  return { result: null, attempts };
 }
 
 function offerIdentity(offer: MerchantOffer): unknown {
@@ -183,6 +207,7 @@ function draftToOffer(
     ...(draft.choiceRequest === undefined
       ? {}
       : { choiceRequest: draft.choiceRequest }),
+    ...(draft.trace === undefined ? {} : { trace: draft.trace }),
   };
 }
 
@@ -250,31 +275,47 @@ export function generateMerchantEncounterWithDebug(
         ) ?? null);
 
   const slotASalt = [context.questSeed, context.site.id, "A", ...rerollSalt];
-  const rolledA =
-    forcedBuilder === null
-      ? rollSlot(eligible, context, slotASalt)
-      : (forceSlot(forcedBuilder, context, slotASalt) ??
-        rollSlot(eligible, context, slotASalt));
-  if (rolledA === null) {
+  // Slot A: a forced builder's attempts come first; if it never builds we fall
+  // back to a normal roll and concatenate both attempt logs so the dead forced
+  // rolls remain visible alongside the eventual pick.
+  const rollsA: MerchantRollAttempt[] = [];
+  let slotA: { builder: MerchantArchetypeBuilder; draft: MerchantOfferDraft } | null;
+  if (forcedBuilder === null) {
+    const rolled = rollSlot(eligible, context, slotASalt);
+    rollsA.push(...rolled.attempts);
+    slotA = rolled.result;
+  } else {
+    const forced = forceSlot(forcedBuilder, context, slotASalt);
+    rollsA.push(...forced.attempts);
+    if (forced.result !== null) {
+      slotA = forced.result;
+    } else {
+      const rolled = rollSlot(eligible, context, slotASalt);
+      rollsA.push(...rolled.attempts);
+      slotA = rolled.result;
+    }
+  }
+  if (slotA === null) {
     throw new Error("Dream Merchant could not roll a first offer");
   }
   const honoredForcedArchetypeId =
-    forcedBuilder !== null && rolledA.builder.archetypeId === forcedBuilder.archetypeId
+    forcedBuilder !== null && slotA.builder.archetypeId === forcedBuilder.archetypeId
       ? forcedBuilder.archetypeId
       : null;
 
   const eligibleB = eligible.filter(
-    (builder) => builder.family !== rolledA.builder.family,
+    (builder) => builder.family !== slotA.builder.family,
   );
   const slotBSalt = [context.questSeed, context.site.id, "B", ...rerollSalt];
   const rolledB = rollSlot(eligibleB, context, slotBSalt);
-  if (rolledB === null) {
+  if (rolledB.result === null) {
     throw new Error("Dream Merchant could not roll a second offer");
   }
+  const slotB = rolledB.result;
 
   const unsignedOffers = [
-    draftToOffer(rolledA.draft, OFFER_IDS[0]),
-    draftToOffer(rolledB.draft, OFFER_IDS[1]),
+    draftToOffer(slotA.draft, OFFER_IDS[0]),
+    draftToOffer(slotB.draft, OFFER_IDS[1]),
   ];
   const encounterSignature = signatureFor(context, unsignedOffers);
   const offers: MerchantOffer[] = unsignedOffers.map((offer) => ({
@@ -298,8 +339,10 @@ export function generateMerchantEncounterWithDebug(
     encounter,
     debug: {
       eligibleArchetypeIds,
-      rolledA: rolledA.builder.archetypeId,
-      rolledB: rolledB.builder.archetypeId,
+      rolledA: slotA.builder.archetypeId,
+      rolledB: slotB.builder.archetypeId,
+      rollsA,
+      rollsB: rolledB.attempts,
       forcedArchetypeId: honoredForcedArchetypeId,
       encounterSignature,
     },
