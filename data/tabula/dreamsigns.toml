@@ -456,88 +456,88 @@ id = "B2626645-827C-46EC-8204-017862D1A398"
 name = "Eyeball Plant"
 image_name = "creepy_plant.png"
 tides = ["reclaim_characters", "void_recursion", "void_threshold", "big_energy"]
-rendered-text = "Characters in your void with ≥5● cost have Reclaim 3●."
-tags = ["J11"]
+rendered-text = "Characters in your void with ≥3● cost have reclaim."
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "2059AA74-8897-4C76-833F-DDEF7D34346C"
 name = "Skull Codex"
 image_name = "book_5.png"
 tides = ["cost_reduction", "reclaim_characters", "reclaim_events", "void_recursion"]
-rendered-text = "Cards in your void with Reclaim have Reclaim 0●."
-tags = ["J11"]
+rendered-text = "Reclaim abilities cost you 0●."
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "8340CCE5-8E27-4940-AB79-34E09FDBCAE1"
 name = "Dragon Egg"
 image_name = "egg_dragon.png"
 tides = ["card_flow", "void_recursion", "reclaim_characters", "reclaim_events"]
-rendered-text = "When you play a card from your void, draw a card."
-tags = ["J11"]
+rendered-text = "Once per turn, when you play a card from your void, draw a card."
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "2CBCBEBB-FB79-4833-A770-2216873147C4"
 name = "Spotted Egg"
 image_name = "eggs_2.png"
 tides = ["event_chain", "reclaim_events", "event_setup", "void_recursion"]
-rendered-text = "When you play your second event each turn, it gains Reclaim 0●."
-tags = ["J11"]
+rendered-text = "When you play your second event each turn, it gains reclaim 0●."
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "D2A916C1-321A-4AE3-9A50-0B7F13C5EFF6"
 name = "Flash Powder"
 image_name = "Alchemical_Powder.png"
 tides = ["fast_setup", "fast_tempo", "cost_reduction", "event_chain"]
-rendered-text = "You may play ❖ events for 1●."
-tags = ["J11"]
+rendered-text = "You may play ❖ and ❖❖ events for 1●."
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "10F27800-99F8-4504-9D94-26BCB3C32788"
 name = "Essence Vial"
 image_name = "essence.png"
 tides = ["abandon_value", "reclaim_characters", "void_recursion", "leave_play_enablers"]
-rendered-text = "The first time each turn you abandon an ally or discard a character, that card gains Reclaim X● where X is its ● cost."
-tags = ["J11"]
+rendered-text = "Once per turn, when you abandon an ally or discard a character, that card gains reclaim."
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "946DBB36-0A90-495A-BF0F-17351C93D74B"
 name = "Green Fly"
 image_name = "fly.png"
 tides = ["void_setup", "void_recursion", "reclaim_characters", "recursion_fuel"]
-rendered-text = "The first card you put into your void from your deck each turn gains Reclaim X● where X is its ● cost."
-tags = ["J11"]
+rendered-text = "The first card you erode each turn gains reclaim."
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "89C83D7E-5617-49B4-B6CD-214680FE0627"
 name = "Candle"
 image_name = "candle.png"
 tides = ["event_chain", "spark_growth", "event_setup", "card_flow"]
-rendered-text = "When you play an event, your ally with the highest ✦ gains +1✦."
-tags = ["J11"]
+rendered-text = "When you play an event, the ally with the highest ✦ gains +1✦."
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "8B87B0C7-E7D5-4C53-B99B-B1E2407CB519"
 name = "Red Heart"
 image_name = "heart.png"
 tides = ["void_setup", "spark_growth", "recursion_fuel", "void_threshold"]
-rendered-text = "When a card enters your void from your deck, a random ally gains +1✦."
-tags = ["J11"]
+rendered-text = "When you erode a card, a random ally gains +1✦."
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "73EFD845-6009-4686-860C-01C7F5B1C074"
 name = "Black Feather"
 image_name = "feather.png"
 tides = ["abandon_value", "spark_tall", "leave_play_enablers", "spark_growth"]
-rendered-text = "When you abandon an ally, give another ally +X✦ where X is the abandoned ally's ✦."
-tags = ["J11"]
+rendered-text = "When you abandon an ally, a random ally gains +X✦ where X is the abandoned ally's ✦."
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "ADC23870-55F8-4F23-B973-A358FC257414"
 name = "Gold Feather"
 image_name = "feather_gold.png"
 tides = ["abandon_value", "leave_play_enablers", "spark_growth", "point_pressure"]
-rendered-text = "When you abandon a character, a random allied front-rank character gains +1✦."
-tags = ["J11"]
+rendered-text = "When you abandon a character, a random ally gains +1✦."
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "1A21186C-CAFD-4E0F-9304-1AC0EF55340A"
@@ -545,23 +545,23 @@ name = "Gray Feather"
 image_name = "feathers.png"
 tides = ["spark_tall", "spark_growth", "point_pressure", "finishers"]
 rendered-text = "When an ally gains ✦, it gains 1 additional ✦."
-tags = ["J11"]
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "FF8D8D4A-FE7B-4511-8192-E6E2E7712DAF"
 name = "Amber Eye"
 image_name = "eye_3.png"
 tides = ["void_threshold", "event_chain", "card_flow", "void_recursion", "void_setup"]
-rendered-text = "With ≥8 cards in your void, when you play an event, draw a card."
-tags = ["J11"]
+rendered-text = "When you play an event, if you have ≥8 cards in your void, draw a card."
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "A92D2B95-C63D-4C1C-831B-902C44DEEE57"
 name = "Garlic Bulb"
 image_name = "garlic.png"
 tides = ["event_setup", "foresee_selection", "event_chain", "topdeck_setup"]
-rendered-text = "When you play your first event each turn, Foresee 1."
-tags = ["J11"]
+rendered-text = "Once per turn, when you play an event, foresee 1."
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "39260DD5-CB43-47D5-A007-EFFBE13D6417"
@@ -569,15 +569,15 @@ name = "Ginger Root"
 image_name = "ginger .png"
 tides = ["foresee_selection", "card_flow", "topdeck_setup", "event_setup"]
 rendered-text = "Once per turn, when you foresee, draw a card."
-tags = ["J11"]
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "4E51F321-9089-4872-A0E2-AB909E242B33"
 name = "Hair Lock"
 image_name = "hair.png"
 tides = ["foresee_selection", "topdeck_setup", "cost_reduction", "card_flow"]
-rendered-text = "At the start of each battle, Foresee 3. Cards you leave on top this way cost 1● less."
-tags = ["J11"]
+rendered-text = "At the start of each battle, foresee 3."
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "268341C7-BB5B-49FB-AD8D-A792B7D631A0"
@@ -585,7 +585,7 @@ name = "Witch Hat"
 image_name = "hat.png"
 tides = ["event_chain", "card_flow", "event_setup", "hand_cycling"]
 rendered-text = "When you play your second event each turn, draw a card."
-tags = ["J11"]
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "9AAED05A-2223-42F2-9B9D-81A53EAB811C"
@@ -593,7 +593,7 @@ name = "Honeycombs"
 image_name = "honeycombs.png"
 tides = ["discard_velocity", "resource_burst", "hand_cycling", "discard_outlets"]
 rendered-text = "Once per turn, when you discard a card, gain 1●."
-tags = ["J11"]
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "5190A8B8-25A0-4C60-A4DE-2E2C5A73AF77"
@@ -601,15 +601,15 @@ name = "Cactus"
 image_name = "cactus .png"
 tides = ["discard_velocity", "void_recursion", "cost_reduction", "hand_cycling"]
 rendered-text = "If you have discarded a card this turn, the first card you play from your void costs 1● less."
-tags = ["J11"]
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "86F64A29-7338-4759-81DA-4C7656E543D2"
 name = "Spice Blossoms"
 image_name = "cinnamon.png"
 tides = ["discard_velocity", "event_chain", "cost_reduction", "hand_cycling"]
-rendered-text = "Your events cost 1● less for each card you discarded this turn."
-tags = ["J11"]
+rendered-text = "When you play an event, it costs 1● less for each card you have discarded this turn."
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "9D134DFC-4643-47F3-A7EC-EA770587CEA1"
@@ -617,15 +617,15 @@ name = "Leaf Bundle"
 image_name = "bunch_of_leaves.png"
 tides = ["discard_velocity", "hand_cycling", "card_flow", "discard_outlets", "resource_burst"]
 rendered-text = "Once per turn, when you discard a card, draw a card."
-tags = ["J11"]
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "3A22A33F-5682-4D00-B0EC-86E43B6ED9DF"
 name = "Magic Fish"
 image_name = "magic_fish.png"
 tides = ["spirit_growth", "card_flow", "character_curve", "materialize_value"]
-rendered-text = "The first time each turn you play a spirit animal, draw a card."
-tags = ["J11"]
+rendered-text = "Once per turn, when you play a spirit animal, draw a card."
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "B3403800-7004-4775-915B-A19840E416B0"
@@ -633,15 +633,15 @@ name = "Sea Tome"
 image_name = "book_11.png"
 tides = ["judgment_engines", "judgment_bodies", "spark_growth", "spark_tall", "judgment_repeaters"]
 rendered-text = "Allied characters with ▸Dawn abilities have +1✦."
-tags = ["J11"]
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "989B55BD-139F-40DC-B1FD-EB2F7B1C091A"
 name = "Charm Bracelet"
 image_name = "necklace.png"
 tides = ["ally_formation", "spark_growth", "point_pressure", "ally_wide"]
-rendered-text = "Allied front-rank characters supported by 2 characters have +2✦."
-tags = ["J11"]
+rendered-text = "Allied challengers have +1✦."
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "6103508C-4991-4B80-9DC1-F30122957296"
@@ -649,7 +649,7 @@ name = "Pig Nose"
 image_name = "pig_nouse.png"
 tides = ["survivor_dissolve", "spark_growth", "defensive_curve", "character_curve"]
 rendered-text = "Allied survivors have +2✦."
-tags = ["J11"]
+tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "7A37386D-6E7C-4F08-B07F-E92A1FD69893"
