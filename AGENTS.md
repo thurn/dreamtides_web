@@ -13,6 +13,16 @@ game design data is subject to change at any time.
 Ignore the legacy `src/draft_test/` directory for most changes, there is
 no need to update this code when making changes.
 
+# Logging
+
+Quest logs live in logs/quest-log.jsonl
+
+All new features should have logging. We should focus on how to answer
+questions about algorithm behavior. "If someone asked me to reconstruct
+what this algorithm did in a given production game, would I be able to?"
+
+Read logs for all production game design debugging.
+
 # Cards
 
 Card data lives in data/tabula/cards_v2.toml
