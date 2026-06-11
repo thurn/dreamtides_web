@@ -3170,7 +3170,7 @@ art-owned = false
 card-number = 171
 
 [[cards]]
-name = "Smoldering Ancient"
+name = "Ruthless Conquerer"
 mtg-name = "Oni-Cult Anvil"
 id = "d6ec65a2-d61e-4617-bdd0-75d5573c063d"
 rendered-text = """
@@ -3184,10 +3184,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "J11"]
-image-number = 608687441
+tags = ["Art Rework", "J11", "Art OK"]
+image-number = 1891048570
 art-owned = false
 card-number = 172
+art = { x = 0.064, y = 0, scale = 1.17 }
 
 [[cards]]
 name = "Collapse Protocol"
@@ -3276,7 +3277,7 @@ art-owned = true
 card-number = 177
 
 [[cards]]
-name = "Dread Arbiter"
+name = "Glimmerwood Scout"
 mtg-name = "Mishra's Bauble"
 id = "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed"
 rendered-text = "Abandon this character: Reveal the opponent's hand. Draw a card with ephemeral."
@@ -3287,10 +3288,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 0
-tags = ["Art Rework", "J11"]
-image-number = 2033123270
+tags = ["Art Rework", "J11", "Art OK"]
+image-number = 2155438709
 art-owned = false
 card-number = 178
+art = { x = -0.294, y = 0.369, scale = 1.17 }
 
 [[cards]]
 name = "Ferryman of the Falls"
@@ -3685,7 +3687,7 @@ art-owned = false
 card-number = 200
 
 [[cards]]
-name = "Liminal Striker"
+name = "Blade of Unity"
 mtg-name = "Michiko's Reign of Truth // Portrait of Michiko"
 id = "7947e9db-a85e-4277-a42a-8d45f7475295"
 rendered-text = "This character has +1✦ for each allied warrior."
@@ -3696,13 +3698,14 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Spark Scaler", "Art Rework", "J11"]
+tags = ["Spark Scaler", "Art Rework", "J11", "Art OK"]
 image-number = 2667786599
 art-owned = false
 card-number = 201
+art = { x = 0, y = -0.346, scale = 1.57 }
 
 [[cards]]
-name = "Ride of the Vanguard"
+name = "Vanguard Charger"
 mtg-name = "Michiko's Reign of Truth // Portrait of Michiko"
 id = "d6e8842f-c0a4-4b4c-93bd-377cfae60894"
 rendered-text = "❖ – ☪: Give an ally +1✦ for each allied warrior until end of turn."
@@ -3713,10 +3716,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "J11"]
+tags = ["Art Rework", "J11", "Art OK"]
 image-number = 1788833078
 art-owned = true
 card-number = 202
+art = { x = 0, y = -0.345, scale = 1.81 }
 
 [[cards]]
 name = "Broadcast Array"
@@ -4149,7 +4153,7 @@ card-number = 226
 art = { x = 0, y = 0.9, scale = 1.17 }
 
 [[cards]]
-name = "Rootbound Witness"
+name = "Sundown Surfer"
 mtg-name = "Bitter Reunion"
 id = "e7c93c3b-14db-4131-ab50-71d152331777"
 rendered-text = """
@@ -4158,15 +4162,16 @@ Awakened
 Abandon this character: Allied characters gain awakened this turn."""
 energy-cost = 1
 card-type = "Character"
-subtype = "Warrior"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "J11"]
-image-number = 2433164315
+tags = ["Art Rework", "J11", "Art OK"]
+image-number = 403770319
 art-owned = false
 card-number = 227
+art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Skies of Change"
