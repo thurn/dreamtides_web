@@ -43,4 +43,21 @@ describe("applySymbolReplacements", () => {
     expect(result.value).toBe("●●");
     expect(result.caret).toBe(2);
   });
+
+  it("replaces the multi-character comparison sequences", () => {
+    const lte = applySymbolReplacements("\\lte", 4);
+    expect(lte.value).toBe("≤");
+    expect(lte.caret).toBe(1);
+
+    const gte = applySymbolReplacements("\\gte", 4);
+    expect(gte.value).toBe("≥");
+    expect(gte.caret).toBe(1);
+  });
+
+  it("replaces comparison sequences embedded in surrounding text", () => {
+    const result = applySymbolReplacements("spark \\gte 3", 10);
+    expect(result.value).toBe("spark ≥ 3");
+    // Caret was just after "\gte"; it follows the glyph.
+    expect(result.caret).toBe(7);
+  });
 });

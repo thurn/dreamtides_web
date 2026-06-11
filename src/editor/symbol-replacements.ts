@@ -12,6 +12,8 @@ export const SYMBOL_REPLACEMENTS: ReadonlyArray<readonly [string, string]> = [
   ["\\f", "❖"],
   ["\\d", "–"],
   ["\\t", "▸"],
+  ["\\lte", "≤"],
+  ["\\gte", "≥"],
 ];
 
 export interface SymbolReplacementResult {
