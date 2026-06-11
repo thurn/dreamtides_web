@@ -229,8 +229,9 @@ export function DreamwellCardView({
         // vertical 5.4% of height equals 3.6% of width on the 3:2 frame.
         borderRadius: "3.6% / 5.4%",
         overflow: "hidden",
-        boxShadow:
-          "0 0.8cqw 2.4cqw rgba(0, 0, 0, 0.55), 0 0 0 0.18cqw rgba(168, 85, 247, 0.5)",
+        // Plain drop shadow, matching the regular card's default (no colored
+        // outer ring); the card edge reads from the soft inner rim below.
+        boxShadow: "0 4px 14px rgba(0, 0, 0, 0.55)",
         userSelect: "none",
         ...style,
       }}
