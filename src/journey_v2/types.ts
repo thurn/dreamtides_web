@@ -56,6 +56,14 @@ export interface MerchantContext {
    * so untouched encounters keep their original signatures.
    */
   rerollNonce?: number;
+  /**
+   * Debug-only: when set to an eligible `MerchantArchetypeId`, the generator
+   * forces the first offer (slot A) to use that archetype instead of weighted
+   * sampling. Typed as `string` because it is a persisted passthrough from
+   * `DreamJourneySiteRuntime`; the generator validates it against the eligible
+   * builder set and ignores values that are not eligible.
+   */
+  forcedArchetypeId?: string;
   /** Retained on the context for other screens; the merchant ignores it. */
   essence: number;
   /** Retained on the context for other screens; the merchant ignores it. */

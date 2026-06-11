@@ -11,6 +11,10 @@ import type {
 } from "../types";
 import type { QuestState, SiteState } from "../../types/quest";
 import { useMemo, useState } from "react";
+import {
+  MERCHANT_ARCHETYPE_LABELS,
+  type MerchantArchetypeId,
+} from "../archetypes/types";
 import { MerchantChooserPanel } from "./MerchantChooserPanel";
 import { OfferCard } from "./OfferCard";
 
@@ -30,6 +34,19 @@ export interface DreamMerchantScreenProps {
    * provided, a reroll icon button is shown in the top-right corner.
    */
   onReroll?: () => void;
+  /**
+   * Debug-only: force the next encounter to include an offer of the given
+   * archetype (or clear the force with `null`). When provided, a bug icon button
+   * opens a dropdown of forceable categories beside the reroll button.
+   */
+  onForceArchetype?: (archetypeId: MerchantArchetypeId | null) => void;
+  /**
+   * Debug-only: archetypes eligible for the current quest state, used to
+   * populate the force-category dropdown. Only these can actually appear.
+   */
+  eligibleArchetypeIds?: readonly MerchantArchetypeId[];
+  /** Debug-only: the archetype currently forced for this site, when any. */
+  forcedArchetypeId?: string | null;
   context?: MerchantContext;
   questState?: QuestState;
 }
@@ -41,10 +58,14 @@ export function DreamMerchantScreen({
   onDecline,
   onCommit,
   onReroll,
+  onForceArchetype,
+  eligibleArchetypeIds,
+  forcedArchetypeId,
   context,
   questState,
 }: DreamMerchantScreenProps) {
   const [choosingOfferId, setChoosingOfferId] = useState<string | null>(null);
+  const [forcePanelOpen, setForcePanelOpen] = useState(false);
   const [selectedChoices, setSelectedChoices] = useState<
     ReadonlyMap<string, MerchantChoice>
   >(new Map());
@@ -64,6 +85,22 @@ export function DreamMerchantScreen({
     () => encounter.offers.find((offer) => offer.offerId === choosingOfferId),
     [choosingOfferId, encounter.offers],
   );
+
+  // Forceable categories, sorted by their (family-prefixed) label so the
+  // dropdown groups families together. Only archetypes that could actually be
+  // rolled for the current quest state are listed.
+  const forceableArchetypes = useMemo(
+    () =>
+      [...(eligibleArchetypeIds ?? [])].sort((a, b) =>
+        MERCHANT_ARCHETYPE_LABELS[a].localeCompare(MERCHANT_ARCHETYPE_LABELS[b]),
+      ),
+    [eligibleArchetypeIds],
+  );
+
+  function forceArchetype(archetypeId: MerchantArchetypeId | null) {
+    setForcePanelOpen(false);
+    onForceArchetype?.(archetypeId);
+  }
 
   function selectedChoiceFor(offer: MerchantOffer): MerchantChoice | undefined {
     return selectedChoices.get(offer.offerId);
@@ -150,6 +187,83 @@ export function DreamMerchantScreen({
         >
           {"↻"}
         </button>
+      )}
+      {onForceArchetype !== undefined && (
+        <div className="absolute right-16 top-4 z-50">
+          <button
+            type="button"
+            aria-label="Force a journey category (debug)"
+            title="Force a journey category (debug)"
+            aria-expanded={forcePanelOpen}
+            data-testid="dream-merchant-force-toggle"
+            onClick={() => setForcePanelOpen((open) => !open)}
+            className="flex h-10 w-10 items-center justify-center rounded-full text-xl leading-none transition-opacity hover:opacity-80"
+            style={{
+              backgroundColor:
+                forcedArchetypeId != null
+                  ? "rgba(252, 211, 77, 0.18)"
+                  : "rgba(15, 23, 42, 0.85)",
+              color: "#fcd34d",
+              border: "1px solid rgba(252, 211, 77, 0.45)",
+              boxShadow: "0 0 10px rgba(252, 211, 77, 0.2)",
+            }}
+          >
+            <i className="bx bx-bug" aria-hidden="true" />
+          </button>
+          {forcePanelOpen && (
+            <div
+              data-testid="dream-merchant-force-panel"
+              className="fixed right-4 top-16 z-50 max-h-[70vh] w-64 overflow-y-auto rounded-md border border-amber-300/45 bg-slate-950/95 p-1 text-left shadow-xl"
+            >
+              <p className="px-2 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-amber-200/80">
+                Force a category
+              </p>
+              <button
+                type="button"
+                data-testid="dream-merchant-force-clear"
+                onClick={() => forceArchetype(null)}
+                className="flex w-full items-center justify-between rounded px-2 py-1.5 text-left text-sm text-slate-100 transition-colors hover:bg-slate-800"
+                style={{
+                  backgroundColor:
+                    forcedArchetypeId == null
+                      ? "rgba(252, 211, 77, 0.16)"
+                      : undefined,
+                }}
+              >
+                <span>Random (clear force)</span>
+                {forcedArchetypeId == null && (
+                  <span className="text-amber-300">✓</span>
+                )}
+              </button>
+              {forceableArchetypes.length === 0 ? (
+                <p className="px-2 py-1.5 text-xs italic text-slate-400">
+                  No categories are eligible here.
+                </p>
+              ) : (
+                forceableArchetypes.map((archetypeId) => {
+                  const isForced = forcedArchetypeId === archetypeId;
+                  return (
+                    <button
+                      key={archetypeId}
+                      type="button"
+                      data-testid={`dream-merchant-force-${archetypeId}`}
+                      onClick={() => forceArchetype(archetypeId)}
+                      className="flex w-full items-center justify-between rounded px-2 py-1.5 text-left text-sm text-slate-100 transition-colors hover:bg-slate-800"
+                      style={{
+                        backgroundColor: isForced
+                          ? "rgba(252, 211, 77, 0.16)"
+                          : undefined,
+                      }}
+                    >
+                      <span>{MERCHANT_ARCHETYPE_LABELS[archetypeId]}</span>
+                      {isForced && <span className="text-amber-300">✓</span>}
+                    </button>
+                  );
+                })
+              )}
+            </div>
+          )}
+        </div>
       )}
       <div className="mx-auto grid w-full max-w-[1500px] gap-4 lg:grid-cols-[minmax(280px,1fr)_minmax(360px,520px)_minmax(280px,1fr)] lg:items-start">
         <div className="order-3 lg:order-1">

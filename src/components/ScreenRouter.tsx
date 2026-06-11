@@ -29,6 +29,7 @@ import {
   buildMerchantContext,
   generateMerchantEncounterWithDebug,
   type MerchantAcceptRequest,
+  type MerchantArchetypeId,
   type MerchantCatalogCard,
   type MerchantCommitRequest,
   type MerchantDeclineRequest,
@@ -386,6 +387,12 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
   const handleReroll = useCallback(() => {
     mutations.rerollDreamJourney?.(site.id);
   }, [mutations, site.id]);
+  const handleForceArchetype = useCallback(
+    (archetypeId: MerchantArchetypeId | null) => {
+      mutations.forceDreamJourneyArchetype?.(site.id, archetypeId);
+    },
+    [mutations, site.id],
+  );
 
   const handleFallbackWalkAway = useCallback(() => {
     logEvent("merchant_offer_validation_failed", {
@@ -435,6 +442,13 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
       onAcceptOffer={handleAcceptOffer}
       onDecline={handleDecline}
       onReroll={handleReroll}
+      onForceArchetype={
+        mutations.forceDreamJourneyArchetype === undefined
+          ? undefined
+          : handleForceArchetype
+      }
+      eligibleArchetypeIds={encounterResult.debug.eligibleArchetypeIds}
+      forcedArchetypeId={merchantContext.forcedArchetypeId ?? null}
     />
   );
 }

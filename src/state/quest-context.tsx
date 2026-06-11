@@ -83,6 +83,7 @@ import {
 import type {
   MerchantAcceptRequest,
   MerchantApplyPayload,
+  MerchantArchetypeId,
   MerchantCommitRequest,
   MerchantDeclineRequest,
   MerchantOfferActionResult,
@@ -180,6 +181,19 @@ export interface QuestMutations {
    * lightweight test/demo mutation stubs.
    */
   rerollDreamJourney?: (siteId: string) => void;
+  /**
+   * Debug-only: forces the next generated Dream Journey encounter to include an
+   * offer of the given archetype (in slot A), or clears the force when passed
+   * `null`. Bumps `rerollNonce` so the encounter regenerates, and persists the
+   * choice on `siteRuntime[siteId].forcedArchetypeId` so subsequent rerolls keep
+   * forcing the same category until it is cleared. An archetype that is not
+   * eligible for the current quest state is ignored by the generator. Optional
+   * because it is exposed only by the live quest providers.
+   */
+  forceDreamJourneyArchetype?: (
+    siteId: string,
+    archetypeId: MerchantArchetypeId | null,
+  ) => void;
   pickDraftCard: (siteId: string, cardNumber: number) => void;
   addCard: (cardNumber: number, source: string) => void;
   addBaneCard: (cardNumber: number, source: string) => void;
@@ -1844,16 +1858,23 @@ export function QuestProvider({
           ? existingRuntime.rerollNonce ?? 0
           : 0;
       const nextNonce = previousNonce + 1;
+      const forcedArchetypeId =
+        existingRuntime?.kind === "dreamJourney"
+          ? existingRuntime.forcedArchetypeId
+          : undefined;
       logEvent("merchant_encounter_rerolled", {
         siteId,
         rerollNonce: nextNonce,
       });
       // Rebuild the runtime from scratch so any prior `merchantCommittedOfferId`
-      // is dropped — the rerolled encounter is a clean slate.
+      // is dropped — the rerolled encounter is a clean slate. A debug-forced
+      // archetype is preserved so a developer can reroll within a forced
+      // category to cycle its targets.
       const runtime: DreamJourneySiteRuntime = {
         kind: "dreamJourney",
         completed: false,
         rerollNonce: nextNonce,
+        ...(forcedArchetypeId === undefined ? {} : { forcedArchetypeId }),
       };
       return {
         ...prev,
@@ -1864,6 +1885,53 @@ export function QuestProvider({
       };
     });
   }, []);
+
+  const forceDreamJourneyArchetype = useCallback(
+    (siteId: string, archetypeId: MerchantArchetypeId | null) => {
+      setState((prev) => {
+        const existingRuntime = prev.siteRuntime[siteId];
+        if (
+          existingRuntime !== undefined &&
+          existingRuntime.kind !== "dreamJourney"
+        ) {
+          return prev;
+        }
+        if (
+          existingRuntime?.kind === "dreamJourney" &&
+          existingRuntime.completed
+        ) {
+          return prev;
+        }
+        const previousNonce =
+          existingRuntime?.kind === "dreamJourney"
+            ? existingRuntime.rerollNonce ?? 0
+            : 0;
+        const nextNonce = previousNonce + 1;
+        logEvent("merchant_encounter_forced", {
+          siteId,
+          rerollNonce: nextNonce,
+          forcedArchetypeId: archetypeId,
+        });
+        // Bump the nonce so the encounter regenerates, and persist (or clear)
+        // the forced archetype. The runtime is rebuilt from scratch so any prior
+        // commit is dropped — the regenerated encounter is a clean slate.
+        const runtime: DreamJourneySiteRuntime = {
+          kind: "dreamJourney",
+          completed: false,
+          rerollNonce: nextNonce,
+          ...(archetypeId === null ? {} : { forcedArchetypeId: archetypeId }),
+        };
+        return {
+          ...prev,
+          siteRuntime: {
+            ...prev.siteRuntime,
+            [siteId]: runtime,
+          },
+        };
+      });
+    },
+    [],
+  );
 
   const commitDreamMerchantOffer = useCallback(
     (siteId: string, request: MerchantCommitRequest) => {
@@ -3167,6 +3235,7 @@ export function QuestProvider({
       acceptDuplicationChoice,
       completeDreamJourneySite,
       rerollDreamJourney,
+      forceDreamJourneyArchetype,
       commitDreamMerchantOffer,
       acceptDreamMerchantOffer,
       declineDreamMerchant,
@@ -3232,6 +3301,7 @@ export function QuestProvider({
       acceptDuplicationChoice,
       completeDreamJourneySite,
       rerollDreamJourney,
+      forceDreamJourneyArchetype,
       commitDreamMerchantOffer,
       acceptDreamMerchantOffer,
       declineDreamMerchant,

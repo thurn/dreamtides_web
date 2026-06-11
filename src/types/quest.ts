@@ -280,6 +280,16 @@ export interface DreamJourneySiteRuntime {
    * for an un-rerolled site.
    */
   rerollNonce?: number;
+  /**
+   * Debug-only: forces the first generated offer to use this archetype (a
+   * `MerchantArchetypeId`). Set by `forceDreamJourneyArchetype` from the Journey
+   * V2 "force a category" debug dropdown. Read by `buildMerchantContext` and
+   * honored during encounter generation, so it drives both the displayed
+   * encounter and the signature checks on accept/commit/decline. Absent when no
+   * category is forced; the value is ignored if it is not eligible for the
+   * current quest state.
+   */
+  forcedArchetypeId?: string;
 }
 
 /** Serialized runtime state keyed by site id. */

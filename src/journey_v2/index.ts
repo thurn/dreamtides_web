@@ -22,6 +22,7 @@ export {
 } from "./archetypes/registry";
 export {
   MERCHANT_ARCHETYPE_FAMILIES,
+  MERCHANT_ARCHETYPE_LABELS,
 } from "./archetypes/types";
 export { MERCHANT_TUNING } from "./tuning";
 export type {

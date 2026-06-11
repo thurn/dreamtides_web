@@ -134,11 +134,16 @@ export function buildMerchantContext({
   const siteRuntime = questState.siteRuntime[site.id];
   const rerollNonce =
     siteRuntime?.kind === "dreamJourney" ? siteRuntime.rerollNonce ?? 0 : 0;
+  const forcedArchetypeId =
+    siteRuntime?.kind === "dreamJourney"
+      ? siteRuntime.forcedArchetypeId
+      : undefined;
 
   return {
     questSeed: questState.seed,
     site,
     rerollNonce,
+    ...(forcedArchetypeId === undefined ? {} : { forcedArchetypeId }),
     essence: questState.essence,
     essenceCap: questState.essenceCap,
     deckCards,

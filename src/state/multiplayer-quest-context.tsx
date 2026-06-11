@@ -86,6 +86,7 @@ import {
 import type {
   MerchantAcceptRequest,
   MerchantApplyPayload,
+  MerchantArchetypeId,
   MerchantCommitRequest,
   MerchantDeclineRequest,
 } from "../journey_v2";
@@ -2941,13 +2942,19 @@ export function MultiplayerQuestProvider({
             ? existingRuntime.rerollNonce ?? 0
             : 0;
         const nextNonce = previousNonce + 1;
+        const forcedArchetypeId =
+          existingRuntime?.kind === "dreamJourney"
+            ? existingRuntime.forcedArchetypeId
+            : undefined;
         // Rebuild the runtime from scratch so any prior
         // `merchantCommittedOfferId` is dropped — the rerolled encounter is a
-        // clean slate.
+        // clean slate. A debug-forced archetype is preserved so a developer can
+        // reroll within a forced category to cycle its targets.
         const runtime: DreamJourneySiteRuntime = {
           kind: "dreamJourney",
           completed: false,
           rerollNonce: nextNonce,
+          ...(forcedArchetypeId === undefined ? {} : { forcedArchetypeId }),
         };
         return {
           ...room,
@@ -2979,6 +2986,83 @@ export function MultiplayerQuestProvider({
       },
     });
   }, []);
+
+  const forceDreamJourneyArchetype = useCallback(
+    (siteId: string, archetypeId: MerchantArchetypeId | null) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          const existingRuntime = room.questState.siteRuntime[siteId];
+          if (
+            existingRuntime !== undefined &&
+            existingRuntime.kind !== "dreamJourney"
+          ) {
+            return room;
+          }
+          if (
+            existingRuntime?.kind === "dreamJourney" &&
+            existingRuntime.completed
+          ) {
+            return room;
+          }
+          const previousNonce =
+            existingRuntime?.kind === "dreamJourney"
+              ? existingRuntime.rerollNonce ?? 0
+              : 0;
+          const nextNonce = previousNonce + 1;
+          // Bump the nonce so the encounter regenerates, and persist (or clear)
+          // the forced archetype. The runtime is rebuilt from scratch so any
+          // prior commit is dropped — the regenerated encounter is a clean
+          // slate.
+          const runtime: DreamJourneySiteRuntime = {
+            kind: "dreamJourney",
+            completed: false,
+            rerollNonce: nextNonce,
+            ...(archetypeId === null
+              ? {}
+              : { forcedArchetypeId: archetypeId }),
+          };
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              siteRuntime: {
+                ...room.questState.siteRuntime,
+                [siteId]: runtime,
+              },
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "merchant_encounter_forced",
+                source: "dream_merchant",
+                summary: {
+                  siteId,
+                  rerollNonce: nextNonce,
+                  forcedArchetypeId: archetypeId,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
 
   const commitDreamMerchantOffer = useCallback(
     (siteId: string, request: MerchantCommitRequest) => {
@@ -4355,6 +4439,7 @@ export function MultiplayerQuestProvider({
       acceptDuplicationChoice,
       completeDreamJourneySite,
       rerollDreamJourney,
+      forceDreamJourneyArchetype,
       commitDreamMerchantOffer,
       acceptDreamMerchantOffer,
       declineDreamMerchant,

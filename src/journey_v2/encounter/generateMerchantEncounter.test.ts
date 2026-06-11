@@ -14,7 +14,10 @@ import {
   makeMerchantTestSite,
 } from "../testing/fixtures";
 import { buildMerchantContext } from "../context/buildMerchantContext";
-import { generateMerchantEncounter } from "./generateMerchantEncounter";
+import {
+  generateMerchantEncounter,
+  generateMerchantEncounterWithDebug,
+} from "./generateMerchantEncounter";
 
 function poolCards(count: number): {
   cards: CardData[];
@@ -115,6 +118,57 @@ describe("generateMerchantEncounter", () => {
     const encounter = generateMerchantEncounter(contextFor(content, state));
     expect(encounter.offers).toHaveLength(2);
     expect(encounter.offers[0].family).not.toBe(encounter.offers[1].family);
+  });
+
+  it("forces an eligible archetype into slot A when requested", () => {
+    const content = fixtureContent({});
+    const state = makeMerchantTestQuestState({ seed: "force-seed" });
+    const baseContext = contextFor(content, state);
+    const { debug } = generateMerchantEncounterWithDebug(baseContext);
+
+    expect(debug.eligibleArchetypeIds.length).toBeGreaterThan(0);
+    for (const archetypeId of debug.eligibleArchetypeIds) {
+      const forced = generateMerchantEncounterWithDebug({
+        ...baseContext,
+        forcedArchetypeId: archetypeId,
+      });
+      // An eligible archetype is always honored in slot A.
+      expect(forced.debug.forcedArchetypeId).toBe(archetypeId);
+      expect(forced.encounter.offers[0].archetypeId).toBe(archetypeId);
+      expect(forced.encounter.offers[0].family).not.toBe(
+        forced.encounter.offers[1].family,
+      );
+    }
+  });
+
+  it("ignores a forced archetype that is not eligible", () => {
+    const content = fixtureContent({});
+    const state = makeMerchantTestQuestState({ seed: "force-ineligible" });
+    const baseContext = contextFor(content, state);
+    const baseline = generateMerchantEncounter(baseContext);
+    const { encounter, debug } = generateMerchantEncounterWithDebug({
+      ...baseContext,
+      // A syntactically valid id that is excluded from the eligible set here.
+      forcedArchetypeId: "add_site",
+    });
+
+    if (!debug.eligibleArchetypeIds.includes("add_site")) {
+      expect(debug.forcedArchetypeId).toBeNull();
+      // Falls back to the unforced encounter for the same parameters.
+      expect(encounter).toEqual(baseline);
+    }
+  });
+
+  it("forcing is deterministic for the same parameters", () => {
+    const content = fixtureContent({});
+    const state = makeMerchantTestQuestState({ seed: "force-deterministic" });
+    const baseContext = contextFor(content, state);
+    const { debug } = generateMerchantEncounterWithDebug(baseContext);
+    const archetypeId = debug.eligibleArchetypeIds[0];
+    const forcedContext = { ...baseContext, forcedArchetypeId: archetypeId };
+    expect(generateMerchantEncounter(forcedContext)).toEqual(
+      generateMerchantEncounter(forcedContext),
+    );
   });
 
   it("renders a single dialogue line and an accept reaction", () => {

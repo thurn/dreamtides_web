@@ -18,8 +18,13 @@ export interface MerchantEncounterGenerationDebug {
   eligibleArchetypeIds: readonly MerchantArchetypeId[];
   rolledA: MerchantArchetypeId | null;
   rolledB: MerchantArchetypeId | null;
+  /** The debug-forced archetype that was honored for slot A, when any. */
+  forcedArchetypeId: MerchantArchetypeId | null;
   encounterSignature: string;
 }
+
+/** Build attempts for a debug-forced slot before giving up and rolling normally. */
+const FORCE_BUILD_ATTEMPTS = 8;
 
 type StableJsonValue =
   | null
@@ -89,6 +94,32 @@ function rollSlot(
     }
     pool = pool.filter((candidate) => candidate !== builder);
     attempt += 1;
+  }
+  return null;
+}
+
+/**
+ * Builds a specific (debug-forced) archetype for a slot, redrawing the build
+ * RNG up to {@link FORCE_BUILD_ATTEMPTS} times when a build returns null. The
+ * force suffix keeps these draws disjoint from the normal roll, so forcing a
+ * category never collides with the unforced encounter's signatures.
+ */
+function forceSlot(
+  builder: MerchantArchetypeBuilder,
+  context: MerchantContext,
+  saltParts: readonly string[],
+): { builder: MerchantArchetypeBuilder; draft: MerchantOfferDraft } | null {
+  for (let attempt = 0; attempt < FORCE_BUILD_ATTEMPTS; attempt += 1) {
+    const buildRng = merchantRng(
+      ...saltParts,
+      "force",
+      builder.archetypeId,
+      String(attempt),
+    );
+    const draft = builder.build(context, buildRng);
+    if (draft !== null) {
+      return { builder, draft };
+    }
   }
   return null;
 }
@@ -209,11 +240,30 @@ export function generateMerchantEncounterWithDebug(
       ? ["reroll", String(context.rerollNonce)]
       : [];
 
+  // A debug-forced archetype only applies when it is actually eligible for the
+  // current quest state; otherwise it is silently ignored and slot A rolls
+  // normally. Forcing targets slot A so the encounter always shows at least one
+  // offer of the chosen category.
+  const forcedBuilder =
+    context.forcedArchetypeId === undefined
+      ? null
+      : (eligible.find(
+          (builder) => builder.archetypeId === context.forcedArchetypeId,
+        ) ?? null);
+
   const slotASalt = [context.questSeed, context.site.id, "A", ...rerollSalt];
-  const rolledA = rollSlot(eligible, context, slotASalt);
+  const rolledA =
+    forcedBuilder === null
+      ? rollSlot(eligible, context, slotASalt)
+      : (forceSlot(forcedBuilder, context, slotASalt) ??
+        rollSlot(eligible, context, slotASalt));
   if (rolledA === null) {
     throw new Error("Dream Merchant could not roll a first offer");
   }
+  const honoredForcedArchetypeId =
+    forcedBuilder !== null && rolledA.builder.archetypeId === forcedBuilder.archetypeId
+      ? forcedBuilder.archetypeId
+      : null;
 
   const eligibleB = eligible.filter(
     (builder) => builder.family !== rolledA.builder.family,
@@ -252,6 +302,7 @@ export function generateMerchantEncounterWithDebug(
       eligibleArchetypeIds,
       rolledA: rolledA.builder.archetypeId,
       rolledB: rolledB.builder.archetypeId,
+      forcedArchetypeId: honoredForcedArchetypeId,
       encounterSignature,
     },
   };

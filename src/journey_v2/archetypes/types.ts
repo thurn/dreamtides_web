@@ -65,6 +65,34 @@ export const MERCHANT_ARCHETYPE_FAMILIES: Readonly<
 };
 
 /**
+ * Human-readable label for every archetype, grouped by family. Used by the
+ * Journey V2 debug "force a category" dropdown so a developer can pick a
+ * specific offer type by name rather than by raw id.
+ */
+export const MERCHANT_ARCHETYPE_LABELS: Readonly<
+  Record<MerchantArchetypeId, string>
+> = {
+  fit_card_grant: "Grant: Fit card (gift)",
+  fit_card_draft: "Grant: Fit card draft",
+  copies_draft: "Grant: Copies draft",
+  strong_card: "Grant: Strong card",
+  premium_draft: "Grant: Premium draft",
+  category_draft_known: "Grant: Category draft",
+  card_bundle: "Grant: Card bundle",
+  transfigured_draft: "Grant: Transfigured draft",
+  transfigure: "Improve: Transfigure",
+  starter_transfigure: "Improve: Starter transfigure",
+  keyword_mod: "Improve: Keyword modifier",
+  tribal_change: "Improve: Tribal change",
+  purge: "Remove: Purge",
+  purge_replace: "Remove: Purge & replace",
+  duplicate: "Duplicate: Duplicate card",
+  dreamsign: "Dreamsign: Grant dreamsign",
+  dreamsign_draft: "Dreamsign: Dreamsign draft",
+  add_site: "Site: Add a site",
+};
+
+/**
  * A built offer before it is assigned an offer id (`A`/`B`) and an encounter
  * signature. One draft is one reward; chooser drafts carry a
  * {@link MerchantChoiceRequest} of at most 4 candidates.
