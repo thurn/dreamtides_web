@@ -83,9 +83,10 @@ const ART_BAND_MAX_TOP_PCT = 92;
  * Sizing is driven by container queries (`container-type: inline-size`), so the
  * card scales to whatever width its container gives it; every length below is in
  * `cqw` (1% of the card's own width) so the layout holds at any size. The corner
- * radius pairs a horizontal `cqw` with a larger vertical `cqw` so the rendered
- * corner stays uniform on the 3:2 frame (the vertical component is the same
- * fraction of height as the horizontal is of width).
+ * radius is the one exception: it is set in `%` (`3.6% / 5.4%`) so it resolves
+ * against the card's own box, matching the regular card's `CARD_CORNER_RADIUS`
+ * (a circular 3.6% of width). A `cqw` radius would resolve against an ancestor
+ * container and blow the corner up on wide layouts.
  */
 export function DreamwellCardView({
   card,
@@ -223,9 +224,10 @@ export function DreamwellCardView({
         width: "100%",
         aspectRatio: "3 / 2",
         containerType: "inline-size",
-        // Horizontal 3.2% of width, vertical 4.8% of width (= 3.2% of height on
-        // a 3:2 frame), so the rendered corner is a uniform 3.2% on every side.
-        borderRadius: "3.2cqw / 4.8cqw",
+        // Circular corner of 3.6% of the card width, matching the regular card.
+        // Set in `%` (not `cqw`) so it resolves against the card's own box; the
+        // vertical 5.4% of height equals 3.6% of width on the 3:2 frame.
+        borderRadius: "3.6% / 5.4%",
         overflow: "hidden",
         boxShadow:
           "0 0.8cqw 2.4cqw rgba(0, 0, 0, 0.55), 0 0 0 0.18cqw rgba(168, 85, 247, 0.5)",
@@ -284,7 +286,7 @@ export function DreamwellCardView({
         style={{
           position: "absolute",
           inset: 0,
-          borderRadius: "3.2cqw / 4.8cqw",
+          borderRadius: "3.6% / 5.4%",
           pointerEvents: "none",
           boxShadow:
             "0 0 0 0.2cqw rgba(255, 255, 255, 0.05) inset, 0 0 6cqw 0.6cqw rgba(0, 0, 0, 0.5) inset",
