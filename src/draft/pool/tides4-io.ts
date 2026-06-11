@@ -51,6 +51,18 @@ export interface Tides4DeckJson {
    * been annotated; preserved across bakes by stable id.
    */
   shortName?: string;
+  /**
+   * A narrative, thematic name (not literal game terms) shown for the tide on the
+   * player-facing Dreamcaller select, pool viewer, and "why this card" screens.
+   * Present once annotated; preserved across bakes by stable id.
+   */
+  displayName?: string;
+  /**
+   * A 10-20 word player-facing description of what makes the tide distinctive,
+   * free of card, Dreamcaller, and tide names. Shown in the hover popovers on the
+   * player-facing tide screens; preserved across bakes by stable id.
+   */
+  displayDescription?: string;
   /** A one-sentence summary of what the tide does and how it differs from peers. */
   summary?: string;
   /** A one-paragraph description of the tide's structure, engine, and contrasts. */

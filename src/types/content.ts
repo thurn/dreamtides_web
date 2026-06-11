@@ -172,6 +172,16 @@ export interface Tides4TideSummary {
   id: string;
   /** Human-readable tide name. */
   name: string;
+  /**
+   * A narrative, thematic name for the tide shown on the player-facing screens
+   * (Dreamcaller select, Pool Viewer, "Why Cards"), when the tide is annotated.
+   */
+  displayName?: string;
+  /**
+   * A 10-20 word player-facing description of what makes the tide distinctive,
+   * shown in the tide hover popovers, when the tide is annotated.
+   */
+  displayDescription?: string;
   /** Whether the tide is a signature floor, a directional facet, or a broad tide. */
   role: Tides4Role;
   /** Why this tide was joined this run. */

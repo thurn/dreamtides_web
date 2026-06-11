@@ -233,6 +233,8 @@ export function generateTides4(
     tides.push({
       id,
       name: tide.name,
+      displayName: tide.displayName,
+      displayDescription: tide.displayDescription,
       role: tide.role,
       selection,
       joined: fold,

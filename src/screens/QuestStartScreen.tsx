@@ -303,7 +303,10 @@ export function QuestStartScreen() {
                             }}
                             data-dreamcaller-tide-tooltip={`${dreamcaller.id}:${tide.id}`}
                           >
-                            {tide.summary ?? tide.description ?? tide.name}
+                            {tide.displayDescription ??
+                            tide.summary ??
+                            tide.description ??
+                            tide.name}
                           </span>
                         }
                       >
@@ -323,7 +326,7 @@ export function QuestStartScreen() {
                             style={{ color: accentColor }}
                           />
                           <span className="truncate">
-                            {tide.shortName ?? tide.name}
+                            {tide.displayName ?? tide.shortName ?? tide.name}
                           </span>
                         </span>
                       </HoverPopover>

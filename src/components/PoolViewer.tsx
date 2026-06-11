@@ -26,6 +26,7 @@ import {
   subtypeOptionsFromCards,
 } from "./card-browser/card-browser-filter";
 import { CardOverlay } from "./CardOverlay";
+import { HoverPopover } from "./HoverPopover";
 
 type PoolViewerSource =
   | "run"
@@ -1007,7 +1008,7 @@ function Tides4Banner({
         <>
           {"Built from tides — the "}
           <span style={{ color: "#34c759", fontWeight: 700 }}>
-            {starterTide?.name ?? "signature"}
+            {starterTide?.displayName ?? starterTide?.name ?? "signature"}
           </span>
           {" tide (always joined), "}
         </>
@@ -1051,7 +1052,7 @@ function TideDeckNav({
       {tides.map((tide) => {
         const meta = TIDE_SELECTION_META[tide.selection];
         const active = tide.id === selectedTideId;
-        return (
+        const button = (
           <button
             key={tide.id}
             type="button"
@@ -1085,7 +1086,7 @@ function TideDeckNav({
                 opacity: tide.joined ? 1 : 0.4,
               }}
             />
-            {tide.name}
+            {tide.displayName ?? tide.name}
             <span
               style={{
                 fontSize: "0.64rem",
@@ -1098,8 +1099,47 @@ function TideDeckNav({
             </span>
           </button>
         );
+        if (tide.displayDescription == null) return button;
+        return (
+          <HoverPopover
+            key={tide.id}
+            style={{ display: "inline-flex" }}
+            content={<TideTooltipContent tide={tide} />}
+          >
+            {button}
+          </HoverPopover>
+        );
       })}
     </div>
+  );
+}
+
+/** Hover tooltip: the tide's thematic name and one-line player-facing blurb. */
+function TideTooltipContent({ tide }: { tide: Tides4TideSummary }) {
+  return (
+    <span
+      data-pool-tide-tooltip={tide.id}
+      style={{
+        display: "block",
+        maxWidth: "260px",
+        borderRadius: "8px",
+        border: "1px solid rgba(255, 255, 255, 0.16)",
+        background: "#000000",
+        color: "#ffffff",
+        padding: "8px 12px",
+        fontSize: "0.74rem",
+        lineHeight: 1.5,
+        textAlign: "left",
+        boxShadow: "0 12px 32px rgba(0, 0, 0, 0.55)",
+      }}
+    >
+      <span style={{ fontWeight: 700 }}>{tide.displayName ?? tide.name}</span>
+      {tide.displayDescription != null ? (
+        <span style={{ display: "block", marginTop: "3px", opacity: 0.88 }}>
+          {tide.displayDescription}
+        </span>
+      ) : null}
+    </span>
   );
 }
 

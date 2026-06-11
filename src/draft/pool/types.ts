@@ -312,6 +312,10 @@ export interface Tides4PoolTide {
   id: string;
   /** Human-readable tide name. */
   name: string;
+  /** A narrative, thematic name for the tide (player-facing), when annotated. */
+  displayName?: string;
+  /** A 10-20 word player-facing description of the tide, when annotated. */
+  displayDescription?: string;
   /** Whether the tide is a signature floor, a directional facet, or a broad tide. */
   role: Tides4Role;
   /** Why this tide was joined this run. */

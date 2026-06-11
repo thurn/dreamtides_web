@@ -121,7 +121,13 @@ function readTideAnnotations(outPath) {
   for (const tide of parsed.tides ?? []) {
     if (!tide || typeof tide.id !== "string") continue;
     const anno = {};
-    for (const key of ["shortName", "summary", "description"]) {
+    for (const key of [
+      "shortName",
+      "displayName",
+      "displayDescription",
+      "summary",
+      "description",
+    ]) {
       if (typeof tide[key] === "string" && tide[key] !== "") anno[key] = tide[key];
     }
     if (Object.keys(anno).length > 0) map.set(tide.id, anno);
@@ -283,9 +289,11 @@ const HEADER = `// data/tides4.jsonc — the committed tide decks the \`tides4\`
 //
 // Cards are keyed by stable cards_v2 UUID; \`name\` fields are informational,
 // refreshed at bake time. Each tide may also carry hand-authored identity
-// annotations — \`shortName\` (a 1-3 word mechanical label), \`summary\` (one
-// sentence), and \`description\` (one paragraph) — which a re-bake preserves by
-// stable tide id. \`tidePoolByDreamcaller\` is keyed by Dreamcaller UUID; each
+// annotations — \`shortName\` (a 1-3 word mechanical label), \`displayName\` (a
+// narrative, thematic name) and \`displayDescription\` (a 10-20 word player-facing
+// blurb) for the player-facing tide screens, \`summary\` (one sentence), and
+// \`description\` (one paragraph) — which a re-bake preserves by stable tide id.
+// \`tidePoolByDreamcaller\` is keyed by Dreamcaller UUID; each
 // entry has \`starter\` (the always-joined signature tide, or null), \`facets\` (a
 // random subset is drawn each run) and \`neutral\` (the broad tail).
 //
@@ -304,7 +312,13 @@ function serializeArtifact(json) {
     // Hand-authored identity annotations (preserved across bakes by tide id) are
     // emitted right after `name` when present, so the deck body stays readable.
     const anno = [];
-    for (const key of ["shortName", "summary", "description"]) {
+    for (const key of [
+      "shortName",
+      "displayName",
+      "displayDescription",
+      "summary",
+      "description",
+    ]) {
       if (typeof tide[key] === "string" && tide[key] !== "") {
         anno.push(`      ${JSON.stringify(key)}: ${JSON.stringify(tide[key])},`);
       }
@@ -584,9 +598,24 @@ function run() {
   // render keeps them.
   const json = {
     version: 1,
-    tides: tides.map(({ id, name, shortName, summary, description, role, cards }) => {
+    tides: tides.map(
+      ({
+        id,
+        name,
+        shortName,
+        displayName,
+        displayDescription,
+        summary,
+        description,
+        role,
+        cards,
+      }) => {
       const out = { id, name };
       if (shortName !== undefined) out.shortName = shortName;
+      if (displayName !== undefined) out.displayName = displayName;
+      if (displayDescription !== undefined) {
+        out.displayDescription = displayDescription;
+      }
       if (summary !== undefined) out.summary = summary;
       if (description !== undefined) out.description = description;
       out.role = role;

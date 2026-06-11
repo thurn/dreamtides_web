@@ -14,6 +14,7 @@ import type {
   Tides4TideSummary,
 } from "../types/content";
 import { seedProvenanceVariantCopy } from "../draft/pool/seed-provenance-copy";
+import { HoverPopover } from "../components/HoverPopover";
 
 interface CardSourceOverlayProps {
   cardSourceDebug: CardSourceDebugState | null;
@@ -128,6 +129,68 @@ function CardChips({ names }: { names: readonly string[] }) {
         </span>
       ))}
     </div>
+  );
+}
+
+/**
+ * Chips naming the tides that built the pool, by their thematic `displayName`.
+ * Each chip hovers to a popover with the tide's one-line player-facing blurb.
+ */
+function TideChips({ tides }: { tides: readonly Tides4TideSummary[] }) {
+  if (tides.length === 0) {
+    return <span className="text-xs opacity-50">none</span>;
+  }
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {tides.map((tide) => {
+        const chip = (
+          <span
+            className="rounded-md px-2 py-0.5 text-[11px]"
+            data-why-tide-chip={tide.id}
+            style={{
+              background: "rgba(30, 41, 59, 0.62)",
+              border: "1px solid rgba(148, 163, 184, 0.16)",
+              color: "#e2e8f0",
+              cursor: tide.displayDescription != null ? "help" : "default",
+            }}
+          >
+            {tide.displayName ?? tide.name}
+          </span>
+        );
+        if (tide.displayDescription == null) {
+          return <span key={tide.id}>{chip}</span>;
+        }
+        return (
+          <HoverPopover
+            key={tide.id}
+            content={<TideChipTooltip tide={tide} />}
+          >
+            {chip}
+          </HoverPopover>
+        );
+      })}
+    </div>
+  );
+}
+
+/** Hover tooltip body for a tide chip: thematic name plus its blurb. */
+function TideChipTooltip({ tide }: { tide: Tides4TideSummary }) {
+  return (
+    <span
+      data-why-tide-tooltip={tide.id}
+      className="block rounded-lg border px-3 py-2 text-left text-xs leading-relaxed shadow-2xl"
+      style={{
+        background: "#000000",
+        borderColor: "rgba(255, 255, 255, 0.16)",
+        color: "#ffffff",
+        maxWidth: "260px",
+      }}
+    >
+      <span className="font-semibold">{tide.displayName ?? tide.name}</span>
+      {tide.displayDescription != null ? (
+        <span className="mt-1 block opacity-90">{tide.displayDescription}</span>
+      ) : null}
+    </span>
   );
 }
 
@@ -622,16 +685,14 @@ function Tides4ProvenanceWalkthrough({
   provenance: Tides4ProvenanceSummary;
 }) {
   const starterTide = provenance.tides.find((t) => t.selection === "starter");
-  const drawnFacetNames = provenance.tides
-    .filter((t) => t.selection === "facet-drawn")
-    .map((t) => t.name);
-  const broadNames = provenance.tides
-    .filter(
-      (t) =>
-        t.joined &&
-        (t.selection === "neutral-fill" || t.selection === "facet-fill"),
-    )
-    .map((t) => t.name);
+  const drawnFacetTides = provenance.tides.filter(
+    (t) => t.selection === "facet-drawn",
+  );
+  const broadTides = provenance.tides.filter(
+    (t) =>
+      t.joined &&
+      (t.selection === "neutral-fill" || t.selection === "facet-fill"),
+  );
   const joinedCount = provenance.tides.filter((t) => t.joined).length;
   const distinctCardCount = Object.keys(
     provenance.cardProvenanceByNumber,
@@ -654,7 +715,7 @@ function Tides4ProvenanceWalkthrough({
             identity floor — always joined, never random.
           </p>
         )}
-        <CardChips names={starterTide ? [starterTide.name] : []} />
+        <TideChips tides={starterTide ? [starterTide] : []} />
       </Step>
 
       <Step index={2} title="Theme tides">
@@ -664,17 +725,17 @@ function Tides4ProvenanceWalkthrough({
           shuffled in. Drawing a different few each run is the variety engine —
           it leans the same identity a different way every time.
         </p>
-        <CardChips names={drawnFacetNames} />
+        <TideChips tides={drawnFacetTides} />
       </Step>
 
       <Step index={3} title="Broad fill">
-        {broadNames.length > 0 ? (
+        {broadTides.length > 0 ? (
           <>
             <p>
               Broad, format-spanning tides topped the pool up to full size once
               the signature and theme tides were in.
             </p>
-            <CardChips names={broadNames} />
+            <TideChips tides={broadTides} />
           </>
         ) : (
           <p className="opacity-70">
@@ -795,21 +856,22 @@ function tideCardReason(
   tide: Tides4TideSummary,
   provenance: Tides4ProvenanceSummary,
 ): string {
+  const label = tide.displayName ?? tide.name;
   switch (tide.selection) {
     case "starter":
       return provenance.signatureless
-        ? `From the borrowed signature tide ${tide.name} — the ${
+        ? `From the borrowed signature tide ${label} — the ${
             provenance.borrowedArchetypeName ?? "borrowed"
           } archetype's identity floor.`
-        : `From your signature tide ${tide.name} — the pool's identity floor.`;
+        : `From your signature tide ${label} — the pool's identity floor.`;
     case "facet-drawn":
-      return `From the theme tide ${tide.name}, one of the ${String(
+      return `From the theme tide ${label}, one of the ${String(
         provenance.facetDrawnCount,
       )} drawn at random this run.`;
     case "facet-fill":
-      return `From ${tide.name}, an on-theme tide folded in to top the pool up.`;
+      return `From ${label}, an on-theme tide folded in to top the pool up.`;
     case "neutral-fill":
-      return `From the broad tide ${tide.name}, folded in to top the pool up.`;
+      return `From the broad tide ${label}, folded in to top the pool up.`;
   }
 }
 
