@@ -640,7 +640,7 @@
       ]
     },
     "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd": {
-      "name": "Charnel Seraph",
+      "name": "Ash Sower",
       "needs": [],
       "supports": [
         "warriors",
@@ -726,7 +726,7 @@
       ]
     },
     "82749215-ed35-44e3-a745-72ca76036c7c": {
-      "name": "Colossal Convergence",
+      "name": "Dreadmount Sovereign",
       "needs": [],
       "supports": [
         "warriors",
@@ -815,7 +815,7 @@
       ]
     },
     "78b5a42d-b099-48f1-a1b4-5b6bc177adeb": {
-      "name": "Crucible Warlord",
+      "name": "Shard Wielder",
       "needs": [
         {
           "theme": "warriors",
@@ -984,7 +984,7 @@
       ]
     },
     "49c6e5ad-8da8-47fa-a8f3-906cbef8a3ed": {
-      "name": "Dread Arbiter",
+      "name": "Glimmerwood Scout",
       "needs": [],
       "supports": [
         "events",
@@ -1570,7 +1570,7 @@
       ]
     },
     "6f1833a0-30f5-4718-9a3e-7620beb72bfc": {
-      "name": "Flagbearer of Decay",
+      "name": "Clockwork Salvager",
       "needs": [
         {
           "theme": "discard",
@@ -1628,7 +1628,7 @@
       "supports": []
     },
     "4b4cc613-2e28-4851-975f-14146286a062": {
-      "name": "Forge-Twin",
+      "name": "Pathfinder",
       "needs": [
         {
           "theme": "warriors",
@@ -2331,7 +2331,7 @@
       ]
     },
     "7947e9db-a85e-4277-a42a-8d45f7475295": {
-      "name": "Liminal Striker",
+      "name": "Blade of Unity",
       "needs": [
         {
           "theme": "warriors",
@@ -2686,7 +2686,7 @@
       ]
     },
     "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e": {
-      "name": "Nineborn Specter",
+      "name": "Vengeance Taker",
       "needs": [],
       "supports": [
         "warriors",
@@ -3125,7 +3125,7 @@
       ]
     },
     "d6e8842f-c0a4-4b4c-93bd-377cfae60894": {
-      "name": "Ride of the Vanguard",
+      "name": "Vanguard Charger",
       "needs": [
         {
           "theme": "warriors",
@@ -3196,7 +3196,7 @@
       ]
     },
     "e7c93c3b-14db-4131-ab50-71d152331777": {
-      "name": "Rootbound Witness",
+      "name": "Sundown Surfer",
       "needs": [],
       "supports": [
         "warriors",
@@ -3673,7 +3673,7 @@
       ]
     },
     "d6ec65a2-d61e-4617-bdd0-75d5573c063d": {
-      "name": "Smoldering Ancient",
+      "name": "Ruthless Conquerer",
       "needs": [
         {
           "theme": "warriors",
