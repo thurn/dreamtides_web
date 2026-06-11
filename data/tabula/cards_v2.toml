@@ -384,7 +384,7 @@ art-owned = false
 card-number = 21
 
 [[cards]]
-name = "Flagbearer of Decay"
+name = "Clockwork Salvager"
 mtg-name = "Containment Construct"
 id = "6f1833a0-30f5-4718-9a3e-7620beb72bfc"
 rendered-text = "When you discard a card, you may play that card from your void this turn."
@@ -395,10 +395,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "J11"]
-image-number = 2197688373
+tags = ["Art Rework", "J11", "Art OK"]
+image-number = 768349747
 art-owned = false
 card-number = 22
+art = { x = 0.147, y = -0.216, scale = 1.47 }
 
 [[cards]]
 name = "Pathwalker"
@@ -1084,7 +1085,7 @@ art-owned = true
 card-number = 58
 
 [[cards]]
-name = "Crucible Warlord"
+name = "Shard Wielder"
 mtg-name = "Thraben Inspector"
 id = "78b5a42d-b099-48f1-a1b4-5b6bc177adeb"
 rendered-text = "▸Materialized: Draw a warrior."
@@ -1095,10 +1096,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "J11"]
-image-number = 2661986989
+tags = ["Art Rework", "J11", "Art OK"]
+image-number = 2191235669
 art-owned = false
 card-number = 59
+art = { x = -0.458, y = 1, scale = 1.47 }
 
 [[cards]]
 name = "Stargazer Adrift"
@@ -2670,7 +2672,7 @@ art-owned = true
 card-number = 144
 
 [[cards]]
-name = "Charnel Seraph"
+name = "Ash Sower"
 mtg-name = "Grafted Wargear"
 id = "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd"
 rendered-text = """
@@ -2684,10 +2686,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "J11"]
-image-number = 2295991869
+tags = ["Art Rework", "J11", "Art OK"]
+image-number = 1798514896
 art-owned = false
 card-number = 145
+art = { x = 0, y = -0.34, scale = 1.37 }
 
 [[cards]]
 name = "Seer of the Fallen"
@@ -3948,7 +3951,7 @@ art-owned = false
 card-number = 215
 
 [[cards]]
-name = "Colossal Convergence"
+name = "Dreadmount Sovereign"
 mtg-name = "Arcbound Ravager"
 id = "82749215-ed35-44e3-a745-72ca76036c7c"
 rendered-text = "❖❖ – ☪, Abandon a character: Give an ally +X✦ where X is the abandoned character's ✦."
@@ -3959,11 +3962,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "J11"]
-image-number = 2430444881
+tags = ["Art Rework", "J11", "Art OK"]
+image-number = 1798514914
 art-owned = false
 card-number = 216
-art = { x = 0, y = 1, scale = 1.57 }
+art = { x = 0, y = 1, scale = 1.47 }
 
 [[cards]]
 name = "Forsworn Champion"
@@ -3984,7 +3987,7 @@ card-number = 217
 art = { x = -0.032, y = -0.445, scale = 1.37 }
 
 [[cards]]
-name = "Forge-Twin"
+name = "Pathfinder"
 mtg-name = "Urza, Lord High Artificer"
 id = "4b4cc613-2e28-4851-975f-14146286a062"
 rendered-text = "▸Materialized: Materialize a figment copy of 'Blade of Unity'."
@@ -3995,10 +3998,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Spark Scaler", "Art Rework", "J11"]
-image-number = 768349747
+tags = ["Spark Scaler", "Art Rework", "J11", "Art OK"]
+image-number = 1790126255
 art-owned = false
 card-number = 218
+art = { x = 0.726, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Speaker for the Forgotten"
@@ -4221,10 +4225,10 @@ card-number = 230
 art = { x = -0.042, y = 0.369, scale = 1.17 }
 
 [[cards]]
-name = "Nineborn Specter"
+name = "Vengeance Taker"
 mtg-name = "Perilous Myr"
 id = "44fb30ba-c8a1-40e2-9f33-f2dd1fa96e5e"
-rendered-text = "▸Dissolved: Gain 2⍟."
+rendered-text = "▸Dissolved: Dissolve a ≤2✦ enemy."
 energy-cost = 2
 card-type = "Character"
 subtype = "Warrior"
@@ -4232,8 +4236,8 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "J11"]
-image-number = 439817014
+tags = ["Art Rework", "J11", "Art OK"]
+image-number = 1798514893
 art-owned = false
 card-number = 231
 art = { x = 0, y = 0.798, scale = 1.17 }
