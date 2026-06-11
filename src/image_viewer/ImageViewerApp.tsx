@@ -1,7 +1,11 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import ImageGrid from "./ImageGrid";
 import ImageViewerToolbar from "./ImageViewerToolbar";
-import { loadImageManifest } from "./image-viewer-api";
+import {
+  loadImageManifest,
+  moveImageCategory,
+  setManualUsed,
+} from "./image-viewer-api";
 import {
   DEFAULT_IMAGE_VIEWER_DISPLAY_STATE,
   parseImageViewerDisplayState,
@@ -17,7 +21,7 @@ import {
 
 type LoadStatus =
   | { kind: "loading" }
-  | { kind: "loaded"; manifest: ImageManifest }
+  | { kind: "loaded" }
   | { kind: "error"; message: string };
 
 /** Resolve the set of category subdirectories a selection expands to. */
@@ -38,6 +42,8 @@ function categoriesForSelection(
 export default function ImageViewerApp() {
   const [loadStatus, setLoadStatus] = useState<LoadStatus>({ kind: "loading" });
   const [loadAttempt, setLoadAttempt] = useState(0);
+  const [manifest, setManifest] = useState<ImageManifest | null>(null);
+  const [actionError, setActionError] = useState<string | null>(null);
   const [displayState, setDisplayState] = useState<ImageViewerDisplayState>(
     () =>
       typeof window === "undefined"
@@ -49,8 +55,9 @@ export default function ImageViewerApp() {
     const controller = new AbortController();
     setLoadStatus({ kind: "loading" });
     loadImageManifest(controller.signal)
-      .then((manifest) => {
-        setLoadStatus({ kind: "loaded", manifest });
+      .then((loaded) => {
+        setManifest(loaded);
+        setLoadStatus({ kind: "loaded" });
       })
       .catch((error: unknown) => {
         if (controller.signal.aborted) {
@@ -77,9 +84,6 @@ export default function ImageViewerApp() {
     }
   }, [displayState]);
 
-  const manifest =
-    loadStatus.kind === "loaded" ? loadStatus.manifest : null;
-
   const visibleImages = useMemo<ImageManifestEntry[]>(() => {
     if (manifest === null) {
       return [];
@@ -88,9 +92,95 @@ export default function ImageViewerApp() {
     return manifest.images.filter(
       (image) =>
         selected.has(image.category) &&
-        (displayState.showUsed || !image.used),
+        (displayState.showUsed || !(image.used || image.manuallyUsed)),
     );
   }, [manifest, displayState.category, displayState.showUsed]);
+
+  // Toggle an image's manual-used mark. The mark is keyed by image number on the
+  // server, so every manifest entry sharing that number flips together. The grid
+  // updates optimistically and reverts if the request fails.
+  const handleToggleUsed = useCallback(
+    (entry: ImageManifestEntry) => {
+      const nextUsed = !entry.manuallyUsed;
+      setActionError(null);
+      setManifest((current) =>
+        current === null
+          ? current
+          : {
+              ...current,
+              images: current.images.map((image) =>
+                image.imageNumber === entry.imageNumber
+                  ? { ...image, manuallyUsed: nextUsed }
+                  : image,
+              ),
+            },
+      );
+      setManualUsed(entry.imageNumber, nextUsed).catch((error: unknown) => {
+        setActionError(
+          error instanceof Error ? error.message : "Failed to update.",
+        );
+        setManifest((current) =>
+          current === null
+            ? current
+            : {
+                ...current,
+                images: current.images.map((image) =>
+                  image.imageNumber === entry.imageNumber
+                    ? { ...image, manuallyUsed: !nextUsed }
+                    : image,
+                ),
+              },
+        );
+      });
+    },
+    [],
+  );
+
+  // Move an image to a different category subdirectory. The grid updates
+  // optimistically and reverts to the original category if the move fails.
+  const handleChangeCategory = useCallback(
+    (entry: ImageManifestEntry, targetCategory: string) => {
+      if (targetCategory === entry.category) {
+        return;
+      }
+      const fromCategory = entry.category;
+      setActionError(null);
+      setManifest((current) =>
+        current === null
+          ? current
+          : {
+              ...current,
+              images: current.images.map((image) =>
+                image.category === fromCategory &&
+                image.filename === entry.filename
+                  ? { ...image, category: targetCategory }
+                  : image,
+              ),
+            },
+      );
+      moveImageCategory(fromCategory, entry.filename, targetCategory).catch(
+        (error: unknown) => {
+          setActionError(
+            error instanceof Error ? error.message : "Failed to move image.",
+          );
+          setManifest((current) =>
+            current === null
+              ? current
+              : {
+                  ...current,
+                  images: current.images.map((image) =>
+                    image.category === targetCategory &&
+                    image.filename === entry.filename
+                      ? { ...image, category: fromCategory }
+                      : image,
+                  ),
+                },
+          );
+        },
+      );
+    },
+    [],
+  );
 
   return (
     <main
@@ -151,22 +241,36 @@ export default function ImageViewerApp() {
           </p>
         ) : null}
 
-        {loadStatus.kind === "loaded" ? (
+        {loadStatus.kind === "loaded" && manifest !== null ? (
           <>
             <ImageViewerToolbar
               displayState={displayState}
-              categories={loadStatus.manifest.categories}
-              hasGenericPool={loadStatus.manifest.genericSubdirs.length > 0}
+              categories={manifest.categories}
+              hasGenericPool={manifest.genericSubdirs.length > 0}
               visibleCount={visibleImages.length}
-              totalCount={loadStatus.manifest.images.length}
+              totalCount={manifest.images.length}
               onDisplayStateChange={setDisplayState}
             />
+            {actionError !== null ? (
+              <p
+                role="alert"
+                style={{ margin: 0, color: "#f0c6bd", fontSize: "0.82rem" }}
+              >
+                {actionError}
+              </p>
+            ) : null}
             {visibleImages.length === 0 ? (
               <p role="status" style={{ margin: 0, color: "#c9d3cf" }}>
                 No images match the current filters.
               </p>
             ) : (
-              <ImageGrid images={visibleImages} columns={displayState.columns} />
+              <ImageGrid
+                images={visibleImages}
+                columns={displayState.columns}
+                categories={manifest.categories}
+                onToggleUsed={handleToggleUsed}
+                onChangeCategory={handleChangeCategory}
+              />
             )}
           </>
         ) : null}

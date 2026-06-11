@@ -1,6 +1,13 @@
-import { existsSync, readFileSync, readdirSync, statSync } from "node:fs";
+import {
+  existsSync,
+  readFileSync,
+  readdirSync,
+  renameSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
 import { homedir } from "node:os";
-import { join } from "node:path";
+import { dirname, join, resolve } from "node:path";
 import { parse } from "smol-toml";
 
 /**
@@ -17,6 +24,14 @@ export const DEFAULT_TAGGED_ROOT = join(
 );
 
 export const METADATA_FILENAME = "untagged-categorized.json";
+
+/**
+ * Editorial overrides authored from the image viewer live alongside the images
+ * in the tagged root. The manual-used file records image numbers a curator has
+ * hand-marked as "used" so they hide from the candidate grid even though no card
+ * claims them yet.
+ */
+export const MANUAL_USED_FILENAME = "manual-used.json";
 
 /**
  * The "Generic" pool combines every non-specialized character subdirectory
@@ -219,6 +234,121 @@ export function readImageMetadata(metadataPath) {
   return byImageNumber;
 }
 
+/** Absolute path of the manual-used override file inside the tagged root. */
+export function manualUsedPath(root) {
+  return join(root, MANUAL_USED_FILENAME);
+}
+
+/**
+ * Read the set of image numbers a curator has hand-marked as used. The override
+ * file is a JSON array of image-number strings. A missing or malformed file
+ * yields an empty set, so the viewer degrades gracefully on a fresh working set.
+ * Returns a `Set<string>` keyed the same way as `imageNumberFromFilename`.
+ */
+export function readManualUsedImageNumbers(root) {
+  const path = manualUsedPath(root);
+  if (!existsSync(path)) {
+    return new Set();
+  }
+  try {
+    const parsed = JSON.parse(readFileSync(path, "utf8"));
+    if (!Array.isArray(parsed)) {
+      return new Set();
+    }
+    return new Set(
+      parsed
+        .filter((value) => typeof value === "string" && value.trim() !== "")
+        .map((value) => value.trim()),
+    );
+  } catch {
+    return new Set();
+  }
+}
+
+/** Persist the manual-used override set as a sorted JSON array. */
+export function writeManualUsedImageNumbers(root, imageNumbers) {
+  const sorted = [...imageNumbers].sort((a, b) => a.localeCompare(b));
+  writeFileSync(manualUsedPath(root), `${JSON.stringify(sorted, null, 2)}\n`);
+}
+
+/**
+ * Mark or unmark a single image number as manually used and persist the change.
+ * Returns the updated set so callers can report the new state.
+ */
+export function setManualUsed(root, imageNumber, used) {
+  const key = String(imageNumber).trim();
+  if (key === "") {
+    throw new Error("imageNumber is required.");
+  }
+  const current = readManualUsedImageNumbers(root);
+  if (used) {
+    current.add(key);
+  } else {
+    current.delete(key);
+  }
+  writeManualUsedImageNumbers(root, current);
+  return current;
+}
+
+/**
+ * Resolve `<root>/<category>` to an absolute path that is guaranteed to be a
+ * direct subdirectory of the tagged root, blocking `..` traversal and absolute
+ * escapes. Throws when the category is missing or not an existing directory.
+ */
+function resolveCategoryDir(root, category) {
+  if (typeof category !== "string" || category.trim() === "") {
+    throw new Error("category is required.");
+  }
+  const rootResolved = resolve(root);
+  const candidate = resolve(rootResolved, category);
+  // The category must be a direct subdirectory of the tagged root: this rejects
+  // the root itself, nested paths, and any `..` escape, since each of those
+  // gives a parent directory other than the root.
+  if (dirname(candidate) !== rootResolved) {
+    throw new Error(`Invalid category: ${category}`);
+  }
+  if (!existsSync(candidate) || !statSync(candidate).isDirectory()) {
+    throw new Error(`Category directory not found: ${category}`);
+  }
+  return candidate;
+}
+
+/**
+ * Move a candidate image file from one category subdirectory to another,
+ * changing which pool it belongs to. The filename is preserved; only the parent
+ * directory changes. Both categories must be existing direct subdirectories of
+ * the tagged root, the source file must exist, and a file of the same name must
+ * not already occupy the destination. Returns the new `{ category, filename }`.
+ */
+export function moveImageCategory(root, category, filename, targetCategory) {
+  if (typeof filename !== "string" || filename.trim() === "") {
+    throw new Error("filename is required.");
+  }
+  if (filename.includes("/") || filename.includes("\\")) {
+    throw new Error(`Invalid filename: ${filename}`);
+  }
+  if (category === targetCategory) {
+    return { category, filename };
+  }
+
+  const sourceDir = resolveCategoryDir(root, category);
+  const targetDir = resolveCategoryDir(root, targetCategory);
+  const sourcePath = join(sourceDir, filename);
+  const targetPath = join(targetDir, filename);
+
+  if (!existsSync(sourcePath) || !statSync(sourcePath).isFile()) {
+    throw new Error(`Image not found: ${category}/${filename}`);
+  }
+  if (existsSync(targetPath)) {
+    throw new Error(
+      `An image named ${filename} already exists in ${targetCategory}.`,
+    );
+  }
+
+  renameSync(sourcePath, targetPath);
+  return { category: targetCategory, filename };
+}
+
 /** List the direct subdirectories of the tagged root, sorted alphabetically. */
 export function listCategories(root) {
   if (!existsSync(root)) {
@@ -241,10 +371,11 @@ export function listCategories(root) {
  * Each image entry records its category (subdirectory), filename, trailing
  * image number, the authored card name / narrative (when present in the
  * metadata JSON), the names the image has ever been published under in the
- * card-data TOMLs, and whether a non-rework card already uses the image. Images
- * whose card carries the `Art OK` tag are approved final art and are dropped
- * from the manifest entirely. The frontend filters the remainder by category
- * and by the used flag.
+ * card-data TOMLs, whether a non-rework card already uses the image, and
+ * whether a curator has hand-marked the image as used. Images whose card
+ * carries the `Art OK` tag are approved final art and are dropped from the
+ * manifest entirely. The frontend filters the remainder by category and by the
+ * used flags.
  */
 export function buildImageManifest({
   root = DEFAULT_TAGGED_ROOT,
@@ -260,6 +391,7 @@ export function buildImageManifest({
     : new Set();
   const nameHistory = readNameHistory(nameHistoryTomlPaths);
   const metadata = readImageMetadata(join(root, METADATA_FILENAME));
+  const manualUsedImageNumbers = readManualUsedImageNumbers(root);
 
   const images = [];
   for (const category of categories) {
@@ -284,6 +416,7 @@ export function buildImageManifest({
         filename,
         imageNumber,
         used: usedImageNumbers.has(imageNumber),
+        manuallyUsed: manualUsedImageNumbers.has(imageNumber),
         cardName: meta?.cardName ?? null,
         narrative: meta?.narrative ?? null,
         subtype: meta?.subtype ?? null,

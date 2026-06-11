@@ -1,10 +1,37 @@
+import type { CSSProperties } from "react";
 import { imageFileUrl } from "./image-viewer-api";
 import type { ColumnCount, ImageManifestEntry } from "./types";
 
 export interface ImageGridProps {
   images: readonly ImageManifestEntry[];
   columns: ColumnCount;
+  /** Every category an image can be moved into, in display order. */
+  categories: readonly string[];
+  /** Toggle the curator's manual-used mark for an image. */
+  onToggleUsed: (image: ImageManifestEntry) => void;
+  /** Move an image into a different category subdirectory. */
+  onChangeCategory: (image: ImageManifestEntry, targetCategory: string) => void;
 }
+
+/** Title-case a category subdirectory name for display in the selector. */
+function categoryLabel(name: string): string {
+  return name
+    .split(/[_\s]+/u)
+    .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+    .join(" ");
+}
+
+const selectStyle: CSSProperties = {
+  flex: "1 1 auto",
+  minWidth: 0,
+  background: "#1a2024",
+  color: "#f7f1df",
+  border: "1px solid rgba(247, 241, 223, 0.25)",
+  borderRadius: "5px",
+  padding: "4px 6px",
+  fontSize: "0.72rem",
+  fontWeight: 600,
+};
 
 /**
  * Candidate art spans a wide range of aspect ratios (landscape illustrations
@@ -22,7 +49,13 @@ const IMAGE_BOX_ASPECT_RATIO = "4 / 3";
  * columns; each shows the authored card name beneath the image, with the
  * category and image number as secondary context.
  */
-export default function ImageGrid({ images, columns }: ImageGridProps) {
+export default function ImageGrid({
+  images,
+  columns,
+  categories,
+  onToggleUsed,
+  onChangeCategory,
+}: ImageGridProps) {
   return (
     <div
       data-image-viewer-grid=""
@@ -67,9 +100,10 @@ export default function ImageGrid({ images, columns }: ImageGridProps) {
                 borderRadius: "8px",
                 overflow: "hidden",
                 background: "#1a2024",
-                border: image.used
-                  ? "2px solid #c8893f"
-                  : "1px solid rgba(247, 241, 223, 0.12)",
+                border:
+                  image.used || image.manuallyUsed
+                    ? "2px solid #c8893f"
+                    : "1px solid rgba(247, 241, 223, 0.12)",
               }}
             >
               <img
@@ -111,7 +145,7 @@ export default function ImageGrid({ images, columns }: ImageGridProps) {
               {image.subtype !== null ? ` · ${image.subtype}` : ""}
               {" · "}
               {image.imageNumber}
-              {image.used ? " · used" : ""}
+              {image.used ? " · used" : image.manuallyUsed ? " · hidden" : ""}
             </span>
             {image.cardNames.length > 0 ? (
               <span
@@ -131,6 +165,55 @@ export default function ImageGrid({ images, columns }: ImageGridProps) {
                 ))}
               </span>
             ) : null}
+
+            <div
+              data-image-viewer-item-controls=""
+              style={{
+                marginTop: "4px",
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
+              }}
+            >
+              <select
+                aria-label={`Category for ${image.filename}`}
+                value={image.category}
+                onChange={(event) =>
+                  onChangeCategory(image, event.target.value)
+                }
+                style={selectStyle}
+              >
+                {categories.includes(image.category) ? null : (
+                  <option value={image.category}>
+                    {categoryLabel(image.category)}
+                  </option>
+                )}
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {categoryLabel(category)}
+                  </option>
+                ))}
+              </select>
+              <button
+                type="button"
+                aria-pressed={image.manuallyUsed}
+                onClick={() => onToggleUsed(image)}
+                style={{
+                  flex: "0 0 auto",
+                  cursor: "pointer",
+                  background: image.manuallyUsed ? "#c8893f" : "#1a2024",
+                  color: image.manuallyUsed ? "#1a1206" : "#f7f1df",
+                  border: "1px solid rgba(247, 241, 223, 0.25)",
+                  borderRadius: "5px",
+                  padding: "4px 8px",
+                  fontSize: "0.72rem",
+                  fontWeight: 700,
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {image.manuallyUsed ? "Unmark used" : "Mark used"}
+              </button>
+            </div>
           </figcaption>
         </figure>
       ))}

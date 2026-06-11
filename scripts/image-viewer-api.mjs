@@ -5,10 +5,44 @@ import {
   DEFAULT_NAME_HISTORY_TOMLS,
   DEFAULT_TAGGED_ROOT,
   buildImageManifest,
+  moveImageCategory,
+  setManualUsed,
 } from "./image-viewer-data.mjs";
 
 const MANIFEST_PATH = "/api/images/manifest";
 const FILE_PATH_PREFIX = "/api/images/file/";
+const MANUAL_USED_PATH = "/api/images/manual-used";
+const CATEGORY_PATH = "/api/images/category";
+
+/** Read and JSON-parse a request body, rejecting oversized or malformed input. */
+function readJsonBody(req) {
+  return new Promise((resolvePromise, reject) => {
+    const chunks = [];
+    let length = 0;
+    req.on("data", (chunk) => {
+      length += chunk.length;
+      if (length > 1_000_000) {
+        reject(new Error("Request body too large."));
+        req.destroy();
+        return;
+      }
+      chunks.push(chunk);
+    });
+    req.on("end", () => {
+      const raw = Buffer.concat(chunks).toString("utf8").trim();
+      if (raw === "") {
+        resolvePromise({});
+        return;
+      }
+      try {
+        resolvePromise(JSON.parse(raw));
+      } catch {
+        reject(new Error("Request body is not valid JSON."));
+      }
+    });
+    req.on("error", reject);
+  });
+}
 
 function jsonResponse(res, statusCode, body) {
   res.writeHead(statusCode, {
@@ -51,9 +85,11 @@ function resolveImagePath(root, rawPath) {
 
 /**
  * Vite dev-server middleware backing `npm run images`. It exposes the
- * candidate-image manifest and streams the individual image files, which live
+ * candidate-image manifest, streams the individual image files (which live
  * outside the repository in the local Shutterstock working set and therefore
- * cannot be served as static `public/` assets.
+ * cannot be served as static `public/` assets), and accepts the viewer's two
+ * editorial mutations: toggling an image's manual-used mark and moving an image
+ * between category subdirectories.
  */
 export function createImageViewerApiMiddleware({
   root = DEFAULT_TAGGED_ROOT,
@@ -93,6 +129,63 @@ export function createImageViewerApiMiddleware({
           error instanceof Error ? error.message : "Failed to build manifest.",
         );
       }
+      return;
+    }
+
+    if (rawPath === MANUAL_USED_PATH) {
+      if (req.method !== "POST") {
+        errorResponse(res, 405, "METHOD_NOT_ALLOWED", "Use POST.");
+        return;
+      }
+      readJsonBody(req)
+        .then((body) => {
+          const imageNumber = body?.imageNumber;
+          const used = body?.used;
+          if (typeof imageNumber !== "string" || imageNumber.trim() === "") {
+            errorResponse(res, 400, "BAD_REQUEST", "imageNumber is required.");
+            return;
+          }
+          if (typeof used !== "boolean") {
+            errorResponse(res, 400, "BAD_REQUEST", "used must be a boolean.");
+            return;
+          }
+          setManualUsed(root, imageNumber, used);
+          jsonResponse(res, 200, { imageNumber: imageNumber.trim(), used });
+        })
+        .catch((error) => {
+          errorResponse(
+            res,
+            400,
+            "MANUAL_USED_FAILED",
+            error instanceof Error ? error.message : "Failed to update.",
+          );
+        });
+      return;
+    }
+
+    if (rawPath === CATEGORY_PATH) {
+      if (req.method !== "POST") {
+        errorResponse(res, 405, "METHOD_NOT_ALLOWED", "Use POST.");
+        return;
+      }
+      readJsonBody(req)
+        .then((body) => {
+          const result = moveImageCategory(
+            root,
+            body?.category,
+            body?.filename,
+            body?.targetCategory,
+          );
+          jsonResponse(res, 200, result);
+        })
+        .catch((error) => {
+          errorResponse(
+            res,
+            400,
+            "CATEGORY_MOVE_FAILED",
+            error instanceof Error ? error.message : "Failed to move image.",
+          );
+        });
       return;
     }
 

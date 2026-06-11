@@ -8,6 +8,8 @@ export interface ImageManifestEntry {
   imageNumber: string;
   /** True when a non-`Art Rework` card already claims this image number. */
   used: boolean;
+  /** True when a curator has hand-marked this image as used from the viewer. */
+  manuallyUsed: boolean;
   /** Authored card name from the metadata JSON, when present. */
   cardName: string | null;
   /** One-sentence narrative from the metadata JSON, when present. */

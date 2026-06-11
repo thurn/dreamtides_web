@@ -1,14 +1,23 @@
-import { mkdtempSync, mkdirSync, rmSync, writeFileSync } from "node:fs";
+import {
+  existsSync,
+  mkdtempSync,
+  mkdirSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import {
   buildImageManifest,
   imageNumberFromFilename,
+  moveImageCategory,
   readApprovedImageNumbers,
   readImageMetadata,
+  readManualUsedImageNumbers,
   readNameHistory,
   readUsedImageNumbers,
+  setManualUsed,
 } from "./image-viewer-data.mjs";
 
 describe("imageNumberFromFilename", () => {
@@ -171,8 +180,56 @@ describe("data helpers over a temp working set", () => {
     expect(byNumber.get("3333")).toMatchObject({
       category: "child",
       used: false,
+      manuallyUsed: false,
       cardName: null,
       cardNames: [],
     });
+  });
+
+  it("round-trips manual-used marks and reflects them in the manifest", () => {
+    expect(readManualUsedImageNumbers(root).size).toBe(0);
+
+    setManualUsed(root, "3333", true);
+    expect(readManualUsedImageNumbers(root).has("3333")).toBe(true);
+
+    const manifest = buildImageManifest({
+      root,
+      cardsTomlPath,
+      nameHistoryTomlPaths: [cardsTomlPath],
+    });
+    const byNumber = new Map(manifest.images.map((i) => [i.imageNumber, i]));
+    expect(byNumber.get("3333")?.manuallyUsed).toBe(true);
+    // Card-derived used is unaffected by the manual mark.
+    expect(byNumber.get("1111")?.manuallyUsed).toBe(false);
+    expect(byNumber.get("1111")?.used).toBe(true);
+
+    setManualUsed(root, "3333", false);
+    expect(readManualUsedImageNumbers(root).has("3333")).toBe(false);
+  });
+
+  it("moves an image to a different category, preserving the filename", () => {
+    const result = moveImageCategory(root, "child", "c-kid-3333.jpg", "warrior");
+    expect(result).toEqual({ category: "warrior", filename: "c-kid-3333.jpg" });
+    expect(existsSync(join(root, "child", "c-kid-3333.jpg"))).toBe(false);
+    expect(existsSync(join(root, "warrior", "c-kid-3333.jpg"))).toBe(true);
+  });
+
+  it("refuses to move onto an existing destination file", () => {
+    writeFileSync(join(root, "child", "a-knight-1111.jpg"), "");
+    expect(() =>
+      moveImageCategory(root, "child", "a-knight-1111.jpg", "warrior"),
+    ).toThrow(/already exists/u);
+    // Both files are left in place.
+    expect(existsSync(join(root, "child", "a-knight-1111.jpg"))).toBe(true);
+    expect(existsSync(join(root, "warrior", "a-knight-1111.jpg"))).toBe(true);
+  });
+
+  it("rejects category and filename path traversal", () => {
+    expect(() =>
+      moveImageCategory(root, "warrior", "../child/c-kid-3333.jpg", "child"),
+    ).toThrow(/Invalid filename/u);
+    expect(() =>
+      moveImageCategory(root, "warrior", "a-knight-1111.jpg", ".."),
+    ).toThrow(/Invalid category|not found/u);
   });
 });
