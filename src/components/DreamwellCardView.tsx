@@ -48,11 +48,13 @@ const ART_SOURCE_BOTTOM_CROP = 21 / 280;
  * line, then fades to a dark base behind and below the box.
  */
 /** Card-height fraction the seam sits below the measured box top (its first text line). */
-const ART_SAFE_AREA_OVERLAP = 0.06;
-/** Card-height % over which the blurred continuation ramps in, ending at the seam. */
-const ART_EXTENSION_FEATHER_ABOVE_PCT = 10;
+const ART_SAFE_AREA_OVERLAP = 0.05;
+/** Card-height % over which the blurred continuation ramps in, ending at the seam.
+ *  Kept short so the crisp art reaches down to the box and only fades just under
+ *  its first line rather than darkening high above it. */
+const ART_EXTENSION_FEATHER_ABOVE_PCT = 6;
 /** Card-height % over which the dark tint ramps in, ending at the seam. */
-const ART_EXTENSION_TINT_ABOVE_PCT = 7;
+const ART_EXTENSION_TINT_ABOVE_PCT = 4;
 /** Blur radius of the continuation, as a fraction of the rendered card width. */
 const ART_EXTENSION_BLUR_RATIO = 0.06;
 /** Brightness multiplier on the blurred continuation so it never reads lighter than the art. */
@@ -313,8 +315,8 @@ export function DreamwellCardView({
           <CardStatOrb
             variant="dreamwellEnergy"
             value={String(card.energyAdded)}
-            sizeVar="12cqw"
-            numberSizeVar="9cqw"
+            sizeVar="9cqw"
+            numberSizeVar="6.4cqw"
             numberCapPx={energyOrbCapPx}
             ariaLabel={`${String(card.energyAdded)} energy added`}
           />
@@ -329,7 +331,7 @@ export function DreamwellCardView({
           left: "3.5cqw",
           right: "3.5cqw",
           bottom: "3.5cqw",
-          padding: "2.8cqw 3.2cqw",
+          padding: "2.2cqw 2.8cqw",
           borderRadius: "2cqw",
           background: panelBackground,
           backdropFilter: panelBlur,
@@ -339,7 +341,7 @@ export function DreamwellCardView({
             "0 0.2cqw 0 rgba(255, 255, 255, 0.07) inset, 0 1.6cqw 4cqw rgba(0, 0, 0, 0.5)",
           color: "#f1f1f0",
           fontFamily: '"Fira Sans Condensed", "Inter", sans-serif',
-          fontSize: "3.3cqw",
+          fontSize: "2.9cqw",
           lineHeight: 1.2,
           textShadow: "0 0.15cqw 0.15cqw rgba(0, 0, 0, 0.55)",
         }}
@@ -350,10 +352,10 @@ export function DreamwellCardView({
             color: "#f6f6f5",
             fontFamily: '"EB Garamond", Georgia, serif',
             fontWeight: 600,
-            fontSize: "5cqw",
+            fontSize: "3.7cqw",
             lineHeight: 1.08,
             letterSpacing: "0.01em",
-            marginBottom: showRulesText ? "1.2cqw" : 0,
+            marginBottom: showRulesText ? "0.8cqw" : 0,
             textShadow: "0 0.2cqw 0.35cqw rgba(0, 0, 0, 0.7)",
           }}
         >
