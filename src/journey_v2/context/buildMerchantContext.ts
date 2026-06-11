@@ -131,9 +131,14 @@ export function buildMerchantContext({
     ),
   );
 
+  const siteRuntime = questState.siteRuntime[site.id];
+  const rerollNonce =
+    siteRuntime?.kind === "dreamJourney" ? siteRuntime.rerollNonce ?? 0 : 0;
+
   return {
     questSeed: questState.seed,
     site,
+    rerollNonce,
     essence: questState.essence,
     essenceCap: questState.essenceCap,
     deckCards,

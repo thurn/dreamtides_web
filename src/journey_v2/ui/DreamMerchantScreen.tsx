@@ -25,6 +25,11 @@ export interface DreamMerchantScreenProps {
    * revealed chooser is shown.
    */
   onCommit?: (request: MerchantCommitRequest) => MerchantOfferActionResult | void;
+  /**
+   * Debug-only: regenerate this encounter from the same quest parameters. When
+   * provided, a reroll icon button is shown in the top-right corner.
+   */
+  onReroll?: () => void;
   context?: MerchantContext;
   questState?: QuestState;
 }
@@ -35,6 +40,7 @@ export function DreamMerchantScreen({
   onAcceptOffer,
   onDecline,
   onCommit,
+  onReroll,
   context,
   questState,
 }: DreamMerchantScreenProps) {
@@ -120,13 +126,31 @@ export function DreamMerchantScreen({
 
   return (
     <div
-      className="min-h-full overflow-y-auto bg-[#090b10] p-4 text-slate-100 sm:p-6"
+      className="relative min-h-full overflow-y-auto bg-[#090b10] p-4 text-slate-100 sm:p-6"
       data-testid="dream-merchant-v2-screen"
       data-site-id={site.id}
       data-encounter-signature={encounter.encounterSignature}
       data-offer-count={encounter.offers.length}
       data-essence={context?.essence ?? questState?.essence}
     >
+      {onReroll !== undefined && (
+        <button
+          type="button"
+          aria-label="Reroll journey (debug)"
+          title="Reroll journey (debug)"
+          data-testid="dream-merchant-reroll"
+          onClick={onReroll}
+          className="absolute right-4 top-4 z-30 flex h-10 w-10 items-center justify-center rounded-full text-xl leading-none transition-opacity hover:opacity-80"
+          style={{
+            backgroundColor: "rgba(15, 23, 42, 0.85)",
+            color: "#fcd34d",
+            border: "1px solid rgba(252, 211, 77, 0.45)",
+            boxShadow: "0 0 10px rgba(252, 211, 77, 0.2)",
+          }}
+        >
+          {"↻"}
+        </button>
+      )}
       <div className="mx-auto grid w-full max-w-[1500px] gap-4 lg:grid-cols-[minmax(280px,1fr)_minmax(360px,520px)_minmax(280px,1fr)] lg:items-start">
         <div className="order-3 lg:order-1">
           {encounter.offers[0] && (

@@ -383,6 +383,9 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
     },
     [mutations, site.id],
   );
+  const handleReroll = useCallback(() => {
+    mutations.rerollDreamJourney?.(site.id);
+  }, [mutations, site.id]);
 
   const handleFallbackWalkAway = useCallback(() => {
     logEvent("merchant_offer_validation_failed", {
@@ -421,6 +424,9 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
 
   return (
     <DreamMerchantScreen
+      // Reset the screen's local selection state whenever the encounter changes
+      // (e.g. after a debug reroll regenerates the offers).
+      key={encounterResult.encounter.encounterSignature}
       site={site}
       context={merchantContext}
       questState={state}
@@ -428,6 +434,7 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
       onCommit={handleCommitOffer}
       onAcceptOffer={handleAcceptOffer}
       onDecline={handleDecline}
+      onReroll={handleReroll}
     />
   );
 }

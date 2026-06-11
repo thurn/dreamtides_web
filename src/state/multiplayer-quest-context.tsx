@@ -2911,6 +2911,75 @@ export function MultiplayerQuestProvider({
     });
   }, []);
 
+  const rerollDreamJourney = useCallback((siteId: string) => {
+    const current = currentRef.current;
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        const existingRuntime = room.questState.siteRuntime[siteId];
+        if (
+          existingRuntime !== undefined &&
+          existingRuntime.kind !== "dreamJourney"
+        ) {
+          return room;
+        }
+        if (
+          existingRuntime?.kind === "dreamJourney" &&
+          existingRuntime.completed
+        ) {
+          return room;
+        }
+        const previousNonce =
+          existingRuntime?.kind === "dreamJourney"
+            ? existingRuntime.rerollNonce ?? 0
+            : 0;
+        const nextNonce = previousNonce + 1;
+        // Rebuild the runtime from scratch so any prior
+        // `merchantCommittedOfferId` is dropped — the rerolled encounter is a
+        // clean slate.
+        const runtime: DreamJourneySiteRuntime = {
+          kind: "dreamJourney",
+          completed: false,
+          rerollNonce: nextNonce,
+        };
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            siteRuntime: {
+              ...room.questState.siteRuntime,
+              [siteId]: runtime,
+            },
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: buildActionLogEntry({
+              timestamp: now,
+              actorId: current.session.clientId,
+              action: "merchant_encounter_rerolled",
+              source: "dream_merchant",
+              summary: {
+                siteId,
+                rerollNonce: nextNonce,
+              },
+            }),
+          },
+        };
+      },
+    });
+  }, []);
+
   const commitDreamMerchantOffer = useCallback(
     (siteId: string, request: MerchantCommitRequest) => {
       const current = currentRef.current;
@@ -4285,6 +4354,7 @@ export function MultiplayerQuestProvider({
       acceptTransfigurationChoice,
       acceptDuplicationChoice,
       completeDreamJourneySite,
+      rerollDreamJourney,
       commitDreamMerchantOffer,
       acceptDreamMerchantOffer,
       declineDreamMerchant,

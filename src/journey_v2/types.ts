@@ -49,6 +49,13 @@ export interface MerchantCatalogCard extends MerchantCardIdentity {
 export interface MerchantContext {
   questSeed: string;
   site: SiteState;
+  /**
+   * Debug reroll counter for this site. Mixed into the encounter RNG salt so a
+   * non-zero value produces a fresh encounter from the same quest parameters
+   * (seed, deck, dreamsigns). Defaults to `0`, which leaves the salt unchanged
+   * so untouched encounters keep their original signatures.
+   */
+  rerollNonce?: number;
   /** Retained on the context for other screens; the merchant ignores it. */
   essence: number;
   /** Retained on the context for other screens; the merchant ignores it. */

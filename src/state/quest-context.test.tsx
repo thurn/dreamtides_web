@@ -352,6 +352,34 @@ function merchantAcceptRequestFor(offer: MerchantOffer): MerchantAcceptRequest {
   };
 }
 
+/**
+ * Builds an accept request for the first usable non-hidden offer: a
+ * direct-payload offer, or a face-up chooser offer using its first candidate.
+ * `hiddenUntilCommit` offers are excluded because they require a prior commit.
+ */
+function pickUsableMerchantOffer(encounter: {
+  offers: readonly MerchantOffer[];
+}): MerchantAcceptRequest {
+  const directOffer = encounter.offers.find(
+    (candidate) =>
+      candidate.applyPayload !== undefined && !candidate.hiddenUntilCommit,
+  );
+  if (directOffer !== undefined) {
+    return merchantAcceptRequestFor(directOffer);
+  }
+  for (const candidate of encounter.offers) {
+    if (candidate.hiddenUntilCommit) continue;
+    const first = candidate.choiceRequest?.candidates[0];
+    if (first !== undefined) {
+      return {
+        ...merchantAcceptRequestFor(candidate),
+        choice: { choiceId: first.choiceId },
+      };
+    }
+  }
+  throw new Error("Expected at least one usable non-hidden offer");
+}
+
 function merchantDeclineRequestFor(offer: MerchantOffer): MerchantDeclineRequest {
   return {
     encounterSignature: offer.encounterSignature,
@@ -532,6 +560,79 @@ describe("Dream Merchant v2 mutations", () => {
         }),
       ]),
     );
+  });
+
+  it("rerolls the journey, bumping the nonce while keeping the site acceptable", () => {
+    const fixture = makeMerchantProviderFixture();
+    const quest = mountQuestContext({
+      cardDatabase: fixture.questContent.cardDatabase,
+      questContent: fixture.questContent,
+      initialState: fixture.state,
+    });
+
+    act(() => {
+      quest.mutations.rerollDreamJourney?.(fixture.site.id);
+    });
+
+    expect(quest.state.siteRuntime[fixture.site.id]).toEqual({
+      kind: "dreamJourney",
+      completed: false,
+      rerollNonce: 1,
+    });
+    expect(getLogEntries()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          event: "merchant_encounter_rerolled",
+          siteId: fixture.site.id,
+          rerollNonce: 1,
+        }),
+      ]),
+    );
+
+    // The regenerated encounter remains acceptable: the persisted nonce drives
+    // both the displayed encounter and the accept-time signature check, so an
+    // accept request built from the rerolled encounter is not rejected as stale.
+    const rerolledEncounter = merchantEncounterFor({
+      state: quest.state,
+      questContent: fixture.questContent,
+      site: fixture.site,
+    });
+    const usable = pickUsableMerchantOffer(rerolledEncounter);
+
+    act(() => {
+      quest.mutations.acceptDreamMerchantOffer(fixture.site.id, usable);
+    });
+
+    expect(quest.state.visitedSites).toContain(fixture.site.id);
+  });
+
+  it("clears a prior committed offer when rerolling", () => {
+    const fixture = makeMerchantProviderFixture();
+    const quest = mountQuestContext({
+      cardDatabase: fixture.questContent.cardDatabase,
+      questContent: fixture.questContent,
+      initialState: {
+        ...fixture.state,
+        siteRuntime: {
+          [fixture.site.id]: {
+            kind: "dreamJourney",
+            completed: false,
+            merchantCommittedOfferId: "A",
+            rerollNonce: 2,
+          },
+        },
+      },
+    });
+
+    act(() => {
+      quest.mutations.rerollDreamJourney?.(fixture.site.id);
+    });
+
+    expect(quest.state.siteRuntime[fixture.site.id]).toEqual({
+      kind: "dreamJourney",
+      completed: false,
+      rerollNonce: 3,
+    });
   });
 });
 

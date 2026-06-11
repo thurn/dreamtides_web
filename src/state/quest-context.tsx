@@ -172,6 +172,14 @@ export interface QuestMutations {
     siteId: string,
     request: MerchantDeclineRequest,
   ) => void;
+  /**
+   * Debug-only: regenerates the Dream Journey encounter for a site using the
+   * same quest parameters by bumping `siteRuntime[siteId].rerollNonce`. Any
+   * prior commit is cleared so the fresh encounter starts from a clean slate.
+   * Optional because it is exposed only by the live quest providers, not by
+   * lightweight test/demo mutation stubs.
+   */
+  rerollDreamJourney?: (siteId: string) => void;
   pickDraftCard: (siteId: string, cardNumber: number) => void;
   addCard: (cardNumber: number, source: string) => void;
   addBaneCard: (cardNumber: number, source: string) => void;
@@ -1819,6 +1827,44 @@ export function QuestProvider({
     });
   }, []);
 
+  const rerollDreamJourney = useCallback((siteId: string) => {
+    setState((prev) => {
+      const existingRuntime = prev.siteRuntime[siteId];
+      if (
+        existingRuntime !== undefined &&
+        existingRuntime.kind !== "dreamJourney"
+      ) {
+        return prev;
+      }
+      if (existingRuntime?.kind === "dreamJourney" && existingRuntime.completed) {
+        return prev;
+      }
+      const previousNonce =
+        existingRuntime?.kind === "dreamJourney"
+          ? existingRuntime.rerollNonce ?? 0
+          : 0;
+      const nextNonce = previousNonce + 1;
+      logEvent("merchant_encounter_rerolled", {
+        siteId,
+        rerollNonce: nextNonce,
+      });
+      // Rebuild the runtime from scratch so any prior `merchantCommittedOfferId`
+      // is dropped — the rerolled encounter is a clean slate.
+      const runtime: DreamJourneySiteRuntime = {
+        kind: "dreamJourney",
+        completed: false,
+        rerollNonce: nextNonce,
+      };
+      return {
+        ...prev,
+        siteRuntime: {
+          ...prev.siteRuntime,
+          [siteId]: runtime,
+        },
+      };
+    });
+  }, []);
+
   const commitDreamMerchantOffer = useCallback(
     (siteId: string, request: MerchantCommitRequest) => {
       let outcome: MerchantOfferActionResult = { ok: true };
@@ -3120,6 +3166,7 @@ export function QuestProvider({
       acceptTransfigurationChoice,
       acceptDuplicationChoice,
       completeDreamJourneySite,
+      rerollDreamJourney,
       commitDreamMerchantOffer,
       acceptDreamMerchantOffer,
       declineDreamMerchant,
@@ -3184,6 +3231,7 @@ export function QuestProvider({
       acceptTransfigurationChoice,
       acceptDuplicationChoice,
       completeDreamJourneySite,
+      rerollDreamJourney,
       commitDreamMerchantOffer,
       acceptDreamMerchantOffer,
       declineDreamMerchant,

@@ -272,6 +272,14 @@ export interface DreamJourneySiteRuntime {
    * `completeQuestSite` via the siteRuntime map).
    */
   merchantCommittedOfferId?: string;
+  /**
+   * Debug reroll counter. Incremented by `rerollDreamJourney` to regenerate the
+   * encounter from the same quest parameters. Mixed into the encounter RNG salt
+   * by `buildMerchantContext`, so the persisted value drives both the displayed
+   * encounter and the signature checks on accept/commit/decline. Absent (or `0`)
+   * for an un-rerolled site.
+   */
+  rerollNonce?: number;
 }
 
 /** Serialized runtime state keyed by site id. */

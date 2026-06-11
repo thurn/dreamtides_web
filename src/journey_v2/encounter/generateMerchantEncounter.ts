@@ -201,7 +201,15 @@ export function generateMerchantEncounterWithDebug(
   );
   const eligibleArchetypeIds = eligible.map((builder) => builder.archetypeId);
 
-  const slotASalt = [context.questSeed, context.site.id, "A"];
+  // A non-zero debug reroll nonce mixes a "reroll|N" suffix into the salt so
+  // the same quest parameters yield a fresh encounter. A zero/absent nonce
+  // contributes nothing, leaving untouched encounters bit-identical.
+  const rerollSalt =
+    context.rerollNonce && context.rerollNonce > 0
+      ? ["reroll", String(context.rerollNonce)]
+      : [];
+
+  const slotASalt = [context.questSeed, context.site.id, "A", ...rerollSalt];
   const rolledA = rollSlot(eligible, context, slotASalt);
   if (rolledA === null) {
     throw new Error("Dream Merchant could not roll a first offer");
@@ -210,7 +218,7 @@ export function generateMerchantEncounterWithDebug(
   const eligibleB = eligible.filter(
     (builder) => builder.family !== rolledA.builder.family,
   );
-  const slotBSalt = [context.questSeed, context.site.id, "B"];
+  const slotBSalt = [context.questSeed, context.site.id, "B", ...rerollSalt];
   const rolledB = rollSlot(eligibleB, context, slotBSalt);
   if (rolledB === null) {
     throw new Error("Dream Merchant could not roll a second offer");
