@@ -50,7 +50,7 @@ function cardTypeTarget(predicateId = "warriors"): RewardParamTarget {
 }
 
 function transfigurationPredicateTarget(
-  transfiguration = "Bronze",
+  transfiguration = "Enduring",
   predicateId = "warriors",
 ): RewardParamTarget {
   return {
@@ -163,9 +163,9 @@ describe("one_operation_many_targets shape", () => {
     },
     {
       templateId: "apply_named_transfiguration_to_card_name",
-      params: { transfiguration: "Bronze" },
+      params: { transfiguration: "Enduring" },
       target: namedCardTarget(),
-      expected: { transfiguration: "Bronze", cardName: "Steady Burn" },
+      expected: { transfiguration: "Enduring", cardName: "Steady Burn" },
     },
     {
       templateId: "gain_random_predicate_cards",
@@ -183,7 +183,7 @@ describe("one_operation_many_targets shape", () => {
       templateId: "apply_named_transfiguration_to_random_predicate_cards",
       params: { count: 2 },
       target: transfigurationPredicateTarget(),
-      expected: { transfiguration: "Bronze", predicateId: "warriors", count: 2 },
+      expected: { transfiguration: "Enduring", predicateId: "warriors", count: 2 },
     },
     {
       templateId: "purge_named_starter",
@@ -267,7 +267,7 @@ describe("one_operation_many_targets shape", () => {
       templateId: "apply_named_transfiguration_to_all_predicate_cards",
       params: {},
       target: transfigurationPredicateTarget(),
-      expected: { transfiguration: "Bronze", predicateId: "warriors" },
+      expected: { transfiguration: "Enduring", predicateId: "warriors" },
     },
     {
       templateId: "set_starting_dreamwell_positive",

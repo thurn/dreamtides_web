@@ -378,7 +378,7 @@ player-visible text actually originates there:
   the cost/reward template's own `render(params): string` function, which
   lives in `src/journey/shared/costs.ts` and `src/journey/shared/rewards.ts`.
   Each template owns its own English-rendering logic
-  (`Gain 50 essence`, `Draft 1 of 4 characters`, `Apply Bronze to 'Card Name'`,
+  (`Gain 50 essence`, `Draft 1 of 4 characters`, `Apply Enduring to 'Card Name'`,
   etc.). These rendering functions are pure string builders that depend on
   `shared/text.ts` (`joinSnippets`, `withLockedPrefix`, `quoteName`),
   `shared/predicates.ts` (`predicate.text.plural` for English noun phrases),
@@ -447,8 +447,8 @@ Examples that must be enforced:
   least one card whose `renderedText` contains the substring "discard"
   (case-insensitive). A tag-based predicate is a future refinement; the
   string match is acceptable for the port.
-- "Transfigure a card to Bronze" (or any of Viridian, Golden, Scarlet,
-  Azure, Bronze, Magenta, Rose, Prismatic) → at least one deck entry must
+- "Transfigure a card to Enduring" (or any of Empowered, Amplified, Kindled,
+  Inspired, Enduring, Resonant, Attuned, Perfected) → at least one deck entry must
   pass that transfiguration's eligibility filter. The port shares the
   existing `assignTransfiguration` helper from the quest prototype via the
   content bridge so the journey module does not reimplement eligibility.

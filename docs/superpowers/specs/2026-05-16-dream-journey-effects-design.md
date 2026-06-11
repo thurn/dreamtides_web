@@ -13,7 +13,7 @@ or branch (decision-tree manifest), the chosen template's mechanical effects
 apply to `QuestState` via the existing `QuestMutations`, then the screen
 advances or closes.
 
-Player choice (for templates such as "Apply Bronze to a chosen card") is
+Player choice (for templates such as "Apply Enduring to a chosen card") is
 collected through an inline overlay layered on the journey screen.
 
 The journey module's isolation contract from the port spec is preserved by
@@ -594,8 +594,8 @@ Stable identifiers let the screen reuse a resolution across re-entries.
     Selected tiles get a purple border. Confirm button disabled until
     pick count is in `[minPicks, maxPicks]`.
   - Dreamsign chooser: vertical list of dreamsign rows with description.
-  - Transfiguration chooser: 8 colored tiles (Bronze, Viridian, Golden,
-    Scarlet, Azure, Magenta, Rose, Prismatic), each grayed out if not in
+  - Transfiguration chooser: 8 colored tiles (Enduring, Empowered, Amplified,
+    Kindled, Inspired, Resonant, Attuned, Perfected), each grayed out if not in
     `eligibleTransfigurations`.
 - Footer: Cancel (left), Confirm (right). Cancel returns to the journey
   screen without applying any effects (the journey option is not

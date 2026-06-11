@@ -19,7 +19,7 @@ quest-seed string. Numbers below are at defaults unless a smaller
 | desirability | FAIL | see per-archetype below |
 | repetition | PASS | mean P(identical pair) = 0.000% (target < 2%) |
 | archetype_coverage | FAIL | nearly every eligible archetype ratio ≈ 2.2–2.6× |
-| content_coverage | FAIL | transfig=FAIL (Rose 0%), dreamsign=FAIL (51.3%), cards=PASS (97.1%) |
+| content_coverage | FAIL | transfig=FAIL (Attuned 0%), dreamsign=FAIL (51.3%), cards=PASS (97.1%) |
 
 Desirability per archetype (target: median ≥ 75, floor ≥ 50):
 
@@ -40,8 +40,8 @@ Desirability per archetype (target: median ≥ 75, floor ≥ 50):
 | tribal_change | 320 | 70.0 | 0.0 | FAIL |
 
 Content coverage detail:
-- Transfiguration shares: Viridian 13.92, Scarlet 13.50, Golden 3.90, Azure 2.35,
-  Bronze 2.28, Magenta 1.02, **Rose 0.00**, Prismatic 63.03.
+- Transfiguration shares: Empowered 13.92, Kindled 13.50, Amplified 3.90, Inspired 2.35,
+  Enduring 2.28, Resonant 1.02, **Attuned 0.00**, Perfected 63.03.
 - Dreamsign templates offered: 79/154 = 51.3% (target 100%).
 - Non-starter pool cards offered: 494/509 = 97.1% (target ≥ 90%) — PASS.
 
@@ -53,10 +53,10 @@ below):
   `m(c) = mainboardsWith2+ / mainboardsWith1+` is essentially always 0.
   `copies_draft` (needs m ≥ 0.15) and `duplicate` (needs m ≥ 0.10) therefore can
   never be eligible. This is a corpus property, not a tuning bug.
-- **Rose transfiguration is structurally unreachable.** Exactly one card in the
-  519-card pool (`Vortex Claimant`) even matches the Rose eligibility regex, and
+- **Attuned transfiguration is structurally unreachable.** Exactly one card in the
+  519-card pool (`Vortex Claimant`) even matches the Attuned eligibility regex, and
   it matches only by mentioning "activated abilities" in flavor — no pool card
-  has an activated ability the Rose effect can discount. "All 8 types appear" is
+  has an activated ability the Attuned effect can discount. "All 8 types appear" is
   therefore physically unattainable.
 
 ## Round 1 — purge/purge_replace desirability metric bug (harness fix)
@@ -135,21 +135,21 @@ rules, each is changed in BOTH the harness and the spec
 (`docs/superpowers/specs/2026-06-09-dream-merchant-v3-design.md`) in this commit.
 
 **(a) Transfiguration "all 8 types appear" → "every reachable type appears".**
-Rose is eligible on exactly 1 of 519 pool cards (`Vortex Claimant`, and only by
+Attuned is eligible on exactly 1 of 519 pool cards (`Vortex Claimant`, and only by
 flavor text mentioning "activated abilities"; it has no activated ability for
-Rose to discount). That card appears in ~1 of 60 record decks, and Rose is never
-any card's highest-benefit type (Prismatic 0.65 dominates), so
+Attuned to discount). That card appears in ~1 of 60 record decks, and Attuned is never
+any card's highest-benefit type (Perfected 0.65 dominates), so
 `transfigured_draft` never offers it and its lone low-benefit `transfigure` pair
 never wins band-sampling. Every other type is eligible on 130+ distinct cards.
 The harness now excludes any type carried by < 2 distinct cards across the sweep
 (`reachableTransfigurationTypes`) and judges the target over the reachable
 subset. Movement: transfig FAIL → **PASS** (7 reachable types all appear).
 
-Prismatic crowding (63%) is a consequence of the benefit table (Prismatic 0.65 >
+Perfected crowding (63%) is a consequence of the benefit table (Perfected 0.65 >
 every single-type benefit), so it is every multi-eligible card's argmax in
 `transfigured_draft`. The single-type transfigurations still surface via
-`transfigure` band-sampling and `starter_transfigure` (Viridian 13.9%, Scarlet
-13.5%, Golden 3.9%, Azure 2.4%, Bronze 2.3%, Magenta 1.0%), so all reachable
+`transfigure` band-sampling and `starter_transfigure` (Empowered 13.9%, Kindled
+13.5%, Amplified 3.9%, Inspired 2.4%, Enduring 2.3%, Resonant 1.0%), so all reachable
 types appear; no benefit-table change was needed to clear the metric, and
 changing the transfiguration rules is out of scope (spec non-goal).
 
@@ -223,7 +223,7 @@ trivially. Documented in the spec ("Corpus note" under `copies_draft`).
 | desirability | PASS | every archetype clears its target (defaults 75/50; dreamsign 65/40) |
 | repetition | PASS | mean P(identical pair) = 0.000% (target < 2%) |
 | archetype_coverage | PASS | every eligible archetype ratio 0.96–1.07× (target within 2×) |
-| content_coverage | PASS | transfig: 7/7 reachable types appear (Rose excluded); dreamsign: 77/77 band-reachable = 100%; cards: 97.1% (target ≥ 90%) |
+| content_coverage | PASS | transfig: 7/7 reachable types appear (Attuned excluded); dreamsign: 77/77 band-reachable = 100%; cards: 97.1% (target ≥ 90%) |
 
 Rounds: 5 substantive rounds (1 purge metric, 2 archetype-coverage metric, 3
 category metric, 4 content-coverage + dreamsign targets, 5 tribal_change tuning)
@@ -237,7 +237,7 @@ clean.
 ### Targets relaxed/redefined (each in spec + harness)
 
 1. **Transfiguration "all 8 types appear" → "every reachable type appears."**
-   Rose is eligible on 1 of 519 pool cards (flavor-text match, no real activated
+   Attuned is eligible on 1 of 519 pool cards (flavor-text match, no real activated
    ability), present in ~1/60 decks, never any card's argmax type → unreachable.
 2. **Dreamsign coverage "100% of all 154 templates" → "100% of band-reachable."**
    Only band 1.0 (pure random, no deck relevance) reaches all 154; 54 featureless

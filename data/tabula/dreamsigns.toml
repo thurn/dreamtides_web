@@ -1,6 +1,6 @@
 [[dreamsign]]
 id = "C706D0BA-2F41-4B14-95D8-DB168AC6246C"
-name = "Golden Acorn"
+name = "Amplified Acorn"
 image_name = "acorn_gold.png"
 tides = ["discard_velocity", "hand_cycling", "cost_reduction", "resource_burst", "discard_outlets"]
 rendered-text = "Once per turn, when you discard a card, your next card this turn costs 2● less."
@@ -181,7 +181,7 @@ tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "94E5683D-A24C-4F89-8AFA-652D7C6C79AA"
-name = "Black Rose"
+name = "Black Attuned"
 image_name = "black_rose.png"
 tides = ["warrior_pressure", "warrior_bastion", "event_chain", "copy_effects"]
 rendered-text = "When you play an event with ≥3 allied warriors, copy it."
@@ -947,14 +947,14 @@ tags = ["J15"]
 id = "E7D23BF7-4D60-4B43-94C4-14A06C0F9116"
 name = "Rainbow Jellyfish"
 image_name = "rainbow_jellyfish.png"
-rendered-text = "When you gain this, apply a Prismatic Transfiguration to each starter card in your deck."
+rendered-text = "When you gain this, apply a Perfected Transfiguration to each starter card in your deck."
 tags = ["J15"]
 
 [[dreamsign]]
 id = "4F21A4AB-E4AA-4718-8563-9AFB72D140C0"
 name = "Star Anise"
 image_name = "star_anise.png"
-rendered-text = "Each dreamscape, the first event card you add to your deck gains the Golden Transfiguration."
+rendered-text = "Each dreamscape, the first event card you add to your deck gains the Amplified Transfiguration."
 tags = ["J15"]
 
 [[dreamsign]]
@@ -981,7 +981,7 @@ tags = ["J15"]
 
 [[dreamsign]]
 id = "34CE9428-DDA9-4EFA-BACD-5EC2698561C1"
-name = "Rose Petals"
+name = "Attuned Petals"
 image_name = "rose_petals.png"
 rendered-text = "Cards you add to your deck from battle rewards gain a random applicable transfiguration."
 tags = ["J15"]

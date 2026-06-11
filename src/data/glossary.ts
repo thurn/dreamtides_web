@@ -213,61 +213,62 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     variants: ["nightmare", "nightmares"],
   },
 
-  // --- Transfiguration colors ---------------------------------------
-  // Each transfiguration is named after a color. The card's name and any
-  // modified rules text display in that color to mark the transfiguration.
-  // Definitions track docs/quests/quests.md (Transfiguration site).
+  // --- Transfigurations ---------------------------------------------
+  // Each transfiguration carries an emblem icon and a tint color; the card's
+  // name and any modified rules text display in that tint to mark the
+  // transfiguration. Definitions track docs/quests/quests.md
+  // (Transfiguration site).
   {
     term: "Transfiguration",
     definition: "A permanent modification to a card.",
     variants: ["transfiguration", "transfigurations"],
   },
   {
-    term: "Viridian",
+    term: "Empowered",
     definition:
       "Transfiguration: reduces this card's energy cost by 50%, rounded to the nearest whole number.",
-    variants: ["viridian"],
+    variants: ["empowered"],
   },
   {
-    term: "Golden",
+    term: "Amplified",
     definition:
       "Transfiguration: increases or decreases a number in this card's rules text by 1.",
-    variants: ["golden"],
+    variants: ["amplified"],
   },
   {
-    term: "Scarlet",
+    term: "Kindled",
     definition:
       "Transfiguration: doubles a character's base spark, or sets it to 1 if zero.",
-    variants: ["scarlet"],
+    variants: ["kindled"],
   },
   {
-    term: "Magenta",
+    term: "Resonant",
     definition:
       "Transfiguration: increases the frequency of named triggers on this card.",
-    variants: ["magenta"],
+    variants: ["resonant"],
   },
   {
-    term: "Azure",
+    term: "Inspired",
     definition:
       'Transfiguration: appends "draw a card" to this event card\'s text.',
-    variants: ["azure"],
+    variants: ["inspired"],
   },
   {
-    term: "Bronze",
+    term: "Enduring",
     definition: 'Transfiguration: adds "reclaim" to this event card\'s text.',
-    variants: ["bronze"],
+    variants: ["enduring"],
   },
   {
-    term: "Rose",
+    term: "Attuned",
     definition:
       "Transfiguration: reduces an activated ability's energy cost by 1.",
-    variants: ["rose"],
+    variants: ["attuned"],
   },
   {
-    term: "Prismatic",
+    term: "Perfected",
     definition:
       "Transfiguration: applies every other eligible transfiguration to a card.",
-    variants: ["prismatic"],
+    variants: ["perfected"],
   },
 ];
 

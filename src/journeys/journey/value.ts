@@ -144,11 +144,11 @@ export const DREAMSIGN_OPERATION_VALUE_CONSTANTS = {
 
 export const TRANSFIGURATION_VALUE_CONSTANTS = {
   standardByType: {
-    Viridian: 85,
-    Bronze: 85,
-    Scarlet: 90,
-    Golden: 110,
-    Prismatic: 165,
+    Empowered: 85,
+    Enduring: 85,
+    Kindled: 90,
+    Amplified: 110,
+    Perfected: 165,
   },
   genericChosen: 95,
   random: 60,

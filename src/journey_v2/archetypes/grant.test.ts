@@ -563,7 +563,7 @@ describe("grant family — card_bundle", () => {
 
 describe("grant family — transfigured_draft", () => {
   it("accept yields a deck entry with the transfiguration set", () => {
-    // Characters with positive spark -> Scarlet eligible.
+    // Characters with positive spark -> Kindled eligible.
     const pool: CardData[] = [];
     for (let i = 0; i < 8; i += 1) {
       pool.push(

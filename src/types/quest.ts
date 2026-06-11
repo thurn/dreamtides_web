@@ -4,14 +4,14 @@ import type { DraftState } from "./draft";
 
 /** Badge applied to a card via a Transfiguration site. */
 export type TransfigurationType =
-  | "Viridian"
-  | "Golden"
-  | "Scarlet"
-  | "Azure"
-  | "Bronze"
-  | "Magenta"
-  | "Rose"
-  | "Prismatic";
+  | "Empowered"
+  | "Amplified"
+  | "Kindled"
+  | "Inspired"
+  | "Enduring"
+  | "Resonant"
+  | "Attuned"
+  | "Perfected";
 
 /** Persistent card type/subtype override applied to one concrete deck entry. */
 export interface CardTypeChange {

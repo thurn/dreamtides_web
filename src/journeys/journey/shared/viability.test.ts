@@ -145,7 +145,7 @@ const CASES: readonly Case[] = [
   },
   {
     name: "transfigurationHasEligibleTarget",
-    // Viridian requires energyCost > 0.
+    // Empowered requires energyCost > 0.
     positive: buildContext({
       cards: [EVENT_CARD],
       deckEntries: [{ cardId: EVENT_CARD.id, copies: 1 }],
@@ -154,7 +154,7 @@ const CASES: readonly Case[] = [
       cards: [COST_ZERO_CARD],
       deckEntries: [{ cardId: COST_ZERO_CARD.id, copies: 1 }],
     }),
-    run: (ctx) => transfigurationHasEligibleTarget(ctx, "Viridian"),
+    run: (ctx) => transfigurationHasEligibleTarget(ctx, "Empowered"),
   },
   {
     name: "canAffordEssence",

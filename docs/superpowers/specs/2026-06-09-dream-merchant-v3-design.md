@@ -293,14 +293,14 @@ tuning is stable).
 
 | Type | Eligibility | Effect |
 |---|---|---|
-| Viridian | energyCost > 0 | cost becomes `round(cost / 2)` |
-| Scarlet | Character | spark 0 becomes 1, otherwise spark doubles |
-| Golden | text contains a digit | first number in text +1 |
-| Azure | Event | appends "Draw a card." |
-| Bronze | Event | appends "Reclaim." |
-| Magenta | text matches materialize/dawn/once-per-turn | trigger fires more often |
-| Rose | text mentions an activated ability | activated ability costs 1 less |
-| Prismatic | eligible for 2+ other types | applies every eligible type |
+| Empowered | energyCost > 0 | cost becomes `round(cost / 2)` |
+| Kindled | Character | spark 0 becomes 1, otherwise spark doubles |
+| Amplified | text contains a digit | first number in text +1 |
+| Inspired | Event | appends "Draw a card." |
+| Enduring | Event | appends "Reclaim." |
+| Resonant | text matches materialize/dawn/once-per-turn | trigger fires more often |
+| Attuned | text mentions an activated ability | activated ability costs 1 less |
+| Perfected | eligible for 2+ other types | applies every eligible type |
 
 A deck entry holds at most one transfiguration
 (`DeckEntry.transfiguration: TransfigurationType | null`); transfigured cards
@@ -312,20 +312,20 @@ additively (`mergeCardKeywordModification`).
 ### v3 benefit scores
 
 Benefit is mechanical where the effect is numeric and a flat constant where it
-is textual. The deck-conditional bonuses in the current scorer (Azure/Bronze
+is textual. The deck-conditional bonuses in the current scorer (Inspired/Enduring
 checking regex-derived draw/recursion counts) are replaced by flat constants,
 since the role counts they depend on come from the deleted regex engine.
 
 | Type | Benefit |
 |---|---|
-| Viridian | `clamp01((oldCost - newCost) / 2)` |
-| Scarlet | `clamp01((newSpark - oldSpark) / 4)` |
-| Golden | 0.4 |
-| Azure | 0.55 |
-| Bronze | 0.55 |
-| Magenta | 0.5 |
-| Rose | 0.5 |
-| Prismatic | 0.65 |
+| Empowered | `clamp01((oldCost - newCost) / 2)` |
+| Kindled | `clamp01((newSpark - oldSpark) / 4)` |
+| Amplified | 0.4 |
+| Inspired | 0.55 |
+| Enduring | 0.55 |
+| Resonant | 0.5 |
+| Attuned | 0.5 |
+| Perfected | 0.65 |
 
 Centrality of the target entry uses corpus signals only:
 `centrality = clamp01(0.65 * fitPrior(card) + 0.35 * fitCooccurrence(card, deck))`,
@@ -336,11 +336,11 @@ falling back to `0.25 + 0.15 * (spark >= 3)` for cards without corpus signal.
 The current detector applies argmax three times: it keeps only the single
 best transfiguration per entry, then only the top 2 entries globally, with
 deterministic benefit constants — which is why a 4-spark starter character
-reliably produces "Scarlet on Marked Direwolf" as the first merchant's offer.
+reliably produces "Kindled on Marked Direwolf" as the first merchant's offer.
 v3 requirement: the `transfigure` candidate set is **every**
 (entry, transfiguration) pair with positive benefit, and the offered pair is
-band-sampled. A Viridian on an expensive card, a Bronze on an event, and the
-Scarlet on the direwolf are all in the band; any of them can be drawn. The
+band-sampled. A Empowered on an expensive card, a Enduring on an event, and the
+Kindled on the direwolf are all in the band; any of them can be drawn. The
 metrics harness's distinct-outcomes and repetition measures verify this
 property rather than leaving it to inspection.
 
@@ -475,11 +475,11 @@ at that stage), so measurements reflect real deck states.
      pool/deck card is eligible for appears in offers (`transfigure`,
      `starter_transfigure`, `transfigured_draft` combined); report the share per
      type. A type carried by fewer than two distinct cards across the sweep is
-     unreachable and excluded from the target. **Rose** is the live exclusion:
-     exactly one pool card is Rose-eligible (and only by flavor text mentioning
-     "activated abilities" — it has no activated ability for Rose to discount),
-     that card appears in ~1 of 60 record decks, and Rose is never any card's
-     highest-benefit type (Prismatic dominates), so Rose can never surface.
+     unreachable and excluded from the target. **Attuned** is the live exclusion:
+     exactly one pool card is Attuned-eligible (and only by flavor text mentioning
+     "activated abilities" — it has no activated ability for Attuned to discount),
+     that card appears in ~1 of 60 record decks, and Attuned is never any card's
+     highest-benefit type (Perfected dominates), so Attuned can never surface.
      "All 8 types appear" is physically unattainable.
    - *Dreamsigns*: fraction of **band-reachable** dreamsign templates ever
      offered. Target: 100% of the reachable set. A dreamsign is reachable when

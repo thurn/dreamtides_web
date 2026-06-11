@@ -634,7 +634,7 @@ describe("Card cost apply (non-choice)", () => {
           cardId: "event-alpha",
           copies: 1,
           entryIds: ["deck-event-alpha"],
-          entryTransfigurations: ["Viridian"],
+          entryTransfigurations: ["Empowered"],
         },
         { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
       ],
@@ -659,7 +659,7 @@ describe("Card cost apply (non-choice)", () => {
           cardId: "event-alpha",
           copies: 2,
           entryIds: ["deck-event-alpha-1", "deck-event-alpha-2"],
-          entryTransfigurations: [null, "Viridian"],
+          entryTransfigurations: [null, "Empowered"],
         },
       ],
     });
@@ -734,19 +734,19 @@ describe("Card cost apply (non-choice)", () => {
           cardId: "starter-alpha",
           copies: 1,
           entryIds: ["deck-starter-alpha"],
-          entryTransfigurations: ["Golden"],
+          entryTransfigurations: ["Amplified"],
         },
         {
           cardId: "event-alpha",
           copies: 1,
           entryIds: ["deck-event-alpha"],
-          entryTransfigurations: ["Viridian"],
+          entryTransfigurations: ["Empowered"],
         },
         {
           cardId: "event-beta",
           copies: 1,
           entryIds: ["deck-event-beta"],
-          entryTransfigurations: ["Rose"],
+          entryTransfigurations: ["Attuned"],
         },
       ],
     });
@@ -782,7 +782,7 @@ describe("Card cost apply (non-choice)", () => {
           cardId: "starter-alpha",
           copies: 1,
           entryIds: ["deck-starter-alpha"],
-          entryTransfigurations: ["Golden"],
+          entryTransfigurations: ["Amplified"],
         },
         {
           cardId: "event-alpha",
@@ -794,7 +794,7 @@ describe("Card cost apply (non-choice)", () => {
           cardId: "event-beta",
           copies: 1,
           entryIds: ["deck-event-beta"],
-          entryTransfigurations: ["Rose"],
+          entryTransfigurations: ["Attuned"],
         },
       ],
     });

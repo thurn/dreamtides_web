@@ -18,8 +18,8 @@
 //      reward fire against any non-empty deck.
 //
 //   3. A transfiguration-eligibility tabular test: for each of the eight
-//      transfigurations (Viridian, Golden, Scarlet, Azure, Bronze, Magenta,
-//      Rose, Prismatic), `apply_named_transfiguration_to_card_name` declines
+//      transfigurations (Empowered, Amplified, Kindled, Inspired, Enduring, Resonant,
+//      Attuned, Perfected), `apply_named_transfiguration_to_card_name` declines
 //      on a deck whose cards all fail the specific transfiguration's
 //      eligibility filter and admits when at least one deck card passes. Bug
 //      class: transfiguration rewards offered for unreachable cards.
@@ -225,14 +225,14 @@ describe("transfiguration eligibility audit", () => {
   // single eligible card admits the option.
   //
   // The filters (per `isCardEligibleForTransfiguration` in `effects.ts`):
-  // - Viridian: energyCost > 0
-  // - Golden: unrestricted at generation time
-  // - Scarlet: cardType === "Character"
-  // - Azure: cardType === "Event"
-  // - Bronze: cardType === "Event"
-  // - Magenta: rendered text matches /materialized|challenge|once per turn/i
-  // - Rose: rendered text matches /\d●[^:\n]*:/ (energy-cost activated)
-  // - Prismatic: unrestricted at generation time
+  // - Empowered: energyCost > 0
+  // - Amplified: unrestricted at generation time
+  // - Kindled: cardType === "Character"
+  // - Inspired: cardType === "Event"
+  // - Enduring: cardType === "Event"
+  // - Resonant: rendered text matches /materialized|challenge|once per turn/i
+  // - Attuned: rendered text matches /\d●[^:\n]*:/ (energy-cost activated)
+  // - Perfected: unrestricted at generation time
   const COST_ZERO_EVENT = card({
     id: "cost0-event",
     name: "Cost Zero Event",
@@ -256,14 +256,14 @@ describe("transfiguration eligibility audit", () => {
   });
   const MAGENTA_TRIGGER_CHARACTER = card({
     id: "mag-char",
-    name: "Magenta Trigger Character",
+    name: "Resonant Trigger Character",
     cardType: "Character",
     energyCost: 2,
     raw: { "rendered-text": "Materialized: Draw a card." },
   });
   const ROSE_ACTIVATED_CHARACTER = card({
     id: "rose-char",
-    name: "Rose Activated Character",
+    name: "Attuned Activated Character",
     cardType: "Character",
     energyCost: 2,
     raw: { "rendered-text": "2●: Draw a card." },
@@ -274,18 +274,18 @@ describe("transfiguration eligibility audit", () => {
     eligible: CardContent;
     ineligible: CardContent;
   }> = [
-    // Viridian needs cost > 0. Cost-0 event fails; cost-2 event passes.
-    { transfiguration: "Viridian", eligible: COST_TWO_EVENT, ineligible: COST_ZERO_EVENT },
-    // Scarlet needs Character. Event fails; character passes.
-    { transfiguration: "Scarlet", eligible: COST_TWO_CHARACTER, ineligible: COST_TWO_EVENT },
-    // Azure needs Event. Character fails; event passes.
-    { transfiguration: "Azure", eligible: COST_TWO_EVENT, ineligible: COST_TWO_CHARACTER },
-    // Bronze needs Event. Same as Azure.
-    { transfiguration: "Bronze", eligible: COST_TWO_EVENT, ineligible: COST_TWO_CHARACTER },
-    // Magenta needs a materialized/challenge/once-per-turn trigger.
-    { transfiguration: "Magenta", eligible: MAGENTA_TRIGGER_CHARACTER, ineligible: COST_TWO_CHARACTER },
-    // Rose needs an N●...: activated ability.
-    { transfiguration: "Rose", eligible: ROSE_ACTIVATED_CHARACTER, ineligible: COST_TWO_CHARACTER },
+    // Empowered needs cost > 0. Cost-0 event fails; cost-2 event passes.
+    { transfiguration: "Empowered", eligible: COST_TWO_EVENT, ineligible: COST_ZERO_EVENT },
+    // Kindled needs Character. Event fails; character passes.
+    { transfiguration: "Kindled", eligible: COST_TWO_CHARACTER, ineligible: COST_TWO_EVENT },
+    // Inspired needs Event. Character fails; event passes.
+    { transfiguration: "Inspired", eligible: COST_TWO_EVENT, ineligible: COST_TWO_CHARACTER },
+    // Enduring needs Event. Same as Inspired.
+    { transfiguration: "Enduring", eligible: COST_TWO_EVENT, ineligible: COST_TWO_CHARACTER },
+    // Resonant needs a materialized/challenge/once-per-turn trigger.
+    { transfiguration: "Resonant", eligible: MAGENTA_TRIGGER_CHARACTER, ineligible: COST_TWO_CHARACTER },
+    // Attuned needs an N●...: activated ability.
+    { transfiguration: "Attuned", eligible: ROSE_ACTIVATED_CHARACTER, ineligible: COST_TWO_CHARACTER },
   ];
 
   it.each(cases)(
@@ -311,16 +311,16 @@ describe("transfiguration eligibility audit", () => {
     },
   );
 
-  // Golden and Prismatic are unrestricted at generation time, so they admit
+  // Amplified and Perfected are unrestricted at generation time, so they admit
   // any non-empty deck and decline only when the deck is empty.
-  it("Golden and Prismatic admit any non-empty deck and decline an empty deck", () => {
+  it("Amplified and Perfected admit any non-empty deck and decline an empty deck", () => {
     const t = getReward("apply_named_transfiguration_to_card_name");
     const empty = buildContext({ cards: [COST_TWO_EVENT], deckEntries: [] });
     const nonEmpty = buildContext({
       cards: [COST_TWO_EVENT],
       deckEntries: [{ cardId: COST_TWO_EVENT.id, copies: 1 }],
     });
-    for (const transfiguration of ["Golden", "Prismatic"]) {
+    for (const transfiguration of ["Amplified", "Perfected"]) {
       expect(
         t.viable({ transfiguration, cardName: COST_TWO_EVENT.name }, empty),
         transfiguration,
@@ -379,7 +379,7 @@ describe("deck-scope predicate audit", () => {
 
   // The three transfiguration-applying predicate variants share the same
   // deck-scope leak fix as `purge_chosen_predicate_cards` /
-  // `duplicate_random_predicate`. `Golden` is unrestricted at generation time,
+  // `duplicate_random_predicate`. `Amplified` is unrestricted at generation time,
   // so the per-transfiguration eligibility check passes for any deck card and
   // does not interfere with the deck-scope assertion.
   const TRANSFIG_PREDICATE_VARIANTS = [
@@ -394,7 +394,7 @@ describe("deck-scope predicate audit", () => {
       const t = getReward(id);
       const ctx = buildContext({ cards: [WARRIOR_CARD], deckEntries: [] });
       expect(
-        t.viable({ predicateId: "warriors", transfiguration: "Golden", count: 1 }, ctx),
+        t.viable({ predicateId: "warriors", transfiguration: "Amplified", count: 1 }, ctx),
       ).toBe(false);
     },
   );
@@ -408,7 +408,7 @@ describe("deck-scope predicate audit", () => {
         deckEntries: [{ cardId: WARRIOR_CARD.id, copies: 1 }],
       });
       expect(
-        t.viable({ predicateId: "warriors", transfiguration: "Golden", count: 1 }, ctx),
+        t.viable({ predicateId: "warriors", transfiguration: "Amplified", count: 1 }, ctx),
       ).toBe(true);
     },
   );
@@ -449,7 +449,7 @@ describe("transfiguration-state viability", () => {
         {
           cardId: EVENT_CARD.id,
           copies: 1,
-          entryTransfigurations: ["Viridian"],
+          entryTransfigurations: ["Empowered"],
         },
       ],
     });
@@ -459,15 +459,15 @@ describe("transfiguration-state viability", () => {
         {
           cardId: EVENT_CARD.id,
           copies: 2,
-          entryTransfigurations: ["Viridian", null],
+          entryTransfigurations: ["Empowered", null],
         },
       ],
     });
     expect(
-      t.viable({ transfiguration: "Viridian", cardName: EVENT_CARD.name }, fullyTransfigured),
+      t.viable({ transfiguration: "Empowered", cardName: EVENT_CARD.name }, fullyTransfigured),
     ).toBe(false);
     expect(
-      t.viable({ transfiguration: "Viridian", cardName: EVENT_CARD.name }, partiallyTransfigured),
+      t.viable({ transfiguration: "Empowered", cardName: EVENT_CARD.name }, partiallyTransfigured),
     ).toBe(true);
   });
 
@@ -480,7 +480,7 @@ describe("transfiguration-state viability", () => {
         {
           cardId: WARRIOR_CARD.id,
           copies: 2,
-          entryTransfigurations: ["Golden", null],
+          entryTransfigurations: ["Amplified", null],
         },
       ],
     });
@@ -490,21 +490,21 @@ describe("transfiguration-state viability", () => {
         {
           cardId: WARRIOR_CARD.id,
           copies: 1,
-          entryTransfigurations: ["Golden"],
+          entryTransfigurations: ["Amplified"],
         },
       ],
     });
     expect(
-      random.viable({ predicateId: "warriors", transfiguration: "Golden", count: 2 }, partial),
+      random.viable({ predicateId: "warriors", transfiguration: "Amplified", count: 2 }, partial),
     ).toBe(false);
     expect(
-      random.viable({ predicateId: "warriors", transfiguration: "Golden", count: 1 }, partial),
+      random.viable({ predicateId: "warriors", transfiguration: "Amplified", count: 1 }, partial),
     ).toBe(true);
     expect(
-      all.viable({ predicateId: "warriors", transfiguration: "Golden" }, fullyTransfigured),
+      all.viable({ predicateId: "warriors", transfiguration: "Amplified" }, fullyTransfigured),
     ).toBe(false);
     expect(
-      all.viable({ predicateId: "warriors", transfiguration: "Golden" }, partial),
+      all.viable({ predicateId: "warriors", transfiguration: "Amplified" }, partial),
     ).toBe(true);
   });
 
@@ -523,10 +523,10 @@ describe("transfiguration-state viability", () => {
     });
 
     expect(
-      random.viable({ predicateId: "events", transfiguration: "Viridian", count: 1 }, ctx),
+      random.viable({ predicateId: "events", transfiguration: "Empowered", count: 1 }, ctx),
     ).toBe(false);
     expect(
-      all.viable({ predicateId: "events", transfiguration: "Viridian" }, ctx),
+      all.viable({ predicateId: "events", transfiguration: "Empowered" }, ctx),
     ).toBe(false);
   });
 
@@ -539,10 +539,10 @@ describe("transfiguration-state viability", () => {
     });
 
     expect(
-      random.viable({ predicateId: "events", transfiguration: "Viridian", count: 2 }, ctx),
+      random.viable({ predicateId: "events", transfiguration: "Empowered", count: 2 }, ctx),
     ).toBe(true);
     expect(
-      all.viable({ predicateId: "events", transfiguration: "Viridian" }, ctx),
+      all.viable({ predicateId: "events", transfiguration: "Empowered" }, ctx),
     ).toBe(true);
   });
 
@@ -556,7 +556,7 @@ describe("transfiguration-state viability", () => {
         {
           cardId: STARTER_CARD.id,
           copies: 2,
-          entryTransfigurations: ["Golden", null],
+          entryTransfigurations: ["Amplified", null],
         },
       ],
     });
@@ -567,7 +567,7 @@ describe("transfiguration-state viability", () => {
         {
           cardId: STARTER_CARD.id,
           copies: 1,
-          entryTransfigurations: ["Golden"],
+          entryTransfigurations: ["Amplified"],
         },
       ],
     });
@@ -585,7 +585,7 @@ describe("transfiguration-state viability", () => {
         {
           cardId: EVENT_CARD.id,
           copies: 1,
-          entryTransfigurations: ["Viridian"],
+          entryTransfigurations: ["Empowered"],
         },
         {
           cardId: STARTER_CARD.id,

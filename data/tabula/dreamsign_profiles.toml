@@ -14,7 +14,7 @@
 #
 # Curated 2026-06-09. Should be reviewed by the design owner before shipping.
 
-# Golden Acorn — once per turn, discarding a card reduces your next card's cost
+# Amplified Acorn — once per turn, discarding a card reduces your next card's cost
 # by 2●; rewards decks that discard frequently regardless of card type.
 [[dreamsigns]]
 id = "C706D0BA-2F41-4B14-95D8-DB168AC6246C"
@@ -244,7 +244,7 @@ cost-bands = []
 keywords = []
 quality = 2
 
-# Black Rose — when you play an event with ≥3 allied warriors, copy it;
+# Black Attuned — when you play an event with ≥3 allied warriors, copy it;
 # rewards warrior-wide + event-chain decks that hit the warrior threshold.
 [[dreamsigns]]
 id = "94E5683D-A24C-4F89-8AFA-652D7C6C79AA"
@@ -1215,7 +1215,7 @@ cost-bands = []
 keywords = []
 quality = 3
 
-# Rainbow Jellyfish — when you gain this, apply Prismatic Transfiguration to
+# Rainbow Jellyfish — when you gain this, apply Perfected Transfiguration to
 # each starter card; one-time effect on gain, rewards starter-dense early decks.
 [[dreamsigns]]
 id = "E7D23BF7-4D60-4B43-94C4-14A06C0F9116"
@@ -1226,7 +1226,7 @@ keywords = []
 quality = 2
 
 # Star Anise — each dreamscape, the first event card you add to your deck gains
-# Golden Transfiguration; rewards event-heavy decks seeking transfiguration.
+# Amplified Transfiguration; rewards event-heavy decks seeking transfiguration.
 [[dreamsigns]]
 id = "4F21A4AB-E4AA-4718-8563-9AFB72D140C0"
 subtypes = []
@@ -1265,7 +1265,7 @@ cost-bands = []
 keywords = []
 quality = 2
 
-# Rose Petals — cards added from battle rewards gain a random applicable
+# Attuned Petals — cards added from battle rewards gain a random applicable
 # transfiguration; rewards decks that win battles frequently.
 [[dreamsigns]]
 id = "34CE9428-DDA9-4EFA-BACD-5EC2698561C1"

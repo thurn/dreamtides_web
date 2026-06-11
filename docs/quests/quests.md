@@ -410,30 +410,30 @@ Each card can only receive a single transfiguration; cards that have already
 been transfigured are not eligible. If multiple transfigurations are applicable
 to a card, a random one is selected to suggest.
 
-Transfigurations are named after colors, and cause the card name and any
-modified rules text to display in a different color to indicate the
-transfiguration. Possible transfigurations include:
+Each transfiguration carries an emblem icon shown in the card's name bar and a
+tint color; the card name and any modified rules text display in that tint to
+indicate the transfiguration. Possible transfigurations include:
 
-- Viridian Transfiguration: Reduces the energy cost of the card by 50%, rounded
+- Empowered Transfiguration: Reduces the energy cost of the card by 50%, rounded
   to the nearest whole number (4->2, 3->2, 2->1, 1->0, etc). Not available for
   cards which cost 0.
-- Golden Transfiguration: Improves the effect of the card by increasing or
+- Amplified Transfiguration: Improves the effect of the card by increasing or
   decreasing a number in its rules text by 1. Only available for cards with
-  numbers in their text. The golden variant of each card is defined in TOML.
-- Scarlet Transfiguration: Doubles the base spark of a character, or sets it to
+  numbers in their text. The amplified variant of each card is defined in TOML.
+- Kindled Transfiguration: Doubles the base spark of a character, or sets it to
   1 for characters with 0 spark. Only available for characters.
-- Magenta Transfiguration: Increases the frequency of named card triggers,
+- Resonant Transfiguration: Increases the frequency of named card triggers,
   changing:
   - A "materialized" trigger to also happen when the card dissolves
   - A "dawn" trigger to also happen when the card is materialized
   - A "once per turn" trigger to happen any number of times per turn
-- Azure Transfiguration: Appends "draw a card" to the text of an event card.
+- Inspired Transfiguration: Appends "draw a card" to the text of an event card.
   Only available for events.
-- Bronze Transfiguration: Adds "reclaim" to the text of an event card. Only
+- Enduring Transfiguration: Adds "reclaim" to the text of an event card. Only
   available for events.
-- Rose Transfiguration: Reduces the cost of an activated ability by 1. Only
+- Attuned Transfiguration: Reduces the cost of an activated ability by 1. Only
   available for cards with activated abilities that cost energy.
-- Prismatic Transfiguration: Adds all of the above transfigurations to a card
+- Perfected Transfiguration: Adds all of the above transfigurations to a card
   which are available. Only available for cards which are eligible for 2 or more
   transfigurations.
 

@@ -661,7 +661,7 @@ Tests by bug class:
 **Files:** Create `src/journey_v2/archetypes/improve.ts` + test.
 
 `transfigurationBenefit(card, transfiguration, preview)` implements the spec
-table exactly (mechanical Viridian/Scarlet deltas; flat constants for the
+table exactly (mechanical Empowered/Kindled deltas; flat constants for the
 rest). `transfigure`: candidates are ALL (untransfigured entry, eligible
 transfiguration) pairs with benefit > 0; starters excluded while any
 non-starter pair exists; signal `transfigureBlend` over (benefit,
@@ -673,10 +673,10 @@ payload.
 
 Tests by bug class:
 - **The Direwolf test** — the determinism bug this rewrite exists to fix,
-  reproduced on a fixture: a deck with one high-spark character (Scarlet
+  reproduced on a fixture: a deck with one high-spark character (Kindled
   benefit 1.0) and >= 7 other positive-benefit pairs; over 40 seeds, at
   least 3 distinct (entry, transfiguration) pairs are offered and the
-  Scarlet pair is offered in < 90% of encounters (bug: any reintroduced
+  Kindled pair is offered in < 90% of encounters (bug: any reintroduced
   argmax in pair enumeration, banding, or sampling).
 - Pair enumeration: an entry eligible for 3 transfigurations contributes 3
   candidates (bug: best-per-entry collapse — the exact v2 defect).

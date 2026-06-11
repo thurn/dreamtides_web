@@ -9,7 +9,7 @@
 ## Strange Cache
 
 - Gain {Ginger Root}.
-- Apply {Viridian Transfiguration} to a chosen starter card.
+- Apply {Empowered Transfiguration} to a chosen starter card.
 - Add a {Transfiguration} site to the current dreamscape.
 
 ## Moonless Altar
@@ -28,9 +28,9 @@
 
 ## Shackled Statue
 
-- Gain 1 {Nightmare}. Apply {Bronze Transfiguration} to a chosen character.
-- Gain 1 {Nightmare}. Apply {Scarlet Transfiguration} to a chosen event.
-- Gain 1 {Nightmare}. Apply {Golden Transfiguration} to a chosen fast card.
+- Gain 1 {Nightmare}. Apply {Enduring Transfiguration} to a chosen character.
+- Gain 1 {Nightmare}. Apply {Kindled Transfiguration} to a chosen event.
+- Gain 1 {Nightmare}. Apply {Amplified Transfiguration} to a chosen fast card.
 
 ## Omen Wager
 
@@ -61,7 +61,7 @@
 
 ## Welcoming Weaver
 
-- Apply {Viridian Transfiguration} to a chosen starter card.
+- Apply {Empowered Transfiguration} to a chosen starter card.
 - Transform a chosen Dreamsign into you choice of 1 of 3 Dreamsigns.
 - Replace a {Draft} site in the current dreamscape with a {Transfiguration}
   site.
@@ -84,37 +84,37 @@
 
 - Buy {Ginger Root} for 80 essence.
 - Buy {Pyramid Relic} for 80 essence.
-- Buy {Golden Acorn} for 80 essence.
+- Buy {Amplified Acorn} for 80 essence.
 
 ## Designer's Counter
 
-- Pay 45 essence. Apply {Viridian Transfiguration} to a chosen card.
+- Pay 45 essence. Apply {Empowered Transfiguration} to a chosen card.
 - Pay 70 essence. Transform 2 chosen cards.
 - Pay 120 essence. Purge a chosen card and duplicate a chosen card.
 
 ## Premium Goods
 
 - Buy {Aspiring Guardian} for 120 essence.
-- Buy {Golden Transfiguration} for 120 essence and apply it to a chosen card.
+- Buy {Amplified Transfiguration} for 120 essence and apply it to a chosen card.
 - Buy a {Dream Journey} site in the current dreamscape for 120 essence.
 
 # curated_reward_trio
 
 ## Early Growth
 
-- Apply {Viridian Transfiguration} to a chosen starter card.
-- Draft 1 of 8 low-cost cards and apply {Viridian Transfiguration} to it.
+- Apply {Empowered Transfiguration} to a chosen starter card.
+- Draft 1 of 8 low-cost cards and apply {Empowered Transfiguration} to it.
 - Gain {Seedling Charm}
 
 ## Three Carvings
 
-- Draft 1 of 8 characters and apply {Viridian Transfiguration} to it.
-- Draft 1 of 8 events and apply {Viridian Transfiguration} to it.
-- Draft 1 of 8 fast cards and apply {Viridian Transfiguration} to it.
+- Draft 1 of 8 characters and apply {Empowered Transfiguration} to it.
+- Draft 1 of 8 events and apply {Empowered Transfiguration} to it.
+- Draft 1 of 8 fast cards and apply {Empowered Transfiguration} to it.
 
 ## Three Signs
 
-- Gain {Golden Acorn}.
+- Gain {Amplified Acorn}.
 - Gain {Silver Key}.
 - Gain {Ginger Root}.
 
@@ -123,12 +123,12 @@
 ## Ancient Margins
 
 - Purge a chosen starter card.
-- Apply {Viridian Transfiguration} to each starter card.
+- Apply {Empowered Transfiguration} to each starter card.
 
 ## Memory Hound
 
 - Gain {Memory Collar}
-- Draft 1 of 8 low-cost characters and apply {Viridian Transfiguration} to it.
+- Draft 1 of 8 low-cost characters and apply {Empowered Transfiguration} to it.
 
 ## Cleanse or Corrupt
 
@@ -140,7 +140,7 @@
 ## One Starter, Three Futures
 
 - Purge {Nocturne Strummer}.
-- Apply {Viridian Transfiguration} to {Nocturne Strummer}.
+- Apply {Empowered Transfiguration} to {Nocturne Strummer}.
 - Replace {Nocturne Strummer} with 1 of 3 low-cost cards.
 
 ## One Bane, Three Escapes
@@ -184,12 +184,12 @@
 - Choose a reward package. The package adapts to the chosen frame:
   - Essence: gain 80 essence when it resolves.
   - Cleansing: purge a chosen Bane when it resolves.
-  - Transfiguration: apply {Viridian Transfiguration} to a chosen starter card
+  - Transfiguration: apply {Empowered Transfiguration} to a chosen starter card
     when it resolves.
 - Choose a finish:
   - Efficient: if Card, reduce its cost by 1, to a minimum of 0; otherwise gain
     1 omen.
-  - Abundant: increase essence to 130, purge 2 Banes, or apply {Golden
+  - Abundant: increase essence to 130, purge 2 Banes, or apply {Amplified
     Transfiguration} instead.
   - Echoing: if Card, give it Reclaim; otherwise repeat the reward after your
     next battle.
@@ -199,7 +199,7 @@
 ## Reflection Gallery
 
 - Duplicate a chosen card.
-- Apply {Golden Transfiguration} to a chosen card.
+- Apply {Amplified Transfiguration} to a chosen card.
 - Transform a chosen Dreamsign into 1 of 3 visible Dreamsigns.
 
 ## Event Mirror
@@ -224,15 +224,15 @@
 
 ## Bloody Margins
 
-- Apply {Scarlet Transfiguration} to a chosen character.
-- Apply {Viridian Transfiguration} to a chosen event.
-- Apply {Azure Transfiguration} to a chosen fast card.
+- Apply {Kindled Transfiguration} to a chosen character.
+- Apply {Empowered Transfiguration} to a chosen event.
+- Apply {Inspired Transfiguration} to a chosen fast card.
 
 ## One Blessing
 
-- Apply {Scarlet Transfiguration} to {Aspiring Guardian}.
-- Apply {Scarlet Transfiguration} to {Tranquil Duelist}.
-- Apply {Scarlet Transfiguration} to {Nocturne}.
+- Apply {Kindled Transfiguration} to {Aspiring Guardian}.
+- Apply {Kindled Transfiguration} to {Tranquil Duelist}.
+- Apply {Kindled Transfiguration} to {Nocturne}.
 
 # choose_your_loss
 
@@ -277,7 +277,7 @@
 
 ## Shining Light
 
-- Gain 1 {Nightmare}. Apply {Viridian Transfiguration} to 2 random cards.
+- Gain 1 {Nightmare}. Apply {Empowered Transfiguration} to 2 random cards.
 - Leave.
 
 ## Bane Bargain
@@ -358,7 +358,7 @@
   - Bury {Scrap Reclaimer}.
   - Bury {Evacuation Enforcer}.
 - Later return:
-  - Reclaim the buried card with {Bronze Transfiguration}.
+  - Reclaim the buried card with {Enduring Transfiguration}.
   - Duplicate the buried card.
 
 ## Sealed Sign
@@ -366,7 +366,7 @@
 - First scene:
   - Seal {Ginger Root}.
   - Seal {Pyramid Relic}.
-  - Seal {Golden Acorn}.
+  - Seal {Amplified Acorn}.
 - Later return:
   - Recover the sealed Dreamsign.
   - Transform the sealed Dreamsign into {Mandrake Root}.
@@ -408,14 +408,14 @@
 - Choose 2:
   - Purge a chosen starter card.
   - Duplicate {Aspiring Guardian}.
-  - Apply {Golden Transfiguration} to {Aspiring Guardian}.
+  - Apply {Amplified Transfiguration} to {Aspiring Guardian}.
 
 ## Troubled Charms
 
 - Choose any number:
   - Gain 1 {Nightmare}. After 2 battles, purge it and gain {Ginger Root}.
   - Gain 1 {Despair}. After 2 battles, purge it and gain {Silver Key}.
-  - Gain 1 {Oblivion}. After 2 battles, purge it and apply {Golden
+  - Gain 1 {Oblivion}. After 2 battles, purge it and apply {Amplified
     Transfiguration} to a chosen card.
 
 # take_up_to_n
@@ -429,7 +429,7 @@
   - Pay 70 essence. Draft 1 of 8 cards.
   - Stop here.
 - Third pull:
-  - Pay 105 essence. Apply {Golden Transfiguration} to a chosen starter card.
+  - Pay 105 essence. Apply {Amplified Transfiguration} to a chosen starter card.
   - Stop here.
 
 ## Measured Greed
@@ -472,9 +472,9 @@
 
 ## Widen The Rewrite
 
-- Pay 30 essence. Apply {Golden Transfiguration} to 1 chosen card.
-- Pay 60 essence. Apply {Golden Transfiguration} to 2 chosen cards.
-- Pay 90 essence. Apply {Golden Transfiguration} to 3 chosen cards.
+- Pay 30 essence. Apply {Amplified Transfiguration} to 1 chosen card.
+- Pay 60 essence. Apply {Amplified Transfiguration} to 2 chosen cards.
+- Pay 90 essence. Apply {Amplified Transfiguration} to 3 chosen cards.
 
 # push_your_luck
 
@@ -495,14 +495,14 @@
 ## Chase The Upgrade
 
 - First push:
-  - Apply {Viridian Transfiguration} to a chosen card.
+  - Apply {Empowered Transfiguration} to a chosen card.
   - Stop here.
 - Second push:
-  - Apply {Viridian Transfiguration} to a second chosen card. 30% chance to gain
+  - Apply {Empowered Transfiguration} to a second chosen card. 30% chance to gain
     1 {Nightmare}.
   - Stop here.
 - Third push:
-  - Apply {Viridian Transfiguration} to a third chosen card. 55% chance to gain
+  - Apply {Empowered Transfiguration} to a third chosen card. 55% chance to gain
     1 {Nightmare}.
   - Stop here.
 
@@ -534,7 +534,7 @@
 
 ## Turning Wheel
 
-- Roll for one: gain 160 essence, restore essence to full, apply {Viridian
+- Roll for one: gain 160 essence, restore essence to full, apply {Empowered
   Transfiguration} to a random card, purge a random Bane, gain 1 {Nightmare}, or
   gain {Ginger Root}.
 
@@ -544,7 +544,7 @@
 
 ## One Omen
 
-- Roll for one: {Azure Transfiguration}, {Bronze Transfiguration}, or {Golden
+- Roll for one: {Inspired Transfiguration}, {Enduring Transfiguration}, or {Amplified
   Transfiguration}. Apply the result to {Glimpse of What Was}.
 
 # sequential_offers
@@ -582,7 +582,7 @@
   - Gain {Pyramid Relic} for 50 essence.
   - Leave.
 - Offer 3:
-  - Gain {Golden Acorn} for 50 essence.
+  - Gain {Amplified Acorn} for 50 essence.
   - Leave.
 
 # escalating_search

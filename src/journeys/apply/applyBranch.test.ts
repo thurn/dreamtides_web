@@ -160,7 +160,7 @@ function transfigureChosenCardsStub(
         return;
       }
       for (const entryId of resolution.entryIds) {
-        mut.transfigureDeckEntry(entryId, "Bronze", `dream_journey:${id}`);
+        mut.transfigureDeckEntry(entryId, "Enduring", `dream_journey:${id}`);
       }
     },
   };
@@ -187,7 +187,7 @@ function chooseCardThenTransfigurationStub(id: string): Reward<Record<string, un
         return {
           kind: "transfiguration",
           requestId: transfigurationRequestId,
-          eligibleTransfigurations: ["Azure", "Bronze"],
+          eligibleTransfigurations: ["Inspired", "Enduring"],
           title: "Choose transfiguration",
         };
       }
@@ -382,7 +382,7 @@ describe("applyBranch", () => {
         method: "transfigureDeckEntry",
         args: [
           "deck-entry-1",
-          "Bronze",
+          "Enduring",
           "dream_journey:apply_named_transfiguration_to_chosen_predicate_cards",
         ],
       },
@@ -398,7 +398,7 @@ describe("applyBranch", () => {
     const secondRequest: ChooserRequest = {
       kind: "transfiguration",
       requestId: branchRequestIdFor("node-root.D", templateId, 1),
-      eligibleTransfigurations: ["Azure", "Bronze"],
+      eligibleTransfigurations: ["Inspired", "Enduring"],
       title: "Choose transfiguration",
     };
     stubRewards.set(templateId, chooseCardThenTransfigurationStub(templateId));
@@ -414,7 +414,7 @@ describe("applyBranch", () => {
     ]);
     const bothResolutions = new Map<string, ChooserResolution>([
       [firstRequest.requestId, { kind: "card", entryIds: ["deck-1"] }],
-      [secondRequest.requestId, { kind: "transfiguration", type: "Azure" }],
+      [secondRequest.requestId, { kind: "transfiguration", type: "Inspired" }],
     ]);
 
     vi.spyOn(loggingModule, "logEvent").mockImplementation(
@@ -441,7 +441,7 @@ describe("applyBranch", () => {
         method: "transfigureDeckEntry",
         args: [
           "deck-1",
-          "Azure",
+          "Inspired",
           "dream_journey:apply_chosen_transfiguration_to_chosen_card",
         ],
       },
@@ -457,7 +457,7 @@ describe("applyBranch", () => {
     const firstTransfigurationRequest: ChooserRequest = {
       kind: "transfiguration",
       requestId: branchRequestIdFor("node-root.E", templateId, 1),
-      eligibleTransfigurations: ["Azure", "Bronze"],
+      eligibleTransfigurations: ["Inspired", "Enduring"],
       title: "Choose transfiguration",
     };
     const secondCardRequest = {
@@ -467,7 +467,7 @@ describe("applyBranch", () => {
     const secondTransfigurationRequest: ChooserRequest = {
       kind: "transfiguration",
       requestId: requestIdFor("node-root.E:entry:1", templateId, 1),
-      eligibleTransfigurations: ["Azure", "Bronze"],
+      eligibleTransfigurations: ["Inspired", "Enduring"],
       title: "Choose transfiguration",
     };
     stubRewards.set(templateId, chooseCardThenTransfigurationStub(templateId));
@@ -486,20 +486,20 @@ describe("applyBranch", () => {
     ]);
     const firstCompleteResolution = new Map<string, ChooserResolution>([
       [firstCardRequest.requestId, { kind: "card", entryIds: ["deck-1"] }],
-      [firstTransfigurationRequest.requestId, { kind: "transfiguration", type: "Azure" }],
+      [firstTransfigurationRequest.requestId, { kind: "transfiguration", type: "Inspired" }],
     ]);
     const secondCardResolution = new Map<string, ChooserResolution>([
       [firstCardRequest.requestId, { kind: "card", entryIds: ["deck-1"] }],
-      [firstTransfigurationRequest.requestId, { kind: "transfiguration", type: "Azure" }],
+      [firstTransfigurationRequest.requestId, { kind: "transfiguration", type: "Inspired" }],
       [secondCardRequest.requestId, { kind: "card", entryIds: ["deck-2"] }],
     ]);
     const allResolutions = new Map<string, ChooserResolution>([
       [firstCardRequest.requestId, { kind: "card", entryIds: ["deck-1"] }],
-      [firstTransfigurationRequest.requestId, { kind: "transfiguration", type: "Azure" }],
+      [firstTransfigurationRequest.requestId, { kind: "transfiguration", type: "Inspired" }],
       [secondCardRequest.requestId, { kind: "card", entryIds: ["deck-2"] }],
       [
         secondTransfigurationRequest.requestId,
-        { kind: "transfiguration", type: "Bronze" },
+        { kind: "transfiguration", type: "Enduring" },
       ],
     ]);
 
@@ -533,7 +533,7 @@ describe("applyBranch", () => {
         method: "transfigureDeckEntry",
         args: [
           "deck-1",
-          "Azure",
+          "Inspired",
           "dream_journey:apply_chosen_transfiguration_to_chosen_card",
         ],
       },
@@ -541,7 +541,7 @@ describe("applyBranch", () => {
         method: "transfigureDeckEntry",
         args: [
           "deck-2",
-          "Bronze",
+          "Enduring",
           "dream_journey:apply_chosen_transfiguration_to_chosen_card",
         ],
       },

@@ -1223,7 +1223,7 @@ describe("addCardById", () => {
     act(() => {
       entryId = quest.mutations.addCardByIdWithTransfiguration(
         "card-501",
-        "Bronze",
+        "Enduring",
         "journey:test",
       );
     });
@@ -1232,7 +1232,7 @@ describe("addCardById", () => {
     expect(quest.state.deck[0]).toEqual({
       entryId,
       cardNumber: 501,
-      transfiguration: "Bronze",
+      transfiguration: "Enduring",
       isBane: false,
     });
   });

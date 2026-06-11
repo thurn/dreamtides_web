@@ -6,25 +6,25 @@ import type { TransfigurationType } from "../../../types/quest";
 import { ChooserOverlay } from "./ChooserOverlay";
 
 const TRANSFIGURATIONS: readonly TransfigurationType[] = [
-  "Bronze",
-  "Viridian",
-  "Golden",
-  "Scarlet",
-  "Azure",
-  "Magenta",
-  "Rose",
-  "Prismatic",
+  "Enduring",
+  "Empowered",
+  "Amplified",
+  "Kindled",
+  "Inspired",
+  "Resonant",
+  "Attuned",
+  "Perfected",
 ];
 
 const TILE_COLORS: Readonly<Record<TransfigurationType, string>> = {
-  Bronze: "#8b5a2b",
-  Viridian: "#228b56",
-  Golden: "#b88712",
-  Scarlet: "#b93434",
-  Azure: "#2563eb",
-  Magenta: "#b83280",
-  Rose: "#d94679",
-  Prismatic: "#7c3aed",
+  Enduring: "#8b5a2b",
+  Empowered: "#228b56",
+  Amplified: "#b88712",
+  Kindled: "#b93434",
+  Inspired: "#2563eb",
+  Resonant: "#b83280",
+  Attuned: "#d94679",
+  Perfected: "#7c3aed",
 };
 
 export interface TransfigurationChooserProps {

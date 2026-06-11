@@ -5,14 +5,14 @@ import type { TransfigurationType } from "../types/quest";
 export const TRANSFIGURATION_COLORS: Readonly<
   Record<TransfigurationType, string>
 > = {
-  Viridian: "#10b981",
-  Golden: "#f59e0b",
-  Scarlet: "#ef4444",
-  Azure: "#3b82f6",
-  Bronze: "#d97706",
-  Magenta: "#d946ef",
-  Rose: "#f43f5e",
-  Prismatic: "#a855f7",
+  Empowered: "#10b981",
+  Amplified: "#f59e0b",
+  Kindled: "#ef4444",
+  Inspired: "#3b82f6",
+  Enduring: "#d97706",
+  Resonant: "#d946ef",
+  Attuned: "#f43f5e",
+  Perfected: "#a855f7",
 };
 
 /**
@@ -26,14 +26,36 @@ export const TRANSFIGURATION_COLORS: Readonly<
 export const TRANSFIGURATION_TINT_COLORS: Readonly<
   Record<TransfigurationType, string>
 > = {
-  Viridian: "#6ee7b7",
-  Golden: "#fcd34d",
-  Scarlet: "#fca5a5",
-  Azure: "#93c5fd",
-  Bronze: "#f0c08a",
-  Magenta: "#f0abfc",
-  Rose: "#fda4af",
-  Prismatic: "#d8b4fe",
+  Empowered: "#6ee7b7",
+  Amplified: "#fcd34d",
+  Kindled: "#fca5a5",
+  Inspired: "#93c5fd",
+  Enduring: "#f0c08a",
+  Resonant: "#f0abfc",
+  Attuned: "#fda4af",
+  Perfected: "#d8b4fe",
+};
+
+/**
+ * Boxicons glyph class for each transfiguration type, painted in the tint color
+ * inside the card's name bar. Each icon evokes the transfiguration's effect:
+ * a bolt for the energy-cheapening Empowered, a rising trend for the
+ * number-raising Amplified, a flame for the spark-doubling Kindled, a mind for
+ * the card-drawing Inspired, an infinity loop for the recurring Enduring, a
+ * broadcast wave for the trigger-widening Resonant, a tuning slider for the
+ * ability-cheapening Attuned, and a flawless gem for the all-applying Perfected.
+ */
+export const TRANSFIGURATION_ICONS: Readonly<
+  Record<TransfigurationType, string>
+> = {
+  Empowered: "bx-bolt",
+  Amplified: "bx-trending-up",
+  Kindled: "bx-flame",
+  Inspired: "bx-brain",
+  Enduring: "bx-infinite",
+  Resonant: "bx-broadcast",
+  Attuned: "bx-slider",
+  Perfected: "bx-diamond",
 };
 
 /**
@@ -63,9 +85,9 @@ export interface CardTransfigurationDisplay {
   color: string;
   /** Rules text with the changed/added spans wrapped in transfigure markers. */
   markedText: string;
-  /** True when the energy cost changed (Viridian); tints the energy orb. */
+  /** True when the energy cost changed (Empowered); tints the energy orb. */
   energyChanged: boolean;
-  /** True when the spark changed (Scarlet); tints the spark orb. */
+  /** True when the spark changed (Kindled); tints the spark orb. */
   sparkChanged: boolean;
 }
 
@@ -85,16 +107,16 @@ export interface TransfiguredCard {
  * the entry point for surfaces that also paint the change.
  *
  * Markers are laid down alongside the same text edits so the marked text stays
- * in lockstep with the transfigured rules text. Prismatic chains every
+ * in lockstep with the transfigured rules text. Perfected chains every
  * applicable change, marking each one.
  */
 export function buildTransfigurationDisplay(
   original: CardData,
   type: TransfigurationType,
 ): TransfiguredCard {
-  const steps: Exclude<TransfigurationType, "Prismatic">[] =
-    type === "Prismatic"
-      ? eligibleNonPrismaticTransfigurations(original)
+  const steps: Exclude<TransfigurationType, "Perfected">[] =
+    type === "Perfected"
+      ? eligibleNonPerfectedTransfigurations(original)
       : [type];
 
   let card = original;
@@ -103,7 +125,7 @@ export function buildTransfigurationDisplay(
   let sparkChanged = false;
 
   for (const step of steps) {
-    if (step === "Viridian" || step === "Scarlet") {
+    if (step === "Empowered" || step === "Kindled") {
       const result = applyStatStep(card, step);
       card = result.card;
       energyChanged = energyChanged || result.energyChanged;
@@ -141,74 +163,74 @@ export interface TransfigurationOffer {
   previewCard: CardData;
 }
 
-/** Returns true if the card is eligible for Viridian transfiguration. */
-export function isViridianEligible(card: CardData): boolean {
+/** Returns true if the card is eligible for Empowered transfiguration. */
+export function isEmpoweredEligible(card: CardData): boolean {
   return card.energyCost !== null && card.energyCost > 0;
 }
 
 /** Returns true if the card's rules text contains at least one digit. */
-export function isGoldenEligible(card: CardData): boolean {
+export function isAmplifiedEligible(card: CardData): boolean {
   return /\d/.test(card.renderedText);
 }
 
-/** Returns true if the card is a Character (eligible for Scarlet). */
-export function isScarletEligible(card: CardData): boolean {
+/** Returns true if the card is a Character (eligible for Kindled). */
+export function isKindledEligible(card: CardData): boolean {
   return card.cardType === "Character";
 }
 
-/** Returns true if the card is an Event (eligible for Azure). */
-export function isAzureEligible(card: CardData): boolean {
+/** Returns true if the card is an Event (eligible for Inspired). */
+export function isInspiredEligible(card: CardData): boolean {
   return card.cardType === "Event";
 }
 
-/** Returns true if the card is an Event (eligible for Bronze). */
-export function isBronzeEligible(card: CardData): boolean {
+/** Returns true if the card is an Event (eligible for Enduring). */
+export function isEnduringEligible(card: CardData): boolean {
   return card.cardType === "Event";
 }
 
 /**
- * Returns true if the card has a named trigger whose reach Magenta can widen:
+ * Returns true if the card has a named trigger whose reach Resonant can widen:
  * a `▸Dawn` trigger (which then also fires on materialize), a `▸Materialized`
  * trigger (which then also fires on dissolve), or a `once per turn` clause
  * (which then fires any number of times per turn).
  */
-export function isMagentaEligible(card: CardData): boolean {
-  return magentaTransform(card.renderedText) !== null;
+export function isResonantEligible(card: CardData): boolean {
+  return resonantTransform(card.renderedText) !== null;
 }
 
 /**
  * Returns true if the card has an activated ability with an energy cost (an
- * `N●` cost token before the ability's colon) that Rose can reduce by 1.
+ * `N●` cost token before the ability's colon) that Attuned can reduce by 1.
  */
-export function isRoseEligible(card: CardData): boolean {
-  return roseTransform(card.renderedText) !== null;
+export function isAttunedEligible(card: CardData): boolean {
+  return attunedTransform(card.renderedText) !== null;
 }
 
 /**
  * Returns true if the card is eligible for two or more of the other
- * transfigurations — the requirement for Prismatic.
+ * transfigurations — the requirement for Perfected.
  */
-export function isPrismaticEligible(card: CardData): boolean {
-  return eligibleNonPrismaticTransfigurations(card).length >= 2;
+export function isPerfectedEligible(card: CardData): boolean {
+  return eligibleNonPerfectedTransfigurations(card).length >= 2;
 }
 
-/** Eligibility check functions for every non-Prismatic transfiguration. */
-const NON_PRISMATIC_CHECKS: ReadonlyArray<
-  [Exclude<TransfigurationType, "Prismatic">, (card: CardData) => boolean]
+/** Eligibility check functions for every non-Perfected transfiguration. */
+const NON_PERFECTED_CHECKS: ReadonlyArray<
+  [Exclude<TransfigurationType, "Perfected">, (card: CardData) => boolean]
 > = [
-  ["Viridian", isViridianEligible],
-  ["Golden", isGoldenEligible],
-  ["Scarlet", isScarletEligible],
-  ["Azure", isAzureEligible],
-  ["Bronze", isBronzeEligible],
-  ["Magenta", isMagentaEligible],
-  ["Rose", isRoseEligible],
+  ["Empowered", isEmpoweredEligible],
+  ["Amplified", isAmplifiedEligible],
+  ["Kindled", isKindledEligible],
+  ["Inspired", isInspiredEligible],
+  ["Enduring", isEnduringEligible],
+  ["Resonant", isResonantEligible],
+  ["Attuned", isAttunedEligible],
 ];
 
-function eligibleNonPrismaticTransfigurations(
+function eligibleNonPerfectedTransfigurations(
   card: CardData,
-): Exclude<TransfigurationType, "Prismatic">[] {
-  return NON_PRISMATIC_CHECKS.filter(([, check]) => check(card)).map(
+): Exclude<TransfigurationType, "Perfected">[] {
+  return NON_PERFECTED_CHECKS.filter(([, check]) => check(card)).map(
     ([type]) => type,
   );
 }
@@ -217,11 +239,11 @@ function eligibleNonPrismaticTransfigurations(
 export function eligibleTransfigurations(
   card: CardData,
 ): TransfigurationType[] {
-  const types: TransfigurationType[] = eligibleNonPrismaticTransfigurations(
+  const types: TransfigurationType[] = eligibleNonPerfectedTransfigurations(
     card,
   );
-  if (isPrismaticEligible(card)) {
-    types.push("Prismatic");
+  if (isPerfectedEligible(card)) {
+    types.push("Perfected");
   }
   return types;
 }
@@ -229,20 +251,20 @@ export function eligibleTransfigurations(
 /**
  * Applies a transfiguration to a card, returning the modified card. This is
  * deterministic so the same badge produces the same battle card every time.
- * Prismatic applies every other transfiguration the card is eligible for.
+ * Perfected applies every other transfiguration the card is eligible for.
  */
 export function applyTransfigurationToCard(
   card: CardData,
   type: TransfigurationType,
 ): CardData {
-  if (type === "Prismatic") {
+  if (type === "Perfected") {
     let result = card;
-    for (const step of eligibleNonPrismaticTransfigurations(card)) {
+    for (const step of eligibleNonPerfectedTransfigurations(card)) {
       result = applyTransfigurationToCard(result, step);
     }
     return result;
   }
-  if (type === "Viridian" || type === "Scarlet") {
+  if (type === "Empowered" || type === "Kindled") {
     return applyStatStep(card, type).card;
   }
   const transform = textTransformFor(card.renderedText, type);
@@ -252,7 +274,7 @@ export function applyTransfigurationToCard(
   return { ...card, renderedText: transform.plain(card.renderedText) };
 }
 
-/** The result of a stat-only transfiguration step (Viridian or Scarlet). */
+/** The result of a stat-only transfiguration step (Empowered or Kindled). */
 interface StatStepResult {
   card: CardData;
   energyChanged: boolean;
@@ -260,15 +282,15 @@ interface StatStepResult {
 }
 
 /**
- * Applies a stat-only step: Viridian halves the energy cost (rounded), Scarlet
+ * Applies a stat-only step: Empowered halves the energy cost (rounded), Kindled
  * doubles the base spark (or sets a 0-spark character to 1). The flags drive
  * which corner stat orb is tinted in the card display.
  */
 function applyStatStep(
   card: CardData,
-  step: "Viridian" | "Scarlet",
+  step: "Empowered" | "Kindled",
 ): StatStepResult {
-  if (step === "Viridian") {
+  if (step === "Empowered") {
     if (card.energyCost === null || card.energyCost <= 0) {
       return { card, energyChanged: false, sparkChanged: false };
     }
@@ -300,23 +322,23 @@ interface TextTransform {
 /**
  * Returns the text transform for a text-changing step (or null when the step
  * does not apply to this card). Driven off the current plain text so it
- * composes correctly when Prismatic chains several steps.
+ * composes correctly when Perfected chains several steps.
  */
 function textTransformFor(
   text: string,
-  step: Exclude<TransfigurationType, "Prismatic" | "Viridian" | "Scarlet">,
+  step: Exclude<TransfigurationType, "Perfected" | "Empowered" | "Kindled">,
 ): TextTransform | null {
   switch (step) {
-    case "Azure":
+    case "Inspired":
       return appendTransform("Draw a card.");
-    case "Bronze":
+    case "Enduring":
       return appendTransform("Reclaim.");
-    case "Golden":
-      return goldenTransform(text);
-    case "Magenta":
-      return magentaTransform(text);
-    case "Rose":
-      return roseTransform(text);
+    case "Amplified":
+      return amplifiedTransform(text);
+    case "Resonant":
+      return resonantTransform(text);
+    case "Attuned":
+      return attunedTransform(text);
   }
 }
 
@@ -333,11 +355,11 @@ function appendTransform(clause: string): TextTransform {
 }
 
 /**
- * Golden bumps the first number in the rules text up by one; only the bumped
+ * Amplified bumps the first number in the rules text up by one; only the bumped
  * number is tinted, so a neighboring resource glyph (e.g. the `●` of `2●`)
  * keeps its resource hue.
  */
-function goldenTransform(text: string): TextTransform | null {
+function amplifiedTransform(text: string): TextTransform | null {
   const match = /\d+/.exec(text);
   if (match === null) {
     return null;
@@ -351,13 +373,13 @@ function goldenTransform(text: string): TextTransform | null {
 }
 
 /**
- * Magenta widens a named trigger's reach by adding a keyword, tinting only the
+ * Resonant widens a named trigger's reach by adding a keyword, tinting only the
  * added keyword:
  *   - `▸Dawn:` also fires on materialize → `▸Materialized, Dawn:`
  *   - `▸Materialized:` also fires on dissolve → `▸Materialized, Dissolved:`
  *   - `once per turn` → `any number of times per turn`
  */
-function magentaTransform(text: string): TextTransform | null {
+function resonantTransform(text: string): TextTransform | null {
   if (/once per turn/i.test(text)) {
     return {
       plain: (t) =>
@@ -388,14 +410,14 @@ function magentaTransform(text: string): TextTransform | null {
  * colon, or newline) in between. This skips `N●` amounts that appear inside an
  * effect rather than a cost.
  */
-const ROSE_COST_PATTERN = /([1-9]\d*)●(?=[^:.\n]*:)/;
+const ATTUNED_COST_PATTERN = /([1-9]\d*)●(?=[^:.\n]*:)/;
 
 /**
- * Rose reduces an activated ability's energy cost by 1, tinting only the
+ * Attuned reduces an activated ability's energy cost by 1, tinting only the
  * changed number (the `●` glyph keeps its resource hue).
  */
-function roseTransform(text: string): TextTransform | null {
-  const match = ROSE_COST_PATTERN.exec(text);
+function attunedTransform(text: string): TextTransform | null {
+  const match = ATTUNED_COST_PATTERN.exec(text);
   if (match === null) {
     return null;
   }
@@ -414,23 +436,23 @@ function buildOffer(
 ): TransfigurationOffer {
   const previewCard = applyTransfigurationToCard(card, type);
   switch (type) {
-    case "Viridian":
+    case "Empowered":
       return {
         type,
         description: `Energy cost: ${String(card.energyCost ?? 0)} → ${String(previewCard.energyCost ?? 0)}`,
         previewCard,
       };
-    case "Scarlet":
+    case "Kindled":
       return {
         type,
         description: `Spark: ${String(card.spark ?? 0)} → ${String(previewCard.spark ?? 0)}`,
         previewCard,
       };
-    case "Azure":
+    case "Inspired":
       return { type, description: "Adds: Draw a card.", previewCard };
-    case "Bronze":
+    case "Enduring":
       return { type, description: "Adds: Reclaim.", previewCard };
-    case "Golden": {
+    case "Amplified": {
       const match = /\d+/.exec(card.renderedText);
       if (match === null) {
         return {
@@ -446,19 +468,19 @@ function buildOffer(
         previewCard,
       };
     }
-    case "Magenta":
+    case "Resonant":
       return {
         type,
         description: "Widens a named trigger to fire more often.",
         previewCard,
       };
-    case "Rose":
+    case "Attuned":
       return {
         type,
         description: "Activated ability costs 1 less.",
         previewCard,
       };
-    case "Prismatic":
+    case "Perfected":
       return {
         type,
         description: "Applies every available transfiguration.",

@@ -81,7 +81,7 @@ describe("createJourneyMutations passthrough", () => {
     const addedEntryId = adapter.addCardById("card-501", "dream_journey:gain_card");
     const transfiguredEntryId = adapter.addCardByIdWithTransfiguration(
       "card-502",
-      "Bronze",
+      "Enduring",
       "dream_journey:gain_transfigured_card",
     );
     adapter.addBaneCardById("bane-1", "dream_journey:gain_bane");
@@ -108,7 +108,7 @@ describe("createJourneyMutations passthrough", () => {
       { method: "addCardById", args: ["card-501", "dream_journey:gain_card"] },
       {
         method: "addCardByIdWithTransfiguration",
-        args: ["card-502", "Bronze", "dream_journey:gain_transfigured_card"],
+        args: ["card-502", "Enduring", "dream_journey:gain_transfigured_card"],
       },
       { method: "addBaneCardById", args: ["bane-1", "dream_journey:gain_bane"] },
       { method: "removeDeckEntry", args: ["entry-7", "dream_journey:purge"] },
@@ -138,14 +138,14 @@ describe("createJourneyMutations transfigureDeckEntry translation", () => {
 
     adapter.transfigureDeckEntry(
       "entry-12",
-      "Prismatic",
+      "Perfected",
       "dream_journey:transfigure_card",
     );
 
     expect(calls).toEqual([
       {
         method: "transfigureCard",
-        args: ["entry-12", "Prismatic", "dream_journey:transfigure_card", {}],
+        args: ["entry-12", "Perfected", "dream_journey:transfigure_card", {}],
       },
     ]);
   });

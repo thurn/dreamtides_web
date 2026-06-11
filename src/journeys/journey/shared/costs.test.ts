@@ -343,7 +343,7 @@ describe("deck-scope viability audits", () => {
         {
           cardId: STEADY_BURN.id,
           copies: 2,
-          entryTransfigurations: [null, "Viridian"],
+          entryTransfigurations: [null, "Empowered"],
         },
       ],
     });
@@ -361,7 +361,7 @@ describe("deck-scope viability audits", () => {
         {
           cardId: STEADY_BURN.id,
           copies: 1,
-          entryTransfigurations: ["Viridian"],
+          entryTransfigurations: ["Empowered"],
         },
         {
           cardId: RINGWATCHER.id,
@@ -384,7 +384,7 @@ describe("deck-scope viability audits", () => {
         {
           cardId: WARRIOR_CARD.id,
           copies: 3,
-          entryTransfigurations: ["Golden", null, "Viridian"],
+          entryTransfigurations: ["Amplified", null, "Empowered"],
         },
       ],
     });
@@ -400,7 +400,7 @@ describe("deck-scope viability audits", () => {
         {
           cardId: WARRIOR_CARD.id,
           copies: 2,
-          entryTransfigurations: ["Golden", null],
+          entryTransfigurations: ["Amplified", null],
         },
       ],
     });

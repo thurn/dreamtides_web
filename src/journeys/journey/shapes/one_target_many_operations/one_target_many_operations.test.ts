@@ -123,9 +123,9 @@ describe("one_target_many_operations shape", () => {
     },
     {
       templateId: "apply_named_transfiguration_to_card_name",
-      params: { transfiguration: "Bronze" },
+      params: { transfiguration: "Enduring" },
       target: cardTarget(),
-      expected: { transfiguration: "Bronze", cardName: "Steady Burn" },
+      expected: { transfiguration: "Enduring", cardName: "Steady Burn" },
     },
     {
       templateId: "duplicate_named_card_X",
@@ -165,9 +165,9 @@ describe("one_target_many_operations shape", () => {
     },
     {
       templateId: "apply_named_transfiguration_to_random_predicate_cards",
-      params: { transfiguration: "Bronze", count: 2 },
+      params: { transfiguration: "Enduring", count: 2 },
       target: predicateTarget(),
-      expected: { transfiguration: "Bronze", predicateId: "warriors", count: 2 },
+      expected: { transfiguration: "Enduring", predicateId: "warriors", count: 2 },
     },
     {
       templateId: "card_cost_reduction_for_X_battles",

@@ -1424,7 +1424,7 @@ const applyNamedTransfigurationToCardName: Reward<ApplyNamedTransfigCardNamePara
       JOURNEY_TRANSFIGURATIONS,
     );
     // Pair the chosen transfiguration with a deck card actually eligible
-    // for it. If no deck card is eligible (e.g. Bronze rolled but the deck
+    // for it. If no deck card is eligible (e.g. Enduring rolled but the deck
     // has no events) fall back to any deck card; `viable` will reject the
     // case so the reward is filtered out of the offer pool.
     const eligibleDeckCards = deckCards.filter((card) =>

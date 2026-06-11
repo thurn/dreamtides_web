@@ -242,7 +242,7 @@ function cardChooserRequest(
 function cardChooserReward(
   id: string,
   request: ChooserRequest,
-  type: "Bronze" | "Golden" = "Bronze",
+  type: "Enduring" | "Amplified" = "Enduring",
 ): Reward<Record<string, unknown>> {
   return {
     id,
@@ -440,7 +440,7 @@ function contextWithTransfiguredDeckEntries(): JourneyContext {
               cardId: "card-a",
               copies: 2,
               entryIds: ["plain-copy", "bronze-copy"],
-              entryTransfigurations: [null, "Bronze"],
+              entryTransfigurations: [null, "Enduring"],
             },
           ],
           summary: { totalCards: 2, starterCards: 2, uniqueCards: 1 },
@@ -1310,7 +1310,7 @@ describe("JourneyScreen", () => {
     expect(calls).toEqual([
       {
         method: "transfigureDeckEntry",
-        args: ["bronze-copy", "Bronze", "dream_journey:choose_transfigured_card"],
+        args: ["bronze-copy", "Enduring", "dream_journey:choose_transfigured_card"],
       },
     ]);
 
@@ -1367,7 +1367,7 @@ describe("JourneyScreen", () => {
         method: "transfigureDeckEntry",
         args: [
           "deck-1",
-          "Bronze",
+          "Enduring",
           "dream_journey:choose_card_then_transfigure",
         ],
       },
@@ -1457,7 +1457,7 @@ describe("JourneyScreen", () => {
       cardChooserReward(
         firstTemplateId,
         cardChooserRequest("1:choose_first_card:0", "Choose first card"),
-        "Bronze",
+        "Enduring",
       ),
     );
     stubRewards.set(
@@ -1465,7 +1465,7 @@ describe("JourneyScreen", () => {
       cardChooserReward(
         secondTemplateId,
         cardChooserRequest("1:choose_second_card:0", "Choose second card"),
-        "Golden",
+        "Amplified",
       ),
     );
     mockedGenerate.mockReturnValue(
@@ -1527,11 +1527,11 @@ describe("JourneyScreen", () => {
     expect(calls).toEqual([
       {
         method: "transfigureDeckEntry",
-        args: ["deck-1", "Bronze", "dream_journey:choose_first_card"],
+        args: ["deck-1", "Enduring", "dream_journey:choose_first_card"],
       },
       {
         method: "transfigureDeckEntry",
-        args: ["deck-2", "Golden", "dream_journey:choose_second_card"],
+        args: ["deck-2", "Amplified", "dream_journey:choose_second_card"],
       },
     ]);
     expect(onClose).toHaveBeenCalledTimes(1);
@@ -1591,7 +1591,7 @@ describe("JourneyScreen", () => {
     expect(calls).toEqual([
       {
         method: "transfigureDeckEntry",
-        args: ["deck-1", "Bronze", "dream_journey:branch_choose_card"],
+        args: ["deck-1", "Enduring", "dream_journey:branch_choose_card"],
       },
     ]);
     expect(onClose).not.toHaveBeenCalled();
@@ -1653,7 +1653,7 @@ describe("JourneyScreen", () => {
     expect(calls).toEqual([
       {
         method: "transfigureDeckEntry",
-        args: ["deck-1", "Bronze", "dream_journey:terminal_choose_card"],
+        args: ["deck-1", "Enduring", "dream_journey:terminal_choose_card"],
       },
     ]);
     expect(onClose).toHaveBeenCalledTimes(1);
@@ -1733,7 +1733,7 @@ describe("JourneyScreen", () => {
       },
       {
         method: "transfigureDeckEntry",
-        args: ["deck-1", "Bronze", "dream_journey:terminal_choose_card"],
+        args: ["deck-1", "Enduring", "dream_journey:terminal_choose_card"],
       },
     ]);
     expect(onClose).toHaveBeenCalledTimes(1);

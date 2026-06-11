@@ -37,16 +37,16 @@ vi.mock("../components/CardDisplay", () => ({
 
 vi.mock("../transfiguration/transfiguration-logic", () => ({
   assignTransfiguration: (card: CardData) => ({
-    type: "Viridian",
-    description: "Viridian test effect",
+    type: "Empowered",
+    description: "Empowered test effect",
     previewCard: card,
   }),
   TRANSFIGURATION_COLORS: {
-    Viridian: "#10b981",
-    Golden: "#f59e0b",
-    Scarlet: "#ef4444",
-    Azure: "#3b82f6",
-    Bronze: "#a16207",
+    Empowered: "#10b981",
+    Amplified: "#f59e0b",
+    Kindled: "#ef4444",
+    Inspired: "#3b82f6",
+    Enduring: "#a16207",
   },
   buildTransfigurationDisplay: (card: CardData, type: string) => ({
     card,
@@ -160,8 +160,8 @@ function makeState(overrides: Partial<QuestState> = {}): QuestState {
         transfigurationOffers: [
           {
             entryId: "deck-1",
-            type: "Viridian",
-            effectDescription: "Viridian test effect",
+            type: "Empowered",
+            effectDescription: "Empowered test effect",
             effectDetails: { test: true },
             previewCard: {
               name: "Test Card",
@@ -362,13 +362,13 @@ describe("TransfigurationSiteScreen", () => {
       <TransfigurationSiteScreen site={makeSite()} />,
     );
 
-    clickButton(container, "Accept Viridian");
+    clickButton(container, "Accept Empowered");
 
     expect(mutations.acceptTransfigurationChoice).toHaveBeenCalledWith(
       "site-1",
       "deck-1",
-      "Viridian",
-      "Viridian test effect",
+      "Empowered",
+      "Empowered test effect",
       { test: true },
     );
     expect(mutations.transfigureCard).not.toHaveBeenCalled();

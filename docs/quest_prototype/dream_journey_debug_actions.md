@@ -24,8 +24,8 @@ typeahead pickers should source their suggestions here.
 
 - **Bane names** (`BANE_NAMES`): Nightmare, Despair, Oblivion, Betrayal,
   Envy, Doubt, Silence, Paranoia, Burden, Paralysis, Lethargy.
-- **Transfigurations** (`JOURNEY_TRANSFIGURATIONS`): Viridian, Golden,
-  Scarlet, Magenta, Azure, Bronze, Rose, Prismatic.
+- **Transfigurations** (`JOURNEY_TRANSFIGURATIONS`): Empowered, Amplified,
+  Kindled, Resonant, Inspired, Enduring, Attuned, Perfected.
 - **Site types** (`JOURNEY_REWARDABLE_SITE_TYPES`): Essence, Shop,
   Specialty Shop, Purge, Transfiguration, Dreamsign Offering,
   Dreamsign Draft, Duplication.

@@ -76,41 +76,41 @@ describe("glossary", () => {
     expect(popup).toMatch(/\bGLOSSARY\b/);
   });
 
-  // Every transfiguration color named in docs/quests/quests.md must have
-  // its own glossary entry so card-text tooltips and the glossary popup
-  // both teach the player what each color does.
+  // Every transfiguration named in docs/quests/quests.md must have its own
+  // glossary entry so card-text tooltips and the glossary popup both teach
+  // the player what each transfiguration does.
   //
   // The list is parsed directly out of quests.md to avoid drifting from
-  // the design doc. If quests.md adds, removes, or renames a color, this
-  // test fails until the glossary catches up.
-  it("includes every transfiguration color named in docs/quests/quests.md", () => {
+  // the design doc. If quests.md adds, removes, or renames a transfiguration,
+  // this test fails until the glossary catches up.
+  it("includes every transfiguration named in docs/quests/quests.md", () => {
     const quests = readFileSync(
       join(SRC_DIR, "..", "docs", "quests", "quests.md"),
       "utf8",
     );
     // Lines like:
-    //   "- Viridian Transfiguration: Reduces ..."
-    //   "- Golden Transfiguration: Improves ..."
-    const colorLine = /^- ([A-Z][a-z]+) Transfiguration:/gm;
-    const colorsFromDoc: string[] = [];
+    //   "- Empowered Transfiguration: Reduces ..."
+    //   "- Amplified Transfiguration: Improves ..."
+    const transfigurationLine = /^- ([A-Z][a-z]+) Transfiguration:/gm;
+    const transfigurationsFromDoc: string[] = [];
     let match: RegExpExecArray | null;
-    while ((match = colorLine.exec(quests)) !== null) {
-      colorsFromDoc.push(match[1]);
+    while ((match = transfigurationLine.exec(quests)) !== null) {
+      transfigurationsFromDoc.push(match[1]);
     }
     expect(
-      colorsFromDoc.length,
-      "Failed to parse any transfiguration colors out of docs/quests/quests.md",
+      transfigurationsFromDoc.length,
+      "Failed to parse any transfigurations out of docs/quests/quests.md",
     ).toBeGreaterThan(0);
 
     const missing: string[] = [];
-    for (const color of colorsFromDoc) {
-      if (!hasGlossaryTerm(color)) {
-        missing.push(color);
+    for (const transfiguration of transfigurationsFromDoc) {
+      if (!hasGlossaryTerm(transfiguration)) {
+        missing.push(transfiguration);
       }
     }
     expect(
       missing,
-      `Transfiguration colors from docs/quests/quests.md missing a glossary entry: ${missing.join(", ")}`,
+      `Transfigurations from docs/quests/quests.md missing a glossary entry: ${missing.join(", ")}`,
     ).toEqual([]);
   });
 
@@ -121,14 +121,14 @@ describe("glossary", () => {
   // same entry the popup iterates.
   it("uses one definition per transfiguration color across tooltip and popup", () => {
     const colors = [
-      "Viridian",
-      "Golden",
-      "Scarlet",
-      "Magenta",
-      "Azure",
-      "Bronze",
-      "Rose",
-      "Prismatic",
+      "Empowered",
+      "Amplified",
+      "Kindled",
+      "Resonant",
+      "Inspired",
+      "Enduring",
+      "Attuned",
+      "Perfected",
     ];
     for (const color of colors) {
       const entry = lookupGlossaryTerm(color);

@@ -72,8 +72,8 @@ dream-art matching, and the circular-image UI are not part of the Reckoner.
 - **Essence** — the quest currency (`QuestState.essence`, cap `essenceCap`).
 - **Transfiguration** — a permanent per-card modification stored on the
   `DeckEntry` and applied to the battle card at `create-battle-init.ts:428`.
-  Viridian halves cost (`Math.round(cost/2)`); Scarlet doubles spark (`0→1`);
-  Azure adds "Draw a card." to an event; Bronze adds "Reclaim."; others in §6.
+  Empowered halves cost (`Math.round(cost/2)`); Kindled doubles spark (`0→1`);
+  Inspired adds "Draw a card." to an event; Enduring adds "Reclaim."; others in §6.
 - **Bane** — a negative card or dreamsign carried into battle (`isBane`).
 - **Dreamsign** — an ongoing triggered/static effect object held during a run.
 - **CEC (converted essence)** — the value model's common unit; `1 CEC ≈ 1
@@ -186,7 +186,7 @@ interface EffectGameObject {
   kind: "deckCard" | "newCard" | "bane" | "dreamsign" | "essence" | "dreamwell";
   cardNumber?: number; entryId?: string; uuid?: string; // identifies the real object to render
   amount?: number;                                       // essence
-  badge?: { label: string; detail?: string };           // e.g. { label: "Viridian", detail: "4→2 ●" }
+  badge?: { label: string; detail?: string };           // e.g. { label: "Empowered", detail: "4→2 ●" }
 }
 
 interface ConcreteEffect {
@@ -349,13 +349,13 @@ candidates = deck entries with transfiguration == null
 for each candidate c, for each eligible transfiguration t:
    projected   = applyTransfigurationToCard(card(c), t)         // transfiguration-logic.ts:113
    benefit(t)  =                                                 // normalized 0..1
-       Viridian: energySaved = cost - round(cost/2)              // 0 when cost <= 1
-       Scarlet:  sparkGained = projected.spark - (spark ?? 0)
-       Azure:    roleValue("draw")     if deck is draw-starved else base
-       Bronze:   roleValue("recursion")
-       Rose:     0.5  (activated-ability discount)
-       Magenta:  0.5  (trigger frequency)
-       Golden:   0.4  (numeric bump)
+       Empowered: energySaved = cost - round(cost/2)              // 0 when cost <= 1
+       Kindled:  sparkGained = projected.spark - (spark ?? 0)
+       Inspired:    roleValue("draw")     if deck is draw-starved else base
+       Enduring:   roleValue("recursion")
+       Attuned:     0.5  (activated-ability discount)
+       Resonant:  0.5  (trigger frequency)
+       Amplified:   0.4  (numeric bump)
    leverage(c,t) = 0.45*centrality(c) + 0.35*norm(benefit(t)) + 0.20*roleImportance(c)
    where centrality(c) = norm(z(prior) + z(meanCooc))           // same signals as §5.3, high end
 keep the best (c,t); emit up to K_UPGRADE (2) distinct-card upgrade_target needs:
@@ -370,8 +370,8 @@ keep the best (c,t); emit up to K_UPGRADE (2) distinct-card upgrade_target needs
    }
 ```
 
-The leverage term is what lets the read prefer Viridian on a cost-heavy enabler
-over Azure on the same card: a draw event that the deck leans on, with cost ≥ 2,
+The leverage term is what lets the read prefer Empowered on a cost-heavy enabler
+over Inspired on the same card: a draw event that the deck leans on, with cost ≥ 2,
 scores its energy saving highly while the "add another draw" benefit is low
 because the deck is not draw-starved.
 
@@ -473,17 +473,17 @@ interface EffectMutations {
 
 | Builder id | Answers | Resolves target | Renders | `apply` | `valueEssence` |
 |---|---|---|---|---|---|
-| `transfigure_upgrade` | `upgrade_target` | the need's `card` + `transfiguration` | that deck card + badge `{type, from→to}` | `transfigureCard(entryId, t, desc, details)` | `TRANSFIGURATION_VALUE_CONSTANTS.standardByType[t]` (Viridian 85, Scarlet 90, …) |
+| `transfigure_upgrade` | `upgrade_target` | the need's `card` + `transfiguration` | that deck card + badge `{type, from→to}` | `transfigureCard(entryId, t, desc, details)` | `TRANSFIGURATION_VALUE_CONSTANTS.standardByType[t]` (Empowered 85, Kindled 90, …) |
 | `purge_weak_card` | `weak_card` | the need's `card` | that deck card + `✕` badge | `removeDeckEntry(entryId, src)` | `PURGE_VALUE_CONSTANTS.chosenStarter` 70 (or context value) |
 | `grant_support_card` | `under_supported_payoff`, `missing_role` | best unowned card whose `supports` ⊇ theme / matches role, ranked by `fitModel.prior` × cooc with deck | the granted card(s) | `addCardById(uuid, src)` | `CARD_VALUE_CONSTANTS.namedVisibleByRarity[rarity]` 75–145 |
 | `draft_support_from_4` | `under_supported_payoff`, `missing_role` | 4 candidate cards matching the theme/role | a 1-of-4 mini-offer of real cards | player picks → `addCardById` | `draftBase 18 + choices4 7 + specificity` |
 | `duplicate_keystone` | `under_supported_payoff` (tier ≥ 2) | the deck's highest-centrality support of the theme | that deck card ×2 | `duplicateDeckEntry(entryId, src)` | `draftCopyBonus 28`-scaled |
-| `add_draw_to_event` | `missing_role:draw` | a central event eligible for Azure | that event + `Azure: +draw` badge | `transfigureCard(entryId,"Azure",…)` | Azure value |
-| `reclaim_key_event` | `missing_role:recursion` | a central event eligible for Bronze | that event + `Bronze: +Reclaim` badge | `transfigureCard(entryId,"Bronze",…)` | Bronze 85 |
+| `add_draw_to_event` | `missing_role:draw` | a central event eligible for Inspired | that event + `Inspired: +draw` badge | `transfigureCard(entryId,"Inspired",…)` | Inspired value |
+| `reclaim_key_event` | `missing_role:recursion` | a central event eligible for Enduring | that event + `Enduring: +Reclaim` badge | `transfigureCard(entryId,"Enduring",…)` | Enduring 85 |
 | `grant_dreamsign` | `missing_role`, `under_supported_payoff` | a need-aligned dreamsign from the run pool | the dreamsign object | `addDreamsign(sign, …)` | `DREAMSIGN_VALUE_CONSTANTS.namedGain` 145 |
-| `lower_curve_card` | `curve_problem` | a cost-heavy central card eligible for Viridian | that card + `Viridian` badge | `transfigureCard(entryId,"Viridian",…)` | 85 |
+| `lower_curve_card` | `curve_problem` | a cost-heavy central card eligible for Empowered | that card + `Empowered` badge | `transfigureCard(entryId,"Empowered",…)` | 85 |
 
-(The remaining ~3 builders cover Scarlet-for-finisher, keyword grants, and
+(The remaining ~3 builders cover Kindled-for-finisher, keyword grants, and
 essence-cap raises; the table shows the shape.)
 
 ### 6.3 Cost builders
@@ -570,22 +570,22 @@ allowWalkAway = true                                  // "walk away"
 
 Each trace runs **Detect → Build → Price → Voice → Render → Apply → Remember**.
 
-### 8.1 Two-offer: Viridian to cut the cost of a key event
+### 8.1 Two-offer: Empowered to cut the cost of a key event
 
 **Situation.** A tempo deck the read profiles as leaning on card draw. It runs
 the event **Miraculous Arrival** (UUID `b56ef7e8…`, `energy-cost 4`, "Draw 2
 cards.", Offering, Fast/Interrupt), plus an abandon payoff with thin support.
 
 **Detect.** §5.4 enumerates transfiguration candidates. Miraculous Arrival is
-eligible for Viridian (cost > 0), Azure, Bronze, and Golden (its text contains
-"2"), hence Prismatic too. Benefits: Viridian saves `4 − round(4/2) = 2`
-energy; Azure's "add a draw" scores low because the deck is not draw-starved
+eligible for Empowered (cost > 0), Inspired, Enduring, and Amplified (its text contains
+"2"), hence Perfected too. Benefits: Empowered saves `4 − round(4/2) = 2`
+energy; Inspired's "add a draw" scores low because the deck is not draw-starved
 (it already leans on draw). `centrality` is high (a common, strong include).
-Leverage favors **Viridian**. The engine also finds the abandon payoff under-
+Leverage favors **Empowered**. The engine also finds the abandon payoff under-
 supported (§5.2). Two needs survive ranking:
 
 ```
-Need.upgrade_target { card: Miraculous Arrival, transfiguration: "Viridian",
+Need.upgrade_target { card: Miraculous Arrival, transfiguration: "Empowered",
    projection: { field:"energyCost", from:4, to:2 }, leverage: .71,
    severity: .62, confidence: .85,
    observation: { subject:"Miraculous Arrival", roleLabel:"card draw",
@@ -596,16 +596,16 @@ Need.under_supported_payoff { theme:"abandon", tier:2, payoff: <Aristocrat>,
 ```
 
 **Build.** `transfigure_upgrade.build` calls `applyTransfigurationToCard(card,
-"Viridian")` → preview cost 2; `describeTransfiguration` → `"Energy cost: 4 →
+"Empowered")` → preview cost 2; `describeTransfiguration` → `"Energy cost: 4 →
 2"`. Offer A:
 
 ```
 ConcreteEffect {
   builderId:"transfigure_upgrade", summary:"Lighten Miraculous Arrival",
   gameObjects:[{ kind:"deckCard", entryId, cardNumber,
-                 badge:{ label:"Viridian", detail:"4→2 ●" } }],
+                 badge:{ label:"Empowered", detail:"4→2 ●" } }],
   valueEssence: 85,
-  apply: m => m.transfigureCard(entryId,"Viridian","Energy cost: 4 → 2",
+  apply: m => m.transfigureCard(entryId,"Empowered","Energy cost: 4 → 2",
                                 { energyCost:{ from:4, to:2 } }),
   answers:["need:upgrade_target:…"] }
 ```
@@ -631,20 +631,20 @@ not locked.
 Every number and name is a fact from the read.
 
 **Render.** Two-offer layout: column A shows the actual Miraculous Arrival
-`CardView` with a `Viridian · 4→2 ●` badge and `85 ◇ — Take`; column B shows the
+`CardView` with a `Empowered · 4→2 ●` badge and `85 ◇ — Take`; column B shows the
 granted card with `98 ◇ — Take`; portrait + dialogue above; `Walk away` beneath.
 
 **Apply (player takes A).**
 
 ```
 m.changeEssence(-85, "merchant:price")
-m.transfigureCard(entryId, "Viridian", "Energy cost: 4 → 2", { energyCost:{from:4,to:2} })
+m.transfigureCard(entryId, "Empowered", "Energy cost: 4 → 2", { energyCost:{from:4,to:2} })
 logEvent("merchant_offer_resolved", { siteId, mode:"two-offer", taken:"A",
    rewardBuilderId:"transfigure_upgrade", paidEssence:85, needKind:"upgrade_target" })
 completeSite(siteId)
 ```
 
-At the next battle, `create-battle-init.ts:428` applies the stored Viridian, so
+At the next battle, `create-battle-init.ts:428` applies the stored Empowered, so
 Miraculous Arrival enters play costing **2 ●**. Real mechanical payoff.
 
 **Remember.** `MerchantState`: `encounterCount += 1`; push the deal
@@ -657,19 +657,19 @@ Miraculous Arrival enters play costing **2 ●**. Real mechanical payoff.
 with `3✦`. The read finds no under-supported payoff but a high-leverage
 `upgrade_target`.
 
-**Detect.** §5.4: the Warrior has no transfiguration and is Scarlet-eligible
+**Detect.** §5.4: the Warrior has no transfiguration and is Kindled-eligible
 (Character). `applyTransfigurationToCard` → spark `3 → 6`. High centrality (a
 corpus-common aggressive Warrior) ⇒ top leverage.
 
 ```
-Need.upgrade_target { card:<Warrior>, transfiguration:"Scarlet",
+Need.upgrade_target { card:<Warrior>, transfiguration:"Kindled",
    projection:{ field:"spark", from:3, to:6 }, leverage:.78, severity:.7, confidence:.85,
    observation:{ subject:<Warrior name>, roleLabel:"finisher", metric:{label:"spark", from:3, to:6} } }
 ```
 
-**Build.** Reward via `transfigure_upgrade`: `valueEssence = 90` (Scarlet),
-renders the Warrior with a `Scarlet · ✦ 3→6` badge, `apply =
-transfigureCard(entryId,"Scarlet","Spark: 3 → 6",{spark:{from:3,to:6}})`.
+**Build.** Reward via `transfigure_upgrade`: `valueEssence = 90` (Kindled),
+renders the Warrior with a `Kindled · ✦ 3→6` badge, `apply =
+transfigureCard(entryId,"Kindled","Spark: 3 → 6",{spark:{from:3,to:6}})`.
 
 **Price (non-essence).** Mode is one-offer (§7.1). `target = 90 ×
 brokerMargin(mood 0 ⇒ 1.2) = 108`. The cost search (§7.3) scans the non-essence
@@ -690,11 +690,11 @@ cost = ConcreteEffect { builderId:"gain_bane", summary:"Carry Despair",
 > is never given freely. You will carry **Despair** out of here, and it will
 > ride in your deck like a stone in a shoe. Yes? Or no."*
 
-**Render.** One-offer layout: the Warrior `CardView` with `Scarlet · ✦ 3→6`;
+**Render.** One-offer layout: the Warrior `CardView` with `Kindled · ✦ 3→6`;
 beneath it the actual **Despair** bane card with a `✚ cost` marker; `Accept` /
 `Walk away`.
 
-**Apply (Accept).** `m.transfigureCard(…Scarlet…)`, then
+**Apply (Accept).** `m.transfigureCard(…Kindled…)`, then
 `m.addBaneCardById(<Despair>, …)`; log; complete. The Warrior now enters battle
 with `6✦`; Despair is shuffled into the deck and bites in future battles.
 
@@ -790,7 +790,7 @@ function renderEncounterDialogue(read: DeckRead, encounter: Encounter,
   `{mood}`, `{lastDealSubject}`. No free text is ever invented.
 - **Register** is chosen by `mood` bucket so the same content reads warm or cold.
 
-Example fragment (one observation nonterminal for the `upgrade_target`/Viridian
+Example fragment (one observation nonterminal for the `upgrade_target`/Empowered
 case):
 
 ```
@@ -837,7 +837,7 @@ offers touch.
 │                                    │   │              Despair for it."       │
 │  ┌─ REWARD A ──┐  ┌─ REWARD B ──┐  │   │        ┌──── REWARD ────┐           │
 │  │  [card art] │  │  [card art] │  │   │        │   [card art]   │           │
-│  │ Viridian    │  │ gain ↧      │  │   │        │ Scarlet ✦ 3→6  │           │
+│  │ Empowered    │  │ gain ↧      │  │   │        │ Kindled ✦ 3→6  │           │
 │  │ 4→2 ●       │  │ outlet card │  │   │        └────────────────┘           │
 │  └─────────────┘  └─────────────┘  │   │        ┌──── COST ─────┐            │
 │   85 ◇ [ Take ]   98 ◇ [ Take ]    │   │        │ [Despair bane] │  ✚        │
@@ -851,8 +851,8 @@ offers touch.
 Each `EffectGameObject` maps to a real component:
 
 - `deckCard` / `newCard` → existing `CardView` for the `cardNumber`, with a
-  corner **badge** drawn from `badge.label/detail` (`Viridian · 4→2 ●`, `✕
-  remove`, `Scarlet · ✦ 3→6`).
+  corner **badge** drawn from `badge.label/detail` (`Empowered · 4→2 ●`, `✕
+  remove`, `Kindled · ✦ 3→6`).
 - `bane` → the bane card rendered as a card with a hazard frame.
 - `dreamsign` → the dreamsign object (reuse the dreamsign offering renderer).
 - `essence` → an essence token showing `amount`.
@@ -930,7 +930,7 @@ content bundle (`src/data/quest-content.ts`), cached and threaded into
 
 - **Deck-read golden tests.** Fixture decks (hand-built `DeckEntry[]`) →
   asserted `Need` sets: an under-supported abandon deck yields the payoff need;
-  a cost-heavy draw deck yields the Viridian `upgrade_target`; an off-theme
+  a cost-heavy draw deck yields the Empowered `upgrade_target`; an off-theme
   starter is flagged `weak_card`; the payoff's only support is never flagged
   weak.
 - **Determinism.** Same `(seed, state)` → identical `Encounter` and `Beats`
@@ -940,7 +940,7 @@ content bundle (`src/data/quest-content.ts`), cached and threaded into
   hold; unaffordable two-offer options lock.
 - **Catalog apply tests.** Each builder's `apply` calls the expected mutation
   with the expected arguments (mirror `journeyMutations.test.ts`): e.g.
-  `transfigure_upgrade` → `transfigureCard(entryId,"Viridian","Energy cost: 4 →
+  `transfigure_upgrade` → `transfigureCard(entryId,"Empowered","Energy cost: 4 →
   2",{energyCost:{from:4,to:2}})`.
 - **Grammar tests.** No unfilled slots; every bound slot resolves to a real card
   in the deck or a real value from the read; no template id repeats within the

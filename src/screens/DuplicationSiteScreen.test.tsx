@@ -270,8 +270,8 @@ describe("DuplicationSiteScreen", () => {
             transfigurationOffers: [
               {
                 entryId: "deck-1",
-                type: "Viridian",
-                effectDescription: "Viridian test effect",
+                type: "Empowered",
+                effectDescription: "Empowered test effect",
                 effectDetails: { test: true },
                 previewCard,
               },

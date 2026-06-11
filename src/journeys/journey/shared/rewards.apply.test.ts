@@ -501,7 +501,7 @@ describe("Card reward apply (non-choice)", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     try {
       const { mut, calls } = createRecordingMutations();
-      t.apply({ transfiguration: "Golden", cardName: "Event Alpha" }, ctx, mut, undefined);
+      t.apply({ transfiguration: "Amplified", cardName: "Event Alpha" }, ctx, mut, undefined);
       expect(calls).toEqual([]);
       expect(warnSpy).toHaveBeenCalledTimes(1);
     } finally {
@@ -518,19 +518,19 @@ describe("Card reward apply (non-choice)", () => {
           cardId: "event-alpha",
           copies: 2,
           entryIds: ["deck-event-alpha-1", "deck-event-alpha-2"],
-          entryTransfigurations: ["Golden", null],
+          entryTransfigurations: ["Amplified", null],
         },
       ],
     });
     const { mut, calls } = createRecordingMutations();
-    t.apply({ transfiguration: "Viridian", cardName: "Event Alpha" }, ctx, mut, undefined);
+    t.apply({ transfiguration: "Empowered", cardName: "Event Alpha" }, ctx, mut, undefined);
 
     expect(calls).toEqual([
       {
         method: "transfigureDeckEntry",
         args: [
           "deck-event-alpha-2",
-          "Viridian",
+          "Empowered",
           "dream_journey:apply_named_transfiguration_to_card_name",
         ],
       },
@@ -722,12 +722,12 @@ describe("Card reward apply (non-choice)", () => {
       kind: "transfiguration",
       requestId: "request:0",
       eligibleTransfigurations: [
-        "Viridian",
-        "Golden",
-        "Scarlet",
-        "Azure",
-        "Bronze",
-        "Prismatic",
+        "Empowered",
+        "Amplified",
+        "Kindled",
+        "Inspired",
+        "Enduring",
+        "Perfected",
       ],
       title: "Choose a transfiguration",
     });
@@ -744,7 +744,7 @@ describe("Card reward apply (non-choice)", () => {
       ],
     });
     const resolutions = new Map<string, ChooserResolution>([
-      ["request:0", { kind: "transfiguration", type: "Bronze" }],
+      ["request:0", { kind: "transfiguration", type: "Enduring" }],
     ]);
 
     expect(t.choosePlan?.({}, ctx, planningContext(resolutions))).toEqual({
@@ -758,7 +758,7 @@ describe("Card reward apply (non-choice)", () => {
     });
   });
 
-  it("apply_chosen_transfiguration_to_chosen_card filters slot-1 cards to Viridian-eligible entries", () => {
+  it("apply_chosen_transfiguration_to_chosen_card filters slot-1 cards to Empowered-eligible entries", () => {
     const t = getReward("apply_chosen_transfiguration_to_chosen_card");
     const ctx = buildContext({
       cards: cardFixture(),
@@ -770,7 +770,7 @@ describe("Card reward apply (non-choice)", () => {
       ],
     });
     const resolutions = new Map<string, ChooserResolution>([
-      ["request:0", { kind: "transfiguration", type: "Viridian" }],
+      ["request:0", { kind: "transfiguration", type: "Empowered" }],
     ]);
 
     expect(t.choosePlan?.({}, ctx, planningContext(resolutions))).toEqual({
@@ -794,7 +794,7 @@ describe("Card reward apply (non-choice)", () => {
     });
     const { mut, calls } = createRecordingMutations();
     const resolutions = new Map<string, ChooserResolution>([
-      ["request:0", { kind: "transfiguration", type: "Bronze" }],
+      ["request:0", { kind: "transfiguration", type: "Enduring" }],
       ["request:1", { kind: "card", entryIds: ["deck-event-alpha"], cardIds: ["event-alpha"] }],
     ]);
 
@@ -802,7 +802,7 @@ describe("Card reward apply (non-choice)", () => {
       {},
       ctx,
       mut,
-      { kind: "transfiguration", type: "Bronze" },
+      { kind: "transfiguration", type: "Enduring" },
       planningContext(resolutions),
     );
 
@@ -811,7 +811,7 @@ describe("Card reward apply (non-choice)", () => {
         method: "transfigureDeckEntry",
         args: [
           "deck-event-alpha",
-          "Bronze",
+          "Enduring",
           "dream_journey:apply_chosen_transfiguration_to_chosen_card",
         ],
       },
@@ -835,28 +835,28 @@ describe("Card reward apply (non-choice)", () => {
     },
     {
       name: "missing slot-1 resolution",
-      slot0: { kind: "transfiguration" as const, type: "Bronze" as const },
+      slot0: { kind: "transfiguration" as const, type: "Enduring" as const },
       resolutions: new Map<string, ChooserResolution>([
-        ["request:0", { kind: "transfiguration", type: "Bronze" }],
+        ["request:0", { kind: "transfiguration", type: "Enduring" }],
       ]),
     },
     {
       name: "wrong slot-1 kind",
-      slot0: { kind: "transfiguration" as const, type: "Bronze" as const },
+      slot0: { kind: "transfiguration" as const, type: "Enduring" as const },
       resolutions: new Map<string, ChooserResolution>([
-        ["request:1", { kind: "transfiguration", type: "Bronze" }],
+        ["request:1", { kind: "transfiguration", type: "Enduring" }],
       ]),
     },
     {
       name: "stale ineligible card",
-      slot0: { kind: "transfiguration" as const, type: "Scarlet" as const },
+      slot0: { kind: "transfiguration" as const, type: "Kindled" as const },
       resolutions: new Map<string, ChooserResolution>([
         ["request:1", { kind: "card", entryIds: ["deck-event-alpha"] }],
       ]),
     },
     {
-      name: "stale Viridian-ineligible card",
-      slot0: { kind: "transfiguration" as const, type: "Viridian" as const },
+      name: "stale Empowered-ineligible card",
+      slot0: { kind: "transfiguration" as const, type: "Empowered" as const },
       resolutions: new Map<string, ChooserResolution>([
         ["request:1", { kind: "card", entryIds: ["deck-starter-alpha"] }],
       ]),
@@ -891,7 +891,7 @@ describe("Card reward apply (non-choice)", () => {
 
     expect(
       t.choosePlan?.(
-        { transfiguration: "Viridian", predicateId: "events", count: 2 },
+        { transfiguration: "Empowered", predicateId: "events", count: 2 },
         ctx,
         planningContext(),
       ),
@@ -916,7 +916,7 @@ describe("Card reward apply (non-choice)", () => {
           cardId: "event-alpha",
           copies: 1,
           entryIds: ["deck-event-alpha"],
-          entryTransfigurations: ["Golden"],
+          entryTransfigurations: ["Amplified"],
         },
         { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
       ],
@@ -924,7 +924,7 @@ describe("Card reward apply (non-choice)", () => {
 
     expect(
       t.choosePlan?.(
-        { transfiguration: "Viridian", predicateId: "events", count: 1 },
+        { transfiguration: "Empowered", predicateId: "events", count: 1 },
         ctx,
         planningContext(),
       ),
@@ -949,17 +949,17 @@ describe("Card reward apply (non-choice)", () => {
           cardId: "event-alpha",
           copies: 1,
           entryIds: ["deck-event-alpha"],
-          entryTransfigurations: ["Golden"],
+          entryTransfigurations: ["Amplified"],
         },
         { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
       ],
     });
 
     expect(
-      t.viable({ transfiguration: "Viridian", predicateId: "events", count: 2 }, ctx),
+      t.viable({ transfiguration: "Empowered", predicateId: "events", count: 2 }, ctx),
     ).toBe(false);
     expect(
-      t.viable({ transfiguration: "Viridian", predicateId: "events", count: 1 }, ctx),
+      t.viable({ transfiguration: "Empowered", predicateId: "events", count: 1 }, ctx),
     ).toBe(true);
   });
 
@@ -975,7 +975,7 @@ describe("Card reward apply (non-choice)", () => {
     const { mut, calls } = createRecordingMutations();
 
     t.apply(
-      { transfiguration: "Viridian", predicateId: "events", count: 2 },
+      { transfiguration: "Empowered", predicateId: "events", count: 2 },
       ctx,
       mut,
       {
@@ -990,7 +990,7 @@ describe("Card reward apply (non-choice)", () => {
         method: "transfigureDeckEntry",
         args: [
           "deck-event-alpha",
-          "Viridian",
+          "Empowered",
           "dream_journey:apply_named_transfiguration_to_chosen_predicate_cards",
         ],
       },
@@ -998,7 +998,7 @@ describe("Card reward apply (non-choice)", () => {
         method: "transfigureDeckEntry",
         args: [
           "deck-event-beta",
-          "Viridian",
+          "Empowered",
           "dream_journey:apply_named_transfiguration_to_chosen_predicate_cards",
         ],
       },
@@ -1012,7 +1012,7 @@ describe("Card reward apply (non-choice)", () => {
     },
     {
       name: "wrong kind",
-      resolution: { kind: "transfiguration" as const, type: "Viridian" as const },
+      resolution: { kind: "transfiguration" as const, type: "Empowered" as const },
     },
     {
       name: "wrong count",
@@ -1039,11 +1039,11 @@ describe("Card reward apply (non-choice)", () => {
         kind: "card" as const,
         entryIds: ["deck-event-alpha", "deck-event-beta"],
       },
-      transfiguration: "Scarlet",
+      transfiguration: "Kindled",
     },
   ])("apply_named_transfiguration_to_chosen_predicate_cards skips $name", ({
     resolution,
-    transfiguration = "Viridian",
+    transfiguration = "Empowered",
   }) => {
     const t = getReward("apply_named_transfiguration_to_chosen_predicate_cards");
     const ctx = buildContext({
@@ -1078,7 +1078,7 @@ describe("Card reward apply (non-choice)", () => {
           cardId: "event-alpha",
           copies: 1,
           entryIds: ["deck-event-alpha"],
-          entryTransfigurations: ["Golden"],
+          entryTransfigurations: ["Amplified"],
         },
         { cardId: "event-beta", copies: 1, entryIds: ["deck-event-beta"] },
       ],
@@ -1087,7 +1087,7 @@ describe("Card reward apply (non-choice)", () => {
     try {
       const { mut, calls } = createRecordingMutations();
       t.apply(
-        { transfiguration: "Viridian", predicateId: "events", count: 2 },
+        { transfiguration: "Empowered", predicateId: "events", count: 2 },
         ctx,
         mut,
         { kind: "card", entryIds: ["deck-event-alpha", "deck-event-beta"] },
@@ -1131,7 +1131,7 @@ describe("Card reward apply (non-choice)", () => {
           cardId: "starter-alpha",
           copies: 1,
           entryIds: ["deck-starter-alpha"],
-          entryTransfigurations: ["Golden"],
+          entryTransfigurations: ["Amplified"],
         },
         { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
       ],
@@ -1173,13 +1173,13 @@ describe("Card reward apply (non-choice)", () => {
     expect(calls).toEqual([
       {
         method: "transfigureDeckEntry",
-        args: ["deck-starter-alpha", "Azure", "dream_journey:transfigure_chosen_starters"],
+        args: ["deck-starter-alpha", "Inspired", "dream_journey:transfigure_chosen_starters"],
       },
       {
         method: "transfigureDeckEntry",
         args: [
           "deck-starter-beta",
-          "Golden",
+          "Amplified",
           "dream_journey:transfigure_chosen_starters",
         ],
       },
@@ -1239,7 +1239,7 @@ describe("Card reward apply (non-choice)", () => {
           cardId: "starter-alpha",
           copies: 1,
           entryIds: ["deck-starter-alpha"],
-          entryTransfigurations: ["Golden"],
+          entryTransfigurations: ["Amplified"],
         },
         { cardId: "starter-beta", copies: 1, entryIds: ["deck-starter-beta"] },
       ],
@@ -1270,14 +1270,14 @@ describe("Card reward apply (non-choice)", () => {
       ],
     });
     const { mut, calls } = createRecordingMutations();
-    t.apply({ transfiguration: "Golden", predicateId: "events", count: 2 }, ctx, mut, undefined);
+    t.apply({ transfiguration: "Amplified", predicateId: "events", count: 2 }, ctx, mut, undefined);
 
     expect(calls).toEqual([
       {
         method: "transfigureDeckEntry",
         args: [
           "deck-event-beta",
-          "Golden",
+          "Amplified",
           "dream_journey:apply_named_transfiguration_to_random_predicate_cards",
         ],
       },
@@ -1285,7 +1285,7 @@ describe("Card reward apply (non-choice)", () => {
         method: "transfigureDeckEntry",
         args: [
           "deck-starter-alpha",
-          "Golden",
+          "Amplified",
           "dream_journey:apply_named_transfiguration_to_random_predicate_cards",
         ],
       },
@@ -1301,7 +1301,7 @@ describe("Card reward apply (non-choice)", () => {
           cardId: "starter-alpha",
           copies: 1,
           entryIds: ["deck-starter-alpha"],
-          entryTransfigurations: ["Golden"],
+          entryTransfigurations: ["Amplified"],
         },
         {
           cardId: "event-alpha",
@@ -1313,21 +1313,21 @@ describe("Card reward apply (non-choice)", () => {
           cardId: "event-beta",
           copies: 1,
           entryIds: ["deck-event-beta"],
-          entryTransfigurations: ["Rose"],
+          entryTransfigurations: ["Attuned"],
         },
       ],
     });
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     try {
       const { mut, calls } = createRecordingMutations();
-      t.apply({ transfiguration: "Golden", predicateId: "events", count: 2 }, ctx, mut, undefined);
+      t.apply({ transfiguration: "Amplified", predicateId: "events", count: 2 }, ctx, mut, undefined);
 
       expect(calls).toEqual([
         {
           method: "transfigureDeckEntry",
           args: [
             "deck-event-alpha",
-            "Golden",
+            "Amplified",
             "dream_journey:apply_named_transfiguration_to_random_predicate_cards",
           ],
         },
@@ -1351,13 +1351,13 @@ describe("Card reward apply (non-choice)", () => {
       ],
     });
     const { mut, calls } = createRecordingMutations();
-    t.apply({ transfiguration: "Viridian", predicateId: "events", count: 2 }, ctx, mut, undefined);
+    t.apply({ transfiguration: "Empowered", predicateId: "events", count: 2 }, ctx, mut, undefined);
 
     expect(calls.map((call) => call.args[0]).sort()).toEqual([
       "deck-event-alpha",
       "deck-event-beta",
     ]);
-    expect(calls.every((call) => call.args[1] === "Viridian")).toBe(true);
+    expect(calls.every((call) => call.args[1] === "Empowered")).toBe(true);
   });
 
   it("apply_named_transfiguration_to_all_predicate_cards applies the same transfiguration to every matching deck entry", () => {
@@ -1371,14 +1371,14 @@ describe("Card reward apply (non-choice)", () => {
       ],
     });
     const { mut, calls } = createRecordingMutations();
-    t.apply({ transfiguration: "Golden", predicateId: "events" }, ctx, mut, undefined);
+    t.apply({ transfiguration: "Amplified", predicateId: "events" }, ctx, mut, undefined);
 
     expect(calls).toEqual([
       {
         method: "transfigureDeckEntry",
         args: [
           "deck-starter-alpha",
-          "Golden",
+          "Amplified",
           "dream_journey:apply_named_transfiguration_to_all_predicate_cards",
         ],
       },
@@ -1386,7 +1386,7 @@ describe("Card reward apply (non-choice)", () => {
         method: "transfigureDeckEntry",
         args: [
           "deck-event-alpha",
-          "Golden",
+          "Amplified",
           "dream_journey:apply_named_transfiguration_to_all_predicate_cards",
         ],
       },
@@ -1394,7 +1394,7 @@ describe("Card reward apply (non-choice)", () => {
         method: "transfigureDeckEntry",
         args: [
           "deck-event-beta",
-          "Golden",
+          "Amplified",
           "dream_journey:apply_named_transfiguration_to_all_predicate_cards",
         ],
       },
@@ -1410,7 +1410,7 @@ describe("Card reward apply (non-choice)", () => {
           cardId: "starter-alpha",
           copies: 1,
           entryIds: ["deck-starter-alpha"],
-          entryTransfigurations: ["Golden"],
+          entryTransfigurations: ["Amplified"],
         },
         {
           cardId: "event-alpha",
@@ -1421,14 +1421,14 @@ describe("Card reward apply (non-choice)", () => {
       ],
     });
     const { mut, calls } = createRecordingMutations();
-    t.apply({ transfiguration: "Golden", predicateId: "events" }, ctx, mut, undefined);
+    t.apply({ transfiguration: "Amplified", predicateId: "events" }, ctx, mut, undefined);
 
     expect(calls).toEqual([
       {
         method: "transfigureDeckEntry",
         args: [
           "deck-event-alpha",
-          "Golden",
+          "Amplified",
           "dream_journey:apply_named_transfiguration_to_all_predicate_cards",
         ],
       },
@@ -1446,14 +1446,14 @@ describe("Card reward apply (non-choice)", () => {
       ],
     });
     const { mut, calls } = createRecordingMutations();
-    t.apply({ transfiguration: "Viridian", predicateId: "events" }, ctx, mut, undefined);
+    t.apply({ transfiguration: "Empowered", predicateId: "events" }, ctx, mut, undefined);
 
     expect(calls).toEqual([
       {
         method: "transfigureDeckEntry",
         args: [
           "deck-event-alpha",
-          "Viridian",
+          "Empowered",
           "dream_journey:apply_named_transfiguration_to_all_predicate_cards",
         ],
       },
@@ -1461,7 +1461,7 @@ describe("Card reward apply (non-choice)", () => {
         method: "transfigureDeckEntry",
         args: [
           "deck-event-beta",
-          "Viridian",
+          "Empowered",
           "dream_journey:apply_named_transfiguration_to_all_predicate_cards",
         ],
       },
@@ -1484,11 +1484,11 @@ describe("Card reward apply (non-choice)", () => {
     expect(calls).toEqual([
       {
         method: "transfigureDeckEntry",
-        args: ["deck-starter-alpha", "Bronze", "dream_journey:transfigure_random_starters"],
+        args: ["deck-starter-alpha", "Enduring", "dream_journey:transfigure_random_starters"],
       },
       {
         method: "transfigureDeckEntry",
-        args: ["deck-starter-beta", "Prismatic", "dream_journey:transfigure_random_starters"],
+        args: ["deck-starter-beta", "Perfected", "dream_journey:transfigure_random_starters"],
       },
     ]);
   });
@@ -1502,7 +1502,7 @@ describe("Card reward apply (non-choice)", () => {
           cardId: "starter-alpha",
           copies: 1,
           entryIds: ["deck-starter-alpha"],
-          entryTransfigurations: ["Golden"],
+          entryTransfigurations: ["Amplified"],
         },
         {
           cardId: "starter-beta",
@@ -1544,11 +1544,11 @@ describe("Card reward apply (non-choice)", () => {
     expect(calls).toEqual([
       {
         method: "transfigureDeckEntry",
-        args: ["deck-starter-alpha", "Golden", "dream_journey:transfigure_all_starters"],
+        args: ["deck-starter-alpha", "Amplified", "dream_journey:transfigure_all_starters"],
       },
       {
         method: "transfigureDeckEntry",
-        args: ["deck-starter-beta", "Prismatic", "dream_journey:transfigure_all_starters"],
+        args: ["deck-starter-beta", "Perfected", "dream_journey:transfigure_all_starters"],
       },
     ]);
   });
@@ -1562,7 +1562,7 @@ describe("Card reward apply (non-choice)", () => {
           cardId: "starter-alpha",
           copies: 1,
           entryIds: ["deck-starter-alpha"],
-          entryTransfigurations: ["Golden"],
+          entryTransfigurations: ["Amplified"],
         },
         {
           cardId: "starter-beta",
@@ -1598,7 +1598,7 @@ describe("Card reward apply (non-choice)", () => {
         method: "transfigureDeckEntry",
         args: [
           "deck-starter-alpha",
-          "Golden",
+          "Amplified",
           "dream_journey:apply_random_transfigurations_to_random_cards",
         ],
       },
@@ -1606,7 +1606,7 @@ describe("Card reward apply (non-choice)", () => {
         method: "transfigureDeckEntry",
         args: [
           "deck-event-beta",
-          "Prismatic",
+          "Perfected",
           "dream_journey:apply_random_transfigurations_to_random_cards",
         ],
       },
@@ -1622,7 +1622,7 @@ describe("Card reward apply (non-choice)", () => {
           cardId: "starter-alpha",
           copies: 1,
           entryIds: ["deck-starter-alpha"],
-          entryTransfigurations: ["Golden"],
+          entryTransfigurations: ["Amplified"],
         },
         {
           cardId: "event-alpha",
@@ -2965,7 +2965,7 @@ describe("Draft and chosen dreamsign reward apply (Wave 2)", () => {
   it("draft_predicate_card_with_transfiguration calls the composed transfigured add mutation", () => {
     const t = getReward("draft_predicate_card_with_transfiguration");
     const ctx = buildContext({ cards: draftCardFixture() });
-    const params = { predicateId: "events", transfiguration: "Bronze" };
+    const params = { predicateId: "events", transfiguration: "Enduring" };
 
     expect(t.choosePlan?.(params, ctx, planningContext())).toEqual({
       kind: "card",
@@ -2989,7 +2989,7 @@ describe("Draft and chosen dreamsign reward apply (Wave 2)", () => {
         method: "addCardByIdWithTransfiguration",
         args: [
           "event-delta",
-          "Bronze",
+          "Enduring",
           "dream_journey:draft_predicate_card_with_transfiguration",
         ],
       },

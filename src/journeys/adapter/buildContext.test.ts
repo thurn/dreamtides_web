@@ -307,7 +307,7 @@ describe("buildJourneyContext deck projection", () => {
       makeDeckEntry({
         entryId: "e1",
         cardNumber: 1,
-        transfiguration: "Viridian",
+        transfiguration: "Empowered",
       }),
       makeDeckEntry({ entryId: "e2", cardNumber: 1, transfiguration: null }),
     ];
@@ -325,7 +325,7 @@ describe("buildJourneyContext deck projection", () => {
         cardId: "card-1",
         copies: 2,
         entryIds: ["e1", "e2"],
-        entryTransfigurations: ["Viridian", null],
+        entryTransfigurations: ["Empowered", null],
       },
     ]);
   });
@@ -516,7 +516,7 @@ describe("cardDataToCardContent and dreamcallerContentToJourneyDreamcaller", () 
     expect(projected.energyCost).toBe(3);
     expect(projected.spark).toBe(2);
     expect(projected.rarity).toBe("Rare");
-    // `raw` is consumed by predicate helpers like `cardHasMagentaTrigger`,
+    // `raw` is consumed by predicate helpers like `cardHasResonantTrigger`,
     // which read `rendered-text`, `is-fast`, and `subtype`.
     expect(projected.raw["rendered-text"]).toBe("Some text.");
     expect(projected.raw["is-fast"]).toBe(true);

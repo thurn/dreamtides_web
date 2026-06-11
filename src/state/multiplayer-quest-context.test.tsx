@@ -2310,8 +2310,8 @@ describe("MultiplayerQuestProvider", () => {
     captured[captured.length - 1]?.mutations.acceptTransfigurationChoice(
       "site-1",
       "deck-1",
-      "Viridian",
-      "Viridian test effect",
+      "Empowered",
+      "Empowered test effect",
       { test: true },
     );
 
@@ -2340,7 +2340,7 @@ describe("MultiplayerQuestProvider", () => {
           transfigurationOffers: [
             {
               entryId: "deck-1",
-              type: "Viridian",
+              type: "Empowered",
               effectDescription: "Energy cost: 1 -> 0",
               effectDetails: { energyCost: { from: 1, to: 0 } },
               previewCard: { ...previewCard, energyCost: 0 },
@@ -2363,7 +2363,7 @@ describe("MultiplayerQuestProvider", () => {
     captured[captured.length - 1]?.mutations.acceptTransfigurationChoice(
       "site-1",
       "deck-1",
-      "Viridian",
+      "Empowered",
       "Energy cost: 1 -> 0",
       { energyCost: { from: 1, to: 99 } },
     );
@@ -2406,7 +2406,7 @@ describe("MultiplayerQuestProvider", () => {
     captured[captured.length - 1]?.mutations.acceptTransfigurationChoice(
       "site-1",
       "deck-1",
-      "Viridian",
+      "Empowered",
       "Energy cost: 1 -> 0",
       { energyCost: { from: 1, to: 0 } },
     );
@@ -2477,7 +2477,7 @@ describe("MultiplayerQuestProvider", () => {
           transfigurationOffers: [
             {
               entryId: "deck-1",
-              type: "Viridian",
+              type: "Empowered",
               effectDescription: "Energy cost: 1 -> 0",
               effectDetails: { energyCost: { from: 1, to: 0 } },
               previewCard: { ...previewCard, energyCost: 0 },
@@ -2962,7 +2962,7 @@ describe("MultiplayerQuestProvider", () => {
         {
           entryId: "deck-1",
           cardNumber: 101,
-          transfiguration: "Viridian",
+          transfiguration: "Empowered",
           isBane: false,
         },
       ],
@@ -3012,7 +3012,7 @@ describe("MultiplayerQuestProvider", () => {
     expect(duplicateRoom?.questState?.deck[1]).toEqual({
       entryId: "deck-2",
       cardNumber: 101,
-      transfiguration: "Viridian",
+      transfiguration: "Empowered",
       isBane: false,
     });
 
@@ -3050,7 +3050,7 @@ describe("MultiplayerQuestProvider", () => {
 
     captured[captured.length - 1]?.mutations.transfigureCard(
       "deck-1",
-      "Viridian",
+      "Empowered",
       "journey:transfigure_deck_entry",
       { energyCost: { from: 1, to: 0 } },
     );
@@ -3060,7 +3060,7 @@ describe("MultiplayerQuestProvider", () => {
       {
         entryId: "deck-1",
         cardNumber: 101,
-        transfiguration: "Viridian",
+        transfiguration: "Empowered",
         isBane: false,
       },
     ]);
@@ -3134,7 +3134,7 @@ describe("MultiplayerQuestProvider", () => {
         {
           entryId: "deck-1",
           cardNumber: 101,
-          transfiguration: "Scarlet",
+          transfiguration: "Kindled",
           isBane: false,
         },
       ],
@@ -3210,7 +3210,7 @@ describe("MultiplayerQuestProvider", () => {
     const entryId =
       captured[captured.length - 1]?.mutations.addCardByIdWithTransfiguration(
         "card-101",
-        "Bronze",
+        "Enduring",
         "journey:transfigured_add",
       );
     const nextRoom = latestRoomTransactionUpdater()?.(session.room);
@@ -3221,7 +3221,7 @@ describe("MultiplayerQuestProvider", () => {
       {
         entryId,
         cardNumber: 101,
-        transfiguration: "Bronze",
+        transfiguration: "Enduring",
         isBane: false,
       },
     ]);
@@ -3235,7 +3235,7 @@ describe("MultiplayerQuestProvider", () => {
         cardNumber: 101,
         cardName: "Card 101",
         entryId,
-        transfigurationType: "Bronze",
+        transfigurationType: "Enduring",
       },
     });
   });

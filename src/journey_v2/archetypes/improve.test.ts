@@ -58,18 +58,18 @@ function makeContext(input: {
 describe("improve family — transfigure pair enumeration", () => {
   it("contributes exactly one candidate per (entry, eligible transfiguration) pair", () => {
     // A Character with energyCost>0, a digit in text, and Character type is
-    // eligible for Viridian, Golden, Scarlet (3 non-prismatic). Being eligible
-    // for 2+ adds Prismatic, so this card is eligible for 4. To pin exactly 3,
-    // make a card eligible for exactly Viridian + Scarlet + Prismatic.
+    // eligible for Empowered, Amplified, Kindled (3 non-perfected). Being eligible
+    // for 2+ adds Perfected, so this card is eligible for 4. To pin exactly 3,
+    // make a card eligible for exactly Empowered + Kindled + Perfected.
     const card = makeMerchantTestCard({
       id: uuid(100),
       cardNumber: 100,
       cardType: "Character",
       energyCost: 4,
       spark: 2,
-      renderedText: "", // no digit, no triggers, no activated -> not Golden etc
+      renderedText: "", // no digit, no triggers, no activated -> not Amplified etc
     });
-    // Viridian (cost>0), Scarlet (Character), Prismatic (eligible for 2+) = 3.
+    // Empowered (cost>0), Kindled (Character), Perfected (eligible for 2+) = 3.
     const context = makeContext({
       cards: [card],
       deckEntries: [makeMerchantTestDeckEntry({ entryId: "e1", cardNumber: 100 })],
@@ -77,7 +77,7 @@ describe("improve family — transfigure pair enumeration", () => {
     const pairs = transfigureCandidatePairs(context);
     expect(pairs).toHaveLength(3);
     const transfigs = new Set(pairs.map((p) => p.transfiguration));
-    expect(transfigs).toEqual(new Set(["Viridian", "Scarlet", "Prismatic"]));
+    expect(transfigs).toEqual(new Set(["Empowered", "Kindled", "Perfected"]));
     // All three pairs reference the same entry.
     expect(new Set(pairs.map((p) => p.entryId))).toEqual(new Set(["e1"]));
   });
@@ -96,7 +96,7 @@ describe("improve family — transfigure pair enumeration", () => {
         makeMerchantTestDeckEntry({
           entryId: "e1",
           cardNumber: 101,
-          transfiguration: "Scarlet",
+          transfiguration: "Kindled",
         }),
       ],
     });
@@ -146,8 +146,8 @@ describe("improve family — transfigure pair enumeration", () => {
   });
 
   it("only enumerates pairs with positive benefit", () => {
-    // An Event with energyCost 0 and no digit: Viridian ineligible (cost 0),
-    // Scarlet ineligible (not Character). Azure/Bronze (Event) have benefit
+    // An Event with energyCost 0 and no digit: Empowered ineligible (cost 0),
+    // Kindled ineligible (not Character). Inspired/Enduring (Event) have benefit
     // 0.55 > 0. So pairs come only from positive-benefit transfigurations.
     const card = makeMerchantTestCard({
       id: uuid(300),
@@ -167,20 +167,20 @@ describe("improve family — transfigure pair enumeration", () => {
   });
 
   // THE DIREWOLF TEST — the anti-argmax property the whole v3 rewrite exists to
-  // deliver. A deck with one high-spark Scarlet character (benefit ~1.0) plus
+  // deliver. A deck with one high-spark Kindled character (benefit ~1.0) plus
   // many other positive-benefit pairs must NOT collapse to always offering the
-  // Scarlet pair.
+  // Kindled pair.
   it("Direwolf test: varied (entry, transfiguration) pairs over 40 seeds", () => {
     const cards: CardData[] = [];
     const deckEntries: DeckEntry[] = [];
 
-    // The Direwolf: a high-spark Character. Scarlet benefit = (8-4)/4 = 1.0.
+    // The Direwolf: a high-spark Character. Kindled benefit = (8-4)/4 = 1.0.
     const direwolf = makeMerchantTestCard({
       id: uuid(900),
       cardNumber: 900,
       name: "Marked Direwolf",
       cardType: "Character",
-      energyCost: 0, // not Viridian-eligible: Scarlet is its ONLY eligibility
+      energyCost: 0, // not Empowered-eligible: Kindled is its ONLY eligibility
       spark: 4,
       renderedText: "", // no digit/trigger/activated
     });
@@ -188,10 +188,10 @@ describe("improve family — transfigure pair enumeration", () => {
     deckEntries.push(
       makeMerchantTestDeckEntry({ entryId: "direwolf", cardNumber: 900 }),
     );
-    // The Scarlet pair on the direwolf: benefit clamp01((8-4)/4)=1.0.
+    // The Kindled pair on the direwolf: benefit clamp01((8-4)/4)=1.0.
 
-    // 7 other Event cards, each eligible for Azure + Bronze (benefit 0.55) and
-    // Prismatic (eligible for 2+), so each contributes 3 pairs -> >= 7 distinct
+    // 7 other Event cards, each eligible for Inspired + Enduring (benefit 0.55) and
+    // Perfected (eligible for 2+), so each contributes 3 pairs -> >= 7 distinct
     // positive-benefit pairs easily.
     for (let i = 0; i < 7; i += 1) {
       const n = 800 + i;
@@ -224,14 +224,14 @@ describe("improve family — transfigure pair enumeration", () => {
       expect(draft).not.toBeNull();
       if (draft === null) continue;
       offeredPairs.add(draft.targetKey);
-      if (draft.targetKey === "direwolf:Scarlet") {
+      if (draft.targetKey === "direwolf:Kindled") {
         scarletDirewolfCount += 1;
       }
     }
 
     // At least 3 distinct (entry, transfiguration) pairs offered.
     expect(offeredPairs.size).toBeGreaterThanOrEqual(3);
-    // The Scarlet-direwolf pair appears in < 90% of encounters.
+    // The Kindled-direwolf pair appears in < 90% of encounters.
     expect(scarletDirewolfCount / SEEDS).toBeLessThan(0.9);
   });
 
@@ -290,7 +290,7 @@ describe("improve family — starter_transfigure", () => {
         makeMerchantTestDeckEntry({
           entryId: "s1",
           cardNumber: 500,
-          transfiguration: "Scarlet",
+          transfiguration: "Kindled",
         }),
       ],
     });

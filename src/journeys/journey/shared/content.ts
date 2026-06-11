@@ -38,11 +38,11 @@ export function transfigurationsEligibleForPredicate(
   // A named transfiguration may be paired with a predicate-keyed reward only
   // if every card in the predicate's match set is eligible for that
   // transfiguration. Using the subset criterion (rather than overlap) means
-  // a reward like "Apply Bronze to 3 chosen cards with a 'discard' ability"
+  // a reward like "Apply Enduring to 3 chosen cards with a 'discard' ability"
   // is rejected, because the discard predicate matches both events and
-  // characters and the player could pick a character — for which Bronze
+  // characters and the player could pick a character — for which Enduring
   // cannot be applied. The events predicate is the only predicate whose
-  // match set is strictly a subset of the Bronze/Azure eligibility set.
+  // match set is strictly a subset of the Enduring/Inspired eligibility set.
   const matches = cardMatches(ctx, predicate);
   if (matches.length === 0) {
     return JOURNEY_TRANSFIGURATIONS;

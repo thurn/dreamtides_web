@@ -317,7 +317,7 @@ Use fixtures with current cards or focused synthetic `CardData` objects. Tests s
 - an under-supported payoff emits `under_supported_payoff`
 - a draw-light or recursion-light deck emits `missing_role`
 - a top-heavy deck emits `curve_problem`
-- an eligible high-cost card emits `upgrade_target` for Viridian projection
+- an eligible high-cost card emits `upgrade_target` for Empowered projection
 - a weak starter candidate is emitted only when it is not sole support for a detected payoff
 - every emitted need has a stable id, severity, confidence, and observation text data
 

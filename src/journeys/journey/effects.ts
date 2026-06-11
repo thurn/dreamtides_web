@@ -162,25 +162,25 @@ export const JOURNEY_REWARDABLE_SITE_TYPES: readonly string[] = Object.freeze(
 // Builder and catalog code uses this set to enumerate effect-catalog-aligned
 // transfiguration effects.
 export const STANDARD_TRANSFIGURATIONS = Object.freeze([
-  "Viridian",
-  "Golden",
-  "Scarlet",
-  "Bronze",
-  "Prismatic",
+  "Empowered",
+  "Amplified",
+  "Kindled",
+  "Enduring",
+  "Perfected",
 ] as const);
 
 // The canonical eight named transfigurations, per `docs/quests.md`
 // § Transfiguration. Random Journey reward generation picks named
 // transfigurations exclusively from this set.
 export const JOURNEY_TRANSFIGURATIONS = Object.freeze([
-  "Viridian",
-  "Golden",
-  "Scarlet",
-  "Magenta",
-  "Azure",
-  "Bronze",
-  "Rose",
-  "Prismatic",
+  "Empowered",
+  "Amplified",
+  "Kindled",
+  "Resonant",
+  "Inspired",
+  "Enduring",
+  "Attuned",
+  "Perfected",
 ] as const);
 
 export const TIMING_TRIGGERS = Object.freeze([
@@ -402,33 +402,33 @@ const EFFECT_DEFINITIONS = [
     tags: ["cost", "dreamsign", "named-reference"],
   },
   {
-    id: "transfiguration-viridian",
+    id: "transfiguration-empowered",
     family: "transfiguration",
-    textTemplate: "Apply Viridian to {targetText}.",
+    textTemplate: "Apply Empowered to {targetText}.",
     tags: ["reward", "transfiguration", "standard"],
   },
   {
-    id: "transfiguration-golden",
+    id: "transfiguration-amplified",
     family: "transfiguration",
-    textTemplate: "Apply Golden to {targetText}.",
+    textTemplate: "Apply Amplified to {targetText}.",
     tags: ["reward", "transfiguration", "standard"],
   },
   {
-    id: "transfiguration-scarlet",
+    id: "transfiguration-kindled",
     family: "transfiguration",
-    textTemplate: "Apply Scarlet to {targetText}.",
+    textTemplate: "Apply Kindled to {targetText}.",
     tags: ["reward", "transfiguration", "standard"],
   },
   {
-    id: "transfiguration-bronze",
+    id: "transfiguration-enduring",
     family: "transfiguration",
-    textTemplate: "Apply Bronze to {targetText}.",
+    textTemplate: "Apply Enduring to {targetText}.",
     tags: ["reward", "transfiguration", "standard"],
   },
   {
-    id: "transfiguration-prismatic",
+    id: "transfiguration-perfected",
     family: "transfiguration",
-    textTemplate: "Apply Prismatic to {targetText}.",
+    textTemplate: "Apply Perfected to {targetText}.",
     tags: ["reward", "transfiguration", "standard"],
   },
   {
@@ -623,17 +623,17 @@ export const EFFECT_CATALOG: readonly EffectEntry[] = Object.freeze(
 // `docs/quests.md` § Transfiguration. Filters not listed are unrestricted
 // (the transfiguration applies to any card).
 //
-// - `Viridian`: cost > 0 (50% cost reduction; cannot apply to cost-0 cards).
-// - `Golden`: applies to cards whose TOML defines a golden variant; for
+// - `Empowered`: cost > 0 (50% cost reduction; cannot apply to cost-0 cards).
+// - `Amplified`: applies to cards whose TOML defines an amplified variant; for
 //   generator purposes treated as unrestricted because the generator does
 //   not have visibility into the per-card TOML data.
-// - `Scarlet`: characters only (doubles base spark).
-// - `Bronze`: events only (adds Reclaim).
-// - `Azure`: events only (appends "draw a card").
-// - `Rose`: cards with an energy-cost activated ability (`N●...:` pattern).
-// - `Magenta`: cards with a `materialized`, `challenge`, or `once per turn`
+// - `Kindled`: characters only (doubles base spark).
+// - `Enduring`: events only (adds Reclaim).
+// - `Inspired`: events only (appends "draw a card").
+// - `Attuned`: cards with an energy-cost activated ability (`N●...:` pattern).
+// - `Resonant`: cards with a `materialized`, `challenge`, or `once per turn`
 //   trigger.
-// - `Prismatic`: applies to any card eligible for 2 or more other
+// - `Perfected`: applies to any card eligible for 2 or more other
 //   transfigurations; conservatively treated as unrestricted at generation
 //   time and validated against the underlying pool at apply time.
 export function isCardEligibleForTransfiguration(
@@ -641,17 +641,17 @@ export function isCardEligibleForTransfiguration(
   card: CardContent,
 ): boolean {
   switch (transfiguration) {
-    case "Viridian":
+    case "Empowered":
       return typeof card.energyCost === "number" && card.energyCost > 0;
-    case "Scarlet":
+    case "Kindled":
       return card.cardType === "Character";
-    case "Bronze":
-    case "Azure":
+    case "Enduring":
+    case "Inspired":
       return card.cardType === "Event";
-    case "Rose":
+    case "Attuned":
       return cardHasEnergyCostActivatedAbility(card);
-    case "Magenta":
-      return cardHasMagentaTrigger(card);
+    case "Resonant":
+      return cardHasResonantTrigger(card);
     default:
       return true;
   }
@@ -687,8 +687,8 @@ function cardHasEnergyCostActivatedAbility(card: CardContent): boolean {
   return /\d●[^:\n]*:/u.test(cardRenderedText(card));
 }
 
-function cardHasMagentaTrigger(card: CardContent): boolean {
-  // Magenta increases the frequency of `materialized`, `challenge`, and `once
+function cardHasResonantTrigger(card: CardContent): boolean {
+  // Resonant increases the frequency of `materialized`, `challenge`, and `once
   // per turn` triggers, so a card is eligible if any of those phrases appear
   // in its rendered text.
   const text = cardRenderedText(card).toLowerCase();

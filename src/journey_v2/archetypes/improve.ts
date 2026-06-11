@@ -75,8 +75,8 @@ function effectiveCardFor(deckCard: MerchantDeckCard): CardData {
 /**
  * The single source of truth for the v3 transfiguration benefit table.
  *
- * Benefit is mechanical where the effect is numeric (Viridian halves an energy
- * cost, Scarlet doubles a character's spark) and a flat constant where the
+ * Benefit is mechanical where the effect is numeric (Empowered halves an energy
+ * cost, Kindled doubles a character's spark) and a flat constant where the
  * effect is textual. `preview` is the result of
  * `applyTransfigurationToCard(card, transfiguration)`; the mechanical types read
  * the before/after fields off `card` and `preview` so they never re-derive the
@@ -91,27 +91,27 @@ export function transfigurationBenefit(
   preview: CardData,
 ): number {
   switch (transfiguration) {
-    case "Viridian": {
+    case "Empowered": {
       const oldCost = card.energyCost ?? 0;
       const newCost = preview.energyCost ?? 0;
       return clamp01((oldCost - newCost) / 2);
     }
-    case "Scarlet": {
+    case "Kindled": {
       const oldSpark = card.spark ?? 0;
       const newSpark = preview.spark ?? 0;
       return clamp01((newSpark - oldSpark) / 4);
     }
-    case "Golden":
+    case "Amplified":
       return 0.4;
-    case "Azure":
+    case "Inspired":
       return 0.55;
-    case "Bronze":
+    case "Enduring":
       return 0.55;
-    case "Magenta":
+    case "Resonant":
       return 0.5;
-    case "Rose":
+    case "Attuned":
       return 0.5;
-    case "Prismatic":
+    case "Perfected":
       return 0.65;
   }
 }

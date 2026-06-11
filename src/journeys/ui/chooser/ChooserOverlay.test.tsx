@@ -299,7 +299,7 @@ describe("Chooser overlay components", () => {
     const request: ChooserRequest = {
       kind: "transfiguration",
       requestId: "choose-transfiguration",
-      eligibleTransfigurations: ["Bronze", "Rose"],
+      eligibleTransfigurations: ["Enduring", "Attuned"],
       title: "Choose a transfiguration",
     };
     const { container, root } = mount(
@@ -310,17 +310,17 @@ describe("Chooser overlay components", () => {
       />,
     );
 
-    const bronze = buttonByName(container, "Bronze");
-    const azure = buttonByName(container, "Azure");
-    expect(bronze.disabled).toBe(false);
-    expect(azure.disabled).toBe(true);
-    expect(azure.getAttribute("aria-disabled")).toBe("true");
+    const enduring = buttonByName(container, "Enduring");
+    const inspired = buttonByName(container, "Inspired");
+    expect(enduring.disabled).toBe(false);
+    expect(inspired.disabled).toBe(true);
+    expect(inspired.getAttribute("aria-disabled")).toBe("true");
 
-    click(azure);
-    expect(azure.getAttribute("aria-pressed")).toBe("false");
+    click(inspired);
+    expect(inspired.getAttribute("aria-pressed")).toBe("false");
 
-    click(bronze);
-    expect(bronze.getAttribute("aria-pressed")).toBe("true");
+    click(enduring);
+    expect(enduring.getAttribute("aria-pressed")).toBe("true");
 
     act(() => {
       root.unmount();
@@ -332,7 +332,7 @@ describe("Chooser overlay components", () => {
     const request: ChooserRequest = {
       kind: "transfiguration",
       requestId: "confirm-transfiguration",
-      eligibleTransfigurations: ["Bronze", "Rose"],
+      eligibleTransfigurations: ["Enduring", "Attuned"],
       title: "Choose a transfiguration",
     };
     const { container, root } = mount(
@@ -343,13 +343,13 @@ describe("Chooser overlay components", () => {
       />,
     );
 
-    click(buttonByName(container, "Rose"));
+    click(buttonByName(container, "Attuned"));
     click(confirmButton(container));
 
     expect(onResolve).toHaveBeenCalledTimes(1);
     expect(onResolve).toHaveBeenCalledWith({
       kind: "transfiguration",
-      type: "Rose",
+      type: "Attuned",
     });
 
     act(() => {
@@ -493,7 +493,7 @@ describe("Chooser overlay components", () => {
     const request: ChooserRequest = {
       kind: "transfiguration",
       requestId: "choose-transfiguration",
-      eligibleTransfigurations: ["Bronze", "Rose"],
+      eligibleTransfigurations: ["Enduring", "Attuned"],
       title: "Choose a transfiguration",
     };
     const { container, root } = mount(
@@ -504,7 +504,7 @@ describe("Chooser overlay components", () => {
       />,
     );
 
-    click(buttonByName(container, "Bronze"));
+    click(buttonByName(container, "Enduring"));
     expect(confirmButton(container).disabled).toBe(false);
 
     renderAgain(
@@ -517,7 +517,7 @@ describe("Chooser overlay components", () => {
     );
 
     expect(confirmButton(container).disabled).toBe(true);
-    expect(buttonByName(container, "Bronze").getAttribute("aria-pressed")).toBe(
+    expect(buttonByName(container, "Enduring").getAttribute("aria-pressed")).toBe(
       "false",
     );
 
@@ -531,7 +531,7 @@ describe("Chooser overlay components", () => {
     );
 
     expect(confirmButton(container).disabled).toBe(true);
-    expect(buttonByName(container, "Bronze").getAttribute("aria-pressed")).toBe(
+    expect(buttonByName(container, "Enduring").getAttribute("aria-pressed")).toBe(
       "false",
     );
 
