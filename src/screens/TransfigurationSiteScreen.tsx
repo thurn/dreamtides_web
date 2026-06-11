@@ -5,6 +5,7 @@ import type { CardData } from "../types/cards";
 import { CardDisplay } from "../components/CardDisplay";
 import { useQuest } from "../state/quest-context";
 import {
+  buildTransfigurationDisplay,
   TRANSFIGURATION_COLORS,
   transfigurationEffectDetails,
   type TransfigurationOffer,
@@ -323,12 +324,20 @@ export function TransfigurationSiteScreen({
                     filter: `drop-shadow(0 0 6px ${color}40)`,
                   }}
                 >
-                  <CardDisplay
-                    card={candidate.offer.previewCard}
-                    selected={true}
-                    selectionColor={color}
-                    tintColor={color}
-                  />
+                  {(() => {
+                    const preview = buildTransfigurationDisplay(
+                      candidate.card,
+                      candidate.offer.type,
+                    );
+                    return (
+                      <CardDisplay
+                        card={preview.card}
+                        selected={true}
+                        selectionColor={color}
+                        transfiguration={preview.display}
+                      />
+                    );
+                  })()}
                 </div>
 
                 {/* Accept button */}
@@ -405,6 +414,7 @@ function EnhancedPreview({
   if (!card) return null;
 
   const color = TRANSFIGURATION_COLORS[offer.type];
+  const preview = buildTransfigurationDisplay(card, offer.type);
 
   return (
     <motion.div
@@ -444,10 +454,10 @@ function EnhancedPreview({
         }}
       >
         <CardDisplay
-          card={offer.previewCard}
+          card={preview.card}
           selected={true}
           selectionColor={color}
-          tintColor={color}
+          transfiguration={preview.display}
         />
       </div>
 

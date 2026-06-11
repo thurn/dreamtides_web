@@ -2,6 +2,7 @@ import type { CardData, FrozenCardData } from "../types/cards";
 import { extractGlossaryTerms } from "../data/glossary-terms";
 import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
 import { CardDisplay } from "./CardDisplay";
+import type { CardTransfigurationDisplay } from "../transfiguration/transfiguration-logic";
 import type { PopoverPlacementSide } from "./hover-popover-placement";
 
 type DefinitionSide = "left" | "right";
@@ -12,6 +13,8 @@ interface CardHoverPreviewProps {
   widthPx: number;
   popoverSide: PopoverPlacementSide;
   anchorRect: DOMRect;
+  /** Paints the enlarged preview as transfigured when the card carries one. */
+  transfiguration?: CardTransfigurationDisplay;
 }
 
 export function definitionSideForCardHover({
@@ -40,6 +43,7 @@ export function CardHoverPreview({
   widthPx,
   popoverSide,
   anchorRect,
+  transfiguration,
 }: CardHoverPreviewProps) {
   const terms = extractGlossaryTerms(card.renderedText);
   const cardNode = (
@@ -48,7 +52,7 @@ export function CardHoverPreview({
       className="shrink-0"
       style={{ width: widthPx }}
     >
-      <CardDisplay card={card} suppressHoverHelp />
+      <CardDisplay card={card} suppressHoverHelp transfiguration={transfiguration} />
     </div>
   );
 

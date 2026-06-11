@@ -7,11 +7,18 @@ import {
   isScarletEligible,
   isAzureEligible,
   isBronzeEligible,
+  isMagentaEligible,
+  isRoseEligible,
   eligibleTransfigurations,
+  applyTransfigurationToCard,
   assignTransfiguration,
+  buildTransfigurationDisplay,
   describeTransfiguration,
   transfigurationEffectDetails,
   TRANSFIGURATION_COLORS,
+  TRANSFIGURATION_TINT_COLORS,
+  TRANSFIGURE_MARK_END,
+  TRANSFIGURE_MARK_START,
 } from "./transfiguration-logic";
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
@@ -339,5 +346,177 @@ describe("transfigurationEffectDetails", () => {
     expect(
       (details.renderedText as { to: string }).to,
     ).toContain("Draw a card.");
+  });
+});
+
+describe("TRANSFIGURATION_TINT_COLORS", () => {
+  it("maps every transfiguration type to a hex color", () => {
+    const types: TransfigurationType[] = [
+      "Viridian",
+      "Golden",
+      "Scarlet",
+      "Azure",
+      "Bronze",
+      "Magenta",
+      "Rose",
+      "Prismatic",
+    ];
+    for (const type of types) {
+      expect(TRANSFIGURATION_TINT_COLORS[type]).toMatch(/^#[0-9a-f]{6}$/i);
+    }
+  });
+});
+
+describe("buildTransfigurationDisplay", () => {
+  function stripMarkers(text: string): string {
+    return text
+      .split(TRANSFIGURE_MARK_START)
+      .join("")
+      .split(TRANSFIGURE_MARK_END)
+      .join("");
+  }
+
+  it("produces a card identical to applyTransfigurationToCard", () => {
+    // A card eligible for several transfigurations so Prismatic also chains.
+    const card = makeCard({
+      cardType: "Character",
+      energyCost: 4,
+      spark: 2,
+      renderedText: "▸Materialized: Deal 3 damage. Once per turn, draw.",
+    });
+    const types = eligibleTransfigurations(card);
+    expect(types.length).toBeGreaterThan(1);
+    for (const type of types) {
+      const built = buildTransfigurationDisplay(card, type);
+      expect(built.card).toEqual(applyTransfigurationToCard(card, type));
+    }
+  });
+
+  it("keeps the marked text equal to the transfigured text once markers are stripped", () => {
+    const card = makeCard({
+      cardType: "Event",
+      energyCost: 2,
+      spark: null,
+      renderedText: "Foresee.",
+    });
+    const built = buildTransfigurationDisplay(card, "Azure");
+    expect(stripMarkers(built.display.markedText)).toBe(
+      built.card.renderedText,
+    );
+  });
+
+  it("wraps an appended Azure clause in transfigure markers", () => {
+    const card = makeCard({
+      cardType: "Event",
+      energyCost: 2,
+      spark: null,
+      renderedText: "Foresee.",
+    });
+    const built = buildTransfigurationDisplay(card, "Azure");
+    expect(built.display.markedText).toContain(
+      `${TRANSFIGURE_MARK_START}Draw a card.${TRANSFIGURE_MARK_END}`,
+    );
+    // The printed text stays outside the markers.
+    expect(built.display.markedText.startsWith("Foresee.")).toBe(true);
+  });
+
+  it("flags spark changes for Scarlet and marks no text", () => {
+    const card = makeCard({
+      cardType: "Character",
+      energyCost: 0,
+      spark: 3,
+      renderedText: "A wall of thorns.",
+    });
+    const built = buildTransfigurationDisplay(card, "Scarlet");
+    expect(built.display.sparkChanged).toBe(true);
+    expect(built.display.energyChanged).toBe(false);
+    expect(built.card.spark).toBe(6);
+    expect(built.display.markedText).toBe(card.renderedText);
+  });
+
+  it("flags energy changes for Viridian", () => {
+    const card = makeCard({
+      cardType: "Event",
+      energyCost: 4,
+      spark: null,
+      renderedText: "Deal damage.",
+    });
+    const built = buildTransfigurationDisplay(card, "Viridian");
+    expect(built.display.energyChanged).toBe(true);
+    expect(built.card.energyCost).toBe(2);
+  });
+
+  it("wraps only the bumped Golden number, leaving a leading resource glyph untinted", () => {
+    const card = makeCard({
+      cardType: "Character",
+      energyCost: 0,
+      spark: 1,
+      renderedText: "Gain ✦2 this turn.",
+    });
+    const built = buildTransfigurationDisplay(card, "Golden");
+    expect(built.card.renderedText).toContain("✦3");
+    // The number is wrapped; the ✦ glyph stays outside the markers.
+    expect(built.display.markedText).toContain(
+      `✦${TRANSFIGURE_MARK_START}3${TRANSFIGURE_MARK_END}`,
+    );
+  });
+
+  it("widens a Magenta Dawn trigger to also fire on materialize, tinting the added keyword", () => {
+    const card = makeCard({
+      cardType: "Character",
+      energyCost: 0,
+      spark: 1,
+      renderedText: "▸Dawn: Gain 1●.",
+    });
+    expect(isMagentaEligible(card)).toBe(true);
+    const built = buildTransfigurationDisplay(card, "Magenta");
+    expect(built.card.renderedText).toBe("▸Materialized, Dawn: Gain 1●.");
+    expect(built.display.markedText).toContain(
+      `▸${TRANSFIGURE_MARK_START}Materialized, ${TRANSFIGURE_MARK_END}Dawn`,
+    );
+  });
+
+  it("widens a Magenta Materialized trigger to also fire on dissolve", () => {
+    const card = makeCard({
+      cardType: "Character",
+      energyCost: 0,
+      spark: 1,
+      renderedText: "▸Materialized: Draw a card.",
+    });
+    const built = buildTransfigurationDisplay(card, "Magenta");
+    expect(built.card.renderedText).toBe(
+      "▸Materialized, Dissolved: Draw a card.",
+    );
+    expect(built.display.markedText).toContain(
+      `Materialized${TRANSFIGURE_MARK_START}, Dissolved${TRANSFIGURE_MARK_END}:`,
+    );
+  });
+
+  it("reduces a Rose activated-ability cost by 1, tinting only the number", () => {
+    const card = makeCard({
+      cardType: "Character",
+      energyCost: 0,
+      spark: 1,
+      renderedText: "2●, Abandon 2 warriors: Draw a card.",
+    });
+    expect(isRoseEligible(card)).toBe(true);
+    const built = buildTransfigurationDisplay(card, "Rose");
+    expect(built.card.renderedText).toBe(
+      "1●, Abandon 2 warriors: Draw a card.",
+    );
+    // Only the number is wrapped; the ● glyph stays outside the markers.
+    expect(built.display.markedText).toContain(
+      `${TRANSFIGURE_MARK_START}1${TRANSFIGURE_MARK_END}●`,
+    );
+  });
+
+  it("does not treat an energy amount inside an effect as a Rose cost", () => {
+    const card = makeCard({
+      cardType: "Character",
+      energyCost: 0,
+      spark: 1,
+      renderedText: "Abandon this character: Gain 1●.",
+    });
+    expect(isRoseEligible(card)).toBe(false);
   });
 });

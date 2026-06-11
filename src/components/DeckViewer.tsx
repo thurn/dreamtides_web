@@ -22,7 +22,11 @@ import {
   type CardSizePreset,
 } from "./card-size";
 import { logEvent } from "../logging";
-import { TRANSFIGURATION_COLORS } from "../transfiguration/transfiguration-logic";
+import {
+  buildTransfigurationDisplay,
+  TRANSFIGURATION_COLORS,
+  type CardTransfigurationDisplay,
+} from "../transfiguration/transfiguration-logic";
 import { computeDeckSummary } from "./deck-summary";
 import { DreamcallerPortrait } from "./DreamcallerPortrait";
 import { RulesText } from "./RulesText";
@@ -50,6 +54,8 @@ type CardTypeFilter = "All" | "Characters" | "Events";
 interface ResolvedEntry {
   entry: DeckEntry;
   card: CardData;
+  /** Display descriptor when the entry carries a transfiguration. */
+  transfiguration?: CardTransfigurationDisplay;
   index: number;
 }
 
@@ -81,7 +87,10 @@ export function DeckViewer({
   const [cardSize, setCardSizeState] = useState<CardSizePreset>(() =>
     getPersistedCardSize(initialSize),
   );
-  const [overlayCard, setOverlayCard] = useState<CardData | null>(null);
+  const [overlayCard, setOverlayCard] = useState<{
+    card: CardData;
+    transfiguration?: CardTransfigurationDisplay;
+  } | null>(null);
   const [showSortDropdown, setShowSortDropdown] = useState(false);
   const openTimestampRef = useRef<number>(0);
   const prevOpenRef = useRef(false);
@@ -134,12 +143,21 @@ export function DeckViewer({
       .map((entry, index) => {
         const card = cardDatabase.get(entry.cardNumber);
         if (!card) return null;
+        const modified = applyDeckEntryCardModification(card, {
+          typeChange: entry.typeChange,
+          keywords: entry.keywordModification,
+        });
+        if (entry.transfiguration === null) {
+          return { entry, card: modified, index };
+        }
+        const transfigured = buildTransfigurationDisplay(
+          modified,
+          entry.transfiguration,
+        );
         return {
           entry,
-          card: applyDeckEntryCardModification(card, {
-            typeChange: entry.typeChange,
-            keywords: entry.keywordModification,
-          }),
+          card: transfigured.card,
+          transfiguration: transfigured.display,
           index,
         };
       })
@@ -200,8 +218,11 @@ export function DeckViewer({
     persistCardSize(size);
   }, []);
 
-  const handleCardClick = useCallback((card: CardData) => {
-    setOverlayCard(card);
+  const handleCardClick = useCallback((resolved: ResolvedEntry) => {
+    setOverlayCard({
+      card: resolved.card,
+      transfiguration: resolved.transfiguration,
+    });
   }, []);
 
   const handleCloseOverlay = useCallback(() => {
@@ -508,9 +529,10 @@ export function DeckViewer({
                       >
                         <CardDisplay
                           card={resolved.card}
+                          transfiguration={resolved.transfiguration}
                           large={cardSize === "large"}
                           onClick={() => {
-                            handleCardClick(resolved.card);
+                            handleCardClick(resolved);
                           }}
                         />
                       </div>
@@ -532,6 +554,7 @@ export function DeckViewer({
                           content={({ anchorRect, side }) =>
                             <CardHoverPreview
                               card={resolved.card}
+                              transfiguration={resolved.transfiguration}
                               testId={`deck-viewer-row-hover-card-${resolved.entry.entryId}`}
                               widthPx={CARD_HOVER_PREVIEW_WIDTH_PX}
                               popoverSide={side}
@@ -726,7 +749,11 @@ export function DeckViewer({
           />
 
           {/* Card overlay */}
-          <CardOverlay card={overlayCard} onClose={handleCloseOverlay} />
+          <CardOverlay
+            card={overlayCard?.card ?? null}
+            transfiguration={overlayCard?.transfiguration}
+            onClose={handleCloseOverlay}
+          />
         </motion.div>
       )}
     </AnimatePresence>

@@ -17,6 +17,7 @@ import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
 import { BOLT_ICON_CLASS } from "./GlowIcon";
 import { CardStatOrb } from "./CardStatOrb";
+import type { CardTransfigurationDisplay } from "../transfiguration/transfiguration-logic";
 import { renderRulesText } from "./RulesText";
 import { useCardTermPopover } from "./useCardTermPopover";
 import { useFitText } from "./useFitText";
@@ -27,6 +28,16 @@ import { useFitText } from "./useFitText";
  * purple accent for events) rather than a colored border.
  */
 const SELECTION_DEFAULT_COLOR = "#f97316";
+
+/**
+ * Tints for a transfiguration-changed corner stat digit. These are chosen for
+ * legibility against the orb's own bright glyph — a warm gold reads on the blue
+ * energy flame, a bright cyan reads on the amber spark sparkle — rather than to
+ * match the transfiguration color (the name gem already carries that hue). Only
+ * the digit takes the tint; the glyph keeps its resource color.
+ */
+const ENERGY_CHANGE_TINT = "#fcd34d";
+const SPARK_CHANGE_TINT = "#67e8f9";
 
 /**
  * Fallback art crop for cards that carry no authored `art` setting: centered
@@ -675,8 +686,14 @@ export interface CardViewProps {
   onClick?: () => void;
   selected?: boolean;
   selectionColor?: string;
-  /** When set, tints the card's rules text in this color. */
-  tintColor?: string;
+  /**
+   * When set, paints the card as transfigured: a small colored gem follows the
+   * name, the changed corner stat(s) take the tint, and only the added/changed
+   * rules text is tinted (driven by the descriptor's marked text). The card
+   * itself should already carry the transfigured stats and rules text — pass the
+   * `card` and `display` from `buildTransfigurationDisplay` together.
+   */
+  transfiguration?: CardTransfigurationDisplay;
   /** Additional CSS class name for the root element. */
   className?: string;
   /** Use larger text sizes for rules text, name, type line, and stats. */
@@ -736,7 +753,7 @@ export function CardView({
   onClick,
   selected = false,
   selectionColor = SELECTION_DEFAULT_COLOR,
-  tintColor,
+  transfiguration,
   className,
   large = false,
   hideRulesText = false,
@@ -859,6 +876,11 @@ export function CardView({
       numberSizeVar="var(--cv-energy-orb-font-size)"
       numberCapPx={energyOrbCapPx}
       tooltip={suppressHoverHelp ? undefined : ENERGY_PIP_TOOLTIP}
+      tintColor={
+        transfiguration?.energyChanged === true
+          ? ENERGY_CHANGE_TINT
+          : undefined
+      }
     />
   );
   const energyNode =
@@ -963,6 +985,31 @@ export function CardView({
       >
         {card.name}
       </span>
+      {transfiguration !== undefined ? (
+        <span
+          aria-label={`${transfiguration.type} transfiguration`}
+          title={`${transfiguration.type} Transfiguration`}
+          style={{
+            flex: "0 0 auto",
+            marginLeft: "0.35em",
+            // A small faceted gem in the transfiguration tint: a rounded square
+            // turned on its point, lit from the top-left with an inset white
+            // highlight and shaded toward the tint at the lower-right, ringed by
+            // a soft outer glow so it reads against any art behind the name bar.
+            width: "0.7em",
+            height: "0.7em",
+            borderRadius: "0.14em",
+            transform: "rotate(45deg)",
+            background: `linear-gradient(135deg, #ffffff 0%, ${transfiguration.color} 55%, ${transfiguration.color} 100%)`,
+            boxShadow: [
+              `inset 0.06em 0.06em 0.05em rgba(255, 255, 255, 0.95)`,
+              `inset -0.05em -0.05em 0.07em ${transfiguration.color}`,
+              `0 0 0.18em ${transfiguration.color}`,
+              `0 1px 1px rgba(0, 0, 0, 0.55)`,
+            ].join(", "),
+          }}
+        />
+      ) : null}
     </div>
   );
 
@@ -1023,15 +1070,16 @@ export function CardView({
         maxHeight: "var(--cv-textbox-rules-area-height)",
         overflow: "hidden",
         textAlign: "left",
-        color: tintColor ?? RULES_COLOR,
+        color: RULES_COLOR,
         fontFamily: RULES_FONT_FAMILY,
         fontSize: `min(var(--cv-rules-font-cap), ${String(rulesFontPx)}px)`,
         lineHeight: "var(--cv-rules-line-height)",
         textShadow: "0 1px 1px rgba(0, 0, 0, 0.55)",
       }}
     >
-      {renderRulesText(card.renderedText, {
+      {renderRulesText(transfiguration?.markedText ?? card.renderedText, {
         pipScale: textScale,
+        highlightColor: transfiguration?.color,
       })}
     </div>
   ) : null;
@@ -1045,6 +1093,11 @@ export function CardView({
         numberSizeVar="var(--cv-spark-orb-font-size)"
         numberCapPx={sparkOrbCapPx}
         tooltip={suppressHoverHelp ? undefined : SPARK_PIP_TOOLTIP}
+        tintColor={
+          transfiguration?.sparkChanged === true
+            ? SPARK_CHANGE_TINT
+            : undefined
+        }
       />
     ) : null;
   const renderedSparkContent =

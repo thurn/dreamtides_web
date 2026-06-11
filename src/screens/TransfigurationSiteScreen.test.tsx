@@ -48,6 +48,16 @@ vi.mock("../transfiguration/transfiguration-logic", () => ({
     Azure: "#3b82f6",
     Bronze: "#a16207",
   },
+  buildTransfigurationDisplay: (card: CardData, type: string) => ({
+    card,
+    display: {
+      type,
+      color: "#6ee7b7",
+      markedText: card.renderedText,
+      energyChanged: false,
+      sparkChanged: false,
+    },
+  }),
   transfigurationEffectDetails: () => ({ test: true }),
 }));
 

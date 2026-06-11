@@ -92,6 +92,13 @@ interface CardStatOrbProps {
   numberCapPx: number;
   ariaLabel?: string;
   tooltip?: ReactNode;
+  /**
+   * Tint applied to the digit when the stat has been changed by a
+   * transfiguration (e.g. a bumped spark or halved energy cost). Only the number
+   * picks up the tint; the resource glyph behind it keeps its resource hue so a
+   * changed stat still reads as the same kind of resource.
+   */
+  tintColor?: string;
 }
 
 /**
@@ -115,6 +122,7 @@ export function CardStatOrb({
   numberCapPx,
   ariaLabel,
   tooltip,
+  tintColor,
 }: CardStatOrbProps) {
   const label = ariaLabel ?? DEFAULT_LABEL[variant];
   const icon = ICON_BY_VARIANT[variant];
@@ -131,7 +139,7 @@ export function CardStatOrb({
   const numberStyle: CSSProperties = {
     fontFamily: '"Anton", system-ui, sans-serif',
     fontWeight: 400,
-    color: "#ffffff",
+    color: tintColor ?? "#ffffff",
     lineHeight: 1,
     textAlign: "center",
     whiteSpace: "nowrap",

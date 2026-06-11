@@ -40,11 +40,13 @@ if (pathname === "/editor") {
     { default: App },
     { HudDreamsignLayoutDemo },
     { JourneyHoverCardDemo },
+    { TransfigurationCardDemo },
     { parseRuntimeConfig },
   ] = await Promise.all([
     import("./App.tsx"),
     import("./components/HudDreamsignLayoutDemo"),
     import("./journeys/ui/JourneyHoverCardDemo"),
+    import("./components/TransfigurationCardDemo"),
     import("./runtime/runtime-config"),
   ]);
 
@@ -60,6 +62,8 @@ if (pathname === "/editor") {
       <HudDreamsignLayoutDemo />
     ) : demoParam === "journey-hover" ? (
       <JourneyHoverCardDemo />
+    ) : demoParam === "transfiguration" ? (
+      <TransfigurationCardDemo />
     ) : (
       <App runtimeConfig={runtimeConfig} />
     ),

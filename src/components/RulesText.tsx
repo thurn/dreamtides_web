@@ -1,5 +1,9 @@
 import { type CSSProperties, type ReactNode } from "react";
 import { tokenizeRulesText, type TextSegment } from "./card-text";
+import {
+  TRANSFIGURE_MARK_END,
+  TRANSFIGURE_MARK_START,
+} from "../transfiguration/transfiguration-logic";
 import { PipBadge } from "./PipBadge";
 import {
   BOLT_ICON_CLASS,
@@ -97,6 +101,54 @@ interface RulesTextProps {
 
 interface RenderRulesTextOptions {
   pipScale?: number;
+  /**
+   * When set, runs of text wrapped in transfigure markers (see
+   * `TRANSFIGURE_MARK_START` / `TRANSFIGURE_MARK_END`) are painted in this color
+   * and given a slightly heavier weight, so only the transfigured span of a
+   * card's rules text is tinted. Text outside the markers renders normally.
+   */
+  highlightColor?: string;
+}
+
+/** One run of a paragraph, flagged for whether it is a transfigured span. */
+interface MarkerChunk {
+  text: string;
+  highlighted: boolean;
+}
+
+/**
+ * Splits a paragraph on the transfigure marker characters into alternating
+ * plain and highlighted runs. Markers are placed at clause/word boundaries by
+ * `buildTransfigurationDisplay`, so each run tokenizes cleanly on its own.
+ */
+function splitOnMarkers(paragraph: string): MarkerChunk[] {
+  const chunks: MarkerChunk[] = [];
+  let buffer = "";
+  let highlighted = false;
+  for (const ch of paragraph) {
+    if (ch === TRANSFIGURE_MARK_START || ch === TRANSFIGURE_MARK_END) {
+      if (buffer.length > 0) {
+        chunks.push({ text: buffer, highlighted });
+        buffer = "";
+      }
+      highlighted = ch === TRANSFIGURE_MARK_START;
+      continue;
+    }
+    buffer += ch;
+  }
+  if (buffer.length > 0) {
+    chunks.push({ text: buffer, highlighted });
+  }
+  return chunks;
+}
+
+/** Strips any stray transfigure markers from a string. */
+function stripMarkers(text: string): string {
+  return text
+    .split(TRANSFIGURE_MARK_START)
+    .join("")
+    .split(TRANSFIGURE_MARK_END)
+    .join("");
 }
 
 function renderSegment(
@@ -275,14 +327,50 @@ export function renderRulesText(
 ): ReactNode[] {
   const paragraphs = splitRulesTextIntoParagraphs(text);
   return paragraphs.map((paragraph, p) => {
-    const segments = tokenizeRulesText(paragraph);
     const style: CSSProperties = p === 0 ? {} : { marginTop: PARAGRAPH_GAP };
     return (
       <div key={p} data-rules-text-paragraph="" style={style}>
-        {segments.map((segment, i) =>
-          renderSegment(segment, `${p}-${i}`, options),
-        )}
+        {renderParagraph(paragraph, p, options)}
       </div>
+    );
+  });
+}
+
+/**
+ * Renders one ability paragraph. With a `highlightColor` set, the paragraph is
+ * split on transfigure markers so each transfigured run is tokenized on its own
+ * and wrapped in a tinted, slightly heavier span; runs outside the markers
+ * render normally. Without a highlight color any stray markers are stripped and
+ * the paragraph tokenizes as a single run.
+ */
+function renderParagraph(
+  paragraph: string,
+  p: number,
+  options: RenderRulesTextOptions,
+): ReactNode[] {
+  if (options.highlightColor === undefined) {
+    const segments = tokenizeRulesText(stripMarkers(paragraph));
+    return segments.map((segment, i) =>
+      renderSegment(segment, `${p}-${i}`, options),
+    );
+  }
+  const chunks = splitOnMarkers(paragraph);
+  return chunks.map((chunk, c) => {
+    const segments = tokenizeRulesText(chunk.text);
+    const nodes = segments.map((segment, i) =>
+      renderSegment(segment, `${p}-${c}-${i}`, options),
+    );
+    if (!chunk.highlighted) {
+      return <span key={`${p}-${c}`}>{nodes}</span>;
+    }
+    return (
+      <span
+        key={`${p}-${c}`}
+        data-transfigured=""
+        style={{ color: options.highlightColor, fontWeight: 600 }}
+      >
+        {nodes}
+      </span>
     );
   });
 }

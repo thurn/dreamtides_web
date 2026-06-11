@@ -2,12 +2,15 @@ import { useEffect, useCallback } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { CardData } from "../types/cards";
 import { CardDisplay } from "./CardDisplay";
+import type { CardTransfigurationDisplay } from "../transfiguration/transfiguration-logic";
 import { logEvent } from "../logging";
 
 /** Props for the CardOverlay component. */
 interface CardOverlayProps {
   card: CardData | null;
   onClose: () => void;
+  /** Paints the enlarged overlay as transfigured when the card carries one. */
+  transfiguration?: CardTransfigurationDisplay;
 }
 
 /**
@@ -15,7 +18,11 @@ interface CardOverlayProps {
  * Animates in with Framer Motion scale + fade. Dismisses on backdrop click
  * or Escape key.
  */
-export function CardOverlay({ card, onClose }: CardOverlayProps) {
+export function CardOverlay({
+  card,
+  onClose,
+  transfiguration,
+}: CardOverlayProps) {
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       if (e.key === "Escape") {
@@ -61,7 +68,7 @@ export function CardOverlay({ card, onClose }: CardOverlayProps) {
               e.stopPropagation();
             }}
           >
-            <CardDisplay card={card} />
+            <CardDisplay card={card} transfiguration={transfiguration} />
           </motion.div>
         </motion.div>
       )}
