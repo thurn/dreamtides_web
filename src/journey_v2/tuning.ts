@@ -12,7 +12,6 @@ export const MERCHANT_TUNING = {
     fit_card_draft: 10,
     copies_draft: 6,
     strong_card: 8,
-    premium_draft: 6,
     category_draft_known: 10,
     card_bundle: 8,
     transfigured_draft: 6,
@@ -30,9 +29,8 @@ export const MERCHANT_TUNING = {
   /** Default band: keep the top 25% (minimum 5) and uniform-sample within. */
   bandFraction: 0.25,
   bandMinimum: 5,
-  /** Tighter bands for the premium/strong archetypes. */
+  /** Tighter band for the strong-card archetype. */
   strongBandFraction: 0.15,
-  premiumBandFraction: 0.1,
   /** Loose band for the small dreamsign population. */
   dreamsignBandFraction: 0.4,
   /**
@@ -45,8 +43,12 @@ export const MERCHANT_TUNING = {
    */
   tribalBandFraction: 0.25,
   tribalBandMinimum: 2,
-  /** Premium draft signal blend over normalized quality and fit. */
-  premiumBlend: { quality: 0.8, fit: 0.2 },
+  /**
+   * Strong-card signal blend over normalized quality and fit. Quality-led (the
+   * card should be genuinely powerful) but with enough fit weight that an
+   * off-archetype bomb is pulled below a comparably strong on-archetype card.
+   */
+  strongBlend: { quality: 0.7, fit: 0.3 },
   /** Transfigure signal blend over benefit and centrality. */
   transfigureBlend: { benefit: 0.7, centrality: 0.3 },
   /**

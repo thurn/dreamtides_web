@@ -192,7 +192,6 @@ export const purgeBuilder: MerchantArchetypeBuilder = {
           displayName: target.deckCard.displayName,
         },
       ],
-      hiddenUntilCommit: false,
       applyPayload: removeDeckEntryPayload(target.deckCard),
       targetKey: target.entryId,
     };
@@ -295,7 +294,6 @@ export const purgeReplaceBuilder: MerchantArchetypeBuilder = {
           badge: { label: "Removed" },
         },
       ],
-      hiddenUntilCommit: false,
       choiceRequest: {
         choiceType: "replacementCard",
         prompt: "Pick a replacement",

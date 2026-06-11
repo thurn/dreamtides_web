@@ -6,13 +6,12 @@ import type {
   MerchantGameObject,
 } from "../types";
 
-/** The 18 offer archetypes across the 6 families. */
+/** The 17 offer archetypes across the 6 families. */
 export type MerchantArchetypeId =
   | "fit_card_grant"
   | "fit_card_draft"
   | "copies_draft"
   | "strong_card"
-  | "premium_draft"
   | "category_draft_known"
   | "card_bundle"
   | "transfigured_draft"
@@ -48,7 +47,6 @@ export const MERCHANT_ARCHETYPE_FAMILIES: Readonly<
   fit_card_draft: "grant",
   copies_draft: "grant",
   strong_card: "grant",
-  premium_draft: "grant",
   category_draft_known: "grant",
   card_bundle: "grant",
   transfigured_draft: "grant",
@@ -76,7 +74,6 @@ export const MERCHANT_ARCHETYPE_LABELS: Readonly<
   fit_card_draft: "Grant: Fit card draft",
   copies_draft: "Grant: Copies draft",
   strong_card: "Grant: Strong card",
-  premium_draft: "Grant: Premium draft",
   category_draft_known: "Grant: Category draft",
   card_bundle: "Grant: Card bundle",
   transfigured_draft: "Grant: Transfigured draft",
@@ -103,8 +100,6 @@ export interface MerchantOfferDraft {
   title: string;
   summary: string;
   gameObjects: readonly MerchantGameObject[];
-  /** True for archetypes that conceal their candidates until the player commits. */
-  hiddenUntilCommit: boolean;
   /** Direct reward payload (mutually exclusive in practice with `choiceRequest`). */
   applyPayload?: MerchantApplyPayload;
   /** Chooser reward (<= 4 candidates). */

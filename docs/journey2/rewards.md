@@ -13,7 +13,7 @@ one offer or declines; either action completes the site.
 
 Offer selection is a two-stage seeded lottery:
 
-- **Stage 1 — archetype roll.** Eligibility predicates filter the 18 registered
+- **Stage 1 — archetype roll.** Eligibility predicates filter the 17 registered
   archetypes against the current deck state. Slot A draws from the eligible set
   by weighted sampling. Slot B draws from the eligible set whose *family* differs
   from slot A's family, ensuring the two offers always pull in materially
@@ -22,21 +22,11 @@ Offer selection is a two-stage seeded lottery:
   and band-samples the target (or chooser set) within the top fraction of that
   list.
 
-Any chooser shown to the player contains at most four items.
-
-### Commit-then-reveal for hidden drafts
-
-The `category_draft_known` and `premium_draft` archetypes hide their candidate
-cards until the player commits to that offer:
-
-1. **Commit mutation.** Records the committed offer id in quest state and forfeits
-   the other offer. The site is not yet complete. Because generation is
-   deterministic, a reload after commit shows the same revealed candidates.
-2. **Reveal/pick mutation.** The player picks one of the revealed cards; the pick
-   is validated against the regenerated candidate set, applied, and the site
-   completes.
-
-Fully face-up archetypes use a single accept-with-optional-choice mutation.
+Any chooser shown to the player contains at most four items. Every offer is
+face-up: a draft shows all of its curated candidate cards in the offer body
+(each previewable on hover), and the player accepts with a single
+accept-with-optional-choice mutation. Picking a draft opens a chooser panel to
+select one of the shown cards.
 
 ### Regenerate-and-validate
 
@@ -64,7 +54,7 @@ The band floor delivers "plausibly want it"; uniform sampling within the band
 delivers "never know what you'll get". Individual archetypes override
 `bandFraction` as noted below.
 
-## The 18 Offer Archetypes
+## The 17 Offer Archetypes
 
 Tunable weights and constants live in `src/journey_v2/tuning.ts`. The weight
 `w` below is the stage-1 lottery weight. Archetypes are grouped by the six
@@ -89,21 +79,19 @@ genuinely strong; below `minDeckForFit` it falls back to corpus quality alone so
 the archetype is live on a small deck. Band-sample 4 as a face-up chooser.
 Eligible when the band has ≥ 4 cards.
 
-**`strong_card`** (w=8) — Receive one named premium card. Candidates: all
-non-starter pool cards. Signal: corpus quality rating. Band-sample 1 with
-`bandFraction = 0.15`. Face-up. Always eligible.
-
-**`premium_draft`** (w=6) — Draft 1 of 4 exceptionally strong cards. Candidates:
-all non-starter pool cards. Signal: `0.8 * qualityNorm + 0.2 * fitNorm` (fit
-term is zero on an empty deck). Band-sample 4 with `bandFraction = 0.10`. Cards
-hidden until commit. Always eligible.
+**`strong_card`** (w=8) — Receive one powerful card chosen with the deck in
+mind. Candidates: all non-starter, unowned pool cards. Signal:
+`strongBlend.quality * qualityNorm + strongBlend.fit * fitNorm` (0.7 / 0.3) — a
+genuinely strong card that still leans toward what the deck is building, so an
+off-archetype bomb is pulled below a comparably strong on-archetype card.
+Band-sample 1 with `bandFraction = 0.15`. Face-up. Always eligible.
 
 **`category_draft_known`** (w=10) — Draft 1 of 4 cards within a named category
 (e.g. "Draft a Warrior", "Draft a cheap Event", "Draft from the Cradle of Storms
 package"). Category construction is described below. Within the sampled category,
-candidates are non-starter pool cards; signal: fit score; band-sample 4.
-Category visible, cards hidden until commit. Eligible when at least one category
-has ≥ 8 non-starter pool cards.
+candidates are non-starter pool cards; signal: fit score; band-sample 4. Face-up
+chooser — both the category and the four cards are shown. Eligible when at least
+one category has ≥ 8 non-starter pool cards.
 
 **`card_bundle`** (w=8) — Gain 2–3 cards that work together and with the deck.
 Band-samples a seed card from the fit candidate band (quality band when deck
@@ -184,7 +172,7 @@ unheld dreamsigns exist.
 
 **`add_site`** (w=6) — Add a site to the current dreamscape. Seeded-samples a
 site type uniformly from: Shop, Specialty Shop, Purge, Transfiguration, Dreamsign
-Offering, Dreamsign Draft, Duplication, Reward, Cleanse, Essence. The new site
+Offering, Dreamsign Draft, Duplication, Reward, Essence. The new site
 appears immediately on the current dreamscape map. Face-up (the offer names the
 site type). Always eligible.
 
@@ -261,22 +249,28 @@ keywords = []                  # e.g. ["reclaim", "fast"]
 quality = 2                    # 1 = premium, 2 = solid, 3 = niche
 ```
 
-A feature is satisfied when the deck holds ≥ 3 cards exhibiting it (subtype
-match, card type match, cost band, or keyword presence — all hard fields). The
-match score is `(0.5 + 0.5 * satisfiedFraction) * qualityWeight`, where
-`qualityWeight` is 1.2 / 1.0 / 0.8 for quality 1 / 2 / 3. A profile with no
-features scores `0.5 * qualityWeight` — generic dreamsigns stay offerable
-everywhere, with premium generic dreamsigns surfacing readily.
+Each feature (subtype match, card type match, cost band, or keyword presence —
+all hard fields) contributes a graded coverage `min(1, matchingDeckCards / 3)`:
+zero when the deck holds no matching card, full at three. The match score is the
+mean coverage across the profile's features times `qualityWeight` (1.2 / 1.0 /
+0.8 for quality 1 / 2 / 3). A profile whose features the deck does not support
+sinks toward zero, so it is never offered as "suited to your deck"; a featureless
+profile scores `0.4 * qualityWeight`, keeping generic dreamsigns offerable
+everywhere without beating a genuinely suited one. The `dreamsign` /
+`dreamsign_draft` builders sample only from the deck-suited pool (signs with
+positive score) whenever any exists.
 
 The loader is `src/data/dreamsign-profiles.ts`. Profiles are populated in
 `QuestContent` and passed through `buildMerchantContext` into `dreamsignMatch.ts`.
 
 ## Dialogue
 
-Each encounter renders exactly one merchant line of ≤ 10 words, hinting at the
-motivation for one seeded-chosen offer. Each archetype has a small template bank
-(6–10 lines), slot-filled with at most the target's display name. One short
-accept reaction (≤ 6 words) fires after the player accepts. No other dialogue.
+Each encounter renders exactly one merchant line for one seeded-chosen offer.
+The merchant speaks only in cryptic, poetic dream-imagery: he never names a
+card, a creature, or a game term, and every line gestures at the *shape* of the
+offer rather than its contents. Each archetype has a small slot-free template
+bank, so the words never spoil what is on the table. One short poetic accept
+reaction fires after the player accepts. No other dialogue.
 
 Template selection is seeded, so the same encounter always produces the same
 line.

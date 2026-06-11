@@ -263,21 +263,11 @@ export interface DreamJourneySiteRuntime {
   kind: "dreamJourney";
   completed: boolean;
   /**
-   * Set by `resolveMerchantCommit` when the player commits to a
-   * `hiddenUntilCommit` offer. Records the committed offer id so that:
-   * - A reload cannot recover the forfeited offer (the site knows the choice
-   *   has been made).
-   * - `resolveMerchantOffer` accepts ONLY this offer id after commit.
-   * Cleared implicitly when the site completes (site runtime is discarded by
-   * `completeQuestSite` via the siteRuntime map).
-   */
-  merchantCommittedOfferId?: string;
-  /**
    * Debug reroll counter. Incremented by `rerollDreamJourney` to regenerate the
    * encounter from the same quest parameters. Mixed into the encounter RNG salt
    * by `buildMerchantContext`, so the persisted value drives both the displayed
-   * encounter and the signature checks on accept/commit/decline. Absent (or `0`)
-   * for an un-rerolled site.
+   * encounter and the signature checks on accept/decline. Absent (or `0`) for an
+   * un-rerolled site.
    */
   rerollNonce?: number;
   /**
@@ -285,7 +275,7 @@ export interface DreamJourneySiteRuntime {
    * `MerchantArchetypeId`). Set by `forceDreamJourneyArchetype` from the Journey
    * V2 "force a category" debug dropdown. Read by `buildMerchantContext` and
    * honored during encounter generation, so it drives both the displayed
-   * encounter and the signature checks on accept/commit/decline. Absent when no
+   * encounter and the signature checks on accept/decline. Absent when no
    * category is forced; the value is ignored if it is not eligible for the
    * current quest state.
    */

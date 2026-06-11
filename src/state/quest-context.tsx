@@ -76,7 +76,6 @@ import {
   transfigurationEffectDetails,
 } from "../transfiguration/transfiguration-logic";
 import {
-  resolveMerchantCommit,
   resolveMerchantDecline,
   resolveMerchantOffer,
 } from "../journey_v2";
@@ -84,7 +83,6 @@ import type {
   MerchantAcceptRequest,
   MerchantApplyPayload,
   MerchantArchetypeId,
-  MerchantCommitRequest,
   MerchantDeclineRequest,
   MerchantOfferActionResult,
 } from "../journey_v2";
@@ -154,17 +152,6 @@ export interface QuestMutations {
    * visit-tracking bookkeeping.
    */
   completeDreamJourneySite: (siteId: string) => void;
-  /**
-   * Records a commit to a `hiddenUntilCommit` offer. Validates the encounter
-   * signature, verifies the offer is hidden, writes
-   * `merchantCommittedOfferId` into `siteRuntime[siteId]`, and forfeits the
-   * other offer. The site is NOT completed — the player must follow up with
-   * `acceptDreamMerchantOffer` to pick from the revealed candidate set.
-   */
-  commitDreamMerchantOffer: (
-    siteId: string,
-    request: MerchantCommitRequest,
-  ) => MerchantOfferActionResult | void;
   acceptDreamMerchantOffer: (
     siteId: string,
     request: MerchantAcceptRequest,
@@ -441,7 +428,7 @@ function findSite(state: QuestState, siteId: string): SiteState | null {
 
 function merchantRequestLogFields(
   siteId: string,
-  request: MerchantAcceptRequest | MerchantDeclineRequest | MerchantCommitRequest,
+  request: MerchantAcceptRequest | MerchantDeclineRequest,
 ): Record<string, unknown> {
   return {
     siteId,
@@ -1866,10 +1853,9 @@ export function QuestProvider({
         siteId,
         rerollNonce: nextNonce,
       });
-      // Rebuild the runtime from scratch so any prior `merchantCommittedOfferId`
-      // is dropped — the rerolled encounter is a clean slate. A debug-forced
-      // archetype is preserved so a developer can reroll within a forced
-      // category to cycle its targets.
+      // Rebuild the runtime from scratch so the rerolled encounter is a clean
+      // slate. A debug-forced archetype is preserved so a developer can reroll
+      // within a forced category to cycle its targets.
       const runtime: DreamJourneySiteRuntime = {
         kind: "dreamJourney",
         completed: false,
@@ -1913,8 +1899,8 @@ export function QuestProvider({
           forcedArchetypeId: archetypeId,
         });
         // Bump the nonce so the encounter regenerates, and persist (or clear)
-        // the forced archetype. The runtime is rebuilt from scratch so any prior
-        // commit is dropped — the regenerated encounter is a clean slate.
+        // the forced archetype. The runtime is rebuilt from scratch so the
+        // regenerated encounter is a clean slate.
         const runtime: DreamJourneySiteRuntime = {
           kind: "dreamJourney",
           completed: false,
@@ -1931,48 +1917,6 @@ export function QuestProvider({
       });
     },
     [],
-  );
-
-  const commitDreamMerchantOffer = useCallback(
-    (siteId: string, request: MerchantCommitRequest) => {
-      let outcome: MerchantOfferActionResult = { ok: true };
-      setState((prev) => {
-        const site = findSite(prev, siteId);
-        if (site === null) {
-          outcome = { ok: false, reason: "site_unavailable" };
-          logEvent("merchant_offer_validation_failed", {
-            ...merchantRequestLogFields(siteId, request),
-            reason: "site_unavailable",
-          });
-          return prev;
-        }
-
-        const result = resolveMerchantCommit({
-          state: prev,
-          questContent,
-          site,
-          request,
-        });
-        if (!result.ok) {
-          outcome = { ok: false, reason: result.reason };
-          logEvent("merchant_offer_validation_failed", {
-            ...merchantRequestLogFields(siteId, request),
-            reason: result.reason,
-          });
-          return prev;
-        }
-
-        outcome = { ok: true };
-        logEvent("merchant_offer_committed", {
-          ...merchantRequestLogFields(siteId, request),
-          archetypeId: result.offer.archetypeId,
-          targetKey: result.offer.targetKey,
-        });
-        return result.state;
-      });
-      return outcome;
-    },
-    [questContent],
   );
 
   const acceptDreamMerchantOffer = useCallback(
@@ -3236,7 +3180,6 @@ export function QuestProvider({
       completeDreamJourneySite,
       rerollDreamJourney,
       forceDreamJourneyArchetype,
-      commitDreamMerchantOffer,
       acceptDreamMerchantOffer,
       declineDreamMerchant,
       pickDraftCard,
@@ -3302,7 +3245,6 @@ export function QuestProvider({
       completeDreamJourneySite,
       rerollDreamJourney,
       forceDreamJourneyArchetype,
-      commitDreamMerchantOffer,
       acceptDreamMerchantOffer,
       declineDreamMerchant,
       pickDraftCard,

@@ -12,7 +12,6 @@ export {
 export { OfferCard } from "./ui/OfferCard";
 export {
   applyMerchantPayloadToState,
-  resolveMerchantCommit,
   resolveMerchantDecline,
   resolveMerchantOffer,
 } from "./encounter/resolveMerchantOffer";
@@ -30,7 +29,6 @@ export type {
 } from "./encounter/generateMerchantEncounter";
 export type {
   MerchantResolveFailureReason,
-  ResolveMerchantCommitResult,
   ResolveMerchantDeclineResult,
   ResolveMerchantOfferResult,
 } from "./encounter/resolveMerchantOffer";
@@ -50,7 +48,6 @@ export type {
   MerchantChoice,
   MerchantChoiceCandidate,
   MerchantChoiceRequest,
-  MerchantCommitRequest,
   MerchantContext,
   MerchantDeckCard,
   MerchantDeclineRequest,

@@ -2,6 +2,7 @@ import type { FitModel } from "../draft/replay/fit-model";
 import type { MerchantCorpus } from "../data/merchant-corpus";
 import type { DreamsignProfile } from "../data/dreamsign-profiles";
 import type { QuestContent } from "../data/quest-content";
+import type { CardTransfigurationDisplay } from "../transfiguration/transfiguration-logic";
 import type { CardData } from "../types/cards";
 import type { DreamsignTemplate } from "../types/content";
 import type {
@@ -37,6 +38,13 @@ export interface MerchantDeckCard extends MerchantCardIdentity {
   displayName: string;
   badge?: MerchantGameObjectBadge;
   previewCard?: CardData;
+  /**
+   * When the object's `card`/`previewCard` shows a transfigured result, this
+   * paints the hover preview with the transfiguration tint and marks the
+   * changed spans. Absent for plain (non-transfigured) cards and for keyword /
+   * type-change previews, whose changed text is already shown without a tint.
+   */
+  transfiguration?: CardTransfigurationDisplay;
 }
 
 export interface MerchantCatalogCard extends MerchantCardIdentity {
@@ -44,6 +52,8 @@ export interface MerchantCatalogCard extends MerchantCardIdentity {
   card: CardData;
   displayName: string;
   badge?: MerchantGameObjectBadge;
+  /** Paints the hover preview as transfigured; see {@link MerchantDeckCard}. */
+  transfiguration?: CardTransfigurationDisplay;
 }
 
 export interface MerchantContext {
@@ -177,7 +187,6 @@ export interface MerchantOffer {
   family: MerchantOfferFamily;
   title: string;
   summary: string;
-  hiddenUntilCommit: boolean;
   targetKey: string;
   gameObjects: readonly MerchantGameObject[];
   applyPayload?: MerchantApplyPayload;
@@ -204,20 +213,6 @@ export interface MerchantAcceptRequest {
   offerId: string;
   archetypeId: MerchantArchetypeId;
   choice?: MerchantChoice;
-}
-
-/**
- * Request to commit to a `hiddenUntilCommit` offer. Committing:
- * - Validates the encounter signature and that the offer is `hiddenUntilCommit`.
- * - Records the committed offer id in `siteRuntime[site.id]`, forfeiting the
- *   other offer.
- * - Does NOT complete the site; the player must then pick from the revealed
- *   candidate set via `resolveMerchantOffer`.
- */
-export interface MerchantCommitRequest {
-  encounterSignature: string;
-  offerId: string;
-  archetypeId: MerchantArchetypeId;
 }
 
 export type MerchantOfferActionResult =

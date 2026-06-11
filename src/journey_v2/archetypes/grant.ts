@@ -10,7 +10,9 @@ import { MERCHANT_TUNING } from "../tuning";
 import type { CardData } from "../../types/cards";
 import {
   applyTransfigurationToCard,
+  buildTransfigurationDisplay,
   eligibleTransfigurations,
+  type CardTransfigurationDisplay,
 } from "../../transfiguration/transfiguration-logic";
 import type { TransfigurationType } from "../../types/quest";
 import type {
@@ -120,12 +122,35 @@ function bandSizeFor(poolSize: number, bandFraction: number): number {
 }
 
 /**
- * `strong_card` — *Receive one named premium card.*
+ * `strong_card` — *Receive one powerful card chosen with your deck in mind.*
  *
- * Candidates: non-starter pool cards the player does not own. Signal: corpus
- * quality. Band-sample 1 with the tight `strongBandFraction`. Always eligible
+ * Candidates: non-starter pool cards the player does not own. Signal:
+ * `strongBlend.quality * qualityNorm + strongBlend.fit * fitNorm`, so the card
+ * is genuinely strong AND leans toward what the deck is building — a quality-only
+ * signal happily handed an events deck a character bomb, which the fit term now
+ * pulls down. Band-sample 1 with the tight `strongBandFraction`. Always eligible
  * (a fresh deck still has a pool to draw from). Face-up.
  */
+function strongScoreByUuid(
+  context: MerchantContext,
+  pool: readonly MerchantCatalogCard[],
+): Map<string, number> {
+  const corpus = context.merchantCorpus;
+  const qualityRaw = pool.map((card) =>
+    corpus === undefined ? 0 : qualityOf(corpus, card.cardUuid),
+  );
+  const fitByUuid = fitValueByUuid(context, pool);
+  const fitRaw = pool.map((card) => fitByUuid.get(card.cardUuid) ?? 0);
+  const qualityNorm = minMaxNormalize(qualityRaw);
+  const fitNorm = minMaxNormalize(fitRaw);
+  const { quality, fit } = MERCHANT_TUNING.strongBlend;
+  const result = new Map<string, number>();
+  pool.forEach((card, i) => {
+    result.set(card.cardUuid, quality * qualityNorm[i] + fit * fitNorm[i]);
+  });
+  return result;
+}
+
 export const strongCardBuilder: MerchantArchetypeBuilder = {
   archetypeId: "strong_card",
   family: "grant",
@@ -133,11 +158,11 @@ export const strongCardBuilder: MerchantArchetypeBuilder = {
     return grantCandidatePool(context).length > 0;
   },
   build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
-    const corpus = context.merchantCorpus;
     const pool = grantCandidatePool(context);
+    const scoreByUuid = strongScoreByUuid(context, pool);
     const sampled = bandSample(
       pool,
-      (card) => (corpus === undefined ? 0 : qualityOf(corpus, card.cardUuid)),
+      (card) => scoreByUuid.get(card.cardUuid) ?? 0,
       1,
       rng,
       { bandFraction: MERCHANT_TUNING.strongBandFraction },
@@ -149,9 +174,8 @@ export const strongCardBuilder: MerchantArchetypeBuilder = {
       archetypeId: "strong_card",
       family: "grant",
       title: `Receive ${target.displayName}`,
-      summary: "A premium card for your deck.",
+      summary: "A powerful card, chosen with your deck in mind.",
       gameObjects: [catalogGameObject(target)],
-      hiddenUntilCommit: false,
       applyPayload: addCatalogCardPayload(target),
       targetKey: target.cardUuid,
     };
@@ -191,9 +215,8 @@ export const fitCardGrantBuilder: MerchantArchetypeBuilder = {
       archetypeId: "fit_card_grant",
       family: "grant",
       title: `Receive ${target.displayName}`,
-      summary: "A card that fits your deck.",
+      summary: "A card chosen to fit your deck.",
       gameObjects: [catalogGameObject(target)],
-      hiddenUntilCommit: false,
       applyPayload: addCatalogCardPayload(target),
       targetKey: target.cardUuid,
     };
@@ -230,20 +253,19 @@ export const fitCardDraftBuilder: MerchantArchetypeBuilder = {
       catalogChoiceCandidate(
         card,
         addCatalogCardPayload(card),
-        "A card that fits your deck.",
+        "Chosen to fit your deck.",
       ),
     );
 
     return {
       archetypeId: "fit_card_draft",
       family: "grant",
-      title: "Draft a card that fits your deck",
-      summary: "Pick 1 of 4 cards that fit your deck.",
+      title: "Draft a card chosen for your deck",
+      summary: "Four cards picked to fit your deck — choose one to keep.",
       gameObjects: [],
-      hiddenUntilCommit: false,
       choiceRequest: {
         choiceType: "catalogCard",
-        prompt: "Draft 1 of 4",
+        prompt: "Pick 1 of these cards chosen to fit your deck",
         candidates,
       },
       targetKey: sampled.map((card) => card.cardUuid).join(","),
@@ -312,93 +334,20 @@ export const copiesDraftBuilder: MerchantArchetypeBuilder = {
           kind: "composite",
           children: [addCatalogCardPayload(card), addCatalogCardPayload(card)],
         },
-        "Receive 2 copies of this card.",
+        "Chosen for your deck — you receive 2 copies.",
       ),
     );
 
     return {
       archetypeId: "copies_draft",
       family: "grant",
-      title: "Draft a card and receive 2 copies",
-      summary: "Pick 1 of 4 cards; receive 2 copies of your pick.",
+      title: "Draft a card, doubled",
+      summary:
+        "Four strong fits for your deck — keep two copies of your pick.",
       gameObjects: [],
-      hiddenUntilCommit: false,
       choiceRequest: {
         choiceType: "catalogCard",
-        prompt: "Draft 1 of 4 (gain 2 copies)",
-        candidates,
-      },
-      targetKey: sampled.map((card) => card.cardUuid).join(","),
-    };
-  },
-};
-
-/**
- * `premium_draft` — *Draft 1 of 4 exceptionally strong cards.*
- *
- * Candidates: non-starter, unowned pool cards. Signal:
- * `premiumBlend.quality * qualityNorm + premiumBlend.fit * fitNorm` (the fit
- * term is zero on an empty deck). Band-sample 4 with the tight
- * `premiumBandFraction`. Cards are hidden until commit; the offer sells on
- * strength alone. Eligible whenever the band holds >= 4 cards.
- */
-function premiumScoreByUuid(
-  context: MerchantContext,
-  pool: readonly MerchantCatalogCard[],
-): Map<string, number> {
-  const corpus = context.merchantCorpus;
-  const qualityRaw = pool.map((card) =>
-    corpus === undefined ? 0 : qualityOf(corpus, card.cardUuid),
-  );
-  const fitByUuid = fitValueByUuid(context, pool);
-  const fitRaw = pool.map((card) => fitByUuid.get(card.cardUuid) ?? 0);
-  const qualityNorm = minMaxNormalize(qualityRaw);
-  const fitNorm = minMaxNormalize(fitRaw);
-  const { quality, fit } = MERCHANT_TUNING.premiumBlend;
-  const result = new Map<string, number>();
-  pool.forEach((card, i) => {
-    result.set(card.cardUuid, quality * qualityNorm[i] + fit * fitNorm[i]);
-  });
-  return result;
-}
-
-export const premiumDraftBuilder: MerchantArchetypeBuilder = {
-  archetypeId: "premium_draft",
-  family: "grant",
-  eligible(context: MerchantContext): boolean {
-    const pool = grantCandidatePool(context);
-    return bandSizeFor(pool.length, MERCHANT_TUNING.premiumBandFraction) >= 4;
-  },
-  build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
-    const pool = grantCandidatePool(context);
-    const scoreByUuid = premiumScoreByUuid(context, pool);
-    const sampled = bandSample(
-      pool,
-      (card) => scoreByUuid.get(card.cardUuid) ?? 0,
-      4,
-      rng,
-      { bandFraction: MERCHANT_TUNING.premiumBandFraction },
-    );
-    if (sampled.length < 4) return null;
-
-    const candidates = sampled.map((card) =>
-      catalogChoiceCandidate(
-        card,
-        addCatalogCardPayload(card),
-        "An exceptionally strong card.",
-      ),
-    );
-
-    return {
-      archetypeId: "premium_draft",
-      family: "grant",
-      title: "Draft 1 of 4 exceptionally strong cards",
-      summary: "Four of the strongest cards available.",
-      gameObjects: [],
-      hiddenUntilCommit: true,
-      choiceRequest: {
-        choiceType: "catalogCard",
-        prompt: "Draft 1 of 4",
+        prompt: "Pick 1 — you keep two copies",
         candidates,
       },
       targetKey: sampled.map((card) => card.cardUuid).join(","),
@@ -444,9 +393,9 @@ function fitOrQualityByUuid(
  * Sampling: build the category universe, weighted-sample one category with 75%
  * weight on deck-affine categories and 25% on the full universe
  * (`categoryAffineWeight`), then fit-band-sample 4 cards within the category's
- * unowned pool members. The category is visible; the cards are hidden until
- * commit. Eligible when at least one category has >= `categoryMinPoolCards`
- * unowned candidate members.
+ * unowned pool members. A face-up chooser: both the category and the four cards
+ * are shown, so the player drafts the best fit for their deck. Eligible when at
+ * least one category has >= `categoryMinPoolCards` unowned candidate members.
  */
 function categoryCandidatePool(
   context: MerchantContext,
@@ -466,6 +415,11 @@ function offerableCategories(
       categoryCandidatePool(context, category).length >=
       MERCHANT_TUNING.categoryMinPoolCards,
   );
+}
+
+/** "a" / "an" for a category label, so titles read "Draft an Event". */
+function indefiniteArticle(label: string): "a" | "an" {
+  return /^[aeiou]/i.test(label) ? "an" : "a";
 }
 
 export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
@@ -501,20 +455,19 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
       catalogChoiceCandidate(
         card,
         addCatalogCardPayload(card),
-        `From the ${category.label} category.`,
+        `A ${category.label}, chosen for your deck.`,
       ),
     );
 
     return {
       archetypeId: "category_draft_known",
       family: "grant",
-      title: `Draft a ${category.label}`,
-      summary: `Pick 1 of 4 ${category.label} cards.`,
+      title: `Draft ${indefiniteArticle(category.label)} ${category.label}`,
+      summary: `Four ${category.label} cards picked for your deck — choose one.`,
       gameObjects: [],
-      hiddenUntilCommit: true,
       choiceRequest: {
         choiceType: "catalogCard",
-        prompt: `Draft a ${category.label}`,
+        prompt: `Pick 1 of these ${category.label} cards`,
         candidates,
       },
       targetKey: `${category.id}:${sampled.map((card) => card.cardUuid).join(",")}`,
@@ -620,9 +573,8 @@ export const cardBundleBuilder: MerchantArchetypeBuilder = {
       archetypeId: "card_bundle",
       family: "grant",
       title: `Gain ${String(bundle.length)} cards that work together`,
-      summary: `A ${String(bundle.length)}-card bundle for your deck.`,
+      summary: `A ${String(bundle.length)}-card bundle chosen to work together and with your deck.`,
       gameObjects: bundle.map((card) => catalogGameObject(card)),
-      hiddenUntilCommit: false,
       applyPayload: payload,
       targetKey: bundle.map((card) => card.cardUuid).join(","),
     };
@@ -644,6 +596,7 @@ interface TransfiguredChoice {
   card: MerchantCatalogCard;
   transfiguration: TransfigurationType;
   preview: CardData;
+  display: CardTransfigurationDisplay;
 }
 
 function bestTransfiguration(card: CardData): TransfigurationType | null {
@@ -691,20 +644,26 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
     for (const card of sampled) {
       const transfiguration = bestTransfiguration(card.card);
       if (transfiguration === null) continue;
-      const preview = applyTransfigurationToCard(card.card, transfiguration);
-      choices.push({ card, transfiguration, preview });
+      const built = buildTransfigurationDisplay(card.card, transfiguration);
+      choices.push({
+        card,
+        transfiguration,
+        preview: built.card,
+        display: built.display,
+      });
     }
     if (choices.length < 4) return null;
 
     const candidates: MerchantChoiceCandidate[] = choices.map((choice) => ({
       choiceId: choice.card.cardUuid,
       title: `${choice.card.displayName} (${choice.transfiguration})`,
-      summary: "Arrives already transfigured.",
+      summary: `Arrives already ${choice.transfiguration} — chosen for your deck.`,
       gameObjects: [
         {
           ...catalogGameObject(choice.card),
           card: choice.preview,
           badge: { label: choice.transfiguration },
+          transfiguration: choice.display,
         },
       ],
       applyPayload: {
@@ -720,13 +679,13 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
     return {
       archetypeId: "transfigured_draft",
       family: "grant",
-      title: "Draft a pre-transfigured card",
-      summary: "Pick 1 of 4 cards that arrive already transfigured.",
+      title: "Draft a transfigured card",
+      summary:
+        "Four cards picked for your deck, each arriving already transfigured — choose one.",
       gameObjects: [],
-      hiddenUntilCommit: false,
       choiceRequest: {
         choiceType: "catalogCard",
-        prompt: "Draft 1 of 4 (transfigured)",
+        prompt: "Pick 1 of these transfigured cards",
         candidates,
       },
       targetKey: choices

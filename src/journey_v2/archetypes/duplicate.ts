@@ -138,7 +138,6 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
             displayName: target.deckCard.displayName,
           },
         ],
-        hiddenUntilCommit: false,
         applyPayload: duplicatePayload(target.deckCard),
         targetKey: target.entryId,
       };
@@ -169,7 +168,6 @@ export const duplicateBuilder: MerchantArchetypeBuilder = {
       title: "Duplicate a deck card",
       summary: "Pick a card from your deck to duplicate.",
       gameObjects: [],
-      hiddenUntilCommit: false,
       choiceRequest: {
         choiceType: "catalogCard",
         prompt: "Pick 1 of up to 3",

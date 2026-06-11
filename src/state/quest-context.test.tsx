@@ -353,22 +353,19 @@ function merchantAcceptRequestFor(offer: MerchantOffer): MerchantAcceptRequest {
 }
 
 /**
- * Builds an accept request for the first usable non-hidden offer: a
- * direct-payload offer, or a face-up chooser offer using its first candidate.
- * `hiddenUntilCommit` offers are excluded because they require a prior commit.
+ * Builds an accept request for the first usable offer: a direct-payload offer,
+ * or a chooser offer using its first candidate.
  */
 function pickUsableMerchantOffer(encounter: {
   offers: readonly MerchantOffer[];
 }): MerchantAcceptRequest {
   const directOffer = encounter.offers.find(
-    (candidate) =>
-      candidate.applyPayload !== undefined && !candidate.hiddenUntilCommit,
+    (candidate) => candidate.applyPayload !== undefined,
   );
   if (directOffer !== undefined) {
     return merchantAcceptRequestFor(directOffer);
   }
   for (const candidate of encounter.offers) {
-    if (candidate.hiddenUntilCommit) continue;
     const first = candidate.choiceRequest?.candidates[0];
     if (first !== undefined) {
       return {
@@ -377,7 +374,7 @@ function pickUsableMerchantOffer(encounter: {
       };
     }
   }
-  throw new Error("Expected at least one usable non-hidden offer");
+  throw new Error("Expected at least one usable offer");
 }
 
 function merchantDeclineRequestFor(offer: MerchantOffer): MerchantDeclineRequest {
@@ -430,16 +427,13 @@ describe("Dream Merchant v2 mutations", () => {
   it("accepts one generated offer and completes the site", () => {
     const fixture = makeMerchantProviderFixture();
     const encounter = merchantEncounterFor(fixture);
-    // Prefer a direct-payload (non-hidden) offer; fall back to a face-up
-    // chooser offer using its first candidate. `hiddenUntilCommit` offers are
-    // excluded because they require a prior commit step — tested separately in
-    // the commit-then-reveal suite.
+    // Prefer a direct-payload offer; fall back to a chooser offer using its
+    // first candidate.
     const directOffer = encounter.offers.find(
-      (candidate) => candidate.applyPayload !== undefined && !candidate.hiddenUntilCommit,
+      (candidate) => candidate.applyPayload !== undefined,
     );
     const offerWithFirstCandidate = (() => {
       for (const candidate of encounter.offers) {
-        if (candidate.hiddenUntilCommit) continue;
         const first = candidate.choiceRequest?.candidates[0];
         if (first !== undefined) return { offer: candidate, choice: first };
       }
@@ -604,35 +598,6 @@ describe("Dream Merchant v2 mutations", () => {
     });
 
     expect(quest.state.visitedSites).toContain(fixture.site.id);
-  });
-
-  it("clears a prior committed offer when rerolling", () => {
-    const fixture = makeMerchantProviderFixture();
-    const quest = mountQuestContext({
-      cardDatabase: fixture.questContent.cardDatabase,
-      questContent: fixture.questContent,
-      initialState: {
-        ...fixture.state,
-        siteRuntime: {
-          [fixture.site.id]: {
-            kind: "dreamJourney",
-            completed: false,
-            merchantCommittedOfferId: "A",
-            rerollNonce: 2,
-          },
-        },
-      },
-    });
-
-    act(() => {
-      quest.mutations.rerollDreamJourney?.(fixture.site.id);
-    });
-
-    expect(quest.state.siteRuntime[fixture.site.id]).toEqual({
-      kind: "dreamJourney",
-      completed: false,
-      rerollNonce: 3,
-    });
   });
 });
 

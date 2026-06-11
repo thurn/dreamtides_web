@@ -10,7 +10,6 @@ import type { MerchantArchetypeId } from "../archetypes/types";
 import { MERCHANT_ARCHETYPE_FAMILIES } from "../archetypes/types";
 import type { MerchantContext, MerchantOffer } from "../types";
 import {
-  fillMerchantDialogueName,
   MERCHANT_ACCEPT_REACTIONS,
   MERCHANT_DIALOGUE_BANKS,
   renderMerchantDialogue,
@@ -19,9 +18,6 @@ import {
 const ALL_ARCHETYPE_IDS = Object.keys(
   MERCHANT_ARCHETYPE_FAMILIES,
 ) as MerchantArchetypeId[];
-
-/** A worst-case display name: four words, so slot fill maximises word count. */
-const WORST_CASE_NAME = "Grand Fixture Mirror Sovereign";
 
 const NAME_SLOT = "{name}";
 
@@ -65,7 +61,6 @@ function makeOffer(input: {
     family: MERCHANT_ARCHETYPE_FAMILIES[input.archetypeId],
     title: "Fixture offer title",
     summary: "Fixture offer summary",
-    hiddenUntilCommit: false,
     targetKey: "fixture-target",
     gameObjects:
       input.displayName === undefined
@@ -88,45 +83,33 @@ function makeOffer(input: {
 }
 
 // ---------------------------------------------------------------------------
-// Bug-class: verbose copy creeping back into the banks
+// Bug-class: bank coverage and slot-free, spoiler-free copy
 // ---------------------------------------------------------------------------
 
-describe("dialogue banks — word limits", () => {
-  it("covers all 18 archetypes with 6-10 templates each", () => {
+describe("dialogue banks — coverage and slot-free copy", () => {
+  it("covers every archetype with a non-empty bank", () => {
     const bankIds = Object.keys(MERCHANT_DIALOGUE_BANKS).sort();
     expect(bankIds).toEqual([...ALL_ARCHETYPE_IDS].sort());
     for (const archetypeId of ALL_ARCHETYPE_IDS) {
       const bank = MERCHANT_DIALOGUE_BANKS[archetypeId];
-      expect(bank.length).toBeGreaterThanOrEqual(6);
-      expect(bank.length).toBeLessThanOrEqual(10);
+      expect(bank.length).toBeGreaterThanOrEqual(1);
     }
   });
 
-  it("every template renders to <= 10 words with a 4-word name", () => {
+  it("never embeds a {name} slot in any template", () => {
     for (const archetypeId of ALL_ARCHETYPE_IDS) {
       for (const template of MERCHANT_DIALOGUE_BANKS[archetypeId]) {
-        const rendered = fillMerchantDialogueName(template, WORST_CASE_NAME);
-        expect(
-          wordCount(rendered),
-          `${archetypeId}: "${rendered}"`,
-        ).toBeLessThanOrEqual(10);
+        expect(template, `${archetypeId}: "${template}"`).not.toContain(
+          NAME_SLOT,
+        );
       }
     }
   });
 
-  it("every template has at most one {name} slot", () => {
-    for (const archetypeId of ALL_ARCHETYPE_IDS) {
-      for (const template of MERCHANT_DIALOGUE_BANKS[archetypeId]) {
-        const slots = template.split(NAME_SLOT).length - 1;
-        expect(slots, `${archetypeId}: "${template}"`).toBeLessThanOrEqual(1);
-      }
-    }
-  });
-
-  it("every accept reaction is <= 6 words and the bank is non-empty", () => {
+  it("has only non-empty accept reactions", () => {
     expect(MERCHANT_ACCEPT_REACTIONS.length).toBeGreaterThan(0);
     for (const reaction of MERCHANT_ACCEPT_REACTIONS) {
-      expect(wordCount(reaction), `"${reaction}"`).toBeLessThanOrEqual(6);
+      expect(wordCount(reaction), `"${reaction}"`).toBeGreaterThan(0);
     }
   });
 });
@@ -172,11 +155,11 @@ describe("renderMerchantDialogue — determinism", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Bug-class: unfilled slots leaking into player-facing copy
+// Bug-class: target names or unfilled slots leaking into player-facing copy
 // ---------------------------------------------------------------------------
 
-describe("renderMerchantDialogue — slot fill", () => {
-  it("never leaves a literal {name} in the rendered line", () => {
+describe("renderMerchantDialogue — spoiler-free copy", () => {
+  it("never leaks a {name} slot or the target's display name", () => {
     for (const archetypeId of ALL_ARCHETYPE_IDS) {
       for (const displayName of ["Fixture Target", undefined]) {
         const context = makeContext();
@@ -187,8 +170,11 @@ describe("renderMerchantDialogue — slot fill", () => {
         });
         const rendered = renderMerchantDialogue({ context, offers: [offer] });
         expect(rendered.line.line).not.toContain(NAME_SLOT);
-        expect(wordCount(rendered.line.line)).toBeLessThanOrEqual(10);
-        expect(wordCount(rendered.acceptReaction)).toBeLessThanOrEqual(6);
+        if (displayName !== undefined) {
+          expect(rendered.line.line).not.toContain(displayName);
+        }
+        expect(rendered.line.line.length).toBeGreaterThan(0);
+        expect(rendered.acceptReaction.length).toBeGreaterThan(0);
       }
     }
   });

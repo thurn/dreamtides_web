@@ -24,188 +24,150 @@ export function fillMerchantDialogueName(template: string, name: string): string
 }
 
 /**
- * Per-archetype line banks in the merchant's warm-broker voice. Each template
- * hints at the motivation behind the offer, carries at most one `{name}` slot
- * (the target's display name), and renders to at most 10 words even with a
- * 4-word name filled in. Archetypes without a public named target use
- * slot-free templates.
+ * Per-archetype line banks in the merchant's cryptic, poetic voice. He never
+ * names a card, a creature, or a rule — he gestures at the *shape* of what he
+ * is offering in dream-imagery and lets the player uncover the rest. Every
+ * line is slot-free (no `{name}`), so nothing on the table is ever spoiled by
+ * the words he chooses.
  */
 export const MERCHANT_DIALOGUE_BANKS: Readonly<
   Record<MerchantArchetypeId, readonly string[]>
 > = {
   fit_card_grant: [
-    "{name} belongs with what you've built.",
-    "I kept {name} for decks like yours.",
-    "{name} slots right into your plans.",
-    "Your deck left room for {name}.",
-    "{name} fits better than you know.",
-    "Trust me, {name} completes the picture.",
-    "{name} is exactly the missing piece.",
+    "Some things drift a long way only to find their owner.",
+    "I kept this shaped like the hollow you carry.",
+    "It has been waiting to belong to someone. To you.",
+    "A stranger that will feel like an old friend.",
+    "This was always going to end up in your hands.",
   ],
   fit_card_draft: [
-    "I pulled a few that suit your style.",
-    "Pick one; each was chosen for you.",
-    "These all want to join your deck.",
-    "A small shelf, stocked just for you.",
-    "Every one of these fits your build.",
-    "Choose freely; I matched them to you.",
+    "Several roads, and each one bends quietly toward you.",
+    "Kindred things, gathered. Take whichever leans your way.",
+    "I sifted the tide and kept only what suits you.",
+    "All of these already half-belong to you.",
+    "Choose freely — none of them are strangers to your path.",
   ],
   copies_draft: [
-    "Why settle for one when two travel together?",
-    "Twins. Whatever you pick comes paired.",
-    "Two copies make a habit, not luck.",
-    "Pick once, and I'll double the order.",
-    "Consistency is kindness. Take the pair.",
-    "One choice, two arrivals. Generous, I know.",
+    "Whatever you cherish, the dream will gladly echo.",
+    "Hold a thing close enough and it learns to return.",
+    "One becomes two when you want it badly enough.",
+    "Take it once; the dream remembers it twice.",
+    "What repeats becomes certain. Choose what you trust.",
   ],
   strong_card: [
-    "{name} is the finest thing I carry.",
-    "Strength like {name} rarely lingers here.",
-    "{name} could carry your whole run.",
-    "I don't shelve {name} for just anyone.",
-    "{name} earns its keep, believe me.",
-    "Raw power, fairly offered: {name}.",
-    "{name} wins games. I've watched it.",
-  ],
-  premium_draft: [
-    "Behind the curtain: four of my best.",
-    "My top shelf, sight unseen. Trust me.",
-    "Four heavyweights wait under this cloth.",
-    "The good crates stay closed until you commit.",
-    "Unseen, yes, but none of them disappoint.",
-    "I only hide what's worth hiding.",
+    "Something fierce is sleeping here, and it stirs for you.",
+    "Not gentle, this one. But it was made to win.",
+    "Raw weather in a small shape. Carry it carefully.",
+    "I keep the dangerous ones for travelers who can hold them.",
+    "Power, plainly. The dream doesn't dress it up.",
   ],
   category_draft_known: [
-    "I stocked exactly the kind you're hunting.",
-    "The crate is labeled; the contents surprise.",
-    "You know the shape. Trust the contents.",
-    "Right category, hidden faces. A fair gamble.",
-    "The label tells you plenty already.",
-    "What's inside matches the sign outside.",
+    "A drawer of kindred things, all leaning the same way.",
+    "Where you are going, your kin have gone before.",
+    "I gathered a little family for you. Pick one to keep.",
+    "Same blood, different faces. Choose the one that calls.",
+    "These belong to one another, and soon to you.",
   ],
   card_bundle: [
-    "These were packed together for a reason.",
-    "A matched set; they pull one direction.",
-    "Kept together because they fight together.",
-    "The bundle hums when you keep it whole.",
-    "Separately fine. Together, something better.",
-    "I don't split sets that sing.",
+    "These were never meant to travel alone.",
+    "Apart they are quiet; together they sing.",
+    "I bound them because they finish each other's sentences.",
+    "A knot of things that only make sense as one.",
+    "Keep them whole and you'll hear them hum.",
   ],
   transfigured_draft: [
-    "Already improved, before you even arrived.",
-    "I do the polishing before the sale.",
-    "These come pre-sharpened. My own work.",
-    "My workshop touched every one of these.",
-    "Each one's been through my hands.",
-    "Finished pieces, not raw material. Look.",
+    "I finish my work before I ever offer it.",
+    "These came to me dull and leave me gleaming.",
+    "Already sharpened, every one, by my own hand.",
+    "No raw material here — only what I've already perfected.",
+    "I polished these in the long dark. Look how they shine.",
   ],
   transfigure: [
-    "{name} could be so much more.",
-    "Let me sharpen {name} for you.",
-    "{name} has room to grow yet.",
-    "I see unfinished work in {name}.",
-    "Give me {name}; you'll get something better.",
-    "{name} deserves a finer edge.",
-    "There's a better {name} waiting inside.",
+    "Even a dreaming thing can be honed.",
+    "There is a finer version of this, waiting inside.",
+    "Give me a moment with it, and it will thank you.",
+    "Unfinished. But I see what it longs to become.",
+    "A little heat, a little patience, and it changes.",
   ],
   starter_transfigure: [
-    "Your old starters still have potential.",
-    "Let me refit the cards you started with.",
-    "Starters age well with a little work.",
-    "The humble ones reward a careful hand.",
-    "I improve beginnings. It's a specialty.",
-    "Even first cards deserve a second draft.",
+    "The first things you carried still hunger to grow.",
+    "Humble beginnings reward a careful hand.",
+    "What you started with can yet become more.",
+    "Old companions, given a second and brighter draft.",
+    "Even the plainest seed remembers how to bloom.",
   ],
   keyword_mod: [
-    "{name} just needs a new trick.",
-    "A word or two changes {name} entirely.",
-    "{name} could learn something useful.",
-    "Let me teach {name} new habits.",
-    "{name} is one talent short. Fixable.",
-    "Small change, large difference for {name}.",
+    "A small new habit can change a whole life.",
+    "One trick it never knew it wanted to learn.",
+    "Teach an old thing a new word and watch it wake.",
+    "Barely a change. It will feel like a different soul.",
+    "A single new gift, and everything after it shifts.",
   ],
   tribal_change: [
-    "{name} was born into the wrong family.",
-    "{name} would thrive among different kin.",
-    "New kin would suit {name} nicely.",
-    "{name} belongs to another bloodline, truly.",
-    "Let {name} run with a new pack.",
-    "{name} only needs a change of company.",
+    "Blood is only a story. It can be retold.",
+    "Born to one kin, but it would run better with another.",
+    "Let me change the company it keeps.",
+    "A new family suits it better than the old one did.",
+    "It only ever wanted to belong somewhere else.",
   ],
   purge: [
-    "{name} is dead weight. Let go.",
-    "Your deck would breathe without {name}.",
-    "{name} costs you more than it gives.",
-    "Some cards overstay. {name} has.",
-    "Travel lighter; leave {name} with me.",
-    "I take castoffs. {name} qualifies.",
+    "Some weight is only weight. Set it down with me.",
+    "Travel lighter. Leave the dead branch behind.",
+    "Not everything you carry is still worth carrying.",
+    "Let me take the stone from your shoe.",
+    "Release it, and feel how the road opens.",
   ],
   purge_replace: [
-    "Trade {name} for something that pulls weight.",
-    "{name} goes; something better takes its seat.",
-    "Out with {name}, in with promise.",
-    "Retire {name}. I have its replacement.",
-    "{name} leaves; a better card arrives.",
-    "Swap {name} out. You won't miss it.",
+    "Let the withered branch fall; another bud waits.",
+    "Trade the burden for something that pulls its weight.",
+    "Out with the silence, in with a clearer note.",
+    "Give me the stone; I'll hand you a seed.",
+    "One leaves so a better thing can take its seat.",
   ],
   duplicate: [
-    "One {name} is good. Two is better.",
-    "{name} deserves a twin, don't you think?",
-    "Imagine drawing {name} twice as often.",
-    "Your best card, echoed. Pick which.",
-    "I make perfect copies. Choose the original.",
-    "Doubling what works is honest strategy.",
-    "A mirror for whichever card you cherish.",
+    "The mirror is fond of your finest reflection.",
+    "Whatever you love most, the dream will love twice.",
+    "Some things are worth seeing again, and again.",
+    "Point to your treasure and I will echo it.",
+    "Doubling what already works is the oldest magic.",
   ],
   dreamsign: [
-    "{name} would watch over your whole journey.",
-    "A standing blessing: {name}.",
-    "{name} keeps working while you sleep.",
-    "Carry {name} and the road softens.",
-    "{name} pays out every single day.",
-    "Signs like {name} choose their bearers.",
+    "A quiet star to walk beneath, all the way home.",
+    "A blessing that keeps working while you sleep.",
+    "Something to watch over the long road ahead.",
+    "Carry this and the nights grow a little softer.",
+    "A faithful light. It asks nothing and gives daily.",
   ],
   dreamsign_draft: [
-    "Several blessings, and you keep just one.",
-    "Choose the sign that suits your road.",
-    "Each sign hums differently. Listen close.",
-    "A blessing fits best when freely chosen.",
-    "Take whichever sign calls to you.",
-    "Pick your patron; they're all listening.",
+    "Several stars lean close. Choose one to follow.",
+    "These lights all hum — listen for the one that's yours.",
+    "Pick the patron whose silence sounds like home.",
+    "A blessing fits best when it is freely chosen.",
+    "Many guardians offered; you may keep a single one.",
   ],
   add_site: [
-    "I can put a new door here.",
-    "This dreamscape has room for one more.",
-    "Maps can be amended, for a friend.",
-    "Another stop on your road, freshly built.",
-    "I deal in places, too. Interested?",
-    "Let me widen your horizon a little.",
+    "I can open a door where there was only wall.",
+    "Your map has room for one more strange place.",
+    "Let me fold a new stop into the road ahead.",
+    "Somewhere worth visiting, drawn fresh just for you.",
+    "The dreamscape will widen, if you let it.",
   ],
 };
 
-/** Short post-accept reactions, each at most 6 words. */
+/** Short post-accept reactions, each a brief poetic murmur. */
 export const MERCHANT_ACCEPT_REACTIONS: readonly string[] = [
-  "Done. A clean trade.",
-  "You won't regret it.",
-  "Wise. Carry it well.",
-  "A pleasure doing business.",
-  "It suits you already.",
-  "Good eye. Safe travels.",
-  "The dream approves, I think.",
+  "It already looks at home with you.",
+  "The dream settles. Go well.",
+  "A fair bargain, and a quiet one.",
+  "Carry it gently. It will carry you.",
+  "There. The road feels lighter now.",
+  "The dark approves, I think.",
+  "Some trades the morning never undoes.",
 ];
 
 function pickIndex(rng: MerchantRng, length: number): number {
   if (length <= 0) return 0;
   return Math.min(Math.floor(rng() * length), length - 1);
-}
-
-/**
- * The display name of the offer's public target, when one exists. Hidden
- * offers and choosers either carry no game objects or use slot-free banks,
- * so the name never leaks a concealed candidate.
- */
-function targetNameFor(offer: MerchantOffer): string | undefined {
-  return offer.gameObjects[0]?.displayName;
 }
 
 export function renderMerchantDialogue(
@@ -231,19 +193,17 @@ export function renderMerchantDialogue(
     };
   }
 
+  // The merchant speaks only in dream-imagery: a line is chosen by archetype,
+  // never filled with a card or target name, so the words never spoil what is
+  // actually on the table.
   const bank = MERCHANT_DIALOGUE_BANKS[offer.archetypeId];
-  const targetName = targetNameFor(offer);
-  const slotFree = bank.filter((template) => !template.includes(NAME_SLOT));
-  const pool = targetName === undefined && slotFree.length > 0 ? slotFree : bank;
-
   const templateRng = merchantRng(
     ...seedParts,
     "dialogue",
     "template",
     offer.offerId,
   );
-  const template = pool[pickIndex(templateRng, pool.length)];
-  const line = fillMerchantDialogueName(template, targetName ?? "it");
+  const line = bank[pickIndex(templateRng, bank.length)];
 
   return {
     line: { line, offerId: offer.offerId },

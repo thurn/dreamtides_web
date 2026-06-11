@@ -199,7 +199,6 @@ export const transfigureBuilder: MerchantArchetypeBuilder = {
       title: `${target.deckCard.displayName}: ${target.transfiguration}`,
       summary: "Permanently improve a deck card.",
       gameObjects: [transfigurePreviewObject(target)],
-      hiddenUntilCommit: false,
       applyPayload: transfigurePayload(target),
       targetKey: `${target.entryId}:${target.transfiguration}`,
     };
@@ -289,7 +288,6 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
       title: `Improve ${String(children.length)} starter card${children.length === 1 ? "" : "s"}`,
       summary: "Polish your starter cards.",
       gameObjects,
-      hiddenUntilCommit: false,
       applyPayload: payload,
       targetKey: gameObjects
         .map((obj) =>
@@ -435,7 +433,6 @@ export const keywordModBuilder: MerchantArchetypeBuilder = {
           previewCard: target.preview,
         },
       ],
-      hiddenUntilCommit: false,
       applyPayload: target.payload,
       targetKey: `${target.entryId}:${target.variant}`,
     };
@@ -565,7 +562,6 @@ export const tribalChangeBuilder: MerchantArchetypeBuilder = {
           previewCard: preview,
         },
       ],
-      hiddenUntilCommit: false,
       applyPayload: {
         kind: "change_deck_entry_type",
         entryId: target.entryId,

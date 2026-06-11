@@ -20,7 +20,6 @@ export const MERCHANT_PLACEABLE_SITE_TYPES: readonly SiteType[] = [
   "DreamsignDraft",
   "Duplication",
   "Reward",
-  "Cleanse",
 ] as const;
 
 /**
@@ -36,7 +35,6 @@ const SITE_TYPE_LABELS: Record<string, string> = {
   DreamsignDraft: "Dreamsign Draft",
   Duplication: "Duplication Site",
   Reward: "Reward Site",
-  Cleanse: "Cleanse Site",
 };
 
 function siteTypeLabel(siteType: SiteType): string {
@@ -78,7 +76,6 @@ export const addSiteBuilder: MerchantArchetypeBuilder = {
       title: `Add a ${label} to this dreamscape`,
       summary: `A ${label} will appear on the current dreamscape map.`,
       gameObjects: [],
-      hiddenUntilCommit: false,
       applyPayload: {
         kind: "add_site",
         siteType,

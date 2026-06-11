@@ -166,23 +166,3 @@ describe("dreamsign_draft — eligibility", () => {
     expect(dreamsignDraftBuilder.eligible(context)).toBe(false);
   });
 });
-
-// ---------------------------------------------------------------------------
-// Bug-class: face-up chooser (hiddenUntilCommit must be false)
-// ---------------------------------------------------------------------------
-
-describe("dreamsign_draft — face-up chooser", () => {
-  it("has hiddenUntilCommit === false", () => {
-    const templates = [
-      makeMerchantTestDreamsignTemplate({ id: "ds-p" }),
-      makeMerchantTestDreamsignTemplate({ id: "ds-q" }),
-      makeMerchantTestDreamsignTemplate({ id: "ds-r" }),
-    ];
-    const context = makeContext({ dreamsignTemplates: templates });
-    const rng = merchantRng("dreamsign-draft-hidden-test", "0");
-    const offer = dreamsignDraftBuilder.build(context, rng);
-    expect(offer).not.toBeNull();
-    if (offer === null) return;
-    expect(offer.hiddenUntilCommit).toBe(false);
-  });
-});

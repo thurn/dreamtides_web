@@ -22,7 +22,6 @@ import {
   copiesDraftBuilder,
   fitCardDraftBuilder,
   fitCardGrantBuilder,
-  premiumDraftBuilder,
   transfiguredDraftBuilder,
 } from "./grant";
 
@@ -264,49 +263,6 @@ describe("grant family — copies_draft", () => {
   });
 });
 
-describe("grant family — premium_draft", () => {
-  it("is hidden until commit and offers 4 distinct top-quality candidates", () => {
-    const pool = makePoolCards(20);
-    const corpusCards: Record<string, { quality: number; multiplicity?: number }> = {};
-    pool.forEach((card, i) => {
-      // Monotonic quality by index.
-      corpusCards[card.id] = { quality: i / pool.length };
-    });
-    const context = makeContext({
-      poolCards: pool,
-      deckEntries: [],
-      corpusCards,
-      fitModel: makeRankedFitModel(pool),
-    });
-    expect(premiumDraftBuilder.eligible(context)).toBe(true);
-
-    // Compute the in-band candidates: top premiumBandFraction by quality blend.
-    for (let seed = 0; seed < 20; seed += 1) {
-      const draft = premiumDraftBuilder.build(
-        context,
-        merchantRng("seed", String(seed)),
-      );
-      expect(draft).not.toBeNull();
-      expect(draft?.hiddenUntilCommit).toBe(true);
-      const candidates = draft?.choiceRequest?.candidates ?? [];
-      expect(candidates.length).toBe(4);
-      expect(new Set(candidates.map((c) => c.cardUuid)).size).toBe(4);
-      // Band floor: every offered card's quality is in the top fraction.
-      const sorted = [...pool].sort(
-        (a, b) => (corpusCards[b.id].quality) - (corpusCards[a.id].quality),
-      );
-      const bandSize = Math.max(
-        Math.ceil(MERCHANT_TUNING.premiumBandFraction * pool.length),
-        Math.min(MERCHANT_TUNING.bandMinimum, pool.length),
-      );
-      const inBand = new Set(sorted.slice(0, bandSize).map((c) => c.id));
-      for (const c of candidates) {
-        expect(inBand.has(c.cardUuid ?? "")).toBe(true);
-      }
-    }
-  });
-});
-
 describe("grant family — category_draft_known", () => {
   it("never offers a card outside the sampled category over 30 seeds", () => {
     const threshold = MERCHANT_TUNING.subtypeMinPoolCards;
@@ -353,7 +309,6 @@ describe("grant family — category_draft_known", () => {
         merchantRng("cat", String(seed)),
       );
       expect(draft).not.toBeNull();
-      expect(draft?.hiddenUntilCommit).toBe(true);
       const candidates = draft?.choiceRequest?.candidates ?? [];
       expect(candidates.length).toBe(4);
       const targetKey = draft?.targetKey ?? "";

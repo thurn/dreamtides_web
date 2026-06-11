@@ -131,7 +131,6 @@ function offerIdentity(offer: MerchantOffer): unknown {
     family: offer.family,
     title: offer.title,
     summary: offer.summary,
-    hiddenUntilCommit: offer.hiddenUntilCommit,
     targetKey: offer.targetKey,
   };
 }
@@ -176,7 +175,6 @@ function draftToOffer(
     family: draft.family,
     title: draft.title,
     summary: draft.summary,
-    hiddenUntilCommit: draft.hiddenUntilCommit,
     targetKey: draft.targetKey,
     gameObjects: draft.gameObjects,
     ...(draft.applyPayload === undefined

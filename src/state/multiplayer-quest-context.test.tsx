@@ -2602,18 +2602,16 @@ describe("MultiplayerQuestProvider", () => {
     const fixture = makeMerchantProviderFixture();
     const encounter = merchantEncounterFor(fixture);
 
-    // Prefer a direct-payload (non-hidden) offer; fall back to a face-up
-    // chooser with its first candidate. `hiddenUntilCommit` offers are excluded
-    // because they require a prior commit step — tested in the commit suite.
+    // Prefer a direct-payload offer; fall back to a chooser with its first
+    // candidate.
     const directOffer = encounter.offers.find(
-      (candidate) => candidate.applyPayload !== undefined && !candidate.hiddenUntilCommit,
+      (candidate) => candidate.applyPayload !== undefined,
     );
     type OfferWithChoice =
       | { offer: MerchantOffer; choiceId: string; payload: MerchantApplyPayload }
       | null;
     const chooserOffer: OfferWithChoice = (() => {
       for (const candidate of encounter.offers) {
-        if (candidate.hiddenUntilCommit) continue;
         const first = candidate.choiceRequest?.candidates[0];
         if (first !== undefined) {
           return { offer: candidate, choiceId: first.choiceId, payload: first.applyPayload };

@@ -6,7 +6,6 @@ import {
   copiesDraftBuilder,
   fitCardDraftBuilder,
   fitCardGrantBuilder,
-  premiumDraftBuilder,
   strongCardBuilder,
   transfiguredDraftBuilder,
 } from "./grant";
@@ -34,7 +33,6 @@ export const MERCHANT_ARCHETYPE_BUILDERS: readonly MerchantArchetypeBuilder[] = 
   fitCardGrantBuilder,
   fitCardDraftBuilder,
   copiesDraftBuilder,
-  premiumDraftBuilder,
   categoryDraftKnownBuilder,
   cardBundleBuilder,
   transfiguredDraftBuilder,

@@ -1,8 +1,21 @@
 import type { DreamsignProfile } from "../../data/dreamsign-profiles";
 import type { CardData } from "../../types/cards";
 
-/** Minimum number of deck cards that must exhibit a feature to satisfy it. */
-const FEATURE_THRESHOLD = 3;
+/**
+ * Deck cards exhibiting a feature for it to count as *fully* covered. Coverage
+ * grades linearly up to this count (one matching card already gives partial
+ * credit), so a dreamsign keyed to a feature the deck genuinely supports rises
+ * and one keyed to a feature the deck lacks falls to zero coverage.
+ */
+const FEATURE_FULL_COVERAGE = 3;
+
+/**
+ * Baseline coverage for a featureless (or unprofiled) dreamsign — one that
+ * suits any deck equally. Pitched below a specific dreamsign whose features the
+ * deck covers, and above one whose features the deck does not, so a generic
+ * blessing is a reasonable fallback but never beats a genuinely suited sign.
+ */
+const FEATURELESS_COVERAGE = 0.4;
 
 /** Quality weight: 1.2 / 1.0 / 0.8 for quality tiers 1 / 2 / 3. */
 function qualityWeight(quality: 1 | 2 | 3): number {
@@ -48,16 +61,33 @@ function countSatisfying(deckCards: readonly CardData[], predicate: (c: CardData
 }
 
 /**
+ * Coverage of a single feature: the fraction of the way to
+ * {@link FEATURE_FULL_COVERAGE} matching deck cards, in [0, 1]. A feature the
+ * deck has no cards for scores 0; three or more matching cards scores 1.
+ */
+function featureCoverage(
+  deckCards: readonly CardData[],
+  predicate: (c: CardData) => boolean,
+): number {
+  const count = countSatisfying(deckCards, predicate);
+  return Math.min(1, count / FEATURE_FULL_COVERAGE);
+}
+
+/**
  * Computes the match score for a dreamsign profile against the player's deck.
  *
- * Each profile feature (subtype, cardType, costBand, keyword) is satisfied when
- * >= 3 deck cards exhibit it. The score is:
- *   `(0.5 + 0.5 * satisfiedFraction) * qualityWeight`
+ * Each profile feature (subtype, cardType, costBand, keyword) contributes a
+ * graded coverage in [0, 1] — zero when the deck holds no matching card, full
+ * at {@link FEATURE_FULL_COVERAGE} matching cards. The profile's coverage is the
+ * mean across its features, so a dreamsign whose features the deck does not
+ * support sinks toward zero (it can never be sold as "suited to your deck"),
+ * while one the deck genuinely supports rises. The score is:
+ *   `meanCoverage * qualityWeight`
  *
- * A profile with no features (or an undefined profile) scores as featureless
- * quality 2: `0.5 * 1.0 = 0.5`.
+ * A profile with no features (or an undefined profile) is featureless: it suits
+ * any deck equally and scores `FEATURELESS_COVERAGE * qualityWeight`.
  *
- * @param profile The dreamsign profile, or undefined for featureless quality-2 behavior.
+ * @param profile The dreamsign profile, or undefined for featureless behavior.
  * @param deckCards The player's current deck.
  */
 export function dreamsignMatchScore(
@@ -66,7 +96,7 @@ export function dreamsignMatchScore(
 ): number {
   // Undefined profile: featureless quality 2
   if (profile === undefined) {
-    return 0.5 * qualityWeight(2);
+    return FEATURELESS_COVERAGE * qualityWeight(2);
   }
 
   const weight = qualityWeight(profile.quality);
@@ -92,17 +122,14 @@ export function dreamsignMatchScore(
 
   // No features: featureless score
   if (features.length === 0) {
-    return 0.5 * weight;
+    return FEATURELESS_COVERAGE * weight;
   }
 
-  // Count satisfied features
-  let satisfied = 0;
+  // Mean graded coverage across the profile's features.
+  let coverageSum = 0;
   for (const predicate of features) {
-    if (countSatisfying(deckCards, predicate) >= FEATURE_THRESHOLD) {
-      satisfied += 1;
-    }
+    coverageSum += featureCoverage(deckCards, predicate);
   }
-
-  const satisfiedFraction = satisfied / features.length;
-  return (0.5 + 0.5 * satisfiedFraction) * weight;
+  const meanCoverage = coverageSum / features.length;
+  return meanCoverage * weight;
 }

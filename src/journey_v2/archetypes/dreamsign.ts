@@ -19,6 +19,27 @@ function dreamsignGameObject(template: DreamsignTemplate): MerchantGameObject {
   };
 }
 
+/**
+ * The dreamsign pool to actually sample "suited to your deck" offers from.
+ *
+ * A dreamsign whose profile features the deck has no card for scores 0 (see
+ * {@link dreamsignMatchScore}); offering it as "suited" is exactly the bug the
+ * graded scoring exists to prevent. So when any candidate carries positive
+ * suitability, the pool is restricted to those — an off-archetype sign can
+ * never surface. Only when nothing is suited (a cold-start deck with no signal)
+ * does the full candidate list stand in.
+ */
+function suitedDreamsignPool(
+  context: MerchantContext,
+  deck: readonly CardData[],
+): readonly DreamsignTemplate[] {
+  const profiles = context.dreamsignProfiles;
+  const suited = context.candidateDreamsigns.filter(
+    (template) => dreamsignMatchScore(profiles?.get(template.id), deck) > 0,
+  );
+  return suited.length > 0 ? suited : context.candidateDreamsigns;
+}
+
 /** Minimum count for the `dreamsign_draft` chooser. */
 const DREAMSIGN_DRAFT_MIN_COUNT = 2;
 /** Maximum count for the `dreamsign_draft` chooser. */
@@ -57,13 +78,14 @@ export const dreamsignBuilder: MerchantArchetypeBuilder = {
   build(context: MerchantContext, rng: MerchantRng): MerchantOfferDraft | null {
     const deck = deckCardData(context);
     const profiles = context.dreamsignProfiles;
+    // A single "suited" offer should be one of the best-matched signs, not a
+    // uniform draw from a loose band — sample a tight band over the suited pool.
     const sampled = bandSample(
-      context.candidateDreamsigns,
-      (template) =>
-        dreamsignMatchScore(profiles?.get(template.id), deck),
+      suitedDreamsignPool(context, deck),
+      (template) => dreamsignMatchScore(profiles?.get(template.id), deck),
       1,
       rng,
-      { bandFraction: MERCHANT_TUNING.dreamsignBandFraction },
+      { bandFraction: MERCHANT_TUNING.dreamsignBandFraction, bandMinimum: 2 },
     );
     const target = sampled[0];
     if (target === undefined) return null;
@@ -74,7 +96,6 @@ export const dreamsignBuilder: MerchantArchetypeBuilder = {
       title: `Gain the ${target.name} dreamsign`,
       summary: "A dreamsign suited to your deck.",
       gameObjects: [dreamsignGameObject(target)],
-      hiddenUntilCommit: false,
       applyPayload: {
         kind: "add_dreamsign",
         dreamsignId: target.id,
@@ -102,9 +123,11 @@ export const dreamsignDraftBuilder: MerchantArchetypeBuilder = {
     const deck = deckCardData(context);
     const profiles = context.dreamsignProfiles;
 
-    // Step 1: determine the band of candidates (same signal as `dreamsign`)
-    // We need the band size to seeded-pick the count, so compute the band manually.
-    const candidates = context.candidateDreamsigns;
+    // Step 1: determine the band of candidates (same signal as `dreamsign`),
+    // restricted to deck-suited signs so the chooser never spreads onto signs
+    // the deck has no use for. We need the band size to seeded-pick the count,
+    // so compute the band manually.
+    const candidates = suitedDreamsignPool(context, deck);
     if (candidates.length < DREAMSIGN_DRAFT_MIN_COUNT) return null;
 
     // Compute band size using the same formula as bandSample
@@ -163,7 +186,6 @@ export const dreamsignDraftBuilder: MerchantArchetypeBuilder = {
       title: `Pick a dreamsign (1 of ${String(sampled.length)})`,
       summary: "Choose a dreamsign suited to your deck.",
       gameObjects: sampled.map(dreamsignGameObject),
-      hiddenUntilCommit: false,
       choiceRequest: {
         choiceType: "dreamsign",
         prompt: "Choose a dreamsign",

@@ -9,7 +9,6 @@ import {
 } from "../../state/quest-state-actions";
 import type {
   DeckEntry,
-  DreamJourneySiteRuntime,
   Dreamsign,
   QuestState,
   SiteState,
@@ -19,7 +18,6 @@ import type {
   MerchantAcceptRequest,
   MerchantApplyPayload,
   MerchantChoice,
-  MerchantCommitRequest,
   MerchantDeclineRequest,
   MerchantOffer,
 } from "../types";
@@ -33,11 +31,7 @@ export type MerchantResolveFailureReason =
   | "missing_choice"
   | "invalid_choice"
   | "target_unavailable"
-  | "site_unavailable"
-  | "commit_required"
-  | "offer_forfeited"
-  | "decline_after_commit"
-  | "not_hidden_offer";
+  | "site_unavailable";
 
 export type ResolveMerchantOfferResult =
   | {
@@ -63,29 +57,9 @@ export type ResolveMerchantDeclineResult =
         | "encounter_unavailable"
         | "stale_encounter"
         | "offer_not_found"
-        | "site_unavailable"
-        | "decline_after_commit";
+        | "site_unavailable";
       state: QuestState;
     };
-
-export type ResolveMerchantCommitResult =
-  | {
-      ok: true;
-      state: QuestState;
-      offer: MerchantOffer;
-    }
-  | {
-      ok: false;
-      reason: MerchantResolveFailureReason;
-      state: QuestState;
-    };
-
-interface ResolveMerchantCommitInput {
-  state: QuestState;
-  questContent: QuestContent;
-  site: SiteState;
-  request: MerchantCommitRequest;
-}
 
 interface ResolveMerchantOfferInput {
   state: QuestState;
@@ -349,97 +323,14 @@ function payloadForRequest(
   return offer.applyPayload ?? "target_unavailable";
 }
 
-/**
- * Returns the committed offer id for the given site, or `undefined` if no
- * commit has been recorded.
- */
-function committedOfferIdFor(state: QuestState, siteId: string): string | undefined {
-  const runtime = state.siteRuntime[siteId];
-  if (runtime?.kind !== "dreamJourney") return undefined;
-  return runtime.merchantCommittedOfferId;
-}
-
-/**
- * Writes `merchantCommittedOfferId` into `siteRuntime[siteId]` without
- * completing the site. If a `dreamJourney` runtime already exists for this
- * site it is preserved; otherwise a fresh one is created with
- * `completed: false`.
- */
-function writeCommitToState(
-  state: QuestState,
-  siteId: string,
-  offerId: string,
-): QuestState {
-  const existing = state.siteRuntime[siteId];
-  const runtime: DreamJourneySiteRuntime =
-    existing?.kind === "dreamJourney"
-      ? { ...existing, merchantCommittedOfferId: offerId }
-      : { kind: "dreamJourney", completed: false, merchantCommittedOfferId: offerId };
-  return {
-    ...state,
-    siteRuntime: {
-      ...state.siteRuntime,
-      [siteId]: runtime,
-    },
-  };
-}
-
-export function resolveMerchantCommit({
-  state,
-  questContent,
-  site,
-  request,
-}: ResolveMerchantCommitInput): ResolveMerchantCommitResult {
-  let encounter;
-  try {
-    encounter = generateMerchantEncounter(
-      buildMerchantContext({ questState: state, questContent, site }),
-    );
-  } catch {
-    return { ok: false, reason: "encounter_unavailable", state };
-  }
-
-  if (encounter.encounterSignature !== request.encounterSignature) {
-    return { ok: false, reason: "stale_encounter", state };
-  }
-
-  const offer = encounter.offers.find(
-    (candidate) => candidate.offerId === request.offerId,
-  );
-  if (offer === undefined) {
-    return { ok: false, reason: "offer_not_found", state };
-  }
-  if (offer.archetypeId !== request.archetypeId) {
-    return { ok: false, reason: "archetype_mismatch", state };
-  }
-  if (!offer.hiddenUntilCommit) {
-    return { ok: false, reason: "not_hidden_offer", state };
-  }
-
-  const committedState = writeCommitToState(state, site.id, offer.offerId);
-  return { ok: true, state: committedState, offer };
-}
-
 export function resolveMerchantOffer({
   state,
   questContent,
   site,
   request,
 }: ResolveMerchantOfferInput): ResolveMerchantOfferResult {
-  // Gate: if a commit has been recorded for this site, only the committed
-  // offer id may be accepted; the other offer is forfeit.
-  const committedOfferId = committedOfferIdFor(state, site.id);
-  if (committedOfferId !== undefined && request.offerId !== committedOfferId) {
-    return fail(state, "offer_forfeited");
-  }
-
   const offer = findCurrentOffer({ state, questContent, site, request });
   if (typeof offer === "string") return fail(state, offer);
-
-  // Gate: accepting a hiddenUntilCommit offer requires a prior commit.
-  if (offer.hiddenUntilCommit && committedOfferId === undefined) {
-    return fail(state, "commit_required");
-  }
 
   const payload = payloadForRequest(offer, request);
   if (typeof payload === "string") return fail(state, payload);
@@ -469,12 +360,6 @@ export function resolveMerchantDecline({
   site,
   request,
 }: ResolveMerchantDeclineInput): ResolveMerchantDeclineResult {
-  // Gate: decline is not allowed after a commit — the player must pick from
-  // the revealed candidate set.
-  if (committedOfferIdFor(state, site.id) !== undefined) {
-    return { ok: false, reason: "decline_after_commit", state };
-  }
-
   try {
     const encounter = generateMerchantEncounter(
       buildMerchantContext({ questState: state, questContent, site }),
