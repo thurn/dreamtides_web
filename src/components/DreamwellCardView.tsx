@@ -1,4 +1,4 @@
-import { type CSSProperties, useRef } from "react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 import {
   cardImageUrl,
   cardIdenticonUri,
@@ -7,6 +7,15 @@ import {
 import { CardStatOrb } from "./CardStatOrb";
 import { renderRulesText } from "./RulesText";
 import { useCardTermPopover } from "./useCardTermPopover";
+
+/**
+ * Upper bound for the energy digit's auto-shrink search, as a fraction of the
+ * card width — the same `ENERGY_ORB_RATIO` CardView passes as the orb's
+ * `numberCapPx` (`widthPx * 0.16`). Computing it from the measured width (rather
+ * than a fixed pixel cap) is what keeps the digit at the `9cqw` ceiling on the
+ * large Dreamwell card instead of being clamped smaller than its flame.
+ */
+const ENERGY_ORB_RATIO = 0.16;
 
 /**
  * The data a Dreamwell card needs to render. A subset of
@@ -64,6 +73,36 @@ export function DreamwellCardView({
     text: card.renderedText,
     enabled: true,
   });
+
+  // Measure the rendered card width so the energy digit's auto-shrink cap is
+  // `widthPx * ENERGY_ORB_RATIO`, exactly as CardView computes it — the digit
+  // then renders at its `9cqw` ceiling at any card size.
+  const [widthPx, setWidthPx] = useState<number | null>(null);
+  useEffect(() => {
+    const element = rootRef.current;
+    if (element === null) {
+      return;
+    }
+    const update = (): void => {
+      const next = element.getBoundingClientRect().width;
+      if (Number.isFinite(next) && next > 0) {
+        setWidthPx(next);
+      }
+    };
+    update();
+    if (typeof ResizeObserver === "undefined") {
+      window.addEventListener("resize", update);
+      return () => {
+        window.removeEventListener("resize", update);
+      };
+    }
+    const observer = new ResizeObserver(update);
+    observer.observe(element);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+  const energyOrbCapPx = (widthPx ?? 220) * ENERGY_ORB_RATIO;
 
   const artUrl = hasAssignedImage(card.imageNumber)
     ? cardImageUrl(card.imageNumber)
@@ -169,9 +208,9 @@ export function DreamwellCardView({
           <CardStatOrb
             variant="dreamwellEnergy"
             value={String(card.energyAdded)}
-            sizeVar="13cqw"
-            numberSizeVar="7.8cqw"
-            numberCapPx={64}
+            sizeVar="12cqw"
+            numberSizeVar="9cqw"
+            numberCapPx={energyOrbCapPx}
             ariaLabel={`${String(card.energyAdded)} energy added`}
           />
         </div>
