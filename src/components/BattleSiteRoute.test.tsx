@@ -80,7 +80,8 @@ function makeFakeBattleState(): SharedBattleState {
     state: makeBattleTestState(),
     cardDatabase: makeBattleTestCardDatabase(),
     dreamcallers: makeBattleTestDreamcallers(),
-    seedOverride: 1234,
+
+    dreamwellCards: [],    seedOverride: 1234,
   });
   const initial = createInitialBattleState(init);
   return {
@@ -213,7 +214,8 @@ function setQuestState({
     questContent: {
       cardDatabase: new Map(),
       dreamcallers: [],
-      dreamsignTemplates: [],
+
+      dreamwellCards: [],      dreamsignTemplates: [],
     },
   });
 }

@@ -110,6 +110,7 @@ function makeStateWith(instance: BattleCardInstance): BattleMutableState {
     phase: "challenge",
     result: null,
     forcedResult: null,
+    dreamwellDeckIndex: 0,
     nextBattleCardOrdinal: 1,
     nextStackEntryOrdinal: 1,
     stack: [],
@@ -134,6 +135,8 @@ function makeEmptySide(): BattleMutableState["sides"]["player"] {
     backRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
     frontRank: { F0: null, F1: null, F2: null, F3: null },
     fatigueCount: 0,
+    dreamwellCardIndex: null,
+    dreamwellDrawnTurn: null,
   };
 }
 

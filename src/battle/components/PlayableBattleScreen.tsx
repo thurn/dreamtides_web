@@ -43,7 +43,7 @@ import type { QuestContent } from "../../data/quest-content";
 import type { BattleCommand } from "../debug/commands";
 import { useBattleAi } from "../ai/use-battle-ai";
 import { aiMayRunHere } from "../ai/ai-may-run-here";
-import { energyRampEdits } from "../engine/energy";
+import { dreamwellEnergyEdits } from "../engine/energy";
 import { planBasicAutomationCommands } from "../automation/basic-automation";
 import { BattleActionBar } from "./BattleActionBar";
 import { BattleAiProposalBar } from "./BattleAiProposalBar";
@@ -64,6 +64,7 @@ import { BattleSideSummaryPopover } from "./BattleSideSummaryPopover";
 import { BattleStatusBar } from "./BattleStatusBar";
 import { BattleStatusStrip } from "./BattleStatusStrip";
 import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
+import { BattleDreamwellDisplay } from "./BattleDreamwellDisplay";
 import { BattlefieldGrid } from "./BattlefieldGrid";
 import { BattleZoneBrowser } from "./BattleZoneBrowser";
 import {
@@ -75,7 +76,7 @@ import {
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
 
 const DESKTOP_INSPECTOR_WIDTH = 1280;
-const PHASE_CONTROL_SEQUENCE = ["dawn", "day", "dusk", "night", "challenge"] as const satisfies readonly BattlePhase[];
+const PHASE_CONTROL_SEQUENCE = ["dreamwell", "day", "dusk", "night", "challenge"] as const satisfies readonly BattlePhase[];
 type ZoneBrowserState = { side: BattleSide; zone: BrowseableZone } | null;
 type RewardOverlayState = {
   rewardSource: string;
@@ -243,6 +244,7 @@ function PlayableBattleScreenInner({
       const plannedCommands = planBasicAutomationCommands(reducerState.mutable, command, {
         maxEnergyCap: battleInit.maxEnergyCap,
         scoreToWin: battleInit.scoreToWin,
+        dreamwellDeck: battleInit.dreamwellDeck,
       });
       for (const planned of plannedCommands) {
         dispatch({ type: "APPLY_COMMAND", command: planned });
@@ -256,26 +258,90 @@ function PlayableBattleScreenInner({
     reducerState.mutable,
     battleInit.maxEnergyCap,
     battleInit.scoreToWin,
+    battleInit.dreamwellDeck,
   ]);
 
-  // Dreamwell-draw rail tool (Task 4.5): on demand, run a side's Dreamwell
-  // energy ramp (Task 2.1 `energyRampEdits`, anchored to the current turn
-  // number and capped by `maxEnergyCap`) followed by its draw step. The very
-  // first turn (turn 1) is the Dreamwell opening and skips the draw, matching
-  // the start-of-turn handoff rule; every later turn draws.
+  // Dreamwell-draw rail tool: on demand, reveal an additional Dreamwell card for
+  // a side and (under basic automation) apply its energy. The shared draw index
+  // advances, so this is the manual hook for effects such as Lily Lake ("Draw an
+  // additional Dreamwell card").
   const runDreamwellDraw = useCallback((side: BattleSide): void => {
-    const turnNumber = reducerState.mutable.turnNumber;
-    for (const edit of energyRampEdits(side, turnNumber, battleInit.maxEnergyCap)) {
-      handleCommand({ id: "DEBUG_EDIT", edit, sourceSurface: "status-strip" });
+    handleCommand({
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "DRAW_DREAMWELL_CARD",
+        side,
+        turnNumber: reducerState.mutable.turnNumber,
+      },
+      sourceSurface: "status-strip",
+    });
+  }, [handleCommand, reducerState.mutable.turnNumber]);
+
+  // Dreamwell reveal: whenever the active side rests on its Dreamwell phase
+  // without having drawn this turn's Dreamwell card yet, reveal it (rules §The
+  // Dreamwell and Energy). This is core turn flow — it fires regardless of basic
+  // automation so the card is always shown — while the energy it grants is
+  // folded in by the automation expansion of `DRAW_DREAMWELL_CARD`.
+  //
+  // A ref keyed by the active (side, turn) ensures the reveal dispatches at most
+  // once per Dreamwell phase, mirroring the AI defensive auto-block. The ref
+  // guard (rather than reading `dreamwellDrawnTurn` back from state) is
+  // essential: with automation on the reveal expands into several commands, and
+  // a state-derived guard can re-enter before that batch commits, looping.
+  const activeSide = reducerState.mutable.activeSide;
+  const activePhase = reducerState.mutable.phase;
+  const activeTurnNumber = reducerState.mutable.turnNumber;
+  const battleResult = reducerState.mutable.result;
+  const lastDreamwellRevealKeyRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (battleResult !== null || activePhase !== "dreamwell") {
+      return;
     }
-    if (turnNumber > 1) {
-      handleCommand({
-        id: "DEBUG_EDIT",
-        edit: { kind: "DRAW_CARD", side },
-        sourceSurface: "status-strip",
-      });
+    const revealKey = `${activeSide}:${String(activeTurnNumber)}`;
+    if (lastDreamwellRevealKeyRef.current === revealKey) {
+      return;
     }
-  }, [handleCommand, reducerState.mutable.turnNumber, battleInit.maxEnergyCap]);
+    lastDreamwellRevealKeyRef.current = revealKey;
+    handleCommand({
+      id: "DEBUG_EDIT",
+      edit: {
+        kind: "DRAW_DREAMWELL_CARD",
+        side: activeSide,
+        turnNumber: activeTurnNumber,
+      },
+      sourceSurface: "auto-system",
+    });
+  }, [
+    handleCommand,
+    activeSide,
+    activePhase,
+    activeTurnNumber,
+    battleResult,
+  ]);
+
+  // The Dreamwell card the active side is currently showing (the card at its
+  // recorded draw index), rendered centered above the battlefield while the
+  // Dreamwell phase is active.
+  const activeDreamwellCardIndex =
+    reducerState.mutable.sides[activeSide].dreamwellCardIndex;
+  const dreamwellDisplayCard = useMemo(() => {
+    if (activeDreamwellCardIndex === null) {
+      return null;
+    }
+    const definition = battleInit.dreamwellDeck[activeDreamwellCardIndex];
+    if (definition === undefined) {
+      return null;
+    }
+    return {
+      id: definition.id,
+      name: definition.name,
+      renderedText: definition.renderedText,
+      energyAdded: definition.energyAdded,
+      imageNumber: definition.imageNumber,
+    };
+  }, [activeDreamwellCardIndex, battleInit.dreamwellDeck]);
+  const isDreamwellDisplayVisible =
+    activePhase === "dreamwell" && battleResult === null;
 
   useEffect(() => {
     if (reducerState.mutable !== battleState.reducer.mutable) {
@@ -903,6 +969,11 @@ function PlayableBattleScreenInner({
             turnNumber={reducerState.mutable.turnNumber}
           />
           <div className="stage">
+            <BattleDreamwellDisplay
+              card={dreamwellDisplayCard}
+              side={activeSide}
+              visible={isDreamwellDisplayVisible}
+            />
             {isOpponentHandRevealed ? (
               <div className="opponent-hand-zone">
                 <BattleOpponentHandTray
@@ -1151,18 +1222,17 @@ function PlayableBattleScreenInner({
                       sourceSurface: "phase-controls",
                     });
                     // In AI mode, the human advancing the turn into the enemy's
-                    // turn IS the enemy's start-of-turn handoff, so it must apply
-                    // the enemy's energy ramp and draw — the symmetric counterpart
-                    // to the AI's own end-turn handoff, which ramps the incoming
-                    // player (see `buildEndTurnProposal` in use-battle-ai.ts).
-                    // Without it the enemy is frozen at its opening energy and the
+                    // turn IS the enemy's start-of-turn handoff. With basic
+                    // automation off the handoff is a passthrough, so this block
+                    // gives the enemy what the automated handoff otherwise would:
+                    // its Dreamwell reveal and energy plus its start-of-turn draw.
+                    // Without it the enemy is frozen at zero energy and the
                     // planner, unable to afford any development, passes every turn.
                     // A forward player→enemy handoff keeps the turn number (see
                     // `advanceBattleTurnPair`); the backward variant decrements it,
-                    // so the equality check excludes rewinds.
-                    // When basic automation is on it owns every start-of-turn
-                    // ramp and draw (for both sides), so the AI-specific handoff
-                    // shortcut must stand down to avoid ramping the enemy twice.
+                    // so the equality check excludes rewinds. When automation is on
+                    // it owns every start-of-turn reveal, energy, and draw (for
+                    // both sides), so this shortcut stands down to avoid duplicates.
                     const isAiEnemyHandoff =
                       aiMode &&
                       !isBasicAutomationEnabled &&
@@ -1170,10 +1240,24 @@ function PlayableBattleScreenInner({
                       target.activeSide === "enemy" &&
                       target.turnNumber === reducerState.mutable.turnNumber;
                     if (isAiEnemyHandoff) {
-                      for (const edit of energyRampEdits(
+                      // Read the card about to be drawn (the deck index has not
+                      // advanced yet) so its energy can be applied alongside the
+                      // reveal even though automation is off.
+                      const dreamwellCard =
+                        battleInit.dreamwellDeck[reducerState.mutable.dreamwellDeckIndex];
+                      handleCommand({
+                        id: "DEBUG_EDIT",
+                        edit: {
+                          kind: "DRAW_DREAMWELL_CARD",
+                          side: "enemy",
+                          turnNumber: target.turnNumber,
+                        },
+                        sourceSurface: "phase-controls",
+                      });
+                      for (const edit of dreamwellEnergyEdits(
                         "enemy",
-                        target.turnNumber,
-                        battleInit.maxEnergyCap,
+                        reducerState.mutable.sides.enemy.maxEnergy,
+                        dreamwellCard?.energyAdded ?? 0,
                       )) {
                         handleCommand({
                           id: "DEBUG_EDIT",
@@ -1613,7 +1697,14 @@ function computePhaseControlTarget(
     };
   })();
   const normalizedNextIndex = (nextIndex + PHASE_CONTROL_SEQUENCE.length) % PHASE_CONTROL_SEQUENCE.length;
-  const phase = PHASE_CONTROL_SEQUENCE[normalizedNextIndex];
+  // A forward control that flips into the next turn always lands on that turn's
+  // Dreamwell phase — the start-of-turn stop the player clicks through after
+  // seeing the drawn Dreamwell card — even the skip control, so the Dreamwell
+  // reveal is never bypassed on a turn change.
+  const phase: BattlePhase =
+    didWrap && control !== "previous"
+      ? "dreamwell"
+      : PHASE_CONTROL_SEQUENCE[normalizedNextIndex];
   const turnPair = didWrap
     ? control === "previous"
       ? decrementBattleTurnPair(state.activeSide, state.turnNumber)
@@ -1630,9 +1721,11 @@ function computePhaseControlTarget(
 
 function normalizePhaseForControls(phase: BattleMutableState["phase"]): (typeof PHASE_CONTROL_SEQUENCE)[number] {
   switch (phase) {
-    case "dreamwell":
+    // Draw and Dawn run as bookkeeping during the turn handoff and are never the
+    // resting phase; the surfaced start-of-turn stop is Dreamwell.
     case "draw":
-      return "dawn";
+    case "dawn":
+      return "dreamwell";
     case "ending":
       return "night";
     default:

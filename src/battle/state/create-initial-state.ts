@@ -10,7 +10,6 @@ import type {
   FrontRankSlotId,
   BackRankSlotId,
 } from "../types";
-import { OPENING_ENERGY } from "../engine/energy";
 
 /**
  * Default per-card status: every flag false and every numeric counter zero. A
@@ -37,15 +36,23 @@ export function createInitialBattleState(battleInit: BattleInit): BattleMutableS
     battleId: battleInit.battleId,
     activeSide: "player",
     turnNumber: 1,
-    phase: "day",
+    // The battle opens on the active player's Dreamwell phase: their first
+    // (order-0) Dreamwell card animates in and is clicked through before the
+    // first Day (rules §The Dreamwell and Energy).
+    phase: "dreamwell",
     result: null,
     forcedResult: null,
+    dreamwellDeckIndex: 0,
     nextBattleCardOrdinal: 1,
     nextStackEntryOrdinal: 1,
     stack: [],
     sides: {
-      player: createInitialSideState(OPENING_ENERGY, OPENING_ENERGY, [], []),
-      enemy: createInitialSideState(OPENING_ENERGY, OPENING_ENERGY, [], []),
+      // Energy starts at 0 for both sides; each side's maximum ● is raised by
+      // the Dreamwell cards it draws (rules §The Dreamwell and Energy). The
+      // active player's opening Dreamwell card is revealed (and its energy
+      // applied under basic automation) when the Dreamwell phase resolves.
+      player: createInitialSideState(0, 0, [], []),
+      enemy: createInitialSideState(0, 0, [], []),
     },
     cardInstances: {},
   };
@@ -73,6 +80,7 @@ export function cloneBattleMutableState(state: BattleMutableState): BattleMutabl
     phase: state.phase,
     result: state.result,
     forcedResult: state.forcedResult,
+    dreamwellDeckIndex: state.dreamwellDeckIndex,
     nextBattleCardOrdinal: state.nextBattleCardOrdinal,
     nextStackEntryOrdinal: state.nextStackEntryOrdinal ?? 1,
     stack: (state.stack ?? []).map((entry) => ({ ...entry })),
@@ -205,6 +213,8 @@ function createInitialSideState(
     backRank: createEmptyBackRank(),
     frontRank: createEmptyFrontRank(),
     fatigueCount: 0,
+    dreamwellCardIndex: null,
+    dreamwellDrawnTurn: null,
   };
 }
 

@@ -15,6 +15,8 @@ function makeEmptySide(): BattleMutableState["sides"]["player"] {
     backRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
     frontRank: { F0: null, F1: null, F2: null, F3: null },
     fatigueCount: 0,
+    dreamwellCardIndex: null,
+    dreamwellDrawnTurn: null,
   };
 }
 
@@ -37,6 +39,7 @@ function makeHandoffState(opts: MakeHandoffStateOptions = {}): BattleMutableStat
     phase: "day",
     result: null,
     forcedResult: null,
+    dreamwellDeckIndex: 0,
     nextBattleCardOrdinal: 1,
     nextStackEntryOrdinal: 1,
     stack: [],
@@ -114,7 +117,7 @@ describe("planHandoff", () => {
       const plan = planHandoff({ state, ...DEFAULT_CONFIG });
       expect(plan.flowEdit).toMatchObject({
         kind: "SET_BATTLE_FLOW",
-        phase: "day",
+        phase: "dreamwell",
         activeSide: "enemy",
         turnNumber: 3,
       });
@@ -125,16 +128,16 @@ describe("planHandoff", () => {
       const plan = planHandoff({ state, ...DEFAULT_CONFIG });
       expect(plan.flowEdit).toMatchObject({
         kind: "SET_BATTLE_FLOW",
-        phase: "day",
+        phase: "dreamwell",
         activeSide: "player",
         turnNumber: 4,
       });
     });
 
-    it("flowEdit phase is always 'day'", () => {
+    it("flowEdit phase is always 'dreamwell'", () => {
       const state = makeHandoffState({ activeSide: "player", turnNumber: 2 });
       const plan = planHandoff({ state, ...DEFAULT_CONFIG });
-      expect(plan.flowEdit).toMatchObject({ kind: "SET_BATTLE_FLOW", phase: "day" });
+      expect(plan.flowEdit).toMatchObject({ kind: "SET_BATTLE_FLOW", phase: "dreamwell" });
     });
   });
 
@@ -154,46 +157,30 @@ describe("planHandoff", () => {
     });
   });
 
-  describe("energyEdits", () => {
-    it("targets the next side with the correct turn number (player → enemy)", () => {
+  describe("Dreamwell landing", () => {
+    it("lands the incoming side on its Dreamwell phase, not Day", () => {
       const state = makeHandoffState({ activeSide: "player", turnNumber: 4 });
       const plan = planHandoff({ state, ...DEFAULT_CONFIG });
-      // Next side is enemy, same turn 4
-      for (const edit of plan.energyEdits) {
-        expect("side" in edit && edit.side).toBe("enemy");
-      }
-      for (const edit of plan.energyEdits) {
-        if (edit.kind === "SET_MAX_ENERGY" || edit.kind === "SET_CURRENT_ENERGY") {
-          // turn 4: Math.min(4+1, 10) = 5
-          expect(edit.value).toBe(5);
-        }
-      }
+      expect(plan.flowEdit).toMatchObject({
+        kind: "SET_BATTLE_FLOW",
+        phase: "dreamwell",
+        activeSide: "enemy",
+      });
     });
 
-    it("targets the next side with incremented turn number (enemy → player)", () => {
-      const state = makeHandoffState({ activeSide: "enemy", turnNumber: 4 });
+    it("does not ramp energy in the handoff (energy follows the Dreamwell reveal)", () => {
+      const state = makeHandoffState({ activeSide: "player", turnNumber: 4 });
       const plan = planHandoff({ state, ...DEFAULT_CONFIG });
-      // Next side is player, turn 5
-      for (const edit of plan.energyEdits) {
-        expect("side" in edit && edit.side).toBe("player");
-      }
-      for (const edit of plan.energyEdits) {
-        if (edit.kind === "SET_MAX_ENERGY" || edit.kind === "SET_CURRENT_ENERGY") {
-          // turn 5: Math.min(5+1, 10) = 6
-          expect(edit.value).toBe(6);
-        }
-      }
-    });
-
-    it("respects maxEnergyCap", () => {
-      const state = makeHandoffState({ activeSide: "player", turnNumber: 9 });
-      const plan = planHandoff({ state, ...DEFAULT_CONFIG });
-      // Next is enemy at turn 9: Math.min(9+1, 10) = 10 (exactly cap)
-      for (const edit of plan.energyEdits) {
-        if (edit.kind === "SET_MAX_ENERGY" || edit.kind === "SET_CURRENT_ENERGY") {
-          expect(edit.value).toBeLessThanOrEqual(10);
-        }
-      }
+      const energyEdits = [
+        plan.flowEdit,
+        ...plan.endingBanishEdits,
+        ...plan.dawnClearEdits,
+        ...plan.drawEdits,
+      ].filter(
+        (edit) =>
+          edit.kind === "SET_MAX_ENERGY" || edit.kind === "SET_CURRENT_ENERGY",
+      );
+      expect(energyEdits).toHaveLength(0);
     });
   });
 

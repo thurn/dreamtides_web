@@ -187,6 +187,7 @@ const demoQuestContext: QuestContextValue = {
   questContent: {
     cardDatabase: new Map(),
     dreamcallers: [demoDreamcaller],
+    dreamwellCards: [],
     dreamsignTemplates: demoTemplates,
   },
 };

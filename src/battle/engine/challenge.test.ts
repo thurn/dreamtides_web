@@ -91,6 +91,8 @@ function emptySide(overrides: Partial<BattleSideMutableState> = {}): BattleSideM
       FRONT_RANK_SLOT_IDS.map((slot) => [slot, null]),
     ) as BattleSideMutableState["frontRank"],
     fatigueCount: 0,
+    dreamwellCardIndex: null,
+    dreamwellDrawnTurn: null,
     ...overrides,
   };
 }
@@ -119,6 +121,7 @@ function makeState(options: {
     phase: "challenge",
     result: null,
     forcedResult: null,
+    dreamwellDeckIndex: 0,
     nextBattleCardOrdinal: 100,
     sides: {
       player: emptySide(options.player),

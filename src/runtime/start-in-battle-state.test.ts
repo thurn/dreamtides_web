@@ -28,7 +28,8 @@ function makeQuestContent(): QuestContent {
   return {
     cardDatabase,
     dreamcallers: [dreamcaller],
-    dreamsignTemplates: [],
+
+    dreamwellCards: [],    dreamsignTemplates: [],
     poolContext: makeTestPoolContext(["dreamsign-1", "dreamsign-2"]),
   };
 }
@@ -65,7 +66,8 @@ describe("createStartInBattleState", () => {
     const questContent: QuestContent = {
       cardDatabase: new Map(),
       dreamcallers: [dreamcaller],
-      dreamsignTemplates: [],
+
+      dreamwellCards: [],      dreamsignTemplates: [],
     };
 
     expect(createStartInBattleState(questContent)).toBeNull();
@@ -75,7 +77,8 @@ describe("createStartInBattleState", () => {
     const questContent: QuestContent = {
       cardDatabase: new Map(),
       dreamcallers: [],
-      dreamsignTemplates: [],
+
+      dreamwellCards: [],      dreamsignTemplates: [],
       poolContext: makeTestPoolContext(),
     };
 

@@ -138,7 +138,8 @@ function makeQuestContent(): QuestContent {
   return {
     cardDatabase: new Map([[101, makeCard(101)]]),
     dreamcallers: [testDreamcaller],
-    dreamsignTemplates: [
+
+    dreamwellCards: [],    dreamsignTemplates: [
       makeDreamsignTemplate("dreamsign-1", "Dreamsign One"),
       makeDreamsignTemplate("dreamsign-2", "Dreamsign Two"),
       makeDreamsignTemplate("dreamsign-3", "Dreamsign Three"),
@@ -195,7 +196,8 @@ function makeFakeBattleState(): SharedBattleState {
     state: makeBattleTestState(),
     cardDatabase: makeBattleTestCardDatabase(),
     dreamcallers: makeBattleTestDreamcallers(),
-    seedOverride: 1,
+
+    dreamwellCards: [],    seedOverride: 1,
   });
   const initial = createInitialBattleState(init);
   return {

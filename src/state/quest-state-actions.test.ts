@@ -73,7 +73,8 @@ function makeQuestContent(
   return {
     cardDatabase,
     dreamcallers: [dreamcaller],
-    dreamsignTemplates: [],
+
+    dreamwellCards: [],    dreamsignTemplates: [],
     poolContext: makeTestPoolContext(["dreamsign-a", "dreamsign-b"]),
   };
 }

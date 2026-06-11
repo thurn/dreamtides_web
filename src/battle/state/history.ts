@@ -108,6 +108,7 @@ function areBattleMutableStatesEqual(
     left.phase !== right.phase ||
     left.result !== right.result ||
     left.forcedResult !== right.forcedResult ||
+    left.dreamwellDeckIndex !== right.dreamwellDeckIndex ||
     left.nextBattleCardOrdinal !== right.nextBattleCardOrdinal
   ) {
     return false;
@@ -131,7 +132,10 @@ function areBattleSideStatesEqual(
   if (
     left.currentEnergy !== right.currentEnergy ||
     left.maxEnergy !== right.maxEnergy ||
-    left.score !== right.score
+    left.score !== right.score ||
+    left.fatigueCount !== right.fatigueCount ||
+    left.dreamwellCardIndex !== right.dreamwellCardIndex ||
+    left.dreamwellDrawnTurn !== right.dreamwellDrawnTurn
   ) {
     return false;
   }

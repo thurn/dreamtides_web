@@ -101,11 +101,11 @@ describe("BattleStatusBar", () => {
   });
 
   it.each([
-    ["dreamwell", "dawn"],
-    ["draw", "dawn"],
+    ["draw", "dreamwell"],
+    ["dawn", "dreamwell"],
     ["ending", "night"],
   ] as const)(
-    "resolves bookend phase %s to the %s surfaced chip",
+    "resolves bookkeeping phase %s to the %s surfaced chip",
     (phase, surfacedChip) => {
       const { container, root } = mount({ phase });
 
@@ -121,7 +121,7 @@ describe("BattleStatusBar", () => {
     },
   );
 
-  it.each(["dawn", "day", "dusk", "night", "challenge"] as const)(
+  it.each(["dreamwell", "day", "dusk", "night", "challenge"] as const)(
     "treats surfaced phase %s as its own active chip",
     (phase) => {
       const { container, root } = mount({ phase });

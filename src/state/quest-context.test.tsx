@@ -72,7 +72,8 @@ function makeQuestContent(
   return {
     cardDatabase,
     dreamcallers: [],
-    dreamsignTemplates: [],
+
+    dreamwellCards: [],    dreamsignTemplates: [],
   };
 }
 

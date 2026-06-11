@@ -5,6 +5,7 @@ export const BATTLE_RNG_STREAMS = [
   "enemyDescriptor",
   "enemyDeckOrder",
   "playerDeckOrder",
+  "dreamwellDeck",
   "battleCardIds",
 ] as const;
 
@@ -60,6 +61,7 @@ export function createBattleRngStreams(
     enemyDescriptor: createBattleRng(seed, "enemyDescriptor"),
     enemyDeckOrder: createBattleRng(seed, "enemyDeckOrder"),
     playerDeckOrder: createBattleRng(seed, "playerDeckOrder"),
+    dreamwellDeck: createBattleRng(seed, "dreamwellDeck"),
     battleCardIds: createBattleRng(seed, "battleCardIds"),
   };
 }

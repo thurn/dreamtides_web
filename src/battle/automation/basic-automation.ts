@@ -3,7 +3,7 @@ import {
   type ChallengeResolution,
   resolveChallenge,
 } from "../engine/challenge";
-import { energyRampEdits } from "../engine/energy";
+import { dreamwellEnergyEdits } from "../engine/energy";
 import { dawnClearEdits, endingBanishEdits } from "../engine/handoff";
 import { selectBattleCardLocation } from "../state/selectors";
 import type {
@@ -11,6 +11,7 @@ import type {
   BattlePhase,
   BattleResult,
   BattleSide,
+  DreamwellCardDefinition,
 } from "../types";
 
 /** An empty support map: the human/automation path runs over an unmodeled board. */
@@ -36,11 +37,12 @@ const PHASE_SEQUENCE: readonly BattlePhase[] = [
 /**
  * The bookend phases (rules §Turn Structure). Each carries no player action:
  * entering one immediately applies its effect and advances to the next phase.
- * Dreamwell ramps energy, Draw draws, Dawn clears exhaustion, and Ending
- * enforces the hand limit and banishes end-of-turn statuses.
+ * Draw draws, Dawn clears exhaustion, and Ending enforces the hand limit and
+ * banishes end-of-turn statuses. The Dreamwell phase is NOT a bookend: it is a
+ * surfaced stop the player clicks through after seeing the drawn Dreamwell card,
+ * and its energy is applied when its reveal (`DRAW_DREAMWELL_CARD`) is expanded.
  */
 const BOOKEND_PHASES: ReadonlySet<BattlePhase> = new Set<BattlePhase>([
-  "dreamwell",
   "draw",
   "dawn",
   "ending",
@@ -71,12 +73,15 @@ const BOOKEND_PHASES: ReadonlySet<BattlePhase> = new Set<BattlePhase>([
  *    winner down when its bearer loses, and Unstoppable scores when a defended
  *    character survives (rules §Keywords and Effects).
  *  - **Bookend phases auto-advance.** A `SET_PHASE` into a bookend phase
- *    (`dreamwell`, `draw`, `dawn`, `ending`) carries no player action: it folds
- *    in that bookend's effect and steps forward — chaining through consecutive
- *    bookends — until it lands on a surfaced phase (rules §Turn Structure).
- *  - **Start of turn ramps energy and draws.** The incoming player's energy
- *    ramps to the per-turn maximum and they draw a card (skipped on the very
- *    first turn of the battle) (rules §Turn Structure — Dreamwell / Draw).
+ *    (`draw`, `dawn`, `ending`) carries no player action: it folds in that
+ *    bookend's effect and steps forward — chaining through consecutive bookends
+ *    — until it lands on a surfaced phase (rules §Turn Structure).
+ *  - **Dreamwell reveal raises energy.** Revealing a side's Dreamwell card
+ *    (`DRAW_DREAMWELL_CARD`) raises its maximum ● by the card's `energyAdded`
+ *    and refills current ● (rules §The Dreamwell and Energy).
+ *  - **Start of turn draws.** The incoming player draws a card on the handoff
+ *    (skipped on the very first turn of the battle) (rules §Turn Structure —
+ *    Draw).
  *  - **Dawn clears exhaustion.** When a side begins its turn, every in-play
  *    character it controls loses the exhausted status (rules §Dawn).
  *  - **End-of-turn hand limit.** The outgoing player discards down to ten cards
@@ -95,6 +100,12 @@ export const BASIC_AUTOMATION_HAND_LIMIT = 10;
 export interface BasicAutomationCaps {
   maxEnergyCap: number;
   scoreToWin: number;
+  /**
+   * The shared Dreamwell deck (`BattleInit.dreamwellDeck`). Read at the active
+   * `dreamwellDeckIndex` so a `DRAW_DREAMWELL_CARD` reveal also applies the
+   * drawn card's `energyAdded` to the side's maximum ●.
+   */
+  dreamwellDeck: readonly DreamwellCardDefinition[];
 }
 
 /**
@@ -114,6 +125,8 @@ export function planBasicAutomationCommands(
   switch (command.edit.kind) {
     case "MOVE_CARD_TO_ZONE":
       return planCardPlay(state, command, command.edit);
+    case "DRAW_DREAMWELL_CARD":
+      return planDreamwellReveal(state, command, command.edit, caps);
     case "SET_BATTLE_FLOW":
       return planTurnHandoff(state, command, command.edit, caps);
     case "SET_PHASE":
@@ -121,7 +134,7 @@ export function planBasicAutomationCommands(
         return planChallengeOnly(state, command, caps);
       }
       if (BOOKEND_PHASES.has(command.edit.phase)) {
-        return planBookendAdvance(state, command, command.edit, caps);
+        return planBookendAdvance(state, command, command.edit);
       }
       return [command];
     default:
@@ -183,6 +196,33 @@ function planCardPlay(
     }));
   }
 
+  return commands;
+}
+
+/**
+ * A `DRAW_DREAMWELL_CARD` reveal (rules §The Dreamwell and Energy) also raises
+ * the drawing side's maximum ● by the drawn card's `energyAdded` and refills
+ * current ● to the new maximum. The card about to be drawn sits at the shared
+ * `dreamwellDeckIndex`; automation reads its `energyAdded` from `caps.dreamwellDeck`
+ * and appends the energy edits after the reveal. A missing card (deck somehow
+ * exhausted) or one that adds 0 leaves the maximum unchanged.
+ */
+function planDreamwellReveal(
+  state: BattleMutableState,
+  command: BattleCommand,
+  edit: Extract<BattleDebugEdit, { kind: "DRAW_DREAMWELL_CARD" }>,
+  caps: BasicAutomationCaps,
+): BattleCommand[] {
+  const card = caps.dreamwellDeck[state.dreamwellDeckIndex];
+  const energyAdded = card?.energyAdded ?? 0;
+  const commands: BattleCommand[] = [command];
+  for (const energyEdit of dreamwellEnergyEdits(
+    edit.side,
+    state.sides[edit.side].maxEnergy,
+    energyAdded,
+  )) {
+    commands.push(autoCommand(energyEdit));
+  }
   return commands;
 }
 
@@ -253,13 +293,11 @@ function planTurnHandoff(
 
   // Dawn: the incoming side's exhausted characters lose the exhausted status
   // (rules §Dawn). Clearing follows the side flip because it belongs to the
-  // incoming player's turn, alongside the ramp and draw.
+  // incoming player's turn, alongside the draw. The incoming side's energy is
+  // raised separately when its Dreamwell card is revealed on the Dreamwell phase
+  // the handoff lands on (see `planDreamwellReveal`).
   for (const clearEdit of dawnClearEdits(state, incomingSide)) {
     commands.push(autoCommand(clearEdit));
-  }
-
-  for (const rampEdit of energyRampEdits(incomingSide, edit.turnNumber, caps.maxEnergyCap)) {
-    commands.push(autoCommand(rampEdit));
   }
 
   // Draw for the incoming side, skipping the very first turn of the battle.
@@ -304,7 +342,6 @@ function planBookendAdvance(
   state: BattleMutableState,
   command: BattleCommand,
   edit: Extract<BattleDebugEdit, { kind: "SET_PHASE" }>,
-  caps: BasicAutomationCaps,
 ): BattleCommand[] {
   const side = state.activeSide;
   // Keep the original navigation so the bookend entry stays in history.
@@ -316,7 +353,7 @@ function planBookendAdvance(
   // finite `PHASE_SEQUENCE` toward a surfaced phase (`ending` is the last
   // bookend and resolves to `day`).
   while (BOOKEND_PHASES.has(phase)) {
-    for (const effectEdit of bookendEffectEdits(state, side, phase, state.turnNumber, caps)) {
+    for (const effectEdit of bookendEffectEdits(state, side, phase, state.turnNumber)) {
       commands.push(autoCommand(effectEdit));
     }
     phase = nextSurfaceableTarget(phase);
@@ -344,8 +381,6 @@ function nextSurfaceableTarget(phase: BattlePhase): BattlePhase {
  * The deterministic effect edits a single bookend phase folds in when entered
  * (rules §Turn Structure). Pure: it only reads `state`.
  *
- *  - **Dreamwell:** ramp the active side's max ● (and refill current ●) on the
- *    per-turn schedule.
  *  - **Draw:** draw one card for the active side, skipping the very first turn.
  *  - **Dawn:** clear the active side's exhausted characters.
  *  - **Ending:** discard the active side down to the hand limit, then banish its
@@ -356,11 +391,8 @@ function bookendEffectEdits(
   side: BattleSide,
   phase: BattlePhase,
   turnNumber: number,
-  caps: BasicAutomationCaps,
 ): BattleDebugEdit[] {
   switch (phase) {
-    case "dreamwell":
-      return energyRampEdits(side, turnNumber, caps.maxEnergyCap);
     case "draw":
       return turnNumber > 1 ? [{ kind: "DRAW_CARD", side }] : [];
     case "dawn":

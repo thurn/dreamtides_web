@@ -145,6 +145,24 @@ export interface BattleDeckCardDefinition {
   isBane: boolean;
 }
 
+/**
+ * A single Dreamwell card frozen into the battle's shared Dreamwell deck
+ * (rules §The Dreamwell and Energy). Both players draw from this one sequence,
+ * one card per turn during the Dreamwell phase. `energyAdded` permanently
+ * raises the drawing side's maximum ●; `renderedText` carries the bonus ability
+ * (applied manually by the player) with the same symbol/glossary markup as
+ * regular cards.
+ */
+export interface DreamwellCardDefinition {
+  id: string;
+  name: string;
+  renderedText: string;
+  energyAdded: number;
+  order: number;
+  cardNumber: number;
+  imageNumber: number;
+}
+
 export interface BattleEnemyDescriptor {
   id: string;
   name: string;
@@ -196,6 +214,14 @@ export interface BattleInit {
   playerDrawSkipsTurnOne: boolean;
   questDeckEntries: readonly BattleQuestDeckEntry[];
   playerDeckOrder: readonly BattleDeckCardDefinition[];
+  /**
+   * The shared Dreamwell deck both players draw from, pre-shuffled within
+   * numeric `order` groups and pre-cycled long enough to cover the battle
+   * (rules §The Dreamwell and Energy). Order-0 cards lead the first cycle only;
+   * each later cycle reshuffles orders 1-4. `BattleMutableState.dreamwellDeckIndex`
+   * tracks the next card to draw.
+   */
+  dreamwellDeck: readonly DreamwellCardDefinition[];
   enemyDescriptor: BattleEnemyDescriptor;
   enemyDeckDefinition: readonly BattleDeckCardDefinition[];
   dreamcallerSummary: BattleDreamcallerSummary | null;
@@ -304,6 +330,18 @@ export interface BattleSideMutableState {
    * (1⍟, 2⍟, 4⍟, …) is reproducible across the snapshot/undo model. Default 0.
    */
   fatigueCount: number;
+  /**
+   * Index into `BattleInit.dreamwellDeck` of the Dreamwell card this side is
+   * currently showing (the most recent one it drew), or `null` before its first
+   * Dreamwell phase. The Dreamwell display reads the definition at this index.
+   */
+  dreamwellCardIndex: number | null;
+  /**
+   * Turn number for which `dreamwellCardIndex` was drawn, or `null` if the side
+   * has not drawn yet. The Dreamwell reveal fires once per turn by comparing
+   * this against the active turn number.
+   */
+  dreamwellDrawnTurn: number | null;
 }
 
 export interface BattleStackEntry {
@@ -334,6 +372,8 @@ export interface BattleMutableState {
   phase: BattlePhase;
   result: BattleResult | null;
   forcedResult: BattleResult | null;
+  /** Next index to draw from the shared `BattleInit.dreamwellDeck`. */
+  dreamwellDeckIndex: number;
   nextBattleCardOrdinal: number;
   nextStackEntryOrdinal?: number;
   stack?: BattleStackEntry[];

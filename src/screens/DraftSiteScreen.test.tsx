@@ -430,7 +430,8 @@ function setQuestContext(
     questContent: {
       cardDatabase: currentCardDatabase,
       dreamcallers: [],
-      dreamsignTemplates: [],
+
+      dreamwellCards: [],      dreamsignTemplates: [],
     },
   }));
 }

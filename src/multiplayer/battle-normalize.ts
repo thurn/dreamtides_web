@@ -48,6 +48,8 @@ function normalizeSide(
     backRank: { ...defaultBackRankSlots(), ...(raw?.backRank ?? {}) },
     frontRank: { ...defaultFrontRankSlots(), ...(raw?.frontRank ?? {}) },
     fatigueCount: raw?.fatigueCount ?? 0,
+    dreamwellCardIndex: raw?.dreamwellCardIndex ?? null,
+    dreamwellDrawnTurn: raw?.dreamwellDrawnTurn ?? null,
   };
 }
 
@@ -80,6 +82,7 @@ function normalizeMutable(
     phase: raw?.phase ?? "day",
     result: raw?.result ?? null,
     forcedResult: raw?.forcedResult ?? null,
+    dreamwellDeckIndex: raw?.dreamwellDeckIndex ?? 0,
     nextBattleCardOrdinal: raw?.nextBattleCardOrdinal ?? 0,
     nextStackEntryOrdinal: raw?.nextStackEntryOrdinal ?? 1,
     stack: raw?.stack ?? [],
@@ -162,6 +165,7 @@ function normalizeInit(raw: SharedBattleState["init"]): BattleInit {
   return {
     ...raw,
     dreamsignSummaries: raw.dreamsignSummaries ?? [],
+    dreamwellDeck: raw.dreamwellDeck ?? [],
   };
 }
 

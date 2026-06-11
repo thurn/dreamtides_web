@@ -195,7 +195,8 @@ function setQuestContext(state: QuestState): void {
     questContent: {
       cardDatabase: makeCardDatabase(),
       dreamcallers: [],
-      dreamsignTemplates: [],
+
+      dreamwellCards: [],      dreamsignTemplates: [],
     },
   });
 }
@@ -638,7 +639,8 @@ describe("ShopScreen", () => {
       questContent: {
         cardDatabase: makeCardDatabase(),
         dreamcallers: [],
-        dreamsignTemplates: [],
+
+        dreamwellCards: [],        dreamsignTemplates: [],
       },
     });
 

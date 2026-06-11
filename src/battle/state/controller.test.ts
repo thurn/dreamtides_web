@@ -90,7 +90,7 @@ describe("battleControllerReducer", () => {
     expect(afterSetPhase.mutable.activeSide).toBe("player");
     expect(afterSetPhase.mutable.turnNumber).toBe(1);
     expect(afterSetPhase.history.past).toHaveLength(1);
-    expect(undone.mutable.phase).toBe("day");
+    expect(undone.mutable.phase).toBe("dreamwell");
     expect(undone.history.future).toHaveLength(1);
     expect(undone.lastActivity?.kind).toBe("undo");
     expect(redone.mutable).toEqual(afterSetPhase.mutable);

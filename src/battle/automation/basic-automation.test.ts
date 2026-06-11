@@ -13,7 +13,7 @@ import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
 import { createDefaultBattleCardStatus } from "../state/create-initial-state";
 import { planBasicAutomationCommands } from "./basic-automation";
 
-const CAPS = { maxEnergyCap: 10, scoreToWin: 25 };
+const CAPS = { maxEnergyCap: 10, scoreToWin: 25, dreamwellDeck: [] };
 
 function makeInstance(
   battleCardId: string,
@@ -82,6 +82,8 @@ function emptySide(overrides: Partial<BattleSideMutableState> = {}): BattleSideM
     backRank: Object.fromEntries(BACK_RANK_SLOT_IDS.map((slot) => [slot, null])) as BattleSideMutableState["backRank"],
     frontRank: Object.fromEntries(FRONT_RANK_SLOT_IDS.map((slot) => [slot, null])) as BattleSideMutableState["frontRank"],
     fatigueCount: 0,
+    dreamwellCardIndex: null,
+    dreamwellDrawnTurn: null,
     ...overrides,
   };
 }
@@ -101,6 +103,7 @@ function makeState(options: {
     phase: options.phase ?? "day",
     result: null,
     forcedResult: null,
+    dreamwellDeckIndex: 0,
     nextBattleCardOrdinal: 100,
     sides: {
       player: emptySide(options.player),
@@ -244,7 +247,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
 // into the automation command stream.
 
 describe("planBasicAutomationCommands — turn handoff", () => {
-  it("resolves the challenge, ramps energy, and draws for the incoming side", () => {
+  it("resolves the challenge and draws for the incoming side (energy follows the Dreamwell reveal)", () => {
     const state = makeState({
       activeSide: "player",
       turnNumber: 3,
@@ -254,7 +257,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     });
     const handoff: BattleCommand = {
       id: "DEBUG_EDIT",
-      edit: { kind: "SET_BATTLE_FLOW", phase: "day", activeSide: "enemy", turnNumber: 3 },
+      edit: { kind: "SET_BATTLE_FLOW", phase: "dreamwell", activeSide: "enemy", turnNumber: 3 },
       sourceSurface: "phase-controls",
     };
 
@@ -263,12 +266,11 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     // Challenge scoring for the outgoing player.
     expect(result).toContainEqual({ kind: "ADJUST_SCORE", side: "player", amount: 4 });
     // The user's own flow edit is preserved.
-    expect(result).toContainEqual({ kind: "SET_BATTLE_FLOW", phase: "day", activeSide: "enemy", turnNumber: 3 });
-    // Incoming-side energy ramp to min(turn + 1, cap) = 4.
-    expect(result).toContainEqual({ kind: "SET_MAX_ENERGY", side: "enemy", value: 4 });
-    expect(result).toContainEqual({ kind: "SET_CURRENT_ENERGY", side: "enemy", value: 4 });
+    expect(result).toContainEqual({ kind: "SET_BATTLE_FLOW", phase: "dreamwell", activeSide: "enemy", turnNumber: 3 });
     // Incoming-side draw (turn > 1).
     expect(result).toContainEqual({ kind: "DRAW_CARD", side: "enemy" });
+    // The handoff itself does not ramp energy; that follows the Dreamwell reveal.
+    expect(result.some((edit) => edit.kind === "SET_MAX_ENERGY")).toBe(false);
   });
 
   it("does not re-resolve the challenge when the outgoing side already sits in the challenge phase", () => {
@@ -284,7 +286,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     });
     const handoff: BattleCommand = {
       id: "DEBUG_EDIT",
-      edit: { kind: "SET_BATTLE_FLOW", phase: "day", activeSide: "enemy", turnNumber: 3 },
+      edit: { kind: "SET_BATTLE_FLOW", phase: "dreamwell", activeSide: "enemy", turnNumber: 3 },
       sourceSurface: "phase-controls",
     };
 
@@ -292,9 +294,8 @@ describe("planBasicAutomationCommands — turn handoff", () => {
 
     // No second scoring of the outgoing player's surviving challenger.
     expect(result.some((edit) => edit.kind === "ADJUST_SCORE")).toBe(false);
-    // The handoff still flips the side, ramps, and draws for the incoming side.
-    expect(result).toContainEqual({ kind: "SET_BATTLE_FLOW", phase: "day", activeSide: "enemy", turnNumber: 3 });
-    expect(result).toContainEqual({ kind: "SET_MAX_ENERGY", side: "enemy", value: 4 });
+    // The handoff still flips the side and draws for the incoming side.
+    expect(result).toContainEqual({ kind: "SET_BATTLE_FLOW", phase: "dreamwell", activeSide: "enemy", turnNumber: 3 });
     expect(result).toContainEqual({ kind: "DRAW_CARD", side: "enemy" });
   });
 
@@ -576,70 +577,53 @@ describe("planBasicAutomationCommands — turn handoff", () => {
   });
 });
 
-describe("planBasicAutomationCommands — bookend phase auto-advance", () => {
-  // A `SET_PHASE` to a bookend (dreamwell / draw / dawn / ending) carries no
-  // player action: automation folds in the bookend's effect edits and a
-  // follow-on `SET_PHASE` that steps forward, chaining through consecutive
-  // bookends until it lands on a surfaced phase the player drives (rules §Turn
-  // Structure). The integration invariant: navigating into `dreamwell` lands the
-  // active side in `day` with energy ramped, a card drawn, and exhaustion
-  // cleared, applying each bookend's effect exactly once.
-  it("expands a dreamwell gesture into the full bookend chain landing in day", () => {
-    const exhausted = makeInstance("p0", { owner: "player", printedSpark: 2 });
-    exhausted.status.isExhausted = true;
+describe("planBasicAutomationCommands — Dreamwell reveal", () => {
+  // The Dreamwell phase is a surfaced stop, not a bookend: a `SET_PHASE` into it
+  // passes through unchanged (the reveal effect issues the `DRAW_DREAMWELL_CARD`
+  // that the player clicks through). Revealing a Dreamwell card raises the
+  // drawing side's maximum ● by the drawn card's `energyAdded`, uncapped.
+  const DREAMWELL_DECK = [
+    { id: "dw-0", name: "Opening", renderedText: "", energyAdded: 2, order: 0, cardNumber: 1, imageNumber: 0 },
+    { id: "dw-1", name: "Bonus", renderedText: "", energyAdded: 1, order: 1, cardNumber: 2, imageNumber: 0 },
+  ];
+
+  it("passes a Dreamwell phase navigation through unchanged", () => {
+    const state = makeState({ activeSide: "player", turnNumber: 3 });
+    const gesture: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_PHASE", phase: "dreamwell" },
+      sourceSurface: "phase-controls",
+    };
+
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
+    expect(result).toEqual([{ kind: "SET_PHASE", phase: "dreamwell" }]);
+  });
+
+  it("raises max energy by the drawn card's energyAdded, uncapped, and refills current", () => {
     const state = makeState({
       activeSide: "player",
       turnNumber: 3,
-      player: {
-        deck: ["d0", "d1"],
-        frontRank: frontRankSlots("F0", "p0"),
-      },
-      instances: [exhausted],
+      player: { maxEnergy: 9, currentEnergy: 1 },
     });
+    const caps = { ...CAPS, dreamwellDeck: DREAMWELL_DECK };
     const gesture: BattleCommand = {
       id: "DEBUG_EDIT",
-      edit: { kind: "SET_PHASE", phase: "dreamwell" },
+      edit: { kind: "DRAW_DREAMWELL_CARD", side: "player", turnNumber: 3 },
       sourceSurface: "phase-controls",
     };
 
-    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
+    const result = edits(planBasicAutomationCommands(state, gesture, caps));
 
-    // The original dreamwell navigation is preserved.
-    expect(result[0]).toEqual({ kind: "SET_PHASE", phase: "dreamwell" });
-    // Dreamwell folds in the energy ramp (turn 3 → min(2 + 2, 10) = 4).
-    expect(result).toContainEqual({ kind: "SET_MAX_ENERGY", side: "player", value: 4 });
-    expect(result).toContainEqual({ kind: "SET_CURRENT_ENERGY", side: "player", value: 4 });
-    // Draw folds in a card for the active side (turn > 1).
-    expect(result).toContainEqual({ kind: "DRAW_CARD", side: "player" });
-    // Dawn folds in the exhaust-clear for the active side.
-    expect(result).toContainEqual({
-      kind: "SET_CARD_STATUS",
-      battleCardId: "p0",
-      status: { isExhausted: false },
+    // The reveal itself is preserved as the first command.
+    expect(result[0]).toEqual({
+      kind: "DRAW_DREAMWELL_CARD",
+      side: "player",
+      turnNumber: 3,
     });
-    // The chain lands the active side in the next surfaced phase, `day`.
-    expect(result[result.length - 1]).toEqual({ kind: "SET_PHASE", phase: "day" });
-    // No bookend effect is applied twice.
-    expect(result.filter((edit) => edit.kind === "DRAW_CARD")).toHaveLength(1);
-    expect(result.filter((edit) => edit.kind === "SET_MAX_ENERGY")).toHaveLength(1);
-  });
-
-  it("skips the draw on the very first turn of the battle", () => {
-    const state = makeState({
-      activeSide: "player",
-      turnNumber: 1,
-      player: { deck: ["d0"] },
-    });
-    const gesture: BattleCommand = {
-      id: "DEBUG_EDIT",
-      edit: { kind: "SET_PHASE", phase: "dreamwell" },
-      sourceSurface: "phase-controls",
-    };
-
-    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
-    expect(result.some((edit) => edit.kind === "DRAW_CARD")).toBe(false);
-    // Still lands in day.
-    expect(result[result.length - 1]).toEqual({ kind: "SET_PHASE", phase: "day" });
+    // Uncapped: previous max (9) + the order-0 card's energyAdded (2) = 11,
+    // above the cap of 10; current ● refills to the new maximum.
+    expect(result).toContainEqual({ kind: "SET_MAX_ENERGY", side: "player", value: 11 });
+    expect(result).toContainEqual({ kind: "SET_CURRENT_ENERGY", side: "player", value: 11 });
   });
 
   it("expands a draw gesture into draw + dawn landing in day", () => {

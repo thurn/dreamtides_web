@@ -380,6 +380,23 @@ export const BANE_NAMES = new Set([
 ]);
 
 /**
+ * Convert a TOML Dreamwell record to its JSON representation with camelCase keys.
+ * Dreamwell cards are the shared cards drawn one per turn during the Dreamwell
+ * phase (see docs/battle_rules/battle_rules.md). The transform is a plain
+ * kebab->camel rename: every field (`name`, `id`, `rendered-text`, `order`,
+ * `energy-added`, `card-type`, `image-number`, `art-owned`, `card-number`) is
+ * preserved verbatim. A record without `image-number` keeps no `imageNumber`
+ * key, which the runtime renders as a generated identicon, matching cards.
+ */
+export function transformDreamwell(dreamwell) {
+  const result = {};
+  for (const [key, value] of Object.entries(dreamwell)) {
+    result[kebabToCamel(key)] = value;
+  }
+  return result;
+}
+
+/**
  * Convert a TOML Dreamcaller record to its JSON representation with camelCase keys.
  * Records without a `starting-essence` value are filled in with
  * `DEFAULT_STARTING_ESSENCE` so the runtime always sees a number.
@@ -482,6 +499,7 @@ export function setupAssets({
   cardTomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
   cardV2TomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
   dreamcallerV2TomlPath = join(DATA_DIR, "tabula", "dreamcallers_v2.toml"),
+  dreamwellTomlPath = join(DATA_DIR, "tabula", "dreamwell.toml"),
   dreamsignTomlPath = join(DATA_DIR, "tabula", "dreamsigns.toml"),
   dreamsignProfilesTomlPath = join(DATA_DIR, "tabula", "dreamsign_profiles.toml"),
   merchantCorpusJsonPath = join(DATA_DIR, "merchant_corpus.json"),
@@ -503,6 +521,7 @@ export function setupAssets({
   const draftRecordsAdaptedDir = join(ROOT, "docs", "draft_records_adapted");
   const draftRecordsJsonPath = join(publicDir, "draft-records-data.json");
   const dreamcallerV2JsonPath = join(publicDir, "dreamcallers-v2-data.json");
+  const dreamwellJsonPath = join(publicDir, "dreamwell-data.json");
   const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
   const dreamsignProfilesJsonPath = join(publicDir, "dreamsign-profiles-data.json");
   const merchantCorpusPublicPath = join(publicDir, "merchant-corpus-data.json");
@@ -768,6 +787,26 @@ export function setupAssets({
     `Wrote ${jsonDreamcallersV2.length} dreamcallers to dreamcallers-v2-data.json`,
   );
 
+  // Dreamwell cards: the shared deck both players draw from one per turn during
+  // the Dreamwell phase (docs/battle_rules/battle_rules.md). Parsed with the
+  // same kebab->camel rename as the other catalogs and written to its own JSON
+  // the runtime fetches at /dreamwell-data.json.
+  console.log("Parsing dreamwell.toml...");
+  const dreamwellTomlContent = readFileSync(dreamwellTomlPath, "utf8");
+  const parsedDreamwell = parse(dreamwellTomlContent);
+  const allDreamwell = parsedDreamwell.dreamwell;
+
+  if (!Array.isArray(allDreamwell)) {
+    throw new Error("Expected [[dreamwell]] array in dreamwell.toml");
+  }
+
+  const jsonDreamwell = allDreamwell.map(transformDreamwell);
+  writeFileSync(dreamwellJsonPath, JSON.stringify(jsonDreamwell, null, 2) + "\n");
+  console.log(`Wrote ${jsonDreamwell.length} dreamwell cards to dreamwell-data.json`);
+  // Dreamwell card art is symlinked into `public/cards` alongside the other
+  // catalogs further below, after `recreateDir(cardsDir)` has created the
+  // directory.
+
   console.log("Parsing dreamsigns.toml...");
   const dreamsignTomlContent = readFileSync(dreamsignTomlPath, "utf8");
   const parsedDreamsigns = parse(dreamsignTomlContent);
@@ -898,6 +937,40 @@ export function setupAssets({
 
   console.log(
     `Linked ${linkedV2} of ${jsonCardsV2.length} cards_v2 images (${missingV2} missing)`,
+  );
+
+  // Dreamwell card art, keyed by image number exactly like the card catalogs
+  // above and linked into the same `public/cards` directory. A Dreamwell card
+  // without an image number (or whose cache file is absent) falls back to a
+  // generated identicon at runtime, so misses are counted quietly.
+  let linkedDreamwell = 0;
+  let missingDreamwell = 0;
+  for (const card of jsonDreamwell) {
+    const imageNumber = card.imageNumber;
+    if (
+      imageNumber === "" ||
+      imageNumber === null ||
+      imageNumber === undefined ||
+      Number(imageNumber) <= 0
+    ) {
+      continue;
+    }
+    const hash = imageHash(imageNumber);
+    const cachePath = join(imageCacheDir, hash);
+    const symlinkPath = join(cardsDir, `${imageNumber}.webp`);
+    if (existsSync(symlinkPath)) {
+      linkedDreamwell++;
+      continue;
+    }
+    if (existsSync(cachePath)) {
+      symlinkSync(cachePath, symlinkPath);
+      linkedDreamwell++;
+    } else {
+      missingDreamwell++;
+    }
+  }
+  console.log(
+    `Linked ${linkedDreamwell} of ${jsonDreamwell.length} dreamwell images (${missingDreamwell} missing)`,
   );
 
   recreateDir(dreamcallersDir);

@@ -682,3 +682,49 @@ describe("REMATERIALIZE", () => {
     });
   });
 });
+
+describe("DRAW_DREAMWELL_CARD edit", () => {
+  function drawDreamwell(
+    state: BattleReducerState,
+    side: "player" | "enemy",
+    turnNumber: number,
+  ): BattleReducerState {
+    return battleControllerReducer(state, {
+      type: "APPLY_COMMAND",
+      command: {
+        id: "DEBUG_EDIT",
+        edit: { kind: "DRAW_DREAMWELL_CARD", side, turnNumber },
+      },
+    });
+  }
+
+  it("points the side at the shared draw index, stamps the turn, and advances the deck", () => {
+    const initial = createBattle();
+    expect(initial.mutable.dreamwellDeckIndex).toBe(0);
+    expect(initial.mutable.sides.player.dreamwellCardIndex).toBeNull();
+    expect(initial.mutable.sides.player.dreamwellDrawnTurn).toBeNull();
+
+    const afterPlayer = drawDreamwell(initial, "player", 1);
+    expect(afterPlayer.mutable.sides.player.dreamwellCardIndex).toBe(0);
+    expect(afterPlayer.mutable.sides.player.dreamwellDrawnTurn).toBe(1);
+    expect(afterPlayer.mutable.dreamwellDeckIndex).toBe(1);
+  });
+
+  it("draws the next shared card for the other side, advancing the index again", () => {
+    let state = createBattle();
+    state = drawDreamwell(state, "player", 1);
+    state = drawDreamwell(state, "enemy", 1);
+
+    // Both sides drew from the one shared sequence: player got index 0, enemy 1.
+    expect(state.mutable.sides.player.dreamwellCardIndex).toBe(0);
+    expect(state.mutable.sides.enemy.dreamwellCardIndex).toBe(1);
+    expect(state.mutable.dreamwellDeckIndex).toBe(2);
+  });
+
+  it("applies no energy on its own (energy is folded in by basic automation)", () => {
+    let state = createBattle();
+    const beforeMax = state.mutable.sides.player.maxEnergy;
+    state = drawDreamwell(state, "player", 1);
+    expect(state.mutable.sides.player.maxEnergy).toBe(beforeMax);
+  });
+});

@@ -20,7 +20,9 @@ import type {
   BattleEnemyDescriptor,
   BattleInit,
   BattleQuestDeckEntry,
+  DreamwellCardDefinition,
 } from "../types";
+import type { DreamwellCard } from "../../data/dreamwell-database";
 
 /**
  * Minimum quest deck size for a battle. A deck below this is padded with
@@ -66,6 +68,13 @@ export interface CreateBattleInitInput {
   >;
   cardDatabase: ReadonlyMap<number, CardData>;
   dreamcallers: readonly DreamcallerContent[];
+  /**
+   * The shared Dreamwell card catalog (`data/tabula/dreamwell.toml`). Built into
+   * the per-battle Dreamwell deck both players draw from. Optional so
+   * battle-engine tests can omit it; an empty list yields an empty Dreamwell
+   * deck (energy then stays at its starting value).
+   */
+  dreamwellCards?: readonly DreamwellCard[];
   /**
    * Dreamsign templates used to give the opponent concrete Dreamsigns.
    * Optional so battle-engine tests can omit it; production always passes
@@ -171,6 +180,10 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     seed,
     input.aiMode ?? false,
   ).map(freezeBattleDeckCardDefinition);
+  const dreamwellDeck = buildDreamwellDeck(
+    input.dreamwellCards ?? [],
+    streams.dreamwellDeck,
+  ).map((definition) => Object.freeze(definition));
   const dreamcallerSummary = freezeBattleDreamcallerSummary(state.dreamcaller);
   const dreamsignSummaries = state.dreamsigns.map(freezeBattleDreamsignSummary);
   const completionLevelAtStart = state.completionLevel;
@@ -212,12 +225,93 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     playerDrawSkipsTurnOne,
     questDeckEntries,
     playerDeckOrder: Object.freeze(playerDeckOrder),
+    dreamwellDeck: Object.freeze(dreamwellDeck),
     enemyDescriptor,
     enemyDeckDefinition: Object.freeze(enemyDeckDefinition),
     dreamcallerSummary,
     dreamsignSummaries: Object.freeze(dreamsignSummaries),
     atlasSnapshot: freezeAtlasSnapshot(state.atlas),
   });
+}
+
+/**
+ * Number of cards drawn per `order` group (1-4) in each Dreamwell deck cycle.
+ * The order-0 starting cards lead the first cycle in addition to these.
+ */
+const DREAMWELL_CARDS_PER_ORDER = 5;
+
+/** Order groups, lowest first, that fill each Dreamwell deck cycle. */
+const DREAMWELL_CYCLE_ORDERS = [1, 2, 3, 4] as const;
+
+/**
+ * Minimum length of the pre-built Dreamwell deck. Both players draw one card
+ * per turn, and a battle runs at most `turnLimit` (50) turns, so a deck this
+ * long is never exhausted in practice; the draw edit still recycles safely if
+ * it somehow reaches the end.
+ */
+const DREAMWELL_DECK_MIN_LENGTH = 62;
+
+/**
+ * Builds the shared Dreamwell deck (rules §The Dreamwell and Energy):
+ *
+ *  - The first cycle leads with every order-0 card (the per-player starting
+ *    cards), then five random cards from each of orders 1-4.
+ *  - Each later cycle drops the order-0 cards and again takes five random cards
+ *    from each of orders 1-4.
+ *
+ * Cards are grouped by `order` and shuffled within each group via the seeded
+ * `dreamwellDeck` RNG stream, so the deck is reproducible per battle seed while
+ * keeping same-order cards randomized. Cycles repeat until the deck is at least
+ * {@link DREAMWELL_DECK_MIN_LENGTH} long (a length never reached in a real
+ * battle). A group smaller than {@link DREAMWELL_CARDS_PER_ORDER} contributes
+ * however many cards it has, so the builder tolerates Dreamwell TOML edits.
+ */
+export function buildDreamwellDeck(
+  cards: readonly DreamwellCard[],
+  rng: BattleRng,
+): DreamwellCardDefinition[] {
+  const byOrder = new Map<number, DreamwellCardDefinition[]>();
+  for (const card of cards) {
+    const definition = toDreamwellCardDefinition(card);
+    const group = byOrder.get(definition.order);
+    if (group === undefined) {
+      byOrder.set(definition.order, [definition]);
+    } else {
+      group.push(definition);
+    }
+  }
+
+  const deck: DreamwellCardDefinition[] = [];
+  let firstCycle = true;
+  while (deck.length < DREAMWELL_DECK_MIN_LENGTH) {
+    const lengthBeforeCycle = deck.length;
+    if (firstCycle) {
+      deck.push(...rng.shuffle(byOrder.get(0) ?? []));
+      firstCycle = false;
+    }
+    for (const order of DREAMWELL_CYCLE_ORDERS) {
+      const group = byOrder.get(order) ?? [];
+      deck.push(...rng.shuffle(group).slice(0, DREAMWELL_CARDS_PER_ORDER));
+    }
+    // No order 1-4 cards (and no order-0 cards on the first pass) means the deck
+    // cannot grow; stop rather than loop forever on a sparse catalog.
+    if (deck.length === lengthBeforeCycle) {
+      break;
+    }
+  }
+  return deck;
+}
+
+function toDreamwellCardDefinition(card: DreamwellCard): DreamwellCardDefinition {
+  return {
+    id: card.id,
+    name: card.name,
+    renderedText: card.renderedText,
+    energyAdded: card.energyAdded,
+    order: card.order,
+    cardNumber: card.cardNumber,
+    imageNumber: card.imageNumber ?? 0,
+  };
 }
 
 /**

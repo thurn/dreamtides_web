@@ -246,7 +246,8 @@ function makeQuestContent(): QuestContent {
   return {
     cardDatabase: new Map<number, CardData>(),
     dreamcallers: [],
-    dreamsignTemplates: [],
+
+    dreamwellCards: [],    dreamsignTemplates: [],
   };
 }
 
@@ -258,7 +259,8 @@ function setQuestState(state: QuestState): void {
     questContent: {
       cardDatabase: new Map(),
       dreamcallers: [],
-      dreamsignTemplates: [],
+
+      dreamwellCards: [],      dreamsignTemplates: [],
     },
   });
 }
@@ -495,7 +497,8 @@ describe("QuestApp", () => {
       questContent: {
         cardDatabase: new Map(),
         dreamcallers: [],
-        dreamsignTemplates: [],
+
+        dreamwellCards: [],        dreamsignTemplates: [],
       },
     });
 
@@ -612,7 +615,8 @@ describe("QuestApp", () => {
       questContent: {
         cardDatabase: new Map(),
         dreamcallers: [],
-        dreamsignTemplates: [],
+
+        dreamwellCards: [],        dreamsignTemplates: [],
       },
     });
 
@@ -647,7 +651,8 @@ describe("QuestApp", () => {
       questContent: {
         cardDatabase: new Map(),
         dreamcallers: [],
-        dreamsignTemplates: [],
+
+        dreamwellCards: [],        dreamsignTemplates: [],
       },
     });
 

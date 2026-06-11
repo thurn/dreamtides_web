@@ -30,7 +30,23 @@ import {
 } from "../test-support";
 import type { SharedBattleState } from "../../multiplayer/battle-types";
 import type { BattleInit, BattleMutableState } from "../types";
+import type { DreamwellCard } from "../../data/dreamwell-database";
 import { PlayableBattleScreen, computeBattlefieldScale } from "./PlayableBattleScreen";
+
+// A single-card Dreamwell deck whose order-0 card adds 1 to maximum ●, used by
+// the AI handoff tests so the enemy's Dreamwell reveal raises its energy by a
+// known, deterministic amount independent of the production Dreamwell TOML.
+const TEST_DREAMWELL_DECK: DreamwellCard[] = [
+  {
+    id: "test-dreamwell-0",
+    name: "Test Spring",
+    renderedText: "(no ability)",
+    order: 0,
+    energyAdded: 1,
+    cardNumber: 9001,
+    imageNumber: 0,
+  },
+];
 
 const BATTLE_CSS = readFileSync(join(process.cwd(), "src/battle/battle.css"), "utf8");
 const mountedRoots = new Set<Root>();
@@ -68,7 +84,7 @@ vi.mock("../../multiplayer/battle-service", async (importOriginal) => {
   };
 });
 
-function createTestBattle(): {
+function createTestBattle(dreamwellCards: DreamwellCard[] = []): {
   battleInit: BattleInit;
   initialState: BattleMutableState;
   site: ReturnType<typeof makeBattleTestSite>;
@@ -79,6 +95,7 @@ function createTestBattle(): {
     state: makeBattleTestState(),
     cardDatabase: makeBattleTestCardDatabase(),
     dreamcallers: makeBattleTestDreamcallers(),
+    dreamwellCards,
   });
 
   return {
@@ -150,6 +167,7 @@ function mount(element: ReactElement): {
   const questContent = {
     cardDatabase,
     dreamcallers: makeBattleTestDreamcallers(),
+    dreamwellCards: [],
     dreamsignTemplates: [],
   };
   const container = document.createElement("div");
@@ -175,9 +193,9 @@ function mount(element: ReactElement): {
 
 function renderScreen(
   mutateInitialState?: (state: ReturnType<typeof createTestBattle>["initialState"]) => void,
-  options?: { aiMode?: boolean; basicAutomation?: boolean },
+  options?: { aiMode?: boolean; basicAutomation?: boolean; dreamwellCards?: DreamwellCard[] },
 ) {
-  const testBattle = createTestBattle();
+  const testBattle = createTestBattle(options?.dreamwellCards ?? []);
   mutateInitialState?.(testBattle.initialState);
   return {
     ...testBattle,
@@ -260,6 +278,7 @@ describe("PlayableBattleScreen", () => {
         .map((element) => element.getAttribute("data-battle-region")),
     ).toEqual([
       "status-bar",
+      "dreamwell-display",
       "stack-zone",
       "player-banished-zone",
       "player-void-zone",
@@ -400,6 +419,9 @@ describe("PlayableBattleScreen", () => {
     let eventCardId = "";
     let eventCost = 0;
     const { container, root } = renderScreen((state) => {
+      // Drive the play on the Day phase so the Dreamwell reveal (which refills
+      // current ● to maximum) does not race the energy-spend assertion.
+      state.phase = "day";
       const found = Object.values(state.cardInstances).find(
         (instance) => instance.definition.battleCardKind === "event",
       );
@@ -606,7 +628,7 @@ describe("PlayableBattleScreen", () => {
     expect(
       container.querySelector<HTMLButtonElement>('[data-battle-phase-control="previous"]')
         ?.getAttribute("title"),
-    ).toBe("Return to Dawn");
+    ).toBe("Return to Dreamwell");
     expect(
       container.querySelector<HTMLButtonElement>('[data-battle-phase-control="next"]')
         ?.getAttribute("title"),
@@ -717,7 +739,7 @@ describe("PlayableBattleScreen", () => {
         ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
 
-    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Dawn");
+    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Dreamwell");
     expect(container.querySelector('[data-battle-stat="round-number"]')?.textContent).toBe("Turn 1");
     expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Enemy");
 
@@ -738,7 +760,7 @@ describe("PlayableBattleScreen", () => {
         ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
 
-    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Day");
+    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Dreamwell");
     expect(container.querySelector('[data-battle-stat="round-number"]')?.textContent).toBe("Turn 2");
     expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Player");
 
@@ -747,7 +769,7 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("ramps the enemy energy and draws when the player passes the turn in AI mode", () => {
+  it("reveals the enemy Dreamwell, raises its energy, and draws when the player passes the turn in AI mode", () => {
     const { container, root } = renderScreen(
       (state) => {
         state.phase = "night";
@@ -756,7 +778,7 @@ describe("PlayableBattleScreen", () => {
         state.sides.enemy.currentEnergy = 2;
         state.sides.enemy.maxEnergy = 2;
       },
-      { aiMode: true },
+      { aiMode: true, dreamwellCards: TEST_DREAMWELL_DECK },
     );
 
     // Reveal the enemy hand so its live card count is observable in the DOM.
@@ -770,10 +792,11 @@ describe("PlayableBattleScreen", () => {
         ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
 
-    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Day");
+    // The forward turn flip lands the enemy on its Dreamwell stop.
+    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Dreamwell");
     expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Enemy");
     const enemyEnergy = container.querySelector('[data-battle-stat="enemy:energy"]');
-    // Turn 2 ramp: min(turnNumber + 1, cap) === 3, applied to both max and current.
+    // The drawn Dreamwell card adds 1 to the enemy's maximum ● (2 -> 3).
     expect(enemyEnergy?.getAttribute("data-battle-current-energy")).toBe("3");
     expect(enemyEnergy?.getAttribute("data-battle-max-energy")).toBe("3");
     // The enemy draws one card for its turn.
@@ -810,7 +833,7 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("ramps and draws for the enemy exactly once on the player turn handoff when automation is on", () => {
+  it("raises enemy energy and draws exactly once on the player turn handoff when automation is on", () => {
     const { container, root } = renderScreen(
       (state) => {
         state.phase = "night";
@@ -819,7 +842,7 @@ describe("PlayableBattleScreen", () => {
         state.sides.enemy.currentEnergy = 2;
         state.sides.enemy.maxEnergy = 2;
       },
-      { basicAutomation: true },
+      { basicAutomation: true, dreamwellCards: TEST_DREAMWELL_DECK },
     );
 
     act(() => {
@@ -834,7 +857,8 @@ describe("PlayableBattleScreen", () => {
 
     expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Enemy");
     const enemyEnergy = container.querySelector('[data-battle-stat="enemy:energy"]');
-    // Single turn-2 ramp via the automation handoff: min(turnNumber + 1, cap) === 3.
+    // The enemy's Dreamwell reveal raises maximum ● by 1 exactly once (2 -> 3),
+    // not twice.
     expect(enemyEnergy?.getAttribute("data-battle-current-energy")).toBe("3");
     expect(enemyEnergy?.getAttribute("data-battle-max-energy")).toBe("3");
     expect(container.querySelectorAll(".revealed-hand-card.opponent").length).toBe(
@@ -846,12 +870,12 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("ramps and draws once for the enemy when both AI mode and automation are on", () => {
+  it("raises enemy energy and draws once when both AI mode and automation are on", () => {
     // The AI-on + automation-on cross-product at the player -> enemy boundary.
-    // Automation's turn-handoff plan owns the enemy's start-of-turn ramp and
-    // draw; the AI-specific `isAiEnemyHandoff` shortcut must stand down (its
-    // `!isBasicAutomationEnabled` guard) so the enemy ramps and draws exactly
-    // once, not twice.
+    // Automation's turn-handoff plan and the Dreamwell reveal own the enemy's
+    // start-of-turn draw and energy; the AI-specific `isAiEnemyHandoff` shortcut
+    // must stand down (its `!isBasicAutomationEnabled` guard) so the enemy's
+    // energy rises and it draws exactly once, not twice.
     const { container, root } = renderScreen(
       (state) => {
         state.phase = "night";
@@ -860,7 +884,7 @@ describe("PlayableBattleScreen", () => {
         state.sides.enemy.currentEnergy = 2;
         state.sides.enemy.maxEnergy = 2;
       },
-      { aiMode: true, basicAutomation: true },
+      { aiMode: true, basicAutomation: true, dreamwellCards: TEST_DREAMWELL_DECK },
     );
 
     act(() => {
@@ -873,10 +897,10 @@ describe("PlayableBattleScreen", () => {
         ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
 
-    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Day");
+    expect(container.querySelector('[data-battle-stat="phase"]')?.textContent).toBe("Dreamwell");
     expect(container.querySelector(".turn-owner-pill")?.textContent).toBe("Enemy");
     const enemyEnergy = container.querySelector('[data-battle-stat="enemy:energy"]');
-    // Exactly one ramp: 3, NOT a double ramp to 6 (automation + AI handoff).
+    // Exactly one Dreamwell reveal: 3, NOT a double application to 4.
     expect(enemyEnergy?.getAttribute("data-battle-current-energy")).toBe("3");
     expect(enemyEnergy?.getAttribute("data-battle-max-energy")).toBe("3");
     // Exactly one draw for the incoming enemy side, not two.
@@ -1395,7 +1419,10 @@ describe("PlayableBattleScreen", () => {
   });
 
   it("locally toggles the opponent hand tray without adding battle history", () => {
-    const { container, initialState, root } = renderScreen();
+    // Start on Day so the opening Dreamwell reveal does not add a history entry.
+    const { container, initialState, root } = renderScreen((state) => {
+      state.phase = "day";
+    });
     const firstEnemyHandCardId = initialState.sides.enemy.hand[0];
 
     expect(container.querySelector('[data-battle-region="opponent-hand-tray"]')).toBeNull();
@@ -2699,7 +2726,10 @@ describe("PlayableBattleScreen", () => {
   });
 
   it("has no end-turn button and pressing e dispatches nothing", () => {
-    const { container, root } = renderScreen();
+    // Start on Day so the opening Dreamwell reveal does not dispatch at mount.
+    const { container, root } = renderScreen((state) => {
+      state.phase = "day";
+    });
 
     expect(container.querySelector('[data-battle-action="end-turn"]')).toBeNull();
 

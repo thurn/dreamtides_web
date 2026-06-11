@@ -6,6 +6,7 @@ import { createBattleInit } from "../battle/integration/create-battle-init";
 import { createInitialBattleState } from "../battle/state/create-initial-state";
 import type { CardData } from "../types/cards";
 import type { DreamcallerContent, DreamsignTemplate } from "../types/content";
+import type { DreamwellCard } from "../data/dreamwell-database";
 import type { RunPoolContext } from "../data/quest-content";
 import type { QuestState, SiteState } from "../types/quest";
 
@@ -49,6 +50,7 @@ export function useEnsureBattleSession(input: {
   >;
   cardDatabase: ReadonlyMap<number, CardData>;
   dreamcallers: readonly DreamcallerContent[];
+  dreamwellCards: readonly DreamwellCard[];
   dreamsignTemplates?: readonly DreamsignTemplate[];
   poolContext?: RunPoolContext;
   seedOverride: number | null;
@@ -71,6 +73,7 @@ export function useEnsureBattleSession(input: {
       state: input.questState,
       cardDatabase: input.cardDatabase,
       dreamcallers: input.dreamcallers,
+      dreamwellCards: input.dreamwellCards,
       dreamsignTemplates: input.dreamsignTemplates,
       poolContext: input.poolContext,
       seedOverride: input.seedOverride,
@@ -96,6 +99,7 @@ export function useEnsureBattleSession(input: {
     input.clientId,
     input.database,
     input.dreamcallers,
+    input.dreamwellCards,
     input.dreamsignTemplates,
     input.poolContext,
     input.questState,

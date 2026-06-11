@@ -42,7 +42,8 @@ function makeQuestContent(
   return {
     cardDatabase,
     dreamcallers: resolvedPackage === null ? [] : [resolvedPackage.dreamcaller],
-    dreamsignTemplates: [],
+
+    dreamwellCards: [],    dreamsignTemplates: [],
     poolContext: makeTestPoolContext([
       "embers-whisper",
       "glacial-insight",

@@ -219,7 +219,8 @@ function setQuestContext(): void {
     questContent: {
       cardDatabase: new Map(),
       dreamcallers: [],
-      dreamsignTemplates: [],
+
+      dreamwellCards: [],      dreamsignTemplates: [],
     },
   });
 }
@@ -321,7 +322,8 @@ function mountWithFullDeck(initialSize: "small" | "medium" | "large") {
     questContent: {
       cardDatabase: new Map(),
       dreamcallers: [],
-      dreamsignTemplates: [],
+
+      dreamwellCards: [],      dreamsignTemplates: [],
     },
   });
   return mount(
@@ -343,7 +345,8 @@ describe("DeckViewer", () => {
       questContent: {
         cardDatabase: new Map(),
         dreamcallers: [],
-        dreamsignTemplates: [],
+
+        dreamwellCards: [],        dreamsignTemplates: [],
       },
     });
 
@@ -594,7 +597,8 @@ describe("DeckViewer", () => {
       questContent: {
         cardDatabase: new Map(),
         dreamcallers: [],
-        dreamsignTemplates: [],
+
+        dreamwellCards: [],        dreamsignTemplates: [],
       },
     });
 

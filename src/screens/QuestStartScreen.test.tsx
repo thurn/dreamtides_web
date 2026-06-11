@@ -245,7 +245,8 @@ function setQuestContext(): void {
     questContent: {
       cardDatabase: new Map(),
       dreamcallers: [...OFFERED_DREAMCALLERS],
-      dreamsignTemplates: [],
+
+      dreamwellCards: [],      dreamsignTemplates: [],
     },
   });
 }

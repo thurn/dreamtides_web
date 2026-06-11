@@ -193,7 +193,8 @@ function setQuestContext(state: QuestState, mutations: QuestMutations): void {
     questContent: {
       cardDatabase,
       dreamcallers: [],
-      dreamsignTemplates: [],
+
+      dreamwellCards: [],      dreamsignTemplates: [],
     },
   });
 }

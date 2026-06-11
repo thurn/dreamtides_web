@@ -147,6 +147,7 @@ export function makeMerchantTestContent({
   return {
     cardDatabase: new Map(cards.map((card) => [card.cardNumber, card])),
     dreamcallers: [],
+    dreamwellCards: [],
     dreamsignTemplates,
     fitModel,
     merchantCorpus,

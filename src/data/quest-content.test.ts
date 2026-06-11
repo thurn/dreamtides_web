@@ -98,6 +98,12 @@ describe("loadQuestContent", () => {
             json: () => Promise.resolve(dreamsigns),
           });
         }
+        if (path === "/dreamwell-data.json") {
+          return Promise.resolve({
+            ok: true,
+            json: () => Promise.resolve([]),
+          });
+        }
         if (path === "/decklists-data.json") {
           return Promise.resolve({
             ok: true,

@@ -95,6 +95,16 @@ export type BattleDebugEdit =
     side: BattleSide;
   }
   | {
+    // Reveals `side`'s next Dreamwell card: advances the shared
+    // `dreamwellDeckIndex`, points the side's `dreamwellCardIndex` at the drawn
+    // card, and stamps `dreamwellDrawnTurn` with the active turn so the reveal
+    // fires once per turn (rules §The Dreamwell and Energy). The energy the card
+    // adds to maximum ● is folded in by basic automation, not by this edit.
+    kind: "DRAW_DREAMWELL_CARD";
+    side: BattleSide;
+    turnNumber: number;
+  }
+  | {
     // Moves the top `count` cards of `side`'s deck to its void (rules §Erode).
     // An erode against an empty deck causes Fatigue, awarding the opponent the
     // doubling ⍟ sequence (rules §Fatigue). Basic automation introduces this
@@ -470,6 +480,7 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
     case "MOVE_CARD_TO_ZONE":
     case "ABANDON":
     case "DRAW_CARD":
+    case "DRAW_DREAMWELL_CARD":
     case "ERODE":
     case "DISCARD_CARD":
     case "CREATE_CARD_COPY":
@@ -541,6 +552,7 @@ function collectDebugEditTargets(
     case "ADJUST_MAX_ENERGY":
     case "INCREASE_MAX_ENERGY_AND_FILL":
     case "DRAW_CARD":
+    case "DRAW_DREAMWELL_CARD":
       return [makeSideTarget(edit.side)];
     case "SET_SIDE_HAND_VISIBILITY":
       return [makeZoneTarget(edit.side, "hand")];
@@ -649,6 +661,8 @@ function createDebugEditLabel(
       return `Swap ${formatSlotLabel(edit.source)} with ${formatSlotLabel(edit.target)}`;
     case "DRAW_CARD":
       return `Draw 1 for ${formatSideLabel(edit.side)}`;
+    case "DRAW_DREAMWELL_CARD":
+      return `Draw Dreamwell Card for ${formatSideLabel(edit.side)}`;
     case "ERODE":
       return `Erode ${String(edit.count)} for ${formatSideLabel(edit.side)}`;
     case "DISCARD_CARD":

@@ -199,7 +199,8 @@ describe("DreamscapeScreen", () => {
       questContent: {
         cardDatabase: new Map(),
         dreamcallers: [],
-        dreamsignTemplates: [],
+
+        dreamwellCards: [],        dreamsignTemplates: [],
       },
     });
 
@@ -315,7 +316,8 @@ describe("DreamscapeScreen", () => {
       questContent: {
         cardDatabase: new Map(),
         dreamcallers: [],
-        dreamsignTemplates: [],
+
+        dreamwellCards: [],        dreamsignTemplates: [],
       },
     });
 

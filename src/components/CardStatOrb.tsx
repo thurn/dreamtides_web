@@ -9,11 +9,15 @@ import {
 } from "./GlowIcon";
 import { useFitText } from "./useFitText";
 
-export type CardStatOrbVariant = "energy" | "spark";
+export type CardStatOrbVariant = "energy" | "spark" | "dreamwellEnergy";
+
+/** Purple fill for the Dreamwell energy mark; the number stays white. */
+export const DREAMWELL_ENERGY_ICON_COLOR = "#a855f7";
 
 const DEFAULT_LABEL: Readonly<Record<CardStatOrbVariant, string>> = {
   energy: "energy cost",
   spark: "spark",
+  dreamwellEnergy: "energy added",
 };
 
 /**
@@ -51,6 +55,15 @@ const ICON_BY_VARIANT: Readonly<
   energy: {
     iconClass: ENERGY_ICON_CLASS,
     color: ENERGY_ICON_COLOR,
+    overscale: 1.12,
+    numberShiftEm: 0.06,
+  },
+  // The Dreamwell energy mark reuses the energy flame glyph in purple (the
+  // number stays white) so a card's `energy-added` reads as the same kind of
+  // resource as a regular energy cost, recolored for the Dreamwell.
+  dreamwellEnergy: {
+    iconClass: ENERGY_ICON_CLASS,
+    color: DREAMWELL_ENERGY_ICON_COLOR,
     overscale: 1.12,
     numberShiftEm: 0.06,
   },

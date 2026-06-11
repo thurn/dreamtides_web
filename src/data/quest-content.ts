@@ -35,6 +35,7 @@ import {
   type DraftRecord,
 } from "./cards-v2-database";
 import { loadDreamcallersV2 } from "./dreamcallers-v2-database";
+import { loadDreamwellCards, type DreamwellCard } from "./dreamwell-database";
 import { STARTER_CARD_NUMBERS } from "./starter-cards";
 import { buildFitModel, type FitModel } from "../draft/replay/fit-model";
 import {
@@ -49,6 +50,8 @@ import type { JourneyVariant } from "../runtime/runtime-config";
 export interface QuestContent {
   cardDatabase: Map<number, CardData>;
   dreamcallers: DreamcallerContent[];
+  /** The shared Dreamwell deck source, drawn from during battle. */
+  dreamwellCards: readonly DreamwellCard[];
   dreamsignTemplates: readonly DreamsignTemplate[];
   poolContext?: RunPoolContext;
   /**
@@ -607,6 +610,7 @@ export async function loadQuestContent(
   const [
     cardDatabase,
     draftDreamcallers,
+    dreamwellCards,
     dreamsignTemplates,
     decklists,
     draftRecords,
@@ -620,6 +624,7 @@ export async function loadQuestContent(
   ] = await Promise.all([
     loadCardsV2Database(),
     loadDreamcallersV2(),
+    loadDreamwellCards(),
     loadDreamsignTemplates(),
     loadDecklists(),
     // Fetch the draft records corpus when a deck-fit mode or a pick-data pool
@@ -714,6 +719,7 @@ export async function loadQuestContent(
     return {
       cardDatabase,
       dreamcallers,
+      dreamwellCards,
       dreamsignTemplates,
       poolContext,
       draftMode,
@@ -728,6 +734,7 @@ export async function loadQuestContent(
   return {
     cardDatabase,
     dreamcallers,
+    dreamwellCards,
     dreamsignTemplates,
     poolContext,
     draftMode,

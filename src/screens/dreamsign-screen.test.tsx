@@ -204,7 +204,8 @@ function setQuestContext(state: QuestState, mutations: QuestMutations): void {
     questContent: {
       cardDatabase: new Map(),
       dreamcallers: [],
-      dreamsignTemplates: DREAMSIGN_TEMPLATES,
+
+      dreamwellCards: [],      dreamsignTemplates: DREAMSIGN_TEMPLATES,
     },
   });
 }

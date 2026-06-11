@@ -223,6 +223,8 @@ export function applyDebugEdit(
       return swapBattlefieldSlots(state, edit.source, edit.target);
     case "DRAW_CARD":
       return drawCardToHand(state, edit.side);
+    case "DRAW_DREAMWELL_CARD":
+      return drawDreamwellCard(state, edit.side, edit.turnNumber);
     case "ERODE":
       return erodeDeck(state, edit.side, edit.count);
     case "DISCARD_CARD":
@@ -1524,6 +1526,34 @@ function drawCardToHand(
   nextState.sides[side].hand.push(battleCardId);
   nextState.cardInstances[battleCardId].controller = side;
 
+  return {
+    state: nextState,
+    transition: createEmptyTransitionData(),
+  };
+}
+
+/**
+ * Reveals `side`'s next Dreamwell card (rules §The Dreamwell and Energy): points
+ * the side's `dreamwellCardIndex` at the shared deck's current draw position,
+ * stamps `dreamwellDrawnTurn` so the per-turn reveal fires once, and advances the
+ * shared `dreamwellDeckIndex`. The maximum-● gain the card grants is applied by
+ * basic automation (which reads the drawn card's `energyAdded`), keeping this
+ * edit a pure reveal. The card definition is read from `BattleInit.dreamwellDeck`
+ * at the recorded index by the display and automation layers.
+ */
+function drawDreamwellCard(
+  state: BattleMutableState,
+  side: BattleSide,
+  turnNumber: number,
+): {
+  state: BattleMutableState;
+  transition: BattleTransitionData;
+} {
+  const nextState = cloneBattleMutableState(state);
+  const drawIndex = nextState.dreamwellDeckIndex;
+  nextState.sides[side].dreamwellCardIndex = drawIndex;
+  nextState.sides[side].dreamwellDrawnTurn = turnNumber;
+  nextState.dreamwellDeckIndex = drawIndex + 1;
   return {
     state: nextState,
     transition: createEmptyTransitionData(),

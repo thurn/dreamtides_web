@@ -153,7 +153,7 @@ describe("battleReducer", () => {
     expect(reduced.history.past).toHaveLength(1);
     expect(reduced.history.past[0].metadata.commandId).toBe("FORCE_RESULT");
     expect(reduced.lastTransition?.resultChange).toEqual({
-      at: { side: "player", phase: "day" },
+      at: { side: "player", phase: "dreamwell" },
       previousResult: null,
       result: "defeat",
       reason: "forced_result",

@@ -26,10 +26,12 @@ describe("createInitialBattleState", () => {
     expect(state.turnNumber).toBe(1);
     expect(state.result).toBeNull();
     expect(state.forcedResult).toBeNull();
-    expect(state.sides.player.currentEnergy).toBe(2);
-    expect(state.sides.player.maxEnergy).toBe(2);
-    expect(state.sides.enemy.currentEnergy).toBe(2);
-    expect(state.sides.enemy.maxEnergy).toBe(2);
+    // Energy starts at 0 for both sides; the active player's maximum ● is raised
+    // by the Dreamwell card revealed when its Dreamwell phase resolves.
+    expect(state.sides.player.currentEnergy).toBe(0);
+    expect(state.sides.player.maxEnergy).toBe(0);
+    expect(state.sides.enemy.currentEnergy).toBe(0);
+    expect(state.sides.enemy.maxEnergy).toBe(0);
     expect(state.sides.player.hand).toHaveLength(battleInit.openingHandSize);
     expect(state.sides.enemy.hand).toHaveLength(battleInit.openingHandSize);
     expect(state.sides.player.deck).toHaveLength(
@@ -64,13 +66,14 @@ describe("createInitialBattleState", () => {
     const state = createInitialBattleState(battleInit);
 
     expect(state.activeSide).toBe("player");
-    expect(state.phase).toBe("day");
+    // The battle opens on the active player's Dreamwell phase (a surfaced stop).
+    expect(state.phase).toBe("dreamwell");
     expect(state.turnNumber).toBe(1);
-    // Opening 2/2 energy on both sides, applied directly with no refresh step.
-    expect(state.sides.player.currentEnergy).toBe(2);
-    expect(state.sides.player.maxEnergy).toBe(2);
-    expect(state.sides.enemy.currentEnergy).toBe(2);
-    expect(state.sides.enemy.maxEnergy).toBe(2);
+    // Energy starts at 0; the Dreamwell card raises maximum ● when revealed.
+    expect(state.sides.player.currentEnergy).toBe(0);
+    expect(state.sides.player.maxEnergy).toBe(0);
+    expect(state.sides.enemy.currentEnergy).toBe(0);
+    expect(state.sides.enemy.maxEnergy).toBe(0);
     expect(state.sides.player.hand).toHaveLength(battleInit.openingHandSize);
     expect(state.sides.enemy.hand).toHaveLength(battleInit.openingHandSize);
     // Empty board on both sides.

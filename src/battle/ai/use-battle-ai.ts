@@ -109,8 +109,15 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
     }
   }
 
+  // The AI holds no proposal while its own turn sits on the Dreamwell phase: the
+  // human first clicks through the AI opponent's Dreamwell card with the phase
+  // advance arrow, which moves the AI off `dreamwell`, and only then does the AI
+  // begin proposing its Day-phase plays.
   const isAiTurn =
-    enabled && mutable.activeSide === aiSide && mutable.result === null;
+    enabled &&
+    mutable.activeSide === aiSide &&
+    mutable.result === null &&
+    mutable.phase !== "dreamwell";
 
   const proposal = useMemo<AiProposal | null>(() => {
     if (!isAiTurn) {
@@ -411,12 +418,13 @@ function buildEndTurnProposal(
     ...challenge.edits,
     // Ending (outgoing side) precedes the side flip; Dawn clear (incoming side)
     // follows it, matching the Basic Automation handoff order so the AI's
-    // end-of-turn composes the same bookend effects.
+    // end-of-turn composes the same bookend effects. The flow edit lands the
+    // incoming side on its Dreamwell phase; that side's energy is raised when
+    // the human clicks through and the Dreamwell card is revealed.
     ...handoff.endingBanishEdits,
     handoff.flowEdit,
     ...handoff.dawnClearEdits,
     ...handoff.drawEdits,
-    ...handoff.energyEdits,
   ];
   const commands = edits.map((edit) => makeAiCommand(edit, aiSide));
 

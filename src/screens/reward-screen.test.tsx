@@ -214,7 +214,8 @@ function setQuestContext(
     questContent: {
       cardDatabase,
       dreamcallers: [],
-      dreamsignTemplates: DREAMSIGN_TEMPLATES,
+
+      dreamwellCards: [],      dreamsignTemplates: DREAMSIGN_TEMPLATES,
     },
   });
 }

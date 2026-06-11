@@ -3,7 +3,7 @@ import { formatPhaseLabel, formatSideLabel } from "../ui/format";
 import type { BattleMutableState, BattlePhase, BattleResult, BattleSide } from "../types";
 
 const PHASE_STEPS = [
-  { id: "dawn", label: "Dawn", icon: "bx-sun phase-icon-sunrise" },
+  { id: "dreamwell", label: "Dreamwell", icon: "bx-droplet" },
   { id: "day", label: "Day", icon: "bx-sun" },
   { id: "dusk", label: "Dusk", icon: "bx-sun phase-icon-sunset" },
   { id: "night", label: "Night", icon: "bx-moon" },
@@ -128,9 +128,11 @@ export function BattleStatusBar({
 
 function normalizeVisiblePhase(phase: BattleMutableState["phase"]) {
   switch (phase) {
-    case "dreamwell":
+    // Draw and Dawn run as handoff bookkeeping and are never the resting phase;
+    // the surfaced start-of-turn chip is Dreamwell.
     case "draw":
-      return "dawn";
+    case "dawn":
+      return "dreamwell";
     case "ending":
       return "night";
     default:

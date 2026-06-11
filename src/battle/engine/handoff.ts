@@ -1,7 +1,6 @@
 import type { BattleDebugEdit } from "../debug/commands";
 import type { BattleMutableState, BattleResult, BattleSide } from "../types";
 import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
-import { energyRampEdits } from "./energy";
 
 export interface HandoffInput {
   state: BattleMutableState;
@@ -18,15 +17,20 @@ export interface HandoffPlan {
    * the side flip.
    */
   endingBanishEdits: BattleDebugEdit[];
-  flowEdit: BattleDebugEdit;          // SET_BATTLE_FLOW{phase:"day", activeSide, turnNumber}
+  /**
+   * SET_BATTLE_FLOW{phase:"dreamwell", activeSide, turnNumber}. The handoff lands
+   * the incoming side on its Dreamwell phase, a surfaced stop the player clicks
+   * through after seeing the drawn Dreamwell card; the card's energy is applied
+   * when its reveal resolves, not here.
+   */
+  flowEdit: BattleDebugEdit;
   /**
    * Dawn bookend for the INCOMING side: every in-play character it controls
    * loses the exhausted status (rules §Dawn). Applied after the side flip,
-   * alongside the incoming side's ramp and draw.
+   * alongside the incoming side's draw.
    */
   dawnClearEdits: BattleDebugEdit[];
   drawEdits: BattleDebugEdit[];       // DRAW_CARD for the next side (empty on the very first turn)
-  energyEdits: BattleDebugEdit[];     // energyRampEdits for the next side
 }
 
 /**
@@ -152,7 +156,7 @@ function advanceTurnPair(
  * incoming side.
  */
 export function planHandoff(input: HandoffInput): HandoffPlan {
-  const { state, scoreToWin, turnLimit, maxEnergyCap } = input;
+  const { state, scoreToWin, turnLimit } = input;
 
   // --- Win check (before building next-turn values) ---
   let result: BattleResult | null = null;
@@ -170,16 +174,15 @@ export function planHandoff(input: HandoffInput): HandoffPlan {
     result = "draw";
   }
 
-  // --- flowEdit ---
+  // --- flowEdit: land the incoming side on its Dreamwell phase (a surfaced
+  // stop the player clicks through). The Dreamwell card's energy is applied when
+  // its reveal resolves, so the handoff itself does not ramp energy. ---
   const flowEdit: BattleDebugEdit = {
     kind: "SET_BATTLE_FLOW",
-    phase: "day",
+    phase: "dreamwell",
     activeSide: next.activeSide,
     turnNumber: next.turnNumber,
   };
-
-  // --- energyEdits ---
-  const energyEdits = energyRampEdits(next.activeSide, next.turnNumber, maxEnergyCap);
 
   // --- drawEdits: skip only on turn 1 (the very first turn) ---
   const drawEdits: BattleDebugEdit[] =
@@ -197,6 +200,5 @@ export function planHandoff(input: HandoffInput): HandoffPlan {
     flowEdit,
     dawnClearEdits: clearEdits,
     drawEdits,
-    energyEdits,
   };
 }
