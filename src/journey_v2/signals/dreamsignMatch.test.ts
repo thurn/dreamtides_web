@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { DreamsignProfile } from "../../data/dreamsign-profiles";
 import type { CardData } from "../../types/cards";
-import { dreamsignMatchScore } from "./dreamsignMatch";
+import { dreamsignHasDeckCoverage, dreamsignMatchScore } from "./dreamsignMatch";
 
 // ---------------------------------------------------------------------------
 // Fixture helpers
@@ -191,6 +191,40 @@ describe("dreamsignMatchScore — cost band features", () => {
       makeCard("c3", 3, { energyCost: 2 }),
     ];
     expect(dreamsignMatchScore(profile, deck)).toBeCloseTo(2 / 3);
+  });
+});
+
+describe("dreamsignHasDeckCoverage — genuine deck fit only", () => {
+  const warriorDeck = [
+    makeCard("c1", 1, { subtype: "Warrior" }),
+    makeCard("c2", 2, { subtype: "Warrior" }),
+  ];
+
+  it("a profiled sign whose feature the deck matches has coverage", () => {
+    const profile = makeProfile({ subtypes: ["Warrior"] });
+    expect(dreamsignHasDeckCoverage(profile, warriorDeck)).toBe(true);
+  });
+
+  it("a profiled off-deck sign (zero coverage) has no coverage", () => {
+    const profile = makeProfile({ subtypes: ["Outsider"] });
+    expect(dreamsignHasDeckCoverage(profile, warriorDeck)).toBe(false);
+  });
+
+  it("a featureless sign is generic, not deck coverage, even though it scores > 0", () => {
+    const profile = makeProfile({ quality: 1 });
+    // It still earns a positive match score (the generic-blessing fallback)...
+    expect(dreamsignMatchScore(profile, warriorDeck)).toBeGreaterThan(0);
+    // ...but it does not count as genuinely suited to the deck.
+    expect(dreamsignHasDeckCoverage(profile, warriorDeck)).toBe(false);
+  });
+
+  it("an undefined profile has no coverage", () => {
+    expect(dreamsignHasDeckCoverage(undefined, warriorDeck)).toBe(false);
+  });
+
+  it("a multi-feature sign with one matched feature has coverage", () => {
+    const profile = makeProfile({ subtypes: ["Warrior"], cardTypes: ["Event"] });
+    expect(dreamsignHasDeckCoverage(profile, warriorDeck)).toBe(true);
   });
 });
 

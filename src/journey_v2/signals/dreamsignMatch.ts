@@ -74,34 +74,32 @@ function featureCoverage(
 }
 
 /**
- * Computes the match score for a dreamsign profile against the player's deck.
- *
- * Each profile feature (subtype, cardType, costBand, keyword) contributes a
- * graded coverage in [0, 1] — zero when the deck holds no matching card, full
- * at {@link FEATURE_FULL_COVERAGE} matching cards. The profile's coverage is the
- * mean across its features, so a dreamsign whose features the deck does not
- * support sinks toward zero (it can never be sold as "suited to your deck"),
- * while one the deck genuinely supports rises. The score is:
- *   `meanCoverage * qualityWeight`
- *
- * A profile with no features (or an undefined profile) is featureless: it suits
- * any deck equally and scores `FEATURELESS_COVERAGE * qualityWeight`.
- *
- * @param profile The dreamsign profile, or undefined for featureless behavior.
- * @param deckCards The player's current deck.
+ * The deck coverage of a dreamsign profile, split out from quality weighting so
+ * callers can distinguish *genuine deck fit* from a generic blessing.
  */
-export function dreamsignMatchScore(
+interface DreamsignCoverage {
+  /** Number of features the profile declares (0 for featureless/undefined). */
+  featureCount: number;
+  /** Mean graded coverage across features in [0, 1]; 0 when featureless. */
+  meanCoverage: number;
+}
+
+/**
+ * Mean graded coverage of a profile's features against the deck. Each feature
+ * (subtype, cardType, costBand, keyword) contributes a graded coverage in
+ * [0, 1] — zero when the deck holds no matching card, full at
+ * {@link FEATURE_FULL_COVERAGE} matching cards — and the result is their mean.
+ * A featureless or undefined profile has no features to measure
+ * (`featureCount === 0`, `meanCoverage === 0`).
+ */
+function profileCoverage(
   profile: DreamsignProfile | undefined,
   deckCards: readonly CardData[],
-): number {
-  // Undefined profile: featureless quality 2
+): DreamsignCoverage {
   if (profile === undefined) {
-    return FEATURELESS_COVERAGE * qualityWeight(2);
+    return { featureCount: 0, meanCoverage: 0 };
   }
 
-  const weight = qualityWeight(profile.quality);
-
-  // Collect all features from the profile
   const features: Array<(c: CardData) => boolean> = [];
 
   for (const subtype of profile.subtypes) {
@@ -120,16 +118,57 @@ export function dreamsignMatchScore(
     features.push((c) => matchesKeyword(c, keyword));
   }
 
-  // No features: featureless score
   if (features.length === 0) {
-    return FEATURELESS_COVERAGE * weight;
+    return { featureCount: 0, meanCoverage: 0 };
   }
 
-  // Mean graded coverage across the profile's features.
   let coverageSum = 0;
   for (const predicate of features) {
     coverageSum += featureCoverage(deckCards, predicate);
   }
-  const meanCoverage = coverageSum / features.length;
-  return meanCoverage * weight;
+  return {
+    featureCount: features.length,
+    meanCoverage: coverageSum / features.length,
+  };
+}
+
+/**
+ * Computes the match score for a dreamsign profile against the player's deck.
+ *
+ * The score is `meanCoverage * qualityWeight`, so a dreamsign whose features the
+ * deck does not support sinks toward zero (it can never be sold as "suited to
+ * your deck"), while one the deck genuinely supports rises. A profile with no
+ * features (or an undefined profile) is featureless: it suits any deck equally
+ * and scores `FEATURELESS_COVERAGE * qualityWeight`.
+ *
+ * @param profile The dreamsign profile, or undefined for featureless behavior.
+ * @param deckCards The player's current deck.
+ */
+export function dreamsignMatchScore(
+  profile: DreamsignProfile | undefined,
+  deckCards: readonly CardData[],
+): number {
+  const weight = qualityWeight(profile?.quality ?? 2);
+  const coverage = profileCoverage(profile, deckCards);
+  if (coverage.featureCount === 0) {
+    return FEATURELESS_COVERAGE * weight;
+  }
+  return coverage.meanCoverage * weight;
+}
+
+/**
+ * True when a dreamsign *genuinely shares a feature with the deck* — a profiled
+ * sign with at least one feature and positive coverage. Returns false for
+ * featureless/undefined signs (generic blessings that fit no deck in particular)
+ * and for off-deck signs whose features the deck lacks. Use this to keep a
+ * generic or off-archetype sign from being offered as "suited to your deck"
+ * whenever a genuinely matching sign is available; {@link dreamsignMatchScore}
+ * still ranks within the chosen pool.
+ */
+export function dreamsignHasDeckCoverage(
+  profile: DreamsignProfile | undefined,
+  deckCards: readonly CardData[],
+): boolean {
+  const coverage = profileCoverage(profile, deckCards);
+  return coverage.featureCount > 0 && coverage.meanCoverage > 0;
 }

@@ -22,6 +22,7 @@ import {
   copiesDraftBuilder,
   fitCardDraftBuilder,
   fitCardGrantBuilder,
+  strongCardBuilder,
   transfiguredDraftBuilder,
 } from "./grant";
 
@@ -478,5 +479,108 @@ describe("grant family — transfigured_draft", () => {
     );
     expect(added).toBeDefined();
     expect(added?.transfiguration).not.toBeNull();
+  });
+});
+
+describe("grant family — strong_card", () => {
+  // A fit model whose play-rate prior (the only fit term that survives an empty
+  // deck) spikes on ONE designated card and is zero elsewhere. At cold start the
+  // fit signal is exactly this popularity, so the spiked card is what a
+  // fit-blending strong_card would over-reward — the case the cold-start guard
+  // exists to neutralize.
+  function makeSpikedFitModel(
+    cards: readonly CardData[],
+    spikeCardNumber: number,
+  ): FitModel {
+    const model = makeMerchantTestFitModel();
+    const numberToName = new Map<number, string>();
+    const nameIndex = new Map<string, number>();
+    const prior = new Map<string, number>();
+    for (const card of cards) {
+      numberToName.set(card.cardNumber, card.name);
+      nameIndex.set(card.name, card.cardNumber);
+      prior.set(card.name, card.cardNumber === spikeCardNumber ? 1 : 0);
+    }
+    return {
+      ...model,
+      numberToName,
+      nameIndex,
+      prior,
+      tuning: { ...model.tuning, alpha: 0, beta: 0, gamma: 1 },
+    };
+  }
+
+  function makeStrongPool(): { pool: CardData[]; corpus: Record<string, { quality: number }> } {
+    // 40 cards so the 0.15 band (6 cards) is a true subset of the pool, and each
+    // a distinct quality so the quality ranking is strict. Quality ascends with
+    // index, so cardNumber 100 is the worst and 139 the best.
+    const pool = makePoolCards(40);
+    const corpus: Record<string, { quality: number }> = {};
+    pool.forEach((card, i) => {
+      corpus[card.id] = { quality: (i + 1) / pool.length };
+    });
+    return { pool, corpus };
+  }
+
+  it("is eligible cold-start with a non-empty unowned pool", () => {
+    const { pool, corpus } = makeStrongPool();
+    const context = makeContext({
+      poolCards: pool,
+      deckEntries: [],
+      corpusCards: corpus,
+      fitModel: makeSpikedFitModel(pool, 120),
+    });
+    expect(strongCardBuilder.eligible(context)).toBe(true);
+    const offer = strongCardBuilder.build(context, merchantRng("strong-cold"));
+    expect(offer).not.toBeNull();
+  });
+
+  it("never hands a cold-start deck a popular mid-quality card", () => {
+    // cardNumber 120 sits at quality rank ~20 of 40 — nowhere near the top-6
+    // quality band — but is the single most popular card. Blending fit in would
+    // crack it into the band; the cold-start guard ranks on quality alone, so it
+    // can never be offered until the deck is large enough for fit to be real.
+    const { pool, corpus } = makeStrongPool();
+    const context = makeContext({
+      poolCards: pool,
+      deckEntries: [],
+      corpusCards: corpus,
+      fitModel: makeSpikedFitModel(pool, 120),
+    });
+    const spikedUuid = pool.find((c) => c.cardNumber === 120)?.id;
+    expect(spikedUuid).toBeDefined();
+
+    for (let seed = 0; seed < 60; seed += 1) {
+      const offer = strongCardBuilder.build(
+        context,
+        merchantRng("strong-cold-spike", String(seed)),
+      );
+      expect(offer).not.toBeNull();
+      expect(offer?.targetKey).not.toBe(spikedUuid);
+    }
+  });
+
+  it("cold-start only ever offers a top-quality card, never a low-quality one", () => {
+    const { pool, corpus } = makeStrongPool();
+    const context = makeContext({
+      poolCards: pool,
+      deckEntries: [],
+      corpusCards: corpus,
+      fitModel: makeSpikedFitModel(pool, 105),
+    });
+    // Bottom-half-quality cards must never be the band's pick at cold start,
+    // even when one of them (cardNumber 105) is the most popular card.
+    const lowQualityUuids = new Set(
+      pool.slice(0, pool.length / 2).map((card) => card.id),
+    );
+    for (let seed = 0; seed < 40; seed += 1) {
+      const offer = strongCardBuilder.build(
+        context,
+        merchantRng("strong-cold-quality", String(seed)),
+      );
+      expect(offer).not.toBeNull();
+      if (offer === null) continue;
+      expect(lowQualityUuids.has(offer.targetKey ?? "")).toBe(false);
+    }
   });
 });

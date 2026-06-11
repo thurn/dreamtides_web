@@ -1,4 +1,7 @@
-import { dreamsignMatchScore } from "../signals/dreamsignMatch";
+import {
+  dreamsignHasDeckCoverage,
+  dreamsignMatchScore,
+} from "../signals/dreamsignMatch";
 import { bandSample, merchantRng, weightedSample, type MerchantRng } from "../signals/rng";
 import { MERCHANT_TUNING } from "../tuning";
 import type { CardData } from "../../types/cards";
@@ -20,24 +23,37 @@ function dreamsignGameObject(template: DreamsignTemplate): MerchantGameObject {
 }
 
 /**
- * The dreamsign pool to actually sample "suited to your deck" offers from.
+ * The dreamsign pool to actually sample "suited to your deck" offers from,
+ * tiered so a generic blessing never crowds out a genuine match.
  *
- * A dreamsign whose profile features the deck has no card for scores 0 (see
- * {@link dreamsignMatchScore}); offering it as "suited" is exactly the bug the
- * graded scoring exists to prevent. So when any candidate carries positive
- * suitability, the pool is restricted to those — an off-archetype sign can
- * never surface. Only when nothing is suited (a cold-start deck with no signal)
- * does the full candidate list stand in.
+ * - Tier 1 — signs that genuinely share a feature with the deck
+ *   ({@link dreamsignHasDeckCoverage}). When at least `minimumDesired` of these
+ *   exist they are the whole pool, so an off-archetype sign (zero coverage) and
+ *   a featureless generic alike are excluded: the band floor can no longer pull
+ *   a "suited" generic in alongside real matches.
+ * - Tier 2 — top up with every positively-scoring sign (covered signs plus
+ *   featureless generics) when too few genuinely match, so the offer can still
+ *   form; the covered signs remain in the pool and rank ahead of the generics.
+ * - Tier 3 — a cold-start deck with no signal at all falls back to the full
+ *   candidate list.
  */
 function suitedDreamsignPool(
   context: MerchantContext,
   deck: readonly CardData[],
+  minimumDesired: number,
 ): readonly DreamsignTemplate[] {
   const profiles = context.dreamsignProfiles;
+  const covered = context.candidateDreamsigns.filter((template) =>
+    dreamsignHasDeckCoverage(profiles?.get(template.id), deck),
+  );
+  if (covered.length >= minimumDesired) return covered;
+
   const suited = context.candidateDreamsigns.filter(
     (template) => dreamsignMatchScore(profiles?.get(template.id), deck) > 0,
   );
-  return suited.length > 0 ? suited : context.candidateDreamsigns;
+  if (suited.length >= minimumDesired) return suited;
+
+  return context.candidateDreamsigns;
 }
 
 /** Minimum count for the `dreamsign_draft` chooser. */
@@ -81,7 +97,7 @@ export const dreamsignBuilder: MerchantArchetypeBuilder = {
     // A single "suited" offer should be one of the best-matched signs, not a
     // uniform draw from a loose band — sample a tight band over the suited pool.
     const sampled = bandSample(
-      suitedDreamsignPool(context, deck),
+      suitedDreamsignPool(context, deck, 1),
       (template) => dreamsignMatchScore(profiles?.get(template.id), deck),
       1,
       rng,
@@ -127,7 +143,11 @@ export const dreamsignDraftBuilder: MerchantArchetypeBuilder = {
     // restricted to deck-suited signs so the chooser never spreads onto signs
     // the deck has no use for. We need the band size to seeded-pick the count,
     // so compute the band manually.
-    const candidates = suitedDreamsignPool(context, deck);
+    const candidates = suitedDreamsignPool(
+      context,
+      deck,
+      DREAMSIGN_DRAFT_MIN_COUNT,
+    );
     if (candidates.length < DREAMSIGN_DRAFT_MIN_COUNT) return null;
 
     // Compute band size using the same formula as bandSample

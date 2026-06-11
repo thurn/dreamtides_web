@@ -128,13 +128,25 @@ function bandSizeFor(poolSize: number, bandFraction: number): number {
  * `strongBlend.quality * qualityNorm + strongBlend.fit * fitNorm`, so the card
  * is genuinely strong AND leans toward what the deck is building — a quality-only
  * signal happily handed an events deck a character bomb, which the fit term now
- * pulls down. Band-sample 1 with the tight `strongBandFraction`. Always eligible
- * (a fresh deck still has a pool to draw from). Face-up.
+ * pulls down. Below `minDeckForFit` the deck is too small for fit to carry real
+ * signal, so the blend falls back to quality alone (as `copies_draft` does)
+ * rather than letting a popular off-archetype card ride in on prior-only fit.
+ * Band-sample 1 with the tight `strongBandFraction`. Always eligible (a fresh
+ * deck still has a pool to draw from). Face-up.
  */
 function strongScoreByUuid(
   context: MerchantContext,
   pool: readonly MerchantCatalogCard[],
 ): Map<string, number> {
+  // Cold start: below `minDeckForFit` the deck is too small for the fit model to
+  // produce real signal (an empty deck collapses fit to global play-rate), so
+  // blending it in would just smuggle a popular off-archetype bomb back into the
+  // band. Rank on quality alone until the deck is large enough for fit to mean
+  // something — matching `copies_draft` and the `card_bundle`/`transfigured_draft`
+  // fit-or-quality fallback.
+  if (context.deckCards.length < MERCHANT_TUNING.minDeckForFit) {
+    return qualityValueByUuid(context, pool);
+  }
   const corpus = context.merchantCorpus;
   const qualityRaw = pool.map((card) =>
     corpus === undefined ? 0 : qualityOf(corpus, card.cardUuid),
