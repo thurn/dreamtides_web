@@ -378,6 +378,7 @@ export const purgeReplaceBuilder: MerchantArchetypeBuilder = {
           pool,
           fitByUuid,
           singleComponentByUuid(pool, "fit", fitByUuid),
+          context.draftPoolCardUuids,
         ),
         selectedKeys: replacements.map((c) => c.cardUuid),
         selectedCount: replacements.length,

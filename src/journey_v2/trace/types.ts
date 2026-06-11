@@ -85,6 +85,13 @@ export interface MerchantTraceCandidate {
   score: number;
   /** Named score sub-components, when the score is a blend or has structure. */
   components?: Readonly<Record<string, number>>;
+  /**
+   * Whether this card belongs to the player's resolved draft pool. Set on grant
+   * candidates so a log reader can tell pool cards from global-catalog cards;
+   * absent for decisions over deck entries / dreamsigns / sites that have no
+   * pool-membership notion.
+   */
+  inDraftPool?: boolean;
   /** Whether the candidate fell inside the sampling band. */
   inBand: boolean;
   /** Whether the candidate was selected as (one of) the offer target(s). */

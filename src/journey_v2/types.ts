@@ -84,6 +84,14 @@ export interface MerchantContext {
   cardByNumber: ReadonlyMap<number, CardData>;
   deckEntryById: ReadonlyMap<string, MerchantDeckCard>;
   ownedCardUuids: ReadonlySet<string>;
+  /**
+   * UUIDs of the cards in this quest's resolved draft pool (the cards the player
+   * could actually draft this game). Empty when no draft pool has been resolved.
+   * Category drafts (`category_draft_known`) only offer cards in this set, and
+   * every grant trace marks each candidate's pool membership (`inDraftPool`) so a
+   * log reader can tell pool cards from global-catalog cards.
+   */
+  draftPoolCardUuids: ReadonlySet<string>;
   heldDreamsignIds: ReadonlySet<string>;
   heldDreamsignFallbackNames: ReadonlySet<string>;
   /** Non-starter pool cards eligible as grant targets. */

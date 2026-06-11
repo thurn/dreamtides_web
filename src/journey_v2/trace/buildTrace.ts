@@ -48,6 +48,7 @@ export interface TraceCandidateInput {
   entryId?: string;
   score: number;
   components?: Readonly<Record<string, number>>;
+  inDraftPool?: boolean;
 }
 
 /**
@@ -104,6 +105,9 @@ export function assembleOfferTrace(params: {
     ...(candidate.components === undefined
       ? {}
       : { components: candidate.components }),
+    ...(candidate.inDraftPool === undefined
+      ? {}
+      : { inDraftPool: candidate.inDraftPool }),
     inBand: rank < bandSize,
     selected: selectedSet.has(candidate.key),
   }));
@@ -148,6 +152,7 @@ export function catalogTraceCandidates(
   pool: readonly MerchantCatalogCard[],
   scoreByUuid: ReadonlyMap<string, number>,
   componentsByUuid?: ReadonlyMap<string, Readonly<Record<string, number>>>,
+  draftPoolCardUuids?: ReadonlySet<string>,
 ): TraceCandidateInput[] {
   return pool.map((card) => ({
     key: card.cardUuid,
@@ -158,6 +163,9 @@ export function catalogTraceCandidates(
     ...(componentsByUuid?.get(card.cardUuid) === undefined
       ? {}
       : { components: componentsByUuid.get(card.cardUuid) }),
+    ...(draftPoolCardUuids === undefined
+      ? {}
+      : { inDraftPool: draftPoolCardUuids.has(card.cardUuid) }),
   }));
 }
 

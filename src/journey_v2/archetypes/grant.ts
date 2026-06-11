@@ -53,6 +53,8 @@ function grantScoredTrace(params: {
   coldStartQualityFallback?: boolean;
   blend?: Readonly<Record<string, number>>;
   notes?: readonly string[];
+  /** Marks each candidate's draft-pool membership in the trace (`inDraftPool`). */
+  draftPoolCardUuids?: ReadonlySet<string>;
 }): MerchantOfferTrace {
   return assembleOfferTrace({
     decision: "scored_cards",
@@ -61,6 +63,7 @@ function grantScoredTrace(params: {
       params.pool,
       params.scoreByUuid,
       params.componentsByUuid,
+      params.draftPoolCardUuids,
     ),
     selectedKeys: params.selectedUuids,
     selectedCount: params.selectedCount,
@@ -266,6 +269,7 @@ export const strongCardBuilder: MerchantArchetypeBuilder = {
       targetKey: target.cardUuid,
       trace: grantScoredTrace({
         pool,
+        draftPoolCardUuids: context.draftPoolCardUuids,
         scoreByUuid: scored.scoreByUuid,
         componentsByUuid: scored.componentsByUuid,
         selectedUuids: [target.cardUuid],
@@ -319,6 +323,7 @@ export const fitCardGrantBuilder: MerchantArchetypeBuilder = {
       targetKey: target.cardUuid,
       trace: grantScoredTrace({
         pool,
+        draftPoolCardUuids: context.draftPoolCardUuids,
         scoreByUuid: fitByUuid,
         componentsByUuid: singleComponentByUuid(pool, "fit", fitByUuid),
         selectedUuids: [target.cardUuid],
@@ -377,6 +382,7 @@ export const fitCardDraftBuilder: MerchantArchetypeBuilder = {
       targetKey: sampled.map((card) => card.cardUuid).join(","),
       trace: grantScoredTrace({
         pool,
+        draftPoolCardUuids: context.draftPoolCardUuids,
         scoreByUuid: fitByUuid,
         componentsByUuid: singleComponentByUuid(pool, "fit", fitByUuid),
         selectedUuids: sampled.map((card) => card.cardUuid),
@@ -474,6 +480,7 @@ export const copiesDraftBuilder: MerchantArchetypeBuilder = {
       targetKey: sampled.map((card) => card.cardUuid).join(","),
       trace: grantScoredTrace({
         pool,
+        draftPoolCardUuids: context.draftPoolCardUuids,
         scoreByUuid: scored.scoreByUuid,
         componentsByUuid: scored.componentsByUuid,
         selectedUuids: sampled.map((card) => card.cardUuid),
@@ -525,18 +532,24 @@ function fitOrQualityByUuid(
  *
  * Sampling: build the category universe, weighted-sample one category with 75%
  * weight on deck-affine categories and 25% on the full universe
- * (`categoryAffineWeight`), then fit-band-sample 4 cards within the category's
- * unowned pool members. A face-up chooser: both the category and the four cards
- * are shown, so the player drafts the best fit for their deck. Eligible when at
- * least one category has >= `categoryMinPoolCards` unowned candidate members.
+ * (`categoryAffineWeight`), then fit-band-sample `categoryDraftSize` cards within
+ * the category's unowned pool members. A face-up chooser: both the category and
+ * the four cards are shown, so the player drafts the best fit for their deck.
+ * Eligible when at least one category can fill the chooser entirely from the
+ * player's own draft pool.
  */
 function categoryCandidatePool(
   context: MerchantContext,
   category: MerchantCategory,
 ): readonly MerchantCatalogCard[] {
   const memberSet = new Set(category.memberUuids);
-  return grantCandidatePool(context).filter((card) =>
-    memberSet.has(card.cardUuid),
+  const draftPool = context.draftPoolCardUuids;
+  // Only offer cards the player could actually draft this game: every candidate
+  // must be both a category member and present in the resolved draft pool. (When
+  // no draft pool has been resolved the set is empty and no category qualifies,
+  // so the merchant simply does not roll a category draft.)
+  return grantCandidatePool(context).filter(
+    (card) => memberSet.has(card.cardUuid) && draftPool.has(card.cardUuid),
   );
 }
 
@@ -546,7 +559,7 @@ function offerableCategories(
   return buildCategoryUniverse(context).filter(
     (category) =>
       categoryCandidatePool(context, category).length >=
-      MERCHANT_TUNING.categoryMinPoolCards,
+      MERCHANT_TUNING.categoryDraftSize,
   );
 }
 
@@ -579,10 +592,10 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
     const sampled = bandSample(
       pool,
       (card) => fitByUuid.get(card.cardUuid) ?? 0,
-      4,
+      MERCHANT_TUNING.categoryDraftSize,
       rng,
     );
-    if (sampled.length < 4) return null;
+    if (sampled.length < MERCHANT_TUNING.categoryDraftSize) return null;
 
     const candidates = sampled.map((card) =>
       catalogChoiceCandidate(
@@ -606,12 +619,17 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
       targetKey: `${category.id}:${sampled.map((card) => card.cardUuid).join(",")}`,
       trace: grantScoredTrace({
         pool,
+        draftPoolCardUuids: context.draftPoolCardUuids,
         scoreByUuid: fitByUuid,
         componentsByUuid: singleComponentByUuid(pool, "fit", fitByUuid),
         selectedUuids: sampled.map((card) => card.cardUuid),
         selectedCount: sampled.length,
         bandFraction: MERCHANT_TUNING.bandFraction,
         notes: [
+          // Every candidate is drawn from the player's resolved draft pool; each
+          // trace candidate also carries `inDraftPool` (always true here).
+          "candidateSource=draftPool",
+          `draftPoolSize=${String(context.draftPoolCardUuids.size)}`,
           `category=${category.id}`,
           `categoryDeckAffine=${String(category.deckAffine)}`,
           `categoryWeight=${String(
@@ -620,6 +638,16 @@ export const categoryDraftKnownBuilder: MerchantArchetypeBuilder = {
               : 1 - MERCHANT_TUNING.categoryAffineWeight,
           )}`,
           `offerableCategories=${String(categories.length)}`,
+          // Why this category and not another: every offerable category with its
+          // draft-pool depth (`*` marks deck-affine categories, weighted higher).
+          `offerableCategoryPool=${categories
+            .map(
+              (candidate) =>
+                `${candidate.id}:${String(
+                  categoryCandidatePool(context, candidate).length,
+                )}${candidate.deckAffine ? "*" : ""}`,
+            )
+            .join("|")}`,
         ],
       }),
     };
@@ -735,6 +763,7 @@ export const cardBundleBuilder: MerchantArchetypeBuilder = {
       // from a different band per grow step.
       trace: grantScoredTrace({
         pool,
+        draftPoolCardUuids: context.draftPoolCardUuids,
         scoreByUuid: seedSignal,
         componentsByUuid: singleComponentByUuid(
           pool,
@@ -873,6 +902,7 @@ export const transfiguredDraftBuilder: MerchantArchetypeBuilder = {
         .join(","),
       trace: grantScoredTrace({
         pool,
+        draftPoolCardUuids: context.draftPoolCardUuids,
         scoreByUuid: signal,
         componentsByUuid: singleComponentByUuid(
           pool,

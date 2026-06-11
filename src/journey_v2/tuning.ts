@@ -75,8 +75,13 @@ export const MERCHANT_TUNING = {
   starterPurgeBonus: 0.25,
   /** Characters of a subtype required for that tribe to be active. */
   tribalThreshold: 4,
-  /** Minimum candidate cards for a category to be offerable. */
-  categoryMinPoolCards: 8,
+  /**
+   * Cards shown in a `category_draft_known` chooser, and therefore the minimum
+   * number of draft-pool cards a category must contribute to be offerable: a
+   * category is only offered when the player's own draft pool can fill all four
+   * slots.
+   */
+  categoryDraftSize: 4,
   /** Minimum non-starter pool cards for a subtype to become a category. */
   subtypeMinPoolCards: 12,
 } as const;

@@ -59,6 +59,30 @@ function projectCatalogCard(card: CardData): MerchantCatalogCard {
   };
 }
 
+/**
+ * Resolves the quest's draft pool to the set of card UUIDs the player could
+ * draft this game. `draftPoolCopiesByCard` is keyed by card number (as a
+ * string); we map each number to its UUID via `cardByNumber`. Returns an empty
+ * set when no package has been resolved (e.g. before the pool is built).
+ */
+function buildDraftPoolCardUuids(
+  questState: QuestState,
+  cardByNumber: ReadonlyMap<number, CardData>,
+): ReadonlySet<string> {
+  const draftPoolCardUuids = new Set<string>();
+  const copiesByCard = questState.resolvedPackage?.draftPoolCopiesByCard;
+  if (copiesByCard === undefined) return draftPoolCardUuids;
+  for (const cardNumberKey of Object.keys(copiesByCard)) {
+    const cardNumber = Number(cardNumberKey);
+    if (!Number.isInteger(cardNumber)) continue;
+    const card = cardByNumber.get(cardNumber);
+    if (card !== undefined && card.id.length > 0) {
+      draftPoolCardUuids.add(card.id);
+    }
+  }
+  return draftPoolCardUuids;
+}
+
 function buildHeldDreamsignIds(dreamsigns: readonly Dreamsign[]): ReadonlySet<string> {
   const heldDreamsignIds = new Set<string>();
   for (const dreamsign of dreamsigns) {
@@ -117,6 +141,8 @@ export function buildMerchantContext({
     [...cardByNumber.values()].filter(isGrantCandidate).map(projectCatalogCard),
   );
 
+  const draftPoolCardUuids = buildDraftPoolCardUuids(questState, cardByNumber);
+
   const heldDreamsignIds = buildHeldDreamsignIds(questState.dreamsigns);
   const heldDreamsignFallbackNames = buildHeldDreamsignFallbackNames(
     questState.dreamsigns,
@@ -151,6 +177,7 @@ export function buildMerchantContext({
     cardByNumber,
     deckEntryById,
     ownedCardUuids,
+    draftPoolCardUuids,
     heldDreamsignIds,
     heldDreamsignFallbackNames,
     candidateGrantCards,
