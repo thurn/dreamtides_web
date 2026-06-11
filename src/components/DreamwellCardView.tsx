@@ -22,6 +22,16 @@ export interface DreamwellCardViewData {
 }
 
 /**
+ * Fraction of the source image's height, at the very bottom, taken up by the
+ * watermark / letterbox strip that must never be shown. The art sources are a
+ * uniform 280px tall with a ~21px strip; cropping it matches the regular card
+ * (`CardView`'s `ART_SOURCE_BOTTOM_CROP`). The art image is rendered into a box
+ * grown taller by this fraction and top-anchored, so the strip falls below the
+ * card's bottom edge and is clipped by the card's `overflow: hidden`.
+ */
+const ART_SOURCE_BOTTOM_CROP = 21 / 280;
+
+/**
  * A Dreamwell card, rendered in landscape (3:2) but wearing the same chrome as a
  * regular {@link import("./CardView").CardView}: full-bleed art under a floating,
  * frosted panel. The Dreamwell energy orb (the energy flame in **purple**, white
@@ -89,7 +99,10 @@ export function DreamwellCardView({
       }}
       {...triggerHandlers}
     >
-      {/* Card art covers the whole frame. */}
+      {/* Card art covers the whole frame. The image box is grown taller by the
+          watermark fraction and top-anchored, so the source's bottom strip
+          extends past the card's bottom edge and is clipped (the card's
+          `overflow: hidden`), matching how the regular card hides it. */}
       <img
         src={artUrl}
         alt=""
@@ -97,10 +110,12 @@ export function DreamwellCardView({
         draggable={false}
         style={{
           position: "absolute",
-          inset: 0,
+          top: 0,
+          left: 0,
           width: "100%",
-          height: "100%",
+          height: `calc(100% / ${String(1 - ART_SOURCE_BOTTOM_CROP)})`,
           objectFit: "cover",
+          objectPosition: "center top",
         }}
       />
 
@@ -131,7 +146,8 @@ export function DreamwellCardView({
       />
 
       {/* Energy-added orb: purple flame, white number, floating in the top-right
-          corner. */}
+          corner over a soft dark backing so it reads on bright art the way the
+          regular card's cost orb reads over its name bar. */}
       <div
         style={{
           position: "absolute",
@@ -139,14 +155,26 @@ export function DreamwellCardView({
           right: "3.4cqw",
         }}
       >
-        <CardStatOrb
-          variant="dreamwellEnergy"
-          value={String(card.energyAdded)}
-          sizeVar="10cqw"
-          numberSizeVar="6.2cqw"
-          numberCapPx={64}
-          ariaLabel={`${String(card.energyAdded)} energy added`}
+        <div
+          aria-hidden="true"
+          style={{
+            position: "absolute",
+            inset: "-22%",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(8, 4, 14, 0.55) 0%, rgba(8, 4, 14, 0.4) 42%, rgba(8, 4, 14, 0) 70%)",
+          }}
         />
+        <div style={{ position: "relative" }}>
+          <CardStatOrb
+            variant="dreamwellEnergy"
+            value={String(card.energyAdded)}
+            sizeVar="13cqw"
+            numberSizeVar="7.8cqw"
+            numberCapPx={64}
+            ariaLabel={`${String(card.energyAdded)} energy added`}
+          />
+        </div>
       </div>
 
       {/* Bottom-anchored box: the card name as a heading, then the rules text. */}
