@@ -8,7 +8,7 @@ import type {
 } from "../types";
 import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
 import type { EffectStep, StepContext } from "./effect-step";
-import { alliesInPlay, gainEnergyEdits } from "./effect-step";
+import { addGainedSparkEdits, alliesInPlay, gainEnergyEdits, gainScoreEdits } from "./effect-step";
 import { fnv1aHex } from "./rules-text-hash";
 
 // ---------------------------------------------------------------------------
@@ -62,6 +62,142 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
     trigger: "dawn",
     textHash: "71765292",
     steps: [{ kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 1) }],
+  },
+
+  // Nightmare Manifest — "▸Dawn: Gain 1●.\n\n☪, Abandon a character: Gain 1●."
+  // The script automates only the ▸Dawn energy gain; the activated ability is
+  // resolved manually.
+  "0458658d-7e02-4286-9249-93674d16620b": {
+    id: "0458658d-7e02-4286-9249-93674d16620b",
+    trigger: "dawn",
+    textHash: "450f3832",
+    steps: [{ kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 1) }],
+  },
+
+  // Sky Voyager — "This character has all character types.\n\n▸Dawn: Gain 1●."
+  // The script automates only the ▸Dawn energy gain; the all-types clause is a
+  // passive resolved manually.
+  "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9": {
+    id: "3d1fadf6-42e5-4d03-9a72-9bc25968c2b9",
+    trigger: "dawn",
+    textHash: "89d15de8",
+    steps: [{ kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 1) }],
+  },
+
+  // Ethereal Trailblazer — "▸Dawn: Gain 1●." The script automates the ▸Dawn
+  // energy gain.
+  "48257e3e-9600-4edf-a905-e73a41ab5ec1": {
+    id: "48257e3e-9600-4edf-a905-e73a41ab5ec1",
+    trigger: "dawn",
+    textHash: "1e9baa12",
+    steps: [{ kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 1) }],
+  },
+
+  // Hallowed Stag — "Vengeful\n\n▸Dawn: Gain 1●." The script automates only the
+  // ▸Dawn energy gain; the Vengeful keyword is resolved manually.
+  "7dd2214f-8d16-453a-9f28-62712e64eae1": {
+    id: "7dd2214f-8d16-453a-9f28-62712e64eae1",
+    trigger: "dawn",
+    textHash: "3958be2a",
+    steps: [{ kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 1) }],
+  },
+
+  // Cloudmantle Ray — "▸Dawn: Gain 1●.\n\nReclaim 3●" The script automates only
+  // the ▸Dawn energy gain; Reclaim is resolved manually.
+  "86fd585b-e9d0-4dc1-bce9-488014b9316d": {
+    id: "86fd585b-e9d0-4dc1-bce9-488014b9316d",
+    trigger: "dawn",
+    textHash: "5fc5d2a1",
+    steps: [{ kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 1) }],
+  },
+
+  // Worldsong Behemoth — "▸Dawn: Gain 1●." The script automates the ▸Dawn
+  // energy gain.
+  "b5fbff03-f850-4627-94eb-12ed4dc15334": {
+    id: "b5fbff03-f850-4627-94eb-12ed4dc15334",
+    trigger: "dawn",
+    textHash: "1e9baa12",
+    steps: [{ kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 1) }],
+  },
+
+  // Starchaser — "Veil 2●\n\n▸Dawn: Gain 1●." The script automates only the
+  // ▸Dawn energy gain; the Veil keyword is resolved manually.
+  "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c": {
+    id: "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c",
+    trigger: "dawn",
+    textHash: "25db0d09",
+    steps: [{ kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 1) }],
+  },
+
+  // Starrunner — "▸Dawn: Gain 1●.\n\nAbandon this character: Gain 1●.\n\nReclaim
+  // 0●" The script automates only the ▸Dawn energy gain; the activated abandon
+  // ability and Reclaim are resolved manually.
+  "d30bd488-f921-49cb-a44f-353c54cb6548": {
+    id: "d30bd488-f921-49cb-a44f-353c54cb6548",
+    trigger: "dawn",
+    textHash: "c63ad125",
+    steps: [{ kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 1) }],
+  },
+
+  // Blazebound Sentinel — "▸Dawn: Gain 1●.\n\n▸Dissolved: Gain 1●." The script
+  // automates only the ▸Dawn energy gain; the ▸Dissolved trigger is resolved
+  // manually.
+  "f0165a60-df1c-41db-87bb-a784c26835a5": {
+    id: "f0165a60-df1c-41db-87bb-a784c26835a5",
+    trigger: "dawn",
+    textHash: "a2d358e4",
+    steps: [{ kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 1) }],
+  },
+
+  // Fern Treader — "Awakened\n\n▸Dawn: Gain 1●." The script automates only the
+  // ▸Dawn energy gain; the Awakened keyword is resolved manually.
+  "f256a0e7-e396-492b-8881-284ecd36025b": {
+    id: "f256a0e7-e396-492b-8881-284ecd36025b",
+    trigger: "dawn",
+    textHash: "099dc114",
+    steps: [{ kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 1) }],
+  },
+
+  // Runebound Champion — "▸Dawn: Gain 1⍟." The script automates the ▸Dawn score
+  // gain.
+  "a28ad36d-fa74-4190-a463-7efd3a6233d0": {
+    id: "a28ad36d-fa74-4190-a463-7efd3a6233d0",
+    trigger: "dawn",
+    textHash: "ce8fae02",
+    steps: [{ kind: "edits", build: (ctx) => gainScoreEdits(ctx.side, 1) }],
+  },
+
+  // Inferno's Herald — "▸Dawn: This character gains +1✦.\n\n▸Dissolved:
+  // Materialize a 1✦ warrior figment for each ✦ this character has." The script
+  // automates only the ▸Dawn self-spark gain; the ▸Dissolved trigger is resolved
+  // manually.
+  "01a8482b-5b4f-4c49-8791-2702cb5dfd3d": {
+    id: "01a8482b-5b4f-4c49-8791-2702cb5dfd3d",
+    trigger: "dawn",
+    textHash: "eb275e6f",
+    steps: [
+      {
+        kind: "edits",
+        build: (ctx) =>
+          ctx.sourceId !== undefined ? addGainedSparkEdits(ctx.sourceId, 1, ctx.state) : [],
+      },
+    ],
+  },
+
+  // Wired Duelist — "▸Dawn: This character gains +1✦.\n\n▸Dissolved: Give an
+  // ally +X✦ where X is this character's ✦." The script automates only the
+  // ▸Dawn self-spark gain; the ▸Dissolved trigger is resolved manually.
+  "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1": {
+    id: "cb2d9f1e-8888-44c7-9918-57b2ec8c78e1",
+    trigger: "dawn",
+    textHash: "ddbe3704",
+    steps: [
+      {
+        kind: "edits",
+        build: (ctx) =>
+          ctx.sourceId !== undefined ? addGainedSparkEdits(ctx.sourceId, 1, ctx.state) : [],
+      },
+    ],
   },
 
   // Ashwalker — "▸Materialized: Erode 3.\n\n▸Dissolved: Return a character from
@@ -229,7 +365,6 @@ export function collectDawnTriggerEdits(
   nowMs: number,
 ): BattleDebugEdit[] {
   const edits: BattleDebugEdit[] = [];
-  const ctx: StepContext = { side, state, random: Math.random, nowMs };
   for (const occupantId of alliesInPlay(state, side)) {
     const instance = state.cardInstances[occupantId];
     if (instance === undefined) continue;
@@ -240,6 +375,9 @@ export function collectDawnTriggerEdits(
     // Interactive Dawn scripts run through the runner post-dawn; skip them
     // wholesale here so a mixed script is never half-applied in the bookend.
     if (dawnScriptIsInteractive(script)) continue;
+    // The ctx is built per occupant so `sourceId` is the character whose dawn
+    // script is running, enabling self-effects (e.g. self-spark) to target it.
+    const ctx: StepContext = { side, state, random: Math.random, nowMs, sourceId: occupantId };
     for (const step of script.steps) {
       if (step.kind === "edits") {
         edits.push(...step.build(ctx));

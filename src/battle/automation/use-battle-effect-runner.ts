@@ -443,6 +443,7 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
       state,
       random: Math.random,
       nowMs: Date.now(),
+      sourceId: run.battleCardId,
     };
 
     const plan = planNextEffectStep(run.steps, ctx);
@@ -495,6 +496,7 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
         state,
         random: Math.random,
         nowMs: Date.now(),
+        sourceId: run.battleCardId,
       };
 
       const { edits, rest } = applyPromptResolution(paused.prompt, resolution, paused.rest, ctx);

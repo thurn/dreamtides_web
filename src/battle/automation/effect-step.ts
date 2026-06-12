@@ -15,6 +15,10 @@ export interface StepContext {
   state: BattleMutableState;
   random: () => number;
   nowMs: number;
+  /** The triggering card's `battleCardId`, when the effect resolves from a
+   *  specific in-play character (Dawn/Materialized self-effects). Absent for
+   *  side-scoped effects. */
+  sourceId?: string;
 }
 
 export type EffectPrompt =
