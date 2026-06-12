@@ -167,6 +167,58 @@ describe("battle history", () => {
     );
   });
 
+  it("commits an entry when only an instance's staticSparkBonus changes", () => {
+    // Regression guard: `areBattleMutableStatesEqual` must compare
+    // `staticSparkBonus`. If it omits the field, a before/after that differ
+    // only in `staticSparkBonus` are treated as equal and the entry is
+    // deduped to a no-op — silently dropping the Support spark edit.
+    const mutable = createInitialBattleState(
+      createBattleInit({
+        battleEntryKey: "site-7::2::dreamscape-2",
+        site: makeBattleTestSite(),
+        state: makeBattleTestState(),
+        cardDatabase: makeBattleTestCardDatabase(),
+        dreamcallers: makeBattleTestDreamcallers(),
+      }),
+    );
+    const battleCardId = mutable.sides.player.hand[0];
+    const after = {
+      ...mutable,
+      cardInstances: {
+        ...mutable.cardInstances,
+        [battleCardId]: {
+          ...mutable.cardInstances[battleCardId],
+          staticSparkBonus:
+            mutable.cardInstances[battleCardId].staticSparkBonus + 2,
+        },
+      },
+    };
+    const history = commitBattleHistoryEntry(
+      createEmptyBattleHistory(),
+      {
+        commandId: "SET_CARD_STATIC_SPARK_BONUS",
+        label: "Set Static Spark Bonus",
+        kind: "card-instance",
+        isComposite: false,
+        actor: "system",
+        sourceSurface: "auto-system",
+        targets: [],
+        timestamp: 0,
+        undoPayload: null,
+      },
+      {
+        mutable,
+        lastTransition: null,
+      },
+      {
+        mutable: after,
+        lastTransition: null,
+      },
+    );
+
+    expect(history.past.length).toBe(1);
+  });
+
   it("deep-clones card note entries inside stored snapshots", () => {
     const mutable = createInitialBattleState(
       createBattleInit({

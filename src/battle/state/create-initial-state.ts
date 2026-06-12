@@ -142,6 +142,7 @@ export function allocateBattleCardInstance(
       ? { figments: [params.definition.printedSpark] }
       : {}),
     sparkDelta: 0,
+    staticSparkBonus: 0,
     isRevealedToPlayer: params.isRevealedToPlayer,
     status: createDefaultBattleCardStatus(),
     markers: { isPrevented: false, isCopied: false },

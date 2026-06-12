@@ -308,6 +308,15 @@ export interface BattleCardInstance {
    */
   figments?: number[];
   sparkDelta: number;
+  /**
+   * Static spark granted by a Support static ability currently affecting this
+   * instance. This is an absolute value set authoritatively by the Support
+   * recompute (it is not additive across recomputes), and it is distinct from
+   * `sparkDelta`: per the battle rules a Support bonus applies only while the
+   * granting static ability holds and does not travel across zones, whereas
+   * `sparkDelta` is gained spark that persists. Effective spark adds both.
+   */
+  staticSparkBonus: number;
   isRevealedToPlayer: boolean;
   status: BattleCardStatus;
   markers: BattleCardMarkers;

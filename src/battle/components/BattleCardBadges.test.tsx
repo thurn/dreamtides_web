@@ -121,6 +121,7 @@ function makeInstance(overrides: {
     owner: "player",
     controller: "player",
     sparkDelta: 0,
+    staticSparkBonus: 0,
     isRevealedToPlayer: true,
     status: createDefaultBattleCardStatus(),
     markers: overrides.markers ?? { isPrevented: false, isCopied: false },

@@ -80,6 +80,7 @@ function makeFigment(
     controller: "player",
     figments: [...figments],
     sparkDelta: 0,
+    staticSparkBonus: 0,
     isRevealedToPlayer: true,
     status: createDefaultBattleCardStatus(),
     markers: { isPrevented: false, isCopied: false },
@@ -95,6 +96,7 @@ function makeNonFigment(battleCardId: string, printedSpark: number): BattleCardI
     owner: "player",
     controller: "player",
     sparkDelta: 0,
+    staticSparkBonus: 0,
     isRevealedToPlayer: true,
     status: createDefaultBattleCardStatus(),
     markers: { isPrevented: false, isCopied: false },
@@ -169,6 +171,29 @@ describe("selectEffectiveSparkForInstance", () => {
   it("clamps non-figment effective spark to zero", () => {
     const instance = makeNonFigment("c0", 1);
     instance.sparkDelta = -4;
+    expect(selectEffectiveSparkForInstance(instance)).toBe(0);
+  });
+
+  it("adds staticSparkBonus on top of printedSpark + sparkDelta for non-figments", () => {
+    const instance = makeNonFigment("c0", 3);
+    instance.sparkDelta = 1;
+    instance.staticSparkBonus = 2;
+    // printedSpark 3 + sparkDelta 1 + staticSparkBonus 2 = 6
+    expect(selectEffectiveSparkForInstance(instance)).toBe(6);
+  });
+
+  it("adds staticSparkBonus on top of member-spark-sum + sparkDelta for a figment stack", () => {
+    const instance = makeFigment("f0", [3, 1]);
+    instance.sparkDelta = 1;
+    instance.staticSparkBonus = 2;
+    // members (3 + 1) + sparkDelta 1 + staticSparkBonus 2 = 7
+    expect(selectEffectiveSparkForInstance(instance)).toBe(7);
+  });
+
+  it("clamps effective spark to zero even when staticSparkBonus is negative", () => {
+    const instance = makeNonFigment("c0", 1);
+    instance.sparkDelta = 0;
+    instance.staticSparkBonus = -5;
     expect(selectEffectiveSparkForInstance(instance)).toBe(0);
   });
 });

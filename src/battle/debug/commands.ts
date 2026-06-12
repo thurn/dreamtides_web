@@ -81,6 +81,11 @@ export type BattleDebugEdit =
     value: number;
   }
   | {
+    kind: "SET_CARD_STATIC_SPARK_BONUS";
+    battleCardId: string;
+    value: number;
+  }
+  | {
     kind: "MOVE_CARD_TO_ZONE";
     battleCardId: string;
     destination: BattleDebugZoneDestination;
@@ -475,6 +480,7 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
       return "numeric-state";
     case "SET_CARD_SPARK":
     case "SET_CARD_SPARK_DELTA":
+    case "SET_CARD_STATIC_SPARK_BONUS":
     case "KINDLE":
     case "ADD_FIGMENTS":
     case "ADD_CARD_NOTE":
@@ -581,6 +587,7 @@ function collectDebugEditTargets(
     }
     case "SET_CARD_SPARK":
     case "SET_CARD_SPARK_DELTA":
+    case "SET_CARD_STATIC_SPARK_BONUS":
     case "ADD_FIGMENTS":
     case "DISCARD_CARD":
     case "ABANDON":
@@ -665,6 +672,8 @@ function createDebugEditLabel(
       return `Set ${readCardName(state, edit.battleCardId)} Spark to ${String(edit.value)}`;
     case "SET_CARD_SPARK_DELTA":
       return `Set ${readCardName(state, edit.battleCardId)} Spark Delta to ${String(edit.value)}`;
+    case "SET_CARD_STATIC_SPARK_BONUS":
+      return `Set ${readCardName(state, edit.battleCardId)} Static Spark Bonus to ${String(edit.value)}`;
     case "MOVE_CARD_TO_ZONE":
       return `Move ${readCardName(state, edit.battleCardId)} to ${formatZoneDestinationLabel(edit.destination)}`;
     case "SWAP_BATTLEFIELD_SLOTS":

@@ -31,6 +31,7 @@ function makeInstance(renderedText: string, cardNumber: number): BattleCardInsta
     owner: "player",
     controller: "player",
     sparkDelta: 0,
+    staticSparkBonus: 0,
     isRevealedToPlayer: true,
     status: createDefaultBattleCardStatus(),
     markers: { isPrevented: false, isCopied: false },

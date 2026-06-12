@@ -54,10 +54,13 @@ export function selectEffectiveSparkForInstance(instance: BattleCardInstance): n
       (total, spark) => total + Math.max(0, spark),
       0,
     );
-    return Math.max(0, memberSpark + instance.sparkDelta);
+    return Math.max(0, memberSpark + instance.sparkDelta + instance.staticSparkBonus);
   }
 
-  return Math.max(0, instance.definition.printedSpark + instance.sparkDelta);
+  return Math.max(
+    0,
+    instance.definition.printedSpark + instance.sparkDelta + instance.staticSparkBonus,
+  );
 }
 
 export function findBattlefieldFigmentStack(

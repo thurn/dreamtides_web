@@ -539,6 +539,49 @@ describe("SET_COUNTERS", () => {
   });
 });
 
+function setStaticSparkBonus(
+  state: BattleReducerState,
+  battleCardId: string,
+  value: number,
+): BattleReducerState {
+  return battleControllerReducer(state, {
+    type: "APPLY_COMMAND",
+    command: {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_CARD_STATIC_SPARK_BONUS", battleCardId, value },
+    },
+  });
+}
+
+describe("SET_CARD_STATIC_SPARK_BONUS", () => {
+  it("sets the instance's staticSparkBonus to the requested value", () => {
+    const state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+
+    const result = setStaticSparkBonus(state, cardId, 3);
+
+    expect(result.mutable.cardInstances[cardId].staticSparkBonus).toBe(3);
+  });
+
+  it("is a no-op when the value already matches", () => {
+    const state = createBattle();
+    const cardId = state.mutable.sides.player.hand[0];
+    const seeded = setStaticSparkBonus(state, cardId, 2);
+    const before = seeded.mutable.cardInstances[cardId];
+
+    const result = setStaticSparkBonus(seeded, cardId, 2);
+
+    // Equal-value re-apply returns the same instance reference (no transition).
+    expect(result.mutable.cardInstances[cardId]).toBe(before);
+  });
+
+  it("ignores an unknown card id", () => {
+    const state = createBattle();
+    const result = setStaticSparkBonus(state, "missing-card", 4);
+    expect(result.mutable).toBe(state.mutable);
+  });
+});
+
 function abandon(
   state: BattleReducerState,
   battleCardId: string,

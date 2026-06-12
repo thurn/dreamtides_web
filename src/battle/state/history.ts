@@ -190,6 +190,7 @@ function areCardInstanceDictionariesEqual(
       leftInstance.controller !== rightInstance.controller ||
       !figmentsEqual(leftInstance.figments, rightInstance.figments) ||
       leftInstance.sparkDelta !== rightInstance.sparkDelta ||
+      leftInstance.staticSparkBonus !== rightInstance.staticSparkBonus ||
       leftInstance.isRevealedToPlayer !== rightInstance.isRevealedToPlayer ||
       leftInstance.markers.isPrevented !== rightInstance.markers.isPrevented ||
       leftInstance.markers.isCopied !== rightInstance.markers.isCopied ||

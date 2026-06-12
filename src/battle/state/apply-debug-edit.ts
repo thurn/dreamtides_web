@@ -217,6 +217,24 @@ export function applyDebugEdit(
         state: nextState,
         transition: createEmptyTransitionData(),
       };
+    case "SET_CARD_STATIC_SPARK_BONUS":
+      if (nextState.cardInstances[edit.battleCardId]?.staticSparkBonus === undefined) {
+        return {
+          state,
+          transition: createEmptyTransitionData(),
+        };
+      }
+      if (nextState.cardInstances[edit.battleCardId].staticSparkBonus === edit.value) {
+        return {
+          state,
+          transition: createEmptyTransitionData(),
+        };
+      }
+      nextState.cardInstances[edit.battleCardId].staticSparkBonus = edit.value;
+      return {
+        state: nextState,
+        transition: createEmptyTransitionData(),
+      };
     case "MOVE_CARD_TO_ZONE":
       return moveCardToDebugZone(state, edit.battleCardId, edit.destination);
     case "SWAP_BATTLEFIELD_SLOTS":

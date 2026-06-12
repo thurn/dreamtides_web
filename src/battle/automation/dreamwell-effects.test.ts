@@ -108,6 +108,7 @@ function makeCharacter(
     owner: side,
     controller: side,
     sparkDelta: 0,
+    staticSparkBonus: 0,
     isRevealedToPlayer: true,
     status: {
       isExhausted: false,

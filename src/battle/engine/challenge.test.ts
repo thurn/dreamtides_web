@@ -59,6 +59,7 @@ function makeInstance(
     controller: options.owner,
     figments,
     sparkDelta: options.sparkDelta ?? 0,
+    staticSparkBonus: 0,
     isRevealedToPlayer: true,
     status: { ...createDefaultBattleCardStatus(), ...options.status },
     markers: { isPrevented: false, isCopied: false },

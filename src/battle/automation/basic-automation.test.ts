@@ -54,6 +54,7 @@ function makeInstance(
       ? Array.from({ length: options.figmentCount ?? 1 }, () => options.printedSpark ?? 0)
       : undefined,
     sparkDelta: options.sparkDelta ?? 0,
+    staticSparkBonus: 0,
     isRevealedToPlayer: true,
     status: createDefaultBattleCardStatus(),
     markers: { isPrevented: false, isCopied: false },
