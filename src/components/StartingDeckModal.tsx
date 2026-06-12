@@ -4,6 +4,7 @@ import type { CardData } from "../types/cards";
 import type { DeckEntry } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "./CardDisplay";
+import { HoverZoomCard } from "./HoverZoomCard";
 import { applyDeckEntryCardModification } from "../card-type-change";
 import { logEvent } from "../logging";
 
@@ -181,12 +182,13 @@ export function StartingDeckModal({
                   }}
                 >
                   {resolvedEntries.map((resolved) => (
-                    <div
+                    <HoverZoomCard
                       key={resolved.entry.entryId}
+                      logSurface="starting_deck"
                       data-testid={`starting-deck-modal-card-${resolved.entry.entryId}`}
                     >
                       <CardDisplay card={resolved.card} />
-                    </div>
+                    </HoverZoomCard>
                   ))}
                 </div>
               )}

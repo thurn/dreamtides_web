@@ -7,14 +7,9 @@ import type {
 } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "./CardDisplay";
-import { CardHoverPreview } from "./CardHoverPreview";
 import { CardOverlay } from "./CardOverlay";
 import { DreamsignArtTile } from "./DreamsignArtTile";
-import {
-  CARD_HOVER_PREVIEW_DELAY_MS,
-  CARD_HOVER_PREVIEW_WIDTH_PX,
-  HoverPopover,
-} from "./HoverPopover";
+import { HoverZoomCard } from "./HoverZoomCard";
 import {
   getPersistedCardSize,
   persistCardSize,
@@ -522,8 +517,16 @@ export function DeckViewer({
                               borderRadius: "0.5rem",
                             }
                           : undefined;
-                    const cardTile = (
-                      <div
+                    // Small and medium tiles grow in place on hover (the card
+                    // itself enlarges until its rules text is comfortably
+                    // legible) so the in-grid card suppresses its own term
+                    // popover to keep the enlarged read clean. Large tiles are
+                    // already wide enough to read, so they neither grow nor
+                    // suppress their term help.
+                    const wrappedCardTile = (
+                      <HoverZoomCard
+                        enabled={cardSize !== "large"}
+                        logSurface="deck_viewer"
                         data-testid={`deck-viewer-row-${resolved.entry.entryId}`}
                         style={cardTileBorderStyle}
                       >
@@ -531,46 +534,13 @@ export function DeckViewer({
                           card={resolved.card}
                           transfiguration={resolved.transfiguration}
                           large={cardSize === "large"}
-                          // Small and medium tiles are wrapped in a hover
-                          // preview that renders its own glossary panel, so the
-                          // in-grid card suppresses its term popover to avoid a
-                          // second, duplicate definition panel. Large tiles have
-                          // no hover preview and keep their own term help.
                           suppressHoverHelp={cardSize !== "large"}
                           onClick={() => {
                             handleCardClick(resolved);
                           }}
                         />
-                      </div>
+                      </HoverZoomCard>
                     );
-                    // Skip the hover preview at large size: the in-grid card
-                    // is already wide enough to read its full art and rules
-                    // text, so the popup would duplicate what's already on
-                    // screen. Small and medium tiles are compressed and
-                    // benefit from a floating full-size preview.
-                    const wrappedCardTile =
-                      cardSize === "large" ? (
-                        cardTile
-                      ) : (
-                        <HoverPopover
-                          triggerAs="div"
-                          placement="top"
-                          delayMs={CARD_HOVER_PREVIEW_DELAY_MS}
-                          maxWidthPx={null}
-                          content={({ anchorRect, side }) =>
-                            <CardHoverPreview
-                              card={resolved.card}
-                              transfiguration={resolved.transfiguration}
-                              testId={`deck-viewer-row-hover-card-${resolved.entry.entryId}`}
-                              widthPx={CARD_HOVER_PREVIEW_WIDTH_PX}
-                              popoverSide={side}
-                              anchorRect={anchorRect}
-                            />
-                          }
-                        >
-                          {cardTile}
-                        </HoverPopover>
-                      );
                     return (
                       <div
                         key={resolved.entry.entryId}

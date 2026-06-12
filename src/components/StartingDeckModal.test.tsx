@@ -36,6 +36,7 @@ vi.mock("../state/quest-context", () => ({
 
 vi.mock("../logging", () => ({
   logEvent: vi.fn(),
+  logEventOnce: vi.fn(),
 }));
 
 vi.mock("./CardDisplay", () => ({

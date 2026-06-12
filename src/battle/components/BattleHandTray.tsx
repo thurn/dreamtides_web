@@ -1,6 +1,7 @@
 import type { MouseEvent as ReactMouseEvent } from "react";
 
 import { CardDisplay } from "../../components/CardDisplay";
+import { HoverZoomCard } from "../../components/HoverZoomCard";
 import type { BattleCommand } from "../debug/commands";
 import type { BattleCardInstance, BattleCommandSourceSurface, BattleMutableState } from "../types";
 import { battleCardAutomationStatus } from "../automation/battle-card-effects-table";
@@ -195,13 +196,22 @@ export function BattleHandCard({
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
     >
-      <CardDisplay
-        card={battleCardDisplayFromInstance(instance)}
-        selected={selected}
-        selectionColor="#a855f7"
+      {/* Cards in the player's hand grow in place on hover so their rules text
+          is comfortably legible. Opponent / revealed (compact) hands stay small
+          and opt out. */}
+      <HoverZoomCard
+        enabled={!compact && side === "player"}
+        logSurface="battle_hand"
         className="h-full w-full"
-        hideRulesText={compact}
-      />
+      >
+        <CardDisplay
+          card={battleCardDisplayFromInstance(instance)}
+          selected={selected}
+          selectionColor="#a855f7"
+          className="h-full w-full"
+          hideRulesText={compact}
+        />
+      </HoverZoomCard>
       {showAutomationGear ? (
         <AutomationGearIcon
           style={{

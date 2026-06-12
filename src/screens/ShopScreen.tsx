@@ -3,14 +3,9 @@ import { motion } from "framer-motion";
 import type { CardData } from "../types/cards";
 import type { SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
-import { CardHoverPreview } from "../components/CardHoverPreview";
 import { CardOverlay } from "../components/CardOverlay";
 import { DreamsignArtTile } from "../components/DreamsignArtTile";
-import {
-  CARD_HOVER_PREVIEW_DELAY_MS,
-  CARD_HOVER_PREVIEW_WIDTH_PX,
-  HoverPopover,
-} from "../components/HoverPopover";
+import { HoverZoomCard } from "../components/HoverZoomCard";
 import { RulesText } from "../components/RulesText";
 import { CARD_ASPECT_RATIO } from "../components/card-aspect";
 import { SIZE_PRESETS } from "../components/card-size";
@@ -370,21 +365,7 @@ function ShopSlotCard({
     const card = slot.card;
     return (
       <div className="flex flex-col gap-2">
-        <HoverPopover
-          triggerAs="div"
-          placement="top"
-          delayMs={CARD_HOVER_PREVIEW_DELAY_MS}
-          maxWidthPx={null}
-          content={({ anchorRect, side }) =>
-            <CardHoverPreview
-              card={card}
-              testId={`shop-offer-hover-card-${String(index)}`}
-              widthPx={CARD_HOVER_PREVIEW_WIDTH_PX}
-              popoverSide={side}
-              anchorRect={anchorRect}
-            />
-          }
-        >
+        <HoverZoomCard logSurface="shop">
           <div
             data-testid={`shop-offer-row-${String(index)}`}
             tabIndex={0}
@@ -393,7 +374,7 @@ function ShopSlotCard({
           >
             <CardDisplay card={card} onClick={() => onCardClick(card)} />
           </div>
-        </HoverPopover>
+        </HoverZoomCard>
         <PriceButton
           price={price}
           currency="essence"
