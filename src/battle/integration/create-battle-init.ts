@@ -528,6 +528,10 @@ function normalizePlayerDeckCard(
   });
   return {
     sourceDeckEntryId: entry.entryId,
+    // The stable base-catalog UUID, kept even when the entry is transfigured or
+    // modified: automation scripts and the rules-text hash key off the printed
+    // card's identity. (None of the registered automation cards are
+    // transfiguration targets today.)
     cardId: card.id,
     cardNumber: card.cardNumber,
     name: card.name,

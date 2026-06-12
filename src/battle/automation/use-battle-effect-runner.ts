@@ -210,11 +210,14 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): void {
 }
 
 /**
- * A key over the Support-relevant board shape: each in-play instance's id paired
- * with its current `staticSparkBonus` and subtype, plus occupancy. When a
- * character's spark target could change — a supporter or supported ally enters,
- * leaves, or its bonus shifts — this key changes and the recompute re-runs until
- * it reaches its fixed point (`planSupportRecompute` returning `[]`).
+ * A key over the Support-relevant board shape: every rank slot's occupant id
+ * paired with that instance's current `staticSparkBonus`. When a character's
+ * spark target could change — a supporter or supported ally enters or leaves a
+ * slot, or a bonus shifts — this key changes and the recompute re-runs until it
+ * reaches its fixed point (`planSupportRecompute` returning `[]`). Subtype is not
+ * part of the key because it is fixed for a given `battleCardId`, so a predicate
+ * such as Eternal Stag's spirit-animal filter cannot go stale without the
+ * occupant id (and thus the key) already changing.
  */
 function supportShapeKey(state: BattleMutableState): string {
   const parts: string[] = [];
