@@ -68,6 +68,7 @@ import { BattleCardPickerOverlay } from "./BattleCardPickerOverlay";
 import { BattleChoicePromptOverlay } from "./BattleChoicePromptOverlay";
 import { useDreamwellEffectRunner } from "../automation/use-dreamwell-effect-runner";
 import { dreamwellAutomationStatus } from "../automation/dreamwell-effects-table";
+import { collectAutomationHashDrift } from "../automation/battle-card-effects-table";
 import { BattlefieldGrid } from "./BattlefieldGrid";
 import { BattleZoneBrowser } from "./BattleZoneBrowser";
 import {
@@ -79,6 +80,8 @@ import {
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
 
 const DESKTOP_INSPECTOR_WIDTH = 1280;
+// Fires the automated-card hash-drift warning at most once per page session.
+let automationHashDriftWarned = false;
 const PHASE_CONTROL_SEQUENCE = ["dreamwell", "day", "dusk", "night", "challenge"] as const satisfies readonly BattlePhase[];
 type ZoneBrowserState = { side: BattleSide; zone: BrowseableZone } | null;
 type RewardOverlayState = {
@@ -456,6 +459,42 @@ function PlayableBattleScreenInner({
     }
     setIsInspectorDrawerOpen(true);
   }, [isDesktopInspectorLayout]);
+
+  // Developer nudge: warn once per session if any automated card's live rules
+  // text has drifted away from the script that automates it. This is purely a
+  // console warning — it never throws or alters battle behavior — and is
+  // defensive against a partially loaded catalog. The CI-gate test
+  // `battle-card-effects-hash.test.ts` is the authoritative guard; this surfaces
+  // the same drift to a developer running the app.
+  useEffect(() => {
+    if (automationHashDriftWarned) {
+      return;
+    }
+    try {
+      const cardsById = new Map<string, string>();
+      for (const card of cardDatabase.values()) {
+        cardsById.set(card.id, card.renderedText);
+      }
+      const drift = collectAutomationHashDrift(cardsById);
+      if (drift.length === 0) {
+        return;
+      }
+      automationHashDriftWarned = true;
+      const details = drift
+        .map(({ id }) => {
+          const card = [...cardDatabase.values()].find((c) => c.id === id);
+          return `  - ${id} (${card?.name ?? "missing from catalog"})`;
+        })
+        .join("\n");
+      console.warn(
+        `Automated battle-card rules text drifted from its script for the ` +
+          `following card(s). Re-check each card's automation script in ` +
+          `battle-card-effects-table.ts and update its stored textHash:\n${details}`,
+      );
+    } catch {
+      // Catalog unavailable or malformed; skip the developer nudge silently.
+    }
+  }, [cardDatabase]);
 
   function handleHandCardClick(_battleCardId: string): void {
     setContextMenu(null);

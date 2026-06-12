@@ -1,6 +1,7 @@
 import type { BattleCardInstance } from "../types";
 import type { EffectStep, StepContext } from "./effect-step";
 import { gainEnergyEdits } from "./effect-step";
+import { fnv1aHex } from "./rules-text-hash";
 
 // ---------------------------------------------------------------------------
 // Battle-card effect registry types
@@ -94,6 +95,27 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
 // ---------------------------------------------------------------------------
 // Lookups
 // ---------------------------------------------------------------------------
+
+/**
+ * Returns the registered cards whose live `renderedText` differs from the hash
+ * stored in `BATTLE_CARD_EFFECTS`. `cardsById` maps card UUID → its current
+ * `renderedText`. A card that is registered here but absent from `cardsById` is
+ * reported with `actual: null` (missing from the catalog). An empty result
+ * means every registered script still matches its target card's rules text.
+ */
+export function collectAutomationHashDrift(
+  cardsById: ReadonlyMap<string, string>,
+): { id: string; expected: string; actual: string | null }[] {
+  const drift: { id: string; expected: string; actual: string | null }[] = [];
+  for (const [id, script] of Object.entries(BATTLE_CARD_EFFECTS)) {
+    const text = cardsById.get(id);
+    const actual = text === undefined ? null : fnv1aHex(text);
+    if (actual !== script.textHash) {
+      drift.push({ id, expected: script.textHash, actual });
+    }
+  }
+  return drift;
+}
 
 /**
  * Returns the `BattleCardEffectScript` for `cardId` if one exists, else `null`.
