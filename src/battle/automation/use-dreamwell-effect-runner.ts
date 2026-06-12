@@ -97,6 +97,15 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
     if (state.phase !== "dreamwell") return;
     if (state.turnNumber <= 1) return;
 
+    // One Dreamwell card at a time: never start (or clobber) a run while another
+    // is in progress or paused on a prompt. When the active run completes (`run`
+    // returns to null) this effect re-runs — `run` is a dependency — and the next
+    // reveal's run can start. Without this guard, a reveal committing for the
+    // following phase while a prior prompt is still unresolved would overwrite
+    // `run` and desync it from `pausedRef`, resolving the pending prompt against
+    // the wrong card/side.
+    if (run !== null) return;
+
     const side = state.activeSide;
     if (state.sides[side].dreamwellDrawnTurn !== state.turnNumber) return;
 
@@ -132,6 +141,8 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
     state.sides[state.activeSide].dreamwellDrawnTurn,
     state.sides[state.activeSide].dreamwellCardIndex,
     dreamwellDeck,
+    // Re-run when the active run finishes (`run` → null) so the next card starts.
+    run,
   ]);
 
   // ---------------------------------------------------------------------------
