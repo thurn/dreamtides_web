@@ -281,10 +281,10 @@ function PlayableBattleScreenInner({
     dispatchEdit: dispatchAutomationEdit,
   });
 
-  // Resolves the persistent-board battle triggers (▸Materialized once per
-  // newly-entered instance, and the idempotent Support spark recompute). No
-  // overlays to render: these are deterministic edits only.
-  useBattleEffectRunner({
+  // Resolves the persistent-board battle triggers: ▸Materialized (walked through
+  // the shared step queue, pausing on prompts surfaced via overlays) once per
+  // newly-entered instance, plus the idempotent Support spark recompute.
+  const battleRunner = useBattleEffectRunner({
     enabled: isBasicAutomationEnabled,
     state: reducerState.mutable,
     dispatchEdit: dispatchAutomationEdit,
@@ -951,6 +951,41 @@ function PlayableBattleScreenInner({
           state={reducerState.mutable}
           onDispatch={(command) => dispatch({ type: "APPLY_COMMAND", command })}
           onClose={() => dreamwellRunner.resolvePrompt({ kind: "foresee" })}
+        />
+      ) : null}
+      {/* Battle-runner (▸Materialized) prompts share the same three overlays.
+          Precedence: only one runner's overlay is open at a time, and dreamwell
+          prompts win ties — render these only when the dreamwell runner has no
+          active prompt. */}
+      {dreamwellRunner.activePrompt === null &&
+      battleRunner.activePrompt?.kind === "pick-cards" ? (
+        <BattleCardPickerOverlay
+          title={battleRunner.activePrompt.label}
+          candidateIds={battleRunner.activePrompt.candidateIds}
+          count={battleRunner.activePrompt.count}
+          optional={battleRunner.activePrompt.optional}
+          state={reducerState.mutable}
+          onConfirm={(ids) => battleRunner.resolvePrompt({ kind: "pick-cards", chosenIds: ids })}
+          onSkip={() => battleRunner.resolvePrompt({ kind: "pick-cards", chosenIds: [] })}
+        />
+      ) : null}
+      {dreamwellRunner.activePrompt === null &&
+      battleRunner.activePrompt?.kind === "choice" ? (
+        <BattleChoicePromptOverlay
+          title={battleRunner.activePrompt.label}
+          options={battleRunner.activePrompt.options}
+          onChoose={(i) => battleRunner.resolvePrompt({ kind: "choice", optionIndex: i })}
+        />
+      ) : null}
+      {dreamwellRunner.activePrompt === null &&
+      battleRunner.activePrompt?.kind === "foresee" &&
+      openForeseeOverlay === null ? (
+        <BattleForeseeOverlay
+          initialCount={battleRunner.activePrompt.count}
+          side={battleRunner.activePromptSide ?? activeSide}
+          state={reducerState.mutable}
+          onDispatch={(command) => dispatch({ type: "APPLY_COMMAND", command })}
+          onClose={() => battleRunner.resolvePrompt({ kind: "foresee" })}
         />
       ) : null}
       {openDeckOrderPicker !== null ? (

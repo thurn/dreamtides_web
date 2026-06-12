@@ -1,13 +1,15 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { createBattleLogBaseFields, logEvent } from "../../logging";
 import type { BattleDebugEdit } from "../debug/commands";
-import type { BattleCardInstance, BattleMutableState } from "../types";
+import type { BattleCardInstance, BattleMutableState, BattleSide } from "../types";
 import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
-import type { StepContext } from "./effect-step";
+import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
 import {
   planSupportRecompute,
   selectBattleCardEffectScript,
 } from "./battle-card-effects-table";
+import { applyPromptResolution, planNextEffectStep } from "./effect-runner-core";
+import type { ActivePrompt, PromptResolution } from "./effect-runner-core";
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -19,6 +21,23 @@ export interface BattleEffectRunnerArgs {
   dispatchEdit: (edit: BattleDebugEdit) => void; // bypasses planBasicAutomationCommands
 }
 
+export interface BattleEffectRunnerResult {
+  activePrompt: ActivePrompt | null;
+  activePromptSide: BattleSide | null; // for the foresee overlay + card rendering
+  resolvePrompt: (resolution: PromptResolution) => void;
+}
+
+/** A materialized run waiting to be (or currently being) walked through the
+ *  shared step queue. `battleCardId` is the unique in-play instance id that
+ *  newly entered; `cardId` is its definition UUID (for logging and lookup);
+ *  `side` is the controller; `steps` is the remaining queue to walk. */
+interface MaterializedRun {
+  battleCardId: string;
+  cardId: string;
+  side: BattleSide;
+  steps: EffectStep[];
+}
+
 // ---------------------------------------------------------------------------
 // Pure detection helpers (exported for unit testing)
 // ---------------------------------------------------------------------------
@@ -28,8 +47,10 @@ export interface BattleEffectRunnerArgs {
  * resolves its ▸Materialized trigger. If `instance.definition.cardId` has a
  * registered `"materialized"` script, runs each edits-step `build(ctx)` and
  * concatenates them in order, with `ctx.side = instance.controller`. Any
- * non-edits step is skipped defensively with a `console.warn` (V1 materialized
- * scripts are all edits). Returns `[]` when no materialized script applies.
+ * non-edits step is skipped defensively with a `console.warn` (a prompt step in
+ * a materialized script is walked through the runner's step queue instead — this
+ * flatten helper is retained only for direct edits-only inspection/testing).
+ * Returns `[]` when no materialized script applies.
  */
 export function materializedScriptEdits(
   instance: BattleCardInstance,
@@ -75,12 +96,49 @@ export function inPlayInstanceIds(state: BattleMutableState): string[] {
   return ids;
 }
 
+/**
+ * Collects the pending materialized runs for the ids that newly appeared in the
+ * in-play set since `previous`. For each newly-appeared id whose backing
+ * instance's card has a registered non-empty `"materialized"` script, returns a
+ * `MaterializedRun` carrying a fresh copy of that script's steps. Ids already in
+ * `previous`, ids with no backing instance, and ids whose card has no
+ * materialized script are skipped. Iteration follows `inPlayIds` order so the
+ * resulting queue is deterministic.
+ */
+export function collectNewlyMaterializedRuns(
+  inPlayIds: string[],
+  previous: Set<string>,
+  state: BattleMutableState,
+): MaterializedRun[] {
+  const runs: MaterializedRun[] = [];
+  for (const id of inPlayIds) {
+    if (previous.has(id)) continue;
+    const instance = state.cardInstances[id];
+    if (instance === undefined) continue;
+    const script = selectBattleCardEffectScript(instance.definition.cardId);
+    if (script === null || script.trigger !== "materialized" || script.steps === undefined) {
+      continue;
+    }
+    if (script.steps.length === 0) continue;
+    runs.push({
+      battleCardId: id,
+      cardId: instance.definition.cardId,
+      side: instance.controller,
+      steps: [...script.steps],
+    });
+  }
+  return runs;
+}
+
 // ---------------------------------------------------------------------------
 // Logging
 // ---------------------------------------------------------------------------
 
 /** Canonical event-name constants for battle-effect logging. */
 const BATTLE_EFFECT_LOG = {
+  started: "battle_proto_battle_effect_started",
+  step: "battle_proto_battle_step",
+  promptResolved: "battle_proto_battle_prompt_resolved",
   resolved: "battle_proto_battle_effect_resolved",
   supportChanged: "battle_proto_battle_support_changed",
 } as const;
@@ -113,10 +171,15 @@ function extractEditTarget(edit: BattleDebugEdit): string | null {
  *
  *  - **▸Materialized** (board-diff, fires once per instance): tracks the
  *    in-play id set across renders. A newly-appeared id whose card has a
- *    `"materialized"` script dispatches that script's deterministic edits once.
- *    Characters already in play when the runner starts are seeded without
- *    firing, so they never retro-fire. A re-materialized card has a fresh
- *    `battleCardId`, so it is a new id and fires again — correct.
+ *    `"materialized"` script is enqueued and walked through the shared step
+ *    queue (`planNextEffectStep`/`applyPromptResolution`): `edits` steps
+ *    dispatch immediately, while a `prompt` step pauses the run and surfaces an
+ *    `activePrompt` for the UI to render (foresee / pick-cards / choice). Only
+ *    one materialized run is active at a time; further materializations queue in
+ *    `pendingRef` and start when the active run completes. Characters already in
+ *    play when the runner starts are seeded without firing, so they never
+ *    retro-fire. A re-materialized card has a fresh `battleCardId`, so it is a
+ *    new id and fires again — correct.
  *  - **Support** (recompute, idempotent): re-derives every in-play instance's
  *    `staticSparkBonus` from the current board via `planSupportRecompute` and
  *    dispatches only the changed edits. Because the recompute is diff-only the
@@ -126,11 +189,8 @@ function extractEditTarget(edit: BattleDebugEdit): string | null {
  * batching, so a `useEffect` is the right place for them. (The transient Dawn
  * bookend is handled in `basic-automation`, not here, because React never
  * commits a `phase === "dawn"` render under automation.)
- *
- * This runner handles DETERMINISTIC EDITS ONLY: the registered V1 materialized
- * scripts use edits-steps exclusively, so there is no prompt state machine.
  */
-export function useBattleEffectRunner(args: BattleEffectRunnerArgs): void {
+export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffectRunnerResult {
   const { enabled, state, dispatchEdit } = args;
 
   // The in-play ids observed on the previous render. `null` until the first
@@ -138,13 +198,38 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): void {
   // play when the runner mounts do not retro-fire their ▸Materialized).
   const seenInPlayRef = useRef<Set<string> | null>(null);
 
+  // Pending materialized runs that have been detected by the board-diff but not
+  // yet started. Multiple characters can materialize in one board change, but
+  // only ONE run may be active at a time (a run can pause on a prompt), so they
+  // wait here in FIFO order. The pump shifts the next one into `run` when idle.
+  const pendingRef = useRef<MaterializedRun[]>([]);
+
+  // The active materialized run (null when idle). `steps` is the remaining queue.
+  const [run, setRun] = useState<MaterializedRun | null>(null);
+
+  // The active prompt shown to the player (null when idle or between prompts).
+  const [activePrompt, setActivePrompt] = useState<ActivePrompt | null>(null);
+
+  // Paused prompt + rest queue, held in a ref so resolvePrompt can read it
+  // without being regenerated on every render.
+  const pausedRef = useRef<{ prompt: EffectPrompt; rest: EffectStep[] } | null>(null);
+
+  // Re-render guard: skip advance if the queue reference has not changed.
+  const processedQueueRef = useRef<EffectStep[] | null>(null);
+
+  // Monotonic counter bumped whenever new runs are enqueued. It is a dependency
+  // of the pump effect so a freshly-enqueued run starts even when `run` was
+  // already null (in which case `run` alone would not change and the pump effect
+  // would not otherwise re-run).
+  const [enqueueTick, setEnqueueTick] = useState(0);
+
   const inPlayIds = inPlayInstanceIds(state);
   // A stable, order-independent key so the materialized effect re-runs only when
   // the in-play membership actually changes (not on every unrelated render).
   const inPlayKey = [...inPlayIds].sort().join(",");
 
   // ---------------------------------------------------------------------------
-  // Materialized — fire once per newly-appeared in-play instance
+  // Materialized board-diff — enqueue newly-appeared in-play instances
   // ---------------------------------------------------------------------------
   useEffect(() => {
     const current = new Set(inPlayIds);
@@ -157,23 +242,14 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): void {
     }
 
     if (enabled) {
-      for (const id of inPlayIds) {
-        if (previous.has(id)) continue;
-        const instance = state.cardInstances[id];
-        if (instance === undefined) continue;
-        const edits = materializedScriptEdits(instance, state, Date.now());
-        if (edits.length === 0) continue;
-        for (const edit of edits) {
-          dispatchEdit(edit);
-        }
-        logBattleEffect(state, BATTLE_EFFECT_LOG.resolved, {
-          cardId: instance.definition.cardId,
-          cardName: instance.definition.name,
-          trigger: "materialized",
-          side: instance.controller,
-          editKinds: edits.map((e) => e.kind),
-          targetIds: edits.map((e) => extractEditTarget(e)),
-        });
+      const newRuns = collectNewlyMaterializedRuns(inPlayIds, previous, state);
+      if (newRuns.length > 0) {
+        pendingRef.current.push(...newRuns);
+        // Wake the pump effect so the first enqueued run starts when none is
+        // active. A counter bump (rather than calling a starter inline) avoids
+        // the stale-closure trap where the imperative starter still sees the
+        // pre-`setRun(null)` value of `run`.
+        setEnqueueTick((t) => t + 1);
       }
     }
 
@@ -184,6 +260,152 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): void {
     // `state`/`dispatchEdit` are read fresh each run (their identity changes
     // every render, so including them would re-run this effect needlessly).
   }, [inPlayKey, enabled]);
+
+  // ---------------------------------------------------------------------------
+  // Pump effect — start the next pending run when none is active
+  // ---------------------------------------------------------------------------
+  useEffect(() => {
+    if (!enabled || state.result !== null) return;
+    // One materialized run at a time: never start (or clobber) a run while
+    // another is in progress or paused on a prompt. When the active run
+    // completes (`run` → null) this effect re-runs (`run` is a dependency) and
+    // the next pending run starts.
+    if (run !== null) return;
+    const next = pendingRef.current.shift();
+    if (next === undefined) return;
+    setRun(next);
+    logBattleEffect(state, BATTLE_EFFECT_LOG.started, {
+      cardId: next.cardId,
+      battleCardId: next.battleCardId,
+      trigger: "materialized",
+      side: next.side,
+      stepCount: next.steps.length,
+    });
+    // Re-run when the active run finishes (`run` → null) so the next pending run
+    // starts, and when a board change enqueues new runs (`enqueueTick`). `state`
+    // is read fresh each run.
+  }, [run, enabled, state.result, enqueueTick, state]);
+
+  // ---------------------------------------------------------------------------
+  // Advance effect — walks the active run's queue one step at a time
+  // ---------------------------------------------------------------------------
+  useEffect(() => {
+    if (run === null) return;
+
+    // Abort check runs FIRST — before the prompt-pause guard — so that toggling
+    // automation off or the battle ending while a prompt is open tears down the
+    // run and clears the overlay instead of leaving both stuck. We also clear
+    // `pendingRef` so not-yet-started materializations that occurred while
+    // enabled do not fire later out of context once automation toggles back on.
+    if (!enabled || state.result !== null) {
+      setRun(null);
+      setActivePrompt(null);
+      pausedRef.current = null;
+      processedQueueRef.current = null;
+      pendingRef.current = [];
+      return;
+    }
+
+    // Prompt-pause guard: a prompt is open; wait for resolvePrompt.
+    if (activePrompt !== null) return;
+
+    // Guard against double-dispatch on re-renders that did not change the queue.
+    if (processedQueueRef.current === run.steps) return;
+    processedQueueRef.current = run.steps;
+
+    const ctx: StepContext = {
+      side: run.side,
+      state,
+      random: Math.random,
+      nowMs: Date.now(),
+    };
+
+    const plan = planNextEffectStep(run.steps, ctx);
+
+    if (plan.type === "done") {
+      logBattleEffect(state, BATTLE_EFFECT_LOG.resolved, {
+        cardId: run.cardId,
+        battleCardId: run.battleCardId,
+        trigger: "materialized",
+        side: run.side,
+      });
+      processedQueueRef.current = null;
+      // Clearing `run` re-runs the pump effect (it depends on `run`), which
+      // starts the next pending materialization (if any).
+      setRun(null);
+    } else if (plan.type === "dispatch") {
+      logBattleEffect(state, BATTLE_EFFECT_LOG.step, {
+        cardId: run.cardId,
+        battleCardId: run.battleCardId,
+        editKinds: plan.edits.map((e) => e.kind),
+        targetIds: plan.edits.map((e) => extractEditTarget(e)),
+      });
+      for (const edit of plan.edits) {
+        dispatchEdit(edit);
+      }
+      // Advance the queue by updating steps to a new array so this effect
+      // re-runs and processes the next step.
+      setRun({ ...run, steps: plan.rest });
+    } else {
+      // plan.type === "prompt"
+      pausedRef.current = { prompt: plan.prompt, rest: plan.rest };
+      setActivePrompt(plan.active);
+      // Do NOT advance — wait for resolvePrompt.
+    }
+  }, [run, activePrompt, enabled, state, dispatchEdit]);
+
+  // ---------------------------------------------------------------------------
+  // resolvePrompt — called by UI when the player makes a choice
+  // ---------------------------------------------------------------------------
+  const resolvePrompt = useCallback(
+    (resolution: PromptResolution) => {
+      const paused = pausedRef.current;
+      if (paused === null) return;
+      // run must be non-null whenever pausedRef is set (a prompt is only opened
+      // from inside the advance effect which already guards run !== null).
+      if (run === null) return;
+
+      const ctx: StepContext = {
+        side: run.side,
+        state,
+        random: Math.random,
+        nowMs: Date.now(),
+      };
+
+      const { edits, rest } = applyPromptResolution(paused.prompt, resolution, paused.rest, ctx);
+
+      // Capture candidateIds before clearing activePrompt.
+      const candidateIds =
+        activePrompt?.kind === "pick-cards" ? activePrompt.candidateIds : null;
+
+      const choice: unknown =
+        resolution.kind === "pick-cards"
+          ? resolution.chosenIds
+          : resolution.kind === "choice"
+            ? resolution.optionIndex
+            : "foresee";
+
+      logBattleEffect(state, BATTLE_EFFECT_LOG.promptResolved, {
+        cardId: run.cardId,
+        battleCardId: run.battleCardId,
+        promptKind: paused.prompt.kind,
+        // The foresee prompt kind has no label field; the cast surfaces it safely.
+        label: (paused.prompt as { label?: string }).label ?? null,
+        candidateIds,
+        choice,
+        resultingEditKinds: edits.map((e) => e.kind),
+      });
+
+      for (const edit of edits) {
+        dispatchEdit(edit);
+      }
+
+      pausedRef.current = null;
+      setActivePrompt(null);
+      setRun({ ...run, steps: rest });
+    },
+    [run, activePrompt, state, dispatchEdit],
+  );
 
   // ---------------------------------------------------------------------------
   // Support — idempotent recompute of staticSparkBonus
@@ -207,6 +429,12 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): void {
     // current bonus) so the recompute re-runs to its fixed point but not on
     // unrelated renders. `state`/`dispatchEdit` are read fresh each run.
   }, [enabled, supportShapeKey(state)]);
+
+  return {
+    activePrompt,
+    activePromptSide: run?.side ?? null,
+    resolvePrompt,
+  };
 }
 
 /**
