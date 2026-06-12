@@ -143,6 +143,7 @@ export function BattlefieldGrid({
                 <BattleCardView
                   battleCardId={instance.battleCardId}
                   data={battleCardVisualFromInstance(instance)}
+                  exhausted={instance.status.isExhausted}
                   reserved={false}
                   selected={isSelectedCard}
                   draggable={canInteract}

@@ -338,8 +338,10 @@ function PlayableBattleScreenInner({
       imageNumber: definition.imageNumber,
     };
   }, [activeDreamwellCardIndex, battleInit.dreamwellDeck]);
+  // The Dreamwell card is hidden during the opening round (turn 1): no card is
+  // surfaced until each side reaches its Dreamwell phase on a later turn.
   const isDreamwellDisplayVisible =
-    activePhase === "dreamwell" && battleResult === null;
+    activePhase === "dreamwell" && battleResult === null && activeTurnNumber > 1;
 
   useEffect(() => {
     if (reducerState.mutable !== battleState.reducer.mutable) {
@@ -957,6 +959,7 @@ function PlayableBattleScreenInner({
             result={reducerState.mutable.result}
             turnNumber={reducerState.mutable.turnNumber}
           />
+          <BattleAiProposalBanner proposal={aiMode ? proposal : null} />
           <div className="stage">
             <BattleDreamwellDisplay
               card={dreamwellDisplayCard}
@@ -1554,6 +1557,35 @@ function BattleStackZone({
         })}
       </div>
     </section>
+  );
+}
+
+/**
+ * A slim banner across the top of the battle stage describing the AI's held
+ * proposal in plain language (the same description carried on {@link AiProposal}).
+ * It surfaces what the AI wants to do while the human decides whether to approve
+ * or reject via the phase-control icons. Renders nothing when no proposal is
+ * held (the human's own turn, AI mode off, or the battle is over).
+ */
+function BattleAiProposalBanner({ proposal }: { proposal: AiProposal | null }) {
+  if (proposal === null) {
+    return null;
+  }
+
+  return (
+    <div
+      className="battle-ai-proposal-banner"
+      data-battle-ai-proposal={proposal.kind}
+      aria-live="polite"
+    >
+      <span className="battle-ai-proposal-banner-label">AI proposes</span>
+      <span
+        className="battle-ai-proposal-banner-description"
+        data-battle-ai-proposal-description
+      >
+        {proposal.description}
+      </span>
+    </div>
   );
 }
 

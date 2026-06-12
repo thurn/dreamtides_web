@@ -91,6 +91,7 @@ export function BattleCardView({
   dataBattleHandCard = false,
   data,
   hidden = false,
+  exhausted = false,
   playable = false,
   selected = false,
   unaffordable = false,
@@ -112,6 +113,7 @@ export function BattleCardView({
   dataBattleHandCard?: boolean;
   data: BattleCardVisualData;
   hidden?: boolean;
+  exhausted?: boolean;
   playable?: boolean;
   selected?: boolean;
   unaffordable?: boolean;
@@ -142,6 +144,7 @@ export function BattleCardView({
     selected ? "selected" : "",
     unaffordable ? "unaffordable" : "",
     hidden ? "hidden-enemy" : "",
+    exhausted ? "exhausted" : "",
     reserved || data.reserved ? "reserved" : "",
     className,
   ]
@@ -180,6 +183,9 @@ export function BattleCardView({
       <div className="c-art">
         {hidden ? null : <BattleCardArt data={data} />}
       </div>
+      {!hidden && exhausted ? (
+        <div className="c-exhausted" aria-label="exhausted">☪</div>
+      ) : null}
       {!hidden && data.kind === "character" && data.figmentCount > 1 ? (
         <div className="c-figment-count" aria-label="figment count">
           {String(data.figmentCount)}

@@ -121,6 +121,15 @@ export function BattleContextMenu({
     }
 
     if (card.definition.battleCardKind === "character") {
+      // A direct exhaust toggle for in-play characters: marks the body exhausted
+      // (☪) so an exhaust icon shows over it until its side's next Dawn clears
+      // it. The same toggle is also available under the Status submenu.
+      if (location.zone === "frontRank" || location.zone === "backRank") {
+        result.push({
+          label: card.status.isExhausted ? "Awaken" : "Exhaust ☪",
+          action: () => setStatus({ isExhausted: !card.status.isExhausted }),
+        });
+      }
       result.push({
         label: "Add Spark",
         submenu: [
