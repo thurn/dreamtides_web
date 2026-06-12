@@ -1130,6 +1130,18 @@
   gap: 6px;
 }
 
+/* While the AI holds a proposal, the cluster shows its approve/reject icon
+   controls. Flex (not the 3-column phase-arrow grid) so one or two buttons fill
+   the row. */
+.phase-float-actions--proposal {
+  display: flex;
+  gap: 6px;
+}
+
+.phase-float-actions--proposal .phase-float-button {
+  flex: 1 1 0;
+}
+
 .phase-float-button {
   position: relative;
   width: 100%;
@@ -1144,6 +1156,35 @@
   box-shadow: 0 6px 16px rgba(5, 2, 10, 0.36);
   cursor: pointer;
   padding: 0;
+}
+
+.phase-float-button.approve {
+  background: #15803d;
+  border-color: #22c55e;
+}
+
+.phase-float-button.approve:hover,
+.phase-float-button.approve:focus-visible {
+  background: #16a34a;
+  border-color: #4ade80;
+}
+
+.phase-float-button.reject {
+  background: #b91c1c;
+  border-color: #ef4444;
+}
+
+.phase-float-button.reject:hover,
+.phase-float-button.reject:focus-visible {
+  background: #dc2626;
+  border-color: #f87171;
+}
+
+/* These buttons carry a native `title` tooltip; suppress the data-preview
+   bubble used by the phase arrows. */
+.phase-float-button.approve::after,
+.phase-float-button.reject::after {
+  content: none;
 }
 
 .phase-float-button .bx {
@@ -2612,80 +2653,4 @@
     padding-block: 6px 8px;
     gap: 8px;
   }
-}
-
-.battle-ai-proposal-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  flex-wrap: wrap;
-  padding: 8px 20px;
-  border-bottom: 1px solid var(--line);
-  background: rgba(10, 6, 18, 0.85);
-  backdrop-filter: blur(8px);
-  position: relative;
-  z-index: 5;
-}
-
-.battle-ai-proposal-copy {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  min-width: 0;
-  flex: 1 1 auto;
-}
-
-.battle-ai-proposal-label {
-  font-size: 11px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  white-space: nowrap;
-}
-
-.battle-ai-proposal-description {
-  color: var(--text);
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.battle-ai-proposal-description.has-preview {
-  cursor: help;
-  text-decoration: underline dotted;
-  text-underline-offset: 3px;
-  text-decoration-color: var(--accent-strong);
-}
-
-.battle-ai-proposal-actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex: 0 0 auto;
-}
-
-.battle-ai-proposal-button {
-  padding: 6px 14px;
-  border-radius: 6px;
-  border: 1px solid var(--line);
-  background: var(--surface);
-  color: var(--text);
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.battle-ai-proposal-button:hover {
-  border-color: var(--line-strong);
-}
-
-.battle-ai-proposal-button.approve {
-  border-color: rgba(34, 197, 94, 0.5);
-  background: rgba(34, 197, 94, 0.15);
-  color: #4ade80;
-}
-
-.battle-ai-proposal-button.reject {
-  border-color: rgba(239, 68, 68, 0.5);
-  background: rgba(239, 68, 68, 0.12);
-  color: var(--danger);
 }

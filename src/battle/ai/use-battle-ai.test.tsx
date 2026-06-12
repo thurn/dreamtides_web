@@ -114,6 +114,20 @@ function makeEnemyTurnState(
   return createBattleReducerState(mutable);
 }
 
+/**
+ * An enemy (AI) turn state with NO playable action: empty hand, empty back rank,
+ * and zero energy, so the planner returns END_TURN. Used to exercise the AI's
+ * end-of-Day proposal (endPhase with automation on, endTurn with it off).
+ */
+function makeEnemyNoActionState(
+  mutate?: (state: BattleMutableState) => void,
+): BattleReducerState {
+  const mutable = makeBareState();
+  mutable.sides.enemy.currentEnergy = 0;
+  mutate?.(mutable);
+  return createBattleReducerState(mutable);
+}
+
 /** A character with the given printed spark and rendered keyword text. */
 function keywordCharacterDefinition(
   name: string,
@@ -180,7 +194,6 @@ interface HookHandle {
   proposal: AiProposal | null;
   approve: () => void;
   reject: () => void;
-  endAiTurn: () => void;
 }
 
 let latest: HookHandle | null = null;
@@ -190,11 +203,13 @@ function HookHarness({
   dispatch,
   enabled = true,
   aiSide = "enemy",
+  basicAutomation = true,
 }: {
   initialState: BattleReducerState;
   dispatch: (action: { type: "APPLY_COMMAND"; command: BattleCommand }) => void;
   enabled?: boolean;
   aiSide?: BattleSide;
+  basicAutomation?: boolean;
 }): ReactElement {
   const [reducerState, setReducerState] = useState(initialState);
   const wrappedDispatch = (action: {
@@ -212,12 +227,12 @@ function HookHarness({
     dispatch: wrappedDispatch,
     enabled,
     aiSide,
+    basicAutomation,
   });
   latest = {
     proposal: handle.proposal,
     approve: handle.approve,
     reject: handle.reject,
-    endAiTurn: handle.endAiTurn,
   };
   return <div data-test-proposal={handle.proposal === null ? "null" : handle.proposal.kind} />;
 }
@@ -316,13 +331,53 @@ describe("useBattleAi", () => {
     expect(after).not.toBe(before);
   });
 
-  it("endAiTurn() switches to an endTurn proposal without dispatching", () => {
+  it("ends its Day with an endPhase proposal once no play remains (automation on)", () => {
+    // With basic automation resolving turn bookends, the AI steps Day → Dusk and
+    // stops, handing the Dusk repositioning window to the human; approving it
+    // dispatches a single same-side SET_BATTLE_FLOW into Dusk.
     const dispatch = vi.fn();
-    mount(<HookHarness initialState={makeEnemyTurnState()} dispatch={dispatch} />);
+    mount(
+      <HookHarness
+        initialState={makeEnemyNoActionState()}
+        dispatch={dispatch}
+        basicAutomation={true}
+      />,
+    );
 
-    act(() => {
-      latest?.endAiTurn();
-    });
+    expect(dispatch).not.toHaveBeenCalled();
+    expect(latest?.proposal?.kind).toBe("endPhase");
+    expect(proposalEdits()).toEqual([
+      { kind: "SET_BATTLE_FLOW", phase: "dusk", activeSide: "enemy", turnNumber: 2 },
+    ]);
+  });
+
+  it("holds no proposal past Day so the human drives the rest (automation on)", () => {
+    // Once the AI sits at Dusk with no play, it proposes nothing: the human
+    // repositions and advances Night/Challenge with the phase controls.
+    const dispatch = vi.fn();
+    mount(
+      <HookHarness
+        initialState={makeEnemyNoActionState((mutable) => {
+          mutable.phase = "dusk";
+        })}
+        dispatch={dispatch}
+        basicAutomation={true}
+      />,
+    );
+
+    expect(latest?.proposal).toBeNull();
+    expect(dispatch).not.toHaveBeenCalled();
+  });
+
+  it("bundles an endTurn proposal when no play remains and automation is off", () => {
+    const dispatch = vi.fn();
+    mount(
+      <HookHarness
+        initialState={makeEnemyNoActionState()}
+        dispatch={dispatch}
+        basicAutomation={false}
+      />,
+    );
 
     expect(dispatch).not.toHaveBeenCalled();
     expect(latest?.proposal?.kind).toBe("endTurn");
@@ -416,11 +471,16 @@ describe("useBattleAi", () => {
       place: (mutable: BattleMutableState) => void,
     ): BattleDebugEdit[] {
       const dispatch = vi.fn();
-      const state = makeEnemyTurnState(place);
-      mount(<HookHarness initialState={state} dispatch={dispatch} />);
-      act(() => {
-        latest?.endAiTurn();
-      });
+      // No playable action + automation off ⇒ the AI holds the all-in-one
+      // endTurn proposal, whose edits carry the keyword-aware Challenge result.
+      const state = makeEnemyNoActionState(place);
+      mount(
+        <HookHarness
+          initialState={state}
+          dispatch={dispatch}
+          basicAutomation={false}
+        />,
+      );
       expect(latest?.proposal?.kind).toBe("endTurn");
       expect(dispatch).not.toHaveBeenCalled();
       return proposalEdits();

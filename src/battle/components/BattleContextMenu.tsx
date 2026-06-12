@@ -6,6 +6,7 @@ import type {
 import {
   selectBattleCardLocation,
 } from "../state/selectors";
+import { isFigmentInstance } from "../state/figments";
 import type {
   BattleCardStatus,
   BattleCommandSourceSurface,
@@ -121,17 +122,17 @@ export function BattleContextMenu({
 
     if (card.definition.battleCardKind === "character") {
       result.push({
-        label: "Kindle",
+        label: "Add Spark",
         submenu: [
-          kindleItem(1),
-          kindleItem(2),
-          kindleItem(3),
+          sparkItem(1),
+          sparkItem(2),
+          sparkItem(3),
           { divider: true },
-          kindleItem(-1),
-          kindleItem(-2),
+          sparkItem(-1),
+          sparkItem(-2),
           { divider: true },
           {
-            label: "Reset delta",
+            label: "Reset to 0",
             action: () => onCommand({
               id: "DEBUG_EDIT",
               edit: {
@@ -144,6 +145,18 @@ export function BattleContextMenu({
           },
         ],
       });
+      // A figment stack can also grow in size — adding members rather than
+      // bonus spark — via a quick "+N" stepper.
+      if (isFigmentInstance(card)) {
+        result.push({
+          label: "Add Figments",
+          submenu: [
+            addFigmentsItem(1),
+            addFigmentsItem(2),
+            addFigmentsItem(3),
+          ],
+        });
+      }
       result.push({ divider: true });
     }
 
@@ -304,9 +317,9 @@ export function BattleContextMenu({
 
     return result;
 
-    function kindleItem(amount: number): ContextMenuItem {
+    function sparkItem(amount: number): ContextMenuItem {
       return {
-        label: amount > 0 ? `Kindle +${String(amount)}` : `Spark ${String(amount)}`,
+        label: amount > 0 ? `+${String(amount)}` : String(amount),
         action: () => onCommand({
           id: "DEBUG_EDIT",
           edit: {
@@ -314,6 +327,21 @@ export function BattleContextMenu({
             amount,
             preferredBattleCardId: battleCardId,
             side: card.controller,
+          },
+          sourceSurface,
+        }),
+      };
+    }
+
+    function addFigmentsItem(count: number): ContextMenuItem {
+      return {
+        label: `+${String(count)}`,
+        action: () => onCommand({
+          id: "DEBUG_EDIT",
+          edit: {
+            kind: "ADD_FIGMENTS",
+            battleCardId,
+            count,
           },
           sourceSurface,
         }),

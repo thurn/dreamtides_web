@@ -24,7 +24,14 @@ import {
  * NEVER applied on its own — only the human-triggered `approve()` dispatches.
  */
 export interface AiProposal {
-  kind: "action" | "endTurn";
+  /**
+   * `action` is a card play/move (rejectable). `endPhase` advances the AI from
+   * its Day phase to Dusk and stops, so the human (the defender on the AI's
+   * turn) can reposition before driving Night/Challenge. `endTurn` bundles the
+   * full Challenge resolution + handoff in one step, used only when basic
+   * automation is off and nothing else will resolve the turn.
+   */
+  kind: "action" | "endPhase" | "endTurn";
   /** Plain-language description, from the trace rationale. */
   description: string;
   trace: BattleAiChoiceTrace | null;
@@ -58,13 +65,19 @@ export interface UseBattleAiArgs {
   aiSide: BattleSide;
   /** Optional win/turn/energy caps; defaults to 25/50/10. */
   caps?: BattleCapsInput;
+  /**
+   * Whether basic automation is resolving turn bookends. When on, the AI ends
+   * its Day with an `endPhase` proposal and lets the human drive the rest;
+   * automation resolves the Challenge and handoff. When off, the AI bundles the
+   * whole end-of-turn into a single `endTurn` proposal.
+   */
+  basicAutomation: boolean;
 }
 
 export interface UseBattleAiResult {
   proposal: AiProposal | null;
   approve: () => void;
   reject: () => void;
-  endAiTurn: () => void;
 }
 
 /**
@@ -72,17 +85,17 @@ export interface UseBattleAiResult {
  *
  * THE SAFETY CONTRACT: the hook computes a {@link AiProposal} and holds it.
  * ONLY the human-triggered {@link UseBattleAiResult.approve} dispatches. Mounting
- * the hook, recomputing a proposal, {@link UseBattleAiResult.reject}, and
- * {@link UseBattleAiResult.endAiTurn} dispatch NOTHING.
+ * the hook, recomputing a proposal, and {@link UseBattleAiResult.reject} dispatch
+ * NOTHING.
  *
  * The proposal is recomputed (via `useMemo`) whenever the live mutable state
- * changes (keyed by `reducerState.transitionId`), whenever an action is rejected
- * (the exclusion set grows), and whenever the human forces an end-of-turn. When
- * `approve()` dispatches, the resulting state change re-runs the memo, which
- * produces the next proposal — that is the entire loop.
+ * changes (keyed by `reducerState.transitionId`) and whenever an action is
+ * rejected (the exclusion set grows). When `approve()` dispatches, the resulting
+ * state change re-runs the memo, which produces the next proposal — that is the
+ * entire loop.
  */
 export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
-  const { reducerState, dispatch, enabled, aiSide, caps } = args;
+  const { reducerState, dispatch, enabled, aiSide, caps, basicAutomation } = args;
   const mutable = reducerState.mutable;
 
   // Actions the human rejected this turn, by stable key. Cleared when the turn
@@ -90,22 +103,17 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
   const [excludedKeys, setExcludedKeys] = useState<ReadonlySet<string>>(
     () => new Set(),
   );
-  // Whether the human forced an end-of-turn for the current AI turn.
-  const [forceEndTurn, setForceEndTurn] = useState(false);
 
-  // Reset per-turn UI state (exclusions, forced end) when the AI turn changes
-  // (it is no longer the AI's turn, or the turn number advanced). This runs
-  // during render via a ref guard so the reset is visible to the memo below
-  // without an extra commit.
+  // Reset per-turn UI state (exclusions) when the AI turn changes (it is no
+  // longer the AI's turn, or the turn number advanced). This runs during render
+  // via a ref guard so the reset is visible to the memo below without an extra
+  // commit.
   const turnKey = `${mutable.activeSide}:${String(mutable.turnNumber)}`;
   const lastTurnKeyRef = useRef(turnKey);
   if (lastTurnKeyRef.current !== turnKey) {
     lastTurnKeyRef.current = turnKey;
     if (excludedKeys.size > 0) {
       setExcludedKeys(new Set());
-    }
-    if (forceEndTurn) {
-      setForceEndTurn(false);
     }
   }
 
@@ -125,15 +133,15 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
     }
     // `reducerState.transitionId` keys live-state changes; `mutable` covers the
     // initial state and any non-transition reference swap.
-    return computeProposal(mutable, aiSide, excludedKeys, forceEndTurn, caps);
+    return computeProposal(mutable, aiSide, excludedKeys, caps, basicAutomation);
   }, [
     isAiTurn,
     reducerState.transitionId,
     mutable,
     aiSide,
     excludedKeys,
-    forceEndTurn,
     caps,
+    basicAutomation,
   ]);
 
   // Defensive auto-block: on the OPPONENT's Dusk the AI is the defender and
@@ -186,9 +194,10 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
     }
   }, [proposal, dispatch]);
 
-  // Excludes the proposed action and recomputes — dispatches NOTHING.
+  // Excludes the proposed action and recomputes — dispatches NOTHING. Only a
+  // card-play `action` can be rejected; phase/turn-ending proposals cannot.
   const reject = useCallback(() => {
-    if (proposal === null || proposal.kind === "endTurn") {
+    if (proposal === null || proposal.kind !== "action") {
       return;
     }
     const key = proposalExclusionKey(proposal);
@@ -205,41 +214,70 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
     });
   }, [proposal]);
 
-  // Forces the endTurn proposal on the next render — dispatches NOTHING. The
-  // human still approves the endTurn proposal to actually pass.
-  const endAiTurn = useCallback(() => {
-    setForceEndTurn(true);
-  }, []);
-
-  return { proposal, approve, reject, endAiTurn };
+  return { proposal, approve, reject };
 }
 
 // --- Proposal computation --------------------------------------------------
 
 /**
- * Computes the held proposal for the live `mutable` state: an action proposal
- * for the planner's chosen play (skipping excluded actions), or the endTurn
- * proposal when the human forced an end-of-turn or no non-excluded action
- * remains.
+ * Computes the held proposal for the live `mutable` state. While the AI has a
+ * non-excluded play it proposes that action. Once no play remains the AI ends
+ * its phase/turn:
+ *
+ * - With basic automation on, the AI proposes `endPhase` to step Day → Dusk and
+ *   then holds NO proposal (returns null), so the human repositions their
+ *   defenders during the AI's Dusk and drives Night/Challenge with the phase
+ *   controls. Basic automation resolves the AI's Challenge and the handoff when
+ *   the human passes Challenge.
+ * - With basic automation off, nothing else will resolve the turn, so the AI
+ *   proposes the all-in-one `endTurn` (Challenge resolution + handoff).
  */
 function computeProposal(
   mutable: BattleMutableState,
   aiSide: BattleSide,
   excludedKeys: ReadonlySet<string>,
-  forceEndTurn: boolean,
   caps: BattleCapsInput | undefined,
-): AiProposal {
+  basicAutomation: boolean,
+): AiProposal | null {
   const model = forwardModelFromState(mutable, aiSide);
 
-  if (forceEndTurn) {
+  const action = planNonExcludedAction(model, mutable, excludedKeys);
+  if (action !== null && action.kind !== "END_TURN") {
+    return buildActionProposal(mutable, action, aiSide);
+  }
+
+  if (!basicAutomation) {
     return buildEndTurnProposal(mutable, model, aiSide, caps);
   }
 
-  const action = planNonExcludedAction(model, mutable, excludedKeys);
-  if (action === null || action.kind === "END_TURN") {
-    return buildEndTurnProposal(mutable, model, aiSide, caps);
+  if (mutable.phase === "day") {
+    return buildEndPhaseProposal(mutable, aiSide);
   }
-  return buildActionProposal(mutable, action, aiSide);
+  return null;
+}
+
+/**
+ * Builds the `endPhase` proposal: a single `SET_BATTLE_FLOW` that advances the
+ * AI from its Day phase into Dusk, keeping the same side and turn. Approving it
+ * hands the Dusk repositioning window to the human defender; the rest of the AI
+ * turn is then driven by the human via the phase controls.
+ */
+function buildEndPhaseProposal(
+  mutable: BattleMutableState,
+  aiSide: BattleSide,
+): AiProposal {
+  const flowEdit: BattleDebugEdit = {
+    kind: "SET_BATTLE_FLOW",
+    phase: "dusk",
+    activeSide: aiSide,
+    turnNumber: mutable.turnNumber,
+  };
+  return {
+    kind: "endPhase",
+    description: "End phase — pass to your Dusk",
+    trace: null,
+    commands: [makeAiCommand(flowEdit, aiSide)],
+  };
 }
 
 /**

@@ -41,12 +41,11 @@ import type {
 } from "../types";
 import type { QuestContent } from "../../data/quest-content";
 import type { BattleCommand } from "../debug/commands";
-import { useBattleAi } from "../ai/use-battle-ai";
+import { useBattleAi, type AiProposal } from "../ai/use-battle-ai";
 import { aiMayRunHere } from "../ai/ai-may-run-here";
 import { dreamwellEnergyEdits } from "../engine/energy";
 import { planBasicAutomationCommands } from "../automation/basic-automation";
 import { BattleActionBar } from "./BattleActionBar";
-import { BattleAiProposalBar } from "./BattleAiProposalBar";
 import { BattleCardHoverPreview } from "./BattleCardHoverPreview";
 import { BattleContextMenu } from "./BattleContextMenu";
 import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
@@ -205,21 +204,20 @@ function PlayableBattleScreenInner({
   // receives the SAME live `reducerState`/`dispatch` the rest of the screen
   // uses, so approved commands flow back as a new `reducerState` and the hook
   // re-plans.
-  const { proposal, approve, reject, endAiTurn } = useBattleAi({
+  const { proposal, approve, reject } = useBattleAi({
     reducerState,
     dispatch,
     enabled: aiMode && aiMayRun,
     aiSide: "enemy",
     caps: aiCaps,
+    basicAutomation: isBasicAutomationEnabled,
   });
 
-  // While the AI holds an un-approved ACTION proposal, the human drives only via
-  // the proposal bar's Approve/Reject. Normal controls return on the human's own
-  // turn (no proposal held) and during the endTurn proposal (the human approves
-  // the Challenge outcome).
-  const canPlayerAct = !(
-    aiMode && proposal !== null && proposal.kind === "action"
-  );
+  // While the AI holds an un-approved proposal, the human drives only via the
+  // approve/reject icon controls in the phase cluster. Normal controls (phase
+  // arrows, hand, battlefield) return once no proposal is held — on the human's
+  // own turn, and during the AI's Dusk/Night/Challenge after its plays are done.
+  const canPlayerAct = !(aiMode && proposal !== null);
   const historyCount = reducerState.history.past.length;
   const futureCount = reducerState.history.future.length;
   const failureResult = selectFailureOverlayResult(reducerState.mutable.result);
@@ -953,15 +951,6 @@ function PlayableBattleScreenInner({
               });
             }}
           />
-          <BattleAiProposalBar
-            proposal={proposal}
-            onApprove={approve}
-            onReject={reject}
-            onEndAiTurn={endAiTurn}
-            onCardPreviewStart={handleBattlefieldCardHoverStart}
-            onCardPreviewMove={handleBattlefieldCardHoverMove}
-            onCardPreviewEnd={handleBattlefieldCardHoverEnd}
-          />
           <BattleLiveRegion
             activeSide={reducerState.mutable.activeSide}
             phase={reducerState.mutable.phase}
@@ -1210,6 +1199,9 @@ function PlayableBattleScreenInner({
                 </div>
                 <BattlePhaseFloatControls
                   state={reducerState.mutable}
+                  proposal={aiMode ? proposal : null}
+                  onApprove={approve}
+                  onReject={reject}
                   onSetBattleFlow={(target) => {
                     handleCommand({
                       id: "DEBUG_EDIT",
@@ -1297,9 +1289,6 @@ function PlayableBattleScreenInner({
               onCardDragStart={handleCardDragStart}
               onCardDragEnd={handleCardDragEnd}
               onCardDropToHand={(sourceSurface) => handleZoneDrop("player", "hand", sourceSurface)}
-              onCardHoverStart={handleBattlefieldCardHoverStart}
-              onCardHoverMove={handleBattlefieldCardHoverMove}
-              onCardHoverEnd={handleBattlefieldCardHoverEnd}
               pendingDragCardId={pendingDragCardId}
               pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
               isCardPlayable={undefined}
@@ -1622,11 +1611,55 @@ type BattleFlowTarget = {
 
 function BattlePhaseFloatControls({
   state,
+  proposal,
+  onApprove,
+  onReject,
   onSetBattleFlow,
 }: {
   state: BattleMutableState;
+  proposal: AiProposal | null;
+  onApprove: () => void;
+  onReject: () => void;
   onSetBattleFlow: (target: BattleFlowTarget) => void;
 }) {
+  // While the AI holds a proposal, the phase cluster becomes its approve/reject
+  // controls: a check approves; a cross rejects a card-play action (phase- and
+  // turn-ending proposals cannot be rejected).
+  if (proposal !== null) {
+    const approveLabel = proposal.kind === "action"
+      ? "Approve AI play"
+      : "Approve — pass phase";
+    return (
+      <div
+        className="phase-float-actions phase-float-actions--proposal"
+        aria-label="AI proposal controls"
+      >
+        <button
+          type="button"
+          className="phase-float-button approve"
+          data-battle-ai-proposal-approve
+          aria-label={approveLabel}
+          title={`${approveLabel} (${proposal.description})`}
+          onClick={onApprove}
+        >
+          <i className="bx bx-check" aria-hidden="true" />
+        </button>
+        {proposal.kind === "action" ? (
+          <button
+            type="button"
+            className="phase-float-button reject"
+            data-battle-ai-proposal-reject
+            aria-label="Reject AI play"
+            title="Reject AI play"
+            onClick={onReject}
+          >
+            <i className="bx bx-x" aria-hidden="true" />
+          </button>
+        ) : null}
+      </div>
+    );
+  }
+
   const previousTarget = computePhaseControlTarget(state, "previous");
   const nextTarget = computePhaseControlTarget(state, "next");
   const nextMajorTarget = computePhaseControlTarget(state, "next-major");

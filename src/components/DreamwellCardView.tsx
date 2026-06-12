@@ -171,9 +171,18 @@ export function DreamwellCardView({
     };
   }, [card.renderedText, card.name]);
 
-  const artUrl = hasAssignedImage(card.imageNumber)
+  // A Dreamwell card without keyed art (or whose keyed image fails to load)
+  // falls back to a deterministic identicon rather than a broken-image glyph.
+  // The identicon is a self-contained data URI, so it never fails in turn.
+  const [artErrored, setArtErrored] = useState(false);
+  useEffect(() => {
+    setArtErrored(false);
+  }, [card.id, card.imageNumber]);
+  const identiconUrl = cardIdenticonUri(card.id !== "" ? card.id : card.name);
+  const usingAssignedArt = hasAssignedImage(card.imageNumber) && !artErrored;
+  const artUrl = usingAssignedArt
     ? cardImageUrl(card.imageNumber)
-    : cardIdenticonUri(card.id);
+    : identiconUrl;
 
   const showRulesText = card.renderedText.trim() !== "";
 
@@ -246,7 +255,14 @@ export function DreamwellCardView({
 
       {/* Crisp art covering the whole frame (watermark-clipped via the grown,
           top-anchored box). The blurred layer below masks it from the seam down. */}
-      <img src={artUrl} alt="" aria-hidden="true" draggable={false} style={artImgStyle} />
+      <img
+        src={artUrl}
+        alt=""
+        aria-hidden="true"
+        draggable={false}
+        style={artImgStyle}
+        onError={usingAssignedArt ? () => setArtErrored(true) : undefined}
+      />
 
       {/* Blurred continuation: a second copy of the art, blurred and darkened,
           masked so it is absent above the feather zone, ramps in across it, and

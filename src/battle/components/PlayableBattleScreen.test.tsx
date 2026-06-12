@@ -1784,7 +1784,7 @@ describe("PlayableBattleScreen", () => {
     const menu = container.querySelector("[data-battle-context-menu]");
     expect(menu?.textContent).toContain("Play to Back Rank");
     expect(menu?.textContent).toContain("Play to Front Rank");
-    expect(menu?.textContent).toContain("Kindle");
+    expect(menu?.textContent).toContain("Add Spark");
     expect(menu?.textContent).toContain("→ Back Rank");
     expect(menu?.textContent).toContain("→ Front Rank");
     expect(menu?.textContent).toContain("→ Void");
@@ -1837,10 +1837,10 @@ describe("PlayableBattleScreen", () => {
     });
 
     const kindleTrigger = [...container.querySelectorAll<HTMLElement>(".ctx-item")].find(
-      (element) => element.textContent?.includes("Kindle"),
+      (element) => element.textContent?.includes("Add Spark"),
     );
     if (kindleTrigger === undefined) {
-      throw new Error("expected Kindle submenu trigger");
+      throw new Error("expected Add Spark submenu trigger");
     }
 
     act(() => {
@@ -1848,10 +1848,10 @@ describe("PlayableBattleScreen", () => {
     });
 
     const kindlePlusThree = [...container.querySelectorAll<HTMLElement>(".ctx-submenu .ctx-item")].find(
-      (element) => element.textContent?.trim() === "Kindle +3",
+      (element) => element.textContent?.trim() === "+3",
     );
     if (kindlePlusThree === undefined) {
-      throw new Error("expected Kindle +3 submenu item");
+      throw new Error("expected Add Spark +3 submenu item");
     }
 
     act(() => {
@@ -2254,59 +2254,27 @@ describe("PlayableBattleScreen", () => {
     });
   });
 
-  it("closes and suppresses card hover previews while a hand card drag is active", () => {
+  it("does not show an enlarged hover preview for the player's own hand cards", () => {
+    // The player already sees their own hand at full size, so hovering a hand
+    // card must not pop an enlarged duplicate. (Battlefield, stack, and the
+    // revealed enemy hand still preview — covered by the tests around this one.)
     const { container, root } = renderScreen();
-    const handCards = [
-      ...container.querySelectorAll<HTMLElement>(
-        '[data-battle-region="player-hand-tray"] [data-battle-card-id]',
-      ),
-    ];
-    const firstHandCard = handCards[0];
-    const secondHandCard = handCards[1];
-
-    if (firstHandCard === undefined || secondHandCard === undefined) {
-      throw new Error("expected at least two hand cards");
+    const handCard = container.querySelector<HTMLElement>(
+      '[data-battle-region="player-hand-tray"] [data-battle-card-id]',
+    );
+    if (handCard === null) {
+      throw new Error("expected a player hand card");
     }
 
     act(() => {
-      firstHandCard.dispatchEvent(new MouseEvent("mouseover", {
+      handCard.dispatchEvent(new MouseEvent("mouseover", {
         bubbles: true,
         clientX: 320,
         clientY: 240,
       }));
     });
 
-    expect(container.querySelector("[data-battle-hover-preview]")).not.toBeNull();
-
-    act(() => {
-      firstHandCard.dispatchEvent(new Event("dragstart", { bubbles: true, cancelable: true }));
-    });
-
     expect(container.querySelector("[data-battle-hover-preview]")).toBeNull();
-
-    act(() => {
-      secondHandCard.dispatchEvent(new MouseEvent("mouseover", {
-        bubbles: true,
-        clientX: 360,
-        clientY: 260,
-      }));
-    });
-
-    expect(container.querySelector("[data-battle-hover-preview]")).toBeNull();
-
-    act(() => {
-      firstHandCard.dispatchEvent(new Event("dragend", { bubbles: true, cancelable: true }));
-    });
-
-    act(() => {
-      secondHandCard.dispatchEvent(new MouseEvent("mouseover", {
-        bubbles: true,
-        clientX: 380,
-        clientY: 280,
-      }));
-    });
-
-    expect(container.querySelector("[data-battle-hover-preview]")).not.toBeNull();
 
     act(() => {
       root.unmount();

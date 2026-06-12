@@ -197,6 +197,13 @@ export type BattleDebugEdit =
     createdAtMs: number;
   }
   | {
+    // Adds `count` members to an existing figment stack, each at the stack's
+    // base spark (rules §Figments). A quick stepper for growing a stack.
+    kind: "ADD_FIGMENTS";
+    battleCardId: string;
+    count: number;
+  }
+  | {
     kind: "CREATE_FIGMENT";
     side: BattleSide;
     chosenSubtype: string;
@@ -469,6 +476,7 @@ function resolveDebugEditKind(edit: BattleDebugEdit): BattleHistoryEntryKind {
     case "SET_CARD_SPARK":
     case "SET_CARD_SPARK_DELTA":
     case "KINDLE":
+    case "ADD_FIGMENTS":
     case "ADD_CARD_NOTE":
     case "DISMISS_CARD_NOTE":
     case "CLEAR_CARD_NOTES":
@@ -528,6 +536,7 @@ function isCompositeDebugEdit(edit: BattleDebugEdit): boolean {
     case "KINDLE":
     case "CREATE_CARD_COPY":
     case "CREATE_FIGMENT":
+    case "ADD_FIGMENTS":
     case "CREATE_CARD_FROM_DEFINITION":
     case "MOVE_CARD_TO_ZONE":
     case "ABANDON":
@@ -572,6 +581,7 @@ function collectDebugEditTargets(
     }
     case "SET_CARD_SPARK":
     case "SET_CARD_SPARK_DELTA":
+    case "ADD_FIGMENTS":
     case "DISCARD_CARD":
     case "ABANDON":
     case "REMATERIALIZE":
@@ -700,6 +710,8 @@ function createDebugEditLabel(
       return `Set ${readCardName(state, edit.battleCardId)} Counters to ${String(Math.max(0, edit.value))}`;
     case "CREATE_CARD_COPY":
       return `Create Copy of ${readCardName(state, edit.sourceBattleCardId)}`;
+    case "ADD_FIGMENTS":
+      return `Add ${String(edit.count)} Figment${edit.count === 1 ? "" : "s"} to ${readCardName(state, edit.battleCardId)}`;
     case "CREATE_FIGMENT":
       return `Create Figment (${edit.chosenSubtype}/${String(edit.chosenSpark)})`;
     case "CREATE_CARD_FROM_DEFINITION":

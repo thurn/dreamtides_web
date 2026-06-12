@@ -318,6 +318,8 @@ export function applyDebugEdit(
         edit.createdAtMs,
         context,
       );
+    case "ADD_FIGMENTS":
+      return addFigmentsToCard(state, nextState, edit.battleCardId, edit.count);
     case "CREATE_CARD_FROM_DEFINITION":
       return createCardFromDefinition(
         state,
@@ -1704,6 +1706,41 @@ function rematerializeCard(
 } {
   return {
     state,
+    transition: createEmptyTransitionData(),
+  };
+}
+
+/**
+ * Adds `count` members to an existing figment stack. New members enter at the
+ * stack's base spark — the figment type's catalog spark when known, otherwise
+ * the current top member's spark, falling back to the printed spark. A no-op for
+ * any target that is not a figment stack.
+ */
+function addFigmentsToCard(
+  state: BattleMutableState,
+  nextState: BattleMutableState,
+  battleCardId: string,
+  count: number,
+): {
+  state: BattleMutableState;
+  transition: BattleTransitionData;
+} {
+  const stack = nextState.cardInstances[battleCardId];
+  if (!isFigmentInstance(stack) || count <= 0) {
+    return {
+      state,
+      transition: createEmptyTransitionData(),
+    };
+  }
+
+  const catalogEntry = lookupFigmentCatalogEntry(stack.definition.subtype);
+  const baseSpark = catalogEntry?.baseSpark
+    ?? selectFigmentSparks(stack)[0]
+    ?? stack.definition.printedSpark;
+  addFigmentsToStackInPlace(nextState, battleCardId, count, baseSpark);
+
+  return {
+    state: nextState,
     transition: createEmptyTransitionData(),
   };
 }

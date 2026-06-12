@@ -282,9 +282,10 @@ interface StatStepResult {
 }
 
 /**
- * Applies a stat-only step: Empowered halves the energy cost (rounded), Kindled
- * doubles the base spark (or sets a 0-spark character to 1). The flags drive
- * which corner stat orb is tinted in the card display.
+ * Applies a stat-only step: Empowered halves the energy cost (rounded down, so a
+ * 1● card becomes free), Kindled doubles the base spark (or sets a 0-spark
+ * character to 1). The flags drive which corner stat orb is tinted in the card
+ * display.
  */
 function applyStatStep(
   card: CardData,
@@ -295,7 +296,7 @@ function applyStatStep(
       return { card, energyChanged: false, sparkChanged: false };
     }
     return {
-      card: { ...card, energyCost: Math.round(card.energyCost / 2) },
+      card: { ...card, energyCost: Math.floor(card.energyCost / 2) },
       energyChanged: true,
       sparkChanged: false,
     };

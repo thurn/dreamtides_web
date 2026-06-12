@@ -278,14 +278,24 @@ describe("assignTransfiguration", () => {
     expect(offer!.previewCard.renderedText).toMatch(/Deal [46] damage\./);
   });
 
-  it("Empowered rounds energy cost correctly for odd numbers", () => {
+  it("Empowered halves the energy cost rounding down for odd numbers", () => {
     vi.spyOn(Math, "random").mockReturnValue(0);
     const card = makeCard({ energyCost: 5 });
     const offer = assignTransfiguration(card, null);
     expect(offer).not.toBeNull();
     expect(offer!.type).toBe("Empowered");
-    // Math.round(5/2) = Math.round(2.5) = 3
-    expect(offer!.previewCard.energyCost).toBe(3);
+    // Math.floor(5 / 2) = 2
+    expect(offer!.previewCard.energyCost).toBe(2);
+  });
+
+  it("Empowered makes a 1-energy card free", () => {
+    vi.spyOn(Math, "random").mockReturnValue(0);
+    const card = makeCard({ energyCost: 1 });
+    const offer = assignTransfiguration(card, null);
+    expect(offer).not.toBeNull();
+    expect(offer!.type).toBe("Empowered");
+    // Math.floor(1 / 2) = 0
+    expect(offer!.previewCard.energyCost).toBe(0);
   });
 });
 

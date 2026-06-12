@@ -46,9 +46,15 @@ export function selectFigmentCount(instance: BattleCardInstance): number {
 
 export function selectEffectiveSparkForInstance(instance: BattleCardInstance): number {
   if (instance.provenance.kind === "generated-figment") {
-    // Pumps on a figment stack live in the spark array (see add path); the
-    // instance-level `sparkDelta` is unused for figments.
-    return figmentSparks(instance).reduce((total, spark) => total + Math.max(0, spark), 0);
+    // A figment stack's spark is the sum of its members' sparks plus a
+    // stack-level bonus stored in `sparkDelta`. The bonus is how "Add Spark"
+    // pumps a whole stack — e.g. "+4 bonus spark in addition to the figments
+    // themselves" — separately from adding more figment members.
+    const memberSpark = figmentSparks(instance).reduce(
+      (total, spark) => total + Math.max(0, spark),
+      0,
+    );
+    return Math.max(0, memberSpark + instance.sparkDelta);
   }
 
   return Math.max(0, instance.definition.printedSpark + instance.sparkDelta);
