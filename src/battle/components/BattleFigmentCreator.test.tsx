@@ -375,6 +375,7 @@ describe("BattleFigmentCreator", () => {
     const stackId = allocateBattleCardInstance(state, {
       definition: {
         sourceDeckEntryId: null,
+        cardId: "",
         cardNumber: 0,
         name: "Shadow Figment",
         battleCardKind: "character",

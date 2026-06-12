@@ -1082,6 +1082,9 @@ function createFigment(
 
   const definition: BattleDeckCardDefinition = {
     sourceDeckEntryId: null,
+    // Synthetic generated figment with no catalog card; never registered for
+    // automation, so an empty UUID is correct here.
+    cardId: "",
     cardNumber: 0,
     name,
     battleCardKind: "character",

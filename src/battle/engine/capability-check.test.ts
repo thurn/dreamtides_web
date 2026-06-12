@@ -13,6 +13,7 @@ function makeInstance(renderedText: string, cardNumber: number): BattleCardInsta
     battleCardId: `test-${cardNumber}`,
     definition: {
       sourceDeckEntryId: null,
+      cardId: "",
       cardNumber,
       name: `Test Card ${cardNumber}`,
       battleCardKind: "character",

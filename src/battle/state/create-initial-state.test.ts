@@ -177,6 +177,7 @@ describe("allocateBattleCardInstance", () => {
   function makeDefinition(cardNumber: number): BattleDeckCardDefinition {
     return {
       sourceDeckEntryId: null,
+      cardId: "",
       cardNumber,
       name: `Phase 2 Figment ${String(cardNumber)}`,
       battleCardKind: "character",

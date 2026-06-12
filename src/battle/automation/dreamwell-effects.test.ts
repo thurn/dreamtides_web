@@ -134,6 +134,7 @@ function makeCharacter(
     },
     definition: {
       sourceDeckEntryId: null,
+      cardId: "",
       cardNumber: 1,
       name: `char-${battleCardId}`,
       battleCardKind: "character",

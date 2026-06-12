@@ -103,6 +103,7 @@ function makeInstance(overrides: {
     battleCardId: "bc_test",
     definition: {
       sourceDeckEntryId: null,
+      cardId: "",
       cardNumber: 1,
       name: "Test Card",
       battleCardKind: "character",

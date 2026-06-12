@@ -6,6 +6,7 @@ export function createBaseBattleDeckCardDefinition(
 ): BattleDeckCardDefinition {
   return {
     sourceDeckEntryId: null,
+    cardId: card.id,
     cardNumber: card.cardNumber,
     name: card.name,
     battleCardKind: card.cardType === "Character" ? "character" : "event",

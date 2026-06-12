@@ -528,6 +528,7 @@ function normalizePlayerDeckCard(
   });
   return {
     sourceDeckEntryId: entry.entryId,
+    cardId: card.id,
     cardNumber: card.cardNumber,
     name: card.name,
     battleCardKind: effectiveCard.cardType === "Character" ? "character" : "event",

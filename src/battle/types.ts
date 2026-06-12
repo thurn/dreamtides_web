@@ -127,6 +127,9 @@ export interface BattleQuestDeckEntry {
 
 export interface BattleDeckCardDefinition {
   sourceDeckEntryId: string | null;
+  /** Stable cards_v2 UUID of the source card. "" for synthetic definitions
+   *  (figments, generated copies) that have no catalog card. */
+  cardId: string;
   cardNumber: number;
   name: string;
   battleCardKind: BattleCardKind;

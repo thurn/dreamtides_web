@@ -77,6 +77,7 @@ function questDeckProvenance(): BattleCardProvenance {
 function direwolfDefinition(): BattleDeckCardDefinition {
   return {
     sourceDeckEntryId: null,
+    cardId: "",
     cardNumber: 512,
     name: "Marked Direwolf",
     battleCardKind: "character",
@@ -136,6 +137,7 @@ function keywordCharacterDefinition(
 ): BattleDeckCardDefinition {
   return {
     sourceDeckEntryId: null,
+    cardId: "",
     cardNumber: 0,
     name,
     battleCardKind: "character",

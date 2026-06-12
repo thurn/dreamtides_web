@@ -58,6 +58,7 @@ function makeCharacterDefinition(
 ): BattleDeckCardDefinition {
   return {
     sourceDeckEntryId: null,
+    cardId: "",
     cardNumber,
     name,
     battleCardKind: "character",

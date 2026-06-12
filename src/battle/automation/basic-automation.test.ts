@@ -33,6 +33,7 @@ function makeInstance(
     battleCardId,
     definition: {
       sourceDeckEntryId: null,
+      cardId: "",
       cardNumber: 1,
       name: battleCardId,
       battleCardKind: options.kind ?? "character",
