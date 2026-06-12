@@ -530,8 +530,8 @@ describe("DREAMWELL_EFFECTS / DREAMWELL_MANUAL_IDS partition invariant", () => {
     }
   });
 
-  it("DREAMWELL_EFFECTS has exactly 14 entries", () => {
-    expect(Object.keys(DREAMWELL_EFFECTS)).toHaveLength(14);
+  it("DREAMWELL_EFFECTS has exactly 27 entries", () => {
+    expect(Object.keys(DREAMWELL_EFFECTS)).toHaveLength(27);
   });
 
   it("DREAMWELL_MANUAL_IDS has exactly 4 entries", () => {
@@ -729,6 +729,355 @@ describe("property test: all DREAMWELL_EFFECTS scripts run without error", () =>
           }
         }
       }
+    });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Tests: interactive-prompt entries — representative per shape
+// ---------------------------------------------------------------------------
+
+// Helper: extract the first prompt step from a script
+function getFirstPromptStep(
+  scriptId: string,
+): import("./dreamwell-effects").DreamwellPrompt {
+  const script = DREAMWELL_EFFECTS[scriptId];
+  if (script === undefined) throw new Error(`no script for ${scriptId}`);
+  const step = script.steps.find((s) => s.kind === "prompt");
+  if (step === undefined || step.kind !== "prompt") throw new Error(`no prompt step for ${scriptId}`);
+  return step.prompt;
+}
+
+// Leaf Light Canopy — return any void card to hand (wrong destination zone)
+describe("Leaf Light Canopy (2b23a60c) — return void card to hand", () => {
+  const UUID = "2b23a60c-209c-4c75-b63c-b7f73b2e1a56";
+
+  it("candidates = player void ids", () => {
+    const state = makeState({ playerVoid: ["v1", "v2"] });
+    const prompt = getFirstPromptStep(UUID);
+    if (prompt.kind !== "pick-cards") throw new Error("expected pick-cards");
+    expect(prompt.candidates(makeCtx(state))).toEqual(["v1", "v2"]);
+  });
+
+  it("resolve(id) → MOVE_CARD_TO_ZONE to hand on player side", () => {
+    const state = makeState({ playerVoid: ["v1"] });
+    const prompt = getFirstPromptStep(UUID);
+    if (prompt.kind !== "pick-cards") throw new Error("expected pick-cards");
+    const edits = prompt.resolve(["v1"], makeCtx(state));
+    expect(edits).toEqual([
+      { kind: "MOVE_CARD_TO_ZONE", battleCardId: "v1", destination: { side: "player", zone: "hand" } },
+    ]);
+  });
+
+  it("resolve([]) → empty when no selection", () => {
+    const state = makeState();
+    const prompt = getFirstPromptStep(UUID);
+    if (prompt.kind !== "pick-cards") throw new Error("expected pick-cards");
+    expect(prompt.resolve([], makeCtx(state))).toEqual([]);
+  });
+});
+
+// Verdant Hollow — only events in void (missing type filter)
+describe("Verdant Hollow (a0fbcbd9) — only events in void", () => {
+  const UUID = "a0fbcbd9-96ee-4392-add7-e1d436f99553";
+
+  it("candidates excludes characters, includes only events", () => {
+    const state = makeState({
+      playerVoid: ["c1", "e1"],
+      cardInstances: {
+        c1: makeCharacter("c1", "player", 2),
+        e1: makeEvent("e1", "player", 2),
+      },
+    });
+    const prompt = getFirstPromptStep(UUID);
+    if (prompt.kind !== "pick-cards") throw new Error("expected pick-cards");
+    expect(prompt.candidates(makeCtx(state))).toEqual(["e1"]);
+  });
+
+  it("resolve returns MOVE to hand", () => {
+    const state = makeState({ playerVoid: ["e1"], cardInstances: { e1: makeEvent("e1", "player", 1) } });
+    const prompt = getFirstPromptStep(UUID);
+    if (prompt.kind !== "pick-cards") throw new Error("expected pick-cards");
+    const edits = prompt.resolve(["e1"], makeCtx(state));
+    expect(edits).toEqual([
+      { kind: "MOVE_CARD_TO_ZONE", battleCardId: "e1", destination: { side: "player", zone: "hand" } },
+    ]);
+  });
+});
+
+// Silent Winter — banish an enemy; self-targeting bug class
+describe("Silent Winter (9954cede) — banish enemy character", () => {
+  const UUID = "9954cede-8a16-4053-b6e9-da745f4540f5";
+
+  it("candidates = opponent's in-play characters only", () => {
+    const state = makeState({
+      enemyBackRank: { B0: "ec1", B1: null, B2: null, B3: null, B4: null },
+      playerBackRank: { B0: "pc1", B1: null, B2: null, B3: null, B4: null },
+      cardInstances: {
+        ec1: makeCharacter("ec1", "enemy", 2),
+        pc1: makeCharacter("pc1", "player", 2),
+      },
+    });
+    const prompt = getFirstPromptStep(UUID);
+    if (prompt.kind !== "pick-cards") throw new Error("expected pick-cards");
+    const cands = prompt.candidates(makeCtx(state, "player"));
+    expect(cands).toContain("ec1");
+    expect(cands).not.toContain("pc1");
+  });
+
+  it("resolve → MOVE_CARD_TO_ZONE to banished on OPPONENT side", () => {
+    const state = makeState({
+      enemyBackRank: { B0: "ec1", B1: null, B2: null, B3: null, B4: null },
+      cardInstances: { ec1: makeCharacter("ec1", "enemy", 2) },
+    });
+    const prompt = getFirstPromptStep(UUID);
+    if (prompt.kind !== "pick-cards") throw new Error("expected pick-cards");
+    const edits = prompt.resolve(["ec1"], makeCtx(state, "player"));
+    expect(edits).toEqual([
+      { kind: "MOVE_CARD_TO_ZONE", battleCardId: "ec1", destination: { side: "enemy", zone: "banished" } },
+    ]);
+  });
+});
+
+// Astral Interface — two-step: draw then discard
+describe("Astral Interface (ee1ef770) — draw then discard", () => {
+  const UUID = "ee1ef770-29ea-4a63-a1f9-7e97b5b8870d";
+
+  it("step 0 is edits: draw 1", () => {
+    const script = DREAMWELL_EFFECTS[UUID];
+    expect(script).toBeDefined();
+    if (script === undefined) throw new Error("no script");
+    const step0 = script.steps[0];
+    expect(step0?.kind).toBe("edits");
+    if (step0?.kind !== "edits") throw new Error();
+    const edits = step0.build(makeCtx(makeState()));
+    expect(edits).toEqual([{ kind: "DRAW_CARD", side: "player" }]);
+  });
+
+  it("step 1 is prompt: pick-cards from hand", () => {
+    const script = DREAMWELL_EFFECTS[UUID];
+    if (script === undefined) throw new Error("no script");
+    const step1 = script.steps[1];
+    expect(step1?.kind).toBe("prompt");
+    if (step1?.kind !== "prompt") throw new Error();
+    expect(step1.prompt.kind).toBe("pick-cards");
+  });
+
+  it("step 1 candidates = player hand", () => {
+    const state = makeState({ playerHand: ["h1", "h2"] });
+    const script = DREAMWELL_EFFECTS[UUID];
+    if (script === undefined) throw new Error("no script");
+    const step1 = script.steps[1];
+    if (step1?.kind !== "prompt" || step1.prompt.kind !== "pick-cards") throw new Error();
+    expect(step1.prompt.candidates(makeCtx(state))).toEqual(["h1", "h2"]);
+  });
+
+  it("step 1 resolve(id) → DISCARD_CARD", () => {
+    const state = makeState({ playerHand: ["h1"] });
+    const script = DREAMWELL_EFFECTS[UUID];
+    if (script === undefined) throw new Error("no script");
+    const step1 = script.steps[1];
+    if (step1?.kind !== "prompt" || step1.prompt.kind !== "pick-cards") throw new Error();
+    const edits = step1.prompt.resolve(["h1"], makeCtx(state));
+    expect(edits).toEqual([{ kind: "DISCARD_CARD", battleCardId: "h1" }]);
+  });
+});
+
+// The Crossroads — choice: draw / gain 2● (swapped option mapping)
+describe("The Crossroads (af2ef62f) — choice draw / gain energy", () => {
+  const UUID = "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c";
+
+  it("is a choice prompt with 2 options, draw first", () => {
+    const prompt = getFirstPromptStep(UUID);
+    if (prompt.kind !== "choice") throw new Error("expected choice");
+    expect(prompt.options).toHaveLength(2);
+    const opt0 = prompt.options[0];
+    const opt1 = prompt.options[1];
+    if (opt0 === undefined || opt1 === undefined) throw new Error("missing options");
+    expect(opt0.label.toLowerCase()).toContain("draw");
+    expect(opt1.label.toLowerCase()).toMatch(/energy|●/);
+  });
+
+  it("options[0].build → DRAW_CARD", () => {
+    const prompt = getFirstPromptStep(UUID);
+    if (prompt.kind !== "choice") throw new Error();
+    const opt0 = prompt.options[0];
+    if (opt0 === undefined) throw new Error("missing option 0");
+    const edits = opt0.build(makeCtx(makeState()));
+    expect(edits).toEqual([{ kind: "DRAW_CARD", side: "player" }]);
+  });
+
+  it("options[1].build → ADJUST_CURRENT_ENERGY +2", () => {
+    const prompt = getFirstPromptStep(UUID);
+    if (prompt.kind !== "choice") throw new Error();
+    const opt1 = prompt.options[1];
+    if (opt1 === undefined) throw new Error("missing option 1");
+    const edits = opt1.build(makeCtx(makeState()));
+    expect(edits).toEqual([{ kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: 2 }]);
+  });
+});
+
+// The Bastion — confirm → pick → abandon (confirm dropping payload)
+describe("The Bastion (20be0fdd) — confirm → abandon ally → draw 2", () => {
+  const UUID = "20be0fdd-d691-40a9-b4f8-15689ea7ebaa";
+
+  it("outer prompt is confirm with non-empty onYes", () => {
+    const prompt = getFirstPromptStep(UUID);
+    expect(prompt.kind).toBe("confirm");
+    if (prompt.kind !== "confirm") throw new Error();
+    expect(prompt.onYes.length).toBeGreaterThan(0);
+  });
+
+  it("onYes[0] is a pick-cards prompt", () => {
+    const prompt = getFirstPromptStep(UUID);
+    if (prompt.kind !== "confirm") throw new Error();
+    const inner = prompt.onYes[0];
+    expect(inner?.kind).toBe("prompt");
+    if (inner?.kind !== "prompt") throw new Error();
+    expect(inner.prompt.kind).toBe("pick-cards");
+  });
+
+  it("onYes pick resolve → ABANDON edit", () => {
+    const state = makeState({
+      playerBackRank: { B0: "ally1", B1: null, B2: null, B3: null, B4: null },
+      cardInstances: { ally1: makeCharacter("ally1", "player", 2) },
+    });
+    const prompt = getFirstPromptStep(UUID);
+    if (prompt.kind !== "confirm") throw new Error();
+    const inner = prompt.onYes[0];
+    if (inner?.kind !== "prompt" || inner.prompt.kind !== "pick-cards") throw new Error();
+    const edits = inner.prompt.resolve(["ally1"], makeCtx(state));
+    expect(edits).toEqual([{ kind: "ABANDON", battleCardId: "ally1" }]);
+  });
+
+  it("onYes also contains a draw-2 edits step", () => {
+    const prompt = getFirstPromptStep(UUID);
+    if (prompt.kind !== "confirm") throw new Error();
+    const drawStep = prompt.onYes.find((s) => s.kind === "edits");
+    expect(drawStep).toBeDefined();
+    if (drawStep?.kind !== "edits") throw new Error();
+    const edits = drawStep.build(makeCtx(makeState()));
+    expect(edits).toEqual([
+      { kind: "DRAW_CARD", side: "player" },
+      { kind: "DRAW_CARD", side: "player" },
+    ]);
+  });
+});
+
+// Shining Beacon — pick 1 of top 2; other goes to bottom (forgetting "other" half)
+describe("Shining Beacon (3a4293da) — top 2, pick 1 to hand other to bottom", () => {
+  const UUID = "3a4293da-55a1-4094-898a-df402ffa1c92";
+
+  it("candidates = top 2 of player deck", () => {
+    const state = makeState({ playerDeck: ["top1", "top2", "top3"] });
+    const prompt = getFirstPromptStep(UUID);
+    if (prompt.kind !== "pick-cards") throw new Error();
+    expect(prompt.candidates(makeCtx(state))).toEqual(["top1", "top2"]);
+  });
+
+  it("resolve(chosen) → MOVE chosen to hand AND MOVE other to deck bottom", () => {
+    const state = makeState({ playerDeck: ["top1", "top2", "top3"] });
+    const prompt = getFirstPromptStep(UUID);
+    if (prompt.kind !== "pick-cards") throw new Error();
+    const edits = prompt.resolve(["top1"], makeCtx(state));
+    expect(edits).toContainEqual({
+      kind: "MOVE_CARD_TO_ZONE",
+      battleCardId: "top1",
+      destination: { side: "player", zone: "hand" },
+    });
+    expect(edits).toContainEqual({
+      kind: "MOVE_CARD_TO_ZONE",
+      battleCardId: "top2",
+      destination: { side: "player", zone: "deck", position: "bottom" },
+    });
+    expect(edits).toHaveLength(2);
+  });
+
+  it("when the other card is chosen, the first goes to bottom", () => {
+    const state = makeState({ playerDeck: ["top1", "top2", "top3"] });
+    const prompt = getFirstPromptStep(UUID);
+    if (prompt.kind !== "pick-cards") throw new Error();
+    const edits = prompt.resolve(["top2"], makeCtx(state));
+    expect(edits).toContainEqual({
+      kind: "MOVE_CARD_TO_ZONE",
+      battleCardId: "top2",
+      destination: { side: "player", zone: "hand" },
+    });
+    expect(edits).toContainEqual({
+      kind: "MOVE_CARD_TO_ZONE",
+      battleCardId: "top1",
+      destination: { side: "player", zone: "deck", position: "bottom" },
+    });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Tests: property test — all prompt scripts (recurse into confirm.onYes)
+// ---------------------------------------------------------------------------
+
+describe("property test: all prompt scripts run without error on rich fixture", () => {
+  const HAND_CARD_ID = "prop-hand-1";
+  const ALLY_ID = "prop-ally-1";
+  const P_VOID_CHAR_ID = "prop-pvoid-char-1";
+  const P_VOID_EVENT_ID = "prop-pvoid-event-1";
+  const E_VOID_CHAR_ID = "prop-evoid-char-1";
+  const ENEMY_CHAR_ID = "prop-enemy-play-1";
+
+  const richState: BattleMutableState = makeState({
+    playerHand: [HAND_CARD_ID],
+    playerVoid: [P_VOID_CHAR_ID, P_VOID_EVENT_ID],
+    playerDeck: ["deck-top-1", "deck-top-2", "deck-top-3"],
+    playerBackRank: { B0: ALLY_ID, B1: null, B2: null, B3: null, B4: null },
+    enemyHand: [],
+    enemyVoid: [E_VOID_CHAR_ID],
+    enemyBackRank: { B0: ENEMY_CHAR_ID, B1: null, B2: null, B3: null, B4: null },
+    cardInstances: {
+      [HAND_CARD_ID]: makeCharacter(HAND_CARD_ID, "player", 2),
+      [ALLY_ID]: makeCharacter(ALLY_ID, "player", 2),
+      [P_VOID_CHAR_ID]: makeCharacter(P_VOID_CHAR_ID, "player", 2),
+      [P_VOID_EVENT_ID]: makeEvent(P_VOID_EVENT_ID, "player", 1),
+      [E_VOID_CHAR_ID]: makeCharacter(E_VOID_CHAR_ID, "enemy", 3),
+      [ENEMY_CHAR_ID]: makeCharacter(ENEMY_CHAR_ID, "enemy", 2),
+    },
+  });
+
+  const ctx: import("./dreamwell-effects").StepContext = {
+    side: "player",
+    state: richState,
+    random: () => 0,
+    nowMs: 42000,
+  };
+
+  function walkSteps(steps: import("./dreamwell-effects").DreamwellEffectStep[], label: string): void {
+    for (const step of steps) {
+      if (step.kind === "edits") {
+        expect(() => step.build(ctx)).not.toThrow();
+      } else {
+        // prompt step
+        const prompt = step.prompt;
+        if (prompt.kind === "pick-cards") {
+          let cands: string[];
+          expect(() => { cands = prompt.candidates(ctx); }).not.toThrow();
+          // resolve with as many candidates as count (or fewer if not enough)
+          const chosen = (cands! ?? []).slice(0, prompt.count);
+          expect(() => prompt.resolve(chosen, ctx)).not.toThrow();
+          // resolve with empty is also safe (optional or no candidates)
+          expect(() => prompt.resolve([], ctx)).not.toThrow();
+        } else if (prompt.kind === "choice") {
+          for (const opt of prompt.options) {
+            expect(() => opt.build(ctx)).not.toThrow();
+          }
+        } else if (prompt.kind === "confirm") {
+          walkSteps(prompt.onYes, `${label} → onYes`);
+        }
+        // foresee: no build function to test
+      }
+    }
+  }
+
+  for (const [id, script] of Object.entries(DREAMWELL_EFFECTS)) {
+    it(`prompt script ${id} resolves without error`, () => {
+      walkSteps(script.steps, id);
     });
   }
 });
