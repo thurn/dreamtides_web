@@ -472,19 +472,28 @@ function PlayableBattleScreenInner({
     }
     try {
       const cardsById = new Map<string, string>();
+      const namesById = new Map<string, string>();
       for (const card of cardDatabase.values()) {
         cardsById.set(card.id, card.renderedText);
+        namesById.set(card.id, card.name);
       }
       const drift = collectAutomationHashDrift(cardsById);
       if (drift.length === 0) {
         return;
       }
       automationHashDriftWarned = true;
-      const details = drift
-        .map(({ id }) => {
-          const card = [...cardDatabase.values()].find((c) => c.id === id);
-          return `  - ${id} (${card?.name ?? "missing from catalog"})`;
-        })
+      const annotated = drift.map((entry) => ({
+        ...entry,
+        name: namesById.get(entry.id) ?? null,
+        // actual === null means the registered card is absent from the catalog,
+        // which reads differently from a hash mismatch.
+        reason: entry.actual === null ? "missing-from-catalog" : "text-drift",
+      }));
+      logEventOnce("battle_proto_automation_hash_drift", "battle_proto_automation_hash_drift", {
+        drift: annotated,
+      });
+      const details = annotated
+        .map(({ id, name, reason }) => `  - ${id} (${name ?? "missing from catalog"}) [${reason}]`)
         .join("\n");
       console.warn(
         `Automated battle-card rules text drifted from its script for the ` +
