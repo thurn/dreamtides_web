@@ -13,6 +13,12 @@ import {
   opponentOf,
   topOfDeck,
 } from "./dreamwell-effects";
+import {
+  DREAMWELL_EFFECTS,
+  DREAMWELL_MANUAL_IDS,
+  dreamwellAutomationStatus,
+  selectDreamwellEffectScript,
+} from "./dreamwell-effects-table";
 
 // ---------------------------------------------------------------------------
 // Minimal state fixture
@@ -501,4 +507,228 @@ describe("gainScoreEdits", () => {
       { kind: "ADJUST_SCORE", side: "enemy", amount: 2 },
     ]);
   });
+});
+
+// ---------------------------------------------------------------------------
+// Tests: dreamwell-effects-table — partition invariant
+// ---------------------------------------------------------------------------
+
+describe("DREAMWELL_EFFECTS / DREAMWELL_MANUAL_IDS partition invariant", () => {
+  it("all DREAMWELL_EFFECTS keys are 36-char UUIDs that equal their entry id", () => {
+    for (const [key, script] of Object.entries(DREAMWELL_EFFECTS)) {
+      expect(key).toHaveLength(36);
+      expect(key).toBe(script.id);
+    }
+  });
+
+  it("DREAMWELL_EFFECTS keys and DREAMWELL_MANUAL_IDS are disjoint", () => {
+    for (const key of Object.keys(DREAMWELL_EFFECTS)) {
+      expect(DREAMWELL_MANUAL_IDS.has(key)).toBe(false);
+    }
+    for (const id of DREAMWELL_MANUAL_IDS) {
+      expect(id in DREAMWELL_EFFECTS).toBe(false);
+    }
+  });
+
+  it("DREAMWELL_EFFECTS has exactly 14 entries", () => {
+    expect(Object.keys(DREAMWELL_EFFECTS)).toHaveLength(14);
+  });
+
+  it("DREAMWELL_MANUAL_IDS has exactly 4 entries", () => {
+    expect(DREAMWELL_MANUAL_IDS.size).toBe(4);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Tests: dreamwellAutomationStatus contract
+// ---------------------------------------------------------------------------
+
+describe("dreamwellAutomationStatus", () => {
+  it('returns "auto" for a known table id', () => {
+    // Autumn Glade
+    expect(dreamwellAutomationStatus("02e8ea92-1218-413c-9f0b-4c865a3921d3")).toBe("auto");
+  });
+
+  it('returns "manual" for each of the 4 excluded ids', () => {
+    expect(dreamwellAutomationStatus("f61431f3-33bd-42ff-a229-b4013582e86e")).toBe("manual"); // Forest Trailhead
+    expect(dreamwellAutomationStatus("8f5f2e26-44b5-447b-90d0-eaf22ab29fed")).toBe("manual"); // Sunlit Archive
+    expect(dreamwellAutomationStatus("2ad68489-044a-40d1-9be6-e62497a4e1fd")).toBe("manual"); // Echo Cascade
+    expect(dreamwellAutomationStatus("14dec460-3ec6-40c1-978f-67e70cb0b227")).toBe("manual"); // Firmament Mirror
+  });
+
+  it('returns "none" for an unknown id', () => {
+    expect(dreamwellAutomationStatus("00000000-0000-0000-0000-000000000000")).toBe("none");
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Tests: selectDreamwellEffectScript
+// ---------------------------------------------------------------------------
+
+describe("selectDreamwellEffectScript", () => {
+  it("returns the script for a known id", () => {
+    const script = selectDreamwellEffectScript("02e8ea92-1218-413c-9f0b-4c865a3921d3");
+    expect(script).not.toBeNull();
+    expect(script?.id).toBe("02e8ea92-1218-413c-9f0b-4c865a3921d3");
+  });
+
+  it("returns null for an unknown id", () => {
+    expect(selectDreamwellEffectScript("00000000-0000-0000-0000-000000000000")).toBeNull();
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Tests: representative deterministic builders
+// ---------------------------------------------------------------------------
+
+function makeCtx(
+  state: BattleMutableState,
+  side: BattleSide = "player",
+): import("./dreamwell-effects").StepContext {
+  return { side, state, random: () => 0, nowMs: 1000 };
+}
+
+/** Extract and assert the first edits step's build function; fails test if missing. */
+function getFirstEditsBuild(
+  scriptId: string,
+): ((ctx: import("./dreamwell-effects").StepContext) => import("../debug/commands").BattleDebugEdit[]) {
+  const script = DREAMWELL_EFFECTS[scriptId];
+  if (script === undefined) throw new Error(`no script for ${scriptId}`);
+  const step = script.steps[0];
+  if (step === undefined || step.kind !== "edits") throw new Error(`step 0 is not edits for ${scriptId}`);
+  return step.build;
+}
+
+describe("Autumn Glade builder", () => {
+  it("produces a single ADJUST_SCORE +2 for the active side", () => {
+    const state = makeState();
+    const build = getFirstEditsBuild("02e8ea92-1218-413c-9f0b-4c865a3921d3");
+    const edits = build(makeCtx(state, "player"));
+    expect(edits).toEqual([{ kind: "ADJUST_SCORE", side: "player", amount: 2 }]);
+  });
+});
+
+describe("Twilight Radiance builder", () => {
+  it("produces ADJUST_CURRENT_ENERGY +1 for the active side", () => {
+    const state = makeState();
+    const build = getFirstEditsBuild("de98477c-e216-4618-bff1-0e24bd982fdb");
+    const edits = build(makeCtx(state, "player"));
+    expect(edits).toEqual([{ kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: 1 }]);
+  });
+});
+
+describe("The Voltsurge builder", () => {
+  it("produces two DRAW_CARD edits for each side (4 total)", () => {
+    const state = makeState();
+    const build = getFirstEditsBuild("7171ff89-ebe4-42d0-8863-9b4b0531cad2");
+    const edits = build(makeCtx(state, "player"));
+    const playerDraws = edits.filter((e) => e.kind === "DRAW_CARD" && e.side === "player");
+    const enemyDraws = edits.filter((e) => e.kind === "DRAW_CARD" && e.side === "enemy");
+    expect(playerDraws).toHaveLength(2);
+    expect(enemyDraws).toHaveLength(2);
+  });
+});
+
+describe("Wellspring Commons builder", () => {
+  it("produces zero draws for a side already holding 3 cards", () => {
+    const state = makeState({
+      playerHand: ["h1", "h2", "h3"],
+      enemyHand: [],
+    });
+    const build = getFirstEditsBuild("06e62e45-53f9-4264-9aa6-2575b445332a");
+    const edits = build(makeCtx(state, "player"));
+    const playerDraws = edits.filter((e) => e.kind === "DRAW_CARD" && e.side === "player");
+    const enemyDraws = edits.filter((e) => e.kind === "DRAW_CARD" && e.side === "enemy");
+    expect(playerDraws).toHaveLength(0);
+    expect(enemyDraws).toHaveLength(3);
+  });
+});
+
+describe("The Brimming Well builder", () => {
+  it("produces ADJUST_MAX_ENERGY +1 targeting the OPPONENT", () => {
+    const state = makeState();
+    const build = getFirstEditsBuild("a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf");
+    // Active side is player — opponent is enemy
+    const edits = build(makeCtx(state, "player"));
+    expect(edits).toEqual([{ kind: "ADJUST_MAX_ENERGY", side: "enemy", amount: 1 }]);
+    // Active side is enemy — opponent is player
+    const edits2 = build(makeCtx(state, "enemy"));
+    expect(edits2).toEqual([{ kind: "ADJUST_MAX_ENERGY", side: "player", amount: 1 }]);
+  });
+});
+
+describe("Eternal Horizon builder", () => {
+  it("produces one SET_CARD_SPARK_DELTA per ally with value === existingSparkDelta + 1", () => {
+    const ally1 = makeCharacter("ally1", "player", 2);
+    const ally2 = { ...makeCharacter("ally2", "player", 3), sparkDelta: 3 };
+    const state = makeState({
+      playerBackRank: { B0: "ally1", B1: "ally2", B2: null, B3: null, B4: null },
+      cardInstances: { ally1, ally2 },
+    });
+    const build = getFirstEditsBuild("a57f1276-3fb6-4527-b538-953fbace35cf");
+    const edits = build(makeCtx(state, "player"));
+    expect(edits).toHaveLength(2);
+    const e1 = edits.find((e) => e.kind === "SET_CARD_SPARK_DELTA" && e.battleCardId === "ally1");
+    const e2 = edits.find((e) => e.kind === "SET_CARD_SPARK_DELTA" && e.battleCardId === "ally2");
+    expect(e1).toBeDefined();
+    expect(e2).toBeDefined();
+    // ally1 has sparkDelta 0 → value should be 1
+    expect(e1).toMatchObject({ kind: "SET_CARD_SPARK_DELTA", battleCardId: "ally1", value: 1 });
+    // ally2 has sparkDelta 3 → value should be 4
+    expect(e2).toMatchObject({ kind: "SET_CARD_SPARK_DELTA", battleCardId: "ally2", value: 4 });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Tests: property test — every auto script runs without error on a rich fixture
+// ---------------------------------------------------------------------------
+
+describe("property test: all DREAMWELL_EFFECTS scripts run without error", () => {
+  // Build a rich fixture: player has a character in void, a card in hand (also
+  // in cardInstances so Twin Moons step 2 can look it up), allies in play, and
+  // the back rank has one open slot for Foxfire Thicket / Celestial Gateway.
+  const HAND_CARD_ID = "hand-char-1";
+  const ALLY_ID = "ally-1";
+  const P_VOID_CHAR_ID = "pvoid-char-1";
+  const E_VOID_CHAR_ID = "evoid-char-1";
+
+  const richState: BattleMutableState = makeState({
+    playerHand: [HAND_CARD_ID],
+    playerVoid: [P_VOID_CHAR_ID],
+    playerBackRank: { B0: ALLY_ID, B1: null, B2: null, B3: null, B4: null },
+    enemyHand: [],
+    enemyVoid: [E_VOID_CHAR_ID],
+    // leave enemy back rank open so Celestial Gateway can place there
+    cardInstances: {
+      [HAND_CARD_ID]: makeCharacter(HAND_CARD_ID, "player", 2),
+      [ALLY_ID]: makeCharacter(ALLY_ID, "player", 2),
+      [P_VOID_CHAR_ID]: makeCharacter(P_VOID_CHAR_ID, "player", 3),
+      [E_VOID_CHAR_ID]: makeCharacter(E_VOID_CHAR_ID, "enemy", 3),
+    },
+  });
+
+  const ctx: import("./dreamwell-effects").StepContext = {
+    side: "player",
+    state: richState,
+    random: () => 0,
+    nowMs: 42000,
+  };
+
+  for (const [id, script] of Object.entries(DREAMWELL_EFFECTS)) {
+    it(`script ${id} (${script.id}) runs all edits steps without error`, () => {
+      for (const step of script.steps) {
+        if (step.kind !== "edits") continue;
+        let edits: ReturnType<typeof step.build>;
+        expect(() => {
+          edits = step.build(ctx);
+        }).not.toThrow();
+        // Every edit that references a battleCardId must point to a real instance
+        for (const edit of edits!) {
+          if ("battleCardId" in edit) {
+            expect(richState.cardInstances).toHaveProperty(edit.battleCardId);
+          }
+        }
+      }
+    });
+  }
 });
