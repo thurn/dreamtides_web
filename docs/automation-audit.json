@@ -549,7 +549,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
     },
     {
       "id": "46783333-78f9-4146-a8ec-0d1b81e1bf2f",
@@ -574,8 +574,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
     },
     {
       "id": "470bbf9d-a73c-4e00-bc66-cb0fa767c8de",
@@ -997,6 +998,28 @@
       "scriptable": true
     },
     {
+      "id": "73fc1b7f-3c2b-4993-9590-924240515c2f",
+      "name": "Lunar Hart",
+      "triggers": [
+        "dawn",
+        "materialized"
+      ],
+      "ruleLines": {
+        "dawn": "▸Materialized, Dawn: Gain 2●.",
+        "materialized": "▸Materialized, Dawn: Gain 2●."
+      },
+      "effects": [
+        {
+          "kind": "gain-energy",
+          "amount": 2,
+          "target": "self"
+        }
+      ],
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
+    },
+    {
       "id": "742a376f-68db-466a-b087-405188634ba4",
       "name": "Assault Leader",
       "triggers": [
@@ -1058,8 +1081,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
     },
     {
       "id": "78673e2b-a6d1-43de-8850-3d3327de5cc6",
@@ -1212,10 +1236,12 @@
       "id": "881e3a5f-280f-413a-b927-352aeb3bda71",
       "name": "Bloodpact Berserker",
       "triggers": [
-        "dawn"
+        "dawn",
+        "materialized"
       ],
       "ruleLines": {
-        "dawn": "▸Materialized, ▸Dawn: Gain 2●. The opponent gains 3⍟."
+        "dawn": "▸Materialized, ▸Dawn: Gain 2●. The opponent gains 3⍟.",
+        "materialized": "▸Materialized, ▸Dawn: Gain 2●. The opponent gains 3⍟."
       },
       "effects": [
         {
@@ -1229,7 +1255,7 @@
       ],
       "classification": "manual",
       "scriptable": false,
-      "notes": "unrecognized phrasing — needs human review"
+      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
     },
     {
       "id": "890970bd-475f-4da4-b835-2fb75882a84d",
@@ -1388,6 +1414,28 @@
       ],
       "classification": "deterministic",
       "scriptable": true
+    },
+    {
+      "id": "96e2c30c-930c-47af-abb0-d4fbab454d56",
+      "name": "Dream Garden Visitor",
+      "triggers": [
+        "dawn",
+        "materialized"
+      ],
+      "ruleLines": {
+        "dawn": "▸Materialized, Dawn: Erode 1.",
+        "materialized": "▸Materialized, Dawn: Erode 1."
+      },
+      "effects": [
+        {
+          "kind": "erode",
+          "amount": 1,
+          "target": "self"
+        }
+      ],
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
     },
     {
       "id": "99101fce-f2b4-4032-b999-317ce3e4a6dd",
@@ -1655,8 +1703,9 @@
           "interactive": true
         }
       ],
-      "classification": "interactive",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
     },
     {
       "id": "bbf83d18-81b6-48c8-886f-4b9f0feb599f",
@@ -1754,10 +1803,12 @@
       "id": "c750af2e-8185-4af0-bb38-4a41430c71b3",
       "name": "Fangbound",
       "triggers": [
-        "dawn"
+        "dawn",
+        "materialized"
       ],
       "ruleLines": {
-        "dawn": "▸Materialized, ▸Dawn: Gain 1●."
+        "dawn": "▸Materialized, ▸Dawn: Gain 1●.",
+        "materialized": "▸Materialized, ▸Dawn: Gain 1●."
       },
       "effects": [
         {
@@ -1766,8 +1817,9 @@
           "target": "self"
         }
       ],
-      "classification": "deterministic",
-      "scriptable": true
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
     },
     {
       "id": "c7c95f67-a838-4e39-879c-cfbf0591540c",
@@ -2130,6 +2182,26 @@
       "scriptable": true
     },
     {
+      "id": "f3282494-2fcf-4c06-bfbe-3474b28aa87a",
+      "name": "Oathbound Pair",
+      "triggers": [
+        "dawn",
+        "materialized"
+      ],
+      "ruleLines": {
+        "dawn": "▸Materialized, Dawn: Give an ally +1✦.",
+        "materialized": "▸Materialized, Dawn: Give an ally +1✦."
+      },
+      "effects": [
+        {
+          "kind": "other"
+        }
+      ],
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
+    },
+    {
       "id": "f7084ba7-8c85-4847-80df-b0c98ec77d78",
       "name": "Carrion Shepherd",
       "triggers": [
@@ -2149,6 +2221,28 @@
       "classification": "manual",
       "scriptable": false,
       "notes": "unrecognized phrasing — needs human review"
+    },
+    {
+      "id": "f860e815-3ed9-463d-ac4d-ed8d2778f8ad",
+      "name": "Lone Castaway",
+      "triggers": [
+        "dawn",
+        "materialized"
+      ],
+      "ruleLines": {
+        "dawn": "▸Materialized, Dawn: Gain 1●.",
+        "materialized": "▸Materialized, Dawn: Gain 1●."
+      },
+      "effects": [
+        {
+          "kind": "gain-energy",
+          "amount": 1,
+          "target": "self"
+        }
+      ],
+      "classification": "manual",
+      "scriptable": false,
+      "notes": "multiple triggers (dawn + materialized); the single-trigger registry cannot automate both"
     },
     {
       "id": "f9a65b32-537b-457c-9eaf-b512cf1f3791",

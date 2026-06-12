@@ -6,11 +6,15 @@
 // emits docs/automation-audit.json: a catalog of every card whose renderedText
 // contains an automatable trigger clause.
 //
-// Trigger detection (literal substrings, per the audit plan):
-//   - ▸Dawn:          (also matches the combined "▸Materialized, ▸Dawn:" line;
-//                      that combined line's body is parsed as the dawn clause)
-//   - ▸Materialized:  (the colon is required, so "▸Materialized, ▸Dawn:" is NOT
-//                      counted as a materialized trigger — only as dawn)
+// Trigger detection:
+//   - Combined "▸Materialized, Dawn:" / "▸Materialized, ▸Dawn:" — a SINGLE
+//     clause whose effect fires on BOTH materialize and each dawn. Detected
+//     first (before the plain markers below) and recorded as carrying BOTH the
+//     `dawn` and `materialized` triggers. Its one shared line is stored under
+//     both ruleLines.dawn and ruleLines.materialized so every trigger has a
+//     corresponding rule line.
+//   - ▸Dawn:          a standalone dawn clause.
+//   - ▸Materialized:  a standalone materialized clause (the colon is required).
 //   - Support –       (em-dash U+2013) or "Support -" (ascii hyphen)
 //
 // Only the relevant trigger CLAUSE is parsed for effects. Activated abilities
@@ -21,11 +25,26 @@
 // Effect atoms map to the downstream builder vocabulary:
 //   Deterministic builders -> kinds: gain-energy, gain-points, draw, erode,
 //     add-spark (target:self), discard (your whole hand), support-spark.
-//   Interactive prompts (scriptable, need a player choice) -> kinds: foresee,
-//     plus draw/discard atoms flagged interactive:true (player chooses).
+//   Interactive prompts (scriptable, need a player choice) -> kinds: foresee
+//     (the only interactive atom the parser emits; draw/discard atoms are always
+//     deterministic).
 //   Anything else -> kind:other (not scriptable).
 //
+// Multi-trigger rule (single-trigger registry constraint):
+//   The downstream registry BATTLE_CARD_EFFECTS maps each card UUID to exactly
+//   ONE trigger ("dawn" | "materialized" | "support") and its steps. A UUID can
+//   therefore automate only one trigger. Any card whose automatable content
+//   spans MORE THAN ONE trigger type (`triggers.length > 1` — whether two
+//   separate clauses like "▸Materialized: ... ▸Dawn: ..." OR a combined
+//   "▸Materialized, Dawn:" line) is classified `manual` (scriptable:false)
+//   regardless of how scriptable the individual effects are. Registering such a
+//   card would fire both triggers' effects on one trigger, producing wrong game
+//   state. Err toward manual: never feed flattened multi-trigger steps
+//   downstream.
+//
 // Classification rules:
+//   - multi-trigger : triggers.length > 1 -> manual, scriptable:false (see
+//                     above). Evaluated before the single-trigger rules below.
 //   - deterministic : every atom is a deterministic builder. scriptable:true.
 //   - interactive   : >=1 atom needs a player choice (interactive:true /
 //                     foresee), and the rest are scriptable. scriptable:true.
@@ -52,6 +71,9 @@ const OUTPUT = join(repoRoot, 'docs', 'automation-audit.json');
 const DAWN_MARK = '▸Dawn:';
 const MAT_MARK = '▸Materialized:';
 const SUPPORT_MARKS = ['Support –', 'Support -'];
+// Combined trigger: one clause firing on BOTH materialize and each dawn.
+// Two spellings appear in the pool — triangle on Dawn or not.
+const COMBINED_MARKS = ['▸Materialized, ▸Dawn:', '▸Materialized, Dawn:'];
 
 // ---------------------------------------------------------------------------
 // Clause extraction
@@ -82,6 +104,17 @@ function dawnBody(line) {
 function materializedBody(line) {
   const idx = line.indexOf(MAT_MARK);
   return line.slice(idx + MAT_MARK.length).trim();
+}
+
+/** Return the first combined marker found in `text`, or null. */
+function findCombinedMark(text) {
+  return COMBINED_MARKS.find((m) => text.includes(m)) ?? null;
+}
+
+/** Strip the leading combined "▸Materialized, [▸]Dawn:" prefix from a line. */
+function combinedBody(line, mark) {
+  const idx = line.indexOf(mark);
+  return line.slice(idx + mark.length).trim();
 }
 
 function supportBody(line) {
@@ -221,10 +254,22 @@ const DETERMINISTIC_KINDS = new Set([
 ]);
 
 /**
- * Classify a card from its full atom list plus optional partial note.
- * Returns { classification, scriptable, notes? }.
+ * Classify a card from its trigger list, full atom list, plus optional partial
+ * note. Returns { classification, scriptable, notes? }.
  */
-function classify(atoms, partialNote) {
+function classify(triggers, atoms, partialNote) {
+  // Multi-trigger cards cannot be automated by the single-trigger registry:
+  // registering one trigger would also run the other trigger's flattened
+  // steps. Mark manual regardless of how scriptable the effects look.
+  if (triggers.length > 1) {
+    const list = [...triggers].sort().join(' + ');
+    return {
+      classification: 'manual',
+      scriptable: false,
+      notes: `multiple triggers (${list}); the single-trigger registry cannot automate both`,
+    };
+  }
+
   const hasOther = atoms.some((a) => a.kind === 'other');
   const hasInteractive = atoms.some((a) => a.interactive === true);
   const hasDeterministic = atoms.some((a) => DETERMINISTIC_KINDS.has(a.kind));
@@ -284,17 +329,34 @@ function main() {
     const text = card.renderedText;
     if (typeof text !== 'string' || text === '') continue;
 
-    const hasDawn = text.includes(DAWN_MARK);
-    const hasMat = text.includes(MAT_MARK);
+    // A combined "▸Materialized, [▸]Dawn:" line carries BOTH triggers via one
+    // shared clause. Detect it first so its line is not double-counted by the
+    // plain ▸Dawn: / ▸Materialized: markers below.
+    const combinedMark = findCombinedMark(text);
+    const hasCombined = combinedMark !== null;
+    // The combined line contains the substring "▸Dawn:", so guard the plain
+    // markers against it; ▸Materialized: (with colon) never matches the
+    // combined line, but guard symmetrically for clarity.
+    const hasDawn = !hasCombined && text.includes(DAWN_MARK);
+    const hasMat = !hasCombined && text.includes(MAT_MARK);
     const supportLine = findSupportLine(text);
     const hasSupport = supportLine !== null;
-    if (!hasDawn && !hasMat && !hasSupport) continue;
+    if (!hasCombined && !hasDawn && !hasMat && !hasSupport) continue;
 
     const triggers = [];
     const ruleLines = {};
     let atoms = [];
     let partialNote;
 
+    if (hasCombined) {
+      const line = findLine(text, combinedMark);
+      // One shared clause fires on both materialize and each dawn; record the
+      // line under both triggers and parse its effects once.
+      triggers.push('dawn', 'materialized');
+      ruleLines.dawn = line;
+      ruleLines.materialized = line;
+      atoms = atoms.concat(parseClause(combinedBody(line, combinedMark)));
+    }
     if (hasDawn) {
       const line = findLine(text, DAWN_MARK);
       triggers.push('dawn');
@@ -315,7 +377,11 @@ function main() {
       if (parsed.partialNote) partialNote = parsed.partialNote;
     }
 
-    const { classification, scriptable, notes } = classify(atoms, partialNote);
+    const { classification, scriptable, notes } = classify(
+      triggers,
+      atoms,
+      partialNote
+    );
 
     const entry = {
       id: card.id,
