@@ -40,6 +40,16 @@ describe("BATTLE_CARD_EFFECTS structural invariants", () => {
       expect(script.support).toBeUndefined();
     }
   });
+
+  it('every "support" entry exposes callable bonus and (when present) applies', () => {
+    for (const script of Object.values(BATTLE_CARD_EFFECTS)) {
+      if (script.trigger !== "support") continue;
+      expect(typeof script.support?.bonus).toBe("function");
+      if (script.support?.applies !== undefined) {
+        expect(typeof script.support.applies).toBe("function");
+      }
+    }
+  });
 });
 
 // ---------------------------------------------------------------------------
