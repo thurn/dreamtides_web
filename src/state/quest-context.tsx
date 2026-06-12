@@ -283,6 +283,17 @@ export interface QuestMutations {
   addBaneCardById: (cardId: string, source: string) => void;
   /** Remove the deck entry with the given entryId. Mirrors `removeCard`. */
   removeDeckEntry: (entryId: string, source: string) => void;
+  /**
+   * Purge the given deck entries at a Purge site: removes the entries, spends
+   * `cost` essence, marks the site visited, and returns to the dreamscape, all
+   * atomically.
+   */
+  purgeDeckCards: (
+    siteId: string,
+    entryIds: readonly string[],
+    cost: number,
+    source: string,
+  ) => void;
   /** Add a duplicate of the deck entry with the given entryId. */
   duplicateDeckEntry: (entryId: string, source: string) => void;
   changeDeckEntryType: (
@@ -2708,6 +2719,39 @@ export function QuestProvider({
     [cardDatabase],
   );
 
+  const purgeDeckCards = useCallback(
+    (
+      siteId: string,
+      entryIds: readonly string[],
+      cost: number,
+      source: string,
+    ) => {
+      setState((prev) => {
+        if (prev.visitedSites.includes(siteId)) {
+          return prev;
+        }
+        const entryIdSet = new Set(entryIds);
+        const purged = prev.deck.filter((e) => entryIdSet.has(e.entryId));
+        const deck = prev.deck.filter((e) => !entryIdSet.has(e.entryId));
+        const essence = clampEssence(prev.essence - cost, prev.essenceCap);
+        logEvent("deck_cards_purged", {
+          siteId,
+          source,
+          cost,
+          count: purged.length,
+          cardNumbers: purged.map((e) => e.cardNumber),
+          essenceBefore: prev.essence,
+          essenceAfter: essence,
+        });
+        return setQuestScreen(
+          completeQuestSite({ ...prev, deck, essence }, siteId),
+          { type: "dreamscape" },
+        );
+      });
+    },
+    [],
+  );
+
   const duplicateDeckEntry = useCallback(
     (entryId: string, source: string) => {
       const newEntryId = nextEntryId();
@@ -3212,6 +3256,7 @@ export function QuestProvider({
       addCardByIdWithTransfiguration,
       addBaneCardById,
       removeDeckEntry,
+      purgeDeckCards,
       duplicateDeckEntry,
       purgeRandomBaneCards,
       purgeAllBaneCards,
@@ -3277,6 +3322,7 @@ export function QuestProvider({
       addCardByIdWithTransfiguration,
       addBaneCardById,
       removeDeckEntry,
+      purgeDeckCards,
       duplicateDeckEntry,
       purgeRandomBaneCards,
       purgeAllBaneCards,

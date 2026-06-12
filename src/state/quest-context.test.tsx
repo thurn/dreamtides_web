@@ -1312,3 +1312,109 @@ describe("changeDeckEntryKeywords", () => {
     expect(quest.state.deck[0]?.keywordModification).toEqual({ reclaim: 5 });
   });
 });
+
+describe("purgeDeckCards", () => {
+  function makePurgeState(): { state: QuestState; site: SiteState } {
+    const site: SiteState = {
+      id: "purge-site",
+      type: "Purge",
+      isEnhanced: false,
+      isVisited: false,
+    };
+    const node: DreamscapeNode = {
+      id: "ds-a",
+      biomeName: "Fixture",
+      biomeColor: "#123456",
+      sites: [site],
+      position: { x: 0, y: 0 },
+      status: "available",
+      enhancedSiteType: null,
+    };
+    const state: QuestState = {
+      ...createDefaultState(),
+      essence: 300,
+      essenceCap: 500,
+      currentDreamscape: "ds-a",
+      screen: { type: "site", siteId: site.id },
+      deck: [1, 2, 3, 4].map((cardNumber, index) =>
+        makeMerchantTestDeckEntry({
+          entryId: `deck-${String(index + 1)}`,
+          cardNumber,
+        }),
+      ),
+      atlas: {
+        nodes: { "ds-a": node },
+        edges: [],
+        startingNodeId: "ds-a",
+      },
+    };
+    return { state, site };
+  }
+
+  it("removes the chosen entries, spends essence, and returns to the dreamscape", () => {
+    const { state, site } = makePurgeState();
+    const quest = mountQuestContext({ initialState: state });
+
+    act(() => {
+      quest.mutations.purgeDeckCards(
+        site.id,
+        ["deck-1", "deck-2"],
+        100,
+        "purge",
+      );
+    });
+
+    expect(quest.state.deck.map((entry) => entry.entryId)).toEqual([
+      "deck-3",
+      "deck-4",
+    ]);
+    expect(quest.state.essence).toBe(200);
+    expect(quest.state.visitedSites).toContain(site.id);
+    expect(quest.state.atlas.nodes["ds-a"]?.sites[0]?.isVisited).toBe(true);
+    expect(quest.state.screen).toEqual({ type: "dreamscape" });
+    expect(getLogEntries()).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          event: "deck_cards_purged",
+          siteId: site.id,
+          cost: 100,
+          count: 2,
+          essenceBefore: 300,
+          essenceAfter: 200,
+        }),
+      ]),
+    );
+  });
+
+  it("clamps essence at zero when the cost exceeds the balance", () => {
+    const { state, site } = makePurgeState();
+    const quest = mountQuestContext({
+      initialState: { ...state, essence: 80 },
+    });
+
+    act(() => {
+      quest.mutations.purgeDeckCards(site.id, ["deck-1"], 200, "purge");
+    });
+
+    expect(quest.state.essence).toBe(0);
+  });
+
+  it("does not charge again once the site is visited", () => {
+    const { state, site } = makePurgeState();
+    const quest = mountQuestContext({ initialState: state });
+
+    act(() => {
+      quest.mutations.purgeDeckCards(site.id, ["deck-1"], 40, "purge");
+    });
+    act(() => {
+      quest.mutations.purgeDeckCards(site.id, ["deck-2"], 60, "purge");
+    });
+
+    expect(quest.state.essence).toBe(260);
+    expect(quest.state.deck.map((entry) => entry.entryId)).toEqual([
+      "deck-2",
+      "deck-3",
+      "deck-4",
+    ]);
+  });
+});

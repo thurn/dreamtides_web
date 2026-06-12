@@ -371,20 +371,37 @@ Icon: "Moon + Star"
 
 ### Purge
 
-A purge site allows the user to remove up to 3 cards from their deck, allowing
-them to remove cards that don't fit with their overall gameplan.
+A purge site lets the user pay essence to permanently remove cards from their
+deck, thinning out cards that don't fit their gameplan. A Purge site appears in
+every dreamscape, so paying to purge is always an option.
 
-**UI:** The camera pulls in to see an NPC at the site, who performs a character
-animation and displays a speech bubble. After a pause, the user's quest deck
-opens its browser view, showing cards, and a message instructs the user to
-select cards to purge (0/3). Selected cards get a red outline. The quest deck
-browser can also be opened outside of sites by clicking the quest deck in the
-bottom right of the screen. A red X close button is displayed as in the normal
-deck browser view. A red button with e.g. "purge 3 cards" appears at the bottom
-of the screen when cards are selected. Clicking this button closes the quest
-deck browser but causes the selected cards to animate to screen center. They
-then play a dissolve animation and fade away. Once this animation completes, the
-camera pulls back to the map screen.
+**Pricing.** Purge cost escalates with each card removed in a single visit, and
+the counter resets every dreamscape. The Nth card removed in a visit costs
+`30 + 5 * N * (N + 1)` essence:
+
+| Card # | Marginal cost | Cumulative |
+| ------ | ------------- | ---------- |
+| 1      | 40            | 40         |
+| 2      | 60            | 100        |
+| 3      | 90            | 190        |
+| 4      | 130           | 320        |
+| 5      | 180           | 500        |
+| 6      | 240           | 740        |
+
+Removing one or two cards is cheap, three or four is a real commitment, and five
+or more requires arriving with a nearly full essence bar. Two anchors tie the
+curve to the rest of the economy: two cards cost the same as one standard shop
+card (100 essence), and five cards cost the full default essence cap (500). Up
+to six cards may be removed in a single visit. Shop-wide essence discounts also
+reduce purge prices. The pricing logic lives in `src/purge/purge-pricing.ts`.
+
+**UI:** The user's quest deck opens its browser view, showing every card.
+Selecting a card gives it a red outline and a price chip showing what that card
+costs in the current selection order. A running summary shows the number
+selected, the total essence cost, the essence remaining afterward, and the
+price of the next card. Cards the player cannot yet afford are dimmed. A red
+"Purge N Cards" button at the bottom confirms the removal: essence is spent and
+the selected cards are permanently removed.
 
 Icon: "Hot"
 
@@ -608,8 +625,8 @@ how draft picks are generated. Sites are selected when the dreamscape becomes
 available. The pool for site generation changes over time, with new options
 being shuffled in after each dreamscape is completed. Each completed dreamscape
 shuffles in a new set of sites as defined in TOML for that completion level.
-Transfiguration, Purge, and Duplication sites are more common later in the
-Quest, for example.
+Transfiguration and Duplication sites are more common later in the Quest, for
+example.
 
 All sites can appear a maximum of 1 time in a dreamscape, with the exception
 that there can be up to 2 Draft sites.
@@ -623,7 +640,8 @@ draft sites based on completion level.
 | 2, 3             | 1           |
 | 4+               | 0           |
 
-Battle sites are also distinct: Each dreamscape has exactly one Battle site.
+Battle and Purge sites are also distinct: every dreamscape has exactly one
+Battle site and exactly one Purge site.
 
 ### Enhanced Sites
 
@@ -637,7 +655,7 @@ visited. The available enhanced sites are:
 - **Shop**: The reroll option is free
 - **Dreamsign Offering/Dreamsign Draft**: A dreamsign draft is offered instead,
   or a draft is offered with an additional option
-- **Purge**: Up to 6 cards can be removed from the deck
+- **Purge**: Every card removed this visit is discounted by 30%
 - **Essence**: The essence amount given is doubled
 - **Transfiguration**: The player may select which card in their deck receives
   transfiguration

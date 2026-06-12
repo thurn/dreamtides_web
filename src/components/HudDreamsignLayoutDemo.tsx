@@ -124,6 +124,7 @@ const mutations: QuestMutations = {
   addCardByIdWithTransfiguration: noopAddCard,
   addBaneCardById: noop,
   removeDeckEntry: noop,
+  purgeDeckCards: noop,
   duplicateDeckEntry: noop,
   purgeRandomBaneCards: noop,
   purgeAllBaneCards: noop,

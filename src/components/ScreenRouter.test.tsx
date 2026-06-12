@@ -178,6 +178,7 @@ function makeMutations(): QuestMutations {
     addCardByIdWithTransfiguration: vi.fn(() => null),
     addBaneCardById: vi.fn(),
     removeDeckEntry: vi.fn(),
+    purgeDeckCards: vi.fn(),
     duplicateDeckEntry: vi.fn(),
     changeDeckEntryKeywords: vi.fn(),
     changeDeckEntryType: vi.fn(),

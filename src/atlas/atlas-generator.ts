@@ -222,10 +222,9 @@ function buildAdditionalSitePool(
     pool.push(["DreamJourney", 2]);
   }
 
-  // Late game (level 5+): add Transfiguration, Purge, Duplication
+  // Late game (level 5+): add Transfiguration, Duplication
   if (completionLevel >= 5) {
     pool.push(["Transfiguration", 2]);
-    pool.push(["Purge", 2]);
     pool.push(["Duplication", 2]);
   }
 
@@ -250,13 +249,15 @@ export function additionalSiteTypesForLevel(
  * Fixed composition for the first dreamscape of a run. The opening encounter
  * is hand-tuned for onboarding — drafts to seed the deck, a Dreamsign draft to
  * introduce the sign mechanic, a Dream Journey to teach the world-effect
- * cadence, and a Battle to close it out.
+ * cadence, a Purge to introduce paid deck thinning, and a Battle to close it
+ * out.
  */
 const FIRST_DREAMSCAPE_SITE_TYPES: readonly SiteType[] = [
   "Draft",
   "Draft",
   "DreamsignDraft",
   "DreamJourney",
+  "Purge",
   "Battle",
 ];
 
@@ -297,8 +298,17 @@ export function generateSiteComposition(
     });
   }
 
+  // Purge is guaranteed in every dreamscape so the player can always pay to
+  // thin their deck. It is priced per visit (see src/purge/purge-pricing.ts).
+  sites.push({
+    id: nextSiteId(),
+    type: "Purge",
+    isEnhanced: false,
+    isVisited: false,
+  });
+
   // Additional sites from the weighted pool, clamped so total is 3-6.
-  // Fixed count = drafts + battle (always 1).
+  // Fixed count = drafts + guaranteed Purge + battle (always 1).
   const fixedCount = sites.length + 1;
   const minAdditional = Math.max(2, 3 - fixedCount);
   const maxAdditional = Math.max(minAdditional, 6 - fixedCount);

@@ -101,6 +101,25 @@ describe("generateSiteComposition", () => {
     }
   });
 
+  it("includes exactly one Purge site in the first dreamscape", () => {
+    const sites = generateSiteComposition(0, true, defaultContext());
+    expect(sites.filter((s) => s.type === "Purge").length).toBe(1);
+  });
+
+  it("includes exactly one Purge site at every level", () => {
+    for (let level = 0; level <= 7; level++) {
+      for (let i = 0; i < 20; i++) {
+        resetAtlasGenerator();
+        const sites = generateSiteComposition(
+          level,
+          false,
+          defaultContext({ playerHasBanes: true }),
+        );
+        expect(sites.filter((s) => s.type === "Purge").length).toBe(1);
+      }
+    }
+  });
+
   it("has at least 2 non-draft non-battle sites for hover preview", () => {
     for (let i = 0; i < 50; i++) {
       resetAtlasGenerator();
@@ -331,7 +350,7 @@ describe("generateSiteComposition", () => {
     expect(sites.some((site) => site.type === "Shop")).toBe(true);
   });
 
-  it("first dreamscape always has exactly 2x Draft, 1x DreamsignDraft, 1x DreamJourney, 1x Battle regardless of seed", () => {
+  it("first dreamscape always has exactly 2x Draft, 1x DreamsignDraft, 1x DreamJourney, 1x Purge, 1x Battle regardless of seed", () => {
     const seeds = [0, 0.123, 0.337, 0.5, 0.728, 0.999];
     for (const seed of seeds) {
       resetAtlasGenerator();
@@ -342,7 +361,7 @@ describe("generateSiteComposition", () => {
       });
       try {
         const sites = generateSiteComposition(0, true, defaultContext());
-        expect(sites).toHaveLength(5);
+        expect(sites).toHaveLength(6);
         const counts: Record<string, number> = {};
         for (const site of sites) {
           counts[site.type] = (counts[site.type] ?? 0) + 1;
@@ -351,6 +370,7 @@ describe("generateSiteComposition", () => {
           Draft: 2,
           DreamsignDraft: 1,
           DreamJourney: 1,
+          Purge: 1,
           Battle: 1,
         });
         expect(sites[sites.length - 1].type).toBe("Battle");
@@ -374,6 +394,7 @@ describe("generateSiteComposition", () => {
           "Draft",
           "DreamsignDraft",
           "DreamJourney",
+          "Purge",
           "Battle",
         ]);
       }

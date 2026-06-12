@@ -3604,6 +3604,75 @@ export function MultiplayerQuestProvider({
     });
   }, []);
 
+  const purgeDeckCards = useCallback(
+    (
+      siteId: string,
+      entryIds: readonly string[],
+      cost: number,
+      source: string,
+    ) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      const entryIdSet = new Set(entryIds);
+
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          // Guard against double-charges from RTDB transaction retries or a
+          // double click: once the site is visited the purge is already done.
+          if (room.questState.visitedSites.includes(siteId)) {
+            return room;
+          }
+          const qs = room.questState;
+          const purged = qs.deck.filter((entry) =>
+            entryIdSet.has(entry.entryId),
+          );
+          const deck = qs.deck.filter(
+            (entry) => !entryIdSet.has(entry.entryId),
+          );
+          const essenceBefore = qs.essence;
+          const essence = clampEssence(essenceBefore - cost, qs.essenceCap);
+          const next = completeSiteAndReturnToDreamscape(
+            { ...qs, deck, essence },
+            siteId,
+          );
+
+          return {
+            ...room,
+            questState: next,
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "purgeDeckCards",
+                source,
+                summary: {
+                  siteId,
+                  cost,
+                  count: purged.length,
+                  cardNumbers: purged.map((entry) => entry.cardNumber),
+                  essenceBefore,
+                  essenceAfter: essence,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
   const duplicateDeckEntry = useCallback((entryId: string, source: string) => {
     const current = currentRef.current;
     const now = new Date().toISOString();
@@ -4387,6 +4456,7 @@ export function MultiplayerQuestProvider({
       addCardByIdWithTransfiguration,
       addBaneCardById,
       removeDeckEntry,
+      purgeDeckCards,
       duplicateDeckEntry,
       purgeRandomBaneCards,
       purgeAllBaneCards,
@@ -4445,6 +4515,7 @@ export function MultiplayerQuestProvider({
       pushTemporaryBaneGrant,
       rerollShop,
       removeDeckEntry,
+      purgeDeckCards,
       removeDreamsign,
       removeSiteTypeFromNextDreamscapes,
       resetQuest,
