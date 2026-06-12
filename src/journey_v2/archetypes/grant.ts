@@ -189,14 +189,16 @@ function bandSizeFor(poolSize: number, bandFraction: number): number {
 }
 
 /**
- * `strong_card` — *Receive one powerful card chosen with your deck in mind.*
+ * `strong_card` — *Receive one powerful card chosen to fit your deck.*
  *
  * Candidates: non-starter pool cards the player does not own. Signal:
- * `strongBlend.quality * qualityNorm + strongBlend.fit * fitNorm`, so the card
- * is genuinely strong AND leans toward what the deck is building — a quality-only
- * signal happily handed an events deck a character bomb, which the fit term now
- * pulls down. Below `minDeckForFit` the deck is too small for fit to carry real
- * signal, so the blend falls back to quality alone (as `copies_draft` does)
+ * `strongBlend.fit * fitNorm + strongBlend.quality * qualityNorm`. A single card
+ * granted unprompted must fit the deck the player is building, so fit leads; the
+ * quality term then favors a genuinely powerful card among those fits rather than
+ * a marginal one. (A generic "best card regardless of deck" offer belongs in a
+ * pick-1-of-4 chooser, where the player can decline a poor fit — not a forced
+ * single grant.) Below `minDeckForFit` the deck is too small for fit to carry
+ * real signal, so the blend falls back to quality alone (as `copies_draft` does)
  * rather than letting a popular off-archetype card ride in on prior-only fit.
  * Band-sample 1 with the tight `strongBandFraction`. Always eligible (a fresh
  * deck still has a pool to draw from). Face-up.

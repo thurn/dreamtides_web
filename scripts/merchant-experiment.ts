@@ -482,7 +482,7 @@ export const DESIRABILITY_TARGETS: Partial<
   dreamsign_draft: { median: 65, floor: 40 },
 };
 
-/** Card-grant archetypes scored by fit; strong/premium by quality. */
+/** Card-grant archetypes scored by fit; strong by a fit-led blend, premium by quality. */
 function grantSignalByUuid(
   context: MerchantContext,
   archetypeId: MerchantArchetypeId,
@@ -490,7 +490,7 @@ function grantSignalByUuid(
   const pool = grantCandidatePool(context);
   const result = new Map<string, number>();
   const corpus = context.merchantCorpus;
-  const useQuality = archetypeId === "strong_card" || archetypeId === "premium_draft";
+  const useQuality = archetypeId === "premium_draft";
   if (useQuality) {
     for (const card of pool) {
       result.set(card.cardUuid, corpus === undefined ? 0 : qualityOf(corpus, card.cardUuid));
@@ -498,9 +498,14 @@ function grantSignalByUuid(
     return result;
   }
   const fitModel = context.fitModel;
-  // copies_draft ranks on a fit+quality blend, falling back to quality alone
-  // when the deck is too small for fit to be meaningful (mirrors the builder).
-  if (archetypeId === "copies_draft") {
+  // strong_card and copies_draft rank on a fit+quality blend, falling back to
+  // quality alone when the deck is too small for fit to be meaningful (mirrors
+  // each builder). strong_card is fit-led; copies_draft fit-weighted.
+  if (archetypeId === "strong_card" || archetypeId === "copies_draft") {
+    const blend =
+      archetypeId === "strong_card"
+        ? MERCHANT_TUNING.strongBlend
+        : MERCHANT_TUNING.copiesBlend;
     const belowFit = context.deckCards.length < MERCHANT_TUNING.minDeckForFit;
     if (belowFit || fitModel === undefined) {
       for (const card of pool) {
@@ -516,7 +521,7 @@ function grantSignalByUuid(
     );
     const fitNorm = minMaxNormalize(fitRaw);
     const qualityNorm = minMaxNormalize(qualityRaw);
-    const { fit, quality } = MERCHANT_TUNING.copiesBlend;
+    const { fit, quality } = blend;
     pool.forEach((card, i) => {
       result.set(card.cardUuid, fit * fitNorm[i] + quality * qualityNorm[i]);
     });

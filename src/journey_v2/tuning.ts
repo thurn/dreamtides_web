@@ -44,11 +44,12 @@ export const MERCHANT_TUNING = {
   tribalBandFraction: 0.25,
   tribalBandMinimum: 2,
   /**
-   * Strong-card signal blend over normalized quality and fit. Quality-led (the
-   * card should be genuinely powerful) but with enough fit weight that an
-   * off-archetype bomb is pulled below a comparably strong on-archetype card.
+   * Strong-card signal blend over normalized fit and quality. Fit-led (a card
+   * the merchant hands you unprompted must fit the deck you are building), with
+   * quality as the secondary term so the offer leans toward a genuinely powerful
+   * card among the fits rather than a marginal one.
    */
-  strongBlend: { quality: 0.7, fit: 0.3 },
+  strongBlend: { fit: 0.7, quality: 0.3 },
   /** Transfigure signal blend over benefit and centrality. */
   transfigureBlend: { benefit: 0.7, centrality: 0.3 },
   /**
