@@ -185,9 +185,10 @@ export function StartingDeckModal({
                     <HoverZoomCard
                       key={resolved.entry.entryId}
                       logSurface="starting_deck"
+                      glossaryText={resolved.card.renderedText}
                       data-testid={`starting-deck-modal-card-${resolved.entry.entryId}`}
                     >
-                      <CardDisplay card={resolved.card} />
+                      <CardDisplay card={resolved.card} suppressHoverHelp />
                     </HoverZoomCard>
                   ))}
                 </div>

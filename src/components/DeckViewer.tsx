@@ -527,6 +527,7 @@ export function DeckViewer({
                       <HoverZoomCard
                         enabled={cardSize !== "large"}
                         logSurface="deck_viewer"
+                        glossaryText={resolved.card.renderedText}
                         data-testid={`deck-viewer-row-${resolved.entry.entryId}`}
                         style={cardTileBorderStyle}
                       >

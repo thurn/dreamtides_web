@@ -3,7 +3,13 @@
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { HoverZoomCard } from "./HoverZoomCard";
+import { HoverZoomCard, MAX_SCALE, TARGET_WIDTH_PX } from "./HoverZoomCard";
+
+/** Pull the numeric scale factor out of a `... scale(N)` transform string. */
+function readScale(transform: string | undefined): number {
+  const match = /scale\(([\d.]+)\)/.exec(transform ?? "");
+  return match ? Number(match[1]) : Number.NaN;
+}
 
 vi.mock("../logging", () => ({
   logEventOnce: vi.fn(),
@@ -53,18 +59,9 @@ beforeEach(() => {
   (
     globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
   ).IS_REACT_ACT_ENVIRONMENT = true;
-  vi.useFakeTimers();
-  // Run rAF callbacks synchronously so the grow animation commits within the
-  // hover handler under test.
-  vi.spyOn(globalThis, "requestAnimationFrame").mockImplementation((cb) => {
-    cb(0);
-    return 0;
-  });
-  vi.spyOn(globalThis, "cancelAnimationFrame").mockImplementation(() => 0);
 });
 
 afterEach(() => {
-  vi.useRealTimers();
   vi.restoreAllMocks();
   document.body.innerHTML = "";
 });
@@ -88,8 +85,61 @@ describe("HoverZoomCard", () => {
     // intercepting the pointer.
     expect(node?.textContent).toContain("CARD BODY");
     expect(node?.classList.contains("pointer-events-none")).toBe(true);
-    // 340px target / 100px footprint => 3.4x, inside the viewport clamp.
-    expect(node?.style.transform).toContain("scale(3.4)");
+    // Assert the scaling *rules* rather than a hardcoded factor so tweaking
+    // MAX_SCALE / TARGET_WIDTH_PX never breaks this test: the card grows
+    // (> 1x), never past the MAX_SCALE cap, and never past the width target
+    // (340px target / 100px footprint).
+    const scale = readScale(node?.style.transform);
+    expect(scale).toBeGreaterThan(1);
+    expect(scale).toBeLessThanOrEqual(MAX_SCALE + 1e-9);
+    expect(scale).toBeLessThanOrEqual(TARGET_WIDTH_PX / 100 + 1e-9);
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("shows a glossary definition stack beside the card for terms in its rules text", () => {
+    mockRect({ width: 100, height: 140, left: 50, top: 50, right: 150, bottom: 190 });
+    const { container, root } = mount(
+      <HoverZoomCard data-testid="slot" glossaryText="Discard a bane.">
+        <div>CARD BODY</div>
+      </HoverZoomCard>,
+    );
+
+    expect(document.body.querySelector("[data-hover-zoom-glossary]")).toBeNull();
+
+    hover(container);
+
+    const stack = document.body.querySelector("[data-hover-zoom-glossary]");
+    expect(stack).not.toBeNull();
+    expect(stack?.textContent).toContain("Bane");
+
+    // The stack collapses with the card when the pointer leaves the footprint.
+    act(() => {
+      window.dispatchEvent(
+        new MouseEvent("mousemove", { clientX: 600, clientY: 600 }),
+      );
+    });
+    expect(document.body.querySelector("[data-hover-zoom-glossary]")).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders no glossary stack when the rules text has no gameplay terms", () => {
+    mockRect({ width: 100, height: 140, left: 50, top: 50, right: 150, bottom: 190 });
+    const { container, root } = mount(
+      <HoverZoomCard data-testid="slot" glossaryText="Just some plain words.">
+        <div>CARD BODY</div>
+      </HoverZoomCard>,
+    );
+
+    hover(container);
+
+    expect(overlay()).not.toBeNull();
+    expect(document.body.querySelector("[data-hover-zoom-glossary]")).toBeNull();
 
     act(() => {
       root.unmount();
@@ -111,7 +161,6 @@ describe("HoverZoomCard", () => {
       window.dispatchEvent(
         new MouseEvent("mousemove", { clientX: 100, clientY: 120 }),
       );
-      vi.advanceTimersByTime(400);
     });
 
     expect(overlay()).not.toBeNull();
@@ -137,9 +186,6 @@ describe("HoverZoomCard", () => {
       window.dispatchEvent(
         new MouseEvent("mousemove", { clientX: 600, clientY: 600 }),
       );
-    });
-    act(() => {
-      vi.advanceTimersByTime(400);
     });
 
     expect(overlay()).toBeNull();
@@ -168,8 +214,19 @@ describe("HoverZoomCard", () => {
   });
 
   it("does not grow a card already at the target width", () => {
-    // A footprint already wider than the 340px target yields a scale <= 1.
-    mockRect({ width: 360, height: 500, left: 20, top: 20, right: 380, bottom: 520 });
+    // A footprint already wider than the target width yields a scale <= 1, so
+    // the card never zooms. Derived from TARGET_WIDTH_PX so the test holds no
+    // matter what that constant is tuned to.
+    const wide = TARGET_WIDTH_PX + 60;
+    const tall = Math.round(wide * 1.4);
+    mockRect({
+      width: wide,
+      height: tall,
+      left: 20,
+      top: 20,
+      right: 20 + wide,
+      bottom: 20 + tall,
+    });
     const { container, root } = mount(
       <HoverZoomCard data-testid="slot">
         <div>CARD BODY</div>

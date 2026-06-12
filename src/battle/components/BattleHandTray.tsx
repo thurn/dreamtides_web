@@ -178,6 +178,8 @@ export function BattleHandCard({
     .filter((value) => value !== "")
     .join(" ");
 
+  const displayCard = battleCardDisplayFromInstance(instance);
+
   return (
     <div
       data-battle-card-id={battleCardId}
@@ -197,18 +199,21 @@ export function BattleHandCard({
       onMouseLeave={onMouseLeave}
     >
       {/* Cards in the player's hand grow in place on hover so their rules text
-          is comfortably legible. Opponent / revealed (compact) hands stay small
-          and opt out. */}
+          is comfortably legible, with the term glossary shown beside the
+          enlarged card. Opponent / revealed (compact) hands stay small and opt
+          out. */}
       <HoverZoomCard
         enabled={!compact && side === "player"}
         logSurface="battle_hand"
+        glossaryText={displayCard.renderedText}
         className="h-full w-full"
       >
         <CardDisplay
-          card={battleCardDisplayFromInstance(instance)}
+          card={displayCard}
           selected={selected}
           selectionColor="#a855f7"
           className="h-full w-full"
+          suppressHoverHelp
           hideRulesText={compact}
         />
       </HoverZoomCard>

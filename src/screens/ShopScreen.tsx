@@ -365,14 +365,18 @@ function ShopSlotCard({
     const card = slot.card;
     return (
       <div className="flex flex-col gap-2">
-        <HoverZoomCard logSurface="shop">
+        <HoverZoomCard logSurface="shop" glossaryText={card.renderedText}>
           <div
             data-testid={`shop-offer-row-${String(index)}`}
             tabIndex={0}
             aria-label={`Shop offer: ${card.name}`}
             className="rounded-md outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
           >
-            <CardDisplay card={card} onClick={() => onCardClick(card)} />
+            <CardDisplay
+              card={card}
+              suppressHoverHelp
+              onClick={() => onCardClick(card)}
+            />
           </div>
         </HoverZoomCard>
         <PriceButton

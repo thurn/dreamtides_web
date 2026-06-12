@@ -8,6 +8,8 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import { logEventOnce } from "../logging";
+import { extractGlossaryTerms } from "../data/glossary-terms";
+import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
 
 /**
  * Wraps a medium-size card so that hovering it grows the card itself in place
@@ -35,10 +37,20 @@ import { logEventOnce } from "../logging";
  */
 
 /**
- * On-screen width (px) the card grows to on hover. Card rules text renders at
- * roughly `width * 0.042` px (see `RULES_FONT_RATIO` in `CardView.tsx`), so
- * 340px lands rules text around 14px — a comfortable reading size that clears
- * common body-text legibility guidance for condensed UI type.
+ * Hard cap on how much bigger the card may get, as a multiple of its original
+ * on-screen size. This is the primary knob for "how much does the card zoom":
+ * lower it to grow cards less, raise it to grow them more. The effective scale
+ * is the smaller of this cap, the {@link TARGET_WIDTH_PX} target, and the
+ * viewport-fit limits, so small cards no longer balloon to 2–2.5x.
+ */
+export const MAX_SCALE = 1.5;
+
+/**
+ * On-screen width (px) the card would grow to on hover before {@link MAX_SCALE}
+ * and the viewport limits are applied. Card rules text renders at roughly
+ * `width * 0.042` px (see `RULES_FONT_RATIO` in `CardView.tsx`), so 340px lands
+ * rules text around 14px — a comfortable reading size. {@link MAX_SCALE} caps
+ * the growth for cards that start small enough to exceed it.
  */
 export const TARGET_WIDTH_PX = 340;
 
@@ -48,9 +60,6 @@ const MAX_VIEWPORT_HEIGHT_FRACTION = 0.92;
 
 /** Don't bother growing a card that is already nearly this large. */
 const MIN_USEFUL_SCALE = 1.02;
-
-/** Grow / shrink transition duration (ms). Kept in sync with the CSS below. */
-const TRANSITION_MS = 170;
 
 interface HoverZoomCardProps {
   /** The card to render (e.g. a `<CardDisplay />`). */
@@ -73,10 +82,25 @@ interface HoverZoomCardProps {
    * can be reconstructed per surface (deck viewer, shop, battle hand, ...).
    */
   logSurface?: string;
+  /**
+   * The card's rendered rules text. When provided, the glossary definitions
+   * for any gameplay terms in the text are shown in a stack beside the
+   * enlarged card while it is zoomed — the same hover-help the old floating
+   * preview carried. The wrapped card should suppress its own inline term
+   * popover (`suppressHoverHelp`) so the definitions appear only here, aligned
+   * with the enlarged card rather than the small original underneath.
+   */
+  glossaryText?: string;
 }
 
 /** Gap (px) kept between the enlarged card and the viewport edges. */
 const VIEWPORT_MARGIN_PX = 8;
+
+/** Width (px) of the glossary definition stack shown beside a zoomed card. */
+const GLOSSARY_STACK_WIDTH_PX = 224;
+
+/** Gap (px) between the enlarged card and its glossary stack. */
+const GLOSSARY_STACK_GAP_PX = 10;
 
 /**
  * Returns the translation (px) needed along one axis to keep an enlarged span
@@ -99,6 +123,65 @@ function clampOffset(start: number, size: number, viewport: number): number {
     return max - start;
   }
   return 0;
+}
+
+/**
+ * Renders the glossary definition stack for a zoomed card's rules text,
+ * positioned just outside the enlarged card on whichever side has room (right
+ * by default, flipping left near the viewport edge) and pinned within the
+ * viewport vertically. Returns null when there is no text or no gameplay terms
+ * to define. The stack is part of the pointer-events-none overlay, mirroring
+ * the hover-help the floating preview used to carry.
+ */
+function renderGlossaryStack(
+  zoom: ZoomState,
+  glossaryText: string | undefined,
+): ReactNode {
+  if (glossaryText === undefined || typeof window === "undefined") {
+    return null;
+  }
+  const terms = extractGlossaryTerms(glossaryText);
+  if (terms.length === 0) {
+    return null;
+  }
+  const scaledWidth = zoom.rect.width * zoom.scale;
+  const scaledHeight = zoom.rect.height * zoom.scale;
+  const centerX = zoom.rect.left + zoom.rect.width / 2;
+  const centerY = zoom.rect.top + zoom.rect.height / 2;
+  const finalLeft = centerX - scaledWidth / 2 + zoom.dx;
+  const finalTop = centerY - scaledHeight / 2 + zoom.dy;
+  const finalRight = finalLeft + scaledWidth;
+
+  const fitsRight = finalRight + GLOSSARY_STACK_GAP_PX +
+    GLOSSARY_STACK_WIDTH_PX + VIEWPORT_MARGIN_PX <= window.innerWidth;
+  const rawLeft = fitsRight
+    ? finalRight + GLOSSARY_STACK_GAP_PX
+    : finalLeft - GLOSSARY_STACK_GAP_PX - GLOSSARY_STACK_WIDTH_PX;
+  const left = Math.max(
+    VIEWPORT_MARGIN_PX,
+    Math.min(
+      rawLeft,
+      window.innerWidth - GLOSSARY_STACK_WIDTH_PX - VIEWPORT_MARGIN_PX,
+    ),
+  );
+  const top = Math.max(
+    VIEWPORT_MARGIN_PX,
+    Math.min(finalTop, window.innerHeight - 120),
+  );
+  const maxHeight = window.innerHeight - top - VIEWPORT_MARGIN_PX;
+
+  return (
+    <div
+      aria-hidden="true"
+      className="pointer-events-none fixed z-[1000] flex flex-col gap-1 overflow-hidden"
+      style={{ left, top, width: GLOSSARY_STACK_WIDTH_PX, maxHeight }}
+      data-hover-zoom-glossary=""
+    >
+      {terms.map((entry) => (
+        <GlossaryDefinitionCard key={entry.term} entry={entry} />
+      ))}
+    </div>
+  );
 }
 
 interface ZoomState {
@@ -124,35 +207,17 @@ export function HoverZoomCard({
   style,
   "data-testid": dataTestId,
   logSurface,
+  glossaryText,
 }: HoverZoomCardProps) {
   const slotRef = useRef<HTMLDivElement | null>(null);
+  // The card snaps straight to its target size on hover and snaps back the
+  // instant the pointer leaves: the copy is simply mounted at full scale and
+  // unmounted, with no transition.
   const [zoom, setZoom] = useState<ZoomState | null>(null);
-  // `active` drives the grow/shrink transition: the copy mounts at the
-  // original size, flips to `active` on the next frame to animate up, and
-  // flips back to inactive to animate down before unmounting.
-  const [active, setActive] = useState(false);
-  const rafRef = useRef<number | null>(null);
-  const collapseTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const clearPending = useCallback(() => {
-    if (rafRef.current !== null) {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
-    }
-    if (collapseTimerRef.current !== null) {
-      clearTimeout(collapseTimerRef.current);
-      collapseTimerRef.current = null;
-    }
-  }, []);
 
   const collapse = useCallback(() => {
-    clearPending();
-    setActive(false);
-    collapseTimerRef.current = setTimeout(() => {
-      setZoom(null);
-      collapseTimerRef.current = null;
-    }, TRANSITION_MS + 30);
-  }, [clearPending]);
+    setZoom(null);
+  }, []);
 
   const handleEnter = useCallback(() => {
     if (!enabled) {
@@ -171,6 +236,7 @@ export function HoverZoomCard({
     const heightLimited = (window.innerHeight * MAX_VIEWPORT_HEIGHT_FRACTION) /
       rect.height;
     const scale = Math.min(
+      MAX_SCALE,
       targetWidthPx / rect.width,
       widthLimited,
       heightLimited,
@@ -189,9 +255,7 @@ export function HoverZoomCard({
     const scaledTop = centerY - scaledHeight / 2;
     const dx = clampOffset(scaledLeft, scaledWidth, window.innerWidth);
     const dy = clampOffset(scaledTop, scaledHeight, window.innerHeight);
-    clearPending();
     setZoom({ rect, scale, dx, dy });
-    setActive(false);
     if (logSurface !== undefined) {
       // Recorded once per surface per session: enough to confirm the in-place
       // zoom engaged on a given screen without flooding the log with an entry
@@ -203,14 +267,7 @@ export function HoverZoomCard({
         targetWidthPx,
       });
     }
-    // Two frames: the first commits the mounted-at-original-size copy, the
-    // second flips `active` so the browser animates the grow.
-    rafRef.current = requestAnimationFrame(() => {
-      rafRef.current = requestAnimationFrame(() => {
-        setActive(true);
-      });
-    });
-  }, [clearPending, enabled, logSurface, targetWidthPx]);
+  }, [enabled, logSurface, targetWidthPx]);
 
   // While a card is grown, shrink it the moment the pointer leaves the
   // *original* footprint. Tracking the stored rect (rather than the enlarged
@@ -247,8 +304,6 @@ export function HoverZoomCard({
     };
   }, [zoom, collapse]);
 
-  useEffect(() => clearPending, [clearPending]);
-
   if (!enabled) {
     return (
       <div className={className} style={style} data-testid={dataTestId}>
@@ -259,28 +314,27 @@ export function HoverZoomCard({
 
   const overlay = zoom !== null && typeof document !== "undefined"
     ? createPortal(
-      <div
-        aria-hidden="true"
-        className="pointer-events-none fixed z-[1000]"
-        style={{
-          left: zoom.rect.left,
-          top: zoom.rect.top,
-          width: zoom.rect.width,
-          height: zoom.rect.height,
-          transform: active
-            ? `translate(${zoom.dx}px, ${zoom.dy}px) scale(${zoom.scale})`
-            : "scale(1)",
-          transformOrigin: "center center",
-          transition: `transform ${TRANSITION_MS}ms ease`,
-          willChange: "transform",
-          filter: active
-            ? "drop-shadow(0 18px 40px rgba(0, 0, 0, 0.55))"
-            : undefined,
-        }}
-        data-hover-zoom-overlay=""
-      >
-        {children}
-      </div>,
+      <>
+        <div
+          aria-hidden="true"
+          className="pointer-events-none fixed z-[1000]"
+          style={{
+            left: zoom.rect.left,
+            top: zoom.rect.top,
+            width: zoom.rect.width,
+            height: zoom.rect.height,
+            // Snap straight to the target size — no transition.
+            transform:
+              `translate(${zoom.dx}px, ${zoom.dy}px) scale(${zoom.scale})`,
+            transformOrigin: "center center",
+            filter: "drop-shadow(0 18px 40px rgba(0, 0, 0, 0.55))",
+          }}
+          data-hover-zoom-overlay=""
+        >
+          {children}
+        </div>
+        {renderGlossaryStack(zoom, glossaryText)}
+      </>,
       document.body,
     )
     : null;
