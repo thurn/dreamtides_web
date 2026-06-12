@@ -109,6 +109,60 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
       bonus: () => 2,
     },
   },
+
+  // Dreadmount Sovereign — "This character costs 1● less for each allied
+  // warrior.\n\nSupport – Supported warriors have +3✦." The script grants +3
+  // spark to supported front-rank "Warrior" allies; the cost-reduction clause
+  // is resolved manually.
+  "6497d8b1-85b8-486d-99e2-5c141486d508": {
+    id: "6497d8b1-85b8-486d-99e2-5c141486d508",
+    trigger: "support",
+    textHash: "6a53a8c1",
+    support: {
+      bonus: () => 3,
+      applies: (ally) => ally.definition.subtype === "Warrior",
+    },
+  },
+
+  // Ash Sower — "❖ – Abandon an ally: Move this character to the abandoned
+  // ally's position.\n\nSupport – Supported characters have +3✦." The script
+  // grants +3 spark to every supported front-rank ally; the ❖ activated ability
+  // is resolved manually.
+  "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd": {
+    id: "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd",
+    trigger: "support",
+    textHash: "be732f49",
+    support: {
+      bonus: () => 3,
+    },
+  },
+
+  // Battlefield Medic — "❖ – 1●: Move this character to an unoccupied character
+  // position.\n\nSupport – Supported characters have +2✦." The script grants +2
+  // spark to every supported front-rank ally; the ❖ activated ability is
+  // resolved manually.
+  "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f": {
+    id: "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f",
+    trigger: "support",
+    textHash: "0e53771a",
+    support: {
+      bonus: () => 2,
+    },
+  },
+
+  // Ghostlight Wolves — "☪: Gain 1● for each allied spirit animal.\n\nSupport –
+  // Supported spirit animals have +2✦." The script grants +2 spark to supported
+  // front-rank "Spirit Animal" allies; the ☪ activated ability is resolved
+  // manually.
+  "c8579b20-95ff-4b1d-b4c6-6bd049fc4760": {
+    id: "c8579b20-95ff-4b1d-b4c6-6bd049fc4760",
+    trigger: "support",
+    textHash: "6744fe3d",
+    support: {
+      bonus: () => 2,
+      applies: (ally) => ally.definition.subtype === "Spirit Animal",
+    },
+  },
 };
 
 // ---------------------------------------------------------------------------
