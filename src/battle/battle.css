@@ -985,6 +985,27 @@
   border-color: #7f1d1d;
 }
 
+/* Automation gear: flags an automation-capable card while basic automation is
+   on. It sits just below the energy cost pip (top-left), clear of the spark pip
+   (top-right), the exhausted moon badge, and the centered figment-count badge. */
+.battle-card .c-automation-gear {
+  position: absolute;
+  top: 27px;
+  left: 7px;
+  width: 20px;
+  height: 20px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55));
+  pointer-events: none;
+  z-index: 3;
+}
+
+.battle-card.hand-card .c-automation-gear {
+  top: 39px;
+  left: 10px;
+  width: 24px;
+  height: 24px;
+}
+
 .battle-card .c-art {
   flex: 1;
   margin: 4px 6px;

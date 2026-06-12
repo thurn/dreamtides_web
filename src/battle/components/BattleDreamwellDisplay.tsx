@@ -3,6 +3,7 @@ import {
   type DreamwellCardViewData,
 } from "../../components/DreamwellCardView";
 import type { BattleSide } from "../types";
+import { AutomationGearIcon } from "./AutomationGearIcon";
 
 /**
  * The Dreamwell card surfaced during a side's Dreamwell phase, centered above
@@ -18,11 +19,13 @@ export function BattleDreamwellDisplay({
   side,
   visible,
   automationStatus,
+  automationEnabled,
 }: {
   card: DreamwellCardViewData | null;
   side: BattleSide;
   visible: boolean;
   automationStatus: "auto" | "manual" | "none";
+  automationEnabled: boolean;
 }) {
   return (
     <div
@@ -49,6 +52,20 @@ export function BattleDreamwellDisplay({
           }}
         >
           <DreamwellCardView card={card} />
+          {automationEnabled && automationStatus !== "none" ? (
+            <AutomationGearIcon
+              style={{
+                position: "absolute",
+                top: "13%",
+                left: "7%",
+                width: "9%",
+                height: "auto",
+                filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55))",
+                pointerEvents: "none",
+                zIndex: 1,
+              }}
+            />
+          ) : null}
           {automationStatus !== "none" ? (
             <div
               style={{

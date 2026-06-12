@@ -2,6 +2,7 @@ import type { MouseEvent as ReactMouseEvent } from "react";
 import type { MouseEvent as ReactPointerMouseEvent } from "react";
 
 import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
+import { battleCardAutomationStatus } from "../automation/battle-card-effects-table";
 import {
   selectBattleCardLocation,
   selectBattlefieldSlotOccupant,
@@ -35,6 +36,7 @@ const SUPPORT_BY_RESERVE: Record<BackRankSlotId, readonly FrontRankSlotId[]> = {
 export function BattlefieldGrid({
   canInteract,
   handSelectionSide,
+  isBasicAutomationEnabled = false,
   onCardClick,
   onCardContextMenu,
   onCardDragEnd,
@@ -54,6 +56,7 @@ export function BattlefieldGrid({
 }: {
   canInteract: boolean;
   handSelectionSide?: BattleSide | null;
+  isBasicAutomationEnabled?: boolean;
   onCardClick: (battleCardId: string) => void;
   onCardContextMenu?: (battleCardId: string, event: ReactMouseEvent<HTMLElement>) => void;
   onCardDragEnd?: () => void;
@@ -145,6 +148,10 @@ export function BattlefieldGrid({
                   data={battleCardVisualFromInstance(instance)}
                   exhausted={instance.status.isExhausted}
                   reserved={false}
+                  showAutomationGear={
+                    isBasicAutomationEnabled &&
+                    battleCardAutomationStatus(instance.definition.cardId) === "auto"
+                  }
                   selected={isSelectedCard}
                   draggable={canInteract}
                   onClick={(event) => {

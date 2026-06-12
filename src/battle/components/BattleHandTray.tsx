@@ -3,6 +3,8 @@ import type { MouseEvent as ReactMouseEvent } from "react";
 import { CardDisplay } from "../../components/CardDisplay";
 import type { BattleCommand } from "../debug/commands";
 import type { BattleCardInstance, BattleCommandSourceSurface, BattleMutableState } from "../types";
+import { battleCardAutomationStatus } from "../automation/battle-card-effects-table";
+import { AutomationGearIcon } from "./AutomationGearIcon";
 import { battleCardDisplayFromInstance } from "./BattleCardView";
 
 export function BattleHandTray({
@@ -27,9 +29,11 @@ export function BattleHandTray({
   pendingDragCardId = null,
   pendingDragSourceSurface = null,
   compact = false,
+  isBasicAutomationEnabled = false,
 }: {
   canInteract: boolean;
   compact?: boolean;
+  isBasicAutomationEnabled?: boolean;
   currentEnergy: number;
   hand: string[];
   onHandCardAction: (command: BattleCommand) => void;
@@ -95,6 +99,10 @@ export function BattleHandTray({
               side="player"
               compact={compact}
               draggable={canInteract}
+              showAutomationGear={
+                isBasicAutomationEnabled &&
+                battleCardAutomationStatus(instance.definition.cardId) === "auto"
+              }
               onClick={canInteract
                 ? (event) => {
                   event.stopPropagation();
@@ -131,6 +139,7 @@ export function BattleHandCard({
   draggable = true,
   instance,
   selected,
+  showAutomationGear = false,
   side,
   onClick,
   onContextMenu,
@@ -146,6 +155,7 @@ export function BattleHandCard({
   draggable?: boolean;
   instance: BattleCardInstance;
   selected: boolean;
+  showAutomationGear?: boolean;
   side: "player" | "opponent";
   onClick?: (event: ReactMouseEvent<HTMLDivElement>) => void;
   onContextMenu?: (event: ReactMouseEvent<HTMLDivElement>) => void;
@@ -192,6 +202,20 @@ export function BattleHandCard({
         className="h-full w-full"
         hideRulesText={compact}
       />
+      {showAutomationGear ? (
+        <AutomationGearIcon
+          style={{
+            position: "absolute",
+            top: "13%",
+            left: "9%",
+            width: "11%",
+            height: "auto",
+            filter: "drop-shadow(0 1px 2px rgba(0, 0, 0, 0.55))",
+            pointerEvents: "none",
+            zIndex: 3,
+          }}
+        />
+      ) : null}
     </div>
   );
 }

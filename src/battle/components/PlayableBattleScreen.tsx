@@ -1070,6 +1070,7 @@ function PlayableBattleScreenInner({
               side={activeSide}
               visible={isDreamwellDisplayVisible}
               automationStatus={dreamwellDisplayCard ? dreamwellAutomationStatus(dreamwellDisplayCard.id) : "none"}
+              automationEnabled={isBasicAutomationEnabled}
             />
             {isOpponentHandRevealed ? (
               <div className="opponent-hand-zone">
@@ -1172,6 +1173,7 @@ function PlayableBattleScreenInner({
                     zone="backRank"
                     state={reducerState.mutable}
                     canInteract={canPlayerAct}
+                    isBasicAutomationEnabled={isBasicAutomationEnabled}
                     selectedCardId={null}
                     selectedSlot={null}
                     selectionAnchor={null}
@@ -1192,6 +1194,7 @@ function PlayableBattleScreenInner({
                     zone="frontRank"
                     state={reducerState.mutable}
                     canInteract={canPlayerAct}
+                    isBasicAutomationEnabled={isBasicAutomationEnabled}
                     selectedCardId={null}
                     selectedSlot={null}
                     selectionAnchor={null}
@@ -1216,6 +1219,7 @@ function PlayableBattleScreenInner({
                     zone="frontRank"
                     state={reducerState.mutable}
                     canInteract={canPlayerAct}
+                    isBasicAutomationEnabled={isBasicAutomationEnabled}
                     selectedCardId={null}
                     selectedSlot={null}
                     selectionAnchor={null}
@@ -1236,6 +1240,7 @@ function PlayableBattleScreenInner({
                     zone="backRank"
                     state={reducerState.mutable}
                     canInteract={canPlayerAct}
+                    isBasicAutomationEnabled={isBasicAutomationEnabled}
                     selectedCardId={null}
                     selectedSlot={null}
                     selectionAnchor={null}
@@ -1384,6 +1389,7 @@ function PlayableBattleScreenInner({
             <BattleHandTray
               canInteract={canPlayerAct}
               compact={isOpponentHandRevealed}
+              isBasicAutomationEnabled={isBasicAutomationEnabled}
               currentEnergy={reducerState.mutable.sides.player.currentEnergy}
               hand={reducerState.mutable.sides.player.hand}
               onHandCardAction={handleCommand}

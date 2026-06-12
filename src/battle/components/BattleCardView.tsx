@@ -8,6 +8,7 @@ import { cardImageUrl } from "../../data/card-database";
 import type { CardData, FrozenCardData } from "../../types/cards";
 import type { BattleCardInstance } from "../types";
 import { selectEffectiveSparkForInstance, selectFigmentCount } from "../state/figments";
+import { AutomationGearIcon } from "./AutomationGearIcon";
 
 export interface BattleCardVisualData {
   artUrl: string | null;
@@ -96,6 +97,7 @@ export function BattleCardView({
   selected = false,
   unaffordable = false,
   reserved = false,
+  showAutomationGear = false,
   style,
   className = "",
   draggable = false,
@@ -118,6 +120,7 @@ export function BattleCardView({
   selected?: boolean;
   unaffordable?: boolean;
   reserved?: boolean;
+  showAutomationGear?: boolean;
   style?: CSSProperties;
   className?: string;
   draggable?: boolean;
@@ -179,6 +182,9 @@ export function BattleCardView({
         ) : (
           <div className="c-spark event">{hidden ? "?" : "•"}</div>
         )}
+        {showAutomationGear ? (
+          <AutomationGearIcon className="c-automation-gear" />
+        ) : null}
       </div>
       <div className="c-art">
         {hidden ? null : <BattleCardArt data={data} />}
