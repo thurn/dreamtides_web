@@ -1,4 +1,12 @@
-import type { BattleCardInstance } from "../types";
+import type { BattleDebugEdit } from "../debug/commands";
+import type {
+  BackRankSlotId,
+  BattleCardInstance,
+  BattleMutableState,
+  BattleSide,
+  FrontRankSlotId,
+} from "../types";
+import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
 import type { EffectStep, StepContext } from "./effect-step";
 import { gainEnergyEdits } from "./effect-step";
 import { fnv1aHex } from "./rules-text-hash";
@@ -131,4 +139,110 @@ export function selectBattleCardEffectScript(cardId: string): BattleCardEffectSc
  */
 export function battleCardAutomationStatus(cardId: string): "auto" | "none" {
   return cardId in BATTLE_CARD_EFFECTS ? "auto" : "none";
+}
+
+// ---------------------------------------------------------------------------
+// Support recompute
+// ---------------------------------------------------------------------------
+
+/**
+ * Back-rank → front-rank Support geometry (rules §Support). A back-rank
+ * Supporter in a given slot benefits the up-to-two front-rank occupants of the
+ * slots listed here:
+ * `B0→[F0]`, `B1→[F0,F1]`, `B2→[F1,F2]`, `B3→[F2,F3]`, `B4→[F3]`.
+ */
+export const SUPPORT_ADJACENCY: Record<BackRankSlotId, FrontRankSlotId[]> = {
+  B0: ["F0"],
+  B1: ["F0", "F1"],
+  B2: ["F1", "F2"],
+  B3: ["F2", "F3"],
+  B4: ["F3"],
+};
+
+/**
+ * Computes the `SET_CARD_STATIC_SPARK_BONUS` edits needed to bring every
+ * in-play instance's `staticSparkBonus` to its correct Support total. "In-play"
+ * means front- and back-rank occupants of both sides; hand/void/deck instances
+ * are never touched. Returns only the edits where the target differs from the
+ * current value, so it is idempotent: calling it on a state whose bonuses
+ * already match the computed targets emits an empty list (the runner that calls
+ * it does not loop). When `enabled` is `false` every target is `0`, clearing any
+ * prior bonus. Only back-rank Supporters with a registered `"support"` script
+ * grant spark, and only to the front-rank occupants of the slots they support
+ * that pass the script's optional `applies` predicate. Iteration follows
+ * `BACK_RANK_SLOT_IDS`/`FRONT_RANK_SLOT_IDS` order for deterministic output.
+ */
+export function planSupportRecompute(
+  state: BattleMutableState,
+  enabled: boolean,
+  nowMs: number,
+): BattleDebugEdit[] {
+  const sides: BattleSide[] = ["player", "enemy"];
+
+  // 1. Default every in-play instance to a target of 0.
+  const targets = new Map<string, number>();
+  for (const side of sides) {
+    for (const slotId of BACK_RANK_SLOT_IDS) {
+      const id = state.sides[side].backRank[slotId];
+      if (id !== null) targets.set(id, 0);
+    }
+    for (const slotId of FRONT_RANK_SLOT_IDS) {
+      const id = state.sides[side].frontRank[slotId];
+      if (id !== null) targets.set(id, 0);
+    }
+  }
+
+  // 2. Accumulate Support bonuses from back-rank Supporters onto front allies.
+  if (enabled) {
+    for (const side of sides) {
+      const ctx: StepContext = { side, state, random: Math.random, nowMs };
+      for (const backSlot of BACK_RANK_SLOT_IDS) {
+        const supporterId = state.sides[side].backRank[backSlot];
+        if (supporterId === null) continue;
+        const supporter = state.cardInstances[supporterId];
+        if (supporter === undefined) continue;
+        const script = selectBattleCardEffectScript(supporter.definition.cardId);
+        if (script === null || script.trigger !== "support" || script.support === undefined) {
+          continue;
+        }
+        const support = script.support;
+        for (const frontSlot of SUPPORT_ADJACENCY[backSlot]) {
+          const allyId = state.sides[side].frontRank[frontSlot];
+          if (allyId === null) continue;
+          const ally = state.cardInstances[allyId];
+          if (ally === undefined) continue;
+          if (support.applies !== undefined && !support.applies(ally, ctx)) continue;
+          targets.set(allyId, (targets.get(allyId) ?? 0) + support.bonus(ctx));
+        }
+      }
+    }
+  }
+
+  // 3. Emit an edit for every instance whose current bonus differs from target.
+  const edits: BattleDebugEdit[] = [];
+  for (const side of sides) {
+    for (const slotId of BACK_RANK_SLOT_IDS) {
+      const id = state.sides[side].backRank[slotId];
+      if (id !== null) pushIfChanged(edits, state, id, targets.get(id) ?? 0);
+    }
+    for (const slotId of FRONT_RANK_SLOT_IDS) {
+      const id = state.sides[side].frontRank[slotId];
+      if (id !== null) pushIfChanged(edits, state, id, targets.get(id) ?? 0);
+    }
+  }
+  return edits;
+}
+
+/** Appends a `SET_CARD_STATIC_SPARK_BONUS` edit when `target` differs from the
+ *  instance's current `staticSparkBonus`. */
+function pushIfChanged(
+  edits: BattleDebugEdit[],
+  state: BattleMutableState,
+  battleCardId: string,
+  target: number,
+): void {
+  const instance = state.cardInstances[battleCardId];
+  if (instance === undefined) return;
+  if (instance.staticSparkBonus === target) return;
+  edits.push({ kind: "SET_CARD_STATIC_SPARK_BONUS", battleCardId, value: target });
 }
