@@ -12,7 +12,7 @@ import {
   gainScoreEdits,
   opponentOf,
   topOfDeck,
-} from "./dreamwell-effects";
+} from "./effect-step";
 import {
   DREAMWELL_EFFECTS,
   DREAMWELL_MANUAL_IDS,
@@ -585,14 +585,14 @@ describe("selectDreamwellEffectScript", () => {
 function makeCtx(
   state: BattleMutableState,
   side: BattleSide = "player",
-): import("./dreamwell-effects").StepContext {
+): import("./effect-step").StepContext {
   return { side, state, random: () => 0, nowMs: 1000 };
 }
 
 /** Extract and assert the first edits step's build function; fails test if missing. */
 function getFirstEditsBuild(
   scriptId: string,
-): ((ctx: import("./dreamwell-effects").StepContext) => import("../debug/commands").BattleDebugEdit[]) {
+): ((ctx: import("./effect-step").StepContext) => import("../debug/commands").BattleDebugEdit[]) {
   const script = DREAMWELL_EFFECTS[scriptId];
   if (script === undefined) throw new Error(`no script for ${scriptId}`);
   const step = script.steps[0];
@@ -708,7 +708,7 @@ describe("property test: all DREAMWELL_EFFECTS scripts run without error", () =>
     },
   });
 
-  const ctx: import("./dreamwell-effects").StepContext = {
+  const ctx: import("./effect-step").StepContext = {
     side: "player",
     state: richState,
     random: () => 0,
@@ -741,7 +741,7 @@ describe("property test: all DREAMWELL_EFFECTS scripts run without error", () =>
 // Helper: extract the first prompt step from a script
 function getFirstPromptStep(
   scriptId: string,
-): import("./dreamwell-effects").DreamwellPrompt {
+): import("./effect-step").EffectPrompt {
   const script = DREAMWELL_EFFECTS[scriptId];
   if (script === undefined) throw new Error(`no script for ${scriptId}`);
   const step = script.steps.find((s) => s.kind === "prompt");
@@ -1077,14 +1077,14 @@ describe("property test: all prompt scripts run without error on rich fixture", 
     },
   });
 
-  const ctx: import("./dreamwell-effects").StepContext = {
+  const ctx: import("./effect-step").StepContext = {
     side: "player",
     state: richState,
     random: () => 0,
     nowMs: 42000,
   };
 
-  function walkSteps(steps: import("./dreamwell-effects").DreamwellEffectStep[], label: string): void {
+  function walkSteps(steps: import("./effect-step").EffectStep[], label: string): void {
     for (const step of steps) {
       if (step.kind === "edits") {
         expect(() => step.build(ctx)).not.toThrow();

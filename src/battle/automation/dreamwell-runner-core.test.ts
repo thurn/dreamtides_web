@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { BattleMutableState } from "../types";
-import type { DreamwellEffectStep, DreamwellPrompt, StepContext } from "./dreamwell-effects";
+import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
 import {
   applyPromptResolution,
   planNextDreamwellStep,
@@ -42,7 +42,7 @@ describe("planNextDreamwellStep — empty queue", () => {
 describe("planNextDreamwellStep — edits head", () => {
   it("returns dispatch with edits === build(ctx) and rest === tail", () => {
     let builderCalled = false;
-    const editsStep: DreamwellEffectStep = {
+    const editsStep: EffectStep = {
       kind: "edits",
       build: (ctx) => {
         builderCalled = true;
@@ -50,7 +50,7 @@ describe("planNextDreamwellStep — edits head", () => {
         return [SENTINEL_EDIT];
       },
     };
-    const tailStep: DreamwellEffectStep = {
+    const tailStep: EffectStep = {
       kind: "edits",
       build: () => [SENTINEL_EDIT_2],
     };
@@ -72,7 +72,7 @@ describe("planNextDreamwellStep — edits head", () => {
   });
 
   it("rest is empty when edits step is the only element", () => {
-    const step: DreamwellEffectStep = { kind: "edits", build: () => [] };
+    const step: EffectStep = { kind: "edits", build: () => [] };
     const result = planNextDreamwellStep([step], makeCtx());
     expect(result.type).toBe("dispatch");
     if (result.type !== "dispatch") throw new Error();
@@ -90,7 +90,7 @@ describe("planNextDreamwellStep — pick-cards prompt head", () => {
     const expectedCandidates = ["card-a", "card-b"];
     let candidatesFnCalled = false;
 
-    const pickPrompt: DreamwellPrompt = {
+    const pickPrompt: EffectPrompt = {
       kind: "pick-cards",
       label: "Choose a card",
       count: 1,
@@ -103,8 +103,8 @@ describe("planNextDreamwellStep — pick-cards prompt head", () => {
       resolve: (ids, _ctx) => ids.map(() => SENTINEL_EDIT),
     };
 
-    const promptStep: DreamwellEffectStep = { kind: "prompt", prompt: pickPrompt };
-    const tailStep: DreamwellEffectStep = { kind: "edits", build: () => [] };
+    const promptStep: EffectStep = { kind: "prompt", prompt: pickPrompt };
+    const tailStep: EffectStep = { kind: "edits", build: () => [] };
 
     const result = planNextDreamwellStep([promptStep, tailStep], makeCtx());
 
@@ -133,7 +133,7 @@ describe("planNextDreamwellStep — pick-cards prompt head", () => {
   });
 
   it("optional=true is mirrored correctly", () => {
-    const prompt: DreamwellPrompt = {
+    const prompt: EffectPrompt = {
       kind: "pick-cards",
       label: "Optional pick",
       count: 2,
@@ -156,7 +156,7 @@ describe("planNextDreamwellStep — pick-cards prompt head", () => {
 
 describe("planNextDreamwellStep — choice prompt head", () => {
   it("maps options to label-only objects and carries prompt and rest", () => {
-    const choicePrompt: DreamwellPrompt = {
+    const choicePrompt: EffectPrompt = {
       kind: "choice",
       label: "Pick one",
       options: [
@@ -164,7 +164,7 @@ describe("planNextDreamwellStep — choice prompt head", () => {
         { label: "Gain energy", build: () => [SENTINEL_EDIT_2] },
       ],
     };
-    const promptStep: DreamwellEffectStep = { kind: "prompt", prompt: choicePrompt };
+    const promptStep: EffectStep = { kind: "prompt", prompt: choicePrompt };
     const result = planNextDreamwellStep([promptStep], makeCtx());
 
     expect(result.type).toBe("prompt");
@@ -184,12 +184,12 @@ describe("planNextDreamwellStep — choice prompt head", () => {
 
 describe("planNextDreamwellStep — confirm prompt head", () => {
   it('presents confirm as a choice with "Yes" and "Skip" options', () => {
-    const confirmPrompt: DreamwellPrompt = {
+    const confirmPrompt: EffectPrompt = {
       kind: "confirm",
       label: "Abandon an ally?",
       onYes: [{ kind: "edits", build: () => [SENTINEL_EDIT] }],
     };
-    const promptStep: DreamwellEffectStep = { kind: "prompt", prompt: confirmPrompt };
+    const promptStep: EffectStep = { kind: "prompt", prompt: confirmPrompt };
     const result = planNextDreamwellStep([promptStep], makeCtx());
 
     expect(result.type).toBe("prompt");
@@ -210,9 +210,9 @@ describe("planNextDreamwellStep — confirm prompt head", () => {
 
 describe("planNextDreamwellStep — foresee prompt head", () => {
   it("returns a foresee active prompt with correct count", () => {
-    const foreseePrompt: DreamwellPrompt = { kind: "foresee", count: 3 };
-    const promptStep: DreamwellEffectStep = { kind: "prompt", prompt: foreseePrompt };
-    const tailStep: DreamwellEffectStep = { kind: "edits", build: () => [] };
+    const foreseePrompt: EffectPrompt = { kind: "foresee", count: 3 };
+    const promptStep: EffectStep = { kind: "prompt", prompt: foreseePrompt };
+    const tailStep: EffectStep = { kind: "edits", build: () => [] };
 
     const result = planNextDreamwellStep([promptStep, tailStep], makeCtx());
 
@@ -239,7 +239,7 @@ describe("applyPromptResolution — pick-cards", () => {
     let resolveCalled = false;
     let capturedIds: string[] | null = null;
 
-    const prompt: DreamwellPrompt = {
+    const prompt: EffectPrompt = {
       kind: "pick-cards",
       label: "Pick",
       count: 2,
@@ -252,7 +252,7 @@ describe("applyPromptResolution — pick-cards", () => {
       },
     };
 
-    const tailStep: DreamwellEffectStep = { kind: "edits", build: () => [] };
+    const tailStep: EffectStep = { kind: "edits", build: () => [] };
     const ctx = makeCtx();
 
     const { edits, rest } = applyPromptResolution(
@@ -280,7 +280,7 @@ describe("applyPromptResolution — pick-cards", () => {
 
 describe("applyPromptResolution — choice", () => {
   it("edits === options[optionIndex].build(ctx) — index 0 picks first option", () => {
-    const prompt: DreamwellPrompt = {
+    const prompt: EffectPrompt = {
       kind: "choice",
       label: "Choose",
       options: [
@@ -300,7 +300,7 @@ describe("applyPromptResolution — choice", () => {
   });
 
   it("edits === options[1].build(ctx) — index 1 picks second option", () => {
-    const prompt: DreamwellPrompt = {
+    const prompt: EffectPrompt = {
       kind: "choice",
       label: "Choose",
       options: [
@@ -325,10 +325,10 @@ describe("applyPromptResolution — choice", () => {
 // ---------------------------------------------------------------------------
 
 describe("applyPromptResolution — confirm (CRITICAL)", () => {
-  const onYesStep: DreamwellEffectStep = { kind: "edits", build: () => [SENTINEL_EDIT] };
-  const tailStep: DreamwellEffectStep = { kind: "edits", build: () => [SENTINEL_EDIT_2] };
+  const onYesStep: EffectStep = { kind: "edits", build: () => [SENTINEL_EDIT] };
+  const tailStep: EffectStep = { kind: "edits", build: () => [SENTINEL_EDIT_2] };
 
-  const confirmPrompt: DreamwellPrompt = {
+  const confirmPrompt: EffectPrompt = {
     kind: "confirm",
     label: "Are you sure?",
     onYes: [onYesStep],
@@ -376,14 +376,14 @@ describe("applyPromptResolution — confirm (CRITICAL)", () => {
   });
 
   it("multi-step onYes: all onYes steps appear before tail, in order", () => {
-    const onYes1: DreamwellEffectStep = { kind: "edits", build: () => [] };
-    const onYes2: DreamwellEffectStep = { kind: "edits", build: () => [] };
-    const prompt: DreamwellPrompt = {
+    const onYes1: EffectStep = { kind: "edits", build: () => [] };
+    const onYes2: EffectStep = { kind: "edits", build: () => [] };
+    const prompt: EffectPrompt = {
       kind: "confirm",
       label: "Multi-step",
       onYes: [onYes1, onYes2],
     };
-    const tail1: DreamwellEffectStep = { kind: "edits", build: () => [] };
+    const tail1: EffectStep = { kind: "edits", build: () => [] };
     const { rest } = applyPromptResolution(
       prompt,
       { kind: "choice", optionIndex: 0 },
@@ -405,8 +405,8 @@ describe("applyPromptResolution — confirm (CRITICAL)", () => {
 
 describe("applyPromptResolution — foresee", () => {
   it("returns no edits and rest unchanged (foresee overlay handles its own edits)", () => {
-    const foreseePrompt: DreamwellPrompt = { kind: "foresee", count: 2 };
-    const tailStep: DreamwellEffectStep = { kind: "edits", build: () => [SENTINEL_EDIT] };
+    const foreseePrompt: EffectPrompt = { kind: "foresee", count: 2 };
+    const tailStep: EffectStep = { kind: "edits", build: () => [SENTINEL_EDIT] };
 
     const { edits, rest } = applyPromptResolution(
       foreseePrompt,

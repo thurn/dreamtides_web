@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { BattleDebugEdit } from "../debug/commands";
 import type { BattleMutableState, BattleSide, DreamwellCardDefinition } from "../types";
 import { createBattleLogBaseFields, logEvent } from "../../logging";
-import type { DreamwellEffectStep, DreamwellPrompt } from "./dreamwell-effects";
+import type { EffectPrompt, EffectStep } from "./effect-step";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
 import {
   applyPromptResolution,
@@ -69,7 +69,7 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
   const [run, setRun] = useState<{
     cardId: string;
     side: BattleSide;
-    remaining: DreamwellEffectStep[];
+    remaining: EffectStep[];
   } | null>(null);
 
   // The active prompt shown to the player (null when idle or between prompts).
@@ -78,15 +78,15 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
   // Paused prompt + rest queue, held in a ref so resolvePrompt can read it
   // without being regenerated on every render.
   const pausedRef = useRef<{
-    prompt: DreamwellPrompt;
-    rest: DreamwellEffectStep[];
+    prompt: EffectPrompt;
+    rest: EffectStep[];
   } | null>(null);
 
   // Key guard: fires at most once per (side, turn) combination.
   const lastRunKeyRef = useRef<string | null>(null);
 
   // Re-render guard: skip advance if the queue reference has not changed.
-  const processedQueueRef = useRef<DreamwellEffectStep[] | null>(null);
+  const processedQueueRef = useRef<EffectStep[] | null>(null);
 
   // ---------------------------------------------------------------------------
   // Start effect — fires when the dreamwell reveal for this (side, turn) lands

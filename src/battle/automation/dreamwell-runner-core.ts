@@ -1,5 +1,5 @@
 import type { BattleDebugEdit } from "../debug/commands";
-import type { DreamwellEffectStep, DreamwellPrompt, StepContext } from "./dreamwell-effects";
+import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -19,8 +19,8 @@ export type DreamwellPromptResolution =
 
 /** Result of inspecting the head of the step queue. */
 export type DreamwellStepPlan =
-  | { type: "dispatch"; edits: BattleDebugEdit[]; rest: DreamwellEffectStep[] }
-  | { type: "prompt"; active: DreamwellActivePrompt; prompt: DreamwellPrompt; rest: DreamwellEffectStep[] }
+  | { type: "dispatch"; edits: BattleDebugEdit[]; rest: EffectStep[] }
+  | { type: "prompt"; active: DreamwellActivePrompt; prompt: EffectPrompt; rest: EffectStep[] }
   | { type: "done" };
 
 // ---------------------------------------------------------------------------
@@ -36,14 +36,14 @@ export type DreamwellStepPlan =
  *    presented as a two-option choice: "Yes" (index 0) / "Skip" (index 1).
  */
 export function planNextDreamwellStep(
-  remaining: DreamwellEffectStep[],
+  remaining: EffectStep[],
   ctx: StepContext,
 ): DreamwellStepPlan {
   if (remaining.length === 0) {
     return { type: "done" };
   }
 
-  const [head, ...rest] = remaining as [DreamwellEffectStep, ...DreamwellEffectStep[]];
+  const [head, ...rest] = remaining as [EffectStep, ...EffectStep[]];
 
   if (head.kind === "edits") {
     return { type: "dispatch", edits: head.build(ctx), rest };
@@ -55,7 +55,7 @@ export function planNextDreamwellStep(
   return { type: "prompt", active, prompt, rest };
 }
 
-function buildActivePrompt(prompt: DreamwellPrompt, ctx: StepContext): DreamwellActivePrompt {
+function buildActivePrompt(prompt: EffectPrompt, ctx: StepContext): DreamwellActivePrompt {
   switch (prompt.kind) {
     case "pick-cards":
       return {
@@ -97,11 +97,11 @@ function buildActivePrompt(prompt: DreamwellPrompt, ctx: StepContext): Dreamwell
  *  - Mismatched prompt/resolution → defensive fallback `{ edits: [], rest }`.
  */
 export function applyPromptResolution(
-  prompt: DreamwellPrompt,
+  prompt: EffectPrompt,
   resolution: DreamwellPromptResolution,
-  rest: DreamwellEffectStep[],
+  rest: EffectStep[],
   ctx: StepContext,
-): { edits: BattleDebugEdit[]; rest: DreamwellEffectStep[] } {
+): { edits: BattleDebugEdit[]; rest: EffectStep[] } {
   switch (prompt.kind) {
     case "pick-cards": {
       if (resolution.kind !== "pick-cards") return { edits: [], rest };

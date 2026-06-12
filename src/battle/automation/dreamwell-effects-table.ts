@@ -12,7 +12,7 @@ import {
   gainScoreEdits,
   opponentOf,
   topOfDeck,
-} from "./dreamwell-effects";
+} from "./effect-step";
 import type { DreamwellEffectScript } from "./dreamwell-effects";
 
 // ---------------------------------------------------------------------------
