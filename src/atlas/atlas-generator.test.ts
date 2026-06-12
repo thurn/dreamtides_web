@@ -466,6 +466,31 @@ describe("generateInitialAtlas", () => {
     }
   });
 
+  it("never enhances a site in the first dreamscape", () => {
+    for (let i = 0; i < 200; i++) {
+      const atlas = generateInitialAtlas(0, defaultContext(), {
+        logEvents: false,
+      });
+      const starting = atlas.nodes[atlas.startingNodeId];
+      expect(starting.enhancedSiteType).toBeNull();
+      expect(starting.sites.some((site) => site.isEnhanced)).toBe(false);
+    }
+  });
+
+  it("assigns the first dreamscape's biome randomly, not a fixed one", () => {
+    const biomeNames = new Set<string>();
+    for (let i = 0; i < 100; i++) {
+      const atlas = generateInitialAtlas(0, defaultContext(), {
+        logEvents: false,
+      });
+      biomeNames.add(atlas.nodes[atlas.startingNodeId].biomeName);
+    }
+    // Over many runs the starting biome varies rather than always being the
+    // same one. Asserting "more than one distinct biome" stays valid no matter
+    // how the biome list changes.
+    expect(biomeNames.size).toBeGreaterThan(1);
+  });
+
 });
 
 describe("generateNewNodes", () => {

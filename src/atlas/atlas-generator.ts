@@ -393,7 +393,12 @@ function createNode(
   const id = nextNodeId();
   const biome = assignBiome(usedBiomeNames);
   const sites = generateSiteComposition(completionLevel, isFirstDreamscape, context);
-  const enhancedSiteType = applyBiomeEnhancement(sites, biome);
+  // The first dreamscape gets a randomly assigned biome for visual variety, but
+  // none of its sites are enhanced — the onboarding encounter is kept uniform so
+  // the opening Purge (and every other opening site) is always standard.
+  const enhancedSiteType = isFirstDreamscape
+    ? null
+    : applyBiomeEnhancement(sites, biome);
 
   if (options.logEvents !== false) {
     logEvent("atlas_node_generated", {

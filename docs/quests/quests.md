@@ -591,7 +591,9 @@ Each dreamscape can be in one of three states:
 The player begins inside the **starting dreamscape**, which sits at the center
 of the Dream Atlas. The player enters the starting dreamscape directly when the
 run begins; the Atlas screen marks it "You started here" with a slight visual
-emphasis so the player keeps their bearings.
+emphasis so the player keeps their bearings. The starting dreamscape is assigned
+a random biome for visual variety, but none of its sites are enhanced, so the
+opening encounter is uniform for every run.
 
 After the player visits a dreamscape and completes its battle, that dreamscape
 becomes **Completed**. Any dreamscapes directly connected to it then also become
