@@ -40,7 +40,7 @@ import type {
   BrowseableZone,
 } from "../types";
 import type { QuestContent } from "../../data/quest-content";
-import type { BattleCommand } from "../debug/commands";
+import type { BattleCommand, BattleDebugEdit } from "../debug/commands";
 import { useBattleAi, type AiProposal } from "../ai/use-battle-ai";
 import { aiMayRunHere } from "../ai/ai-may-run-here";
 import { dreamwellEnergyEdits } from "../engine/energy";
@@ -64,6 +64,10 @@ import { BattleStatusBar } from "./BattleStatusBar";
 import { BattleStatusStrip } from "./BattleStatusStrip";
 import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
 import { BattleDreamwellDisplay } from "./BattleDreamwellDisplay";
+import { BattleCardPickerOverlay } from "./BattleCardPickerOverlay";
+import { BattleChoicePromptOverlay } from "./BattleChoicePromptOverlay";
+import { useDreamwellEffectRunner } from "../automation/use-dreamwell-effect-runner";
+import { dreamwellAutomationStatus } from "../automation/dreamwell-effects-table";
 import { BattlefieldGrid } from "./BattlefieldGrid";
 import { BattleZoneBrowser } from "./BattleZoneBrowser";
 import {
@@ -258,6 +262,20 @@ function PlayableBattleScreenInner({
     battleInit.scoreToWin,
     battleInit.dreamwellDeck,
   ]);
+
+  const dispatchAutomationEdit = useCallback((edit: BattleDebugEdit): void => {
+    dispatch({
+      type: "APPLY_COMMAND",
+      command: { id: "DEBUG_EDIT", edit, sourceSurface: "auto-system" },
+    });
+  }, [dispatch]);
+
+  const dreamwellRunner = useDreamwellEffectRunner({
+    enabled: isBasicAutomationEnabled,
+    state: reducerState.mutable,
+    dreamwellDeck: battleInit.dreamwellDeck,
+    dispatchEdit: dispatchAutomationEdit,
+  });
 
   // Dreamwell-draw rail tool: on demand, reveal an additional Dreamwell card for
   // a side and (under basic automation) apply its energy. The shared draw index
@@ -849,6 +867,33 @@ function PlayableBattleScreenInner({
           onDispatch={handleCommand}
         />
       ) : null}
+      {dreamwellRunner.activePrompt?.kind === "pick-cards" ? (
+        <BattleCardPickerOverlay
+          title={dreamwellRunner.activePrompt.label}
+          candidateIds={dreamwellRunner.activePrompt.candidateIds}
+          count={dreamwellRunner.activePrompt.count}
+          optional={dreamwellRunner.activePrompt.optional}
+          state={reducerState.mutable}
+          onConfirm={(ids) => dreamwellRunner.resolvePrompt({ kind: "pick-cards", chosenIds: ids })}
+          onSkip={() => dreamwellRunner.resolvePrompt({ kind: "pick-cards", chosenIds: [] })}
+        />
+      ) : null}
+      {dreamwellRunner.activePrompt?.kind === "choice" ? (
+        <BattleChoicePromptOverlay
+          title={dreamwellRunner.activePrompt.label}
+          options={dreamwellRunner.activePrompt.options}
+          onChoose={(i) => dreamwellRunner.resolvePrompt({ kind: "choice", optionIndex: i })}
+        />
+      ) : null}
+      {dreamwellRunner.activePrompt?.kind === "foresee" ? (
+        <BattleForeseeOverlay
+          initialCount={dreamwellRunner.activePrompt.count}
+          side={dreamwellRunner.activePromptSide ?? activeSide}
+          state={reducerState.mutable}
+          onDispatch={(command) => dispatch({ type: "APPLY_COMMAND", command })}
+          onClose={() => dreamwellRunner.resolvePrompt({ kind: "foresee" })}
+        />
+      ) : null}
       {openDeckOrderPicker !== null ? (
         <BattleDeckOrderPicker
           initialOrder={reducerState.mutable.sides[openDeckOrderPicker].deck}
@@ -965,6 +1010,7 @@ function PlayableBattleScreenInner({
               card={dreamwellDisplayCard}
               side={activeSide}
               visible={isDreamwellDisplayVisible}
+              automationStatus={dreamwellDisplayCard ? dreamwellAutomationStatus(dreamwellDisplayCard.id) : "none"}
             />
             {isOpponentHandRevealed ? (
               <div className="opponent-hand-zone">

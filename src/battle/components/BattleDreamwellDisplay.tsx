@@ -17,10 +17,12 @@ export function BattleDreamwellDisplay({
   card,
   side,
   visible,
+  automationStatus,
 }: {
   card: DreamwellCardViewData | null;
   side: BattleSide;
   visible: boolean;
+  automationStatus: "auto" | "manual" | "none";
 }) {
   return (
     <div
@@ -39,12 +41,34 @@ export function BattleDreamwellDisplay({
         <div
           data-battle-dreamwell-card={card.id}
           data-battle-dreamwell-side={side}
+          data-battle-dreamwell-automation={automationStatus}
           style={{
+            position: "relative",
             width: "min(64vw, 46vh)",
             pointerEvents: "auto",
           }}
         >
           <DreamwellCardView card={card} />
+          {automationStatus !== "none" ? (
+            <div
+              style={{
+                position: "absolute",
+                top: "8px",
+                right: "8px",
+                background: "rgba(20, 20, 30, 0.85)",
+                color: "#e8e0ff",
+                fontSize: "11px",
+                fontWeight: 600,
+                letterSpacing: "0.04em",
+                padding: "2px 8px",
+                borderRadius: "999px",
+                pointerEvents: "none",
+                userSelect: "none",
+              }}
+            >
+              {automationStatus === "auto" ? "Auto" : "Manual"}
+            </div>
+          ) : null}
         </div>
       ) : null}
     </div>
