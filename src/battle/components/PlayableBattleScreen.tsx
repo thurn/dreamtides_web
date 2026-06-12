@@ -885,7 +885,8 @@ function PlayableBattleScreenInner({
           onChoose={(i) => dreamwellRunner.resolvePrompt({ kind: "choice", optionIndex: i })}
         />
       ) : null}
-      {dreamwellRunner.activePrompt?.kind === "foresee" ? (
+      {dreamwellRunner.activePrompt?.kind === "foresee" &&
+      openForeseeOverlay === null ? (
         <BattleForeseeOverlay
           initialCount={dreamwellRunner.activePrompt.count}
           side={dreamwellRunner.activePromptSide ?? activeSide}
