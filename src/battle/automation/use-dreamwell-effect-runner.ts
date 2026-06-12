@@ -6,9 +6,9 @@ import type { EffectPrompt, EffectStep } from "./effect-step";
 import { selectDreamwellEffectScript } from "./dreamwell-effects-table";
 import {
   applyPromptResolution,
-  planNextDreamwellStep,
-} from "./dreamwell-runner-core";
-import type { DreamwellActivePrompt, DreamwellPromptResolution } from "./dreamwell-runner-core";
+  planNextEffectStep,
+} from "./effect-runner-core";
+import type { ActivePrompt, PromptResolution } from "./effect-runner-core";
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -22,9 +22,9 @@ export interface DreamwellRunnerArgs {
 }
 
 export interface DreamwellRunnerResult {
-  activePrompt: DreamwellActivePrompt | null;
+  activePrompt: ActivePrompt | null;
   activePromptSide: BattleSide | null;     // for the foresee overlay + card rendering
-  resolvePrompt: (resolution: DreamwellPromptResolution) => void;
+  resolvePrompt: (resolution: PromptResolution) => void;
 }
 
 // ---------------------------------------------------------------------------
@@ -73,7 +73,7 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
   } | null>(null);
 
   // The active prompt shown to the player (null when idle or between prompts).
-  const [activePrompt, setActivePrompt] = useState<DreamwellActivePrompt | null>(null);
+  const [activePrompt, setActivePrompt] = useState<ActivePrompt | null>(null);
 
   // Paused prompt + rest queue, held in a ref so resolvePrompt can read it
   // without being regenerated on every render.
@@ -179,7 +179,7 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
       nowMs: Date.now(),
     };
 
-    const plan = planNextDreamwellStep(run.remaining, ctx);
+    const plan = planNextEffectStep(run.remaining, ctx);
 
     if (plan.type === "done") {
       logDreamwell(state, DREAMWELL_LOG.resolved, {
@@ -212,7 +212,7 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
   // resolvePrompt — called by UI when the player makes a choice
   // ---------------------------------------------------------------------------
   const resolvePrompt = useCallback(
-    (resolution: DreamwellPromptResolution) => {
+    (resolution: PromptResolution) => {
       const paused = pausedRef.current;
       if (paused === null) return;
       // run must be non-null whenever pausedRef is set (a prompt is only opened

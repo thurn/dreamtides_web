@@ -7,24 +7,24 @@ import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
 
 /** What the UI must render when the runner is paused on a prompt. Candidate ids
  *  are resolved here (from live state) so the overlay needs no builder access. */
-export type DreamwellActivePrompt =
+export type ActivePrompt =
   | { kind: "pick-cards"; label: string; candidateIds: string[]; count: number; optional: boolean }
   | { kind: "choice"; label: string; options: { label: string }[] }
   | { kind: "foresee"; count: number };
 
-export type DreamwellPromptResolution =
+export type PromptResolution =
   | { kind: "pick-cards"; chosenIds: string[] }
   | { kind: "choice"; optionIndex: number }
   | { kind: "foresee" };
 
 /** Result of inspecting the head of the step queue. */
-export type DreamwellStepPlan =
+export type EffectStepPlan =
   | { type: "dispatch"; edits: BattleDebugEdit[]; rest: EffectStep[] }
-  | { type: "prompt"; active: DreamwellActivePrompt; prompt: EffectPrompt; rest: EffectStep[] }
+  | { type: "prompt"; active: ActivePrompt; prompt: EffectPrompt; rest: EffectStep[] }
   | { type: "done" };
 
 // ---------------------------------------------------------------------------
-// planNextDreamwellStep
+// planNextEffectStep
 // ---------------------------------------------------------------------------
 
 /** Inspect the head of the step queue and return a plan.
@@ -35,10 +35,10 @@ export type DreamwellStepPlan =
  *    has candidates already resolved from live state. Confirm prompts are
  *    presented as a two-option choice: "Yes" (index 0) / "Skip" (index 1).
  */
-export function planNextDreamwellStep(
+export function planNextEffectStep(
   remaining: EffectStep[],
   ctx: StepContext,
-): DreamwellStepPlan {
+): EffectStepPlan {
   if (remaining.length === 0) {
     return { type: "done" };
   }
@@ -55,7 +55,7 @@ export function planNextDreamwellStep(
   return { type: "prompt", active, prompt, rest };
 }
 
-function buildActivePrompt(prompt: EffectPrompt, ctx: StepContext): DreamwellActivePrompt {
+function buildActivePrompt(prompt: EffectPrompt, ctx: StepContext): ActivePrompt {
   switch (prompt.kind) {
     case "pick-cards":
       return {
@@ -98,7 +98,7 @@ function buildActivePrompt(prompt: EffectPrompt, ctx: StepContext): DreamwellAct
  */
 export function applyPromptResolution(
   prompt: EffectPrompt,
-  resolution: DreamwellPromptResolution,
+  resolution: PromptResolution,
   rest: EffectStep[],
   ctx: StepContext,
 ): { edits: BattleDebugEdit[]; rest: EffectStep[] } {

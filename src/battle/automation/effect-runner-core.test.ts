@@ -3,8 +3,8 @@ import type { BattleMutableState } from "../types";
 import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
 import {
   applyPromptResolution,
-  planNextDreamwellStep,
-} from "./dreamwell-runner-core";
+  planNextEffectStep,
+} from "./effect-runner-core";
 
 // ---------------------------------------------------------------------------
 // Minimal fixture helpers
@@ -23,23 +23,23 @@ function makeCtx(): StepContext {
 }
 
 // ---------------------------------------------------------------------------
-// Tests: planNextDreamwellStep — empty queue terminates (bug: forgetting to
+// Tests: planNextEffectStep — empty queue terminates (bug: forgetting to
 // handle the base case, looping forever or throwing)
 // ---------------------------------------------------------------------------
 
-describe("planNextDreamwellStep — empty queue", () => {
+describe("planNextEffectStep — empty queue", () => {
   it('returns { type: "done" } for an empty step array', () => {
-    const result = planNextDreamwellStep([], makeCtx());
+    const result = planNextEffectStep([], makeCtx());
     expect(result).toEqual({ type: "done" });
   });
 });
 
 // ---------------------------------------------------------------------------
-// Tests: planNextDreamwellStep — edits step (bug: dropping the tail or
+// Tests: planNextEffectStep — edits step (bug: dropping the tail or
 // not calling the builder function at all)
 // ---------------------------------------------------------------------------
 
-describe("planNextDreamwellStep — edits head", () => {
+describe("planNextEffectStep — edits head", () => {
   it("returns dispatch with edits === build(ctx) and rest === tail", () => {
     let builderCalled = false;
     const editsStep: EffectStep = {
@@ -55,7 +55,7 @@ describe("planNextDreamwellStep — edits head", () => {
       build: () => [SENTINEL_EDIT_2],
     };
     const ctx = makeCtx();
-    const result = planNextDreamwellStep([editsStep, tailStep], ctx);
+    const result = planNextEffectStep([editsStep, tailStep], ctx);
 
     expect(result.type).toBe("dispatch");
     if (result.type !== "dispatch") throw new Error("wrong type");
@@ -73,7 +73,7 @@ describe("planNextDreamwellStep — edits head", () => {
 
   it("rest is empty when edits step is the only element", () => {
     const step: EffectStep = { kind: "edits", build: () => [] };
-    const result = planNextDreamwellStep([step], makeCtx());
+    const result = planNextEffectStep([step], makeCtx());
     expect(result.type).toBe("dispatch");
     if (result.type !== "dispatch") throw new Error();
     expect(result.rest).toHaveLength(0);
@@ -81,11 +81,11 @@ describe("planNextDreamwellStep — edits head", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Tests: planNextDreamwellStep — pick-cards prompt (bug: forgetting to resolve
+// Tests: planNextEffectStep — pick-cards prompt (bug: forgetting to resolve
 // candidates from live state — just storing the builder instead of the ids)
 // ---------------------------------------------------------------------------
 
-describe("planNextDreamwellStep — pick-cards prompt head", () => {
+describe("planNextEffectStep — pick-cards prompt head", () => {
   it("resolves candidateIds eagerly from ctx, not just stores the builder", () => {
     const expectedCandidates = ["card-a", "card-b"];
     let candidatesFnCalled = false;
@@ -106,7 +106,7 @@ describe("planNextDreamwellStep — pick-cards prompt head", () => {
     const promptStep: EffectStep = { kind: "prompt", prompt: pickPrompt };
     const tailStep: EffectStep = { kind: "edits", build: () => [] };
 
-    const result = planNextDreamwellStep([promptStep, tailStep], makeCtx());
+    const result = planNextEffectStep([promptStep, tailStep], makeCtx());
 
     expect(result.type).toBe("prompt");
     if (result.type !== "prompt") throw new Error();
@@ -141,7 +141,7 @@ describe("planNextDreamwellStep — pick-cards prompt head", () => {
       candidates: () => ["x", "y"],
       resolve: () => [],
     };
-    const result = planNextDreamwellStep([{ kind: "prompt", prompt }], makeCtx());
+    const result = planNextEffectStep([{ kind: "prompt", prompt }], makeCtx());
     expect(result.type).toBe("prompt");
     if (result.type !== "prompt") throw new Error();
     if (result.active.kind !== "pick-cards") throw new Error();
@@ -151,10 +151,10 @@ describe("planNextDreamwellStep — pick-cards prompt head", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Tests: planNextDreamwellStep — choice prompt
+// Tests: planNextEffectStep — choice prompt
 // ---------------------------------------------------------------------------
 
-describe("planNextDreamwellStep — choice prompt head", () => {
+describe("planNextEffectStep — choice prompt head", () => {
   it("maps options to label-only objects and carries prompt and rest", () => {
     const choicePrompt: EffectPrompt = {
       kind: "choice",
@@ -165,7 +165,7 @@ describe("planNextDreamwellStep — choice prompt head", () => {
       ],
     };
     const promptStep: EffectStep = { kind: "prompt", prompt: choicePrompt };
-    const result = planNextDreamwellStep([promptStep], makeCtx());
+    const result = planNextEffectStep([promptStep], makeCtx());
 
     expect(result.type).toBe("prompt");
     if (result.type !== "prompt") throw new Error();
@@ -179,10 +179,10 @@ describe("planNextDreamwellStep — choice prompt head", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Tests: planNextDreamwellStep — confirm prompt presented as two-option choice
+// Tests: planNextEffectStep — confirm prompt presented as two-option choice
 // ---------------------------------------------------------------------------
 
-describe("planNextDreamwellStep — confirm prompt head", () => {
+describe("planNextEffectStep — confirm prompt head", () => {
   it('presents confirm as a choice with "Yes" and "Skip" options', () => {
     const confirmPrompt: EffectPrompt = {
       kind: "confirm",
@@ -190,7 +190,7 @@ describe("planNextDreamwellStep — confirm prompt head", () => {
       onYes: [{ kind: "edits", build: () => [SENTINEL_EDIT] }],
     };
     const promptStep: EffectStep = { kind: "prompt", prompt: confirmPrompt };
-    const result = planNextDreamwellStep([promptStep], makeCtx());
+    const result = planNextEffectStep([promptStep], makeCtx());
 
     expect(result.type).toBe("prompt");
     if (result.type !== "prompt") throw new Error();
@@ -205,16 +205,16 @@ describe("planNextDreamwellStep — confirm prompt head", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Tests: planNextDreamwellStep — foresee prompt
+// Tests: planNextEffectStep — foresee prompt
 // ---------------------------------------------------------------------------
 
-describe("planNextDreamwellStep — foresee prompt head", () => {
+describe("planNextEffectStep — foresee prompt head", () => {
   it("returns a foresee active prompt with correct count", () => {
     const foreseePrompt: EffectPrompt = { kind: "foresee", count: 3 };
     const promptStep: EffectStep = { kind: "prompt", prompt: foreseePrompt };
     const tailStep: EffectStep = { kind: "edits", build: () => [] };
 
-    const result = planNextDreamwellStep([promptStep, tailStep], makeCtx());
+    const result = planNextEffectStep([promptStep, tailStep], makeCtx());
 
     expect(result.type).toBe("prompt");
     if (result.type !== "prompt") throw new Error();
