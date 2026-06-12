@@ -356,6 +356,27 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
     ],
   },
 
+  // Ringwatcher — "▸Materialized: Foresee 1." The script automates the
+  // ▸Materialized Foresee; the runner pauses on the prompt step and surfaces the
+  // foresee overlay.
+  "647f5150-b2e0-424b-9480-27557642524e": {
+    id: "647f5150-b2e0-424b-9480-27557642524e",
+    trigger: "materialized",
+    textHash: "153cdaf2",
+    steps: [{ kind: "prompt", prompt: { kind: "foresee", count: 1 } }],
+  },
+
+  // Planetgazer — "▸Materialized: Foresee 2.\n\n❖ – 1●: Move this character to
+  // an unoccupied character position." The script automates only the
+  // ▸Materialized Foresee (the runner pauses on the prompt step and surfaces the
+  // foresee overlay); the ❖ move ability is resolved manually.
+  "8cb543d7-e70b-4526-b473-bb17dcaee2a7": {
+    id: "8cb543d7-e70b-4526-b473-bb17dcaee2a7",
+    trigger: "materialized",
+    textHash: "86e1b469",
+    steps: [{ kind: "prompt", prompt: { kind: "foresee", count: 2 } }],
+  },
+
   // Eternal Stag — "Support – Supported spirit animals have +1✦.\n\n2●, ☪: Draw
   // a spirit animal." Supported front-rank allies whose subtype is "Spirit
   // Animal" gain +1 spark.
