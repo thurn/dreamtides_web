@@ -38,6 +38,26 @@ function extractEditTarget(edit: BattleDebugEdit): string | null {
   return null;
 }
 
+/** Canonical event-name constants for dreamwell logging. */
+const DREAMWELL_LOG = {
+  started: "battle_proto_dreamwell_effect_started",
+  step: "battle_proto_dreamwell_step",
+  promptResolved: "battle_proto_dreamwell_prompt_resolved",
+  resolved: "battle_proto_dreamwell_effect_resolved",
+} as const;
+
+/** Logs a dreamwell event, spreading the standard base fields. */
+function logDreamwell(
+  state: BattleMutableState,
+  event: string,
+  payload: Record<string, unknown>,
+): void {
+  logEvent(event, {
+    ...createBattleLogBaseFields(state, { sourceSurface: "auto-system", selectedCardId: null }),
+    ...payload,
+  });
+}
+
 // ---------------------------------------------------------------------------
 // useDreamwellEffectRunner
 // ---------------------------------------------------------------------------
@@ -93,8 +113,7 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
 
     if (script !== null && script.steps.length > 0) {
       setRun({ cardId: script.id, side, remaining: [...script.steps] });
-      logEvent("battle_proto_dreamwell_effect_started", {
-        ...createBattleLogBaseFields(state, { sourceSurface: "auto-system", selectedCardId: null }),
+      logDreamwell(state, DREAMWELL_LOG.started, {
         dreamwellCardId: cardId,
         dreamwellCardName: card?.name,
         side,
@@ -120,15 +139,20 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
   // ---------------------------------------------------------------------------
   useEffect(() => {
     if (run === null) return;
-    if (activePrompt !== null) return;
 
+    // Abort check runs FIRST — before the prompt-pause guard — so that toggling
+    // automation off or the battle ending while a prompt is open tears down the
+    // run and clears the overlay instead of leaving both stuck.
     if (!enabled || state.result !== null) {
-      // Abort: automation toggled off or battle ended.
       setRun(null);
       setActivePrompt(null);
       pausedRef.current = null;
+      processedQueueRef.current = null;
       return;
     }
+
+    // Prompt-pause guard: a prompt is open; wait for resolvePrompt.
+    if (activePrompt !== null) return;
 
     // Guard against double-dispatch on re-renders that did not change the queue.
     if (processedQueueRef.current === run.remaining) return;
@@ -144,15 +168,14 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
     const plan = planNextDreamwellStep(run.remaining, ctx);
 
     if (plan.type === "done") {
-      logEvent("battle_proto_dreamwell_effect_resolved", {
-        ...createBattleLogBaseFields(state, { sourceSurface: "auto-system", selectedCardId: null }),
+      logDreamwell(state, DREAMWELL_LOG.resolved, {
         dreamwellCardId: run.cardId,
         side: run.side,
       });
+      processedQueueRef.current = null;
       setRun(null);
     } else if (plan.type === "dispatch") {
-      logEvent("battle_proto_dreamwell_step", {
-        ...createBattleLogBaseFields(state, { sourceSurface: "auto-system", selectedCardId: null }),
+      logDreamwell(state, DREAMWELL_LOG.step, {
         dreamwellCardId: run.cardId,
         editKinds: plan.edits.map((e) => e.kind),
         targetIds: plan.edits.map((e) => extractEditTarget(e)),
@@ -178,9 +201,12 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
     (resolution: DreamwellPromptResolution) => {
       const paused = pausedRef.current;
       if (paused === null) return;
+      // run must be non-null whenever pausedRef is set (a prompt is only opened
+      // from inside the advance effect which already guards run !== null).
+      if (run === null) return;
 
       const ctx = {
-        side: run?.side ?? ("player" as BattleSide),
+        side: run.side,
         state,
         random: Math.random,
         nowMs: Date.now(),
@@ -199,10 +225,10 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
             ? resolution.optionIndex
             : "foresee";
 
-      logEvent("battle_proto_dreamwell_prompt_resolved", {
-        ...createBattleLogBaseFields(state, { sourceSurface: "auto-system", selectedCardId: null }),
-        dreamwellCardId: run?.cardId ?? null,
+      logDreamwell(state, DREAMWELL_LOG.promptResolved, {
+        dreamwellCardId: run.cardId,
         promptKind: paused.prompt.kind,
+        // The foresee prompt kind has no label field; the cast surfaces it safely.
         label: (paused.prompt as { label?: string }).label ?? null,
         candidateIds,
         choice,
@@ -215,7 +241,7 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
 
       pausedRef.current = null;
       setActivePrompt(null);
-      setRun(run !== null ? { ...run, remaining: rest } : null);
+      setRun({ ...run, remaining: rest });
     },
     [run, activePrompt, state, dispatchEdit],
   );
