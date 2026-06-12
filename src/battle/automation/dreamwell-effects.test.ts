@@ -1011,6 +1011,41 @@ describe("Shining Beacon (3a4293da) — top 2, pick 1 to hand other to bottom", 
   });
 });
 
+// Fortune's Wheel — discard hand then draw that many (atomicity and ordering)
+describe("Fortune's Wheel (446095b1) — discard hand then draw same count", () => {
+  const UUID = "446095b1-ec4d-40d7-8eed-a8221d339ea2";
+  const N = 3;
+  const handIds = ["fw-hand-1", "fw-hand-2", "fw-hand-3"];
+
+  it("confirm onYes edits step: exactly N DISCARD_CARD edits followed by exactly N DRAW_CARD edits", () => {
+    const state = makeState({
+      playerHand: handIds,
+      cardInstances: Object.fromEntries(handIds.map((id) => [id, makeCharacter(id, "player", 2)])),
+    });
+    const script = DREAMWELL_EFFECTS[UUID];
+    if (script === undefined) throw new Error(`no script for ${UUID}`);
+    const step0 = script.steps[0];
+    if (step0?.kind !== "prompt") throw new Error("expected prompt step");
+    const prompt = step0.prompt;
+    if (prompt.kind !== "confirm") throw new Error("expected confirm prompt");
+    const onYesEdits = prompt.onYes.find((s) => s.kind === "edits");
+    if (onYesEdits?.kind !== "edits") throw new Error("expected edits in onYes");
+
+    const edits = onYesEdits.build(makeCtx(state, "player"));
+
+    // First N edits are DISCARD_CARD, one per hand id in order
+    expect(edits.slice(0, N)).toEqual(
+      handIds.map((id) => ({ kind: "DISCARD_CARD", battleCardId: id })),
+    );
+    // Next N edits are DRAW_CARD for the active side
+    expect(edits.slice(N)).toEqual(
+      Array.from({ length: N }, () => ({ kind: "DRAW_CARD", side: "player" })),
+    );
+    // Total length = 2 * N
+    expect(edits).toHaveLength(2 * N);
+  });
+});
+
 // ---------------------------------------------------------------------------
 // Tests: property test — all prompt scripts (recurse into confirm.onYes)
 // ---------------------------------------------------------------------------

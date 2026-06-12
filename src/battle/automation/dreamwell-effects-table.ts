@@ -32,9 +32,11 @@ export const DREAMWELL_MANUAL_IDS = new Set<string>([
 ]);
 
 /**
- * Fully automated dreamwell effect scripts keyed by the dreamwell card UUID.
- * Each entry's `.id` equals its key. Effects are deterministic — no player
- * input is required.
+ * Dreamwell effect scripts keyed by the dreamwell card UUID. Each entry's
+ * `.id` equals its key. The table contains both deterministic `edits` steps
+ * and interactive `prompt` steps resolved by the runner; the runner walks each
+ * step in order, applying edits immediately and pausing on prompts until the
+ * player resolves them.
  */
 export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
   // Meteor Meadow — Draw a card.
@@ -371,7 +373,8 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
           resolve: ([chosenId], ctx) => {
             if (chosenId === undefined) return [];
             const top2 = topOfDeck(ctx.state, ctx.side, 2);
-            const otherId = top2.find((id) => id !== chosenId);
+            const otherIndex = top2[0] === chosenId ? 1 : 0;
+            const otherId = top2[otherIndex];
             const edits: BattleDebugEdit[] = [
               { kind: "MOVE_CARD_TO_ZONE", battleCardId: chosenId, destination: { side: ctx.side, zone: "hand" } },
             ];
