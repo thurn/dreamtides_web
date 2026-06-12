@@ -135,6 +135,40 @@ export function gainScoreEdits(side: BattleSide, amount: number): BattleDebugEdi
   return [{ kind: "ADJUST_SCORE", side, amount }];
 }
 
+/** Returns a single `ERODE` edit of `count` for `side` (rules §Erode). */
+export function erodeEdits(side: BattleSide, count: number): BattleDebugEdit[] {
+  return [{ kind: "ERODE", side, count }];
+}
+
+/**
+ * Returns a `SET_CARD_SPARK_DELTA` edit that adds `amount` of gained spark to
+ * the instance's CURRENT `sparkDelta` (accumulates, does not overwrite). If the
+ * instance is absent, returns `[]`.
+ */
+export function addGainedSparkEdits(
+  battleCardId: string,
+  amount: number,
+  state: BattleMutableState,
+): BattleDebugEdit[] {
+  const instance = state.cardInstances[battleCardId];
+  if (instance === undefined) return [];
+  return [{ kind: "SET_CARD_SPARK_DELTA", battleCardId, value: instance.sparkDelta + amount }];
+}
+
+/**
+ * Returns one `DISCARD_CARD` edit per card currently in `side`'s hand, in hand
+ * order. Returns `[]` for an empty hand. The discarded card's owner is implied
+ * by its id, so the edit carries no `side` field.
+ */
+export function discardHandEdits(
+  side: BattleSide,
+  state: BattleMutableState,
+): BattleDebugEdit[] {
+  return state.sides[side].hand.map(
+    (battleCardId): BattleDebugEdit => ({ kind: "DISCARD_CARD", battleCardId }),
+  );
+}
+
 /**
  * Returns the top `n` card ids from `side`'s deck (index 0 is the top). If
  * the deck has fewer than `n` cards, returns however many are available.
