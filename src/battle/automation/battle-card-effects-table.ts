@@ -98,6 +98,17 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
       bonus: () => 2,
     },
   },
+
+  // Nocturne Strummer — "Support – Supported characters have +2✦." Grants +2
+  // spark to every supported front-rank ally (no subtype restriction).
+  "5a980eff-6ec7-44d8-9977-b98e66bbc2c8": {
+    id: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
+    trigger: "support",
+    textHash: "a4a7189e",
+    support: {
+      bonus: () => 2,
+    },
+  },
 };
 
 // ---------------------------------------------------------------------------
