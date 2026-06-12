@@ -257,13 +257,15 @@ rendered **underneath** the `.c-cost` energy pip.
 
 Per the project logging standard ("could I reconstruct what this algorithm did
 in a given production game?"), the battle effect runner logs to
-`logs/quest-log.jsonl`:
+`logs/quest-log.jsonl` — **one entry per automation action, never per render or
+per step**:
 
-- **Trigger fire** — `gameId`, `turnNumber`, `side`, card UUID, trigger type
-  (`dawn` / `materialized`), and the ordered edits the script emitted.
-- **Prompt** — each interactive prompt shown and the resolution chosen.
-- **Support recompute** — when a recompute changes any bonus: the supporter
-  UUID(s), affected ally UUIDs, and old → new `staticSparkBonus` values.
+- **Effect resolved** — one entry when a single card's Dawn or Materialized
+  script finishes: card UUID + name, trigger type, side, the aggregated edits it
+  produced, and any prompt choice(s). No separate started/per-step entries.
+- **Support changed** — one entry **only when a recompute actually changes a
+  bonus** (non-empty edit set): the changed `{ battleCardId, value }` set. No-op
+  recompute passes are not logged.
 - **Hash mismatch** — at battle init, each drifted card (UUID + name, expected
   vs actual hash).
 
