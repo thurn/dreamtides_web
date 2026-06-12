@@ -159,6 +159,9 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
       setActivePrompt(null);
       pausedRef.current = null;
       processedQueueRef.current = null;
+      // `lastRunKeyRef` is deliberately NOT reset here: if the operator toggles
+      // automation off and back on during the same (side, turn) Dreamwell phase,
+      // the start effect's key guard keeps the bonus ability from replaying.
       return;
     }
 
