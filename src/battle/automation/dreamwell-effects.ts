@@ -130,7 +130,7 @@ export function drawEdits(side: BattleSide, count: number): BattleDebugEdit[] {
   return Array.from({ length: count }, (): BattleDebugEdit => ({ kind: "DRAW_CARD", side }));
 }
 
-/** Returns `count` `ADJUST_CURRENT_ENERGY` edits of `+amount` for `side`. */
+/** Returns an `ADJUST_CURRENT_ENERGY` edit of `+amount` for `side`. */
 export function gainEnergyEdits(side: BattleSide, amount: number): BattleDebugEdit[] {
   return [{ kind: "ADJUST_CURRENT_ENERGY", side, amount }];
 }

@@ -1,12 +1,17 @@
 import { describe, expect, it } from "vitest";
-import type { BattleMutableState, BattleSide } from "../types";
+import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
+import type { BackRankSlotId, BattleMutableState, BattleSide, FrontRankSlotId } from "../types";
 import {
   alliesInPlay,
   charactersInVoid,
+  drawEdits,
   drawUntilEdits,
   enemyCharactersInPlay,
   eventsInVoid,
+  gainEnergyEdits,
+  gainScoreEdits,
   opponentOf,
+  topOfDeck,
 } from "./dreamwell-effects";
 
 // ---------------------------------------------------------------------------
@@ -18,21 +23,25 @@ function makeSide(
     hand: string[];
     void: string[];
     deck: string[];
-    backRank: Record<string, string | null>;
-    frontRank: Record<string, string | null>;
+    backRank: Record<BackRankSlotId, string | null>;
+    frontRank: Record<FrontRankSlotId, string | null>;
   }> = {},
 ): BattleMutableState["sides"][BattleSide] {
   return {
-    currentEnergy: 3,
-    maxEnergy: 5,
+    currentEnergy: 0,
+    maxEnergy: 0,
     score: 0,
     visibility: {},
     deck: overrides.deck ?? [],
     hand: overrides.hand ?? [],
     void: overrides.void ?? [],
     banished: [],
-    backRank: overrides.backRank ?? { B0: null, B1: null, B2: null, B3: null, B4: null },
-    frontRank: overrides.frontRank ?? { F0: null, F1: null, F2: null, F3: null },
+    backRank:
+      overrides.backRank ??
+      (Object.fromEntries(BACK_RANK_SLOT_IDS.map((s) => [s, null])) as Record<BackRankSlotId, string | null>),
+    frontRank:
+      overrides.frontRank ??
+      (Object.fromEntries(FRONT_RANK_SLOT_IDS.map((s) => [s, null])) as Record<FrontRankSlotId, string | null>),
     fatigueCount: 0,
     dreamwellCardIndex: null,
     dreamwellDrawnTurn: null,
@@ -44,13 +53,13 @@ function makeState(
     playerHand: string[];
     playerVoid: string[];
     playerDeck: string[];
-    playerBackRank: Record<string, string | null>;
-    playerFrontRank: Record<string, string | null>;
+    playerBackRank: Record<BackRankSlotId, string | null>;
+    playerFrontRank: Record<FrontRankSlotId, string | null>;
     enemyHand: string[];
     enemyVoid: string[];
     enemyDeck: string[];
-    enemyBackRank: Record<string, string | null>;
-    enemyFrontRank: Record<string, string | null>;
+    enemyBackRank: Record<BackRankSlotId, string | null>;
+    enemyFrontRank: Record<FrontRankSlotId, string | null>;
     cardInstances: BattleMutableState["cardInstances"];
   }> = {},
 ): BattleMutableState {
@@ -141,11 +150,12 @@ function makeEvent(
   side: BattleSide,
   energyCost: number,
 ): BattleMutableState["cardInstances"][string] {
+  const base = makeCharacter(battleCardId, side, energyCost);
   return {
-    ...makeCharacter(battleCardId, side, energyCost),
+    ...base,
     definition: {
-      ...makeCharacter(battleCardId, side, energyCost).definition,
-      battleCardKind: "event",
+      ...base.definition,
+      battleCardKind: "event" as const,
       name: `event-${battleCardId}`,
     },
   };
@@ -397,5 +407,98 @@ describe("drawUntilEdits", () => {
     const edits = drawUntilEdits(state, "enemy", 1);
     expect(edits).toHaveLength(1);
     expect(edits[0]).toEqual({ kind: "DRAW_CARD", side: "enemy" });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Tests: topOfDeck
+// ---------------------------------------------------------------------------
+
+describe("topOfDeck", () => {
+  it("returns an empty array when n is 0", () => {
+    const state = makeState({ playerDeck: ["c1", "c2", "c3"] });
+    expect(topOfDeck(state, "player", 0)).toEqual([]);
+  });
+
+  it("returns the top n card ids when the deck has enough cards", () => {
+    const state = makeState({ playerDeck: ["c1", "c2", "c3", "c4"] });
+    expect(topOfDeck(state, "player", 2)).toEqual(["c1", "c2"]);
+  });
+
+  it("returns only available cards when the deck is shorter than n", () => {
+    const state = makeState({ playerDeck: ["c1", "c2"] });
+    expect(topOfDeck(state, "player", 5)).toEqual(["c1", "c2"]);
+  });
+
+  it("returns an empty array when the deck is empty", () => {
+    const state = makeState({ playerDeck: [] });
+    expect(topOfDeck(state, "player", 3)).toEqual([]);
+  });
+
+  it("reads from the correct side's deck", () => {
+    const state = makeState({ enemyDeck: ["e1", "e2"] });
+    expect(topOfDeck(state, "enemy", 1)).toEqual(["e1"]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Tests: drawEdits
+// ---------------------------------------------------------------------------
+
+describe("drawEdits", () => {
+  it("returns an empty array when count is 0", () => {
+    expect(drawEdits("player", 0)).toEqual([]);
+  });
+
+  it("returns three DRAW_CARD edits with the correct side when count is 3", () => {
+    const edits = drawEdits("player", 3);
+    expect(edits).toHaveLength(3);
+    for (const edit of edits) {
+      expect(edit).toEqual({ kind: "DRAW_CARD", side: "player" });
+    }
+  });
+
+  it("uses the correct side for enemy", () => {
+    const edits = drawEdits("enemy", 2);
+    expect(edits).toHaveLength(2);
+    for (const edit of edits) {
+      expect(edit).toEqual({ kind: "DRAW_CARD", side: "enemy" });
+    }
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Tests: gainEnergyEdits
+// ---------------------------------------------------------------------------
+
+describe("gainEnergyEdits", () => {
+  it("returns a single ADJUST_CURRENT_ENERGY edit with the correct side and amount", () => {
+    expect(gainEnergyEdits("player", 3)).toEqual([
+      { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: 3 },
+    ]);
+  });
+
+  it("uses the correct side for enemy", () => {
+    expect(gainEnergyEdits("enemy", 1)).toEqual([
+      { kind: "ADJUST_CURRENT_ENERGY", side: "enemy", amount: 1 },
+    ]);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Tests: gainScoreEdits
+// ---------------------------------------------------------------------------
+
+describe("gainScoreEdits", () => {
+  it("returns a single ADJUST_SCORE edit with the correct side and amount", () => {
+    expect(gainScoreEdits("player", 5)).toEqual([
+      { kind: "ADJUST_SCORE", side: "player", amount: 5 },
+    ]);
+  });
+
+  it("uses the correct side for enemy", () => {
+    expect(gainScoreEdits("enemy", 2)).toEqual([
+      { kind: "ADJUST_SCORE", side: "enemy", amount: 2 },
+    ]);
   });
 });
