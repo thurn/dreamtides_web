@@ -243,7 +243,7 @@ function extractEditTarget(edit: BattleDebugEdit): string | null {
  *    queue (`planNextEffectStep`/`applyPromptResolution`): `edits` steps
  *    dispatch immediately, while a `prompt` step pauses the run and surfaces an
  *    `activePrompt` for the UI to render (foresee / pick-cards / choice). Only
- *    one materialized run is active at a time; further materializations queue in
+ *    one run is active at a time; further materializations queue in
  *    `pendingRef` and start when the active run completes. Characters already in
  *    play when the runner starts are seeded without firing, so they never
  *    retro-fire. A re-materialized card has a fresh `battleCardId`, so it is a
@@ -391,7 +391,7 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
       pendingRef.current = [];
       return;
     }
-    // One materialized run at a time: never start (or clobber) a run while
+    // One run at a time: never start (or clobber) a run while
     // another is in progress or paused on a prompt. When the active run
     // completes (`run` → null) this effect re-runs (`run` is a dependency) and
     // the next pending run starts.
@@ -420,8 +420,8 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
     // Abort check runs FIRST — before the prompt-pause guard — so that toggling
     // automation off or the battle ending while a prompt is open tears down the
     // run and clears the overlay instead of leaving both stuck. We also clear
-    // `pendingRef` so not-yet-started materializations that occurred while
-    // enabled do not fire later out of context once automation toggles back on.
+    // `pendingRef` so not-yet-started runs that were enqueued while enabled
+    // do not fire later out of context once automation toggles back on.
     if (!enabled || state.result !== null) {
       setRun(null);
       setActivePrompt(null);
