@@ -8,7 +8,15 @@ import type {
 } from "../types";
 import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
 import type { EffectStep, StepContext } from "./effect-step";
-import { addGainedSparkEdits, alliesInPlay, gainEnergyEdits, gainScoreEdits } from "./effect-step";
+import {
+  addGainedSparkEdits,
+  alliesInPlay,
+  discardHandEdits,
+  drawEdits,
+  erodeEdits,
+  gainEnergyEdits,
+  gainScoreEdits,
+} from "./effect-step";
 import { fnv1aHex } from "./rules-text-hash";
 
 // ---------------------------------------------------------------------------
@@ -207,6 +215,145 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
     trigger: "materialized",
     textHash: "8d143597",
     steps: [{ kind: "edits", build: ({ side }) => [{ kind: "ERODE", side, count: 3 }] }],
+  },
+
+  // Nocturne — "▸Materialized: Erode 1.\n\nReclaim 0●" The script automates only
+  // the ▸Materialized Erode; Reclaim is resolved manually.
+  "19aeffa6-fd1b-4b8f-bb0c-c35659521976": {
+    id: "19aeffa6-fd1b-4b8f-bb0c-c35659521976",
+    trigger: "materialized",
+    textHash: "cbaf761c",
+    steps: [{ kind: "edits", build: (ctx) => erodeEdits(ctx.side, 1) }],
+  },
+
+  // Pit Descender — "▸Materialized: Erode 3.\n\n☪, Abandon a warrior: Materialize
+  // a ≤2● cost warrior from your void." The script automates only the
+  // ▸Materialized Erode; the activated ability is resolved manually.
+  "81074582-dfb3-497c-8c04-f97a24d6b1d4": {
+    id: "81074582-dfb3-497c-8c04-f97a24d6b1d4",
+    trigger: "materialized",
+    textHash: "df9a14d1",
+    steps: [{ kind: "edits", build: (ctx) => erodeEdits(ctx.side, 3) }],
+  },
+
+  // Echo Technician — "▸Materialized: Erode 4.\n\n☪: You may play an event from
+  // your void." The script automates only the ▸Materialized Erode; the activated
+  // ability is resolved manually.
+  "cd3d8e4a-618e-4c2f-be60-0363b81887f1": {
+    id: "cd3d8e4a-618e-4c2f-be60-0363b81887f1",
+    trigger: "materialized",
+    textHash: "bfd5c961",
+    steps: [{ kind: "edits", build: (ctx) => erodeEdits(ctx.side, 4) }],
+  },
+
+  // Veilseeker — "▸Materialized: Erode 3.\n\n5●, ☪, Abandon this character:
+  // Return all ≤2● cost characters from your void to play." The script automates
+  // only the ▸Materialized Erode; the activated ability is resolved manually.
+  "d8c90a33-a581-469a-9fd3-9a80d1cc5315": {
+    id: "d8c90a33-a581-469a-9fd3-9a80d1cc5315",
+    trigger: "materialized",
+    textHash: "1318518f",
+    steps: [{ kind: "edits", build: (ctx) => erodeEdits(ctx.side, 3) }],
+  },
+
+  // Sigil Analyst — "▸Materialized: Draw 2 cards." The script automates the
+  // ▸Materialized draw.
+  "1b4d2adc-64ab-4020-bae6-b35321898bf0": {
+    id: "1b4d2adc-64ab-4020-bae6-b35321898bf0",
+    trigger: "materialized",
+    textHash: "be73bf85",
+    steps: [{ kind: "edits", build: (ctx) => drawEdits(ctx.side, 2) }],
+  },
+
+  // Sage of the Prelude — "Vengeful\n\n▸Materialized: Draw a card." The script
+  // automates only the ▸Materialized draw; the Vengeful keyword is resolved
+  // manually.
+  "41d0aa36-f15a-487d-b97c-7fd765973921": {
+    id: "41d0aa36-f15a-487d-b97c-7fd765973921",
+    trigger: "materialized",
+    textHash: "788b248f",
+    steps: [{ kind: "edits", build: (ctx) => drawEdits(ctx.side, 1) }],
+  },
+
+  // Looming Oracle — "Veil 2●\n\n▸Materialized: Draw a card." The script
+  // automates only the ▸Materialized draw; the Veil keyword is resolved
+  // manually.
+  "4b20e66e-2466-4518-8ef9-67f580bd6f14": {
+    id: "4b20e66e-2466-4518-8ef9-67f580bd6f14",
+    trigger: "materialized",
+    textHash: "ef3b6d38",
+    steps: [{ kind: "edits", build: (ctx) => drawEdits(ctx.side, 1) }],
+  },
+
+  // Verdant Wayfarer — "▸Materialized: Draw 2 cards.\n\nReclaim – 3●, Banish 7
+  // cards from your void." The script automates only the ▸Materialized draw;
+  // Reclaim is resolved manually.
+  "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc": {
+    id: "713b9f42-b0a0-4c0a-bc2e-89e0ac8a2dbc",
+    trigger: "materialized",
+    textHash: "f7d16dbb",
+    steps: [{ kind: "edits", build: (ctx) => drawEdits(ctx.side, 2) }],
+  },
+
+  // Dreamvale Monarch — "▸Materialized: Draw a card." The script automates the
+  // ▸Materialized draw.
+  "965ce3b2-a722-475c-99c5-5b35685d2404": {
+    id: "965ce3b2-a722-475c-99c5-5b35685d2404",
+    trigger: "materialized",
+    textHash: "28a4b0a7",
+    steps: [{ kind: "edits", build: (ctx) => drawEdits(ctx.side, 1) }],
+  },
+
+  // Seeker of the Radiant Wilds — "Vengeful\n\n▸Materialized: Draw a card." The
+  // script automates only the ▸Materialized draw; the Vengeful keyword is
+  // resolved manually.
+  "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9": {
+    id: "b049ba66-9334-4dd1-a7d8-6d8b32d9a0a9",
+    trigger: "materialized",
+    textHash: "788b248f",
+    steps: [{ kind: "edits", build: (ctx) => drawEdits(ctx.side, 1) }],
+  },
+
+  // Frost Visionary — "▸Materialized: Draw a card." The script automates the
+  // ▸Materialized draw.
+  "bbf83d18-81b6-48c8-886f-4b9f0feb599f": {
+    id: "bbf83d18-81b6-48c8-886f-4b9f0feb599f",
+    trigger: "materialized",
+    textHash: "28a4b0a7",
+    steps: [{ kind: "edits", build: (ctx) => drawEdits(ctx.side, 1) }],
+  },
+
+  // Rusted Monolith — "▸Materialized: Gain 1⍟.\n\nReclaim 0●" The script
+  // automates only the ▸Materialized score gain; Reclaim is resolved manually.
+  "2a828466-450a-4637-9c68-6b54522450c0": {
+    id: "2a828466-450a-4637-9c68-6b54522450c0",
+    trigger: "materialized",
+    textHash: "1d11f9ff",
+    steps: [{ kind: "edits", build: (ctx) => gainScoreEdits(ctx.side, 1) }],
+  },
+
+  // Scrapyard Custodian — "▸Materialized: Gain 1⍟.\n\nAbandon a spirit animal:
+  // Materialize this character from your void." The script automates only the
+  // ▸Materialized score gain; the activated ability is resolved manually.
+  "ecf77f27-df0f-47c4-99c2-48d7fa46a137": {
+    id: "ecf77f27-df0f-47c4-99c2-48d7fa46a137",
+    trigger: "materialized",
+    textHash: "756fa549",
+    steps: [{ kind: "edits", build: (ctx) => gainScoreEdits(ctx.side, 1) }],
+  },
+
+  // Urban Cipher — "▸Materialized: Discard your hand, then draw 3 cards." The
+  // script discards the whole hand first, then draws 3 (order matters).
+  "8adfa141-6864-4f5f-a9ca-59306eaf5432": {
+    id: "8adfa141-6864-4f5f-a9ca-59306eaf5432",
+    trigger: "materialized",
+    textHash: "2c952295",
+    steps: [
+      {
+        kind: "edits",
+        build: (ctx) => [...discardHandEdits(ctx.side, ctx.state), ...drawEdits(ctx.side, 3)],
+      },
+    ],
   },
 
   // Eternal Stag — "Support – Supported spirit animals have +1✦.\n\n2●, ☪: Draw
