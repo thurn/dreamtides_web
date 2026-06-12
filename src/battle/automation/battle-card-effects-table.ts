@@ -144,13 +144,30 @@ export function selectBattleCardEffectScript(cardId: string): BattleCardEffectSc
 }
 
 /**
+ * A Dawn script is interactive if any of its steps needs a player choice.
+ * Interactive Dawn scripts run through the runner post-dawn, NOT the bookend
+ * (the synchronous bookend produces a flat `BattleDebugEdit[]` and cannot pause
+ * for a prompt). A script with only `edits` steps is deterministic.
+ */
+export function dawnScriptIsInteractive(script: BattleCardEffectScript): boolean {
+  return (script.steps ?? []).some((s) => s.kind === "prompt");
+}
+
+/**
  * Edits from the active side's in-play ▸Dawn characters when automation resolves
  * the Dawn bookend. For each in-play character (front + back rank) of `side`
  * whose `definition.cardId` has a registered `"dawn"` script, runs each
  * edits-step `build(ctx)` and concatenates them, in stable slot order
- * (`alliesInPlay`: back rank then front rank). Skips any non-edits step
- * defensively with a `console.warn` (V1 dawn scripts are all edits). The
- * `random`/`nowMs` injected into the step context keep the builders pure.
+ * (`alliesInPlay`: back rank then front rank). The `random`/`nowMs` injected
+ * into the step context keep the builders pure.
+ *
+ * Interactive Dawn scripts (those with a `prompt` step, per
+ * `dawnScriptIsInteractive`) are skipped ENTIRELY here — not even their
+ * deterministic edits steps run — because they are routed through the React
+ * runner post-dawn (`useBattleEffectRunner`). Contributing any of a mixed
+ * deterministic+interactive script's edits here would double-apply them (once
+ * in the bookend, again in the runner). Any other non-edits step in a
+ * deterministic script is skipped defensively with a `console.warn`.
  */
 export function collectDawnTriggerEdits(
   state: BattleMutableState,
@@ -166,6 +183,9 @@ export function collectDawnTriggerEdits(
     if (script === null || script.trigger !== "dawn" || script.steps === undefined) {
       continue;
     }
+    // Interactive Dawn scripts run through the runner post-dawn; skip them
+    // wholesale here so a mixed script is never half-applied in the bookend.
+    if (dawnScriptIsInteractive(script)) continue;
     for (const step of script.steps) {
       if (step.kind === "edits") {
         edits.push(...step.build(ctx));

@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type {
   BackRankSlotId,
   BattleCardInstance,
@@ -7,7 +7,12 @@ import type {
   FrontRankSlotId,
 } from "../types";
 import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
-import { collectDawnTriggerEdits } from "./battle-card-effects-table";
+import type { BattleCardEffectScript } from "./battle-card-effects-table";
+import {
+  BATTLE_CARD_EFFECTS,
+  collectDawnTriggerEdits,
+  dawnScriptIsInteractive,
+} from "./battle-card-effects-table";
 
 // ---------------------------------------------------------------------------
 // Registered dawn UUID (from BATTLE_CARD_EFFECTS).
@@ -127,5 +132,74 @@ describe("collectDawnTriggerEdits", () => {
     expect(collectDawnTriggerEdits(state, "player", 0)).toEqual([
       { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: 1 },
     ]);
+  });
+
+  // No interactive Dawn card is registered yet (Task 8), so we register a
+  // synthetic mixed deterministic+interactive Dawn script in the live registry
+  // for the span of these tests and remove it afterward.
+  describe("interactive Dawn scripts are skipped wholesale", () => {
+    const INTERACTIVE_DAWN = "11111111-2222-3333-4444-555555555555";
+
+    beforeEach(() => {
+      BATTLE_CARD_EFFECTS[INTERACTIVE_DAWN] = {
+        id: INTERACTIVE_DAWN,
+        trigger: "dawn",
+        textHash: "00000000",
+        steps: [
+          // A deterministic edits step ALONGSIDE a prompt step — the bug class
+          // is half-applying this in the bookend then again in the runner.
+          { kind: "edits", build: ({ side }) => [{ kind: "ADJUST_SCORE", side, amount: 5 }] },
+          { kind: "prompt", prompt: { kind: "foresee", count: 2 } },
+        ],
+      };
+    });
+
+    afterEach(() => {
+      delete BATTLE_CARD_EFFECTS[INTERACTIVE_DAWN];
+    });
+
+    it("contributes NONE of an interactive Dawn script's edits (not even deterministic ones)", () => {
+      const state = makeState({
+        player: { front: { F0: { battleCardId: "interactive", cardId: INTERACTIVE_DAWN } } },
+      });
+      expect(collectDawnTriggerEdits(state, "player", 0)).toEqual([]);
+    });
+
+    it("still collects deterministic Dawn cards on the same board", () => {
+      const state = makeState({
+        player: {
+          front: { F0: { battleCardId: "interactive", cardId: INTERACTIVE_DAWN } },
+          back: { B0: { battleCardId: "drift", cardId: DRIFTCALLER_SOVEREIGN } },
+        },
+      });
+      // Only Driftcaller's deterministic +1 energy survives; the interactive
+      // card contributes nothing.
+      expect(collectDawnTriggerEdits(state, "player", 0)).toEqual([
+        { kind: "ADJUST_CURRENT_ENERGY", side: "player", amount: 1 },
+      ]);
+    });
+  });
+});
+
+describe("dawnScriptIsInteractive", () => {
+  function makeScript(steps: BattleCardEffectScript["steps"]): BattleCardEffectScript {
+    return { id: "x", trigger: "dawn", textHash: "0", steps };
+  }
+
+  it("is true when any step is a prompt", () => {
+    const script = makeScript([
+      { kind: "edits", build: () => [] },
+      { kind: "prompt", prompt: { kind: "foresee", count: 1 } },
+    ]);
+    expect(dawnScriptIsInteractive(script)).toBe(true);
+  });
+
+  it("is false for an edits-only script", () => {
+    const script = makeScript([{ kind: "edits", build: () => [] }]);
+    expect(dawnScriptIsInteractive(script)).toBe(false);
+  });
+
+  it("is false for a script with no steps", () => {
+    expect(dawnScriptIsInteractive(makeScript(undefined))).toBe(false);
   });
 });

@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type {
   BackRankSlotId,
   BattleCardInstance,
@@ -9,10 +9,14 @@ import type {
 import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
 import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
 import { applyPromptResolution, planNextEffectStep } from "./effect-runner-core";
+import { BATTLE_CARD_EFFECTS } from "./battle-card-effects-table";
 import {
+  POST_DAWN_PHASES,
+  collectInteractiveDawnRuns,
   collectNewlyMaterializedRuns,
   inPlayInstanceIds,
   materializedScriptEdits,
+  shouldScanInteractiveDawn,
 } from "./use-battle-effect-runner";
 
 // ---------------------------------------------------------------------------
@@ -280,5 +284,99 @@ describe("materialized step-queue walk", () => {
     if (third.type !== "dispatch") throw new Error("expected dispatch");
     expect(third.edits).toEqual([SENTINEL_EDIT_2]);
     expect(planNextEffectStep(third.rest, ctx)).toEqual({ type: "done" });
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Interactive-Dawn detection — phase/turn gating + per-(side, turn) once.
+// ---------------------------------------------------------------------------
+
+describe("shouldScanInteractiveDawn", () => {
+  it("is true once Dawn has passed (post-dawn phase) on turn > 1", () => {
+    for (const phase of POST_DAWN_PHASES) {
+      expect(shouldScanInteractiveDawn(phase, 2)).toBe(true);
+    }
+  });
+
+  it("is false in pre-dawn phases (Dawn has not yet resolved)", () => {
+    // Bug class: firing during dreamwell/draw/dawn (too early).
+    for (const phase of ["dreamwell", "draw", "dawn"]) {
+      expect(shouldScanInteractiveDawn(phase, 2)).toBe(false);
+    }
+  });
+
+  it("is false on turn 1 (no Dawn occurs)", () => {
+    // Bug class: firing on turn 1.
+    expect(shouldScanInteractiveDawn("day", 1)).toBe(false);
+  });
+
+  it("is false for the post-battle ending phase", () => {
+    expect(shouldScanInteractiveDawn("ending", 2)).toBe(false);
+  });
+});
+
+// No interactive Dawn card is registered yet (Task 8), so we register a
+// synthetic interactive Dawn script in the live registry for these tests.
+describe("collectInteractiveDawnRuns", () => {
+  const INTERACTIVE_DAWN = "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee";
+
+  beforeEach(() => {
+    BATTLE_CARD_EFFECTS[INTERACTIVE_DAWN] = {
+      id: INTERACTIVE_DAWN,
+      trigger: "dawn",
+      textHash: "00000000",
+      steps: [{ kind: "prompt", prompt: { kind: "foresee", count: 2 } }],
+    };
+  });
+
+  afterEach(() => {
+    delete BATTLE_CARD_EFFECTS[INTERACTIVE_DAWN];
+  });
+
+  it("returns a dawn-trigger run for an interactive Dawn card of the active side", () => {
+    const state = makeState({
+      player: { front: { F0: { battleCardId: "id", cardId: INTERACTIVE_DAWN } } },
+    });
+    const runs = collectInteractiveDawnRuns(state, "player", false);
+    expect(runs).toHaveLength(1);
+    expect(runs[0]?.battleCardId).toBe("id");
+    expect(runs[0]?.cardId).toBe(INTERACTIVE_DAWN);
+    expect(runs[0]?.side).toBe("player");
+    expect(runs[0]?.trigger).toBe("dawn");
+    expect(runs[0]?.steps.length).toBeGreaterThan(0);
+  });
+
+  it("returns nothing when the (side, turn) was already processed", () => {
+    // Bug class: firing more than once per (side, turn).
+    const state = makeState({
+      player: { front: { F0: { battleCardId: "id", cardId: INTERACTIVE_DAWN } } },
+    });
+    expect(collectInteractiveDawnRuns(state, "player", true)).toEqual([]);
+  });
+
+  it("ignores an interactive Dawn card controlled by the other side", () => {
+    // Bug class: firing for the wrong side.
+    const state = makeState({
+      enemy: { front: { F0: { battleCardId: "e", cardId: INTERACTIVE_DAWN } } },
+    });
+    expect(collectInteractiveDawnRuns(state, "player", false)).toEqual([]);
+    expect(collectInteractiveDawnRuns(state, "enemy", false)).toHaveLength(1);
+  });
+
+  it("does not return deterministic Dawn cards (they run in the bookend)", () => {
+    const state = makeState({
+      player: { front: { F0: { battleCardId: "drift", cardId: DRIFTCALLER_SOVEREIGN } } },
+    });
+    expect(collectInteractiveDawnRuns(state, "player", false)).toEqual([]);
+  });
+
+  it("does not return materialized or unregistered cards", () => {
+    const state = makeState({
+      player: {
+        front: { F0: { battleCardId: "ash", cardId: ASHWALKER } },
+        back: { B0: { battleCardId: "plain", cardId: UNREGISTERED } },
+      },
+    });
+    expect(collectInteractiveDawnRuns(state, "player", false)).toEqual([]);
   });
 });

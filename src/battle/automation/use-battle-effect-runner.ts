@@ -4,7 +4,9 @@ import type { BattleDebugEdit } from "../debug/commands";
 import type { BattleCardInstance, BattleMutableState, BattleSide } from "../types";
 import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
 import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
+import { alliesInPlay } from "./effect-step";
 import {
+  dawnScriptIsInteractive,
   planSupportRecompute,
   selectBattleCardEffectScript,
 } from "./battle-card-effects-table";
@@ -27,14 +29,17 @@ export interface BattleEffectRunnerResult {
   resolvePrompt: (resolution: PromptResolution) => void;
 }
 
-/** A materialized run waiting to be (or currently being) walked through the
- *  shared step queue. `battleCardId` is the unique in-play instance id that
- *  newly entered; `cardId` is its definition UUID (for logging and lookup);
- *  `side` is the controller; `steps` is the remaining queue to walk. */
-interface MaterializedRun {
+/** A scripted run waiting to be (or currently being) walked through the shared
+ *  step queue. Both ▸Materialized board-diffs and interactive ▸Dawn scans feed
+ *  the SAME queue; `trigger` records which one so logging faithfully
+ *  reconstructs what fired. `battleCardId` is the unique in-play instance id;
+ *  `cardId` is its definition UUID (for logging and lookup); `side` is the
+ *  controller; `steps` is the remaining queue to walk. */
+interface EffectRun {
   battleCardId: string;
   cardId: string;
   side: BattleSide;
+  trigger: "materialized" | "dawn";
   steps: EffectStep[];
 }
 
@@ -99,8 +104,8 @@ export function inPlayInstanceIds(state: BattleMutableState): string[] {
 /**
  * Collects the pending materialized runs for the ids that newly appeared in the
  * in-play set since `previous`. For each newly-appeared id whose backing
- * instance's card has a registered non-empty `"materialized"` script, returns a
- * `MaterializedRun` carrying a fresh copy of that script's steps. Ids already in
+ * instance's card has a registered non-empty `"materialized"` script, returns an
+ * `EffectRun` carrying a fresh copy of that script's steps. Ids already in
  * `previous`, ids with no backing instance, and ids whose card has no
  * materialized script are skipped. Iteration follows `inPlayIds` order so the
  * resulting queue is deterministic.
@@ -109,8 +114,8 @@ export function collectNewlyMaterializedRuns(
   inPlayIds: string[],
   previous: Set<string>,
   state: BattleMutableState,
-): MaterializedRun[] {
-  const runs: MaterializedRun[] = [];
+): EffectRun[] {
+  const runs: EffectRun[] = [];
   for (const id of inPlayIds) {
     if (previous.has(id)) continue;
     const instance = state.cardInstances[id];
@@ -124,6 +129,69 @@ export function collectNewlyMaterializedRuns(
       battleCardId: id,
       cardId: instance.definition.cardId,
       side: instance.controller,
+      trigger: "materialized",
+      steps: [...script.steps],
+    });
+  }
+  return runs;
+}
+
+// ---------------------------------------------------------------------------
+// Interactive-Dawn detection (exported for unit testing)
+// ---------------------------------------------------------------------------
+
+/**
+ * Phases that have already passed the Dawn bookend for the active side this
+ * turn. Under automation React never commits a `phase === "dawn"` render, so we
+ * detect "Dawn already happened" by observing the board once the phase has
+ * advanced to one of these. Earlier phases (`dreamwell`/`draw`/`dawn`) mean Dawn
+ * has not yet resolved, so the interactive scan must NOT fire.
+ */
+export const POST_DAWN_PHASES = new Set<string>(["day", "dusk", "night", "challenge"]);
+
+/**
+ * Whether the interactive-Dawn scan should run for the current `(phase,
+ * turnNumber)`. True only once Dawn has passed (`phase ∈ POST_DAWN_PHASES`) and
+ * on a turn that has a Dawn (`turnNumber > 1`; turn 1's Dawn is skipped by the
+ * rules). The hook additionally gates on a per-(side, turn) processed key so the
+ * scan fires at most once per side per turn — this predicate covers only the
+ * phase/turn eligibility, which is the part with the interesting bug classes
+ * (fires too early / on turn 1).
+ */
+export function shouldScanInteractiveDawn(phase: string, turnNumber: number): boolean {
+  return turnNumber > 1 && POST_DAWN_PHASES.has(phase);
+}
+
+/**
+ * The interactive-Dawn runs for `side`'s in-play characters whose registered
+ * `"dawn"` script is interactive (has a prompt step). Returns `[]` when
+ * `alreadyProcessed` is true (this `(side, turn)` was already scanned), so the
+ * caller can pass the result of its processed-set check to enforce
+ * fire-at-most-once. Each run carries a fresh copy of the script's steps and
+ * `trigger: "dawn"`. Iteration follows `alliesInPlay` order (back rank then
+ * front rank) so the queue is deterministic. Deterministic Dawn scripts are not
+ * returned here — they already ran in the bookend.
+ */
+export function collectInteractiveDawnRuns(
+  state: BattleMutableState,
+  side: BattleSide,
+  alreadyProcessed: boolean,
+): EffectRun[] {
+  if (alreadyProcessed) return [];
+  const runs: EffectRun[] = [];
+  for (const id of alliesInPlay(state, side)) {
+    const instance = state.cardInstances[id];
+    if (instance === undefined) continue;
+    const script = selectBattleCardEffectScript(instance.definition.cardId);
+    if (script === null || script.trigger !== "dawn" || script.steps === undefined) {
+      continue;
+    }
+    if (!dawnScriptIsInteractive(script)) continue;
+    runs.push({
+      battleCardId: id,
+      cardId: instance.definition.cardId,
+      side,
+      trigger: "dawn",
       steps: [...script.steps],
     });
   }
@@ -167,7 +235,7 @@ function extractEditTarget(edit: BattleDebugEdit): string | null {
 // ---------------------------------------------------------------------------
 
 /**
- * Resolves the two persistent-board battle triggers under basic automation:
+ * Resolves the persistent-board battle triggers under basic automation:
  *
  *  - **▸Materialized** (board-diff, fires once per instance): tracks the
  *    in-play id set across renders. A newly-appeared id whose card has a
@@ -180,15 +248,24 @@ function extractEditTarget(edit: BattleDebugEdit): string | null {
  *    play when the runner starts are seeded without firing, so they never
  *    retro-fire. A re-materialized card has a fresh `battleCardId`, so it is a
  *    new id and fires again — correct.
+ *  - **Interactive ▸Dawn** (post-dawn phase scan, fires once per (side, turn)):
+ *    once Dawn has passed for the active side this turn (`phase ∈
+ *    POST_DAWN_PHASES`, `turnNumber > 1`), enqueues the active side's
+ *    interactive Dawn scripts (those with a prompt step) onto the SAME pending
+ *    queue as ▸Materialized and walks them identically. A per-(side, turn)
+ *    processed key fires the scan at most once. Deterministic Dawn scripts run
+ *    synchronously in the Dawn bookend (`collectDawnTriggerEdits`) and are NOT
+ *    re-run here, so they are never double-applied.
  *  - **Support** (recompute, idempotent): re-derives every in-play instance's
  *    `staticSparkBonus` from the current board via `planSupportRecompute` and
  *    dispatches only the changed edits. Because the recompute is diff-only the
  *    next run after the edits commit returns `[]`, so it self-terminates.
  *
- * Both concerns observe PERSISTENT board state, which survives React's dispatch
- * batching, so a `useEffect` is the right place for them. (The transient Dawn
- * bookend is handled in `basic-automation`, not here, because React never
- * commits a `phase === "dawn"` render under automation.)
+ * These concerns observe PERSISTENT board state, which survives React's dispatch
+ * batching, so a `useEffect` is the right place for them. The transient Dawn
+ * bookend itself is handled in `basic-automation` (React never commits a
+ * `phase === "dawn"` render under automation), which is exactly why interactive
+ * Dawn scripts are deferred to the post-dawn scan above.
  */
 export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffectRunnerResult {
   const { enabled, state, dispatchEdit } = args;
@@ -202,10 +279,10 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
   // yet started. Multiple characters can materialize in one board change, but
   // only ONE run may be active at a time (a run can pause on a prompt), so they
   // wait here in FIFO order. The pump shifts the next one into `run` when idle.
-  const pendingRef = useRef<MaterializedRun[]>([]);
+  const pendingRef = useRef<EffectRun[]>([]);
 
-  // The active materialized run (null when idle). `steps` is the remaining queue.
-  const [run, setRun] = useState<MaterializedRun | null>(null);
+  // The active run (null when idle). `steps` is the remaining queue.
+  const [run, setRun] = useState<EffectRun | null>(null);
 
   // The active prompt shown to the player (null when idle or between prompts).
   const [activePrompt, setActivePrompt] = useState<ActivePrompt | null>(null);
@@ -222,6 +299,15 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
   // already null (in which case `run` alone would not change and the pump effect
   // would not otherwise re-run).
   const [enqueueTick, setEnqueueTick] = useState(0);
+
+  // The `${activeSide}:${turnNumber}` keys whose interactive-Dawn scan has
+  // already run. Marked even when the scan finds zero matching cards, so the
+  // scan fires at most once per (side, turn) and does not repeat every render.
+  // Keys persist across the runner's lifetime: turn numbers only advance, so a
+  // stale key never collides with a future (side, turn); and persisting means
+  // disabling automation mid-turn then re-enabling the SAME turn does not
+  // re-fire the scan (the key stays set), avoiding a double-fire.
+  const processedInteractiveDawnRef = useRef<Set<string>>(new Set());
 
   const inPlayIds = inPlayInstanceIds(state);
   // A stable, order-independent key so the materialized effect re-runs only when
@@ -262,10 +348,49 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
   }, [inPlayKey, enabled]);
 
   // ---------------------------------------------------------------------------
+  // Interactive-Dawn scan — enqueue the active side's interactive ▸Dawn scripts
+  // ---------------------------------------------------------------------------
+  // Deterministic Dawn scripts run synchronously in the Dawn bookend
+  // (`collectDawnTriggerEdits`). Interactive ones (with a prompt step) cannot —
+  // the bookend skips them — so we fire them here, once Dawn has passed for the
+  // active side this turn, by enqueuing them onto the SAME pending queue the
+  // ▸Materialized board-diff uses. The pump and advance effects then walk them
+  // identically (edits dispatch, prompts pause). We mark the (side, turn) key
+  // processed even with zero matches so the scan does not repeat each render.
+  useEffect(() => {
+    if (!enabled || state.result !== null) return;
+    if (!shouldScanInteractiveDawn(state.phase, state.turnNumber)) return;
+
+    const key = `${state.activeSide}:${state.turnNumber}`;
+    const alreadyProcessed = processedInteractiveDawnRef.current.has(key);
+    const newRuns = collectInteractiveDawnRuns(state, state.activeSide, alreadyProcessed);
+    // Mark processed up front (even for zero matches) so a re-render does not
+    // re-scan, and a disable→re-enable in the SAME turn does not double-fire.
+    processedInteractiveDawnRef.current.add(key);
+    if (newRuns.length > 0) {
+      pendingRef.current.push(...newRuns);
+      // Wake the pump (same counter-bump idiom as the materialized path) so the
+      // first enqueued run starts even when `run` is already null.
+      setEnqueueTick((t) => t + 1);
+    }
+    // Re-run when the active side, turn, or phase changes (the scan's gating
+    // inputs), or when automation toggles. `state` is read fresh each run, so
+    // its per-render identity is intentionally NOT a dependency.
+  }, [enabled, state.activeSide, state.turnNumber, state.phase, state.result]);
+
+  // ---------------------------------------------------------------------------
   // Pump effect — start the next pending run when none is active
   // ---------------------------------------------------------------------------
   useEffect(() => {
-    if (!enabled || state.result !== null) return;
+    if (!enabled || state.result !== null) {
+      // Clear stale pending runs on the disabled/ended transition INDEPENDENT of
+      // whether a run is active. The advance effect early-returns when `run` is
+      // null, so without this a queue filled while enabled (but before the pump
+      // started a run) would survive a disable and replay out of context on
+      // re-enable. (The processed-Dawn keys intentionally persist — see the ref.)
+      pendingRef.current = [];
+      return;
+    }
     // One materialized run at a time: never start (or clobber) a run while
     // another is in progress or paused on a prompt. When the active run
     // completes (`run` → null) this effect re-runs (`run` is a dependency) and
@@ -277,7 +402,7 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
     logBattleEffect(state, BATTLE_EFFECT_LOG.started, {
       cardId: next.cardId,
       battleCardId: next.battleCardId,
-      trigger: "materialized",
+      trigger: next.trigger,
       side: next.side,
       stepCount: next.steps.length,
     });
@@ -326,7 +451,7 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
       logBattleEffect(state, BATTLE_EFFECT_LOG.resolved, {
         cardId: run.cardId,
         battleCardId: run.battleCardId,
-        trigger: "materialized",
+        trigger: run.trigger,
         side: run.side,
       });
       processedQueueRef.current = null;
