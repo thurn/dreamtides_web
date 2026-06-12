@@ -5,6 +5,7 @@ import {
 } from "../engine/challenge";
 import { dreamwellEnergyEdits } from "../engine/energy";
 import { dawnClearEdits, endingBanishEdits } from "../engine/handoff";
+import { collectDawnTriggerEdits } from "./battle-card-effects-table";
 import { selectBattleCardLocation } from "../state/selectors";
 import type {
   BattleMutableState,
@@ -382,7 +383,12 @@ function nextSurfaceableTarget(phase: BattlePhase): BattlePhase {
  * (rules §Turn Structure). Pure: it only reads `state`.
  *
  *  - **Draw:** draw one card for the active side, skipping the very first turn.
- *  - **Dawn:** clear the active side's exhausted characters.
+ *  - **Dawn:** clear the active side's exhausted characters, then fold in the
+ *    edits from its in-play ▸Dawn characters (e.g. Driftcaller Sovereign's
+ *    energy gain). Dawn triggers are computed here, inside the bookend
+ *    expansion, because automation steps straight through the transient Dawn
+ *    phase in one synchronous dispatch loop — a React effect would never observe
+ *    a committed `phase === "dawn"` to fire them.
  *  - **Ending:** discard the active side down to the hand limit, then banish its
  *    end-of-turn statuses (ephemeral in hand, offering in play).
  */
@@ -396,7 +402,10 @@ function bookendEffectEdits(
     case "draw":
       return turnNumber > 1 ? [{ kind: "DRAW_CARD", side }] : [];
     case "dawn":
-      return dawnClearEdits(state, side);
+      return [
+        ...dawnClearEdits(state, side),
+        ...collectDawnTriggerEdits(state, side, Date.now()),
+      ];
     case "ending":
       return [
         ...handLimitDiscardEdits(state, side),

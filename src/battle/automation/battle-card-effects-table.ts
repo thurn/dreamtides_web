@@ -8,7 +8,7 @@ import type {
 } from "../types";
 import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
 import type { EffectStep, StepContext } from "./effect-step";
-import { gainEnergyEdits } from "./effect-step";
+import { alliesInPlay, gainEnergyEdits } from "./effect-step";
 import { fnv1aHex } from "./rules-text-hash";
 
 // ---------------------------------------------------------------------------
@@ -130,6 +130,42 @@ export function collectAutomationHashDrift(
  */
 export function selectBattleCardEffectScript(cardId: string): BattleCardEffectScript | null {
   return BATTLE_CARD_EFFECTS[cardId] ?? null;
+}
+
+/**
+ * Edits from the active side's in-play ▸Dawn characters when automation resolves
+ * the Dawn bookend. For each in-play character (front + back rank) of `side`
+ * whose `definition.cardId` has a registered `"dawn"` script, runs each
+ * edits-step `build(ctx)` and concatenates them, in stable slot order
+ * (`alliesInPlay`: back rank then front rank). Skips any non-edits step
+ * defensively with a `console.warn` (V1 dawn scripts are all edits). The
+ * `random`/`nowMs` injected into the step context keep the builders pure.
+ */
+export function collectDawnTriggerEdits(
+  state: BattleMutableState,
+  side: BattleSide,
+  nowMs: number,
+): BattleDebugEdit[] {
+  const edits: BattleDebugEdit[] = [];
+  const ctx: StepContext = { side, state, random: Math.random, nowMs };
+  for (const occupantId of alliesInPlay(state, side)) {
+    const instance = state.cardInstances[occupantId];
+    if (instance === undefined) continue;
+    const script = selectBattleCardEffectScript(instance.definition.cardId);
+    if (script === null || script.trigger !== "dawn" || script.steps === undefined) {
+      continue;
+    }
+    for (const step of script.steps) {
+      if (step.kind === "edits") {
+        edits.push(...step.build(ctx));
+      } else {
+        console.warn(
+          `collectDawnTriggerEdits: skipping non-edits step kind "${step.kind}" for card ${instance.definition.cardId}`,
+        );
+      }
+    }
+  }
+  return edits;
 }
 
 /**

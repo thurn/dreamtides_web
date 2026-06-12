@@ -67,6 +67,7 @@ import { BattleDreamwellDisplay } from "./BattleDreamwellDisplay";
 import { BattleCardPickerOverlay } from "./BattleCardPickerOverlay";
 import { BattleChoicePromptOverlay } from "./BattleChoicePromptOverlay";
 import { useDreamwellEffectRunner } from "../automation/use-dreamwell-effect-runner";
+import { useBattleEffectRunner } from "../automation/use-battle-effect-runner";
 import { dreamwellAutomationStatus } from "../automation/dreamwell-effects-table";
 import { collectAutomationHashDrift } from "../automation/battle-card-effects-table";
 import { BattlefieldGrid } from "./BattlefieldGrid";
@@ -277,6 +278,15 @@ function PlayableBattleScreenInner({
     enabled: isBasicAutomationEnabled,
     state: reducerState.mutable,
     dreamwellDeck: battleInit.dreamwellDeck,
+    dispatchEdit: dispatchAutomationEdit,
+  });
+
+  // Resolves the persistent-board battle triggers (▸Materialized once per
+  // newly-entered instance, and the idempotent Support spark recompute). No
+  // overlays to render: these are deterministic edits only.
+  useBattleEffectRunner({
+    enabled: isBasicAutomationEnabled,
+    state: reducerState.mutable,
     dispatchEdit: dispatchAutomationEdit,
   });
 

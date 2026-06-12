@@ -20,6 +20,7 @@ function makeInstance(
   options: {
     owner: BattleSide;
     kind?: BattleCardKind;
+    cardId?: string;
     energyCost?: number;
     printedSpark?: number;
     sparkDelta?: number;
@@ -33,7 +34,7 @@ function makeInstance(
     battleCardId,
     definition: {
       sourceDeckEntryId: null,
-      cardId: "",
+      cardId: options.cardId ?? "",
       cardNumber: 1,
       name: battleCardId,
       battleCardKind: options.kind ?? "character",
@@ -674,6 +675,41 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
     expect(result.some((edit) => edit.kind === "DRAW_CARD")).toBe(false);
     expect(result.some((edit) => edit.kind === "SET_MAX_ENERGY")).toBe(false);
     expect(result[result.length - 1]).toEqual({ kind: "SET_PHASE", phase: "day" });
+  });
+
+  it("folds an in-play Driftcaller Sovereign's Dawn energy gain into the bookend", () => {
+    // Driftcaller Sovereign — ▸Dawn: Gain 1●.
+    const driftcaller = makeInstance("p0", {
+      owner: "player",
+      cardId: "9b9c2743-75b3-499d-b5fb-c3429c92d420",
+      printedSpark: 2,
+    });
+    driftcaller.status.isExhausted = true;
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 4,
+      player: { frontRank: frontRankSlots("F0", "p0") },
+      instances: [driftcaller],
+    });
+    const gesture: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_PHASE", phase: "dawn" },
+      sourceSurface: "phase-controls",
+    };
+
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
+    // The exhaust-clear still fires.
+    expect(result).toContainEqual({
+      kind: "SET_CARD_STATUS",
+      battleCardId: "p0",
+      status: { isExhausted: false },
+    });
+    // The Dawn trigger energy gain is folded into the same bookend expansion.
+    expect(result).toContainEqual({
+      kind: "ADJUST_CURRENT_ENERGY",
+      side: "player",
+      amount: 1,
+    });
   });
 
   it("expands an ending gesture into the hand-limit discard and banish", () => {
