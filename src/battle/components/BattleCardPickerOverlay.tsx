@@ -41,6 +41,10 @@ export function BattleCardPickerOverlay({
   const [selected, setSelected] = useState<string[]>([]);
 
   useEffect(() => {
+    setSelected([]);
+  }, [candidateIds]);
+
+  useEffect(() => {
     function handleKeyDown(event: KeyboardEvent): void {
       if (event.key === "Escape") {
         event.stopPropagation();
@@ -107,7 +111,7 @@ export function BattleCardPickerOverlay({
                 }
               }}
             >
-              Dismiss
+              {optional ? "Skip" : "Continue"}
             </button>
           </div>
         </div>
