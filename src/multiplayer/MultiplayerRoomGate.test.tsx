@@ -200,6 +200,28 @@ describe("MultiplayerRoomGate", () => {
     expect(container.textContent).toContain("Loading ab12cd");
   });
 
+  it("auto-creates a room without showing the Create Game button when autoCreate is set", async () => {
+    const { container } = mount(
+      <MultiplayerRoomGate database={database} gameId={null} autoCreate>
+        {() => <div>Quest App</div>}
+      </MultiplayerRoomGate>,
+    );
+
+    await act(async () => {
+      await flushEffects();
+    });
+
+    // The manual gate never appears; the room is created automatically and the
+    // URL gains ?game=<id> so a reload resumes the same room.
+    expect(container.querySelector("[data-create-game]")).toBeNull();
+    expect(serviceMocks.createRoomEvictingStale).toHaveBeenCalledWith(
+      database,
+      "ab12cd",
+      expect.any(String),
+    );
+    expect(window.location.search).toBe("?game=ab12cd");
+  });
+
   it("preserves realtime=1 when creating a room from a realtime URL", async () => {
     window.history.replaceState(null, "", "/?realtime=1");
 

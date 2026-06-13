@@ -595,6 +595,10 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
       database={database}
       gameId={runtimeConfig.gameId}
       databaseMode={runtimeConfig.databaseMode}
+      autoCreate={
+        (runtimeConfig.loadQuestName ?? null) !== null ||
+        runtimeConfig.startInBattle
+      }
     >
       {(session) => (
         <MultiplayerQuestProvider
