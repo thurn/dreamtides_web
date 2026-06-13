@@ -230,10 +230,18 @@ export const DREAMWELL_EFFECTS: Record<string, DreamwellEffectScript> = {
         kind: "prompt",
         prompt: {
           kind: "pick-cards",
-          label: "Discard a card",
+          label: "Choose a card to discard",
           count: 1,
           optional: false,
           candidates: (ctx) => ctx.state.sides[ctx.side].hand,
+          // The draw above pushes the new card to the end of the hand, so the
+          // last id is the card just drawn — flag it so the player can tell it
+          // apart from the rest of their hand.
+          highlight: (ctx) => {
+            const hand = ctx.state.sides[ctx.side].hand;
+            const drawn = hand[hand.length - 1];
+            return drawn !== undefined ? [drawn] : [];
+          },
           resolve: ([id]) => (id !== undefined ? [{ kind: "DISCARD_CARD", battleCardId: id }] : []),
         },
       },

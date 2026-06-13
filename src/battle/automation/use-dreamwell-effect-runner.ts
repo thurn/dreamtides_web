@@ -24,6 +24,7 @@ export interface DreamwellRunnerArgs {
 export interface DreamwellRunnerResult {
   activePrompt: ActivePrompt | null;
   activePromptSide: BattleSide | null;     // for the foresee overlay + card rendering
+  activePromptSourceName: string | null;   // dreamwell card driving the open prompt
   resolvePrompt: (resolution: PromptResolution) => void;
 }
 
@@ -68,6 +69,7 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
   // Internal runner state: the active card run (null when idle).
   const [run, setRun] = useState<{
     cardId: string;
+    cardName: string;
     side: BattleSide;
     remaining: EffectStep[];
   } | null>(null);
@@ -121,7 +123,12 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
     const script = cardId != null ? selectDreamwellEffectScript(cardId) : null;
 
     if (script !== null && script.steps.length > 0) {
-      setRun({ cardId: script.id, side, remaining: [...script.steps] });
+      setRun({
+        cardId: script.id,
+        cardName: card?.name ?? "",
+        side,
+        remaining: [...script.steps],
+      });
       logDreamwell(state, DREAMWELL_LOG.started, {
         dreamwellCardId: cardId,
         dreamwellCardName: card?.name,
@@ -263,6 +270,7 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
   return {
     activePrompt,
     activePromptSide: run?.side ?? null,
+    activePromptSourceName: run?.cardName ?? null,
     resolvePrompt,
   };
 }

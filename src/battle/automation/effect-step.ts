@@ -29,6 +29,13 @@ export type EffectPrompt =
       optional: boolean;
       candidates: (ctx: StepContext) => string[];
       resolve: (chosenIds: string[], ctx: StepContext) => BattleDebugEdit[];
+      /**
+       * Optional callout: ids among the candidates worth flagging in the picker,
+       * e.g. the card just drawn by a preceding draw step so a "draw then
+       * discard" effect makes it obvious which card is new. The picker badges
+       * these; resolution is unaffected.
+       */
+      highlight?: (ctx: StepContext) => string[];
     }
   | {
       kind: "choice";

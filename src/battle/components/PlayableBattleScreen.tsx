@@ -928,9 +928,11 @@ function PlayableBattleScreenInner({
       {dreamwellRunner.activePrompt?.kind === "pick-cards" ? (
         <BattleCardPickerOverlay
           title={dreamwellRunner.activePrompt.label}
+          sourceName={dreamwellRunner.activePromptSourceName}
           candidateIds={dreamwellRunner.activePrompt.candidateIds}
           count={dreamwellRunner.activePrompt.count}
           optional={dreamwellRunner.activePrompt.optional}
+          highlightCardIds={dreamwellRunner.activePrompt.highlightCardIds}
           state={reducerState.mutable}
           onConfirm={(ids) => dreamwellRunner.resolvePrompt({ kind: "pick-cards", chosenIds: ids })}
           onSkip={() => dreamwellRunner.resolvePrompt({ kind: "pick-cards", chosenIds: [] })}
@@ -964,6 +966,7 @@ function PlayableBattleScreenInner({
           candidateIds={battleRunner.activePrompt.candidateIds}
           count={battleRunner.activePrompt.count}
           optional={battleRunner.activePrompt.optional}
+          highlightCardIds={battleRunner.activePrompt.highlightCardIds}
           state={reducerState.mutable}
           onConfirm={(ids) => battleRunner.resolvePrompt({ kind: "pick-cards", chosenIds: ids })}
           onSkip={() => battleRunner.resolvePrompt({ kind: "pick-cards", chosenIds: [] })}
@@ -1807,25 +1810,17 @@ function BattlePhaseFloatControls({
     const approveLabel = proposal.kind === "action"
       ? "Approve AI play"
       : "Approve — pass phase";
+    // Reuse the three-column phase-control grid so the approve button lands at
+    // the exact position and size of the "next-major" phase-advance button (the
+    // third/rightmost cell), with reject in the second cell. Both stay purple to
+    // match the phase buttons.
     return (
-      <div
-        className="phase-float-actions phase-float-actions--proposal"
-        aria-label="AI proposal controls"
-      >
-        <button
-          type="button"
-          className="phase-float-button approve"
-          data-battle-ai-proposal-approve
-          aria-label={approveLabel}
-          title={`${approveLabel} (${proposal.description})`}
-          onClick={onApprove}
-        >
-          <i className="bx bx-check" aria-hidden="true" />
-        </button>
+      <div className="phase-float-actions" aria-label="AI proposal controls">
         {proposal.kind === "action" ? (
           <button
             type="button"
             className="phase-float-button reject"
+            style={{ gridColumn: 2 }}
             data-battle-ai-proposal-reject
             aria-label="Reject AI play"
             title="Reject AI play"
@@ -1834,6 +1829,17 @@ function BattlePhaseFloatControls({
             <i className="bx bx-x" aria-hidden="true" />
           </button>
         ) : null}
+        <button
+          type="button"
+          className="phase-float-button approve"
+          style={{ gridColumn: 3 }}
+          data-battle-ai-proposal-approve
+          aria-label={approveLabel}
+          title={`${approveLabel} (${proposal.description})`}
+          onClick={onApprove}
+        >
+          <i className="bx bx-check" aria-hidden="true" />
+        </button>
       </div>
     );
   }

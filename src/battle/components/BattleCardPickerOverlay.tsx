@@ -23,17 +23,23 @@ export function togglePick(
 
 export function BattleCardPickerOverlay({
   title,
+  sourceName,
   candidateIds,
   count,
   optional,
+  highlightCardIds,
   state,
   onConfirm,
   onSkip,
 }: {
   title: string;
+  /** The effect source driving this prompt (e.g. the dreamwell card name). */
+  sourceName?: string | null;
   candidateIds: readonly string[];
   count: number;
   optional: boolean;
+  /** Candidate ids to flag (e.g. a card just drawn before a discard prompt). */
+  highlightCardIds?: readonly string[];
   state: BattleMutableState;
   onConfirm: (chosenIds: string[]) => void;
   onSkip: () => void;
@@ -71,6 +77,8 @@ export function BattleCardPickerOverlay({
   }
 
   const canConfirm = selected.length === count;
+  const highlightSet = new Set(highlightCardIds ?? []);
+  const hasHighlight = highlightSet.size > 0;
 
   if (candidateIds.length === 0) {
     return (
@@ -87,7 +95,12 @@ export function BattleCardPickerOverlay({
           className="pointer-events-auto mx-auto flex max-h-[calc(100vh-1.5rem)] w-full max-w-4xl flex-col gap-4 overflow-y-auto rounded-[2rem] border border-violet-300/25 bg-[linear-gradient(180deg,_rgba(7,10,18,0.98)_0%,_rgba(11,17,30,0.96)_100%)] p-5 shadow-2xl shadow-slate-950/70"
           onClick={(event) => event.stopPropagation()}
         >
-          <header className="flex flex-col gap-2 border-b border-slate-800 pb-3">
+          <header className="flex flex-col gap-1 border-b border-slate-800 pb-3">
+            {sourceName ? (
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-violet-300/80">
+                {sourceName}
+              </p>
+            ) : null}
             <h3
               id="battle-card-picker-title"
               className="text-lg font-semibold text-white"
@@ -135,14 +148,22 @@ export function BattleCardPickerOverlay({
       >
         <header className="flex flex-col gap-2 border-b border-slate-800 pb-3 md:flex-row md:items-start md:justify-between">
           <div>
+            {sourceName ? (
+              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-violet-300/80">
+                {sourceName}
+              </p>
+            ) : null}
             <h3
               id="battle-card-picker-title"
-              className="text-lg font-semibold text-white"
+              className="mt-0.5 text-lg font-semibold text-white"
             >
               {title}
             </h3>
             <p className="mt-1 text-sm text-slate-400">
               Choose {String(count)}
+              {hasHighlight
+                ? " — the highlighted card was just drawn"
+                : ""}
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -171,34 +192,42 @@ export function BattleCardPickerOverlay({
             ) : null}
           </div>
         </header>
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap justify-center gap-3">
           {candidateIds.map((id) => {
             const instance = state.cardInstances[id];
             if (instance === undefined) {
               return null;
             }
             const isSelected = selected.includes(id);
+            const isHighlighted = highlightSet.has(id);
             return (
               <article
                 key={id}
                 data-battle-dreamwell-pick-card={id}
+                data-battle-dreamwell-pick-highlighted={
+                  isHighlighted ? "" : undefined
+                }
                 className={[
-                  "flex min-w-[18rem] flex-1 cursor-pointer flex-col gap-3 rounded-2xl border p-3 transition",
+                  "relative flex w-[9.5rem] shrink-0 cursor-pointer flex-col gap-2 rounded-2xl border p-2 transition",
                   isSelected
                     ? "border-violet-400/70 bg-violet-900/25 ring-2 ring-violet-400/40"
-                    : "border-slate-800 bg-slate-900/75 hover:border-violet-400/40 hover:bg-slate-900/90",
+                    : isHighlighted
+                      ? "border-amber-300/70 bg-amber-500/10 hover:border-amber-200/80"
+                      : "border-slate-800 bg-slate-900/75 hover:border-violet-400/40 hover:bg-slate-900/90",
                 ].join(" ")}
                 onClick={() => {
                   setSelected((previous) => togglePick(previous, id, count));
                 }}
               >
-                <div className="max-h-[17rem] max-w-[20rem] overflow-y-auto">
-                  <CardDisplay
-                    card={battleCardDisplayFromInstance(instance)}
-                    className="w-full"
-                    large
-                  />
-                </div>
+                {isHighlighted ? (
+                  <span className="absolute -top-2 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap rounded-full border border-amber-300/70 bg-amber-400 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wide text-slate-950 shadow">
+                    Just drawn
+                  </span>
+                ) : null}
+                <CardDisplay
+                  card={battleCardDisplayFromInstance(instance)}
+                  className="w-full"
+                />
               </article>
             );
           })}

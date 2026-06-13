@@ -8,7 +8,15 @@ import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
 /** What the UI must render when the runner is paused on a prompt. Candidate ids
  *  are resolved here (from live state) so the overlay needs no builder access. */
 export type ActivePrompt =
-  | { kind: "pick-cards"; label: string; candidateIds: string[]; count: number; optional: boolean }
+  | {
+      kind: "pick-cards";
+      label: string;
+      candidateIds: string[];
+      count: number;
+      optional: boolean;
+      /** Candidate ids to flag in the picker (e.g. a just-drawn card). */
+      highlightCardIds: string[];
+    }
   | { kind: "choice"; label: string; options: { label: string }[] }
   | { kind: "foresee"; count: number };
 
@@ -57,14 +65,20 @@ export function planNextEffectStep(
 
 function buildActivePrompt(prompt: EffectPrompt, ctx: StepContext): ActivePrompt {
   switch (prompt.kind) {
-    case "pick-cards":
+    case "pick-cards": {
+      const candidateIds = prompt.candidates(ctx);
+      const highlightCardIds = (prompt.highlight?.(ctx) ?? []).filter((id) =>
+        candidateIds.includes(id),
+      );
       return {
         kind: "pick-cards",
         label: prompt.label,
-        candidateIds: prompt.candidates(ctx),
+        candidateIds,
         count: prompt.count,
         optional: prompt.optional,
+        highlightCardIds,
       };
+    }
     case "choice":
       return {
         kind: "choice",

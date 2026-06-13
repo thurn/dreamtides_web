@@ -1211,15 +1211,6 @@
   text-overflow: ellipsis;
 }
 
-.phase-float-actions--proposal {
-  display: flex;
-  gap: 6px;
-}
-
-.phase-float-actions--proposal .phase-float-button {
-  flex: 1 1 0;
-}
-
 .phase-float-button {
   position: relative;
   width: 100%;
@@ -1236,30 +1227,11 @@
   padding: 0;
 }
 
-.phase-float-button.approve {
-  background: #15803d;
-  border-color: #22c55e;
-}
-
-.phase-float-button.approve:hover,
-.phase-float-button.approve:focus-visible {
-  background: #16a34a;
-  border-color: #4ade80;
-}
-
-.phase-float-button.reject {
-  background: #b91c1c;
-  border-color: #ef4444;
-}
-
-.phase-float-button.reject:hover,
-.phase-float-button.reject:focus-visible {
-  background: #dc2626;
-  border-color: #f87171;
-}
-
-/* These buttons carry a native `title` tooltip; suppress the data-preview
-   bubble used by the phase arrows. */
+/* The approve/reject AI-proposal buttons reuse the base purple phase-button
+   styling (no green/red treatment) so they read as the same control family as
+   the phase-advance arrows, and the approve button sits exactly where the
+   "next-major" arrow does. They carry a native `title` tooltip; suppress the
+   data-preview bubble used by the phase arrows. */
 .phase-float-button.approve::after,
 .phase-float-button.reject::after {
   content: none;

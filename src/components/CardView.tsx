@@ -628,7 +628,17 @@ function useCardMetrics(large: boolean): {
     const measuredElement = element;
 
     function updateWidth(): void {
-      const nextWidth = measuredElement.getBoundingClientRect().width;
+      // `offsetWidth` is the card's layout width, immune to CSS transforms on
+      // ancestors. `getBoundingClientRect().width` would fold in any ancestor
+      // `scale()` — e.g. the HoverZoomCard enlargement, which portals this card
+      // and scales it up. Reading the transformed width there would re-derive a
+      // larger `textScale` (and rules font px) on top of the uniform visual
+      // scale, making the rules text balloon out of proportion with the rest of
+      // the card. Layout width keeps the auto-scale stable so the whole card
+      // grows uniformly. jsdom reports `offsetWidth` as 0, so fall back to the
+      // measured rect there (test environments stub `getBoundingClientRect`).
+      const nextWidth = measuredElement.offsetWidth ||
+        measuredElement.getBoundingClientRect().width;
       if (Number.isFinite(nextWidth) && nextWidth > 0) {
         setWidthPx(nextWidth);
       }
@@ -1390,12 +1400,19 @@ export function CardView({
       </div>
 
       {/* Energy cost orb, floating over the name bar's left end and protruding
-          above and below it. */}
+          above and below it. `display: flex` (rather than the default block) so
+          the inline-flex orb does not sit in a text line box: a line box would
+          add baseline leading above the orb from the inherited `line-height`,
+          which is a fixed px value and therefore a larger fraction of small
+          cards than large ones — dropping the orb noticeably on the smallest
+          surfaces (e.g. the starting-deck grid). Flex lays the orb flush to the
+          wrapper's `2cqw` top so the position stays card-proportional. */}
       <div
         className="absolute"
         style={{
           top: "var(--cv-energy-orb-top)",
           left: "var(--cv-energy-orb-left)",
+          display: "flex",
           zIndex: 10,
         }}
       >
