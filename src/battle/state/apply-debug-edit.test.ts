@@ -634,6 +634,50 @@ function createFigmentInSlot(
   return { state: next, battleCardId };
 }
 
+describe("CREATE_FIGMENT exhaustion", () => {
+  function createBackRankFigment(subtype: string): BattleReducerState {
+    return battleControllerReducer(createBattle(), {
+      type: "APPLY_COMMAND",
+      command: {
+        id: "DEBUG_EDIT",
+        edit: {
+          kind: "CREATE_FIGMENT",
+          side: "player",
+          chosenSubtype: subtype,
+          chosenSpark: 1,
+          name: `${subtype} Figment`,
+          destination: { side: "player", zone: "backRank", slotId: "B0" },
+          createdAtMs: 0,
+        },
+      },
+    });
+  }
+
+  function backRankFigmentId(state: BattleReducerState): string {
+    const id = state.mutable.sides.player.backRank.B0;
+    if (id === null) {
+      throw new Error("expected figment to be created in slot B0");
+    }
+    return id;
+  }
+
+  it("enters a non-awakened figment exhausted so it cannot challenge the turn it is created", () => {
+    // Foxfire Thicket's dreamwell ability creates an Ethereal Figment; Ethereal
+    // carries no Awakened keyword, so it must enter the back rank exhausted.
+    const state = createBackRankFigment("Ethereal");
+    const id = backRankFigmentId(state);
+    expect(state.mutable.cardInstances[id].status.grantedAwakened).not.toBe(true);
+    expect(state.mutable.cardInstances[id].status.isExhausted).toBe(true);
+  });
+
+  it("enters an Awakened figment (Ember) ready", () => {
+    const state = createBackRankFigment("Ember");
+    const id = backRankFigmentId(state);
+    expect(state.mutable.cardInstances[id].status.grantedAwakened).toBe(true);
+    expect(state.mutable.cardInstances[id].status.isExhausted).toBe(false);
+  });
+});
+
 describe("ABANDON", () => {
   it("moves a non-figment character from play to its controller's void", () => {
     let state = createBattle();

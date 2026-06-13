@@ -1138,6 +1138,22 @@ function createFigment(
 
   applyFigmentKeywordToStatus(nextState, battleCardId, catalogEntry?.keyword);
 
+  // A figment materialized into the back rank enters exhausted unless it is
+  // Awakened, matching the rule that a created character enters the back rank
+  // exhausted (rules §Exhaust and Awaken, §Figments). Without this, a figment
+  // created mid-turn — e.g. Foxfire Thicket's dreamwell ability spawning an
+  // Ethereal Figment — could be repositioned to the front rank and declared as
+  // a challenger on the same turn, which is an illegal play.
+  const materializedFigment = nextState.cardInstances[battleCardId];
+  if (
+    materializedFigment !== undefined &&
+    "slotId" in destination &&
+    destination.zone === "backRank" &&
+    !materializedFigment.status.grantedAwakened
+  ) {
+    materializedFigment.status.isExhausted = true;
+  }
+
   return {
     state: nextState,
     transition: {
