@@ -6,6 +6,7 @@
   "scripts": {
     "launch": "npm install && npm start -- --open",
     "qai": "npm install && npm start -- --open \"/?ai=1\"",
+    "load-quest": "npm install && node scripts/load-saved-quest.mjs",
     "editor": "npm install && npm run dev:vite -- --open /editor",
     "editor2": "npm install && npm run dev:vite -- --open \"/editor?toml=data/tabula/cards_v2.toml\"",
     "dreamsigns": "npm install && npm run dev:vite -- --open \"/dreamsigns?toml=data/tabula/dreamsigns.toml\"",

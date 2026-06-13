@@ -43,6 +43,16 @@ export interface RuntimeConfig {
   debugJourneyShape?: string | null;
   debugJourneyReward?: string | null;
   debugJourneyCost?: string | null;
+  /**
+   * Name of a saved quest to load on boot, from `?loadQuest=`. When set, the
+   * app fetches the matching snapshot from the dev server's `/api/saved-quests`
+   * endpoint and replaces the room's quest state with it before showing the
+   * game (see `scripts/saved-quests-api.mjs`). Null when absent.
+   * `parseRuntimeConfig` always sets it; it is optional only so test config
+   * literals can omit it. Only works while the Vite dev server is running,
+   * since that serves the endpoint.
+   */
+  loadQuestName?: string | null;
 }
 
 export type DatabaseMode = "emulator" | "realtime";
@@ -72,6 +82,7 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     debugJourneyShape: parseDebugJourneyId(params.get("debugJourneyShape")),
     debugJourneyReward: parseDebugJourneyId(params.get("debugJourneyReward")),
     debugJourneyCost: parseDebugJourneyId(params.get("debugJourneyCost")),
+    loadQuestName: parseLoadQuestName(params.get("loadQuest")),
   };
 }
 
@@ -98,6 +109,14 @@ function parsePackSize(rawPackSize: string | null): number | undefined {
 
 function parseDatabaseMode(rawRealtime: string | null): DatabaseMode {
   return rawRealtime === "1" ? "realtime" : "emulator";
+}
+
+function parseLoadQuestName(rawName: string | null): string | null {
+  if (rawName === null) {
+    return null;
+  }
+  const trimmed = rawName.trim();
+  return trimmed === "" ? null : trimmed;
 }
 
 function parseDebugJourneyId(rawId: string | null): string | null {

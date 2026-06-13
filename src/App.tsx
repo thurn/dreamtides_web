@@ -26,6 +26,8 @@ import { DebugScreen } from "./screens/DebugScreen";
 import { CardSourceOverlay } from "./screens/CardSourceOverlay";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { STARTER_CARD_NUMBERS } from "./data/starter-cards";
+import { getSavedQuest } from "./state/saved-quests";
+import { logEvent } from "./logging";
 import type { RuntimeConfig } from "./runtime/runtime-config";
 import type { QuestState } from "./types/quest";
 import {
@@ -65,6 +67,15 @@ export function QuestApp({
     useState<JourneyExplanation | null>(null);
   const previousScreenTypeRef = useRef(state.screen.type);
   const startInBattleFiredRef = useRef(false);
+  const loadQuestFiredRef = useRef(false);
+  const loadQuestName = runtimeConfig.loadQuestName ?? null;
+  // `?loadQuest=<name>` boot flow: 'pending' holds a loading screen until the
+  // saved snapshot has been fetched and dispatched; 'error' surfaces a failure;
+  // 'done' (or no load requested) lets the game render normally.
+  const [loadQuestStatus, setLoadQuestStatus] = useState<
+    "idle" | "pending" | "done" | "error"
+  >(loadQuestName === null ? "idle" : "pending");
+  const [loadQuestError, setLoadQuestError] = useState<string | null>(null);
 
   // `?startInBattle=1`: replace the freshly created room's empty quest state
   // with a battle-ready state in a single atomic write. Firing once per mount
@@ -82,6 +93,46 @@ export function QuestApp({
     startInBattleFiredRef.current = true;
     mutations.bootstrapStartInBattle();
   }, [runtimeConfig.startInBattle, state.dreamcaller, mutations]);
+
+  // `?loadQuest=<name>`: fetch the named snapshot from the dev server and
+  // replace the room's quest state with it, then render the loaded run. Fires
+  // once per mount; a reload of the same URL re-applies the snapshot, which is
+  // the intended "resume this saved quest" behaviour.
+  useEffect(() => {
+    const questName = loadQuestName;
+    if (questName === null || loadQuestFiredRef.current) {
+      return;
+    }
+    if (mutations.loadQuestState === undefined) {
+      setLoadQuestError("Loading a saved quest is unavailable in this context.");
+      setLoadQuestStatus("error");
+      return;
+    }
+
+    loadQuestFiredRef.current = true;
+    const loadQuestState = mutations.loadQuestState;
+    void getSavedQuest(questName)
+      .then((loaded) => {
+        if (loaded === null) {
+          setLoadQuestError(`No saved quest named "${questName}".`);
+          setLoadQuestStatus("error");
+          return;
+        }
+        logEvent("debug_quest_loaded", {
+          source: "load_quest_url",
+          name: questName,
+          screen: loaded.screen?.type ?? "unknown",
+        });
+        loadQuestState(loaded, "load_quest_url");
+        setLoadQuestStatus("done");
+      })
+      .catch((error: unknown) => {
+        setLoadQuestError(
+          error instanceof Error ? error.message : "Failed to load the saved quest.",
+        );
+        setLoadQuestStatus("error");
+      });
+  }, [loadQuestName, mutations]);
 
   const hasDraftData = state.resolvedPackage !== null;
   const hasCardSourceDebug = state.cardSourceDebug !== null;
@@ -267,6 +318,36 @@ export function QuestApp({
       <div className="flex h-screen flex-col items-center justify-center gap-3 p-8">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
         <p className="text-lg opacity-80">Entering battle...</p>
+      </div>
+    );
+  }
+
+  // Hold a loading screen while the `?loadQuest=` snapshot is being fetched and
+  // applied, so the player lands directly on the loaded run rather than the
+  // Dreamcaller selection screen.
+  if (loadQuestStatus === "pending") {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center gap-3 p-8">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
+        <p className="text-lg opacity-80">
+          Loading saved quest &ldquo;{loadQuestName}&rdquo;...
+        </p>
+      </div>
+    );
+  }
+
+  if (loadQuestStatus === "error") {
+    return (
+      <div className="flex h-screen items-center justify-center p-8">
+        <div
+          role="alert"
+          className="max-w-2xl w-full rounded-lg border border-red-500/60 bg-red-950/40 p-6 shadow-lg"
+        >
+          <h1 className="mb-3 text-xl font-semibold text-red-200">
+            Could not load saved quest
+          </h1>
+          <p className="font-mono text-sm text-red-100">{loadQuestError}</p>
+        </div>
       </div>
     );
   }

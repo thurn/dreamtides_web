@@ -18,6 +18,22 @@ describe("parseRuntimeConfig", () => {
       debugJourneyShape: null,
       debugJourneyReward: null,
       debugJourneyCost: null,
+      loadQuestName: null,
+    });
+  });
+
+  describe("loadQuestName", () => {
+    it("returns null when loadQuest is absent or blank", () => {
+      expect(parseRuntimeConfig("").loadQuestName).toBeNull();
+      expect(parseRuntimeConfig("?loadQuest=").loadQuestName).toBeNull();
+      expect(parseRuntimeConfig("?loadQuest=%20%20").loadQuestName).toBeNull();
+    });
+
+    it("returns the trimmed, decoded name when loadQuest is present", () => {
+      expect(parseRuntimeConfig("?loadQuest=warriors%20draft").loadQuestName).toBe(
+        "warriors draft",
+      );
+      expect(parseRuntimeConfig("?loadQuest=%20foo%20").loadQuestName).toBe("foo");
     });
   });
 
