@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useQuest } from "../state/quest-context";
-import { downloadLog } from "../logging";
+import { downloadLog, logEvent } from "../logging";
+import { saveQuest } from "../state/saved-quests";
 import { DreamcallerPortrait } from "./DreamcallerPortrait";
 import { DreamcallerPopover } from "./DreamcallerPopover";
 import { HudDreamsignRow } from "./HudDreamsignRow";
@@ -80,10 +81,63 @@ export function HUD({
 }: HudProps) {
   const { state } = useQuest();
   const [isUtilityMenuOpen, setIsUtilityMenuOpen] = useState(false);
+  // Transient feedback for the "Save Quest" menu action, auto-cleared a few
+  // seconds after the save resolves so it does not linger on the HUD.
+  const [saveStatus, setSaveStatus] = useState<string | null>(null);
+  const saveStatusTimerRef = useRef<number | null>(null);
   const animatedEssence = useAnimatedNumber(
     state.essence,
     ESSENCE_ANIM_DURATION,
   );
+
+  useEffect(() => {
+    return () => {
+      if (saveStatusTimerRef.current !== null) {
+        clearTimeout(saveStatusTimerRef.current);
+      }
+    };
+  }, []);
+
+  function showSaveStatus(text: string): void {
+    setSaveStatus(text);
+    if (saveStatusTimerRef.current !== null) {
+      clearTimeout(saveStatusTimerRef.current);
+    }
+    saveStatusTimerRef.current = window.setTimeout(() => {
+      setSaveStatus(null);
+      saveStatusTimerRef.current = null;
+    }, 4000);
+  }
+
+  // Save the current run to disk under a chosen name. That same name is what
+  // `npm run load-quest -- "<name>"` (and the Package Debug overlay) reloads.
+  async function handleSaveQuest(): Promise<void> {
+    setIsUtilityMenuOpen(false);
+    const entered = window.prompt(
+      "Save current quest as (reload with `npm run load-quest -- \"<name>\"`):",
+    );
+    if (entered === null) {
+      return;
+    }
+    const trimmed = entered.trim();
+    if (trimmed === "") {
+      showSaveStatus("Save cancelled: a name is required.");
+      return;
+    }
+    try {
+      const summary = await saveQuest(trimmed, state);
+      logEvent("debug_quest_saved", {
+        source: "hud_save_quest",
+        name: summary.name,
+        screen: summary.screenType,
+      });
+      showSaveStatus(`Saved "${summary.name}".`);
+    } catch (error) {
+      showSaveStatus(
+        error instanceof Error ? error.message : "Failed to save quest.",
+      );
+    }
+  }
 
   function handleDownloadLog() {
     setIsUtilityMenuOpen(false);
@@ -345,7 +399,23 @@ export function HUD({
                   testId="hud-why-journey-button"
                 />
               ) : null}
+              <UtilityMenuButton
+                label="Save Quest"
+                onClick={() => {
+                  void handleSaveQuest();
+                }}
+                testId="hud-save-quest-button"
+              />
               <UtilityMenuButton label="Download Log" onClick={handleDownloadLog} />
+            </div>
+          ) : null}
+          {saveStatus !== null && !isUtilityMenuOpen ? (
+            <div
+              data-testid="hud-save-status"
+              role="status"
+              className="absolute right-0 bottom-full z-50 mb-2 max-w-xs rounded-md border border-slate-600 bg-slate-950 px-3 py-2 text-xs text-slate-100 shadow-xl"
+            >
+              {saveStatus}
             </div>
           ) : null}
         </div>
