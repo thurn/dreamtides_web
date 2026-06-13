@@ -222,12 +222,9 @@ id = "5E28154D-770A-4B84-8AAC-9DE44F5D7D02"
 image-number = "0080"
 rendered-text = "❖ – 4●, ☪: Materialize a 1✦ outsider figment."
 signature-cards = [
-  "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", # Thronebound Arbiter
-  "87aba308-00b4-40d8-a46f-4e6f58a664a8", # Breach Artist
-  "3b5f5686-f63b-4998-b713-2f6777ecbb5f", # Dreadcall Warden
-  "8e003d04-e489-4c55-9c72-fc5612909d07", # Last Beacon
+  "954e8d50-d494-4fb2-b4c7-74979083b774", # Driftrider
   "4f29a241-9265-4669-a189-5a2a91923e12", # Vanishing Inquisitor
-  "7e2f2ac0-4e3c-4520-80c6-c830581b40de", # Eternal Sentry
+  "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", # Thronebound Arbiter
 ]
 
 [[dreamcaller]]
