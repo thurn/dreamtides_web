@@ -3,7 +3,10 @@ import type { CSSProperties } from "react";
 /**
  * A small white-filled, black-outlined gear icon flagging a card whose battle
  * effect is scripted for basic automation. Call sites size and position it via
- * `className` and/or `style`; it defaults to roughly the energy-pip size.
+ * `className` and/or `style`: the SVG carries no intrinsic width/height, so the
+ * width supplied by the class (e.g. `.c-automation-gear`) or inline style fully
+ * governs its size. This lets the on-card flag match the energy-pip box exactly
+ * so it stacks centered in a column directly below the pip.
  */
 export function AutomationGearIcon({
   className,
@@ -18,7 +21,7 @@ export function AutomationGearIcon({
       aria-label="automated"
       viewBox="0 0 24 24"
       className={className}
-      style={{ width: "1.1em", height: "1.1em", display: "block", ...style }}
+      style={{ display: "block", ...style }}
     >
       <path
         fill="#fff"

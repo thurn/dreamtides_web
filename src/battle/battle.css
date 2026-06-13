@@ -1001,7 +1001,8 @@
 
 .battle-card.hand-card .c-automation-gear {
   top: 39px;
-  left: 10px;
+  /* Center the 24px gear under the 26px hand-card cost pip (pip left 10px). */
+  left: 11px;
   width: 24px;
   height: 24px;
 }
