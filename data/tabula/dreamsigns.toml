@@ -656,61 +656,61 @@ id = "7A37386D-6E7C-4F08-B07F-E92A1FD69893"
 name = "Oak Leaf"
 image_name = "oak_leaf.png"
 tides = ["ally_formation", "spark_growth", "point_pressure", "ally_wide"]
-rendered-text = "Allied front-rank characters that share a subtype with another allied front-rank character have +2✦."
-tags = ["J12"]
+rendered-text = "Allied challengers that share a character type with another allied challenger have +2✦."
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "15FD5A22-A786-48E3-99B0-919E810B3EBA"
 name = "Opal"
 image_name = "opal.png"
 tides = ["spark_tall", "spark_growth", "big_energy", "finishers"]
-rendered-text = "Your ≥5● cost characters have +2✦."
-tags = ["J12"]
+rendered-text = "You may pay Offering costs by discarding a card instead of banishing a card from your hand."
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "08A3983A-1B95-4D2E-A445-9D8DC2B8FCA7"
 name = "Crystal Orb"
 image_name = "magic_ball_2.png"
-rendered-text = "While you have the front-rank character with the highest ✦, allied front-rank characters have +1✦."
-tags = ["J12"]
+rendered-text = "When you have 3 or more challengers, they have +2✦."
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "EB6A5C19-26A6-41EF-AC7A-CE1152557B5C"
 name = "Egg Nest"
 image_name = "nest.png"
-rendered-text = "Allied front-rank characters have +1✦ while your back rank is empty."
-tags = ["J12"]
+rendered-text = "When all allied characters are challengers, they have +2✦."
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "87239E3F-04F7-45BD-9B73-944EF36AD445"
 name = "Eyeball Slime"
 image_name = "monster_jelly.png"
 tides = ["ally_formation", "spark_growth", "point_pressure", "ally_wide"]
-rendered-text = "Supported allies have +1✦ and Vengeful."
-tags = ["J12"]
+rendered-text = "Cards in your hand with ephemeral are not banished at the end of your turn."
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "11018E32-F47E-45FD-A8CF-3A9E3F3BE71B"
 name = "Silver Key"
 image_name = "key_2.png"
 rendered-text = "The first character you play each turn materializes with +1✦."
-tags = ["J12"]
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "D4B18CC4-CAEB-40B3-B0E2-F1C8B1C8354C"
 name = "Larva"
 image_name = "larva.png"
 tides = ["materialize_value", "character_chain", "materialized_staples", "spark_growth"]
-rendered-text = "Characters you materialize gain +1✦ for each other character materialized this turn."
-tags = ["J12"]
+rendered-text = "When you play a character, it gains +1✦ for each other character you have played this turn."
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "2788CDAD-2735-4CDF-89A8-DCECACA87369"
 name = "Phoenix Feather"
 image_name = "phoenix_feather.png"
 tides = ["leave_play_enablers", "materialize_tempo", "materialize_value", "spark_growth"]
-rendered-text = "Allied characters materialize with +1✦ for each ally that left play this turn."
-tags = ["J12"]
+rendered-text = "When you play a character, it gains +1✦ for each ally that left play this turn."
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "4F5BDCAC-64CB-4A45-8121-E37F5E4D3074"
@@ -718,31 +718,31 @@ name = "Notes"
 image_name = "note_2.png"
 tides = ["bounce_blink_tools", "materialize_tempo", "spark_growth", "leave_play_enablers", "materialize_value"]
 rendered-text = "Allied spirit animals have +1✦."
-tags = ["J12"]
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "1CCD8D69-E14C-4788-BE1D-CB6A1B703225"
 name = "Serpent Manual"
 image_name = "book_6.png"
 tides = ["warrior_bastion", "judgment_engines", "spark_growth", "spark_tall"]
-rendered-text = "When an ally dissolves an enemy in a challenge, it gains +2✦."
-tags = ["J12"]
+rendered-text = "When an allied character dissolves an enemy in a challenge, it gains +2✦."
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "6B51E477-352C-489B-8D5F-049BC378FDE9"
 name = "Piranha"
 image_name = "piranha.png"
 tides = ["point_pressure", "finishers", "fast_tempo"]
-rendered-text = "Your unpaired challengers score 1 additional ⍟."
-tags = ["J12"]
+rendered-text = "When an allied character scores ⍟ in a challenge, it scores 1 additional ⍟."
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "4D762FAE-AE9F-4C35-A03B-051D7ECC3532"
 name = "Blazing Orb"
 image_name = "magic_ball.png"
 tides = ["spark_tall", "point_pressure", "spark_growth", "finishers"]
-rendered-text = "Your ally with the most ✦ scores double ⍟."
-tags = ["J12"]
+rendered-text = "The allied character with the most ✦ has unstoppable."
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "C92438FC-8E1F-4F97-9DCF-8CA0EDAA8607"
@@ -750,15 +750,15 @@ name = "Black Horn"
 image_name = "leech.png"
 tides = ["cheap_removal", "premium_removal", "resource_burst", "card_flow"]
 rendered-text = "When you dissolve or banish an enemy character, gain 2●."
-tags = ["J12"]
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "9DD7D53F-D4DB-4EEC-919D-D701774AF359"
 name = "Poison Bottle"
 image_name = "poison.png"
 tides = ["leave_play_enablers", "resource_burst", "premium_removal"]
-rendered-text = "When you banish a character, gain 1●."
-tags = ["J12"]
+rendered-text = "When you return a character to a player's hand, gain 2●."
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "BB8BB233-7CB1-43B3-AF30-E71AB9E832C5"
@@ -766,15 +766,15 @@ name = "Sealed Letter"
 image_name = "letter_2.png"
 tides = ["abandon_value", "trigger_reuse", "survivor_dissolve", "leave_play_enablers"]
 rendered-text = "When you abandon an ally, its ▸Dissolved ability triggers an additional time."
-tags = ["J12"]
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "FDFBD522-C2BE-4B77-A63F-E9A64CA3DE3B"
 name = "Parchment"
 image_name = "parchment.png"
 tides = ["survivor_dissolve", "attrition_trade", "card_flow", "defensive_curve"]
-rendered-text = "Allied characters have '▸Dissolved: Draw a card.'"
-tags = ["J12"]
+rendered-text = "Once per turn, when an ally is dissolved, draw a card."
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "293A610D-EA75-4974-88DA-13E4C86F248F"
@@ -782,23 +782,23 @@ name = "Mandrake Root"
 image_name = "mandragora.png"
 tides = ["survivor_dissolve", "void_recursion", "reclaim_characters", "attrition_trade"]
 rendered-text = "Once per turn, when an ally is dissolved, return a random character with lower cost from your void to hand."
-tags = ["J12"]
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "4A9F95D5-B72D-4EE8-8D29-B05646EDC23D"
 name = "Herb Mortar"
 image_name = "mortar_pestle.png"
 tides = ["survivor_dissolve", "void_recursion", "materialize_value", "attrition_trade"]
-rendered-text = "When an ally is dissolved, materialize a random character with lower cost from your void."
-tags = ["J12"]
+rendered-text = "Once per turn, when an ally is dissolved, materialize a random character with lower cost from your void."
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "B765F6BB-0B8A-4847-ADA4-477B9493E3AD"
 name = "Flower Petals"
 image_name = "petals.png"
 tides = ["abandon_value", "materialize_value", "leave_play_enablers", "character_chain"]
-rendered-text = "At the end of your turn, materialize a random character you abandoned this turn. It has 1✦."
-tags = ["J12"]
+rendered-text = "At the end of your turn, materialize a random character you abandoned this turn with 0✦."
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "72EF4B11-5366-4798-AAB0-09E5FFBB1ED8"
@@ -806,7 +806,7 @@ name = "Clam Shell"
 image_name = "mollusk.png"
 tides = ["big_energy", "hand_cycling", "card_flow", "resource_burst"]
 rendered-text = "When you draw your second card each turn, gain 1 maximum ●."
-tags = ["J12"]
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "05F69D01-F8A3-4044-B7CD-0BFD9ED980CD"
@@ -814,7 +814,7 @@ name = "Philosopher's Stone"
 image_name = "philosopher's_Stone.png"
 tides = ["big_energy", "resource_burst", "event_chain", "finishers"]
 rendered-text = "Your unspent ● carries over between turns."
-tags = ["J12"]
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "64A28F37-54A4-4152-8C72-2EBC61E19AAC"
@@ -822,7 +822,7 @@ name = "Steel Wand"
 image_name = "Magicwand.png"
 tides = ["fast_tempo", "fast_interaction", "card_flow", "fast_setup"]
 rendered-text = "Once per turn, when you play a ❖ card, draw a card."
-tags = ["J12"]
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "206049AE-9F28-4A90-9F75-63D9EE5F4A27"
@@ -830,23 +830,23 @@ name = "Gold Key"
 image_name = "key_3.png"
 tides = ["character_chain", "character_curve", "big_energy", "cost_reduction", "resource_burst"]
 rendered-text = "When you play your third character each turn, gain 2●."
-tags = ["J12"]
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "9204FBC8-BA40-4E33-9FBC-F62CCC4A43D1"
 name = "Powder Bowl"
 image_name = "powder_magic.png"
 tides = ["point_pressure", "cost_rfeduction", "character_curve", "finishers"]
-rendered-text = "Characters cost you 1● less if an ally scored ⍟ last turn."
-tags = ["J12"]
+rendered-text = "The first character you play each turn costs 2● less if an ally scored ⍟ last turn."
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "FB87262C-5BDE-409E-92F1-58CC7A4E5491"
 name = "Purple Potion"
 image_name = "potion.png"
 tides = ["big_energy", "cost_reduction", "resource_burst", "finishers", "spark_tall"]
-rendered-text = "≥5● cost characters cost you 2● less."
-tags = ["J12"]
+rendered-text = "3● cost characters cost you 2●."
+tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "62E1A588-F719-415C-9434-80AA08CE2E6A"
