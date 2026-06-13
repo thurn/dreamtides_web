@@ -853,30 +853,30 @@ id = "62E1A588-F719-415C-9434-80AA08CE2E6A"
 name = "Crystal Wand"
 image_name = "magic_stick_2.png"
 tides = ["big_energy", "card_flow", "resource_burst", "finishers"]
-rendered-text = "When you play a ≥5● cost card, draw a card."
-tags = ["J15"]
+rendered-text = "Once per turn, when you play a 2● cost character, draw a card."
+tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "4BB408A8-7941-42DC-9FF6-DBC1400C99ED"
 name = "Red Pin"
 image_name = "pin.png"
 tides = ["point_pressure", "judgment_engines", "card_flow", "finishers"]
-rendered-text = "Once per turn, when an ally scores ⍟, draw a card."
-tags = ["J15"]
+rendered-text = "When one or more allies score ⍟, draw a card."
+tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "FDD2FFE4-40F4-49CF-BC2E-2496E1042F76"
 name = "Poppy Flower"
 image_name = "maquis.png"
-rendered-text = "At the end of your turn, if you played no cards during your Day phase, gain 1⍟."
-tags = ["J15"]
+rendered-text = "▸Night: If you have played no cards this turn, gain 2●."
+tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "56CAA78B-021D-4B27-ACAB-C77FB0146CED"
 name = "Rabbit Tail"
 image_name = "rabbit_tail.png"
-rendered-text = "At the end of your turn, if you played no characters this turn, draw a card."
-tags = ["J15"]
+rendered-text = "▸Night: If you have played no characters this turn, draw a card."
+tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "EF25FBA0-58A0-4B69-BE06-3668679FCDC7"
@@ -884,7 +884,7 @@ name = "Green Cauldron"
 image_name = "pot.png"
 tides = ["discard_velocity", "hand_cycling", "card_flow", "discard_outlets"]
 rendered-text = "The first time each turn your hand becomes empty, draw a card."
-tags = ["J15"]
+tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "055F211D-AA51-49EB-9162-190A946B1614"
