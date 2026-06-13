@@ -84,6 +84,7 @@ function makeDraftState(
     activeSiteId: null,
     pickNumber: 1,
     sitePicksCompleted: 0,
+    siteShownCardNumbers: [],
     ...overrides,
   };
   // Default the immutable run pool to a copy of the remaining copies when a
@@ -193,32 +194,65 @@ describe("fixed multiset offer generation", () => {
     expect(state.currentOffer[0]).toBe(1);
   });
 
-  it("allows duplicate names to recur across the run while keeping each offer unique", () => {
+  it("never offers the same card twice within a single site visit", () => {
+    // Ten unique cards, one copy each: more than two full offers' worth, so the
+    // second offer can be made entirely from cards not shown in the first.
     const cardDatabase = buildDB(
-      Array.from({ length: 6 }, (_, index) => makeCard(index + 1)),
+      Array.from({ length: 10 }, (_, index) => makeCard(index + 1)),
     );
     const state = makeDraftState({
-      remainingCopiesByCard: {
-        "1": 2,
-        "2": 2,
-        "3": 1,
-        "4": 1,
-        "5": 1,
-        "6": 1,
-      },
+      remainingCopiesByCard: Object.fromEntries(
+        Array.from({ length: 10 }, (_, index) => [String(index + 1), 1]),
+      ),
     });
-
-    vi.spyOn(Math, "random").mockReturnValue(0);
 
     enterDraftSite(state, "site-a", cardDatabase);
     const firstOffer = [...state.currentOffer];
+    expect(firstOffer.length).toBe(4);
+    expect(new Set(firstOffer).size).toBe(4);
+
     const isComplete = processPlayerPick(firstOffer[0], state, cardDatabase);
+    const secondOffer = [...state.currentOffer];
 
     expect(isComplete).toBe(false);
-    expect(new Set(firstOffer).size).toBe(4);
-    expect(new Set(state.currentOffer).size).toBe(4);
-    expect(firstOffer).toContain(1);
-    expect(state.currentOffer).toContain(1);
+    expect(secondOffer.length).toBe(4);
+    // No card shown in the first offer reappears in the second offer of the
+    // same visit — not just the picked card, every shown card is excluded.
+    for (const cardNumber of secondOffer) {
+      expect(firstOffer).not.toContain(cardNumber);
+    }
+    // The visit's shown set records every card displayed so far.
+    expect(new Set(state.siteShownCardNumbers)).toEqual(
+      new Set([...firstOffer, ...secondOffer]),
+    );
+  });
+
+  it("clears the shown set so a later site visit can reoffer the same cards", () => {
+    // A four-card pool can fill exactly one offer, so once those cards are shown
+    // the visit has no unshown cards left to offer.
+    const cardDatabase = buildDB(
+      Array.from({ length: 4 }, (_, index) => makeCard(index + 1)),
+    );
+    const state = makeDraftState({
+      remainingCopiesByCard: { "1": 1, "2": 1, "3": 1, "4": 1 },
+    });
+
+    enterDraftSite(state, "site-a", cardDatabase);
+    expect(new Set(state.currentOffer)).toEqual(new Set([1, 2, 3, 4]));
+
+    // Every card has now been shown this visit, so the visit ends after the pick
+    // rather than offering a within-visit duplicate.
+    const isComplete = processPlayerPick(
+      state.currentOffer[0],
+      state,
+      cardDatabase,
+    );
+    expect(isComplete).toBe(true);
+
+    // A brand-new site resets the shown set, so the same cards are offerable.
+    enterDraftSite(state, "site-b", cardDatabase);
+    expect(new Set(state.currentOffer)).toEqual(new Set([1, 2, 3, 4]));
+    expect(new Set(state.siteShownCardNumbers)).toEqual(new Set([1, 2, 3, 4]));
   });
 
   it("does not spend the shown offer a second time when the player picks", () => {
@@ -254,8 +288,12 @@ describe("fixed multiset offer generation", () => {
     expect(isComplete).toBe(false);
     expect(state.pickNumber).toBe(2);
     expect(state.sitePicksCompleted).toBe(1);
+    // Pick 2's offer is [5, 6, 7, 8]: cards 1-4 were shown in the first offer and
+    // are excluded for the rest of the visit, so card 1's surviving copy stays in
+    // the pool rather than being re-shown and spent.
+    expect(state.currentOffer).toEqual([5, 6, 7, 8]);
     expect(state.remainingCopiesByCard).toEqual({
-      "8": 1,
+      "1": 1,
     });
   });
 
@@ -635,6 +673,7 @@ describe("replay mode", () => {
       activeSiteId: null,
       pickNumber: 1,
       sitePicksCompleted: 0,
+      siteShownCardNumbers: [],
     });
   });
 

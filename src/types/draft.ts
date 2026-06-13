@@ -24,6 +24,14 @@ interface DraftStateCommon {
   pickNumber: number;
   /** Number of player picks completed in the current draft site visit. */
   sitePicksCompleted: number;
+  /**
+   * Card numbers that have appeared in any offer during the current draft site
+   * visit. A card shown once is never shown again for the rest of the visit, so
+   * a single visit can never offer the same card twice. Reset to empty when a
+   * new draft site visit begins. Optional only so older persisted states and
+   * fixtures omit it safely; live states maintained by the engine always set it.
+   */
+  siteShownCardNumbers?: number[];
 }
 
 /**

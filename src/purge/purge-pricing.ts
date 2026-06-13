@@ -7,21 +7,21 @@
  * stays cheap while emptying a large part of the deck in a single visit is
  * expensive.
  *
- * Marginal cost of the Nth card purged in a visit is `30 + 5 * N * (N + 1)`:
+ * Marginal cost of the Nth card purged in a visit is `30 + 8 * N * (N + 1)`:
  *
  * | Card # | Marginal | Cumulative |
  * | ------ | -------- | ---------- |
- * |   1    |    40    |     40     |
- * |   2    |    60    |    100     | = one standard shop card
- * |   3    |    90    |    190     |
- * |   4    |   130    |    320     |
- * |   5    |   180    |    500     | = the default essence cap
- * |   6    |   240    |    740     |
+ * |   1    |    46    |     46     |
+ * |   2    |    78    |    124     |
+ * |   3    |   126    |    250     |
+ * |   4    |   190    |    440     |
+ * |   5    |   270    |    710     |
+ * |   6    |   366    |   1076     |
  *
- * Two anchors tie the curve to the rest of the economy: two cards cost the same
- * as buying one standard shop card (100 essence), and five cards cost the full
- * default essence cap (500), so a five-card visit requires arriving with a
- * maxed essence bar.
+ * A single-card trim stays cheap (46 essence), while the cost climbs steeply
+ * once a visit removes several cards: three cards in one visit cost 250, more
+ * than twice a single trim, so emptying a large part of the deck at once
+ * requires arriving with a deep essence reserve.
  */
 
 /** Soft cap on how many cards may be purged in a single visit. */
@@ -44,7 +44,7 @@ export interface PurgePriceModifiers {
  */
 export function purgeMarginalCost(cardIndex: number): number {
   if (cardIndex <= 0) return 0;
-  return 30 + 5 * cardIndex * (cardIndex + 1);
+  return 30 + 8 * cardIndex * (cardIndex + 1);
 }
 
 /** Total discount percent applied to purge prices for a visit, clamped 0-100. */

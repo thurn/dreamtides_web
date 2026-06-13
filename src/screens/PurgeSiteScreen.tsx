@@ -217,6 +217,40 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
         </span>
       </div>
 
+      {/* Action buttons — kept above the deck grid so the Purge button stays
+          visible without scrolling past a long deck. */}
+      <div className="mb-6 flex gap-4">
+        <button
+          className="rounded-lg px-6 py-2.5 text-base font-bold transition-opacity"
+          style={{
+            background:
+              selectedCount > 0
+                ? "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)"
+                : "#4b5563",
+            color: selectedCount > 0 ? "#ffffff" : "#9ca3af",
+            opacity: selectedCount > 0 ? 1 : 0.6,
+            cursor: selectedCount > 0 ? "pointer" : "not-allowed",
+          }}
+          disabled={selectedCount === 0}
+          onClick={handlePurge}
+        >
+          Purge {String(selectedCount)} Card
+          {selectedCount !== 1 ? "s" : ""}
+          {selectedCount > 0 ? ` — ${String(totalCost)} essence` : ""}
+        </button>
+        <button
+          className="rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
+          style={{
+            background: "rgba(107, 114, 128, 0.2)",
+            border: "1px solid rgba(107, 114, 128, 0.4)",
+            color: "#9ca3af",
+          }}
+          onClick={handleClose}
+        >
+          Close
+        </button>
+      </div>
+
       {/* Deck grid */}
       <div className="grid w-full max-w-5xl grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
         {deck.map((entry, index) => {
@@ -258,39 +292,6 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
             </motion.div>
           );
         })}
-      </div>
-
-      {/* Action buttons */}
-      <div className="mt-8 flex gap-4">
-        <button
-          className="rounded-lg px-6 py-2.5 text-base font-bold transition-opacity"
-          style={{
-            background:
-              selectedCount > 0
-                ? "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)"
-                : "#4b5563",
-            color: selectedCount > 0 ? "#ffffff" : "#9ca3af",
-            opacity: selectedCount > 0 ? 1 : 0.6,
-            cursor: selectedCount > 0 ? "pointer" : "not-allowed",
-          }}
-          disabled={selectedCount === 0}
-          onClick={handlePurge}
-        >
-          Purge {String(selectedCount)} Card
-          {selectedCount !== 1 ? "s" : ""}
-          {selectedCount > 0 ? ` — ${String(totalCost)} essence` : ""}
-        </button>
-        <button
-          className="rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
-          style={{
-            background: "rgba(107, 114, 128, 0.2)",
-            border: "1px solid rgba(107, 114, 128, 0.4)",
-            color: "#9ca3af",
-          }}
-          onClick={handleClose}
-        >
-          Close
-        </button>
       </div>
     </motion.div>
   );

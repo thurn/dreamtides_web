@@ -160,15 +160,27 @@ export function drawAndSpendUniqueCards(
   return drawn;
 }
 
-/** Build a 4-unique-card offer weighted by remaining copies. */
-function buildOffer(ctx: PackContext): number[] {
+/**
+ * Build a 4-unique-card offer weighted by remaining copies. Card numbers in
+ * `excludeCardNumbers` are never offered: this is how a draft site keeps a card
+ * from appearing twice across the offers of a single visit once it has been
+ * shown.
+ */
+function buildOffer(
+  ctx: PackContext,
+  excludeCardNumbers: Set<number> = new Set(),
+): number[] {
   const entries: Array<{ cardNumber: number; weight: number }> = [];
 
   for (const [cardNumberText, copies] of Object.entries(
     ctx.remainingCopiesByCard,
   )) {
     const cardNumber = Number(cardNumberText);
-    if (!Number.isInteger(cardNumber) || copies <= 0) {
+    if (
+      !Number.isInteger(cardNumber) ||
+      copies <= 0 ||
+      excludeCardNumbers.has(cardNumber)
+    ) {
       continue;
     }
 
@@ -241,15 +253,25 @@ function revealOffer(
     return state.currentOffer.length > 0;
   }
 
-  let offer = buildOffer({
-    remainingCopiesByCard: state.remainingCopiesByCard,
-    pickNumber: state.pickNumber,
-    packSize: config.packSize,
-  });
+  // Cards already shown in this site visit are excluded so the same card is
+  // never offered twice within one visit. The set resets when a new draft site
+  // visit begins (see enterDraftSite).
+  const shownThisVisit = new Set(state.siteShownCardNumbers ?? []);
+
+  let offer = buildOffer(
+    {
+      remainingCopiesByCard: state.remainingCopiesByCard,
+      pickNumber: state.pickNumber,
+      packSize: config.packSize,
+    },
+    shownThisVisit,
+  );
 
   // The draft multiset is finite. When fewer than a full offer's worth of
-  // unique cards remain, recreate the multiset from the run's fixed pool so
-  // the Draft site can keep producing offers.
+  // unique unshown cards remain, recreate the multiset from the run's fixed
+  // pool so the Draft site can keep producing offers. Cards shown earlier this
+  // visit stay excluded, so recreation never reintroduces a within-visit
+  // duplicate.
   if (offer.length < config.packSize) {
     state.remainingCopiesByCard = { ...state.draftPoolCopiesByCard };
     if (options.logEvents) {
@@ -261,11 +283,14 @@ function revealOffer(
         ),
       });
     }
-    offer = buildOffer({
-      remainingCopiesByCard: state.remainingCopiesByCard,
-      pickNumber: state.pickNumber,
-      packSize: config.packSize,
-    });
+    offer = buildOffer(
+      {
+        remainingCopiesByCard: state.remainingCopiesByCard,
+        pickNumber: state.pickNumber,
+        packSize: config.packSize,
+      },
+      shownThisVisit,
+    );
   }
 
   state.currentOffer = offer;
@@ -274,6 +299,7 @@ function revealOffer(
   }
 
   spendShownOffer(state.remainingCopiesByCard, offer);
+  state.siteShownCardNumbers = [...(state.siteShownCardNumbers ?? []), ...offer];
   if (options.logEvents) {
     logEvent("draft_offer_revealed", {
       pickNumber: state.pickNumber,
@@ -339,6 +365,7 @@ export function createInitialDraftState(
     activeSiteId: null,
     pickNumber: 1,
     sitePicksCompleted: 0,
+    siteShownCardNumbers: [],
   };
 }
 
@@ -360,6 +387,7 @@ export function createInitialReplayDraftState(args: {
     activeSiteId: null,
     pickNumber: 1,
     sitePicksCompleted: 0,
+    siteShownCardNumbers: [],
   };
 }
 
@@ -379,6 +407,7 @@ export function createInitialFresh20DraftState(args: {
     activeSiteId: null,
     pickNumber: 1,
     sitePicksCompleted: 0,
+    siteShownCardNumbers: [],
   };
 }
 
@@ -426,6 +455,7 @@ export function enterDraftSite(
 
   state.activeSiteId = siteId;
   state.sitePicksCompleted = 0;
+  state.siteShownCardNumbers = [];
   const hasOffer = revealOffer(state, config, { logEvents: true }, offerDeps);
 
   logEvent("draft_site_entered", {

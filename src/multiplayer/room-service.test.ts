@@ -526,6 +526,7 @@ describe("room service", () => {
       remainingCopiesByCard: { "42": 2 },
       currentOffer: [],
       activeSiteId: null,
+      siteShownCardNumbers: [],
     });
   });
 
@@ -573,6 +574,7 @@ describe("room service", () => {
         [11, 12],
       ],
       activeSiteId: null,
+      siteShownCardNumbers: [],
     });
   });
 
@@ -608,6 +610,7 @@ describe("room service", () => {
       signatureCardNumbers: [],
       packSequence: [],
       activeSiteId: null,
+      siteShownCardNumbers: [],
     });
   });
 
@@ -653,6 +656,7 @@ describe("room service", () => {
         "31": [5],
       },
       activeSiteId: null,
+      siteShownCardNumbers: [],
     });
   });
 
@@ -688,6 +692,7 @@ describe("room service", () => {
       currentOffer: [],
       shownPicksByCard: {},
       activeSiteId: null,
+      siteShownCardNumbers: [],
     });
   });
 

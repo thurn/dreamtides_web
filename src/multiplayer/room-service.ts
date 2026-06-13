@@ -194,6 +194,9 @@ function normalizeDraftState(draftState: DraftState | null | undefined): DraftSt
     activeSiteId: draftState.activeSiteId ?? null,
     pickNumber: draftState.pickNumber ?? 1,
     sitePicksCompleted: draftState.sitePicksCompleted ?? 0,
+    // RTDB strips the empty array on a fresh run or between site visits;
+    // restore it so the within-visit dedup never reads `undefined`.
+    siteShownCardNumbers: coerceNumberArray(draftState.siteShownCardNumbers),
   };
   if (mode === "replay") {
     return {

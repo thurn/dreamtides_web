@@ -584,6 +584,7 @@ export default function DraftTestApp() {
           activeSiteId: "draft_test",
           pickNumber: 1,
           sitePicksCompleted: 0,
+          siteShownCardNumbers: [],
         };
         draftStateRef.current = draftState;
 

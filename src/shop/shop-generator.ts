@@ -203,6 +203,7 @@ export function replayShopDraftState(
     activeSiteId: null,
     pickNumber: 1,
     sitePicksCompleted: 0,
+    siteShownCardNumbers: [],
   };
 }
 
