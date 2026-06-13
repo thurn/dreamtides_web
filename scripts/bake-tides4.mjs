@@ -209,16 +209,25 @@ function chooseNeutralSeeds(corpus, count, priorFloor) {
   return seeds;
 }
 
-// Grow one tide and turn the UUID-keyed counts into `{ id, name, copies }` card
-// entries (id = the corpus UUID key, name from `cardNameById`), ordered by
-// descending copies then by id ascending, dropping any key with no current name.
-function growTideCards(corpus, seedKeys, size, nameOf) {
+// Grow one tide and turn the UUID-keyed counts into `{ id, name, subtype?, text,
+// copies }` card entries (id = the corpus UUID key, name from `cardNameById`,
+// subtype/text from `detailOf`), ordered by descending copies then by id
+// ascending, dropping any key with no current name. `subtype` (the character
+// subtype) is informational and omitted when blank; `text` is the rendered rules
+// text. These extra fields are for human reading only — the runtime schema
+// ignores them.
+function growTideCards(corpus, seedKeys, size, nameOf, detailOf) {
   const { counts } = growAffinityPoolFromSeeds(corpus, seedKeys, size, SIGSEED);
   const cards = [];
   for (const [id, copies] of counts) {
     const name = nameOf(id);
     if (name === undefined) continue;
-    cards.push({ id, name, copies });
+    const detail = detailOf(id) ?? {};
+    const entry = { id, name };
+    if (detail.subtype) entry.subtype = detail.subtype;
+    entry.text = detail.text ?? "";
+    entry.copies = copies;
+    cards.push(entry);
   }
   cards.sort((a, b) => b.copies - a.copies || (a.id < b.id ? -1 : 1));
   return cards;
@@ -456,6 +465,12 @@ function run() {
   }
   const nameOf = (id) => poolData.cardNameById?.get(id);
   const priorOf = (id) => corpus.prior.get(id) ?? 0;
+  // Card subtype + rendered rules text by UUID, for the informational `subtype`
+  // and `text` fields on each baked card entry (human reading only).
+  const cardDetailById = new Map(
+    cards.map((c) => [c.id, { subtype: c.subtype ?? "", text: c.renderedText ?? "" }]),
+  );
+  const detailOf = (id) => cardDetailById.get(id);
   console.log(`Corpus: ${corpus.cards.length} cards from the draft records.`);
 
   const tides = [];
@@ -481,7 +496,7 @@ function run() {
     sigIdx += 1;
     const id = `tide-sig-${String(sigIdx).padStart(2, "0")}`;
     // The starter is the full-signature `sigseed` pool — the dense on-theme core.
-    const cardsList = growTideCards(corpus, keys, TUNING.starterSize, nameOf);
+    const cardsList = growTideCards(corpus, keys, TUNING.starterSize, nameOf, detailOf);
     tides.push({
       id,
       name: `${dc.name} signature`,
@@ -503,7 +518,7 @@ function run() {
   const facetTideByAnchor = new Map();
   facetAnchors.forEach((anchor, i) => {
     const id = `tide-fac-${String(i + 1).padStart(2, "0")}`;
-    const cardsList = growTideCards(corpus, [anchor], TUNING.facetSize, nameOf);
+    const cardsList = growTideCards(corpus, [anchor], TUNING.facetSize, nameOf, detailOf);
     tides.push({
       id,
       name: `Lean: ${nameOf(anchor) ?? anchor}`,
@@ -525,7 +540,7 @@ function run() {
   const neutralTides = [];
   neutralSeeds.forEach((seed, i) => {
     const id = `tide-neu-${String(i + 1).padStart(2, "0")}`;
-    const cardsList = growTideCards(corpus, [seed], TUNING.neutralTideSize, nameOf);
+    const cardsList = growTideCards(corpus, [seed], TUNING.neutralTideSize, nameOf, detailOf);
     const top = cardsList.slice(0, 2).map((c) => c.name).join(" / ");
     const tide = { id, name: `Broad: ${top}`, role: "neutral", cards: cardsList };
     tides.push(tide);
