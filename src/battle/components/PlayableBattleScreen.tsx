@@ -348,6 +348,52 @@ function PlayableBattleScreenInner({
     battleResult,
   ]);
 
+  // Round 1 surfaces no Dreamwell card (see `isDreamwellDisplayVisible` below),
+  // so the player should not have to click through an empty Dreamwell phase.
+  // Once round 1's reveal has committed — `dreamwellDrawnTurn` reaches this turn,
+  // so its energy is already applied — auto-advance to the Day phase for the
+  // locally-driven side. Skipped on the AI's own turn (the AI driver advances
+  // itself) and when automation is off (the operator is stepping manually).
+  // Ref-guarded to fire once per (side, turn).
+  const round1DreamwellDrawnTurn =
+    reducerState.mutable.sides[activeSide].dreamwellDrawnTurn;
+  const lastDreamwellAutoAdvanceKeyRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (battleResult !== null || activePhase !== "dreamwell") {
+      return;
+    }
+    if (activeTurnNumber > 1 || !isBasicAutomationEnabled) {
+      return;
+    }
+    if (aiMode && activeSide === "enemy") {
+      return;
+    }
+    // Wait for this turn's Dreamwell reveal to land so its energy is applied
+    // before the phase advances.
+    if (round1DreamwellDrawnTurn !== activeTurnNumber) {
+      return;
+    }
+    const advanceKey = `${activeSide}:${String(activeTurnNumber)}`;
+    if (lastDreamwellAutoAdvanceKeyRef.current === advanceKey) {
+      return;
+    }
+    lastDreamwellAutoAdvanceKeyRef.current = advanceKey;
+    handleCommand({
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_PHASE", phase: "day" },
+      sourceSurface: "auto-system",
+    });
+  }, [
+    handleCommand,
+    aiMode,
+    isBasicAutomationEnabled,
+    activeSide,
+    activePhase,
+    activeTurnNumber,
+    battleResult,
+    round1DreamwellDrawnTurn,
+  ]);
+
   // The Dreamwell card the active side is currently showing (the card at its
   // recorded draw index), rendered centered above the battlefield while the
   // Dreamwell phase is active.
