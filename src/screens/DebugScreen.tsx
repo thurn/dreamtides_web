@@ -1,4 +1,10 @@
-import { useCallback, useEffect, useMemo, type ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import type { CardData } from "../types/cards";
 import type {
@@ -6,6 +12,15 @@ import type {
   ResolvedDreamcallerPackage,
 } from "../types/content";
 import type { DraftState } from "../types/draft";
+import type { QuestState } from "../types/quest";
+import { logEvent } from "../logging";
+import {
+  deleteSavedQuest,
+  getSavedQuest,
+  listSavedQuests,
+  saveQuest,
+  type SavedQuestSummary,
+} from "../state/saved-quests";
 import {
   extractDraftDebugInfo,
   extractPackageDebugInfo,
@@ -30,6 +45,16 @@ interface DebugScreenProps {
     draftState: DraftState,
     source: string,
   ) => void;
+  /**
+   * The live quest state, captured by "Save Quest" into a named file-system
+   * save. Null before a quest has started.
+   */
+  questState: QuestState | null;
+  /**
+   * Replaces the entire quest state with a saved snapshot loaded by name.
+   * Optional because only the live multiplayer provider supplies it.
+   */
+  onLoadQuestState?: (state: QuestState, source: string) => void;
 }
 
 /** Full-screen overlay showing package and draft pool debug info. */
@@ -42,6 +67,8 @@ export function DebugScreen({
   remainingDreamsignPool,
   dreamsignTemplates,
   onForceLegendaryOffer,
+  questState,
+  onLoadQuestState,
 }: DebugScreenProps) {
   const debugInfo = useMemo(
     () => extractDraftDebugInfo(draftState, cardDatabase),
@@ -118,6 +145,14 @@ export function DebugScreen({
           </div>
 
           <div className="flex-1 overflow-y-auto px-4 py-4 md:px-6">
+            <div className="mx-auto mb-4 max-w-4xl">
+              <SavedQuestsPanel
+                isOpen={isOpen}
+                questState={questState}
+                onLoadQuestState={onLoadQuestState}
+                onClose={handleClose}
+              />
+            </div>
             {packageDebugInfo === null ? (
               <div className="flex h-full items-center justify-center">
                 <p className="text-sm opacity-40">
@@ -327,6 +362,279 @@ function InfoCard({
       {children}
     </div>
   );
+}
+
+/**
+ * Save / load named quest snapshots to the developer's file system. A save
+ * captures the live quest state into a JSON file (via the dev-server
+ * `/api/saved-quests` endpoints); loading writes a saved snapshot back into the
+ * current room so a run can be resumed after the emulator restarts.
+ */
+function SavedQuestsPanel({
+  isOpen,
+  questState,
+  onLoadQuestState,
+  onClose,
+}: {
+  isOpen: boolean;
+  questState: QuestState | null;
+  onLoadQuestState?: (state: QuestState, source: string) => void;
+  onClose: () => void;
+}) {
+  const [saves, setSaves] = useState<SavedQuestSummary[]>([]);
+  const [name, setName] = useState("");
+  const [status, setStatus] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const refresh = useCallback(async () => {
+    try {
+      setSaves(await listSavedQuests());
+    } catch (refreshError) {
+      setError(
+        refreshError instanceof Error
+          ? refreshError.message
+          : "Failed to list saved quests.",
+      );
+    }
+  }, []);
+
+  // Load the list whenever the overlay opens so it reflects on-disk state.
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+    void refresh();
+  }, [isOpen, refresh]);
+
+  const handleSave = useCallback(async () => {
+    if (questState === null) {
+      setError("No quest is active to save.");
+      return;
+    }
+    const trimmed = name.trim();
+    if (trimmed === "") {
+      setError("Enter a name for the save.");
+      return;
+    }
+    setBusy(true);
+    setError(null);
+    setStatus(null);
+    try {
+      const summary = await saveQuest(trimmed, questState);
+      logEvent("debug_quest_saved", {
+        source: "debug_save_quest",
+        name: summary.name,
+        screen: summary.screenType,
+      });
+      setStatus(`Saved "${summary.name}".`);
+      setName("");
+      await refresh();
+    } catch (saveError) {
+      setError(
+        saveError instanceof Error ? saveError.message : "Failed to save quest.",
+      );
+    } finally {
+      setBusy(false);
+    }
+  }, [name, questState, refresh]);
+
+  const handleLoad = useCallback(
+    async (summary: SavedQuestSummary) => {
+      if (onLoadQuestState === undefined) {
+        setError("Loading is unavailable in this context.");
+        return;
+      }
+      setBusy(true);
+      setError(null);
+      setStatus(null);
+      try {
+        const loaded = await getSavedQuest(summary.name);
+        if (loaded === null) {
+          setError(`Saved quest "${summary.name}" could not be found.`);
+          return;
+        }
+        logEvent("debug_quest_loaded", {
+          source: "debug_load_quest",
+          name: summary.name,
+          screen: loaded.screen?.type ?? "unknown",
+        });
+        onLoadQuestState(loaded, "debug_load_quest");
+        onClose();
+      } catch (loadError) {
+        setError(
+          loadError instanceof Error ? loadError.message : "Failed to load quest.",
+        );
+      } finally {
+        setBusy(false);
+      }
+    },
+    [onLoadQuestState, onClose],
+  );
+
+  const handleDelete = useCallback(
+    async (summary: SavedQuestSummary) => {
+      setBusy(true);
+      setError(null);
+      setStatus(null);
+      try {
+        await deleteSavedQuest(summary.name);
+        logEvent("debug_quest_save_deleted", {
+          source: "debug_delete_quest",
+          name: summary.name,
+        });
+        setStatus(`Deleted "${summary.name}".`);
+        await refresh();
+      } catch (deleteError) {
+        setError(
+          deleteError instanceof Error
+            ? deleteError.message
+            : "Failed to delete quest.",
+        );
+      } finally {
+        setBusy(false);
+      }
+    },
+    [refresh],
+  );
+
+  return (
+    <InfoCard title="Saved Quests">
+      <p className="mb-2 text-[11px] opacity-60">
+        Save the current run to disk and reload it later, even after the
+        emulator restarts.
+      </p>
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <input
+          data-testid="debug-save-quest-name"
+          type="text"
+          value={name}
+          onChange={(event) => {
+            setName(event.target.value);
+          }}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              void handleSave();
+            }
+          }}
+          placeholder="e.g. warriors draft"
+          disabled={busy || questState === null}
+          className="flex-1 rounded-md px-2 py-1 text-sm"
+          style={{
+            minWidth: "160px",
+            background: "rgba(0, 0, 0, 0.4)",
+            border: "1px solid rgba(124, 58, 237, 0.3)",
+            color: "#e2e8f0",
+          }}
+        />
+        <button
+          data-testid="debug-save-quest"
+          type="button"
+          onClick={() => {
+            void handleSave();
+          }}
+          disabled={busy || questState === null}
+          className="cursor-pointer rounded-md px-3 py-1 text-[11px] font-bold uppercase tracking-wider"
+          style={{
+            background: "linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)",
+            color: "#f5f3ff",
+            border: "1px solid rgba(168, 85, 247, 0.6)",
+            opacity: busy || questState === null ? 0.5 : 1,
+          }}
+        >
+          Save Quest
+        </button>
+      </div>
+
+      {error !== null && (
+        <p className="mb-2 text-xs" style={{ color: "#fca5a5" }}>
+          {error}
+        </p>
+      )}
+      {error === null && status !== null && (
+        <p className="mb-2 text-xs" style={{ color: "#86efac" }}>
+          {status}
+        </p>
+      )}
+
+      {saves.length === 0 ? (
+        <p className="text-sm opacity-50">No saved quests yet.</p>
+      ) : (
+        <div className="space-y-1">
+          {saves.map((summary) => (
+            <div
+              key={summary.name}
+              className="flex items-center justify-between gap-2 rounded-md px-2 py-1"
+              style={{
+                background: "rgba(168, 85, 247, 0.08)",
+                border: "1px solid rgba(168, 85, 247, 0.18)",
+              }}
+            >
+              <div className="min-w-0 flex-1">
+                <p
+                  className="truncate text-sm font-medium"
+                  style={{ color: "#e2e8f0" }}
+                >
+                  {summary.name}
+                </p>
+                <p className="text-[10px] opacity-50">
+                  {summary.screenType}
+                  {" · "}
+                  {formatSavedAt(summary.savedAt)}
+                </p>
+              </div>
+              <div className="flex shrink-0 items-center gap-1">
+                <button
+                  data-testid="debug-load-quest"
+                  type="button"
+                  onClick={() => {
+                    void handleLoad(summary);
+                  }}
+                  disabled={busy || onLoadQuestState === undefined}
+                  className="cursor-pointer rounded px-2 py-1 text-[10px] font-bold uppercase tracking-wider"
+                  style={{
+                    background: "rgba(124, 58, 237, 0.3)",
+                    color: "#e9d5ff",
+                    border: "1px solid rgba(168, 85, 247, 0.4)",
+                    opacity: busy || onLoadQuestState === undefined ? 0.5 : 1,
+                  }}
+                >
+                  Load
+                </button>
+                <button
+                  data-testid="debug-delete-quest"
+                  type="button"
+                  onClick={() => {
+                    void handleDelete(summary);
+                  }}
+                  disabled={busy}
+                  aria-label={`Delete saved quest ${summary.name}`}
+                  className="cursor-pointer rounded px-2 py-1 text-[10px] font-bold uppercase tracking-wider"
+                  style={{
+                    background: "rgba(127, 29, 29, 0.4)",
+                    color: "#fecaca",
+                    border: "1px solid rgba(239, 68, 68, 0.4)",
+                    opacity: busy ? 0.5 : 1,
+                  }}
+                >
+                  {"✕"}
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </InfoCard>
+  );
+}
+
+/** Formats an ISO timestamp for the saved-quest list; falls back to raw text. */
+function formatSavedAt(iso: string): string {
+  const parsed = new Date(iso);
+  if (Number.isNaN(parsed.getTime())) {
+    return iso;
+  }
+  return parsed.toLocaleString();
 }
 
 /**

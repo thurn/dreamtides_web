@@ -9,6 +9,7 @@ import { createCardEditorApiMiddleware } from "./scripts/card-editor-api.mjs";
 import { createDreamsignEditorApiMiddleware } from "./scripts/dreamsign-editor-api.mjs";
 import { createImageViewerApiMiddleware } from "./scripts/image-viewer-api.mjs";
 import { createCardImageApiMiddleware } from "./scripts/card-image-api.mjs";
+import { createSavedQuestsApiMiddleware } from "./scripts/saved-quests-api.mjs";
 import { checkGeneratedCardData } from "./scripts/generated-card-data-drift.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -96,6 +97,19 @@ function cardImageApiPlugin(): Plugin {
     apply: "serve",
     configureServer(server) {
       server.middlewares.use(createCardImageApiMiddleware({ rootDir: __dirname }));
+    },
+  };
+}
+
+/** Vite plugin that serves the saved-quest read/write endpoints. */
+function savedQuestsApiPlugin(): Plugin {
+  return {
+    name: "saved-quests-api",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(
+        createSavedQuestsApiMiddleware({ rootDir: __dirname }),
+      );
     },
   };
 }
@@ -218,6 +232,7 @@ export default defineConfig({
     dreamsignEditorApiPlugin(),
     imageViewerApiPlugin(),
     cardImageApiPlugin(),
+    savedQuestsApiPlugin(),
     generatedCardDataDriftPlugin(),
   ],
   test: {
@@ -250,6 +265,9 @@ export default defineConfig({
       // creating a worktree from reloading the dev server.
       ignored: [
         path.resolve(path.join(__dirname, "data", "tabula")) + "/**",
+        // Saving a quest writes a JSON file here; ignore it so the save does
+        // not trigger a full page reload that would close the debug overlay.
+        path.resolve(path.join(__dirname, "saved-quests")) + "/**",
         path.resolve(path.join(__dirname, ".worktrees")) + "/**",
         path.resolve(path.join(__dirname, ".claude", "worktrees")) + "/**",
         ...generatedCardDataWatchPaths,

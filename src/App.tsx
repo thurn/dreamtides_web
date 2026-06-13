@@ -349,6 +349,8 @@ export function QuestApp({
             remainingDreamsignPool={state.remainingDreamsignPool}
             dreamsignTemplates={questContent.dreamsignTemplates}
             onForceLegendaryOffer={mutations.setDraftState}
+            questState={state}
+            onLoadQuestState={mutations.loadQuestState}
           />
         </ErrorBoundary>
         <ErrorBoundary

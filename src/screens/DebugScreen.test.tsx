@@ -157,6 +157,7 @@ describe("DebugScreen", () => {
         resolvedPackage={makeResolvedPackage()}
         remainingDreamsignPool={["sign-2"]}
         dreamsignTemplates={DREAMSIGN_TEMPLATES}
+        questState={null}
       />,
     );
 

@@ -198,6 +198,14 @@ export interface QuestMutations {
    * a reload of the same room does not clobber in-progress state.
    */
   bootstrapStartInBattle: () => void;
+  /**
+   * Debug-only: replaces the entire quest state with a previously saved
+   * snapshot (a named save loaded from the developer's file system via the
+   * debug overlay). Clears the battle slot, mirroring `resetQuest`. Optional
+   * because only the live multiplayer provider implements it; lightweight
+   * test/demo mutation stubs omit it.
+   */
+  loadQuestState?: (state: QuestState, source: string) => void;
   resetQuest: () => void;
 
   // ---- Dream Journey effect plumbing (Wave 1) ----

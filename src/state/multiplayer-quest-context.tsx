@@ -988,6 +988,48 @@ export function MultiplayerQuestProvider({
     });
   }, []);
 
+  const loadQuestState = useCallback(
+    (state: QuestState, source: string) => {
+      const current = currentRef.current;
+      resetBattleCompletionBridge();
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      const actionEntry = buildActionLogEntry({
+        timestamp: now,
+        actorId: current.session.clientId,
+        action: "loadQuestState",
+        source,
+        summary: {
+          dreamcallerId: state.dreamcaller?.id ?? null,
+          screen: state.screen.type,
+        },
+      });
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null) {
+            return undefined;
+          }
+          return {
+            ...room,
+            questState: state,
+            battleState: null,
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: actionEntry,
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
   const dismissStartingDeckPopup = useCallback(() => {
     const current = currentRef.current;
     if (current.state.hasSeenStartingDeckPopup) {
@@ -4448,6 +4490,7 @@ export function MultiplayerQuestProvider({
       setFailureSummary,
       dismissStartingDeckPopup,
       bootstrapStartInBattle,
+      loadQuestState,
       resetQuest,
       changeOmens,
       setEssence,
@@ -4507,6 +4550,7 @@ export function MultiplayerQuestProvider({
       grantFreeShopRerolls,
       grantShopOmenDiscounts,
       incrementCompletionLevel,
+      loadQuestState,
       markSiteVisited,
       pickDraftCard,
       purgeAllBaneCards,

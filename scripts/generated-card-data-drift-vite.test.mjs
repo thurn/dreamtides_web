@@ -35,12 +35,14 @@ describe("generated card data drift Vite integration", () => {
   it("keeps editor-written card data files out of Vite's reload watcher", () => {
     // The whole data/tabula directory is ignored so editor writes to any card
     // or tag TOML (not just the default cards_v2.toml) never trigger a full
-    // page reload. The .worktrees and .claude/worktrees directories are ignored
-    // so creating a git worktree (which writes a full repo copy, including a
-    // tsconfig.json) does not force a full reload. The generated card data
-    // paths round out the list.
+    // page reload. The saved-quests directory is ignored so saving a quest from
+    // the debug overlay does not reload the page. The .worktrees and
+    // .claude/worktrees directories are ignored so creating a git worktree
+    // (which writes a full repo copy, including a tsconfig.json) does not force
+    // a full reload. The generated card data paths round out the list.
     expect(viteConfig.server?.watch?.ignored).toEqual([
       resolve(join(rootDir, "data", "tabula")) + "/**",
+      resolve(join(rootDir, "saved-quests")) + "/**",
       resolve(join(rootDir, ".worktrees")) + "/**",
       resolve(join(rootDir, ".claude", "worktrees")) + "/**",
       ...generatedCardDataWatchPaths,
