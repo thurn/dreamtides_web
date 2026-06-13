@@ -495,38 +495,29 @@ export function transformDreamsignProfile(profile) {
   return result;
 }
 
-export function setupAssets({
+/**
+ * Parse `cards_v2.toml` and write both runtime card JSON catalogs — the
+ * Special-filtered `card-data.json` the quest/battle runtime fetches, and the
+ * unfiltered `cards_v2-data.json` the `/draft_test` harness fetches with the
+ * draft-pool metadata merged in. This is the TOML->JSON card transform shared by
+ * the full `setupAssets` build and the dev hot-reload plugin
+ * (`cardDataHotReloadPlugin` in vite.config.ts): the plugin calls it on every
+ * `cards_v2.toml` save so the running browser can refetch fresh card data
+ * without a full asset rebuild. It writes only the two card JSON files (and
+ * refreshes the build-around name index); image symlinks and the other catalogs
+ * are left to `setupAssets`.
+ *
+ * Returns the transformed `jsonCards` / `jsonCardsV2` arrays and the id<->name
+ * `cardMaps`, which `setupAssets` reuses for image symlinking and the remaining
+ * catalogs so the transform runs once.
+ */
+export function regenerateCardData({
   cardTomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
   cardV2TomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
-  dreamcallerV2TomlPath = join(DATA_DIR, "tabula", "dreamcallers_v2.toml"),
-  dreamwellTomlPath = join(DATA_DIR, "tabula", "dreamwell.toml"),
-  dreamsignTomlPath = join(DATA_DIR, "tabula", "dreamsigns.toml"),
-  dreamsignProfilesTomlPath = join(DATA_DIR, "tabula", "dreamsign_profiles.toml"),
-  merchantCorpusJsonPath = join(DATA_DIR, "merchant_corpus.json"),
   publicDir = PUBLIC_DIR,
-  imageCacheDir = IMAGE_CACHE_DIR,
-  dreamcallerArtDir = defaultDreamcallerArtDir(),
-  dreamsignArtDir = DREAMSIGN_ART_DIR,
-  journeyArtDir = JOURNEY_ART_DIR,
-  cardFrameArtDir = CARD_FRAME_ART_DIR,
+  cardJsonPath = join(publicDir, "card-data.json"),
+  cardV2JsonPath = join(publicDir, "cards_v2-data.json"),
 } = {}) {
-  const cardsDir = join(publicDir, "cards");
-  const cardFrameDir = join(publicDir, "card-frame");
-  const dreamcallersDir = join(publicDir, "dreamcallers");
-  const dreamsignsDir = join(publicDir, "dreamsigns");
-  const journeysDir = join(publicDir, "journeys");
-  const cardJsonPath = join(publicDir, "card-data.json");
-  const cardV2JsonPath = join(publicDir, "cards_v2-data.json");
-  const decklistsJsonPath = join(publicDir, "decklists-data.json");
-  const draftRecordsAdaptedDir = join(ROOT, "docs", "draft_records_adapted");
-  const draftRecordsJsonPath = join(publicDir, "draft-records-data.json");
-  const dreamcallerV2JsonPath = join(publicDir, "dreamcallers-v2-data.json");
-  const dreamwellJsonPath = join(publicDir, "dreamwell-data.json");
-  const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
-  const dreamsignProfilesJsonPath = join(publicDir, "dreamsign-profiles-data.json");
-  const merchantCorpusPublicPath = join(publicDir, "merchant-corpus-data.json");
-  const journeyExtensionJsonPath = join(journeysDir, "imageId-extension.json");
-
   console.log("Parsing cards_v2.toml for the runtime card catalog...");
   const cardTomlContent = readFileSync(cardTomlPath, "utf8");
   const parsedCards = parse(cardTomlContent);
@@ -616,6 +607,49 @@ export function setupAssets({
   });
   writeFileSync(cardV2JsonPath, JSON.stringify(jsonCardsV2, null, 2) + "\n");
   console.log(`Wrote ${jsonCardsV2.length} cards to cards_v2-data.json`);
+
+  return { jsonCards, jsonCardsV2, cardMaps };
+}
+
+export function setupAssets({
+  cardTomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
+  cardV2TomlPath = join(DATA_DIR, "tabula", "cards_v2.toml"),
+  dreamcallerV2TomlPath = join(DATA_DIR, "tabula", "dreamcallers_v2.toml"),
+  dreamwellTomlPath = join(DATA_DIR, "tabula", "dreamwell.toml"),
+  dreamsignTomlPath = join(DATA_DIR, "tabula", "dreamsigns.toml"),
+  dreamsignProfilesTomlPath = join(DATA_DIR, "tabula", "dreamsign_profiles.toml"),
+  merchantCorpusJsonPath = join(DATA_DIR, "merchant_corpus.json"),
+  publicDir = PUBLIC_DIR,
+  imageCacheDir = IMAGE_CACHE_DIR,
+  dreamcallerArtDir = defaultDreamcallerArtDir(),
+  dreamsignArtDir = DREAMSIGN_ART_DIR,
+  journeyArtDir = JOURNEY_ART_DIR,
+  cardFrameArtDir = CARD_FRAME_ART_DIR,
+} = {}) {
+  const cardsDir = join(publicDir, "cards");
+  const cardFrameDir = join(publicDir, "card-frame");
+  const dreamcallersDir = join(publicDir, "dreamcallers");
+  const dreamsignsDir = join(publicDir, "dreamsigns");
+  const journeysDir = join(publicDir, "journeys");
+  const cardJsonPath = join(publicDir, "card-data.json");
+  const cardV2JsonPath = join(publicDir, "cards_v2-data.json");
+  const decklistsJsonPath = join(publicDir, "decklists-data.json");
+  const draftRecordsAdaptedDir = join(ROOT, "docs", "draft_records_adapted");
+  const draftRecordsJsonPath = join(publicDir, "draft-records-data.json");
+  const dreamcallerV2JsonPath = join(publicDir, "dreamcallers-v2-data.json");
+  const dreamwellJsonPath = join(publicDir, "dreamwell-data.json");
+  const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
+  const dreamsignProfilesJsonPath = join(publicDir, "dreamsign-profiles-data.json");
+  const merchantCorpusPublicPath = join(publicDir, "merchant-corpus-data.json");
+  const journeyExtensionJsonPath = join(journeysDir, "imageId-extension.json");
+
+  const { jsonCards, jsonCardsV2, cardMaps } = regenerateCardData({
+    cardTomlPath,
+    cardV2TomlPath,
+    cardJsonPath,
+    cardV2JsonPath,
+    publicDir,
+  });
 
   // Real per-deck card lists bundled for the draft test's `decklists` pool
   // variant (and the `idf`/`idf2`/`idf3` variants), which build a pool by

@@ -11,6 +11,7 @@ import { createImageViewerApiMiddleware } from "./scripts/image-viewer-api.mjs";
 import { createCardImageApiMiddleware } from "./scripts/card-image-api.mjs";
 import { createSavedQuestsApiMiddleware } from "./scripts/saved-quests-api.mjs";
 import { checkGeneratedCardData } from "./scripts/generated-card-data-drift.mjs";
+import { regenerateCardData } from "./scripts/setup-assets.mjs";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const generatedCardDataWatchPaths = [
@@ -110,6 +111,103 @@ function savedQuestsApiPlugin(): Plugin {
       server.middlewares.use(
         createSavedQuestsApiMiddleware({ rootDir: __dirname }),
       );
+    },
+  };
+}
+
+/**
+ * Dev-only Vite plugin that hot-reloads card data into the running browser when
+ * `data/tabula/cards_v2.toml` is edited. The dev watcher ignores the TOML
+ * directory (see `server.watch.ignored`), so a TOML save normally has no effect
+ * on the page; this plugin watches the file directly with `fs.watch`, and on
+ * change:
+ *
+ *   1. Regenerates both runtime card JSON catalogs (`public/card-data.json` and
+ *      `public/cards_v2-data.json`) via {@link regenerateCardData}, reusing the
+ *      exact TOML->JSON transform `setup-assets` uses (no duplication). The
+ *      writes are synchronous, so the fresh JSON is fully on disk before step 2.
+ *   2. Triggers a full browser reload (`server.ws.send({ type: "full-reload" })`).
+ *      Quest/battle state lives in the Firebase room keyed by the `?game=<id>`
+ *      URL and rehydrates on reload, and the card database is re-fetched fresh
+ *      from `/cards_v2-data.json` on load, so the running game picks up the
+ *      edited card text within a second of saving.
+ *
+ * Because regeneration runs first, the generated JSON matches the TOML by the
+ * time {@link generatedCardDataDriftPlugin} re-checks, so the drift overlay does
+ * not fire spuriously after a TOML edit; the drift guard stays as a startup
+ * safety net for a checkout whose JSON was never generated. Rapid successive
+ * saves are debounced so a single regenerate+reload covers a burst of writes.
+ *
+ * `apply: "serve"` keeps this out of production builds entirely.
+ */
+export function cardDataHotReloadPlugin(): Plugin {
+  const cardTomlPath = path.resolve(
+    path.join(__dirname, "data", "tabula", "cards_v2.toml"),
+  );
+  const tomlDir = path.dirname(cardTomlPath);
+  const tomlBasename = path.basename(cardTomlPath);
+
+  return {
+    name: "card-data-hot-reload",
+    apply: "serve",
+    configureServer(server) {
+      let pendingReload: ReturnType<typeof setTimeout> | null = null;
+
+      const regenerateAndReload = (): void => {
+        try {
+          regenerateCardData();
+          console.log(
+            "[card-data] cards_v2.toml changed -> regenerated card JSON -> reloading browser",
+          );
+          server.ws.send({ type: "full-reload" });
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error);
+          console.error(`[card-data] hot reload failed: ${message}`);
+          server.ws.send({
+            type: "error",
+            err: {
+              message: "Failed to regenerate card data from cards_v2.toml",
+              stack: message,
+            },
+          });
+        }
+      };
+
+      const scheduleReload = (): void => {
+        if (pendingReload !== null) {
+          clearTimeout(pendingReload);
+        }
+        pendingReload = setTimeout(() => {
+          pendingReload = null;
+          regenerateAndReload();
+        }, 150);
+      };
+
+      const watcher = fs.watch(
+        tomlDir,
+        { persistent: false },
+        (_eventType, filename) => {
+          if (filename === null || filename.toString() === tomlBasename) {
+            scheduleReload();
+          }
+        },
+      );
+
+      let closed = false;
+      const closeWatcher = (): void => {
+        if (closed) {
+          return;
+        }
+        closed = true;
+        if (pendingReload !== null) {
+          clearTimeout(pendingReload);
+          pendingReload = null;
+        }
+        watcher.close();
+      };
+
+      server.httpServer?.once("close", closeWatcher);
+      server.watcher.once("close", closeWatcher);
     },
   };
 }
@@ -233,6 +331,7 @@ export default defineConfig({
     imageViewerApiPlugin(),
     cardImageApiPlugin(),
     savedQuestsApiPlugin(),
+    cardDataHotReloadPlugin(),
     generatedCardDataDriftPlugin(),
   ],
   test: {
