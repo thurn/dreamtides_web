@@ -39,6 +39,9 @@ import type { TideDeckCardJson } from "./tides-io.ts";
 /** The role a tide plays in pool construction. */
 export type Tides4Role = "signature" | "facet" | "neutral";
 
+/** The deck color a tide's mechanical identity belongs to. */
+export type Tides4Color = "purple" | "green" | "yellow" | "blue" | "red";
+
 /** One preconstructed `tides4` deck. */
 export interface Tides4DeckJson {
   /** Stable tide id, e.g. "tide-sig-01" / "tide-fac-01" / "tide-neu-01". */
@@ -67,6 +70,11 @@ export interface Tides4DeckJson {
   summary?: string;
   /** A one-paragraph description of the tide's structure, engine, and contrasts. */
   description?: string;
+  /**
+   * The deck color this tide's mechanical identity belongs to. Present once
+   * annotated; preserved across bakes by stable id.
+   */
+  color?: Tides4Color;
   /** Whether this is a signature floor, a directional facet, or a broad tide. */
   role: Tides4Role;
   /** The decklist as UUID + copies entries. */

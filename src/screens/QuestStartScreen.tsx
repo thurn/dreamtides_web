@@ -7,10 +7,40 @@ import { generateQuestSeed } from "../state/quest-state-actions";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
 import { HoverPopover } from "../components/HoverPopover";
 import { RulesText } from "../components/RulesText";
-import type { Tides4DeckJson } from "../draft/pool/tides4-io";
+import type { Tides4Color, Tides4DeckJson } from "../draft/pool/tides4-io";
 import type { DreamcallerContent } from "../types/content";
 
 const DREAMCALLER_ACCENT = "#c084fc";
+
+/**
+ * Per deck color, the tide chip's dark background and matching border. The
+ * background is a deep shade of the color and the border a brighter tint of it,
+ * so the chip reads as its color while staying legible with white text.
+ */
+const TIDE_COLOR_CHIP: Record<
+  Tides4Color,
+  { background: string; border: string }
+> = {
+  purple: { background: "#3b1259", border: "rgba(192, 132, 252, 0.55)" },
+  green: { background: "#0f3d22", border: "rgba(74, 222, 128, 0.55)" },
+  yellow: { background: "#4a3a00", border: "rgba(250, 204, 21, 0.55)" },
+  blue: { background: "#13315c", border: "rgba(96, 165, 250, 0.55)" },
+  red: { background: "#5c1417", border: "rgba(248, 113, 113, 0.55)" },
+};
+
+/** The tide chip styling used when a tide has no color annotation. */
+const DEFAULT_TIDE_CHIP = {
+  background: "rgba(30, 41, 59, 0.62)",
+  border: "rgba(148, 163, 184, 0.28)",
+};
+
+/** The dark background and border for a tide chip given its deck color. */
+function tideChipColors(color: Tides4Color | undefined): {
+  background: string;
+  border: string;
+} {
+  return (color && TIDE_COLOR_CHIP[color]) ?? DEFAULT_TIDE_CHIP;
+}
 const DREAMCALLER_HOVER_TRANSITION = { duration: 0.12, delay: 0 } as const;
 const DREAMCALLER_TAP_TRANSITION = { duration: 0.08, delay: 0 } as const;
 const SIGNATURE_CARDS_LABEL_HOVER_BLURB =
@@ -314,7 +344,9 @@ export function QuestStartScreen() {
                     </HoverPopover>
                   </span>
                   <div className="flex w-full flex-col items-start gap-1.5">
-                    {tides.map((tide) => (
+                    {tides.map((tide) => {
+                      const chip = tideChipColors(tide.color);
+                      return (
                       <HoverPopover
                         key={`${dreamcaller.id}-${tide.id}`}
                         content={
@@ -335,26 +367,22 @@ export function QuestStartScreen() {
                         }
                       >
                         <span
-                          className="inline-flex max-w-full items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium"
+                          className="inline-flex max-w-full items-center rounded-full border px-2.5 py-1 text-xs font-medium"
                           data-dreamcaller-tide={`${dreamcaller.id}:${tide.id}`}
                           style={{
-                            background: `${accentColor}14`,
-                            borderColor: `${accentColor}40`,
+                            background: chip.background,
+                            borderColor: chip.border,
                             color: "#ffffff",
                             cursor: "help",
                           }}
                         >
-                          <i
-                            aria-hidden="true"
-                            className="bx bx-water text-sm leading-none"
-                            style={{ color: accentColor }}
-                          />
                           <span className="truncate">
                             {tide.displayName ?? tide.shortName ?? tide.name}
                           </span>
                         </span>
                       </HoverPopover>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               )}
