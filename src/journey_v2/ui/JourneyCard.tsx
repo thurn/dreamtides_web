@@ -1,12 +1,14 @@
-import type { CSSProperties, ReactNode } from "react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type ReactNode,
+} from "react";
+import { createPortal } from "react-dom";
 import type { CardData } from "../../types/cards";
 import { CardView } from "../../components/CardView";
-import { CardHoverPreview } from "../../components/CardHoverPreview";
-import {
-  CARD_HOVER_PREVIEW_DELAY_MS,
-  CARD_HOVER_PREVIEW_WIDTH_PX,
-  HoverPopover,
-} from "../../components/HoverPopover";
 import { JOURNEY_SHADOW_IDLE } from "./journeyTheme";
 import type { JourneyCardObject } from "./offerPresentation";
 
@@ -29,11 +31,45 @@ interface JourneyCardProps {
   onClick?: () => void;
   /** Absolutely-positioned overlay (CHOSEN pill, ×2 badge, check) — shares the float. */
   overlay?: ReactNode;
-  /** Show the full-card hover preview popover. Defaults to true. */
+  /**
+   * Grow the card in place on hover (the deck-viewer treatment). Defaults to
+   * true. When false the card never zooms (e.g. the tiny duplicate-stack faces).
+   */
   hoverPreview?: boolean;
   selected?: boolean;
   testId?: string;
   ariaLabel?: string;
+}
+
+/** On-screen width (px) the card grows toward on hover. */
+const ZOOM_TARGET_WIDTH_PX = 340;
+/** Hard cap on the zoom factor so a tiny card never balloons absurdly. */
+const ZOOM_MAX_SCALE = 3;
+/** Below this growth there is nothing to gain — leave the card alone. */
+const ZOOM_MIN_USEFUL_SCALE = 1.04;
+/** Fraction of the viewport the zoomed card may occupy. */
+const ZOOM_MAX_VIEWPORT_W = 0.94;
+const ZOOM_MAX_VIEWPORT_H = 0.92;
+/** Gap (px) kept between the zoomed card and the viewport edges. */
+const ZOOM_VIEWPORT_MARGIN_PX = 8;
+
+interface ZoomBox {
+  left: number;
+  top: number;
+  width: number;
+  height: number;
+  /** The original on-screen footprint, used to detect when the pointer leaves. */
+  origin: DOMRect;
+}
+
+/** Clamp a zoomed span of `size` starting at `start` inside the viewport. */
+function clampStart(start: number, size: number, viewport: number): number {
+  if (size >= viewport - ZOOM_VIEWPORT_MARGIN_PX * 2) {
+    return (viewport - size) / 2;
+  }
+  const min = ZOOM_VIEWPORT_MARGIN_PX;
+  const max = viewport - ZOOM_VIEWPORT_MARGIN_PX - size;
+  return Math.max(min, Math.min(start, max));
 }
 
 /**
@@ -41,6 +77,14 @@ interface JourneyCardProps {
  * shadow, and a per-state selection ring + glow. The float animation lives on
  * the outer wrapper so the ring and any `overlay` (CHOSEN / ×2 / check) ride
  * along with the card's idle drift and never detach from it.
+ *
+ * Hovering grows the card in place — a full-size `CardView` copy is portaled to
+ * `document.body` over the card's footprint and shrinks back the instant the
+ * pointer leaves — the same treatment the deck viewer uses, with no separate
+ * preview popup. The grown copy is purely visual (`pointer-events: none`); the
+ * original card keeps its click target and never shifts the layout. Because the
+ * Dream Journey stage renders inside a CSS scale transform, the copy is sized in
+ * real screen pixels rather than by transforming the down-scaled original.
  */
 export function JourneyCard({
   object,
@@ -64,6 +108,63 @@ export function JourneyCard({
       ? object.previewCard
       : object.card);
 
+  const boxRef = useRef<HTMLDivElement | null>(null);
+  const [zoom, setZoom] = useState<ZoomBox | null>(null);
+  const collapse = useCallback(() => {
+    setZoom(null);
+  }, []);
+
+  const handleEnter = useCallback(() => {
+    if (!hoverPreview || typeof window === "undefined") return;
+    const box = boxRef.current;
+    if (box === null) return;
+    const rect = box.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return;
+    const scale = Math.min(
+      ZOOM_MAX_SCALE,
+      ZOOM_TARGET_WIDTH_PX / rect.width,
+      (window.innerWidth * ZOOM_MAX_VIEWPORT_W) / rect.width,
+      (window.innerHeight * ZOOM_MAX_VIEWPORT_H) / rect.height,
+    );
+    if (scale <= ZOOM_MIN_USEFUL_SCALE) return;
+    const width = rect.width * scale;
+    const height = rect.height * scale;
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    setZoom({
+      left: clampStart(centerX - width / 2, width, window.innerWidth),
+      top: clampStart(centerY - height / 2, height, window.innerHeight),
+      width,
+      height,
+      origin: rect,
+    });
+  }, [hoverPreview]);
+
+  // Shrink the moment the pointer leaves the card's ORIGINAL footprint, so a row
+  // of cards each pop in turn rather than the grown copy swallowing neighbours.
+  useEffect(() => {
+    if (zoom === null) return undefined;
+    const { origin } = zoom;
+    function handleMove(event: MouseEvent) {
+      if (
+        event.clientX < origin.left ||
+        event.clientX > origin.right ||
+        event.clientY < origin.top ||
+        event.clientY > origin.bottom
+      ) {
+        collapse();
+      }
+    }
+    window.addEventListener("mousemove", handleMove);
+    window.addEventListener("scroll", collapse, true);
+    window.addEventListener("blur", collapse);
+    return () => {
+      window.removeEventListener("mousemove", handleMove);
+      window.removeEventListener("scroll", collapse, true);
+      window.removeEventListener("blur", collapse);
+    };
+  }, [zoom, collapse]);
+
   const wrapperStyle: CSSProperties = {
     position: "relative",
     width: widthPx,
@@ -78,11 +179,13 @@ export function JourneyCard({
     cursor: onClick ? "pointer" : undefined,
   };
 
-  const body = (
+  return (
     <div className="dj-anim-card" style={wrapperStyle}>
       <div
+        ref={boxRef}
         style={boxStyle}
         onClick={onClick}
+        onMouseEnter={handleEnter}
         role={onClick ? "button" : undefined}
         aria-pressed={onClick ? selected : undefined}
         aria-label={ariaLabel}
@@ -90,6 +193,7 @@ export function JourneyCard({
         data-card-uuid={object.cardUuid}
         data-card-number={object.cardNumber}
         data-selected={selected ? "true" : undefined}
+        data-hover-zoomed={zoom !== null ? "true" : undefined}
       >
         <CardView
           card={card}
@@ -99,29 +203,30 @@ export function JourneyCard({
         />
       </div>
       {overlay}
+      {zoom !== null &&
+        typeof document !== "undefined" &&
+        createPortal(
+          <div
+            aria-hidden="true"
+            data-journey-card-zoom=""
+            data-card-uuid={object.cardUuid}
+            className="pointer-events-none fixed z-[1000]"
+            style={{
+              left: zoom.left,
+              top: zoom.top,
+              width: zoom.width,
+              filter: "drop-shadow(0 18px 40px rgba(0,0,0,.55))",
+            }}
+          >
+            <CardView
+              card={card}
+              suppressHoverHelp
+              transfiguration={usePreview ? object.transfiguration : undefined}
+              className="block w-full overflow-hidden rounded-[12px]"
+            />
+          </div>,
+          document.body,
+        )}
     </div>
-  );
-
-  if (!hoverPreview) return body;
-
-  return (
-    <HoverPopover
-      triggerAs="div"
-      placement="left"
-      delayMs={CARD_HOVER_PREVIEW_DELAY_MS}
-      maxWidthPx={null}
-      content={({ anchorRect, side }) => (
-        <CardHoverPreview
-          card={card}
-          testId={`journey-card-hover-${object.cardUuid}`}
-          widthPx={CARD_HOVER_PREVIEW_WIDTH_PX}
-          popoverSide={side}
-          anchorRect={anchorRect}
-          transfiguration={usePreview ? object.transfiguration : undefined}
-        />
-      )}
-    >
-      {body}
-    </HoverPopover>
   );
 }
