@@ -127,6 +127,7 @@ function readTideAnnotations(outPath) {
       "displayDescription",
       "summary",
       "description",
+      "color",
     ]) {
       if (typeof tide[key] === "string" && tide[key] !== "") anno[key] = tide[key];
     }
@@ -300,8 +301,10 @@ const HEADER = `// data/tides4.jsonc — the committed tide decks the \`tides4\`
 // refreshed at bake time. Each tide may also carry hand-authored identity
 // annotations — \`shortName\` (a 1-3 word mechanical label), \`displayName\` (a
 // narrative, thematic name) and \`displayDescription\` (a 10-20 word player-facing
-// blurb) for the player-facing tide screens, \`summary\` (one sentence), and
-// \`description\` (one paragraph) — which a re-bake preserves by stable tide id.
+// blurb) for the player-facing tide screens, \`summary\` (one sentence),
+// \`description\` (one paragraph), and \`color\` (one of the five deck colors:
+// purple, green, yellow, blue, red) — which a re-bake preserves by stable tide
+// id.
 // \`tidePoolByDreamcaller\` is keyed by Dreamcaller UUID; each
 // entry has \`starter\` (the always-joined signature tide, or null), \`facets\` (a
 // random subset is drawn each run) and \`neutral\` (the broad tail).
@@ -327,6 +330,7 @@ function serializeArtifact(json) {
       "displayDescription",
       "summary",
       "description",
+      "color",
     ]) {
       if (typeof tide[key] === "string" && tide[key] !== "") {
         anno.push(`      ${JSON.stringify(key)}: ${JSON.stringify(tide[key])},`);
@@ -622,6 +626,7 @@ function run() {
         displayDescription,
         summary,
         description,
+        color,
         role,
         cards,
       }) => {
@@ -633,6 +638,7 @@ function run() {
       }
       if (summary !== undefined) out.summary = summary;
       if (description !== undefined) out.description = description;
+      if (color !== undefined) out.color = color;
       out.role = role;
       out.cards = cards;
       return out;
