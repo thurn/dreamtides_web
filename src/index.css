@@ -153,6 +153,144 @@ button:disabled {
 }
 
 /*
+ * Dream Journey idle motion.
+ *
+ * The redesigned Dream Journey leans into calm, continuous, GPU-friendly
+ * (transform/opacity only) loops. The governing rule: every element that sits
+ * on a floating object shares that object's float period and phase, so
+ * selection rings, purge seals, and CHOSEN badges never drift away from their
+ * card. Keyframes that center their element keep the centering translate inside
+ * the transform so the animation stays transform-pure.
+ *
+ * All loops freeze under `prefers-reduced-motion: reduce` (see the rule at the
+ * end of this block): glows hold at a static opacity and floats rest at their
+ * neutral position, so nothing drifts for players who opt out of motion.
+ */
+@keyframes dj-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translateX(-50%) scale(1);
+  }
+  50% {
+    opacity: 0.82;
+    transform: translateX(-50%) scale(1.06);
+  }
+}
+@keyframes dj-glow-pulse-local {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.08);
+  }
+}
+@keyframes dj-hand-glow {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.14);
+  }
+}
+@keyframes dj-float-y {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+@keyframes dj-float-yb {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-6px);
+  }
+}
+@keyframes dj-float-ycx {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-8px);
+  }
+}
+@keyframes dj-drift {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.8;
+  }
+  88% {
+    opacity: 0.7;
+  }
+  100% {
+    transform: translateY(-150px) translateX(18px);
+    opacity: 0;
+  }
+}
+@keyframes dj-arrow-slide {
+  0%,
+  100% {
+    opacity: 0.5;
+    transform: translateX(-3px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(3px);
+  }
+}
+@keyframes dj-btn-glow {
+  0%,
+  100% {
+    box-shadow:
+      0 10px 24px rgba(108, 60, 230, 0.36),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+  50% {
+    box-shadow:
+      0 10px 30px rgba(124, 77, 255, 0.6),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+}
+@keyframes dj-aura-spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+@keyframes dj-bob-center {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+  50% {
+    transform: translate(-50%, -50%) translateY(-6px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [class*="dj-anim-"] {
+    animation: none !important;
+  }
+}
+
+/*
  * Rendered-card geometry knobs.
  *
  * The Dreamtides card is full-bleed: the illustration runs edge to edge and all

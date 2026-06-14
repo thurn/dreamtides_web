@@ -15,28 +15,20 @@ import type {
 import { makeMerchantTestCard } from "../testing/fixtures";
 import { DreamMerchantScreen } from "./DreamMerchantScreen";
 
-vi.mock("../../components/CardDisplay", () => ({
-  CardDisplay: ({ card }: { card: CardData }) => (
-    <div data-testid="mock-card-display" data-card-number={card.cardNumber}>
+vi.mock("../../components/CardView", () => ({
+  CardView: ({ card }: { card: CardData }) => (
+    <div data-testid="mock-card-view" data-card-number={card.cardNumber}>
       {card.name}
     </div>
   ),
 }));
 
-vi.mock("../../components/DreamsignArtTile", () => ({
-  DreamsignArtTile: ({
-    dreamsign,
-  }: {
-    dreamsign: { id?: string; name: string };
-  }) => (
-    <div data-testid="mock-dreamsign-art" data-dreamsign-id={dreamsign.id}>
-      {dreamsign.name}
-    </div>
-  ),
+vi.mock("../../components/CardHoverPreview", () => ({
+  CardHoverPreview: () => null,
 }));
 
-vi.mock("../../components/RulesText", () => ({
-  RulesText: ({ text }: { text: string }) => <span>{text}</span>,
+vi.mock("../../components/DreamsignHoverCard", () => ({
+  DreamsignHoverCard: () => null,
 }));
 
 const roots: Root[] = [];
@@ -278,10 +270,9 @@ describe("DreamMerchantScreen", () => {
         onDecline={() => undefined}
       />,
     );
-    // First click opens the chooser.
-    click(byTestId(container, "merchant-offer-action-A"));
-    click(byTestId(container, "merchant-choice-choice-22"));
-    // Now confirm.
+    // Selection is intrinsic to the object: click the candidate card to choose
+    // it, then confirm with the accept button (which is disabled until a pick).
+    click(byTestId(container, "journey-choice-choice-22"));
     click(byTestId(container, "merchant-offer-action-A"));
     expect(requests).toHaveLength(1);
     expect(requests[0].choice?.choiceId).toBe("choice-22");

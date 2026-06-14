@@ -1,0 +1,237 @@
+import type { SiteType } from "../../types/quest";
+import type {
+  MerchantChoiceCandidate,
+  MerchantDeckCard,
+  MerchantGameObject,
+  MerchantOffer,
+} from "../types";
+
+/** A card-shaped game object (a deck card or a catalog card). */
+export type JourneyCardObject = Extract<
+  MerchantGameObject,
+  { objectType: "catalogCard" | "deckCard" }
+>;
+
+/** A dreamsign game object. */
+export type JourneyDreamsignObject = Extract<
+  MerchantGameObject,
+  { objectType: "dreamsign" }
+>;
+
+/**
+ * The visual treatment an offer renders with. Derived purely from the offer's
+ * archetype and structure (a pre-targeted offer carries `applyPayload` + a
+ * single object; a chooser carries `choiceRequest`). The renderer switches on
+ * `kind`; every variant carries exactly the objects that treatment needs.
+ */
+export type OfferPresentation =
+  /** Power Gift / fit-card gift — one strong card, pre-targeted. */
+  | { kind: "heroCard"; card: JourneyCardObject }
+  /** Draft / themed package — pick 1 of N full cards in a grid. */
+  | { kind: "cardGrid"; candidates: readonly MerchantChoiceCandidate[]; transfigured: boolean }
+  /** Transfigure / keyword / tribal — a pre-targeted before → after pair. */
+  | { kind: "beforeAfter"; object: MerchantDeckCard }
+  /** Purge — one pre-targeted card under a red seal. */
+  | { kind: "purge"; object: MerchantDeckCard }
+  /** Purge & Replace — the banished card, an arrow, then a replacement chooser. */
+  | {
+      kind: "purgeReplace";
+      removed: MerchantDeckCard;
+      candidates: readonly MerchantChoiceCandidate[];
+    }
+  /** Duplicate (chooser) — pick one of up to three; the pick renders as two copies. */
+  | { kind: "duplicateChoose"; candidates: readonly MerchantChoiceCandidate[] }
+  /** Duplicate (single) — one pre-targeted card shown as two copies. */
+  | { kind: "duplicateSingle"; object: MerchantDeckCard }
+  /** Dreamsign Gift — a pre-targeted dreamsign icon with rules on hover. */
+  | { kind: "dreamsign"; object: JourneyDreamsignObject }
+  /** Dreamsign Draft — pick one of several dreamsign icons. */
+  | { kind: "dreamsignGrid"; candidates: readonly MerchantChoiceCandidate[] }
+  /** Add Site — a slice of the dreamscape map with the new node inserted. */
+  | { kind: "addSite"; siteType: SiteType }
+  /** Anything unrecognized renders its raw objects so nothing ever blanks out. */
+  | { kind: "fallback"; objects: readonly MerchantGameObject[] };
+
+function firstCardObject(
+  objects: readonly MerchantGameObject[],
+): JourneyCardObject | undefined {
+  return objects.find(
+    (object): object is JourneyCardObject =>
+      object.objectType === "catalogCard" || object.objectType === "deckCard",
+  );
+}
+
+function firstDeckCard(
+  objects: readonly MerchantGameObject[],
+): MerchantDeckCard | undefined {
+  return objects.find(
+    (object): object is MerchantDeckCard => object.objectType === "deckCard",
+  );
+}
+
+function firstDreamsign(
+  objects: readonly MerchantGameObject[],
+): JourneyDreamsignObject | undefined {
+  return objects.find(
+    (object): object is JourneyDreamsignObject => object.objectType === "dreamsign",
+  );
+}
+
+/**
+ * Resolve an offer to its visual treatment. The mapping keys off the archetype
+ * id (an enum) and the offer's chooser/pre-targeted shape, never card names.
+ * Falls back to a plain object list if an offer's data does not fit any
+ * treatment, so an unexpected shape degrades to something visible rather than a
+ * blank column.
+ */
+export function resolveOfferPresentation(offer: MerchantOffer): OfferPresentation {
+  const candidates = offer.choiceRequest?.candidates;
+  const isChooser = candidates !== undefined && candidates.length > 0;
+
+  switch (offer.archetypeId) {
+    case "add_site": {
+      if (offer.applyPayload?.kind === "add_site") {
+        return { kind: "addSite", siteType: offer.applyPayload.siteType };
+      }
+      return { kind: "fallback", objects: offer.gameObjects };
+    }
+
+    case "purge": {
+      const object = firstDeckCard(offer.gameObjects);
+      return object === undefined
+        ? { kind: "fallback", objects: offer.gameObjects }
+        : { kind: "purge", object };
+    }
+
+    case "purge_replace": {
+      const removed = firstDeckCard(offer.gameObjects);
+      if (removed === undefined || candidates === undefined) {
+        return { kind: "fallback", objects: offer.gameObjects };
+      }
+      return { kind: "purgeReplace", removed, candidates };
+    }
+
+    case "duplicate": {
+      if (isChooser) {
+        return { kind: "duplicateChoose", candidates };
+      }
+      const object = firstDeckCard(offer.gameObjects);
+      return object === undefined
+        ? { kind: "fallback", objects: offer.gameObjects }
+        : { kind: "duplicateSingle", object };
+    }
+
+    case "transfigure":
+    case "starter_transfigure":
+    case "keyword_mod":
+    case "tribal_change": {
+      const object = firstDeckCard(offer.gameObjects);
+      return object === undefined
+        ? { kind: "fallback", objects: offer.gameObjects }
+        : { kind: "beforeAfter", object };
+    }
+
+    case "dreamsign":
+    case "dreamsign_draft": {
+      if (isChooser) {
+        return { kind: "dreamsignGrid", candidates };
+      }
+      const object = firstDreamsign(offer.gameObjects);
+      return object === undefined
+        ? { kind: "fallback", objects: offer.gameObjects }
+        : { kind: "dreamsign", object };
+    }
+
+    // Grant family.
+    case "strong_card":
+    case "fit_card_grant":
+    case "fit_card_draft":
+    case "copies_draft":
+    case "category_draft_known":
+    case "card_bundle":
+    case "transfigured_draft": {
+      if (isChooser) {
+        return {
+          kind: "cardGrid",
+          candidates,
+          transfigured: offer.archetypeId === "transfigured_draft",
+        };
+      }
+      const card = firstCardObject(offer.gameObjects);
+      return card === undefined
+        ? { kind: "fallback", objects: offer.gameObjects }
+        : { kind: "heroCard", card };
+    }
+
+    default: {
+      // Exhaustiveness guard: a new archetype lands here until it is mapped.
+      if (isChooser) {
+        return { kind: "cardGrid", candidates, transfigured: false };
+      }
+      return { kind: "fallback", objects: offer.gameObjects };
+    }
+  }
+}
+
+/** Whether the player must select a candidate before the accept button works. */
+export function presentationRequiresSelection(
+  presentation: OfferPresentation,
+): boolean {
+  return (
+    presentation.kind === "cardGrid" ||
+    presentation.kind === "purgeReplace" ||
+    presentation.kind === "duplicateChoose" ||
+    presentation.kind === "dreamsignGrid"
+  );
+}
+
+/** The candidate set a chooser presentation offers, or empty for pre-targeted. */
+export function presentationCandidates(
+  presentation: OfferPresentation,
+): readonly MerchantChoiceCandidate[] {
+  switch (presentation.kind) {
+    case "cardGrid":
+    case "duplicateChoose":
+    case "dreamsignGrid":
+      return presentation.candidates;
+    case "purgeReplace":
+      return presentation.candidates;
+    default:
+      return [];
+  }
+}
+
+/**
+ * The accept-button label. Pre-targeted offers use a fixed verb; choosers read
+ * "Choose" until a candidate is picked, then name the pick ("Take Embersummoner",
+ * "Duplicate Ember Trooper", "Swap") so the button confirms the exact result.
+ */
+export function acceptButtonLabel(
+  presentation: OfferPresentation,
+  selected: MerchantChoiceCandidate | undefined,
+): string {
+  switch (presentation.kind) {
+    case "heroCard":
+      return "Take this card";
+    case "beforeAfter":
+      return "Transfigure it";
+    case "purge":
+      return "Purge it";
+    case "duplicateSingle":
+      return "Duplicate it";
+    case "dreamsign":
+      return "Take dreamsign";
+    case "addSite":
+      return "Add this site";
+    case "cardGrid":
+      return selected === undefined ? "Choose" : `Take ${selected.title}`;
+    case "dreamsignGrid":
+      return selected === undefined ? "Choose" : `Take ${selected.title}`;
+    case "duplicateChoose":
+      return selected === undefined ? "Choose" : `Duplicate ${selected.title}`;
+    case "purgeReplace":
+      return selected === undefined ? "Choose a replacement" : "Swap";
+    case "fallback":
+      return "Take";
+  }
+}

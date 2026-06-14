@@ -1,6 +1,5 @@
 import type {
   MerchantAcceptRequest,
-  MerchantChoice,
   MerchantChoiceCandidate,
   MerchantContext,
   MerchantDeclineRequest,
@@ -9,13 +8,14 @@ import type {
   MerchantOfferActionResult,
 } from "../types";
 import type { QuestState, SiteState } from "../../types/quest";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   MERCHANT_ARCHETYPE_LABELS,
   type MerchantArchetypeId,
 } from "../archetypes/types";
-import { MerchantChooserPanel } from "./MerchantChooserPanel";
-import { OfferCard } from "./OfferCard";
+import { DreamJourneyMobile } from "./DreamJourneyMobile";
+import { DreamJourneyStage } from "./DreamJourneyStage";
+import { OfferColumn } from "./OfferColumn";
 
 export interface DreamMerchantScreenProps {
   site: SiteState;
@@ -44,6 +44,22 @@ export interface DreamMerchantScreenProps {
   questState?: QuestState;
 }
 
+/** Below this viewport width the screen switches to the mobile overview flow. */
+const MOBILE_MAX_WIDTH = 760;
+
+function useIsNarrow(): boolean {
+  const [narrow, setNarrow] = useState(false);
+  useEffect(() => {
+    if (typeof window === "undefined" || window.matchMedia === undefined) return;
+    const query = window.matchMedia(`(max-width: ${String(MOBILE_MAX_WIDTH - 1)}px)`);
+    const update = () => setNarrow(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  return narrow;
+}
+
 export function DreamMerchantScreen({
   site,
   encounter,
@@ -56,22 +72,14 @@ export function DreamMerchantScreen({
   context,
   questState,
 }: DreamMerchantScreenProps) {
-  const [choosingOfferId, setChoosingOfferId] = useState<string | null>(null);
   const [forcePanelOpen, setForcePanelOpen] = useState(false);
   const [selectedChoices, setSelectedChoices] = useState<
-    ReadonlyMap<string, MerchantChoice>
+    ReadonlyMap<string, string>
   >(new Map());
   const [validationMessage, setValidationMessage] = useState<string | null>(null);
   const [accepted, setAccepted] = useState(false);
+  const isNarrow = useIsNarrow();
 
-  const choosingOffer = useMemo(
-    () => encounter.offers.find((offer) => offer.offerId === choosingOfferId),
-    [choosingOfferId, encounter.offers],
-  );
-
-  // Forceable categories, sorted by their (family-prefixed) label so the
-  // dropdown groups families together. Only archetypes that could actually be
-  // rolled for the current quest state are listed.
   const forceableArchetypes = useMemo(
     () =>
       [...(eligibleArchetypeIds ?? [])].sort((a, b) =>
@@ -85,18 +93,26 @@ export function DreamMerchantScreen({
     onForceArchetype?.(archetypeId);
   }
 
-  function selectedChoiceFor(offer: MerchantOffer): MerchantChoice | undefined {
-    return selectedChoices.get(offer.offerId);
+  function selectCandidate(
+    offer: MerchantOffer,
+    candidate: MerchantChoiceCandidate,
+  ) {
+    setValidationMessage(null);
+    setSelectedChoices((previous) => {
+      const next = new Map(previous);
+      next.set(offer.offerId, candidate.choiceId);
+      return next;
+    });
   }
 
   function acceptOffer(offer: MerchantOffer) {
     setValidationMessage(null);
-    const choice = selectedChoiceFor(offer);
+    const choiceId = selectedChoices.get(offer.offerId);
     const request: MerchantAcceptRequest = {
       encounterSignature: encounter.encounterSignature,
       offerId: offer.offerId,
       archetypeId: offer.archetypeId,
-      ...(choice === undefined ? {} : { choice }),
+      ...(choiceId === undefined ? {} : { choice: { choiceId } }),
     };
     const result = onAcceptOffer(request);
     if (result?.ok === false) {
@@ -115,50 +131,193 @@ export function DreamMerchantScreen({
     onDecline(request);
   }
 
-  function openChooser(offer: MerchantOffer) {
-    setValidationMessage(null);
-    setChoosingOfferId(offer.offerId);
+  const debugControls =
+    onReroll === undefined && onForceArchetype === undefined ? undefined : (
+      <DebugControls
+        onReroll={onReroll}
+        onForceArchetype={onForceArchetype}
+        forcePanelOpen={forcePanelOpen}
+        setForcePanelOpen={setForcePanelOpen}
+        forceArchetype={forceArchetype}
+        forceableArchetypes={forceableArchetypes}
+        forcedArchetypeId={forcedArchetypeId ?? null}
+      />
+    );
+
+  const toastBaseStyle = {
+    position: "absolute",
+    left: "50%",
+    bottom: 132,
+    transform: "translateX(-50%)",
+    zIndex: 20,
+    maxWidth: 520,
+    padding: "12px 18px",
+    borderRadius: 12,
+    fontSize: 13.5,
+    fontWeight: 600,
+    textAlign: "center",
+  } as const;
+
+  const validationOverlay =
+    validationMessage !== null ? (
+      <div
+        data-testid="merchant-validation-message"
+        style={{
+          ...toastBaseStyle,
+          background: "rgba(60,20,28,.92)",
+          border: "1px solid rgba(255,140,140,.4)",
+          color: "#ffd9d6",
+        }}
+      >
+        {validationMessage}
+      </div>
+    ) : accepted ? (
+      <div
+        data-testid="merchant-accept-reaction"
+        style={{
+          ...toastBaseStyle,
+          background: "rgba(20,44,36,.92)",
+          border: "1px solid rgba(120,235,180,.4)",
+          color: "#cdedd9",
+        }}
+      >
+        {encounter.acceptReaction}
+      </div>
+    ) : undefined;
+
+  const rootProps = {
+    "data-testid": "dream-merchant-v2-screen",
+    "data-site-id": site.id,
+    "data-encounter-signature": encounter.encounterSignature,
+    "data-offer-count": encounter.offers.length,
+    "data-essence": context?.essence ?? questState?.essence,
+  } as const;
+
+  if (isNarrow) {
+    return (
+      <div
+        {...rootProps}
+        style={{ position: "relative", height: "calc(100dvh - 64px)", width: "100%" }}
+      >
+        <DreamJourneyMobile
+          offers={encounter.offers}
+          subtitle={encounter.dialogue.line}
+          context={context}
+          selectedChoices={selectedChoices}
+          onSelectCandidate={selectCandidate}
+          onAccept={acceptOffer}
+          onWalkOn={declineEncounter}
+        />
+        {validationMessage !== null && (
+          <div
+            data-testid="merchant-validation-message"
+            style={{
+              position: "fixed",
+              left: 16,
+              right: 16,
+              bottom: 80,
+              zIndex: 30,
+              padding: "12px 16px",
+              borderRadius: 12,
+              background: "rgba(60,20,28,.95)",
+              border: "1px solid rgba(255,140,140,.4)",
+              color: "#ffd9d6",
+              fontSize: 13.5,
+              fontWeight: 600,
+              textAlign: "center",
+            }}
+          >
+            {validationMessage}
+          </div>
+        )}
+      </div>
+    );
   }
 
-  function selectCandidate(offer: MerchantOffer, candidate: MerchantChoiceCandidate) {
-    setValidationMessage(null);
-    setSelectedChoices((previous) => {
-      const next = new Map(previous);
-      next.set(offer.offerId, { choiceId: candidate.choiceId });
-      return next;
-    });
-    setChoosingOfferId(null);
-  }
+  const offerA = encounter.offers[0];
+  const offerB = encounter.offers[1];
 
   return (
     <div
-      className="relative min-h-full overflow-y-auto bg-[#090b10] p-4 text-slate-100 sm:p-6"
-      data-testid="dream-merchant-v2-screen"
-      data-site-id={site.id}
-      data-encounter-signature={encounter.encounterSignature}
-      data-offer-count={encounter.offers.length}
-      data-essence={context?.essence ?? questState?.essence}
+      {...rootProps}
+      style={{ position: "relative", height: "calc(100dvh - 64px)", width: "100%" }}
     >
-      {onReroll !== undefined && (
-        <button
-          type="button"
-          aria-label="Reroll journey (debug)"
-          title="Reroll journey (debug)"
-          data-testid="dream-merchant-reroll"
-          onClick={onReroll}
-          className="absolute right-4 top-4 z-30 flex h-10 w-10 items-center justify-center rounded-full text-xl leading-none transition-opacity hover:opacity-80"
-          style={{
-            backgroundColor: "rgba(15, 23, 42, 0.85)",
-            color: "#fcd34d",
-            border: "1px solid rgba(252, 211, 77, 0.45)",
-            boxShadow: "0 0 10px rgba(252, 211, 77, 0.2)",
-          }}
-        >
-          {"↻"}
-        </button>
-      )}
+      <DreamJourneyStage
+        subtitle={encounter.dialogue.line}
+        onWalkOn={declineEncounter}
+        debugControls={debugControls}
+        overlay={validationOverlay}
+        leftColumn={
+          offerA === undefined ? null : (
+            <OfferColumn
+              offer={offerA}
+              side="left"
+              label="A"
+              context={context}
+              selectedChoiceId={selectedChoices.get(offerA.offerId)}
+              onSelectCandidate={(candidate) => selectCandidate(offerA, candidate)}
+              onAccept={() => acceptOffer(offerA)}
+            />
+          )
+        }
+        rightColumn={
+          offerB === undefined ? null : (
+            <OfferColumn
+              offer={offerB}
+              side="right"
+              label="B"
+              context={context}
+              selectedChoiceId={selectedChoices.get(offerB.offerId)}
+              onSelectCandidate={(candidate) => selectCandidate(offerB, candidate)}
+              onAccept={() => acceptOffer(offerB)}
+            />
+          )
+        }
+      />
+    </div>
+  );
+}
+
+// --- debug controls ---------------------------------------------------------
+
+interface DebugControlsProps {
+  onReroll?: () => void;
+  onForceArchetype?: (archetypeId: MerchantArchetypeId | null) => void;
+  forcePanelOpen: boolean;
+  setForcePanelOpen: (updater: (open: boolean) => boolean) => void;
+  forceArchetype: (archetypeId: MerchantArchetypeId | null) => void;
+  forceableArchetypes: readonly MerchantArchetypeId[];
+  forcedArchetypeId: string | null;
+}
+
+const DEBUG_BUTTON_STYLE = {
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  height: 32,
+  width: 32,
+  borderRadius: 8,
+  fontSize: 16,
+  lineHeight: 1,
+  cursor: "pointer",
+  color: "#fcd34d",
+  background: "rgba(15, 23, 42, 0.7)",
+  border: "1px solid rgba(252, 211, 77, 0.4)",
+} as const;
+
+function DebugControls({
+  onReroll,
+  onForceArchetype,
+  forcePanelOpen,
+  setForcePanelOpen,
+  forceArchetype,
+  forceableArchetypes,
+  forcedArchetypeId,
+}: DebugControlsProps) {
+  return (
+    <>
       {onForceArchetype !== undefined && (
-        <div className="absolute right-16 top-4 z-50">
+        <div style={{ position: "relative" }}>
           <button
             type="button"
             aria-label="Force a journey category (debug)"
@@ -166,15 +325,12 @@ export function DreamMerchantScreen({
             aria-expanded={forcePanelOpen}
             data-testid="dream-merchant-force-toggle"
             onClick={() => setForcePanelOpen((open) => !open)}
-            className="flex h-10 w-10 items-center justify-center rounded-full text-xl leading-none transition-opacity hover:opacity-80"
             style={{
-              backgroundColor:
+              ...DEBUG_BUTTON_STYLE,
+              background:
                 forcedArchetypeId != null
                   ? "rgba(252, 211, 77, 0.18)"
-                  : "rgba(15, 23, 42, 0.85)",
-              color: "#fcd34d",
-              border: "1px solid rgba(252, 211, 77, 0.45)",
-              boxShadow: "0 0 10px rgba(252, 211, 77, 0.2)",
+                  : DEBUG_BUTTON_STYLE.background,
             }}
           >
             <i className="bx bx-bug" aria-hidden="true" />
@@ -182,148 +338,114 @@ export function DreamMerchantScreen({
           {forcePanelOpen && (
             <div
               data-testid="dream-merchant-force-panel"
-              className="fixed right-4 top-16 z-50 max-h-[70vh] w-64 overflow-y-auto rounded-md border border-amber-300/45 bg-slate-950/95 p-1 text-left shadow-xl"
+              style={{
+                position: "absolute",
+                right: 0,
+                top: 38,
+                width: 256,
+                maxHeight: "60vh",
+                overflowY: "auto",
+                borderRadius: 8,
+                border: "1px solid rgba(252,211,77,.45)",
+                background: "rgba(2,6,23,.97)",
+                padding: 4,
+                textAlign: "left",
+                boxShadow: "0 18px 40px rgba(0,0,0,.5)",
+              }}
             >
-              <p className="px-2 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-amber-200/80">
-                Force a category
-              </p>
-              <button
-                type="button"
-                data-testid="dream-merchant-force-clear"
-                onClick={() => forceArchetype(null)}
-                className="flex w-full items-center justify-between rounded px-2 py-1.5 text-left text-sm text-slate-100 transition-colors hover:bg-slate-800"
+              <p
                 style={{
-                  backgroundColor:
-                    forcedArchetypeId == null
-                      ? "rgba(252, 211, 77, 0.16)"
-                      : undefined,
+                  padding: "6px 8px",
+                  fontSize: 11,
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: ".06em",
+                  color: "rgba(252,211,77,.8)",
                 }}
               >
-                <span>Random (clear force)</span>
-                {forcedArchetypeId == null && (
-                  <span className="text-amber-300">✓</span>
-                )}
-              </button>
+                Force a category
+              </p>
+              <DebugForceRow
+                label="Random (clear force)"
+                active={forcedArchetypeId == null}
+                onClick={() => forceArchetype(null)}
+                testId="dream-merchant-force-clear"
+              />
               {forceableArchetypes.length === 0 ? (
-                <p className="px-2 py-1.5 text-xs italic text-slate-400">
+                <p
+                  style={{
+                    padding: "6px 8px",
+                    fontSize: 12,
+                    fontStyle: "italic",
+                    color: "#94a3b8",
+                  }}
+                >
                   No categories are eligible here.
                 </p>
               ) : (
-                forceableArchetypes.map((archetypeId) => {
-                  const isForced = forcedArchetypeId === archetypeId;
-                  return (
-                    <button
-                      key={archetypeId}
-                      type="button"
-                      data-testid={`dream-merchant-force-${archetypeId}`}
-                      onClick={() => forceArchetype(archetypeId)}
-                      className="flex w-full items-center justify-between rounded px-2 py-1.5 text-left text-sm text-slate-100 transition-colors hover:bg-slate-800"
-                      style={{
-                        backgroundColor: isForced
-                          ? "rgba(252, 211, 77, 0.16)"
-                          : undefined,
-                      }}
-                    >
-                      <span>{MERCHANT_ARCHETYPE_LABELS[archetypeId]}</span>
-                      {isForced && <span className="text-amber-300">✓</span>}
-                    </button>
-                  );
-                })
+                forceableArchetypes.map((archetypeId) => (
+                  <DebugForceRow
+                    key={archetypeId}
+                    label={MERCHANT_ARCHETYPE_LABELS[archetypeId]}
+                    active={forcedArchetypeId === archetypeId}
+                    onClick={() => forceArchetype(archetypeId)}
+                    testId={`dream-merchant-force-${archetypeId}`}
+                  />
+                ))
               )}
             </div>
           )}
         </div>
       )}
-      <div className="mx-auto grid w-full max-w-[1500px] gap-4 lg:grid-cols-[minmax(280px,1fr)_minmax(360px,520px)_minmax(280px,1fr)] lg:items-start">
-        <div className="order-3 lg:order-1">
-          {encounter.offers[0] && (
-            <OfferCard
-              offer={encounter.offers[0]}
-              label="A"
-              isChooserOpen={choosingOfferId === encounter.offers[0].offerId}
-              selectedChoice={selectedChoiceFor(encounter.offers[0])}
-              onTake={acceptOffer}
-              onChoose={openChooser}
-            />
-          )}
-        </div>
-
-        <main className="order-1 grid gap-4 lg:order-2">
-          <section
-            className="flex min-h-[300px] items-center justify-center rounded-md border border-dashed border-slate-500/70 bg-[radial-gradient(circle_at_center,rgba(245,158,11,0.10),rgba(15,23,42,0.54)_48%,rgba(2,6,23,0.90)_100%)] p-6 sm:min-h-[420px] lg:min-h-[560px]"
-            data-testid="dream-merchant-image-slot"
-            aria-label="Dream Merchant image slot"
-          >
-            <div className="h-24 w-24 rounded-md border border-slate-500/35 bg-slate-800/30" />
-          </section>
-
-          <section
-            className="rounded-md border border-slate-600/70 bg-slate-950/75 p-4 text-left"
-            data-testid="merchant-dialogue"
-          >
-            <h2 className="text-lg font-bold text-slate-50">Dream Merchant</h2>
-            <p
-              className="mt-3 text-sm leading-relaxed text-slate-200"
-              data-dialogue-offer-id={encounter.dialogue.offerId}
-              data-testid="merchant-dialogue-line"
-            >
-              {encounter.dialogue.line}
-            </p>
-            {accepted && (
-              <p
-                className="mt-3 text-sm leading-relaxed text-emerald-200"
-                data-testid="merchant-accept-reaction"
-              >
-                {encounter.acceptReaction}
-              </p>
-            )}
-          </section>
-
-          {validationMessage !== null && (
-            <p
-              className="rounded-md border border-amber-300/45 bg-amber-950/35 px-4 py-3 text-sm font-semibold text-amber-100"
-              data-testid="merchant-validation-message"
-            >
-              {validationMessage}
-            </p>
-          )}
-
-          <button
-            type="button"
-            className="min-h-12 rounded-md border border-slate-600 bg-slate-900 px-5 py-3 text-sm font-bold text-slate-100 transition hover:bg-slate-800"
-            data-testid="merchant-walk-away"
-            onClick={declineEncounter}
-          >
-            Walk away
-          </button>
-        </main>
-
-        <div className="order-4 lg:order-3">
-          {encounter.offers[1] && (
-            <OfferCard
-              offer={encounter.offers[1]}
-              label="B"
-              isChooserOpen={choosingOfferId === encounter.offers[1].offerId}
-              selectedChoice={selectedChoiceFor(encounter.offers[1])}
-              onTake={acceptOffer}
-              onChoose={openChooser}
-            />
-          )}
-        </div>
-      </div>
-
-      {choosingOffer?.choiceRequest !== undefined && (
-        <div className="fixed inset-x-3 bottom-24 top-4 z-40 overflow-y-auto sm:left-1/2 sm:w-[min(760px,calc(100vw-2rem))] sm:-translate-x-1/2">
-          <MerchantChooserPanel
-            offer={choosingOffer}
-            choiceRequest={choosingOffer.choiceRequest}
-            selectedChoiceId={selectedChoiceFor(choosingOffer)?.choiceId}
-            onSelect={(candidate) => selectCandidate(choosingOffer, candidate)}
-            onClose={() => setChoosingOfferId(null)}
-          />
-        </div>
+      {onReroll !== undefined && (
+        <button
+          type="button"
+          aria-label="Reroll journey (debug)"
+          title="Reroll journey (debug)"
+          data-testid="dream-merchant-reroll"
+          onClick={onReroll}
+          style={DEBUG_BUTTON_STYLE}
+        >
+          {"↻"}
+        </button>
       )}
-    </div>
+    </>
+  );
+}
+
+function DebugForceRow({
+  label,
+  active,
+  onClick,
+  testId,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+  testId: string;
+}) {
+  return (
+    <button
+      type="button"
+      data-testid={testId}
+      onClick={onClick}
+      style={{
+        display: "flex",
+        width: "100%",
+        alignItems: "center",
+        justifyContent: "space-between",
+        borderRadius: 6,
+        padding: "6px 8px",
+        fontSize: 13,
+        textAlign: "left",
+        color: "#e2e8f0",
+        background: active ? "rgba(252,211,77,.16)" : "transparent",
+        cursor: "pointer",
+      }}
+    >
+      <span>{label}</span>
+      {active && <span style={{ color: "#fcd34d" }}>✓</span>}
+    </button>
   );
 }
 

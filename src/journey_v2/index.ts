@@ -4,12 +4,8 @@ export {
   generateMerchantEncounterWithDebug,
 } from "./encounter/generateMerchantEncounter";
 export { DreamMerchantScreen } from "./ui/DreamMerchantScreen";
-export { MerchantChooserPanel } from "./ui/MerchantChooserPanel";
-export {
-  MerchantGameObjectList,
-  MerchantGameObjectView,
-} from "./ui/MerchantGameObjectView";
-export { OfferCard } from "./ui/OfferCard";
+export { OfferColumn } from "./ui/OfferColumn";
+export { resolveOfferPresentation } from "./ui/offerPresentation";
 export {
   applyMerchantPayloadToState,
   resolveMerchantDecline,
