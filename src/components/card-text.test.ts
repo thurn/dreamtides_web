@@ -4,8 +4,18 @@ import {
   formatTypeLine,
   type TextSegment,
 } from "./card-text";
-import { lookupGlossaryTerm } from "../data/glossary";
+import { GLOSSARY } from "../data/glossary";
 import type { CardData } from "../types/cards";
+
+// Representative live glossary entries, so the term-dependent tokenizer tests
+// track the data instead of hardcoding names that change as the glossary
+// evolves. `entry` objects come straight from GLOSSARY, which is what the
+// tokenizer resolves to, so they compare equal in the expected output.
+const ARROW_TRIGGERS = GLOSSARY.filter((e) => e.term.startsWith("▸"));
+const BARE_ENTRIES = GLOSSARY.filter((e) => /^[A-Za-z]+$/.test(e.term));
+const PLURAL_ENTRY = GLOSSARY.find((e) =>
+  (e.variants ?? []).some((v) => /^[a-z]+$/.test(v)),
+);
 
 /** Rebuilds the visible text from segments (recursing into nobreak groups). */
 function reconstructText(segments: TextSegment[]): string {
@@ -214,9 +224,11 @@ describe("tokenizeRulesText", () => {
   // arrow must not be left alone at the end of a line. The keyword still
   // tokenizes as a glossary term so its popover attaches.
   it("keeps a no-space trigger arrow glued to its following keyword", () => {
-    const result = tokenizeRulesText("trigger its ▸Materialized ability.");
-    expect(nobreakContaining(result, "▸")).toBe("▸Materialized");
-    expect(hasTerm(result, "Materialized")).toBe(true);
+    const entry = ARROW_TRIGGERS[0];
+    const keyword = entry.term.slice(1);
+    const result = tokenizeRulesText(`trigger its ${entry.term} ability.`);
+    expect(nobreakContaining(result, "▸")).toBe(entry.term);
+    expect(hasTerm(result, keyword)).toBe(true);
   });
 
   it("keeps a butted number glued to its symbol (●2)", () => {
@@ -249,25 +261,26 @@ describe("tokenizeRulesText", () => {
 
   // The leading word binds even when it is a glossary term tokenizing into its
   // own segment — the term still renders for its popover.
-  it("binds the variable X to a leading glossary term (Reclaim X●)", () => {
-    const result = tokenizeRulesText("Reclaim X● to draw.");
-    expect(nobreakContaining(result, "●")).toBe("Reclaim X●");
-    expect(hasTerm(result, "Reclaim")).toBe(true);
+  it("binds the variable X to a leading glossary term", () => {
+    const entry = BARE_ENTRIES[0];
+    const result = tokenizeRulesText(`${entry.term} X● to draw.`);
+    expect(nobreakContaining(result, "●")).toBe(`${entry.term} X●`);
+    expect(hasTerm(result, entry.term)).toBe(true);
   });
 
   // The trigger arrow `▸` keeps its glossary keyword on the same line. The
   // keyword inside the nobreak is wrapped as a `term` segment for its popover.
   it("groups ▸ with a trailing colon-suffixed keyword as nobreak (with term)", () => {
-    const result = tokenizeRulesText("▸ Dawn: Draw a card.");
-    const dawnEntry = lookupGlossaryTerm("Dawn");
-    expect(dawnEntry).toBeDefined();
+    const entry = ARROW_TRIGGERS[0];
+    const keyword = entry.term.slice(1);
+    const result = tokenizeRulesText(`▸ ${keyword}: Draw a card.`);
     expect(result).toEqual([
       {
         kind: "nobreak",
         segments: [
           { kind: "symbol", symbol: "trigger", char: "▸" },
           { kind: "text", value: " " },
-          { kind: "term", word: "Dawn", entry: dawnEntry },
+          { kind: "term", word: keyword, entry },
           { kind: "text", value: ":" },
         ],
       },
@@ -276,17 +289,16 @@ describe("tokenizeRulesText", () => {
   });
 
   it("groups ▸ with a trailing comma-suffixed keyword as nobreak (with term)", () => {
-    const result = tokenizeRulesText("▸ Materialized, draw a card.");
-    // The Materialized entry is arrow-gated, so it resolves via the arrow form.
-    const materializedEntry = lookupGlossaryTerm("▸Materialized");
-    expect(materializedEntry).toBeDefined();
+    const entry = ARROW_TRIGGERS[0];
+    const keyword = entry.term.slice(1);
+    const result = tokenizeRulesText(`▸ ${keyword}, draw a card.`);
     expect(result).toEqual([
       {
         kind: "nobreak",
         segments: [
           { kind: "symbol", symbol: "trigger", char: "▸" },
           { kind: "text", value: " " },
-          { kind: "term", word: "Materialized", entry: materializedEntry },
+          { kind: "term", word: keyword, entry },
           { kind: "text", value: "," },
         ],
       },
@@ -294,13 +306,10 @@ describe("tokenizeRulesText", () => {
     ]);
   });
 
-  it("groups all known trigger keywords with the arrow and wraps them as terms", () => {
-    for (const keyword of ["Dawn", "Materialized", "Dissolved"]) {
+  it("groups every arrow trigger keyword with the arrow and wraps them as terms", () => {
+    for (const entry of ARROW_TRIGGERS) {
+      const keyword = entry.term.slice(1);
       const result = tokenizeRulesText(`▸ ${keyword}: Effect.`);
-      // Trigger keywords resolve via the arrow form; arrow-gated entries
-      // (`▸Materialized`) match only this way, bare ones fall back to the word.
-      const entry = lookupGlossaryTerm(`▸${keyword}`);
-      expect(entry, `${keyword} should be in the glossary`).toBeDefined();
       expect(result[0]).toEqual({
         kind: "nobreak",
         segments: [
@@ -313,17 +322,17 @@ describe("tokenizeRulesText", () => {
     }
   });
 
-  it("groups ↯ with a directly attached lowercase keyword (↯fast) and wraps as term", () => {
-    const result = tokenizeRulesText("Your cards have ↯fast.");
-    const fastEntry = lookupGlossaryTerm("fast");
-    expect(fastEntry).toBeDefined();
+  it("groups ↯ with a directly attached lowercase keyword and wraps as term", () => {
+    const entry = BARE_ENTRIES[0];
+    const keyword = entry.term.toLowerCase();
+    const result = tokenizeRulesText(`Your cards have ↯${keyword}.`);
     expect(result).toEqual([
       { kind: "text", value: "Your cards have " },
       {
         kind: "nobreak",
         segments: [
           { kind: "symbol", symbol: "fast", char: "↯" },
-          { kind: "term", word: "fast", entry: fastEntry },
+          { kind: "term", word: keyword, entry },
         ],
       },
       { kind: "text", value: "." },
@@ -333,34 +342,34 @@ describe("tokenizeRulesText", () => {
   // Glossary tokenization. The tokenizer wraps recognized keywords in `term`
   // segments so the renderer can attach a hover popover.
   it("wraps a recognized lowercase glossary term", () => {
-    const result = tokenizeRulesText("reclaim this card.");
-    const reclaimEntry = lookupGlossaryTerm("reclaim");
-    expect(reclaimEntry).toBeDefined();
+    const entry = BARE_ENTRIES[0];
+    const keyword = entry.term.toLowerCase();
+    const result = tokenizeRulesText(`${keyword} this card.`);
     expect(result).toEqual([
-      { kind: "term", word: "reclaim", entry: reclaimEntry },
+      { kind: "term", word: keyword, entry },
       { kind: "text", value: " this card." },
     ]);
   });
 
   it("wraps multiple glossary terms in the same string", () => {
-    const result = tokenizeRulesText("Discover with reclaim.");
-    const discoverEntry = lookupGlossaryTerm("Discover");
-    const reclaimEntry = lookupGlossaryTerm("reclaim");
-    expect(discoverEntry).toBeDefined();
-    expect(reclaimEntry).toBeDefined();
+    const [first, second] = BARE_ENTRIES;
+    const result = tokenizeRulesText(`${first.term} with ${second.term}.`);
     expect(result).toEqual([
-      { kind: "term", word: "Discover", entry: discoverEntry },
+      { kind: "term", word: first.term, entry: first },
       { kind: "text", value: " with " },
-      { kind: "term", word: "reclaim", entry: reclaimEntry },
+      { kind: "term", word: second.term, entry: second },
       { kind: "text", value: "." },
     ]);
   });
 
   it("matches plural and past-tense variants", () => {
-    const result = tokenizeRulesText("This dissolved character.");
-    const dissolvedEntry = lookupGlossaryTerm("Dissolved");
-    expect(dissolvedEntry).toBeDefined();
-    expect(hasTerm(result, "dissolved")).toBe(true);
+    expect(PLURAL_ENTRY).toBeDefined();
+    const variant = (PLURAL_ENTRY!.variants ?? []).find((v) =>
+      /^[a-z]+$/.test(v),
+    );
+    expect(variant).toBeDefined();
+    const result = tokenizeRulesText(`This ${variant!} character.`);
+    expect(hasTerm(result, variant!)).toBe(true);
   });
 
   it("does not wrap unknown words", () => {

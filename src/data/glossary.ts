@@ -13,11 +13,13 @@
  *   * Plain language. Avoid forward-references to other glossary terms when
  *     possible; when a definition mentions another term, that term should
  *     itself be in the glossary.
- *   * Match the lowercase form. The tokenizer compares case-insensitively
- *     and accepts simple plural / past-tense suffixes via the variants list.
- *   * A variant may carry a leading trigger arrow (e.g. `▸materialized`). Such
- *     a variant matches only the arrow-prefixed keyword in rules text, never
- *     the bare word. See `TRIGGER_ARROW` and `lookupGlossaryTerm`.
+ *   * The term is matched directly and case-insensitively, so it need not be
+ *     repeated in `variants`; list there only the extra forms (plurals,
+ *     past-tenses) the rules text uses.
+ *   * A term or variant may carry a leading trigger arrow (e.g.
+ *     `▸Materialized`). That form matches only the arrow-prefixed keyword in
+ *     rules text, never the bare word. See `TRIGGER_ARROW` and
+ *     `lookupGlossaryTerm`.
  *
  * When new card content adds new terminology, add a new entry here. The
  * `glossary-completeness` test scans the live card / Dreamcaller / Dreamsign
@@ -27,16 +29,20 @@
 
 /** A single glossary entry. */
 export interface GlossaryEntry {
-  /** Canonical term shown as the popover heading. */
+  /**
+   * Canonical term shown as the popover heading. The term itself is matched
+   * directly (case-insensitively), so it does not need to be repeated in
+   * `variants`.
+   */
   readonly term: string;
   /** Short, plain-language definition. */
   readonly definition: string;
   /**
-   * Word forms (lowercase) that should match this entry in rules text.
-   * Always includes `term.toLowerCase()`; add plurals and past-tense forms
-   * when the rules text uses them.
+   * Extra word forms that should match this entry beyond the term itself, such
+   * as plurals and past-tense forms (e.g. `banes`, `transfigured`). Omit when
+   * the term is the only form. Matching is case-insensitive.
    */
-  readonly variants: readonly string[];
+  readonly variants?: readonly string[];
 }
 
 /**
@@ -47,52 +53,52 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
   {
     term: "Figment",
     definition: "A token representation of character created by an effect.",
-    variants: ["figment", "figments"],
+    variants: ["figments"],
   },
 
   // --- Triggers & timing ---------------------------------------------
-  // The trigger arrow is part of this entry's variant, so it matches only the
+  // The trigger arrow is part of the term, so it matches only the
   // `▸Materialized` trigger keyword and not the past-tense verb "materialized"
   // (the latter belongs to the `Materialize` entry). See `TRIGGER_ARROW` below.
   {
     term: "▸Materialized",
     definition: "Triggers when this character enters play.",
-    variants: ["▸materialized"],
   },
   {
-    term: "Dawn",
+    term: "▸Dawn",
     definition: "Triggers at the start of your turn.",
+    // Bare variant retained for backward-compatible matching; drop it to gate
+    // this trigger to the arrow form like `▸Materialized`.
     variants: ["dawn"],
   },
   {
     term: "Day",
     definition: "The turn phase when the active player plays standard cards.",
-    variants: ["day"],
   },
   {
     term: "Materialize",
     definition: "Put a character into play",
-    variants: ["materialize", "materializes"],
+    variants: ["materializes"],
   },
   {
     term: "Rematerialize",
     definition: "Trigger an in-play character's materialization again.",
-    variants: ["rematerialize"],
   },
   {
-    term: "Dissolved",
+    term: "▸Dissolved",
     definition: "Triggers when this character is dissolved.",
+    // Bare variant retained for backward-compatible matching; drop it to gate
+    // this trigger to the arrow form like `▸Materialized`.
     variants: ["dissolved"],
   },
   {
     term: "Dissolve",
     definition: "Destroy a character, sending it to the void.",
-    variants: ["dissolve", "dissolves"],
+    variants: ["dissolves"],
   },
   {
     term: "Banish",
     definition: "Remove a card from the game.",
-    variants: ["banish"],
   },
 
   // --- Keywords -------------------------------------------------------
@@ -100,85 +106,93 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     term: "Reclaim",
     definition:
       "You may play this card from your void, then banish it when it leaves play.",
-    variants: ["reclaim", "reclaimed"],
+    variants: ["reclaimed"],
   },
   {
     term: "Foresee",
     definition:
-      "Look at the top N cards of your deck, put any number into your void, and put the rest back in any order.",
-    variants: ["foresee"],
+      "Look at the top N cards of your deck, put any number into your void, and put the rest back on top in any order.",
   },
   {
     term: "Discover",
     definition: "Reveal three matching cards and choose one to draw.",
-    variants: ["discover"],
   },
   {
     term: "Erode",
     definition: "Put cards from the top of a player's deck into their void.",
-    variants: ["erode", "eroded", "erodes"],
+    variants: ["eroded", "erodes"],
   },
   {
     term: "Fast",
     definition:
       "Can be played during your Night phase or the opponent's Dusk phase.",
-    variants: ["fast"],
   },
   {
     term: "Awakened",
     definition:
       "Can challenge and activate ☪ abilities on the same turn in which it is materialized.",
-    variants: ["awakened"],
   },
   {
     term: "Unstoppable",
     definition:
-      "Scores points equal to its spark when dissolving a defender during a challenge.",
-    variants: ["unstoppable"],
+      "Scores points equal to its ✦ when dissolving a defender during a challenge.",
   },
   {
     term: "Preeminence",
-    definition: "Wins spark ties during challenges.",
-    variants: ["preeminence"],
+    definition: "Wins ✦ ties during challenges.",
   },
   {
     term: "Supported",
     definition: "Characters directly in front of this character.",
-    variants: ["supported", "supporting"],
+    variants: ["supporting"],
   },
   {
     term: "Challenger",
-    definition: "A front-rank character during the Night phase.",
-    variants: ["challenger", "challengers"],
+    definition: "A front-rank ally during your Night phase.",
+    variants: ["challengers"],
   },
   {
     term: "Unpaired",
     definition: "A challenger with no defender opposite it.",
-    variants: ["unpaired"],
   },
   {
     term: "Prevent",
     definition: "Counter a card on the stack and send it to the void.",
-    variants: ["prevent", "prevented"],
+    variants: ["prevented"],
+  },
+  {
+    term: "Offering",
+    definition:
+      "You may play this card for 0● by banishing a card from your hand. If you do, banish this card at end of turn.",
+  },
+  {
+    term: "Phasing",
+    definition:
+      "To play this character, return an ally to hand. Materialize this character in that ally's position.",
+  },
+  {
+    term: "Ephemeral",
+    definition:
+      "If an ephemeral card is in your hand at end of turn, banish it.",
   },
 
   // --- Verbs ----------------------------------------------------------
   {
     term: "Transfigure",
     definition: "Permanently upgrade a card in your deck.",
-    variants: ["transfigure", "transfigured", "transfigures"],
+    variants: ["transfigured", "transfigures"],
   },
   {
     term: "Purge",
     definition: "Permanently remove a card from your deck for the run.",
-    variants: ["purge", "purged"],
+    variants: ["purged"],
   },
 
   // --- Quest terms ----------------------------------------------------
   {
     term: "Bane",
     definition: "A penalty card forced into your deck.",
-    variants: ["bane", "banes"],
+    variants: ["banes"],
   },
 
   // --- Transfigurations ---------------------------------------------
@@ -189,71 +203,63 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
   {
     term: "Transfiguration",
     definition: "A permanent modification to a card.",
-    variants: ["transfiguration", "transfigurations"],
+    variants: ["transfigurations"],
   },
   {
     term: "Empowered",
     definition:
       "Transfiguration: reduces this card's energy cost by 50%, rounded to the nearest whole number.",
-    variants: ["empowered"],
   },
   {
     term: "Amplified",
     definition:
       "Transfiguration: increases or decreases a number in this card's rules text by 1.",
-    variants: ["amplified"],
   },
   {
     term: "Kindled",
     definition:
       "Transfiguration: doubles a character's base spark, or sets it to 1 if zero.",
-    variants: ["kindled"],
   },
   {
     term: "Resonant",
     definition:
       "Transfiguration: increases the frequency of named triggers on this card.",
-    variants: ["resonant"],
   },
   {
     term: "Inspired",
     definition:
       'Transfiguration: appends "draw a card" to this event card\'s text.',
-    variants: ["inspired"],
   },
   {
     term: "Enduring",
     definition: 'Transfiguration: adds "reclaim" to this event card\'s text.',
-    variants: ["enduring"],
   },
   {
     term: "Attuned",
     definition:
       "Transfiguration: reduces an activated ability's energy cost by 1.",
-    variants: ["attuned"],
   },
   {
     term: "Perfected",
     definition:
       "Transfiguration: applies every other eligible transfiguration to a card.",
-    variants: ["perfected"],
   },
 ];
 
 /**
- * Lookup index from a lowercase variant to its glossary entry.
- * Built once at module load.
+ * Lookup index from a lowercase word form to its glossary entry. Each entry is
+ * keyed by its term plus any extra `variants`. Built once at module load.
  */
 export const GLOSSARY_INDEX: Readonly<Record<string, GlossaryEntry>> = (() => {
   const index: Record<string, GlossaryEntry> = {};
   for (const entry of GLOSSARY) {
-    for (const variant of entry.variants) {
-      const key = variant.toLowerCase();
+    for (const form of [entry.term, ...(entry.variants ?? [])]) {
+      const key = form.toLowerCase();
       if (index[key] !== undefined && index[key] !== entry) {
-        // Two glossary entries claim the same variant; keep the first and
+        // Two glossary entries claim the same word form; keep the first and
         // surface the conflict. This catches glossary editing mistakes.
         console.warn(
-          `glossary: duplicate variant "${key}" used by both "${index[key].term}" and "${entry.term}"`,
+          `glossary: duplicate term "${key}" used by both "${index[key].term}" and "${entry.term}"`,
         );
         continue;
       }
@@ -271,13 +277,13 @@ export const GLOSSARY_INDEX: Readonly<Record<string, GlossaryEntry>> = (() => {
 export const TRIGGER_ARROW = "▸";
 
 /**
- * Returns the glossary entry whose variants include the given word
- * (case-insensitive), or `undefined` if none matches.
+ * Returns the glossary entry matching the given word (case-insensitive), by
+ * its term or one of its variants, or `undefined` if none matches.
  *
  * The word may carry a leading trigger arrow (e.g. `▸Dawn`). An entry whose
- * variant carries the arrow (`▸materialized`) matches only that arrow-prefixed
- * form; when no arrow-specific entry exists, the bare keyword resolves the
- * lookup, so plain triggers (`▸Dawn`, `▸Judgment`) still find their entries.
+ * term or variant carries the arrow (`▸Materialized`) matches only that
+ * arrow-prefixed form; when no arrow-specific entry exists, the bare keyword
+ * resolves the lookup as a fallback.
  */
 export function lookupGlossaryTerm(word: string): GlossaryEntry | undefined {
   const key = word.toLowerCase();

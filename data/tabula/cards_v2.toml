@@ -9048,7 +9048,7 @@ rendered-text = '''
 Phasing
 
 When you return an ally to hand, reduce its cost by 2●.'''
-energy-cost = 4
+energy-cost = 2
 card-type = "Character"
 subtype = "Outsider"
 rarity = ""
