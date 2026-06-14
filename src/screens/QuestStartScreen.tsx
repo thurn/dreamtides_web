@@ -16,7 +16,7 @@ const DREAMCALLER_TAP_TRANSITION = { duration: 0.08, delay: 0 } as const;
 const SIGNATURE_CARDS_LABEL_HOVER_BLURB =
   "These signature cards define this Dreamcaller's strategy and steer the draft pool toward them.";
 const TIDES_LABEL_HOVER_BLURB =
-  "Tides are the preconstructed decks combined into this Dreamcaller's draft pool. Hover a tide to see what it does.";
+  "Tides are the pools of cards you will see on a quest. Different tides are used every time you play.";
 /** The select screen shows at most this many tides per Dreamcaller. */
 const MAX_TIDES_SHOWN = 4;
 
@@ -120,7 +120,9 @@ export function QuestStartScreen() {
       >
         {offered.map((dreamcaller, index) => {
           const accentColor = DREAMCALLER_ACCENT;
-          const tides = largestTides(tidesByDreamcaller.get(dreamcaller.id) ?? []);
+          const tides = largestTides(
+            tidesByDreamcaller.get(dreamcaller.id) ?? [],
+          );
           // A `tides4` run shows the dealt tides in place of the signature
           // cards, so suppress the signature-card list whenever tides exist.
           const signatureCards =
@@ -282,7 +284,7 @@ export function QuestStartScreen() {
                       data-dreamcaller-tides-label={dreamcaller.id}
                       style={{ color: "#94a3b8" }}
                     >
-                      Draft Tides:
+                      Tides:
                     </span>
                     <HoverPopover
                       content={
@@ -326,9 +328,9 @@ export function QuestStartScreen() {
                             data-dreamcaller-tide-tooltip={`${dreamcaller.id}:${tide.id}`}
                           >
                             {tide.displayDescription ??
-                            tide.summary ??
-                            tide.description ??
-                            tide.name}
+                              tide.summary ??
+                              tide.description ??
+                              tide.name}
                           </span>
                         }
                       >
