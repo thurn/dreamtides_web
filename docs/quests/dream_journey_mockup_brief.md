@@ -4,8 +4,6 @@ A starting brief for designing the **Dream Journey** screen. It covers the
 moment this screen creates for the player, everything that can appear on it, and
 an index of rendered game-object art to drop into mockups.
 
-Assets live in [`dream_journey_mockup/assets/`](./dream_journey_mockup/assets/).
-
 ---
 
 ## 1. The moment
@@ -100,16 +98,66 @@ run **currencies** (Essence, Omens, Cards).
 
 ---
 
-## 3. Asset index
+## 3. Stay consistent with the rest of the game
 
-Rendered game-object art to use as reference fills in mockups. Cards are a 2:3
-portrait shape; dreamsign tiles are square; Dreamcaller cards are a tall framed
-portrait.
+**The Dream Journey is not a blank canvas — it should feel like a sibling of the
+screens the player already knows.** The quest already has a clear, calm visual
+language across the dreamscape map, the card draft, the dreamsign draft, and the
+deck viewer. The redesign should read as obviously part of that same family: a
+player moving from a draft into a Dream Journey should feel like they walked into
+the next room of the same building, not a different app.
 
-| File | Object | Notes |
-|---|---|---|
-| `card-01.png` … `card-06.png` | Cards | A mix of spell and character cards, varied art. |
-| `dreamsign-01.png` … `dreamsign-04.png` | Dreamsign tiles | Square art tile + name + effect line. |
-| `transfigured-01.png`, `transfigured-02.png` | Transfigured cards | Note the gem in the title bar and the highlighted stat/text. |
-| `transfig-pair-printed.png` / `transfig-pair-transfigured.png` | Before / after | The same card, normal vs. upgraded. |
-| `dreamcaller-01.png` … `dreamcaller-03.png` | Dreamcaller cards | Framed portrait + ability + starting Essence. |
+### Reference screens — match these
+
+The Dreamsign Draft and Card Draft are the closest cousins: the Dream Journey is
+another "look at a few options, pick one or skip" screen and should borrow their
+shape directly.
+
+**Dreamsign Draft** — the offering/chooser pattern to echo most closely:
+![Dreamsign Draft](dream_journey_mockup/assets/screen-dreamsign-draft.png)
+
+**Card Draft** — the card-forward chooser, with the deck shown alongside:
+![Card Draft](dream_journey_mockup/assets/screen-draft.png)
+
+**Dreamscape map** — the location the player enters the Dream Journey from:
+![Dreamscape](dream_journey_mockup/assets/screen-dreamscape.png)
+
+**Deck viewer** — how the full deck is presented:
+![Deck viewer](dream_journey_mockup/assets/screen-deck-viewer.png)
+
+**Dreamcaller selection** — the framed-portrait, choose-one treatment at run start:
+![Dreamcaller selection](dream_journey_mockup/assets/screen-dreamcaller-select.png)
+
+### The shared visual language
+
+Pull these conventions through to the new design:
+
+- **Dark, dreamy canvas.** Every screen floats on the same near-black,
+  deep-indigo field with lots of breathing room. Content is centered and
+  uncluttered; nothing fills edge to edge.
+- **Title, then a quiet subtitle.** Screens lead with a bold centered title and a
+  small muted one-line subtitle beneath it ("Choose one dreamsign or skip",
+  "Complete 4 remaining sites…"). Dreamscape titles take on the location's accent
+  color (e.g. the teal "Verdant Hollow"); the offering screens use a soft purple
+  gradient title.
+- **Rounded, glassy panels.** Options and rows are rounded rectangles with a thin
+  purple-tinted border and a dark translucent fill. The dreamscape stacks
+  full-width rows; the offering screens lay out a row of equal option panels.
+- **Purple is the "yes" color.** Primary actions are solid purple buttons with
+  white labels (Select / Take / Choose). Secondary or declining actions are quiet
+  ghost/outline pills (Skip, Walk away, Glossary). Keep that hierarchy.
+- **A persistent bottom HUD.** A fixed bar runs along the bottom of every in-run
+  screen: on the left, the run totals with color-coded values — **Essence** in
+  lavender, **Omens** in gold, **Cards** with a card glyph — then the Dreamcaller
+  portrait and name; on the right, utility buttons (View Deck, Glossary, ⋯). The
+  Dream Journey should keep this bar exactly as-is.
+- **Cards look the same everywhere.** Cards use one consistent treatment —
+  full-bleed art, a translucent title bar, a teal energy badge at top-left, an
+  upgrade gem at top-right when transfigured, an italic type label, and a rules
+  box — shown larger in choosers and smaller in grids. Reuse it; don't restyle
+  cards for this screen.
+- **Friendly iconography.** Site and offer types read through simple emoji-style
+  icons (🃏 draft, ✨ dreamsign, 🌙 journey, 🔥 purge, ⚔️ battle); completed states
+  get a green check, locked states a padlock and a dimmed row.
+- **A top-left presence chip.** A small uppercase "1 CONNECTED" pill sits in the
+  top-left corner (multiplayer presence). Leave room for it.
