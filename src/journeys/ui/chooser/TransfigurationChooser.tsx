@@ -22,6 +22,7 @@ const TILE_COLORS: Readonly<Record<TransfigurationType, string>> = {
   Amplified: "#b88712",
   Kindled: "#b93434",
   Inspired: "#2563eb",
+  Hastened: "#0e7490",
   Resonant: "#b83280",
   Attuned: "#d94679",
   Perfected: "#7c3aed",

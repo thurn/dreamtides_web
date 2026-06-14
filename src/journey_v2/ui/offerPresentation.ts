@@ -27,10 +27,23 @@ export type JourneyDreamsignObject = Extract<
 export type OfferPresentation =
   /** Power Gift / fit-card gift — one strong card, pre-targeted. */
   | { kind: "heroCard"; card: JourneyCardObject }
-  /** Draft / themed package — pick 1 of N full cards in a grid. */
-  | { kind: "cardGrid"; candidates: readonly MerchantChoiceCandidate[]; transfigured: boolean }
+  /** Card bundle — several pre-targeted cards granted together, shown in a row. */
+  | { kind: "cardBundle"; cards: readonly JourneyCardObject[] }
+  /**
+   * Draft / themed package — pick 1 of N full cards in a grid. `transfigured`
+   * shows each pick already transfigured; `doubled` renders the pick as two
+   * copies (the `copies_draft` "keep two copies" treatment).
+   */
+  | {
+      kind: "cardGrid";
+      candidates: readonly MerchantChoiceCandidate[];
+      transfigured: boolean;
+      doubled: boolean;
+    }
   /** Transfigure / keyword / tribal — a pre-targeted before → after pair. */
   | { kind: "beforeAfter"; object: MerchantDeckCard }
+  /** Improve several starter cards — one before → after pair per card. */
+  | { kind: "beforeAfterMulti"; objects: readonly MerchantDeckCard[] }
   /** Purge — one pre-targeted card under a red seal. */
   | { kind: "purge"; object: MerchantDeckCard }
   /** Purge & Replace — the banished card, an arrow, then a replacement chooser. */
@@ -61,10 +74,27 @@ function firstCardObject(
   );
 }
 
+function allCardObjects(
+  objects: readonly MerchantGameObject[],
+): readonly JourneyCardObject[] {
+  return objects.filter(
+    (object): object is JourneyCardObject =>
+      object.objectType === "catalogCard" || object.objectType === "deckCard",
+  );
+}
+
 function firstDeckCard(
   objects: readonly MerchantGameObject[],
 ): MerchantDeckCard | undefined {
   return objects.find(
+    (object): object is MerchantDeckCard => object.objectType === "deckCard",
+  );
+}
+
+function allDeckCards(
+  objects: readonly MerchantGameObject[],
+): readonly MerchantDeckCard[] {
+  return objects.filter(
     (object): object is MerchantDeckCard => object.objectType === "deckCard",
   );
 }
@@ -121,8 +151,14 @@ export function resolveOfferPresentation(offer: MerchantOffer): OfferPresentatio
         : { kind: "duplicateSingle", object };
     }
 
+    case "starter_transfigure": {
+      const objects = allDeckCards(offer.gameObjects);
+      return objects.length === 0
+        ? { kind: "fallback", objects: offer.gameObjects }
+        : { kind: "beforeAfterMulti", objects };
+    }
+
     case "transfigure":
-    case "starter_transfigure":
     case "keyword_mod":
     case "tribal_change": {
       const object = firstDeckCard(offer.gameObjects);
@@ -142,19 +178,28 @@ export function resolveOfferPresentation(offer: MerchantOffer): OfferPresentatio
         : { kind: "dreamsign", object };
     }
 
+    // Card bundle — several cards granted together; show every one, not just
+    // the first.
+    case "card_bundle": {
+      const cards = allCardObjects(offer.gameObjects);
+      return cards.length === 0
+        ? { kind: "fallback", objects: offer.gameObjects }
+        : { kind: "cardBundle", cards };
+    }
+
     // Grant family.
     case "strong_card":
     case "fit_card_grant":
     case "fit_card_draft":
     case "copies_draft":
     case "category_draft_known":
-    case "card_bundle":
     case "transfigured_draft": {
       if (isChooser) {
         return {
           kind: "cardGrid",
           candidates,
           transfigured: offer.archetypeId === "transfigured_draft",
+          doubled: offer.archetypeId === "copies_draft",
         };
       }
       const card = firstCardObject(offer.gameObjects);
@@ -166,7 +211,7 @@ export function resolveOfferPresentation(offer: MerchantOffer): OfferPresentatio
     default: {
       // Exhaustiveness guard: a new archetype lands here until it is mapped.
       if (isChooser) {
-        return { kind: "cardGrid", candidates, transfigured: false };
+        return { kind: "cardGrid", candidates, transfigured: false, doubled: false };
       }
       return { kind: "fallback", objects: offer.gameObjects };
     }
@@ -203,8 +248,9 @@ export function presentationCandidates(
 
 /**
  * The accept-button label. Pre-targeted offers use a fixed verb; choosers read
- * "Choose" until a candidate is picked, then name the pick ("Take Embersummoner",
- * "Duplicate Ember Trooper", "Swap") so the button confirms the exact result.
+ * "Choose" until a candidate is picked, then a short verb ("Take", "Duplicate",
+ * "Swap") that confirms the action. Labels stay simple — card names live on the
+ * cards themselves, not in button text.
  */
 export function acceptButtonLabel(
   presentation: OfferPresentation,
@@ -213,8 +259,12 @@ export function acceptButtonLabel(
   switch (presentation.kind) {
     case "heroCard":
       return "Take this card";
+    case "cardBundle":
+      return "Take these cards";
     case "beforeAfter":
       return "Transfigure it";
+    case "beforeAfterMulti":
+      return presentation.objects.length === 1 ? "Transfigure it" : "Transfigure them";
     case "purge":
       return "Purge it";
     case "duplicateSingle":
@@ -224,11 +274,11 @@ export function acceptButtonLabel(
     case "addSite":
       return "Add this site";
     case "cardGrid":
-      return selected === undefined ? "Choose" : `Take ${selected.title}`;
+      return selected === undefined ? "Choose" : "Take";
     case "dreamsignGrid":
-      return selected === undefined ? "Choose" : `Take ${selected.title}`;
+      return selected === undefined ? "Choose" : "Take";
     case "duplicateChoose":
-      return selected === undefined ? "Choose" : `Duplicate ${selected.title}`;
+      return selected === undefined ? "Choose" : "Duplicate";
     case "purgeReplace":
       return selected === undefined ? "Choose a replacement" : "Swap";
     case "fallback":

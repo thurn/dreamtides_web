@@ -647,6 +647,7 @@ export function isCardEligibleForTransfiguration(
       return card.cardType === "Character";
     case "Enduring":
     case "Inspired":
+    case "Hastened":
       return card.cardType === "Event";
     case "Attuned":
       return cardHasEnergyCostActivatedAbility(card);

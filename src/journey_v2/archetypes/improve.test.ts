@@ -17,12 +17,14 @@ import type { MerchantContext } from "../types";
 import {
   keywordModBuilder,
   keywordModCandidatePairs,
+  merchantTransfigurations,
   starterTransfigureBuilder,
   transfigureBuilder,
   transfigureCandidatePairs,
   TRIBES,
   tribalChangeBuilder,
 } from "./improve";
+import { eligibleTransfigurations } from "../../transfiguration/transfiguration-logic";
 
 function uuid(n: number): string {
   const hex = n.toString(16).padStart(12, "0");
@@ -53,14 +55,45 @@ function makeContext(input: {
   });
 }
 
+describe("merchantTransfigurations", () => {
+  it("never offers Perfected, even when the card is Perfected-eligible", () => {
+    // A Character with cost, a digit, and spark is eligible for several
+    // transfigurations, which makes it Perfected-eligible.
+    const card = makeMerchantTestCard({
+      id: uuid(50),
+      cardNumber: 50,
+      cardType: "Character",
+      energyCost: 4,
+      spark: 2,
+      renderedText: "Deal 2 damage.",
+    });
+    expect(eligibleTransfigurations(card)).toContain("Perfected");
+    expect(merchantTransfigurations(card)).not.toContain("Perfected");
+    // It still offers the underlying types.
+    expect(merchantTransfigurations(card)).toContain("Empowered");
+  });
+
+  it("includes Hastened for a non-fast Event", () => {
+    const card = makeMerchantTestCard({
+      id: uuid(51),
+      cardNumber: 51,
+      cardType: "Event",
+      energyCost: 2,
+      spark: null,
+      isFast: false,
+      renderedText: "Deal damage.",
+    });
+    expect(merchantTransfigurations(card)).toContain("Hastened");
+  });
+});
+
 // --- Task 11: transfigure -----------------------------------------------------
 
 describe("improve family — transfigure pair enumeration", () => {
   it("contributes exactly one candidate per (entry, eligible transfiguration) pair", () => {
-    // A Character with energyCost>0, a digit in text, and Character type is
-    // eligible for Empowered, Amplified, Kindled (3 non-perfected). Being eligible
-    // for 2+ adds Perfected, so this card is eligible for 4. To pin exactly 3,
-    // make a card eligible for exactly Empowered + Kindled + Perfected.
+    // A Character with energyCost>0 and no digit/trigger is eligible for
+    // Empowered (cost>0) and Kindled (Character). The merchant never offers
+    // Perfected, so this entry contributes exactly those two pairs.
     const card = makeMerchantTestCard({
       id: uuid(100),
       cardNumber: 100,
@@ -69,15 +102,14 @@ describe("improve family — transfigure pair enumeration", () => {
       spark: 2,
       renderedText: "", // no digit, no triggers, no activated -> not Amplified etc
     });
-    // Empowered (cost>0), Kindled (Character), Perfected (eligible for 2+) = 3.
     const context = makeContext({
       cards: [card],
       deckEntries: [makeMerchantTestDeckEntry({ entryId: "e1", cardNumber: 100 })],
     });
     const pairs = transfigureCandidatePairs(context);
-    expect(pairs).toHaveLength(3);
+    expect(pairs).toHaveLength(2);
     const transfigs = new Set(pairs.map((p) => p.transfiguration));
-    expect(transfigs).toEqual(new Set(["Empowered", "Kindled", "Perfected"]));
+    expect(transfigs).toEqual(new Set(["Empowered", "Kindled"]));
     // All three pairs reference the same entry.
     expect(new Set(pairs.map((p) => p.entryId))).toEqual(new Set(["e1"]));
   });
@@ -190,8 +222,8 @@ describe("improve family — transfigure pair enumeration", () => {
     );
     // The Kindled pair on the direwolf: benefit clamp01((8-4)/4)=1.0.
 
-    // 7 other Event cards, each eligible for Inspired + Enduring (benefit 0.55) and
-    // Perfected (eligible for 2+), so each contributes 3 pairs -> >= 7 distinct
+    // 7 other Event cards, each eligible for Inspired + Enduring (benefit 0.55)
+    // and Hastened (benefit 0.5), so each contributes 3 pairs -> >= 7 distinct
     // positive-benefit pairs easily.
     for (let i = 0; i < 7; i += 1) {
       const n = 800 + i;
@@ -363,11 +395,11 @@ describe("improve family — keyword_mod", () => {
     });
   }
 
-  it("offers add_reclaim/add_fast/reduce_reclaim for the right Events", () => {
-    // A plain non-fast Event with no reclaim: add_reclaim + add_fast (2 pairs).
+  it("offers reduce_reclaim only for Events whose Reclaim cost exceeds 1", () => {
+    // A plain Event with no Reclaim: no candidate (granting Reclaim is the
+    // Enduring transfiguration, granting Fast is Hastened).
     const plain = eventCard({ id: uuid(1000), cardNumber: 1000 });
-    // A fast Event with reclaimCost 3: reduce_reclaim only (no add_fast since
-    // already fast; no add_reclaim since it already has Reclaim).
+    // An Event with reclaimCost 3: reduce_reclaim.
     const reclaimer = eventCard({
       id: uuid(1001),
       cardNumber: 1001,
@@ -385,7 +417,7 @@ describe("improve family — keyword_mod", () => {
     const pairs = keywordModCandidatePairs(context);
     const byEntry = (id: string) =>
       new Set(pairs.filter((p) => p.entryId === id).map((p) => p.variant));
-    expect(byEntry("plain")).toEqual(new Set(["add_reclaim", "add_fast"]));
+    expect(byEntry("plain")).toEqual(new Set([]));
     expect(byEntry("reclaimer")).toEqual(new Set(["reduce_reclaim"]));
   });
 
@@ -405,7 +437,7 @@ describe("improve family — keyword_mod", () => {
     expect(keywordModBuilder.eligible(context)).toBe(false);
   });
 
-  it("respects an existing keywordModification.reclaim (no add_reclaim stacking)", () => {
+  it("excludes reduce_reclaim when the effective Reclaim cost is exactly 1", () => {
     const ev = eventCard({ id: uuid(1200), cardNumber: 1200 });
     const context = makeContext({
       cards: [ev],
@@ -417,15 +449,9 @@ describe("improve family — keyword_mod", () => {
         }),
       ],
     });
-    const variants = new Set(
-      keywordModCandidatePairs(context).map((p) => p.variant),
-    );
-    // It already has modified Reclaim 1: add_reclaim is excluded. add_fast still
-    // applies (still non-fast). reduce_reclaim needs effective cost > 1, but the
-    // modified cost is exactly 1, so it is excluded too.
-    expect(variants.has("add_reclaim")).toBe(false);
-    expect(variants.has("add_fast")).toBe(true);
-    expect(variants.has("reduce_reclaim")).toBe(false);
+    // The modified Reclaim cost is exactly 1, so reduce_reclaim is excluded and
+    // the entry yields no keyword_mod candidate.
+    expect(keywordModCandidatePairs(context)).toHaveLength(0);
   });
 
   it("offers reduce_reclaim against the effective (modified) cost", () => {
@@ -455,26 +481,25 @@ describe("improve family — keyword_mod", () => {
     }
   });
 
-  it("samples uniformly and applies the payload", () => {
-    const ev = eventCard({ id: uuid(1400), cardNumber: 1400 });
+  it("reduces the Reclaim cost and applies the payload", () => {
+    const ev = eventCard({
+      id: uuid(1400),
+      cardNumber: 1400,
+      reclaimCost: 3,
+      renderedText: "Deal damage. Reclaim 3●",
+    });
     const deckEntries = [
       makeMerchantTestDeckEntry({ entryId: "e", cardNumber: 1400 }),
     ];
     const context = makeContext({ cards: [ev], deckEntries });
-    const variants = new Set<string>();
-    for (let s = 0; s < 40; s += 1) {
-      const draft = keywordModBuilder.build(context, merchantRng("k", String(s)));
-      expect(draft).not.toBeNull();
-      if (draft?.applyPayload?.kind === "change_deck_entry_keywords") {
-        const kw = draft.applyPayload.keywords;
-        if (kw.reclaim !== undefined) variants.add("add_reclaim");
-        if (kw.fast === true) variants.add("add_fast");
-      }
-    }
-    // Both variants seen across seeds (uniform, not argmax to one).
-    expect(variants).toEqual(new Set(["add_reclaim", "add_fast"]));
-
     const draft = keywordModBuilder.build(context, merchantRng("k", "0"));
+    expect(draft).not.toBeNull();
+    expect(draft?.applyPayload?.kind).toBe("change_deck_entry_keywords");
+    if (draft?.applyPayload?.kind === "change_deck_entry_keywords") {
+      // Effective Reclaim cost 3 -> setReclaim 2.
+      expect(draft.applyPayload.keywords.setReclaim).toBe(2);
+    }
+
     const questState = makeMerchantTestQuestState({ deck: deckEntries });
     const questContent = makeMerchantTestContent({ cards: [ev] });
     const next = applyMerchantPayloadToState({

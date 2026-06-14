@@ -1,6 +1,7 @@
 import { applyDeckEntryCardModification } from "../../card-type-change";
 import {
   applyTransfigurationToCard,
+  buildTransfigurationDisplay,
   eligibleTransfigurations,
 } from "../../transfiguration/transfiguration-logic";
 import type { CardData } from "../../types/cards";
@@ -107,6 +108,8 @@ export function transfigurationBenefit(
       return 0.55;
     case "Enduring":
       return 0.55;
+    case "Hastened":
+      return 0.5;
     case "Resonant":
       return 0.5;
     case "Attuned":
@@ -114,6 +117,18 @@ export function transfigurationBenefit(
     case "Perfected":
       return 0.65;
   }
+}
+
+/**
+ * The transfigurations the Dream Merchant may offer for a card: every eligible
+ * type except Perfected. Perfected (which chains every other applicable
+ * transfiguration) is reserved for other surfaces and never offered on a Dream
+ * Journey, so both the improve and grant families filter through this helper.
+ */
+export function merchantTransfigurations(
+  card: CardData,
+): readonly TransfigurationType[] {
+  return eligibleTransfigurations(card).filter((type) => type !== "Perfected");
 }
 
 // --- transfigure --------------------------------------------------------------
@@ -145,7 +160,7 @@ export function transfigureCandidatePairs(
   for (const deckCard of context.deckCards) {
     if (deckCard.deckEntry.transfiguration !== null) continue;
     const base = deckCard.card;
-    for (const transfiguration of eligibleTransfigurations(base)) {
+    for (const transfiguration of merchantTransfigurations(base)) {
       const preview = applyTransfigurationToCard(base, transfiguration);
       const benefit = transfigurationBenefit(base, transfiguration, preview);
       if (benefit <= 0) continue;
@@ -166,16 +181,26 @@ export function transfigureCandidatePairs(
 function transfigurePreviewObject(
   pair: TransfigureCandidatePair,
 ): MerchantGameObject {
+  // Build the display descriptor off the entry's base card so the "after" card
+  // paints the change in the transfiguration tint (e.g. a green energy orb for
+  // Empowered, the added "Reclaim."/"Fast" marked text). The descriptor's card
+  // equals `pair.preview` (an equivalence test guards this), so the visible
+  // result matches the benefit math.
+  const built = buildTransfigurationDisplay(
+    pair.deckCard.card,
+    pair.transfiguration,
+  );
   return {
     objectType: "deckCard",
     entryId: pair.entryId,
     cardUuid: pair.deckCard.cardUuid,
     cardNumber: pair.deckCard.cardNumber,
     deckEntry: pair.deckCard.deckEntry,
-    card: pair.preview,
+    card: built.card,
     displayName: pair.deckCard.displayName,
     badge: { label: pair.transfiguration },
-    previewCard: pair.preview,
+    previewCard: built.card,
+    transfiguration: built.display,
   };
 }
 
@@ -270,7 +295,7 @@ function transfigurableStarters(
 function positiveBenefitTransfigurations(
   card: CardData,
 ): readonly TransfigurationType[] {
-  return eligibleTransfigurations(card).filter((transfiguration) => {
+  return merchantTransfigurations(card).filter((transfiguration) => {
     const preview = applyTransfigurationToCard(card, transfiguration);
     return transfigurationBenefit(card, transfiguration, preview) > 0;
   });
@@ -373,8 +398,13 @@ export const starterTransfigureBuilder: MerchantArchetypeBuilder = {
 
 // --- keyword_mod --------------------------------------------------------------
 
-/** The three keyword-modification variants offered for deck Events. */
-export type KeywordModVariant = "add_reclaim" | "add_fast" | "reduce_reclaim";
+/**
+ * Keyword-modification variants offered for deck Events. Granting Reclaim is the
+ * Enduring transfiguration and granting Fast is the Hastened transfiguration, so
+ * this archetype covers the one keyword change with no transfiguration: reducing
+ * an existing Reclaim cost.
+ */
+export type KeywordModVariant = "reduce_reclaim";
 
 /** A single (deck entry, keyword variant) candidate with its built payload. */
 export interface KeywordModCandidatePair {
@@ -394,10 +424,8 @@ function effectiveReclaimCost(card: CardData): number {
 /**
  * Enumerates the flat (deck Event entry, keyword variant) candidate list,
  * reading each entry's EFFECTIVE card so modifications already on the entry are
- * respected:
- * - `add_reclaim` for Events whose effective card has no Reclaim.
- * - `add_fast` for Events whose effective card is not fast.
- * - `reduce_reclaim` for Events whose effective Reclaim cost is > 1.
+ * respected: a `reduce_reclaim` candidate for each Event whose effective Reclaim
+ * cost is > 1.
  */
 export function keywordModCandidatePairs(
   context: MerchantContext,
@@ -408,15 +436,6 @@ export function keywordModCandidatePairs(
     if (effective.cardType !== "Event") continue;
 
     const reclaimCost = effectiveReclaimCost(effective);
-
-    if (reclaimCost <= 0) {
-      pairs.push(
-        buildKeywordModPair(deckCard, "add_reclaim", { reclaim: 1 }),
-      );
-    }
-    if (!effective.isFast) {
-      pairs.push(buildKeywordModPair(deckCard, "add_fast", { fast: true }));
-    }
     if (reclaimCost > 1) {
       pairs.push(
         buildKeywordModPair(deckCard, "reduce_reclaim", {
@@ -454,18 +473,13 @@ function buildKeywordModPair(
 
 function keywordModSummary(variant: KeywordModVariant): string {
   switch (variant) {
-    case "add_reclaim":
-      return "Add Reclaim to an event.";
-    case "add_fast":
-      return "Make an event fast.";
     case "reduce_reclaim":
       return "Reduce a Reclaim cost.";
   }
 }
 
 /**
- * `keyword_mod` — *Add Reclaim to an event / make an event fast / reduce a
- * Reclaim cost.*
+ * `keyword_mod` — *Reduce a Reclaim cost.*
  *
  * Builds the flat (entry, variant) candidate list off each Event's effective
  * card, then seeded-samples one pair uniformly — no Legendary/cost argmax.

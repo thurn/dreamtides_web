@@ -10,6 +10,7 @@ export const TRANSFIGURATION_COLORS: Readonly<
   Kindled: "#ef4444",
   Inspired: "#3b82f6",
   Enduring: "#d97706",
+  Hastened: "#06b6d4",
   Resonant: "#d946ef",
   Attuned: "#f43f5e",
   Perfected: "#a855f7",
@@ -31,6 +32,7 @@ export const TRANSFIGURATION_TINT_COLORS: Readonly<
   Kindled: "#fca5a5",
   Inspired: "#93c5fd",
   Enduring: "#f0c08a",
+  Hastened: "#67e8f9",
   Resonant: "#f0abfc",
   Attuned: "#fda4af",
   Perfected: "#d8b4fe",
@@ -43,7 +45,8 @@ export const TRANSFIGURATION_TINT_COLORS: Readonly<
  * number-raising Amplified, a flame for the spark-doubling Kindled, a mind for
  * the card-drawing Inspired, an infinity loop for the recurring Enduring, a
  * broadcast wave for the trigger-widening Resonant, a tuning slider for the
- * ability-cheapening Attuned, and a flawless gem for the all-applying Perfected.
+ * ability-cheapening Attuned, a rocket for the Fast-granting Hastened, and a
+ * flawless gem for the all-applying Perfected.
  */
 export const TRANSFIGURATION_ICONS: Readonly<
   Record<TransfigurationType, string>
@@ -53,6 +56,7 @@ export const TRANSFIGURATION_ICONS: Readonly<
   Kindled: "bx-flame",
   Inspired: "bx-brain",
   Enduring: "bx-infinite",
+  Hastened: "bx-rocket",
   Resonant: "bx-broadcast",
   Attuned: "bx-slider",
   Perfected: "bx-diamond",
@@ -89,6 +93,8 @@ export interface CardTransfigurationDisplay {
   energyChanged: boolean;
   /** True when the spark changed (Kindled); tints the spark orb. */
   sparkChanged: boolean;
+  /** True when the card gained Fast (Hastened); tints the speed bolt. */
+  fastChanged: boolean;
 }
 
 /** A transfigured card paired with the display descriptor that paints it. */
@@ -123,6 +129,7 @@ export function buildTransfigurationDisplay(
   let markedText = original.renderedText;
   let energyChanged = false;
   let sparkChanged = false;
+  let fastChanged = false;
 
   for (const step of steps) {
     if (step === "Empowered" || step === "Kindled") {
@@ -130,6 +137,13 @@ export function buildTransfigurationDisplay(
       card = result.card;
       energyChanged = energyChanged || result.energyChanged;
       sparkChanged = sparkChanged || result.sparkChanged;
+      continue;
+    }
+    if (step === "Hastened") {
+      if (!card.isFast) {
+        card = { ...card, isFast: true };
+        fastChanged = true;
+      }
       continue;
     }
     // The transform is decided from the current plain text, then applied both
@@ -152,6 +166,7 @@ export function buildTransfigurationDisplay(
       markedText,
       energyChanged,
       sparkChanged,
+      fastChanged,
     },
   };
 }
@@ -186,6 +201,11 @@ export function isInspiredEligible(card: CardData): boolean {
 /** Returns true if the card is an Event (eligible for Enduring). */
 export function isEnduringEligible(card: CardData): boolean {
   return card.cardType === "Event";
+}
+
+/** Returns true if the card is an Event that is not already fast (Hastened). */
+export function isHastenedEligible(card: CardData): boolean {
+  return card.cardType === "Event" && !card.isFast;
 }
 
 /**
@@ -223,6 +243,7 @@ const NON_PERFECTED_CHECKS: ReadonlyArray<
   ["Kindled", isKindledEligible],
   ["Inspired", isInspiredEligible],
   ["Enduring", isEnduringEligible],
+  ["Hastened", isHastenedEligible],
   ["Resonant", isResonantEligible],
   ["Attuned", isAttunedEligible],
 ];
@@ -266,6 +287,9 @@ export function applyTransfigurationToCard(
   }
   if (type === "Empowered" || type === "Kindled") {
     return applyStatStep(card, type).card;
+  }
+  if (type === "Hastened") {
+    return card.isFast ? card : { ...card, isFast: true };
   }
   const transform = textTransformFor(card.renderedText, type);
   if (transform === null) {
@@ -327,7 +351,10 @@ interface TextTransform {
  */
 function textTransformFor(
   text: string,
-  step: Exclude<TransfigurationType, "Perfected" | "Empowered" | "Kindled">,
+  step: Exclude<
+    TransfigurationType,
+    "Perfected" | "Empowered" | "Kindled" | "Hastened"
+  >,
 ): TextTransform | null {
   switch (step) {
     case "Inspired":
@@ -453,6 +480,8 @@ function buildOffer(
       return { type, description: "Adds: Draw a card.", previewCard };
     case "Enduring":
       return { type, description: "Adds: Reclaim.", previewCard };
+    case "Hastened":
+      return { type, description: "Adds: Fast.", previewCard };
     case "Amplified": {
       const match = /\d+/.exec(card.renderedText);
       if (match === null) {

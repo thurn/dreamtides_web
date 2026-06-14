@@ -7,6 +7,7 @@ import {
   isKindledEligible,
   isInspiredEligible,
   isEnduringEligible,
+  isHastenedEligible,
   isResonantEligible,
   isAttunedEligible,
   eligibleTransfigurations,
@@ -159,6 +160,35 @@ describe("eligibleTransfigurations", () => {
   });
 });
 
+describe("Hastened", () => {
+  it("is eligible only for an Event that is not already fast", () => {
+    expect(
+      isHastenedEligible(makeCard({ cardType: "Event", isFast: false })),
+    ).toBe(true);
+    expect(
+      isHastenedEligible(makeCard({ cardType: "Event", isFast: true })),
+    ).toBe(false);
+    expect(
+      isHastenedEligible(makeCard({ cardType: "Character", isFast: false })),
+    ).toBe(false);
+  });
+
+  it("grants Fast and the display matches applyTransfigurationToCard", () => {
+    const card = makeCard({
+      cardType: "Event",
+      energyCost: 2,
+      isFast: false,
+      renderedText: "Deal damage.",
+    });
+    const applied = applyTransfigurationToCard(card, "Hastened");
+    expect(applied.isFast).toBe(true);
+    const built = buildTransfigurationDisplay(card, "Hastened");
+    expect(built.card).toEqual(applied);
+    expect(built.display.fastChanged).toBe(true);
+    expect(built.display.energyChanged).toBe(false);
+  });
+});
+
 describe("assignTransfiguration", () => {
   it("returns null if existing transfiguration is not null", () => {
     const card = makeCard();
@@ -247,12 +277,14 @@ describe("assignTransfiguration", () => {
   });
 
   it("returns a Enduring offer that appends Reclaim", () => {
-    // Event with 0 cost and no numbers: eligible = [Inspired, Enduring, Perfected];
-    // 0.5 * 3 = 1.5 -> floor 1 -> Enduring.
+    // A fast Event with 0 cost and no numbers (Hastened ineligible since already
+    // fast): eligible = [Inspired, Enduring, Perfected]; 0.5 * 3 = 1.5 ->
+    // floor 1 -> Enduring.
     vi.spyOn(Math, "random").mockReturnValue(0.5);
     const card = makeCard({
       cardType: "Event",
       energyCost: 0,
+      isFast: true,
       renderedText: "Foresee.",
     });
     const offer = assignTransfiguration(card, null);

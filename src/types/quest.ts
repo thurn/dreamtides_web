@@ -9,6 +9,7 @@ export type TransfigurationType =
   | "Kindled"
   | "Inspired"
   | "Enduring"
+  | "Hastened"
   | "Resonant"
   | "Attuned"
   | "Perfected";

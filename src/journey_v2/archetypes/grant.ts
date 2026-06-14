@@ -11,7 +11,6 @@ import type { CardData } from "../../types/cards";
 import {
   applyTransfigurationToCard,
   buildTransfigurationDisplay,
-  eligibleTransfigurations,
   type CardTransfigurationDisplay,
 } from "../../transfiguration/transfiguration-logic";
 import type { TransfigurationType } from "../../types/quest";
@@ -27,7 +26,7 @@ import {
 } from "../trace/buildTrace";
 import type { MerchantOfferTrace } from "../trace/types";
 import { buildCategoryUniverse, type MerchantCategory } from "./categories";
-import { transfigurationBenefit } from "./improve";
+import { merchantTransfigurations, transfigurationBenefit } from "./improve";
 import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
 
 /** A scored grant pool plus the per-card components and cold-start branch flag. */
@@ -810,7 +809,7 @@ interface TransfiguredChoice {
 }
 
 function bestTransfiguration(card: CardData): TransfigurationType | null {
-  const eligible = eligibleTransfigurations(card);
+  const eligible = merchantTransfigurations(card);
   let best: TransfigurationType | null = null;
   let bestBenefit = -Infinity;
   for (const transfiguration of eligible) {
@@ -828,7 +827,7 @@ function transfigurableCandidates(
   context: MerchantContext,
 ): readonly MerchantCatalogCard[] {
   return grantCandidatePool(context).filter(
-    (card) => eligibleTransfigurations(card.card).length > 0,
+    (card) => merchantTransfigurations(card.card).length > 0,
   );
 }
 

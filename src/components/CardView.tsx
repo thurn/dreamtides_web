@@ -934,7 +934,12 @@ export function CardView({
       key={chip.key}
       data-attribute-chip={chip.key}
       aria-label={chip.ariaLabel}
-      style={{ color: "#ffffff" }}
+      style={{
+        color:
+          transfiguration?.fastChanged === true
+            ? transfiguration.color
+            : "#ffffff",
+      }}
     >
       {Array.from({ length: chip.boltCount }, (_, index) => (
         <i

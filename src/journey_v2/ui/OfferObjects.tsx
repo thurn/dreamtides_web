@@ -195,7 +195,7 @@ function DuplicatePair({
   object,
   widthPx,
 }: {
-  object: MerchantDeckCard;
+  object: JourneyCardObject;
   widthPx: number;
 }) {
   return (
@@ -239,6 +239,55 @@ function DuplicatePair({
         <CardView card={object.card} suppressHoverHelp className="block w-full" />
       </div>
       <TwoBadge />
+    </div>
+  );
+}
+
+// --- before / after transfigure pair ----------------------------------------
+
+function BeforeAfterPair({
+  object,
+  context,
+  nowWidth,
+  afterWidth,
+}: {
+  object: MerchantDeckCard;
+  context?: MerchantContext;
+  nowWidth: number;
+  afterWidth: number;
+}) {
+  const original =
+    context?.deckEntryById.get(object.entryId)?.card ?? object.card;
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: 10,
+      }}
+    >
+      <div style={{ textAlign: "center" }}>
+        <JourneyCard
+          object={object}
+          widthPx={nowWidth}
+          cardOverride={original}
+          dim
+          hoverPreview
+        />
+        <CaptionLabel text="Now" color="#7d7799" />
+      </div>
+      <SlideArrow />
+      <div style={{ textAlign: "center" }}>
+        <JourneyCard
+          object={object}
+          widthPx={afterWidth}
+          usePreview
+          ringShadow={JOURNEY_RING_TRANSFIGURE}
+          floatAnimation="dj-float-y 5s ease-in-out infinite"
+        />
+        <CaptionLabel text="After" color="#5fe6cd" />
+      </div>
     </div>
   );
 }
@@ -409,11 +458,13 @@ function CardGrid({
   selectedChoiceId,
   onSelectCandidate,
   transfigured,
+  doubled,
 }: {
   candidates: readonly MerchantChoiceCandidate[];
   selectedChoiceId?: string;
   onSelectCandidate: (candidate: MerchantChoiceCandidate) => void;
   transfigured: boolean;
+  doubled: boolean;
 }) {
   const columns = candidates.length <= 3 ? candidates.length : 2;
   const gridStyle: CSSProperties = {
@@ -421,6 +472,7 @@ function CardGrid({
     gridTemplateColumns: `repeat(${columns}, 124px)`,
     gap: 14,
     justifyContent: "center",
+    alignItems: "center",
   };
   return (
     <div style={gridStyle}>
@@ -428,6 +480,29 @@ function CardGrid({
         const cardObject = candidateCard(candidate);
         if (cardObject === undefined) return null;
         const selected = candidate.choiceId === selectedChoiceId;
+        // The picked card in a "keep two copies" draft renders as the same
+        // overlapping ×2 pair used by the duplicate flow, so the doubling reads
+        // the moment it is selected.
+        if (doubled && selected) {
+          return (
+            <button
+              key={candidate.choiceId}
+              type="button"
+              onClick={() => onSelectCandidate(candidate)}
+              data-testid={`journey-choice-${candidate.choiceId}`}
+              data-selected="true"
+              aria-label={candidate.title}
+              style={{
+                background: "none",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
+              }}
+            >
+              <DuplicatePair object={cardObject} widthPx={118} />
+            </button>
+          );
+        }
         const ring = selected
           ? transfigured
             ? JOURNEY_RING_TRANSFIGURE
@@ -487,43 +562,65 @@ export function OfferObjects({
           selectedChoiceId={selectedChoiceId}
           onSelectCandidate={onSelectCandidate}
           transfigured={presentation.transfigured}
+          doubled={presentation.doubled}
         />
       );
 
-    case "beforeAfter": {
-      const object = presentation.object;
-      const original =
-        context?.deckEntryById.get(object.entryId)?.card ?? object.card;
+    case "beforeAfter":
+      return (
+        <BeforeAfterPair
+          object={presentation.object}
+          context={context}
+          nowWidth={128}
+          afterWidth={142}
+        />
+      );
+
+    case "beforeAfterMulti": {
+      const single = presentation.objects.length === 1;
+      return (
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 16,
+          }}
+        >
+          {presentation.objects.map((object) => (
+            <BeforeAfterPair
+              key={object.entryId}
+              object={object}
+              context={context}
+              nowWidth={single ? 128 : 92}
+              afterWidth={single ? 142 : 104}
+            />
+          ))}
+        </div>
+      );
+    }
+
+    case "cardBundle": {
+      const wide = presentation.cards.length >= 3;
       return (
         <div
           style={{
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: 10,
+            gap: 12,
+            flexWrap: "wrap",
           }}
         >
-          <div style={{ textAlign: "center" }}>
+          {presentation.cards.map((card, index) => (
             <JourneyCard
-              object={object}
-              widthPx={128}
-              cardOverride={original}
-              dim
-              hoverPreview
+              key={`${card.cardUuid}:${String(index)}`}
+              object={card}
+              widthPx={wide ? 118 : 138}
+              floatAnimation={`dj-float-yb 5.4s ease-in-out infinite ${String(index * 0.2)}s`}
             />
-            <CaptionLabel text="Now" color="#7d7799" />
-          </div>
-          <SlideArrow />
-          <div style={{ textAlign: "center" }}>
-            <JourneyCard
-              object={object}
-              widthPx={142}
-              usePreview
-              ringShadow={JOURNEY_RING_TRANSFIGURE}
-              floatAnimation="dj-float-y 5s ease-in-out infinite"
-            />
-            <CaptionLabel text="After" color="#5fe6cd" />
-          </div>
+          ))}
         </div>
       );
     }
@@ -548,6 +645,7 @@ export function OfferObjects({
             selectedChoiceId={selectedChoiceId}
             onSelectCandidate={onSelectCandidate}
             transfigured={false}
+            doubled={false}
           />
         </div>
       );
@@ -649,7 +747,7 @@ export function OfferObjects({
               <JourneyDreamsignIcon
                 key={candidate.choiceId}
                 object={object}
-                sizePx={76}
+                sizePx={114}
                 dim={!selected}
                 ringColor={selected ? "rgba(199,155,255,.95)" : undefined}
                 floatAnimation="dj-float-yb 5.4s ease-in-out infinite"
@@ -659,10 +757,10 @@ export function OfferObjects({
                 caption={
                   <div
                     style={{
-                      fontSize: 12.5,
+                      fontSize: 13.5,
                       fontWeight: 700,
                       color: selected ? "#e7defc" : "#9a93c4",
-                      maxWidth: 110,
+                      maxWidth: 150,
                       textAlign: "center",
                     }}
                   >

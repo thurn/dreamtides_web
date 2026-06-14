@@ -78,7 +78,11 @@ export function DreamJourneyStage({
         position: "absolute",
         inset: 0,
         overflow: "hidden",
-        background: "#0b0a11",
+        // Fill the full viewport with the same purple wash as the canvas so the
+        // letterbox area outside the scaled 1440x980 stage reads as one
+        // continuous dream, not black bars.
+        background:
+          "radial-gradient(140% 120% at 50% 30%, #241b42 0%, #130d29 52%, #0a0718 100%)",
       }}
       data-testid="dream-journey-stage"
     >
@@ -137,31 +141,34 @@ export function DreamJourneyStage({
           1 CONNECTED
         </div>
 
-        {/* Walk on — a quiet decline, never a red close */}
+        {/* Walk on — a quiet decline pinned to the bottom center, clear of the
+            offer columns and the top-right debug controls. */}
         <button
           type="button"
           onClick={onWalkOn}
           data-testid="merchant-walk-away"
           style={{
             position: "absolute",
-            top: 24,
-            right: 26,
-            zIndex: 6,
+            bottom: 30,
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 12,
             display: "flex",
             alignItems: "center",
-            gap: 7,
-            fontSize: 13,
-            fontWeight: 600,
-            color: "#a39ec5",
-            padding: "9px 15px 9px 17px",
+            gap: 8,
+            fontSize: 15,
+            fontWeight: 700,
+            color: "#cfc8ef",
+            padding: "12px 26px",
             borderRadius: 999,
-            background: "rgba(28,22,48,.5)",
-            border: "1px solid rgba(140,120,210,.24)",
+            background: "rgba(34,27,58,.78)",
+            border: "1px solid rgba(150,128,224,.45)",
+            boxShadow: "0 8px 24px rgba(0,0,0,.45)",
             cursor: "pointer",
           }}
         >
           Walk on
-          <span aria-hidden="true" style={{ fontSize: 14, lineHeight: 1 }}>
+          <span aria-hidden="true" style={{ fontSize: 16, lineHeight: 1 }}>
             ›
           </span>
         </button>
