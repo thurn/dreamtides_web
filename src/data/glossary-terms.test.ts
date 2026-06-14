@@ -18,8 +18,8 @@ describe("extractGlossaryTerms", () => {
   });
 
   it("matches terms case-insensitively", () => {
-    const terms = extractGlossaryTerms("trigger a JUDGMENT");
-    expect(terms.map((entry) => entry.term)).toEqual(["Judgment"]);
+    const terms = extractGlossaryTerms("trigger a DAWN");
+    expect(terms.map((entry) => entry.term)).toEqual(["Dawn"]);
   });
 
   it("matches plural / past-tense forms via the glossary variants list", () => {
@@ -54,22 +54,39 @@ describe("extractGlossaryTerms", () => {
   });
 
   it("tolerates punctuation around terms", () => {
-    const terms = extractGlossaryTerms("(transfigured) — judgment: bane.");
+    const terms = extractGlossaryTerms("(transfigured) — dawn: bane.");
     expect(terms.map((entry) => entry.term)).toEqual([
       "Transfigure",
-      "Judgment",
+      "Dawn",
       "Bane",
     ]);
   });
 
+  it("surfaces an arrow-gated term only when the arrow is present", () => {
+    // The production trigger form (`▸Materialized`, no space) shows the tile.
+    const trigger = extractGlossaryTerms("▸Materialized: draw a card.");
+    expect(trigger.map((entry) => entry.term)).toEqual(["▸Materialized"]);
+
+    // The bare past-tense verb does not, so it never duplicates the trigger.
+    const prose = extractGlossaryTerms(
+      "if it is not the first ally you have materialized this turn",
+    );
+    expect(prose.map((entry) => entry.term)).toEqual([]);
+  });
+
+  it("resolves a plain arrow-prefixed trigger through its bare entry", () => {
+    const terms = extractGlossaryTerms("▸Dawn: gain 1 energy.");
+    expect(terms.map((entry) => entry.term)).toEqual(["Dawn"]);
+  });
+
   it("preserves order across heterogeneous mentions", () => {
     const terms = extractGlossaryTerms(
-      "After Materialize, Banish a Nightmare, then Foresee 2.",
+      "After Materialize, Banish a Bane, then Foresee 2.",
     );
     expect(terms.map((entry) => entry.term)).toEqual([
       "Materialize",
       "Banish",
-      "Nightmare",
+      "Bane",
       "Foresee",
     ]);
   });

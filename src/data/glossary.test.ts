@@ -40,14 +40,30 @@ describe("glossary", () => {
   });
 
   it("exposes a working lookup helper", () => {
-    expect(lookupGlossaryTerm("Materialized")?.term).toBe("Materialized");
-    expect(lookupGlossaryTerm("MATERIALIZED")?.term).toBe("Materialized");
+    expect(lookupGlossaryTerm("Reclaim")?.term).toBe("Reclaim");
+    expect(lookupGlossaryTerm("RECLAIM")?.term).toBe("Reclaim");
     expect(lookupGlossaryTerm("not-a-real-term")).toBeUndefined();
   });
 
+  it("gates an arrow-prefixed entry to the trigger form", () => {
+    // `▸Materialized` resolves; the bare past-tense verb does not, so prose
+    // like "you have materialized" never surfaces the trigger definition.
+    expect(lookupGlossaryTerm("▸Materialized")?.term).toBe("▸Materialized");
+    expect(lookupGlossaryTerm("▸materialized")?.term).toBe("▸Materialized");
+    expect(lookupGlossaryTerm("Materialized")).toBeUndefined();
+    expect(lookupGlossaryTerm("materialized")).toBeUndefined();
+  });
+
+  it("resolves a plain trigger keyword through its bare variant", () => {
+    // Non-gated trigger entries keep a bare variant, so they match whether or
+    // not the arrow is glued to them.
+    expect(lookupGlossaryTerm("▸Dawn")?.term).toBe("Dawn");
+    expect(lookupGlossaryTerm("Dawn")?.term).toBe("Dawn");
+  });
+
   it("exposes a working hasGlossaryTerm helper", () => {
-    expect(hasGlossaryTerm("Judgment")).toBe(true);
-    expect(hasGlossaryTerm("judgment")).toBe(true);
+    expect(hasGlossaryTerm("Dawn")).toBe(true);
+    expect(hasGlossaryTerm("dawn")).toBe(true);
     expect(hasGlossaryTerm("xxxxxxxx")).toBe(false);
   });
 

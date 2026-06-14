@@ -126,13 +126,20 @@ function splitKeywordFragment(fragment: string): {
 /**
  * Wraps the keyword inside a nobreak fragment in a `term` segment if the
  * keyword is in the glossary, otherwise returns the original text segment.
+ *
+ * When `arrowPrefixed` is set, the keyword follows a trigger arrow (`▸`), so
+ * the glossary lookup includes the arrow — this lets arrow-gated entries such
+ * as `▸Materialized` resolve while keeping the displayed word bare.
  */
-function maybeWrapKeyword(value: string): TextSegment[] {
+function maybeWrapKeyword(
+  value: string,
+  arrowPrefixed: boolean,
+): TextSegment[] {
   const { prefix, word, suffix } = splitKeywordFragment(value);
   if (word === "") {
     return [{ kind: "text", value }];
   }
-  const entry = lookupGlossaryTerm(word);
+  const entry = lookupGlossaryTerm((arrowPrefixed ? TRIGGER_CHAR : "") + word);
   const segments: TextSegment[] = [];
   if (prefix !== "") {
     segments.push({ kind: "text", value: prefix });
@@ -345,6 +352,16 @@ export function tokenizeRulesText(text: string): TextSegment[] {
     }
     const chunk = buffer;
     buffer = "";
+    // The common authored trigger form `▸Materialized` (no space) reaches here
+    // as a bare keyword after the arrow has been emitted as its own symbol
+    // segment. When this chunk's first word sits directly against that arrow,
+    // look it up arrow-prefixed so arrow-gated entries (`▸Materialized`)
+    // resolve.
+    const previous = segments[segments.length - 1];
+    const afterTriggerArrow =
+      previous !== undefined &&
+      previous.kind === "symbol" &&
+      previous.symbol === "trigger";
     let cursor = 0;
     let pending = "";
     while (cursor < chunk.length) {
@@ -356,7 +373,10 @@ export function tokenizeRulesText(text: string): TextSegment[] {
         continue;
       }
       const word = wordMatch[0];
-      const entry = lookupGlossaryTerm(word);
+      const arrowPrefixed = afterTriggerArrow && cursor === 0;
+      const entry = lookupGlossaryTerm(
+        (arrowPrefixed ? TRIGGER_CHAR : "") + word,
+      );
       if (entry !== undefined) {
         if (pending.length > 0) {
           segments.push({ kind: "text", value: pending });
@@ -388,7 +408,7 @@ export function tokenizeRulesText(text: string): TextSegment[] {
           kind: "nobreak",
           segments: [
             { kind: "symbol", symbol: "trigger", char: TRIGGER_CHAR },
-            ...maybeWrapKeyword(` ${match[1]}${tail}`),
+            ...maybeWrapKeyword(` ${match[1]}${tail}`, true),
           ],
         });
         i += match[0].length;
@@ -405,7 +425,7 @@ export function tokenizeRulesText(text: string): TextSegment[] {
           kind: "nobreak",
           segments: [
             { kind: "symbol", symbol: "fast", char: FAST_CHAR },
-            ...maybeWrapKeyword(match[1]),
+            ...maybeWrapKeyword(match[1], false),
           ],
         });
         i += match[0].length;

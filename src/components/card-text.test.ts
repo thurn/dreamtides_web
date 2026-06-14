@@ -258,16 +258,16 @@ describe("tokenizeRulesText", () => {
   // The trigger arrow `▸` keeps its glossary keyword on the same line. The
   // keyword inside the nobreak is wrapped as a `term` segment for its popover.
   it("groups ▸ with a trailing colon-suffixed keyword as nobreak (with term)", () => {
-    const result = tokenizeRulesText("▸ Judgment: Draw a card.");
-    const judgmentEntry = lookupGlossaryTerm("Judgment");
-    expect(judgmentEntry).toBeDefined();
+    const result = tokenizeRulesText("▸ Dawn: Draw a card.");
+    const dawnEntry = lookupGlossaryTerm("Dawn");
+    expect(dawnEntry).toBeDefined();
     expect(result).toEqual([
       {
         kind: "nobreak",
         segments: [
           { kind: "symbol", symbol: "trigger", char: "▸" },
           { kind: "text", value: " " },
-          { kind: "term", word: "Judgment", entry: judgmentEntry },
+          { kind: "term", word: "Dawn", entry: dawnEntry },
           { kind: "text", value: ":" },
         ],
       },
@@ -277,7 +277,8 @@ describe("tokenizeRulesText", () => {
 
   it("groups ▸ with a trailing comma-suffixed keyword as nobreak (with term)", () => {
     const result = tokenizeRulesText("▸ Materialized, draw a card.");
-    const materializedEntry = lookupGlossaryTerm("Materialized");
+    // The Materialized entry is arrow-gated, so it resolves via the arrow form.
+    const materializedEntry = lookupGlossaryTerm("▸Materialized");
     expect(materializedEntry).toBeDefined();
     expect(result).toEqual([
       {
@@ -294,9 +295,11 @@ describe("tokenizeRulesText", () => {
   });
 
   it("groups all known trigger keywords with the arrow and wraps them as terms", () => {
-    for (const keyword of ["Judgment", "Materialized", "Dissolved", "Banished"]) {
+    for (const keyword of ["Dawn", "Materialized", "Dissolved"]) {
       const result = tokenizeRulesText(`▸ ${keyword}: Effect.`);
-      const entry = lookupGlossaryTerm(keyword);
+      // Trigger keywords resolve via the arrow form; arrow-gated entries
+      // (`▸Materialized`) match only this way, bare ones fall back to the word.
+      const entry = lookupGlossaryTerm(`▸${keyword}`);
       expect(entry, `${keyword} should be in the glossary`).toBeDefined();
       expect(result[0]).toEqual({
         kind: "nobreak",

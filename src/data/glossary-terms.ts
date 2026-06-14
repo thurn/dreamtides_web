@@ -5,9 +5,12 @@ import { lookupGlossaryTerm, type GlossaryEntry } from "./glossary";
  * matched glossary entries.
  *
  * Tokenization rules:
- *   * Words are runs of ASCII letters (`[A-Za-z]+`). Punctuation, numbers,
- *     and other symbols split runs apart, so `bane,` and `bane.` both yield
- *     the bare word `bane`.
+ *   * Words are runs of ASCII letters (`[A-Za-z]+`), optionally led by the
+ *     trigger arrow `▸` when it is glued to the word (e.g. `▸Materialized`).
+ *     Punctuation, numbers, and other symbols split runs apart, so `bane,` and
+ *     `bane.` both yield the bare word `bane`. An arrow-prefixed token resolves
+ *     to an arrow-specific glossary entry when one exists (`▸Materialized`),
+ *     otherwise to the bare keyword (`▸Dawn` → `Dawn`).
  *   * Matching is case-insensitive. The glossary's variant list also covers
  *     simple plural / past-tense forms (e.g. `banes`, `transfigured`), so
  *     casual prose like "transfigure your banes" matches the `Transfigure`
@@ -28,8 +31,8 @@ import { lookupGlossaryTerm, type GlossaryEntry } from "./glossary";
  * this same helper instead of re-implementing extraction.
  */
 
-/** Word run; ASCII-letter tokens only. */
-const WORD_RE = /[A-Za-z]+/g;
+/** Word run; ASCII letters, optionally led by a glued trigger arrow. */
+const WORD_RE = /▸?[A-Za-z]+/g;
 
 /**
  * Returns the glossary entries referenced in `text`, in first-occurrence

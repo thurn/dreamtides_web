@@ -15,6 +15,9 @@
  *     itself be in the glossary.
  *   * Match the lowercase form. The tokenizer compares case-insensitively
  *     and accepts simple plural / past-tense suffixes via the variants list.
+ *   * A variant may carry a leading trigger arrow (e.g. `▸materialized`). Such
+ *     a variant matches only the arrow-prefixed keyword in rules text, never
+ *     the bare word. See `TRIGGER_ARROW` and `lookupGlossaryTerm`.
  *
  * When new card content adds new terminology, add a new entry here. The
  * `glossary-completeness` test scans the live card / Dreamcaller / Dreamsign
@@ -43,16 +46,18 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
   // --- Card types -----------------------------------------------------
   {
     term: "Figment",
-    definition:
-      "A temporary token character with 1 spark created by an effect.",
+    definition: "A token representation of character created by an effect.",
     variants: ["figment", "figments"],
   },
 
   // --- Triggers & timing ---------------------------------------------
+  // The trigger arrow is part of this entry's variant, so it matches only the
+  // `▸Materialized` trigger keyword and not the past-tense verb "materialized"
+  // (the latter belongs to the `Materialize` entry). See `TRIGGER_ARROW` below.
   {
-    term: "Materialized",
+    term: "▸Materialized",
     definition: "Triggers when this character enters play.",
-    variants: ["materialized"],
+    variants: ["▸materialized"],
   },
   {
     term: "Dawn",
@@ -75,24 +80,14 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     variants: ["rematerialize"],
   },
   {
-    term: "Judgment",
-    definition: "Triggers at the start of your turn.",
-    variants: ["judgment"],
-  },
-  {
     term: "Dissolved",
     definition: "Triggers when this character is dissolved.",
     variants: ["dissolved"],
   },
   {
     term: "Dissolve",
-    definition: "Destroy a character. It goes to the void.",
+    definition: "Destroy a character, sending it to the void.",
     variants: ["dissolve", "dissolves"],
-  },
-  {
-    term: "Banished",
-    definition: "Triggers when this card is banished.",
-    variants: ["banished"],
   },
   {
     term: "Banish",
@@ -115,33 +110,31 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
   },
   {
     term: "Discover",
-    definition: "Reveal three matching cards. Draw the chosen one.",
+    definition: "Reveal three matching cards and choose one to draw.",
     variants: ["discover"],
   },
   {
     term: "Erode",
-    definition: "Put cards from the top of your deck into your void.",
+    definition: "Put cards from the top of a player's deck into their void.",
     variants: ["erode", "eroded", "erodes"],
   },
   {
     term: "Fast",
-    definition: "Can be played during the opponent's turn.",
+    definition:
+      "Can be played during your Night phase or the opponent's Dusk phase.",
     variants: ["fast"],
   },
   {
-    term: "Unbound",
-    definition: "Can be deployed on the same turn in which it is materialized.",
-    variants: ["unbound"],
+    term: "Awakened",
+    definition:
+      "Can challenge and activate ☪ abilities on the same turn in which it is materialized.",
+    variants: ["awakened"],
   },
   {
     term: "Unstoppable",
-    definition: "Scores points when dissolving a defender during challenges.",
+    definition:
+      "Scores points equal to its spark when dissolving a defender during a challenge.",
     variants: ["unstoppable"],
-  },
-  {
-    term: "Echo",
-    definition: "Triggers an additional time.",
-    variants: ["echo"],
   },
   {
     term: "Preeminence",
@@ -154,18 +147,8 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     variants: ["supported", "supporting"],
   },
   {
-    term: "Front Rank",
-    definition: "The row where characters challenge and defend.",
-    variants: ["front", "rank"],
-  },
-  {
-    term: "Back Rank",
-    definition: "The row whose characters can support the front rank.",
-    variants: ["back"],
-  },
-  {
     term: "Challenger",
-    definition: "A front-rank character attacking during the Challenge phase.",
+    definition: "A front-rank character during the Night phase.",
     variants: ["challenger", "challengers"],
   },
   {
@@ -174,22 +157,12 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     variants: ["unpaired"],
   },
   {
-    term: "Deployed",
-    definition: "In the front rank.",
-    variants: ["deployed"],
-  },
-  {
     term: "Prevent",
     definition: "Counter a card on the stack and send it to the void.",
     variants: ["prevent", "prevented"],
   },
 
   // --- Verbs ----------------------------------------------------------
-  {
-    term: "Kindle",
-    definition: "Increase the spark of the ally with the highest spark",
-    variants: ["kindle"],
-  },
   {
     term: "Transfigure",
     definition: "Permanently upgrade a card in your deck.",
@@ -206,11 +179,6 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     term: "Bane",
     definition: "A penalty card forced into your deck.",
     variants: ["bane", "banes"],
-  },
-  {
-    term: "Nightmare",
-    definition: "A bane card that disrupts your deck when drawn.",
-    variants: ["nightmare", "nightmares"],
   },
 
   // --- Transfigurations ---------------------------------------------
@@ -296,11 +264,31 @@ export const GLOSSARY_INDEX: Readonly<Record<string, GlossaryEntry>> = (() => {
 })();
 
 /**
+ * The trigger arrow that can prefix a keyword in rules text (e.g.
+ * `▸Materialized`). A glossary variant may include it to match only the
+ * arrow-prefixed form of a word.
+ */
+export const TRIGGER_ARROW = "▸";
+
+/**
  * Returns the glossary entry whose variants include the given word
  * (case-insensitive), or `undefined` if none matches.
+ *
+ * The word may carry a leading trigger arrow (e.g. `▸Dawn`). An entry whose
+ * variant carries the arrow (`▸materialized`) matches only that arrow-prefixed
+ * form; when no arrow-specific entry exists, the bare keyword resolves the
+ * lookup, so plain triggers (`▸Dawn`, `▸Judgment`) still find their entries.
  */
 export function lookupGlossaryTerm(word: string): GlossaryEntry | undefined {
-  return GLOSSARY_INDEX[word.toLowerCase()];
+  const key = word.toLowerCase();
+  const direct = GLOSSARY_INDEX[key];
+  if (direct !== undefined) {
+    return direct;
+  }
+  if (key.startsWith(TRIGGER_ARROW)) {
+    return GLOSSARY_INDEX[key.slice(TRIGGER_ARROW.length)];
+  }
+  return undefined;
 }
 
 /**
