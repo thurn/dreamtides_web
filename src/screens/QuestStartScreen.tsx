@@ -13,31 +13,34 @@ import type { DreamcallerContent } from "../types/content";
 const DREAMCALLER_ACCENT = "#c084fc";
 
 /**
- * Per deck color, the tide chip's dark background and matching border. The
- * background is a deep shade of the color and the border a brighter tint of it,
- * so the chip reads as its color while staying legible with white text.
+ * Per deck color, the tide chip's dark background, matching border, and the
+ * white-outline Boxicons glyph that marks the color. The background is a deep
+ * shade of the color and the border a brighter tint of it, so the chip reads as
+ * its color while staying legible with white text and icon.
  */
 const TIDE_COLOR_CHIP: Record<
   Tides4Color,
-  { background: string; border: string }
+  { background: string; border: string; icon: string }
 > = {
-  purple: { background: "#3b1259", border: "rgba(192, 132, 252, 0.55)" },
-  green: { background: "#0f3d22", border: "rgba(74, 222, 128, 0.55)" },
-  yellow: { background: "#4a3a00", border: "rgba(250, 204, 21, 0.55)" },
-  blue: { background: "#13315c", border: "rgba(96, 165, 250, 0.55)" },
-  red: { background: "#5c1417", border: "rgba(248, 113, 113, 0.55)" },
+  purple: { background: "#3b1259", border: "rgba(192, 132, 252, 0.55)", icon: "bx-skull" },
+  green: { background: "#0f3d22", border: "rgba(74, 222, 128, 0.55)", icon: "bx-leaf" },
+  yellow: { background: "#4a3a00", border: "rgba(250, 204, 21, 0.55)", icon: "bx-shield" },
+  blue: { background: "#13315c", border: "rgba(96, 165, 250, 0.55)", icon: "bx-eye-alt" },
+  red: { background: "#5c1417", border: "rgba(248, 113, 113, 0.55)", icon: "bx-hot" },
 };
 
 /** The tide chip styling used when a tide has no color annotation. */
 const DEFAULT_TIDE_CHIP = {
   background: "rgba(30, 41, 59, 0.62)",
   border: "rgba(148, 163, 184, 0.28)",
+  icon: "bx-water",
 };
 
-/** The dark background and border for a tide chip given its deck color. */
+/** The dark background, border, and icon for a tide chip given its deck color. */
 function tideChipColors(color: Tides4Color | undefined): {
   background: string;
   border: string;
+  icon: string;
 } {
   return (color && TIDE_COLOR_CHIP[color]) ?? DEFAULT_TIDE_CHIP;
 }
@@ -367,7 +370,7 @@ export function QuestStartScreen() {
                         }
                       >
                         <span
-                          className="inline-flex max-w-full items-center rounded-full border px-2.5 py-1 text-xs font-medium"
+                          className="inline-flex max-w-full items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium"
                           data-dreamcaller-tide={`${dreamcaller.id}:${tide.id}`}
                           style={{
                             background: chip.background,
@@ -376,6 +379,11 @@ export function QuestStartScreen() {
                             cursor: "help",
                           }}
                         >
+                          <i
+                            aria-hidden="true"
+                            className={`bx ${chip.icon} text-sm leading-none`}
+                            style={{ color: "#ffffff" }}
+                          />
                           <span className="truncate">
                             {tide.displayName ?? tide.shortName ?? tide.name}
                           </span>
