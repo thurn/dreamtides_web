@@ -12,36 +12,29 @@ Assets live in [`dream_journey_mockup/assets/`](./dream_journey_mockup/assets/).
 
 The Dream Journey is a **merchant encounter**: a between-battles site on the
 Dream Atlas where the player is shown a small set of run-shaping offers and
-picks one (or walks away). It is the main "deck-shaping" surface of a run —
-where the player adds cards, upgrades cards, thins the deck, gains dreamsigns,
-or reshapes the map.
+chooses how to spend the encounter. It is the main "deck-shaping" surface of a
+run — where the player adds cards, upgrades cards, thins the deck, gains
+dreamsigns, or reshapes the map.
 
 **Where it sits in the flow.** A quest is a sequence of **dreamscapes**. Each
 dreamscape is a list of **sites** the player visits in any order (Draft,
 Dreamsign, Purge, Battle, etc.); clearing the required sites unlocks the
-dreamscape's Battle and advances the run. `DreamJourney` is one such site type.
-The player taps it from the dreamscape list (`screen-dreamscape.png`) and lands
-on the merchant screen (`screen-dream-journey.png`).
+dreamscape's Battle and advances the run. `DreamJourney` is one such site type
+the player enters from the dreamscape.
 
-**The current layout (the thing being redesigned).** Three columns:
+**What the encounter contains.** Each encounter is a set of **offers** plus the
+option to decline. An offer carries a title, a short description, the game
+object(s) it acts on (a card, a dreamsign, a transfigure target, etc.), and the
+action the player takes to accept it. Two offers are presented per encounter,
+drawn from **different offer families** so the choices are mechanically
+distinct. The player also has the run currencies in hand — **Essence**,
+**Omens**, and **Cards** (deck size) — and the active Dreamcaller as context.
 
-- **Offer A** (left) — a single offer with its title, a one-line description,
-  the relevant game object(s) (a card, a dreamsign tile, a transfigure target,
-  etc.), and a primary action button (`Take` / `Choose` / `Draft`).
-- **Dream Merchant** (center) — a portrait/image slot, a flavor line, and a
-  `Walk away` button that declines both offers and leaves the site.
-- **Offer B** (right) — a second offer, always drawn from a **different offer
-  family** than Offer A, so the two choices are mechanically distinct.
-
-A persistent HUD at the bottom shows the run currencies — **Essence**,
-**Omens**, **Cards** (deck size) — plus the active Dreamcaller and a
-View Deck / Glossary affordance.
-
-**Generation model.** The encounter is **precommitted**: the two offers are
-sampled and frozen when the dreamscape becomes available, so the choice is
-deterministic and reproducible rather than rerolled on open. Offers are
-scored against the player's current deck (fit, quality, leave-one-out misfit,
-dreamsign-match signals) so what's shown is relevant to the deck in hand.
+**Generation model.** The encounter is **precommitted**: its offers are sampled
+and frozen when the dreamscape becomes available, so the choice is deterministic
+and reproducible rather than rerolled on open. Offers are scored against the
+player's current deck (fit, quality, leave-one-out misfit, dreamsign-match
+signals) so what's shown is relevant to the deck in hand.
 
 **Key files**
 
@@ -59,8 +52,8 @@ dreamsign-match signals) so what's shown is relevant to the deck in hand.
 ## 2. Offer inventory
 
 Offers are built from **17 archetypes** grouped into **6 families**. An
-encounter shows two offers; Offer B is always from a different family than
-Offer A. Source: `src/journey_v2/archetypes/types.ts` (`MerchantArchetypeId`,
+encounter draws two offers from **different families**. Source:
+`src/journey_v2/archetypes/types.ts` (`MerchantArchetypeId`,
 `MerchantOfferFamily`, `ARCHETYPE_FAMILY`).
 
 ### Family: GRANT — add new cards to the deck
@@ -125,9 +118,6 @@ square; Dreamcaller cards are a tall framed portrait.
 | `transfigured-01.png`, `transfigured-02.png` | Transfigured cards | Note the transfiguration gem in the name bar and highlighted stat/text. |
 | `transfig-pair-printed.png` / `transfig-pair-transfigured.png` | Before/after | Same card printed vs. transfigured. |
 | `dreamcaller-01.png` … `dreamcaller-03.png` | Dreamcaller cards | Framed portrait + ability + Starting Essence. |
-| `screen-dream-journey.png` | **Current screen** | The layout being redesigned (Offer A / Merchant / Offer B + HUD). |
-| `screen-dreamscape.png` | Context | Site list with the Dream Journey entry + bottom HUD currencies. |
-| `screen-dreamcaller-select.png` | Context | Dreamcaller selection, full framed-portrait treatment. |
 
 ### Where the source art lives
 | Object | Component | Image dir | Format |
