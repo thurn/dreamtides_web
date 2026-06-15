@@ -78,8 +78,7 @@ Room navigation keeps `realtime=1` in the URL when a cloud room is created.
 
 Selects the draft-pool construction strategy. It drives the quest prototype's
 draft and enemy pools (parsed by `parseRuntimeConfig`, threaded through the run's
-pool context) and the standalone `/draft_test` harness (parsed by
-`DraftTestApp`).
+pool context).
 
 Each strategy is a `PoolStrategy` registered in `src/draft/pool/registry.ts`,
 the single source of truth for the accepted ids. The registry currently
@@ -142,11 +141,7 @@ no anchor/seed yields no anchor deck, so the enemy battle deck falls back to a
 sampled draftable deck.
 
 The parameter is read once at page load and is not reactive; changing it requires
-a reload. On `/draft_test` the active strategy is also shown as a chip in the
-draft header, and clicking the chip reloads with the next registered strategy
-(in registry order) so they can be compared side by side. That route exercises
-the experimental `cards_v2` pool directly: start the dev server with
-`npm run dev:vite` (or `npm run draft_test`) and visit it on port 5173.
+a reload.
 
 Two values of `algo` select a deck-fit draft mode instead of a pool strategy.
 Both build a deck-fit model from the historical draft-record corpus and, at each
@@ -179,7 +174,6 @@ http://localhost:5173/?algo=seed                # single random-card affinity-gr
 http://localhost:5173/?algo=replay              # record-replay deck-fit draft
 http://localhost:5173/?algo=fresh20             # fresh-pack deck-fit draft (20-card packs)
 http://localhost:5173/?algo=fresh20&packsize=30 # fresh-pack draft with 30-card packs
-http://localhost:5173/draft_test?algo=diverse   # draft harness, diverse algorithm
 ```
 
 ## `journey`
@@ -284,5 +278,4 @@ http://localhost:5173/?startInBattle=1&ai=0     # manual battle, no AI opponent
 http://localhost:5173/?startInBattle=1&automation=0          # battle with Basic Automation off
 http://localhost:5173/?startInBattle=1&ai=0&automation=0     # fully manual sandbox (both off)
 http://localhost:5173/editor?q=moon&type=event
-http://localhost:5173/draft_test?algo=diverse   # diverse draft-pool algorithm
 ```

@@ -1,8 +1,6 @@
 // The registry of pool-construction strategies: the single place that knows
-// which generation algorithms exist. `generate.ts` dispatches through it, and
-// the `draft_test` harness derives the `?algo=` option set and the variant chip
-// cycle from it, so no other code enumerates or branches on individual
-// algorithms.
+// which generation algorithms exist. `generate.ts` dispatches through it, so no
+// other code enumerates or branches on individual algorithms.
 //
 // `POOL_STRATEGIES` is typed as `Record<PoolVariant, PoolStrategy>`, so the
 // compiler requires exactly one entry per id in the {@link PoolVariant} union —

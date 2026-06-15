@@ -67,9 +67,9 @@ export interface PoolCard {
    */
   id?: string;
   /**
-   * Mechanic-archetype tides for the experimental cards_v2 pool. Supplied by the
-   * `draft_test` experiment harness from `cards-v2-metadata.ts`; absent on
-   * runtime catalog cards, where the tide-derived archetype lists are unused.
+   * Mechanic-archetype tides for the experimental cards_v2 pool. Supplied from
+   * `cards-v2-metadata.ts`; absent on runtime catalog cards, where the
+   * tide-derived archetype lists are unused.
    */
   tides?: readonly string[];
   core?: boolean;

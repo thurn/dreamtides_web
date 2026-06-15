@@ -11,7 +11,6 @@
     "editor2": "npm install && npm run dev:vite -- --open \"/editor?toml=data/tabula/cards_v2.toml\"",
     "dreamsigns": "npm install && npm run dev:vite -- --open \"/dreamsigns?toml=data/tabula/dreamsigns.toml\"",
     "images": "npm install && npm run dev:vite -- --open /images",
-    "draft_test": "npm install && npm run dev:vite -- --open /draft_test",
     "start": "node scripts/dev-with-emulator.mjs",
     "dev": "node scripts/dev-with-emulator.mjs",
     "dev:vite": "node scripts/setup-assets.mjs && vite --port 5173 --strictPort",

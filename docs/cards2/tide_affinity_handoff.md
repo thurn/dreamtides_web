@@ -225,7 +225,7 @@ Fisher-Yates shuffle of the bag → deal. Change only the selection:
   `tideRelationships?` on `PoolData` (`src/draft/pool/types.ts`), a
   `loadTideRelationships()` in `src/data/cards-v2-database.ts`, gated fetch in
   `src/data/quest-content.ts` (`POOL_VARIANTS_NEEDING_TIDES` already exists),
-  the same in `src/draft_test/DraftTestApp.tsx`, and direct file reads in
+  and direct file reads in
   `scripts/pool-metrics.mjs` (`loadContext`) and
   `scripts/tides-similarity-experiment.mjs` (`loadContext`). Follow the
   existing `tideDecks` plumbing line-for-line; it was built as the template.

@@ -524,7 +524,7 @@ export function transformDreamsignProfile(profile) {
 /**
  * Parse `cards_v2.toml` and write both runtime card JSON catalogs — the
  * Special-filtered `card-data.json` the quest/battle runtime fetches, and the
- * unfiltered `cards_v2-data.json` the `/draft_test` harness fetches with the
+ * unfiltered `cards_v2-data.json` that `cards-v2-database.ts` fetches with the
  * draft-pool metadata merged in. This is the TOML->JSON card transform shared by
  * the full `setupAssets` build and the dev hot-reload plugin
  * (`cardDataHotReloadPlugin` in vite.config.ts): the plugin calls it on every
@@ -572,12 +572,12 @@ export function regenerateCardData({
   writeFileSync(cardJsonPath, JSON.stringify(jsonCards, null, 2) + "\n");
   console.log(`Wrote ${jsonCards.length} cards to card-data.json`);
 
-  // Experimental v2 card pool used by the standalone `/draft_test` page. It is
-  // transformed with the same kebab->camel rules as the runtime pool and
-  // written to its own JSON so the draft test harness can fetch it with the
-  // draft-pool metadata merged in, separate from card-data.json (which the dev
-  // drift guard pins to cards_v2.toml). Special-rarity filtering is
-  // intentionally skipped here: the harness shows the whole pool.
+  // Experimental v2 card pool loaded at run time via `cards-v2-database.ts`. It
+  // is transformed with the same kebab->camel rules as the runtime pool and
+  // written to its own JSON so it can be fetched with the draft-pool metadata
+  // merged in, separate from card-data.json (which the dev drift guard pins to
+  // cards_v2.toml). Special-rarity filtering is intentionally skipped here: the
+  // pool draws on the whole catalog.
   console.log("Parsing cards_v2.toml...");
   const cardV2TomlContent = readFileSync(cardV2TomlPath, "utf8");
   const parsedCardsV2 = parse(cardV2TomlContent);
@@ -1006,7 +1006,7 @@ export function setupAssets({
 
   // Link art for the experimental v2 pool into the same cards directory, keyed
   // by image number. Many v2 image numbers are absent from the local cache, in
-  // which case the `/draft_test` page falls back to a generated identicon, so
+  // which case the card view falls back to a generated identicon, so
   // misses are counted quietly rather than warned per card.
   let linkedV2 = 0;
   let missingV2 = 0;

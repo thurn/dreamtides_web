@@ -37,9 +37,6 @@ if (pathname === "/editor") {
     "./image_viewer/ImageViewerApp"
   );
   renderStrict(<ImageViewerApp />);
-} else if (pathname === "/draft_test") {
-  const { default: DraftTestApp } = await import("./draft_test/DraftTestApp");
-  renderStrict(<DraftTestApp />);
 } else {
   // The dev card/figment data hot-reload plugins (see vite.config.ts) emit
   // targeted custom HMR events instead of a full reload, so that saving in the

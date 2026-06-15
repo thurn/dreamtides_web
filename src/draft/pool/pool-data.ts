@@ -40,8 +40,8 @@ function addTo(
  * Reconstruct the generator's inputs from card records. Each card contributes
  * to `core` (if flagged), to one mechanic archetype per tide base name, and to
  * every bare color-combo list and color+archetype slice it belongs to. Runtime
- * catalog cards carry no `tides`, so their archetype lists stay empty; the
- * `draft_test` experiment harness supplies tides for the non-`idf3` variants.
+ * catalog cards carry no `tides`, so their archetype lists stay empty;
+ * `cards-v2-metadata.ts` supplies tides for the non-`idf3` variants.
  */
 export function buildPoolData(
   cards: readonly PoolCard[],

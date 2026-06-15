@@ -1,11 +1,10 @@
 # Draft Pool Construction Algorithms
 
-The draft test mode (`draft_test`) builds a card pool that a player drafts
-from. The pool is assembled by one of several interchangeable construction
-algorithms, selected with the `?algo=` URL parameter: `color_pool`, `diverse`,
-`decklists`, `idf`, and `idf2` (for example,
-`draft_test?algo=decklists`). The run-time half of all of them lives in
-`src/draft_test/color-pool.ts`. This document explains, in detail, how each one
+The quest prototype builds a card pool that a player drafts from. The pool is
+assembled by one of several interchangeable construction algorithms, selected
+with the `?algo=` URL parameter: `color_pool`, `diverse`, `decklists`, `idf`,
+and `idf2` (for example, `?algo=decklists`). The run-time half of all of them
+lives in `src/draft/pool/`. This document explains, in detail, how each one
 works.
 
 ## Shared foundations
@@ -23,7 +22,7 @@ once, because the rest of this document refers to these stores by name.
 - **The card records** start as `[[cards]]` entries in
   `data/tabula/cards_v2.toml`, which supplies each card's `name` and rules text.
   The draft-pool metadata the non-`idf3` variants read lives in TypeScript, in
-  `src/draft_test/cards-v2-metadata.ts`, keyed by card name: `core` (a boolean
+  `src/data/cards-v2-metadata.ts`, keyed by card name: `core` (a boolean
   staple flag), `tides` (mechanic tags such as `"Abandon"` or `"Storm"`),
   `colors` (the bare color-combo lists the card is legal in, e.g.
   `["b", "br", "wbr"]`), and `draftArchetypes` (the color-plus-archetype slices
@@ -55,10 +54,10 @@ once, because the rest of this document refers to these stores by name.
   array of arrays of names. `loadDecklists` (in `cards-v2-database.ts`) fetches
   it into `string[][]`, or returns an empty array if the bundle is missing.
 
-The draft test page (`DraftTestApp.tsx`) loads all three at startup, then calls
+Quest content loading (`src/data/quest-content.ts`) loads all three, then calls
 `buildPoolData` once to fold the card records (and the decklists) into the single
-`PoolData` structure described next. When the player picks a Dreamcaller, the
-page calls `generatePoolFromData` with that `PoolData`, the chosen variant, and
+`PoolData` structure described next. When the player picks a Dreamcaller,
+`generatePoolFromData` runs with that `PoolData`, the chosen variant, and
 the Dreamcaller's `draftArchetypes` and `themeArchetypes`. The pool the
 algorithm returns is a multiset of card *names*; `resolvePool` then maps those
 names back to card numbers (via a name-to-number index) for the draft engine to
