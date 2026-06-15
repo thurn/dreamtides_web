@@ -378,8 +378,10 @@ target the character abandoned to pay the cost (that character is in the void,
 not in play, by the time the effect chooses among in-play characters; and the
 abandoned character was selected as a cost, not a target).
 
-When an effect targets a [figment](#figments) stack, it must target the topmost
-(highest-spark) figment in that stack.
+When an effect targets a [figment](#figments) stack, it affects the stack's
+**topmost** figment — the single active figment. The reserve figments beneath it
+cannot be chosen or affected. Spark-threshold targeting reads the topmost
+figment's spark, not the stack's displayed total.
 
 ## Keywords and Effects
 
@@ -412,8 +414,8 @@ status. See [Exhaust and Awaken](#exhaust-and-awaken).
 **Support** — A back-rank character with Support provides a benefit to the
 front-rank characters in the positions it supports (up to two). Support has no
 effect on its own; the keyword text states the benefit, such as "Support –
-Supported allies have +1✦." A Support benefit that applies to a figment stack
-applies to each figment in the stack individually.
+Supported allies have +1✦." Support is a non-figment mechanic: a [figment](#figments)
+neither grants Support to allies nor benefits from an ally's Support.
 
 **Veil N●** — While a character has Veil, it costs the opponent N additional ●
 to choose it as a target with an event, activated ability, or triggered ability.
@@ -565,8 +567,13 @@ void, or hand, and ceases to exist if it would leave play.
 ## Figments
 
 Figments are characters created by card effects rather than played from a deck.
-They have spark values, count toward the 9-character limit, and can be targeted
-by effects. Each figment type has a base spark and may carry a keyword:
+Each figment is one of a fixed set of generic **types**, listed in the catalog
+below. A figment exists only in play: it cannot enter the deck, hand, or void,
+and when it leaves play it **ceases to exist** — it is not sent to the void or
+the Banished zone. Effects that copy a named card produce an ordinary character
+token (a created card), not a figment.
+
+**Figment catalog:**
 
 | Figment type | Base ✦ | Keyword |
 | --- | --- | --- |
@@ -575,60 +582,108 @@ by effects. Each figment type has a base spark and may carry a keyword:
 | Enigma | 0✦ | — |
 | Shadow | 2✦ | — |
 | Spirit Animal | 1✦ | — |
-| Synth | 0✦ | Support – +1✦ |
 | Monstrosity | 4✦ | — |
 | Survivor | 1✦ | — |
-| Celestial | 2✦ | Preeminence |
+| Celestial | 2✦ | — |
 | Wraith | 0✦ | Vengeful |
 | Ethereal | 1✦ | — |
 | Radiant | 2✦ | — |
 | Ember | 1✦ | Awakened |
 | Outsider | 1✦ | — |
+| Legion | 1✦ per allied warrior | — |
 
-A figment that is a copy of a named card uses that card's printed identity. For
-example, a figment copy of "Blade of Unity" is a 2● warrior with "This character
-has +1✦ for each allied warrior."
+A **Legion** is a Warrior whose spark equals the number of allied warriors,
+counting itself. Because each figment counts individually toward subtype tallies
+(see [Spark and counting](#spark-and-counting)), three Legion figments alone are
+three allied warriors, so each is 3✦.
 
-**Stacking:** Figments of the **same type** occupy a single shared position as a
-**stack**. Different types never share a stack, so a player can have several
-stacks in different positions. A stack:
+### Stacks
 
-- Displays its total spark, the sum of its figments' spark.
-- Is sorted by spark, highest on top.
-- Cannot be split. Its figments move, exhaust, awaken, challenge, and defend
-  together; materializing additional same-type figments joins them to the stack
-  without requiring a new position, and they challenge and defend together with
-  the rest.
-- Takes its exhausted or awakened state from its topmost figment: when the
-  topmost figment becomes exhausted the stack is exhausted, and when it becomes
-  awakened the stack is awakened.
+Figments of the **same type** occupy a single shared position as a **stack**.
+Different types never share a stack, so a player can have several stacks in
+different positions. A stack is a **topmost (active) figment** together with a
+set of **reserve** figments beneath it:
 
-**Targeted vs. general effects:** A targeted effect — a dissolve, a spark pump,
-an Abandon cost, or granting an ability — applies to the topmost figment of the
-stack. A general effect that applies to "each" matching character, such as a
-Support bonus, applies to every figment in the stack individually. As a result a
-"+1✦ to supported characters" Support effect aimed at a stack adds +1✦ **per
-figment**, while a single-target pump adds its bonus to one figment only.
+- The **topmost figment** is the only one that can be targeted or affected. A
+  dissolve, an Abandon cost, a spark pump, or a granted keyword all apply to the
+  topmost. **Reserve figments cannot be chosen or affected by anything.**
+- A figment materializing into an existing same-type stack joins the **bottom**
+  of the stack as a reserve and does not require a new position. The topmost
+  figment stays topmost until it is removed, at which point the next figment up
+  is promoted to topmost. The topmost is identified by position, not by spark.
+- A stack **displays its total spark**, the sum of every figment's spark.
+- When a stack's last figment is removed, the stack **ceases to exist** and frees
+  its position immediately.
+- The play-area cap is **9 positions**. A stack occupies one position regardless
+  of how many figments it holds, so stacking lets a player field more than 9
+  figments.
+- Materializing any figment fires "when you materialize" triggers, including a
+  figment that joins an existing stack.
 
-**Stacks in a challenge:** When a figment stack is the challenger or the
-defender in a lane, resolve it against the opposing character (or stack) as
-follows:
+### Spark and counting
 
-- The opposing spark is applied to the stack from the top down. Going figment by
-  figment from the top, dissolve a figment only if the remaining opposing spark
-  is at least that figment's spark, subtracting that figment's spark from the
-  remaining amount. As soon as dissolving the next figment would push the total
-  dissolved spark above the opposing spark, stop — that figment and all figments
-  below it survive.
-- The opposing character (or stack) is dissolved if the stack's total spark is
-  greater than or equal to the opposing spark. As with any challenge, equal
-  spark dissolves both sides.
+- A figment counts **individually** as one member of its subtype, and as one
+  character, for every tally — "with 3 allied warriors", "+1✦ for each allied
+  warrior", and so on. A stack of three Warrior figments is three allied
+  warriors.
+- A targeted **spark gain** ("+2✦") applies to the **topmost** figment. It rides
+  that figment and is gone when the topmost is removed.
+- An **anthem** — a static "allied X have +N✦" — applies to **each** figment in
+  the stack, topmost and reserves alike. An anthem can therefore multiply a
+  stack's total spark, and it persists as figments are chipped.
 
-For example, a stack of five 2✦ figments against a 5✦ character loses two
-figments (the first two absorb 4 of the opposing 5; a third would raise the
-dissolved total to 6, above 5, so it and the rest survive), while the 5✦
-character is dissolved because the stack's total of 10✦ meets it. A stack of
-three 2✦ figments against the same 5✦ character likewise loses two and keeps one.
-A stack whose total spark exactly equals the opposing spark is entirely dissolved
-along with the tied opposing character — for instance five 1✦ figments against a
-5✦ character.
+### Statuses
+
+- **Exhausted and awakened are properties of the stack.** A stack that has been
+  in play since the start of its controller's turn is awakened and can challenge
+  that turn, regardless of figments added or removed during the turn. A stack
+  created this turn is exhausted until its controller's next Dawn.
+- Every **other** status — a granted keyword such as Unstoppable or Veil — rides
+  the **topmost** figment and is gone when the topmost is removed.
+- A figment type's **inherent** keyword (the Keyword column above) is carried by
+  every figment of that type, so a promoted reserve keeps it.
+
+### Challenge resolution
+
+When a figment stack is a challenger or defender in a lane, the **topmost figment
+resolves a normal challenge** against the opposing character using its own
+single-figment spark, while the **reserve figments are always unopposed**:
+
+- **Unopposed stack** (no opposing character in the lane): every figment scores,
+  so the stack scores its **total** spark.
+- **Opposed stack:** only the **reserves** score, each its own spark. The topmost
+  is contested and scores nothing unless it has Unstoppable and wins.
+- The topmost resolves the spark comparison normally: with lower or equal spark
+  it is dissolved (one figment removed — a **chip**); with higher spark the
+  opposing character is dissolved and the topmost survives. The opposing
+  character is compared only against the **topmost's** spark, never the stack
+  total, so a tall stack of small figments cannot overpower a large defender but
+  reliably leaks reserve points past it.
+- **Stack against stack:** the two topmost figments resolve a normal challenge
+  against each other; only the **challenger's** reserves score.
+- A defender never scores, so the reserves of a defending stack score nothing and
+  are never at risk.
+
+For example:
+
+- A stack of four 2✦ figments, unopposed, scores **8⍟**.
+- That stack challenges into a 3✦ defender. The topmost (2✦) is dissolved; the
+  three reserves (6✦) score **6⍟**; the defender survives. The stack is now three
+  2✦ figments.
+- A stack of three 4✦ Monstrosity figments challenges into a 3✦ defender. The
+  topmost (4✦) dissolves the defender and survives, scoring nothing; the two
+  reserves score **8⍟**.
+- A stack of two 4✦ Ancient figments (Unstoppable) challenges into a 3✦ defender.
+  The topmost dissolves the defender, survives, and scores **4⍟**; the reserve
+  scores **4⍟**, for **8⍟** total.
+- A stack of three 0✦ Wraith figments (Vengeful) challenges into a 5✦ defender.
+  The topmost is dissolved, and Vengeful dissolves the defender as well; the
+  reserves score 0. The stack is now two Wraiths and the defender is gone.
+
+### Removal and triggers
+
+A figment removed by a **dissolve**, an **Abandon**, or a combat **chip** fires
+dissolved triggers, once per figment removed; the figment then ceases to exist. A
+figment removed by **banish** does not fire dissolved triggers. Support does not
+interact with figments — a figment neither grants Support to allies nor benefits
+from an ally's Support.
