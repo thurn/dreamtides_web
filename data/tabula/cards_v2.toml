@@ -157,7 +157,7 @@ id = "724a1362-3f0f-4b77-b14e-22c0b877349a"
 rendered-text = """
 2●, ☪: Draw a card, then discard a card.
 
-Once per turn, when you discard a card, materialize a 2✦ radiant figment."""
+Once per turn, when you discard a card, materialize a 2✦ shadow figment."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Warrior"

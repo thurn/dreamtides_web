@@ -26,8 +26,9 @@ subtype = "Shadow"
 spark = 2
 keyword = ""
 rendered-text = ""
-image-number = 0
+image-number = 277174382
 art-owned = false
+art = { x = 0.289, y = -0.296, scale = 2.47 }
 
 [[figments]]
 name = "Spirit Animal"
@@ -36,8 +37,9 @@ subtype = "Spirit Animal"
 spark = 1
 keyword = ""
 rendered-text = ""
-image-number = 0
+image-number = 439817014
 art-owned = false
+art = { x = 0, y = 0.648, scale = 1.37 }
 
 [[figments]]
 name = "Monstrosity"
@@ -46,8 +48,9 @@ subtype = "Monstrosity"
 spark = 4
 keyword = ""
 rendered-text = ""
-image-number = 0
+image-number = 1450052363
 art-owned = false
+art = { x = 0, y = 1, scale = 1.17 }
 
 [[figments]]
 name = "Survivor"
@@ -56,8 +59,9 @@ subtype = "Survivor"
 spark = 1
 keyword = ""
 rendered-text = ""
-image-number = 0
+image-number = 608686829
 art-owned = false
+art = { x = 0, y = -0.448, scale = 1.5 }
 
 [[figments]]
 name = "Wraith"
@@ -66,8 +70,9 @@ subtype = "Wraith"
 spark = 0
 keyword = "vengeful"
 rendered-text = "Vengeful"
-image-number = 0
+image-number = 2025883232
 art-owned = false
+art = { x = -0.096, y = 0.529, scale = 1.37 }
 
 [[figments]]
 name = "Ethereal"
@@ -76,18 +81,9 @@ subtype = "Ethereal"
 spark = 1
 keyword = ""
 rendered-text = ""
-image-number = 0
+image-number = 586115636
 art-owned = false
-
-[[figments]]
-name = "Radiant"
-id = "0f099626-f965-49c4-b057-d2031aa3f2c6"
-subtype = "Radiant"
-spark = 2
-keyword = ""
-rendered-text = ""
-image-number = 0
-art-owned = false
+art = { x = 0, y = -0.318, scale = 1.7 }
 
 [[figments]]
 name = "Ember"
@@ -96,8 +92,9 @@ subtype = "Ember"
 spark = 1
 keyword = "awakened"
 rendered-text = "Awakened"
-image-number = 0
+image-number = 515170261
 art-owned = false
+art = { x = 0.353, y = 0.555, scale = 1.17 }
 
 [[figments]]
 name = "Outsider"
@@ -106,8 +103,9 @@ subtype = "Outsider"
 spark = 1
 keyword = ""
 rendered-text = ""
-image-number = 0
+image-number = 461706649
 art-owned = false
+art = { x = -0.93, y = 1, scale = 1.67 }
 
 [[figments]]
 name = "Legionnaire"
