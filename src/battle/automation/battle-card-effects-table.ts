@@ -390,25 +390,25 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
     },
   },
 
-  // Woodland Apparition — "Support – Supported allies have +2✦ and have
+  // Woodland Apparition — "Support – Supported allies have +2✦ and
   // unstoppable.\n\nReclaim – 3●, Banish 3 cards from your void." The script
   // grants the +2 spark to every supported ally; the unstoppable grant is
   // resolved manually.
   "1268a899-b209-46bb-bce4-6def1dcd0404": {
     id: "1268a899-b209-46bb-bce4-6def1dcd0404",
     trigger: "support",
-    textHash: "efc84b0a",
+    textHash: "c1e261ae",
     support: {
       bonus: () => 2,
     },
   },
 
-  // Nocturne Strummer — "Support – Supported characters have +2✦." Grants +2
+  // Nocturne Strummer — "Support – Supported allies have +2✦." Grants +2
   // spark to every supported front-rank ally (no subtype restriction).
   "5a980eff-6ec7-44d8-9977-b98e66bbc2c8": {
     id: "5a980eff-6ec7-44d8-9977-b98e66bbc2c8",
     trigger: "support",
-    textHash: "a4a7189e",
+    textHash: "193da238",
     support: {
       bonus: () => 2,
     },
@@ -428,40 +428,40 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
     },
   },
 
-  // Ash Sower — "❖ – Abandon an ally: Move this character to the abandoned
-  // ally's position.\n\nSupport – Supported characters have +3✦." The script
-  // grants +3 spark to every supported front-rank ally; the ❖ activated ability
-  // is resolved manually.
+  // Ash Sower — "Support – Supported allies have +3✦.\n\n❖ – Abandon an ally:
+  // Move this character to the abandoned ally's position." The script grants +3
+  // spark to every supported front-rank ally; the ❖ activated ability is
+  // resolved manually.
   "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd": {
     id: "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd",
     trigger: "support",
-    textHash: "be732f49",
+    textHash: "3b26d8b7",
     support: {
       bonus: () => 3,
     },
   },
 
-  // Battlefield Medic — "❖ – 1●: Move this character to an unoccupied character
-  // position.\n\nSupport – Supported characters have +2✦." The script grants +2
+  // Battlefield Medic — "Support – Supported allies have +2✦.\n\n❖ – 1●: Move
+  // this character to an unoccupied character position." The script grants +2
   // spark to every supported front-rank ally; the ❖ activated ability is
   // resolved manually.
   "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f": {
     id: "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f",
     trigger: "support",
-    textHash: "0e53771a",
+    textHash: "3fb58b48",
     support: {
       bonus: () => 2,
     },
   },
 
-  // Ghostlight Wolves — "☪: Gain 1● for each allied spirit animal.\n\nSupport –
-  // Supported spirit animals have +2✦." The script grants +2 spark to supported
-  // front-rank "Spirit Animal" allies; the ☪ activated ability is resolved
-  // manually.
+  // Ghostlight Wolves — "Support – Supported spirit animals have +2✦.\n\n☪:
+  // Gain 1● for each allied spirit animal." The script grants +2 spark to
+  // supported front-rank "Spirit Animal" allies; the ☪ activated ability is
+  // resolved manually.
   "c8579b20-95ff-4b1d-b4c6-6bd049fc4760": {
     id: "c8579b20-95ff-4b1d-b4c6-6bd049fc4760",
     trigger: "support",
-    textHash: "6744fe3d",
+    textHash: "cfb223c7",
     support: {
       bonus: () => 2,
       applies: (ally) => ally.definition.subtype === "Spirit Animal",
