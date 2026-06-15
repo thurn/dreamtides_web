@@ -19,6 +19,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 export const generatedCardDataWatchPaths = [
   path.join(__dirname, "data", "tabula", "cards_v2.toml"),
   path.join(__dirname, "public", "card-data.json"),
+  path.join(__dirname, "public", "cards_v2-data.json"),
 ].map((filePath) => path.resolve(filePath));
 
 /** Vite plugin that writes quest log events to disk during development. */
@@ -463,10 +464,14 @@ export default defineConfig({
   server: {
     watch: {
       // The card editor APIs write card and tag TOML files under data/tabula
-      // (via temp-file swaps) and regenerate public/card-data.json on every
-      // save. None of these are part of the module graph, so the dev watcher
-      // ignores them; otherwise each editor save triggers a full page reload,
-      // which would close the art editor mid-edit and discard inline edits.
+      // (via temp-file swaps) and regenerate the public card JSON catalogs
+      // (public/card-data.json and public/cards_v2-data.json) on every save.
+      // Files in public/ are not part of the module graph, but Vite still
+      // forces a full page reload whenever any public/ file changes, so each
+      // editor save must ignore every regenerated catalog. Both catalogs are
+      // listed in generatedCardDataWatchPaths below; ignoring them keeps an
+      // editor save from reloading the page, closing the art editor mid-edit,
+      // and discarding inline edits.
       //
       // Git worktrees live under .worktrees and .claude/worktrees inside the
       // project root, so they fall within the watched tree. Each checkout
