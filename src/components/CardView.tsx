@@ -709,6 +709,19 @@ export interface CardViewProps {
   className?: string;
   /** Use larger text sizes for rules text, name, type line, and stats. */
   large?: boolean;
+  /**
+   * Render the figment frame (rules §Figments): no energy orb, the spark floats
+   * as a large mark in the top-right corner instead of inside a name bar, and
+   * the rules box takes a black-on-light frosted treatment. A figment has no
+   * name bar by default; pass `figmentTitleBar` to show one (for a named figment
+   * like a Legionnaire, or while its name is being edited).
+   */
+  figment?: boolean;
+  /**
+   * In figment mode, render the top title bar holding the card name (left
+   * aligned, dark character-card treatment). Ignored when `figment` is false.
+   */
+  figmentTitleBar?: boolean;
   /** Hide rules text for dense card surfaces that show identity and stats. */
   hideRulesText?: boolean;
   /**
@@ -767,6 +780,8 @@ export function CardView({
   transfiguration,
   className,
   large = false,
+  figment = false,
+  figmentTitleBar = false,
   hideRulesText = false,
   suppressHoverHelp = false,
   slots = {},
@@ -1093,14 +1108,23 @@ export function CardView({
     </div>
   ) : null;
 
+  // In figment mode the spark is the standalone top-right corner mark, sized up
+  // from the in-bar orb so it carries the top of the card on its own.
+  const sparkSizeVar = figment
+    ? "var(--cv-figment-spark-size)"
+    : "var(--cv-spark-orb-size)";
+  const sparkFontVar = figment
+    ? "var(--cv-figment-spark-font-size)"
+    : "var(--cv-spark-orb-font-size)";
+  const sparkCapPx = figment ? widthPx * 0.14 : sparkOrbCapPx;
   const sparkOrbNode =
     card.spark !== null || card.sparkVariable === true ? (
       <CardStatOrb
         variant="spark"
         value={card.spark !== null ? String(card.spark) : "X"}
-        sizeVar="var(--cv-spark-orb-size)"
-        numberSizeVar="var(--cv-spark-orb-font-size)"
-        numberCapPx={sparkOrbCapPx}
+        sizeVar={sparkSizeVar}
+        numberSizeVar={sparkFontVar}
+        numberCapPx={sparkCapPx}
         tooltip={suppressHoverHelp ? undefined : SPARK_PIP_TOOLTIP}
         tintColor={
           transfiguration?.sparkChanged === true
@@ -1215,6 +1239,7 @@ export function CardView({
       data-card-text-scale={textScale.toFixed(2)}
       data-rarity={rarityAttr}
       data-card-type={card.cardType}
+      data-figment={figment ? "true" : undefined}
       style={
         {
           aspectRatio: CARD_ASPECT_RATIO,
@@ -1364,65 +1389,123 @@ export function CardView({
         </div>
       ) : null}
 
-      {/*
-        Top name bar: the card name (left, flexes to fill) with the spark orb at
-        its right edge. The bar's left padding clears the energy orb that floats
-        over its left end.
-      */}
-      <div
-        style={
-          {
-            position: "absolute",
-            top: "var(--cv-namebar-top)",
-            left: "var(--cv-namebar-left)",
-            right: "var(--cv-header-inset)",
-            height: "var(--cv-namebar-height)",
-            zIndex: 5,
-            display: "flex",
-            alignItems: "center",
-            gap: "var(--cv-namebar-gap)",
-            paddingLeft:
-              stackedEnergyCosts !== null
-                ? "var(--cv-namebar-pad-left-multi)"
-                : "var(--cv-namebar-pad-left)",
-            paddingRight: "var(--cv-namebar-pad-right)",
-            // Visible so the spark orb, which is taller than the bar, protrudes
-            // above and below it (like the energy orb) instead of being
-            // clipped. The card name truncates via its own overflow rule.
-            overflow: "visible",
-            borderRadius: "var(--cv-namebar-radius)",
-            background: "var(--cv-textbox-bg)",
-            backdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
-            WebkitBackdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
-            border: "1px solid var(--cv-textbox-border)",
-            boxShadow:
-              "0 1px 0 rgba(255,255,255,0.16) inset, 0 -6px 14px rgba(0,0,0,0.30) inset, 0 6px 16px rgba(0,0,0,0.34)",
-          } satisfies CSSProperties
-        }
-      >
-        {renderedNameNode}
-        {hasSparkContent ? renderedSparkContent : null}
-      </div>
+      {figment ? (
+        <>
+          {/*
+            Figment top chrome. No name bar by default — the spark floats as a
+            large mark in the top-right corner directly on the art. A named
+            figment (or one whose name is being edited) opts into a left-aligned
+            title bar via `figmentTitleBar`, reusing the dark character-card bar
+            treatment so it reads as the same material as a regular name bar.
+          */}
+          {figmentTitleBar ? (
+            <div
+              data-testid="figment-title-bar"
+              style={
+                {
+                  position: "absolute",
+                  top: "var(--cv-figment-titlebar-top)",
+                  left: "var(--cv-figment-titlebar-left)",
+                  right: "var(--cv-figment-titlebar-right)",
+                  height: "var(--cv-figment-titlebar-height)",
+                  zIndex: 5,
+                  display: "flex",
+                  alignItems: "center",
+                  paddingLeft: "var(--cv-figment-titlebar-pad)",
+                  paddingRight: "var(--cv-namebar-pad-right)",
+                  overflow: "visible",
+                  borderRadius: "var(--cv-namebar-radius)",
+                  background: "var(--cv-namebar-bg)",
+                  backdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
+                  WebkitBackdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
+                  border: "1px solid var(--cv-namebar-border)",
+                  boxShadow:
+                    "0 1px 0 rgba(255,255,255,0.16) inset, 0 -6px 14px rgba(0,0,0,0.30) inset, 0 6px 16px rgba(0,0,0,0.34)",
+                } satisfies CSSProperties
+              }
+            >
+              {renderedNameNode}
+            </div>
+          ) : null}
+          {hasSparkContent ? (
+            <div
+              className="absolute"
+              style={{
+                top: "var(--cv-figment-spark-top)",
+                right: "var(--cv-figment-spark-right)",
+                display: "flex",
+                zIndex: 6,
+              }}
+            >
+              {renderedSparkContent}
+            </div>
+          ) : null}
+        </>
+      ) : (
+        <>
+          {/*
+            Top name bar: the card name (left, flexes to fill) with the spark orb
+            at its right edge. The bar's left padding clears the energy orb that
+            floats over its left end.
+          */}
+          <div
+            style={
+              {
+                position: "absolute",
+                top: "var(--cv-namebar-top)",
+                left: "var(--cv-namebar-left)",
+                right: "var(--cv-header-inset)",
+                height: "var(--cv-namebar-height)",
+                zIndex: 5,
+                display: "flex",
+                alignItems: "center",
+                gap: "var(--cv-namebar-gap)",
+                paddingLeft:
+                  stackedEnergyCosts !== null
+                    ? "var(--cv-namebar-pad-left-multi)"
+                    : "var(--cv-namebar-pad-left)",
+                paddingRight: "var(--cv-namebar-pad-right)",
+                // Visible so the spark orb, which is taller than the bar,
+                // protrudes above and below it (like the energy orb) instead of
+                // being clipped. The card name truncates via its own overflow
+                // rule.
+                overflow: "visible",
+                borderRadius: "var(--cv-namebar-radius)",
+                background: "var(--cv-namebar-bg)",
+                backdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
+                WebkitBackdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
+                border: "1px solid var(--cv-namebar-border)",
+                boxShadow:
+                  "0 1px 0 rgba(255,255,255,0.16) inset, 0 -6px 14px rgba(0,0,0,0.30) inset, 0 6px 16px rgba(0,0,0,0.34)",
+              } satisfies CSSProperties
+            }
+          >
+            {renderedNameNode}
+            {hasSparkContent ? renderedSparkContent : null}
+          </div>
 
-      {/* Energy cost orb, floating over the name bar's left end and protruding
-          above and below it. `display: flex` (rather than the default block) so
-          the inline-flex orb does not sit in a text line box: a line box would
-          add baseline leading above the orb from the inherited `line-height`,
-          which is a fixed px value and therefore a larger fraction of small
-          cards than large ones — dropping the orb noticeably on the smallest
-          surfaces (e.g. the starting-deck grid). Flex lays the orb flush to the
-          wrapper's `2cqw` top so the position stays card-proportional. */}
-      <div
-        className="absolute"
-        style={{
-          top: "var(--cv-energy-orb-top)",
-          left: "var(--cv-energy-orb-left)",
-          display: "flex",
-          zIndex: 10,
-        }}
-      >
-        {slots.energy?.(slotContext, energyNode) ?? energyNode}
-      </div>
+          {/* Energy cost orb, floating over the name bar's left end and
+              protruding above and below it. `display: flex` (rather than the
+              default block) so the inline-flex orb does not sit in a text line
+              box: a line box would add baseline leading above the orb from the
+              inherited `line-height`, which is a fixed px value and therefore a
+              larger fraction of small cards than large ones — dropping the orb
+              noticeably on the smallest surfaces (e.g. the starting-deck grid).
+              Flex lays the orb flush to the wrapper's `2cqw` top so the position
+              stays card-proportional. */}
+          <div
+            className="absolute"
+            style={{
+              top: "var(--cv-energy-orb-top)",
+              left: "var(--cv-energy-orb-left)",
+              display: "flex",
+              zIndex: 10,
+            }}
+          >
+            {slots.energy?.(slotContext, energyNode) ?? energyNode}
+          </div>
+        </>
+      )}
     </div>
   );
 }

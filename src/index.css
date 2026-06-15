@@ -369,6 +369,12 @@ button:disabled {
    * needs extra left clearance to start past both orbs. */
   --cv-namebar-pad-left-multi: 18.6cqw;
   --cv-namebar-pad-right: 1.5cqw;
+  /* The name bar's fill and border default to the text box's, so the two
+   * floating panels read as one material. They are split into their own vars so
+   * the figment frame can take a light rules box while keeping a dark title bar
+   * (see the `data-figment` block below). */
+  --cv-namebar-bg: var(--cv-textbox-bg);
+  --cv-namebar-border: var(--cv-textbox-border);
 
   /* Floating text box: inset from the card edges, anchored to the bottom. The
    * `--cv-textbox-max-height` cap (a percentage of the card height) bounds
@@ -441,6 +447,73 @@ button:disabled {
     rgba(2, 2, 3, 0.86) 100%
   );
   --cv-textbox-border: rgba(255, 255, 255, 0.14);
+}
+
+/*
+ * Figment frame (rules §Figments). A figment is a temporary, token-like card.
+ * It reuses the full-bleed character frame but is distinguished by a black-on-
+ * light frosted rules box (the primary "this is a figment" cue), drops the
+ * energy orb (figments are costless), and floats its spark as a large mark in
+ * the top-right corner instead of inside a name bar. A named figment (one whose
+ * identity differs from its character type, e.g. a Legionnaire that is a
+ * Warrior) opts into a top title bar, which keeps the dark character-card
+ * treatment so it still reads as the same material as a regular card's name bar.
+ * The visual target is the "Frostglass" design handoff (Figment Cards).
+ */
+.card-view[data-figment="true"] {
+  /* Black-on-light frosted rules box: a translucent near-white fill with a
+   * bright rim and dark text. This is what most clearly marks a card as a
+   * figment versus the dark rules box of a regular card. */
+  --cv-textbox-bg: rgba(244, 248, 255, 0.82);
+  --cv-textbox-border: rgba(255, 255, 255, 0.72);
+  --cv-rules-color: #1a2030;
+  /* Keyword emphasis (Unstoppable, Vengeful, Awakened) retuned from the dark
+   * box's spark amber to a deep gold that holds contrast on the light fill while
+   * keeping the warm "this is a keyword" cue. */
+  --cv-rules-highlight-color: #8a5210;
+  --cv-textbox-radius: 3.2cqw;
+  --cv-textbox-pad-y: 2.9cqw;
+  --cv-textbox-pad-x: 3.4cqw;
+  /* The optional title bar keeps the regular card's warm near-black treatment
+   * (it bleeds the art the same way) so it does not pick up the light box fill. */
+  --cv-namebar-bg: linear-gradient(
+    180deg,
+    rgba(8, 6, 4, 0.74) 0%,
+    rgba(4, 3, 2, 0.83) 48%,
+    rgba(1, 1, 1, 0.9) 100%
+  );
+  --cv-namebar-border: rgba(0, 0, 0, 0.55);
+
+  /* Corner spark mark: larger than a regular card's spark orb so it carries the
+   * top of the card on its own (there is no name bar to anchor it). */
+  --cv-figment-spark-size: 17.5cqw;
+  --cv-figment-spark-font-size: 8.4cqw;
+  --cv-figment-spark-top: 2.8cqw;
+  --cv-figment-spark-right: 1.6cqw;
+
+  /* Optional title bar geometry (named figments / while editing the name). */
+  --cv-figment-titlebar-top: 4cqw;
+  --cv-figment-titlebar-left: 3.4cqw;
+  /* Right inset clears the corner spark. */
+  --cv-figment-titlebar-right: 20cqw;
+  --cv-figment-titlebar-height: 9cqw;
+  --cv-figment-titlebar-pad: 4.5cqw;
+}
+
+/* The figment editor's reveal-on-edit affordances (name bar, rules box):
+ * invisible at rest so the card stays art-forward, with a faint dashed hint on
+ * hover/focus showing where a double-click opens the editable field. */
+.figment-edit-affordance {
+  border-radius: 6px;
+  border: 1px dashed transparent;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+.figment-edit-affordance:hover,
+.figment-edit-affordance:focus-visible {
+  background: rgba(8, 6, 4, 0.55);
+  border-color: rgba(255, 255, 255, 0.45);
+  outline: none;
 }
 
 /* Event frame: a dark purple accent on the name bar and text box. */

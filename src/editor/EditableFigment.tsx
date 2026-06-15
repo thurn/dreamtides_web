@@ -2,7 +2,7 @@ import { useRef, type ReactNode } from "react";
 import { CardView } from "../components/CardView";
 import type { CardViewSlots } from "../components/CardView";
 import EditableField from "./EditableField";
-import { figmentPreviewCard } from "./figment-types";
+import { figmentHasTitleBar, figmentPreviewCard } from "./figment-types";
 import type {
   EditableFigmentField,
   EditorFigmentRecord,
@@ -85,6 +85,22 @@ export default function EditableFigment({
     spark: visibleSpark,
   };
 
+  // Figments show no name bar at rest. The bar appears for a named figment (one
+  // whose identity differs from its subtype, e.g. a Legionnaire that is a
+  // Warrior) and while the name is being edited, so the name stays editable in
+  // place without changing the art-forward at-rest look.
+  const nameActive =
+    nameSaveEntry !== null && nameSaveEntry.status !== "idle";
+  const showTitleBar = figmentHasTitleBar(visibleName, visibleSubtype) || nameActive;
+
+  // The rules box follows the same reveal-on-edit pattern as the title bar: a
+  // figment with no rules text shows no box at rest (matching the in-game
+  // figment frame), and the box appears once there is rules text or the field
+  // is being edited. A bottom affordance starts the edit for an empty figment.
+  const rulesActive =
+    rulesTextSaveEntry !== null && rulesTextSaveEntry.status !== "idle";
+  const showRulesBox = visibleRulesText.trim() !== "" || rulesActive;
+
   const fieldProps = (
     field: EditableFigmentField,
     value: EditableFieldValue,
@@ -111,11 +127,9 @@ export default function EditableFigment({
     </EditableField>
   );
 
-  // Figments are 0-cost: suppress the energy orb the character frame would
-  // otherwise show. The slot must return a non-null node (an empty fragment) —
-  // CardView falls back to its default orb when a slot returns null/undefined.
+  // The figment frame drops the energy orb itself (figments are 0-cost), so the
+  // slots here only wrap the inline-editable fields.
   const slots: CardViewSlots = {
-    energy: () => <></>,
     name: (_context, defaultNode) => (
       <EditableField {...fieldProps("name", figment.name, nameSaveEntry)}>
         {defaultNode}
@@ -137,14 +151,23 @@ export default function EditableFigment({
 
       return defaultNode;
     },
-    rulesText: (_context, defaultNode) => (
-      <EditableField
-        {...fieldProps("rendered-text", figment["rendered-text"], rulesTextSaveEntry)}
-        mode="multiline"
-      >
-        {defaultNode}
-      </EditableField>
-    ),
+    rulesText: (_context, defaultNode) =>
+      showRulesBox ? (
+        <EditableField
+          {...fieldProps(
+            "rendered-text",
+            figment["rendered-text"],
+            rulesTextSaveEntry,
+          )}
+          mode="multiline"
+        >
+          {defaultNode}
+        </EditableField>
+      ) : (
+        // No box at rest: returning the (null) default node keeps the figment
+        // art-forward; the affordance below starts a rules edit when wanted.
+        defaultNode
+      ),
     spark: (_context, defaultNode) => (
       <EditableField
         {...fieldProps("spark", figment.spark, sparkSaveEntry)}
@@ -166,8 +189,9 @@ export default function EditableFigment({
         <CardView
           card={visibleCard}
           large={size === "large"}
+          figment
+          figmentTitleBar={showTitleBar}
           suppressHoverHelp
-          slots={{ energy: () => <></> }}
           onClick={() => onOpenArtEditor(figment)}
         />
       </article>
@@ -184,10 +208,73 @@ export default function EditableFigment({
       <CardView
         card={visibleCard}
         large={size === "large"}
+        figment
+        figmentTitleBar={showTitleBar}
         suppressHoverHelp
         slots={slots}
         rulesTextboxExpanded={rulesTextEditing}
       />
+      {/* With no name bar at rest, this transparent strip over the top-left of
+          the art is the affordance to start naming an unnamed figment: a
+          double-click begins the name edit, which reveals the title bar with the
+          editable field. It clears the corner spark on the right. */}
+      {!showTitleBar ? (
+        <div
+          className="figment-edit-affordance"
+          role="button"
+          tabIndex={0}
+          aria-label={`Edit name for ${visibleName}`}
+          title="Double-click to name this figment"
+          onDoubleClick={() => onFieldBeginEdit(figment, "name", figment.name)}
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              onFieldBeginEdit(figment, "name", figment.name);
+            }
+          }}
+          style={{
+            position: "absolute",
+            top: "3.4%",
+            left: "5%",
+            right: "26%",
+            height: "7%",
+            cursor: "text",
+            zIndex: 6,
+          }}
+        />
+      ) : null}
+      {/* With no rules box at rest, this transparent strip over the bottom-left
+          of the art (clear of the bottom-right type line) starts a rules edit on
+          a double-click, revealing the editable frosted box. */}
+      {!showRulesBox ? (
+        <div
+          className="figment-edit-affordance"
+          role="button"
+          tabIndex={0}
+          aria-label={`Edit rules text for ${visibleName}`}
+          title="Double-click to add rules text"
+          onDoubleClick={() =>
+            onFieldBeginEdit(figment, "rendered-text", figment["rendered-text"])
+          }
+          onKeyDown={(event) => {
+            if (event.key === "Enter") {
+              onFieldBeginEdit(
+                figment,
+                "rendered-text",
+                figment["rendered-text"],
+              );
+            }
+          }}
+          style={{
+            position: "absolute",
+            bottom: "3.4%",
+            left: "5%",
+            right: "52%",
+            height: "9%",
+            cursor: "text",
+            zIndex: 5,
+          }}
+        />
+      ) : null}
     </article>
   );
 }

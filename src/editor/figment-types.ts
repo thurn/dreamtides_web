@@ -91,9 +91,22 @@ export interface FigmentEditorApiClient {
 }
 
 /**
+ * Whether a figment shows the optional top title bar. A figment whose identity
+ * (its name with a trailing " Figment" removed) differs from its character
+ * subtype — e.g. a "Legionnaire Figment" that is a Warrior — needs a title bar
+ * so it reads distinctly from a plain figment of that subtype (which shows none,
+ * since its identity matches the subtype shown at the foot).
+ */
+export function figmentHasTitleBar(name: string, subtype: string): boolean {
+  const identity = name.replace(/\s*Figment$/iu, "").trim().toLowerCase();
+  const sub = subtype.trim().toLowerCase();
+  return identity !== "" && identity !== sub;
+}
+
+/**
  * Build the `CardData` the character card frame renders for a figment. Figments
- * are 0-cost characters with no energy orb (the editor suppresses it via the
- * card-view energy slot); art is keyed by image number with the saved crop.
+ * are 0-cost characters with no energy orb (the figment frame drops it); art is
+ * keyed by image number with the saved crop.
  */
 export function figmentPreviewCard(record: EditorFigmentRecord): CardData {
   return {

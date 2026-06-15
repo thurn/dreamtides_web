@@ -122,9 +122,14 @@ const HIGHLIGHTED_TERMS: ReadonlySet<string> = new Set([
   "preeminence",
 ]);
 
-/** Spark-amber emphasis layered onto a highlighted term. */
+/**
+ * Spark-amber emphasis layered onto a highlighted term. The color is a CSS var
+ * so a surface with a different rules-box background can retune it — the figment
+ * frame's black-on-light box overrides it to a high-contrast deep gold — while
+ * every other surface inherits the default spark amber via the fallback.
+ */
 const HIGHLIGHTED_TERM_STYLE: CSSProperties = {
-  color: SPARK_ICON_COLOR,
+  color: `var(--cv-rules-highlight-color, ${SPARK_ICON_COLOR})`,
 };
 
 /**
