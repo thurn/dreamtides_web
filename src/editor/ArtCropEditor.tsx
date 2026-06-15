@@ -42,8 +42,16 @@ const SAVE_DEBOUNCE_MS = 400;
 
 export type ArtSaveStatus = "idle" | "saving" | "saved" | "error";
 
+/**
+ * The minimal record shape the art editor renders and saves: a stable id, the
+ * display name, and the `CardData` preview the card frame draws. Both the card
+ * editor (`EditorCardRecord`) and the figment editor (an adapter over
+ * `EditorFigmentRecord`) satisfy this, so they share one art-edit modal.
+ */
+export type ArtEditableRecord = Pick<EditorCardRecord, "id" | "name" | "preview">;
+
 export interface ArtCropEditorProps {
-  card: EditorCardRecord;
+  card: ArtEditableRecord;
   saveStatus: ArtSaveStatus;
   saveError: string | null;
   cardNameSaveStatus: ArtSaveStatus;
@@ -79,7 +87,7 @@ function roundTo(value: number, decimals: number): number {
   return Math.round(value * factor) / factor;
 }
 
-function readCardArt(card: EditorCardRecord): ArtCrop {
+function readCardArt(card: ArtEditableRecord): ArtCrop {
   const art = card.preview.art;
   if (art === undefined) {
     return { ...DEFAULT_ART_CROP };
