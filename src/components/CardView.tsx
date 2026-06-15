@@ -1120,7 +1120,7 @@ export function CardView({
         fontFamily: RULES_FONT_FAMILY,
         fontSize: `min(var(--cv-rules-font-cap), ${String(rulesFontPx)}px)`,
         lineHeight: "var(--cv-rules-line-height)",
-        textShadow: "0 1px 1px rgba(0, 0, 0, 0.55)",
+        textShadow: "var(--cv-rules-text-shadow)",
       }}
     >
       {renderRulesText(transfiguration?.markedText ?? card.renderedText, {

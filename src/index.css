@@ -436,6 +436,9 @@ button:disabled {
   /* Drop shadow under the card name, as a var so a surface with a light name bar
    * (the figment title bar) can drop it for crisp dark text. */
   --cv-name-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+  /* Drop shadow under the rules text, grounding light text on the dark box. A
+   * var so the figment's light box can drop it for crisp black text. */
+  --cv-rules-text-shadow: 0 1px 1px rgba(0, 0, 0, 0.55);
   /* Near-white and fully opaque: the type label floats on the art with no plate
    * behind it, so its fill rides on top of the faux outline rather than a
    * translucent panel. */
@@ -475,6 +478,7 @@ button:disabled {
    * as plain black card text. */
   --cv-rules-color: #16181c;
   --cv-rules-highlight-color: #16181c;
+  --cv-rules-text-shadow: none;
   --cv-textbox-radius: 3.2cqw;
   --cv-textbox-pad-y: 2.9cqw;
   --cv-textbox-pad-x: 3.4cqw;
