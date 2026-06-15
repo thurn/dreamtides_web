@@ -781,7 +781,7 @@ art-owned = false
 card-number = 42
 
 [[cards]]
-name = "Starshot Gunner"
+name = "Riftwalker"
 mtg-name = "Aether Spellbomb"
 id = "a9b5afaa-e149-4bf4-9007-077e8e9f12e6"
 rendered-text = "1●, Abandon this character: Return a character to hand."
@@ -792,10 +792,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "June15"]
-image-number = 432001924
+tags = ["Art Rework", "June15", "Art OK"]
+image-number = 1793552422
 art-owned = false
 card-number = 43
+art = { x = 0.375, y = 0.189, scale = 1.37 }
 
 [[cards]]
 name = "Desolation's Edge"
@@ -975,7 +976,7 @@ card-number = 52
 art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Spent Courier"
+name = "Consumed Marksman"
 mtg-name = "Experimental Synthesizer"
 id = "b8a66998-f2d8-401d-8262-d5a658563936"
 rendered-text = "▸Materialized, Dissolved: Draw a card with ephemeral."
@@ -986,10 +987,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Ichor Wellspring", "Art Rework", "June15"]
-image-number = 1185684769
+tags = ["Ichor Wellspring", "Art Rework", "June15", "Art OK"]
+image-number = 1639942837
 art-owned = false
 card-number = 53
+art = { x = 0.588, y = 0.608, scale = 1.17 }
 
 [[cards]]
 name = "Ironclad Marksman"
@@ -6091,10 +6093,10 @@ art-owned = false
 card-number = 331
 
 [[cards]]
-name = "Junkfield Renegade"
+name = "Flamestride Rider"
 mtg-name = "Pyrite Spellbomb"
 id = "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f"
-rendered-text = "1●, Abandon this character: Choose one: Gain 3⍟ or draw a card."
+rendered-text = "1●, Abandon this character: Choose one: Draw a card or dissolve a ≤2✦ enemy."
 energy-cost = 1
 card-type = "Character"
 subtype = "Warrior"
@@ -6102,13 +6104,14 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "June15"]
-image-number = 1282908319
+tags = ["Art Rework", "June15", "Art OK"]
+image-number = 2586513025
 art-owned = false
 card-number = 332
+art = { x = 0.21, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Fern Treader"
+name = "Pactbound Challenger"
 mtg-name = "Ornithopter of Paradise"
 id = "f256a0e7-e396-492b-8881-284ecd36025b"
 rendered-text = """
@@ -6122,10 +6125,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June15"]
-image-number = 1950881317
+tags = ["Art Rework", "June15", "Art OK"]
+image-number = 2131591267
 art-owned = false
 card-number = 333
+art = { x = 0.252, y = 0.212, scale = 1.17 }
 
 [[cards]]
 name = "Sanctum Awakened"
@@ -6946,7 +6950,7 @@ card-number = 377
 art = { x = 0.21, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Gleamshield Knight"
+name = "Containment Specialist"
 mtg-name = "Walking Ballista"
 id = "ec4c1ea2-067d-49e4-9d21-9de3f64a05e3"
 rendered-text = "4●: Gain 1⍟. This character gains +1✦."
@@ -6957,11 +6961,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June15"]
-image-number = 653554603
+tags = ["Art Rework", "June15", "Art OK"]
+image-number = 2661986989
 art-owned = false
 card-number = 378
-art = { x = -0.353, y = 0.399, scale = 1.17 }
+art = { x = 0.159, y = 0.141, scale = 1.47 }
 
 [[cards]]
 name = "Ashen Harbinger"
@@ -7475,19 +7479,19 @@ art-owned = false
 card-number = 405
 
 [[cards]]
-name = "Flamestride Rider"
+name = "Melodist of the Finale"
 mtg-name = "Losheel, Clockwork Scholar"
 id = "f07dfe42-566c-4e91-a250-9e2781e9d06f"
 rendered-text = "When you challenge with two or more warriors, draw a card."
 energy-cost = 3
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Musician"
 rarity = ""
 is-fast = false
 is-interrupt = false
-spark = 5
-tags = ["Art Rework", "June15"]
-image-number = 2586513025
+spark = 4
+tags = ["Art Rework", "June15", "Art OK"]
+image-number = 1074373424
 art-owned = false
 card-number = 406
 
@@ -7498,12 +7502,12 @@ id = "8367b757-c3d2-4c22-9043-8baadee1c5ba"
 rendered-text = "Once per turn, when you materialize a warrior, draw a card."
 energy-cost = 2
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Mage"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June15"]
+tags = ["Art Rework", "June15", "Art OK"]
 image-number = 1289324101
 art-owned = true
 card-number = 407
@@ -7697,21 +7701,22 @@ card-number = 417
 art = { x = -0.513, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Wreckheap Survivor"
+name = "Wreckheap Lookout"
 mtg-name = "Bloodsoaked Champion"
 id = "1b341984-d32e-42a7-ae56-b22059c59737"
 rendered-text = "▸Night: With an allied challenger, you may pay 2● to return this character from your void to play."
 energy-cost = 1
 card-type = "Character"
-subtype = "Warrior"
+subtype = "Survivor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June15"]
+tags = ["Art Rework", "June15", "Art OK"]
 image-number = 1114007978
 art-owned = false
 card-number = 418
+art = { x = 0, y = 1, scale = 1.47 }
 
 [[cards]]
 name = "Soulbinder"
@@ -7895,7 +7900,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "June15"]
+tags = ["Art Rework", "June15", "Art OK"]
 image-number = 1213574257
 art-owned = false
 card-number = 428
@@ -8832,7 +8837,7 @@ art-owned = false
 card-number = 479
 
 [[cards]]
-name = "Phantasmal Recruiter"
+name = "Grim Reclaimer"
 mtg-name = "Spawning Pit"
 id = "cf173b05-7bf2-465b-91e2-41f213c536d1"
 rendered-text = """
@@ -8846,10 +8851,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Figment Maker", "Art Rework", "June15"]
-image-number = 436090582
+tags = ["Figment Maker", "Art Rework", "June15", "Art OK"]
+image-number = 492981619
 art-owned = false
 card-number = 480
+art = { x = 0.353, y = 0.266, scale = 1.17 }
 
 [[cards]]
 name = "Duskmount"
@@ -8928,21 +8934,22 @@ card-number = 484
 art = { x = 0, y = -0.142, scale = 1.47 }
 
 [[cards]]
-name = "Blade of Oblivion"
+name = "Gilded Catalyst"
 mtg-name = "Diamond Lion"
 id = "0bddeb19-ff49-4a77-bc06-955377ba3ed1"
-rendered-text = "☪, Discard your hand, Abandon this character: Gain 3●."
-energy-cost = 2
+rendered-text = "☪, Discard your hand, abandon this character: Gain 3●."
+energy-cost = 1
 card-type = "Character"
 subtype = "Warrior"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June15"]
-image-number = 1798382134
+tags = ["Art Rework", "June15", "Art OK"]
+image-number = 2189428529
 art-owned = false
 card-number = 485
+art = { x = -0.024, y = 0.669, scale = 1.67 }
 
 [[cards]]
 name = "Wolfbond Chieftain"
@@ -9060,7 +9067,7 @@ card-number = 491
 art = { x = 0.126, y = 0.032, scale = 1.17 }
 
 [[cards]]
-name = "Dune Reaper"
+name = "Immortal Reaper"
 mtg-name = "Scrapheap Scrounger"
 id = "fd355778-abea-4513-844c-91bf75929ebe"
 rendered-text = "2●, Banish a card from your void: Materialize this character from your void."
@@ -9071,10 +9078,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "June15"]
-image-number = 2639857441
+tags = ["Art Rework", "June15", "Art OK"]
+image-number = 1740270992
 art-owned = false
 card-number = 492
+art = { x = 0, y = 1, scale = 1.37 }
 
 [[cards]]
 name = "Path to Redemption"

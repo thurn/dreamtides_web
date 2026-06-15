@@ -355,7 +355,7 @@
       ]
     },
     "0bddeb19-ff49-4a77-bc06-955377ba3ed1": {
-      "name": "Blade of Oblivion",
+      "name": "Gilded Catalyst",
       "needs": [],
       "supports": [
         "warriors",
@@ -1143,7 +1143,7 @@
       ]
     },
     "fd355778-abea-4513-844c-91bf75929ebe": {
-      "name": "Dune Reaper",
+      "name": "Immortal Reaper",
       "needs": [
         {
           "theme": "void",
@@ -1536,7 +1536,7 @@
       ]
     },
     "f256a0e7-e396-492b-8881-284ecd36025b": {
-      "name": "Fern Treader",
+      "name": "Pactbound Challenger",
       "needs": [],
       "supports": [
         "storm"
@@ -1584,7 +1584,7 @@
       ]
     },
     "f07dfe42-566c-4e91-a250-9e2781e9d06f": {
-      "name": "Flamestride Rider",
+      "name": "Melodist of the Finale",
       "needs": [
         {
           "theme": "warriors",
@@ -2163,7 +2163,7 @@
       ]
     },
     "c0edaab0-1e6d-4f0f-8d37-6fc90c8bee7f": {
-      "name": "Junkfield Renegade",
+      "name": "Flamestride Rider",
       "needs": [],
       "supports": [
         "abandon",
@@ -2887,7 +2887,7 @@
       ]
     },
     "cf173b05-7bf2-465b-91e2-41f213c536d1": {
-      "name": "Phantasmal Recruiter",
+      "name": "Grim Reclaimer",
       "needs": [
         {
           "theme": "abandon",
@@ -3820,7 +3820,7 @@
       ]
     },
     "b8a66998-f2d8-401d-8262-d5a658563936": {
-      "name": "Spent Courier",
+      "name": "Consumed Marksman",
       "needs": [],
       "supports": [
         "warriors",
@@ -4011,7 +4011,7 @@
       "supports": []
     },
     "a9b5afaa-e149-4bf4-9007-077e8e9f12e6": {
-      "name": "Starshot Gunner",
+      "name": "Riftwalker",
       "needs": [],
       "supports": [
         "warriors",
@@ -4912,7 +4912,7 @@
       ]
     },
     "1b341984-d32e-42a7-ae56-b22059c59737": {
-      "name": "Wreckheap Survivor",
+      "name": "Wreckheap Lookout",
       "needs": [],
       "supports": [
         "warriors",
