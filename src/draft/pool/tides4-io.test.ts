@@ -18,6 +18,7 @@ function makeArtifact(): Tides4DecksJson {
         id: "tide-sig-01",
         name: "Rael signature",
         role: "signature",
+        color: "purple",
         cards: [
           { id: "11111111-1111-1111-1111-111111111111", name: "Card A", copies: 2 },
           { id: "22222222-2222-2222-2222-222222222222", name: "Card B", copies: 1 },
@@ -27,6 +28,7 @@ function makeArtifact(): Tides4DecksJson {
         id: "tide-fac-01",
         name: "Lean: Card A",
         role: "facet",
+        color: "green",
         cards: [
           { id: "11111111-1111-1111-1111-111111111111", name: "Card A", copies: 2 },
           { id: "44444444-4444-4444-4444-444444444444", name: "Card D", copies: 1 },
@@ -36,6 +38,7 @@ function makeArtifact(): Tides4DecksJson {
         id: "tide-neu-01",
         name: "Broad: Card C / Card D",
         role: "neutral",
+        color: "blue",
         cards: [
           { id: "33333333-3333-3333-3333-333333333333", name: "Card C", copies: 1 },
         ],
@@ -85,6 +88,18 @@ describe("validateTides4Decks", () => {
     const data = clone(makeArtifact()) as Tides4DecksJson;
     (data.tides[0] as { role: string }).role = "broad";
     expect(() => validateTides4Decks(data)).toThrow(/unknown role/);
+  });
+
+  it("rejects an unknown color", () => {
+    const data = clone(makeArtifact()) as Tides4DecksJson;
+    (data.tides[0] as { color: string }).color = "teal";
+    expect(() => validateTides4Decks(data)).toThrow(/unknown color/);
+  });
+
+  it("rejects a tide with a missing color", () => {
+    const data = clone(makeArtifact()) as Tides4DecksJson;
+    delete (data.tides[0] as { color?: string }).color;
+    expect(() => validateTides4Decks(data)).toThrow(/unknown color/);
   });
 
   it("rejects a tide with no cards", () => {

@@ -331,11 +331,12 @@ function makeTides4Context(): RunPoolContext {
         id: "tide-sig-1",
         name: "Signature Floor",
         role: "signature",
+        color: "purple",
         cards: mkCards([...range(0, 6), STARTER_NAME_A]),
       },
-      { id: "tide-fac-1", name: "Facet A", role: "facet", cards: mkCards(range(6, 12)) },
-      { id: "tide-fac-2", name: "Facet B", role: "facet", cards: mkCards(range(12, 18)) },
-      { id: "tide-neu-1", name: "Broad Tail", role: "neutral", cards: mkCards(range(18, 24)) },
+      { id: "tide-fac-1", name: "Facet A", role: "facet", color: "green", cards: mkCards(range(6, 12)) },
+      { id: "tide-fac-2", name: "Facet B", role: "facet", color: "red", cards: mkCards(range(12, 18)) },
+      { id: "tide-neu-1", name: "Broad Tail", role: "neutral", color: "blue", cards: mkCards(range(18, 24)) },
     ],
     tidePoolByDreamcaller: {
       "dc-test": {

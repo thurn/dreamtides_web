@@ -28,22 +28,6 @@ const TIDE_COLOR_CHIP: Record<
   blue: { background: "#13315c", border: "rgba(96, 165, 250, 0.55)", icon: "bx-eye-alt" },
   red: { background: "#5c1417", border: "rgba(248, 113, 113, 0.55)", icon: "bx-hot" },
 };
-
-/** The tide chip styling used when a tide has no color annotation. */
-const DEFAULT_TIDE_CHIP = {
-  background: "rgba(30, 41, 59, 0.62)",
-  border: "rgba(148, 163, 184, 0.28)",
-  icon: "bx-water",
-};
-
-/** The dark background, border, and icon for a tide chip given its deck color. */
-function tideChipColors(color: Tides4Color | undefined): {
-  background: string;
-  border: string;
-  icon: string;
-} {
-  return (color && TIDE_COLOR_CHIP[color]) ?? DEFAULT_TIDE_CHIP;
-}
 const DREAMCALLER_HOVER_TRANSITION = { duration: 0.12, delay: 0 } as const;
 const DREAMCALLER_TAP_TRANSITION = { duration: 0.08, delay: 0 } as const;
 const SIGNATURE_CARDS_LABEL_HOVER_BLURB =
@@ -348,7 +332,7 @@ export function QuestStartScreen() {
                   </span>
                   <div className="flex w-full flex-col items-start gap-1.5">
                     {tides.map((tide) => {
-                      const chip = tideChipColors(tide.color);
+                      const chip = TIDE_COLOR_CHIP[tide.color];
                       return (
                       <HoverPopover
                         key={`${dreamcaller.id}-${tide.id}`}

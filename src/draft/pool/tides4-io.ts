@@ -42,6 +42,15 @@ export type Tides4Role = "signature" | "facet" | "neutral";
 /** The deck color a tide's mechanical identity belongs to. */
 export type Tides4Color = "purple" | "green" | "yellow" | "blue" | "red";
 
+/** Every valid {@link Tides4Color}, for validation. */
+export const TIDES4_COLORS: readonly Tides4Color[] = [
+  "purple",
+  "green",
+  "yellow",
+  "blue",
+  "red",
+];
+
 /** One preconstructed `tides4` deck. */
 export interface Tides4DeckJson {
   /** Stable tide id, e.g. "tide-sig-01" / "tide-fac-01" / "tide-neu-01". */
@@ -71,10 +80,11 @@ export interface Tides4DeckJson {
   /** A one-paragraph description of the tide's structure, engine, and contrasts. */
   description?: string;
   /**
-   * The deck color this tide's mechanical identity belongs to. Present once
-   * annotated; preserved across bakes by stable id.
+   * The deck color this tide's mechanical identity belongs to. Every tide is
+   * annotated with one; preserved across bakes by stable id. A tide without a
+   * valid color is rejected by {@link validateTides4Decks}.
    */
-  color?: Tides4Color;
+  color: Tides4Color;
   /** Whether this is a signature floor, a directional facet, or a broad tide. */
   role: Tides4Role;
   /** The decklist as UUID + copies entries. */
@@ -141,6 +151,9 @@ export function validateTides4Decks(json: unknown): Tides4DecksJson {
       tide.role !== "neutral"
     ) {
       fail(`tide "${tide.id}" has an unknown role "${String(tide.role)}"`);
+    }
+    if (!TIDES4_COLORS.includes(tide.color)) {
+      fail(`tide "${tide.id}" has an unknown color "${String(tide.color)}"`);
     }
     if (!Array.isArray(tide.cards) || tide.cards.length === 0) {
       fail(`tide "${tide.id}" without cards`);

@@ -33,17 +33,25 @@ function makeTides4(
       copies,
     }));
   const tides: Tides4DecksJson["tides"] = [
-    { id: "tide-sig-1", name: "Sig 1", role: "signature", cards: mkCards("tide-sig-1") },
+    {
+      id: "tide-sig-1",
+      name: "Sig 1",
+      role: "signature",
+      color: "purple",
+      cards: mkCards("tide-sig-1"),
+    },
     ...Array.from({ length: facetCount }, (_, f) => ({
       id: `tide-fac-${String(f + 1)}`,
       name: `Facet ${String(f + 1)}`,
       role: "facet" as const,
+      color: "green" as const,
       cards: mkCards(`tide-fac-${String(f + 1)}`),
     })),
     ...Array.from({ length: neutralCount }, (_, n) => ({
       id: `tide-neu-${String(n + 1)}`,
       name: `Neutral ${String(n + 1)}`,
       role: "neutral" as const,
+      color: "blue" as const,
       cards: mkCards(`tide-neu-${String(n + 1)}`),
     })),
   ];
@@ -135,6 +143,7 @@ describe("generateTides4", () => {
       id: "tide-sig-2",
       name: "Sig 2",
       role: "signature",
+      color: "yellow",
       cards: Array.from({ length: 30 }, (_, i) => ({
         id: `tide-sig-2-card-${String(i)}`,
         name: `Card tide-sig-2.${String(i)}`,

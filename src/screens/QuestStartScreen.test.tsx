@@ -543,6 +543,7 @@ describe("largestTides", () => {
       id,
       name: id,
       role: "facet",
+      color: "purple",
       cards: Array.from({ length: cardCount }, (_, index) => ({
         id: `${id}-card-${index}`,
         name: `${id}-card-${index}`,
@@ -589,6 +590,7 @@ describe("largestTides", () => {
       id: "big",
       name: "big",
       role: "facet",
+      color: "purple",
       cards: [{ id: "x", name: "x", copies: 20 }],
     };
     const tides = [
