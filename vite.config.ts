@@ -464,13 +464,17 @@ export default defineConfig({
   server: {
     watch: {
       // The card editor APIs write card and tag TOML files under data/tabula
-      // (via temp-file swaps) and regenerate the public card JSON catalogs
-      // (public/card-data.json and public/cards_v2-data.json) on every save.
-      // Files in public/ are not part of the module graph, but Vite still
-      // forces a full page reload whenever any public/ file changes, so each
-      // editor save must ignore every regenerated catalog. Both catalogs are
-      // listed in generatedCardDataWatchPaths below; ignoring them keeps an
-      // editor save from reloading the page, closing the art editor mid-edit,
+      // (via temp-file swaps) and regenerate the generated card data on every
+      // save. regenerateCardData() writes three files: the two public card
+      // JSON catalogs (public/card-data.json and public/cards_v2-data.json) and
+      // data/buildaround_support.json, whose per-card name fields are refreshed
+      // from the current card names (so a rename rewrites it). Files in public/
+      // are not part of the module graph, but Vite still forces a full page
+      // reload whenever any public/ file changes, and data/buildaround_support
+      // .json sits outside data/tabula so it is otherwise watched too. The two
+      // catalogs are listed in generatedCardDataWatchPaths below and
+      // buildaround_support.json is ignored just below; ignoring all three keeps
+      // an editor save from reloading the page, closing the art editor mid-edit,
       // and discarding inline edits.
       //
       // Git worktrees live under .worktrees and .claude/worktrees inside the
@@ -485,6 +489,10 @@ export default defineConfig({
         path.resolve(path.join(__dirname, "saved-quests")) + "/**",
         path.resolve(path.join(__dirname, ".worktrees")) + "/**",
         path.resolve(path.join(__dirname, ".claude", "worktrees")) + "/**",
+        // Regenerated on every card save (its per-card name fields track the
+        // current card names), so a rename rewrites it; ignore it so the save
+        // does not trigger a full page reload that closes the art editor.
+        path.resolve(path.join(__dirname, "data", "buildaround_support.json")),
         ...generatedCardDataWatchPaths,
       ],
     },
