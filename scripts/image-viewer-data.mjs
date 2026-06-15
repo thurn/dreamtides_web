@@ -59,6 +59,9 @@ export const ART_OK_TAG = "Art OK";
 /** Default card data file used to decide which images are already in use. */
 export const DEFAULT_CARDS_TOML = join("data", "tabula", "cards_v2.toml");
 
+/** Default figment catalog scanned for image numbers claimed by a figment. */
+export const DEFAULT_FIGMENTS_TOML = join("data", "tabula", "figments.toml");
+
 /**
  * Card data files scanned for the names an image number has ever been given.
  * `cards_v2.toml` is the live card set; it records every name a given
@@ -145,6 +148,36 @@ export function readApprovedImageNumbers(cardsTomlPath) {
   }
 
   return approved;
+}
+
+/**
+ * Read the set of image numbers claimed by a figment in the figment catalog.
+ *
+ * A figment "uses" its `image-number` exactly when that number is a positive
+ * id; the catalog stores `0` for figment types that have no art yet. Returns a
+ * `Set<string>` of image numbers (as strings, matching
+ * `imageNumberFromFilename`).
+ */
+export function readFigmentImageNumbers(figmentsTomlPath) {
+  const parsed = parse(readFileSync(figmentsTomlPath, "utf8"));
+  const figments = Array.isArray(parsed.figments) ? parsed.figments : [];
+  const used = new Set();
+
+  for (const figment of figments) {
+    const imageNumber = figment["image-number"];
+    if (
+      imageNumber === undefined ||
+      imageNumber === null ||
+      imageNumber === "" ||
+      Number(imageNumber) <= 0
+    ) {
+      continue;
+    }
+
+    used.add(String(imageNumber));
+  }
+
+  return used;
 }
 
 /**
@@ -371,8 +404,8 @@ export function listCategories(root) {
  * Each image entry records its category (subdirectory), filename, trailing
  * image number, the authored card name / narrative (when present in the
  * metadata JSON), the names the image has ever been published under in the
- * card-data TOMLs, whether a non-rework card already uses the image, and
- * whether a curator has hand-marked the image as used. Images whose card
+ * card-data TOMLs, whether a non-rework card or a figment already uses the
+ * image, and whether a curator has hand-marked the image as used. Images whose card
  * carries the `Art OK` tag are approved final art and are dropped from the
  * manifest entirely. The frontend filters the remainder by category and by the
  * used flags.
@@ -380,11 +413,15 @@ export function listCategories(root) {
 export function buildImageManifest({
   root = DEFAULT_TAGGED_ROOT,
   cardsTomlPath = DEFAULT_CARDS_TOML,
+  figmentsTomlPath = DEFAULT_FIGMENTS_TOML,
   nameHistoryTomlPaths = DEFAULT_NAME_HISTORY_TOMLS,
 } = {}) {
   const categories = listCategories(root);
   const usedImageNumbers = existsSync(cardsTomlPath)
     ? readUsedImageNumbers(cardsTomlPath)
+    : new Set();
+  const figmentImageNumbers = existsSync(figmentsTomlPath)
+    ? readFigmentImageNumbers(figmentsTomlPath)
     : new Set();
   const approvedImageNumbers = existsSync(cardsTomlPath)
     ? readApprovedImageNumbers(cardsTomlPath)
@@ -415,7 +452,9 @@ export function buildImageManifest({
         category,
         filename,
         imageNumber,
-        used: usedImageNumbers.has(imageNumber),
+        used:
+          usedImageNumbers.has(imageNumber) ||
+          figmentImageNumbers.has(imageNumber),
         manuallyUsed: manualUsedImageNumbers.has(imageNumber),
         cardName: meta?.cardName ?? null,
         narrative: meta?.narrative ?? null,

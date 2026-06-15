@@ -13,6 +13,7 @@ import {
   imageNumberFromFilename,
   moveImageCategory,
   readApprovedImageNumbers,
+  readFigmentImageNumbers,
   readImageMetadata,
   readManualUsedImageNumbers,
   readNameHistory,
@@ -36,11 +37,13 @@ describe("data helpers over a temp working set", () => {
   let root;
   let cardsTomlPath;
   let extraTomlPath;
+  let figmentsTomlPath;
 
   beforeEach(() => {
     root = mkdtempSync(join(tmpdir(), "image-viewer-"));
     cardsTomlPath = join(root, "cards.toml");
     extraTomlPath = join(root, "cards_extra.toml");
+    figmentsTomlPath = join(root, "figments.toml");
 
     mkdirSync(join(root, "warrior"));
     mkdirSync(join(root, "child"));
@@ -114,6 +117,23 @@ describe("data helpers over a temp working set", () => {
         "",
       ].join("\n"),
     );
+
+    // Figment 3333 claims an image; a figment with image-number 0 has no art.
+    writeFileSync(
+      figmentsTomlPath,
+      [
+        "[[figments]]",
+        'name = "Spirit Animal"',
+        'subtype = "Spirit Animal"',
+        "image-number = 3333",
+        "",
+        "[[figments]]",
+        'name = "Shadow"',
+        'subtype = "Shadow"',
+        "image-number = 0",
+        "",
+      ].join("\n"),
+    );
   });
 
   afterEach(() => {
@@ -132,6 +152,24 @@ describe("data helpers over a temp working set", () => {
     expect(approved.has("5555")).toBe(true);
     expect(approved.has("1111")).toBe(false);
     expect(approved.has("2222")).toBe(false);
+  });
+
+  it("collects image numbers claimed by a figment, skipping the 0 placeholder", () => {
+    const figmentUsed = readFigmentImageNumbers(figmentsTomlPath);
+    expect(figmentUsed.has("3333")).toBe(true);
+    expect(figmentUsed.has("0")).toBe(false);
+  });
+
+  it("marks a figment-claimed image as used in the manifest", () => {
+    const manifest = buildImageManifest({
+      root,
+      cardsTomlPath,
+      figmentsTomlPath,
+      nameHistoryTomlPaths: [cardsTomlPath],
+    });
+    const byNumber = new Map(manifest.images.map((i) => [i.imageNumber, i]));
+    // 3333 has no card, but a figment claims it.
+    expect(byNumber.get("3333")?.used).toBe(true);
   });
 
   it("collects distinct names per image across both card sets", () => {
