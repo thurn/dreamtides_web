@@ -592,9 +592,9 @@ name = "Spirit Field Reclaimer"
 mtg-name = "Lion Sash"
 id = "78673e2b-a6d1-43de-8850-3d3327de5cc6"
 rendered-text = '''
-1●, Banish a character from a void: Store 1⧗.
+Support – Supported allies have +1✦ for each stored ⧗.
 
-Support – Supported allies have +1✦ for each stored ⧗.'''
+1●, Banish a character from a void: Store 1⧗.'''
 energy-cost = 3
 card-type = "Character"
 subtype = "Warrior"
@@ -629,10 +629,10 @@ card-number = 34
 name = "Woodland Apparition"
 mtg-name = "Detective's Phoenix"
 id = "1268a899-b209-46bb-bce4-6def1dcd0404"
-rendered-text = """
-Support – Supported allies have +2✦ and have unstoppable.
+rendered-text = '''
+Support – Supported allies have +2✦ and unstoppable.
 
-Reclaim – 3●, Banish 3 cards from your void."""
+Reclaim – 3●, Banish 3 cards from your void.'''
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -876,10 +876,10 @@ card-number = 47
 name = "Ghostlight Wolves"
 mtg-name = "Elvish Archdruid"
 id = "c8579b20-95ff-4b1d-b4c6-6bd049fc4760"
-rendered-text = """
-☪: Gain 1● for each allied spirit animal.
+rendered-text = '''
+Support – Supported spirit animals have +2✦.
 
-Support – Supported spirit animals have +2✦."""
+☪: Gain 1● for each allied spirit animal.'''
 energy-cost = 3
 card-type = "Character"
 subtype = "Spirit Animal"
@@ -1012,10 +1012,10 @@ card-number = 54
 name = "Battlefield Medic"
 mtg-name = "Cranial Plating"
 id = "c61c8b29-6911-4bbf-b1c4-0c18b22ed33f"
-rendered-text = """
-❖ – 1●: Move this character to an unoccupied character position.
+rendered-text = '''
+Support – Supported allies have +2✦.
 
-Support – Supported characters have +2✦."""
+❖ – 1●: Move this character to an unoccupied character position.'''
 energy-cost = 1
 card-type = "Character"
 subtype = "Warrior"
@@ -1033,7 +1033,7 @@ art = { x = -0.042, y = 1, scale = 1.17 }
 name = "Skyflame Commander"
 mtg-name = "Cranial Plating"
 id = "56411ed4-bda9-4fdf-82e5-b5492de67039"
-rendered-text = "Support – Supported characters have +1✦ for each allied warrior."
+rendered-text = "Support – Supported allies have +1✦ for each allied warrior."
 energy-cost = 2
 card-type = "Character"
 subtype = "Warrior"
@@ -2676,9 +2676,9 @@ name = "Ash Sower"
 mtg-name = "Grafted Wargear"
 id = "8c9ef6a8-d93e-4149-a965-0bdbe2acf6bd"
 rendered-text = """
-❖ – Abandon an ally: Move this character to the abandoned ally's position.
+Support – Supported allies have +3✦.
 
-Support – Supported characters have +3✦."""
+❖ – Abandon an ally: Move this character to the abandoned ally's position."""
 energy-cost = 3
 card-type = "Character"
 subtype = "Warrior"
@@ -9400,7 +9400,7 @@ card-number = 509
 name = "Nocturne Strummer"
 mtg-name = ""
 id = "5a980eff-6ec7-44d8-9977-b98e66bbc2c8"
-rendered-text = "Support – Supported characters have +2✦."
+rendered-text = "Support – Supported allies have +2✦."
 energy-cost = 2
 card-type = "Character"
 subtype = "Musician"
