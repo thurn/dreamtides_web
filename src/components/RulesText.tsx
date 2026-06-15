@@ -23,17 +23,12 @@ import {
  *     for their filled marks (star-circle, moon, hourglass, caret), the
  *     trigger keeping its muted slate
  *   - the fast `↯` glyph colored
- *   - glossary terms rendered as plain prose by default, with three curated
- *     families syntax-highlighted so a player can tell the kinds of rules
- *     vocabulary apart at a glance (see `classifyRulesTextTerm`):
- *       * trigger keywords (`▸Materialized`, `▸Dissolved`, `▸Dawn`) in a
- *         soft green;
- *       * action verbs (`materialize`, `dissolve`, `banish`, `prevent`,
- *         `foresee`, …) in the spark amber;
- *       * static keyword abilities (`awakened`, `veil`, `unstoppable`,
- *         `reclaim`, …) in a soft lavender.
- *     The plain-language definitions for every term on a card surface beside
- *     it in the card's hover-help panel (see `CardTermDefinitions`).
+ *   - glossary terms rendered as plain prose by default, with a curated set
+ *     of keyword effects and action verbs (`dissolve`, `banish`, `prevent`,
+ *     `foresee`, `veil`, `unstoppable`, `reclaim`, …) emphasized in the spark
+ *     amber so the eye catches them (see `HIGHLIGHTED_TERMS`). The
+ *     plain-language definitions for every term on a card surface beside it in
+ *     the card's hover-help panel (see `CardTermDefinitions`).
  *
  * Used by `CardDisplay`, `DreamcallerPopover`, and the dreamsign cards on
  * `DreamsignDraftScreen` / `DreamsignOfferingScreen`. Single source of
@@ -84,107 +79,61 @@ const SYMBOL_ICON_CLASSES: Readonly<
 };
 
 /**
- * The three syntax-highlighting families a glossary term can fall into.
+ * Glossary terms emphasized in the spark amber color wherever they appear in
+ * rules text — the keyword effects and action verbs worth drawing the eye to.
  *
- * Membership is keyed on `GlossaryEntry.term` (the canonical form), so every
- * authored variant of a word inherits its family — `dissolve` / `dissolves` /
- * `dissolved` all resolve to the `Dissolve` entry and so all read as actions.
- * The trigger/verb split is enforced in the glossary: the arrow-gated
- * `▸Dissolved` entry only matches `▸Dissolved` in card text (the trigger),
- * while the bare past-tense verb `dissolved` resolves to `Dissolve`. The same
- * holds for `▸Materialized` vs `materialize`.
+ * Membership is keyed on the word form as written (lower-cased), not on the
+ * glossary entry, so emphasis can split conjugations of a single entry:
+ * `dissolve` and `dissolves` are emphasized while the past-tense `dissolved`
+ * is not, and the `support` keyword is emphasized while the `supported`
+ * relationship word is not. Terms outside this set — including the named
+ * triggers `▸Materialized`, `▸Dissolved`, and `▸Dawn` — render as plain prose.
  */
-type RulesTextTermGroup = "trigger" | "action" | "keyword";
-
-/**
- * Trigger keywords — the timing markers that open a triggered ability, always
- * written with the `▸` arrow. Keyed by their arrow-gated glossary term.
- */
-export const TRIGGER_TERMS: ReadonlySet<string> = new Set([
-  "▸Materialized",
-  "▸Dissolved",
-  "▸Dawn",
+const HIGHLIGHTED_TERMS: ReadonlySet<string> = new Set([
+  // Action verbs.
+  "banish",
+  "banished",
+  "banishes",
+  "dissolve",
+  "dissolves",
+  "discover",
+  "erode",
+  "eroded",
+  "erodes",
+  "prevent",
+  "prevented",
+  "rematerialize",
+  "ephemeral",
+  "foresee",
+  // Static keyword abilities.
+  "awakened",
+  "awaken",
+  "awakens",
+  "phasing",
+  "support",
+  "supports",
+  "veil",
+  "veiled",
+  "reclaim",
+  "reclaimed",
+  "offering",
+  "unstoppable",
+  "vengeful",
+  "preeminence",
 ]);
 
-/**
- * Action verbs — the words that name something a card does. Keyed by canonical
- * glossary term so their conjugations (`prevented`, `dissolved`, `materializes`)
- * pick up the same emphasis.
- */
-export const ACTION_TERMS: ReadonlySet<string> = new Set([
-  "Score",
-  "Abandon",
-  "Banish",
-  "Dissolve",
-  "Discover",
-  "Materialize",
-  "Erode",
-  "Prevent",
-  "Figment",
-  "Rematerialize",
-  "Ephemeral",
-  "Foresee",
-]);
-
-/**
- * Static keyword abilities — the named, persistent abilities a card can carry.
- * Keyed by canonical glossary term (e.g. `awaken` resolves to `Awakened`).
- */
-export const KEYWORD_TERMS: ReadonlySet<string> = new Set([
-  "Awakened",
-  "Phasing",
-  "Supported",
-  "Veil",
-  "Reclaim",
-  "Offering",
-  "Unstoppable",
-  "Vengeful",
-  "Preeminence",
-]);
-
-/**
- * Classifies a glossary term (its canonical `GlossaryEntry.term`) into its
- * syntax-highlighting family, or `undefined` for terms that render as plain
- * prose. Exported for the highlighter tests.
- */
-export function classifyRulesTextTerm(
-  term: string,
-): RulesTextTermGroup | undefined {
-  if (TRIGGER_TERMS.has(term)) {
-    return "trigger";
-  }
-  if (ACTION_TERMS.has(term)) {
-    return "action";
-  }
-  if (KEYWORD_TERMS.has(term)) {
-    return "keyword";
-  }
-  return undefined;
-}
-
-/**
- * Subtle green for trigger keywords. Cool and calm against the dark
- * black/purple rules-text background, and clearly distinct from the energy
- * flame's brighter blue (`#0ea5e9`) so a trigger never reads as a resource.
- */
-const TRIGGER_TERM_COLOR = "#82c98a";
-
-/**
- * Subtle lavender for static keyword abilities. Lifts off the dark purple
- * background while staying soft, and sits opposite the green and amber on the
- * wheel so the three families separate cleanly.
- */
-const KEYWORD_TERM_COLOR = "#b9aef0";
-
-/**
- * Per-family inline color. Action verbs keep the spark amber (`#f3c33f`) the
- * earlier single-term emphasis used, so that family is visually unchanged.
- */
-const TERM_GROUP_STYLES: Readonly<Record<RulesTextTermGroup, CSSProperties>> = {
-  trigger: { color: TRIGGER_TERM_COLOR },
-  action: { color: SPARK_ICON_COLOR },
-  keyword: { color: KEYWORD_TERM_COLOR },
+/** Spark-amber emphasis layered onto a highlighted term. */
+const HIGHLIGHTED_TERM_STYLE: CSSProperties = {
+  color: SPARK_ICON_COLOR,
 };
+
+/**
+ * True when a glossary term, by its word form as written (case-insensitive),
+ * is emphasized in rules text. Exported for the highlighter tests.
+ */
+export function isHighlightedRulesTextTerm(word: string): boolean {
+  return HIGHLIGHTED_TERMS.has(word.toLowerCase());
+}
 
 interface RulesTextProps {
   /** The rules text to render. */
@@ -266,11 +215,12 @@ function renderSegment(
   }
   if (segment.kind === "term") {
     // Glossary terms read as plain prose; their definitions surface beside the
-    // card in its hover-help panel rather than as per-word tooltips. Three
-    // curated families (trigger keywords, action verbs, static keyword
-    // abilities) carry a subtle color so the eye can tell them apart.
-    const group = classifyRulesTextTerm(segment.entry.term);
-    const emphasis = group !== undefined ? TERM_GROUP_STYLES[group] : undefined;
+    // card in its hover-help panel rather than as per-word tooltips. A curated
+    // set of keyword effects and action verbs carries a spark-amber emphasis so
+    // the eye still catches them.
+    const emphasis = isHighlightedRulesTextTerm(segment.word)
+      ? HIGHLIGHTED_TERM_STYLE
+      : undefined;
     return (
       <span key={key} style={emphasis}>
         {segment.word}
