@@ -577,16 +577,12 @@ token (a created card), not a figment.
 | Figment type | Base ✦ | Keyword |
 | --- | --- | --- |
 | Warrior | 1✦ | — |
-| Ancient | 4✦ | Unstoppable |
-| Enigma | 0✦ | — |
 | Shadow | 2✦ | — |
 | Spirit Animal | 1✦ | — |
 | Monstrosity | 4✦ | — |
 | Survivor | 1✦ | — |
-| Celestial | 2✦ | — |
 | Wraith | 0✦ | Vengeful |
 | Ethereal | 1✦ | — |
-| Radiant | 2✦ | — |
 | Ember | 1✦ | Awakened |
 | Outsider | 1✦ | — |
 | Legion | 1✦ per allied warrior | — |
