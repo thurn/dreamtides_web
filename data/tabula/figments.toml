@@ -20,16 +20,6 @@ art-owned = false
 art = { x = 0, y = 0.123, scale = 1.2 }
 
 [[figments]]
-name = "Ancient"
-id = "9ac0957e-d95a-47b0-a496-c0f0a8e8c8e7"
-subtype = "Ancient"
-spark = 4
-keyword = "unstoppable"
-rendered-text = "Unstoppable"
-image-number = 0
-art-owned = false
-
-[[figments]]
 name = "Shadow"
 id = "86125402-a7ca-4bf2-ab36-f8a91ddd27bf"
 subtype = "Shadow"
@@ -64,16 +54,6 @@ name = "Survivor"
 id = "5256888f-c4d6-41b2-baf0-420dbf30d269"
 subtype = "Survivor"
 spark = 1
-keyword = ""
-rendered-text = ""
-image-number = 0
-art-owned = false
-
-[[figments]]
-name = "Celestial"
-id = "742631cc-a85d-4c35-b33a-5d257211caab"
-subtype = "Celestial"
-spark = 2
 keyword = ""
 rendered-text = ""
 image-number = 0
