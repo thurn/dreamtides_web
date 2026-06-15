@@ -479,6 +479,11 @@ button:disabled {
   --cv-rules-color: #16181c;
   --cv-rules-highlight-color: #16181c;
   --cv-rules-text-shadow: none;
+  /* Inline resource glyphs (the spark sparkle, an energy flame) read in the same
+   * black as the surrounding text rather than their bright resource hue, which is
+   * hard to read on the pale box. */
+  --cv-rules-spark-color: var(--cv-rules-color);
+  --cv-rules-energy-color: var(--cv-rules-color);
   --cv-textbox-radius: 3.2cqw;
   --cv-textbox-pad-y: 2.9cqw;
   --cv-textbox-pad-x: 3.4cqw;

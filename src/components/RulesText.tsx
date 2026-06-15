@@ -286,7 +286,11 @@ function renderSegment(
         aria-label="energy"
         className={`${ENERGY_ICON_CLASS} align-middle`}
         style={{
-          color: ENERGY_ICON_COLOR,
+          // A var so a light-box surface (the figment frame) can render the
+          // resource glyph in its own text color instead of the bright resource
+          // hue, which is hard to read on a pale fill. Defaults to the resource
+          // color everywhere else.
+          color: `var(--cv-rules-energy-color, ${ENERGY_ICON_COLOR})`,
           transform: "translateY(-0.08em)",
         }}
       />
@@ -304,7 +308,13 @@ function renderSegment(
         key={key}
         aria-label="spark"
         className={`${SPARK_INLINE_ICON_CLASS} align-middle`}
-        style={{ color: SPARK_ICON_COLOR, transform: "translateY(-0.09em)" }}
+        style={{
+          // See the energy glyph above: a var so the figment's light box can
+          // render the spark in its black text color rather than the gold
+          // resource hue, which is hard to read on the pale fill.
+          color: `var(--cv-rules-spark-color, ${SPARK_ICON_COLOR})`,
+          transform: "translateY(-0.09em)",
+        }}
       />
     );
   }
