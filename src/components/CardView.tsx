@@ -1011,7 +1011,7 @@ export function CardView({
         fontFamily: NAME_FONT_FAMILY,
         fontWeight: 600,
         letterSpacing: "0.01em",
-        textShadow: "0 1px 2px rgba(0, 0, 0, 0.7)",
+        textShadow: "var(--cv-name-text-shadow)",
         fontSize: "var(--cv-name-font-size)",
         lineHeight: 1.1,
       }}
@@ -1130,15 +1130,18 @@ export function CardView({
     </div>
   ) : null;
 
-  // In figment mode the spark is the standalone top-right corner mark, sized up
-  // from the in-bar orb so it carries the top of the card on its own.
-  const sparkSizeVar = figment
+  // A title-less figment floats the spark as a large standalone top-right corner
+  // mark (sized up so it carries the top of the card on its own). A titled
+  // figment instead seats the regular-size spark at the title bar's right edge,
+  // exactly like a normal card's name bar.
+  const figmentCornerSpark = figment && !figmentTitleBar;
+  const sparkSizeVar = figmentCornerSpark
     ? "var(--cv-figment-spark-size)"
     : "var(--cv-spark-orb-size)";
-  const sparkFontVar = figment
+  const sparkFontVar = figmentCornerSpark
     ? "var(--cv-figment-spark-font-size)"
     : "var(--cv-spark-orb-font-size)";
-  const sparkCapPx = figment ? widthPx * 0.14 : sparkOrbCapPx;
+  const sparkCapPx = figmentCornerSpark ? widthPx * 0.14 : sparkOrbCapPx;
   const sparkOrbNode =
     card.spark !== null || card.sparkVariable === true ? (
       <CardStatOrb
@@ -1419,11 +1422,13 @@ export function CardView({
       {figment ? (
         <>
           {/*
-            Figment top chrome. No name bar by default — the spark floats as a
-            large mark in the top-right corner directly on the art. A named
-            figment (or one whose name is being edited) opts into a left-aligned
-            title bar via `figmentTitleBar`, reusing the dark character-card bar
-            treatment so it reads as the same material as a regular name bar.
+            Figment top chrome. A title-less figment is art-forward: the spark
+            floats as a large mark in the top-right corner directly on the art. A
+            named figment (e.g. a Legionnaire) opts into a title bar that is
+            structured exactly like a regular card's name bar — same corner
+            radius, the spark stat seated at its right edge — but uses the
+            figment's own black-on-light frosted material (the same as the rules
+            box) with the card name in the card serif, dark and unshadowed.
           */}
           {figmentTitleBar ? (
             <div
@@ -1431,30 +1436,35 @@ export function CardView({
               style={
                 {
                   position: "absolute",
-                  top: "var(--cv-figment-titlebar-top)",
-                  left: "var(--cv-figment-titlebar-left)",
-                  right: "var(--cv-figment-titlebar-right)",
-                  height: "var(--cv-figment-titlebar-height)",
+                  top: "var(--cv-namebar-top)",
+                  // No energy orb on a figment, so the bar runs symmetrically
+                  // inset from both sides rather than offset to clear an orb.
+                  left: "var(--cv-header-inset)",
+                  right: "var(--cv-header-inset)",
+                  height: "var(--cv-namebar-height)",
                   zIndex: 5,
                   display: "flex",
                   alignItems: "center",
+                  gap: "var(--cv-namebar-gap)",
                   paddingLeft: "var(--cv-figment-titlebar-pad)",
                   paddingRight: "var(--cv-namebar-pad-right)",
+                  // Visible so the spark orb, taller than the bar, protrudes
+                  // above and below it exactly as on a regular card.
                   overflow: "visible",
                   borderRadius: "var(--cv-namebar-radius)",
-                  background: "var(--cv-namebar-bg)",
+                  background: "var(--cv-textbox-bg)",
                   backdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
                   WebkitBackdropFilter: "blur(var(--cv-textbox-blur)) saturate(1)",
-                  border: "1px solid var(--cv-namebar-border)",
+                  border: "1px solid var(--cv-textbox-border)",
                   boxShadow:
-                    "0 1px 0 rgba(255,255,255,0.16) inset, 0 -6px 14px rgba(0,0,0,0.30) inset, 0 6px 16px rgba(0,0,0,0.34)",
+                    "0 1px 0 rgba(255,255,255,0.5) inset, 0 4px 12px rgba(18,28,58,0.22)",
                 } satisfies CSSProperties
               }
             >
               {renderedNameNode}
+              {hasSparkContent ? renderedSparkContent : null}
             </div>
-          ) : null}
-          {hasSparkContent ? (
+          ) : hasSparkContent ? (
             <div
               className="absolute"
               style={{

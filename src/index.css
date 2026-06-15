@@ -433,6 +433,9 @@ button:disabled {
   --cv-name-font-family: "EB Garamond", Georgia, serif;
   --cv-rules-font-family: "Fira Sans Condensed", "Inter", sans-serif;
   --cv-name-color: #f6f6f5;
+  /* Drop shadow under the card name, as a var so a surface with a light name bar
+   * (the figment title bar) can drop it for crisp dark text. */
+  --cv-name-text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
   /* Near-white and fully opaque: the type label floats on the art with no plate
    * behind it, so its fill rides on top of the faux outline rather than a
    * translucent panel. */
@@ -474,30 +477,24 @@ button:disabled {
   --cv-textbox-radius: 3.2cqw;
   --cv-textbox-pad-y: 2.9cqw;
   --cv-textbox-pad-x: 3.4cqw;
-  /* The optional title bar keeps the regular card's warm near-black treatment
-   * (it bleeds the art the same way) so it does not pick up the light box fill. */
-  --cv-namebar-bg: linear-gradient(
-    180deg,
-    rgba(8, 6, 4, 0.74) 0%,
-    rgba(4, 3, 2, 0.83) 48%,
-    rgba(1, 1, 1, 0.9) 100%
-  );
-  --cv-namebar-border: rgba(0, 0, 0, 0.55);
+  /* Optional title bar (named figments like a Legionnaire). It is structured
+   * exactly like a regular card's name bar — same corner radius, the spark stat
+   * seated at its right edge — but uses the figment's own black-on-light frosted
+   * material (the same as the rules box) with the card name in the card serif,
+   * dark, and no drop shadow. A figment has no energy cost, so the bar runs
+   * symmetrically inset from both sides with no orb gap at the left. */
+  --cv-name-color: #1a2030;
+  --cv-name-text-shadow: none;
+  --cv-figment-titlebar-pad: 3.6cqw;
 
-  /* Corner spark mark: larger than a regular card's spark orb so it carries the
-   * top of the card on its own (there is no name bar to anchor it). */
+  /* Corner spark mark for a figment with NO title bar (art-forward): larger than
+   * the in-bar spark so it carries the top of the card on its own. A titled
+   * figment instead seats the regular-size spark at the title bar's right edge,
+   * exactly like a normal card. */
   --cv-figment-spark-size: 17.5cqw;
   --cv-figment-spark-font-size: 8.4cqw;
   --cv-figment-spark-top: 2.8cqw;
   --cv-figment-spark-right: 1.6cqw;
-
-  /* Optional title bar geometry (named figments / while editing the name). */
-  --cv-figment-titlebar-top: 4cqw;
-  --cv-figment-titlebar-left: 3.4cqw;
-  /* Right inset clears the corner spark. */
-  --cv-figment-titlebar-right: 20cqw;
-  --cv-figment-titlebar-height: 9cqw;
-  --cv-figment-titlebar-pad: 4.5cqw;
 }
 
 /* The figment editor's reveal-on-edit affordances (name bar, rules box):
