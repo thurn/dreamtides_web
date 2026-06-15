@@ -5,7 +5,9 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../types/cards";
+import { SIZE_PRESETS } from "../components/card-size";
 import CardEditorApp from "./CardEditorApp";
+import { DEFAULT_EDITOR_DISPLAY_STATE } from "./editor-url-state";
 import type { EditorApiClient, EditorCardRecord } from "./types";
 
 function deferred<T>(): {
@@ -797,34 +799,33 @@ describe("CardEditorApp", () => {
 
   it("updates editor grid sizing from the size control", async () => {
     const { container, root } = await mountLoadedApp([makeEditorCard()]);
-    const largeButton = Array.from(container.querySelectorAll("button")).find(
-      (button) => button.textContent === "Large",
+    const mediumButton = Array.from(container.querySelectorAll("button")).find(
+      (button) => button.textContent === "Medium",
     );
 
-    if (largeButton === undefined) {
-      throw new Error("Missing large size button");
+    if (mediumButton === undefined) {
+      throw new Error("Missing medium size button");
     }
 
-    const mediumGrid = container.querySelector<HTMLElement>(
-      "[data-editor-grid-size=\"medium\"]",
+    // The grid starts at the default size preset.
+    const startGrid = container.querySelector<HTMLElement>(
+      `[data-editor-grid-size="${DEFAULT_EDITOR_DISPLAY_STATE.size}"]`,
     );
-    expect(mediumGrid).not.toBeNull();
-    // Cards are tiled at the active preset width on each card-item wrapper.
-    expect(
-      mediumGrid
-        ?.querySelector<HTMLElement>("[data-editor-card-item]")
-        ?.style.width,
-    ).toBe("176px");
+    expect(startGrid).not.toBeNull();
 
     act(() => {
-      largeButton.click();
+      mediumButton.click();
     });
 
-    // The "large" preset tiles cards at the quest draft offer width.
+    // The size control switches the grid to the chosen preset and re-tiles the
+    // cards at that preset's width.
     const grid = container.querySelector<HTMLElement>(
-      "[data-editor-grid-size=\"large\"]",
+      "[data-editor-grid-size=\"medium\"]",
     );
     expect(grid).not.toBeNull();
+    expect(
+      grid?.querySelector<HTMLElement>("[data-editor-card-item]")?.style.width,
+    ).toBe(SIZE_PRESETS.medium.cardWidth);
 
     act(() => {
       root.unmount();

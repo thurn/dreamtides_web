@@ -197,8 +197,6 @@ describe("assignTransfiguration", () => {
   });
 
   it("returns a valid offer for an Event with 0 cost and no numbers", () => {
-    // Events are always eligible for Inspired and Enduring, which makes them
-    // eligible for Perfected too.
     const card = makeCard({
       cardType: "Event",
       energyCost: 0,
@@ -206,7 +204,8 @@ describe("assignTransfiguration", () => {
     });
     const result = assignTransfiguration(card, null);
     expect(result).not.toBeNull();
-    expect(["Inspired", "Enduring", "Perfected"]).toContain(result!.type);
+    // The offer is always one of the card's eligible transfigurations.
+    expect(eligibleTransfigurations(card)).toContain(result!.type);
   });
 
   it("returns a valid offer with type, description, and previewCard", () => {

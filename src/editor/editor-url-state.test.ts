@@ -58,11 +58,11 @@ describe("editor URL display state", () => {
       showFontSize: false,
       sort: "cost",
       dir: "desc",
-      size: "large",
+      size: "small",
     };
 
     expect(serializeEditorDisplayState(state).toString()).toBe(
-      "scope=all&type=character&cost=5plus&subtype=Scout&sort=cost&dir=desc&size=large",
+      "scope=all&type=character&cost=5plus&subtype=Scout&sort=cost&dir=desc&size=small",
     );
     expect(parseEditorDisplayState(serializeEditorDisplayState(state))).toEqual(
       state,
