@@ -53,7 +53,7 @@ const DEFAULT_DISPLAY_STATE: FigmentDisplayState = {
   artEditing: false,
   sort: "sourceOrder",
   dir: "asc",
-  size: "medium",
+  size: "large",
 };
 
 function errorMessageFor(error: unknown): string {

@@ -24,7 +24,7 @@ export const DEFAULT_EDITOR_DISPLAY_STATE: EditorDisplayState = {
   showFontSize: false,
   sort: "name",
   dir: "asc",
-  size: "medium",
+  size: "large",
 };
 
 const TYPE_VALUES = new Set<EditorTypeFilter>(["all", "character", "event"]);

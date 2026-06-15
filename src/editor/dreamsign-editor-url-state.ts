@@ -30,7 +30,7 @@ export const DEFAULT_DREAMSIGN_DISPLAY_STATE: DreamsignDisplayState = {
   checkboxTag: "",
   sort: "sourceOrder",
   dir: "asc",
-  size: "medium",
+  size: "large",
 };
 
 function listParam(params: URLSearchParams, key: string): string[] {
