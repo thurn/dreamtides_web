@@ -85,20 +85,31 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     definition: "Trigger an in-play character's materialization again.",
   },
   {
+    // Gated to the arrow form so the trigger reads as a timing marker; the
+    // bare past-tense verb "dissolved" resolves to the `Dissolve` action entry
+    // below instead.
     term: "▸Dissolved",
     definition: "Triggers when this character is dissolved.",
-    // Bare variant retained for backward-compatible matching; drop it to gate
-    // this trigger to the arrow form like `▸Materialized`.
-    variants: ["dissolved"],
   },
   {
     term: "Dissolve",
     definition: "Destroy a character, sending it to the void.",
-    variants: ["dissolves"],
+    variants: ["dissolves", "dissolved"],
   },
   {
     term: "Banish",
     definition: "Remove a card from the game.",
+    variants: ["banished", "banishes"],
+  },
+  {
+    term: "Abandon",
+    definition: "Send a character you control to the void.",
+    variants: ["abandoned", "abandons"],
+  },
+  {
+    term: "Score",
+    definition: "Convert a character's spark into victory points.",
+    variants: ["scores", "scored", "scoring"],
   },
 
   // --- Keywords -------------------------------------------------------
@@ -131,6 +142,7 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     term: "Awakened",
     definition:
       "Can challenge and activate ☪ abilities on the same turn in which it is materialized.",
+    variants: ["awaken", "awakens"],
   },
   {
     term: "Unstoppable",
@@ -142,9 +154,19 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     definition: "Wins ✦ ties during challenges.",
   },
   {
+    term: "Veil",
+    definition: "Costs the opponent extra ● to target this character.",
+    variants: ["veiled"],
+  },
+  {
+    term: "Vengeful",
+    definition:
+      "When this character loses a challenge, it dissolves the opposing character.",
+  },
+  {
     term: "Supported",
     definition: "Characters directly in front of this character.",
-    variants: ["supporting"],
+    variants: ["supporting", "support", "supports"],
   },
   {
     term: "Challenger",
