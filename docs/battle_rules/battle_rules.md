@@ -252,7 +252,7 @@ character's controller's next turn, when it is cleared during the Dawn phase.
 - Paying a ☪ cost exhausts that character.
 
 Because an exhausted character cannot be moved to the front rank, exhausting a
-character keeps it out of combat. As a convenience, when a front-rank character
+character keeps it from challenging or defending. As a convenience, when a front-rank character
 pays a ☪ cost it is automatically moved to an available back-rank position so
 that it does not remain a potential challenger or defender. If there is no
 available back-rank position (and no front-rank position to swap into), the
@@ -646,23 +646,23 @@ set of **reserve** figments beneath it:
 
 Whether a figment stack is a challenger or a defender, its **topmost figment
 resolves a normal challenge** against the opposing character using its own
-single-figment spark; the **reserve figments never fight**. The spark comparison
+single-figment spark; the **reserve figments take no part in the challenge**. The spark comparison
 resolves normally: with lower or equal spark the topmost is dissolved (one figment
 removed); with higher spark the opposing character is dissolved and the topmost
 survives. The opposing character is compared only against the **topmost's** spark,
-never the stack total, so a tall stack of small figments cannot overpower a large
+never the stack total, so a tall stack of small figments cannot dissolve a large
 defender.
 
 Scoring follows the usual rule that **only a challenger scores**, never a
-defender. So a stack's reserves earn points only when the stack is the one
-attacking:
+defender. So a stack's reserves earn points only when the stack is the
+challenger:
 
 - **Stack challenging, unopposed** (no defender in the lane): every figment is
   unopposed, so the stack scores its **total** spark.
 - **Stack challenging into a defender:** only the **reserves** are unopposed, so
   the stack scores the reserves' spark. The contested topmost scores nothing
   unless it has Unstoppable and wins.
-- **Stack defending:** the topmost blocks and the spark comparison resolves as
+- **Stack defending:** the topmost defends and the spark comparison resolves as
   above, but the stack scores nothing — its reserves are safe and idle.
 
 **Stack against stack:** the two topmost figments resolve a normal challenge
