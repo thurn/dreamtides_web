@@ -22,18 +22,38 @@ const TIDE_COLOR_CHIP: Record<
   Tides4Color,
   { background: string; border: string; icon: string }
 > = {
-  purple: { background: "#3b1259", border: "rgba(192, 132, 252, 0.55)", icon: "bx-skull" },
-  green: { background: "#0f3d22", border: "rgba(74, 222, 128, 0.55)", icon: "bx-leaf" },
-  yellow: { background: "#4a3a00", border: "rgba(250, 204, 21, 0.55)", icon: "bx-shield" },
-  blue: { background: "#13315c", border: "rgba(96, 165, 250, 0.55)", icon: "bx-eye-alt" },
-  red: { background: "#5c1417", border: "rgba(248, 113, 113, 0.55)", icon: "bx-hot" },
+  purple: {
+    background: "#3b1259",
+    border: "rgba(192, 132, 252, 0.55)",
+    icon: "bx-skull",
+  },
+  green: {
+    background: "#0f3d22",
+    border: "rgba(74, 222, 128, 0.55)",
+    icon: "bx-leaf",
+  },
+  yellow: {
+    background: "#4a3a00",
+    border: "rgba(250, 204, 21, 0.55)",
+    icon: "bx-shield",
+  },
+  blue: {
+    background: "#13315c",
+    border: "rgba(96, 165, 250, 0.55)",
+    icon: "bx-eye-alt",
+  },
+  red: {
+    background: "#5c1417",
+    border: "rgba(248, 113, 113, 0.55)",
+    icon: "bx-hot",
+  },
 };
 const DREAMCALLER_HOVER_TRANSITION = { duration: 0.12, delay: 0 } as const;
 const DREAMCALLER_TAP_TRANSITION = { duration: 0.08, delay: 0 } as const;
 const SIGNATURE_CARDS_LABEL_HOVER_BLURB =
   "These signature cards define this Dreamcaller's strategy and steer the draft pool toward them.";
 const TIDES_LABEL_HOVER_BLURB =
-  "Tides are the pools of cards you will see on a quest. Different tides are used every time you play.";
+  "Pools of cards you will see during a quest. Different tides are used every time you play.";
 /** The select screen shows at most this many tides per Dreamcaller. */
 const MAX_TIDES_SHOWN = 4;
 
@@ -334,45 +354,45 @@ export function QuestStartScreen() {
                     {tides.map((tide) => {
                       const chip = TIDE_COLOR_CHIP[tide.color];
                       return (
-                      <HoverPopover
-                        key={`${dreamcaller.id}-${tide.id}`}
-                        content={
-                          <span
-                            className="block rounded-lg border px-3 py-2 text-left text-xs leading-relaxed shadow-2xl"
-                            style={{
-                              background: "#000000",
-                              borderColor: "rgba(255, 255, 255, 0.16)",
-                              color: "#ffffff",
-                            }}
-                            data-dreamcaller-tide-tooltip={`${dreamcaller.id}:${tide.id}`}
-                          >
-                            {tide.displayDescription ??
-                              tide.summary ??
-                              tide.description ??
-                              tide.name}
-                          </span>
-                        }
-                      >
-                        <span
-                          className="inline-flex max-w-full items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium"
-                          data-dreamcaller-tide={`${dreamcaller.id}:${tide.id}`}
-                          style={{
-                            background: chip.background,
-                            borderColor: chip.border,
-                            color: "#ffffff",
-                            cursor: "help",
-                          }}
+                        <HoverPopover
+                          key={`${dreamcaller.id}-${tide.id}`}
+                          content={
+                            <span
+                              className="block rounded-lg border px-3 py-2 text-left text-xs leading-relaxed shadow-2xl"
+                              style={{
+                                background: "#000000",
+                                borderColor: "rgba(255, 255, 255, 0.16)",
+                                color: "#ffffff",
+                              }}
+                              data-dreamcaller-tide-tooltip={`${dreamcaller.id}:${tide.id}`}
+                            >
+                              {tide.displayDescription ??
+                                tide.summary ??
+                                tide.description ??
+                                tide.name}
+                            </span>
+                          }
                         >
-                          <i
-                            aria-hidden="true"
-                            className={`bx ${chip.icon} text-sm leading-none`}
-                            style={{ color: "#ffffff" }}
-                          />
-                          <span className="truncate">
-                            {tide.displayName ?? tide.shortName ?? tide.name}
+                          <span
+                            className="inline-flex max-w-full items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-medium"
+                            data-dreamcaller-tide={`${dreamcaller.id}:${tide.id}`}
+                            style={{
+                              background: chip.background,
+                              borderColor: chip.border,
+                              color: "#ffffff",
+                              cursor: "help",
+                            }}
+                          >
+                            <i
+                              aria-hidden="true"
+                              className={`bx ${chip.icon} text-sm leading-none`}
+                              style={{ color: "#ffffff" }}
+                            />
+                            <span className="truncate">
+                              {tide.displayName ?? tide.shortName ?? tide.name}
+                            </span>
                           </span>
-                        </span>
-                      </HoverPopover>
+                        </HoverPopover>
                       );
                     })}
                   </div>
