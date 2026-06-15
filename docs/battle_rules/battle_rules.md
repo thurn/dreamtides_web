@@ -543,8 +543,7 @@ when it changes zones.
 
 Targeting is based on card identity, which persists across zones. Banishing a
 card and returning it to play does **not** protect a character: an effect
-targeting that character still works once it is found in play again. For this
-reason, banish-and-materialize effects are never Interrupts.
+targeting that character still works once it is found in play again.
 
 Gained spark and persistent statuses (such as reclaimed and Offering) travel
 with the card across zones, while spark a character merely _has_ from a static
@@ -554,13 +553,13 @@ ability, and any counters on the card, do not (see [Spark](#spark) and
 ## Created Cards
 
 A **created card** is produced by an effect rather than drawn from a deck — for
-example, an effect that creates a token event in your hand. A created card can be
-played and otherwise used like a normal card, but it ceases to exist whenever it
-would leave its current zone: it is banished instead of going to the void, and it
-never enters a deck. A created event, for instance, is banished on resolution
-rather than moving to the void.
+example, an effect that creates a token event in your hand. A created card can
+be played and otherwise used like a normal card, but it ceases to exist whenever
+it would leave play: it is banished instead of going to the void, and it never
+enters a deck. A created event, for instance, is banished on resolution rather
+than moving to the void.
 
-**Figments** are the character-typed subset of created cards. In addition to the
+**Figments** are a character-typed subset of created cards. In addition to the
 created-card rule, a figment can exist only in play: it cannot enter the deck,
 void, or hand, and ceases to exist if it would leave play.
 
@@ -630,7 +629,7 @@ set of **reserve** figments beneath it:
   that figment and is gone when the topmost is removed.
 - An **anthem** — a static "allied X have +N✦" — applies to **each** figment in
   the stack, topmost and reserves alike. An anthem can therefore multiply a
-  stack's total spark, and it persists as figments are chipped.
+  stack's total spark, and it persists as figments are removed.
 
 ### Statuses
 
@@ -645,24 +644,30 @@ set of **reserve** figments beneath it:
 
 ### Challenge resolution
 
-When a figment stack is a challenger or defender in a lane, the **topmost figment
+Whether a figment stack is a challenger or a defender, its **topmost figment
 resolves a normal challenge** against the opposing character using its own
-single-figment spark, while the **reserve figments are always unopposed**:
+single-figment spark; the **reserve figments never fight**. The spark comparison
+resolves normally: with lower or equal spark the topmost is dissolved (one figment
+removed); with higher spark the opposing character is dissolved and the topmost
+survives. The opposing character is compared only against the **topmost's** spark,
+never the stack total, so a tall stack of small figments cannot overpower a large
+defender.
 
-- **Unopposed stack** (no opposing character in the lane): every figment scores,
-  so the stack scores its **total** spark.
-- **Opposed stack:** only the **reserves** score, each its own spark. The topmost
-  is contested and scores nothing unless it has Unstoppable and wins.
-- The topmost resolves the spark comparison normally: with lower or equal spark
-  it is dissolved (one figment removed — a **chip**); with higher spark the
-  opposing character is dissolved and the topmost survives. The opposing
-  character is compared only against the **topmost's** spark, never the stack
-  total, so a tall stack of small figments cannot overpower a large defender but
-  reliably leaks reserve points past it.
-- **Stack against stack:** the two topmost figments resolve a normal challenge
-  against each other; only the **challenger's** reserves score.
-- A defender never scores, so the reserves of a defending stack score nothing and
-  are never at risk.
+Scoring follows the usual rule that **only a challenger scores**, never a
+defender. So a stack's reserves earn points only when the stack is the one
+attacking:
+
+- **Stack challenging, unopposed** (no defender in the lane): every figment is
+  unopposed, so the stack scores its **total** spark.
+- **Stack challenging into a defender:** only the **reserves** are unopposed, so
+  the stack scores the reserves' spark. The contested topmost scores nothing
+  unless it has Unstoppable and wins.
+- **Stack defending:** the topmost blocks and the spark comparison resolves as
+  above, but the stack scores nothing — its reserves are safe and idle.
+
+**Stack against stack:** the two topmost figments resolve a normal challenge
+against each other. Only the challenging stack can score, by the rules above; the
+defending stack's reserves score nothing.
 
 For example:
 
@@ -682,7 +687,7 @@ For example:
 
 ### Removal and triggers
 
-A figment removed by a **dissolve**, an **Abandon**, or a combat **chip** fires
+A figment removed by a **dissolve**, an **Abandon**, or a lost challenge fires
 dissolved triggers, once per figment removed; the figment then ceases to exist. A
 figment removed by **banish** does not fire dissolved triggers. Support does not
 interact with figments — a figment neither grants Support to allies nor benefits
