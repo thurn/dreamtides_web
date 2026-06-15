@@ -15,8 +15,9 @@ subtype = "Warrior"
 spark = 1
 keyword = ""
 rendered-text = ""
-image-number = 0
+image-number = 436090582
 art-owned = false
+art = { x = 0, y = 0.123, scale = 1.2 }
 
 [[figments]]
 name = "Ancient Figment"
@@ -139,11 +140,12 @@ image-number = 0
 art-owned = false
 
 [[figments]]
-name = "Legion Figment"
+name = "Legionnaire Figment"
 id = "e757b306-5bab-4a5a-8493-28c0f3aa6440"
-subtype = "Legion"
-spark = 1
+subtype = "Warrior"
+spark = 0
 keyword = ""
-rendered-text = "Spark equals the number of allied warriors."
-image-number = 0
+rendered-text = "This character has +1✦ for each allied warrior."
+image-number = 653554603
 art-owned = false
+art = { x = 0, y = 0.399, scale = 1 }
