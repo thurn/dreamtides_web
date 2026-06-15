@@ -7,6 +7,8 @@ import { fileURLToPath } from "node:url";
 import type { Plugin, ViteDevServer } from "vite";
 import { createCardEditorApiMiddleware } from "./scripts/card-editor-api.mjs";
 import { createDreamsignEditorApiMiddleware } from "./scripts/dreamsign-editor-api.mjs";
+import { createFigmentEditorApiMiddleware } from "./scripts/figment-editor-api.mjs";
+import { refreshFigmentDataJson } from "./scripts/figment-editor-data.mjs";
 import { createImageViewerApiMiddleware } from "./scripts/image-viewer-api.mjs";
 import { createCardImageApiMiddleware } from "./scripts/card-image-api.mjs";
 import { createSavedQuestsApiMiddleware } from "./scripts/saved-quests-api.mjs";
@@ -64,6 +66,98 @@ function dreamsignEditorApiPlugin(): Plugin {
     apply: "serve",
     configureServer(server) {
       server.middlewares.use(createDreamsignEditorApiMiddleware({ rootDir: __dirname }));
+    },
+  };
+}
+
+/** Vite plugin that serves local figment editor read/write endpoints. */
+function figmentEditorApiPlugin(): Plugin {
+  return {
+    name: "figment-editor-api",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(createFigmentEditorApiMiddleware({ rootDir: __dirname }));
+    },
+  };
+}
+
+/**
+ * Dev-only Vite plugin that hot-reloads figment data into the running browser
+ * when `data/tabula/figments.toml` is edited. The TOML directory is ignored by
+ * the dev watcher (see `server.watch.ignored`), so this plugin watches the file
+ * directly, regenerates `public/figments-data.json` via
+ * {@link refreshFigmentDataJson}, and triggers a full reload so a battle in
+ * progress refetches the edited figment catalog. `apply: "serve"` keeps it out
+ * of production builds.
+ */
+function figmentDataHotReloadPlugin(): Plugin {
+  const figmentTomlPath = path.resolve(
+    path.join(__dirname, "data", "tabula", "figments.toml"),
+  );
+  const tomlDir = path.dirname(figmentTomlPath);
+  const tomlBasename = path.basename(figmentTomlPath);
+
+  return {
+    name: "figment-data-hot-reload",
+    apply: "serve",
+    configureServer(server) {
+      let pendingReload: ReturnType<typeof setTimeout> | null = null;
+
+      const regenerateAndReload = (): void => {
+        try {
+          refreshFigmentDataJson({ rootDir: __dirname });
+          console.log(
+            "[figment-data] figments.toml changed -> regenerated figments-data.json -> reloading browser",
+          );
+          server.ws.send({ type: "full-reload" });
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error);
+          console.error(`[figment-data] hot reload failed: ${message}`);
+          server.ws.send({
+            type: "error",
+            err: {
+              message: "Failed to regenerate figment data from figments.toml",
+              stack: message,
+            },
+          });
+        }
+      };
+
+      const scheduleReload = (): void => {
+        if (pendingReload !== null) {
+          clearTimeout(pendingReload);
+        }
+        pendingReload = setTimeout(() => {
+          pendingReload = null;
+          regenerateAndReload();
+        }, 150);
+      };
+
+      const watcher = fs.watch(
+        tomlDir,
+        { persistent: false },
+        (_eventType, filename) => {
+          if (filename === null || filename.toString() === tomlBasename) {
+            scheduleReload();
+          }
+        },
+      );
+
+      let closed = false;
+      const closeWatcher = (): void => {
+        if (closed) {
+          return;
+        }
+        closed = true;
+        if (pendingReload !== null) {
+          clearTimeout(pendingReload);
+          pendingReload = null;
+        }
+        watcher.close();
+      };
+
+      server.httpServer?.once("close", closeWatcher);
+      server.watcher.once("close", closeWatcher);
     },
   };
 }
@@ -328,6 +422,8 @@ export default defineConfig({
     questLogPlugin(),
     cardEditorApiPlugin(),
     dreamsignEditorApiPlugin(),
+    figmentEditorApiPlugin(),
+    figmentDataHotReloadPlugin(),
     imageViewerApiPlugin(),
     cardImageApiPlugin(),
     savedQuestsApiPlugin(),

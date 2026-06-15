@@ -428,6 +428,32 @@ export function transformDreamsign(dreamsign, altTextByImageName = new Map()) {
 }
 
 /**
+ * Convert a TOML figment record to its JSON representation with camelCase keys.
+ * Figment spark is a plain non-negative integer (a Legion's stored value is the
+ * per-warrior rate; its live spark is computed from the board), so it is parsed
+ * with `parseSpark` and any missing value defaults to 0. A missing `image-number`
+ * defaults to 0 (no assigned art), matching the card transform.
+ */
+export function transformFigment(figment) {
+  const result = {};
+  for (const [key, value] of Object.entries(figment)) {
+    const camelKey = kebabToCamel(key);
+    if (camelKey === "spark") {
+      result.spark = parseSpark(value).spark;
+    } else {
+      result[camelKey] = value;
+    }
+  }
+  if (result.spark == null) {
+    result.spark = 0;
+  }
+  if (result.imageNumber == null) {
+    result.imageNumber = 0;
+  }
+  return result;
+}
+
+/**
  * Build the Shutterstock preview URL for a given image number. This is the
  * canonical source for card art: every cache filename is keyed off this URL,
  * so the same helper is reused anywhere art is fetched or located by number.
@@ -618,6 +644,7 @@ export function setupAssets({
   dreamwellTomlPath = join(DATA_DIR, "tabula", "dreamwell.toml"),
   dreamsignTomlPath = join(DATA_DIR, "tabula", "dreamsigns.toml"),
   dreamsignProfilesTomlPath = join(DATA_DIR, "tabula", "dreamsign_profiles.toml"),
+  figmentTomlPath = join(DATA_DIR, "tabula", "figments.toml"),
   merchantCorpusJsonPath = join(DATA_DIR, "merchant_corpus.json"),
   publicDir = PUBLIC_DIR,
   imageCacheDir = IMAGE_CACHE_DIR,
@@ -640,6 +667,7 @@ export function setupAssets({
   const dreamwellJsonPath = join(publicDir, "dreamwell-data.json");
   const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
   const dreamsignProfilesJsonPath = join(publicDir, "dreamsign-profiles-data.json");
+  const figmentJsonPath = join(publicDir, "figments-data.json");
   const merchantCorpusPublicPath = join(publicDir, "merchant-corpus-data.json");
   const journeyExtensionJsonPath = join(journeysDir, "imageId-extension.json");
 
@@ -882,6 +910,22 @@ export function setupAssets({
     `Wrote ${jsonDreamsignProfiles.length} dreamsign profiles to dreamsign-profiles-data.json`,
   );
 
+  // Figments: parse the figment catalog TOML and write the kebab->camel JSON
+  // the battle UI fetches to source each figment type's name, character type,
+  // spark, rules text, and art (rules §Figments).
+  console.log("Parsing figments.toml...");
+  const figmentTomlContent = readFileSync(figmentTomlPath, "utf8");
+  const parsedFigments = parse(figmentTomlContent);
+  const allFigments = parsedFigments.figments;
+
+  if (!Array.isArray(allFigments)) {
+    throw new Error("Expected [[figments]] array in figments.toml");
+  }
+
+  const jsonFigments = allFigments.map(transformFigment);
+  writeFileSync(figmentJsonPath, JSON.stringify(jsonFigments, null, 2) + "\n");
+  console.log(`Wrote ${jsonFigments.length} figments to figments-data.json`);
+
   // Merchant corpus: copy the baked artifact as-is to the public directory so
   // the runtime loader can fetch it as /merchant-corpus-data.json.  If the
   // file has not been baked yet (`npm run bake-merchant-corpus`), warn and
@@ -934,6 +978,31 @@ export function setupAssets({
   }
 
   console.log(`Linked ${linked} of ${jsonCards.length} card images (${missing} missing)`);
+
+  // Link figment art into the same cards directory, keyed by image number. A
+  // figment with no assigned art keeps image-number 0 and is skipped; the battle
+  // UI falls back to a generated gradient for those.
+  for (const figment of jsonFigments) {
+    const imageNumber = figment.imageNumber;
+    if (
+      imageNumber === "" ||
+      imageNumber === null ||
+      imageNumber === undefined ||
+      Number(imageNumber) <= 0
+    ) {
+      continue;
+    }
+
+    const hash = imageHash(imageNumber);
+    const cachePath = join(imageCacheDir, hash);
+    const symlinkPath = join(cardsDir, `${imageNumber}.webp`);
+    if (existsSync(symlinkPath)) {
+      continue;
+    }
+    if (existsSync(cachePath)) {
+      symlinkSync(cachePath, symlinkPath);
+    }
+  }
 
   // Link art for the experimental v2 pool into the same cards directory, keyed
   // by image number. Many v2 image numbers are absent from the local cache, in
