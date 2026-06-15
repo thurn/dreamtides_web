@@ -469,11 +469,12 @@ button:disabled {
    * figment versus the dark rules box of a regular card. */
   --cv-textbox-bg: rgba(244, 248, 255, 0.82);
   --cv-textbox-border: rgba(255, 255, 255, 0.72);
-  --cv-rules-color: #1a2030;
-  /* Keyword emphasis (Unstoppable, Vengeful, Awakened) retuned from the dark
-   * box's spark amber to a deep gold that holds contrast on the light fill while
-   * keeping the warm "this is a keyword" cue. */
-  --cv-rules-highlight-color: #8a5210;
+  /* Rules text is the card's exact rules treatment (Fira Sans Condensed, same
+   * size/weight/leading) rendered in black on the light box. Keyword emphasis is
+   * the same black rather than the dark box's spark amber, so the whole box reads
+   * as plain black card text. */
+  --cv-rules-color: #16181c;
+  --cv-rules-highlight-color: #16181c;
   --cv-textbox-radius: 3.2cqw;
   --cv-textbox-pad-y: 2.9cqw;
   --cv-textbox-pad-x: 3.4cqw;
@@ -483,7 +484,7 @@ button:disabled {
    * material (the same as the rules box) with the card name in the card serif,
    * dark, and no drop shadow. A figment has no energy cost, so the bar runs
    * symmetrically inset from both sides with no orb gap at the left. */
-  --cv-name-color: #1a2030;
+  --cv-name-color: #16181c;
   --cv-name-text-shadow: none;
   --cv-figment-titlebar-pad: 3.6cqw;
 
