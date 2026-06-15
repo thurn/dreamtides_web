@@ -1,0 +1,51 @@
+import {
+  hydrateFigmentCatalog,
+  type FigmentCatalogRecord,
+} from "../battle/state/figment-catalog";
+
+/**
+ * The shape of a figment entry in `/figments-data.json` (generated from
+ * `data/tabula/figments.toml` by `setup-assets`). Mirrors the camelCased fields
+ * the figment editor writes.
+ */
+interface FigmentDataEntry {
+  id: string;
+  name?: string;
+  subtype: string;
+  spark?: number;
+  keyword?: string;
+  renderedText?: string;
+  imageNumber?: number;
+}
+
+function toCatalogRecord(entry: FigmentDataEntry): FigmentCatalogRecord {
+  return {
+    subtype: entry.subtype,
+    spark: typeof entry.spark === "number" ? entry.spark : 0,
+    ...(entry.keyword === undefined ? {} : { keyword: entry.keyword }),
+    ...(entry.name === undefined ? {} : { name: entry.name }),
+    ...(entry.renderedText === undefined
+      ? {}
+      : { renderedText: entry.renderedText }),
+    ...(entry.imageNumber === undefined
+      ? {}
+      : { imageNumber: entry.imageNumber }),
+  };
+}
+
+/**
+ * Fetches `/figments-data.json` and hydrates the figment catalog so the battle
+ * UI sources each figment type's name, character type, spark, rules text, and
+ * art from `figments.toml`. A failure is non-fatal: the catalog keeps its
+ * built-in rules defaults, matching pre-load rendering.
+ */
+export async function loadFigmentDatabase(): Promise<void> {
+  const response = await fetch("/figments-data.json");
+  if (!response.ok) {
+    throw new Error(
+      `Failed to load figment data: ${String(response.status)} ${response.statusText}`,
+    );
+  }
+  const entries = (await response.json()) as FigmentDataEntry[];
+  hydrateFigmentCatalog(entries.map(toCatalogRecord));
+}

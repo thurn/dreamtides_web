@@ -31,6 +31,38 @@ export interface FigmentCatalogEntry {
   baseSpark: number;
   /** The implicit keyword this type carries, if any. */
   keyword?: FigmentKeyword;
+  /**
+   * The figment's display name, sourced from `figments.toml` once the catalog
+   * is hydrated. Absent on the built-in defaults, where callers fall back to a
+   * `"<Type> Figment"` derivation.
+   */
+  name?: string;
+  /** The figment's rules text, sourced from `figments.toml` when hydrated. */
+  renderedText?: string;
+  /** The figment's art image number, sourced from `figments.toml` when hydrated. */
+  imageNumber?: number;
+}
+
+/**
+ * A figment record as loaded from `figments.toml` (camelCased by
+ * `transformFigment`). Hydrating the catalog from these records is what carries
+ * the figment editor's edits to spark, character type, name, rules text, and
+ * art into the battle UI.
+ */
+export interface FigmentCatalogRecord {
+  subtype: string;
+  spark: number;
+  keyword?: string;
+  name?: string;
+  renderedText?: string;
+  imageNumber?: number;
+}
+
+function normalizeHydratedKeyword(keyword: string | undefined): FigmentKeyword | undefined {
+  if (keyword === "unstoppable" || keyword === "vengeful" || keyword === "awakened") {
+    return keyword;
+  }
+  return undefined;
 }
 
 /**
@@ -83,11 +115,60 @@ export const FIGMENT_CATALOG: Readonly<Record<string, FigmentCatalogEntry>> =
   Object.fromEntries(FIGMENT_CATALOG_ENTRIES.map((item) => [item.key, item]));
 
 /**
+ * The catalog hydrated from `figments.toml`, or `null` before the figment
+ * database has loaded (the default in tests and on first paint). When present it
+ * takes precedence over the built-in defaults, so a figment renders with the
+ * name, character type, spark, rules text, and art the figment editor saved.
+ */
+let hydratedCatalog: Readonly<Record<string, FigmentCatalogEntry>> | null = null;
+let hydratedEntries: readonly FigmentCatalogEntry[] | null = null;
+
+/**
+ * Replaces the live figment catalog with entries built from `figments.toml`
+ * records. Each record's subtype is the lookup key; its base spark, keyword,
+ * name, rules text, and image number become the entry the battle UI reads when
+ * creating and rendering a figment of that type.
+ */
+export function hydrateFigmentCatalog(records: readonly FigmentCatalogRecord[]): void {
+  const entries = records.map((record) => {
+    const keyword = normalizeHydratedKeyword(record.keyword);
+    return {
+      key: normalizeFigmentCatalogKey(record.subtype),
+      subtype: record.subtype,
+      baseSpark: Number.isFinite(record.spark) ? record.spark : 0,
+      ...(keyword === undefined ? {} : { keyword }),
+      ...(record.name === undefined ? {} : { name: record.name }),
+      ...(record.renderedText === undefined
+        ? {}
+        : { renderedText: record.renderedText }),
+      ...(record.imageNumber === undefined
+        ? {}
+        : { imageNumber: record.imageNumber }),
+    } satisfies FigmentCatalogEntry;
+  });
+  hydratedEntries = entries;
+  hydratedCatalog = Object.fromEntries(entries.map((item) => [item.key, item]));
+}
+
+/**
+ * The live figment catalog entries — the hydrated set from `figments.toml` when
+ * loaded, otherwise the built-in defaults. The figment-creator UI lists these.
+ */
+export function figmentCatalogEntries(): readonly FigmentCatalogEntry[] {
+  return hydratedEntries ?? FIGMENT_CATALOG_ENTRIES;
+}
+
+/**
  * Looks up the catalog entry for a (possibly non-normalized) subtype. Returns
- * `undefined` when the subtype is not one of the 14 figment types.
+ * `undefined` when the subtype is not one of the figment types. Reads the
+ * hydrated catalog when loaded, falling back to the built-in defaults.
  */
 export function lookupFigmentCatalogEntry(
   subtype: string,
 ): FigmentCatalogEntry | undefined {
-  return FIGMENT_CATALOG[normalizeFigmentCatalogKey(subtype)];
+  const key = normalizeFigmentCatalogKey(subtype);
+  if (hydratedCatalog !== null) {
+    return hydratedCatalog[key] ?? FIGMENT_CATALOG[key];
+  }
+  return FIGMENT_CATALOG[key];
 }

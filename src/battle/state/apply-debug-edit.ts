@@ -1112,8 +1112,11 @@ function createFigment(
     printedSpark: resolvedSpark,
     isFast: false,
     reclaimCost: null,
-    renderedText: "",
-    imageNumber: 0,
+    // Rules text and art are sourced from the figment catalog (figments.toml via
+    // the figment editor) so a created figment renders the type's authored
+    // description and image; an un-hydrated catalog falls back to no text/art.
+    renderedText: catalogEntry?.renderedText ?? "",
+    imageNumber: catalogEntry?.imageNumber ?? 0,
     transfiguration: null,
     isBane: false,
   };

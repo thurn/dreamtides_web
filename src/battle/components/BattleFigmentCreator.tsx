@@ -4,6 +4,7 @@ import type { BattleMutableState, BattleSide, FrontRankSlotId, BackRankSlotId } 
 import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
 import {
   FIGMENT_CATALOG_ENTRIES,
+  figmentCatalogEntries,
   lookupFigmentCatalogEntry,
   type FigmentCatalogEntry,
   type FigmentKeyword,
@@ -16,6 +17,18 @@ const DEFAULT_FIGMENT_SUBTYPE = "Shadow";
 
 function figmentTypeName(subtype: string): string {
   return `${subtype} Figment`;
+}
+
+/**
+ * The default name for a figment of the given type: the catalog's authored name
+ * from `figments.toml` when hydrated, otherwise the `"<Type> Figment"`
+ * derivation. The figment editor's name edits flow through here.
+ */
+function defaultFigmentName(subtype: string): string {
+  const authored = lookupFigmentCatalogEntry(subtype)?.name;
+  return authored !== undefined && authored.trim() !== ""
+    ? authored
+    : figmentTypeName(subtype);
 }
 
 const FIGMENT_KEYWORD_LABELS: Readonly<Record<FigmentKeyword, string>> = {
@@ -38,7 +51,7 @@ export function BattleFigmentCreator({
   const defaultEntry =
     lookupFigmentCatalogEntry(DEFAULT_FIGMENT_SUBTYPE) ?? FIGMENT_CATALOG_ENTRIES[0];
   const [subtype, setSubtype] = useState<string>(defaultEntry.subtype);
-  const [name, setName] = useState(figmentTypeName(defaultEntry.subtype));
+  const [name, setName] = useState(defaultFigmentName(defaultEntry.subtype));
   const [sparkText, setSparkText] = useState(String(defaultEntry.baseSpark));
   const [side, setSide] = useState<BattleSide>(initialSide);
   const [zone, setZone] = useState<FigmentZone>("backRank");
@@ -99,7 +112,7 @@ export function BattleFigmentCreator({
     }
     setName((current) =>
       current.trim() === "" || isAutoDerivedFigmentName(current)
-        ? figmentTypeName(nextSubtype)
+        ? defaultFigmentName(nextSubtype)
         : current,
     );
   }
@@ -204,7 +217,7 @@ export function BattleFigmentCreator({
             onChange={(event) => handleSelectType(event.target.value)}
             className="rounded-2xl border border-slate-700 bg-slate-900/80 px-3 py-2 text-sm text-slate-100 focus:border-violet-300/60 focus:outline-none"
           >
-            {FIGMENT_CATALOG_ENTRIES.map((entry) => (
+            {figmentCatalogEntries().map((entry) => (
               <option key={entry.key} value={entry.subtype}>
                 {formatCatalogOptionLabel(entry)}
               </option>
@@ -428,8 +441,11 @@ function formatCatalogOptionLabel(entry: FigmentCatalogEntry): string {
  * user hand-edits it.
  */
 function isAutoDerivedFigmentName(name: string): boolean {
-  return FIGMENT_CATALOG_ENTRIES.some(
-    (entry) => figmentTypeName(entry.subtype) === name.trim(),
+  const trimmed = name.trim();
+  return figmentCatalogEntries().some(
+    (entry) =>
+      figmentTypeName(entry.subtype) === trimmed ||
+      (entry.name !== undefined && entry.name === trimmed),
   );
 }
 
