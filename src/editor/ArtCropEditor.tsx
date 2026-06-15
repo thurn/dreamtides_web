@@ -3,6 +3,7 @@ import type { CSSProperties, ReactNode } from "react";
 import {
   CardView,
   DEFAULT_ART_CROP,
+  FIGMENT_ART_SAFE_AREA_TARGET,
   artPanStep,
   artSafeAreaTarget,
   minArtOffsetY,
@@ -62,6 +63,12 @@ export interface ArtCropEditorProps {
   onSaveCardName: (name: string) => void;
   onSaveImageNumber: (imageNumber: number) => void;
   onClose: () => void;
+  /**
+   * Render and bound the crop for the full-bleed figment frame: the preview uses
+   * the figment frame and the art is held covering to the card's bottom edge
+   * (no fill band), so the editor's zoom/pan bounds match what the figment shows.
+   */
+  figment?: boolean;
 }
 
 /**
@@ -193,6 +200,7 @@ export default function ArtCropEditor({
   onSaveCardName,
   onSaveImageNumber,
   onClose,
+  figment = false,
 }: ArtCropEditorProps) {
   const [art, setArt] = useState<ArtCrop>(() => readCardArt(card));
   const [cardNameText, setCardNameText] = useState<string>(() => card.name);
@@ -316,8 +324,11 @@ export default function ArtCropEditor({
         // The safe-area target follows the measured box, so the zoom-out floor
         // and up-pan bound are both resolved against it: zooming out cannot pull
         // the art above the box's first text line, and a lower zoom leaves less
-        // overscan so the up-pan floor rises with it.
-        const target = artSafeAreaTarget(boxTopFrac);
+        // overscan so the up-pan floor rises with it. A figment is full-bleed, so
+        // its target is the card's bottom edge instead.
+        const target = figment
+          ? FIGMENT_ART_SAFE_AREA_TARGET
+          : artSafeAreaTarget(boxTopFrac);
         const scaleMin =
           imageAspect !== null ? minArtScale(imageAspect, target) : SCALE_MIN;
         const scale = roundTo(
@@ -338,7 +349,7 @@ export default function ArtCropEditor({
       });
       scheduleSave();
     },
-    [scheduleSave, imageAspect, boxTopFrac],
+    [scheduleSave, imageAspect, boxTopFrac, figment],
   );
 
   const resetCrop = useCallback(() => {
@@ -403,6 +414,7 @@ export default function ArtCropEditor({
           <CardView
             card={previewCard}
             large
+            figment={figment}
             suppressHoverHelp
             onBoxTopFracChange={handleBoxTopFracChange}
           />

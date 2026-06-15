@@ -71,6 +71,14 @@ const ART_SOURCE_BOTTOM_CROP = 21 / 280;
 export const ART_SAFE_AREA_OVERLAP = 0.06;
 
 /**
+ * Coverage target for the full-bleed figment frame: the art is held covering all
+ * the way to the card's bottom edge (a card-height fraction of 1) so there is no
+ * fill band. The watermark-clipped art reaches the very bottom, so the figment
+ * shows edge-to-edge art with no dark grounding strip.
+ */
+export const FIGMENT_ART_SAFE_AREA_TARGET = 1;
+
+/**
  * Resolve the safe-area coverage target from the measured rules-box top. Until
  * the box is measured (or for a card with no rules box) the art-region seam is
  * used, matching the fill band's default top. The result is capped just shy of
@@ -370,6 +378,7 @@ function ArtLayers({
   safeAreaTarget,
   widthPx,
   bandTopPct,
+  fullBleed = false,
   onLoad,
   onError,
 }: {
@@ -380,6 +389,14 @@ function ArtLayers({
   safeAreaTarget: number;
   widthPx: number;
   bandTopPct: number;
+  /**
+   * When set, the art covers the whole card with no bottom fill band: the
+   * blurred, darkened continuation and the dark tint gradient are dropped, and
+   * the caller is expected to pass a `safeAreaTarget` that holds the crisp art
+   * covering to the very bottom edge. Used by the figment frame, which is
+   * full-bleed art rather than art-over-a-grounded-band.
+   */
+  fullBleed?: boolean;
   onLoad: (event: React.SyntheticEvent<HTMLImageElement>) => void;
   onError: () => void;
 }) {
@@ -436,37 +453,42 @@ function ArtLayers({
         it shows the real source below the crop window, blurred. The mask hides it
         above the feather zone (the box top), ramps it in across the feather (the
         art defocuses into the band), and holds it opaque from the seam down (the
-        band shows the blurred continuation).
+        band shows the blurred continuation). The figment frame is full-bleed art
+        with no band, so it drops this layer (and the tint gradient below).
       */}
-      <div
-        aria-hidden="true"
-        style={{
-          position: "absolute",
-          inset: 0,
-          overflow: "hidden",
-          maskImage: featherMask,
-          WebkitMaskImage: featherMask,
-        }}
-      >
+      {fullBleed ? null : (
         <div
+          aria-hidden="true"
           style={{
             position: "absolute",
             inset: 0,
-            filter: `blur(${blurPx.toFixed(2)}px) brightness(${ART_EXTENSION_BLUR_BRIGHTNESS})`,
+            overflow: "hidden",
+            maskImage: featherMask,
+            WebkitMaskImage: featherMask,
           }}
         >
-          <img src={imageUrl} alt="" style={extendedStyle} draggable={false} />
+          <div
+            style={{
+              position: "absolute",
+              inset: 0,
+              filter: `blur(${blurPx.toFixed(2)}px) brightness(${ART_EXTENSION_BLUR_BRIGHTNESS})`,
+            }}
+          >
+            <img src={imageUrl} alt="" style={extendedStyle} draggable={false} />
+          </div>
         </div>
-      </div>
+      )}
 
       {/* Color-matched darkening: a gradient in the art's own (darkened) bottom
           color that ramps in just above the seam and grounds the band's edge
           nearly solid, so the fill is dark and on-palette and the rules text
-          stays legible. */}
-      <div
-        aria-hidden="true"
-        style={{ position: "absolute", inset: 0, background: tintGradient }}
-      />
+          stays legible. Dropped for the full-bleed figment frame. */}
+      {fullBleed ? null : (
+        <div
+          aria-hidden="true"
+          style={{ position: "absolute", inset: 0, background: tintGradient }}
+        />
+      )}
     </>
   );
 }
@@ -1205,8 +1227,12 @@ export function CardView({
   const bandTopPct =
     boxTopFrac !== null ? boxTopFrac * 100 : ART_BAND_DEFAULT_TOP_PCT;
   // The art's pan/zoom envelope is held against this card-height target so its
-  // watermark-clipped bottom always tucks under the box's first text line.
-  const safeAreaTarget = artSafeAreaTarget(boxTopFrac);
+  // watermark-clipped bottom always tucks under the box's first text line. The
+  // figment frame is full-bleed (no fill band), so its art is instead held
+  // covering to the very bottom edge.
+  const safeAreaTarget = figment
+    ? FIGMENT_ART_SAFE_AREA_TARGET
+    : artSafeAreaTarget(boxTopFrac);
 
   // Report the measured box top so the art-crop editor can floor zoom-out and
   // pan against the same box-relative safe area the card renders with.
@@ -1281,6 +1307,7 @@ export function CardView({
           safeAreaTarget={safeAreaTarget}
           widthPx={widthPx}
           bandTopPct={bandTopPct}
+          fullBleed={figment}
           onLoad={(event) => {
             const image = event.currentTarget;
             const { naturalWidth, naturalHeight } = image;

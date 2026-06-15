@@ -664,6 +664,7 @@ export default function FigmentEditorApp({
 
       {artEditorFigment !== null ? (
         <ArtCropEditor
+          figment
           card={{
             id: artEditorFigment.id,
             name: artEditorFigment.name,
