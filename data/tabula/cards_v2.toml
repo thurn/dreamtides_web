@@ -5005,14 +5005,12 @@ name = "Cinderblade Legionnaire"
 mtg-name = "Bitterbloom Bearer"
 id = "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf"
 rendered-text = """
-Fast
-
 ▸Dawn: Materialize a 1✦ ethereal figment."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Visitor"
 rarity = ""
-is-fast = false
+is-fast = true
 is-interrupt = false
 spark = 1
 tags = ["Figment Maker", "Art Rework", "July8"]
