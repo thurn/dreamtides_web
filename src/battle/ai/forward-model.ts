@@ -2,6 +2,7 @@ import {
   isFigmentInstance,
   selectEffectiveSparkForInstance,
   selectFigmentCount,
+  selectFigmentSparkContext,
 } from "../state/figments";
 import { supportedDeploySlots } from "../engine/support";
 import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
@@ -166,7 +167,10 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
     if (instance !== undefined) {
       opponentBodies.push({
         battleCardId: instance.battleCardId,
-        effectiveSpark: selectEffectiveSparkForInstance(instance),
+        effectiveSpark: selectEffectiveSparkForInstance(
+          instance,
+          selectFigmentSparkContext(state, instance),
+        ),
         energyCost: instance.definition.energyCost ?? 0,
         rank: "front",
         slot: slotId,
@@ -180,7 +184,10 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
     if (instance !== undefined) {
       opponentBodies.push({
         battleCardId: instance.battleCardId,
-        effectiveSpark: selectEffectiveSparkForInstance(instance),
+        effectiveSpark: selectEffectiveSparkForInstance(
+          instance,
+          selectFigmentSparkContext(state, instance),
+        ),
         energyCost: instance.definition.energyCost ?? 0,
         rank: "back",
         slot: slotId,

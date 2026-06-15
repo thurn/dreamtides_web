@@ -670,6 +670,10 @@ function pushIfChanged(
 ): void {
   const instance = state.cardInstances[battleCardId];
   if (instance === undefined) return;
+  // Support does not apply to figments (rules §Support); a figment's
+  // `staticSparkBonus` is its per-figment anthem, which the Support recompute
+  // must not overwrite.
+  if (instance.provenance?.kind === "generated-figment") return;
   if (instance.staticSparkBonus === target) return;
   edits.push({ kind: "SET_CARD_STATIC_SPARK_BONUS", battleCardId, value: target });
 }

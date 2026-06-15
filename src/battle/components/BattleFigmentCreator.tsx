@@ -20,8 +20,6 @@ function figmentTypeName(subtype: string): string {
 
 const FIGMENT_KEYWORD_LABELS: Readonly<Record<FigmentKeyword, string>> = {
   unstoppable: "Unstoppable",
-  support: "Support",
-  preeminence: "Preeminence",
   vengeful: "Vengeful",
   awakened: "Awakened",
 };

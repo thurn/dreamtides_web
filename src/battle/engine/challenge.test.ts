@@ -371,47 +371,103 @@ describe("resolveChallenge — keyword combinations", () => {
   });
 });
 
-describe("resolveChallenge — figment dissolution counts", () => {
-  it("survives a partial loss (opposing spark covers only the top members)", () => {
-    // Stack of three 2✦ figments (total 6). Opposing spark 5 covers two members
-    // (2 + 2 = 4 ≤ 5, next 2 would need 6) → loss count 2 < 3 → stack stays.
+describe("resolveChallenge — figment stacks (rules §Figments)", () => {
+  it("compares only the topmost figment, so a tall stack of small figments cannot dissolve a large defender", () => {
+    // Stack of three 2✦ figments (total 6). Only the topmost (2✦) fights the 3✦
+    // defender, so the topmost dissolves and the defender survives.
     const figment = makeInstance("fig", {
       owner: "player",
       isFigment: true,
       figmentSparks: [2, 2, 2],
     });
-    const opposing = makeInstance("e0", { owner: "enemy", printedSpark: 5 });
-    const state = lane0State(figment, opposing);
+    const defender = makeInstance("e0", { owner: "enemy", printedSpark: 3 });
+    const state = lane0State(figment, defender);
     const resolution = resolveChallenge({ state, activeSide: "player" });
-    // Figment total 6 > opposing 5 → opposing dissolves; figment survives.
-    expect(dissolvedIds(resolution)).toEqual(["e0"]);
-  });
-
-  it("fully dissolves the stack when opposing spark covers every member", () => {
-    const figment = makeInstance("fig", {
-      owner: "player",
-      isFigment: true,
-      figmentSparks: [2, 2, 2],
-    });
-    const opposing = makeInstance("e0", { owner: "enemy", printedSpark: 8 });
-    const state = lane0State(figment, opposing);
-    const resolution = resolveChallenge({ state, activeSide: "player" });
-    // Opposing 8 > figment total 6 → figment fully dissolves.
     expect(dissolvedIds(resolution)).toEqual(["fig"]);
+    // The two reserves (4✦) are unopposed and score; the contested topmost does not.
+    expect(resolution.playerScoreDelta).toBe(4);
+    expect(resolution.lanes[0].winner).toBe("enemy");
   });
 
-  it("a Celestial figment wins a spark tie via its implicit Preeminence", () => {
+  it("scores reserve figments while the topmost wins and survives", () => {
+    // Three 4✦ Monstrosity figments. Topmost 4 > defender 3 → defender dissolves;
+    // the topmost survives scoring nothing; the two reserves score 8⍟.
     const figment = makeInstance("fig", {
       owner: "player",
       isFigment: true,
-      subtype: "Celestial",
-      figmentSparks: [2, 2],
+      subtype: "Monstrosity",
+      figmentSparks: [4, 4, 4],
     });
-    const opposing = makeInstance("e0", { owner: "enemy", printedSpark: 4 });
-    const state = lane0State(figment, opposing);
+    const defender = makeInstance("e0", { owner: "enemy", printedSpark: 3 });
+    const state = lane0State(figment, defender);
     const resolution = resolveChallenge({ state, activeSide: "player" });
-    // Tie at 4✦; Celestial's Preeminence keeps the figment and dissolves the foe.
     expect(dissolvedIds(resolution)).toEqual(["e0"]);
+    expect(resolution.playerScoreDelta).toBe(8);
+  });
+
+  it("scores the surviving Unstoppable topmost on top of the reserves", () => {
+    // Two 4✦ Ancient figments (Unstoppable). Topmost dissolves the 3✦ defender and
+    // survives, scoring 4⍟; the reserve scores 4⍟, for 8⍟ total.
+    const figment = makeInstance("fig", {
+      owner: "player",
+      isFigment: true,
+      subtype: "Ancient",
+      figmentSparks: [4, 4],
+    });
+    const defender = makeInstance("e0", { owner: "enemy", printedSpark: 3 });
+    const state = lane0State(figment, defender);
+    const resolution = resolveChallenge({ state, activeSide: "player" });
+    expect(dissolvedIds(resolution)).toEqual(["e0"]);
+    expect(resolution.playerScoreDelta).toBe(8);
+  });
+
+  it("trades the topmost Wraith for the defender via Vengeful and scores nothing", () => {
+    // Three 0✦ Wraith figments (Vengeful) into a 5✦ defender. The topmost is
+    // dissolved and Vengeful drags the defender down too; reserves score 0.
+    const figment = makeInstance("fig", {
+      owner: "player",
+      isFigment: true,
+      subtype: "Wraith",
+      figmentSparks: [0, 0, 0],
+    });
+    const defender = makeInstance("e0", { owner: "enemy", printedSpark: 5 });
+    const state = lane0State(figment, defender);
+    const resolution = resolveChallenge({ state, activeSide: "player" });
+    expect(dissolvedIds(resolution).sort()).toEqual(["e0", "fig"]);
+    expect(resolution.playerScoreDelta).toBe(0);
+  });
+
+  it("scores the whole stack when it challenges unopposed", () => {
+    const figment = makeInstance("fig", {
+      owner: "player",
+      isFigment: true,
+      figmentSparks: [2, 2, 2, 2],
+    });
+    const state = lane0State(figment, null);
+    const resolution = resolveChallenge({ state, activeSide: "player" });
+    expect(resolution.playerScoreDelta).toBe(8);
+    expect(dissolvedIds(resolution)).toEqual([]);
+  });
+
+  it("stack vs stack: only the challenging stack scores, by its reserves", () => {
+    // Challenger topmost 3 beats defender topmost 1: the defender stack sheds its
+    // topmost; the challenger's reserves (3✦) score. The defender stack, defending,
+    // scores nothing.
+    const challenger = makeInstance("fig", {
+      owner: "player",
+      isFigment: true,
+      figmentSparks: [3, 3],
+    });
+    const defender = makeInstance("e0", {
+      owner: "enemy",
+      isFigment: true,
+      figmentSparks: [1, 1, 1],
+    });
+    const state = lane0State(challenger, defender);
+    const resolution = resolveChallenge({ state, activeSide: "player" });
+    expect(dissolvedIds(resolution)).toEqual(["e0"]);
+    expect(resolution.playerScoreDelta).toBe(3);
+    expect(resolution.enemyScoreDelta).toBe(0);
   });
 });
 
@@ -538,12 +594,13 @@ describe("hasCombatKeyword — detection precedence", () => {
     });
     expect(hasCombatKeyword(wraith, "vengeful")).toBe(true);
 
+    // Celestial carries no inherent combat keyword.
     const celestial = makeInstance("fig3", {
       owner: "player",
       isFigment: true,
       subtype: "Celestial",
     });
-    expect(hasCombatKeyword(celestial, "preeminence")).toBe(true);
+    expect(hasCombatKeyword(celestial, "preeminence")).toBe(false);
 
     const ember = makeInstance("fig4", {
       owner: "player",

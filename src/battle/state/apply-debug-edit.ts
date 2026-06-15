@@ -1180,9 +1180,8 @@ function createFigment(
 }
 
 /**
- * Stamps a figment type's implicit keyword onto the new instance's status. The
- * four combat keywords map onto the matching `granted*` flag; `support` is a
- * static Support benefit resolved at challenge time and has no status flag.
+ * Stamps a figment type's inherent keyword onto the new instance's status. Each
+ * figment keyword maps onto the matching combat-keyword `granted*` flag.
  */
 function applyFigmentKeywordToStatus(
   state: BattleMutableState,
@@ -1201,13 +1200,8 @@ function applyFigmentKeywordToStatus(
     case "vengeful":
       instance.status.grantedVengeful = true;
       return;
-    case "preeminence":
-      instance.status.grantedPreeminence = true;
-      return;
     case "awakened":
       instance.status.grantedAwakened = true;
-      return;
-    case "support":
       return;
   }
 }
@@ -1399,6 +1393,25 @@ function moveCardToDebugZone(
   }
 
   const sourceInstance = state.cardInstances[battleCardId];
+
+  // Dissolving a figment stack to the void removes only its topmost figment
+  // (rules §Figments — Challenge resolution, Removal). A multi-member stack
+  // stays in play with its remaining figments; a single-member stack falls
+  // through to the normal void move below.
+  if (
+    !("slotId" in destination) &&
+    destination.zone === "void" &&
+    isFigmentInstance(sourceInstance) &&
+    selectFigmentCount(sourceInstance) > 1
+  ) {
+    const nextState = cloneBattleMutableState(state);
+    dissolveFigmentsFromStackInPlace(nextState, battleCardId, 1);
+    return {
+      state: nextState,
+      transition: createEmptyTransitionData(),
+    };
+  }
+
   const destinationStack = "slotId" in destination && isFigmentInstance(sourceInstance)
     ? findBattlefieldFigmentStack(state, destination.side, sourceInstance.definition.subtype, battleCardId)
     : null;

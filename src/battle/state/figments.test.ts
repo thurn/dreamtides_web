@@ -2,14 +2,16 @@ import { describe, expect, it } from "vitest";
 import {
   addFigmentsToStackInPlace,
   canMergeFigments,
+  countAlliedWarriors,
   dissolveFigmentsFromStackInPlace,
   findBattlefieldFigmentStack,
   isFigmentInstance,
   mergeFigmentsIntoStackInPlace,
   selectEffectiveSparkForInstance,
-  selectFigmentChallengeLossCount,
   selectFigmentCount,
+  selectFigmentReserveSpark,
   selectFigmentSparks,
+  selectTopmostFigmentSpark,
 } from "./figments";
 import { createDefaultBattleCardStatus } from "./create-initial-state";
 import type {
@@ -182,12 +184,12 @@ describe("selectEffectiveSparkForInstance", () => {
     expect(selectEffectiveSparkForInstance(instance)).toBe(6);
   });
 
-  it("adds staticSparkBonus on top of member-spark-sum + sparkDelta for a figment stack", () => {
+  it("adds the topmost gain once and the anthem per figment for a figment stack", () => {
     const instance = makeFigment("f0", [3, 1]);
     instance.sparkDelta = 1;
     instance.staticSparkBonus = 2;
-    // members (3 + 1) + sparkDelta 1 + staticSparkBonus 2 = 7
-    expect(selectEffectiveSparkForInstance(instance)).toBe(7);
+    // members (3 + 1) + sparkDelta 1 (topmost gain) + anthem 2 × 2 figments = 9
+    expect(selectEffectiveSparkForInstance(instance)).toBe(9);
   });
 
   it("clamps effective spark to zero even when staticSparkBonus is negative", () => {
@@ -199,8 +201,8 @@ describe("selectEffectiveSparkForInstance", () => {
 });
 
 describe("selectFigmentSparks", () => {
-  it("returns the members sorted descending", () => {
-    expect(selectFigmentSparks(makeFigment("f0", [1, 3, 2]))).toEqual([3, 2, 1]);
+  it("returns the members in stack order, topmost first", () => {
+    expect(selectFigmentSparks(makeFigment("f0", [1, 3, 2]))).toEqual([1, 3, 2]);
   });
 
   it("returns an empty array for non-figments", () => {
@@ -214,40 +216,64 @@ describe("selectFigmentSparks", () => {
   });
 });
 
-describe("selectFigmentChallengeLossCount (rules §Figments golden examples)", () => {
-  it("[2,2,2,2,2] vs 5 → loses two, survivors [2,2,2]", () => {
-    const instance = makeFigment("f0", [2, 2, 2, 2, 2]);
-    expect(selectFigmentChallengeLossCount(instance, 5)).toBe(2);
+describe("selectTopmostFigmentSpark / selectFigmentReserveSpark", () => {
+  it("reads the topmost member (index 0) plus its riding gain and one anthem share", () => {
+    const instance = makeFigment("f0", [3, 1, 1]);
+    instance.sparkDelta = 2;
+    instance.staticSparkBonus = 1;
+    // topmost 3 + sparkDelta 2 + anthem 1 = 6
+    expect(selectTopmostFigmentSpark(instance)).toBe(6);
+    // total: members (3+1+1=5) + sparkDelta 2 + anthem 1×3 = 10; reserves 10 − 6 = 4
     expect(selectEffectiveSparkForInstance(instance)).toBe(10);
+    expect(selectFigmentReserveSpark(instance)).toBe(4);
   });
 
-  it("[2,2,2] vs 5 → loses two, keeps [2]", () => {
-    expect(selectFigmentChallengeLossCount(makeFigment("f0", [2, 2, 2]), 5)).toBe(2);
+  it("returns the plain effective spark for a non-figment and zero reserves", () => {
+    const instance = makeNonFigment("c0", 4);
+    instance.sparkDelta = 1;
+    expect(selectTopmostFigmentSpark(instance)).toBe(5);
+    expect(selectFigmentReserveSpark(instance)).toBe(0);
   });
 
-  it("[1,1,1,1,1] vs 5 → entirely dissolved (tie), loss 5", () => {
-    expect(selectFigmentChallengeLossCount(makeFigment("f0", [1, 1, 1, 1, 1]), 5)).toBe(5);
+  it("a single-figment stack has no reserve spark", () => {
+    expect(selectFigmentReserveSpark(makeFigment("f0", [2]))).toBe(0);
+  });
+});
+
+describe("countAlliedWarriors / Legion dynamic spark", () => {
+  it("counts each figment member individually and non-figment warriors once", () => {
+    const warriorStack = makeFigment("w", [1, 1, 1], { subtype: "Warrior" });
+    const state = makeStateWith(warriorStack);
+    state.sides.player.frontRank.F0 = "w";
+    state.cardInstances.nonfig = makeNonFigment("nonfig", 5); // subtype Warrior
+    state.sides.player.frontRank.F1 = "nonfig";
+    // three Warrior figments + one non-figment Warrior = four allied warriors
+    expect(countAlliedWarriors(state, "player")).toBe(4);
   });
 
-  it("heterogeneous [3,1] vs 3 → top 3 absorbs all, loss 1, survivor [1]", () => {
-    expect(selectFigmentChallengeLossCount(makeFigment("f0", [3, 1]), 3)).toBe(1);
+  it("gives each Legion member spark equal to the allied-warrior count", () => {
+    const legion = makeFigment("l", [1, 1, 1], { subtype: "Legion" });
+    const state = makeStateWith(legion);
+    state.sides.player.frontRank.F0 = "l";
+    // Three Legion figments alone are three allied warriors, so each is 3✦.
+    const ctx = { alliedWarriorCount: countAlliedWarriors(state, "player") };
+    expect(ctx.alliedWarriorCount).toBe(3);
+    expect(selectTopmostFigmentSpark(legion, ctx)).toBe(3);
+    expect(selectEffectiveSparkForInstance(legion, ctx)).toBe(9);
   });
 
-  it("returns 0 when opposing spark is zero", () => {
-    expect(selectFigmentChallengeLossCount(makeFigment("f0", [2, 2]), 0)).toBe(0);
-  });
-
-  it("returns 0 for non-figments", () => {
-    expect(selectFigmentChallengeLossCount(makeNonFigment("c0", 5), 3)).toBe(0);
+  it("falls back to the stack's own member count when no board context is given", () => {
+    const legion = makeFigment("l", [1, 1], { subtype: "Legion" });
+    expect(selectEffectiveSparkForInstance(legion)).toBe(4);
   });
 });
 
 describe("addFigmentsToStackInPlace", () => {
-  it("pushes new members at the given base spark and re-sorts descending", () => {
+  it("appends new members at the given base spark to the bottom of the stack", () => {
     const instance = makeFigment("f0", [3, 1]);
     const state = makeStateWith(instance);
     addFigmentsToStackInPlace(state, "f0", 2, 2);
-    expect(state.cardInstances.f0.figments).toEqual([3, 2, 2, 1]);
+    expect(state.cardInstances.f0.figments).toEqual([3, 1, 2, 2]);
   });
 
   it("ignores non-figment targets", () => {
@@ -259,21 +285,23 @@ describe("addFigmentsToStackInPlace", () => {
 });
 
 describe("mergeFigmentsIntoStackInPlace", () => {
-  it("merges incoming members and keeps the array sorted descending", () => {
+  it("appends incoming members to the bottom, preserving stack order", () => {
     const instance = makeFigment("f0", [2, 2]);
     const state = makeStateWith(instance);
     mergeFigmentsIntoStackInPlace(state, "f0", [3, 1]);
-    expect(state.cardInstances.f0.figments).toEqual([3, 2, 2, 1]);
+    expect(state.cardInstances.f0.figments).toEqual([2, 2, 3, 1]);
   });
 });
 
 describe("dissolveFigmentsFromStackInPlace", () => {
-  it("drops the top k members (highest spark first) and keeps the rest", () => {
+  it("drops the top k members (topmost first), keeps the rest, and resets the topmost gain", () => {
     const instance = makeFigment("f0", [3, 2, 2, 1]);
+    instance.sparkDelta = 4;
     const state = makeStateWith(instance);
     const emptied = dissolveFigmentsFromStackInPlace(state, "f0", 2);
     expect(emptied).toBe(false);
     expect(state.cardInstances.f0.figments).toEqual([2, 1]);
+    expect(state.cardInstances.f0.sparkDelta).toBe(0);
   });
 
   it("empties the stack and returns true when k covers the stack", () => {

@@ -4,19 +4,21 @@
  * type yields these defaults instead of free-typed values: the base spark seeds
  * the new figment's spark and the keyword is stamped onto its status.
  *
+ * A Legion is a Warrior whose spark equals the number of allied warriors,
+ * counting itself; its catalog `baseSpark` of 1 is the per-warrior rate, and the
+ * live spark is computed from the board (see `countAlliedWarriors` in
+ * `figments.ts`).
+ *
  * This module is plain data. It is consumed by `CREATE_FIGMENT` (catalog
  * defaults for the base spark and keyword) and by the figment-creator UI.
  */
 
 /**
- * A keyword a figment type carries implicitly. `support` is the +1✦ Support
- * benefit a Synth grants; the other four map onto the combat-keyword `granted*`
- * status flags.
+ * A keyword a figment type carries implicitly. Each maps onto the matching
+ * combat-keyword `granted*` status flag, carried by every figment of that type.
  */
 export type FigmentKeyword =
   | "unstoppable"
-  | "support"
-  | "preeminence"
   | "vengeful"
   | "awakened";
 
@@ -62,15 +64,15 @@ export const FIGMENT_CATALOG_ENTRIES: readonly FigmentCatalogEntry[] = [
   entry("Enigma", 0),
   entry("Shadow", 2),
   entry("Spirit Animal", 1),
-  entry("Synth", 0, "support"),
   entry("Monstrosity", 4),
   entry("Survivor", 1),
-  entry("Celestial", 2, "preeminence"),
+  entry("Celestial", 2),
   entry("Wraith", 0, "vengeful"),
   entry("Ethereal", 1),
   entry("Radiant", 2),
   entry("Ember", 1, "awakened"),
   entry("Outsider", 1),
+  entry("Legion", 1),
 ];
 
 /**

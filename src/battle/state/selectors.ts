@@ -13,7 +13,10 @@ import type {
   BackRankSlotId,
 } from "../types";
 import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
-import { selectEffectiveSparkForInstance } from "./figments";
+import {
+  selectEffectiveSparkForInstance,
+  selectFigmentSparkContext,
+} from "./figments";
 
 /**
  * Summary of B-5 quest deck metadata captured at battle-init time. The
@@ -126,7 +129,10 @@ export function selectEffectiveSpark(
     return null;
   }
 
-  return selectEffectiveSparkForInstance(instance);
+  return selectEffectiveSparkForInstance(
+    instance,
+    selectFigmentSparkContext(state, instance),
+  );
 }
 
 /**

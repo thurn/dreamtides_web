@@ -302,9 +302,12 @@ export interface BattleCardInstance {
   controller: BattleSide;
   /**
    * For a figment stack (`provenance.kind === "generated-figment"`), the spark
-   * of each member figment, kept sorted descending so the top of the stack is
-   * index 0. Empty or `undefined` for non-figment cards. A figment's effective
-   * spark is the sum of these values; its member count is the array length.
+   * of each member figment in stack order: the topmost (active) figment is index
+   * 0 and newly materialized figments append to the bottom as reserves. Empty or
+   * `undefined` for non-figment cards. A figment's effective spark is the sum of
+   * these values plus stack-level adjustments; its member count is the array
+   * length. A `Legion` stack stores per-warrior placeholders whose live spark is
+   * computed from the board (see `countAlliedWarriors`).
    */
   figments?: number[];
   sparkDelta: number;
@@ -315,6 +318,10 @@ export interface BattleCardInstance {
    * `sparkDelta`: per the battle rules a Support bonus applies only while the
    * granting static ability holds and does not travel across zones, whereas
    * `sparkDelta` is gained spark that persists. Effective spark adds both.
+   *
+   * On a figment stack, Support does not apply (rules §Support); this field
+   * instead holds the per-figment anthem amount, applied to every figment in the
+   * stack, while `sparkDelta` is the targeted gain riding the topmost figment.
    */
   staticSparkBonus: number;
   isRevealedToPlayer: boolean;

@@ -2,8 +2,9 @@ import type { BattleDebugEdit } from "../debug/commands";
 import {
   isFigmentInstance,
   selectEffectiveSparkForInstance,
-  selectFigmentChallengeLossCount,
-  selectFigmentCount,
+  selectFigmentReserveSpark,
+  selectFigmentSparkContext,
+  selectTopmostFigmentSpark,
 } from "../state/figments";
 import type {
   BattleCardInstance,
@@ -78,12 +79,12 @@ export type CombatKeyword =
  * Figment base types carry an implicit combat keyword (rules §Figments). Their
  * printed text is usually empty, so the subtype is the only signal of the
  * keyword. Relocated from `basic-automation.ts` so detection lives with the
- * resolver. Synth's Support keyword is not a combat keyword and is absent here.
+ * resolver. The inherent keyword is carried by every figment of that type, so a
+ * promoted reserve keeps it.
  */
 const FIGMENT_KEYWORDS: Readonly<Record<string, CombatKeyword>> = {
   ancient: "unstoppable",
   wraith: "vengeful",
-  celestial: "preeminence",
   ember: "awakened",
 };
 
@@ -220,18 +221,13 @@ function resolveLane(params: {
   const defender =
     defenderId === null ? null : state.cardInstances[defenderId] ?? null;
 
-  const challengerSpark =
-    challenger === null
-      ? 0
-      : effectiveSpark(challenger, challengerId, supportContribution);
-  const defenderSpark =
-    defender === null
-      ? 0
-      : effectiveSpark(defender, defenderId, supportContribution);
+  const challengerSpark = laneSpark(state, challenger, challengerId, supportContribution);
+  const defenderSpark = laneSpark(state, defender, defenderId, supportContribution);
 
-  // `playerSpark`/`enemySpark` always describe the actual side in that lane.
-  const playerSpark = activeSide === "player" ? challengerSpark : defenderSpark;
-  const enemySpark = activeSide === "player" ? defenderSpark : challengerSpark;
+  // `playerSpark`/`enemySpark` describe the spark that actually fights in that
+  // lane — for a figment stack, the topmost figment alone (rules §Figments).
+  const playerSpark = activeSide === "player" ? challengerSpark.compare : defenderSpark.compare;
+  const enemySpark = activeSide === "player" ? defenderSpark.compare : challengerSpark.compare;
 
   const lane = (winner: BattleSide | null, scoreDelta: number): BattleLaneJudgment => ({
     slotId,
@@ -247,27 +243,30 @@ function resolveLane(params: {
     return { judgment: lane(null, 0), activeScored: 0, opposingScored: 0 };
   }
 
-  // Unpaired challenger: scores ⍟ equal to its effective spark.
+  // Unpaired challenger: scores ⍟ equal to its total spark. For a figment stack
+  // every figment is unopposed, so the whole stack scores (rules §Figments).
   if (defender === null || defenderId === null) {
     return {
-      judgment: lane(null, challengerSpark),
-      activeScored: challengerSpark,
+      judgment: lane(null, challengerSpark.total),
+      activeScored: challengerSpark.total,
       opposingScored: 0,
     };
   }
 
-  // Both present: resolve the spark comparison, with Preeminence breaking ties.
+  // Both present: resolve the topmost-vs-topmost spark comparison, with
+  // Preeminence breaking ties. A figment that loses sheds only its topmost
+  // figment; the void move keeps the rest of the stack in play.
   const baseChallengerDissolves = dissolvesAgainst(
     challenger,
-    challengerSpark,
+    challengerSpark.compare,
     defender,
-    defenderSpark,
+    defenderSpark.compare,
   );
   const baseDefenderDissolves = dissolvesAgainst(
     defender,
-    defenderSpark,
+    defenderSpark.compare,
     challenger,
-    challengerSpark,
+    challengerSpark.compare,
   );
   let challengerDissolves = baseChallengerDissolves;
   let defenderDissolves = baseDefenderDissolves;
@@ -280,14 +279,27 @@ function resolveLane(params: {
     challengerDissolves = true;
   }
 
-  // Unstoppable: a defended character that survives still scores its spark.
+  // Scoring. Only a challenger scores (rules §Figments — Challenge resolution).
   let activeScored = 0;
   let opposingScored = 0;
+
+  // The challenger's reserve figments are unopposed and always score; a
+  // non-figment has no reserves. The contested topmost scores only when it
+  // survives with Unstoppable.
+  activeScored += challengerSpark.reserve;
   if (!challengerDissolves && defenderDissolves && hasCombatKeyword(challenger, "unstoppable")) {
-    activeScored += challengerSpark;
+    activeScored += challengerSpark.compare;
   }
-  if (!defenderDissolves && challengerDissolves && hasCombatKeyword(defender, "unstoppable")) {
-    opposingScored += defenderSpark;
+
+  // A defending figment scores nothing. A defending non-figment keeps the
+  // existing Unstoppable-survivor scoring.
+  if (
+    !isFigmentInstance(defender) &&
+    !defenderDissolves &&
+    challengerDissolves &&
+    hasCombatKeyword(defender, "unstoppable")
+  ) {
+    opposingScored += defenderSpark.compare;
   }
 
   if (challengerDissolves) {
@@ -316,27 +328,50 @@ function resolveLane(params: {
   };
 }
 
-/**
- * Effective spark for an instance = its base effective spark plus any
- * support/static contribution targeted at its battleCardId.
- */
-function effectiveSpark(
-  instance: BattleCardInstance,
-  battleCardId: string | null,
-  supportContribution: ReadonlyMap<string, number> | undefined,
-): number {
-  const base = selectEffectiveSparkForInstance(instance);
-  const bonus =
-    battleCardId === null ? 0 : supportContribution?.get(battleCardId) ?? 0;
-  return base + bonus;
+/** The spark figures a lane participant brings to a challenge. */
+interface LaneSpark {
+  /** Spark used in the win/lose comparison — the topmost figment alone. */
+  compare: number;
+  /** Total spark the participant can score when fully unopposed. */
+  total: number;
+  /** Reserve-figment spark that scores even behind a contested topmost. */
+  reserve: number;
 }
 
 /**
- * Whether `self` dissolves when challenged against `opposing`. A non-figment
- * dissolves on a lower or tied spark, except a tie won by Preeminence. A figment
- * stack dissolves only when the opposing spark covers every member figment
- * (top-down loss count, rules §Figments), and a fully-covered stack still
- * survives an exact tie if it wins by Preeminence.
+ * Resolves the spark a lane participant fights and scores with. A non-figment
+ * fights and scores with its full effective spark (plus any support); a figment
+ * stack fights with its topmost figment but can score its reserves separately
+ * (rules §Figments — Challenge resolution). Support does not apply to figments.
+ */
+function laneSpark(
+  state: BattleMutableState,
+  instance: BattleCardInstance | null,
+  battleCardId: string | null,
+  supportContribution: ReadonlyMap<string, number> | undefined,
+): LaneSpark {
+  if (instance === null) {
+    return { compare: 0, total: 0, reserve: 0 };
+  }
+  if (isFigmentInstance(instance)) {
+    const context = selectFigmentSparkContext(state, instance);
+    return {
+      compare: selectTopmostFigmentSpark(instance, context),
+      total: selectEffectiveSparkForInstance(instance, context),
+      reserve: selectFigmentReserveSpark(instance, context),
+    };
+  }
+  const bonus =
+    battleCardId === null ? 0 : supportContribution?.get(battleCardId) ?? 0;
+  const spark = selectEffectiveSparkForInstance(instance) + bonus;
+  return { compare: spark, total: spark, reserve: 0 };
+}
+
+/**
+ * Whether `self` loses its spark comparison against `opposing`. A character
+ * dissolves on a lower or tied spark, except a tie won by Preeminence. For a
+ * figment stack `selfSpark`/`opposingSpark` are the topmost figments' sparks, so
+ * a losing stack sheds only its topmost figment (handled by the void move).
  */
 function dissolvesAgainst(
   self: BattleCardInstance,
@@ -344,17 +379,6 @@ function dissolvesAgainst(
   opposing: BattleCardInstance,
   opposingSpark: number,
 ): boolean {
-  if (isFigmentInstance(self)) {
-    const fullyDissolved =
-      selectFigmentChallengeLossCount(self, opposingSpark) >= selectFigmentCount(self);
-    if (!fullyDissolved) {
-      return false;
-    }
-    if (selfSpark === opposingSpark && winsTieByPreeminence(self, opposing)) {
-      return false;
-    }
-    return true;
-  }
   if (selfSpark > opposingSpark) {
     return false;
   }

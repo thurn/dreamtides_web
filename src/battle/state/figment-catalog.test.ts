@@ -31,7 +31,7 @@ describe("figment catalog", () => {
     }
   });
 
-  it("assigns keywords to exactly the five types that carry one", () => {
+  it("assigns keywords to exactly the three types that carry one", () => {
     const keywordsByKey = new Map(
       FIGMENT_CATALOG_ENTRIES.filter((entry) => entry.keyword !== undefined).map(
         (entry) => [entry.key, entry.keyword],
@@ -41,15 +41,13 @@ describe("figment catalog", () => {
     expect(keywordsByKey).toEqual(
       new Map([
         ["ancient", "unstoppable"],
-        ["synth", "support"],
-        ["celestial", "preeminence"],
         ["wraith", "vengeful"],
         ["ember", "awakened"],
       ]),
     );
   });
 
-  it("leaves the other nine types without a keyword", () => {
+  it("leaves the other eleven types without a keyword", () => {
     const keywordless = FIGMENT_CATALOG_ENTRIES.filter(
       (entry) => entry.keyword === undefined,
     ).map((entry) => entry.key);
@@ -62,9 +60,11 @@ describe("figment catalog", () => {
         "spirit animal",
         "monstrosity",
         "survivor",
+        "celestial",
         "ethereal",
         "radiant",
         "outsider",
+        "legion",
       ]),
     );
   });
@@ -96,13 +96,13 @@ describe("figment catalog", () => {
         "ember": 1,
         "enigma": 0,
         "ethereal": 1,
+        "legion": 1,
         "monstrosity": 4,
         "outsider": 1,
         "radiant": 2,
         "shadow": 2,
         "spirit animal": 1,
         "survivor": 1,
-        "synth": 0,
         "warrior": 1,
         "wraith": 0,
       }
