@@ -82,13 +82,15 @@ function figmentEditorApiPlugin(): Plugin {
 }
 
 /**
- * Dev-only Vite plugin that hot-reloads figment data into the running browser
- * when `data/tabula/figments.toml` is edited. The TOML directory is ignored by
- * the dev watcher (see `server.watch.ignored`), so this plugin watches the file
+ * Dev-only Vite plugin that hot-reloads figment data into a running battle when
+ * `data/tabula/figments.toml` is edited. The TOML directory is ignored by the
+ * dev watcher (see `server.watch.ignored`), so this plugin watches the file
  * directly, regenerates `public/figments-data.json` via
- * {@link refreshFigmentDataJson}, and triggers a full reload so a battle in
- * progress refetches the edited figment catalog. `apply: "serve"` keeps it out
- * of production builds.
+ * {@link refreshFigmentDataJson}, and emits a `figment-data:changed` custom HMR
+ * event. Only the battle/quest app reloads on that event (see src/main.tsx); the
+ * editor pages ignore it, so saving in the figment editor never reloads the page
+ * and closes an open art editor. `apply: "serve"` keeps it out of production
+ * builds.
  */
 function figmentDataHotReloadPlugin(): Plugin {
   const figmentTomlPath = path.resolve(
@@ -107,9 +109,15 @@ function figmentDataHotReloadPlugin(): Plugin {
         try {
           refreshFigmentDataJson({ rootDir: __dirname });
           console.log(
-            "[figment-data] figments.toml changed -> regenerated figments-data.json -> reloading browser",
+            "[figment-data] figments.toml changed -> regenerated figments-data.json -> notifying running app",
           );
-          server.ws.send({ type: "full-reload" });
+          // Send a targeted custom event rather than a full reload. Only the
+          // running battle/quest app registers a handler for it (see
+          // `figment-data:changed` in src/main.tsx) and reloads to pick up the
+          // edit; the figment and card editor pages register no handler, so a
+          // save from the editor does not reload the page out from under an open
+          // art editor or an inline edit.
+          server.ws.send({ type: "custom", event: "figment-data:changed" });
         } catch (error) {
           const message = error instanceof Error ? error.message : String(error);
           console.error(`[figment-data] hot reload failed: ${message}`);
@@ -220,11 +228,14 @@ function savedQuestsApiPlugin(): Plugin {
  *      `public/cards_v2-data.json`) via {@link regenerateCardData}, reusing the
  *      exact TOML->JSON transform `setup-assets` uses (no duplication). The
  *      writes are synchronous, so the fresh JSON is fully on disk before step 2.
- *   2. Triggers a full browser reload (`server.ws.send({ type: "full-reload" })`).
- *      Quest/battle state lives in the Firebase room keyed by the `?game=<id>`
- *      URL and rehydrates on reload, and the card database is re-fetched fresh
- *      from `/cards_v2-data.json` on load, so the running game picks up the
- *      edited card text within a second of saving.
+ *   2. Emits a `card-data:changed` custom HMR event. Only the battle/quest app
+ *      reloads on it (see src/main.tsx); the editor pages register no handler,
+ *      so a card editor save does not reload the page and close an open art
+ *      editor or discard an inline edit. Quest/battle state lives in the
+ *      Firebase room keyed by the `?game=<id>` URL and rehydrates on reload, and
+ *      the card database is re-fetched fresh from `/cards_v2-data.json` on load,
+ *      so the running game picks up the edited card text within a second of
+ *      saving.
  *
  * Because regeneration runs first, the generated JSON matches the TOML by the
  * time {@link generatedCardDataDriftPlugin} re-checks, so the drift overlay does
@@ -251,9 +262,13 @@ export function cardDataHotReloadPlugin(): Plugin {
         try {
           regenerateCardData();
           console.log(
-            "[card-data] cards_v2.toml changed -> regenerated card JSON -> reloading browser",
+            "[card-data] cards_v2.toml changed -> regenerated card JSON -> notifying running app",
           );
-          server.ws.send({ type: "full-reload" });
+          // Targeted custom event rather than a full reload: only the running
+          // battle/quest app reloads to pick up the edit (see
+          // `card-data:changed` in src/main.tsx), so saving in the card editor
+          // does not reload the page and close an open art editor.
+          server.ws.send({ type: "custom", event: "card-data:changed" });
         } catch (error) {
           const message = error instanceof Error ? error.message : String(error);
           console.error(`[card-data] hot reload failed: ${message}`);
