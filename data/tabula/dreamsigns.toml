@@ -96,7 +96,7 @@ id = "EDE46F71-AA77-4B12-9824-0D3706DA6A22"
 name = "Crystal Orb"
 image_name = "magic_ball_2.png"
 tides = ["materialize_value", "materialize_tempo", "materialized_staples", "big_energy"]
-rendered-text = "The first character you materialize each turn has Awakened."
+rendered-text = "The first character you materialize each turn has awakened."
 tags = ["Tag OK"]
 
 [[dreamsign]]
@@ -962,7 +962,7 @@ id = "0C52E8C3-A792-4EEA-955F-A0C61463C066"
 name = "Spell Tome"
 image_name = "book.png"
 tides = ["event_chain", "copy_effects", "event_setup"]
-rendered-text = "At transfiguration sites, when you transfigure an event, add a copy of it to your deck."
+rendered-text = "When you transfigure an event, add a copy of it to your deck."
 tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
@@ -1141,7 +1141,7 @@ tags = ["J16", "Tag OK"]
 id = "CD81A49D-DF58-4E0E-B1B2-33A82B386052"
 name = "Rosemary"
 image_name = "rosemary.png"
-rendered-text = "Dreamsign and dreamsign draft sites are enchanced."
+rendered-text = "Dreamsign and dreamsign draft sites are enhanced."
 tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
