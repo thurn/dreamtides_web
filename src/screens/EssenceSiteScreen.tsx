@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { SiteState } from "../types/quest";
+import { EssenceGlyph } from "../components/EssenceValue";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 
@@ -116,24 +117,15 @@ export function EssenceSiteScreen({ site }: EssenceSiteScreenProps) {
         >
           <motion.span
             className="text-5xl font-black tabular-nums"
-            style={{ color: "var(--color-essence)" }}
+            style={{ color: "var(--color-essence)", whiteSpace: "nowrap" }}
             animate={{ scale: [1, 1.1, 1] }}
             transition={{ duration: 0.6, repeat: Infinity }}
             data-essence-site-value=""
           >
             +{String(displayValue)}
+            <EssenceGlyph />
           </motion.span>
         </motion.div>
-
-        <motion.p
-          className="text-lg font-medium"
-          style={{ color: "var(--color-essence)" }}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-        >
-          Essence
-        </motion.p>
 
         {site.isEnhanced && (
           <motion.span

@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import type { SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
+import { EssenceValue } from "../components/EssenceValue";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import {
@@ -179,7 +180,11 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
           }}
         >
           {String(selectedCount)} selected — cost{" "}
-          <strong style={{ color: ESSENCE_COLOR }}>{String(totalCost)}</strong>
+          <EssenceValue
+            amount={totalCost}
+            color={ESSENCE_COLOR}
+            className="font-bold"
+          />
         </span>
         <span
           className="rounded-lg px-4 py-2"
@@ -189,10 +194,12 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
           }}
         >
           Essence after:{" "}
-          <strong style={{ color: ESSENCE_COLOR }}>
-            {String(remainingEssence)}
-          </strong>{" "}
-          / {String(essence)}
+          <EssenceValue
+            amount={remainingEssence}
+            color={ESSENCE_COLOR}
+            className="font-bold"
+          />{" "}
+          / <EssenceValue amount={essence} color={ESSENCE_COLOR} />
         </span>
         <span
           className="rounded-lg px-4 py-2"
@@ -205,9 +212,11 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
           {canSelectMore ? (
             <>
               Next card:{" "}
-              <strong style={{ color: ESSENCE_COLOR }}>
-                {String(nextCardPrice)}
-              </strong>
+              <EssenceValue
+                amount={nextCardPrice}
+                color={ESSENCE_COLOR}
+                className="font-bold"
+              />
             </>
           ) : selectedCount >= MAX_PURGE_PER_VISIT ? (
             "Visit limit reached"
@@ -236,7 +245,12 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
         >
           Purge {String(selectedCount)} Card
           {selectedCount !== 1 ? "s" : ""}
-          {selectedCount > 0 ? ` — ${String(totalCost)} essence` : ""}
+          {selectedCount > 0 ? (
+            <>
+              {" — "}
+              <EssenceValue amount={totalCost} color="inherit" />
+            </>
+          ) : null}
         </button>
         <button
           className="rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
@@ -286,7 +300,7 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
                     border: "1px solid rgba(255, 255, 255, 0.4)",
                   }}
                 >
-                  {String(cardPrice)}
+                  <EssenceValue amount={cardPrice} color="inherit" />
                 </span>
               )}
             </motion.div>

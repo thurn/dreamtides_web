@@ -229,7 +229,7 @@ afterEach(() => {
 });
 
 describe("ShopScreen", () => {
-  it("paints the Buy price's number and 'Essence' label in the shared essence colour", () => {
+  it("shows the Buy price as a white essence value glued to the crypto glyph", () => {
     setQuestContext(
       makeState([
         {
@@ -256,22 +256,18 @@ describe("ShopScreen", () => {
     const priceSpan = container.querySelector("[data-shop-price]");
     expect(priceSpan).not.toBeNull();
     expect(priceSpan?.textContent).toBe("100");
-    expect((priceSpan as HTMLElement | null)?.style.color).toBe(
+    // The price is part of the button label, so it carries no purple inline
+    // colour -- it reads in the button's own white text.
+    expect((priceSpan as HTMLElement | null)?.style.color).not.toBe(
       "var(--color-essence)",
     );
 
-    // The "Essence" label is the second purple span -- the verb
-    // "Buy" stays neutral so only the cost reads as currency.
-    const labels = container.querySelectorAll("[data-shop-currency-label]");
-    expect(labels.length).toBeGreaterThan(0);
-    expect((labels[0] as HTMLElement).style.color).toBe(
-      "var(--color-essence)",
-    );
-    expect(labels[0]?.textContent).toBe("Essence");
-
-    // No legacy currency glyph anywhere in the Buy button row.
-    expect(container.textContent).not.toContain("◆");
-    expect(container.textContent).not.toContain("⬢");
+    // The crypto glyph names the currency, so no trailing "Essence" word is
+    // rendered for an essence price.
+    expect(priceSpan?.querySelector("i.bx-crypto")).not.toBeNull();
+    expect(
+      container.querySelector("[data-shop-currency-label]"),
+    ).toBeNull();
 
     act(() => {
       root.unmount();

@@ -36,7 +36,7 @@ afterEach(() => {
 });
 
 describe("BattleRewardSurface", () => {
-  it("renders the essence reward in the shared essence colour with no glyph", () => {
+  it("renders the essence reward as a purple value glued to the crypto glyph", () => {
     const { container, root } = mount(
       <BattleRewardSurface
         battleId="b-1"
@@ -58,10 +58,6 @@ describe("BattleRewardSurface", () => {
       "[data-battle-reward-essence-callout]",
     );
     expect(callout).not.toBeNull();
-    // No legacy hexagon glyph remains anywhere in the essence callout
-    // -- essence is identified purely by its purple colour now.
-    expect(callout?.textContent).not.toContain("⬢");
-    expect(callout?.textContent).not.toContain("◆");
 
     const value = container.querySelector(
       "[data-battle-reward-essence-value]",
@@ -70,6 +66,8 @@ describe("BattleRewardSurface", () => {
     expect((value as HTMLElement | null)?.style.color).toBe(
       "var(--color-essence)",
     );
+    // The amount is glued to the crypto glyph that marks essence everywhere.
+    expect(value?.querySelector("i.bx-crypto")).not.toBeNull();
 
     // The "Essence Earned" caption above the number is also in the
     // currency colour so the whole callout reads as one purple unit.

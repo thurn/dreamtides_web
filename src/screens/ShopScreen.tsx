@@ -5,6 +5,7 @@ import type { SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
 import { DreamsignArtTile } from "../components/DreamsignArtTile";
+import { EssenceValue } from "../components/EssenceValue";
 import { HoverZoomCard } from "../components/HoverZoomCard";
 import { RulesText } from "../components/RulesText";
 import { CARD_ASPECT_RATIO } from "../components/card-aspect";
@@ -405,8 +406,6 @@ function PriceButton({
   canAfford: boolean;
   onClick: () => void;
 }) {
-  const currencyColor =
-    currency === "omens" ? "#fbbf24" : "var(--color-essence)";
   return (
     <button
       className="flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-bold transition-opacity"
@@ -420,20 +419,34 @@ function PriceButton({
       onClick={onClick}
     >
       <span>Buy</span>
-      <span
-        style={{ color: currencyColor }}
-        className="tabular-nums"
-        data-shop-price=""
-      >
-        {String(price)}
-      </span>
-      <span
-        className="text-xs"
-        style={{ color: currencyColor }}
-        data-shop-currency-label=""
-      >
-        {currency === "omens" ? "Omens" : "Essence"}
-      </span>
+      {currency === "essence" ? (
+        // Essence price is part of the button label, so the value and its
+        // crypto glyph read in the button's own white text rather than the
+        // purple used for plain essence values elsewhere.
+        <EssenceValue
+          amount={price}
+          color="inherit"
+          className="font-bold"
+          data-shop-price=""
+        />
+      ) : (
+        <>
+          <span
+            style={{ color: "#fbbf24" }}
+            className="tabular-nums"
+            data-shop-price=""
+          >
+            {String(price)}
+          </span>
+          <span
+            className="text-xs"
+            style={{ color: "#fbbf24" }}
+            data-shop-currency-label=""
+          >
+            Omens
+          </span>
+        </>
+      )}
     </button>
   );
 }

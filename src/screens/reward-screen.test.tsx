@@ -436,7 +436,7 @@ describe("RewardSiteScreen", () => {
     });
   });
 
-  it("paints the essence reward number in the shared essence colour with no glyph", () => {
+  it("paints the essence reward as a purple value glued to the crypto glyph", () => {
     const mutations = makeMutations();
     setQuestContext(
       makeState({
@@ -462,20 +462,15 @@ describe("RewardSiteScreen", () => {
       />,
     );
 
-    // The essence reward capsule advertises essence purely by colour
-    // -- no diamond / hexagon glyph -- and the number itself is the
-    // single source of currency identity.
+    // The essence reward reads in the shared purple colour with the amount
+    // glued to the crypto glyph that marks essence everywhere.
     const value = container.querySelector("[data-essence-reward-value]");
     expect(value).not.toBeNull();
     expect(value?.textContent).toBe("+175");
     expect((value as HTMLElement | null)?.style.color).toBe(
       "var(--color-essence)",
     );
-
-    const capsule = container.querySelector("[data-essence-reward-display]");
-    expect(capsule).not.toBeNull();
-    expect(capsule?.textContent).not.toContain("◆");
-    expect(capsule?.textContent).not.toContain("⬢");
+    expect(value?.querySelector("i.bx-crypto")).not.toBeNull();
 
     act(() => {
       root.unmount();

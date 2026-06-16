@@ -368,26 +368,26 @@ describe("HUD", () => {
     });
   });
 
-  it("renders the essence counter in the shared essence colour with no glyph", () => {
+  it("renders the essence counter as a purple value glued to the crypto glyph", () => {
     setQuestContext(makeState([]));
     const { container, root } = renderHud();
 
     const essenceBlock = container.querySelector('[data-hud-essence]');
     expect(essenceBlock).not.toBeNull();
 
-    // The HUD must never carry the legacy gold diamond or hexagon
-    // glyphs for essence; the only marker for currency is purple
-    // colour applied to both the value and the "Essence" label.
-    expect(essenceBlock?.textContent).not.toContain("◆");
-    expect(essenceBlock?.textContent).not.toContain("⬢");
+    // The amount carries no trailing "Essence" word — the crypto glyph names
+    // the currency, the same way card and dreamsign rules text show it.
     expect(essenceBlock?.textContent).toContain("100");
-    expect(essenceBlock?.textContent).toContain("Essence");
+    expect(essenceBlock?.textContent).not.toContain("Essence");
 
-    const spans = essenceBlock?.querySelectorAll("span") ?? [];
-    expect(spans.length).toBeGreaterThanOrEqual(2);
-    for (const span of spans) {
-      expect((span as HTMLElement).style.color).toBe("var(--color-essence)");
-    }
+    // The filled crypto glyph follows the number.
+    expect(essenceBlock?.querySelector("i.bx-crypto")).not.toBeNull();
+
+    // The value reads in the shared purple essence colour.
+    const valueSpan = essenceBlock?.querySelector("span");
+    expect((valueSpan as HTMLElement | null)?.style.color).toBe(
+      "var(--color-essence)",
+    );
 
     act(() => {
       root.unmount();

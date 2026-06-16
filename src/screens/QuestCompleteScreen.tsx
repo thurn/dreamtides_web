@@ -4,6 +4,7 @@ import { useQuest } from "../state/quest-context";
 import { logEvent, downloadLog } from "../logging";
 import { CardDisplay } from "../components/CardDisplay";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
+import { EssenceValue } from "../components/EssenceValue";
 import type { CardData } from "../types/cards";
 
 /** Final summary screen shown after winning 7 battles. */
@@ -158,14 +159,19 @@ export function QuestCompleteScreen() {
               }}
               data-quest-complete-stat={stat.label}
             >
-              <span
-                className="text-3xl font-bold tabular-nums md:text-4xl"
-                style={{
-                  color: isEssenceStat ? "var(--color-essence)" : "#fbbf24",
-                }}
-              >
-                {stat.value}
-              </span>
+              {isEssenceStat ? (
+                <EssenceValue
+                  amount={stat.value}
+                  className="text-3xl font-bold md:text-4xl"
+                />
+              ) : (
+                <span
+                  className="text-3xl font-bold tabular-nums md:text-4xl"
+                  style={{ color: "#fbbf24" }}
+                >
+                  {stat.value}
+                </span>
+              )}
               <span className="mt-1 text-sm opacity-60">{stat.label}</span>
             </div>
           );

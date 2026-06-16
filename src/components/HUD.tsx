@@ -5,6 +5,7 @@ import { saveQuest } from "../state/saved-quests";
 import { DreamcallerPortrait } from "./DreamcallerPortrait";
 import { DreamcallerPopover } from "./DreamcallerPopover";
 import { HudDreamsignRow } from "./HudDreamsignRow";
+import { EssenceValue } from "./EssenceValue";
 import {
   HUD_BUTTON_BASE_CLASS,
   HUD_DREAMSIGN_DEBUG_SLOT_ID,
@@ -170,29 +171,18 @@ export function HUD({
     >
       {/* Left section: essence, deck, dreamcaller */}
       <div className="flex min-w-0 items-center gap-2 overflow-visible md:gap-5">
-        {/* Essence counter. Color identity is the only marker for
-            essence across the prototype; no glyph is rendered so the
-            HUD stays consistent with shop / battle-reward surfaces.
-            The "Essence" label sits inline with the number at every
-            breakpoint so the purple value reads as currency rather
-            than as a free-floating count. */}
+        {/* Essence counter. The purple value is glued to the crypto glyph that
+            marks essence everywhere in the prototype, so the wallet reads as a
+            currency value the same way card and dreamsign rules text show it. */}
         <div
           className="flex shrink-0 items-baseline gap-1.5"
           aria-label="Essence"
           data-hud-essence=""
         >
-          <span
-            className="text-sm font-bold tabular-nums md:text-base"
-            style={{ color: "var(--color-essence)" }}
-          >
-            {String(animatedEssence)}
-          </span>
-          <span
-            className="text-xs md:text-sm"
-            style={{ color: "var(--color-essence)" }}
-          >
-            Essence
-          </span>
+          <EssenceValue
+            amount={String(animatedEssence)}
+            className="text-sm font-bold md:text-base"
+          />
         </div>
 
         {/* Omens counter. Spent only on shop Dreamsign purchases and rerolls. */}

@@ -5,6 +5,7 @@ import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
 import { selectedTides4Decks } from "../data/tides4-preview";
 import { generateQuestSeed } from "../state/quest-state-actions";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
+import { EssenceValue } from "../components/EssenceValue";
 import { HoverPopover } from "../components/HoverPopover";
 import { RulesText } from "../components/RulesText";
 import type { Tides4Color, Tides4DeckJson } from "../draft/pool/tides4-io";
@@ -237,13 +238,11 @@ export function QuestStartScreen() {
                   >
                     Starting Essence
                   </span>
-                  <span
-                    className="text-base font-bold tabular-nums md:text-lg"
-                    style={{ color: "var(--color-essence)" }}
+                  <EssenceValue
+                    amount={dreamcaller.startingEssence}
+                    className="text-base font-bold md:text-lg"
                     data-starting-essence-value={dreamcaller.id}
-                  >
-                    {String(dreamcaller.startingEssence)}
-                  </span>
+                  />
                 </div>
               </motion.button>
               {signatureCards.length > 0 && (

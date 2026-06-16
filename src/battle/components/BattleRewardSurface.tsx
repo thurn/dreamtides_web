@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { logEvent, logEventOnce } from "../../logging";
+import { EssenceGlyph } from "../../components/EssenceValue";
 import { buttonVariant, typography } from "../design-tokens";
 
 // L-3 exception (bug-090): this module is a pure UI surface that only knows
@@ -40,10 +41,11 @@ function EssenceCountUp({ target, duration }: { target: number; duration: number
   return (
     <span
       className="text-3xl font-bold tabular-nums md:text-4xl"
-      style={{ color: "var(--color-essence)" }}
+      style={{ color: "var(--color-essence)", whiteSpace: "nowrap" }}
       data-battle-reward-essence-value=""
     >
       +{String(value)}
+      <EssenceGlyph />
     </span>
   );
 }
@@ -211,10 +213,10 @@ export function BattleRewardSurface({
       ) : null}
 
       <motion.div
-        // Essence reward callout: a purple-tinted capsule that wraps
-        // the count-up number. Essence is identified by color across
-        // the prototype, so the callout does not render any currency
-        // glyph alongside the number.
+        // Essence reward callout: a purple-tinted capsule that wraps the
+        // count-up value. The number is glued to the crypto glyph that marks
+        // essence everywhere in the prototype, so the reward reads as a
+        // currency value.
         data-battle-reward-essence-callout=""
         className="mb-6 flex flex-col items-center gap-2 rounded-md px-8 py-3"
         style={{
