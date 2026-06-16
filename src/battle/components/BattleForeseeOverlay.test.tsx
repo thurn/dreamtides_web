@@ -237,8 +237,8 @@ describe("BattleForeseeOverlay", () => {
       container.querySelector(`img[alt="${topCard.definition.name}"]`),
     ).not.toBeNull();
     expect(
-      container.querySelector("[data-battle-foresee-card-scroll]")?.className,
-    ).toContain("max-h-[17rem]");
+      container.querySelector("[data-battle-foresee-card-scroll]"),
+    ).not.toBeNull();
 
     act(() => {
       root.unmount();

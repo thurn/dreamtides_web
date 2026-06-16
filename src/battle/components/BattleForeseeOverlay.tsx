@@ -148,10 +148,11 @@ export function BattleForeseeOverlay({
               id="battle-foresee-title"
               className="mt-2 text-lg font-semibold text-white"
             >
-              Top {String(count)} of {formatSideLabel(side)} Deck
+              Foreseeing {String(count)} {count === 1 ? "card" : "cards"}
             </h3>
             <p className="mt-1 text-sm text-slate-400">
-              Leave on top, send to bottom or void, play from top, or reorder all.
+              Top of {formatSideLabel(side)} deck — leave on top, send to bottom
+              or void, play from top, or reorder all.
             </p>
           </div>
           <div className="flex items-center gap-2">
@@ -168,7 +169,7 @@ export function BattleForeseeOverlay({
                   });
                 }}
               >
-                Reveal Less
+                Foresee 1 Fewer
               </button>
               <button
                 type="button"
@@ -186,7 +187,7 @@ export function BattleForeseeOverlay({
                   });
                 }}
               >
-                Reveal More
+                Foresee 1 More
               </button>
             <button
               type="button"
@@ -217,19 +218,15 @@ export function BattleForeseeOverlay({
                 <article
                   key={battleCardId}
                   data-battle-foresee-card={battleCardId}
-                  className="flex min-w-[18rem] flex-1 flex-col gap-3 rounded-2xl border border-slate-800 bg-slate-900/75 p-3"
+                  className="flex w-[12rem] shrink-0 flex-col gap-3 rounded-2xl border border-slate-800 bg-slate-900/75 p-3"
                 >
                   <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-500">
                     Position {String(index + 1)}
                   </p>
-                  <div
-                    className="max-h-[17rem] max-w-[20rem] overflow-y-auto"
-                    data-battle-foresee-card-scroll=""
-                  >
+                  <div data-battle-foresee-card-scroll="">
                     <CardDisplay
                       card={battleCardDisplayFromInstance(instance)}
                       className="w-full"
-                      large
                     />
                   </div>
                   <div className="mt-1 flex flex-wrap gap-2">
