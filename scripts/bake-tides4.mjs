@@ -303,7 +303,7 @@ const HEADER = `// data/tides4.jsonc — the committed tide decks the \`tides4\`
 // narrative, thematic name) and \`displayDescription\` (a 10-20 word player-facing
 // blurb) for the player-facing tide screens, \`summary\` (one sentence),
 // \`description\` (one paragraph), and \`color\` (one of the five deck colors:
-// purple, green, yellow, blue, red) — which a re-bake preserves by stable tide
+// purple, green, yellow, blue, orange) — which a re-bake preserves by stable tide
 // id.
 // \`tidePoolByDreamcaller\` is keyed by Dreamcaller UUID; each
 // entry has \`starter\` (the always-joined signature tide, or null), \`facets\` (a

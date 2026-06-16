@@ -42,9 +42,9 @@ const TIDE_COLOR_CHIP: Record<
     border: "rgba(96, 165, 250, 0.55)",
     icon: "bx-eye-alt",
   },
-  red: {
-    background: "#5c1417",
-    border: "rgba(248, 113, 113, 0.55)",
+  orange: {
+    background: "#5c2c0f",
+    border: "rgba(251, 146, 60, 0.55)",
     icon: "bx-hot",
   },
 };

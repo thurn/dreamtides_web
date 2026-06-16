@@ -40,7 +40,7 @@ import type { TideDeckCardJson } from "./tides-io.ts";
 export type Tides4Role = "signature" | "facet" | "neutral";
 
 /** The deck color a tide's mechanical identity belongs to. */
-export type Tides4Color = "purple" | "green" | "yellow" | "blue" | "red";
+export type Tides4Color = "purple" | "green" | "yellow" | "blue" | "orange";
 
 /** Every valid {@link Tides4Color}, for validation. */
 export const TIDES4_COLORS: readonly Tides4Color[] = [
@@ -48,7 +48,7 @@ export const TIDES4_COLORS: readonly Tides4Color[] = [
   "green",
   "yellow",
   "blue",
-  "red",
+  "orange",
 ];
 
 /** One preconstructed `tides4` deck. */

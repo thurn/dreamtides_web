@@ -12,7 +12,7 @@ export const TIDE_DOT_COLOR: Record<Tides4Color, string> = {
   green: "#4ade80",
   yellow: "#facc15",
   blue: "#60a5fa",
-  red: "#f87171",
+  orange: "#fb923c",
 };
 
 export interface TidePoolModalProps {
