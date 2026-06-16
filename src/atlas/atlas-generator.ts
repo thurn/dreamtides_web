@@ -623,6 +623,56 @@ export function generateNewNodes(
   };
 }
 
+/**
+ * Chooses which node a progress replay should complete next. Prefers an
+ * `available` node (the live game only ever lets the player enter available
+ * dreamscapes); if none is available yet it falls back to the first
+ * not-yet-completed node so the replay can still advance from the initial
+ * atlas's lone available start. Returns `null` only when every node is already
+ * completed. Iteration order is insertion order, so the choice is deterministic
+ * for a given atlas.
+ */
+function pickReplayCompletionNode(atlas: DreamAtlas): string | null {
+  let fallback: string | null = null;
+  for (const node of Object.values(atlas.nodes)) {
+    if (node.status === "available") {
+      return node.id;
+    }
+    if (node.status !== "completed" && fallback === null) {
+      fallback = node.id;
+    }
+  }
+  return fallback;
+}
+
+/**
+ * Rebuilds an atlas that reflects a player who has completed
+ * `completedDreamscapes` dreamscapes, by replaying the live generation
+ * algorithm rather than restoring a persisted layout. It starts from a fresh
+ * initial atlas at Completion Level 0 and applies one expansion per completed
+ * dreamscape, advancing the Completion Level on each step exactly as a battle
+ * victory does (the first expansion runs at level 1, matching
+ * `battle-completion-bridge`). The result is a brand-new layout whose progress
+ * depth matches the player's place in the run, so a debug "regenerate" picks up
+ * the latest generation logic — including node placement and expansion shape —
+ * without resetting the player to an empty quest.
+ */
+export function regenerateAtlasForProgress(
+  completedDreamscapes: number,
+  context: SiteGenerationContext,
+  options: AtlasGenerationOptions = {},
+): DreamAtlas {
+  let atlas = generateInitialAtlas(0, context, options);
+  for (let completion = 1; completion <= completedDreamscapes; completion++) {
+    const nodeToComplete = pickReplayCompletionNode(atlas);
+    if (nodeToComplete === null) {
+      break;
+    }
+    atlas = generateNewNodes(atlas, nodeToComplete, completion, context);
+  }
+  return atlas;
+}
+
 /** Metadata for each site type: icon, display name, and short description. */
 const SITE_TYPE_META: Record<
   SiteType,

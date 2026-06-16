@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useQuest } from "../state/quest-context";
 import { AtlasNode } from "../components/AtlasNode";
 import {
-  generateInitialAtlas,
+  regenerateAtlasForProgress,
   type SiteGenerationContext,
 } from "../atlas/atlas-generator";
 import { logEvent } from "../logging";
@@ -90,12 +90,14 @@ export function AtlasScreen() {
   }, []);
 
   /**
-   * Debug-only: discard the persisted atlas and rebuild it from scratch with
-   * the current {@link generateInitialAtlas} algorithm at the quest's present
-   * completion level. Lets us iterate on atlas generation and see the result
-   * live without starting a new quest. Because every node ID is reissued, the
-   * current dreamscape is reset to the freshly generated starting node so the
-   * rest of the quest state stays internally consistent.
+   * Debug-only: discard the persisted atlas and rebuild it by replaying the
+   * current {@link regenerateAtlasForProgress} algorithm up to the player's
+   * present progress depth, so the regenerated map still reflects "N
+   * dreamscapes completed" instead of resetting to an empty quest. Lets us
+   * iterate on atlas generation and see the result live without starting a new
+   * quest. Because every node ID is reissued, the current dreamscape is reset
+   * to a freshly generated available node so the rest of the quest state stays
+   * internally consistent.
    */
   const handleDebugRegenerate = useCallback(() => {
     const playerHasBanes =
@@ -108,25 +110,34 @@ export function AtlasScreen() {
         : {}),
     };
     const previousNodeCount = Object.keys(state.atlas.nodes).length;
-    const regenerated = generateInitialAtlas(state.completionLevel, context, {
-      logEvents: true,
-    });
-    const startingNode = Object.values(regenerated.nodes).find(
+    const completedDreamscapes = state.completionLevel;
+    const regenerated = regenerateAtlasForProgress(
+      completedDreamscapes,
+      context,
+      { logEvents: true },
+    );
+    const nextAvailableNode = Object.values(regenerated.nodes).find(
       (node) => node.status === "available",
     );
+    const regeneratedCompletedCount = Object.values(regenerated.nodes).filter(
+      (node) => node.status === "completed",
+    ).length;
 
     logEvent("debug_atlas_regenerated", {
       source: "atlas_debug_refresh",
       completionLevel: state.completionLevel,
+      replayedCompletions: completedDreamscapes,
+      regeneratedCompletedCount,
       playerHasBanes,
       dreamscapeModifierCount: state.dreamscapeModifiers.length,
       previousNodeCount,
       regeneratedNodeCount: Object.keys(regenerated.nodes).length,
       startingNodeId: regenerated.startingNodeId,
+      nextAvailableNodeId: nextAvailableNode?.id ?? null,
     });
 
     mutations.updateAtlas(regenerated);
-    mutations.setCurrentDreamscape(startingNode?.id ?? null);
+    mutations.setCurrentDreamscape(nextAvailableNode?.id ?? null);
   }, [
     state.deck,
     state.dreamsigns,

@@ -4,6 +4,7 @@ import {
   generateSiteComposition,
   generateInitialAtlas,
   generateNewNodes,
+  regenerateAtlasForProgress,
   assignBiome,
   previewSiteTypes,
   revealedAtlasSite,
@@ -853,5 +854,40 @@ describe("rewardPreviewLabel", () => {
       isVisited: false,
     };
     expect(rewardPreviewLabel(site)).toBeNull();
+  });
+});
+
+describe("regenerateAtlasForProgress", () => {
+  function completedCount(atlas: DreamAtlas): number {
+    return Object.values(atlas.nodes).filter(
+      (node) => node.status === "completed",
+    ).length;
+  }
+
+  it("replays one completion per progress step so the depth matches", () => {
+    // Each replayed completion marks exactly one node completed and never
+    // un-completes one, so the completed-node count equals the requested
+    // progress. This is a structural invariant of the replay loop, independent
+    // of biome/site TOML data.
+    for (let progress = 0; progress <= 4; progress++) {
+      const atlas = regenerateAtlasForProgress(progress, defaultContext());
+      expect(completedCount(atlas)).toBe(progress);
+    }
+  });
+
+  it("rebuilds a fresh two-node initial atlas at zero progress", () => {
+    const atlas = regenerateAtlasForProgress(0, defaultContext());
+    expect(Object.keys(atlas.nodes)).toHaveLength(2);
+    expect(completedCount(atlas)).toBe(0);
+  });
+
+  it("always leaves at least one available node to continue from", () => {
+    for (let progress = 1; progress <= 4; progress++) {
+      const atlas = regenerateAtlasForProgress(progress, defaultContext());
+      const available = Object.values(atlas.nodes).filter(
+        (node) => node.status === "available",
+      );
+      expect(available.length).toBeGreaterThanOrEqual(1);
+    }
   });
 });
