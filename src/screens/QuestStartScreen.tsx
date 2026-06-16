@@ -53,7 +53,7 @@ const DREAMCALLER_TAP_TRANSITION = { duration: 0.08, delay: 0 } as const;
 const SIGNATURE_CARDS_LABEL_HOVER_BLURB =
   "These signature cards define this Dreamcaller's strategy and steer the draft pool toward them.";
 const TIDES_LABEL_HOVER_BLURB =
-  "Pools of cards you will see during a quest. Different tides are used every time you play.";
+  "Pools of cards you will see during the quest. Different tides are used every time you play.";
 /** The select screen shows at most this many tides per Dreamcaller. */
 const MAX_TIDES_SHOWN = 4;
 
