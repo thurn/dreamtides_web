@@ -33,6 +33,13 @@ exist.
 Please always identify cards by UUID, *never* by card name. A lot of our
 legacy algorithm code does this and it's a huge nightmare to support.
 
+# Draft Pools
+
+Unless otherwise specified, assume all draft questions are about the "tides4"
+draft pool construction algorithm and that the source data for drafts lives
+in data/tides4.jsonc
+
+
 # Draft Data
 
 The directory docs/draft_records_adapted/ has a high quality set of data about real Dreamtides drafts.
