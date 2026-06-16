@@ -56,7 +56,7 @@ const GROUP_BY_ID: Record<string, number> = {
   "73EFD845-6009-4686-860C-01C7F5B1C074": 7, // Black Feather
   // 8: Challenger ✦ anthem
   "989B55BD-139F-40DC-B1FD-EB2F7B1C091A": 8, // Charm Bracelet
-  "15FD5A22-A786-48E3-99B0-919E810B3EBA": 8, // Oak Leaf
+  "7A37386D-6E7C-4F08-B07F-E92A1FD69893": 8, // Oak Leaf
   "08A3983A-1B95-4D2E-A445-9D8DC2B8FCA7": 8, // Crystal Orb
   "EB6A5C19-26A6-41EF-AC7A-CE1152557B5C": 8, // Egg Nest
   // 9: Random transfiguration on card acquisition
