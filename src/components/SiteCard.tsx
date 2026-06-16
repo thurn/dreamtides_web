@@ -90,9 +90,14 @@ export function SiteCard({
       layout
     >
       {/* Site type icon */}
-      <span className="text-2xl md:text-3xl" style={{ filter: site.isVisited ? "grayscale(1)" : "none" }}>
-        {icon}
-      </span>
+      <i
+        className={`${icon} text-2xl md:text-3xl`}
+        aria-hidden="true"
+        style={{
+          lineHeight: 1,
+          color: site.isVisited ? "#6b7280" : "#e2e8f0",
+        }}
+      />
 
       {/* Site info */}
       <div className="flex flex-1 flex-col gap-0.5">
@@ -107,14 +112,15 @@ export function SiteCard({
           {/* Enhanced indicator */}
           {site.isEnhanced && !site.isVisited && (
             <span
-              className="rounded-full px-2 py-0.5 text-[10px] font-bold md:text-xs"
+              className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold md:text-xs"
               style={{
                 background: `${biomeColor}20`,
                 color: biomeColor,
                 border: `1px solid ${biomeColor}40`,
               }}
             >
-              {"\u2B50"} Enhanced
+              <i className="bxf bx-star" aria-hidden="true" style={{ lineHeight: 1 }} />
+              Enhanced
             </span>
           )}
         </div>
@@ -141,17 +147,18 @@ export function SiteCard({
       {/* Right side: status indicators */}
       <div className="flex items-center">
         {site.isVisited && (
-          <span
-            className="text-lg font-bold md:text-xl"
-            style={{ color: "#10b981" }}
-          >
-            {"\u2713"}
-          </span>
+          <i
+            className="bx bx-check text-lg font-bold md:text-xl"
+            aria-hidden="true"
+            style={{ color: "#10b981", lineHeight: 1 }}
+          />
         )}
         {isLocked && !site.isVisited && (
-          <span className="text-lg opacity-50 md:text-xl">
-            {"\uD83D\uDD12"}
-          </span>
+          <i
+            className="bx bx-lock text-lg opacity-50 md:text-xl"
+            aria-hidden="true"
+            style={{ lineHeight: 1 }}
+          />
         )}
       </div>
 

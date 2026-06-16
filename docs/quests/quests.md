@@ -606,19 +606,36 @@ least one **Completed** dreamscape.
 Each dreamscape displays exactly one site icon on the atlas to preview one site
 contained in that dreamscape. This icon is not a battle or draft site. If the
 dreamscape has an enhanced site, the preview icon is that enhanced site.
-Otherwise, it is the configured preview site for that dreamscape. Winning the
-7th battle causes the player to win the quest.
+Otherwise, it is the configured preview site for that dreamscape. Site icons use
+the Boxicons glyph font (icon names are listed per site in
+[Dreamscape Sites](#dreamscape-sites)). The starting dreamscape is special: it
+shows its own flag glyph rather than a site icon, and hovering any dreamscape
+describes what is special about it — its enhanced property when it has an
+enhanced site. Winning the 7th battle causes the player to win the quest.
 
 ### Dream Atlas Generation
 
-The dream atlas is generated dynamically throughout the quest, with new
-dreamscapes being added as dreamscapes are completed. The new dreamscapes are
-added as 'unavailable' nodes adjacent to the newly 'available' nodes. Between 1
-and 2 nodes are randomly generated and placed in this manner each time a
-dreamscape is completed, creating a web of interconnected nodes. The atlas is
-purely additive and is never pruned; the player will visit 7 dreamscapes in a
-typical quest (or 8 with the battle-skip meta progression unlock). Initial atlas
-topology is configured in TOML.
+The dream atlas is a branching tree that grows outward from the starting
+dreamscape, keeping a two-deep look-ahead so the player can always see their
+immediate choices and where each choice leads. The initial atlas holds the
+starting dreamscape, its two direct children (the first two choices, which are
+guaranteed to show different site icons), and two grandchildren beneath each
+child. Every node but the start begins 'unavailable'.
+
+Completing a dreamscape marks it 'completed' and turns its direct children into
+the newly 'available' choices. Each newly available dreamscape is then topped up
+to two forward branches: a dreamscape that already carries its children (such as
+the initial choices) generates nothing new, while a deeper dreamscape that has
+no children of its own sprouts two onward branches the moment it becomes a live
+choice. New dreamscapes attach only to the newly available nodes, never directly
+to the completed node, so they stay 'unavailable' until their own parent is
+completed.
+
+Every dreamscape is placed in a collision-free slot, fanned around its parent's
+outward direction and kept at least a fixed minimum distance from every other
+dreamscape, so the atlas never renders overlapping nodes. The atlas is purely
+additive and is never pruned; the player will visit 7 dreamscapes in a typical
+quest (or 8 with the battle-skip meta progression unlock).
 
 ## Dreamscape Generation
 

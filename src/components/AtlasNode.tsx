@@ -2,6 +2,8 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import type { DreamscapeNode } from "../types/quest";
 import {
+  STARTING_DREAMSCAPE_ICON_CLASS,
+  enhancedSiteDescription,
   revealedAtlasSite,
   siteTypeDescription,
   siteTypeIcon,
@@ -15,6 +17,52 @@ interface AtlasNodeProps {
   node: DreamscapeNode;
   isStarting: boolean;
   onNodeClick: (nodeId: string) => void;
+}
+
+/** Renders a Boxicons glyph centred at (0, `centerY`) inside the SVG node. */
+function NodeIcon({
+  iconClass,
+  size,
+  centerY,
+  color,
+  opacity,
+}: {
+  iconClass: string;
+  size: number;
+  centerY: number;
+  color: string;
+  opacity: number;
+}) {
+  return (
+    <foreignObject
+      x={-size / 2}
+      y={centerY - size / 2}
+      width={size}
+      height={size}
+      style={{ overflow: "visible", pointerEvents: "none" }}
+    >
+      <div
+        style={{
+          display: "flex",
+          width: `${String(size)}px`,
+          height: `${String(size)}px`,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <i
+          className={iconClass}
+          aria-hidden="true"
+          style={{
+            fontSize: `${String(size)}px`,
+            lineHeight: 1,
+            color,
+            opacity,
+          }}
+        />
+      </div>
+    </foreignObject>
+  );
 }
 
 /** Renders a single node on the Dream Atlas graph. */
@@ -56,19 +104,40 @@ export function AtlasNode({ node, isStarting, onNodeClick }: AtlasNodeProps) {
     strokeColor = "#6b7280";
   }
 
-  // The one site we reveal inside the dreamscape circle. The Battle site is
-  // intentionally never revealed — the player should know a battle is coming
-  // but not always know what surrounds it. The remaining sites (including
-  // Battle) show as "?" placeholders in the hover popover.
+  // The single site revealed inside the dreamscape circle. The starting
+  // dreamscape instead shows its own flag glyph, because it is special: it is
+  // where the run begins and never carries an enhanced site. The Battle site is
+  // intentionally never revealed elsewhere — the player should know a battle is
+  // coming but not always know what surrounds it.
   const revealedSite = revealedAtlasSite(node);
-  const hiddenSiteCount = revealedSite
-    ? Math.max(node.sites.length - 1, 0)
-    : node.sites.length;
+  const iconClass = isStarting
+    ? STARTING_DREAMSCAPE_ICON_CLASS
+    : revealedSite
+      ? siteTypeIcon(revealedSite.type)
+      : null;
+  const iconColor = isCompleted ? "#94a3b8" : "#f8fafc";
 
-  // Tooltip dimensions
-  const tooltipWidth = 240;
-  const tooltipHeight = isStarting ? 104 : 88;
-  const tooltipOffsetY = radius + 12;
+  // Tooltip: describe what is special about this dreamscape (its enhanced
+  // property) on hover.
+  const enhancedSite = revealedSite?.isEnhanced ? revealedSite : null;
+  const tooltipTitle = isStarting
+    ? "Starting Dreamscape"
+    : enhancedSite
+      ? `Enhanced ${siteTypeName(enhancedSite.type)}`
+      : revealedSite
+        ? siteTypeName(revealedSite.type)
+        : node.biomeName;
+  const tooltipDescription = isStarting
+    ? "Where your journey began. No enhanced site."
+    : enhancedSite
+      ? enhancedSiteDescription(enhancedSite.type)
+      : revealedSite
+        ? siteTypeDescription(revealedSite.type)
+        : "";
+
+  const tooltipWidth = 230;
+  const tooltipHeight = 92;
+  const tooltipOffsetY = radius + 14;
 
   const ariaLabel = `${node.biomeName} dreamscape - ${node.status}${
     isStarting ? " - starting dreamscape" : ""
@@ -137,35 +206,28 @@ export function AtlasNode({ node, isStarting, onNodeClick }: AtlasNodeProps) {
         strokeWidth={isStarting ? 3 : 2}
       />
 
-      {/* Revealed site icon centered inside the dreamscape circle. Completed
-          nodes overlay the checkmark on top, but we still show the icon as a
+      {/* Revealed site (or starting flag) icon centred in the dreamscape circle.
+          Completed nodes overlay the checkmark on top, but the icon stays as a
           dim reminder of what the dreamscape contained. */}
-      {revealedSite && (
-        <text
-          x={0}
-          y={radius * 0.28}
-          textAnchor="middle"
-          fontSize={radius * 0.95}
-          opacity={isCompleted ? 0.35 : 1}
-          style={{ pointerEvents: "none" }}
-        >
-          {siteTypeIcon(revealedSite.type)}
-        </text>
+      {iconClass !== null && (
+        <NodeIcon
+          iconClass={iconClass}
+          size={radius * 1.0}
+          centerY={isCompleted ? -radius * 0.34 : 0}
+          color={iconColor}
+          opacity={isCompleted ? 0.5 : 1}
+        />
       )}
 
       {/* Checkmark for completed nodes */}
       {isCompleted && (
-        <text
-          x={0}
-          y={4}
-          textAnchor="middle"
-          fill="#10b981"
-          fontSize={radius * 0.8}
-          fontWeight="bold"
-          style={{ pointerEvents: "none" }}
-        >
-          {"✓"}
-        </text>
+        <NodeIcon
+          iconClass="bx bx-check"
+          size={radius * 0.9}
+          centerY={radius * 0.34}
+          color="#10b981"
+          opacity={1}
+        />
       )}
 
       {/* Biome name (with starting marker) below the node */}
@@ -196,81 +258,74 @@ export function AtlasNode({ node, isStarting, onNodeClick }: AtlasNodeProps) {
         </text>
       )}
 
-      {/* Hover tooltip */}
-      {isHovered && (isAvailable || isCompleted) && revealedSite && (
-        <g transform={`translate(0, ${String(tooltipOffsetY)})`}>
-          <rect
-            x={-tooltipWidth / 2}
-            y={0}
-            width={tooltipWidth}
-            height={tooltipHeight}
-            rx={8}
-            fill="#1a1025"
-            stroke={node.biomeColor}
-            strokeWidth={1}
-            opacity={0.95}
-          />
-          {/* Biome name in tooltip */}
-          <text
-            x={0}
-            y={16}
-            textAnchor="middle"
-            fill={node.biomeColor}
-            fontSize={11}
-            fontWeight="bold"
+      {/* Hover tooltip describing this dreamscape's enhanced property. */}
+      {isHovered && (isAvailable || isCompleted) && (
+        <foreignObject
+          x={-tooltipWidth / 2}
+          y={tooltipOffsetY}
+          width={tooltipWidth}
+          height={tooltipHeight}
+          style={{ overflow: "visible", pointerEvents: "none" }}
+        >
+          <div
+            style={{
+              boxSizing: "border-box",
+              width: `${String(tooltipWidth)}px`,
+              padding: "8px 12px",
+              borderRadius: "8px",
+              background: "#1a1025",
+              border: `1px solid ${node.biomeColor}`,
+              color: "#e2e8f0",
+              display: "flex",
+              flexDirection: "column",
+              gap: "3px",
+              textAlign: "center",
+            }}
           >
-            {node.biomeName}
-          </text>
-          {/* Revealed site name */}
-          <text
-            x={0}
-            y={34}
-            textAnchor="middle"
-            fill="#e2e8f0"
-            fontSize={11}
-            fontWeight="bold"
-          >
-            {siteTypeIcon(revealedSite.type)} {siteTypeName(revealedSite.type)}
-            {revealedSite.isEnhanced ? " ★" : ""}
-          </text>
-          {/* Revealed site description */}
-          <text
-            x={0}
-            y={50}
-            textAnchor="middle"
-            fill="#cbd5e1"
-            fontSize={9}
-            opacity={0.85}
-          >
-            {siteTypeDescription(revealedSite.type)}
-          </text>
-          {/* "?" placeholders for the remaining hidden sites */}
-          {hiddenSiteCount > 0 && (
-            <text
-              x={0}
-              y={72}
-              textAnchor="middle"
-              fill="#94a3b8"
-              fontSize={11}
-              letterSpacing={4}
+            <div
+              style={{
+                color: node.biomeColor,
+                fontSize: "11px",
+                fontWeight: 700,
+              }}
             >
-              {Array.from({ length: hiddenSiteCount }, () => "?").join(" ")}
-            </text>
-          )}
-          {isStarting && (
-            <text
-              x={0}
-              y={tooltipHeight - 10}
-              textAnchor="middle"
-              fill="#a855f7"
-              fontSize={9}
-              fontWeight="bold"
-              letterSpacing={1.5}
+              {node.biomeName}
+            </div>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "6px",
+                fontSize: "11px",
+                fontWeight: 700,
+              }}
             >
-              YOUR STARTING DREAMSCAPE
-            </text>
-          )}
-        </g>
+              <i
+                className={iconClass ?? STARTING_DREAMSCAPE_ICON_CLASS}
+                aria-hidden="true"
+                style={{ fontSize: "14px", lineHeight: 1 }}
+              />
+              <span>{tooltipTitle}</span>
+            </div>
+            <div style={{ fontSize: "9px", color: "#cbd5e1", opacity: 0.9 }}>
+              {tooltipDescription}
+            </div>
+            {isStarting && (
+              <div
+                style={{
+                  marginTop: "2px",
+                  color: "#a855f7",
+                  fontSize: "9px",
+                  fontWeight: 700,
+                  letterSpacing: "1.5px",
+                }}
+              >
+                YOUR STARTING DREAMSCAPE
+              </div>
+            )}
+          </div>
+        </foreignObject>
       )}
     </g>
   );

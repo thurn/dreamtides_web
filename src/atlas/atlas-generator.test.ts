@@ -11,6 +11,7 @@ import {
   rewardPreviewLabel,
   resetAtlasGenerator,
   siteTypeDescription,
+  siteTypeIcon,
   type SiteGenerationContext,
 } from "./atlas-generator";
 import type { DreamAtlas, DreamscapeNode, SiteState, SiteType } from "../types/quest";
@@ -404,11 +405,22 @@ describe("generateSiteComposition", () => {
 });
 
 describe("generateInitialAtlas", () => {
-  it("creates exactly 2 dreamscape nodes", () => {
+  /** Direct neighbours of `nodeId` via the atlas edge list. */
+  function neighborIds(atlas: DreamAtlas, nodeId: string): string[] {
+    const result = new Set<string>();
+    for (const [a, b] of atlas.edges) {
+      if (a === nodeId) result.add(b);
+      if (b === nodeId) result.add(a);
+    }
+    return [...result];
+  }
+
+  it("creates a two-deep binary tree: start plus 2 children plus 4 grandchildren", () => {
     for (let i = 0; i < 20; i++) {
       const atlas = generateInitialAtlas(0, defaultContext());
       const nodeCount = Object.keys(atlas.nodes).length;
-      expect(nodeCount).toBe(2);
+      // 1 starting + 2 children + (2 grandchildren per child) = 7.
+      expect(nodeCount).toBe(7);
     }
   });
 
@@ -420,7 +432,7 @@ describe("generateInitialAtlas", () => {
     expect(starting.position.y).toBe(0);
   });
 
-  it("marks only the starting dreamscape available; the second begins unavailable", () => {
+  it("marks only the starting dreamscape available; every other node begins unavailable", () => {
     const atlas = generateInitialAtlas(0, defaultContext());
     for (const [id, node] of Object.entries(atlas.nodes)) {
       if (id === atlas.startingNodeId) {
@@ -431,19 +443,60 @@ describe("generateInitialAtlas", () => {
     }
   });
 
-  it("connects the starting dreamscape directly to the other starting dreamscape", () => {
+  it("connects the starting dreamscape to exactly 2 children, each leading to 2 more", () => {
     const atlas = generateInitialAtlas(0, defaultContext());
-    const otherIds = Object.keys(atlas.nodes).filter(
-      (id) => id !== atlas.startingNodeId,
-    );
-    expect(otherIds).toHaveLength(1);
-    for (const nodeId of otherIds) {
-      const hasEdge = atlas.edges.some(
-        ([a, b]) =>
-          (a === atlas.startingNodeId && b === nodeId) ||
-          (b === atlas.startingNodeId && a === nodeId),
+    const children = neighborIds(atlas, atlas.startingNodeId);
+    expect(children).toHaveLength(2);
+
+    for (const childId of children) {
+      // A child's neighbours are the start plus its own 2 grandchildren.
+      const childNeighbors = neighborIds(atlas, childId).filter(
+        (id) => id !== atlas.startingNodeId,
       );
-      expect(hasEdge).toBe(true);
+      expect(childNeighbors).toHaveLength(2);
+      // Grandchildren are not directly connected to the start.
+      for (const grandId of childNeighbors) {
+        expect(neighborIds(atlas, grandId)).not.toContain(
+          atlas.startingNodeId,
+        );
+      }
+    }
+  });
+
+  it("gives the two starting choices distinct revealed atlas icons", () => {
+    for (let i = 0; i < 50; i++) {
+      const atlas = generateInitialAtlas(0, defaultContext(), {
+        logEvents: false,
+      });
+      const children = neighborIds(atlas, atlas.startingNodeId).map(
+        (id) => atlas.nodes[id],
+      );
+      expect(children).toHaveLength(2);
+      const icons = children.map((child) => {
+        const revealed = revealedAtlasSite(child);
+        return revealed === null ? null : siteTypeIcon(revealed.type);
+      });
+      expect(icons[0]).not.toBeNull();
+      expect(icons[0]).not.toBe(icons[1]);
+    }
+  });
+
+  it("never places two dreamscapes on top of each other", () => {
+    for (let i = 0; i < 30; i++) {
+      const atlas = generateInitialAtlas(0, defaultContext(), {
+        logEvents: false,
+      });
+      const positions = Object.values(atlas.nodes).map((n) => n.position);
+      for (let a = 0; a < positions.length; a++) {
+        for (let b = a + 1; b < positions.length; b++) {
+          const dx = positions[a].x - positions[b].x;
+          const dy = positions[a].y - positions[b].y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          // Nodes render at radius ~28-34; a comfortable floor well above any
+          // visual overlap.
+          expect(dist).toBeGreaterThan(80);
+        }
+      }
     }
   });
 
@@ -455,15 +508,19 @@ describe("generateInitialAtlas", () => {
     }
   });
 
-  it("positions the non-starting dreamscape at the base radius distance from the origin", () => {
+  it("positions the starting dreamscape's direct children at the base radius", () => {
     const atlas = generateInitialAtlas(0, defaultContext());
-    for (const [id, node] of Object.entries(atlas.nodes)) {
-      if (id === atlas.startingNodeId) continue;
+    const children = neighborIds(atlas, atlas.startingNodeId);
+    for (const childId of children) {
+      const node = atlas.nodes[childId];
       const dist = Math.sqrt(
         node.position.x * node.position.x +
           node.position.y * node.position.y,
       );
-      expect(dist).toBeCloseTo(200, 0);
+      // Children sit near the base radius; the free-slot search may nudge them
+      // outward to avoid overlap, so allow generous slack above 200.
+      expect(dist).toBeGreaterThanOrEqual(180);
+      expect(dist).toBeLessThan(420);
     }
   });
 
@@ -501,7 +558,7 @@ describe("generateNewNodes", () => {
     );
   }
 
-  it("generates 1-2 new nodes after a dreamscape is completed", () => {
+  it("adds no new nodes when completing the start, since its children already exist", () => {
     for (let i = 0; i < 40; i++) {
       const atlas = generateInitialAtlas(0, defaultContext());
       const updated = generateNewNodes(
@@ -510,14 +567,15 @@ describe("generateNewNodes", () => {
         0,
         defaultContext(),
       );
+      // The two starting choices already carry their grandchildren, so the
+      // two-deep look-ahead is satisfied without generating anything new.
       const newNodeCount =
         Object.keys(updated.nodes).length - Object.keys(atlas.nodes).length;
-      expect(newNodeCount).toBeGreaterThanOrEqual(1);
-      expect(newNodeCount).toBeLessThanOrEqual(2);
+      expect(newNodeCount).toBe(0);
     }
   });
 
-  it("makes the completed node's neighbour available; new nodes stay unavailable", () => {
+  it("makes both starting choices available when the start is completed", () => {
     const atlas = generateInitialAtlas(0, defaultContext());
     const updated = generateNewNodes(
       atlas,
@@ -528,11 +586,55 @@ describe("generateNewNodes", () => {
     const availableNodes = Object.values(updated.nodes).filter(
       (node) => node.status === "available",
     );
-    // Only the second initial dreamscape (adjacent to the completed starting
-    // node) is available; the new dreamscapes attach to it and stay
-    // unavailable.
-    expect(availableNodes).toHaveLength(1);
-    expect(availableNodes[0].id).not.toBe(atlas.startingNodeId);
+    // Both dreamscapes adjacent to the completed start become available; the
+    // grandchildren stay unavailable.
+    expect(availableNodes).toHaveLength(2);
+    for (const node of availableNodes) {
+      expect(node.id).not.toBe(atlas.startingNodeId);
+    }
+  });
+
+  it("tops up a newly-available dreamscape to 2 forward branches", () => {
+    // Complete the start so the two choices become available, then complete one
+    // of those choices: its grandchildren become available and must each sprout
+    // their own 2 onward branches.
+    const atlas = generateInitialAtlas(0, defaultContext());
+    const afterStart = generateNewNodes(
+      atlas,
+      atlas.startingNodeId,
+      1,
+      defaultContext(),
+    );
+    const choice = Object.values(afterStart.nodes).find(
+      (node) => node.status === "available",
+    );
+    expect(choice).toBeDefined();
+    if (!choice) return;
+
+    const afterChoice = generateNewNodes(
+      afterStart,
+      choice.id,
+      2,
+      defaultContext(),
+    );
+
+    const newlyAvailable = Object.values(afterChoice.nodes).filter(
+      (node) =>
+        node.status === "available" &&
+        afterChoice.edges.some(
+          ([a, b]) =>
+            (a === node.id && b === choice.id) ||
+            (b === node.id && a === choice.id),
+        ),
+    );
+    expect(newlyAvailable.length).toBeGreaterThanOrEqual(1);
+    for (const node of newlyAvailable) {
+      const forwardBranches = afterChoice.edges.filter(([a, b]) => {
+        const other = a === node.id ? b : b === node.id ? a : null;
+        return other !== null && afterChoice.nodes[other].status !== "completed";
+      });
+      expect(forwardBranches.length).toBe(2);
+    }
   });
 
   it("marks the completed node as completed", () => {
@@ -547,16 +649,31 @@ describe("generateNewNodes", () => {
   });
 
   it("derives expansion ids from the persisted atlas after generator state resets", () => {
+    // Completing the start only promotes its pre-built children; completing one
+    // of those children is what grows the atlas, so drive the expansion that
+    // actually allocates new ids.
     const atlas = generateInitialAtlas(0, defaultContext());
-    const originalNodeIds = Object.keys(atlas.nodes);
-    const originalSiteIds = allSiteIds(atlas);
+    const afterStart = generateNewNodes(
+      atlas,
+      atlas.startingNodeId,
+      1,
+      defaultContext(),
+    );
+    const choice = Object.values(afterStart.nodes).find(
+      (node) => node.status === "available",
+    );
+    expect(choice).toBeDefined();
+    if (!choice) return;
+
+    const originalNodeIds = Object.keys(afterStart.nodes);
+    const originalSiteIds = allSiteIds(afterStart);
 
     resetAtlasGenerator();
 
     const updated = generateNewNodes(
-      atlas,
-      atlas.startingNodeId,
-      0,
+      afterStart,
+      choice.id,
+      2,
       defaultContext(),
     );
     const updatedNodeIds = Object.keys(updated.nodes);
@@ -565,7 +682,7 @@ describe("generateNewNodes", () => {
     expect(updatedNodeIds.length).toBeGreaterThan(originalNodeIds.length);
     expect(new Set(updatedNodeIds).size).toBe(updatedNodeIds.length);
     expect(new Set(updatedSiteIds).size).toBe(updatedSiteIds.length);
-    expect(updated.nodes[atlas.startingNodeId].status).toBe("completed");
+    expect(updated.nodes[choice.id].status).toBe("completed");
     for (const nodeId of originalNodeIds) {
       expect(updated.nodes[nodeId]).toBeDefined();
     }
@@ -810,28 +927,44 @@ describe("revealedAtlasSite", () => {
   });
 });
 
+const ALL_SITE_TYPES: SiteType[] = [
+  "Battle",
+  "Draft",
+  "Shop",
+  "SpecialtyShop",
+  "DreamsignOffering",
+  "DreamsignDraft",
+  "DreamJourney",
+  "Purge",
+  "Essence",
+  "Transfiguration",
+  "Duplication",
+  "Reward",
+  "Cleanse",
+];
+
 describe("siteTypeDescription", () => {
   it("returns a non-empty string for every site type", () => {
-    const types: SiteType[] = [
-      "Battle",
-      "Draft",
-      "Shop",
-      "SpecialtyShop",
-      "DreamsignOffering",
-      "DreamsignDraft",
-      "DreamJourney",
-      "Purge",
-      "Essence",
-      "Transfiguration",
-      "Duplication",
-      "Reward",
-      "Cleanse",
-    ];
-    for (const t of types) {
+    for (const t of ALL_SITE_TYPES) {
       const desc = siteTypeDescription(t);
       expect(typeof desc).toBe("string");
       expect(desc.length).toBeGreaterThan(0);
     }
+  });
+});
+
+describe("siteTypeIcon", () => {
+  it("returns a Boxicons class name (not an emoji) for every site type", () => {
+    for (const t of ALL_SITE_TYPES) {
+      const icon = siteTypeIcon(t);
+      // Boxicons classes start with the `bx` base class and a `bx-` glyph.
+      expect(icon).toMatch(/^bx bx-[a-z0-9-]+$/);
+    }
+  });
+
+  it("assigns a distinct icon to every site type", () => {
+    const icons = ALL_SITE_TYPES.map((t) => siteTypeIcon(t));
+    expect(new Set(icons).size).toBe(icons.length);
   });
 });
 
@@ -875,9 +1008,11 @@ describe("regenerateAtlasForProgress", () => {
     }
   });
 
-  it("rebuilds a fresh two-node initial atlas at zero progress", () => {
+  it("rebuilds a fresh initial-tree atlas at zero progress", () => {
     const atlas = regenerateAtlasForProgress(0, defaultContext());
-    expect(Object.keys(atlas.nodes)).toHaveLength(2);
+    // The fresh initial atlas is the two-deep tree: start + 2 children + 4
+    // grandchildren.
+    expect(Object.keys(atlas.nodes)).toHaveLength(7);
     expect(completedCount(atlas)).toBe(0);
   });
 
