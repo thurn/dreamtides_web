@@ -162,15 +162,16 @@ describe("grant family — fit_card_grant", () => {
     expect(fitCardGrantBuilder.eligible(big)).toBe(true);
   });
 
-  it("marks draft-pool membership per candidate in the trace", () => {
+  it("restricts candidates to the resolved draft pool", () => {
     const pool = makePoolCards(10);
     const deckEntries = Array.from({ length: MERCHANT_TUNING.minDeckForFit }, (_, i) => ({
       entryId: `d${String(i)}`,
       cardNumber: 100 + i,
     }));
     // Cards 100-105 are owned (in deck), so the grant candidates are 106-109.
-    // Put 106/107 in the draft pool and leave 108/109 out; the grant pool is not
-    // pool-restricted, so the trace must distinguish the two classes.
+    // Put 106/107 in the draft pool and leave 108/109 out: the grant pool is
+    // restricted to the draft pool, so 108/109 must never be offered and every
+    // surfaced candidate must be a draft-pool card.
     const inPoolNumbers = [100, 101, 102, 103, 104, 105, 106, 107];
     const context = makeContext({
       poolCards: pool,
@@ -182,14 +183,14 @@ describe("grant family — fit_card_grant", () => {
     const traceCandidates = draft?.trace?.candidates ?? [];
     expect(traceCandidates.length).toBeGreaterThan(0);
     const inPoolUuids = new Set(inPoolNumbers.map((n) => uuid(n)));
+    const outOfPoolUuids = new Set([uuid(108), uuid(109)]);
     for (const candidate of traceCandidates) {
-      expect(candidate.inDraftPool).toBe(
-        inPoolUuids.has(candidate.cardUuid ?? ""),
-      );
+      expect(inPoolUuids.has(candidate.cardUuid ?? "")).toBe(true);
+      expect(outOfPoolUuids.has(candidate.cardUuid ?? "")).toBe(false);
+      expect(candidate.inDraftPool).toBe(true);
     }
-    // Both classes are represented so the assertion is meaningful.
-    expect(traceCandidates.some((c) => c.inDraftPool === true)).toBe(true);
-    expect(traceCandidates.some((c) => c.inDraftPool === false)).toBe(true);
+    // The granted card itself is drawn from the draft pool.
+    expect(inPoolUuids.has(draft?.targetKey ?? "")).toBe(true);
   });
 });
 

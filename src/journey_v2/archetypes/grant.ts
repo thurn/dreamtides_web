@@ -96,15 +96,25 @@ function catalogGameObject(card: MerchantCatalogCard): MerchantCatalogCard {
 }
 
 /**
- * The shared grant candidate pool: non-starter pool cards
- * (`candidateGrantCards`) that the player does not already own.
+ * The shared grant candidate pool: non-starter cards from the player's resolved
+ * draft pool — the cards they could actually draft this game — that they do not
+ * already own. Every grant archetype draws from here, so restricting it to the
+ * draft pool keeps every grant offer (single grants, choosers, copies, bundles,
+ * transfigured drafts) inside the pool the player is drafting from.
+ *
+ * When no draft pool has been resolved yet (`draftPoolCardUuids` empty, e.g.
+ * before a package is chosen) there is nothing to intersect against, so we fall
+ * back to the full unowned catalog rather than offering nothing at all.
  */
 export function grantCandidatePool(
   context: MerchantContext,
 ): readonly MerchantCatalogCard[] {
-  return context.candidateGrantCards.filter(
+  const draftPool = context.draftPoolCardUuids;
+  const unowned = context.candidateGrantCards.filter(
     (card) => !context.ownedCardUuids.has(card.cardUuid),
   );
+  if (draftPool.size === 0) return unowned;
+  return unowned.filter((card) => draftPool.has(card.cardUuid));
 }
 
 /** Min-max normalize a list of numbers to [0, 1]; constant input maps to 0. */
