@@ -1027,6 +1027,14 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* Crop the ~21/280 (7.5%) watermark/letterbox strip off the source bottom,
+     matching CardView's ART_SOURCE_BOTTOM_CROP, then scale the clipped image up
+     from the top so it refills the art box. Without this the dark strip shows
+     along the bottom edge of battle cards (most visible on full-bleed figment
+     art); the scale keeps the box covered so the clip leaves no gap. */
+  clip-path: inset(0 0 7.5% 0);
+  transform: scale(1.0811);
+  transform-origin: top center;
 }
 
 .battle-card .c-art-overlay {
