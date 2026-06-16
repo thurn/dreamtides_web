@@ -1033,155 +1033,167 @@ id = "1C505034-E405-495D-8418-6E3C06D974F0"
 name = "Sea Urchin"
 image_name = "sea_urchin.png"
 rendered-text = "While you have at least 300 essence, Draft picks show 1 additional card."
-tags = ["J16"]
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "427C71E3-178F-4352-8D6F-F0789CB13C2D"
 name = "Carved Stick"
 image_name = "stick.png"
-rendered-text = "When you win a battle, gain 10 essence for each of your characters that was dissolved during that battle."
-tags = ["J16"]
+rendered-text = "When you dissolve or banish an enemy character, gain 10 essence."
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "2DCF92BF-93B3-400C-AB97-69D3098F8868"
 name = "Wing"
 image_name = "wing.png"
-rendered-text = "When you draft cards, see an additional choice."
-tags = ["J16"]
+rendered-text = "Draft choices show an additional card."
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "E377C3ED-16F5-4424-A9F1-73F9750ACE9F"
 name = "Tortoise Shell"
 image_name = "White tortoise shell.png"
-rendered-text = "Cards in your deck cannot be purged. Draft sites show 1 additional card."
-tags = ["J16"]
+rendered-text = '''
+Cards in your deck cannot be purged.
+
+Draft choices show an additional card.'''
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "71F77DD5-3BB5-4987-80F4-13DC69F74E6B"
 name = "Scorpion"
 image_name = "scorpion.png"
 rendered-text = "Before each battle, if you have more than 30 cards in your deck, you may purge cards of your choice while remaining at or above 30 cards."
-tags = ["J16"]
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "D78864DA-EB31-4F25-9D51-94FCA7ECF810"
 name = "Tongue"
 image_name = "tongue.png"
-rendered-text = "After you draw your opening hand, you may discard any number of cards, then draw that many."
-tags = ["J16"]
+rendered-text = "After you draw your opening hand, you may discard any number of cards, then draw that many cards."
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "1328E611-FA2F-426F-87E2-97F26C061866"
 name = "Paired Teeth"
 image_name = "teeaths.png"
 rendered-text = "When you gain this dreamsign, you may purge up to 4 starter cards from your deck."
-tags = ["J16"]
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "069C6E8F-4F41-4F13-9EC9-2009B4186E3B"
 name = "Spotted Mug"
 image_name = "tea.png"
 tides = ["event_chain", "event_setup", "card_flow", "finishers"]
-rendered-text = "When you gain this dreamsign, pick an event card in your deck. That card is always in your opening hand."
-tags = ["J16"]
+rendered-text = '''
+When you gain this dreamsign, pick an event card in your deck.
+
+That card is always in your opening hand.'''
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "8E2D26A8-FF39-48A4-A30E-434479C4675F"
 name = "Toad"
 image_name = "toad.png"
 tides = ["survivor_dissolve", "character_curve", "defensive_curve"]
-rendered-text = "Character cards in your deck are survivors in addition to their other subtypes."
-tags = ["J16"]
+rendered-text = '''
+When you gain this dreamsign, pick a character type.
+
+Character cards in your deck are that character type.'''
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "108841CE-4FEB-4C73-972E-0277C727C63E"
 name = "Slug"
 image_name = "slug.png"
-rendered-text = "After each battle, you may purge a card from your deck."
-tags = ["J16"]
+rendered-text = "After each battle, you may purge up to 2 cards from your deck."
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "025CE7F1-066B-480A-8A2F-364379890ABD"
 name = "Spider"
 image_name = "spider.png"
 rendered-text = "After each battle, you may duplicate a card in your deck."
-tags = ["J16"]
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "452B7CD6-9DC3-48A8-B9AA-412CA6DD5F19"
 name = "Green Slime"
 image_name = "speaces.png"
-rendered-text = "Instead of receiving Battle Reward cards, choose a card in your deck and duplicate it."
-tags = ["J16"]
+rendered-text = "After each battle, you may apply random transfigurations to up to 3 cards in your deck."
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "DA7E4B45-9106-4116-BC1C-3AEC8885396B"
 name = "Spiral Shell"
 image_name = "shell 2.png"
 rendered-text = "At Duplication sites, you always add 4 copies of the selected card to your deck."
-tags = ["J16"]
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "7E8C86CC-788F-4648-BE84-E0935C40C31E"
 name = "Red Cheese"
 image_name = "red_cheese.png"
-rendered-text = "After winning a battle, you are offered a Dreamsign Draft instead of the battle reward pick."
-tags = ["J16"]
+rendered-text = "After each battle, pick 1 of 3 dreamsigns to gain."
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "CD81A49D-DF58-4E0E-B1B2-33A82B386052"
 name = "Rosemary"
 image_name = "rosemary.png"
-rendered-text = "Dreamsign Offering and Dreamsign Draft sites are enhanced."
-tags = ["J16"]
+rendered-text = "Dreamsign and Dreamsign Draft sites are enchanced."
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "58472AD2-88B1-4DC7-A161-C6DEA7D8C43D"
 name = "Red Shard"
 image_name = "stone-red.png"
 rendered-text = "In each dreamscape, 1 additional site is enhanced."
-tags = ["J16"]
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "3C0CED1A-7A2A-4F18-9AB4-5D6055D1DC59"
 name = "Curled Tail"
 image_name = "tall.png"
-rendered-text = "Your dream journey effects apply twice, if able."
-tags = ["J16"]
+rendered-text = "You may reroll Dream Journey sites once to present new options."
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "0DF9D72C-58EA-42A0-A72A-CBC540A1836A"
 name = "Voodoo Doll"
 image_name = "vudu_doll.png"
 rendered-text = "When you gain this dreamsign, choose another dreamsign you own. This dreamsign becomes a copy of it."
-tags = ["J16"]
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "31DF4C62-6AB2-47F2-A4FF-C32B8E554B3B"
 name = "Raven Skull"
 image_name = "raven_skull.png"
 rendered-text = "Bane cards cannot be added to your deck."
-tags = ["J16"]
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "EB55B141-82F8-4BA4-B319-420F762E9EE4"
 name = "Strange Fruit"
 image_name = "strange_fruit.png"
-rendered-text = "When you gain a Bane, gain 100 essence."
-tags = ["J16"]
+rendered-text = "When an allied character dissolves an enemy during a challenge, gain 10 essence."
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "1CD25B9A-B176-4C51-8349-BB4DF35CBF05"
 name = "Twisted Herbs"
 image_name = "twisting_herbs.png"
 tides = ["big_energy", "cost_reduction", "finishers"]
-rendered-text = "When you gain this dreamsign, add 2 Bane cards to your deck. ≥4● cost cards cost you 1● less."
-tags = ["J16"]
+rendered-text = '''
+When you gain this dreamsign, add 5 Nightmare cards to your deck.
+
+Allied characters have +1✦.'''
+tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "B8590328-CA72-4869-A795-C7F4B6802BED"
 name = "Antler"
 image_name = "horns.png"
 tides = ["discard_velocity", "hand_cycling", "card_flow", "discard_outlets", "event_chain"]
-rendered-text = "Draw 2 additional cards during your Draw phase. At the end of each turn, discard your hand."
-tags = ["J16"]
+rendered-text = "Draw two additional cards during your Draw phase. At the end of each turn, discard your hand."
+tags = ["J16", "Tag OK"]
