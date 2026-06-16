@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } fro
 import type { Database, Unsubscribe } from "firebase/database";
 import { clearLogContext, setLogContext } from "../logging";
 import type { DatabaseMode } from "../runtime/runtime-config";
+import { listSavedQuests, type SavedQuestSummary } from "../state/saved-quests";
 import { generateRoomId } from "./room-id";
 import {
   connectedClientCount,
@@ -238,6 +239,7 @@ export function MultiplayerRoomGate({
   if (gateState.status === "create") {
     return (
       <RoomShell subtitle="Quest Multiplayer">
+        <LoadQuestMenu />
         <CreateGameButton onClick={() => void handleCreateGame()} label="Create Game" />
       </RoomShell>
     );
@@ -317,6 +319,142 @@ function CreateGameButton({
       {label}
     </button>
   );
+}
+
+/**
+ * Debug control pinned to the top-right of the "Create Game" screen. Lists the
+ * developer's named quest saves (served by the dev server's
+ * `/api/saved-quests` endpoint) and, on selection, navigates to
+ * `?loadQuest=<name>` — the existing boot flow auto-creates a room and replaces
+ * its state with the saved snapshot, dropping the player straight into the run.
+ */
+function LoadQuestMenu(): ReactNode {
+  const [open, setOpen] = useState(false);
+  const [status, setStatus] = useState<"idle" | "loading" | "ready" | "error">(
+    "idle",
+  );
+  const [saves, setSaves] = useState<SavedQuestSummary[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  const refresh = useCallback(() => {
+    setStatus("loading");
+    setError(null);
+    void listSavedQuests()
+      .then((entries) => {
+        setSaves(entries);
+        setStatus("ready");
+      })
+      .catch((caught: unknown) => {
+        setError(
+          caught instanceof Error ? caught.message : "Failed to list saved quests.",
+        );
+        setStatus("error");
+      });
+  }, []);
+
+  // Fetch the list the first time the menu is opened so the create screen does
+  // not hit the dev server on every boot.
+  const handleToggle = useCallback(() => {
+    setOpen((prev) => {
+      const next = !prev;
+      if (next && status === "idle") {
+        refresh();
+      }
+      return next;
+    });
+  }, [refresh, status]);
+
+  const handleSelect = useCallback((name: string) => {
+    const nextUrl = new URL(window.location.href);
+    nextUrl.searchParams.delete("game");
+    nextUrl.searchParams.set("loadQuest", name);
+    // Full navigation so the runtime config re-parses `?loadQuest=` on boot and
+    // the auto-create + load flow runs.
+    window.location.assign(
+      `${nextUrl.pathname}${nextUrl.search}${nextUrl.hash}`,
+    );
+  }, []);
+
+  return (
+    <div className="fixed top-3 right-3 z-50 text-left">
+      <button
+        data-load-quest-menu="true"
+        type="button"
+        onClick={handleToggle}
+        className="cursor-pointer rounded-lg px-3 py-2 text-sm font-medium transition-colors"
+        style={{
+          background: "rgba(30, 18, 48, 0.85)",
+          color: "#e2e8f0",
+          border: "1px solid rgba(124, 58, 237, 0.5)",
+        }}
+      >
+        Load Quest {open ? "▴" : "▾"}
+      </button>
+      {open && (
+        <div
+          className="mt-2 max-h-[60vh] w-64 overflow-auto rounded-lg p-1 shadow-xl"
+          style={{
+            background: "rgba(20, 12, 32, 0.97)",
+            border: "1px solid rgba(124, 58, 237, 0.5)",
+          }}
+        >
+          {status === "loading" && (
+            <p className="px-3 py-2 text-sm" style={{ color: "#94a3b8" }}>
+              Loading saved quests...
+            </p>
+          )}
+          {status === "error" && (
+            <div className="px-3 py-2 text-sm" style={{ color: "#fca5a5" }}>
+              <p>{error}</p>
+              <button
+                type="button"
+                onClick={refresh}
+                className="mt-1 cursor-pointer underline"
+                style={{ color: "#cbd5f5" }}
+              >
+                Retry
+              </button>
+            </div>
+          )}
+          {status === "ready" && saves.length === 0 && (
+            <p className="px-3 py-2 text-sm" style={{ color: "#94a3b8" }}>
+              No saved quests.
+            </p>
+          )}
+          {status === "ready" &&
+            saves.map((save) => (
+              <button
+                key={save.name}
+                data-load-quest-option={save.name}
+                type="button"
+                onClick={() => {
+                  handleSelect(save.name);
+                }}
+                className="block w-full cursor-pointer rounded-md px-3 py-2 text-left text-sm transition-colors hover:bg-purple-500/20"
+                style={{ color: "#e2e8f0" }}
+              >
+                <span className="block truncate font-medium">{save.name}</span>
+                <span
+                  className="block truncate text-xs"
+                  style={{ color: "#94a3b8" }}
+                >
+                  {save.screenType} · {formatSavedAt(save.savedAt)}
+                </span>
+              </button>
+            ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** Renders a saved-quest timestamp compactly, falling back to the raw value. */
+function formatSavedAt(savedAt: string): string {
+  const parsed = new Date(savedAt);
+  if (Number.isNaN(parsed.getTime())) {
+    return savedAt;
+  }
+  return parsed.toLocaleString();
 }
 
 function RoomShell({
