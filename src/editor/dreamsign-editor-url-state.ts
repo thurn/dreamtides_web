@@ -12,7 +12,6 @@ const SORT_FIELDS = new Set<DreamsignSortField>([
   "rulesTextLength",
   "nameLength",
   "tagCount",
-  "similarityGroup",
 ]);
 
 const SEARCH_SCOPES = new Set<DreamsignSearchScope>(["name", "all"]);

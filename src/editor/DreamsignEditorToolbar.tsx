@@ -29,8 +29,6 @@ const DREAMSIGN_SORT_OPTIONS: ReadonlyArray<CardBrowserSortOption> = [
   { value: "rulesTextLength", label: "Effect Text Length" },
   { value: "nameLength", label: "Name Length" },
   { value: "tagCount", label: "Tag Count" },
-  // TEMPORARY: clusters near-duplicate effects for de-dup review.
-  { value: "similarityGroup", label: "Similarity Group" },
 ];
 
 const SEARCH_SCOPE_OPTIONS: ReadonlyArray<{

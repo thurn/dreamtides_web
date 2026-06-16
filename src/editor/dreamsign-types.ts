@@ -7,9 +7,7 @@ export type DreamsignSortField =
   | "name"
   | "rulesTextLength"
   | "nameLength"
-  | "tagCount"
-  // TEMPORARY: clusters near-duplicate effects together for de-dup review.
-  | "similarityGroup";
+  | "tagCount";
 export type DreamsignSortDirection = "asc" | "desc";
 export type DreamsignSize = "small" | "medium" | "large";
 export type DreamsignSearchScope = "name" | "all";
