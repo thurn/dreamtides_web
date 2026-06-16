@@ -528,7 +528,7 @@ id = "73EFD845-6009-4686-860C-01C7F5B1C074"
 name = "Black Feather"
 image_name = "feather.png"
 tides = ["abandon_value", "spark_tall", "leave_play_enablers", "spark_growth"]
-rendered-text = "When you abandon an ally, a random ally gains +X✦ where X is the abandoned ally's ✦."
+rendered-text = "When you abandon an ally, a random ally gains +X✦ where X is the abandoned character's ✦."
 tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
@@ -797,7 +797,7 @@ id = "B765F6BB-0B8A-4847-ADA4-477B9493E3AD"
 name = "Flower Petals"
 image_name = "petals.png"
 tides = ["abandon_value", "materialize_value", "leave_play_enablers", "character_chain"]
-rendered-text = "At the end of your turn, materialize a random character you abandoned this turn with 0✦."
+rendered-text = "At the end of your turn, materialize a random character in your void which you abandoned this turn. It has 0✦."
 tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
@@ -898,7 +898,7 @@ tags = ["J15", "Tag OK"]
 id = "CD4BB1F4-66BB-45EA-ABFE-CE0C66E4EC4F"
 name = "Bestiary"
 image_name = "book_10.png"
-rendered-text = "The first card you purchase at each Shop costs 25% less and gains a random transfiguration."
+rendered-text = "The first card you purchase at each dream bazaar site costs 25% less and gains a random transfiguration."
 tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
@@ -919,7 +919,7 @@ tags = ["J15", "Tag OK"]
 id = "10BD78DE-87EC-44E4-9B16-E755DA2A9717"
 name = "Rainbow Mushroom"
 image_name = "rainbow mushroom.png"
-rendered-text = "Cards you purchase from Shops gain a random transfiguration."
+rendered-text = "Cards you purchase from dream bazaar sites gain a random transfiguration."
 tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
@@ -1032,21 +1032,21 @@ tags = ["J15", "Tag OK"]
 id = "1C505034-E405-495D-8418-6E3C06D974F0"
 name = "Sea Urchin"
 image_name = "sea_urchin.png"
-rendered-text = "While you have at least 300 essence, Draft picks show 1 additional card."
+rendered-text = "While you have at least 300 essence, draft site choices show an additional card."
 tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "427C71E3-178F-4352-8D6F-F0789CB13C2D"
 name = "Carved Stick"
 image_name = "stick.png"
-rendered-text = "When you dissolve or banish an enemy character, gain 10 essence."
+rendered-text = "When you dissolve or banish an enemy character outside of a challenge, gain 10 essence."
 tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "2DCF92BF-93B3-400C-AB97-69D3098F8868"
 name = "Wing"
 image_name = "wing.png"
-rendered-text = "Draft choices show an additional card."
+rendered-text = "Draft site choices show an additional card."
 tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
@@ -1056,7 +1056,7 @@ image_name = "White tortoise shell.png"
 rendered-text = '''
 Cards in your deck cannot be purged.
 
-Draft choices show an additional card.'''
+Draft site choices show an additional card.'''
 tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
@@ -1176,7 +1176,7 @@ tags = ["J16", "Tag OK"]
 id = "EB55B141-82F8-4BA4-B319-420F762E9EE4"
 name = "Strange Fruit"
 image_name = "strange_fruit.png"
-rendered-text = "When an allied character dissolves an enemy during a challenge, gain 10 essence."
+rendered-text = "When an ally dissolves an enemy during a challenge, gain 10 essence."
 tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
