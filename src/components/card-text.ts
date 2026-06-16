@@ -35,6 +35,10 @@ export type SymbolType =
  *   marker `❖❖`). The renderer draws `count` filled lightning bolts, the same
  *   mark shown before the card name in the title bar — one bolt for a normal
  *   activated ability, two almost-touching bolts for an interrupt.
+ * - `essence` represents the essence currency. `amount` carries the number
+ *   written in front of it (`"50"` for `50 essence`) or is `null` for a bare
+ *   reference (`the essence you gain`). The renderer draws the amount glued
+ *   directly to the crypto glyph; the word "essence" itself is dropped.
  */
 export type TextSegment =
   | { kind: "text"; value: string }
@@ -42,7 +46,8 @@ export type TextSegment =
   | { kind: "nobreak"; segments: TextSegment[] }
   | { kind: "term"; word: string; entry: GlossaryEntry }
   | { kind: "sparkPip"; value: string }
-  | { kind: "bolt"; count: number };
+  | { kind: "bolt"; count: number }
+  | { kind: "essence"; amount: string | null };
 
 /** Maps special Unicode characters to their symbol type. */
 const SYMBOL_MAP: Readonly<Record<string, SymbolType>> = {
@@ -103,6 +108,45 @@ const FAST_GROUP_RE = /^↯([a-z]+)/;
  * glossary term.
  */
 const WORD_RE = /^[A-Za-z]+/;
+
+/**
+ * Matches the essence currency in three forms, in priority order:
+ *   1. `<number> essence` (`50 essence`) — the amount is captured in group 1.
+ *   2. `essence site` / `essence sites` — the journey site type, NOT the
+ *      currency. Matched only so it is *skipped* and left as ordinary words.
+ *   3. a bare `essence` reference (`the essence you gain`).
+ * Case-insensitive so `Essence` matches too.
+ */
+const ESSENCE_RE = /(\d+)\s+essence\b|\bessence\s+sites?\b|\bessence\b/gi;
+
+/**
+ * Splits text into plain-text runs and `essence` segments. A `<number> essence`
+ * run becomes an essence segment carrying the amount; a bare `essence` becomes
+ * an essence segment with no amount; `essence site(s)` is left untouched inside
+ * the surrounding text because it names a journey site type rather than the
+ * currency.
+ */
+function splitEssence(text: string): TextSegment[] {
+  const out: TextSegment[] = [];
+  let last = 0;
+  for (const match of text.matchAll(ESSENCE_RE)) {
+    const index = match.index ?? 0;
+    // The site form ("Essence site(s)") carries no captured amount and includes
+    // the word "site"; leave it in the surrounding prose unchanged.
+    if (match[1] === undefined && /site/i.test(match[0])) {
+      continue;
+    }
+    if (index > last) {
+      out.push({ kind: "text", value: text.slice(last, index) });
+    }
+    out.push({ kind: "essence", amount: match[1] ?? null });
+    last = index + match[0].length;
+  }
+  if (last < text.length) {
+    out.push({ kind: "text", value: text.slice(last) });
+  }
+  return out;
+}
 
 /**
  * Splits the contents of a `nobreak` keyword text fragment (e.g. ` Judgment:`
@@ -213,7 +257,8 @@ function toAtoms(segments: TextSegment[]): Atom[] {
     const icon =
       segment.kind === "symbol" ||
       segment.kind === "sparkPip" ||
-      segment.kind === "bolt";
+      segment.kind === "bolt" ||
+      segment.kind === "essence";
     atoms.push({
       kind: "unit",
       segment,
@@ -243,6 +288,16 @@ function protectedSpaces(atoms: Atom[]): Set<number> {
     const atom = atoms[i];
     if (atom.kind !== "unit" || !atom.icon) {
       continue;
+    }
+    // Essence carries its amount inside the segment, so glue the word
+    // immediately in front of it (`gain 50◆`) — a line must never break right
+    // before the number.
+    if (
+      atom.segment.kind === "essence" &&
+      isSpace(atoms[i - 1]) &&
+      atoms[i - 2]?.kind === "unit"
+    ) {
+      result.add(i - 1);
     }
     // A value sits directly against the icon (`+2✦`, `2●`): glue the word in
     // front of the value.
@@ -341,8 +396,13 @@ function bindIconsToText(segments: TextSegment[]): TextSegment[] {
   return groupAtoms(atoms, protectedSpaces(atoms));
 }
 
-/** Parses rules text into segments of plain text, symbols, and glossary terms. */
-export function tokenizeRulesText(text: string): TextSegment[] {
+/**
+ * Scans a run of text (with no essence references — those are extracted first by
+ * `tokenizeRulesText`) into a flat segment list of plain text, symbols, and
+ * glossary terms. The icon-binding pass is applied by the caller across the
+ * whole list so it can glue text to essence segments too.
+ */
+function scanSegments(text: string): TextSegment[] {
   const segments: TextSegment[] = [];
   let buffer = "";
 
@@ -469,6 +529,28 @@ export function tokenizeRulesText(text: string): TextSegment[] {
     i += 1;
   }
   flushBufferAndExtractTerms();
+  return segments;
+}
+
+/**
+ * Parses rules text into segments of plain text, symbols, glossary terms, and
+ * essence currency values.
+ *
+ * Essence references are pulled out first (see `splitEssence`) so the amount in
+ * front of the word is captured and the word itself dropped; the remaining text
+ * runs are scanned for symbols and glossary terms. The icon-binding pass runs
+ * once over the combined list so the word in front of an essence amount stays
+ * glued to it.
+ */
+export function tokenizeRulesText(text: string): TextSegment[] {
+  const segments: TextSegment[] = [];
+  for (const piece of splitEssence(text)) {
+    if (piece.kind === "text") {
+      segments.push(...scanSegments(piece.value));
+    } else {
+      segments.push(piece);
+    }
+  }
   return bindIconsToText(segments);
 }
 

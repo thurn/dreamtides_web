@@ -32,6 +32,8 @@ function reconstructText(segments: TextSegment[]): string {
           return `⍏${segment.value}`;
         case "bolt":
           return "❖".repeat(segment.count);
+        case "essence":
+          return segment.amount ?? "";
         case "nobreak":
           return reconstructText(segment.segments);
       }

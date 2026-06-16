@@ -120,11 +120,11 @@ describe("JourneyHoverCard", () => {
     const { container } = trackedMount(
       <JourneyHoverCard
         dreamName="Hollow Pact"
-        text="Gain 2 essence."
+        text="Gain 2 gold."
       />,
     );
     expect(container.textContent).toContain("Hollow Pact");
-    expect(container.textContent).toContain("Gain 2 essence.");
+    expect(container.textContent).toContain("Gain 2 gold.");
   });
 
   it("does not render a glossary stack when effect text has no terms", () => {

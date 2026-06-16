@@ -58,13 +58,14 @@ const SYMBOL_COLORS: Readonly<Record<string, string>> = {
 const BOLT_ICON_COLOR = "#ffffff";
 
 /**
- * The essence currency renders in a readable violet with a filled diamond glyph
- * glued directly to the front of the word (no space), so `essence` reads as a
- * resource marker the way `●` energy and `✦` spark do. The violet matches the
- * purple used for glossary headings and the boon-dreamsign accent.
+ * Essence renders as a currency value: the amount in a readable violet glued
+ * directly to the filled crypto glyph with no space, the way `2●` reads as an
+ * energy value. A bare reference with no amount shows just the glyph. The whole
+ * unit — plus the word in front of the amount — stays on one line. The violet
+ * matches the purple used for glossary headings and the boon-dreamsign accent.
  */
 const ESSENCE_TEXT_COLOR = "#c4b5fd";
-const ESSENCE_ICON_CLASS = "bxf bx-diamond";
+const ESSENCE_ICON_CLASS = "bxf bx-crypto";
 
 /**
  * Symbol types that render as an inline Boxicons mark sized to the surrounding
@@ -238,25 +239,24 @@ function renderSegment(
       </span>
     );
   }
+  if (segment.kind === "essence") {
+    // Essence renders as a currency value: the amount in violet glued directly
+    // to the filled crypto glyph with no space (`50◆`), the way `2●` reads as an
+    // energy value. A bare reference (no amount) shows just the glyph. The unit
+    // stays on one line; the icon's mass sits low in its em box, so a small
+    // upward nudge centers it on the text.
+    return (
+      <span key={key} style={{ color: ESSENCE_TEXT_COLOR, whiteSpace: "nowrap" }}>
+        {segment.amount !== null ? segment.amount : null}
+        <i
+          aria-label="essence"
+          className={`${ESSENCE_ICON_CLASS} align-middle`}
+          style={{ transform: "translateY(-0.06em)" }}
+        />
+      </span>
+    );
+  }
   if (segment.kind === "term") {
-    // The essence currency renders in violet with a filled diamond glyph glued
-    // to the front (no space), so it reads as a resource marker like the energy
-    // and spark glyphs rather than as ordinary prose.
-    if (segment.word.toLowerCase() === "essence") {
-      return (
-        <span
-          key={key}
-          style={{ color: ESSENCE_TEXT_COLOR, whiteSpace: "nowrap" }}
-        >
-          <i
-            className={`${ESSENCE_ICON_CLASS} align-middle`}
-            style={{ transform: "translateY(-0.06em)" }}
-            aria-hidden="true"
-          />
-          {segment.word}
-        </span>
-      );
-    }
     // Glossary terms read as plain prose; their definitions surface beside the
     // card in its hover-help panel rather than as per-word tooltips. A curated
     // set of keyword effects and action verbs carries a spark-amber emphasis so

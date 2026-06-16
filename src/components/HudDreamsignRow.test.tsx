@@ -86,7 +86,7 @@ describe("HudDreamsignRow", () => {
     try {
       const sign = makeDreamsign({
         name: "Skull Codex",
-        effectDescription: "When you draw a card, gain 1 essence.",
+        effectDescription: "When you draw a card, gain 1 gold.",
         imageName: "amanita.png",
       });
 
@@ -125,7 +125,7 @@ describe("HudDreamsignRow", () => {
       expect(popover).not.toBeNull();
       expect(popover?.textContent).toContain("Skull Codex");
       expect(popover?.textContent).toContain(
-        "When you draw a card, gain 1 essence.",
+        "When you draw a card, gain 1 gold.",
       );
 
       // Mouse leave hides the popover.
