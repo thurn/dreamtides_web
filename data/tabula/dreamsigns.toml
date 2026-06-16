@@ -408,7 +408,7 @@ id = "56523397-6C48-4DF6-846B-9E4F15D7FDEE"
 name = "Clover"
 image_name = "clover.png"
 tides = ["event_chain", "copy_effects", "finishers", "event_setup"]
-rendered-text = "Once per turn, when you play an event with no allies in play, copy it."
+rendered-text = "Once per turn, when you play an event while you have no allies in play, copy it."
 tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
