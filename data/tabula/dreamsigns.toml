@@ -31,8 +31,8 @@ tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "3DD05E97-1AF8-4AE9-8E1F-954EAA63E112"
-name = "Worm Apple"
-image_name = "apple.png"
+name = "Flash Powder"
+image_name = "Alchemical_Powder.png"
 rendered-text = "The first character you play each turn costs 2● less and has 0✦."
 tags = ["Tag OK"]
 
@@ -53,32 +53,32 @@ tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "8778BF17-4E0A-4CE7-B23C-4DAF49A782A7"
-name = "Wolf Sigil"
-image_name = "amulet_4.png"
+name = "Serpent Manual"
+image_name = "book_6.png"
 tides = ["discard_velocity", "hand_cycling", "cost_reduction", "resource_burst"]
 rendered-text = "Reclaim abilities cost you 1● less."
 tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "12EC9625-CBFB-4056-9C3E-98ED8C8BEA70"
-name = "Trinket Necklace"
-image_name = "amulet_5.png"
+name = "Charm Bracelet"
+image_name = "necklace.png"
 tides = ["materialize_tempo", "bounce_blink_tools", "leave_play_enablers", "materialized_staples", "cost_reduction"]
 rendered-text = "Once per turn, when you return an ally to hand, your next character this turn costs 1● less."
 tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "95F0F483-9A76-47C6-A839-01A1D9122945"
-name = "Bead Charm"
-image_name = "amulet_6.png"
+name = "Oak Leaf"
+image_name = "oak_leaf.png"
 tides = ["materialize_tempo", "bounce_blink_tools", "cost_reduction"]
 rendered-text = "When you return an ally to hand, it gains +2✦."
 tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "553D2317-32F9-47BC-BAE0-5018CA26D56A"
-name = "Eye Amulet"
-image_name = "amulet_7.png"
+name = "Egg Nest"
+image_name = "nest.png"
 tides = ["fast_tempo", "fast_interaction", "fast_setup", "cost_reduction"]
 rendered-text = "The first ❖ card you play during the opponent's turn costs 1● less."
 tags = ["Tag OK"]
@@ -93,8 +93,8 @@ tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "EDE46F71-AA77-4B12-9824-0D3706DA6A22"
-name = "Spider Medallion"
-image_name = "amulet_9.png"
+name = "Crystal Orb"
+image_name = "magic_ball_2.png"
 tides = ["materialize_value", "materialize_tempo", "materialized_staples", "big_energy"]
 rendered-text = "The first character you materialize each turn has Awakened."
 tags = ["Tag OK"]
@@ -109,8 +109,8 @@ tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "2EBF0BBB-440C-4DBA-8E48-228DAADC0A1E"
-name = "Glow Pouch"
-image_name = "bag_3.png"
+name = "Attuned Petals"
+image_name = "rose_petals.png"
 tides = ["abandon_value", "materialize_value", "copy_effects", "leave_play_enablers"]
 rendered-text = "Once per turn, when you abandon an ally, materialize a 0✦ figment copy of it."
 tags = ["Tag OK"]
@@ -205,8 +205,8 @@ tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "59D44948-210A-4703-B031-CB938C917150"
-name = "Carved Bone"
-image_name = "bone.png"
+name = "Carved Stick"
+image_name = "stick.png"
 tides = ["warrior_pressure", "warrior_bastion", "spark_growth"]
 rendered-text = "Allied warriors have preeminence."
 tags = ["Tag OK"]
@@ -229,8 +229,8 @@ tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "6B5C0F18-198C-44E7-92E8-D639298B8CF6"
-name = "Charm Staff"
-image_name = "magic_stick_6.png"
+name = "Sealed Scroll"
+image_name = "scroll_3.png"
 tides = ["warrior_bastion", "spark_growth", "warrior_pressure", "character_curve"]
 rendered-text = "Once per turn, when an allied spirit animal is dissolved, draw a card."
 tags = ["Tag OK"]
@@ -277,8 +277,8 @@ tags = ["J10", "Tag OK"]
 
 [[dreamsign]]
 id = "4A91C56C-D828-482A-A46C-1299D69FA011"
-name = "Purple Crystal"
-image_name = "crystal.png"
+name = "Bestiary"
+image_name = "book_10.png"
 tides = ["discard_velocity", "figment_swarm", "materialize_value", "hand_cycling"]
 rendered-text = "When you discard a card, materialize a 2✦ radiant figment."
 tags = ["J10", "Tag OK"]
@@ -485,8 +485,8 @@ tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "D2A916C1-321A-4AE3-9A50-0B7F13C5EFF6"
-name = "Flash Powder"
-image_name = "Alchemical_Powder.png"
+name = "Worm Apple"
+image_name = "apple.png"
 tides = ["fast_setup", "fast_tempo", "cost_reduction", "event_chain"]
 rendered-text = "You may play ❖ and ❖❖ events for 1●."
 tags = ["J11", "Tag OK"]
@@ -637,8 +637,8 @@ tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "989B55BD-139F-40DC-B1FD-EB2F7B1C091A"
-name = "Charm Bracelet"
-image_name = "necklace.png"
+name = "Trinket Necklace"
+image_name = "amulet_5.png"
 tides = ["ally_formation", "spark_growth", "point_pressure", "ally_wide"]
 rendered-text = "Allied challengers have +1✦."
 tags = ["J11", "Tag OK"]
@@ -653,8 +653,8 @@ tags = ["J11", "Tag OK"]
 
 [[dreamsign]]
 id = "7A37386D-6E7C-4F08-B07F-E92A1FD69893"
-name = "Oak Leaf"
-image_name = "oak_leaf.png"
+name = "Bead Charm"
+image_name = "amulet_6.png"
 tides = ["ally_formation", "spark_growth", "point_pressure", "ally_wide"]
 rendered-text = "Allied challengers that share a character type with another allied challenger have +2✦."
 tags = ["J12", "Tag OK"]
@@ -669,15 +669,15 @@ tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "08A3983A-1B95-4D2E-A445-9D8DC2B8FCA7"
-name = "Crystal Orb"
-image_name = "magic_ball_2.png"
+name = "Spider Medallion"
+image_name = "amulet_9.png"
 rendered-text = "When you have 3 or more challengers, they have +2✦."
 tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "EB6A5C19-26A6-41EF-AC7A-CE1152557B5C"
-name = "Egg Nest"
-image_name = "nest.png"
+name = "Eye Amulet"
+image_name = "amulet_7.png"
 rendered-text = "When all allied characters are challengers, they have +2✦."
 tags = ["J12", "Tag OK"]
 
@@ -722,8 +722,8 @@ tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "1CCD8D69-E14C-4788-BE1D-CB6A1B703225"
-name = "Serpent Manual"
-image_name = "book_6.png"
+name = "Wolf Sigil"
+image_name = "amulet_4.png"
 tides = ["warrior_bastion", "judgment_engines", "spark_growth", "spark_tall"]
 rendered-text = "When an allied character dissolves an enemy in a challenge, it gains +2✦."
 tags = ["J12", "Tag OK"]
@@ -802,8 +802,8 @@ tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "72EF4B11-5366-4798-AAB0-09E5FFBB1ED8"
-name = "Clam Shell"
-image_name = "mollusk.png"
+name = "Wing"
+image_name = "wing.png"
 tides = ["big_energy", "hand_cycling", "card_flow", "resource_burst"]
 rendered-text = "When you draw your second card each turn, gain 1 maximum ●."
 tags = ["J12", "Tag OK"]
@@ -850,16 +850,16 @@ tags = ["J12", "Tag OK"]
 
 [[dreamsign]]
 id = "62E1A588-F719-415C-9434-80AA08CE2E6A"
-name = "Crystal Wand"
-image_name = "magic_stick_2.png"
+name = "Red Pin"
+image_name = "pin.png"
 tides = ["big_energy", "card_flow", "resource_burst", "finishers"]
 rendered-text = "Once per turn, when you play a 2● cost character, draw a card."
 tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "4BB408A8-7941-42DC-9FF6-DBC1400C99ED"
-name = "Red Pin"
-image_name = "pin.png"
+name = "Crystal Wand"
+image_name = "magic_stick_2.png"
 tides = ["point_pressure", "judgment_engines", "card_flow", "finishers"]
 rendered-text = "When one or more allies score ⍟, draw a card."
 tags = ["J15", "Tag OK"]
@@ -896,8 +896,8 @@ tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "CD4BB1F4-66BB-45EA-ABFE-CE0C66E4EC4F"
-name = "Bestiary"
-image_name = "book_10.png"
+name = "Purple Crystal"
+image_name = "crystal.png"
 rendered-text = "The first card you purchase at each dream bazaar site costs 25% less and gains a random transfiguration."
 tags = ["J15", "Tag OK"]
 
@@ -917,8 +917,8 @@ tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "10BD78DE-87EC-44E4-9B16-E755DA2A9717"
-name = "Rainbow Mushroom"
-image_name = "rainbow mushroom.png"
+name = "Red Shard"
+image_name = "stone-red.png"
 rendered-text = "Cards you purchase from dream bazaar sites gain a random transfiguration."
 tags = ["J15", "Tag OK"]
 
@@ -931,8 +931,8 @@ tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "883F88FB-AC50-419A-8382-C22EDEE29755"
-name = "Sealed Scroll"
-image_name = "scroll_3.png"
+name = "Charm Staff"
+image_name = "magic_stick_6.png"
 rendered-text = "After you buy an item at a Shop, replace it immediately with another item for purchase."
 tags = ["J15", "Tag OK"]
 
@@ -967,22 +967,22 @@ tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "8B69DE8A-835D-4F0C-AC25-DC0E700E2983"
-name = "White Rat"
-image_name = "white_rat.png"
+name = "Glowing Crystal"
+image_name = "stone_2.png"
 rendered-text = "When you add a character card to your deck, it has a 50% chance to gain a random transfiguration."
 tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "AB1DA9D3-376A-460A-A9DC-4737E59E558B"
-name = "Glowing Crystal"
-image_name = "stone_2.png"
+name = "White Rat"
+image_name = "white_rat.png"
 rendered-text = "When you gain this dreamsign, apply random transfigurations to half the cards in your deck."
 tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "34CE9428-DDA9-4EFA-BACD-5EC2698561C1"
-name = "Attuned Petals"
-image_name = "rose_petals.png"
+name = "Glow Pouch"
+image_name = "bag_3.png"
 rendered-text = "When you apply a transfiguration to a card, apply an additional random transfiguration to it."
 tags = ["J15", "Tag OK"]
 
@@ -1016,8 +1016,8 @@ tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "F4DF5A74-7822-4552-A3AB-F50B00758593"
-name = "Mortal Skull"
-image_name = "skull_2.png"
+name = "Strange Fruit"
+image_name = "strange_fruit.png"
 rendered-text = "When you purge a card, gain 50 essence."
 tags = ["J15", "Tag OK"]
 
@@ -1037,15 +1037,15 @@ tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "427C71E3-178F-4352-8D6F-F0789CB13C2D"
-name = "Carved Stick"
-image_name = "stick.png"
+name = "Carved Bone"
+image_name = "bone.png"
 rendered-text = "When you dissolve or banish an enemy character outside of a challenge, gain 10 essence."
 tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "2DCF92BF-93B3-400C-AB97-69D3098F8868"
-name = "Wing"
-image_name = "wing.png"
+name = "Clam Shell"
+image_name = "mollusk.png"
 rendered-text = "Draft site choices show an additional card."
 tags = ["J16", "Tag OK"]
 
@@ -1146,8 +1146,8 @@ tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "58472AD2-88B1-4DC7-A161-C6DEA7D8C43D"
-name = "Red Shard"
-image_name = "stone-red.png"
+name = "Rainbow Mushroom"
+image_name = "rainbow mushroom.png"
 rendered-text = "In each dreamscape, 1 additional site is enhanced."
 tags = ["J16", "Tag OK"]
 
@@ -1174,8 +1174,8 @@ tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "EB55B141-82F8-4BA4-B319-420F762E9EE4"
-name = "Strange Fruit"
-image_name = "strange_fruit.png"
+name = "Mortal Skull"
+image_name = "skull_2.png"
 rendered-text = "When an ally dissolves an enemy during a challenge, gain 10 essence."
 tags = ["J16", "Tag OK"]
 

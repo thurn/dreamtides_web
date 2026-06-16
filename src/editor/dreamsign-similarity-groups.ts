@@ -33,42 +33,42 @@ const GROUP_LABELS: Record<number, string> = {
 // never matters.
 const GROUP_BY_ID: Record<string, number> = {
   // 1: Reclaim cost reduction
-  "8778BF17-4E0A-4CE7-B23C-4DAF49A782A7": 1, // Wolf Sigil
+  "8778BF17-4E0A-4CE7-B23C-4DAF49A782A7": 1, // Serpent Manual
   "2059AA74-8897-4C76-833F-DDEF7D34346C": 1, // Skull Codex
   // 2: Essence on enemy kill
-  "427C71E3-178F-4352-8D6F-F0789CB13C2D": 2, // Carved Stick
-  "EB55B141-82F8-4BA4-B319-420F762E9EE4": 2, // Strange Fruit
+  "427C71E3-178F-4352-8D6F-F0789CB13C2D": 2, // Carved Bone
+  "EB55B141-82F8-4BA4-B319-420F762E9EE4": 2, // Mortal Skull
   // 3: Draw when an ally is dissolved
   "FDFBD522-C2BE-4B77-A63F-E9A64CA3DE3B": 3, // Parchment
-  "6B5C0F18-198C-44E7-92E8-D639298B8CF6": 3, // Charm Staff
+  "6B5C0F18-198C-44E7-92E8-D639298B8CF6": 3, // Sealed Scroll
   // 4: Draft choices show +1 card
-  "2DCF92BF-93B3-400C-AB97-69D3098F8868": 4, // Wing
+  "2DCF92BF-93B3-400C-AB97-69D3098F8868": 4, // Clam Shell
   "E377C3ED-16F5-4424-A9F1-73F9750ACE9F": 4, // Tortoise Shell
   "1C505034-E405-495D-8418-6E3C06D974F0": 4, // Sea Urchin
   // 5: Recur a lower-cost character from void on ally death
   "293A610D-EA75-4974-88DA-13E4C86F248F": 5, // Mandrake Root
   "4A9F95D5-B72D-4EE8-8D29-B05646EDC23D": 5, // Herb Mortar
   // 6: Abandon → 0✦ copy back
-  "2EBF0BBB-440C-4DBA-8E48-228DAADC0A1E": 6, // Glow Pouch
+  "2EBF0BBB-440C-4DBA-8E48-228DAADC0A1E": 6, // Attuned Petals
   "B765F6BB-0B8A-4847-ADA4-477B9493E3AD": 6, // Flower Petals
   // 7: Abandon → random ally gains ✦
   "ADC23870-55F8-4F23-B973-A358FC257414": 7, // Gold Feather
   "73EFD845-6009-4686-860C-01C7F5B1C074": 7, // Black Feather
   // 8: Challenger ✦ anthem
-  "989B55BD-139F-40DC-B1FD-EB2F7B1C091A": 8, // Charm Bracelet
-  "7A37386D-6E7C-4F08-B07F-E92A1FD69893": 8, // Oak Leaf
-  "08A3983A-1B95-4D2E-A445-9D8DC2B8FCA7": 8, // Crystal Orb
-  "EB6A5C19-26A6-41EF-AC7A-CE1152557B5C": 8, // Egg Nest
+  "989B55BD-139F-40DC-B1FD-EB2F7B1C091A": 8, // Trinket Necklace
+  "7A37386D-6E7C-4F08-B07F-E92A1FD69893": 8, // Bead Charm
+  "08A3983A-1B95-4D2E-A445-9D8DC2B8FCA7": 8, // Spider Medallion
+  "EB6A5C19-26A6-41EF-AC7A-CE1152557B5C": 8, // Eye Amulet
   // 9: Random transfiguration on card acquisition
-  "8B69DE8A-835D-4F0C-AC25-DC0E700E2983": 9, // White Rat
+  "8B69DE8A-835D-4F0C-AC25-DC0E700E2983": 9, // Glowing Crystal
   "C2AF5460-E61F-409B-9B86-6AC7DB34D748": 9, // Blue Crystal
-  "10BD78DE-87EC-44E4-9B16-E755DA2A9717": 9, // Rainbow Mushroom
-  "CD4BB1F4-66BB-45EA-ABFE-CE0C66E4EC4F": 9, // Bestiary
+  "10BD78DE-87EC-44E4-9B16-E755DA2A9717": 9, // Red Shard
+  "CD4BB1F4-66BB-45EA-ABFE-CE0C66E4EC4F": 9, // Purple Crystal
   // 10: First character each turn costs 2● less
-  "3DD05E97-1AF8-4AE9-8E1F-954EAA63E112": 10, // Worm Apple
+  "3DD05E97-1AF8-4AE9-8E1F-954EAA63E112": 10, // Flash Powder
   "9204FBC8-BA40-4E33-9FBC-F62CCC4A43D1": 10, // Powder Bowl
   // 11: Score ⍟ → draw a card
-  "4BB408A8-7941-42DC-9FF6-DBC1400C99ED": 11, // Red Pin
+  "4BB408A8-7941-42DC-9FF6-DBC1400C99ED": 11, // Crystal Wand
   "055F211D-AA51-49EB-9162-190A946B1614": 11, // Root Staff
   // 12: Pick a character type on gain
   "3D86F8CE-42AC-43DC-96D5-121E6D1A6167": 12, // Theater Mask
