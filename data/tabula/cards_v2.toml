@@ -994,7 +994,7 @@ card-number = 53
 art = { x = 0.588, y = 0.608, scale = 1.17 }
 
 [[cards]]
-name = "Ironclad Marksman"
+name = "Frostbound Defiant"
 mtg-name = "Conjurer's Bauble"
 id = "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7"
 rendered-text = "Abandon this character: Shuffle up to 3 cards from your void into your deck. Draw a card."
@@ -1005,10 +1005,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "June16"]
-image-number = 393588439
+tags = ["Art Rework", "June16", "Art OK"]
+image-number = 499788403
 art-owned = false
 card-number = 54
+art = { x = -0.39, y = -0.308, scale = 1.87 }
 
 [[cards]]
 name = "Battlefield Medic"
@@ -2376,7 +2377,7 @@ card-number = 128
 art = { x = 0.294, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Ossuary Overlord"
+name = "Bloomweaver"
 mtg-name = "Ichor Wellspring"
 id = "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c"
 rendered-text = "▸Materialized, Dissolved: Draw a card."
@@ -2387,10 +2388,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Ichor Wellspring", "Art Rework", "June16"]
-image-number = 389999815
+tags = ["Ichor Wellspring", "Art Rework", "June16", "Art OK"]
+image-number = 1790126246
 art-owned = false
 card-number = 129
+art = { x = 0, y = -0.485, scale = 1.97 }
 
 [[cards]]
 name = "Forsaken Pact"
@@ -3555,7 +3557,7 @@ Awakened
 ▸Challenge: This character gains +1✦."""
 energy-cost = 1
 card-type = "Character"
-subtype = "Warrior"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
@@ -4403,7 +4405,7 @@ id = "3b5f5686-f63b-4998-b713-2f6777ecbb5f"
 rendered-text = "▸Night: Draw a card, then discard a card unless you have an allied challenger."
 energy-cost = 2
 card-type = "Character"
-subtype = "Warrior"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
@@ -4965,7 +4967,7 @@ card-number = 270
 art = { x = 0, y = 0, scale = 1.97 }
 
 [[cards]]
-name = "Scorched Crusader"
+name = "Voidcaller"
 mtg-name = "Samwise Gamgee"
 id = "920ef495-5560-4fa6-9a95-b9584ef6a4cf"
 rendered-text = """
@@ -4979,10 +4981,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June16"]
-image-number = 1798514893
+tags = ["Art Rework", "June16", "Art OK"]
+image-number = 2299755785
 art-owned = false
 card-number = 271
+art = { x = 0, y = 1, scale = 1.27 }
 
 [[cards]]
 name = "Worldsong Behemoth"
@@ -5240,7 +5243,7 @@ card-number = 285
 art = { x = -0.168, y = 0.032, scale = 1.17 }
 
 [[cards]]
-name = "Dreaming Obelisk"
+name = "Prophet of the Consumed"
 mtg-name = "Goblin Welder"
 id = "8a5d7d67-91c9-41c4-b22e-8287954efa09"
 rendered-text = "☪, Abandon a warrior: Materialize a warrior from your void."
@@ -5251,8 +5254,8 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June16"]
-image-number = 2645678685
+tags = ["Art Rework", "June16", "Art OK"]
+image-number = 1991802452
 art-owned = false
 card-number = 286
 
@@ -6056,7 +6059,7 @@ card-number = 329
 art = { x = 0.882, y = 0.032, scale = 1.17 }
 
 [[cards]]
-name = "Harborwarden"
+name = "Ash Harbinger"
 mtg-name = "Asmoranomardicadaistinaculdacar"
 id = "956aaeb1-5280-4294-bf80-73079f35c5f6"
 rendered-text = """
@@ -6065,15 +6068,16 @@ rendered-text = """
 ☪, Abandon 2 warrior figments: Dissolve a ≤4✦ enemy."""
 energy-cost = 2
 card-type = "Character"
-subtype = "Warrior"
+subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Removal", "Figment Maker", "Art Rework", "June16"]
-image-number = 2212744817
+tags = ["Removal", "Figment Maker", "Art Rework", "June16", "Art OK"]
+image-number = 682942723
 art-owned = false
 card-number = 330
+art = { x = 0.779, y = 0.574, scale = 1.47 }
 
 [[cards]]
 name = "Maelstrom Denial"
@@ -7409,7 +7413,7 @@ card-number = 401
 art = { x = -0.168, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Apocalypse Vigilante"
+name = "Shatterpoint Agent"
 mtg-name = "Vault Skirge"
 id = "7697da0e-d759-4c75-8c9c-477e9058b035"
 rendered-text = "When this character scores ⍟, the opponent loses an equivalent quantity of ⍟."
@@ -7420,14 +7424,14 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "June16"]
-image-number = 1347487814
+tags = ["Art Rework", "June16", "Art OK"]
+image-number = 2590831717
 art-owned = true
 card-number = 402
-art = { x = -0.3, y = 0, scale = 1.17 }
+art = { x = 0.456, y = 0.761, scale = 1.17 }
 
 [[cards]]
-name = "Void Pilgrim"
+name = "Relentless Pursuer"
 mtg-name = "Smuggler's Copter"
 id = "43628666-2ecd-47a7-b2c0-241cda0de5e8"
 rendered-text = "▸Challenge: Draw a card, then discard a card."
@@ -7438,10 +7442,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June16"]
-image-number = 1258823164
+tags = ["Art Rework", "June16", "Art OK"]
+image-number = 1725212353
 art-owned = false
 card-number = 403
+art = { x = 0, y = 0.214, scale = 1.57 }
 
 [[cards]]
 name = "Starbound Striker"
@@ -9180,7 +9185,7 @@ card-number = 497
 art = { x = 0.399, y = -0.678, scale = 1.87 }
 
 [[cards]]
-name = "Dreadmount Sovereign"
+name = "Dragonward"
 mtg-name = "Thought Monitor"
 id = "6497d8b1-85b8-486d-99e2-5c141486d508"
 rendered-text = """
@@ -9194,14 +9199,14 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June16"]
-image-number = 1798514914
+tags = ["Art Rework", "June16", "Art OK"]
+image-number = 2303852057
 art-owned = false
 card-number = 498
-art = { x = 0, y = 1, scale = 1.37 }
+art = { x = -0.064, y = 0.64, scale = 1.37 }
 
 [[cards]]
-name = "Sigil Analyst"
+name = "Harbor Warden"
 mtg-name = "Thought Monitor"
 id = "1b4d2adc-64ab-4020-bae6-b35321898bf0"
 rendered-text = "▸Materialized: Draw 2 cards."
@@ -9212,10 +9217,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 5
-tags = ["Art Rework", "June16"]
-image-number = 2025883241
+tags = ["Art Rework", "June16", "Art OK"]
+image-number = 2212744817
 art-owned = false
 card-number = 499
+art = { x = 0.096, y = 0.314, scale = 1.67 }
 
 [[cards]]
 name = "Immolate"
@@ -9348,21 +9354,22 @@ art-owned = false
 card-number = 506
 
 [[cards]]
-name = "Iron Executor"
+name = "Cloaked Sentinel"
 mtg-name = "Monoskelion"
 id = "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a"
 rendered-text = "Abandon this character: Dissolve an enemy with ✦ less than or equal to this character's ✦."
-energy-cost = 2
+energy-cost = 1
 card-type = "Character"
 subtype = "Warrior"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "June16"]
-image-number = 425039824
+tags = ["Art Rework", "June16", "Art OK"]
+image-number = 1295291155
 art-owned = false
 card-number = 507
+art = { x = 0, y = 0.331, scale = 1.77 }
 
 [[cards]]
 name = "Eruption"

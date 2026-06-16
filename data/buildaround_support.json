@@ -122,7 +122,7 @@
       ]
     },
     "7697da0e-d759-4c75-8c9c-477e9058b035": {
-      "name": "Apocalypse Vigilante",
+      "name": "Shatterpoint Agent",
       "needs": [],
       "supports": [
         "warriors"
@@ -1013,7 +1013,7 @@
       ]
     },
     "6497d8b1-85b8-486d-99e2-5c141486d508": {
-      "name": "Dreadmount Sovereign",
+      "name": "Dragonward",
       "needs": [
         {
           "theme": "warriors",
@@ -1094,7 +1094,7 @@
       ]
     },
     "8a5d7d67-91c9-41c4-b22e-8287954efa09": {
-      "name": "Dreaming Obelisk",
+      "name": "Prophet of the Consumed",
       "needs": [
         {
           "theme": "warriors",
@@ -1934,7 +1934,7 @@
       ]
     },
     "956aaeb1-5280-4294-bf80-73079f35c5f6": {
-      "name": "Harborwarden",
+      "name": "Ash Harbinger",
       "supports": [
         "warriors",
         "figments",
@@ -2137,7 +2137,7 @@
       ]
     },
     "75bf1aab-dce0-4bbc-8ab0-a3c84b66ae9a": {
-      "name": "Iron Executor",
+      "name": "Cloaked Sentinel",
       "needs": [],
       "supports": [
         "warriors",
@@ -2154,7 +2154,7 @@
       ]
     },
     "28f8d95a-be99-4b4c-b9ef-92a4b40fffe7": {
-      "name": "Ironclad Marksman",
+      "name": "Frostbound Defiant",
       "needs": [],
       "supports": [
         "warriors",
@@ -2758,7 +2758,7 @@
       ]
     },
     "64ce3ebc-c0ac-4dd3-95ca-eeb67530187c": {
-      "name": "Ossuary Overlord",
+      "name": "Bloomweaver",
       "needs": [],
       "supports": [
         "warriors",
@@ -3319,7 +3319,7 @@
       ]
     },
     "920ef495-5560-4fa6-9a95-b9584ef6a4cf": {
-      "name": "Scorched Crusader",
+      "name": "Voidcaller",
       "supports": [
         "warriors"
       ]
@@ -3570,7 +3570,7 @@
       ]
     },
     "1b4d2adc-64ab-4020-bae6-b35321898bf0": {
-      "name": "Sigil Analyst",
+      "name": "Harbor Warden",
       "needs": [],
       "supports": [
         "warriors"
@@ -4640,7 +4640,7 @@
       ]
     },
     "43628666-2ecd-47a7-b2c0-241cda0de5e8": {
-      "name": "Void Pilgrim",
+      "name": "Relentless Pursuer",
       "needs": [],
       "supports": [
         "warriors",

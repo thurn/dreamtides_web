@@ -53,7 +53,7 @@ tags = ["Tag OK"]
 
 [[dreamsign]]
 id = "8778BF17-4E0A-4CE7-B23C-4DAF49A782A7"
-name = "Serpent Manual"
+name = "Serpent Tome"
 image_name = "book_6.png"
 tides = ["discard_velocity", "hand_cycling", "cost_reduction", "resource_burst"]
 rendered-text = "Reclaim abilities cost you 1● less."
