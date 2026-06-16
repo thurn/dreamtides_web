@@ -4,6 +4,7 @@ import { RulesText } from "../components/RulesText";
 import CardTagEditor from "./CardTagEditor";
 import EditableField from "./EditableField";
 import { readableTextColor, tagColor } from "./tag-color";
+import { similarityGroupFor } from "./dreamsign-similarity-groups";
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
 import type {
   EditableDreamsignField,
@@ -197,6 +198,9 @@ export default function EditableDreamsign({
   const checkboxChecked = checkboxActive && dreamsign.tags.includes(checkboxTag);
   const checkboxColor = tagColor(checkboxTag, availableTags);
 
+  // TEMPORARY: similarity-group badge for de-dup review.
+  const similarityGroup = similarityGroupFor(dreamsign.id);
+
   const toggleCheckboxTag = () => {
     if (checkboxChecked) {
       onRemoveDreamsignTag(dreamsign, checkboxTag);
@@ -212,6 +216,42 @@ export default function EditableDreamsign({
       style={tileStyle}
     >
       <div style={artFrameStyle}>
+        {similarityGroup !== null ? (
+          <span
+            title={`Similarity group ${similarityGroup.group}: ${similarityGroup.label}`}
+            style={{
+              position: "absolute",
+              top: "8px",
+              left: "8px",
+              zIndex: 2,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "5px",
+              maxWidth: "calc(100% - 16px)",
+              padding: "3px 8px",
+              borderRadius: "999px",
+              border: "1px solid rgba(0, 0, 0, 0.45)",
+              background: "#f2c14e",
+              color: "#1a1205",
+              fontSize: "0.74rem",
+              fontWeight: 900,
+              lineHeight: 1.1,
+              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.4)",
+            }}
+          >
+            <span aria-hidden="true">#{similarityGroup.group}</span>
+            <span
+              style={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                fontWeight: 700,
+              }}
+            >
+              {similarityGroup.label}
+            </span>
+          </span>
+        ) : null}
         {dreamsign.imageName !== "" ? (
           <img
             src={`/dreamsigns/${dreamsign.imageName}`}

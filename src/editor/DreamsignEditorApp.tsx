@@ -36,6 +36,7 @@ import type {
 } from "./dreamsign-types";
 import type { EditorTag } from "./types";
 import { editorTomlParam } from "./editor-api";
+import { similaritySortValue } from "./dreamsign-similarity-groups";
 
 const DEFAULT_DREAMSIGN_API_CLIENT: DreamsignEditorApiClient = {
   loadEditorDreamsigns,
@@ -111,6 +112,8 @@ function sortValue(
       return dreamsign.name.length;
     case "tagCount":
       return dreamsign.tags.length;
+    case "similarityGroup":
+      return similaritySortValue(dreamsign.id);
   }
 }
 
