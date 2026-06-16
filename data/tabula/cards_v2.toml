@@ -9521,8 +9521,8 @@ art = { x = -0.42, y = 1, scale = 1.17 }
 name = "Flashpoint Detonation"
 mtg-name = ""
 id = "4408b942-09a0-4f4e-a403-10c708c6e3c5"
-rendered-text = "Dissolve a ≤3● cost enemy."
-energy-cost = 2
+rendered-text = "Dissolve a ≤2● cost enemy."
+energy-cost = 3
 card-type = "Event"
 subtype = ""
 rarity = "Starter"
