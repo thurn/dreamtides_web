@@ -131,7 +131,7 @@ describe("JourneyHoverCard", () => {
     const { container } = trackedMount(
       <JourneyHoverCard
         dreamName="Quiet Grove"
-        text="Gain 2 essence and one point."
+        text="Gain 2 gold and one point."
       />,
     );
     expect(queryGlossaryStack(container)).toBeNull();
@@ -141,7 +141,7 @@ describe("JourneyHoverCard", () => {
     const { container } = trackedMount(
       <JourneyHoverCard
         dreamName="Burning Pact"
-        text="Gain 1 essence. Add a Bane to your deck."
+        text="Gain 1 gold. Add a Bane to your deck."
       />,
     );
     const stack = queryGlossaryStack(container);

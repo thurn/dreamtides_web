@@ -58,6 +58,15 @@ const SYMBOL_COLORS: Readonly<Record<string, string>> = {
 const BOLT_ICON_COLOR = "#ffffff";
 
 /**
+ * The essence currency renders in a readable violet with a filled diamond glyph
+ * glued directly to the front of the word (no space), so `essence` reads as a
+ * resource marker the way `●` energy and `✦` spark do. The violet matches the
+ * purple used for glossary headings and the boon-dreamsign accent.
+ */
+const ESSENCE_TEXT_COLOR = "#c4b5fd";
+const ESSENCE_ICON_CLASS = "bxf bx-diamond";
+
+/**
  * Symbol types that render as an inline Boxicons mark sized to the surrounding
  * text. Energy and spark keep their dedicated branches below (each pins a
  * resource hue with a matching corner stat); these are the remaining glyphs
@@ -120,6 +129,17 @@ const HIGHLIGHTED_TERMS: ReadonlySet<string> = new Set([
   "unstoppable",
   "vengeful",
   "preeminence",
+  // Quest verbs that appear in dreamsign text.
+  "enhanced",
+  "duplicate",
+  "duplicated",
+  "duplicates",
+  "purge",
+  "purged",
+  "purges",
+  "transfigure",
+  "transfigured",
+  "transfigures",
 ]);
 
 /**
@@ -219,6 +239,24 @@ function renderSegment(
     );
   }
   if (segment.kind === "term") {
+    // The essence currency renders in violet with a filled diamond glyph glued
+    // to the front (no space), so it reads as a resource marker like the energy
+    // and spark glyphs rather than as ordinary prose.
+    if (segment.word.toLowerCase() === "essence") {
+      return (
+        <span
+          key={key}
+          style={{ color: ESSENCE_TEXT_COLOR, whiteSpace: "nowrap" }}
+        >
+          <i
+            className={`${ESSENCE_ICON_CLASS} align-middle`}
+            style={{ transform: "translateY(-0.06em)" }}
+            aria-hidden="true"
+          />
+          {segment.word}
+        </span>
+      );
+    }
     // Glossary terms read as plain prose; their definitions surface beside the
     // card in its hover-help panel rather than as per-word tooltips. A curated
     // set of keyword effects and action verbs carries a spark-amber emphasis so

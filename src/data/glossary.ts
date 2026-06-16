@@ -207,7 +207,12 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
   {
     term: "Purge",
     definition: "Permanently remove a card from your deck for the run.",
-    variants: ["purged"],
+    variants: ["purged", "purges"],
+  },
+  {
+    term: "Duplicate",
+    definition: "Add an exact copy of a card to your deck.",
+    variants: ["duplicated", "duplicates"],
   },
 
   // --- Quest terms ----------------------------------------------------
@@ -215,6 +220,14 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
     term: "Bane",
     definition: "A penalty card forced into your deck.",
     variants: ["banes"],
+  },
+  {
+    term: "Essence",
+    definition: "Currency you gain and spend over the course of a run.",
+  },
+  {
+    term: "Enhanced",
+    definition: "An improved site that offers better or additional rewards.",
   },
 
   // --- Transfigurations ---------------------------------------------
