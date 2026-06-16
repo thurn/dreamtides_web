@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { DreamwellCardViewData } from "../../components/DreamwellCardView";
 import type { BattleDebugEdit } from "../debug/commands";
 import type { BattleMutableState, BattleSide, DreamwellCardDefinition } from "../types";
 import { createBattleLogBaseFields, logEvent } from "../../logging";
@@ -25,6 +26,7 @@ export interface DreamwellRunnerResult {
   activePrompt: ActivePrompt | null;
   activePromptSide: BattleSide | null;     // for the foresee overlay + card rendering
   activePromptSourceName: string | null;   // dreamwell card driving the open prompt
+  activePromptSourceCard: DreamwellCardViewData | null; // its full card, for in-modal display
   resolvePrompt: (resolution: PromptResolution) => void;
 }
 
@@ -267,10 +269,19 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
     [run, activePrompt, state, dispatchEdit],
   );
 
+  // The full Dreamwell card behind the open run, looked up by id so the prompt
+  // modal can re-render it as context (the on-board display is hidden behind the
+  // prompt's backdrop).
+  const activePromptSourceCard =
+    run !== null
+      ? dreamwellDeck.find((card) => card.id === run.cardId) ?? null
+      : null;
+
   return {
     activePrompt,
     activePromptSide: run?.side ?? null,
     activePromptSourceName: run?.cardName ?? null,
+    activePromptSourceCard,
     resolvePrompt,
   };
 }

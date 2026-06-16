@@ -975,6 +975,7 @@ function PlayableBattleScreenInner({
         <BattleCardPickerOverlay
           title={dreamwellRunner.activePrompt.label}
           sourceName={dreamwellRunner.activePromptSourceName}
+          sourceCard={dreamwellRunner.activePromptSourceCard}
           candidateIds={dreamwellRunner.activePrompt.candidateIds}
           count={dreamwellRunner.activePrompt.count}
           optional={dreamwellRunner.activePrompt.optional}
@@ -987,6 +988,7 @@ function PlayableBattleScreenInner({
       {dreamwellRunner.activePrompt?.kind === "choice" ? (
         <BattleChoicePromptOverlay
           title={dreamwellRunner.activePrompt.label}
+          sourceCard={dreamwellRunner.activePromptSourceCard}
           options={dreamwellRunner.activePrompt.options}
           onChoose={(i) => dreamwellRunner.resolvePrompt({ kind: "choice", optionIndex: i })}
         />
@@ -996,6 +998,7 @@ function PlayableBattleScreenInner({
         <BattleForeseeOverlay
           initialCount={dreamwellRunner.activePrompt.count}
           side={dreamwellRunner.activePromptSide ?? activeSide}
+          sourceCard={dreamwellRunner.activePromptSourceCard}
           state={reducerState.mutable}
           onDispatch={(command) => dispatch({ type: "APPLY_COMMAND", command })}
           onClose={() => dreamwellRunner.resolvePrompt({ kind: "foresee" })}

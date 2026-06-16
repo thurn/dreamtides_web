@@ -1,11 +1,19 @@
 import { useEffect } from "react";
+import type { DreamwellCardViewData } from "../../components/DreamwellCardView";
+import { DreamwellPromptCard } from "./DreamwellPromptCard";
 
 export function BattleChoicePromptOverlay({
   title,
+  sourceCard,
   options,
   onChoose,
 }: {
   title: string;
+  /**
+   * The Dreamwell card driving this prompt, rendered at the head of the modal so
+   * the player sees what triggered the choice.
+   */
+  sourceCard?: DreamwellCardViewData | null;
   options: readonly { label: string }[];
   onChoose: (index: number) => void;
 }) {
@@ -37,6 +45,7 @@ export function BattleChoicePromptOverlay({
         className="pointer-events-auto mx-auto flex max-h-[calc(100vh-1.5rem)] w-full max-w-lg flex-col gap-4 overflow-y-auto rounded-[2rem] border border-violet-300/25 bg-[linear-gradient(180deg,_rgba(7,10,18,0.98)_0%,_rgba(11,17,30,0.96)_100%)] p-5 shadow-2xl shadow-slate-950/70"
         onClick={(event) => event.stopPropagation()}
       >
+        {sourceCard ? <DreamwellPromptCard card={sourceCard} /> : null}
         <header className="border-b border-slate-800 pb-3">
           <h3
             id="battle-choice-prompt-title"

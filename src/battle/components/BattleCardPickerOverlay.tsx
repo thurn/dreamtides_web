@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { CardDisplay } from "../../components/CardDisplay";
+import type { DreamwellCardViewData } from "../../components/DreamwellCardView";
 import type { BattleMutableState } from "../types";
 import { battleCardDisplayFromInstance } from "./BattleCardView";
+import { DreamwellPromptCard } from "./DreamwellPromptCard";
 
 export function togglePick(
   selected: readonly string[],
@@ -24,6 +26,7 @@ export function togglePick(
 export function BattleCardPickerOverlay({
   title,
   sourceName,
+  sourceCard,
   candidateIds,
   count,
   optional,
@@ -35,6 +38,12 @@ export function BattleCardPickerOverlay({
   title: string;
   /** The effect source driving this prompt (e.g. the dreamwell card name). */
   sourceName?: string | null;
+  /**
+   * The full Dreamwell card driving this prompt. When provided it is rendered at
+   * the head of the modal so the player sees what triggered the prompt; it
+   * supersedes the {@link sourceName} text label.
+   */
+  sourceCard?: DreamwellCardViewData | null;
   candidateIds: readonly string[];
   count: number;
   optional: boolean;
@@ -95,8 +104,10 @@ export function BattleCardPickerOverlay({
           className="pointer-events-auto mx-auto flex max-h-[calc(100vh-1.5rem)] w-full max-w-4xl flex-col gap-4 overflow-y-auto rounded-[2rem] border border-violet-300/25 bg-[linear-gradient(180deg,_rgba(7,10,18,0.98)_0%,_rgba(11,17,30,0.96)_100%)] p-5 shadow-2xl shadow-slate-950/70"
           onClick={(event) => event.stopPropagation()}
         >
-          <header className="flex flex-col gap-1 border-b border-slate-800 pb-3">
-            {sourceName ? (
+          <header className="flex flex-col gap-2 border-b border-slate-800 pb-3">
+            {sourceCard ? (
+              <DreamwellPromptCard card={sourceCard} />
+            ) : sourceName ? (
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-violet-300/80">
                 {sourceName}
               </p>
@@ -146,9 +157,10 @@ export function BattleCardPickerOverlay({
         className="pointer-events-auto mx-auto flex max-h-[calc(100vh-1.5rem)] w-full max-w-4xl flex-col gap-4 overflow-y-auto rounded-[2rem] border border-violet-300/25 bg-[linear-gradient(180deg,_rgba(7,10,18,0.98)_0%,_rgba(11,17,30,0.96)_100%)] p-5 shadow-2xl shadow-slate-950/70"
         onClick={(event) => event.stopPropagation()}
       >
+        {sourceCard ? <DreamwellPromptCard card={sourceCard} /> : null}
         <header className="flex flex-col gap-2 border-b border-slate-800 pb-3 md:flex-row md:items-start md:justify-between">
           <div>
-            {sourceName ? (
+            {!sourceCard && sourceName ? (
               <p className="text-xs font-semibold uppercase tracking-[0.16em] text-violet-300/80">
                 {sourceName}
               </p>

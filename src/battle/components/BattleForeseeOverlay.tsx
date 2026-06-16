@@ -1,11 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { CardDisplay } from "../../components/CardDisplay";
+import type { DreamwellCardViewData } from "../../components/DreamwellCardView";
 import { logEvent } from "../../logging";
 import type { BattleCommand } from "../debug/commands";
 import type { BattleMutableState, BattleSide } from "../types";
 import { formatSideLabel } from "../ui/format";
 import { BattleDeckOrderPicker } from "./BattleDeckOrderPicker";
 import { battleCardDisplayFromInstance } from "./BattleCardView";
+import { DreamwellPromptCard } from "./DreamwellPromptCard";
 
 const MIN_FORESEE_COUNT = 1;
 const MAX_FORESEE_COUNT = 5;
@@ -15,12 +17,18 @@ export function BattleForeseeOverlay({
   onClose,
   onDispatch,
   side,
+  sourceCard,
   state,
 }: {
   initialCount: number;
   onClose: () => void;
   onDispatch: (command: BattleCommand) => void;
   side: BattleSide;
+  /**
+   * The Dreamwell card driving this Foresee (e.g. Skypath), rendered at the head
+   * of the modal so the player sees what triggered it.
+   */
+  sourceCard?: DreamwellCardViewData | null;
   state: BattleMutableState;
 }) {
   const deck = state.sides[side].deck;
@@ -139,6 +147,7 @@ export function BattleForeseeOverlay({
         className="pointer-events-auto mx-auto flex max-h-[calc(100vh-1.5rem)] w-full max-w-4xl flex-col gap-4 overflow-y-auto rounded-[2rem] border border-violet-300/25 bg-[linear-gradient(180deg,_rgba(7,10,18,0.98)_0%,_rgba(11,17,30,0.96)_100%)] p-5 shadow-2xl shadow-slate-950/70"
         onClick={(event) => event.stopPropagation()}
       >
+        {sourceCard ? <DreamwellPromptCard card={sourceCard} /> : null}
         <header className="flex flex-col gap-2 border-b border-slate-800 pb-3 md:flex-row md:items-start md:justify-between">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.28em] text-violet-300">
