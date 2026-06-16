@@ -68,6 +68,15 @@ const ESSENCE_TEXT_COLOR = "#c4b5fd";
 const ESSENCE_ICON_CLASS = "bxf bx-crypto";
 
 /**
+ * Quest site names ("draft", "shop", "dream journey", …) are tinted this blue
+ * where they appear in front of the word "site"/"sites", so the site a
+ * dreamsign refers to reads at a glance. The trailing "site"/"sites" stays in
+ * the surrounding text color. Distinct from the spark-amber keyword emphasis
+ * and the violet essence currency.
+ */
+const SITE_NAME_COLOR = "#60a5fa";
+
+/**
  * Symbol types that render as an inline Boxicons mark sized to the surrounding
  * text. Energy and spark keep their dedicated branches below (each pins a
  * resource hue with a matching corner stat); these are the remaining glyphs
@@ -253,6 +262,15 @@ function renderSegment(
           className={`${ESSENCE_ICON_CLASS} align-middle`}
           style={{ transform: "translateY(-0.06em)" }}
         />
+      </span>
+    );
+  }
+  if (segment.kind === "siteName") {
+    // A quest site name written before "site"/"sites" reads in blue; the word
+    // "site" itself stays in the surrounding text color.
+    return (
+      <span key={key} style={{ color: SITE_NAME_COLOR }}>
+        {segment.value}
       </span>
     );
   }

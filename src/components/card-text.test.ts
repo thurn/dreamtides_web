@@ -34,6 +34,8 @@ function reconstructText(segments: TextSegment[]): string {
           return "❖".repeat(segment.count);
         case "essence":
           return segment.amount ?? "";
+        case "siteName":
+          return segment.value;
         case "nobreak":
           return reconstructText(segment.segments);
       }

@@ -39,6 +39,9 @@ export type SymbolType =
  *   written in front of it (`"50"` for `50 essence`) or is `null` for a bare
  *   reference (`the essence you gain`). The renderer draws the amount glued
  *   directly to the crypto glyph; the word "essence" itself is dropped.
+ * - `siteName` is the name of a quest site (`draft`, `shop`, `dream journey`,
+ *   …) written immediately before the word "site"/"sites". The renderer tints
+ *   it so the site reads at a glance; the trailing "site"/"sites" stays plain.
  */
 export type TextSegment =
   | { kind: "text"; value: string }
@@ -47,7 +50,8 @@ export type TextSegment =
   | { kind: "term"; word: string; entry: GlossaryEntry }
   | { kind: "sparkPip"; value: string }
   | { kind: "bolt"; count: number }
-  | { kind: "essence"; amount: string | null };
+  | { kind: "essence"; amount: string | null }
+  | { kind: "siteName"; value: string };
 
 /** Maps special Unicode characters to their symbol type. */
 const SYMBOL_MAP: Readonly<Record<string, SymbolType>> = {
@@ -140,6 +144,38 @@ function splitEssence(text: string): TextSegment[] {
       out.push({ kind: "text", value: text.slice(last, index) });
     }
     out.push({ kind: "essence", amount: match[1] ?? null });
+    last = index + match[0].length;
+  }
+  if (last < text.length) {
+    out.push({ kind: "text", value: text.slice(last) });
+  }
+  return out;
+}
+
+/**
+ * Quest site names that are tinted when they appear directly before the word
+ * "site"/"sites". Multi-word names are listed before any shorter name they
+ * share a first word with so the regex prefers the longer match. Battle is
+ * intentionally excluded. The trailing "site"/"sites" is matched by a lookahead
+ * so only the name is captured and the word "site" itself stays plain.
+ */
+const SITE_NAME_RE =
+  /\b(?:specialty shop|dreamsign offering|dreamsign draft|dream journey|dream bazaar|shop|draft|essence|transfiguration|duplication|reward|purge|cleanse|rest)(?=\s+sites?\b)/gi;
+
+/**
+ * Splits text into plain-text runs and `siteName` segments, tinting the name of
+ * a quest site written in front of "site"/"sites". The "site"/"sites" word
+ * itself is left in the surrounding text.
+ */
+function splitSiteNames(text: string): TextSegment[] {
+  const out: TextSegment[] = [];
+  let last = 0;
+  for (const match of text.matchAll(SITE_NAME_RE)) {
+    const index = match.index ?? 0;
+    if (index > last) {
+      out.push({ kind: "text", value: text.slice(last, index) });
+    }
+    out.push({ kind: "siteName", value: match[0] });
     last = index + match[0].length;
   }
   if (last < text.length) {
@@ -533,22 +569,30 @@ function scanSegments(text: string): TextSegment[] {
 }
 
 /**
- * Parses rules text into segments of plain text, symbols, glossary terms, and
- * essence currency values.
+ * Parses rules text into segments of plain text, symbols, glossary terms,
+ * essence currency values, and quest site names.
  *
  * Essence references are pulled out first (see `splitEssence`) so the amount in
- * front of the word is captured and the word itself dropped; the remaining text
- * runs are scanned for symbols and glossary terms. The icon-binding pass runs
- * once over the combined list so the word in front of an essence amount stays
- * glued to it.
+ * front of the word is captured and the word itself dropped; quest site names
+ * are then tinted (see `splitSiteNames`); the remaining text runs are scanned
+ * for symbols and glossary terms. The icon-binding pass runs once over the
+ * combined list so the word in front of an essence amount stays glued to it.
  */
 export function tokenizeRulesText(text: string): TextSegment[] {
   const segments: TextSegment[] = [];
   for (const piece of splitEssence(text)) {
-    if (piece.kind === "text") {
-      segments.push(...scanSegments(piece.value));
-    } else {
+    if (piece.kind !== "text") {
       segments.push(piece);
+      continue;
+    }
+    // Tint site names ("draft site") before scanning the remaining text for
+    // symbols and glossary terms.
+    for (const sub of splitSiteNames(piece.value)) {
+      if (sub.kind === "text") {
+        segments.push(...scanSegments(sub.value));
+      } else {
+        segments.push(sub);
+      }
     }
   }
   return bindIconsToText(segments);
