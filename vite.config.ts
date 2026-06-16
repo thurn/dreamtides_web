@@ -7,6 +7,7 @@ import { fileURLToPath } from "node:url";
 import type { Plugin, ViteDevServer } from "vite";
 import { createCardEditorApiMiddleware } from "./scripts/card-editor-api.mjs";
 import { createDreamsignEditorApiMiddleware } from "./scripts/dreamsign-editor-api.mjs";
+import { createDreamcallerEditorApiMiddleware } from "./scripts/dreamcaller-editor-api.mjs";
 import { createFigmentEditorApiMiddleware } from "./scripts/figment-editor-api.mjs";
 import { refreshFigmentDataJson } from "./scripts/figment-editor-data.mjs";
 import { createImageViewerApiMiddleware } from "./scripts/image-viewer-api.mjs";
@@ -67,6 +68,17 @@ function dreamsignEditorApiPlugin(): Plugin {
     apply: "serve",
     configureServer(server) {
       server.middlewares.use(createDreamsignEditorApiMiddleware({ rootDir: __dirname }));
+    },
+  };
+}
+
+/** Vite plugin that serves local dreamcaller editor read/write endpoints. */
+function dreamcallerEditorApiPlugin(): Plugin {
+  return {
+    name: "dreamcaller-editor-api",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(createDreamcallerEditorApiMiddleware({ rootDir: __dirname }));
     },
   };
 }
@@ -438,6 +450,7 @@ export default defineConfig({
     questLogPlugin(),
     cardEditorApiPlugin(),
     dreamsignEditorApiPlugin(),
+    dreamcallerEditorApiPlugin(),
     figmentEditorApiPlugin(),
     figmentDataHotReloadPlugin(),
     imageViewerApiPlugin(),
@@ -493,6 +506,14 @@ export default defineConfig({
         // current card names), so a rename rewrites it; ignore it so the save
         // does not trigger a full page reload that closes the art editor.
         path.resolve(path.join(__dirname, "data", "buildaround_support.json")),
+        // The dreamcaller editor writes data/tides4.jsonc (tide-pool edits) and
+        // regenerates the public dreamcaller/tides4 JSON catalogs on every save.
+        // tides4.jsonc sits outside data/tabula and the JSON outputs live under
+        // public/, so all three are otherwise watched; ignoring them keeps a
+        // dreamcaller-editor save from reloading the page mid-edit.
+        path.resolve(path.join(__dirname, "data", "tides4.jsonc")),
+        path.resolve(path.join(__dirname, "public", "dreamcallers-v2-data.json")),
+        path.resolve(path.join(__dirname, "public", "tides4-data.json")),
         ...generatedCardDataWatchPaths,
       ],
     },

@@ -27,6 +27,11 @@ if (pathname === "/editor") {
     "./editor/DreamsignEditorApp"
   );
   renderStrict(<DreamsignEditorApp />);
+} else if (pathname === "/dreamcallers") {
+  const { default: DreamcallerEditorApp } = await import(
+    "./editor/DreamcallerEditorApp"
+  );
+  renderStrict(<DreamcallerEditorApp />);
 } else if (pathname === "/figments") {
   const { default: FigmentEditorApp } = await import(
     "./editor/FigmentEditorApp"

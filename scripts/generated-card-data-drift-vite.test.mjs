@@ -39,12 +39,20 @@ describe("generated card data drift Vite integration", () => {
     // the debug overlay does not reload the page. The .worktrees and
     // .claude/worktrees directories are ignored so creating a git worktree
     // (which writes a full repo copy, including a tsconfig.json) does not force
-    // a full reload. The generated card data paths round out the list.
+    // a full reload. buildaround_support.json (regenerated on every card save),
+    // data/tides4.jsonc, and the public dreamcaller/tides4 JSON catalogs (all
+    // rewritten by the dreamcaller editor) are ignored so those editor saves do
+    // not reload the page either. The generated card data paths round out the
+    // list.
     expect(viteConfig.server?.watch?.ignored).toEqual([
       resolve(join(rootDir, "data", "tabula")) + "/**",
       resolve(join(rootDir, "saved-quests")) + "/**",
       resolve(join(rootDir, ".worktrees")) + "/**",
       resolve(join(rootDir, ".claude", "worktrees")) + "/**",
+      resolve(join(rootDir, "data", "buildaround_support.json")),
+      resolve(join(rootDir, "data", "tides4.jsonc")),
+      resolve(join(rootDir, "public", "dreamcallers-v2-data.json")),
+      resolve(join(rootDir, "public", "tides4-data.json")),
       ...generatedCardDataWatchPaths,
     ]);
   });
