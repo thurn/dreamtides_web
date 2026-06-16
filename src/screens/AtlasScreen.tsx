@@ -2,6 +2,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { useQuest } from "../state/quest-context";
 import { AtlasNode } from "../components/AtlasNode";
+import {
+  generateInitialAtlas,
+  type SiteGenerationContext,
+} from "../atlas/atlas-generator";
+import { logEvent } from "../logging";
 
 const DRAG_THRESHOLD = 5;
 
@@ -84,6 +89,53 @@ export function AtlasScreen() {
     };
   }, []);
 
+  /**
+   * Debug-only: discard the persisted atlas and rebuild it from scratch with
+   * the current {@link generateInitialAtlas} algorithm at the quest's present
+   * completion level. Lets us iterate on atlas generation and see the result
+   * live without starting a new quest. Because every node ID is reissued, the
+   * current dreamscape is reset to the freshly generated starting node so the
+   * rest of the quest state stays internally consistent.
+   */
+  const handleDebugRegenerate = useCallback(() => {
+    const playerHasBanes =
+      state.deck.some((entry) => entry.isBane) ||
+      state.dreamsigns.some((dreamsign) => dreamsign.isBane);
+    const context: SiteGenerationContext = {
+      playerHasBanes,
+      ...(state.dreamscapeModifiers.length > 0
+        ? { dreamscapeModifiers: state.dreamscapeModifiers }
+        : {}),
+    };
+    const previousNodeCount = Object.keys(state.atlas.nodes).length;
+    const regenerated = generateInitialAtlas(state.completionLevel, context, {
+      logEvents: true,
+    });
+    const startingNode = Object.values(regenerated.nodes).find(
+      (node) => node.status === "available",
+    );
+
+    logEvent("debug_atlas_regenerated", {
+      source: "atlas_debug_refresh",
+      completionLevel: state.completionLevel,
+      playerHasBanes,
+      dreamscapeModifierCount: state.dreamscapeModifiers.length,
+      previousNodeCount,
+      regeneratedNodeCount: Object.keys(regenerated.nodes).length,
+      startingNodeId: regenerated.startingNodeId,
+    });
+
+    mutations.updateAtlas(regenerated);
+    mutations.setCurrentDreamscape(startingNode?.id ?? null);
+  }, [
+    state.deck,
+    state.dreamsigns,
+    state.dreamscapeModifiers,
+    state.completionLevel,
+    state.atlas.nodes,
+    mutations,
+  ]);
+
   const handleNodeClick = useCallback(
     (nodeId: string) => {
       if (didDrag.current) return;
@@ -119,6 +171,19 @@ export function AtlasScreen() {
         <p className="text-sm opacity-50">
           Click a glowing node to enter a dreamscape
         </p>
+        <button
+          type="button"
+          onClick={handleDebugRegenerate}
+          data-testid="atlas-debug-regenerate"
+          className="mt-2 rounded border px-2 py-1 text-xs font-medium tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
+          style={{
+            background: "rgba(217, 119, 6, 0.12)",
+            border: "1px solid rgba(217, 119, 6, 0.4)",
+            color: "#fbbf24",
+          }}
+        >
+          {"🔄 Debug: Regenerate Atlas"}
+        </button>
       </div>
 
       <div
