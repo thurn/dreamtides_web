@@ -146,16 +146,18 @@ export function AtlasNode({ node, isStarting, onNodeClick }: AtlasNodeProps) {
   return (
     <g
       transform={`translate(${String(node.position.x)}, ${String(node.position.y)})`}
-      style={{
-        cursor: isAvailable ? "pointer" : "default",
-        opacity,
-      }}
+      style={{ cursor: isAvailable ? "pointer" : "default" }}
       onClick={handleClick}
       onMouseEnter={() => { setIsHovered(true); }}
       onMouseLeave={() => { setIsHovered(false); }}
       role={isAvailable ? "button" : undefined}
       aria-label={ariaLabel}
     >
+      {/* The node's own visuals are dimmed by status (unavailable dreamscapes
+          are faded back, completed ones slightly), but the hover tooltip is
+          rendered outside this group so it always stays fully legible — even for
+          unavailable dreamscapes the player cannot reach yet. */}
+      <g style={{ opacity }}>
       {/* Glow effect for available nodes */}
       {isAvailable && (
         <motion.circle
@@ -257,9 +259,12 @@ export function AtlasNode({ node, isStarting, onNodeClick }: AtlasNodeProps) {
           YOU STARTED HERE
         </text>
       )}
+      </g>
 
-      {/* Hover tooltip describing this dreamscape's enhanced property. */}
-      {isHovered && (isAvailable || isCompleted) && (
+      {/* Hover tooltip describing this dreamscape's enhanced property. Shown for
+          every dreamscape, including unavailable ones the player cannot reach
+          yet, so they can preview what is special about each one. */}
+      {isHovered && (
         <foreignObject
           x={-tooltipWidth / 2}
           y={tooltipOffsetY}
