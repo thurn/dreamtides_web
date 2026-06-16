@@ -747,6 +747,27 @@ describe("assignBiome", () => {
     expect(biome.color).toBeDefined();
     expect(biome.enhancedSiteType).toBeDefined();
   });
+
+  it("generates a wide variety of distinct names", () => {
+    // The generator combines a themed adjective and noun, so repeated rolls
+    // should yield far more than the handful of names a fixed list allowed.
+    const names = new Set<string>();
+    for (let i = 0; i < 2000; i++) {
+      names.add(assignBiome().name);
+    }
+    expect(names.size).toBeGreaterThan(200);
+  });
+
+  it("avoids names already in use when alternatives exist", () => {
+    // Track the names handed out across a quest-sized batch; with thousands of
+    // combinations available, none should repeat when we feed prior names back.
+    const used = new Set<string>();
+    for (let i = 0; i < 30; i++) {
+      const biome = assignBiome(used);
+      expect(used.has(biome.name)).toBe(false);
+      used.add(biome.name);
+    }
+  });
 });
 
 describe("previewSiteTypes", () => {

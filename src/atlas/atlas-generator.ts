@@ -5,7 +5,11 @@ import type {
   SiteState,
   SiteType,
 } from "../types/quest";
-import { BIOMES, type Biome } from "../data/biomes";
+import {
+  BIOME_THEMES,
+  biomeName,
+  type Biome,
+} from "../data/biomes";
 import { draftSiteData } from "../draft/draft-site-config";
 import { logEvent } from "../logging";
 
@@ -484,10 +488,43 @@ export function generateSiteComposition(
   return sites;
 }
 
-/** Randomly assigns a biome, preferring those whose names are not already in use. */
+/** How many fresh names to try before accepting a duplicate name. */
+const BIOME_NAME_MAX_ATTEMPTS = 12;
+
+/**
+ * Randomly assigns a biome. A theme is chosen at random, then an evocative name
+ * is built from that theme's vocabulary (`${adjective} ${noun}`) along with a
+ * colour from the theme's palette. Each theme yields hundreds of distinct
+ * names, so the same name rarely recurs within a quest; when a generated name
+ * is already in `usedBiomeNames`, a handful of fresh names are tried before
+ * accepting a repeat (which keeps generation terminating even in the
+ * vanishingly unlikely case that every combination is exhausted).
+ */
 export function assignBiome(usedBiomeNames: ReadonlySet<string> = new Set()): Biome {
-  const available = BIOMES.filter((biome) => !usedBiomeNames.has(biome.name));
-  return pickRandom(available.length > 0 ? available : BIOMES);
+  let candidate = rollBiome();
+  for (
+    let attempt = 0;
+    attempt < BIOME_NAME_MAX_ATTEMPTS && usedBiomeNames.has(candidate.name);
+    attempt++
+  ) {
+    candidate = rollBiome();
+  }
+  return candidate;
+}
+
+/** Rolls a single random biome from a random theme's vocabulary and palette. */
+function rollBiome(): Biome {
+  const theme = pickRandom(BIOME_THEMES);
+  const name = biomeName(
+    theme,
+    randomInt(0, theme.adjectives.length - 1),
+    randomInt(0, theme.nouns.length - 1),
+  );
+  return {
+    name,
+    color: pickRandom(theme.colors),
+    enhancedSiteType: theme.enhancedSiteType,
+  };
 }
 
 /**
