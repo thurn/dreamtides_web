@@ -1,7 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { useQuest } from "../state/quest-context";
 import { downloadLog, logEvent } from "../logging";
-import { saveQuest } from "../state/saved-quests";
+import {
+  getSavedQuest,
+  listSavedQuests,
+  saveQuest,
+  type SavedQuestSummary,
+} from "../state/saved-quests";
+import type { QuestState } from "../types/quest";
 import { DreamcallerPortrait } from "./DreamcallerPortrait";
 import { DreamcallerPopover } from "./DreamcallerPopover";
 import { HudDreamsignRow } from "./HudDreamsignRow";
@@ -64,6 +70,12 @@ interface HudProps {
   isCardSourceOverlayOpen: boolean;
   hasJourneyExplanation: boolean;
   isJourneyExplanationOpen: boolean;
+  /**
+   * Replaces the entire quest state with a saved snapshot loaded by name.
+   * Optional because only the live multiplayer provider supplies it, matching
+   * the Package Debug overlay's own load wiring.
+   */
+  onLoadQuestState?: (state: QuestState, source: string) => void;
 }
 
 /** Persistent HUD bar anchored to the bottom of the viewport. */
@@ -79,9 +91,19 @@ export function HUD({
   isCardSourceOverlayOpen,
   hasJourneyExplanation,
   isJourneyExplanationOpen,
+  onLoadQuestState,
 }: HudProps) {
   const { state } = useQuest();
   const [isUtilityMenuOpen, setIsUtilityMenuOpen] = useState(false);
+  // The utility menu has two views: the root list of actions and a "Load
+  // Quest" submenu listing saved snapshots. Selecting "Load Quest" swaps the
+  // menu into the submenu rather than opening a separate overlay.
+  const [menuView, setMenuView] = useState<"root" | "load">("root");
+  const [loadSaves, setLoadSaves] = useState<SavedQuestSummary[]>([]);
+  const [loadStatus, setLoadStatus] = useState<
+    "idle" | "loading" | "ready" | "error"
+  >("idle");
+  const [loadError, setLoadError] = useState<string | null>(null);
   // Transient feedback for the "Save Quest" menu action, auto-cleared a few
   // seconds after the save resolves so it does not linger on the HUD.
   const [saveStatus, setSaveStatus] = useState<string | null>(null);
@@ -145,8 +167,59 @@ export function HUD({
     downloadLog();
   }
 
+  // Switch the utility menu into the "Load Quest" submenu and (re)fetch the
+  // list of saved snapshots from the dev server every time it is opened so the
+  // list reflects any saves made since the menu was last viewed.
+  function handleOpenLoadMenu(): void {
+    setMenuView("load");
+    setLoadStatus("loading");
+    setLoadError(null);
+    void listSavedQuests()
+      .then((entries) => {
+        setLoadSaves(entries);
+        setLoadStatus("ready");
+      })
+      .catch((error: unknown) => {
+        setLoadError(
+          error instanceof Error
+            ? error.message
+            : "Failed to list saved quests.",
+        );
+        setLoadStatus("error");
+      });
+  }
+
+  // Fetch the chosen snapshot and replace the running quest with it. Mirrors
+  // the Package Debug overlay's load path so both routes behave identically.
+  async function handleSelectLoad(summary: SavedQuestSummary): Promise<void> {
+    if (onLoadQuestState === undefined) {
+      showSaveStatus("Loading is unavailable in this context.");
+      return;
+    }
+    try {
+      const loaded = await getSavedQuest(summary.name);
+      if (loaded === null) {
+        showSaveStatus(`Saved quest "${summary.name}" could not be found.`);
+        return;
+      }
+      logEvent("debug_quest_loaded", {
+        source: "hud_load_quest",
+        name: summary.name,
+        screen: loaded.screen?.type ?? "unknown",
+      });
+      onLoadQuestState(loaded, "hud_load_quest");
+      closeUtilityMenu();
+      showSaveStatus(`Loaded "${summary.name}".`);
+    } catch (error) {
+      showSaveStatus(
+        error instanceof Error ? error.message : "Failed to load quest.",
+      );
+    }
+  }
+
   function closeUtilityMenu(): void {
     setIsUtilityMenuOpen(false);
+    setMenuView("root");
   }
 
   const dreamcallerName = state.dreamcaller?.name ?? null;
@@ -343,7 +416,10 @@ export function HUD({
               border: "1px solid rgba(148, 163, 184, 0.32)",
               color: "#e2e8f0",
             }}
-            onClick={() => setIsUtilityMenuOpen((value) => !value)}
+            onClick={() => {
+              setMenuView("root");
+              setIsUtilityMenuOpen((value) => !value);
+            }}
           >
             {"\u22ef"}
           </button>
@@ -352,51 +428,76 @@ export function HUD({
               data-testid="hud-utility-menu"
               className="absolute right-0 bottom-full z-50 mb-2 flex min-w-48 flex-col gap-1 rounded-md border border-slate-600 bg-slate-950 p-2 shadow-xl"
             >
-              <UtilityMenuButton
-                label="Pool Viewer"
-                onClick={() => {
-                  closeUtilityMenu();
-                  onOpenPoolViewer();
-                }}
-              />
-              {hasCardSourceDebug ? (
-                <UtilityMenuButton
-                  label="Why Cards"
-                  active={isCardSourceOverlayOpen}
-                  onClick={() => {
-                    closeUtilityMenu();
-                    onToggleCardSourceOverlay();
+              {menuView === "root" ? (
+                <>
+                  <UtilityMenuButton
+                    label="Pool Viewer"
+                    onClick={() => {
+                      closeUtilityMenu();
+                      onOpenPoolViewer();
+                    }}
+                  />
+                  {hasCardSourceDebug ? (
+                    <UtilityMenuButton
+                      label="Why Cards"
+                      active={isCardSourceOverlayOpen}
+                      onClick={() => {
+                        closeUtilityMenu();
+                        onToggleCardSourceOverlay();
+                      }}
+                    />
+                  ) : null}
+                  {hasDraftData ? (
+                    <UtilityMenuButton
+                      label="Package Debug"
+                      onClick={() => {
+                        closeUtilityMenu();
+                        onOpenDebugScreen();
+                      }}
+                    />
+                  ) : null}
+                  {hasJourneyExplanation ? (
+                    <UtilityMenuButton
+                      label="Why Journey"
+                      active={isJourneyExplanationOpen}
+                      onClick={() => {
+                        closeUtilityMenu();
+                        onToggleJourneyExplanation();
+                      }}
+                      testId="hud-why-journey-button"
+                    />
+                  ) : null}
+                  <UtilityMenuButton
+                    label="Save Quest"
+                    onClick={() => {
+                      void handleSaveQuest();
+                    }}
+                    testId="hud-save-quest-button"
+                  />
+                  {onLoadQuestState !== undefined ? (
+                    <UtilityMenuButton
+                      label="Load Quest"
+                      onClick={handleOpenLoadMenu}
+                      testId="hud-load-quest-button"
+                    />
+                  ) : null}
+                  <UtilityMenuButton
+                    label="Download Log"
+                    onClick={handleDownloadLog}
+                  />
+                </>
+              ) : (
+                <LoadQuestSubmenu
+                  status={loadStatus}
+                  saves={loadSaves}
+                  error={loadError}
+                  onBack={() => setMenuView("root")}
+                  onRetry={handleOpenLoadMenu}
+                  onSelect={(summary) => {
+                    void handleSelectLoad(summary);
                   }}
                 />
-              ) : null}
-              {hasDraftData ? (
-                <UtilityMenuButton
-                  label="Package Debug"
-                  onClick={() => {
-                    closeUtilityMenu();
-                    onOpenDebugScreen();
-                  }}
-                />
-              ) : null}
-              {hasJourneyExplanation ? (
-                <UtilityMenuButton
-                  label="Why Journey"
-                  active={isJourneyExplanationOpen}
-                  onClick={() => {
-                    closeUtilityMenu();
-                    onToggleJourneyExplanation();
-                  }}
-                  testId="hud-why-journey-button"
-                />
-              ) : null}
-              <UtilityMenuButton
-                label="Save Quest"
-                onClick={() => {
-                  void handleSaveQuest();
-                }}
-                testId="hud-save-quest-button"
-              />
-              <UtilityMenuButton label="Download Log" onClick={handleDownloadLog} />
+              )}
             </div>
           ) : null}
           {saveStatus !== null && !isUtilityMenuOpen ? (
@@ -438,5 +539,90 @@ function UtilityMenuButton({
     >
       {label}
     </button>
+  );
+}
+
+/** Formats a saved-quest ISO timestamp for the load submenu subtitle. */
+function formatSavedAt(savedAt: string): string {
+  const parsed = new Date(savedAt);
+  if (Number.isNaN(parsed.getTime())) {
+    return savedAt;
+  }
+  return parsed.toLocaleString();
+}
+
+/**
+ * The "Load Quest" view of the utility menu: a back control plus the list of
+ * saved snapshots fetched from the dev server. Picking an entry replaces the
+ * running quest with that snapshot.
+ */
+function LoadQuestSubmenu({
+  status,
+  saves,
+  error,
+  onBack,
+  onRetry,
+  onSelect,
+}: {
+  status: "idle" | "loading" | "ready" | "error";
+  saves: SavedQuestSummary[];
+  error: string | null;
+  onBack: () => void;
+  onRetry: () => void;
+  onSelect: (summary: SavedQuestSummary) => void;
+}) {
+  return (
+    <div data-testid="hud-load-quest-menu" className="flex flex-col gap-1">
+      <button
+        type="button"
+        className="min-h-9 rounded-md px-3 text-left text-sm font-medium text-slate-300 hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+        onClick={onBack}
+      >
+        {"‹"} Back
+      </button>
+      <div className="my-1 border-t border-slate-700" />
+      {status === "loading" ? (
+        <p className="px-3 py-2 text-xs text-slate-400">
+          Loading saved quests...
+        </p>
+      ) : null}
+      {status === "error" ? (
+        <div className="px-3 py-2 text-xs text-rose-300">
+          <p>{error ?? "Failed to list saved quests."}</p>
+          <button
+            type="button"
+            className="mt-1 rounded-md px-2 py-1 text-xs font-medium text-cyan-200 hover:bg-white/10"
+            onClick={onRetry}
+          >
+            Retry
+          </button>
+        </div>
+      ) : null}
+      {status === "ready" && saves.length === 0 ? (
+        <p className="px-3 py-2 text-xs text-slate-400">No saved quests.</p>
+      ) : null}
+      {status === "ready" && saves.length > 0 ? (
+        <div className="flex max-h-[50vh] flex-col gap-1 overflow-auto">
+          {saves.map((save) => (
+            <button
+              key={save.name}
+              type="button"
+              data-load-quest-option={save.name}
+              className="min-h-9 rounded-md px-3 py-1 text-left hover:bg-white/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300"
+              onClick={() => {
+                onSelect(save);
+              }}
+            >
+              <span className="block truncate text-sm font-medium text-slate-100">
+                {save.name}
+              </span>
+              <span className="block truncate text-xs text-slate-400">
+                {save.screenType} · {formatSavedAt(save.savedAt)}
+              </span>
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
   );
 }

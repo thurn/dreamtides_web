@@ -378,6 +378,7 @@ export function QuestApp({
               hasJourneyExplanation={journeyExplanation !== null}
               isJourneyExplanationOpen={journeyExplanationOpen}
               onToggleJourneyExplanation={handleToggleJourneyExplanation}
+              onLoadQuestState={mutations.loadQuestState}
             />
           </ErrorBoundary>
         )}
