@@ -905,14 +905,14 @@ tags = ["J15", "Tag OK"]
 id = "1CF06F9B-D698-434B-8E36-8A47206F4C0C"
 name = "Cracked Mirror"
 image_name = "mirror.png"
-rendered-text = "The first card you purchase from each Shop is duplicated."
+rendered-text = "The first card you purchase from each shop site is duplicated."
 tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "8408B8C2-5A3F-40DD-BAC4-98F2736C4176"
 name = "Cracked Orb"
 image_name = "magic-ball.png"
-rendered-text = "Each Shop site provides 2 additional options."
+rendered-text = "Each shop site provides 2 additional options."
 tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
@@ -926,14 +926,14 @@ tags = ["J15", "Tag OK"]
 id = "8A2C7B32-26EA-40E2-845A-689DA5673B4D"
 name = "Witch Coin"
 image_name = "witch_coin.png"
-rendered-text = "The first Restock at each Shop costs 0."
+rendered-text = "The first Restock at each shop site costs 0."
 tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "883F88FB-AC50-419A-8382-C22EDEE29755"
 name = "Charm Staff"
 image_name = "magic_stick_6.png"
-rendered-text = "After you buy an item at a Shop, replace it immediately with another item for purchase."
+rendered-text = "After you buy an item at a shop site, replace it immediately with another item for purchase."
 tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
@@ -954,7 +954,7 @@ tags = ["J15", "Tag OK"]
 id = "4F21A4AB-E4AA-4718-8563-9AFB72D140C0"
 name = "Star Anise"
 image_name = "star_anise.png"
-rendered-text = "At each Draft site, the first event card you add to your deck gains the Amplified Transfiguration."
+rendered-text = "At each draft site, the first event card you add to your deck gains the Amplified Transfiguration."
 tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
@@ -962,7 +962,7 @@ id = "0C52E8C3-A792-4EEA-955F-A0C61463C066"
 name = "Spell Tome"
 image_name = "book.png"
 tides = ["event_chain", "copy_effects", "event_setup"]
-rendered-text = "At Transfiguration sites, when you transfigure an event, add a copy of it to your deck."
+rendered-text = "At transfiguration sites, when you transfigure an event, add a copy of it to your deck."
 tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
@@ -990,28 +990,28 @@ tags = ["J15", "Tag OK"]
 id = "D9F0F7FF-63C0-4247-8831-054D7FED931D"
 name = "Leaf Ledger"
 image_name = "book_8.png"
-rendered-text = "At each Transfiguration site you visit, transfigure 2 cards instead of 1."
+rendered-text = "At each transfiguration site you visit, transfigure 2 cards instead of 1."
 tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "BE59C0BA-6286-49E3-A88D-86B0977CC30A"
 name = "Pearl Shell"
 image_name = "shell.png"
-rendered-text = "At each Essence site you visit, you are instead offered a Dreamsign."
+rendered-text = "At each essence site you visit, you are instead offered a Dreamsign."
 tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "AF92858A-0C50-4ABF-A622-04C024CA32B3"
 name = "Star Badge"
 image_name = "Ring_2.png"
-rendered-text = "Double the essence you gain from Essence sites."
+rendered-text = "Double the essence you gain from essence sites."
 tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
 id = "488BF436-C6D5-4E38-8A19-E50041F53766"
 name = "Sickle"
 image_name = "sickle.png"
-rendered-text = "At each Essence site, you may forgo the essence to purge 2 cards."
+rendered-text = "At each essence site, you may forgo the essence to purge 2 cards."
 tags = ["J15", "Tag OK"]
 
 [[dreamsign]]
@@ -1106,28 +1106,28 @@ tags = ["J16", "Tag OK"]
 id = "108841CE-4FEB-4C73-972E-0277C727C63E"
 name = "Slug"
 image_name = "slug.png"
-rendered-text = "After each battle, you may purge up to 2 cards from your deck."
+rendered-text = "After each battle, you may purge up to 2 cards."
 tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "025CE7F1-066B-480A-8A2F-364379890ABD"
 name = "Spider"
 image_name = "spider.png"
-rendered-text = "After each battle, you may duplicate a card in your deck."
+rendered-text = "After each battle, you may duplicate a card."
 tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "452B7CD6-9DC3-48A8-B9AA-412CA6DD5F19"
 name = "Green Slime"
 image_name = "speaces.png"
-rendered-text = "After each battle, you may apply random transfigurations to up to 3 cards in your deck."
+rendered-text = "After each battle, you may apply random transfigurations to up to 3 cards."
 tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
 id = "DA7E4B45-9106-4116-BC1C-3AEC8885396B"
 name = "Spiral Shell"
 image_name = "shell 2.png"
-rendered-text = "At Duplication sites, you always add 4 copies of the selected card to your deck."
+rendered-text = "At duplication sites, you always gain 4 copies of the selected card."
 tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
@@ -1141,7 +1141,7 @@ tags = ["J16", "Tag OK"]
 id = "CD81A49D-DF58-4E0E-B1B2-33A82B386052"
 name = "Rosemary"
 image_name = "rosemary.png"
-rendered-text = "Dreamsign and Dreamsign Draft sites are enchanced."
+rendered-text = "Dreamsign and dreamsign draft sites are enchanced."
 tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
@@ -1155,7 +1155,7 @@ tags = ["J16", "Tag OK"]
 id = "3C0CED1A-7A2A-4F18-9AB4-5D6055D1DC59"
 name = "Curled Tail"
 image_name = "tall.png"
-rendered-text = "You may reroll Dream Journey sites once to present new options."
+rendered-text = "You may reroll dream journey sites once to present new options."
 tags = ["J16", "Tag OK"]
 
 [[dreamsign]]
