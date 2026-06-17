@@ -36,7 +36,7 @@ shops and in various other ways. Players begin each quest by choosing a
 Dreamcaller, then review their fixed starter deck and starting dreamscape. By
 default, quests have a maximum essence cap of 500; any essence gained beyond
 this cap is lost unless the cap has been increased by an effect such as a Dream
-Journey reward. Dreamtides does not use an explicit rarity system for cards,
+Augury reward. Dreamtides does not use an explicit rarity system for cards,
 except for certain powerful cards that are designated as legendary cards.
 
 In addition to deck cards, users during a quest will select 1 of 3 Dreamcallers
@@ -155,7 +155,7 @@ ancient bargains and cards drift into the void only to rise again.*
 ### Blackthorn Keep
 
 - **Dream Guide:** Aldric, the Seer
-- **Signature Site:** [Dream Journey](#dream-journey)
+- **Signature Site:** [Dream Augury](#dream-augury)
 - **Aesthetic:** A dark fantasy castle.
 - **Affiliation:** Abandon / Sacrifice
 - **Site Icon:** `game-icons.net/sbed/crystal-ball`
@@ -196,7 +196,7 @@ An affiliation nudges random card selection throughout its dreamscape:
 
 - The nudge applies **dreamscape-wide**, to every random card or dreamsign draw
   at any site within that dreamscape: draft offers, Card Shop stock, dreamsign
-  selection, transfiguration and duplication candidates, journey reward cards,
+  selection, transfiguration and duplication candidates, augury reward cards,
   and so on.
 - The nudge is **similarity-weighted reweighting**. Each candidate card's
   selection weight is multiplied by a factor derived from its similarity to the
@@ -398,7 +398,7 @@ Icon: `game-icons.net/sbed/card-pick` (modified)
 
 An essence site grants the user a fixed amount of essence, often around 200-300.
 Essence is capped at 500 by default, and any amount above the current cap is
-lost. Effects such as Dream Journey rewards may increase this cap.
+lost. Effects such as Dream Augury rewards may increase this cap.
 
 **UI:** Unlike with other sites, the camera does not zoom in to essence sites.
 Instead the button simply vanishes on click and a purple particle effect
@@ -422,7 +422,7 @@ Shop always shows 5 cards to purchase plus a restock option.
 Shop base prices and the overall essence economy are defined in TOML. The shop
 implements a random "discount" system where one or more items can be displayed as
 being on sale, for between 30% and 90% cost reduction. Effects such as dreamsigns
-or journey effects can also modify shop prices.
+or augury effects can also modify shop prices.
 
 **Home Specialty.** In Tumbleleaf Village, Tobias sells powerful cards at a
 discount, drawn directly from the player's Dreamcaller signature tide.
@@ -601,30 +601,30 @@ selected cards are permanently removed.
 
 Icon: `game-icons.net/sbed/small-fire`
 
-### Dream Journey
+### Dream Augury
 
-Dream Journey is run by **Aldric, the Seer** (home: Blackthorn Keep). It functions
+Dream Augury is run by **Aldric, the Seer** (home: Blackthorn Keep). It functions
 like a random event in other roguelike deckbuilding games: the player chooses
-between two reward options to claim. Dream Journey rewards are pure upside, and
+between two reward options to claim. Dream Augury rewards are pure upside, and
 this is where the biggest random effects live — effects that can structurally
 change a quest or modify the user's entire deck. The amount of information
-revealed about an effect is variable, and some journeys have highly random effects
+revealed about an effect is variable, and some auguries have highly random effects
 not disclosed in advance. A close button allows the user to reject the options,
-though some journeys explicitly remove it.
+though some auguries explicitly remove it.
 
 **Home Specialty.** In Blackthorn Keep, Aldric offers bigger rewards highly
 curated to the player's current deck (for example, transfiguring more cards,
 offering more draft choices, or offering more curated strong cards).
 
-**UI:** Aldric performs an animation and displays a speech bubble. The journey
+**UI:** Aldric performs an animation and displays a speech bubble. The augury
 cards animate from the center of Aldric's chest at a small size and are shown
 side-by-side (next to him in landscape, below in portrait). A purple button under
 each accepts it. Accepting animates the chosen card up to screen center, then
 plays a dissolve animation, then shows the effect via a custom animation (for
 example, cards fading in and animating to the quest deck for an "add 3 cards"
 effect). Once the effect animation completes, the camera pulls back to the map. A
-journey card is a circular image that displays its rules text on hover/long press.
-For journeys with multiple effects, each animation plays in sequence.
+augury card is a circular image that displays its rules text on hover/long press.
+For auguries with multiple effects, each animation plays in sequence.
 
 Icon: `game-icons.net/sbed/crystal-ball`
 
@@ -697,7 +697,7 @@ enhancements are:
 | Durgan Forgehammer | Frostforge | Transfiguration | Pick any card and any applicable transfiguration |
 | Deacon Holt | Hope's End | Duplication | Pick any card to duplicate |
 | Master Takeshi | Tsukiren | Purge | Remove up to 3 cards or banes for free |
-| Aldric, the Seer | Blackthorn Keep | Dream Journey | Bigger rewards, curated to the deck |
+| Aldric, the Seer | Blackthorn Keep | Dream Augury | Bigger rewards, curated to the deck |
 | Maddox | The Rust Expanse | Tempting Offer | Choose between two offers |
 | Gravok | Farpoint Station | Gamble | No initial fee, bigger payouts |
 | "Layaway" | Grid City | Temporal Fork | Longer duration / sooner future rewards |
@@ -739,7 +739,7 @@ their choice to get back down under 50 cards.
 
 Quest runs also have a maximum essence cap of 500 by default. If the player would
 gain essence above their current cap, the excess is lost. This cap can be
-increased by effects such as Dream Journey rewards.
+increased by effects such as Dream Augury rewards.
 
 Quest decks must contain a minimum of 25 cards. If the user has not completed
 enough drafts to reach this threshold, additional copies of their deck are added
