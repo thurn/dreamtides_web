@@ -32,8 +32,9 @@ when possible.
 
 Quests revolve primarily around drafting and refining a deck to bring into
 future battles. Quests use a single currency, **essence**, which is spent at
-shops and in various other ways. Players begin each quest by choosing a
-Dreamcaller, then review their fixed starter deck and starting dreamscape. By
+shops and in various other ways. Players begin each quest with 200 essence by
+default, then choose a Dreamcaller and review their fixed starter deck and
+starting dreamscape. By
 default, quests have a maximum essence cap of 500; any essence gained beyond
 this cap is lost unless the cap has been increased by an effect such as a Dream
 Augury reward. Dreamtides does not use an explicit rarity system for cards,
@@ -201,6 +202,11 @@ An affiliation nudges random card selection throughout its dreamscape:
   tides4 algorithm. It only shifts draw probabilities; any card that could
   appear can still appear, and affiliated cards simply appear more often.
 
+An affiliation also influences the opponent encountered at the dreamscape's
+[Battle](#battle) site: the assigned opponent Dreamcaller is more likely to bring
+a deck matching the affiliation. A battle in Tumbleleaf Village, for example, is
+more likely to be against a Spirit Animals deck.
+
 Affiliations are flavor-aligned with their dreamscape (Tumbleleaf Village leans
 toward Spirit Animals, Tsukiren toward Warriors), but mechanically they are just
 signature card sets and corresponding similarity weights configured in TOML.
@@ -246,6 +252,7 @@ define the run.
 Selecting a Dreamcaller performs all run bootstrap work immediately:
 
 - Add the fixed starter deck.
+- Grant the starting essence (200 by default).
 - Build the draft pool and Dreamsign pool from the Dreamcaller's tides.
 - Generate the initial atlas.
 - Make the starting deck available through the deck UI.
@@ -351,7 +358,8 @@ Three sites — Battle, Draft, and Essence — have no guide and are never enhan
 
 The Battle site is the core gameplay element of Dreamtides, and it allows users
 to play a match against an AI opponent. Each battle has an assigned opponent
-dreamcaller with their own deck, derived randomly from that dreamcaller's tides.
+dreamcaller with their own deck, derived randomly from that dreamcaller's tides
+and biased toward the dreamscape's [affiliation](#affiliations).
 Before the battle begins, the opposing dreamcaller is displayed so the user can
 understand any special abilities they have. Opposing dreamsigns are also shown.
 When the battle completes, the [Victory or Defeat](#victory--defeat) screen is
