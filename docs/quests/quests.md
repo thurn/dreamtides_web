@@ -43,15 +43,21 @@ except for certain powerful cards that are designated as legendary cards.
 In addition to deck cards, users during a quest will select 1 of 3 Dreamcallers
 to lead their deck and may have some number of Dreamsigns:
 
-- **Dreamcaller:** An animated 3D character who starts each battle already in
-  play for both participants in a battle. Each Dreamcaller has powerful ongoing,
-  triggered, or activated abilities and seeds the run's draft pool, Dreamsign
-  pool, and default reward bias as described in
+- **Dreamcaller:** An animated 3D character who is already in play when each
+  battle begins. The player and their opponent each bring their own Dreamcaller,
+  which starts in play on its owner's side. Each Dreamcaller has powerful
+  ongoing, triggered, or activated abilities and seeds the run's draft pool,
+  Dreamsign pool, and default reward bias as described in
   [Draft Pool Construction](#draft-pool-construction).
 - **Dreamsigns:** Cards with 2D illustrations of objects which provide more
-  minor ongoing effects. Dreamsign effects can apply during battles, on the
-  quest map, or both. Dreamsigns are pulled from a shared run pool and are spent
-  as soon as they are shown to the player.
+  minor ongoing effects, defined in `data/tabula/dreamsigns.toml`. A dreamsign
+  the player gains is kept for the rest of the run; its effect can apply during
+  battles, on the quest map, or both (for example, a battle effect such as "Once
+  per turn, when you discard a card, your next card this turn costs 2 less," or a
+  map effect such as "Double the essence you gain from essence sites"). Dreamsigns
+  are drawn from a shared run pool, and each entry is removed from that pool as
+  soon as it is offered — whether or not the player takes it — so the same
+  dreamsign is never offered twice in a run.
 
 Quests display a top-level 3D screen called the [Dream Atlas](#dream-atlas), an
 interconnected web of locations called **dreamscapes**. Each dreamscape has a
@@ -268,8 +274,10 @@ square frame (head only). The other cards animate back to a small size.
 
 ## Rarity
 
-Dreamtides does *not* have card rarity, except for the "legendary" status on
-certain powerful cards.
+Dreamtides does *not* have card rarity. The one exception is a **legendary** tag
+applied to certain very strong cards. A card's legendary tag is capped at a single
+copy in a run's draft pool, and the tag is referenced by reward effects such as
+Dream Augury offers; it carries no other rarity mechanics.
 
 ## Draft Pool Construction
 
@@ -287,7 +295,8 @@ At quest start, choosing a Dreamcaller resolves the run's draft pool as follows:
 3. Top the bag up with the Dreamcaller's neutral tides until a full pool can be
    dealt.
 4. Shuffle the combined bag and deal it into the draft multiset, capped at 2
-   copies of any single card. The default deal size is 150 cards.
+   copies of any single card (1 copy for [legendary](#rarity) cards). The default
+   deal size is 150 cards.
 5. Exclude the Dreamcaller's starter cards from the pool.
 
 The resulting multiset is stored as `draftPoolCopiesByCard`. Because facet
@@ -313,8 +322,8 @@ generates draft pick offers directly from that data:
   burned; they do not return to the pool later.
 - The player pick adds the chosen card to the deck but does not otherwise alter
   the already-spent offer.
-- The draft multiset is recreated from `draftPoolCopiesByCard` when it runs out
-  of cards.
+- The draft pool cannot run out: when the multiset is exhausted it is recreated
+  from `draftPoolCopiesByCard`, so draft and shop sites can always make an offer.
 
 ### Draft Sites On The Map
 
@@ -327,9 +336,10 @@ dreamscapes provide more opportunities to draft than late dreamscapes:
 | 2, 3             | 1           |
 | 4+               | 0           |
 
-Because the draft pool is persistent and finite, each draft site is spending
-real run inventory. Offer quality naturally shifts over time as cards are
-consumed.
+Draft picks and shop stock both spend from this shared multiset. When the multiset
+is exhausted it is recreated from `draftPoolCopiesByCard`, so the pool never runs
+dry and every draft and shop site can present a full offer. A future iteration may
+replace this recreate-on-exhaustion step with a continuous refill algorithm.
 
 ## Dreamscape Sites
 
@@ -358,8 +368,13 @@ Three sites — Battle, Draft, and Essence — have no guide and are never enhan
 
 The Battle site is the core gameplay element of Dreamtides, and it allows users
 to play a match against an AI opponent. Each battle has an assigned opponent
-dreamcaller with their own deck, derived randomly from that dreamcaller's tides
-and biased toward the dreamscape's [affiliation](#affiliations).
+dreamcaller with their own deck. The deck is built programmatically by emulating
+the player's own journey — running a simulated quest with that dreamcaller's tides
+up to the equivalent point in the run, biased toward the dreamscape's
+[affiliation](#affiliations) — so the decks the player faces grow stronger as the
+quest progresses. Opponents carry no dreamsigns until the miniboss on the 4th
+battle, which brings a single dreamsign, and continue to bring only 1 dreamsign
+until the final boss.
 Before the battle begins, the opposing dreamcaller is displayed so the user can
 understand any special abilities they have. Opposing dreamsigns are also shown.
 When the battle completes, the [Victory or Defeat](#victory--defeat) screen is
@@ -386,8 +401,9 @@ The Draft site allows users to add cards to their deck via the
 [Draft Pool Construction](#draft-pool-construction) system. Each draft site
 provides 5 picks from the ongoing run multiset. Each pick shows 4 unique cards
 sampled from the remaining pool, weighted by remaining copies and affiliation
-similarity. Revealed cards are spent immediately whether or not they are chosen,
-so a Draft site always burns real run inventory.
+similarity. Revealed cards are spent immediately from the current multiset
+whether or not they are chosen; the multiset is rebuilt when exhausted, so the
+pool never runs dry.
 
 **UI:** The cards available for the current pick are shown in multiple rows. The
 available cards animate in to be selected. Clicking a card animates it to the
@@ -422,9 +438,10 @@ Shop cards are drawn from the run's tide-based draft pool, in the same manner as
 draft picks, and are removed from the draft pool even if not selected. A Card
 Shop always shows 5 cards to purchase plus a restock option.
 
-Shop base prices and the overall essence economy are defined in TOML. The shop
-implements a random "discount" system where one or more items can be displayed as
-being on sale, for between 30% and 90% cost reduction. Effects such as dreamsigns
+Shop base prices and the overall essence economy are defined in TOML. A card's
+median price is around 100 essence, and the restock option always costs 50
+essence. The shop implements a random "discount" system where one or more items
+can be displayed as being on sale, for between 30% and 90% cost reduction. Effects such as dreamsigns
 or augury effects can also modify shop prices.
 
 **Home Specialty.** In Tumbleleaf Village, Tobias sells powerful cards at a
@@ -447,8 +464,9 @@ Icon: `game-icons.net/sbed/shop`
 
 The Dreamsign Market is run by **Amunet, the Tomb-Keeper** (home: Pharaoh's
 Gate). It is the site for purchasing dreamsigns with essence, and offers a
-restock option that refreshes the available choices once for essence. A Dreamsign
-Market always shows 3 dreamsigns to purchase plus a restock option.
+restock option that refreshes the available choices once for essence. A dreamsign's
+median price is around 100 essence, and the restock option always costs 50 essence.
+A Dreamsign Market always shows 3 dreamsigns to purchase plus a restock option.
 
 Dreamsigns are drawn from the run's shared Dreamsign pool, which was seeded from
 the selected Dreamcaller's tides, and are removed from that pool when shown.
@@ -736,6 +754,9 @@ completes more dreamscapes.
 
 ## Limits
 
+A quest deck is tuned to land at roughly 30 cards by the end of a run; the limits
+below bracket that target.
+
 Quest decks can contain a maximum of 50 cards during battles. If this limit is
 exceeded, before the battle starts the user gains the ability to purge cards of
 their choice to get back down under 50 cards.
@@ -766,69 +787,84 @@ or for free alongside ordinary cards. See [Banes](banes.md) for more information
 ## Dream Atlas
 
 The Dream Atlas is the world map players navigate after Dreamcaller selection. It
-shows a 3D map of dreamscapes represented as circular miniature "worlds,"
-connected by dotted lines. For later dreamscape choices, the player can hover over
-or long-press a dreamscape to preview it, then click it again to zoom the camera
-in to that dreamscape.
+is a layered, branching path that flows from **Firstlight Meadow** on one side to
+the **final boss** on the other, rendered as a 3D web of circular miniature
+"worlds" joined by glowing lines. The player carves a single route through it, one
+dreamscape at a time.
+
+The Atlas is organized into successive layers between the start and the final
+boss. Each layer offers a small set of dreamscapes, and advancing means choosing
+exactly **one** dreamscape from the next layer to travel to. The dreamscapes the
+player does **not** pick are gone for good: there is no backtracking and no way to
+revisit a forgone branch, so every choice commits the player to a single
+"world-line" through the dream. Because a typical quest is 7 battles long, the
+player threads through 7 dreamscapes (8 with the battle-skip meta-progression
+unlock) on the way to the final boss.
+
+Layers are **interconnected** rather than a clean tree. Each dreamscape connects
+forward to a subset of the next layer's dreamscapes, so the dreamscape the player
+picks now determines which dreamscapes become reachable next. Two different choices
+in the current layer can still funnel toward some of the same later dreamscapes,
+and the routes braid together as they approach the final boss.
 
 Each dreamscape can be in one of three states:
 
 - **Completed**: The player has already visited this dreamscape and finished its
   battle.
-- **Available**: The player can choose this dreamscape as their next destination.
-- **Unavailable**: The player cannot choose this dreamscape yet.
+- **Available**: The dreamscape is reachable from the player's current position
+  and can be chosen as the next destination.
+- **Unavailable**: The dreamscape cannot be chosen yet, because no dreamscape
+  connected into it has been completed.
 
-The player begins inside **Firstlight Meadow**, the starting dreamscape, which
-sits at the center of the Dream Atlas. The player enters it directly when the run
-begins; the Atlas screen marks it "You started here" with a slight visual
-emphasis so the player keeps their bearings.
+The player begins inside Firstlight Meadow, the starting dreamscape on the far side
+of the Atlas, and enters it directly when the run begins; the Atlas marks it "You
+started here" with a slight visual emphasis so the player keeps their bearings.
+After the player completes a dreamscape's battle, that dreamscape becomes
+**Completed** and the dreamscapes it connects forward to become the new
+**Available** choices. The number of dreamscapes the player has completed is the
+**Completion Level** for that quest.
 
-After the player visits a dreamscape and completes its battle, that dreamscape
-becomes **Completed**. Any dreamscapes directly connected to it then also become
-**Available**. The number of dreamscapes the user has completed is called the
-'Completion Level' for that quest. In other words, a dreamscape is **Available**
-only if it is connected to at least one **Completed** dreamscape.
+The player can see roughly two layers ahead: the dreamscapes currently available to
+pick, plus the dreamscapes those connect to. This lets the player plan a step or
+two — chasing a home specialty, a needed affiliation, or an extra draft — without
+revealing the whole route in advance. For these forward dreamscapes the player can
+hover or long-press to preview, then click to zoom the camera in.
 
-Each dreamscape displays exactly one site icon on the atlas to preview it: the
-icon of its home guide's signature site (the enhanced site). Firstlight Meadow is
-special — it shows its own flag glyph rather than a site icon. Hovering a
-dreamscape describes what is special about it: its guide, its affiliation, and its
-home specialty. Site icons use the game-icons.net glyphs and custom SVGs listed
-per site above. Winning the 7th battle causes the player to win the quest.
+Each dreamscape previews itself with exactly one site icon on the Atlas: the icon
+of its home guide's signature site (the enhanced site it is guaranteed to offer).
+The dreamscape's name communicates both that specialized site and its affiliation.
+Firstlight Meadow is special — it shows its own flag glyph rather than a site icon.
+Hovering a dreamscape describes what is special about it: its guide, its
+affiliation, and its home specialty. Site icons use the game-icons.net glyphs and
+custom SVGs listed per site above. Winning the final battle wins the quest.
 
 ### Dream Atlas Generation
 
-The dream atlas is a branching tree that grows outward from Firstlight Meadow,
-keeping a two-deep look-ahead so the player can always see their immediate choices
-and where each choice leads. The initial atlas holds the starting dreamscape, its
-two direct children (the first two choices, which are guaranteed to show different
-site icons), and two grandchildren beneath each child. Every node but the start
-begins 'unavailable'.
+The Dream Atlas is laid out as a sequence of layers spanning from Firstlight Meadow
+to the final boss. Each intermediate layer holds a small number of nodes (its width
+is configured in TOML), and adjacent layers are wired together with forward
+connections so that every node leads to at least one node in the next layer and
+every node is reachable from the previous one. The braided routes converge on the
+final layer, a single final-boss dreamscape.
 
-Completing a dreamscape marks it 'completed' and turns its direct children into
-the newly 'available' choices. Each newly available dreamscape is then topped up
-to two forward branches: a dreamscape that already carries its children (such as
-the initial choices) generates nothing new, while a deeper dreamscape that has no
-children of its own sprouts two onward branches the moment it becomes a live
-choice. New dreamscapes attach only to the newly available nodes, never directly
-to the completed node, so they stay 'unavailable' until their own parent is
-completed.
+The layer-and-connection skeleton is laid out up front so the player can see the
+shape of the map, while the named dreamscape filling each node is revealed only
+within the look-ahead of about two layers — the player's current choices and the
+dreamscapes those connect to. Nodes start **unavailable**; completing a dreamscape
+marks it **completed** and promotes the nodes it connects forward to into the
+**available** choices. The map is never pruned: nodes the player passes by remain
+forgone, and the player travels through exactly one node per layer.
 
-Every dreamscape is placed in a collision-free slot, fanned around its parent's
-outward direction and kept at least a fixed minimum distance from every other
-dreamscape, so the atlas never renders overlapping nodes. The atlas is purely
-additive and is never pruned; the player will visit 7 dreamscapes in a typical
-quest (or 8 with the battle-skip meta progression unlock).
-
-**Assigning dreamscapes to nodes.** Which named dreamscape fills each new node is
-chosen by a weighted random draw from the 10 non-starter dreamscapes. Each
-dreamscape carries a weight that is reduced each time it is placed, so
-not-yet-seen dreamscapes are strongly favored and already-placed ones become
-progressively less likely. Every dreamscape keeps a nonzero weight, so a repeat
-is possible at any point — even before all 10 have appeared — just much less
+**Assigning dreamscapes to nodes.** Which named dreamscape fills each node is
+chosen, as the node is revealed, by a weighted random draw from the 10 non-starter
+dreamscapes. Each dreamscape carries a weight that is reduced each time it is
+placed, so not-yet-seen dreamscapes are strongly favored and already-placed ones
+become progressively less likely. Every dreamscape keeps a nonzero weight, so a
+repeat is possible at any point — even before all 10 have appeared — just much less
 likely than a fresh dreamscape. A draw that would place a dreamscape directly
-adjacent to a copy of itself is rejected and redrawn. The weighting and how
-sharply repeats are discouraged are configured in TOML.
+adjacent to a copy of itself is rejected and redrawn. The two direct choices out of
+Firstlight Meadow are guaranteed to show different site icons. The layer widths,
+the weighting, and how sharply repeats are discouraged are configured in TOML.
 
 ## Dreamscape Generation
 
