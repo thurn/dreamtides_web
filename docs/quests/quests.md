@@ -275,9 +275,9 @@ square frame (head only). The other cards animate back to a small size.
 ## Rarity
 
 Dreamtides does *not* have card rarity. The one exception is a **legendary** tag
-applied to certain very strong cards. A card's legendary tag is capped at a single
-copy in a run's draft pool, and the tag is referenced by reward effects such as
-Dream Augury offers; it carries no other rarity mechanics.
+applied to certain very strong cards. A card with the legendary tag is capped at
+a single copy in a run's draft pool, and the tag is referenced by reward effects
+such as Dream Augury offers; it carries no other rarity mechanics.
 
 ## Draft Pool Construction
 
