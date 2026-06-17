@@ -372,9 +372,9 @@ dreamcaller with their own deck. The deck is built programmatically by emulating
 the player's own journey — running a simulated quest with that dreamcaller's tides
 up to the equivalent point in the run, biased toward the dreamscape's
 [affiliation](#affiliations) — so the decks the player faces grow stronger as the
-quest progresses. Opponents carry no dreamsigns until the miniboss on the 4th
-battle, which brings a single dreamsign, and continue to bring only 1 dreamsign
-until the final boss.
+quest progresses. Opponents carry no dreamsigns in the early battles of a quest;
+from the midpoint onward each opponent brings a single dreamsign, up until the
+final boss.
 Before the battle begins, the opposing dreamcaller is displayed so the user can
 understand any special abilities they have. Opposing dreamsigns are also shown.
 When the battle completes, the [Victory or Defeat](#victory--defeat) screen is
@@ -742,10 +742,10 @@ animates upward to reveal a summary panel showing battle rewards earned, quest
 statistics, and a button to continue to the Dream Atlas (on victory) or to end
 the quest (on defeat).
 
-A Quest ends in victory if the user wins 7 battles. The 4th battle they face is
-against a miniboss, and the 7th battle is against the final boss of Dreamtides.
-Bosses are dreamcallers that have their own unique abilities, dreamsigns, or
-custom cards in their decks. See [Boss Dreamcallers](bosses.md) for details.
+A Quest ends in victory if the user wins 7 battles. The 7th battle is against the
+final boss of Dreamtides. The final boss is a dreamcaller that has its own unique
+abilities, dreamsigns, or custom cards in its deck. See
+[Boss Dreamcallers](bosses.md) for details.
 
 ### Battle Rewards
 
