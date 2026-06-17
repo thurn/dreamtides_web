@@ -1,10 +1,8 @@
 # Boss Dreamcallers
 
-Boss dreamcallers are special opponents encountered during quests. Minibosses
-appear at the 4th battle, and final bosses appear at the 7th battle. Each boss
-has a single dreamcaller ability that defines their archetype.
-
-## Minibosses
+Boss dreamcallers are special opponents encountered during quests. Bosses appear
+at the 7th battle. Each boss has a single dreamcaller ability that defines their
+archetype.
 
 ### 1. Pyrra, Ember Dancer
 
@@ -105,8 +103,6 @@ that benefit from repeated re-entry to the battlefield.
 
 **Deck:** Expensive high-spark characters with protective static abilities and
 energy ramp, building an impenetrable wall of unkillable threats.
-
-## Final Bosses
 
 ### 11. Nihil, the Silence Between
 
