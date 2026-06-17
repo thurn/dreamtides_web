@@ -31,68 +31,242 @@ when possible.
 ## Overview
 
 Quests revolve primarily around drafting and refining a deck to bring into
-future battles. Quests use two currencies: "essence" and "omens". Essence is the
-main quest currency and is spent on shops and in various other ways. Omens are
-used only for shop dreamsign purchases and shop rerolls. Players begin each
-quest by choosing a Dreamcaller, then review their fixed starter deck and first
-dreamscape. By default, quests have a maximum essence cap of 500; any essence
-gained beyond this cap is lost unless the cap has been increased by an effect
-such as a Dream Journey reward. Omens have no cap. Dreamtides does not use an
-explicit rarity system for cards, except for certain powerful cards that are
-designated as legendary cards.
+future battles. Quests use a single currency, **essence**, which is spent at
+shops and in various other ways. Players begin each quest by choosing a
+Dreamcaller, then review their fixed starter deck and starting dreamscape. By
+default, quests have a maximum essence cap of 500; any essence gained beyond
+this cap is lost unless the cap has been increased by an effect such as a Dream
+Journey reward. Dreamtides does not use an explicit rarity system for cards,
+except for certain powerful cards that are designated as legendary cards.
 
 In addition to deck cards, users during a quest will select 1 of 3 Dreamcallers
 to lead their deck and may have some number of Dreamsigns:
 
 - **Dreamcaller:** An animated 3D character who starts each battle already in
   play for both participants in a battle. Each Dreamcaller has powerful ongoing,
-  triggered, or activated abilities and defines a fixed run package: mandatory
-  package tides plus a selected subset of optional package tides. That package
-  seeds the run's draft multiset, Dreamsign pool, and default reward bias.
+  triggered, or activated abilities and seeds the run's draft pool, Dreamsign
+  pool, and default reward bias as described in
+  [Draft Pool Construction](#draft-pool-construction).
 - **Dreamsigns:** Cards with 2D illustrations of objects which provide more
   minor ongoing effects. Dreamsign effects can apply during battles, on the
   quest map, or both. Dreamsigns are pulled from a shared run pool and are spent
   as soon as they are shown to the player.
 
-Quests display a top-level 3D screen called the [Dream Atlas](#dream-atlas) with
-a series of "dreamscapes" the user can navigate to. Each dreamscape is
-associated with "sites", specific rewards available in that dreamscape.
+Quests display a top-level 3D screen called the [Dream Atlas](#dream-atlas), an
+interconnected web of locations called **dreamscapes**. Each dreamscape has a
+randomly-generated collection of **sites** available, which provide services to
+the player to let them modify their deck. The user navigates from dreamscape to
+dreamscape, visiting sites and fighting battles to improve their deck on the way
+to the final boss.
 
-Dreamscapes show a group of individual white icons with black circular
-backgrounds for their sites. Each site icon corresponds to some specific quest
-effect, and users can "visit" a site to activate the effect by clicking on the
-icon. This causes the camera to zoom in on that site and then displays the
-site's effect, often with a 3D animated NPC character introducing the site's
-concept. Once all of the sites in a given dreamscape have been visited, the user
-must navigate to the "battle" site to initiate a card battle. After completing a
-battle, the user is able to select another dreamscape to navigate to, and the
-process repeats. By default, quests are single elimination: if the player loses
-any battle, the quest ends immediately.
+## Dreamscapes and Dream Guides
+
+A quest takes place on the Dream Atlas, an interconnected web of dreamscapes.
+Each dreamscape is a named, themed location with a fixed aesthetic, a collection
+of sites, and (for every dreamscape except the starting one) a **Dream Guide**
+and an **affiliation**.
+
+- **Dream Guides** are the NPCs who provide services to the player. Most sites
+  are paired with a specific guide (for example, every Card Shop is run by
+  Tobias Tanglefur). A guide can be found in *any* dreamscape where their site
+  appears, and is always found in their **home** dreamscape. When a guide is in
+  their home dreamscape, their power is enhanced and the site they offer is more
+  powerful (see [Home Specialties](#home-specialties)).
+- **Affiliations** are a type of card a dreamscape is most connected to. Cards
+  matching the affiliation are slightly more likely to appear in random card
+  draws within that dreamscape, as described in [Affiliations](#affiliations).
+
+The 10 non-starter dreamscapes can appear more than once on the Dream Atlas, but
+the same dreamscape is never connected directly to a copy of itself. Dreamscapes
+are drawn without replacement from a pool as part of Atlas generation, making it
+less likely (but not impossible) that repeats are generated until every
+dreamscape has been seen. See [Dream Atlas Generation](#dream-atlas-generation)
+for the assignment algorithm.
+
+The full set of dreamscapes follows. The guide's signature site is always
+present and enhanced in their home dreamscape; the same site can also appear,
+non-enhanced, in the random fill of other dreamscapes.
+
+### Firstlight Meadow
+
+The starting dreamscape of every dream quest. Firstlight Meadow has no Dream
+Guide and no affiliation, and its sites are fixed: it always contains a Battle
+site, a Purge site, and two Draft sites, with no fill sites and no enhancement.
+This gives every run an identical, uniform on-ramp.
+
+- **Aesthetic:** A tranquil meadow at sunrise.
+
+### Tumbleleaf Village
+
+*A warm village of travelers and spirit animals, where the card shop offers new
+companions, old charms, and small wonders for the road ahead.*
+
+- **Dream Guide:** Tobias Tanglefur
+- **Signature Site:** [Card Shop](#card-shop). Purchase cards for essence;
+  restock the available choices once for essence.
+- **Home Specialty:** Tobias sells powerful cards at a discount, drawn directly
+  from the player's Dreamcaller signature tide.
+- **Aesthetic:** A fantasy village with anthropomorphic animals.
+- **Affiliation:** Spirit Animals
+- **Site Icon:** `game-icons.net/sbed/shop`
+
+### Pharaoh's Gate
+
+*A sun-baked realm of tombs and golden gods, where the dreamsign market deals in
+ancient bargains and cards drift into the void only to rise again.*
+
+- **Dream Guide:** Amunet, the Tomb-Keeper
+- **Signature Site:** [Dreamsign Market](#dreamsign-market). Purchase dreamsigns
+  for essence; restock the available choices once for essence.
+- **Home Specialty:** Amunet sells dreamsigns and allows the player to restock
+  the choices once for free.
+- **Aesthetic:** An ancient Egyptian realm.
+- **Affiliation:** Erode, Void matters
+- **Site Icon:** `game-icons.net/sbed/great-pyramid`
+
+### Winterwake Fjords
+
+- **Dream Guide:** Sigrún
+- **Signature Site:** [Dreamsign Revelation](#dreamsign-revelation). The player
+  receives 1 random dreamsign, or sometimes picks 1 of 3.
+- **Home Specialty:** Sigrún offers improved dreamsigns specifically tailored to
+  the player's current deck, with more choices — in her home dreamscape she
+  always offers a choice rather than a single random dreamsign.
+- **Aesthetic:** A snowy viking village.
+- **Affiliation:** Removal, Dissolve / Banish effects
+- **Site Icon:** `game-icons.net/sbed/fire`
+
+### Frostforge
+
+- **Dream Guide:** Durgan Forgehammer
+- **Signature Site:** [Transfiguration](#transfiguration). 4 random cards from
+  the player's deck are drawn with random transfigurations, and the player may
+  pick one to apply.
+- **Home Specialty:** Durgan allows the player to pick any card in their deck and
+  apply a transfiguration of their choice to it.
+- **Aesthetic:** A dwarven fortress.
+- **Affiliation:** Storm / Events matter
+- **Site Icon:** `game-icons.net/sbed/anvil-impact`
+
+### Hope's End
+
+- **Dream Guide:** Deacon Holt
+- **Signature Site:** [Duplication](#duplication). 4 random cards from the
+  player's deck are drawn, and the player may choose one to duplicate.
+- **Home Specialty:** Deacon Holt allows the player to pick any card in their
+  deck to duplicate.
+- **Aesthetic:** A rural town experiencing a zombie apocalypse.
+- **Affiliation:** Inexpensive Characters
+- **Site Icon:** Custom `stack.svg`
+
+### Tsukiren
+
+- **Dream Guide:** Master Takeshi
+- **Signature Site:** [Purge](#purge). The player chooses cards to remove from
+  their deck by paying essence.
+- **Home Specialty:** Master Takeshi allows the player to remove up to 3 cards at
+  no cost.
+- **Aesthetic:** A samurai-era Japanese kingdom.
+- **Affiliation:** Warriors
+- **Site Icon:** `game-icons.net/sbed/small-fire`
+
+### Blackthorn Keep
+
+- **Dream Guide:** Aldric, the Seer
+- **Signature Site:** [Dream Journey](#dream-journey). The player chooses between
+  two rewards to claim.
+- **Home Specialty:** Aldric offers bigger rewards, highly curated to the
+  player's current deck — for example transfiguring more cards, offering more
+  draft choices, or offering more curated strong cards.
+- **Aesthetic:** A dark fantasy castle.
+- **Affiliation:** Abandon / Sacrifice
+- **Site Icon:** `game-icons.net/sbed/crystal-ball`
+
+### The Rust Expanse
+
+- **Dream Guide:** Maddox
+- **Signature Site:** [Tempting Offer](#tempting-offer). The player may take a
+  powerful reward, but it comes at a cost.
+- **Home Specialty:** Maddox offers the player their choice of two tempting
+  offers.
+- **Aesthetic:** A "Mad Max" post-apocalyptic wasteland.
+- **Affiliation:** Survivors
+- **Site Icon:** `game-icons.net/sbed/scales`
+
+### Farpoint Station
+
+- **Dream Guide:** Gravok
+- **Signature Site:** [Gamble](#gamble). The player engages in one of a few wager
+  or "push your luck" style games to win rewards.
+- **Home Specialty:** Gravok charges no initial fee and offers bigger payouts in
+  his home dreamscape.
+- **Aesthetic:** A sci-fi outpost on a distant planet, populated by humans and
+  aliens (such as Gravok, a crystal/rock creature).
+- **Affiliation:** Figments
+- **Site Icon:** `game-icons.net/sbed/two-coins`
+
+### Grid City
+
+- **Dream Guide:** "Layaway"
+- **Signature Site:** [Temporal Fork](#temporal-fork). The player is offered a
+  choice of two time-based effects, such as temporary modifications to the
+  player's deck or game rules, or rewards that come in the future.
+- **Home Specialty:** Layaway offers effects with a longer duration, or future
+  rewards that arrive sooner.
+- **Aesthetic:** A cyberpunk city.
+- **Affiliation:** Discard
+- **Site Icon:** `game-icons.net/sbed/sands-of-time`
+
+## Affiliations
+
+Each non-starter dreamscape has an affiliation: a type of card it is most
+connected to (for example, Spirit Animals or Warriors). An affiliation is
+represented as a signature card set, scored using the same IDF / card-similarity
+analysis that the [tides4](#tides) algorithm uses.
+
+An affiliation nudges random card selection throughout its dreamscape:
+
+- The nudge applies **dreamscape-wide**, to every random card or dreamsign draw
+  at any site within that dreamscape: draft offers, Card Shop stock, dreamsign
+  selection, transfiguration and duplication candidates, journey reward cards,
+  and so on.
+- The nudge is **similarity-weighted reweighting**. Each candidate card's
+  selection weight is multiplied by a factor derived from its similarity to the
+  affiliation's signature card set; cards more similar to the affiliation become
+  more likely to appear.
+- The nudge does **not** modify pool membership, the overall draft pool, or the
+  tides4 algorithm. It only shifts draw probabilities; any card that could
+  appear can still appear, and affiliated cards simply appear more often.
+
+Affiliations are flavor-aligned with their dreamscape (Tumbleleaf Village leans
+toward Spirit Animals, Tsukiren toward Warriors), but mechanically they are just
+signature card sets and corresponding similarity weights configured in TOML.
 
 ## Tides
 
 Quest content uses the layered tide system described in
-[Tides](../../tides/tides.md):
+[Tides](../../tides/tides.md) and implemented by the **tides4** draft pool
+algorithm. Each tide is a preconstructed deck of cards with one of three roles:
 
-- **Structural tides** are full shells. They define the deck's main engines,
-  payoffs, and finishers.
-- **Support tides** are splashable reinforcement packages. They provide setup,
-  smoothing, bridges, and enablers for structural shells.
-- **Utility tides** are broad role packages. They provide generic curve,
-  interaction, selection, refuel, and closing tools.
+- **Signature tides** define a Dreamcaller's identity floor and are always
+  joined when present.
+- **Facet tides** are single-anchor variety engines; a random subset is drawn
+  for each run to vary the pool.
+- **Neutral tides** are broad fill packages joined as needed to reach the target
+  pool size.
 
-Cards are assigned tides by battle function, not by flavor or surface
-terminology. A single card may belong to multiple package tides.
+Cards are assigned to tides by battle function, not by flavor or surface
+terminology. A single card may belong to multiple tides.
 
 For quests, the important consequences are:
 
-- Dreamcallers define **mandatory package tides** and **optional package
-  tides**.
-- At the start of a quest, the player picks 1 of 3 Dreamcallers, and the tides
-  for that Dreamcaller are used to determine the draft pool for the quest as
-  described in [Package Resolution Algorithm](#package-resolution-algorithm).
+- Each Dreamcaller maps to a signature tide (or none), a set of facet tides, and
+  a set of neutral tides.
+- At the start of a quest, the player picks 1 of 3 Dreamcallers, and that
+  Dreamcaller's tides determine the draft pool for the quest as described in
+  [Draft Pool Construction](#draft-pool-construction).
 - Draft pools, Dreamsign pools, shops, and reward generators all key off these
-  package tides.
+  tides.
 - Battles themselves use the core
   [battle rules](../../battle_rules/battle_rules.md) resource model: cards are
   paid for with **energy**, and energy production comes from the shared
@@ -109,21 +283,18 @@ define the run.
 Selecting a Dreamcaller performs all run bootstrap work immediately:
 
 - Add the fixed starter deck.
-- Resolve the Dreamcaller's mandatory and optional package tides into one legal
-  selected tide package.
-- Initialize the draft multiset and Dreamsign pool from that package.
+- Build the draft pool and Dreamsign pool from the Dreamcaller's tides.
 - Generate the initial atlas.
 - Make the starting deck available through the deck UI.
-- Set the starting dreamscape as the current destination and enter it directly.
+- Set Firstlight Meadow as the current destination and enter it directly.
 
 **UI:** Dreamcallers are shown in their full-body "card" representation, with
-ability text displayed alongside their 3D models and highlighted structural and
-support tides. The Dreamcaller cards animate in from a small size in the center
-of the screen. Each Dreamcaller does a different humanoid animation within its
-card frame. A primary action button appears below each Dreamcaller allowing it
-to be selected. The selected Dreamcaller animates to the bottom left of the
-screen to appear in a square frame (head only). The other cards animate back to
-a small size.
+ability text displayed alongside their 3D models and highlighted tides. The
+Dreamcaller cards animate in from a small size in the center of the screen. Each
+Dreamcaller does a different humanoid animation within its card frame. A primary
+action button appears below each Dreamcaller allowing it to be selected. The
+selected Dreamcaller animates to the bottom left of the screen to appear in a
+square frame (head only). The other cards animate back to a small size.
 
 ## Rarity
 
@@ -132,37 +303,32 @@ certain powerful cards.
 
 ## Draft Pool Construction
 
-The draft pool is a fixed multiset built from the selected Dreamcaller's tides.
+The draft pool is a fixed multiset built from the selected Dreamcaller's tides
+using the tides4 algorithm. The same algorithm runs deterministically from a
+per-run seed so a given Dreamcaller and seed always produce the same pool.
 
-### Package Resolution Algorithm
+### Pool Generation Algorithm
 
 At quest start, choosing a Dreamcaller resolves the run's draft pool as follows:
 
-1. Start from the full non-starter card pool.
-2. Build a **mandatory-only** draft multiset using the Dreamcaller's mandatory
-   package tides. A card receives copies equal to its overlap count with the
-   selected tides, capped at 2 copies.
-3. The mandatory-only pool must land in the `110-150` card range. Dreamcallers
-   that fail this validation are not legal quest-start offers.
-4. Enumerate all optional-tide subsets of size 3 and 4 from the Dreamcaller's
-   optional package tides.
-5. For each subset, form `selectedTides = mandatoryTides + optionalSubset`, then
-   rebuild the draft multiset using the same overlap-count rule: one copy for
-   one matching tide, two copies for two or more matching tides.
-6. Legal draft pools are `175-225` cards. Preferred draft pools are `190-210`
-   cards.
-7. Choose the best candidate from the preferred range if one exists; otherwise
-   choose the best legal candidate. "Best" means the closest to the center of
-   the target pool size.
+1. Join the Dreamcaller's signature tide, if it has one.
+2. Draw a uniformly-random subset of 1 to 3 of the Dreamcaller's facet tides and
+   join them. This is the main source of run-to-run variety.
+3. Top the bag up with the Dreamcaller's neutral tides until a full pool can be
+   dealt.
+4. Shuffle the combined bag and deal it into the draft multiset, capped at 2
+   copies of any single card. The default deal size is 150 cards.
+5. Exclude the Dreamcaller's starter cards from the pool.
 
-This makes the run package concrete and replayable: Dreamcaller choice decides
-which structural/support/utility packages are active, and cards that bridge
-multiple selected tides naturally show up more often because they receive two
-copies instead of one.
+The resulting multiset is stored as `draftPoolCopiesByCard`. Because facet
+selection is random per run, two players with the same Dreamcaller still draft
+from different pools.
 
-The same resolution step also builds the run's initial Dreamsign pool by taking
-every Dreamsign template with any package-tide overlap against the selected
-tides.
+The same resolution step also builds the run's initial Dreamsign pool from the
+Dreamsign templates associated with the selected tides.
+
+Pool size, copy cap, and the facet draw range are configured in TOML; assume all
+of these values are subject to change.
 
 ### Draft Pick Generation
 
@@ -171,18 +337,19 @@ generates draft pick offers directly from that data:
 
 - Each pick shows **4 unique cards** when at least 4 unique cards remain.
 - Cards are sampled **without replacement**, weighted by their remaining copy
-  counts.
+  counts (and by [affiliation](#affiliations) similarity in affiliated
+  dreamscapes).
 - The shown offer is **spent immediately** from the pool. Unpicked cards are
   burned; they do not return to the pool later.
 - The player pick adds the chosen card to the deck but does not otherwise alter
   the already-spent offer.
-- The draft multiset is recreated when it runs out of cards.
+- The draft multiset is recreated from `draftPoolCopiesByCard` when it runs out
+  of cards.
 
 ### Draft Sites On The Map
 
-Each [Draft site](#draft) on the dreamscape map provides **5 picks** from the
-ongoing multiset. Early dreamscapes provide more opportunities to draft than
-late dreamscapes:
+Each [Draft site](#draft) provides **5 picks** from the ongoing multiset. Early
+dreamscapes provide more opportunities to draft than late dreamscapes:
 
 | Completion Level | Draft Sites |
 | ---------------- | ----------- |
@@ -191,40 +358,43 @@ late dreamscapes:
 | 4+               | 0           |
 
 Because the draft pool is persistent and finite, each draft site is spending
-real run inventory. Offer quality will naturally shift over time as adjacent
-cards and doubled bridge cards are consumed.
+real run inventory. Offer quality naturally shifts over time as cards are
+consumed.
 
 ## Dreamscape Sites
 
-The following dreamscape sites are planned for eventual implementation in
-Dreamtides. Sites can generally be visited in any order, with the exception that
-the "Battle" site must be visited last. Each site must be visited exactly once
-and cannot be returned to. Dreamscapes contain between 3 and 6 total sites
-(including battle and draft sites, configured in TOML) as described below in the
-[Dreamscape Generation](#dreamscape-generation) section.
+Sites are the encounters within a dreamscape. Sites can generally be visited in
+any order, with the exception that the "Battle" site must be visited last. Each
+site must be visited exactly once and cannot be returned to. Dreamscapes contain
+between 3 and 6 total sites (including battle and draft sites, configured in
+TOML) as described in [Dreamscape Generation](#dreamscape-generation).
 
-Many sites have an "enhanced" version with a stronger version of their ability
-which can appear as described in [Enhanced Sites](#enhanced-sites) below.
+Most sites are paired with a [Dream Guide](#dreamscapes-and-dream-guides). The
+guide is the same character for a given site type everywhere it appears (every
+Card Shop is Tobias), and the guide character appears wherever their site
+appears, home or not. Their behavior and dialog are configured via TOML. For
+sites with a guide, portrait mode frames the guide at the top of the screen with
+content below, while landscape mode places the guide to one side with content
+beside them.
 
-Many sites are associated with an NPC, a 3D humanoid character that can play
-character animations and show a speech bubble. This NPC is always the same for a
-given site (e.g. all shops are the same NPC), and their behavior and dialog are
-configured via TOML. For sites with an NPC, portrait mode frames the NPC at the
-top of the screen with content below, while landscape mode places the NPC to one
-side with content beside them.
+When a guide site appears in its guide's home dreamscape it is **enhanced** with
+a stronger version of its ability, the guide's [Home
+Specialty](#home-specialties). The same site appearing elsewhere uses its
+standard, non-enhanced behavior.
+
+Three sites — Battle, Draft, and Essence — have no guide and are never enhanced.
 
 ### Battle
 
 The Battle site is the core gameplay element of Dreamtides, and it allows users
 to play a match against an AI opponent. Each battle has an assigned opponent
-dreamcaller with their own deck. Opponent decks are derived randomly from the
-required tide pool for that dreamcaller. Before the battle begins, the opposing
-dreamcaller is displayed so the user can understand any special abilities they
-have. Opposing dreamsigns are also shown. When the battle completes, the
-[Victory or Defeat](#victory--defeat) screen is shown along with any associated
-battle rewards. Battles use the rules from [Battle
-Rules](../../battle_rules/battle_rules.md). Quests are single elimination by
-default, so losing this battle ends the run.
+dreamcaller with their own deck, derived randomly from that dreamcaller's tides.
+Before the battle begins, the opposing dreamcaller is displayed so the user can
+understand any special abilities they have. Opposing dreamsigns are also shown.
+When the battle completes, the [Victory or Defeat](#victory--defeat) screen is
+shown along with any associated battle rewards. Battles use the rules from
+[Battle Rules](../../battle_rules/battle_rules.md). Quests are single elimination
+by default, so losing this battle ends the run.
 
 **UI:** The camera pans in to the battle scene. The "full body" card
 representation of the enemy dreamcaller animates in from a small size at the
@@ -237,17 +407,16 @@ dreamcaller card format (head only, no text). The user dreamcaller and user
 quest deck animate to their starting positions. The enemy quest deck animates to
 its starting position. An opening hand of cards is dealt to both players.
 
-Icon: "Sword"
+Icon: `game-icons.net/lorc/swords-emblem`
 
 ### Draft
 
 The Draft site allows users to add cards to their deck via the
 [Draft Pool Construction](#draft-pool-construction) system. Each draft site
 provides 5 picks from the ongoing run multiset. Each pick shows 4 unique cards
-sampled from the remaining pool, weighted by remaining copies. Revealed cards
-are spent immediately whether or not they are chosen, so a Draft site always
-burns real run inventory. There is no default skip or reroll for draft picks,
-though dreamsigns and journeys may still override this.
+sampled from the remaining pool, weighted by remaining copies and affiliation
+similarity. Revealed cards are spent immediately whether or not they are chosen,
+so a Draft site always burns real run inventory.
 
 **UI:** The cards available for the current pick are shown in multiple rows. The
 available cards animate in to be selected. Clicking a card animates it to the
@@ -255,155 +424,7 @@ quest deck, and the remaining cards animate away as the next offer arrives.
 After all picks at a draft site are completed, the camera automatically pulls
 back to the map view. Cards are shown with an orange outline.
 
-Icon: "Rectangle Vertical"
-
-### Shop
-
-The shop is the primary site in which the user can spend quest currencies. Shops
-offer individual cards, dreamsigns, and rerolls for purchase, and may rarely
-offer other site options such as purchasing journeys, purging cards,
-transfiguring cards, duplicating cards, etc. Cards and most other shop options
-cost essence. Dreamsigns cost omens rather than essence, typically around 1-3
-omens. Rerolling the shop also costs omens rather than essence, typically 1
-omen.
-
-A standard shop configuration is 3 cards to purchase, 2 dreamsigns to purchase,
-and 1 reroll to purchase.
-
-Shop cards and dreamsigns are drawn from the tide-based draft pool, in the same
-manner as draft picks and dreamsign offerings. Cards and dreamsigns draw from
-the shop are removed from the draft pool, even if not selected.
-
-Shop base prices and the overall essence/omen economy are defined in TOML. The
-shop implements a random "discount" system where one or more items can be
-displayed as being on sale, for between 30% and 90% cost reduction. Things like
-dreamsigns or journey effects can also modify shop prices.
-
-**UI:** An NPC is shown who performs an animation and displays a speech bubble
-with some dialog when the camera arrives at this site. Two rows of three items
-each are displayed, along with a close button. The items are beside the NPC in
-landscape mode and below the NPC in portrait mode. Each item has a purple button
-under it showing the relevant cost to purchase that item. Cards and most shop
-services show an essence cost, while dreamsigns and rerolls show an omen cost.
-Clicking the button for a card or dreamsign animates it to the quest deck or
-dreamsign display in the bottom right corner of the screen. The other items do
-not move on purchase, leaving a gap. One of the items shown may be a "reroll"
-option. When this is selected, the items do a staggered scale-down animation,
-then the 6 new options perform a scale-up animation in-place. Clicking the close
-button completes the site visit and pulls the camera back to the map screen. The
-items remain in place visually rather than animating away, but the site cannot
-be revisited.
-
-Icon: "Store"
-
-### Specialty Shop
-
-A specialty shop operates in a similar manner to a [Shop](#shop), except that it
-*only* features cards or dreamsigns from a single tide, which is always one of
-the mandatory tides for the user's dreamcaller.
-
-**UI:** Identical UI to the regular shop site except that it features a
-different NPC.
-
-Icon: "Store Alt 2"
-
-### Dreamsign Offering
-
-At a dreamsign offering site, the user is presented with a single dreamsign to
-gain. The offering may be rejected, but there is no reward for doing so. The
-offered Dreamsign is drawn from the run's shared Dreamsign pool, which was
-seeded from the selected Dreamcaller's tides. Revealed Dreamsigns are removed
-from that pool immediately, so rejecting an offer does not return it to the run.
-
-**UI:** The dreamsign animates to be displayed from screen center at a small
-scale. A purple accept button and a gray reject button are displayed. The
-dreamsign animates to the bottom right dreamsign display if accepted and
-animates back to a small scale if rejected.
-
-Icon: "Sparkles"
-
-### Dreamsign Draft
-
-At a dreamsign draft site, the user is presented with three dreamsigns and is
-able to select one to gain. It is again possible to select no dreamsign. As with
-Dreamsign Offering, the shown Dreamsigns are drawn from the run's shared
-Dreamsign pool based on tides and are removed from the pool as soon as they are
-shown. Skipping the site means the revealed Dreamsigns are lost for the rest of
-the run, or until the pool runs out and needs to be regenerated.
-
-**UI:** The three dreamsigns animate in at full size from the bottom of the
-screen in a staggered animation, positioning themselves in a single row. Purple
-accept buttons are shown below each one. A red close button is shown top left,
-functioning in a similar way to the Shop close button. Accepting a dreamsign
-animates it to the user's dreamsign display area in the bottom right of the
-screen.
-
-Icon: "Sparkles Alt"
-
-### Dream Journey
-
-A dream journey functions in a manner similar to a random event in other
-roguelike deckbuilding games. The user is offered a selection between 1-3
-circular cards with art based on the effect. Each card has a description,
-although the amount of information revealed about the effects is variable, and
-some dream journeys have highly random effects which are not disclosed in
-advance. This is where we put the biggest random effects which can structurally
-change a quest or modify the user's entire deck. A close button is displayed in
-a similar manner to the shop screen allowing the user to reject the dream
-journey options. Some dream journey types explicitly remove the close button.
-
-**UI:** An NPC is shown who performs an animation and displays a speech bubble
-with some dialog when the camera arrives at this site. The journey cards animate
-from the center of the NPC's chest at a small size and are shown side-by-side in
-a similar layout to the shop screen (next to the NPC landscape, below in
-portrait). A purple button is displayed under each journey card to accept it.
-Clicking this button causes the not-selected journey card to animate down to a
-small size and vanish. The accepted journey card animates up to appear in screen
-center, then plays a dissolve animation. The effects of the journey are shown
-via a custom animation (e.g. cards might fade in and then be animated to the
-user's quest deck if the journey effect is "add 3 cards to your deck"). Once the
-effect animation completes, the camera pulls back to the map screen. A dream
-journey is a circular card image which displays its rules text on hover/long
-press. For journeys with multiple costs or effects, each animation plays in
-sequence.
-
-Icon: "Moon + Star"
-
-### Purge
-
-A purge site lets the user pay essence to permanently remove cards from their
-deck, thinning out cards that don't fit their gameplan. A Purge site appears in
-every dreamscape, so paying to purge is always an option.
-
-**Pricing.** Purge cost escalates with each card removed in a single visit, and
-the counter resets every dreamscape. The Nth card removed in a visit costs
-`30 + 5 * N * (N + 1)` essence:
-
-| Card # | Marginal cost | Cumulative |
-| ------ | ------------- | ---------- |
-| 1      | 40            | 40         |
-| 2      | 60            | 100        |
-| 3      | 90            | 190        |
-| 4      | 130           | 320        |
-| 5      | 180           | 500        |
-| 6      | 240           | 740        |
-
-Removing one or two cards is cheap, three or four is a real commitment, and five
-or more requires arriving with a nearly full essence bar. Two anchors tie the
-curve to the rest of the economy: two cards cost the same as one standard shop
-card (100 essence), and five cards cost the full default essence cap (500). Up
-to six cards may be removed in a single visit. Shop-wide essence discounts also
-reduce purge prices. The pricing logic lives in `src/purge/purge-pricing.ts`.
-
-**UI:** The user's quest deck opens its browser view, showing every card.
-Selecting a card gives it a red outline and a price chip showing what that card
-costs in the current selection order. A running summary shows the number
-selected, the total essence cost, the essence remaining afterward, and the
-price of the next card. Cards the player cannot yet afford are dimmed. A red
-"Purge N Cards" button at the bottom confirms the removal: essence is spent and
-the selected cards are permanently removed.
-
-Icon: "Hot"
+Icon: `game-icons.net/sbed/card-pick` (modified)
 
 ### Essence
 
@@ -419,13 +440,90 @@ updates the quantity of essence shown.
 
 Icon: "Diamond"
 
+### Card Shop
+
+The Card Shop is run by **Tobias Tanglefur** (home: Tumbleleaf Village). It is
+the primary site for spending essence on cards. The shop offers individual cards
+for purchase plus a restock option that refreshes the available choices once,
+also for essence.
+
+Shop cards are drawn from the run's tide-based draft pool, in the same manner as
+draft picks, and are removed from the draft pool even if not selected. A standard
+shop configuration is 3 cards to purchase plus 1 restock.
+
+Shop base prices and the overall essence economy are defined in TOML. The shop
+implements a random "discount" system where one or more items can be displayed as
+being on sale, for between 30% and 90% cost reduction. Effects such as dreamsigns
+or journey effects can also modify shop prices.
+
+**Home Specialty.** In Tumbleleaf Village, Tobias sells powerful cards at a
+discount, drawn directly from the player's Dreamcaller signature tide.
+
+**UI:** Tobias performs an animation and displays a speech bubble with some
+dialog when the camera arrives at this site. The items are displayed in a row,
+along with a close button — beside Tobias in landscape mode and below him in
+portrait mode. Each item has a purple button under it showing its essence cost.
+Clicking the button for a card animates it to the quest deck. One of the options
+is a "restock" option; when selected, the items do a staggered scale-down
+animation, then the new options perform a scale-up animation in-place. Clicking
+the close button completes the site visit and pulls the camera back to the map
+screen. The items remain in place visually rather than animating away, but the
+site cannot be revisited.
+
+Icon: `game-icons.net/sbed/shop`
+
+### Dreamsign Market
+
+The Dreamsign Market is run by **Amunet, the Tomb-Keeper** (home: Pharaoh's
+Gate). It is the site for purchasing dreamsigns with essence, and offers a
+restock option that refreshes the available choices once for essence.
+
+Dreamsigns are drawn from the run's shared Dreamsign pool, which was seeded from
+the selected Dreamcaller's tides, and are removed from that pool when shown.
+
+**Home Specialty.** In Pharaoh's Gate, Amunet allows the player to restock the
+dreamsign choices once for free.
+
+**UI:** Amunet performs an animation and displays a speech bubble when the camera
+arrives. Dreamsigns for purchase are displayed in a row with a close button,
+beside Amunet in landscape and below her in portrait. Each dreamsign has a purple
+button showing its essence cost; purchasing animates it to the dreamsign display
+in the bottom right corner of the screen. A restock option refreshes the choices
+with a staggered scale animation. Clicking the close button completes the visit
+and returns to the map.
+
+Icon: `game-icons.net/sbed/great-pyramid`
+
+### Dreamsign Revelation
+
+Dreamsign Revelation is run by **Sigrún** (home: Winterwake Fjords). The player
+receives 1 random dreamsign, or sometimes picks 1 of 3. The offered dreamsigns
+are drawn from the run's shared Dreamsign pool and are removed from the pool as
+soon as they are shown, so declining does not return them to the run.
+
+**Home Specialty.** In Winterwake Fjords, Sigrún offers improved dreamsigns
+specifically tailored to the player's current deck, with more choices. In her
+home dreamscape she always offers a choice of dreamsigns rather than a single
+random one.
+
+**UI:** Sigrún performs an animation and displays a speech bubble. For a single
+offer, the dreamsign animates to screen center at a small scale with a purple
+accept button and a gray reject button; it animates to the bottom-right dreamsign
+display if accepted and back to a small scale if rejected. For a choice, the
+dreamsigns animate in at full size in a single row with a purple accept button
+below each and a close button at top left.
+
+Icon: `game-icons.net/sbed/fire`
+
 ### Transfiguration
 
-A transfiguration site shows the user 3 random cards from their deck, and they
-may select one to apply a transfiguration to, modifying that card's rules text.
-Each card can only receive a single transfiguration; cards that have already
-been transfigured are not eligible. If multiple transfigurations are applicable
-to a card, a random one is selected to suggest.
+Transfiguration is run by **Durgan Forgehammer** (home: Frostforge). The site
+shows the user 4 random cards from their deck, each with a random transfiguration
+proposed, and the user may select one to apply, modifying that card's rules text.
+Each card can only receive a single transfiguration; cards that have already been
+transfigured are not eligible. If multiple transfigurations are applicable to a
+card, a random one is selected to suggest. The candidate cards are subject to the
+dreamscape's [affiliation](#affiliations) nudge.
 
 Each transfiguration carries an emblem icon shown in the card's name bar and a
 tint color; the card name and any modified rules text display in that tint to
@@ -454,67 +552,191 @@ indicate the transfiguration. Possible transfigurations include:
   which are available. Only available for cards which are eligible for 2 or more
   transfigurations.
 
-**UI:** An NPC is shown who performs an animation and displays a speech bubble
-with some dialog when the camera arrives at this site. 3 cards from the quest
-deck animate to appear in a row via a staggered move animation (they flip to be
-face-up). As with other sites, they appear beside the NPC in landscape and below
-the NPC in portrait. Each card is augmented to show the transfigured version
-being offered, with the card name and card text tinted to the new color. Each
-card gets a purple "Transfigure" button to accept that transfiguration. When
-clicked the other cards fall away, and then the selected card animates to screen
-center and displays a visual effect specific to the transfiguration being
-applied, then flips over and returns to the quest deck in the bottom right of
-the screen. A close button is displayed to allow the user to decline a
-transfiguration.
+**Home Specialty.** In Frostforge, Durgan allows the player to pick any card in
+their deck and apply a transfiguration of their choice to it.
 
-Icon: "Science"
+**UI:** Durgan performs an animation and displays a speech bubble. 4 cards from
+the quest deck animate to appear in a row via a staggered move animation (they
+flip face-up), beside Durgan in landscape and below him in portrait. Each card is
+augmented to show the transfigured version being offered, with the card name and
+text tinted to the new color. Each card gets a purple "Transfigure" button. When
+clicked the other cards fall away, then the selected card animates to screen
+center, displays a visual effect specific to the transfiguration, flips over, and
+returns to the quest deck in the bottom right. A close button allows the user to
+decline.
+
+Icon: `game-icons.net/sbed/anvil-impact`
 
 ### Duplication
 
-A duplication site shows the user 3 random cards from their deck along with a
-proposed random number of copies to create for each card between 1 and 4. The
-user may pick one of the proposed options to add that many duplicates of that
-card to their deck.
+Duplication is run by **Deacon Holt** (home: Hope's End). The site shows the user
+4 random cards from their deck, and the user may choose one to duplicate, adding a
+copy to their deck. The candidate cards are subject to the dreamscape's
+[affiliation](#affiliations) nudge.
 
-**UI:** An NPC is shown who performs an animation and displays a speech bubble
-with some dialog when the camera arrives at this site. 3 cards from the quest
-deck animate to appear in a row via a staggered move animation. A purple button
-like "Duplicate x3" appears under each one. Clicking this button causes the
-other cards to fall away, and then a particle effect plays and additional copies
-of the card emerge from the selected card. All copies then animate to the quest
-deck, and the camera pulls back to the map screen. A close button is displayed
-to allow the user to decline duplication.
+**Home Specialty.** In Hope's End, Deacon Holt allows the player to pick any card
+in their deck to duplicate.
+
+**UI:** Deacon performs an animation and displays a speech bubble. 4 cards from
+the quest deck animate to appear in a row via a staggered move animation. A purple
+"Duplicate" button appears under each one. Clicking it causes the other cards to
+fall away, then a particle effect plays and a copy of the card emerges from the
+selected card. The copies animate to the quest deck, and the camera pulls back to
+the map. A close button allows the user to decline.
 
 Icon: "Copy"
 
-### Dreamsign Reward Site
+### Purge
 
-A dreamsign reward site is a special site for granting the user a known
-dreamsign. The distinguishing factor of dreamsign reward sites is that the
-reward is fixed by dreamscape generation and appears on the dream atlas rather
-than randomly rolled when the site is visited. Otherwise it is identical to a
-[Dreamsign Offering](#dreamsign-offering) site.
+Purge is run by **Master Takeshi** (home: Tsukiren). It lets the user pay essence
+to permanently remove cards from their deck, thinning out cards that don't fit
+their gameplan. Purge also removes [Banes](#banes): bane cards can be selected for
+removal alongside ordinary cards, and are removed cheaply or for free so that a
+bad bane is always shakeable.
 
-**UI:** The camera pulls in on a scene showing the reward items in question,
-with a purple "accept" button and a gray "decline" button. Accepting the reward
-plays the standard animation for that item type, for example animating to the
-quest deck, and then the camera pulls back to the map screen.
+A Purge site is guaranteed in the starting dreamscape and the next two
+(completion levels 0, 1, and 2), so early-game deck-thinning is always available.
+From completion level 3 onward, Purge is no longer guaranteed but can still appear
+in the random fill of a dreamscape. Tsukiren always offers an enhanced Purge.
 
-Icon: "Treasure Chest"
+**Pricing.** Purge cost escalates with each card removed in a single visit, and
+the counter resets every dreamscape. The Nth card removed in a visit costs
+`30 + 5 * N * (N + 1)` essence:
 
-### Cleanse
+| Card # | Marginal cost | Cumulative |
+| ------ | ------------- | ---------- |
+| 1      | 40            | 40         |
+| 2      | 60            | 100        |
+| 3      | 90            | 190        |
+| 4      | 130           | 320        |
+| 5      | 180           | 500        |
+| 6      | 240           | 740        |
 
-A Cleanse site allows the user to remove up to 3 chosen [Banes](#banes) from
-their deck or dreamsigns.
+Removing one or two cards is cheap, three or four is a real commitment, and five
+or more requires arriving with a nearly full essence bar. Two anchors tie the
+curve to the rest of the economy: two cards cost the same as one standard shop
+card (100 essence), and five cards cost the full default essence cap (500). Up to
+six cards may be removed in a single visit. Essence discounts also reduce purge
+prices. The pricing logic lives in `src/purge/purge-pricing.ts`.
 
-**UI:** An NPC is shown who performs an animation and displays a speech bubble
-with some dialog when the camera arrives at this site. The cards or dreamsigns
-to cleanse emerge from the quest deck or dreamsign display. A purple "cleanse"
-button is displayed, along with a gray "decline" button. Selecting "cleanse"
-causes the bane cards to play a dissolve animation, and then the camera pulls
-back to the map screen.
+**Home Specialty.** In Tsukiren, Master Takeshi allows the player to remove up to
+3 cards (ordinary cards or banes) at no cost.
 
-Icon: "Snowflake"
+**UI:** The user's quest deck opens its browser view, showing every card.
+Selecting a card gives it a red outline and a price chip showing what that card
+costs in the current selection order. A running summary shows the number
+selected, the total essence cost, the essence remaining afterward, and the price
+of the next card. Cards the player cannot yet afford are dimmed. A red "Purge N
+Cards" button at the bottom confirms the removal: essence is spent and the
+selected cards are permanently removed.
+
+Icon: `game-icons.net/sbed/small-fire`
+
+### Dream Journey
+
+Dream Journey is run by **Aldric, the Seer** (home: Blackthorn Keep). It functions
+like a random event in other roguelike deckbuilding games: the player chooses
+between two reward options to claim. Dream Journey rewards are pure upside, and
+this is where the biggest random effects live — effects that can structurally
+change a quest or modify the user's entire deck. The amount of information
+revealed about an effect is variable, and some journeys have highly random effects
+not disclosed in advance. A close button allows the user to reject the options,
+though some journeys explicitly remove it.
+
+**Home Specialty.** In Blackthorn Keep, Aldric offers bigger rewards highly
+curated to the player's current deck (for example, transfiguring more cards,
+offering more draft choices, or offering more curated strong cards).
+
+**UI:** Aldric performs an animation and displays a speech bubble. The journey
+cards animate from the center of Aldric's chest at a small size and are shown
+side-by-side (next to him in landscape, below in portrait). A purple button under
+each accepts it. Accepting animates the chosen card up to screen center, then
+plays a dissolve animation, then shows the effect via a custom animation (for
+example, cards fading in and animating to the quest deck for an "add 3 cards"
+effect). Once the effect animation completes, the camera pulls back to the map. A
+journey card is a circular image that displays its rules text on hover/long press.
+For journeys with multiple effects, each animation plays in sequence.
+
+Icon: `game-icons.net/sbed/crystal-ball`
+
+### Tempting Offer
+
+Tempting Offer is run by **Maddox** (home: The Rust Expanse). The player may take
+a powerful reward, but it comes at a cost: paying essence, gaining a
+[Bane](#banes), or losing something (such as a card from their deck). Tempting
+Offer is the primary source of banes during a quest.
+
+**Home Specialty.** In The Rust Expanse, Maddox offers the player their choice of
+two tempting offers.
+
+**UI:** Maddox performs an animation and displays a speech bubble. The offer
+card(s) animate in from the center of his chest and are shown beside him in
+landscape, below in portrait, with the reward and its cost both displayed. A
+purple button accepts the offer; the cost and reward animations play in sequence
+(for example, essence draining away and then a reward animating to the quest
+deck). A close button allows the user to decline.
+
+Icon: `game-icons.net/sbed/scales`
+
+### Gamble
+
+Gamble is run by **Gravok** (home: Farpoint Station). The player engages in one of
+a few wager or "push your luck" style games to win rewards. A wager can win a
+larger payout or lose the stake.
+
+**Home Specialty.** In Farpoint Station, Gravok charges no initial fee and offers
+bigger payouts.
+
+**UI:** Gravok performs an animation and displays a speech bubble. The wager
+interface appears beside him in landscape and below in portrait, showing the bet,
+the odds, and the potential reward. The player commits to a wager, an outcome
+animation resolves the result (a win animates the reward to the quest deck or
+essence total; a loss plays a failure animation), and the camera pulls back to the
+map. A close button allows the user to decline before wagering.
+
+Icon: `game-icons.net/sbed/two-coins`
+
+### Temporal Fork
+
+Temporal Fork is run by **"Layaway"** (home: Grid City). The player is offered a
+choice of two time-based effects: temporary modifications to the player's deck or
+game rules, or rewards that arrive in the future. This is where time-limited big
+effects live.
+
+**Home Specialty.** In Grid City, Layaway offers effects with a longer duration,
+or future rewards that arrive sooner.
+
+**UI:** Layaway performs an animation and displays a speech bubble. The two effect
+cards animate in beside him in landscape and below in portrait, each showing its
+effect and its duration or timing. A purple button accepts an effect; the
+not-selected card animates away, and the chosen effect plays a custom animation
+(for example, a clock motif marking when a future reward will arrive). The camera
+then pulls back to the map. A close button allows the user to decline.
+
+Icon: `game-icons.net/sbed/sands-of-time`
+
+## Home Specialties
+
+When a Dream Guide is in their home dreamscape, their site is enhanced. The
+enhancements are:
+
+| Guide | Home Dreamscape | Site | Enhancement |
+| ----- | --------------- | ---- | ----------- |
+| Tobias Tanglefur | Tumbleleaf Village | Card Shop | Discounted cards drawn from the player's Dreamcaller signature tide |
+| Amunet, the Tomb-Keeper | Pharaoh's Gate | Dreamsign Market | Restock the choices once for free |
+| Sigrún | Winterwake Fjords | Dreamsign Revelation | Always a choice (never a single random dreamsign), more choices, tailored to the deck |
+| Durgan Forgehammer | Frostforge | Transfiguration | Pick any card and any applicable transfiguration |
+| Deacon Holt | Hope's End | Duplication | Pick any card to duplicate |
+| Master Takeshi | Tsukiren | Purge | Remove up to 3 cards or banes for free |
+| Aldric, the Seer | Blackthorn Keep | Dream Journey | Bigger rewards, curated to the deck |
+| Maddox | The Rust Expanse | Tempting Offer | Choose between two offers |
+| Gravok | Farpoint Station | Gamble | No initial fee, bigger payouts |
+| "Layaway" | Grid City | Temporal Fork | Longer duration / sooner future rewards |
+
+The guide's signature site is always present and enhanced in the home dreamscape.
+The same site can also appear in the random fill of other dreamscapes, where the
+guide still presents it but the enhancement does not apply. Enhancement details
+are configured in TOML.
 
 ## Victory & Defeat
 
@@ -524,8 +746,8 @@ quest ends immediately in defeat. As described in the
 an exception that allows continuing after a first loss, but that is a
 meta-progression reward layered on top of the base rule.
 
-**UI:** When a battle ends, a particle effect plays alongside a sound effect,
-and the word "Victory" or "Defeat" is displayed at screen center. The text then
+**UI:** When a battle ends, a particle effect plays alongside a sound effect, and
+the word "Victory" or "Defeat" is displayed at screen center. The text then
 animates upward to reveal a summary panel showing battle rewards earned, quest
 statistics, and a button to continue to the Dream Atlas (on victory) or to end
 the quest (on defeat).
@@ -538,8 +760,7 @@ custom cards in their decks. See [Boss Dreamcallers](bosses.md) for details.
 ### Battle Rewards
 
 Completing a battle always grants an essence reward, which increases as the user
-completes more dreamscapes. The user also gains 1-3 omens, again increasing as
-the user completes more dreamscapes.
+completes more dreamscapes.
 
 ## Limits
 
@@ -547,16 +768,14 @@ Quest decks can contain a maximum of 50 cards during battles. If this limit is
 exceeded, before the battle starts the user gains the ability to purge cards of
 their choice to get back down under 50 cards.
 
-Quest runs also have a maximum essence cap of 500 by default. If the player
-would gain essence above their current cap, the excess is lost. This cap can be
+Quest runs also have a maximum essence cap of 500 by default. If the player would
+gain essence above their current cap, the excess is lost. This cap can be
 increased by effects such as Dream Journey rewards.
-
-Omens have no cap.
 
 Quest decks must contain a minimum of 25 cards. If the user has not completed
 enough drafts to reach this threshold, additional copies of their deck are added
-during a battle until they exceed 25 (for example, a player with 9 cards in
-their deck will end up with 27 cards during a battle).
+during a battle until they exceed 25 (for example, a player with 9 cards in their
+deck will end up with 27 cards during a battle).
 
 Users can have a maximum of 12 dreamsigns at any time. If they would receive
 another dreamsign, an overlay is shown and they must immediately purge a
@@ -566,67 +785,59 @@ Users may have only 1 dreamcaller.
 
 ## Banes
 
-Certain cards, called "banes", can be given to the user during a quest,
-typically as a result of the cost side of a [Dream Journey](#dream-journey).
-Bane cards generally have negative effects when drawn. Bane cards can be
-[purged](#purge) as normal. Bane cards can also be removed via the
-[cleanse](#cleanse) site. See [Banes](banes.md) for more information.
+Certain cards, called "banes", can be given to the user during a quest, typically
+as the cost side of a [Tempting Offer](#tempting-offer) or as the downside of a
+losing [Gamble](#gamble). Bane cards generally have negative effects when drawn.
+Bane cards can be removed at a [Purge](#purge) site, which removes banes cheaply
+or for free alongside ordinary cards. See [Banes](banes.md) for more information.
 
 ## Dream Atlas
 
-The Dream Atlas is the world map players navigate after Dreamcaller selection.
-It shows a 3D map of dreamscapes represented as circular miniature "worlds,"
-connected by dotted lines. For later dreamscape choices, the player can hover
-over or long-press a dreamscape to preview its biome and preview site, then
-click it again to zoom the camera in to that dreamscape.
+The Dream Atlas is the world map players navigate after Dreamcaller selection. It
+shows a 3D map of dreamscapes represented as circular miniature "worlds,"
+connected by dotted lines. For later dreamscape choices, the player can hover over
+or long-press a dreamscape to preview it, then click it again to zoom the camera
+in to that dreamscape.
 
 Each dreamscape can be in one of three states:
 
 - **Completed**: The player has already visited this dreamscape and finished its
   battle.
-- **Available**: The player can choose this dreamscape as their next
-  destination.
+- **Available**: The player can choose this dreamscape as their next destination.
 - **Unavailable**: The player cannot choose this dreamscape yet.
 
-The player begins inside the **starting dreamscape**, which sits at the center
-of the Dream Atlas. The player enters the starting dreamscape directly when the
-run begins; the Atlas screen marks it "You started here" with a slight visual
-emphasis so the player keeps their bearings. The starting dreamscape is assigned
-a random biome for visual variety, but none of its sites are enhanced, so the
-opening encounter is uniform for every run.
+The player begins inside **Firstlight Meadow**, the starting dreamscape, which
+sits at the center of the Dream Atlas. The player enters it directly when the run
+begins; the Atlas screen marks it "You started here" with a slight visual
+emphasis so the player keeps their bearings.
 
 After the player visits a dreamscape and completes its battle, that dreamscape
 becomes **Completed**. Any dreamscapes directly connected to it then also become
 **Available**. The number of dreamscapes the user has completed is called the
-'Completion Level' for that quest.
+'Completion Level' for that quest. In other words, a dreamscape is **Available**
+only if it is connected to at least one **Completed** dreamscape.
 
-In other words, a dreamscape is **Available** only if it is connected to at
-least one **Completed** dreamscape.
-
-Each dreamscape displays exactly one site icon on the atlas to preview one site
-contained in that dreamscape. This icon is not a battle or draft site. If the
-dreamscape has an enhanced site, the preview icon is that enhanced site.
-Otherwise, it is the configured preview site for that dreamscape. Site icons use
-the Boxicons glyph font (icon names are listed per site in
-[Dreamscape Sites](#dreamscape-sites)). The starting dreamscape is special: it
-shows its own flag glyph rather than a site icon, and hovering any dreamscape
-describes what is special about it — its enhanced property when it has an
-enhanced site. Winning the 7th battle causes the player to win the quest.
+Each dreamscape displays exactly one site icon on the atlas to preview it: the
+icon of its home guide's signature site (the enhanced site). Firstlight Meadow is
+special — it shows its own flag glyph rather than a site icon. Hovering a
+dreamscape describes what is special about it: its guide, its affiliation, and its
+home specialty. Site icons use the game-icons.net glyphs and custom SVGs listed
+per site above. Winning the 7th battle causes the player to win the quest.
 
 ### Dream Atlas Generation
 
-The dream atlas is a branching tree that grows outward from the starting
-dreamscape, keeping a two-deep look-ahead so the player can always see their
-immediate choices and where each choice leads. The initial atlas holds the
-starting dreamscape, its two direct children (the first two choices, which are
-guaranteed to show different site icons), and two grandchildren beneath each
-child. Every node but the start begins 'unavailable'.
+The dream atlas is a branching tree that grows outward from Firstlight Meadow,
+keeping a two-deep look-ahead so the player can always see their immediate choices
+and where each choice leads. The initial atlas holds the starting dreamscape, its
+two direct children (the first two choices, which are guaranteed to show different
+site icons), and two grandchildren beneath each child. Every node but the start
+begins 'unavailable'.
 
 Completing a dreamscape marks it 'completed' and turns its direct children into
 the newly 'available' choices. Each newly available dreamscape is then topped up
 to two forward branches: a dreamscape that already carries its children (such as
-the initial choices) generates nothing new, while a deeper dreamscape that has
-no children of its own sprouts two onward branches the moment it becomes a live
+the initial choices) generates nothing new, while a deeper dreamscape that has no
+children of its own sprouts two onward branches the moment it becomes a live
 choice. New dreamscapes attach only to the newly available nodes, never directly
 to the completed node, so they stay 'unavailable' until their own parent is
 completed.
@@ -637,21 +848,41 @@ dreamscape, so the atlas never renders overlapping nodes. The atlas is purely
 additive and is never pruned; the player will visit 7 dreamscapes in a typical
 quest (or 8 with the battle-skip meta progression unlock).
 
+**Assigning dreamscapes to nodes.** Which named dreamscape fills each new node is
+drawn from a shuffled bag of the 10 non-starter dreamscapes. Each node draws
+without replacement from the bag; when the bag empties it is refilled and
+reshuffled. A draw that would place a dreamscape directly adjacent to a copy of
+itself is rejected and redrawn. Because the bag is exhausted before it refills,
+the first batch of placements is all-distinct and repeats only begin to appear
+once the bag has cycled — so within a single typical quest the player usually sees
+distinct dreamscapes, with repeats possible but uncommon.
+
 ## Dreamscape Generation
 
-Dreamscapes are generated by drawing sites from a pool, in a similar manner to
-how draft picks are generated. Sites are selected when the dreamscape becomes
-available. The pool for site generation changes over time, with new options
-being shuffled in after each dreamscape is completed. Each completed dreamscape
-shuffles in a new set of sites as defined in TOML for that completion level.
-Transfiguration and Duplication sites are more common later in the Quest, for
-example.
+Within a dreamscape, sites are generated by drawing from a pool, in a similar
+manner to how draft picks are generated. Sites are selected when the dreamscape
+becomes available. Each dreamscape contains between 3 and 6 total sites
+(configured in TOML).
 
-All sites can appear a maximum of 1 time in a dreamscape, with the exception
+The contents of a non-starter dreamscape are assembled as follows:
+
+1. **Mandatory sites** are placed first:
+   - Exactly one Battle site (visited last).
+   - The home guide's signature site, enhanced.
+   - A Purge site, if the completion level is 0, 1, or 2.
+   - Draft sites according to the completion-level table below.
+2. **Fill sites** are then drawn to reach the target site count (within the 3–6
+   range) from a pool of the 9 other guides' signature sites (each bringing its
+   guide, non-enhanced) plus the generic Essence site. The pool for fill
+   generation changes over time, with new options shuffled in after each
+   dreamscape is completed as defined in TOML for that completion level;
+   Transfiguration and Duplication, for example, become more common later in the
+   quest.
+
+All site types can appear a maximum of 1 time in a dreamscape, with the exception
 that there can be up to 2 Draft sites.
 
-Draft sites are handled differently. Dreamscapes have a deterministic number of
-draft sites based on completion level.
+Draft sites are deterministic by completion level:
 
 | Completion Level | Draft Sites |
 | ---------------- | ----------- |
@@ -659,34 +890,16 @@ draft sites based on completion level.
 | 2, 3             | 1           |
 | 4+               | 0           |
 
-Battle and Purge sites are also distinct: every dreamscape has exactly one
-Battle site and exactly one Purge site.
-
-### Enhanced Sites
-
-Each dreamscape is associated with a specific "biome" which dictates the 3D
-environment assets used in generation. Biomes are purely visual aside from their
-enhanced site affinity. There is one biome per enhanced site type, and biome
-configuration and assignment are defined in TOML. Each dreamscape biome has an
-affinity for a specific site, and produces an "enhanced site" of that type when
-visited. The available enhanced sites are:
-
-- **Shop**: The reroll option is free
-- **Dreamsign Offering/Dreamsign Draft**: A dreamsign draft is offered instead,
-  or a draft is offered with an additional option
-- **Purge**: Every card removed this visit is discounted by 30%
-- **Essence**: The essence amount given is doubled
-- **Transfiguration**: The player may select which card in their deck receives
-  transfiguration
-- **Duplication**: The player may select which card in their deck is duplicated
+Firstlight Meadow does not use this generation process: its sites are fixed at a
+Battle site, a Purge site, and two Draft sites, with no fill and no enhancement.
 
 ## Implementation Strategy and QA
 
 The overall implementation strategy for the Quests game mode is to rely heavily
-on both *integration testing* and *manual QA*. The integration testing
-philosophy should follow what we use for the battle game mode, writing tests
-that operate against the real QuestView/Commands interface. Philosophically,
-Dreamtides does not employ unit testing.
+on both *integration testing* and *manual QA*. The integration testing philosophy
+should follow what we use for the battle game mode, writing tests that operate
+against the real QuestView/Commands interface. Philosophically, Dreamtides does
+not employ unit testing.
 
 The manual QA strategy here is based on validating all changes against a running
 instance of the Unity editor using the [abu](../../abu/abu.md) tool. *Every*
