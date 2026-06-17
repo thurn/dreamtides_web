@@ -90,9 +90,11 @@ non-enhanced, in the random fill of other dreamscapes.
 ### Firstlight Meadow
 
 The starting dreamscape of every dream quest. Firstlight Meadow has no Dream
-Guide and no affiliation, and its sites are fixed: it always contains a Battle
-site, a Purge site, and two Draft sites, with no fill sites and no enhancement.
-This gives every run an identical, uniform on-ramp.
+Guide and no affiliation, and its sites are fixed, giving every run an identical,
+uniform on-ramp. Its sites are two [Draft](#draft) sites, a [Dreamsign
+Revelation](#dreamsign-revelation) offering a choice of 3 dreamsigns, a
+[Purge](#purge) site, and a [Battle](#battle) site fought to 10 points. No fill
+sites appear and no site is enhanced.
 
 - **Aesthetic:** A tranquil meadow at sunrise.
 
@@ -414,8 +416,8 @@ for purchase plus a restock option that refreshes the available choices once,
 also for essence.
 
 Shop cards are drawn from the run's tide-based draft pool, in the same manner as
-draft picks, and are removed from the draft pool even if not selected. A standard
-shop configuration is 3 cards to purchase plus 1 restock.
+draft picks, and are removed from the draft pool even if not selected. A Card
+Shop always shows 5 cards to purchase plus a restock option.
 
 Shop base prices and the overall essence economy are defined in TOML. The shop
 implements a random "discount" system where one or more items can be displayed as
@@ -442,7 +444,8 @@ Icon: `game-icons.net/sbed/shop`
 
 The Dreamsign Market is run by **Amunet, the Tomb-Keeper** (home: Pharaoh's
 Gate). It is the site for purchasing dreamsigns with essence, and offers a
-restock option that refreshes the available choices once for essence.
+restock option that refreshes the available choices once for essence. A Dreamsign
+Market always shows 3 dreamsigns to purchase plus a restock option.
 
 Dreamsigns are drawn from the run's shared Dreamsign pool, which was seeded from
 the selected Dreamcaller's tides, and are removed from that pool when shown.
@@ -856,8 +859,10 @@ Draft sites are deterministic by completion level:
 | 2, 3             | 1           |
 | 4+               | 0           |
 
-Firstlight Meadow does not use this generation process: its sites are fixed at a
-Battle site, a Purge site, and two Draft sites, with no fill and no enhancement.
+Firstlight Meadow does not use this generation process: its sites are fixed at
+two Draft sites, a Dreamsign Revelation offering a choice of 3 dreamsigns, a
+Purge site, and a Battle site fought to 10 points, with no fill and no
+enhancement.
 
 ## Implementation Strategy and QA
 
