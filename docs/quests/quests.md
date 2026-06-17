@@ -77,11 +77,12 @@ and an **affiliation**.
   draws within that dreamscape, as described in [Affiliations](#affiliations).
 
 The 10 non-starter dreamscapes can appear more than once on the Dream Atlas, but
-the same dreamscape is never connected directly to a copy of itself. Dreamscapes
-are drawn without replacement from a pool as part of Atlas generation, making it
-less likely (but not impossible) that repeats are generated until every
-dreamscape has been seen. See [Dream Atlas Generation](#dream-atlas-generation)
-for the assignment algorithm.
+the same dreamscape is never connected directly to a copy of itself. When a new
+node is filled, dreamscapes the player has not yet seen are weighted more heavily
+than ones that have already appeared, so repeats are less likely than fresh
+dreamscapes — but a repeat can occur at any point, even before all 10 have been
+seen. See [Dream Atlas Generation](#dream-atlas-generation) for the assignment
+algorithm.
 
 The full set of dreamscapes follows. The guide's signature site is always
 present and enhanced in their home dreamscape; the same site can also appear,
@@ -100,9 +101,6 @@ sites appear and no site is enhanced.
 
 ### Tumbleleaf Village
 
-*A warm village of travelers and spirit animals, where the card shop offers new
-companions, old charms, and small wonders for the road ahead.*
-
 - **Dream Guide:** Tobias Tanglefur
 - **Signature Site:** [Card Shop](#card-shop)
 - **Aesthetic:** A fantasy village with anthropomorphic animals.
@@ -110,9 +108,6 @@ companions, old charms, and small wonders for the road ahead.*
 - **Site Icon:** `game-icons.net/sbed/shop`
 
 ### Pharaoh's Gate
-
-*A sun-baked realm of tombs and golden gods, where the dreamsign market deals in
-ancient bargains and cards drift into the void only to rise again.*
 
 - **Dream Guide:** Amunet, the Tomb-Keeper
 - **Signature Site:** [Dreamsign Market](#dreamsign-market)
@@ -818,13 +813,14 @@ additive and is never pruned; the player will visit 7 dreamscapes in a typical
 quest (or 8 with the battle-skip meta progression unlock).
 
 **Assigning dreamscapes to nodes.** Which named dreamscape fills each new node is
-drawn from a shuffled bag of the 10 non-starter dreamscapes. Each node draws
-without replacement from the bag; when the bag empties it is refilled and
-reshuffled. A draw that would place a dreamscape directly adjacent to a copy of
-itself is rejected and redrawn. Because the bag is exhausted before it refills,
-the first batch of placements is all-distinct and repeats only begin to appear
-once the bag has cycled — so within a single typical quest the player usually sees
-distinct dreamscapes, with repeats possible but uncommon.
+chosen by a weighted random draw from the 10 non-starter dreamscapes. Each
+dreamscape carries a weight that is reduced each time it is placed, so
+not-yet-seen dreamscapes are strongly favored and already-placed ones become
+progressively less likely. Every dreamscape keeps a nonzero weight, so a repeat
+is possible at any point — even before all 10 have appeared — just much less
+likely than a fresh dreamscape. A draw that would place a dreamscape directly
+adjacent to a copy of itself is rejected and redrawn. The weighting and how
+sharply repeats are discouraged are configured in TOML.
 
 ## Dreamscape Generation
 
