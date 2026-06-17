@@ -102,10 +102,7 @@ This gives every run an identical, uniform on-ramp.
 companions, old charms, and small wonders for the road ahead.*
 
 - **Dream Guide:** Tobias Tanglefur
-- **Signature Site:** [Card Shop](#card-shop). Purchase cards for essence;
-  restock the available choices once for essence.
-- **Home Specialty:** Tobias sells powerful cards at a discount, drawn directly
-  from the player's Dreamcaller signature tide.
+- **Signature Site:** [Card Shop](#card-shop)
 - **Aesthetic:** A fantasy village with anthropomorphic animals.
 - **Affiliation:** Spirit Animals
 - **Site Icon:** `game-icons.net/sbed/shop`
@@ -116,10 +113,7 @@ companions, old charms, and small wonders for the road ahead.*
 ancient bargains and cards drift into the void only to rise again.*
 
 - **Dream Guide:** Amunet, the Tomb-Keeper
-- **Signature Site:** [Dreamsign Market](#dreamsign-market). Purchase dreamsigns
-  for essence; restock the available choices once for essence.
-- **Home Specialty:** Amunet sells dreamsigns and allows the player to restock
-  the choices once for free.
+- **Signature Site:** [Dreamsign Market](#dreamsign-market)
 - **Aesthetic:** An ancient Egyptian realm.
 - **Affiliation:** Erode, Void matters
 - **Site Icon:** `game-icons.net/sbed/great-pyramid`
@@ -127,11 +121,7 @@ ancient bargains and cards drift into the void only to rise again.*
 ### Winterwake Fjords
 
 - **Dream Guide:** Sigrún
-- **Signature Site:** [Dreamsign Revelation](#dreamsign-revelation). The player
-  receives 1 random dreamsign, or sometimes picks 1 of 3.
-- **Home Specialty:** Sigrún offers improved dreamsigns specifically tailored to
-  the player's current deck, with more choices — in her home dreamscape she
-  always offers a choice rather than a single random dreamsign.
+- **Signature Site:** [Dreamsign Revelation](#dreamsign-revelation)
 - **Aesthetic:** A snowy viking village.
 - **Affiliation:** Removal, Dissolve / Banish effects
 - **Site Icon:** `game-icons.net/sbed/fire`
@@ -139,11 +129,7 @@ ancient bargains and cards drift into the void only to rise again.*
 ### Frostforge
 
 - **Dream Guide:** Durgan Forgehammer
-- **Signature Site:** [Transfiguration](#transfiguration). 4 random cards from
-  the player's deck are drawn with random transfigurations, and the player may
-  pick one to apply.
-- **Home Specialty:** Durgan allows the player to pick any card in their deck and
-  apply a transfiguration of their choice to it.
+- **Signature Site:** [Transfiguration](#transfiguration)
 - **Aesthetic:** A dwarven fortress.
 - **Affiliation:** Storm / Events matter
 - **Site Icon:** `game-icons.net/sbed/anvil-impact`
@@ -151,10 +137,7 @@ ancient bargains and cards drift into the void only to rise again.*
 ### Hope's End
 
 - **Dream Guide:** Deacon Holt
-- **Signature Site:** [Duplication](#duplication). 4 random cards from the
-  player's deck are drawn, and the player may choose one to duplicate.
-- **Home Specialty:** Deacon Holt allows the player to pick any card in their
-  deck to duplicate.
+- **Signature Site:** [Duplication](#duplication)
 - **Aesthetic:** A rural town experiencing a zombie apocalypse.
 - **Affiliation:** Inexpensive Characters
 - **Site Icon:** Custom `stack.svg`
@@ -162,10 +145,7 @@ ancient bargains and cards drift into the void only to rise again.*
 ### Tsukiren
 
 - **Dream Guide:** Master Takeshi
-- **Signature Site:** [Purge](#purge). The player chooses cards to remove from
-  their deck by paying essence.
-- **Home Specialty:** Master Takeshi allows the player to remove up to 3 cards at
-  no cost.
+- **Signature Site:** [Purge](#purge)
 - **Aesthetic:** A samurai-era Japanese kingdom.
 - **Affiliation:** Warriors
 - **Site Icon:** `game-icons.net/sbed/small-fire`
@@ -173,11 +153,7 @@ ancient bargains and cards drift into the void only to rise again.*
 ### Blackthorn Keep
 
 - **Dream Guide:** Aldric, the Seer
-- **Signature Site:** [Dream Journey](#dream-journey). The player chooses between
-  two rewards to claim.
-- **Home Specialty:** Aldric offers bigger rewards, highly curated to the
-  player's current deck — for example transfiguring more cards, offering more
-  draft choices, or offering more curated strong cards.
+- **Signature Site:** [Dream Journey](#dream-journey)
 - **Aesthetic:** A dark fantasy castle.
 - **Affiliation:** Abandon / Sacrifice
 - **Site Icon:** `game-icons.net/sbed/crystal-ball`
@@ -185,10 +161,7 @@ ancient bargains and cards drift into the void only to rise again.*
 ### The Rust Expanse
 
 - **Dream Guide:** Maddox
-- **Signature Site:** [Tempting Offer](#tempting-offer). The player may take a
-  powerful reward, but it comes at a cost.
-- **Home Specialty:** Maddox offers the player their choice of two tempting
-  offers.
+- **Signature Site:** [Tempting Offer](#tempting-offer)
 - **Aesthetic:** A "Mad Max" post-apocalyptic wasteland.
 - **Affiliation:** Survivors
 - **Site Icon:** `game-icons.net/sbed/scales`
@@ -196,10 +169,7 @@ ancient bargains and cards drift into the void only to rise again.*
 ### Farpoint Station
 
 - **Dream Guide:** Gravok
-- **Signature Site:** [Gamble](#gamble). The player engages in one of a few wager
-  or "push your luck" style games to win rewards.
-- **Home Specialty:** Gravok charges no initial fee and offers bigger payouts in
-  his home dreamscape.
+- **Signature Site:** [Gamble](#gamble)
 - **Aesthetic:** A sci-fi outpost on a distant planet, populated by humans and
   aliens (such as Gravok, a crystal/rock creature).
 - **Affiliation:** Figments
@@ -208,11 +178,7 @@ ancient bargains and cards drift into the void only to rise again.*
 ### Grid City
 
 - **Dream Guide:** "Layaway"
-- **Signature Site:** [Temporal Fork](#temporal-fork). The player is offered a
-  choice of two time-based effects, such as temporary modifications to the
-  player's deck or game rules, or rewards that come in the future.
-- **Home Specialty:** Layaway offers effects with a longer duration, or future
-  rewards that arrive sooner.
+- **Signature Site:** [Temporal Fork](#temporal-fork)
 - **Aesthetic:** A cyberpunk city.
 - **Affiliation:** Discard
 - **Site Icon:** `game-icons.net/sbed/sands-of-time`
