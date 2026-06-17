@@ -330,11 +330,11 @@ generates draft pick offers directly from that data:
 Each [Draft site](#draft) provides **5 picks** from the ongoing multiset. Early
 dreamscapes provide more opportunities to draft than late dreamscapes:
 
-| Completion Level | Draft Sites |
-| ---------------- | ----------- |
-| 0, 1             | 2           |
-| 2, 3             | 1           |
-| 4+               | 0           |
+| Layer | Draft Sites |
+| ----- | ----------- |
+| 1, 2  | 2           |
+| 3, 4  | 1           |
+| 5, 6  | 0           |
 
 Draft picks and shop stock both spend from this shared multiset. When the multiset
 is exhausted it is recreated from `draftPoolCopiesByCard`, so the pool never runs
@@ -362,7 +362,8 @@ a stronger version of its ability, the guide's [Home
 Specialty](#home-specialties). The same site appearing elsewhere uses its
 standard, non-enhanced behavior.
 
-Three sites — Battle, Draft, and Essence — have no guide and are never enhanced.
+Four sites — Battle, Draft, Essence, and Dreamsign Reward — have no guide and are
+never enhanced.
 
 ### Battle
 
@@ -505,6 +506,22 @@ below each and a close button at top left.
 
 Icon: `game-icons.net/sbed/fire`
 
+### Dreamsign Reward
+
+A Dreamsign Reward site grants the player a specific, pre-disclosed
+[known dreamsign](#known-dreamsigns) for free on visit. It has no guide and is
+never enhanced. The site appears only on the rare carrier nodes that the atlas
+flags with a known dreamsign, where it takes one of the dreamscape's fill slots.
+The granted dreamsign was drawn from the run's shared Dreamsign pool when the atlas
+was generated, so it is shown on the Atlas node in advance and the player can plan
+toward claiming it.
+
+**UI:** On arrival the known dreamsign animates from screen center at a small scale
+and then to the dreamsign display in the bottom-right corner of the screen, playing
+its acquisition particle effect, after which the camera pulls back to the map.
+
+Icon: `game-icons.net/delapouite/gift`
+
 ### Transfiguration
 
 Transfiguration is run by **Durgan Forgehammer** (home: Frostforge). The site
@@ -584,9 +601,8 @@ their gameplan. Purge also removes [Banes](#banes): bane cards can be selected f
 removal alongside ordinary cards, and are removed cheaply or for free so that a
 bad bane is always shakeable.
 
-A Purge site is guaranteed in the starting dreamscape and the next two
-(completion levels 0, 1, and 2), so early-game deck-thinning is always available.
-From completion level 3 onward, Purge is no longer guaranteed but can still appear
+A Purge site is guaranteed in layers 1, 2, and 3, so early-game deck-thinning is
+always available. From layer 4 onward, Purge is not guaranteed but can still appear
 in the random fill of a dreamscape. Tsukiren always offers an enhanced Purge.
 
 **Pricing.** Purge cost escalates with each card removed in a single visit, and
@@ -787,73 +803,96 @@ or for free alongside ordinary cards. See [Banes](banes.md) for more information
 ## Dream Atlas
 
 The Dream Atlas is the world map players navigate after Dreamcaller selection. It
-is a layered, branching path that flows from **Firstlight Meadow** on one side to
-the **final boss** on the other, rendered as a 3D web of circular miniature
-"worlds" joined by glowing lines. The player carves a single route through it, one
-dreamscape at a time.
+is a layered, branching path that flows from **Firstlight Meadow** to the **final
+boss**, rendered as a 3D web of circular miniature "worlds" joined by glowing
+lines. The player carves a single route through it, one dreamscape at a time.
 
-The Atlas is organized into successive layers between the start and the final
-boss. Each layer offers a small set of dreamscapes, and advancing means choosing
-exactly **one** dreamscape from the next layer to travel to. The dreamscapes the
-player does **not** pick are gone for good: there is no backtracking and no way to
-revisit a forgone branch, so every choice commits the player to a single
-"world-line" through the dream. Because a typical quest is 7 battles long, the
-player threads through 7 dreamscapes (8 with the battle-skip meta-progression
-unlock) on the way to the final boss.
+The Atlas is organized into **7 layers**, each a vertical column of stacked
+dreamscape nodes. The player visits exactly one node per layer, advancing in
+sequence; once a layer is completed the player proceeds to the next layer and the
+other nodes in the completed layer are gone for good, with no backtracking. The
+default layer shape — itself a TOML layer-spec list, described with concrete
+defaults here to show the intended shape — is:
 
-Layers are **interconnected** rather than a clean tree. Each dreamscape connects
-forward to a subset of the next layer's dreamscapes, so the dreamscape the player
-picks now determines which dreamscapes become reachable next. Two different choices
-in the current layer can still funnel toward some of the same later dreamscapes,
-and the routes braid together as they approach the final boss.
+| Layer | Width | Notes |
+| ----- | ----- | ----- |
+| 1 | 1 | Always Firstlight Meadow, the starting dreamscape |
+| 2 | 2 | Both nodes connect back to Firstlight Meadow |
+| 3 | 3 | |
+| 4 | 3–4 | |
+| 5 | 3–5 | |
+| 6 | 3–5 | |
+| 7 | 1 | Always the final boss; every layer-6 node connects to it |
 
-Each dreamscape can be in one of three states:
+The variable widths (layers 4–6) are rolled once at quest start when the atlas
+skeleton is built. Because a quest is 7 layers long, the player threads through 7
+dreamscapes and fights 7 battles on the way to the final boss. (A meta-progression
+unlock can waive Firstlight Meadow's battle; see
+[Meta Progression](meta_progression.md).)
 
-- **Completed**: The player has already visited this dreamscape and finished its
-  battle.
-- **Available**: The dreamscape is reachable from the player's current position
-  and can be chosen as the next destination.
-- **Unavailable**: The dreamscape cannot be chosen yet, because no dreamscape
-  connected into it has been completed.
+Layers are **interconnected** rather than a clean tree. Each node connects forward
+to a subset of the next layer's nodes via **forward connections**, so the node the
+player picks now determines which nodes become reachable next. Two different
+choices in the current layer can still funnel toward some of the same later nodes,
+and the routes braid together as they approach the final boss. Connections target
+an average of 2 forward edges per node and obey one hard rule: **connections never
+cross**. A monotonic backbone guarantees every node has at least one forward and
+one backward connection — no orphans or dead-ends — after which extra non-crossing
+edges are added at random toward the average, which is a soft target the geometry
+may undershoot.
 
-The player begins inside Firstlight Meadow, the starting dreamscape on the far side
-of the Atlas, and enters it directly when the run begins; the Atlas marks it "You
-started here" with a slight visual emphasis so the player keeps their bearings.
-After the player completes a dreamscape's battle, that dreamscape becomes
-**Completed** and the dreamscapes it connects forward to become the new
-**Available** choices. The number of dreamscapes the player has completed is the
-**Completion Level** for that quest.
+Each node can be in one of five states:
 
-The player can see roughly two layers ahead: the dreamscapes currently available to
-pick, plus the dreamscapes those connect to. This lets the player plan a step or
-two — chasing a home specialty, a needed affiliation, or an extra draft — without
-revealing the whole route in advance. For these forward dreamscapes the player can
-hover or long-press to preview, then click to zoom the camera in.
+- **Unrevealed**: The skeleton and its connections are drawn, but the node shows an
+  empty gray circle instead of a dreamscape icon.
+- **Revealed-locked**: The node's dreamscape is shown, but it lies in a future
+  layer the player cannot pick yet.
+- **Available**: The node is reachable from the player's just-completed node and
+  can be chosen as the next destination.
+- **Completed**: The player has visited this dreamscape and won its battle.
+- **Forgone**: The node was revealed or reachable, but the player committed to a
+  different route, so it can never be visited; it renders dimmed.
 
-Each dreamscape previews itself with exactly one site icon on the Atlas: the icon
-of its home guide's signature site (the enhanced site it is guaranteed to offer).
-The dreamscape's name communicates both that specialized site and its affiliation.
-Firstlight Meadow is special — it shows its own flag glyph rather than a site icon.
-Hovering a dreamscape describes what is special about it: its guide, its
-affiliation, and its home specialty. Site icons use the game-icons.net glyphs and
-custom SVGs listed per site above. Winning the final battle wins the quest.
+The player begins inside Firstlight Meadow and enters it directly when the run
+begins; the Atlas marks it "You started here" with a slight visual emphasis.
+Dreamscapes are revealed by layer: completing layer 1 reveals layers 2 and 3, and
+completing each later layer reveals the layer two ahead of it, so the player always
+sees the current pick-layer plus one layer of look-ahead. Connections are
+**always** visible; only the dreamscape icon inside a node is hidden until the
+node's layer is revealed. The final-boss node in layer 7 is **always revealed**
+from the start so the player can see their destination. In addition, a bell-curve
+random count of **0 to 2** extra nodes (1 being most common), drawn from layers
+5–6, is revealed at quest start to allow for planning; these reveals persist for
+the rest of the run.
+
+For revealed forward nodes the player can hover or long-press to preview, then
+click to zoom the camera in. Each dreamscape previews itself with one primary site
+icon on the Atlas: the icon of its home guide's signature site (the enhanced site
+it is guaranteed to offer). The dreamscape's name communicates both that
+specialized site and its affiliation. Firstlight Meadow is special — it shows its
+own flag glyph rather than a site icon. Hovering a dreamscape describes what is
+special about it: its guide, its affiliation, and its home specialty. A node that
+carries a [known dreamsign](#known-dreamsigns) additionally shows that dreamsign in
+its corner and on hover. Site icons use the game-icons.net glyphs and custom SVGs
+listed per site above. Winning the final battle wins the quest.
 
 ### Dream Atlas Generation
 
-The Dream Atlas is laid out as a sequence of layers spanning from Firstlight Meadow
-to the final boss. Each intermediate layer holds a small number of nodes (its width
-is configured in TOML), and adjacent layers are wired together with forward
-connections so that every node leads to at least one node in the next layer and
-every node is reachable from the previous one. The braided routes converge on the
-final layer, a single final-boss dreamscape.
+The Dream Atlas is laid out as the 7-layer skeleton described above, generated in
+full at quest start: every layer's width is rolled, every node is placed, and all
+forward connections are wired before the run begins, so the player can see the
+shape of the map immediately. Layer 1 is always Firstlight Meadow and layer 7 is
+always the final boss. Connections follow the non-crossing, average-2,
+backbone-guaranteed-reachability rules described above; layer 1 connects to both
+layer-2 nodes, and every layer-6 node connects to the single layer-7 boss.
 
-The layer-and-connection skeleton is laid out up front so the player can see the
-shape of the map, while the named dreamscape filling each node is revealed only
-within the look-ahead of about two layers — the player's current choices and the
-dreamscapes those connect to. Nodes start **unavailable**; completing a dreamscape
-marks it **completed** and promotes the nodes it connects forward to into the
-**available** choices. The map is never pruned: nodes the player passes by remain
-forgone, and the player travels through exactly one node per layer.
+The skeleton is laid out up front, while the named dreamscape filling each node is
+revealed only as its layer is revealed — completing layer 1 reveals layers 2 and 3,
+and completing each later layer reveals the layer two ahead of it. Nodes start
+**unrevealed**; completing a dreamscape marks it **completed** and promotes the
+nodes it connects forward to into the **available** choices, while the other nodes
+in the completed layer become **forgone**. The map is never pruned: forgone nodes
+remain visible, and the player travels through exactly one node per layer.
 
 **Assigning dreamscapes to nodes.** Which named dreamscape fills each node is
 chosen, as the node is revealed, by a weighted random draw from the 10 non-starter
@@ -862,9 +901,24 @@ placed, so not-yet-seen dreamscapes are strongly favored and already-placed ones
 become progressively less likely. Every dreamscape keeps a nonzero weight, so a
 repeat is possible at any point — even before all 10 have appeared — just much less
 likely than a fresh dreamscape. A draw that would place a dreamscape directly
-adjacent to a copy of itself is rejected and redrawn. The two direct choices out of
-Firstlight Meadow are guaranteed to show different site icons. The layer widths,
-the weighting, and how sharply repeats are discouraged are configured in TOML.
+adjacent to a copy of itself is rejected and redrawn. The two layer-2 choices out
+of Firstlight Meadow are guaranteed to show different site icons. The layer widths,
+the weighting, the connection average, the reveal counts, and how sharply repeats
+are discouraged are configured in TOML.
+
+### Known Dreamsigns
+
+A node may rarely carry a **known dreamsign**: a specific, pre-disclosed dreamsign
+the player is guaranteed to receive for free upon visiting that dreamscape, awarded
+through a [Dreamsign Reward](#dreamsign-reward) site that takes one of the
+dreamscape's fill slots. At most **2** known dreamsigns appear on an atlas. Carrier
+nodes are eligible in layers 3–6 and are placed with a low probability, hard-capped
+at 2 per atlas. The granted dreamsign is drawn from the run's shared Dreamsign pool
+and removed from the pool at generation time, so it is never offered elsewhere.
+Placement is biased so that, when possible, one carrier lands among the nodes
+revealed at quest start, letting the player plan toward it. A carrier node keeps
+its guide's signature site icon as its primary Atlas icon and shows the known
+dreamsign in its corner and on hover, visible as soon as the node is revealed.
 
 ## Dreamscape Generation
 
@@ -878,26 +932,28 @@ The contents of a non-starter dreamscape are assembled as follows:
 1. **Mandatory sites** are placed first:
    - Exactly one Battle site (visited last).
    - The home guide's signature site, enhanced.
-   - A Purge site, if the completion level is 0, 1, or 2.
-   - Draft sites according to the completion-level table below.
+   - A Purge site, in layers 2 and 3 (layer 1, Firstlight Meadow, has its own
+     fixed Purge site).
+   - Draft sites according to the layer table below.
 2. **Fill sites** are then drawn to reach the target site count (within the 3–6
    range) from a pool of the 9 other guides' signature sites (each bringing its
-   guide, non-enhanced) plus the generic Essence site. The pool for fill
-   generation changes over time, with new options shuffled in after each
-   dreamscape is completed as defined in TOML for that completion level;
-   Transfiguration and Duplication, for example, become more common later in the
-   quest.
+   guide, non-enhanced) plus the generic Essence site. The pool for fill generation
+   changes by layer, with new options shuffled in after each dreamscape is
+   completed as defined in TOML for that layer; Transfiguration and Duplication, for
+   example, become more common later in the quest. When the node carries a
+   [known dreamsign](#known-dreamsigns), a [Dreamsign Reward](#dreamsign-reward)
+   site takes one of these fill slots.
 
 All site types can appear a maximum of 1 time in a dreamscape, with the exception
 that there can be up to 2 Draft sites.
 
-Draft sites are deterministic by completion level:
+Draft sites are deterministic by layer:
 
-| Completion Level | Draft Sites |
-| ---------------- | ----------- |
-| 0, 1             | 2           |
-| 2, 3             | 1           |
-| 4+               | 0           |
+| Layer | Draft Sites |
+| ----- | ----------- |
+| 1, 2  | 2           |
+| 3, 4  | 1           |
+| 5, 6  | 0           |
 
 Firstlight Meadow does not use this generation process: its sites are fixed at
 two Draft sites, a Dreamsign Revelation offering a choice of 3 dreamsigns, a
