@@ -931,8 +931,8 @@
           "id": "dreamscape-6",
           "layer": 2,
           "indexInLayer": 2,
-          "dreamscapeId": "blackthorn_keep",
-          "biomeName": "Blackthorn Keep",
+          "dreamscapeId": "wilderveil",
+          "biomeName": "Wilderveil",
           "biomeColor": "#c084fc",
           "sites": [
             {
@@ -1433,8 +1433,8 @@
           "id": "dreamscape-19",
           "layer": 6,
           "indexInLayer": 0,
-          "dreamscapeId": "blackthorn_keep",
-          "biomeName": "Blackthorn Keep",
+          "dreamscapeId": "wilderveil",
+          "biomeName": "Wilderveil",
           "biomeColor": "#c084fc",
           "sites": [
             {

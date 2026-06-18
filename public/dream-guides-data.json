@@ -68,7 +68,7 @@
   {
     "id": "aldric_the_seer",
     "name": "Aldric, the Seer",
-    "homeDreamscapeId": "blackthorn_keep",
+    "homeDreamscapeId": "wilderveil",
     "siteType": "DreamAugury",
     "dialog": [
       "I have foreseen your arrival.",

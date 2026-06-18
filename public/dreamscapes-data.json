@@ -77,9 +77,9 @@
     "isStarter": false
   },
   {
-    "id": "blackthorn_keep",
-    "name": "Blackthorn Keep",
-    "aesthetic": "A dark fantasy castle wreathed in storm and shadow.",
+    "id": "wilderveil",
+    "name": "Wilderveil",
+    "aesthetic": "An enchanted forest of ancient trees and drifting lights.",
     "guideId": "aldric_the_seer",
     "signatureSite": "DreamAugury",
     "affiliationId": "abandon_sacrifice",

@@ -69,9 +69,10 @@ to the final boss.
 ## Dreamscapes and Dream Guides
 
 A quest takes place on the Dream Atlas, an interconnected web of dreamscapes.
-Each dreamscape is a named, themed location with a fixed aesthetic, a collection
-of sites, and (for every dreamscape except the starting one) a **Dream Guide**
-and an **affiliation**.
+Each dreamscape is a named, themed location with a fixed aesthetic and a
+collection of sites. Every dreamscape between the start and the final boss also
+has a **Dream Guide** and an **affiliation**; the two fixed endpoints —
+Firstlight Meadow at the start and Limbo at the final boss — have neither.
 
 - **Dream Guides** are the NPCs who provide services to the player. Most sites
   are paired with a specific guide (for example, every Card Shop is run by
@@ -83,13 +84,13 @@ and an **affiliation**.
   matching the affiliation are slightly more likely to appear in random card
   draws within that dreamscape, as described in [Affiliations](#affiliations).
 
-The 10 non-starter dreamscapes can appear more than once on the Dream Atlas, but
-the same dreamscape is never connected directly to a copy of itself. When a new
-node is filled, dreamscapes the player has not yet seen are weighted more heavily
-than ones that have already appeared, so repeats are less likely than fresh
-dreamscapes — but a repeat can occur at any point, even before all 10 have been
-seen. See [Dream Atlas Generation](#dream-atlas-generation) for the assignment
-algorithm.
+The 10 guide dreamscapes fill the layers between Firstlight Meadow and Limbo.
+They can appear more than once on the Dream Atlas, but the same dreamscape is
+never connected directly to a copy of itself. When a new node is filled,
+dreamscapes the player has not yet seen are weighted more heavily than ones that
+have already appeared, so repeats are less likely than fresh dreamscapes — but a
+repeat can occur at any point, even before all 10 have been seen. See [Dream
+Atlas Generation](#dream-atlas-generation) for the assignment algorithm.
 
 The full set of dreamscapes follows. The guide's signature site is always
 present and enhanced in their home dreamscape; the same site can also appear,
@@ -154,11 +155,11 @@ sites appear and no site is enhanced.
 - **Affiliation:** Warriors
 - **Site Icon:** `game-icons.net/sbed/small-fire`
 
-### Blackthorn Keep
+### Wilderveil
 
 - **Dream Guide:** Aldric, the Seer
 - **Signature Site:** [Dream Augury](#dream-augury)
-- **Aesthetic:** A dark fantasy castle.
+- **Aesthetic:** An enchanted forest.
 - **Affiliation:** Abandon / Sacrifice
 - **Site Icon:** `game-icons.net/sbed/crystal-ball`
 
@@ -186,6 +187,17 @@ sites appear and no site is enhanced.
 - **Aesthetic:** A cyberpunk city.
 - **Affiliation:** Discard
 - **Site Icon:** `game-icons.net/sbed/sands-of-time`
+
+### Limbo
+
+The final dreamscape of every dream quest, always occupying Layer 7. Limbo has
+no Dream Guide and no affiliation. Instead it is home to **Apollyon, the Doom of
+Humanity**, the final boss of Dreamtides. Apollyon appears in many different
+forms — each form plays a different deck and takes on its own unique abilities
+(see [Boss Dreamcallers](bosses.md)) — but it is always the same named
+character. Limbo's only site is the final [Battle](#battle) against Apollyon.
+
+- **Aesthetic:** A dark fantasy void at the end of all dreams.
 
 ## Affiliations
 
@@ -640,7 +652,7 @@ Icon: `game-icons.net/sbed/small-fire`
 
 ### Dream Augury
 
-Dream Augury is run by **Aldric, the Seer** (home: Blackthorn Keep). It functions
+Dream Augury is run by **Aldric, the Seer** (home: Wilderveil). It functions
 like a random event in other roguelike deckbuilding games: the player chooses
 between two reward options to claim. Dream Augury rewards are pure upside, and
 this is where the biggest random effects live — effects that can structurally
@@ -649,7 +661,7 @@ revealed about an effect is variable, and some auguries have highly random effec
 not disclosed in advance. A close button allows the user to reject the options,
 though some auguries explicitly remove it.
 
-**Home Specialty.** In Blackthorn Keep, Aldric offers bigger rewards highly
+**Home Specialty.** In Wilderveil, Aldric offers bigger rewards highly
 curated to the player's current deck (for example, transfiguring more cards,
 offering more draft choices, or offering more curated strong cards).
 
@@ -734,7 +746,7 @@ enhancements are:
 | Durgan Forgehammer | Frostforge | Transfiguration | Pick any card and any applicable transfiguration |
 | Deacon Holt | Hope's End | Duplication | Pick any card to duplicate |
 | Master Takeshi | Tsukiren | Purge | Remove up to 3 cards or banes for free |
-| Aldric, the Seer | Blackthorn Keep | Dream Augury | Bigger rewards, curated to the deck |
+| Aldric, the Seer | Wilderveil | Dream Augury | Bigger rewards, curated to the deck |
 | Maddox | The Rust Expanse | Tempting Offer | Choose between two offers |
 | Gravok | Farpoint Station | Gamble | No initial fee, bigger payouts |
 | "Layaway" | Grid City | Temporal Fork | Longer duration / sooner future rewards |
@@ -758,10 +770,11 @@ animates upward to reveal a summary panel showing battle rewards earned, quest
 statistics, and a button to continue to the Dream Atlas (on victory) or to end
 the quest (on defeat).
 
-A Quest ends in victory if the user wins 7 battles. The 7th battle is against the
-final boss of Dreamtides. The final boss is a dreamcaller that has its own unique
-abilities, dreamsigns, or custom cards in its deck. See
-[Boss Dreamcallers](bosses.md) for details.
+A Quest ends in victory if the user wins 7 battles. The 7th battle takes place in
+Limbo against **Apollyon, the Doom of Humanity**, the final boss of Dreamtides.
+Apollyon appears in one of many forms, each with its own unique abilities,
+dreamsigns, or custom cards in its deck. See [Boss Dreamcallers](bosses.md) for
+details.
 
 ### Battle Rewards
 
@@ -822,7 +835,7 @@ defaults here to show the intended shape — is:
 | 4 | 3–4 | |
 | 5 | 3–5 | |
 | 6 | 3–5 | |
-| 7 | 1 | Always the final boss; every layer-6 node connects to it |
+| 7 | 1 | Always Limbo, home to the final boss; every layer-6 node connects to it |
 
 The variable widths (layers 4–6) are rolled once at quest start when the atlas
 skeleton is built. Because a quest is 7 layers long, the player threads through 7
@@ -882,7 +895,8 @@ The Dream Atlas is laid out as the 7-layer skeleton described above, generated i
 full at quest start: every layer's width is rolled, every node is placed, and all
 forward connections are wired before the run begins, so the player can see the
 shape of the map immediately. Layer 1 is always Firstlight Meadow and layer 7 is
-always the final boss. Connections follow the non-crossing, average-2,
+always Limbo, home to the final boss. Connections follow the non-crossing,
+average-2,
 backbone-guaranteed-reachability rules described above; layer 1 connects to both
 layer-2 nodes, and every layer-6 node connects to the single layer-7 boss.
 
@@ -894,9 +908,11 @@ nodes it connects forward to into the **available** choices, while the other nod
 in the completed layer become **forgone**. The map is never pruned: forgone nodes
 remain visible, and the player travels through exactly one node per layer.
 
-**Assigning dreamscapes to nodes.** Which named dreamscape fills each node is
-chosen, as the node is revealed, by a weighted random draw from the 10 non-starter
-dreamscapes. Each dreamscape carries a weight that is reduced each time it is
+**Assigning dreamscapes to nodes.** Which named dreamscape fills each node in
+layers 2–6 is chosen, as the node is revealed, by a weighted random draw from the
+10 guide dreamscapes (Firstlight Meadow and Limbo are fixed at layers 1 and 7 and
+are not part of this draw). Each dreamscape carries a weight that is reduced each
+time it is
 placed, so not-yet-seen dreamscapes are strongly favored and already-placed ones
 become progressively less likely. Every dreamscape keeps a nonzero weight, so a
 repeat is possible at any point — even before all 10 have appeared — just much less

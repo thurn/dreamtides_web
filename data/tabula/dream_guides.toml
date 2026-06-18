@@ -80,7 +80,7 @@ home-specialty = "Remove up to 3 cards or banes for free."
 [[guides]]
 id = "aldric_the_seer"
 name = "Aldric, the Seer"
-home-dreamscape-id = "blackthorn_keep"
+home-dreamscape-id = "wilderveil"
 site-type = "DreamAugury"
 dialog = [
   "I have foreseen your arrival.",
