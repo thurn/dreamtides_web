@@ -569,9 +569,13 @@ function wireLayerConnections(
 
 /**
  * Draws a dreamscape for a node via a repeat-discouraged weighted draw with
- * adjacency rejection: a draw that would place a dreamscape next to a connected
- * copy of itself is redrawn. After a bounded number of attempts the best
- * non-adjacent candidate is accepted so generation always terminates.
+ * rejection of ineligible dreamscapes. A draw is rejected when it would place a
+ * dreamscape next to a connected copy of itself, or — for the two layer-1 nodes
+ * directly out of the starter — when it matches the dreamscape already assigned
+ * to the same-layer sibling, so the two choices out of Firstlight Meadow always
+ * show different signature site icons (each dreamscape has a unique signature
+ * site). After a bounded number of attempts the best candidate is accepted so
+ * generation always terminates.
  */
 function drawDreamscapeForNode(
   state: AtlasState,
@@ -579,11 +583,26 @@ function drawDreamscapeForNode(
 ): DreamscapeContent {
   const nonStarter = state.context.dreamscapes.filter((d) => !d.isStarter);
   const connectedIds = [...node.forwardIds, ...node.backwardIds];
-  const adjacentDreamscapeIds = new Set(
+  const ineligibleDreamscapeIds = new Set(
     connectedIds
       .map((id) => state.atlas.nodes[id]?.dreamscapeId)
       .filter((id): id is string => id !== null && id !== undefined),
   );
+
+  // The two layer-1 nodes (the first choice out of the starter) are not
+  // connected to each other, so exclude an already-assigned same-layer sibling's
+  // dreamscape explicitly to guarantee the two opening choices differ.
+  if (node.layer === 1) {
+    for (const siblingId of state.atlas.layers[1]) {
+      if (siblingId === node.id) {
+        continue;
+      }
+      const siblingDreamscapeId = state.atlas.nodes[siblingId]?.dreamscapeId;
+      if (siblingDreamscapeId !== null && siblingDreamscapeId !== undefined) {
+        ineligibleDreamscapeIds.add(siblingDreamscapeId);
+      }
+    }
+  }
 
   const MAX_ATTEMPTS = 12;
   let fallback: DreamscapeContent | null = null;
@@ -596,7 +615,7 @@ function drawDreamscapeForNode(
     );
     const candidate = weightedPick(weighted);
     fallback ??= candidate;
-    if (!adjacentDreamscapeIds.has(candidate.id)) {
+    if (!ineligibleDreamscapeIds.has(candidate.id)) {
       return candidate;
     }
   }

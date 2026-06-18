@@ -462,6 +462,44 @@ describe("generateInitialAtlas structural invariants", () => {
     const atlas = freshAtlas();
     expect(atlas.nodes[atlas.startingNodeId].position.x).toBe(0);
   });
+
+  it("gives the two layer-1 choices out of the starter different dreamscapes (and signature site icons)", () => {
+    const dreamscapesById = new Map(
+      TEST_DREAMSCAPES.map((d) => [d.id, d]),
+    );
+    for (let iter = 0; iter < 60; iter++) {
+      const atlas = freshAtlas();
+      // Layer 1 is the first choice out of Firstlight Meadow and is always
+      // width 2. Reveal both nodes the way consumers do: completing the starter
+      // makes its forward targets available, which reveals their dreamscapes.
+      const layer1 = atlas.layers[1];
+      expect(layer1).toHaveLength(2);
+      const advanced = advanceAtlas(
+        atlas,
+        atlas.startingNodeId,
+        1,
+        defaultContext(),
+        buildContext(),
+        { logEvents: false },
+      );
+
+      const [a, b] = layer1.map((id) => advanced.nodes[id]);
+      expect(a.state).toBe("available");
+      expect(b.state).toBe("available");
+      expect(a.dreamscapeId).not.toBeNull();
+      expect(b.dreamscapeId).not.toBeNull();
+
+      // Different dreamscapes...
+      expect(a.dreamscapeId).not.toBe(b.dreamscapeId);
+      // ...and therefore different signature site icons, since each dreamscape
+      // has a unique signature site.
+      const siteA = dreamscapesById.get(a.dreamscapeId ?? "")?.signatureSite;
+      const siteB = dreamscapesById.get(b.dreamscapeId ?? "")?.signatureSite;
+      expect(siteA).toBeDefined();
+      expect(siteB).toBeDefined();
+      expect(siteA).not.toBe(siteB);
+    }
+  });
 });
 
 describe("advanceAtlas", () => {
