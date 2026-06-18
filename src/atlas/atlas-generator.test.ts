@@ -6,6 +6,7 @@ import {
   generateInitialAtlas,
   edgesCross,
   previewSiteTypes,
+  regenerateAtlasForProgress,
   revealedAtlasSite,
   rewardPreviewLabel,
   resetAtlasGenerator,
@@ -842,6 +843,84 @@ describe("advanceAtlas", () => {
       expect(node.sites.length).toBeGreaterThan(0);
       expect(node.sites.some((s) => s.type === "Battle")).toBe(true);
     }
+  });
+});
+
+describe("regenerateAtlasForProgress", () => {
+  const countCompleted = (atlas: DreamAtlas) =>
+    Object.values(atlas.nodes).filter((node) => node.state === "completed")
+      .length;
+  const countAvailable = (atlas: DreamAtlas) =>
+    Object.values(atlas.nodes).filter((node) => node.state === "available")
+      .length;
+
+  it("rebuilds a fresh, unprogressed atlas at zero depth", () => {
+    const atlas = regenerateAtlasForProgress(0, defaultContext(), buildContext(), {
+      logEvents: false,
+    });
+
+    // No dreamscape has been completed yet, and the only entry point is the
+    // starter — the same shape a brand-new quest begins with.
+    expect(countCompleted(atlas)).toBe(0);
+    expect(atlas.nodes[atlas.startingNodeId].state).toBe("available");
+    expect(countAvailable(atlas)).toBeGreaterThan(0);
+  });
+
+  it("replays one completion per progress level", () => {
+    for (const depth of [1, 2, 3]) {
+      const atlas = regenerateAtlasForProgress(
+        depth,
+        defaultContext(),
+        buildContext(),
+        { logEvents: false },
+      );
+      // Each replayed level completes exactly one dreamscape, reproducing the
+      // player's progress depth.
+      expect(countCompleted(atlas)).toBe(depth);
+      // The frontier is preserved: there is always somewhere to continue from.
+      expect(countAvailable(atlas)).toBeGreaterThan(0);
+    }
+  });
+
+  it("places the player at the current frontier with revealed layers ahead", () => {
+    const atlas = regenerateAtlasForProgress(
+      2,
+      defaultContext(),
+      buildContext(),
+      { logEvents: false },
+    );
+
+    // The available frontier sits ahead of every completed node, and there is
+    // at least one revealed-but-locked node further out — the layer-ahead reveal
+    // that gives the player a glimpse of what is coming.
+    const completedLayers = Object.values(atlas.nodes)
+      .filter((node) => node.state === "completed")
+      .map((node) => node.layer);
+    const deepestCompleted = Math.max(...completedLayers);
+    const availableLayers = Object.values(atlas.nodes)
+      .filter((node) => node.state === "available")
+      .map((node) => node.layer);
+    expect(Math.min(...availableLayers)).toBeGreaterThan(deepestCompleted);
+    expect(
+      Object.values(atlas.nodes).some(
+        (node) => node.state === "revealedLocked",
+      ),
+    ).toBe(true);
+  });
+
+  it("stops cleanly when the requested depth exceeds the reachable path", () => {
+    // A depth far beyond the 7-layer atlas cannot complete more nodes than the
+    // graph allows; the replay breaks out rather than looping forever.
+    const atlas = regenerateAtlasForProgress(
+      100,
+      defaultContext(),
+      buildContext(),
+      { logEvents: false },
+    );
+    expect(countCompleted(atlas)).toBeGreaterThan(0);
+    expect(countCompleted(atlas)).toBeLessThanOrEqual(
+      Object.keys(atlas.nodes).length,
+    );
   });
 });
 

@@ -1169,6 +1169,63 @@ export function advanceAtlas(
 }
 
 /**
+ * Chooses which node a progress replay should complete next. Prefers an
+ * `available` node, because the live game only ever lets the player enter
+ * available dreamscapes; when none is available yet (the very first step off a
+ * fresh atlas before any advance) it falls back to the first node that is not
+ * already completed. Returns `null` only when every node is already completed.
+ * Iteration order is insertion order, so the choice is deterministic for a
+ * given atlas.
+ */
+function pickReplayCompletionNode(atlas: DreamAtlas): string | null {
+  let fallback: string | null = null;
+  for (const node of Object.values(atlas.nodes)) {
+    if (node.state === "available") {
+      return node.id;
+    }
+    if (node.state !== "completed" && fallback === null) {
+      fallback = node.id;
+    }
+  }
+  return fallback;
+}
+
+/**
+ * Rebuilds an atlas that reflects a player who has completed
+ * `completedDreamscapes` dreamscapes, by replaying the live generation
+ * algorithm rather than restoring a persisted layout. It starts from a fresh
+ * initial atlas at Completion Level 0 and applies one {@link advanceAtlas}
+ * expansion per completed dreamscape, advancing the Completion Level on each
+ * step exactly as a battle victory does (the first expansion runs at level 1,
+ * matching `battle-completion-bridge`). At each step the current frontier's
+ * available node is completed, so the result is a brand-new layout whose
+ * progress depth — completed nodes, the available frontier two layers behind
+ * the reveal edge, and the `revealedLocked` nodes ahead — matches the player's
+ * place in the run. A debug "regenerate" therefore picks up the latest
+ * generation logic while preserving the player's current layer experience.
+ */
+export function regenerateAtlasForProgress(
+  completedDreamscapes: number,
+  context: SiteGenerationContext,
+  build: AtlasBuildContext,
+  options: AtlasGenerationOptions = {},
+): DreamAtlas {
+  let atlas = generateInitialAtlas(0, context, build, options);
+  for (
+    let completion = 1;
+    completion <= completedDreamscapes;
+    completion++
+  ) {
+    const nodeToComplete = pickReplayCompletionNode(atlas);
+    if (nodeToComplete === null) {
+      break;
+    }
+    atlas = advanceAtlas(atlas, nodeToComplete, completion, context, build, options);
+  }
+  return atlas;
+}
+
+/**
  * Boxicons class name shown for the starting dreamscape on the atlas. The start
  * gets its own flag glyph rather than a site icon because it is special: it is
  * where the player's journey begins and it never has an enhanced site.

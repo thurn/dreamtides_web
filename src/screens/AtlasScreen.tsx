@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { useQuest } from "../state/quest-context";
 import { AtlasNode, type AtlasNodeView } from "../components/AtlasNode";
 import {
-  generateInitialAtlas,
+  regenerateAtlasForProgress,
   revealedAtlasSite,
   siteTypeName,
   type SiteGenerationContext,
@@ -557,10 +557,16 @@ export function AtlasScreen() {
   );
 
   /**
-   * Debug-only: discard the persisted atlas and rebuild a fresh 7-layer atlas
-   * with the current generation logic so atlas generation can be iterated live
-   * without starting a new quest. Every node id is reissued, so the current
-   * dreamscape is reset to the freshly generated starter.
+   * Debug-only: discard the persisted atlas and rebuild one with the current
+   * generation logic, replaying the live progression up to the player's present
+   * progress depth so atlas generation can be iterated live without starting a
+   * new quest. Starting from a fresh Completion Level 0 atlas, one expansion is
+   * applied per completed dreamscape (`state.completionLevel` total), so the
+   * regenerated map reproduces the player's current layer experience: the same
+   * count of completed dreamscapes, an available frontier to continue from, and
+   * the layers ahead revealed but locked. Every node id is reissued; the player
+   * is placed back at the regenerated frontier (`currentDreamscape` cleared once
+   * any dreamscape has been completed, matching the post-victory atlas state).
    */
   const handleDebugRegenerate = useCallback(() => {
     const context: SiteGenerationContext = {
@@ -568,7 +574,7 @@ export function AtlasScreen() {
         ? { dreamscapeModifiers: state.dreamscapeModifiers }
         : {}),
     };
-    const regenerated = generateInitialAtlas(
+    const regenerated = regenerateAtlasForProgress(
       state.completionLevel,
       context,
       {
@@ -578,16 +584,25 @@ export function AtlasScreen() {
       },
       { logEvents: true },
     );
+    const completedCount = Object.values(regenerated.nodes).filter(
+      (node) => node.state === "completed",
+    ).length;
     logEvent("debug_atlas_regenerated", {
       source: "atlas_debug_refresh",
       completionLevel: state.completionLevel,
+      replayedCompletions: completedCount,
       dreamscapeModifierCount: state.dreamscapeModifiers.length,
       regeneratedNodeCount: Object.keys(regenerated.nodes).length,
       startingNodeId: regenerated.startingNodeId,
       bossNodeId: regenerated.bossNodeId,
     });
     mutations.updateAtlas(regenerated);
-    mutations.setCurrentDreamscape(regenerated.startingNodeId);
+    // After completing a dreamscape the player stands at the atlas frontier with
+    // no dreamscape entered (matching `battle-completion-bridge`); a zero-depth
+    // replay leaves them at the freshly generated starter, as a new quest does.
+    mutations.setCurrentDreamscape(
+      state.completionLevel > 0 ? null : regenerated.startingNodeId,
+    );
     setHover(null);
   }, [
     state.dreamscapeModifiers,
