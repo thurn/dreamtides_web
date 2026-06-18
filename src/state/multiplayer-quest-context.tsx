@@ -257,14 +257,16 @@ function findNextDreamscapeId(
   if (currentId === null) {
     return null;
   }
-  for (const [a, b] of atlas.edges) {
-    const other = a === currentId ? b : b === currentId ? a : null;
-    if (other === null) {
-      continue;
-    }
-    const node = atlas.nodes[other];
-    if (node !== undefined && node.status !== "completed") {
-      return other;
+  const currentNode = atlas.nodes[currentId];
+  if (currentNode === undefined) {
+    return null;
+  }
+  // The "next" dreamscape is a forward target of the current node that the
+  // player has not already cleared.
+  for (const forwardId of currentNode.forwardIds) {
+    const node = atlas.nodes[forwardId];
+    if (node !== undefined && node.state !== "completed") {
+      return forwardId;
     }
   }
   return null;

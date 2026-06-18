@@ -189,6 +189,19 @@ const demoQuestContext: QuestContextValue = {
     dreamcallers: [demoDreamcaller],
     dreamwellCards: [],
     dreamsignTemplates: demoTemplates,
+    dreamscapes: [],
+    atlasConfig: {
+      layerSpecs: [],
+      connectionAverage: 2,
+      bonusReveal: { min: 0, max: 2, mode: 1 },
+      repeatDiscourageStrength: 2,
+      knownDreamsign: {
+        maxPerAtlas: 2,
+        eligibleLayers: [3, 4, 5, 6],
+        placementProbability: 0.5,
+        earlyRevealBias: 1,
+      },
+    },
   },
 };
 

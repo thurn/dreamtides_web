@@ -6,13 +6,30 @@ import {
 } from "./battle-completion-bridge";
 
 const mocks = vi.hoisted(() => ({
-  generateNewNodes: vi.fn(),
+  advanceAtlas: vi.fn(),
   logEvent: vi.fn(),
 }));
 
 vi.mock("../../atlas/atlas-generator", () => ({
-  generateNewNodes: mocks.generateNewNodes,
+  advanceAtlas: mocks.advanceAtlas,
 }));
+
+const TEST_ATLAS_BUILD_CONTEXT = {
+  dreamscapes: [],
+  atlasConfig: {
+    layerSpecs: [],
+    connectionAverage: 2,
+    bonusReveal: { min: 0, max: 2, mode: 1 },
+    repeatDiscourageStrength: 2,
+    knownDreamsign: {
+      maxPerAtlas: 2,
+      eligibleLayers: [3, 4, 5, 6],
+      placementProbability: 0.5,
+      earlyRevealBias: 1,
+    },
+  },
+  dreamsignPoolIds: [],
+};
 
 vi.mock("../../logging", () => ({
   logEvent: mocks.logEvent,
@@ -41,6 +58,9 @@ function makeInput(
       nodes: {
         "dreamscape-1": {
           id: "dreamscape-1",
+          layer: 0,
+          indexInLayer: 0,
+          dreamscapeId: "test_dreamscape",
           biomeName: "Luminous Reaches",
           biomeColor: "#fff",
           sites: [
@@ -58,18 +78,25 @@ function makeInput(
             },
           ],
           position: { x: 0, y: 0 },
-          status: "available",
+          state: "available",
           enhancedSiteType: null,
+          forwardIds: [],
+          backwardIds: [],
+          knownDreamsignId: null,
         },
       },
-      edges: [],
       startingNodeId: "dreamscape-1",
+      bossNodeId: "dreamscape-1",
+      currentNodeId: "dreamscape-1",
+      layers: [],
+      knownDreamsignCarrierIds: [],
     },
     essenceReward: 200,
     omenReward: 2,
     isMiniboss: false,
     isFinalBoss: false,
     playerHasBanes: true,
+    atlasBuildContext: TEST_ATLAS_BUILD_CONTEXT,
     mutations: makeMutations(),
     ...overrides,
   };
@@ -89,8 +116,11 @@ describe("completeBattleSiteVictory", () => {
     vi.useFakeTimers();
     const updatedAtlas = {
       nodes: {},
-      edges: [],
       startingNodeId: "updated",
+      bossNodeId: "updated",
+      currentNodeId: "updated",
+      layers: [],
+      knownDreamsignCarrierIds: [],
     };
     const clearBattleStateForRoom = vi.fn();
     const input = makeInput({
@@ -99,7 +129,7 @@ describe("completeBattleSiteVictory", () => {
       clearBattleStateForRoom,
     });
 
-    mocks.generateNewNodes.mockReturnValue(updatedAtlas);
+    mocks.advanceAtlas.mockReturnValue(updatedAtlas);
 
     completeBattleSiteVictory(input);
 
@@ -116,24 +146,25 @@ describe("completeBattleSiteVictory", () => {
       false,
     );
     expect(input.mutations.setScreen).not.toHaveBeenCalled();
-    expect(mocks.generateNewNodes).not.toHaveBeenCalled();
+    expect(mocks.advanceAtlas).not.toHaveBeenCalled();
     expect(clearBattleStateForRoom).not.toHaveBeenCalled();
 
     vi.advanceTimersByTime(799);
 
     expect(input.mutations.setScreen).not.toHaveBeenCalled();
-    expect(mocks.generateNewNodes).not.toHaveBeenCalled();
+    expect(mocks.advanceAtlas).not.toHaveBeenCalled();
     expect(clearBattleStateForRoom).not.toHaveBeenCalled();
 
     vi.advanceTimersByTime(1);
 
     expect(input.mutations.setScreen).toHaveBeenCalledWith({ type: "atlas" });
     expect(clearBattleStateForRoom).toHaveBeenCalledTimes(1);
-    expect(mocks.generateNewNodes).toHaveBeenCalledWith(
+    expect(mocks.advanceAtlas).toHaveBeenCalledWith(
       input.atlasSnapshot,
       "dreamscape-1",
       3,
       { playerHasBanes: true },
+      TEST_ATLAS_BUILD_CONTEXT,
     );
     expect(input.mutations.updateAtlas).toHaveBeenCalledWith(updatedAtlas);
     expect(input.mutations.setCurrentDreamscape).toHaveBeenCalledWith(null);
@@ -178,8 +209,11 @@ describe("completeBattleSiteVictory", () => {
       completionLevelAtBattleStart: 6,
       atlasSnapshot: {
         nodes: {},
-        edges: [],
         startingNodeId: "dreamscape-1",
+        bossNodeId: "dreamscape-1",
+        currentNodeId: "dreamscape-1",
+        layers: [],
+        knownDreamsignCarrierIds: [],
       },
       essenceReward: 400,
       isFinalBoss: true,
@@ -200,8 +234,11 @@ describe("completeBattleSiteVictory", () => {
     vi.useFakeTimers();
     const updatedAtlas = {
       nodes: {},
-      edges: [],
       startingNodeId: "updated",
+      bossNodeId: "updated",
+      currentNodeId: "updated",
+      layers: [],
+      knownDreamsignCarrierIds: [],
     };
     const modifier = {
       kind: "boost_site_appearance" as const,
@@ -215,12 +252,12 @@ describe("completeBattleSiteVictory", () => {
       dreamscapeModifiers: [modifier],
     });
 
-    mocks.generateNewNodes.mockReturnValue(updatedAtlas);
+    mocks.advanceAtlas.mockReturnValue(updatedAtlas);
 
     completeBattleSiteVictory(input);
     vi.advanceTimersByTime(800);
 
-    expect(mocks.generateNewNodes).toHaveBeenCalledWith(
+    expect(mocks.advanceAtlas).toHaveBeenCalledWith(
       input.atlasSnapshot,
       "dreamscape-1",
       3,
@@ -228,6 +265,7 @@ describe("completeBattleSiteVictory", () => {
         playerHasBanes: true,
         dreamscapeModifiers: [modifier],
       },
+      TEST_ATLAS_BUILD_CONTEXT,
     );
   });
 
@@ -235,8 +273,11 @@ describe("completeBattleSiteVictory", () => {
     vi.useFakeTimers();
     const updatedAtlas = {
       nodes: {},
-      edges: [],
       startingNodeId: "updated",
+      bossNodeId: "updated",
+      currentNodeId: "updated",
+      layers: [],
+      knownDreamsignCarrierIds: [],
     };
     const input = makeInput({
       battleId: "battle:dreamscape-1:site-4:3",
@@ -244,7 +285,7 @@ describe("completeBattleSiteVictory", () => {
       postVictoryHandoffDelayMs: 800,
     });
 
-    mocks.generateNewNodes.mockReturnValue(updatedAtlas);
+    mocks.advanceAtlas.mockReturnValue(updatedAtlas);
 
     completeBattleSiteVictory(input);
     completeBattleSiteVictory(input);
@@ -259,7 +300,7 @@ describe("completeBattleSiteVictory", () => {
     vi.runAllTimers();
 
     expect(input.mutations.setScreen).toHaveBeenCalledTimes(1);
-    expect(mocks.generateNewNodes).toHaveBeenCalledTimes(1);
+    expect(mocks.advanceAtlas).toHaveBeenCalledTimes(1);
     expect(input.mutations.updateAtlas).toHaveBeenCalledTimes(1);
     expect(input.mutations.setCurrentDreamscape).toHaveBeenCalledTimes(1);
   });
@@ -294,15 +335,18 @@ describe("completeBattleSiteVictory", () => {
     vi.useFakeTimers();
     const updatedAtlas = {
       nodes: {},
-      edges: [],
       startingNodeId: "updated",
+      bossNodeId: "updated",
+      currentNodeId: "updated",
+      layers: [],
+      knownDreamsignCarrierIds: [],
     };
     const input = makeInput({
       battleId: "battle:dreamscape-1:site-4:abort-cycle",
       mutations: makeMutations(),
       postVictoryHandoffDelayMs: 800,
     });
-    mocks.generateNewNodes.mockReturnValue(updatedAtlas);
+    mocks.advanceAtlas.mockReturnValue(updatedAtlas);
 
     completeBattleSiteVictory(input);
     expect(input.mutations.changeEssence).toHaveBeenCalledTimes(1);
@@ -314,7 +358,7 @@ describe("completeBattleSiteVictory", () => {
     vi.runAllTimers();
 
     expect(input.mutations.setScreen).not.toHaveBeenCalled();
-    expect(mocks.generateNewNodes).not.toHaveBeenCalled();
+    expect(mocks.advanceAtlas).not.toHaveBeenCalled();
     expect(input.mutations.updateAtlas).not.toHaveBeenCalled();
     expect(input.mutations.setCurrentDreamscape).not.toHaveBeenCalled();
   });

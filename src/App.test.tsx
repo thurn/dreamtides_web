@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
+import { MINIMAL_ATLAS_CONFIG, MINIMAL_DREAMSCAPES } from "./__test-helpers__/atlas-fixtures";
 import type { ReactElement, ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -220,8 +221,11 @@ function makeState(overrides: Partial<QuestState> = {}): QuestState {
     completionLevel: 0,
     atlas: {
       nodes: {},
-      edges: [],
       startingNodeId: "",
+      bossNodeId: "",
+      currentNodeId: "",
+      layers: [],
+      knownDreamsignCarrierIds: [],
     },
     currentDreamscape: null,
     visitedSites: [],
@@ -247,7 +251,7 @@ function makeQuestContent(): QuestContent {
     cardDatabase: new Map<number, CardData>(),
     dreamcallers: [],
 
-    dreamwellCards: [],    dreamsignTemplates: [],
+    dreamwellCards: [],    dreamsignTemplates: [],    dreamscapes: MINIMAL_DREAMSCAPES,    atlasConfig: MINIMAL_ATLAS_CONFIG,
   };
 }
 
@@ -260,7 +264,7 @@ function setQuestState(state: QuestState): void {
       cardDatabase: new Map(),
       dreamcallers: [],
 
-      dreamwellCards: [],      dreamsignTemplates: [],
+      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES,      atlasConfig: MINIMAL_ATLAS_CONFIG,
     },
   });
 }
@@ -498,7 +502,7 @@ describe("QuestApp", () => {
         cardDatabase: new Map(),
         dreamcallers: [],
 
-        dreamwellCards: [],        dreamsignTemplates: [],
+        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES,        atlasConfig: MINIMAL_ATLAS_CONFIG,
       },
     });
 
@@ -616,7 +620,7 @@ describe("QuestApp", () => {
         cardDatabase: new Map(),
         dreamcallers: [],
 
-        dreamwellCards: [],        dreamsignTemplates: [],
+        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES,        atlasConfig: MINIMAL_ATLAS_CONFIG,
       },
     });
 
@@ -652,7 +656,7 @@ describe("QuestApp", () => {
         cardDatabase: new Map(),
         dreamcallers: [],
 
-        dreamwellCards: [],        dreamsignTemplates: [],
+        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES,        atlasConfig: MINIMAL_ATLAS_CONFIG,
       },
     });
 
@@ -686,6 +690,9 @@ describe("QuestApp", () => {
           nodes: {
             "dreamscape-1": {
               id: "dreamscape-1",
+              layer: 0,
+              indexInLayer: 0,
+              dreamscapeId: "test_dreamscape",
               biomeName: "Test Dreamscape",
               biomeColor: "#112233",
               sites: [
@@ -697,12 +704,18 @@ describe("QuestApp", () => {
                 },
               ],
               position: { x: 0, y: 0 },
-              status: "available",
+              state: "available",
               enhancedSiteType: null,
+              forwardIds: [],
+              backwardIds: [],
+              knownDreamsignId: null,
             },
           },
-          edges: [],
           startingNodeId: "dreamscape-1",
+          bossNodeId: "dreamscape-1",
+          currentNodeId: "dreamscape-1",
+          layers: [],
+          knownDreamsignCarrierIds: [],
         },
         currentDreamscape: "dreamscape-1",
         screen: { type: "site", siteId: "site-1" },

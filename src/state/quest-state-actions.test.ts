@@ -1,4 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  loadTestAtlasConfig,
+  loadTestDreamscapes,
+  makeTestAtlasNode,
+} from "../__test-helpers__/atlas-fixtures";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import type { CardData } from "../types/cards";
 import type { DreamcallerContent } from "../types/content";
@@ -75,20 +80,23 @@ function makeQuestContent(
     dreamcallers: [dreamcaller],
 
     dreamwellCards: [],    dreamsignTemplates: [],
+    dreamscapes: loadTestDreamscapes(),
+    atlasConfig: loadTestAtlasConfig(),
     poolContext: makeTestPoolContext(["dreamsign-a", "dreamsign-b"]),
   };
 }
 
 function makeAtlas(): DreamAtlas {
   return {
+    layers: [["dreamscape-1"]],
     startingNodeId: "dreamscape-1",
-    edges: [],
+    bossNodeId: "dreamscape-1",
+    currentNodeId: "dreamscape-1",
+    knownDreamsignCarrierIds: [],
     nodes: {
-      "dreamscape-1": {
-        id: "dreamscape-1",
-        biomeName: "Test Biome",
-        biomeColor: "#22c55e",
-        sites: [
+      "dreamscape-1": makeTestAtlasNode(
+        "dreamscape-1",
+        [
           {
             id: "site-1",
             type: "Draft",
@@ -102,10 +110,8 @@ function makeAtlas(): DreamAtlas {
             isVisited: false,
           },
         ],
-        position: { x: 200, y: 0 },
-        status: "available",
-        enhancedSiteType: null,
-      },
+        { position: { x: 200, y: 0 } },
+      ),
     },
   };
 }
@@ -395,7 +401,7 @@ describe("quest state actions", () => {
       seedOverride: "quest-seed-1",
     });
     const firstAvailableNode = Object.values(next.atlas.nodes).find(
-      (node) => node.status === "available",
+      (node) => node.state === "available",
     );
 
     expect(next.dreamcaller).toEqual(toQuestDreamcaller(dreamcaller));
@@ -410,8 +416,17 @@ describe("quest state actions", () => {
       .toBeGreaterThan(0);
     // The state seed matches the seed the pool was built from.
     expect(next.seed).toBe("quest-seed-1");
+    // The remaining dreamsign pool is the resolved pool minus any dreamsigns the
+    // atlas granted as pre-revealed known dreamsigns, and is a fresh array.
+    const knownIds = new Set(
+      next.atlas.knownDreamsignCarrierIds
+        .map((id) => next.atlas.nodes[id]?.knownDreamsignId)
+        .filter((id): id is string => id != null),
+    );
     expect(next.remainingDreamsignPool).toEqual(
-      next.resolvedPackage?.dreamsignPoolIds,
+      (next.resolvedPackage?.dreamsignPoolIds ?? []).filter(
+        (id) => !knownIds.has(id),
+      ),
     );
     expect(next.remainingDreamsignPool).not.toBe(
       next.resolvedPackage?.dreamsignPoolIds,
@@ -470,7 +485,14 @@ describe("quest state actions", () => {
     const next = updateQuestAtlas(prev, atlas);
 
     expect(next.atlas).toBe(atlas);
-    expect(prev.atlas).toEqual({ nodes: {}, edges: [], startingNodeId: "" });
+    expect(prev.atlas).toEqual({
+      layers: [],
+      nodes: {},
+      startingNodeId: "",
+      bossNodeId: "",
+      currentNodeId: null,
+      knownDreamsignCarrierIds: [],
+    });
   });
 
   it("completes a site while preserving unrelated site runtime", () => {
@@ -528,8 +550,15 @@ describe("quest state actions (replay draft)", () => {
     // signatures, and the dreamsign pool keep working.
     expect(next.resolvedPackage).not.toBeNull();
     expect(next.resolvedPackage?.draftPoolSize).toBeGreaterThan(0);
+    const knownIds = new Set(
+      next.atlas.knownDreamsignCarrierIds
+        .map((id) => next.atlas.nodes[id]?.knownDreamsignId)
+        .filter((id): id is string => id != null),
+    );
     expect(next.remainingDreamsignPool).toEqual(
-      next.resolvedPackage?.dreamsignPoolIds,
+      (next.resolvedPackage?.dreamsignPoolIds ?? []).filter(
+        (id) => !knownIds.has(id),
+      ),
     );
   });
 

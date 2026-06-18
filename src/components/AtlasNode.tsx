@@ -70,9 +70,11 @@ export function AtlasNode({ node, isStarting, onNodeClick }: AtlasNodeProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   const radius = isStarting ? NODE_RADIUS_STARTING : NODE_RADIUS_REGULAR;
-  const isAvailable = node.status === "available";
-  const isCompleted = node.status === "completed";
-  const isUnavailable = node.status === "unavailable";
+  const isAvailable = node.state === "available";
+  const isCompleted = node.state === "completed";
+  // Revealed-but-locked, forgone, and unrevealed nodes are all rendered dimmed
+  // for now; the full per-state visual treatment is a later task.
+  const isUnavailable = !isAvailable && !isCompleted;
 
   const handleClick = () => {
     if (isAvailable) {
@@ -139,7 +141,8 @@ export function AtlasNode({ node, isStarting, onNodeClick }: AtlasNodeProps) {
   const tooltipHeight = 92;
   const tooltipOffsetY = radius + 14;
 
-  const ariaLabel = `${node.biomeName} dreamscape - ${node.status}${
+  const displayName = node.biomeName === "" ? "Unrevealed" : node.biomeName;
+  const ariaLabel = `${displayName} dreamscape - ${node.state}${
     isStarting ? " - starting dreamscape" : ""
   }${revealedSite ? ` - ${siteTypeName(revealedSite.type)} revealed` : ""}`;
 

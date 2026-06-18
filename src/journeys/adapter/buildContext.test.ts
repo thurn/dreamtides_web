@@ -111,9 +111,12 @@ function makeQuestState(overrides: {
     dreamsigns: overrides.dreamsigns ?? [],
     completionLevel: overrides.completionLevel ?? 0,
     atlas: {
+      layers: [],
       nodes: {},
-      edges: [],
       startingNodeId: overrides.startingNodeId ?? "node-start",
+      bossNodeId: overrides.startingNodeId ?? "node-start",
+      currentNodeId: null,
+      knownDreamsignCarrierIds: [],
     },
     currentDreamscape: null,
     visitedSites: [],

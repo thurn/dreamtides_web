@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { act, type ReactElement } from "react";
+import { loadTestAtlasConfig, loadTestDreamscapes } from "../__test-helpers__/atlas-fixtures";
 import type { Database } from "firebase/database";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -144,6 +145,8 @@ function makeQuestContent(): QuestContent {
       makeDreamsignTemplate("dreamsign-2", "Dreamsign Two"),
       makeDreamsignTemplate("dreamsign-3", "Dreamsign Three"),
     ],
+    dreamscapes: loadTestDreamscapes(),
+    atlasConfig: loadTestAtlasConfig(),
     poolContext: makeTestPoolContext(["dreamsign-1", "dreamsign-2"]),
   };
 }
@@ -215,16 +218,22 @@ function makeFakeBattleState(): SharedBattleState {
 function makeNode(
   id: string,
   sites: SiteState[],
-  status: "completed" | "available" | "unavailable" = "available",
+  state: QuestState["atlas"]["nodes"][string]["state"] = "available",
 ): QuestState["atlas"]["nodes"][string] {
   return {
     id,
+    layer: 0,
+    indexInLayer: 0,
+    dreamscapeId: "candle_mire",
     biomeName: "Candle Mire",
     biomeColor: "#abcdef",
     sites,
     position: { x: 0, y: 0 },
-    status,
+    state,
     enhancedSiteType: null,
+    forwardIds: [],
+    backwardIds: [],
+    knownDreamsignId: null,
   };
 }
 
@@ -344,16 +353,25 @@ function makeMerchantProviderFixture(): {
       nodes: {
         "dreamscape-a": {
           id: "dreamscape-a",
+          layer: 0,
+          indexInLayer: 0,
+          dreamscapeId: "candle_mire",
           biomeName: "Fixture",
           biomeColor: "#123456",
           sites: [site],
           position: { x: 0, y: 0 },
-          status: "available",
+          state: "available",
           enhancedSiteType: null,
+          forwardIds: [],
+          backwardIds: [],
+          knownDreamsignId: null,
         },
       },
-      edges: [],
       startingNodeId: "dreamscape-a",
+      bossNodeId: "dreamscape-a",
+      currentNodeId: "dreamscape-a",
+      layers: [],
+      knownDreamsignCarrierIds: [],
     },
   });
   const cards = merchantFixtureCards();
@@ -1939,6 +1957,9 @@ describe("MultiplayerQuestProvider", () => {
         nodes: {
           "node-1": {
             id: "node-1",
+            layer: 0,
+            indexInLayer: 0,
+            dreamscapeId: "candle_mire",
             biomeName: "Candle Mire",
             biomeColor: "#abcdef",
             sites: [
@@ -1950,12 +1971,18 @@ describe("MultiplayerQuestProvider", () => {
               },
             ],
             position: { x: 0, y: 0 },
-            status: "available",
+            state: "available",
             enhancedSiteType: null,
+            forwardIds: [],
+            backwardIds: [],
+            knownDreamsignId: null,
           },
         },
-        edges: [],
         startingNodeId: "node-1",
+        bossNodeId: "node-1",
+        currentNodeId: "node-1",
+        layers: [],
+        knownDreamsignCarrierIds: [],
       },
       screen: { type: "site", siteId: "site-1" },
       activeSiteId: "site-1",
@@ -2024,6 +2051,9 @@ describe("MultiplayerQuestProvider", () => {
         nodes: {
           "node-1": {
             id: "node-1",
+            layer: 0,
+            indexInLayer: 0,
+            dreamscapeId: "candle_mire",
             biomeName: "Candle Mire",
             biomeColor: "#abcdef",
             sites: [
@@ -2035,12 +2065,18 @@ describe("MultiplayerQuestProvider", () => {
               },
             ],
             position: { x: 0, y: 0 },
-            status: "available",
+            state: "available",
             enhancedSiteType: null,
+            forwardIds: [],
+            backwardIds: [],
+            knownDreamsignId: null,
           },
         },
-        edges: [],
         startingNodeId: "node-1",
+        bossNodeId: "node-1",
+        currentNodeId: "node-1",
+        layers: [],
+        knownDreamsignCarrierIds: [],
       },
       screen: { type: "site", siteId: "site-1" },
       activeSiteId: "site-1",
@@ -2514,6 +2550,9 @@ describe("MultiplayerQuestProvider", () => {
         nodes: {
           "node-1": {
             id: "node-1",
+            layer: 0,
+            indexInLayer: 0,
+            dreamscapeId: "candle_mire",
             biomeName: "Candle Mire",
             biomeColor: "#abcdef",
             sites: [
@@ -2525,12 +2564,18 @@ describe("MultiplayerQuestProvider", () => {
               },
             ],
             position: { x: 0, y: 0 },
-            status: "available",
+            state: "available",
             enhancedSiteType: null,
+            forwardIds: [],
+            backwardIds: [],
+            knownDreamsignId: null,
           },
         },
-        edges: [],
         startingNodeId: "node-1",
+        bossNodeId: "node-1",
+        currentNodeId: "node-1",
+        layers: [],
+        knownDreamsignCarrierIds: [],
       },
       screen: { type: "site", siteId: "site-1" },
       activeSiteId: "site-1",
@@ -2812,6 +2857,9 @@ describe("MultiplayerQuestProvider", () => {
           nodes: {
             "node-1": {
               id: "node-1",
+              layer: 0,
+              indexInLayer: 0,
+              dreamscapeId: "candle_mire",
               biomeName: "Candle Mire",
               biomeColor: "#abcdef",
               sites: [
@@ -2823,12 +2871,18 @@ describe("MultiplayerQuestProvider", () => {
                 },
               ],
               position: { x: 0, y: 0 },
-              status: "available",
+              state: "available",
               enhancedSiteType: null,
+              forwardIds: [],
+              backwardIds: [],
+              knownDreamsignId: null,
             },
           },
-          edges: [],
           startingNodeId: "node-1",
+          bossNodeId: "node-1",
+          currentNodeId: "node-1",
+          layers: [],
+          knownDreamsignCarrierIds: [],
         },
         screen: { type: "site", siteId: "site-1" },
         activeSiteId: "site-1",
@@ -3399,12 +3453,15 @@ describe("MultiplayerQuestProvider", () => {
     const questState: QuestState = {
       ...createDefaultState(),
       atlas: {
+        layers: [[current.id], [next.id]],
         nodes: {
-          [current.id]: current,
-          [next.id]: next,
+          [current.id]: { ...current, forwardIds: [next.id] },
+          [next.id]: { ...next, backwardIds: [current.id] },
         },
-        edges: [[current.id, next.id]],
         startingNodeId: current.id,
+        bossNodeId: next.id,
+        currentNodeId: current.id,
+        knownDreamsignCarrierIds: [],
       },
       currentDreamscape: current.id,
     };
@@ -3482,12 +3539,15 @@ describe("MultiplayerQuestProvider", () => {
     const questState: QuestState = {
       ...createDefaultState(),
       atlas: {
+        layers: [[current.id], [next.id]],
         nodes: {
-          [current.id]: current,
-          [next.id]: next,
+          [current.id]: { ...current, forwardIds: [next.id] },
+          [next.id]: { ...next, backwardIds: [current.id] },
         },
-        edges: [[current.id, next.id]],
         startingNodeId: current.id,
+        bossNodeId: next.id,
+        currentNodeId: current.id,
+        knownDreamsignCarrierIds: [],
       },
       currentDreamscape: current.id,
       visitedSites: ["site-1"],

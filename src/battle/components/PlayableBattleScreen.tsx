@@ -671,6 +671,11 @@ function PlayableBattleScreenInner({
         questState.deck.some((entry) => entry.isBane) ||
         questState.dreamsigns.some((dreamsign) => dreamsign.isBane),
       dreamscapeModifiers: questState.dreamscapeModifiers,
+      atlasBuildContext: {
+        dreamscapes: questContent.dreamscapes,
+        atlasConfig: questContent.atlasConfig,
+        dreamsignPoolIds: questState.remainingDreamsignPool,
+      },
       mutations,
       clearBattleStateForRoom: () => {
         void dispatchClearBattleState({

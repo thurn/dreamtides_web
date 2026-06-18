@@ -83,16 +83,25 @@ function makeFixture(overrides: { seed?: string } = {}): {
       nodes: {
         "dreamscape-a": {
           id: "dreamscape-a",
+          layer: 0,
+          indexInLayer: 0,
+          dreamscapeId: "test_dreamscape",
           biomeName: "Fixture",
           biomeColor: "#123456",
           sites: [site],
           position: { x: 0, y: 0 },
-          status: "available",
+          state: "available",
           enhancedSiteType: null,
+          forwardIds: [],
+          backwardIds: [],
+          knownDreamsignId: null,
         },
       },
-      edges: [],
       startingNodeId: "dreamscape-a",
+      bossNodeId: "dreamscape-a",
+      currentNodeId: "dreamscape-a",
+      layers: [],
+      knownDreamsignCarrierIds: [],
     },
   });
   return { state, questContent, site };

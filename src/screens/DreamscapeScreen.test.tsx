@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { renderToStaticMarkup } from "react-dom/server";
+import { MINIMAL_ATLAS_CONFIG, MINIMAL_DREAMSCAPES } from "../__test-helpers__/atlas-fixtures";
 import { describe, expect, it, vi } from "vitest";
 import type { ReactNode, HTMLAttributes } from "react";
 import { DreamscapeScreen } from "./DreamscapeScreen";
@@ -78,10 +79,16 @@ function makeState(overrides?: Partial<QuestState>): QuestState {
       nodes: {
         "dreamscape-1": {
           id: "dreamscape-1",
+          layer: 0,
+          indexInLayer: 0,
+          dreamscapeId: "test_dreamscape",
           biomeName: "Crystal Spire",
           biomeColor: "#38bdf8",
-          status: "available",
+          state: "available",
           enhancedSiteType: null,
+          forwardIds: [],
+          backwardIds: [],
+          knownDreamsignId: null,
           position: { x: 0, y: 0 },
           sites: [
             {
@@ -105,8 +112,11 @@ function makeState(overrides?: Partial<QuestState>): QuestState {
           ],
         },
       },
-      edges: [],
       startingNodeId: "dreamscape-1",
+      bossNodeId: "dreamscape-1",
+      currentNodeId: "dreamscape-1",
+      layers: [],
+      knownDreamsignCarrierIds: [],
     },
     currentDreamscape: "dreamscape-1",
     visitedSites: [],
@@ -200,7 +210,7 @@ describe("DreamscapeScreen", () => {
         cardDatabase: new Map(),
         dreamcallers: [],
 
-        dreamwellCards: [],        dreamsignTemplates: [],
+        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES,        atlasConfig: MINIMAL_ATLAS_CONFIG,
       },
     });
 
@@ -217,10 +227,16 @@ describe("DreamscapeScreen", () => {
           nodes: {
             "dreamscape-1": {
               id: "dreamscape-1",
+              layer: 0,
+              indexInLayer: 0,
+              dreamscapeId: "test_dreamscape",
               biomeName: "Crystal Spire",
               biomeColor: "#38bdf8",
-              status: "available",
+              state: "available",
               enhancedSiteType: null,
+              forwardIds: [],
+              backwardIds: [],
+              knownDreamsignId: null,
               position: { x: 0, y: 0 },
               sites: [
                 {
@@ -244,8 +260,11 @@ describe("DreamscapeScreen", () => {
               ],
             },
           },
-          edges: [],
           startingNodeId: "dreamscape-1",
+          bossNodeId: "dreamscape-1",
+          currentNodeId: "dreamscape-1",
+          layers: [],
+          knownDreamsignCarrierIds: [],
         },
       }),
       mutations: {
@@ -317,7 +336,7 @@ describe("DreamscapeScreen", () => {
         cardDatabase: new Map(),
         dreamcallers: [],
 
-        dreamwellCards: [],        dreamsignTemplates: [],
+        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES,        atlasConfig: MINIMAL_ATLAS_CONFIG,
       },
     });
 

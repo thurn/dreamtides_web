@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { MINIMAL_ATLAS_CONFIG, MINIMAL_DREAMSCAPES } from "../__test-helpers__/atlas-fixtures";
 import type { CardData } from "../types/cards";
 import type { QuestContent } from "../data/quest-content";
 import type { DreamcallerContent } from "../types/content";
@@ -29,7 +30,7 @@ function makeQuestContent(): QuestContent {
     cardDatabase,
     dreamcallers: [dreamcaller],
 
-    dreamwellCards: [],    dreamsignTemplates: [],
+    dreamwellCards: [],    dreamsignTemplates: [],    dreamscapes: MINIMAL_DREAMSCAPES,    atlasConfig: MINIMAL_ATLAS_CONFIG,
     poolContext: makeTestPoolContext(["dreamsign-1", "dreamsign-2"]),
   };
 }
@@ -67,7 +68,7 @@ describe("createStartInBattleState", () => {
       cardDatabase: new Map(),
       dreamcallers: [dreamcaller],
 
-      dreamwellCards: [],      dreamsignTemplates: [],
+      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES,      atlasConfig: MINIMAL_ATLAS_CONFIG,
     };
 
     expect(createStartInBattleState(questContent)).toBeNull();
@@ -78,7 +79,7 @@ describe("createStartInBattleState", () => {
       cardDatabase: new Map(),
       dreamcallers: [],
 
-      dreamwellCards: [],      dreamsignTemplates: [],
+      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES,      atlasConfig: MINIMAL_ATLAS_CONFIG,
       poolContext: makeTestPoolContext(),
     };
 

@@ -372,9 +372,12 @@ export function createDefaultState(): QuestState {
     dreamsigns: [],
     completionLevel: 0,
     atlas: {
+      layers: [],
       nodes: {},
-      edges: [],
       startingNodeId: "",
+      bossNodeId: "",
+      currentNodeId: null,
+      knownDreamsignCarrierIds: [],
     },
     currentDreamscape: null,
     visitedSites: [],

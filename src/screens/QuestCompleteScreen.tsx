@@ -17,7 +17,7 @@ export function QuestCompleteScreen() {
     if (!hasLoggedRef.current) {
       hasLoggedRef.current = true;
       const completedNodes = Object.values(state.atlas.nodes).filter(
-        (n) => n.status === "completed",
+        (n) => n.state === "completed",
       ).length;
       logEvent("quest_completed", {
         cardsInDeck: state.deck.length,
@@ -50,7 +50,7 @@ export function QuestCompleteScreen() {
   }, []);
 
   const completedDreamscapes = Object.values(state.atlas.nodes).filter(
-    (n) => n.status === "completed",
+    (n) => n.state === "completed",
   ).length;
 
   const dreamcallerName = state.dreamcaller?.name ?? "None";

@@ -22,6 +22,9 @@ function makeDreamscapeState(overrides: Partial<QuestState> = {}): QuestState {
       nodes: {
         "node-1": {
           id: "node-1",
+          layer: 0,
+          indexInLayer: 0,
+          dreamscapeId: "test_dreamscape",
           biomeName: "Fixture Biome",
           biomeColor: "#aabbcc",
           sites: [
@@ -39,11 +42,17 @@ function makeDreamscapeState(overrides: Partial<QuestState> = {}): QuestState {
             },
           ],
           position: { x: 0, y: 0 },
-          status: "available",
+          state: "available",
           enhancedSiteType: null,
+          forwardIds: [],
+          backwardIds: [],
+          knownDreamsignId: null,
         },
         "node-2": {
           id: "node-2",
+          layer: 0,
+          indexInLayer: 0,
+          dreamscapeId: "test_dreamscape",
           biomeName: "Other Biome",
           biomeColor: "#112233",
           sites: [
@@ -55,12 +64,18 @@ function makeDreamscapeState(overrides: Partial<QuestState> = {}): QuestState {
             },
           ],
           position: { x: 1, y: 0 },
-          status: "unavailable",
+          state: "revealedLocked",
           enhancedSiteType: null,
+          forwardIds: [],
+          backwardIds: [],
+          knownDreamsignId: null,
         },
       },
-      edges: [],
       startingNodeId: "node-1",
+      bossNodeId: "node-1",
+      currentNodeId: "node-1",
+      layers: [],
+      knownDreamsignCarrierIds: [],
     },
   };
 }

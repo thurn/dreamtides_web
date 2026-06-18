@@ -28,17 +28,21 @@ export function createStartInBattleState(
     seed,
   );
 
-  const atlas = generateInitialAtlas(0, { playerHasBanes: false });
-  const dreamscapeWithBattle = Object.values(atlas.nodes).find(
-    (node) =>
-      node.status === "available" &&
-      node.sites.some((site) => site.type === "Battle"),
+  const atlas = generateInitialAtlas(
+    0,
+    { playerHasBanes: false },
+    {
+      dreamscapes: questContent.dreamscapes,
+      atlasConfig: questContent.atlasConfig,
+      dreamsignPoolIds: resolvedPackage.dreamsignPoolIds,
+    },
   );
-  const battleSite = dreamscapeWithBattle?.sites.find(
+  const dreamscapeWithBattle = atlas.nodes[atlas.startingNodeId];
+  const battleSite = dreamscapeWithBattle.sites.find(
     (site) => site.type === "Battle",
   );
 
-  if (dreamscapeWithBattle === undefined || battleSite === undefined) {
+  if (battleSite === undefined) {
     return null;
   }
 

@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useQuest } from "../state/quest-context";
 import { AtlasNode } from "../components/AtlasNode";
 import {
-  regenerateAtlasForProgress,
+  generateInitialAtlas,
   type SiteGenerationContext,
 } from "../atlas/atlas-generator";
 import { logEvent } from "../logging";
@@ -12,7 +12,7 @@ const DRAG_THRESHOLD = 5;
 
 /** The Dream Atlas screen: a pannable radial graph of dreamscape nodes. */
 export function AtlasScreen() {
-  const { state, mutations } = useQuest();
+  const { state, mutations, questContent } = useQuest();
   const { atlas } = state;
 
   const containerRef = useRef<HTMLDivElement>(null);
@@ -90,14 +90,11 @@ export function AtlasScreen() {
   }, []);
 
   /**
-   * Debug-only: discard the persisted atlas and rebuild it by replaying the
-   * current {@link regenerateAtlasForProgress} algorithm up to the player's
-   * present progress depth, so the regenerated map still reflects "N
-   * dreamscapes completed" instead of resetting to an empty quest. Lets us
-   * iterate on atlas generation and see the result live without starting a new
-   * quest. Because every node ID is reissued, the current dreamscape is reset
-   * to a freshly generated available node so the rest of the quest state stays
-   * internally consistent.
+   * Debug-only: discard the persisted atlas and rebuild a fresh 7-layer atlas
+   * with the current generation logic, so we can iterate on atlas generation and
+   * see the result live without starting a new quest. Because every node ID is
+   * reissued, the current dreamscape is reset to the freshly generated starter
+   * so the rest of the quest state stays internally consistent.
    */
   const handleDebugRegenerate = useCallback(() => {
     const playerHasBanes =
@@ -110,40 +107,38 @@ export function AtlasScreen() {
         : {}),
     };
     const previousNodeCount = Object.keys(state.atlas.nodes).length;
-    const completedDreamscapes = state.completionLevel;
-    const regenerated = regenerateAtlasForProgress(
-      completedDreamscapes,
+    const regenerated = generateInitialAtlas(
+      state.completionLevel,
       context,
+      {
+        dreamscapes: questContent.dreamscapes,
+        atlasConfig: questContent.atlasConfig,
+        dreamsignPoolIds: state.remainingDreamsignPool,
+      },
       { logEvents: true },
     );
-    const nextAvailableNode = Object.values(regenerated.nodes).find(
-      (node) => node.status === "available",
-    );
-    const regeneratedCompletedCount = Object.values(regenerated.nodes).filter(
-      (node) => node.status === "completed",
-    ).length;
 
     logEvent("debug_atlas_regenerated", {
       source: "atlas_debug_refresh",
       completionLevel: state.completionLevel,
-      replayedCompletions: completedDreamscapes,
-      regeneratedCompletedCount,
       playerHasBanes,
       dreamscapeModifierCount: state.dreamscapeModifiers.length,
       previousNodeCount,
       regeneratedNodeCount: Object.keys(regenerated.nodes).length,
       startingNodeId: regenerated.startingNodeId,
-      nextAvailableNodeId: nextAvailableNode?.id ?? null,
+      bossNodeId: regenerated.bossNodeId,
     });
 
     mutations.updateAtlas(regenerated);
-    mutations.setCurrentDreamscape(nextAvailableNode?.id ?? null);
+    mutations.setCurrentDreamscape(regenerated.startingNodeId);
   }, [
     state.deck,
     state.dreamsigns,
     state.dreamscapeModifiers,
     state.completionLevel,
     state.atlas.nodes,
+    state.remainingDreamsignPool,
+    questContent,
     mutations,
   ]);
 
@@ -151,7 +146,7 @@ export function AtlasScreen() {
     (nodeId: string) => {
       if (didDrag.current) return;
       const node = atlas.nodes[nodeId];
-      if (!node || node.status !== "available") return;
+      if (!node || node.state !== "available") return;
 
       mutations.setCurrentDreamscape(nodeId);
       mutations.setScreen({ type: "dreamscape" });
@@ -221,28 +216,32 @@ export function AtlasScreen() {
           </defs>
 
           <g transform={`translate(${String(transformX)}, ${String(transformY)})`}>
-            {atlas.edges.map(([fromId, toId], i) => {
-              const fromNode = atlas.nodes[fromId];
-              const toNode = atlas.nodes[toId];
-              if (!fromNode || !toNode) return null;
+            {Object.values(atlas.nodes).flatMap((fromNode) =>
+              fromNode.forwardIds.map((toId) => {
+                const toNode = atlas.nodes[toId];
+                if (!toNode) return null;
 
-              const isActive =
-                fromNode.status !== "unavailable" &&
-                toNode.status !== "unavailable";
+                // An edge reads "active" only when both endpoints are visible to
+                // the player (revealed in some form), so connections into still
+                // unrevealed nodes stay faint.
+                const isActive =
+                  fromNode.state !== "unrevealed" &&
+                  toNode.state !== "unrevealed";
 
-              return (
-                <line
-                  key={`edge-${String(i)}`}
-                  className="atlas-edge"
-                  x1={fromNode.position.x}
-                  y1={fromNode.position.y}
-                  x2={toNode.position.x}
-                  y2={toNode.position.y}
-                  stroke={isActive ? "#a855f780" : "#4a386040"}
-                  strokeWidth={isActive ? 2 : 1}
-                />
-              );
-            })}
+                return (
+                  <line
+                    key={`edge-${fromNode.id}-${toId}`}
+                    className="atlas-edge"
+                    x1={fromNode.position.x}
+                    y1={fromNode.position.y}
+                    x2={toNode.position.x}
+                    y2={toNode.position.y}
+                    stroke={isActive ? "#a855f780" : "#4a386040"}
+                    strokeWidth={isActive ? 2 : 1}
+                  />
+                );
+              }),
+            )}
 
             {Object.values(atlas.nodes).map((node) => (
               <AtlasNode

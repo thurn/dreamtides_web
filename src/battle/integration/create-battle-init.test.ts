@@ -790,7 +790,7 @@ describe("createBattleInit", () => {
       // mutations of the source atlas cannot leak through.
       expect(Object.isFrozen(snapshot)).toBe(true);
       expect(Object.isFrozen(snapshot.nodes)).toBe(true);
-      expect(Object.isFrozen(snapshot.edges)).toBe(true);
+      expect(Object.isFrozen(snapshot.layers)).toBe(true);
       for (const nodeId of Object.keys(snapshot.nodes)) {
         const node = snapshot.nodes[nodeId];
         expect(Object.isFrozen(node)).toBe(true);

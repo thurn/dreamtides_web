@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { act } from "react";
+import { MINIMAL_ATLAS_CONFIG, MINIMAL_DREAMSCAPES } from "../__test-helpers__/atlas-fixtures";
 import type { HTMLAttributes, ReactElement, ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -216,8 +217,11 @@ function makeState(): QuestState {
     completionLevel: 0,
     atlas: {
       nodes: {},
-      edges: [],
       startingNodeId: "",
+      bossNodeId: "",
+      currentNodeId: "",
+      layers: [],
+      knownDreamsignCarrierIds: [],
     },
     currentDreamscape: null,
     visitedSites: [],
@@ -247,7 +251,7 @@ function setQuestContext(): void {
       cardDatabase: new Map(),
       dreamcallers: [...OFFERED_DREAMCALLERS],
 
-      dreamwellCards: [],      dreamsignTemplates: [],
+      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES,      atlasConfig: MINIMAL_ATLAS_CONFIG,
     },
   });
 }

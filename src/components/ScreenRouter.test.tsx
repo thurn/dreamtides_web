@@ -228,11 +228,17 @@ function makeStateFor(site: SiteState): QuestState {
       nodes: {
         "dreamscape-router": {
           id: "dreamscape-router",
+          layer: 0,
+          indexInLayer: 0,
+          dreamscapeId: "test_dreamscape",
           biomeName: "Router Dreamscape",
           biomeColor: "#7c3aed",
           position: { x: 0, y: 0 },
-          status: "available",
+          state: "available",
           enhancedSiteType: null,
+          forwardIds: [],
+          backwardIds: [],
+          knownDreamsignId: null,
           sites: [site],
         },
       },

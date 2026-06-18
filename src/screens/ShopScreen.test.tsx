@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { act, type HTMLAttributes, type ReactElement, type ReactNode } from "react";
+import { MINIMAL_ATLAS_CONFIG, MINIMAL_DREAMSCAPES } from "../__test-helpers__/atlas-fixtures";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { QuestMutations } from "../state/quest-context";
@@ -160,8 +161,11 @@ function makeState(slots: RuntimeShopSlot[]): QuestState {
     completionLevel: 0,
     atlas: {
       nodes: {},
-      edges: [],
       startingNodeId: "",
+      bossNodeId: "",
+      currentNodeId: "",
+      layers: [],
+      knownDreamsignCarrierIds: [],
     },
     currentDreamscape: null,
     visitedSites: [],
@@ -197,7 +201,7 @@ function setQuestContext(state: QuestState): void {
       cardDatabase: makeCardDatabase(),
       dreamcallers: [],
 
-      dreamwellCards: [],      dreamsignTemplates: [],
+      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES,      atlasConfig: MINIMAL_ATLAS_CONFIG,
     },
   });
 }
@@ -637,7 +641,7 @@ describe("ShopScreen", () => {
         cardDatabase: makeCardDatabase(),
         dreamcallers: [],
 
-        dreamwellCards: [],        dreamsignTemplates: [],
+        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES,        atlasConfig: MINIMAL_ATLAS_CONFIG,
       },
     });
 

@@ -72,6 +72,12 @@ function normalizeDreamscapeNode(node: DreamscapeNode): DreamscapeNode {
     ...node,
     sites: node.sites ?? [],
     enhancedSiteType: node.enhancedSiteType ?? null,
+    // RTDB drops empty arrays and null on write; restore the optional/edge
+    // fields so the new node shape always round-trips intact.
+    dreamscapeId: node.dreamscapeId ?? null,
+    forwardIds: node.forwardIds ?? [],
+    backwardIds: node.backwardIds ?? [],
+    knownDreamsignId: node.knownDreamsignId ?? null,
   };
 }
 
@@ -86,9 +92,13 @@ function normalizeAtlas(atlas: DreamAtlas | undefined): DreamAtlas {
     nodes[id] = normalizeDreamscapeNode(node);
   }
   return {
+    layers: atlas.layers ?? defaults.layers,
     nodes,
-    edges: atlas.edges ?? defaults.edges,
     startingNodeId: atlas.startingNodeId ?? defaults.startingNodeId,
+    bossNodeId: atlas.bossNodeId ?? defaults.bossNodeId,
+    currentNodeId: atlas.currentNodeId ?? defaults.currentNodeId,
+    knownDreamsignCarrierIds:
+      atlas.knownDreamsignCarrierIds ?? defaults.knownDreamsignCarrierIds,
   };
 }
 

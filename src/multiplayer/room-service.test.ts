@@ -417,7 +417,14 @@ describe("room service", () => {
           remainingDreamsignPool: [],
           dreamsigns: [],
           completionLevel: 0,
-          atlas: { nodes: {}, edges: [], startingNodeId: "dreamscape-1" },
+          atlas: {
+            layers: [],
+            nodes: {},
+            startingNodeId: "dreamscape-1",
+            bossNodeId: "",
+            currentNodeId: null,
+            knownDreamsignCarrierIds: [],
+          },
           currentDreamscape: null,
           visitedSites: [],
           siteRuntime: {},
@@ -486,14 +493,13 @@ describe("room service", () => {
       ...createDefaultState(),
       atlas: {
         startingNodeId: "dreamscape-1",
-        edges: [],
         nodes: {
           "dreamscape-1": {
             id: "dreamscape-1",
             biomeName: "Verdant Hollow",
             biomeColor: "#22c55e",
             position: { x: 0, y: 0 },
-            status: "available" as const,
+            state: "available" as const,
           },
         },
       },

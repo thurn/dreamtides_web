@@ -1,15 +1,12 @@
 import type {
+  AtlasConfig,
   DreamAtlas,
   DreamscapeModifier,
   DreamscapeNode,
   SiteState,
   SiteType,
 } from "../types/quest";
-import {
-  BIOME_THEMES,
-  biomeName,
-  type Biome,
-} from "../data/biomes";
+import type { DreamscapeContent } from "../types/content";
 import { draftSiteData } from "../draft/draft-site-config";
 import { logEvent } from "../logging";
 
@@ -24,32 +21,28 @@ export interface SiteGenerationContext {
   dreamscapeModifiers?: readonly DreamscapeModifier[];
 }
 
+/**
+ * External data the 7-layer Atlas generator needs: the dreamscape definitions it
+ * assigns to nodes, the generation tuning, and the run's dreamsign pool the
+ * known-dreamsign placement draws from. Sourced from the compiled TOML bundles
+ * (`public/{dreamscapes,atlas-config}-data.json`) and threaded through the quest
+ * content so generation stays synchronous inside reducers.
+ */
+export interface AtlasBuildContext {
+  dreamscapes: readonly DreamscapeContent[];
+  atlasConfig: AtlasConfig;
+  /** Dreamsign ids eligible to be granted as pre-revealed known dreamsigns. */
+  dreamsignPoolIds: readonly string[];
+}
+
 export interface AtlasGenerationOptions {
   logEvents?: boolean;
 }
 
-/** Radial distance from the origin to the starting node's direct children. */
-const BASE_RADIUS = 200;
-/** Radial distance added per tree level as the atlas grows outward. */
-const LEVEL_SPACING = 200;
-/**
- * Minimum allowed distance between any two dreamscape centres. Placement
- * searches for a free slot that keeps every node at least this far from all
- * others so the atlas never renders overlapping dreamscapes.
- */
-const MIN_NODE_SEPARATION = 150;
-/** Each dreamscape branches into this many forward choices. */
-const CHILDREN_PER_NODE = 2;
-/** Total angular spread (radians) a node's children fan across. */
-const CHILD_FAN_RADIANS = 1.5;
-/**
- * Bounded re-roll budget when forcing sibling dreamscapes to show distinct
- * atlas icons. A handful of attempts is always enough given the number of
- * biomes and site types.
- */
-const DISTINCT_ICON_MAX_ATTEMPTS = 12;
-
-const ORIGIN = { x: 0, y: 0 } as const;
+/** Horizontal spacing between adjacent layers in atlas-space pixels. */
+const LAYER_X_SPACING = 200;
+/** Vertical spacing between adjacent column slots within one layer. */
+const LAYER_Y_SPACING = 140;
 
 let nodeIdCounter = 0;
 let siteIdCounter = 0;
@@ -99,7 +92,12 @@ function maxSiteIdSuffix(atlas: DreamAtlas): number {
   return max;
 }
 
-function syncAtlasGeneratorCounters(atlas: DreamAtlas): void {
+/**
+ * Advances the internal node/site id counters past everything already present in
+ * `atlas` so a mutation applied to a persisted atlas (whose generator state has
+ * since reset, e.g. across a reload) never reissues an existing id.
+ */
+export function syncAtlasGeneratorCounters(atlas: DreamAtlas): void {
   nodeIdCounter = Math.max(nodeIdCounter, maxNodeIdSuffix(atlas));
   siteIdCounter = Math.max(siteIdCounter, maxSiteIdSuffix(atlas));
 }
@@ -112,131 +110,6 @@ export function resetAtlasGenerator(): void {
 
 function randomInt(min: number, max: number): number {
   return Math.floor(Math.random() * (max - min + 1)) + min;
-}
-
-function randomFloat(min: number, max: number): number {
-  return Math.random() * (max - min) + min;
-}
-
-function pickRandom<T>(items: readonly T[]): T {
-  return items[Math.floor(Math.random() * items.length)];
-}
-
-function distance(
-  a: { x: number; y: number },
-  b: { x: number; y: number },
-): number {
-  const dx = a.x - b.x;
-  const dy = a.y - b.y;
-  return Math.sqrt(dx * dx + dy * dy);
-}
-
-/** Angle (radians) of a point measured from the origin. */
-function angleFromOrigin(p: { x: number; y: number }): number {
-  return Math.atan2(p.y, p.x);
-}
-
-/** Smallest distance from `pos` to any of the given occupied positions. */
-function minDistanceToPositions(
-  pos: { x: number; y: number },
-  occupied: readonly { x: number; y: number }[],
-): number {
-  let min = Infinity;
-  for (const q of occupied) {
-    min = Math.min(min, distance(pos, q));
-  }
-  return min;
-}
-
-/**
- * Finds a placement near (`preferredAngle`, `preferredRadius`) that keeps the
- * new node at least {@link MIN_NODE_SEPARATION} away from every occupied
- * position. The search widens the angle and pushes the radius outward in
- * fixed steps and returns the first non-colliding slot; if every candidate
- * collides it returns the least-crowded one so generation always makes
- * progress.
- */
-function findFreeSlot(
-  preferredAngle: number,
-  preferredRadius: number,
-  occupied: readonly { x: number; y: number }[],
-): { x: number; y: number } {
-  const radiusOffsets = [0, 28, 56, 92, 140, 200];
-  const angleOffsets = [
-    0, 0.3, -0.3, 0.6, -0.6, 0.9, -0.9, 1.2, -1.2, 1.6, -1.6, 2.1, -2.1,
-  ];
-  let best: { x: number; y: number } | null = null;
-  let bestClearance = -Infinity;
-  for (const dr of radiusOffsets) {
-    for (const da of angleOffsets) {
-      const radius = preferredRadius + dr;
-      const angle = preferredAngle + da;
-      const pos = {
-        x: Math.cos(angle) * radius,
-        y: Math.sin(angle) * radius,
-      };
-      const clearance = minDistanceToPositions(pos, occupied);
-      if (clearance >= MIN_NODE_SEPARATION) {
-        return pos;
-      }
-      if (clearance > bestClearance) {
-        bestClearance = clearance;
-        best = pos;
-      }
-    }
-  }
-  return (
-    best ?? {
-      x: Math.cos(preferredAngle) * preferredRadius,
-      y: Math.sin(preferredAngle) * preferredRadius,
-    }
-  );
-}
-
-/**
- * Evenly fans `count` child angles across {@link CHILD_FAN_RADIANS}, centred on
- * the parent's outward direction, so a node's children spread to its sides
- * rather than stacking on one bearing.
- */
-function childPreferredAngles(parentAngle: number, count: number): number[] {
-  if (count <= 1) {
-    return [parentAngle];
-  }
-  const angles: number[] = [];
-  for (let i = 0; i < count; i++) {
-    const t = i / (count - 1) - 0.5;
-    angles.push(parentAngle + t * CHILD_FAN_RADIANS);
-  }
-  return angles;
-}
-
-/** The site type the atlas would reveal for a node, or null if none. */
-function revealedSiteType(node: DreamscapeNode): SiteType | null {
-  return revealedAtlasSite(node)?.type ?? null;
-}
-
-/** Returns the non-completed neighbours of a node. */
-function nonCompletedNeighborIds(
-  nodeId: string,
-  edges: ReadonlyArray<[string, string]>,
-  nodes: Record<string, DreamscapeNode>,
-): string[] {
-  const result: string[] = [];
-  for (const [a, b] of edges) {
-    const other = a === nodeId ? b : b === nodeId ? a : null;
-    if (other === null) {
-      continue;
-    }
-    const neighbor = nodes[other];
-    if (
-      neighbor !== undefined &&
-      neighbor.status !== "completed" &&
-      !result.includes(other)
-    ) {
-      result.push(other);
-    }
-  }
-  return result;
 }
 
 /** Weighted random selection from an array of [item, weight] pairs. */
@@ -253,6 +126,27 @@ function weightedPick<T>(items: Array<[T, number]>): T {
     }
   }
   return items[items.length - 1][0];
+}
+
+/**
+ * Samples a count in `[min, max]` biased toward `mode` via a triangular draw.
+ * Used for the bonus-reveal count, where the middle value is most common.
+ */
+function triangularInt(min: number, max: number, mode: number): number {
+  if (max <= min) {
+    return min;
+  }
+  const clampedMode = Math.min(Math.max(mode, min), max);
+  const u = Math.random();
+  const range = max - min;
+  const split = (clampedMode - min) / range;
+  let value: number;
+  if (u < split) {
+    value = min + Math.sqrt(u * range * (clampedMode - min));
+  } else {
+    value = max - Math.sqrt((1 - u) * range * (max - clampedMode));
+  }
+  return Math.round(value);
 }
 
 function combinedSiteAppearanceBoosts(
@@ -488,433 +382,633 @@ export function generateSiteComposition(
   return sites;
 }
 
-/** How many fresh names to try before accepting a duplicate name. */
-const BIOME_NAME_MAX_ATTEMPTS = 12;
+/** Default accent colour for a node before a dreamscape is assigned. */
+const UNREVEALED_NODE_COLOR = "#2d2040";
 
 /**
- * Randomly assigns a biome. A theme is chosen at random, then an evocative name
- * is built from that theme's vocabulary (`${adjective} ${noun}`) along with a
- * colour from the theme's palette. Each theme yields hundreds of distinct
- * names, so the same name rarely recurs within a quest; when a generated name
- * is already in `usedBiomeNames`, a handful of fresh names are tried before
- * accepting a repeat (which keeps generation terminating even in the
- * vanishingly unlikely case that every combination is exhausted).
+ * Aesthetic accent colours cycled across dreamscapes for visual variety on the
+ * Atlas. The dreamscape's identity comes from its `DreamscapeContent`; this is
+ * purely flavour applied at reveal time, derived deterministically from the
+ * dreamscape id so a given dreamscape always renders the same colour.
  */
-export function assignBiome(usedBiomeNames: ReadonlySet<string> = new Set()): Biome {
-  let candidate = rollBiome();
-  for (
-    let attempt = 0;
-    attempt < BIOME_NAME_MAX_ATTEMPTS && usedBiomeNames.has(candidate.name);
-    attempt++
-  ) {
-    candidate = rollBiome();
+const ACCENT_COLORS: readonly string[] = [
+  "#34d399",
+  "#c084fc",
+  "#f87171",
+  "#38bdf8",
+  "#a78bfa",
+  "#2dd4bf",
+  "#fb923c",
+  "#22d3ee",
+  "#f472b6",
+  "#facc15",
+];
+
+/**
+ * FNV-1a hash of a string. Used to derive deterministic per-node and
+ * per-dreamscape selections (accent colour, atlas preview site).
+ */
+function fnv1aHash(value: string): number {
+  const HASH_OFFSET_BASIS = 2166136261;
+  const HASH_PRIME = 16777619;
+  let hash = HASH_OFFSET_BASIS;
+  for (const char of value) {
+    hash ^= char.charCodeAt(0);
+    hash = Math.imul(hash, HASH_PRIME) >>> 0;
   }
-  return candidate;
+  return hash;
 }
 
-/** Rolls a single random biome from a random theme's vocabulary and palette. */
-function rollBiome(): Biome {
-  const theme = pickRandom(BIOME_THEMES);
-  const name = biomeName(
-    theme,
-    randomInt(0, theme.adjectives.length - 1),
-    randomInt(0, theme.nouns.length - 1),
-  );
-  return {
-    name,
-    color: pickRandom(theme.colors),
-    enhancedSiteType: theme.enhancedSiteType,
-  };
+/** Deterministic accent colour for a dreamscape, by its id. */
+function accentColorForDreamscape(dreamscapeId: string): string {
+  return ACCENT_COLORS[fnv1aHash(dreamscapeId) % ACCENT_COLORS.length];
 }
 
 /**
- * Marks the biome's enhanced site type on matching sites.
- * Returns the enhanced site type if found, null otherwise.
+ * Marks the dreamscape's signature (enhanced) site type on matching sites.
+ * Returns the enhanced site type if any site matched, null otherwise.
  */
-function applyBiomeEnhancement(
+function applyEnhancement(
   sites: SiteState[],
-  biome: Biome,
+  signatureSite: SiteType,
 ): SiteType | null {
   let enhancedType: SiteType | null = null;
   for (let i = 0; i < sites.length; i++) {
-    if (sites[i].type === biome.enhancedSiteType) {
+    if (sites[i].type === signatureSite) {
       sites[i] = { ...sites[i], isEnhanced: true };
-      enhancedType = biome.enhancedSiteType;
+      enhancedType = signatureSite;
     }
   }
   return enhancedType;
 }
 
 /**
- * Builds a single dreamscape node at the given position without emitting any
- * log events. Pure construction is separated from logging so that the
- * distinct-icon search can discard candidate nodes without polluting the quest
- * log; the chosen node is logged afterwards via {@link logNodeGeneration}.
+ * Predicate: do the forward edges (a -> b) and (c -> d) cross, where a, c are
+ * source `indexInLayer` and b, d are target `indexInLayer`? Two edges cross
+ * exactly when their source order and target order disagree.
  */
-function buildNode(
-  position: { x: number; y: number },
-  completionLevel: number,
-  isFirstDreamscape: boolean,
-  context: SiteGenerationContext,
-  usedBiomeNames: ReadonlySet<string>,
-): DreamscapeNode {
-  const id = nextNodeId();
-  const biome = assignBiome(usedBiomeNames);
-  const sites = generateSiteComposition(completionLevel, isFirstDreamscape, context);
-  // The first dreamscape gets a randomly assigned biome for visual variety, but
-  // none of its sites are enhanced — the onboarding encounter is kept uniform so
-  // the opening Purge (and every other opening site) is always standard.
-  const enhancedSiteType = isFirstDreamscape
-    ? null
-    : applyBiomeEnhancement(sites, biome);
-
-  return {
-    id,
-    biomeName: biome.name,
-    biomeColor: biome.color,
-    sites,
-    position,
-    status: "available",
-    enhancedSiteType,
-  };
+export function edgesCross(
+  a: number,
+  b: number,
+  c: number,
+  d: number,
+): boolean {
+  return (a < c && b > d) || (a > c && b < d);
 }
 
-/** Emits the generation log events for a freshly created dreamscape node. */
-function logNodeGeneration(
-  node: DreamscapeNode,
-  connections: string[],
-  context: SiteGenerationContext,
-): void {
-  logEvent("atlas_node_generated", {
-    nodeId: node.id,
-    connections,
-    position: { x: node.position.x, y: node.position.y },
-  });
+// ---------------------------------------------------------------------------
+// Generation
+// ---------------------------------------------------------------------------
 
-  logEvent("dreamscape_generated", {
-    dreamscapeId: node.id,
-    biomeName: node.biomeName,
-    siteTypes: node.sites.map((s) => s.type),
-    enhancedSiteType: node.enhancedSiteType,
-    siteAppearanceBoosts: Array.from(
-      combinedSiteAppearanceBoosts(context.dreamscapeModifiers),
-      ([siteType, percent]) => ({ siteType, percent }),
-    ),
-    removedSiteTypes: Array.from(
-      removedSiteTypesFromModifiers(context.dreamscapeModifiers),
-    ),
-  });
+interface AtlasState {
+  atlas: DreamAtlas;
+  context: AtlasBuildContext;
+  siteContext: SiteGenerationContext;
+  completionLevel: number;
+  /**
+   * Per-dreamscape placement weight. Starts at 1 for every non-starter
+   * dreamscape and is reduced each time that dreamscape is placed, discouraging
+   * (but never forbidding) repeats. Kept > 0 always.
+   */
+  dreamscapeWeights: Map<string, number>;
+  /** Run dreamsign pool still available to grant as known dreamsigns. */
+  remainingDreamsignIds: string[];
+  logEvents: boolean;
+}
+
+/** Rolls each layer's width from its spec. Layers 0 and 6 are always width 1. */
+function rollLayerWidths(config: AtlasConfig): number[] {
+  return config.layerSpecs.map((spec) => randomInt(spec.min, spec.max));
+}
+
+/** Computes the (x, y) position of a node given its layer and column slot. */
+function nodePosition(
+  layer: number,
+  indexInLayer: number,
+  layerWidth: number,
+): { x: number; y: number } {
+  const x = layer * LAYER_X_SPACING;
+  // Centre the column vertically: a width-1 layer sits at y=0, wider layers
+  // spread symmetrically around it.
+  const y = (indexInLayer - (layerWidth - 1) / 2) * LAYER_Y_SPACING;
+  return { x, y };
 }
 
 /**
- * Creates `count` child dreamscapes branching off `parent`. Children are fanned
- * around the parent's outward direction, each placed in a collision-free slot
- * (see {@link findFreeSlot}) so dreamscapes never overlap, and each is forced
- * to reveal a different atlas icon from its siblings so the player's choices are
- * visually distinct. Returns the new nodes (status `available`; callers set the
- * appropriate status) and the edges connecting them to `parent`.
+ * Wires non-crossing forward connections from `fromLayer` to `toLayer`.
  *
- * `occupiedPositions` and `usedBiomeNames` are mutated in place so that
- * successive batches stay non-overlapping and keep their biomes varied.
+ * A monotonic backbone first guarantees every source has at least one forward
+ * edge and every target at least one backward edge: sources and targets are
+ * walked in index order so the backbone can never cross. Extra non-crossing
+ * edges are then added at random toward the configured connection average; an
+ * extra edge is accepted only when it crosses none of the edges already placed
+ * between these two layers.
  */
-function createChildNodes(
-  parent: DreamscapeNode,
-  count: number,
-  completionLevel: number,
-  context: SiteGenerationContext,
-  occupiedPositions: Array<{ x: number; y: number }>,
-  usedBiomeNames: Set<string>,
-  options: AtlasGenerationOptions,
-): { nodes: DreamscapeNode[]; edges: Array<[string, string]> } {
-  const parentDistance = distance(parent.position, ORIGIN);
-  const parentAngle =
-    parentDistance < 1
-      ? randomFloat(0, Math.PI * 2)
-      : angleFromOrigin(parent.position);
-  const childRadius = Math.max(parentDistance + LEVEL_SPACING, BASE_RADIUS);
-  const angles = childPreferredAngles(parentAngle, count);
+function wireLayerConnections(
+  fromLayer: DreamscapeNode[],
+  toLayer: DreamscapeNode[],
+  connectionAverage: number,
+): Array<[number, number]> {
+  const edges: Array<[number, number]> = [];
+  const has = (s: number, t: number) =>
+    edges.some(([a, b]) => a === s && b === t);
+  const crossesExisting = (s: number, t: number) =>
+    edges.some(([a, b]) => edgesCross(a, b, s, t));
 
-  const nodes: DreamscapeNode[] = [];
-  const edges: Array<[string, string]> = [];
-  const siblingRevealedTypes = new Set<SiteType>();
-
-  for (let i = 0; i < count; i++) {
-    const position = findFreeSlot(angles[i], childRadius, occupiedPositions);
-
-    // Roll a node whose revealed atlas icon differs from its siblings. Re-rolls
-    // also exclude the biomes already tried so the search converges quickly.
-    let node = buildNode(position, completionLevel, false, context, usedBiomeNames);
-    const triedBiomes = new Set<string>([node.biomeName]);
-    let attempts = 0;
-    while (attempts < DISTINCT_ICON_MAX_ATTEMPTS) {
-      const revealed = revealedSiteType(node);
-      if (revealed === null || !siblingRevealedTypes.has(revealed)) {
-        break;
-      }
-      node = buildNode(position, completionLevel, false, context, new Set([
-        ...usedBiomeNames,
-        ...triedBiomes,
-      ]));
-      triedBiomes.add(node.biomeName);
-      attempts += 1;
+  const addEdge = (sourceIdx: number, targetIdx: number) => {
+    if (has(sourceIdx, targetIdx)) {
+      return;
     }
+    edges.push([sourceIdx, targetIdx]);
+    fromLayer[sourceIdx].forwardIds.push(toLayer[targetIdx].id);
+    toLayer[targetIdx].backwardIds.push(fromLayer[sourceIdx].id);
+  };
 
-    const revealed = revealedSiteType(node);
-    if (revealed !== null) {
-      siblingRevealedTypes.add(revealed);
+  // Monotonic backbone. Pair sources and targets along a diagonal so every node
+  // on both sides is covered and no two backbone edges cross.
+  const steps = Math.max(fromLayer.length, toLayer.length);
+  for (let i = 0; i < steps; i++) {
+    const sourceIdx = Math.min(
+      Math.floor((i * fromLayer.length) / steps),
+      fromLayer.length - 1,
+    );
+    const targetIdx = Math.min(
+      Math.floor((i * toLayer.length) / steps),
+      toLayer.length - 1,
+    );
+    addEdge(sourceIdx, targetIdx);
+  }
+  // Guarantee full coverage in case the diagonal skipped an endpoint.
+  for (let s = 0; s < fromLayer.length; s++) {
+    if (!edges.some(([a]) => a === s)) {
+      addEdge(s, Math.min(s, toLayer.length - 1));
     }
-    usedBiomeNames.add(node.biomeName);
-    occupiedPositions.push(position);
-    nodes.push(node);
-    edges.push([parent.id, node.id]);
-
-    if (options.logEvents !== false) {
-      logNodeGeneration(node, [parent.id], context);
+  }
+  for (let t = 0; t < toLayer.length; t++) {
+    if (!edges.some(([, b]) => b === t)) {
+      addEdge(Math.min(t, fromLayer.length - 1), t);
     }
   }
 
-  return { nodes, edges };
+  // Extra non-crossing edges toward the soft connection-average target.
+  const targetEdgeCount = Math.round(connectionAverage * fromLayer.length);
+  let attempts = 0;
+  const maxAttempts = fromLayer.length * toLayer.length * 2;
+  while (edges.length < targetEdgeCount && attempts < maxAttempts) {
+    attempts += 1;
+    const s = randomInt(0, fromLayer.length - 1);
+    const t = randomInt(0, toLayer.length - 1);
+    if (has(s, t) || crossesExisting(s, t)) {
+      continue;
+    }
+    addEdge(s, t);
+  }
+
+  return edges;
 }
 
 /**
- * Creates the initial atlas as a two-deep binary tree rooted at the starting
- * dreamscape. The starting dreamscape (the one the player is placed in) sits at
- * the origin so the Atlas centres on the player's current location and is the
- * only initially `available` node. It branches into {@link CHILDREN_PER_NODE}
- * direct children — the two choices the player faces once they clear the
- * starting dreamscape — and each child in turn branches into
- * {@link CHILDREN_PER_NODE} grandchildren, so the player can already see where
- * each first choice leads. Every node but the start begins `unavailable`; the
- * children become reachable only after the starting dreamscape's battle is
- * completed.
- *
- * All nodes are placed in collision-free slots, and the two child dreamscapes
- * are guaranteed to reveal different atlas icons so the opening choice always
- * looks distinct.
+ * Draws a dreamscape for a node via a repeat-discouraged weighted draw with
+ * adjacency rejection: a draw that would place a dreamscape next to a connected
+ * copy of itself is redrawn. After a bounded number of attempts the best
+ * non-adjacent candidate is accepted so generation always terminates.
+ */
+function drawDreamscapeForNode(
+  state: AtlasState,
+  node: DreamscapeNode,
+): DreamscapeContent {
+  const nonStarter = state.context.dreamscapes.filter((d) => !d.isStarter);
+  const connectedIds = [...node.forwardIds, ...node.backwardIds];
+  const adjacentDreamscapeIds = new Set(
+    connectedIds
+      .map((id) => state.atlas.nodes[id]?.dreamscapeId)
+      .filter((id): id is string => id !== null && id !== undefined),
+  );
+
+  const MAX_ATTEMPTS = 12;
+  let fallback: DreamscapeContent | null = null;
+  for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+    const weighted = nonStarter.map(
+      (d): [DreamscapeContent, number] => [
+        d,
+        state.dreamscapeWeights.get(d.id) ?? 1,
+      ],
+    );
+    const candidate = weightedPick(weighted);
+    fallback ??= candidate;
+    if (!adjacentDreamscapeIds.has(candidate.id)) {
+      return candidate;
+    }
+  }
+  return fallback ?? nonStarter[0];
+}
+
+/** Reduces a placed dreamscape's draw weight, keeping it strictly positive. */
+function discourageRepeat(state: AtlasState, dreamscapeId: string): void {
+  const strength = Math.max(
+    1,
+    state.context.atlasConfig.repeatDiscourageStrength,
+  );
+  const current = state.dreamscapeWeights.get(dreamscapeId) ?? 1;
+  state.dreamscapeWeights.set(dreamscapeId, current / strength);
+}
+
+/**
+ * Assigns a dreamscape to a node and builds its sites. The layer-0 node always
+ * receives the starter dreamscape; the layer-6 node and every interior node draw
+ * from the non-starter dreamscapes. Idempotent: a node that already carries a
+ * dreamscape is returned unchanged.
+ */
+function revealNodeDreamscape(state: AtlasState, nodeId: string): void {
+  const node = state.atlas.nodes[nodeId];
+  if (node.dreamscapeId !== null) {
+    return;
+  }
+
+  const isFirstDreamscape = node.layer === 0;
+  const starter = state.context.dreamscapes.find((d) => d.isStarter);
+  let dreamscape: DreamscapeContent | null;
+  if (isFirstDreamscape && starter !== undefined) {
+    dreamscape = starter;
+  } else if (state.context.dreamscapes.some((d) => !d.isStarter)) {
+    dreamscape = drawDreamscapeForNode(state, node);
+    discourageRepeat(state, dreamscape.id);
+  } else {
+    dreamscape = null;
+  }
+
+  const sites = generateSiteComposition(
+    state.completionLevel,
+    isFirstDreamscape,
+    state.siteContext,
+  );
+  // The starter (layer 0) keeps every opening site standard, so no enhancement
+  // is applied there.
+  const enhancedSiteType =
+    isFirstDreamscape || dreamscape === null
+      ? null
+      : applyEnhancement(sites, dreamscape.signatureSite);
+
+  state.atlas.nodes[nodeId] = {
+    ...node,
+    dreamscapeId: dreamscape?.id ?? null,
+    biomeName: dreamscape?.name ?? "",
+    biomeColor:
+      dreamscape === null
+        ? UNREVEALED_NODE_COLOR
+        : accentColorForDreamscape(dreamscape.id),
+    sites,
+    enhancedSiteType,
+  };
+
+  if (state.logEvents) {
+    logEvent("atlas_node_revealed", {
+      nodeId,
+      layer: node.layer,
+      indexInLayer: node.indexInLayer,
+      dreamscapeId: dreamscape?.id ?? null,
+      dreamscapeName: dreamscape?.name ?? null,
+      signatureSite: dreamscape?.signatureSite ?? null,
+      enhancedSiteType,
+      siteTypes: sites.map((s) => s.type),
+      remainingWeight:
+        dreamscape === null
+          ? null
+          : (state.dreamscapeWeights.get(dreamscape.id) ?? 1),
+    });
+  }
+}
+
+/** Sets a node's lifecycle state, revealing its dreamscape when it becomes visible. */
+function setNodeState(
+  state: AtlasState,
+  nodeId: string,
+  next: DreamscapeNode["state"],
+): void {
+  const node = state.atlas.nodes[nodeId];
+  if (next !== "unrevealed" && node.dreamscapeId === null) {
+    revealNodeDreamscape(state, nodeId);
+  }
+  state.atlas.nodes[nodeId] = {
+    ...state.atlas.nodes[nodeId],
+    state: next,
+  };
+}
+
+/**
+ * Places up to `maxPerAtlas` known dreamsigns on eligible nodes. Carriers are
+ * drawn from the configured eligible layers, biased toward earlier layers so one
+ * can land among the start-revealed set; each carrier is granted a distinct
+ * dreamsign drawn (and removed) from the run pool.
+ */
+function placeKnownDreamsigns(
+  state: AtlasState,
+  startRevealedNodeIds: ReadonlySet<string>,
+): void {
+  const cfg = state.context.atlasConfig.knownDreamsign;
+  if (cfg.maxPerAtlas <= 0 || state.remainingDreamsignIds.length === 0) {
+    return;
+  }
+
+  // 0-indexed eligible layers from the (1-indexed) config.
+  const eligibleLayers = cfg.eligibleLayers
+    .map((layer) => layer - 1)
+    .filter((layer) => layer >= 0 && layer < state.atlas.layers.length);
+
+  // Candidate nodes, biased toward earlier layers and toward the start-reveal
+  // set so a known dreamsign tends to be visible from the start.
+  const candidates: Array<[string, number]> = [];
+  for (const layer of eligibleLayers) {
+    for (const nodeId of state.atlas.layers[layer]) {
+      const earlierWeight = 1 + cfg.earlyRevealBias / (layer + 1);
+      const revealBoost = startRevealedNodeIds.has(nodeId)
+        ? 1 + cfg.earlyRevealBias
+        : 1;
+      candidates.push([nodeId, earlierWeight * revealBoost]);
+    }
+  }
+  if (candidates.length === 0) {
+    return;
+  }
+
+  const carriers: string[] = [];
+  const remainingCandidates = [...candidates];
+  while (
+    carriers.length < cfg.maxPerAtlas &&
+    state.remainingDreamsignIds.length > 0 &&
+    remainingCandidates.length > 0
+  ) {
+    if (Math.random() > cfg.placementProbability) {
+      break;
+    }
+    const chosen = weightedPick(remainingCandidates);
+    for (let i = remainingCandidates.length - 1; i >= 0; i--) {
+      if (remainingCandidates[i][0] === chosen) {
+        remainingCandidates.splice(i, 1);
+      }
+    }
+    const dreamsignId = state.remainingDreamsignIds.shift();
+    if (dreamsignId === undefined) {
+      break;
+    }
+    const node = state.atlas.nodes[chosen];
+    state.atlas.nodes[chosen] = { ...node, knownDreamsignId: dreamsignId };
+    carriers.push(chosen);
+
+    if (state.logEvents) {
+      logEvent("atlas_known_dreamsign_placed", {
+        nodeId: chosen,
+        layer: node.layer,
+        indexInLayer: node.indexInLayer,
+        dreamsignId,
+        amongStartReveal: startRevealedNodeIds.has(chosen),
+      });
+    }
+  }
+
+  state.atlas.knownDreamsignCarrierIds = carriers;
+}
+
+/**
+ * Builds a fresh 7-layer Atlas. The starter (layer 0) is `available` so the
+ * player enters it directly; the boss (layer 6) plus a bell-curve sample of
+ * bonus nodes from the deepest two layers are revealed (`revealedLocked`); every
+ * other node starts `unrevealed`. Dreamscapes are assigned lazily as nodes are
+ * revealed, except the starter and boss which are assigned eagerly.
  */
 export function generateInitialAtlas(
   completionLevel: number,
   context: SiteGenerationContext,
+  build: AtlasBuildContext,
   options: AtlasGenerationOptions = {},
 ): DreamAtlas {
   resetAtlasGenerator();
+  const logEvents = options.logEvents !== false;
 
+  const widths = rollLayerWidths(build.atlasConfig);
+  const layers: string[][] = [];
   const nodes: Record<string, DreamscapeNode> = {};
-  const edges: Array<[string, string]> = [];
-  const usedBiomeNames = new Set<string>();
-  const occupiedPositions: Array<{ x: number; y: number }> = [];
 
-  // Starting dreamscape: the player's starting position, placed at the origin.
-  const startingNode = buildNode(
-    { x: 0, y: 0 },
-    completionLevel,
-    true,
-    context,
-    usedBiomeNames,
-  );
-  usedBiomeNames.add(startingNode.biomeName);
-  occupiedPositions.push(startingNode.position);
-  nodes[startingNode.id] = startingNode;
-  if (options.logEvents !== false) {
-    logNodeGeneration(startingNode, [], context);
+  for (let layer = 0; layer < widths.length; layer++) {
+    const layerIds: string[] = [];
+    for (let indexInLayer = 0; indexInLayer < widths[layer]; indexInLayer++) {
+      const id = nextNodeId();
+      nodes[id] = {
+        id,
+        layer,
+        indexInLayer,
+        dreamscapeId: null,
+        biomeName: "",
+        biomeColor: UNREVEALED_NODE_COLOR,
+        sites: [],
+        position: nodePosition(layer, indexInLayer, widths[layer]),
+        state: "unrevealed",
+        enhancedSiteType: null,
+        forwardIds: [],
+        backwardIds: [],
+        knownDreamsignId: null,
+      };
+      layerIds.push(id);
+    }
+    layers.push(layerIds);
   }
 
-  // Two direct children: the choices revealed when the start is completed.
-  const children = createChildNodes(
-    startingNode,
-    CHILDREN_PER_NODE,
-    completionLevel,
-    context,
-    occupiedPositions,
-    usedBiomeNames,
-    options,
-  );
-  for (const child of children.nodes) {
-    nodes[child.id] = { ...child, status: "unavailable" };
-  }
-  for (const edge of children.edges) {
-    edges.push(edge);
-  }
-
-  // Two grandchildren per child: where each first choice leads.
-  for (const child of children.nodes) {
-    const grandchildren = createChildNodes(
-      child,
-      CHILDREN_PER_NODE,
-      completionLevel,
-      context,
-      occupiedPositions,
-      usedBiomeNames,
-      options,
+  // Wire forward connections layer by layer.
+  for (let layer = 0; layer < layers.length - 1; layer++) {
+    const fromNodes = layers[layer].map((id) => nodes[id]);
+    const toNodes = layers[layer + 1].map((id) => nodes[id]);
+    wireLayerConnections(
+      fromNodes,
+      toNodes,
+      build.atlasConfig.connectionAverage,
     );
-    for (const grandchild of grandchildren.nodes) {
-      nodes[grandchild.id] = { ...grandchild, status: "unavailable" };
-    }
-    for (const edge of grandchildren.edges) {
-      edges.push(edge);
+  }
+
+  const startingNodeId = layers[0][0];
+  const bossNodeId = layers[layers.length - 1][0];
+
+  const dreamscapeWeights = new Map<string, number>();
+  for (const dreamscape of build.dreamscapes) {
+    if (!dreamscape.isStarter) {
+      dreamscapeWeights.set(dreamscape.id, 1);
     }
   }
 
-  return { nodes, edges, startingNodeId: startingNode.id };
+  const atlas: DreamAtlas = {
+    layers,
+    nodes,
+    startingNodeId,
+    bossNodeId,
+    currentNodeId: startingNodeId,
+    knownDreamsignCarrierIds: [],
+  };
+
+  const state: AtlasState = {
+    atlas,
+    context: build,
+    siteContext: context,
+    completionLevel,
+    dreamscapeWeights,
+    remainingDreamsignIds: [...build.dreamsignPoolIds],
+    logEvents,
+  };
+
+  if (logEvents) {
+    logEvent("atlas_generated", {
+      layerWidths: widths,
+      connectionAverage: build.atlasConfig.connectionAverage,
+      startingNodeId,
+      bossNodeId,
+    });
+  }
+
+  // Bonus reveals: a bell-curve count of nodes from the deepest two interior
+  // layers (0-indexed 4 and 5) revealed at the start of the run.
+  const bonusCount = triangularInt(
+    build.atlasConfig.bonusReveal.min,
+    build.atlasConfig.bonusReveal.max,
+    build.atlasConfig.bonusReveal.mode,
+  );
+  const bonusPool: string[] = [];
+  for (const layer of [4, 5]) {
+    if (layer < layers.length - 1) {
+      bonusPool.push(...layers[layer]);
+    }
+  }
+  const bonusReveals: string[] = [];
+  const shuffledBonus = [...bonusPool];
+  for (let i = 0; i < bonusCount && shuffledBonus.length > 0; i++) {
+    const idx = randomInt(0, shuffledBonus.length - 1);
+    bonusReveals.push(shuffledBonus.splice(idx, 1)[0]);
+  }
+
+  const startRevealed = new Set<string>([startingNodeId, bossNodeId, ...bonusReveals]);
+
+  // Place known dreamsigns before driving reveal states so an early carrier can
+  // be among the start-revealed nodes.
+  placeKnownDreamsigns(state, startRevealed);
+
+  // The starter is entered directly; the boss and any bonus nodes are revealed
+  // but locked.
+  setNodeState(state, startingNodeId, "available");
+  setNodeState(state, bossNodeId, "revealedLocked");
+  for (const nodeId of bonusReveals) {
+    setNodeState(state, nodeId, "revealedLocked");
+  }
+
+  if (logEvents) {
+    logEvent("atlas_initial_reveal", {
+      startingNodeId,
+      bossNodeId,
+      bonusRevealCount: bonusReveals.length,
+      bonusRevealNodeIds: bonusReveals,
+    });
+  }
+
+  return atlas;
 }
 
 /**
- * Expands the atlas after a dreamscape's battle is completed. The completed
- * node is marked `completed` and its direct neighbours become the newly
- * `available` choices. To preserve the two-deep look-ahead, every newly
- * available dreamscape is topped up with forward children until it leads to
- * {@link CHILDREN_PER_NODE} onward dreamscapes — so a dreamscape created with no
- * children of its own (deeper in the tree) sprouts its two onward branches the
- * moment it becomes a live choice, while the initial children, which already
- * carry their grandchildren, generate nothing new. New dreamscapes attach only
- * to the newly-available nodes, never to the completed node, so they stay
- * `unavailable` until their own parent is completed.
+ * Advances the Atlas after the player completes the dreamscape at
+ * `completedNodeId`: the node is marked `completed`, its forward targets become
+ * `available`, the other nodes in the completed node's layer become `forgone`,
+ * and the layer two ahead of the completed layer is revealed (`revealedLocked`).
+ * `currentNodeId` is set to the completed node.
  */
-export function generateNewNodes(
+export function advanceAtlas(
   atlas: DreamAtlas,
   completedNodeId: string,
   completionLevel: number,
   context: SiteGenerationContext,
+  build: AtlasBuildContext,
+  options: AtlasGenerationOptions = {},
 ): DreamAtlas {
   const completedNode = atlas.nodes[completedNodeId];
-  if (!completedNode) {
+  if (completedNode === undefined) {
     return atlas;
   }
 
   syncAtlasGeneratorCounters(atlas);
+  const logEvents = options.logEvents !== false;
 
-  const updatedNodes = { ...atlas.nodes };
-  const updatedEdges = [...atlas.edges];
+  // Rebuild weights from already-revealed dreamscapes so repeat-discourage stays
+  // consistent across a reload that reset the in-memory weights.
+  const dreamscapeWeights = new Map<string, number>();
+  for (const dreamscape of build.dreamscapes) {
+    if (!dreamscape.isStarter) {
+      dreamscapeWeights.set(dreamscape.id, 1);
+    }
+  }
+  for (const node of Object.values(atlas.nodes)) {
+    if (node.dreamscapeId !== null && dreamscapeWeights.has(node.dreamscapeId)) {
+      dreamscapeWeights.set(
+        node.dreamscapeId,
+        (dreamscapeWeights.get(node.dreamscapeId) ?? 1) /
+          Math.max(1, build.atlasConfig.repeatDiscourageStrength),
+      );
+    }
+  }
 
-  // Mark the completed node.
-  updatedNodes[completedNodeId] = {
-    ...completedNode,
-    status: "completed",
+  const remainingDreamsignIds = build.dreamsignPoolIds.filter(
+    (id) =>
+      !Object.values(atlas.nodes).some((node) => node.knownDreamsignId === id),
+  );
+
+  const nextAtlas: DreamAtlas = {
+    ...atlas,
+    nodes: { ...atlas.nodes },
+    currentNodeId: completedNodeId,
+  };
+  const state: AtlasState = {
+    atlas: nextAtlas,
+    context: build,
+    siteContext: context,
+    completionLevel,
+    dreamscapeWeights,
+    remainingDreamsignIds,
+    logEvents,
   };
 
-  // The dreamscapes directly connected to the just-completed node (and not
-  // themselves completed) are the newly-available choices.
-  const newlyAvailableIds = nonCompletedNeighborIds(
-    completedNodeId,
-    updatedEdges,
-    updatedNodes,
-  );
+  setNodeState(state, completedNodeId, "completed");
 
-  const occupiedPositions = Object.values(updatedNodes).map(
-    (node) => node.position,
-  );
-  const usedBiomeNames = new Set<string>(
-    Object.values(updatedNodes)
-      .filter((node) => node.status !== "completed")
-      .map((node) => node.biomeName),
-  );
-
-  // Top each newly-available dreamscape up to CHILDREN_PER_NODE forward
-  // branches so the player always sees where every live choice leads.
-  for (const availableId of newlyAvailableIds) {
-    const availableNode = updatedNodes[availableId];
-    const existingForwardCount = nonCompletedNeighborIds(
-      availableId,
-      updatedEdges,
-      updatedNodes,
-    ).length;
-    const needed = CHILDREN_PER_NODE - existingForwardCount;
-    if (needed <= 0) {
+  // Forgo the sibling choices in the completed node's layer.
+  for (const siblingId of atlas.layers[completedNode.layer]) {
+    if (siblingId === completedNodeId) {
       continue;
     }
-    const batch = createChildNodes(
-      availableNode,
-      needed,
+    const sibling = nextAtlas.nodes[siblingId];
+    if (sibling.state !== "completed") {
+      nextAtlas.nodes[siblingId] = { ...sibling, state: "forgone" };
+    }
+  }
+
+  // The completed node's forward targets become the next available choices.
+  for (const targetId of completedNode.forwardIds) {
+    setNodeState(state, targetId, "available");
+  }
+
+  // Reveal the layer two ahead of the completed layer.
+  const revealLayer = completedNode.layer + 2;
+  if (revealLayer < nextAtlas.layers.length) {
+    for (const nodeId of nextAtlas.layers[revealLayer]) {
+      const node = nextAtlas.nodes[nodeId];
+      if (node.state === "unrevealed") {
+        setNodeState(state, nodeId, "revealedLocked");
+      }
+    }
+  }
+
+  if (logEvents) {
+    logEvent("atlas_advanced", {
+      completedNodeId,
+      completedLayer: completedNode.layer,
+      forwardTargets: completedNode.forwardIds,
+      revealedLayer: revealLayer < nextAtlas.layers.length ? revealLayer : null,
       completionLevel,
-      context,
-      occupiedPositions,
-      usedBiomeNames,
-      {},
-    );
-    for (const child of batch.nodes) {
-      updatedNodes[child.id] = { ...child, status: "unavailable" };
-    }
-    for (const edge of batch.edges) {
-      updatedEdges.push(edge);
-    }
+    });
   }
 
-  // Update availability: a node is available iff it is directly connected to
-  // any completed node.
-  const completedIds = new Set(
-    Object.values(updatedNodes)
-      .filter((n) => n.status === "completed")
-      .map((n) => n.id),
-  );
-
-  for (const [nodeId, node] of Object.entries(updatedNodes)) {
-    if (node.status === "completed") continue;
-    const isConnectedToCompleted = updatedEdges.some(
-      ([a, b]) =>
-        (a === nodeId && completedIds.has(b)) ||
-        (b === nodeId && completedIds.has(a)),
-    );
-    updatedNodes[nodeId] = {
-      ...node,
-      status: isConnectedToCompleted ? "available" : "unavailable",
-    };
-  }
-
-  return {
-    nodes: updatedNodes,
-    edges: updatedEdges,
-    startingNodeId: atlas.startingNodeId,
-  };
-}
-
-/**
- * Chooses which node a progress replay should complete next. Prefers an
- * `available` node (the live game only ever lets the player enter available
- * dreamscapes); if none is available yet it falls back to the first
- * not-yet-completed node so the replay can still advance from the initial
- * atlas's lone available start. Returns `null` only when every node is already
- * completed. Iteration order is insertion order, so the choice is deterministic
- * for a given atlas.
- */
-function pickReplayCompletionNode(atlas: DreamAtlas): string | null {
-  let fallback: string | null = null;
-  for (const node of Object.values(atlas.nodes)) {
-    if (node.status === "available") {
-      return node.id;
-    }
-    if (node.status !== "completed" && fallback === null) {
-      fallback = node.id;
-    }
-  }
-  return fallback;
-}
-
-/**
- * Rebuilds an atlas that reflects a player who has completed
- * `completedDreamscapes` dreamscapes, by replaying the live generation
- * algorithm rather than restoring a persisted layout. It starts from a fresh
- * initial atlas at Completion Level 0 and applies one expansion per completed
- * dreamscape, advancing the Completion Level on each step exactly as a battle
- * victory does (the first expansion runs at level 1, matching
- * `battle-completion-bridge`). The result is a brand-new layout whose progress
- * depth matches the player's place in the run, so a debug "regenerate" picks up
- * the latest generation logic — including node placement and expansion shape —
- * without resetting the player to an empty quest.
- */
-export function regenerateAtlasForProgress(
-  completedDreamscapes: number,
-  context: SiteGenerationContext,
-  options: AtlasGenerationOptions = {},
-): DreamAtlas {
-  let atlas = generateInitialAtlas(0, context, options);
-  for (let completion = 1; completion <= completedDreamscapes; completion++) {
-    const nodeToComplete = pickReplayCompletionNode(atlas);
-    if (nodeToComplete === null) {
-      break;
-    }
-    atlas = generateNewNodes(atlas, nodeToComplete, completion, context);
-  }
-  return atlas;
+  return nextAtlas;
 }
 
 /**
@@ -1074,7 +1168,7 @@ export function siteTypeIcon(siteType: SiteType): string {
 
 /**
  * Returns the line describing what is special about a dreamscape whose enhanced
- * site is `siteType` \u2014 used by the atlas hover tooltip. For site types with no
+ * site is `siteType` — used by the atlas hover tooltip. For site types with no
  * distinct enhanced behaviour this falls back to the standard description.
  */
 export function enhancedSiteDescription(siteType: SiteType): string {
@@ -1096,10 +1190,7 @@ export function siteTypeDescription(siteType: SiteType): string {
  * Shows 2-3 non-draft, non-battle site icons.
  */
 export function previewSiteTypes(node: DreamscapeNode): SiteType[] {
-  const excluded: Set<SiteType> = new Set([
-    "Battle",
-    "Draft",
-  ]);
+  const excluded: Set<SiteType> = new Set(["Battle", "Draft"]);
   return node.sites
     .filter((s) => !excluded.has(s.type))
     .map((s) => s.type)
@@ -1107,32 +1198,16 @@ export function previewSiteTypes(node: DreamscapeNode): SiteType[] {
 }
 
 /**
- * FNV-1a hash of a string. Used to derive deterministic per-node random
- * selections on the Atlas (so the same dreamscape reveals the same site
- * across reloads).
- */
-function fnv1aHash(value: string): number {
-  const HASH_OFFSET_BASIS = 2166136261;
-  const HASH_PRIME = 16777619;
-  let hash = HASH_OFFSET_BASIS;
-  for (const char of value) {
-    hash ^= char.charCodeAt(0);
-    hash = Math.imul(hash, HASH_PRIME) >>> 0;
-  }
-  return hash;
-}
-
-/**
  * Returns the single site to reveal on the Atlas screen for the given
  * dreamscape node. Selection rules:
  *
- * 1. If the dreamscape has a biome-enhanced site (other than Battle or Draft),
- *    reveal it — the enhanced site is the visual signature of the biome.
+ * 1. If the dreamscape has an enhanced site (other than Battle or Draft),
+ *    reveal it — the enhanced site is the visual signature of the dreamscape.
  * 2. Otherwise, pick deterministically from the non-Battle, non-Draft sites
  *    using a hash of the node id. The Battle and Draft sites are always kept
  *    hidden so the atlas preview never reveals them.
  *
- * Returns `null` only for nodes with no previewable sites.
+ * Returns `null` only for nodes with no previewable sites (e.g. unrevealed).
  */
 export function revealedAtlasSite(node: DreamscapeNode): SiteState | null {
   const candidates = node.sites.filter(
@@ -1161,10 +1236,9 @@ export function revealedAtlasSite(node: DreamscapeNode): SiteState | null {
 
 /**
  * Returns a reward preview label for atlas tooltip display, or null if not a
- * reward site. FIND-01-7: Reward sites already show "Reward" as their primary
- * label via `siteTypeName`, so returning "Reward" here duplicated the copy.
- * Return null instead — the absence of a subtitle is preferable to repeating
- * the title.
+ * reward site. Reward sites already show "Reward" as their primary label via
+ * `siteTypeName`, so returning a value here would duplicate the copy. Returning
+ * null leaves the subtitle absent rather than repeating the title.
  */
 export function rewardPreviewLabel(_site: SiteState): string | null {
   return null;

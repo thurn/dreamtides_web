@@ -163,27 +163,64 @@ export interface SiteState {
   data?: Record<string, unknown>;
 }
 
-/** A node on the Dream Atlas representing a dreamscape. */
+/**
+ * A node on the Dream Atlas representing one dreamscape slot in a fixed 7-layer
+ * directed graph. The player travels forward from the layer-0 starter to the
+ * layer-6 boss. A node holds a column position within its layer (`layer`,
+ * `indexInLayer`), the dreamscape assigned to it (`dreamscapeId`, lazily drawn
+ * at reveal; `null` while unrevealed), its forward/backward connections, its
+ * lifecycle `state`, and an optional pre-revealed known dreamsign carried by
+ * one of its sites.
+ */
 export interface DreamscapeNode {
   id: string;
+  /** Layer index, 0 (starter) through 6 (boss). */
+  layer: number;
+  /** Column index of this node within its layer. */
+  indexInLayer: number;
+  /** The dreamscape assigned to this node, or `null` while unrevealed. */
+  dreamscapeId: string | null;
+  /** Display name of the assigned dreamscape (`""` while unrevealed). */
   biomeName: string;
+  /** Accent colour shown for the dreamscape on the Atlas. */
   biomeColor: string;
   sites: SiteState[];
   position: { x: number; y: number };
-  status: "completed" | "available" | "unavailable";
+  state: AtlasNodeState;
+  /** The site type this dreamscape enhances, or `null` when none. */
   enhancedSiteType: SiteType | null;
+  /** Node ids in the next layer this node connects forward to. */
+  forwardIds: string[];
+  /** Node ids in the previous layer this node connects backward to. */
+  backwardIds: string[];
+  /**
+   * The id of a pre-revealed "known" dreamsign carried by this node, or `null`
+   * when the node carries none. The dreamsign is shown to the player before
+   * they reach the node so they can plan a route toward it.
+   */
+  knownDreamsignId: string | null;
 }
 
-/** The Dream Atlas graph containing all dreamscape nodes. */
+/**
+ * The Dream Atlas: a fixed 7-layer directed graph the player traverses from the
+ * layer-0 starter dreamscape to the layer-6 boss. `layers` lists the node ids in
+ * each layer (index 0..6); connections derive from each node's `forwardIds`.
+ */
 export interface DreamAtlas {
+  /** Node ids per layer, index 0 (starter) through 6 (boss). */
+  layers: string[][];
   nodes: Record<string, DreamscapeNode>;
-  edges: Array<[string, string]>;
   /**
-   * The dreamscape the player started the run in. Rendered at the centre of
-   * the Atlas SVG and emphasised in `AtlasNode` so the player has a clear
-   * "you started here" anchor on the graph.
+   * The layer-0 starter dreamscape the player begins the run in. Anchors the
+   * left edge of the Atlas and is the player's "you started here" marker.
    */
   startingNodeId: string;
+  /** The layer-6 boss node, always revealed from the start of the run. */
+  bossNodeId: string;
+  /** The node the player currently occupies, or `null` between dreamscapes. */
+  currentNodeId: string | null;
+  /** Node ids that carry a pre-revealed known dreamsign. */
+  knownDreamsignCarrierIds: string[];
 }
 
 /** Terminal battle result stored on a frozen failure summary. */

@@ -445,10 +445,24 @@ export function startQuestFromDreamcaller({
   const atlas = generateInitialAtlas(
     prev.completionLevel,
     { playerHasBanes },
+    {
+      dreamscapes: questContent.dreamscapes,
+      atlasConfig: questContent.atlasConfig,
+      dreamsignPoolIds: resolvedPackage.dreamsignPoolIds,
+    },
     { logEvents: false },
   );
-  const firstNode = Object.values(atlas.nodes).find(
-    (node) => node.status === "available",
+  const firstNode = atlas.nodes[atlas.startingNodeId];
+  // Known dreamsigns placed on the atlas are drawn from (and removed from) the
+  // run dreamsign pool at generation time, so exclude them from the remaining
+  // pool offered by sites later in the run.
+  const knownDreamsignIds = new Set(
+    atlas.knownDreamsignCarrierIds
+      .map((id) => atlas.nodes[id]?.knownDreamsignId)
+      .filter((id): id is string => id !== null && id !== undefined),
+  );
+  const remainingDreamsignPool = resolvedPackage.dreamsignPoolIds.filter(
+    (id) => !knownDreamsignIds.has(id),
   );
 
   // In replay mode the draft state is a frozen real-pack sequence chosen from
@@ -485,12 +499,12 @@ export function startQuestFromDreamcaller({
     deck,
     dreamcaller: toQuestDreamcaller(dreamcaller),
     resolvedPackage,
-    remainingDreamsignPool: [...resolvedPackage.dreamsignPoolIds],
+    remainingDreamsignPool,
     draftState,
     atlas,
-    currentDreamscape: firstNode?.id ?? null,
-    visitedSites: firstNode === undefined ? prev.visitedSites : [],
-    screen: firstNode === undefined ? { type: "atlas" } : { type: "dreamscape" },
+    currentDreamscape: firstNode.id,
+    visitedSites: [],
+    screen: { type: "dreamscape" },
     activeSiteId: null,
   };
 }

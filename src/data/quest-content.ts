@@ -37,6 +37,10 @@ import {
 } from "./cards-v2-database";
 import { loadDreamcallersV2 } from "./dreamcallers-v2-database";
 import { loadDreamwellCards, type DreamwellCard } from "./dreamwell-database";
+import { loadDreamscapes } from "./dreamscapes";
+import { loadAtlasConfig } from "./atlas-config";
+import type { DreamscapeContent } from "../types/content";
+import type { AtlasConfig } from "../types/quest";
 import { STARTER_CARD_NUMBERS } from "./starter-cards";
 import { buildFitModel, type FitModel } from "../draft/replay/fit-model";
 import {
@@ -54,6 +58,15 @@ export interface QuestContent {
   /** The shared Dreamwell deck source, drawn from during battle. */
   dreamwellCards: readonly DreamwellCard[];
   dreamsignTemplates: readonly DreamsignTemplate[];
+  /**
+   * Dreamscape definitions the Atlas generator assigns to nodes, loaded from
+   * `public/dreamscapes-data.json`.
+   */
+  dreamscapes: readonly DreamscapeContent[];
+  /**
+   * Dream Atlas generation tuning, loaded from `public/atlas-config-data.json`.
+   */
+  atlasConfig: AtlasConfig;
   poolContext?: RunPoolContext;
   /**
    * Draft mode for this run: `"replay"` activates the record-replay draft;
@@ -628,6 +641,8 @@ export async function loadQuestContent(
     tides4Decks,
     merchantCorpus,
     dreamsignProfiles,
+    dreamscapes,
+    atlasConfig,
   ] = await Promise.all([
     loadCardsV2Database(),
     loadDreamcallersV2(),
@@ -658,6 +673,10 @@ export async function loadQuestContent(
     loadDreamsignProfiles().catch(
       () => undefined as ReadonlyMap<string, DreamsignProfile> | undefined,
     ),
+    // Dreamscape definitions and Atlas generation tuning are small and always
+    // loaded so the 7-layer Atlas generator can assign and tune nodes.
+    loadDreamscapes(),
+    loadAtlasConfig(),
   ]);
 
   const dreamcallers: DreamcallerContent[] = draftDreamcallers.map((dc) => ({
@@ -728,6 +747,8 @@ export async function loadQuestContent(
       dreamcallers,
       dreamwellCards,
       dreamsignTemplates,
+      dreamscapes,
+      atlasConfig,
       poolContext,
       draftMode,
       draftRecords,
@@ -743,6 +764,8 @@ export async function loadQuestContent(
     dreamcallers,
     dreamwellCards,
     dreamsignTemplates,
+    dreamscapes,
+    atlasConfig,
     poolContext,
     draftMode,
     merchantCorpus,

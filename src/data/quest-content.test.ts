@@ -122,6 +122,27 @@ describe("loadQuestContent", () => {
             json: () => Promise.resolve(affinityCorpus),
           });
         }
+        if (path === "/dreamscapes-data.json") {
+          return Promise.resolve({ ok: true, json: () => Promise.resolve([]) });
+        }
+        if (path === "/atlas-config-data.json") {
+          return Promise.resolve({
+            ok: true,
+            json: () =>
+              Promise.resolve({
+                layerSpecs: [],
+                connectionAverage: 2,
+                bonusReveal: { min: 0, max: 2, mode: 1 },
+                repeatDiscourageStrength: 2,
+                knownDreamsign: {
+                  maxPerAtlas: 2,
+                  eligibleLayers: [3, 4, 5, 6],
+                  placementProbability: 0.5,
+                  earlyRevealBias: 1,
+                },
+              }),
+          });
+        }
         // Any other asset the loader requests is an optional, variant-specific
         // artifact (a tides bundle, the merchant corpus, dreamsign profiles,
         // etc.). The loaders all treat a non-ok response as "absent" and fall
