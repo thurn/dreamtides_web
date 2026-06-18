@@ -430,6 +430,12 @@ export function generateSiteComposition(
   );
   // Sample without replacement: every non-Draft type appears at most once.
   const remainingPool = fillPool.filter(([type]) => !usedTypes.has(type));
+  // Snapshot the filtered distribution before sampling depletes it, so the log
+  // reflects the weights the fill picks were actually drawn from.
+  const fillDistribution = remainingPool.map(([type, weight]) => ({
+    type,
+    weight,
+  }));
   const minPreBattle = 2;
   const maxPreBattle = 5;
   const minFill = Math.max(0, minPreBattle - preBattle.length);
@@ -461,7 +467,7 @@ export function generateSiteComposition(
       draftCount,
       purgeMandatory: purgeMandatoryForLayer(layer),
       hasKnownDreamsign: hasKnownDreamsign === true,
-      fillWeights: remainingPool.map(([type, weight]) => ({ type, weight })),
+      fillWeights: fillDistribution,
       fillChosen: chosenFill,
       siteTypes: sites.map((s) => s.type),
     });
