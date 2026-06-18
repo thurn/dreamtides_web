@@ -469,11 +469,16 @@ describe("generateInitialAtlas structural invariants", () => {
     );
     for (let iter = 0; iter < 60; iter++) {
       const atlas = freshAtlas();
-      // Layer 1 is the first choice out of Firstlight Meadow and is always
-      // width 2. Reveal both nodes the way consumers do: completing the starter
-      // makes its forward targets available, which reveals their dreamscapes.
+      // Layer 1 is the first choice out of Firstlight Meadow. Derive its
+      // expected width from the live config rather than hardcoding it; the
+      // layer-1-distinct feature inherently needs at least 2 nodes. Reveal both
+      // nodes the way consumers do: completing the starter makes its forward
+      // targets available, which reveals their dreamscapes.
       const layer1 = atlas.layers[1];
-      expect(layer1).toHaveLength(2);
+      const layer1Spec = TEST_ATLAS_CONFIG.layerSpecs[1];
+      expect(layer1Spec.min).toBeGreaterThanOrEqual(2);
+      expect(layer1.length).toBeGreaterThanOrEqual(layer1Spec.min);
+      expect(layer1.length).toBeLessThanOrEqual(layer1Spec.max);
       const advanced = advanceAtlas(
         atlas,
         atlas.startingNodeId,

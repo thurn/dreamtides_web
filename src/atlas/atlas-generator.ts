@@ -538,17 +538,9 @@ function wireLayerConnections(
     );
     addEdge(sourceIdx, targetIdx);
   }
-  // Guarantee full coverage in case the diagonal skipped an endpoint.
-  for (let s = 0; s < fromLayer.length; s++) {
-    if (!edges.some(([a]) => a === s)) {
-      addEdge(s, Math.min(s, toLayer.length - 1));
-    }
-  }
-  for (let t = 0; t < toLayer.length; t++) {
-    if (!edges.some(([, b]) => b === t)) {
-      addEdge(Math.min(t, fromLayer.length - 1), t);
-    }
-  }
+  // The diagonal walk above covers every source index and every target index:
+  // it takes `max(fromLayer.length, toLayer.length)` steps and the floor map is
+  // surjective onto both index ranges, so no orphan can remain.
 
   // Extra non-crossing edges toward the soft connection-average target.
   const targetEdgeCount = Math.round(connectionAverage * fromLayer.length);
@@ -873,11 +865,59 @@ export function generateInitialAtlas(
   };
 
   if (logEvents) {
+    const cfg = build.atlasConfig;
+    // Wired forward connections, the load-bearing random output of the extra-edge
+    // phase. Logged both as a per-node map (forwardIds) and a flat per-gap edge
+    // list ([fromLayer, fromIndex] -> [toLayer, toIndex]) so the exact graph can
+    // be reconstructed from the log alone.
+    const forwardIds: Record<string, string[]> = {};
+    const edges: Array<{
+      from: string;
+      to: string;
+      fromLayer: number;
+      fromIndex: number;
+      toLayer: number;
+      toIndex: number;
+    }> = [];
+    for (const node of Object.values(nodes)) {
+      forwardIds[node.id] = [...node.forwardIds];
+      for (const targetId of node.forwardIds) {
+        const target = nodes[targetId];
+        edges.push({
+          from: node.id,
+          to: targetId,
+          fromLayer: node.layer,
+          fromIndex: node.indexInLayer,
+          toLayer: target.layer,
+          toIndex: target.indexInLayer,
+        });
+      }
+    }
     logEvent("atlas_generated", {
       layerWidths: widths,
-      connectionAverage: build.atlasConfig.connectionAverage,
+      connectionAverage: cfg.connectionAverage,
       startingNodeId,
       bossNodeId,
+      forwardIds,
+      edges,
+      // Effective TOML tuning that drove every random draw, captured because the
+      // production tuning is subject to change and a later log read needs to know
+      // which tuning produced this atlas.
+      atlasConfig: {
+        repeatDiscourageStrength: cfg.repeatDiscourageStrength,
+        connectionAverage: cfg.connectionAverage,
+        bonusReveal: {
+          min: cfg.bonusReveal.min,
+          max: cfg.bonusReveal.max,
+          mode: cfg.bonusReveal.mode,
+        },
+        knownDreamsign: {
+          maxPerAtlas: cfg.knownDreamsign.maxPerAtlas,
+          eligibleLayers: [...cfg.knownDreamsign.eligibleLayers],
+          placementProbability: cfg.knownDreamsign.placementProbability,
+          earlyRevealBias: cfg.knownDreamsign.earlyRevealBias,
+        },
+      },
     });
   }
 
