@@ -30,7 +30,7 @@ function makeQuestContent(): QuestContent {
     cardDatabase,
     dreamcallers: [dreamcaller],
 
-    dreamwellCards: [],    dreamsignTemplates: [],    dreamscapes: MINIMAL_DREAMSCAPES,    atlasConfig: MINIMAL_ATLAS_CONFIG,
+    dreamwellCards: [],    dreamsignTemplates: [],    dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [],    atlasConfig: MINIMAL_ATLAS_CONFIG,
     poolContext: makeTestPoolContext(["dreamsign-1", "dreamsign-2"]),
   };
 }
@@ -68,7 +68,7 @@ describe("createStartInBattleState", () => {
       cardDatabase: new Map(),
       dreamcallers: [dreamcaller],
 
-      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES,      atlasConfig: MINIMAL_ATLAS_CONFIG,
+      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [],      atlasConfig: MINIMAL_ATLAS_CONFIG,
     };
 
     expect(createStartInBattleState(questContent)).toBeNull();
@@ -79,7 +79,7 @@ describe("createStartInBattleState", () => {
       cardDatabase: new Map(),
       dreamcallers: [],
 
-      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES,      atlasConfig: MINIMAL_ATLAS_CONFIG,
+      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [],      atlasConfig: MINIMAL_ATLAS_CONFIG,
       poolContext: makeTestPoolContext(),
     };
 

@@ -73,6 +73,7 @@ import {
   rerollCost,
   shopSlotsToRuntime,
 } from "../shop/shop-generator";
+import { resolveNodeAffiliationWeights } from "../affiliations/affiliation-weights";
 import {
   assignTransfiguration,
   transfigurationEffectDetails,
@@ -220,6 +221,31 @@ function runtimeSlotPrice(slot: {
 
 function nextDeckEntryId(deck: readonly DeckEntry[]): string {
   return `deck-${String(deriveDeckEntryCounter(deck) + 1)}`;
+}
+
+/**
+ * The affiliation reweighting for the dreamscape the player is currently in: the
+ * `cardNumber -> multiplier` map plus the affiliation id (for the reconstruction
+ * log), or `undefined` for a neutral dreamscape (so a draw site draws unbiased).
+ * Reads the current node's `dreamscapeId`, maps it to its affiliation, and scores
+ * the run's draft pool against the affiliation's signature set (see
+ * `src/affiliations/affiliation-weights.ts`).
+ */
+function currentAffiliationWeights(
+  state: QuestState,
+  questContent: QuestContent,
+): { weights: Map<number, number>; affiliationId: string } | undefined {
+  const nodeId = state.currentDreamscape;
+  const node = nodeId === null ? null : state.atlas.nodes[nodeId] ?? null;
+  const resolved = resolveNodeAffiliationWeights(
+    node,
+    questContent.dreamscapes,
+    questContent.affiliations,
+    questContent.poolContext?.poolData,
+    questContent.cardDatabase,
+  );
+  if (resolved === null) return undefined;
+  return { weights: resolved.weights, affiliationId: resolved.affiliation.id };
 }
 
 function generatedDeckEntryId(clientId: string): string {
@@ -1402,6 +1428,10 @@ export function MultiplayerQuestProvider({
         cardNumber,
         cardDatabase: current.questContent.cardDatabase,
         fitModel,
+        affiliationWeights: currentAffiliationWeights(
+          current.state,
+          current.questContent,
+        )?.weights,
       });
     } catch {
       return;
@@ -2011,6 +2041,10 @@ export function MultiplayerQuestProvider({
         const shopDraftState = isDeckFitDraft
           ? replayShopDraftState(current.state.resolvedPackage)
           : current.state.draftState;
+        const affiliation = currentAffiliationWeights(
+          current.state,
+          current.questContent,
+        );
         const generated = generateShopInventory({
           cardDatabase: current.questContent.cardDatabase,
           draftState: shopDraftState,
@@ -2021,6 +2055,8 @@ export function MultiplayerQuestProvider({
           starterDecklistCardNumbers: specialtyOnly
             ? (current.state.resolvedPackage?.starterDecklistCardNumbers ?? [])
             : undefined,
+          affiliationNumberWeights: affiliation?.weights,
+          affiliationId: affiliation?.affiliationId,
         });
         runtime = {
           kind: "shop",
@@ -2313,6 +2349,10 @@ export function MultiplayerQuestProvider({
     const shopDraftState = isDeckFitDraft
       ? replayShopDraftState(current.state.resolvedPackage)
       : current.state.draftState;
+    const affiliation = currentAffiliationWeights(
+      current.state,
+      current.questContent,
+    );
     const generated = generateShopInventory({
       cardDatabase: current.questContent.cardDatabase,
       draftState: shopDraftState,
@@ -2324,6 +2364,8 @@ export function MultiplayerQuestProvider({
         site.type === "SpecialtyShop"
           ? (current.state.resolvedPackage?.starterDecklistCardNumbers ?? [])
           : undefined,
+      affiliationNumberWeights: affiliation?.weights,
+      affiliationId: affiliation?.affiliationId,
     });
     const nextDraftState = isDeckFitDraft
       ? current.state.draftState

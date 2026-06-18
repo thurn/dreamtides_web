@@ -5,6 +5,7 @@ import type { Dreamsign, RuntimeShopSlot } from "../types/quest";
 
 import { drawAndSpendUniqueCards } from "../draft/draft-engine";
 import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
+import { logAffiliationDraw } from "../affiliations/affiliation-weights";
 
 /** Fixed price for standard card items. */
 export const STANDARD_CARD_PRICE = 100;
@@ -66,6 +67,20 @@ export interface ShopGenerationOptions {
   starterDecklistCardNumbers?: readonly number[];
   cardCount?: number;
   dreamsignCount?: number;
+  /**
+   * Optional affiliation reweighting (`cardNumber -> multiplier`) for a shop in
+   * an affiliated dreamscape (see `src/affiliations/affiliation-weights.ts`).
+   * Applied to a regular shop's draft-multiset card draw so the stock leans toward
+   * the dreamscape's affiliation without ever removing a card. A Specialty Shop's
+   * card slots come from the run's fixed starter decklist and are deliberately
+   * left unbiased — that shop already features a curated list by design.
+   */
+  affiliationNumberWeights?: ReadonlyMap<number, number>;
+  /**
+   * The id of the affiliation `affiliationNumberWeights` came from, recorded in
+   * the reconstruction log. Absent in a neutral dreamscape.
+   */
+  affiliationId?: string;
 }
 
 export interface ShopInventoryResult {
@@ -227,6 +242,8 @@ export function generateShopInventory(
     starterDecklistCardNumbers = [],
     cardCount = STANDARD_CARD_COUNT,
     dreamsignCount = STANDARD_DREAMSIGN_COUNT,
+    affiliationNumberWeights,
+    affiliationId,
   } = options;
 
   const isSpecialty = starterDecklistCardNumbers.length > 0;
@@ -260,8 +277,22 @@ export function generateShopInventory(
       });
     }
   } else if (nextDraftState !== null) {
-    // --- Regular card slots: drawn from the draft multiset and spent. ---
-    const drawnCardNumbers = drawAndSpendUniqueCards(nextDraftState, cardCount);
+    // --- Regular card slots: drawn from the draft multiset and spent, biased
+    // toward the dreamscape's affiliation when one is supplied. ---
+    const drawnCardNumbers = drawAndSpendUniqueCards(
+      nextDraftState,
+      cardCount,
+      undefined,
+      affiliationNumberWeights,
+    );
+    if (affiliationNumberWeights !== undefined) {
+      logAffiliationDraw({
+        drawSite: "shop_stock",
+        affiliationId,
+        candidateWeights: affiliationNumberWeights,
+        picked: drawnCardNumbers,
+      });
+    }
     for (const cardNumber of drawnCardNumbers) {
       const card = cardDatabase.get(cardNumber);
       if (card === undefined) {

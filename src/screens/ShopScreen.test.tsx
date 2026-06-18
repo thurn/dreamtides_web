@@ -201,7 +201,7 @@ function setQuestContext(state: QuestState): void {
       cardDatabase: makeCardDatabase(),
       dreamcallers: [],
 
-      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES,      atlasConfig: MINIMAL_ATLAS_CONFIG,
+      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES,      affiliations: [],      atlasConfig: MINIMAL_ATLAS_CONFIG,
     },
   });
 }
@@ -641,7 +641,7 @@ describe("ShopScreen", () => {
         cardDatabase: makeCardDatabase(),
         dreamcallers: [],
 
-        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES,        atlasConfig: MINIMAL_ATLAS_CONFIG,
+        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES,        affiliations: [],        atlasConfig: MINIMAL_ATLAS_CONFIG,
       },
     });
 

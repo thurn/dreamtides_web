@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import { act, type ReactElement } from "react";
-import { loadTestAtlasConfig, loadTestDreamscapes } from "../__test-helpers__/atlas-fixtures";
+import { loadTestAffiliations, loadTestAtlasConfig, loadTestDreamscapes } from "../__test-helpers__/atlas-fixtures";
 import type { Database } from "firebase/database";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -146,6 +146,7 @@ function makeQuestContent(): QuestContent {
       makeDreamsignTemplate("dreamsign-3", "Dreamsign Three"),
     ],
     dreamscapes: loadTestDreamscapes(),
+    affiliations: loadTestAffiliations(),
     atlasConfig: loadTestAtlasConfig(),
     poolContext: makeTestPoolContext(["dreamsign-1", "dreamsign-2"]),
   };

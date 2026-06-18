@@ -2,6 +2,20 @@
 export interface DraftConfig {
   /** Number of cards shown per pick. */
   packSize: number;
+  /**
+   * Optional affiliation reweighting for a draft inside an affiliated dreamscape:
+   * a `cardNumber -> multiplier` map (see `src/affiliations/affiliation-weights.ts`).
+   * Each offered card's base copy weight is multiplied by its entry (cards absent
+   * from the map use 1), pulling offers toward the dreamscape's affiliation
+   * without ever removing a card. Absent in a neutral dreamscape.
+   */
+  affiliationWeights?: ReadonlyMap<number, number>;
+  /**
+   * The id of the affiliation `affiliationWeights` came from, recorded in the
+   * reconstruction log so a draw can be traced back to its dreamscape's faction.
+   * Absent in a neutral dreamscape.
+   */
+  affiliationId?: string;
 }
 
 /** Context provided to a pack generation strategy. */
@@ -12,6 +26,12 @@ export interface PackContext {
   pickNumber: number;
   /** Number of cards to include in the pack. */
   packSize: number;
+  /**
+   * Optional affiliation reweighting (`cardNumber -> multiplier`) applied to each
+   * candidate's base copy weight, threaded from {@link DraftConfig}. Absent in a
+   * neutral dreamscape.
+   */
+  affiliationWeights?: ReadonlyMap<number, number>;
 }
 
 /** Fields shared by every draft mode. Survives across dreamscape visits. */

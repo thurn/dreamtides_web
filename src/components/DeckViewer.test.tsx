@@ -225,7 +225,7 @@ function setQuestContext(): void {
       cardDatabase: new Map(),
       dreamcallers: [],
 
-      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES,      atlasConfig: MINIMAL_ATLAS_CONFIG,
+      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES,      affiliations: [],      atlasConfig: MINIMAL_ATLAS_CONFIG,
     },
   });
 }
@@ -328,7 +328,7 @@ function mountWithFullDeck(initialSize: "small" | "medium" | "large") {
       cardDatabase: new Map(),
       dreamcallers: [],
 
-      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES,      atlasConfig: MINIMAL_ATLAS_CONFIG,
+      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES,      affiliations: [],      atlasConfig: MINIMAL_ATLAS_CONFIG,
     },
   });
   return mount(
@@ -351,7 +351,7 @@ describe("DeckViewer", () => {
         cardDatabase: new Map(),
         dreamcallers: [],
 
-        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES,        atlasConfig: MINIMAL_ATLAS_CONFIG,
+        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES,        affiliations: [],        atlasConfig: MINIMAL_ATLAS_CONFIG,
       },
     });
 
@@ -504,7 +504,7 @@ describe("DeckViewer", () => {
         cardDatabase: new Map(),
         dreamcallers: [],
 
-        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES,        atlasConfig: MINIMAL_ATLAS_CONFIG,
+        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES,        affiliations: [],        atlasConfig: MINIMAL_ATLAS_CONFIG,
       },
     });
 

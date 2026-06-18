@@ -4,6 +4,7 @@ import { buildDreamcallerPackage, buildReplayDraftState } from "../data/quest-co
 import type { QuestContent } from "../data/quest-content";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import {
+  DEFAULT_DRAFT_CONFIG,
   createInitialDraftState,
   createInitialFresh20DraftState,
   processPlayerPickWithoutLogging,
@@ -85,6 +86,7 @@ export function pickDraftCardInQuestState({
   cardNumber,
   cardDatabase,
   fitModel,
+  affiliationWeights,
 }: {
   prev: QuestState;
   siteId: string;
@@ -95,6 +97,12 @@ export function pickDraftCardInQuestState({
    * offer is ranked against the deck *after* this pick (see below).
    */
   fitModel?: FitModel;
+  /**
+   * Affiliation reweighting (`cardNumber -> multiplier`) for the dreamscape this
+   * draft site sits in, threaded into the NEXT pool-mode offer so the whole site
+   * visit stays biased toward the affiliation. Absent in a neutral dreamscape.
+   */
+  affiliationWeights?: ReadonlyMap<number, number>;
 }): QuestState {
   if (prev.draftState === null) {
     throw new Error("Draft state is unavailable.");
@@ -122,7 +130,9 @@ export function pickDraftCardInQuestState({
     cardNumber,
     draftState,
     cardDatabase,
-    undefined,
+    affiliationWeights === undefined
+      ? undefined
+      : { ...DEFAULT_DRAFT_CONFIG, affiliationWeights },
     offerDeps,
   );
 
@@ -135,6 +145,7 @@ export function prepareDraftCardPickInQuestState({
   cardNumber,
   cardDatabase,
   fitModel,
+  affiliationWeights,
 }: {
   prev: QuestState;
   siteId: string;
@@ -142,6 +153,11 @@ export function prepareDraftCardPickInQuestState({
   cardDatabase: Map<number, CardData>;
   /** Live deck-fit model, only present in replay mode. Passed straight through. */
   fitModel?: FitModel;
+  /**
+   * Affiliation reweighting for the current dreamscape, threaded into the NEXT
+   * offer so a multi-pick draft visit stays biased. Absent in a neutral dreamscape.
+   */
+  affiliationWeights?: ReadonlyMap<number, number>;
 }): PreparedDraftPick {
   if (prev.draftState === null) {
     throw new Error("Draft state is unavailable.");
@@ -160,6 +176,7 @@ export function prepareDraftCardPickInQuestState({
     cardNumber,
     cardDatabase,
     fitModel,
+    affiliationWeights,
   });
 
   return {

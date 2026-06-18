@@ -190,6 +190,7 @@ const demoQuestContext: QuestContextValue = {
     dreamwellCards: [],
     dreamsignTemplates: demoTemplates,
     dreamscapes: [],
+    affiliations: [],
     atlasConfig: {
       layerSpecs: [],
       connectionAverage: 2,

@@ -26,7 +26,8 @@ import {
 import { replayDepsFor } from "../draft/replay/replay-deps";
 import { fresh20DepsFor } from "../draft/fresh20/fresh20-deps";
 import type { FitModel } from "../draft/replay/fit-model";
-import type { DraftState } from "../types/draft";
+import type { DraftConfig, DraftState } from "../types/draft";
+import { resolveNodeAffiliationWeights } from "../affiliations/affiliation-weights";
 import type { CardData } from "../types/cards";
 import type { DeckEntry } from "../types/quest";
 import { cardImageUrl } from "../data/card-database";
@@ -424,6 +425,7 @@ function bootstrapLocalDraftState(
   cardDatabase: Map<number, CardData>,
   deck: readonly DeckEntry[],
   fitModel: FitModel | undefined,
+  draftConfig: DraftConfig = DEFAULT_DRAFT_CONFIG,
 ): DraftState | null {
   if (cardDatabase.size === 0) return null;
   if (liveDraftState === null) return null;
@@ -431,13 +433,40 @@ function bootstrapLocalDraftState(
 
   const cloned = JSON.parse(JSON.stringify(liveDraftState)) as DraftState;
   const offerDeps = offerDepsForDraftState(cloned, deck, fitModel, cardDatabase);
-  enterDraftSite(cloned, siteId, cardDatabase, DEFAULT_DRAFT_CONFIG, offerDeps);
+  enterDraftSite(cloned, siteId, cardDatabase, draftConfig, offerDeps);
   return cloned;
 }
 
 /** The draft site screen: 4-card pack display, card picking, and summary. */
 export function DraftSiteScreen({ siteId }: { siteId: string }) {
   const { state, mutations, cardDatabase, questContent } = useQuest();
+  // Affiliation reweighting for the dreamscape this draft site sits in. A neutral
+  // dreamscape yields `DEFAULT_DRAFT_CONFIG` (no bias); an affiliated one pulls the
+  // offers toward its signature set without removing any card.
+  const draftConfig = useMemo<DraftConfig>(() => {
+    const nodeId = state.currentDreamscape;
+    const node = nodeId === null ? null : state.atlas.nodes[nodeId] ?? null;
+    const resolved = resolveNodeAffiliationWeights(
+      node,
+      questContent.dreamscapes,
+      questContent.affiliations,
+      questContent.poolContext?.poolData,
+      cardDatabase,
+    );
+    if (resolved === null) return DEFAULT_DRAFT_CONFIG;
+    return {
+      ...DEFAULT_DRAFT_CONFIG,
+      affiliationWeights: resolved.weights,
+      affiliationId: resolved.affiliation.id,
+    };
+  }, [
+    state.currentDreamscape,
+    state.atlas,
+    questContent.dreamscapes,
+    questContent.affiliations,
+    questContent.poolContext,
+    cardDatabase,
+  ]);
   const [pickPhase, setPickPhase] = useState<PickPhase>("idle");
   const [pickedCardNumber, setPickedCardNumber] = useState<number | null>(null);
   const [overlayCard, setOverlayCard] = useState<CardData | null>(null);
@@ -456,6 +485,7 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
         cardDatabase,
         state.deck,
         questContent.fitModel,
+        draftConfig,
       ),
   );
   const draftStateRef = useRef<DraftState | null>(null);
@@ -588,7 +618,7 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
       cloned,
       siteId,
       cardDatabase,
-      DEFAULT_DRAFT_CONFIG,
+      draftConfig,
       offerDeps,
     );
     draftStateRef.current = cloned;
@@ -603,6 +633,7 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
     mutations,
     localDraftState,
     questContent.fitModel,
+    draftConfig,
   ]);
 
   useEffect(() => {

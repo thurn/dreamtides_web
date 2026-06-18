@@ -37,9 +37,9 @@ import {
 } from "./cards-v2-database";
 import { loadDreamcallersV2 } from "./dreamcallers-v2-database";
 import { loadDreamwellCards, type DreamwellCard } from "./dreamwell-database";
-import { loadDreamscapes } from "./dreamscapes";
+import { loadAffiliations, loadDreamscapes } from "./dreamscapes";
 import { loadAtlasConfig } from "./atlas-config";
-import type { DreamscapeContent } from "../types/content";
+import type { AffiliationContent, DreamscapeContent } from "../types/content";
 import type { AtlasConfig } from "../types/quest";
 import { STARTER_CARD_NUMBERS } from "./starter-cards";
 import { buildFitModel, type FitModel } from "../draft/replay/fit-model";
@@ -63,6 +63,13 @@ export interface QuestContent {
    * `public/dreamscapes-data.json`.
    */
   dreamscapes: readonly DreamscapeContent[];
+  /**
+   * Thematic affiliations backing non-starter dreamscapes, loaded from
+   * `public/affiliations-data.json`. Each dreamscape's `affiliationId` resolves to
+   * one of these; affiliated card draws reweight toward its `signatureCards` (see
+   * `src/affiliations/affiliation-weights.ts`).
+   */
+  affiliations: readonly AffiliationContent[];
   /**
    * Dream Atlas generation tuning, loaded from `public/atlas-config-data.json`.
    */
@@ -642,6 +649,7 @@ export async function loadQuestContent(
     merchantCorpus,
     dreamsignProfiles,
     dreamscapes,
+    affiliations,
     atlasConfig,
   ] = await Promise.all([
     loadCardsV2Database(),
@@ -676,6 +684,9 @@ export async function loadQuestContent(
     // Dreamscape definitions and Atlas generation tuning are small and always
     // loaded so the 7-layer Atlas generator can assign and tune nodes.
     loadDreamscapes(),
+    // Affiliations are small and always loaded so affiliated card draws can
+    // reweight toward a dreamscape's faction.
+    loadAffiliations(),
     loadAtlasConfig(),
   ]);
 
@@ -748,6 +759,7 @@ export async function loadQuestContent(
       dreamwellCards,
       dreamsignTemplates,
       dreamscapes,
+      affiliations,
       atlasConfig,
       poolContext,
       draftMode,
@@ -765,6 +777,7 @@ export async function loadQuestContent(
     dreamwellCards,
     dreamsignTemplates,
     dreamscapes,
+    affiliations,
     atlasConfig,
     poolContext,
     draftMode,

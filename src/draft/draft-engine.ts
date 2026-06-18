@@ -9,6 +9,7 @@ import type {
   ReplayDraftState,
 } from "../types/draft";
 import { logEvent } from "../logging";
+import { logAffiliationDraw } from "../affiliations/affiliation-weights";
 import { computeReplayOffer, type FitModel } from "./replay/fit-model";
 import {
   computeFresh20Offer,
@@ -120,11 +121,17 @@ function weightedSample(
  *
  * `eligibleCardNumbers`, when provided, restricts the draw to that subset
  * (used by Specialty Shops to feature a single tide).
+ *
+ * `affiliationWeights`, when provided, multiplies each card's base copy weight by
+ * its `cardNumber -> multiplier` entry (cards absent use 1) so a draw inside an
+ * affiliated dreamscape leans toward that affiliation without ever dropping a card
+ * (see `src/affiliations/affiliation-weights.ts`).
  */
 export function drawAndSpendUniqueCards(
   state: DraftState,
   count: number,
   eligibleCardNumbers?: ReadonlySet<number>,
+  affiliationWeights?: ReadonlyMap<number, number>,
 ): number[] {
   if (state.mode !== "pool") {
     throw new Error("drawAndSpendUniqueCards requires a pool draft state");
@@ -144,7 +151,8 @@ export function drawAndSpendUniqueCards(
       ) {
         continue;
       }
-      entries.push({ cardNumber, weight: copies_ });
+      const multiplier = affiliationWeights?.get(cardNumber) ?? 1;
+      entries.push({ cardNumber, weight: copies_ * multiplier });
     }
     return entries;
   };
@@ -184,7 +192,8 @@ function buildOffer(
       continue;
     }
 
-    entries.push({ cardNumber, weight: copies });
+    const multiplier = ctx.affiliationWeights?.get(cardNumber) ?? 1;
+    entries.push({ cardNumber, weight: copies * multiplier });
   }
 
   if (entries.length < ctx.packSize) {
@@ -263,6 +272,7 @@ function revealOffer(
       remainingCopiesByCard: state.remainingCopiesByCard,
       pickNumber: state.pickNumber,
       packSize: config.packSize,
+      affiliationWeights: config.affiliationWeights,
     },
     shownThisVisit,
   );
@@ -288,6 +298,7 @@ function revealOffer(
         remainingCopiesByCard: state.remainingCopiesByCard,
         pickNumber: state.pickNumber,
         packSize: config.packSize,
+        affiliationWeights: config.affiliationWeights,
       },
       shownThisVisit,
     );
@@ -301,6 +312,14 @@ function revealOffer(
   spendShownOffer(state.remainingCopiesByCard, offer);
   state.siteShownCardNumbers = [...(state.siteShownCardNumbers ?? []), ...offer];
   if (options.logEvents) {
+    if (config.affiliationWeights !== undefined) {
+      logAffiliationDraw({
+        drawSite: "draft_offer",
+        affiliationId: config.affiliationId,
+        candidateWeights: config.affiliationWeights,
+        picked: offer,
+      });
+    }
     logEvent("draft_offer_revealed", {
       pickNumber: state.pickNumber,
       offerCards: offer,

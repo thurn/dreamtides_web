@@ -151,6 +151,7 @@ export function makeMerchantTestContent({
     dreamwellCards: [],
     dreamsignTemplates,
     dreamscapes: MINIMAL_DREAMSCAPES,
+    affiliations: [],
     atlasConfig: MINIMAL_ATLAS_CONFIG,
     fitModel,
     merchantCorpus,

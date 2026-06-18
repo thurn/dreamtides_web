@@ -1,5 +1,6 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  loadTestAffiliations,
   loadTestAtlasConfig,
   loadTestDreamscapes,
   makeTestAtlasNode,
@@ -81,6 +82,7 @@ function makeQuestContent(
 
     dreamwellCards: [],    dreamsignTemplates: [],
     dreamscapes: loadTestDreamscapes(),
+    affiliations: loadTestAffiliations(),
     atlasConfig: loadTestAtlasConfig(),
     poolContext: makeTestPoolContext(["dreamsign-a", "dreamsign-b"]),
   };
