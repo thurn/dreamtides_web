@@ -113,7 +113,7 @@ sites appear and no site is enhanced.
 - **Signature Site:** [Card Shop](#card-shop)
 - **Aesthetic:** A fantasy village with anthropomorphic animals.
 - **Affiliation:** Spirit Animals
-- **Site Icon:** `game-icons.net/sbed/shop`
+- **Site Icon:** `boxicons3/store-alt-2`
 
 ### Pharaoh's Gate
 
@@ -121,7 +121,7 @@ sites appear and no site is enhanced.
 - **Signature Site:** [Dreamsign Market](#dreamsign-market)
 - **Aesthetic:** An ancient Egyptian realm.
 - **Affiliation:** Erode, Void matters
-- **Site Icon:** `game-icons.net/sbed/great-pyramid`
+- **Site Icon:** `boxicons3/pyramid`
 
 ### Winterwake Fjords
 
@@ -129,7 +129,7 @@ sites appear and no site is enhanced.
 - **Signature Site:** [Dreamsign Revelation](#dreamsign-revelation)
 - **Aesthetic:** A snowy viking village.
 - **Affiliation:** Removal, Dissolve / Banish effects
-- **Site Icon:** `game-icons.net/sbed/fire`
+- **Site Icon:** `boxicons3/meteor`
 
 ### Frostforge
 
@@ -137,7 +137,7 @@ sites appear and no site is enhanced.
 - **Signature Site:** [Transfiguration](#transfiguration)
 - **Aesthetic:** A dwarven fortress.
 - **Affiliation:** Storm / Events matter
-- **Site Icon:** `game-icons.net/sbed/anvil-impact`
+- **Site Icon:** `fontawesome/hammer`
 
 ### Hope's End
 
@@ -145,7 +145,7 @@ sites appear and no site is enhanced.
 - **Signature Site:** [Duplication](#duplication)
 - **Aesthetic:** A rural town experiencing a zombie apocalypse.
 - **Affiliation:** Inexpensive Characters
-- **Site Icon:** Custom `stack.svg`
+- **Site Icon:** `boxicons3/copy`
 
 ### Tsukiren
 
@@ -153,7 +153,7 @@ sites appear and no site is enhanced.
 - **Signature Site:** [Purge](#purge)
 - **Aesthetic:** A samurai-era Japanese kingdom.
 - **Affiliation:** Warriors
-- **Site Icon:** `game-icons.net/sbed/small-fire`
+- **Site Icon:** `boxicons3/hot`
 
 ### Wilderveil
 
@@ -161,7 +161,7 @@ sites appear and no site is enhanced.
 - **Signature Site:** [Dream Augury](#dream-augury)
 - **Aesthetic:** An enchanted forest.
 - **Affiliation:** Abandon / Sacrifice
-- **Site Icon:** `game-icons.net/sbed/crystal-ball`
+- **Site Icon:** `boxicons3/eye`
 
 ### The Rust Expanse
 
@@ -169,7 +169,7 @@ sites appear and no site is enhanced.
 - **Signature Site:** [Tempting Offer](#tempting-offer)
 - **Aesthetic:** A "Mad Max" post-apocalyptic wasteland.
 - **Affiliation:** Survivors
-- **Site Icon:** `game-icons.net/sbed/scales`
+- **Site Icon:** `boxicons3/law`
 
 ### Farpoint Station
 
@@ -178,7 +178,7 @@ sites appear and no site is enhanced.
 - **Aesthetic:** A sci-fi outpost on a distant planet, populated by humans and
   aliens (such as Gravok, a crystal/rock creature).
 - **Affiliation:** Figments
-- **Site Icon:** `game-icons.net/sbed/two-coins`
+- **Site Icon:** `boxicons3/coin`
 
 ### Grid City
 
@@ -186,7 +186,7 @@ sites appear and no site is enhanced.
 - **Signature Site:** [Temporal Fork](#temporal-fork)
 - **Aesthetic:** A cyberpunk city.
 - **Affiliation:** Discard
-- **Site Icon:** `game-icons.net/sbed/sands-of-time`
+- **Site Icon:** `boxicons3/clock`
 
 ### Limbo
 
@@ -406,7 +406,7 @@ dreamcaller card format (head only, no text). The user dreamcaller and user
 quest deck animate to their starting positions. The enemy quest deck animates to
 its starting position. An opening hand of cards is dealt to both players.
 
-Icon: `game-icons.net/lorc/swords-emblem`
+Icon: `boxicons3/sword-alt`
 
 ### Draft
 
@@ -424,7 +424,7 @@ quest deck, and the remaining cards animate away as the next offer arrives.
 After all picks at a draft site are completed, the camera automatically pulls
 back to the map view. Cards are shown with an orange outline.
 
-Icon: `game-icons.net/sbed/card-pick` (modified)
+Icon: `boxicons3/rectangle-vertical`
 
 ### Essence
 
@@ -438,7 +438,7 @@ appears, animating in a winding path to the user's essence total and then plays
 a 'hit' particle effect when it reaches the bottom left essence total and
 updates the quantity of essence shown.
 
-Icon: "Diamond"
+Icon: `boxicons3/diamond-alt`
 
 ### Card Shop
 
@@ -471,7 +471,7 @@ the close button completes the site visit and pulls the camera back to the map
 screen. The items remain in place visually rather than animating away, but the
 site cannot be revisited.
 
-Icon: `game-icons.net/sbed/shop`
+Icon: `boxicons3/store-alt-2`
 
 ### Dreamsign Market
 
@@ -495,7 +495,7 @@ in the bottom right corner of the screen. A restock option refreshes the choices
 with a staggered scale animation. Clicking the close button completes the visit
 and returns to the map.
 
-Icon: `game-icons.net/sbed/great-pyramid`
+Icon: `boxicons3/pyramid`
 
 ### Dreamsign Revelation
 
@@ -516,7 +516,7 @@ display if accepted and back to a small scale if rejected. For a choice, the
 dreamsigns animate in at full size in a single row with a purple accept button
 below each and a close button at top left.
 
-Icon: `game-icons.net/sbed/fire`
+Icon: `boxicons3/meteor`
 
 ### Dreamsign Reward
 
@@ -584,7 +584,7 @@ center, displays a visual effect specific to the transfiguration, flips over, an
 returns to the quest deck in the bottom right. A close button allows the user to
 decline.
 
-Icon: `game-icons.net/sbed/anvil-impact`
+Icon: `fontawesome/hammer`
 
 ### Duplication
 
@@ -603,7 +603,7 @@ fall away, then a particle effect plays and a copy of the card emerges from the
 selected card. The copies animate to the quest deck, and the camera pulls back to
 the map. A close button allows the user to decline.
 
-Icon: "Copy"
+Icon: `boxicons3/copy`
 
 ### Purge
 
@@ -648,7 +648,7 @@ of the next card. Cards the player cannot yet afford are dimmed. A red "Purge N
 Cards" button at the bottom confirms the removal: essence is spent and the
 selected cards are permanently removed.
 
-Icon: `game-icons.net/sbed/small-fire`
+Icon: `boxicons3/hot`
 
 ### Dream Augury
 
@@ -675,7 +675,7 @@ effect). Once the effect animation completes, the camera pulls back to the map. 
 augury card is a circular image that displays its rules text on hover/long press.
 For auguries with multiple effects, each animation plays in sequence.
 
-Icon: `game-icons.net/sbed/crystal-ball`
+Icon: `boxicons3/eye`
 
 ### Tempting Offer
 
@@ -694,7 +694,7 @@ purple button accepts the offer; the cost and reward animations play in sequence
 (for example, essence draining away and then a reward animating to the quest
 deck). A close button allows the user to decline.
 
-Icon: `game-icons.net/sbed/scales`
+Icon: `boxicons3/law`
 
 ### Gamble
 
@@ -712,7 +712,7 @@ animation resolves the result (a win animates the reward to the quest deck or
 essence total; a loss plays a failure animation), and the camera pulls back to the
 map. A close button allows the user to decline before wagering.
 
-Icon: `game-icons.net/sbed/two-coins`
+Icon: `boxicons3/coin`
 
 ### Temporal Fork
 
@@ -731,7 +731,7 @@ not-selected card animates away, and the chosen effect plays a custom animation
 (for example, a clock motif marking when a future reward will arrive). The camera
 then pulls back to the map. A close button allows the user to decline.
 
-Icon: `game-icons.net/sbed/sands-of-time`
+Icon: `boxicons3/clock`
 
 ## Home Specialties
 
