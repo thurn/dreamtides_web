@@ -600,6 +600,48 @@ describe("advanceAtlas", () => {
     expect(result).toBe(atlas);
   });
 
+  // Realtime Database drops empty arrays on write, so an unrevealed node that
+  // carries no sites yet round-trips back with `sites` absent. advanceAtlas
+  // syncs its id counters across every node up front, so it must tolerate a
+  // persisted node whose `sites` array is missing rather than throwing — a
+  // throw here strands the post-victory atlas handoff and blocks progression.
+  it("advances a persisted atlas whose unrevealed nodes lack a sites array", () => {
+    const atlas = freshAtlas();
+    const persisted: DreamAtlas = {
+      ...atlas,
+      nodes: Object.fromEntries(
+        Object.entries(atlas.nodes).map(([id, node]) => {
+          if (node.state !== "unrevealed") {
+            return [id, node];
+          }
+          const { sites: _sites, ...withoutSites } = node;
+          return [id, withoutSites as typeof node];
+        }),
+      ),
+    };
+
+    expect(() =>
+      advanceAtlas(
+        persisted,
+        persisted.startingNodeId,
+        1,
+        defaultContext(),
+        buildContext(),
+        { logEvents: false },
+      ),
+    ).not.toThrow();
+
+    const advanced = advanceAtlas(
+      persisted,
+      persisted.startingNodeId,
+      1,
+      defaultContext(),
+      buildContext(),
+      { logEvents: false },
+    );
+    expect(advanced.nodes[persisted.startingNodeId].state).toBe("completed");
+  });
+
   // The Atlas UI styles all five AtlasNodeState values distinctly. If a played
   // run could never produce one of those states, the corresponding UI treatment
   // would be dead code that silently masks a regression. This drives the real

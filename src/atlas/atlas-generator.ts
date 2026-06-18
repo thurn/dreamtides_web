@@ -82,7 +82,11 @@ function maxNodeIdSuffix(atlas: DreamAtlas): number {
 function maxSiteIdSuffix(atlas: DreamAtlas): number {
   let max = 0;
   for (const node of Object.values(atlas.nodes)) {
-    for (const site of node.sites) {
+    // A persisted node can lack a `sites` array entirely (RTDB drops empty
+    // arrays on write, and unrevealed nodes carry no sites yet), so iterate
+    // defensively rather than throwing while syncing id counters.
+    const sites = Array.isArray(node.sites) ? node.sites : [];
+    for (const site of sites) {
       const suffix = numericSuffix(site.id, "site");
       if (suffix !== null && suffix > max) {
         max = suffix;
