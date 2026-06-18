@@ -1,11 +1,10 @@
 {
-  "name": "spirit_animals_before_first_battle",
-  "savedAt": "2026-06-16T20:27:15.390Z",
+  "name": "storm_after_first_battle",
+  "savedAt": "2026-06-18T17:00:31.893Z",
   "questState": {
-    "seed": "5aec0ce1-0c45-465f-8571-99801724d499",
-    "essence": 0,
+    "seed": "c0e9874a-2494-4b8a-9dc7-ca85c966c7c0",
+    "essence": 110,
     "essenceCap": 500,
-    "omens": 0,
     "maxDreamsigns": 12,
     "deck": [
       {
@@ -65,7 +64,7 @@
         "keywordModification": null
       },
       {
-        "cardNumber": 293,
+        "cardNumber": 416,
         "entryId": "deck-11",
         "isBane": false,
         "transfiguration": null,
@@ -73,7 +72,7 @@
         "keywordModification": null
       },
       {
-        "cardNumber": 49,
+        "cardNumber": 285,
         "entryId": "deck-12",
         "isBane": false,
         "transfiguration": null,
@@ -81,7 +80,7 @@
         "keywordModification": null
       },
       {
-        "cardNumber": 466,
+        "cardNumber": 401,
         "entryId": "deck-13",
         "isBane": false,
         "transfiguration": null,
@@ -89,7 +88,7 @@
         "keywordModification": null
       },
       {
-        "cardNumber": 180,
+        "cardNumber": 152,
         "entryId": "deck-14",
         "isBane": false,
         "transfiguration": null,
@@ -97,7 +96,7 @@
         "keywordModification": null
       },
       {
-        "cardNumber": 262,
+        "cardNumber": 384,
         "entryId": "deck-15",
         "isBane": false,
         "transfiguration": null,
@@ -105,7 +104,7 @@
         "keywordModification": null
       },
       {
-        "cardNumber": 37,
+        "cardNumber": 473,
         "entryId": "deck-16",
         "isBane": false,
         "transfiguration": null,
@@ -113,7 +112,7 @@
         "keywordModification": null
       },
       {
-        "cardNumber": 61,
+        "cardNumber": 116,
         "entryId": "deck-17",
         "isBane": false,
         "transfiguration": null,
@@ -121,7 +120,7 @@
         "keywordModification": null
       },
       {
-        "cardNumber": 244,
+        "cardNumber": 212,
         "entryId": "deck-18",
         "isBane": false,
         "transfiguration": null,
@@ -129,7 +128,7 @@
         "keywordModification": null
       },
       {
-        "cardNumber": 272,
+        "cardNumber": 334,
         "entryId": "deck-19",
         "isBane": false,
         "transfiguration": null,
@@ -137,16 +136,8 @@
         "keywordModification": null
       },
       {
-        "cardNumber": 502,
+        "cardNumber": 246,
         "entryId": "deck-20",
-        "isBane": false,
-        "transfiguration": null,
-        "typeChange": null,
-        "keywordModification": null
-      },
-      {
-        "cardNumber": 209,
-        "entryId": "deck-21",
         "isBane": false,
         "transfiguration": null,
         "typeChange": null,
@@ -154,129 +145,160 @@
       }
     ],
     "dreamcaller": {
-      "id": "3EBABA62-9000-429D-B203-2A5A9724389A",
-      "imageNumber": "0045",
-      "name": "Radulf",
-      "renderedText": "With 3 or more allied characters, the first character you play each turn costs 1● less.",
-      "startingEssence": 250,
-      "title": "Hegemon of Shattered Thrones"
+      "id": "6029BE40-75B9-4C07-912F-9718B6C5C747",
+      "imageNumber": "0003",
+      "name": "Korrax",
+      "renderedText": "▸Night: Give an ally +1✦.",
+      "startingEssence": 200,
+      "title": "Iron Sovereign"
     },
     "resolvedPackage": {
-      "doubledCardCount": 53,
+      "doubledCardCount": 15,
       "draftPoolCopiesByCard": {
-        "4": 2,
-        "13": 2,
-        "15": 2,
-        "21": 1,
-        "29": 1,
-        "37": 2,
-        "39": 1,
-        "42": 1,
-        "48": 2,
-        "49": 2,
-        "50": 2,
-        "51": 2,
-        "52": 1,
-        "54": 2,
+        "3": 2,
+        "7": 1,
+        "11": 1,
+        "12": 1,
+        "20": 1,
+        "26": 1,
+        "27": 1,
+        "28": 1,
+        "34": 1,
+        "40": 1,
+        "41": 1,
+        "43": 2,
+        "50": 1,
         "60": 1,
-        "61": 2,
-        "66": 1,
-        "70": 2,
-        "85": 2,
-        "86": 2,
-        "98": 2,
-        "99": 1,
-        "104": 1,
-        "106": 2,
-        "110": 1,
-        "113": 2,
-        "130": 1,
+        "61": 1,
+        "65": 1,
+        "67": 1,
+        "68": 1,
+        "69": 1,
+        "70": 1,
+        "71": 2,
+        "75": 1,
+        "83": 1,
+        "84": 1,
+        "87": 2,
+        "91": 1,
+        "93": 1,
+        "96": 1,
+        "97": 1,
+        "100": 2,
+        "103": 1,
+        "116": 1,
+        "118": 1,
+        "127": 1,
+        "132": 1,
         "134": 1,
+        "135": 1,
+        "137": 1,
         "138": 1,
-        "141": 2,
-        "143": 1,
-        "147": 1,
-        "148": 2,
-        "151": 1,
+        "152": 1,
         "153": 1,
-        "158": 2,
-        "159": 2,
-        "160": 2,
+        "155": 1,
+        "156": 1,
+        "157": 2,
+        "161": 1,
+        "162": 2,
         "167": 1,
-        "180": 2,
-        "181": 2,
+        "173": 1,
+        "174": 2,
+        "177": 1,
+        "182": 2,
+        "183": 1,
         "184": 1,
-        "185": 2,
-        "190": 1,
-        "192": 2,
+        "185": 1,
+        "189": 1,
+        "192": 1,
+        "196": 1,
+        "197": 1,
+        "203": 1,
         "205": 1,
-        "209": 2,
-        "210": 1,
+        "206": 1,
+        "212": 1,
+        "213": 1,
+        "215": 2,
+        "222": 1,
+        "225": 1,
         "226": 1,
-        "229": 2,
-        "230": 2,
-        "232": 1,
-        "244": 2,
-        "248": 2,
-        "249": 1,
-        "262": 1,
-        "265": 2,
-        "269": 2,
-        "270": 1,
-        "272": 2,
-        "274": 1,
-        "287": 2,
-        "288": 1,
-        "293": 2,
-        "298": 1,
-        "303": 2,
+        "229": 1,
+        "236": 1,
+        "240": 1,
+        "241": 1,
+        "243": 1,
+        "246": 1,
+        "247": 1,
+        "250": 1,
+        "251": 1,
+        "252": 1,
+        "255": 1,
+        "261": 1,
+        "266": 1,
+        "267": 1,
+        "273": 1,
+        "276": 1,
+        "279": 1,
+        "280": 1,
+        "284": 1,
+        "285": 1,
+        "288": 2,
+        "305": 1,
+        "307": 1,
         "309": 1,
-        "325": 2,
-        "340": 1,
-        "349": 2,
+        "319": 1,
+        "322": 1,
+        "323": 1,
+        "334": 1,
+        "335": 1,
+        "341": 1,
+        "346": 1,
+        "347": 1,
+        "356": 1,
+        "357": 2,
+        "359": 2,
         "380": 1,
-        "382": 2,
-        "383": 2,
-        "390": 2,
-        "394": 1,
-        "409": 2,
-        "411": 2,
-        "415": 2,
-        "417": 2,
+        "384": 1,
+        "385": 1,
+        "393": 1,
+        "401": 1,
+        "412": 1,
+        "416": 1,
+        "418": 1,
+        "423": 1,
         "424": 1,
-        "426": 1,
-        "430": 2,
-        "446": 2,
+        "436": 1,
+        "437": 1,
+        "439": 1,
+        "440": 2,
+        "442": 1,
+        "447": 1,
+        "449": 1,
         "450": 1,
+        "453": 1,
         "458": 1,
-        "459": 2,
-        "461": 2,
-        "466": 2,
-        "467": 2,
+        "461": 1,
+        "468": 1,
         "470": 1,
+        "473": 2,
         "477": 1,
-        "479": 1,
         "482": 1,
-        "487": 2,
-        "488": 1,
-        "502": 2,
-        "503": 1
+        "483": 1,
+        "490": 1,
+        "491": 1,
+        "494": 1,
+        "501": 1,
+        "503": 1,
+        "504": 1
       },
       "draftPoolSize": 150,
       "dreamcaller": {
-        "id": "3EBABA62-9000-429D-B203-2A5A9724389A",
-        "imageNumber": "0045",
-        "name": "Radulf",
-        "renderedText": "With 3 or more allied characters, the first character you play each turn costs 1● less.",
-        "signatureCards": [
-          "Dawnprowler Panther",
-          "Starrunner",
-          "Celestial Reverie",
-          "Mother of Flames",
-          "Lumin-Gate Seer"
-        ],
-        "startingEssence": 250,
-        "title": "Hegemon of Shattered Thrones"
+        "id": "6029BE40-75B9-4C07-912F-9718B6C5C747",
+        "imageNumber": "0003",
+        "name": "Korrax",
+        "renderedText": "▸Night: Give an ally +1✦.",
+        "startingEssence": 200,
+        "title": "Iron Sovereign"
       },
       "dreamsignPoolIds": [
         "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
@@ -451,6 +473,7 @@
       "12EC9625-CBFB-4056-9C3E-98ED8C8BEA70",
       "95F0F483-9A76-47C6-A839-01A1D9122945",
       "553D2317-32F9-47BC-BAE0-5018CA26D56A",
+      "0D668E16-1729-4289-AD1D-0FB3C1374EE9",
       "EDE46F71-AA77-4B12-9824-0D3706DA6A22",
       "3380C657-79CA-400B-ABB7-4B56FBB92AF4",
       "2EBF0BBB-440C-4DBA-8E48-228DAADC0A1E",
@@ -500,6 +523,7 @@
       "2059AA74-8897-4C76-833F-DDEF7D34346C",
       "8340CCE5-8E27-4940-AB79-34E09FDBCAE1",
       "2CBCBEBB-FB79-4833-A770-2216873147C4",
+      "D2A916C1-321A-4AE3-9A50-0B7F13C5EFF6",
       "10F27800-99F8-4504-9D94-26BCB3C32788",
       "946DBB36-0A90-495A-BF0F-17351C93D74B",
       "89C83D7E-5617-49B4-B6CD-214680FE0627",
@@ -556,14 +580,13 @@
       "8408B8C2-5A3F-40DD-BAC4-98F2736C4176",
       "10BD78DE-87EC-44E4-9B16-E755DA2A9717",
       "8A2C7B32-26EA-40E2-845A-689DA5673B4D",
-      "883F88FB-AC50-419A-8382-C22EDEE29755",
       "C2AF5460-E61F-409B-9B86-6AC7DB34D748",
       "E7D23BF7-4D60-4B43-94C4-14A06C0F9116",
       "4F21A4AB-E4AA-4718-8563-9AFB72D140C0",
-      "0C52E8C3-A792-4EEA-955F-A0C61463C066",
       "8B69DE8A-835D-4F0C-AC25-DC0E700E2983",
       "AB1DA9D3-376A-460A-A9DC-4737E59E558B",
       "34CE9428-DDA9-4EFA-BACD-5EC2698561C1",
+      "D9F0F7FF-63C0-4247-8831-054D7FED931D",
       "BE59C0BA-6286-49E3-A88D-86B0977CC30A",
       "AF92858A-0C50-4ABF-A622-04C024CA32B3",
       "488BF436-C6D5-4E38-8A19-E50041F53766",
@@ -582,7 +605,6 @@
       "025CE7F1-066B-480A-8A2F-364379890ABD",
       "452B7CD6-9DC3-48A8-B9AA-412CA6DD5F19",
       "DA7E4B45-9106-4116-BC1C-3AEC8885396B",
-      "7E8C86CC-788F-4648-BE84-E0935C40C31E",
       "CD81A49D-DF58-4E0E-B1B2-33A82B386052",
       "58472AD2-88B1-4DC7-A161-C6DEA7D8C43D",
       "3C0CED1A-7A2A-4F18-9AB4-5D6055D1DC59",
@@ -594,21 +616,62 @@
     ],
     "dreamsigns": [
       {
-        "effectDescription": "Characters with ▸Materialized abilities cost you 1● less.",
-        "id": "0D668E16-1729-4289-AD1D-0FB3C1374EE9",
-        "imageAlt": "Skull pendant with dangling chains, beige bone and dark eye sockets.",
-        "imageName": "amulet_8.png",
+        "effectDescription": "After each battle, pick 1 of 3 dreamsigns to gain.",
+        "id": "7E8C86CC-788F-4648-BE84-E0935C40C31E",
+        "imageAlt": "Glowing red wedge-shaped gem or cheese-like shard with oval cutouts.",
+        "imageName": "red_cheese.png",
         "isBane": false,
-        "name": "Skull Pendant"
+        "name": "Red Cheese"
       }
     ],
-    "completionLevel": 0,
+    "completionLevel": 1,
     "atlas": {
+      "layers": [
+        [
+          "dreamscape-1"
+        ],
+        [
+          "dreamscape-2",
+          "dreamscape-3"
+        ],
+        [
+          "dreamscape-4",
+          "dreamscape-5",
+          "dreamscape-6"
+        ],
+        [
+          "dreamscape-7",
+          "dreamscape-8",
+          "dreamscape-9",
+          "dreamscape-10"
+        ],
+        [
+          "dreamscape-11",
+          "dreamscape-12",
+          "dreamscape-13"
+        ],
+        [
+          "dreamscape-14",
+          "dreamscape-15",
+          "dreamscape-16",
+          "dreamscape-17"
+        ],
+        [
+          "dreamscape-18"
+        ]
+      ],
       "nodes": {
         "dreamscape-1": {
-          "biomeColor": "#34d399",
-          "biomeName": "Hall of Echoes",
+          "biomeColor": "#2dd4bf",
+          "biomeName": "Firstlight Meadow",
+          "dreamscapeId": "firstlight_meadow",
+          "forwardIds": [
+            "dreamscape-2",
+            "dreamscape-3"
+          ],
           "id": "dreamscape-1",
+          "indexInLayer": 0,
+          "layer": 0,
           "position": {
             "x": 0,
             "y": 0
@@ -636,95 +699,664 @@
               "id": "site-3",
               "isEnhanced": false,
               "isVisited": true,
-              "type": "DreamsignDraft"
+              "type": "DreamsignRevelation"
             },
             {
               "id": "site-4",
               "isEnhanced": false,
               "isVisited": true,
-              "type": "DreamJourney"
-            },
-            {
-              "id": "site-5",
-              "isEnhanced": false,
-              "isVisited": true,
               "type": "Purge"
             },
             {
-              "id": "site-6",
+              "id": "site-5",
               "isEnhanced": false,
               "isVisited": false,
               "type": "Battle"
             }
           ],
-          "status": "available",
-          "enhancedSiteType": null
+          "state": "completed",
+          "enhancedSiteType": null,
+          "backwardIds": [],
+          "knownDreamsignId": null
         },
-        "dreamscape-2": {
-          "biomeColor": "#c084fc",
-          "biomeName": "Starfall Glade",
-          "id": "dreamscape-2",
+        "dreamscape-10": {
+          "backwardIds": [
+            "dreamscape-6",
+            "dreamscape-5"
+          ],
+          "biomeColor": "#2d2040",
+          "biomeName": "",
+          "forwardIds": [
+            "dreamscape-13"
+          ],
+          "id": "dreamscape-10",
+          "indexInLayer": 3,
+          "layer": 3,
           "position": {
-            "x": -158.03384135457944,
-            "y": -122.57775078176145
+            "x": 600,
+            "y": 210
+          },
+          "state": "unrevealed",
+          "sites": [],
+          "enhancedSiteType": null,
+          "dreamscapeId": null,
+          "knownDreamsignId": null
+        },
+        "dreamscape-11": {
+          "backwardIds": [
+            "dreamscape-7",
+            "dreamscape-8"
+          ],
+          "biomeColor": "#2d2040",
+          "biomeName": "",
+          "forwardIds": [
+            "dreamscape-14",
+            "dreamscape-15",
+            "dreamscape-16"
+          ],
+          "id": "dreamscape-11",
+          "indexInLayer": 0,
+          "layer": 4,
+          "position": {
+            "x": 800,
+            "y": -140
+          },
+          "state": "unrevealed",
+          "sites": [],
+          "enhancedSiteType": null,
+          "dreamscapeId": null,
+          "knownDreamsignId": null
+        },
+        "dreamscape-12": {
+          "backwardIds": [
+            "dreamscape-9",
+            "dreamscape-8"
+          ],
+          "biomeColor": "#2d2040",
+          "biomeName": "",
+          "forwardIds": [
+            "dreamscape-16"
+          ],
+          "id": "dreamscape-12",
+          "indexInLayer": 1,
+          "layer": 4,
+          "position": {
+            "x": 800,
+            "y": 0
+          },
+          "state": "unrevealed",
+          "sites": [],
+          "enhancedSiteType": null,
+          "dreamscapeId": null,
+          "knownDreamsignId": null
+        },
+        "dreamscape-13": {
+          "backwardIds": [
+            "dreamscape-10",
+            "dreamscape-9"
+          ],
+          "biomeColor": "#2d2040",
+          "biomeName": "",
+          "forwardIds": [
+            "dreamscape-17",
+            "dreamscape-16"
+          ],
+          "id": "dreamscape-13",
+          "indexInLayer": 2,
+          "layer": 4,
+          "position": {
+            "x": 800,
+            "y": 140
+          },
+          "state": "unrevealed",
+          "sites": [],
+          "enhancedSiteType": null,
+          "dreamscapeId": null,
+          "knownDreamsignId": null
+        },
+        "dreamscape-14": {
+          "backwardIds": [
+            "dreamscape-11"
+          ],
+          "biomeColor": "#2d2040",
+          "biomeName": "",
+          "forwardIds": [
+            "dreamscape-18"
+          ],
+          "id": "dreamscape-14",
+          "indexInLayer": 0,
+          "layer": 5,
+          "position": {
+            "x": 1000,
+            "y": -210
+          },
+          "state": "unrevealed",
+          "sites": [],
+          "enhancedSiteType": null,
+          "dreamscapeId": null,
+          "knownDreamsignId": null
+        },
+        "dreamscape-15": {
+          "backwardIds": [
+            "dreamscape-11"
+          ],
+          "biomeColor": "#2d2040",
+          "biomeName": "",
+          "forwardIds": [
+            "dreamscape-18"
+          ],
+          "id": "dreamscape-15",
+          "indexInLayer": 1,
+          "layer": 5,
+          "position": {
+            "x": 1000,
+            "y": -70
+          },
+          "state": "unrevealed",
+          "sites": [],
+          "enhancedSiteType": null,
+          "dreamscapeId": null,
+          "knownDreamsignId": null
+        },
+        "dreamscape-16": {
+          "backwardIds": [
+            "dreamscape-12",
+            "dreamscape-13",
+            "dreamscape-11"
+          ],
+          "biomeColor": "#f472b6",
+          "biomeName": "Wilderveil",
+          "dreamscapeId": "wilderveil",
+          "enhancedSiteType": "DreamAugury",
+          "forwardIds": [
+            "dreamscape-18"
+          ],
+          "id": "dreamscape-16",
+          "indexInLayer": 2,
+          "layer": 5,
+          "position": {
+            "x": 1000,
+            "y": 70
           },
           "sites": [
             {
-              "data": {
-                "draftPickCount": 5
-              },
+              "id": "site-12",
+              "isEnhanced": true,
+              "isVisited": false,
+              "type": "DreamAugury"
+            },
+            {
+              "id": "site-13",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "TemporalFork"
+            },
+            {
+              "id": "site-14",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Battle"
+            }
+          ],
+          "state": "revealedLocked",
+          "knownDreamsignId": null
+        },
+        "dreamscape-17": {
+          "backwardIds": [
+            "dreamscape-13"
+          ],
+          "biomeColor": "#2d2040",
+          "biomeName": "",
+          "forwardIds": [
+            "dreamscape-18"
+          ],
+          "id": "dreamscape-17",
+          "indexInLayer": 3,
+          "layer": 5,
+          "position": {
+            "x": 1000,
+            "y": 210
+          },
+          "state": "unrevealed",
+          "sites": [],
+          "enhancedSiteType": null,
+          "dreamscapeId": null,
+          "knownDreamsignId": null
+        },
+        "dreamscape-18": {
+          "backwardIds": [
+            "dreamscape-14",
+            "dreamscape-15",
+            "dreamscape-16",
+            "dreamscape-17"
+          ],
+          "biomeColor": "#fb923c",
+          "biomeName": "The Rust Expanse",
+          "dreamscapeId": "rust_expanse",
+          "enhancedSiteType": "TemptingOffer",
+          "id": "dreamscape-18",
+          "indexInLayer": 0,
+          "layer": 6,
+          "position": {
+            "x": 1200,
+            "y": 0
+          },
+          "sites": [
+            {
+              "id": "site-6",
+              "isEnhanced": true,
+              "isVisited": false,
+              "type": "TemptingOffer"
+            },
+            {
               "id": "site-7",
               "isEnhanced": false,
               "isVisited": false,
-              "type": "Draft"
+              "type": "DreamsignRevelation"
             },
             {
-              "data": {
-                "draftPickCount": 5
-              },
               "id": "site-8",
               "isEnhanced": false,
               "isVisited": false,
-              "type": "Draft"
+              "type": "Shop"
             },
             {
               "id": "site-9",
               "isEnhanced": false,
               "isVisited": false,
-              "type": "DreamsignDraft"
+              "type": "TemporalFork"
             },
             {
               "id": "site-10",
               "isEnhanced": false,
               "isVisited": false,
-              "type": "DreamJourney"
+              "type": "Transfiguration"
             },
             {
               "id": "site-11",
               "isEnhanced": false,
               "isVisited": false,
+              "type": "Battle"
+            }
+          ],
+          "state": "revealedLocked",
+          "forwardIds": [],
+          "knownDreamsignId": null
+        },
+        "dreamscape-2": {
+          "backwardIds": [
+            "dreamscape-1"
+          ],
+          "biomeColor": "#38bdf8",
+          "biomeName": "Tumbleleaf Village",
+          "dreamscapeId": "tumbleleaf_village",
+          "enhancedSiteType": "Shop",
+          "forwardIds": [
+            "dreamscape-4",
+            "dreamscape-5"
+          ],
+          "id": "dreamscape-2",
+          "indexInLayer": 0,
+          "layer": 1,
+          "position": {
+            "x": 200,
+            "y": -70
+          },
+          "sites": [
+            {
+              "id": "site-15",
+              "isEnhanced": true,
+              "isVisited": false,
+              "type": "Shop"
+            },
+            {
+              "data": {
+                "draftPickCount": 5
+              },
+              "id": "site-16",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Draft"
+            },
+            {
+              "data": {
+                "draftPickCount": 5
+              },
+              "id": "site-17",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Draft"
+            },
+            {
+              "id": "site-18",
+              "isEnhanced": false,
+              "isVisited": false,
               "type": "Purge"
             },
             {
-              "id": "site-12",
+              "id": "site-19",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Duplication"
+            },
+            {
+              "id": "site-20",
               "isEnhanced": false,
               "isVisited": false,
               "type": "Battle"
             }
           ],
-          "status": "unavailable",
-          "enhancedSiteType": null
+          "state": "available",
+          "knownDreamsignId": null
+        },
+        "dreamscape-3": {
+          "backwardIds": [
+            "dreamscape-1"
+          ],
+          "biomeColor": "#38bdf8",
+          "biomeName": "Grid City",
+          "dreamscapeId": "grid_city",
+          "enhancedSiteType": "TemporalFork",
+          "forwardIds": [
+            "dreamscape-6",
+            "dreamscape-5"
+          ],
+          "id": "dreamscape-3",
+          "indexInLayer": 1,
+          "layer": 1,
+          "position": {
+            "x": 200,
+            "y": 70
+          },
+          "sites": [
+            {
+              "id": "site-21",
+              "isEnhanced": true,
+              "isVisited": false,
+              "type": "TemporalFork"
+            },
+            {
+              "data": {
+                "draftPickCount": 5
+              },
+              "id": "site-22",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Draft"
+            },
+            {
+              "data": {
+                "draftPickCount": 5
+              },
+              "id": "site-23",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Draft"
+            },
+            {
+              "id": "site-24",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Purge"
+            },
+            {
+              "id": "site-25",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Battle"
+            }
+          ],
+          "state": "available",
+          "knownDreamsignId": null
+        },
+        "dreamscape-4": {
+          "backwardIds": [
+            "dreamscape-2"
+          ],
+          "biomeColor": "#34d399",
+          "biomeName": "Hope's End",
+          "dreamscapeId": "hopes_end",
+          "enhancedSiteType": "Duplication",
+          "forwardIds": [
+            "dreamscape-7",
+            "dreamscape-8"
+          ],
+          "id": "dreamscape-4",
+          "indexInLayer": 0,
+          "layer": 2,
+          "position": {
+            "x": 400,
+            "y": -140
+          },
+          "sites": [
+            {
+              "id": "site-26",
+              "isEnhanced": true,
+              "isVisited": false,
+              "type": "Duplication"
+            },
+            {
+              "data": {
+                "draftPickCount": 5
+              },
+              "id": "site-27",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Draft"
+            },
+            {
+              "id": "site-28",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Purge"
+            },
+            {
+              "id": "site-29",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Battle"
+            }
+          ],
+          "state": "revealedLocked",
+          "knownDreamsignId": null
+        },
+        "dreamscape-5": {
+          "backwardIds": [
+            "dreamscape-2",
+            "dreamscape-3"
+          ],
+          "biomeColor": "#f472b6",
+          "biomeName": "Tsukiren",
+          "dreamscapeId": "tsukiren",
+          "enhancedSiteType": "Purge",
+          "forwardIds": [
+            "dreamscape-9",
+            "dreamscape-10",
+            "dreamscape-8"
+          ],
+          "id": "dreamscape-5",
+          "indexInLayer": 1,
+          "layer": 2,
+          "position": {
+            "x": 400,
+            "y": 0
+          },
+          "sites": [
+            {
+              "id": "site-30",
+              "isEnhanced": true,
+              "isVisited": false,
+              "type": "Purge"
+            },
+            {
+              "data": {
+                "draftPickCount": 5
+              },
+              "id": "site-31",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Draft"
+            },
+            {
+              "id": "site-32",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Shop"
+            },
+            {
+              "id": "site-33",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "TemptingOffer"
+            },
+            {
+              "id": "site-34",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Battle"
+            }
+          ],
+          "state": "revealedLocked",
+          "knownDreamsignId": null
+        },
+        "dreamscape-6": {
+          "backwardIds": [
+            "dreamscape-3"
+          ],
+          "biomeColor": "#c084fc",
+          "biomeName": "Winterwake Fjords",
+          "dreamscapeId": "winterwake_fjords",
+          "enhancedSiteType": "DreamsignRevelation",
+          "forwardIds": [
+            "dreamscape-10"
+          ],
+          "id": "dreamscape-6",
+          "indexInLayer": 2,
+          "layer": 2,
+          "position": {
+            "x": 400,
+            "y": 140
+          },
+          "sites": [
+            {
+              "id": "site-35",
+              "isEnhanced": true,
+              "isVisited": false,
+              "type": "DreamsignRevelation"
+            },
+            {
+              "data": {
+                "draftPickCount": 5
+              },
+              "id": "site-36",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Draft"
+            },
+            {
+              "id": "site-37",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Purge"
+            },
+            {
+              "id": "site-38",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Duplication"
+            },
+            {
+              "id": "site-39",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "TemptingOffer"
+            },
+            {
+              "id": "site-40",
+              "isEnhanced": false,
+              "isVisited": false,
+              "type": "Battle"
+            }
+          ],
+          "state": "revealedLocked",
+          "knownDreamsignId": null
+        },
+        "dreamscape-7": {
+          "backwardIds": [
+            "dreamscape-4"
+          ],
+          "biomeColor": "#2d2040",
+          "biomeName": "",
+          "forwardIds": [
+            "dreamscape-11"
+          ],
+          "id": "dreamscape-7",
+          "indexInLayer": 0,
+          "layer": 3,
+          "position": {
+            "x": 600,
+            "y": -210
+          },
+          "state": "unrevealed",
+          "sites": [],
+          "enhancedSiteType": null,
+          "dreamscapeId": null,
+          "knownDreamsignId": null
+        },
+        "dreamscape-8": {
+          "backwardIds": [
+            "dreamscape-4",
+            "dreamscape-5"
+          ],
+          "biomeColor": "#2d2040",
+          "biomeName": "",
+          "forwardIds": [
+            "dreamscape-11",
+            "dreamscape-12"
+          ],
+          "id": "dreamscape-8",
+          "indexInLayer": 1,
+          "layer": 3,
+          "position": {
+            "x": 600,
+            "y": -70
+          },
+          "state": "unrevealed",
+          "sites": [],
+          "enhancedSiteType": null,
+          "dreamscapeId": null,
+          "knownDreamsignId": null
+        },
+        "dreamscape-9": {
+          "backwardIds": [
+            "dreamscape-5"
+          ],
+          "biomeColor": "#2d2040",
+          "biomeName": "",
+          "forwardIds": [
+            "dreamscape-12",
+            "dreamscape-13"
+          ],
+          "id": "dreamscape-9",
+          "indexInLayer": 2,
+          "layer": 3,
+          "position": {
+            "x": 600,
+            "y": 70
+          },
+          "state": "unrevealed",
+          "sites": [],
+          "enhancedSiteType": null,
+          "dreamscapeId": null,
+          "knownDreamsignId": null
         }
       },
-      "edges": [
-        [
-          "dreamscape-1",
-          "dreamscape-2"
-        ]
-      ],
-      "startingNodeId": "dreamscape-1"
+      "startingNodeId": "dreamscape-1",
+      "bossNodeId": "dreamscape-18",
+      "currentNodeId": "dreamscape-1",
+      "knownDreamsignCarrierIds": []
     },
-    "currentDreamscape": "dreamscape-1",
+    "currentDreamscape": null,
     "visitedSites": [
       "site-1",
       "site-2",
@@ -738,28 +1370,28 @@
         "kind": "dreamsignOffer",
         "offeredDreamsigns": [
           {
-            "effectDescription": "You may play ❖ and ❖❖ events for 1●.",
-            "id": "D2A916C1-321A-4AE3-9A50-0B7F13C5EFF6",
-            "imageAlt": "Shiny red apple with green segmented stem and curled leaf.",
-            "imageName": "apple.png",
+            "effectDescription": "When you transfigure an event, add a copy of it to your deck.",
+            "id": "0C52E8C3-A792-4EEA-955F-A0C61463C066",
+            "imageAlt": "red spellbook with turquoise gem, gold corners, and green ribbon",
+            "imageName": "book.png",
             "isBane": false,
-            "name": "Worm Apple"
+            "name": "Spell Tome"
           },
           {
-            "effectDescription": "At each transfiguration site you visit, transfigure 2 cards instead of 1.",
-            "id": "D9F0F7FF-63C0-4247-8831-054D7FED931D",
-            "imageAlt": "brown strapped book with leaf corners and parchment peeking out",
-            "imageName": "book_8.png",
+            "effectDescription": "After you buy an item at a shop site, replace it immediately with another item for purchase.",
+            "id": "883F88FB-AC50-419A-8382-C22EDEE29755",
+            "imageAlt": "curved black staff with copper wrappings, feathers, and dark hanging charms",
+            "imageName": "magic_stick_6.png",
             "isBane": false,
-            "name": "Leaf Ledger"
+            "name": "Charm Staff"
           },
           {
-            "effectDescription": "Characters with ▸Materialized abilities cost you 1● less.",
-            "id": "0D668E16-1729-4289-AD1D-0FB3C1374EE9",
-            "imageAlt": "Skull pendant with dangling chains, beige bone and dark eye sockets.",
-            "imageName": "amulet_8.png",
+            "effectDescription": "After each battle, pick 1 of 3 dreamsigns to gain.",
+            "id": "7E8C86CC-788F-4648-BE84-E0935C40C31E",
+            "imageAlt": "Glowing red wedge-shaped gem or cheese-like shard with oval cutouts.",
+            "imageName": "red_cheese.png",
             "isBane": false,
-            "name": "Skull Pendant"
+            "name": "Red Cheese"
           }
         ],
         "remainingDreamsignPool": [
@@ -774,6 +1406,7 @@
           "12EC9625-CBFB-4056-9C3E-98ED8C8BEA70",
           "95F0F483-9A76-47C6-A839-01A1D9122945",
           "553D2317-32F9-47BC-BAE0-5018CA26D56A",
+          "0D668E16-1729-4289-AD1D-0FB3C1374EE9",
           "EDE46F71-AA77-4B12-9824-0D3706DA6A22",
           "3380C657-79CA-400B-ABB7-4B56FBB92AF4",
           "2EBF0BBB-440C-4DBA-8E48-228DAADC0A1E",
@@ -823,6 +1456,7 @@
           "2059AA74-8897-4C76-833F-DDEF7D34346C",
           "8340CCE5-8E27-4940-AB79-34E09FDBCAE1",
           "2CBCBEBB-FB79-4833-A770-2216873147C4",
+          "D2A916C1-321A-4AE3-9A50-0B7F13C5EFF6",
           "10F27800-99F8-4504-9D94-26BCB3C32788",
           "946DBB36-0A90-495A-BF0F-17351C93D74B",
           "89C83D7E-5617-49B4-B6CD-214680FE0627",
@@ -879,14 +1513,13 @@
           "8408B8C2-5A3F-40DD-BAC4-98F2736C4176",
           "10BD78DE-87EC-44E4-9B16-E755DA2A9717",
           "8A2C7B32-26EA-40E2-845A-689DA5673B4D",
-          "883F88FB-AC50-419A-8382-C22EDEE29755",
           "C2AF5460-E61F-409B-9B86-6AC7DB34D748",
           "E7D23BF7-4D60-4B43-94C4-14A06C0F9116",
           "4F21A4AB-E4AA-4718-8563-9AFB72D140C0",
-          "0C52E8C3-A792-4EEA-955F-A0C61463C066",
           "8B69DE8A-835D-4F0C-AC25-DC0E700E2983",
           "AB1DA9D3-376A-460A-A9DC-4737E59E558B",
           "34CE9428-DDA9-4EFA-BACD-5EC2698561C1",
+          "D9F0F7FF-63C0-4247-8831-054D7FED931D",
           "BE59C0BA-6286-49E3-A88D-86B0977CC30A",
           "AF92858A-0C50-4ABF-A622-04C024CA32B3",
           "488BF436-C6D5-4E38-8A19-E50041F53766",
@@ -905,7 +1538,6 @@
           "025CE7F1-066B-480A-8A2F-364379890ABD",
           "452B7CD6-9DC3-48A8-B9AA-412CA6DD5F19",
           "DA7E4B45-9106-4116-BC1C-3AEC8885396B",
-          "7E8C86CC-788F-4648-BE84-E0935C40C31E",
           "CD81A49D-DF58-4E0E-B1B2-33A82B386052",
           "58472AD2-88B1-4DC7-A161-C6DEA7D8C43D",
           "3C0CED1A-7A2A-4F18-9AB4-5D6055D1DC59",
@@ -915,10 +1547,6 @@
           "1CD25B9A-B176-4C51-8349-BB4DF35CBF05",
           "B8590328-CA72-4869-A795-C7F4B6802BED"
         ]
-      },
-      "site-4": {
-        "completed": true,
-        "kind": "dreamJourney"
       }
     },
     "draftState": {
@@ -927,214 +1555,273 @@
       "pickNumber": 11,
       "sitePicksCompleted": 5,
       "siteShownCardNumbers": [
-        288,
-        13,
-        37,
-        15,
-        477,
-        503,
-        52,
-        61,
-        482,
-        86,
-        411,
-        244,
+        473,
+        157,
+        91,
+        229,
+        504,
+        87,
+        501,
+        116,
+        96,
+        167,
+        212,
+        43,
+        137,
+        305,
+        334,
         185,
-        85,
-        138,
-        272,
-        380,
-        502,
-        287,
-        54
+        246,
+        266,
+        503,
+        288
       ],
       "mode": "pool",
       "draftPoolCopiesByCard": {
-        "4": 2,
-        "13": 2,
-        "15": 2,
-        "21": 1,
-        "29": 1,
-        "37": 2,
-        "39": 1,
-        "42": 1,
-        "48": 2,
-        "49": 2,
-        "50": 2,
-        "51": 2,
-        "52": 1,
-        "54": 2,
-        "60": 1,
-        "61": 2,
-        "66": 1,
-        "70": 2,
-        "85": 2,
-        "86": 2,
-        "98": 2,
-        "99": 1,
-        "104": 1,
-        "106": 2,
-        "110": 1,
-        "113": 2,
-        "130": 1,
-        "134": 1,
-        "138": 1,
-        "141": 2,
-        "143": 1,
-        "147": 1,
-        "148": 2,
-        "151": 1,
-        "153": 1,
-        "158": 2,
-        "159": 2,
-        "160": 2,
-        "167": 1,
-        "180": 2,
-        "181": 2,
-        "184": 1,
-        "185": 2,
-        "190": 1,
-        "192": 2,
-        "205": 1,
-        "209": 2,
-        "210": 1,
-        "226": 1,
-        "229": 2,
-        "230": 2,
-        "232": 1,
-        "244": 2,
-        "248": 2,
-        "249": 1,
-        "262": 1,
-        "265": 2,
-        "269": 2,
-        "270": 1,
-        "272": 2,
-        "274": 1,
-        "287": 2,
-        "288": 1,
-        "293": 2,
-        "298": 1,
-        "303": 2,
-        "309": 1,
-        "325": 2,
-        "340": 1,
-        "349": 2,
-        "380": 1,
-        "382": 2,
-        "383": 2,
-        "390": 2,
-        "394": 1,
-        "409": 2,
-        "411": 2,
-        "415": 2,
-        "417": 2,
-        "424": 1,
-        "426": 1,
-        "430": 2,
-        "446": 2,
-        "450": 1,
-        "458": 1,
-        "459": 2,
-        "461": 2,
-        "466": 2,
-        "467": 2,
-        "470": 1,
-        "477": 1,
-        "479": 1,
-        "482": 1,
-        "487": 2,
-        "488": 1,
-        "502": 2,
-        "503": 1
-      },
-      "remainingCopiesByCard": {
-        "4": 1,
-        "13": 1,
-        "15": 1,
-        "21": 1,
-        "29": 1,
-        "37": 1,
-        "39": 1,
-        "48": 2,
-        "49": 1,
-        "50": 2,
-        "51": 2,
-        "54": 1,
+        "3": 2,
+        "7": 1,
+        "11": 1,
+        "12": 1,
+        "20": 1,
+        "26": 1,
+        "27": 1,
+        "28": 1,
+        "34": 1,
+        "40": 1,
+        "41": 1,
+        "43": 2,
+        "50": 1,
         "60": 1,
         "61": 1,
-        "70": 2,
-        "85": 1,
-        "86": 1,
-        "98": 2,
-        "99": 1,
-        "104": 1,
-        "106": 1,
-        "110": 1,
-        "113": 1,
-        "130": 1,
+        "65": 1,
+        "67": 1,
+        "68": 1,
+        "69": 1,
+        "70": 1,
+        "71": 2,
+        "75": 1,
+        "83": 1,
+        "84": 1,
+        "87": 2,
+        "91": 1,
+        "93": 1,
+        "96": 1,
+        "97": 1,
+        "100": 2,
+        "103": 1,
+        "116": 1,
+        "118": 1,
+        "127": 1,
+        "132": 1,
         "134": 1,
-        "141": 2,
-        "143": 1,
-        "147": 1,
-        "148": 1,
-        "151": 1,
+        "135": 1,
+        "137": 1,
+        "138": 1,
+        "152": 1,
         "153": 1,
-        "158": 2,
-        "159": 2,
-        "160": 2,
+        "155": 1,
+        "156": 1,
+        "157": 2,
+        "161": 1,
+        "162": 2,
         "167": 1,
-        "180": 1,
-        "181": 2,
+        "173": 1,
+        "174": 2,
+        "177": 1,
+        "182": 2,
+        "183": 1,
         "184": 1,
         "185": 1,
-        "190": 1,
-        "192": 2,
-        "209": 2,
-        "210": 1,
-        "229": 2,
-        "230": 2,
-        "232": 1,
-        "244": 1,
-        "248": 2,
-        "249": 1,
-        "265": 2,
-        "269": 2,
-        "270": 1,
-        "274": 1,
-        "287": 1,
-        "293": 1,
-        "298": 1,
-        "303": 2,
+        "189": 1,
+        "192": 1,
+        "196": 1,
+        "197": 1,
+        "203": 1,
+        "205": 1,
+        "206": 1,
+        "212": 1,
+        "213": 1,
+        "215": 2,
+        "222": 1,
+        "225": 1,
+        "226": 1,
+        "229": 1,
+        "236": 1,
+        "240": 1,
+        "241": 1,
+        "243": 1,
+        "246": 1,
+        "247": 1,
+        "250": 1,
+        "251": 1,
+        "252": 1,
+        "255": 1,
+        "261": 1,
+        "266": 1,
+        "267": 1,
+        "273": 1,
+        "276": 1,
+        "279": 1,
+        "280": 1,
+        "284": 1,
+        "285": 1,
+        "288": 2,
+        "305": 1,
+        "307": 1,
         "309": 1,
-        "325": 2,
-        "340": 1,
-        "349": 2,
-        "382": 2,
-        "383": 1,
-        "390": 1,
-        "394": 1,
-        "409": 2,
-        "411": 1,
-        "415": 1,
-        "417": 2,
+        "319": 1,
+        "322": 1,
+        "323": 1,
+        "334": 1,
+        "335": 1,
+        "341": 1,
+        "346": 1,
+        "347": 1,
+        "356": 1,
+        "357": 2,
+        "359": 2,
+        "380": 1,
+        "384": 1,
+        "385": 1,
+        "393": 1,
+        "401": 1,
+        "412": 1,
+        "416": 1,
+        "418": 1,
+        "423": 1,
         "424": 1,
-        "426": 1,
-        "430": 2,
-        "446": 1,
+        "436": 1,
+        "437": 1,
+        "439": 1,
+        "440": 2,
+        "442": 1,
+        "447": 1,
+        "449": 1,
         "450": 1,
+        "453": 1,
         "458": 1,
-        "459": 2,
-        "461": 2,
-        "466": 1,
-        "467": 2,
-        "479": 1,
-        "487": 2,
-        "488": 1
+        "461": 1,
+        "468": 1,
+        "470": 1,
+        "473": 2,
+        "477": 1,
+        "482": 1,
+        "483": 1,
+        "490": 1,
+        "491": 1,
+        "494": 1,
+        "501": 1,
+        "503": 1,
+        "504": 1
+      },
+      "remainingCopiesByCard": {
+        "3": 2,
+        "7": 1,
+        "11": 1,
+        "20": 1,
+        "26": 1,
+        "27": 1,
+        "28": 1,
+        "34": 1,
+        "40": 1,
+        "41": 1,
+        "43": 1,
+        "50": 1,
+        "60": 1,
+        "61": 1,
+        "65": 1,
+        "69": 1,
+        "71": 2,
+        "75": 1,
+        "83": 1,
+        "84": 1,
+        "87": 1,
+        "93": 1,
+        "97": 1,
+        "100": 1,
+        "103": 1,
+        "118": 1,
+        "127": 1,
+        "132": 1,
+        "134": 1,
+        "135": 1,
+        "138": 1,
+        "153": 1,
+        "155": 1,
+        "156": 1,
+        "157": 1,
+        "161": 1,
+        "162": 2,
+        "173": 1,
+        "174": 1,
+        "177": 1,
+        "182": 2,
+        "183": 1,
+        "184": 1,
+        "189": 1,
+        "192": 1,
+        "196": 1,
+        "197": 1,
+        "203": 1,
+        "205": 1,
+        "206": 1,
+        "215": 2,
+        "222": 1,
+        "225": 1,
+        "226": 1,
+        "236": 1,
+        "240": 1,
+        "241": 1,
+        "243": 1,
+        "247": 1,
+        "250": 1,
+        "251": 1,
+        "252": 1,
+        "261": 1,
+        "267": 1,
+        "273": 1,
+        "276": 1,
+        "279": 1,
+        "280": 1,
+        "284": 1,
+        "288": 1,
+        "307": 1,
+        "319": 1,
+        "322": 1,
+        "323": 1,
+        "335": 1,
+        "341": 1,
+        "346": 1,
+        "347": 1,
+        "356": 1,
+        "357": 2,
+        "359": 1,
+        "380": 1,
+        "385": 1,
+        "393": 1,
+        "412": 1,
+        "418": 1,
+        "423": 1,
+        "424": 1,
+        "436": 1,
+        "437": 1,
+        "440": 2,
+        "442": 1,
+        "447": 1,
+        "449": 1,
+        "450": 1,
+        "453": 1,
+        "458": 1,
+        "468": 1,
+        "473": 1,
+        "477": 1,
+        "483": 1,
+        "491": 1,
+        "494": 1
       }
     },
     "screen": {
-      "type": "dreamscape"
+      "type": "atlas"
     },
     "activeSiteId": null,
     "failureSummary": null,
@@ -1142,8 +1829,7 @@
     "battleModifiers": [],
     "shopModifiers": {
       "essenceDiscountPercent": 0,
-      "freeRerolls": 0,
-      "upcomingOmenDiscounts": 0
+      "freeRerolls": 0
     },
     "dreamscapeModifiers": []
   }
