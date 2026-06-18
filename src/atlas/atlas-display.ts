@@ -42,34 +42,13 @@ export const ROUND_FRAME_URL = "/atlas/Round_frame_main.png";
 export const AFFILIATION_ROW_ICON_CLASS = "bxf bx-rectangle-vertical";
 
 /**
- * Atlas-specific site iconography, per the Dream Atlas handoff. The game's icon
- * system is Boxicons 3, filled variant (`bxf bx-*`); Transfiguration is the lone
- * Font Awesome exception because Boxicons has no hammer glyph. Only the site
- * types that surface on the Atlas (the ten guide signature sites) are listed;
- * any other type falls back to the shared {@link siteTypeIcon} table.
- */
-const ATLAS_SITE_ICON_OVERRIDES: Partial<Record<SiteType, string>> = {
-  Shop: "bxf bx-store-alt-2",
-  SpecialtyShop: "bxf bx-store-alt-2",
-  DreamsignMarket: "bxf bx-pyramid",
-  DreamsignRevelation: "bxf bx-meteor",
-  Transfiguration: "fa-solid fa-hammer",
-  Duplication: "bxf bx-copy",
-  Purge: "bxf bx-hot",
-  DreamAugury: "bxf bx-eye",
-  TemptingOffer: "bxf bx-law",
-  Gamble: "bxf bx-coin",
-  TemporalFork: "bxf bx-clock",
-};
-
-/**
- * Icon class for a site as shown on the Dream Atlas. Prefers the handoff's
- * Boxicons-3 filled mapping and falls back to the shared site-type icon for
- * types that never appear as a node's signature site (e.g. Battle, Draft,
- * Essence).
+ * Icon class for a site as shown on the Dream Atlas. The game's icon system is
+ * Boxicons 3, filled variant (`bxf bx-*`); Transfiguration is the lone Font
+ * Awesome exception because Boxicons has no hammer glyph. The Atlas and the
+ * in-dreamscape site cards share the single {@link siteTypeIcon} mapping.
  */
 export function atlasSiteIcon(siteType: SiteType): string {
-  return ATLAS_SITE_ICON_OVERRIDES[siteType] ?? siteTypeIcon(siteType);
+  return siteTypeIcon(siteType);
 }
 
 /** Font Awesome flag glyph the starting dreamscape shows as its site mark. */

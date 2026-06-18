@@ -1192,113 +1192,113 @@ const SITE_TYPE_META: Record<
   }
 > = {
   Battle: {
-    icon: "bx bx-sword",
+    icon: "bxf bx-sword-alt",
     name: "Battle",
     description: "Fight the dreamscape's keeper to clear it.",
     enhancedDescription: "Fight the dreamscape's keeper to clear it.",
   },
   Draft: {
-    icon: "bx bx-rectangle-vertical",
+    icon: "bxf bx-rectangle-vertical",
     name: "Draft",
     description: "Pick a card from a curated offer to add to your deck.",
     enhancedDescription: "Pick a card from a curated offer to add to your deck.",
   },
   Shop: {
-    icon: "bx bx-store",
+    icon: "bxf bx-store-alt-2",
     name: "Shop",
     description: "Spend essence to buy cards, dreamsigns, or rerolls.",
     enhancedDescription: "Enhanced shop: rerolling the inventory is free.",
   },
   SpecialtyShop: {
-    icon: "bx bx-store-alt-2",
+    icon: "bxf bx-store",
     name: "Specialty Shop",
     description: "A rare shop with a focused, themed inventory.",
     enhancedDescription: "A rare shop with a focused, themed inventory.",
   },
   DreamsignOffering: {
-    icon: "bx bx-sparkles",
+    icon: "bxf bx-sparkles",
     name: "Dreamsign Offering",
     description: "Accept a dreamsign passive, or refuse for essence.",
     enhancedDescription:
       "Enhanced dreamsign site: a richer dreamsign draft is offered.",
   },
   DreamsignDraft: {
-    icon: "bx bx-sparkles-alt",
+    icon: "bxf bx-sparkles-alt",
     name: "Dreamsign Draft",
     description: "Choose one dreamsign from several offered options.",
     enhancedDescription:
       "Enhanced dreamsign site: a richer dreamsign draft is offered.",
   },
   Purge: {
-    icon: "bx bx-hot",
+    icon: "bxf bx-hot",
     name: "Purge",
     description: "Remove a card from your deck.",
     enhancedDescription:
       "Enhanced purge: every card removed this visit is 30% cheaper.",
   },
   Essence: {
-    icon: "bx bx-diamond",
+    icon: "bxf bx-diamond-alt",
     name: "Essence",
     description: "Collect a pile of essence.",
     enhancedDescription: "Enhanced essence: the essence granted is doubled.",
   },
   Transfiguration: {
-    icon: "bx bx-science",
+    icon: "fa-solid fa-hammer",
     name: "Transfiguration",
     description: "Badge a card with a colored transfiguration.",
     enhancedDescription:
       "Enhanced transfiguration: you choose which card is transfigured.",
   },
   Duplication: {
-    icon: "bx bx-copy",
+    icon: "bxf bx-copy",
     name: "Duplication",
     description: "Make a copy of a card already in your deck.",
     enhancedDescription:
       "Enhanced duplication: you choose which card is duplicated.",
   },
   Reward: {
-    icon: "bx bx-treasure-chest",
+    icon: "bxf bx-treasure-chest",
     name: "Reward",
     description: "Claim a card, dreamsign, or pile of essence.",
     enhancedDescription: "Claim a card, dreamsign, or pile of essence.",
   },
   DreamAugury: {
-    icon: "bx bx-eye",
+    icon: "bxf bx-eye",
     name: "Dream Augury",
     description: "Claim a reward foreseen by the dreamscape's seer.",
     enhancedDescription:
       "Enhanced augury: bigger rewards, curated to your deck.",
   },
   DreamsignMarket: {
-    icon: "bx bx-shopping-bag",
+    icon: "bxf bx-pyramid",
     name: "Dreamsign Market",
     description: "Buy a dreamsign from a rotating selection.",
     enhancedDescription:
       "Enhanced market: restock the dreamsign choices once for free.",
   },
   DreamsignRevelation: {
-    icon: "bx bx-bulb",
+    icon: "bxf bx-meteor",
     name: "Dreamsign Revelation",
     description: "Choose one dreamsign from several revealed options.",
     enhancedDescription:
       "Enhanced revelation: always a choice, with more options tailored to your deck.",
   },
   TemptingOffer: {
-    icon: "bx bx-bolt-circle",
+    icon: "bxf bx-law",
     name: "Tempting Offer",
     description: "Take a risky deal for an outsized payoff.",
     enhancedDescription:
       "Enhanced offer: choose between two competing offers.",
   },
   Gamble: {
-    icon: "bx bx-coins",
+    icon: "bxf bx-coin",
     name: "Gamble",
     description: "Wager essence on an uncertain reward.",
     enhancedDescription:
       "Enhanced gamble: no initial fee, with bigger payouts.",
   },
   TemporalFork: {
-    icon: "bx bx-hourglass",
+    icon: "bxf bx-clock",
     name: "Temporal Fork",
     description: "Defer a reward now to claim more of it later.",
     enhancedDescription:

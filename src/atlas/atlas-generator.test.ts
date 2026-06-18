@@ -1019,10 +1019,12 @@ describe("siteTypeDescription", () => {
 });
 
 describe("siteTypeIcon", () => {
-  it("returns a Boxicons class name (not an emoji) for every site type", () => {
+  it("returns an icon class (not an emoji) for every site type", () => {
+    // Site icons are Boxicons 3 filled (`bxf bx-*`); Transfiguration is the
+    // lone Font Awesome exception because Boxicons has no hammer glyph.
     for (const t of ALL_SITE_TYPES) {
       const icon = siteTypeIcon(t);
-      expect(icon).toMatch(/^bx bx-[a-z0-9-]+$/);
+      expect(icon).toMatch(/^(bxf? bx-[a-z0-9-]+|fa-solid fa-[a-z0-9-]+)$/);
     }
   });
 
