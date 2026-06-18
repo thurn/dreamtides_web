@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import type { DreamscapeNode } from "../types/quest";
 import { useQuest } from "../state/quest-context";
@@ -13,6 +13,12 @@ import {
 
 const NODE_RADIUS_REGULAR = 28;
 const NODE_RADIUS_STARTING = 34;
+
+/** Glyph shown for an unrevealed node whose contents are still unknown. */
+const UNREVEALED_ICON_CLASS = "bx bx-help-circle";
+
+/** Press duration (ms) that opens the preview on a touch long-press. */
+const LONG_PRESS_MS = 350;
 
 interface AtlasNodeProps {
   node: DreamscapeNode;
@@ -166,7 +172,7 @@ function NodeIcon({
 }
 
 /**
- * Preview content for a node's hover / long-press card: the guide who tends the
+ * Preview content for a node's preview card: the guide who tends the
  * dreamscape, its thematic affiliation, the guide's home specialty, and any
  * pre-revealed known dreamsign. Fields that cannot be resolved (the starter and
  * unrevealed nodes carry no guide; only some nodes carry a known dreamsign) are
@@ -188,20 +194,70 @@ export function AtlasNode({
   onNodeClick,
 }: AtlasNodeProps) {
   const { questContent } = useQuest();
+  // `isHovered` drives the preview card. Despite the name it is opened by mouse
+  // hover, touch long-press, and keyboard focus alike.
   const [isHovered, setIsHovered] = useState(false);
+  // Long-press timer for touch: a press that lasts {@link LONG_PRESS_MS} opens
+  // the preview. The ref tracks the pending timer so a pointer-up or pointer
+  // move can cancel it before it fires, and so a long-press that did open the
+  // preview can suppress the trailing click that would otherwise navigate.
+  const longPressTimer = useRef<number | null>(null);
+  const longPressFired = useRef(false);
 
   const radius = isStarting || isBoss ? NODE_RADIUS_STARTING : NODE_RADIUS_REGULAR;
   const isAvailable = node.state === "available";
   const isCompleted = node.state === "completed";
   const isUnrevealed = node.state === "unrevealed";
 
+  // A revealed node carries a resolvable preview (guide / affiliation / site /
+  // known dreamsign), so it is made interactive for touch and keyboard. An
+  // unrevealed node has nothing to preview and stays inert.
+  const hasPreview = !isUnrevealed;
+
   const visuals = nodeVisuals(node, isStarting);
 
   const handleClick = () => {
+    // A long-press already opened the preview on this gesture; do not also fire
+    // the navigation click that the browser synthesizes on pointer-up.
+    if (longPressFired.current) {
+      longPressFired.current = false;
+      return;
+    }
     if (isAvailable) {
       onNodeClick(node.id);
     }
   };
+
+  const cancelLongPress = () => {
+    if (longPressTimer.current !== null) {
+      window.clearTimeout(longPressTimer.current);
+      longPressTimer.current = null;
+    }
+  };
+
+  // Touch long-press opens the preview without triggering navigation. Mouse and
+  // pen pointers keep their hover behaviour and are ignored here.
+  const handlePointerDown = (event: React.PointerEvent) => {
+    if (!hasPreview || event.pointerType !== "touch") {
+      return;
+    }
+    longPressFired.current = false;
+    cancelLongPress();
+    longPressTimer.current = window.setTimeout(() => {
+      longPressFired.current = true;
+      setIsHovered(true);
+      longPressTimer.current = null;
+    }, LONG_PRESS_MS);
+  };
+
+  // Any pointer release or movement before the timer fires cancels the
+  // long-press so a quick tap still navigates an available node.
+  const handlePointerUp = () => {
+    cancelLongPress();
+  };
+
+  // Clear a pending timer if the node unmounts mid-press.
+  useEffect(() => cancelLongPress, []);
 
   // The single site revealed inside the dreamscape circle. The starting
   // dreamscape instead shows its own flag glyph, because it is special: it is
@@ -307,7 +363,26 @@ export function AtlasNode({
       onMouseLeave={() => {
         setIsHovered(false);
       }}
-      role={isAvailable ? "button" : undefined}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
+      onPointerMove={handlePointerUp}
+      onPointerCancel={handlePointerUp}
+      onFocus={
+        hasPreview
+          ? () => {
+              setIsHovered(true);
+            }
+          : undefined
+      }
+      onBlur={
+        hasPreview
+          ? () => {
+              setIsHovered(false);
+            }
+          : undefined
+      }
+      tabIndex={hasPreview ? 0 : undefined}
+      role={isAvailable ? "button" : hasPreview ? "img" : undefined}
       aria-label={ariaLabel}
       data-node-state={node.state}
       data-node-boss={isBoss ? "true" : undefined}
@@ -480,10 +555,12 @@ export function AtlasNode({
         </g>
       )}
 
-      {/* Hover / focus preview describing this dreamscape: its enhanced property,
-          resident guide, affiliation, home specialty, and any known dreamsign.
-          Shown for every node, including ones the player cannot reach yet, so
-          they can plan a route. Sized to its content via auto height. */}
+      {/* Preview describing this dreamscape: its enhanced property, resident
+          guide, affiliation, home specialty, and any known dreamsign. Opened by
+          mouse hover, by a touch long-press, and by keyboard focus (the node is
+          focusable while it has a preview to show). Shown for every revealed
+          node, including ones the player cannot reach yet, so they can plan a
+          route. Sized to its content via auto height. */}
       {isHovered && (
         <foreignObject
           x={-tooltipWidth / 2}
@@ -528,7 +605,7 @@ export function AtlasNode({
               }}
             >
               <i
-                className={iconClass ?? STARTING_DREAMSCAPE_ICON_CLASS}
+                className={iconClass ?? UNREVEALED_ICON_CLASS}
                 aria-hidden="true"
                 style={{ fontSize: "14px", lineHeight: 1 }}
               />
