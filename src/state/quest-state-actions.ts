@@ -456,12 +456,9 @@ export function startQuestFromDreamcaller({
     });
   }
 
-  const playerHasBanes =
-    deck.some((entry) => entry.isBane) ||
-    prev.dreamsigns.some((dreamsign) => dreamsign.isBane);
   const atlas = generateInitialAtlas(
     prev.completionLevel,
-    { playerHasBanes },
+    {},
     {
       dreamscapes: questContent.dreamscapes,
       atlasConfig: questContent.atlasConfig,

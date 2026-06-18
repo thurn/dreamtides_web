@@ -666,9 +666,6 @@ function PlayableBattleScreenInner({
       essenceReward: battleInit.essenceReward,
       isMiniboss: battleInit.isMiniboss,
       isFinalBoss: battleInit.isFinalBoss,
-      playerHasBanes:
-        questState.deck.some((entry) => entry.isBane) ||
-        questState.dreamsigns.some((dreamsign) => dreamsign.isBane),
       dreamscapeModifiers: questState.dreamscapeModifiers,
       atlasBuildContext: {
         dreamscapes: questContent.dreamscapes,

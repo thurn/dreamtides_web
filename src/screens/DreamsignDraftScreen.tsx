@@ -53,15 +53,23 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
     }
 
     logEvent("site_entered", {
-      siteType: "DreamsignDraft",
+      siteType: site.type,
       isEnhanced: site.isEnhanced,
       optionCount,
     });
-  }, [site.isEnhanced, optionCount, options]);
+  }, [site.type, site.isEnhanced, optionCount, options]);
+
+  // The same screen serves both the DreamsignDraft and DreamsignRevelation site
+  // types; the completion source mirrors the actual site type so log readers can
+  // tell the two visit kinds apart.
+  const completeSource =
+    site.type === "DreamsignRevelation"
+      ? "dreamsign_revelation"
+      : "dreamsign_draft";
 
   const completeSite = useCallback(() => {
-    mutations.completeSite(site.id, "dreamsign_draft");
-  }, [site, mutations]);
+    mutations.completeSite(site.id, completeSource);
+  }, [site, mutations, completeSource]);
 
   const handleSelect = useCallback(
     (dreamsign: Dreamsign) => {

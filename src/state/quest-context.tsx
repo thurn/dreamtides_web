@@ -128,7 +128,7 @@ export interface QuestMutations {
   removeCard: (entryId: string, source: string) => void;
   /**
    * Apply a transfiguration to a deck entry, or clear it when `type` is
-   * `null`. The null variant supports Dream Journey reward templates that
+   * `null`. The null variant supports Dream Augury reward templates that
    * "remove transfiguration"; `effectDescription` is the upstream source
    * string and `effectDetails` is forwarded into the `card_transfigured`
    * log payload.

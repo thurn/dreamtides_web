@@ -97,11 +97,7 @@ export function AtlasScreen() {
    * so the rest of the quest state stays internally consistent.
    */
   const handleDebugRegenerate = useCallback(() => {
-    const playerHasBanes =
-      state.deck.some((entry) => entry.isBane) ||
-      state.dreamsigns.some((dreamsign) => dreamsign.isBane);
     const context: SiteGenerationContext = {
-      playerHasBanes,
       ...(state.dreamscapeModifiers.length > 0
         ? { dreamscapeModifiers: state.dreamscapeModifiers }
         : {}),
@@ -121,7 +117,6 @@ export function AtlasScreen() {
     logEvent("debug_atlas_regenerated", {
       source: "atlas_debug_refresh",
       completionLevel: state.completionLevel,
-      playerHasBanes,
       dreamscapeModifierCount: state.dreamscapeModifiers.length,
       previousNodeCount,
       regeneratedNodeCount: Object.keys(regenerated.nodes).length,

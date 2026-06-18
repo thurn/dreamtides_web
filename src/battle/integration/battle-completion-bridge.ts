@@ -32,7 +32,6 @@ export interface CompleteBattleSiteVictoryInput {
   essenceReward: number;
   isMiniboss: boolean;
   isFinalBoss: boolean;
-  playerHasBanes: boolean;
   dreamscapeModifiers?: readonly DreamscapeModifier[];
   /**
    * Dreamscape definitions, atlas tuning, and dreamsign pool the Atlas advance
@@ -64,7 +63,6 @@ export function completeBattleSiteVictory(
     essenceReward,
     isMiniboss,
     isFinalBoss,
-    playerHasBanes,
     dreamscapeModifiers = [],
     atlasBuildContext,
     mutations,
@@ -125,7 +123,6 @@ export function completeBattleSiteVictory(
         dreamscapeId,
         completionLevelAtBattleStart + 1,
         {
-          playerHasBanes,
           ...(dreamscapeModifiers.length > 0 ? { dreamscapeModifiers } : {}),
         },
         atlasBuildContext,

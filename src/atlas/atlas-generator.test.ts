@@ -31,7 +31,6 @@ function defaultContext(
   overrides?: Partial<SiteGenerationContext>,
 ): SiteGenerationContext {
   return {
-    playerHasBanes: false,
     ...overrides,
   };
 }
@@ -100,7 +99,6 @@ function composeFor(
   dreamscape: (typeof NON_STARTER_DREAMSCAPES)[number],
   layer: number,
   overrides?: Partial<{
-    playerHasBanes: boolean;
     hasKnownDreamsign: boolean;
   }>,
 ): SiteState[] {
@@ -109,7 +107,7 @@ function composeFor(
     layer,
     dreamscape,
     dreamscapes: TEST_DREAMSCAPES,
-    context: defaultContext({ playerHasBanes: overrides?.playerHasBanes }),
+    context: defaultContext(),
     hasKnownDreamsign: overrides?.hasKnownDreamsign,
   }).sites;
 }
@@ -127,9 +125,7 @@ describe("generateSiteComposition", () => {
     for (const dreamscape of NON_STARTER_DREAMSCAPES) {
       for (const layer of NON_STARTER_LAYERS) {
         for (let i = 0; i < 20; i++) {
-          const sites = composeFor(dreamscape, layer, {
-            playerHasBanes: true,
-          });
+          const sites = composeFor(dreamscape, layer);
           expect(sites.length).toBeGreaterThanOrEqual(3);
           expect(sites.length).toBeLessThanOrEqual(6);
         }
@@ -141,9 +137,7 @@ describe("generateSiteComposition", () => {
     for (const dreamscape of NON_STARTER_DREAMSCAPES) {
       for (const layer of NON_STARTER_LAYERS) {
         for (let i = 0; i < 20; i++) {
-          const sites = composeFor(dreamscape, layer, {
-            playerHasBanes: true,
-          });
+          const sites = composeFor(dreamscape, layer);
           expect(sites.filter((s) => s.type === "Battle")).toHaveLength(1);
           expect(sites[sites.length - 1].type).toBe("Battle");
         }
@@ -155,9 +149,7 @@ describe("generateSiteComposition", () => {
     for (const dreamscape of NON_STARTER_DREAMSCAPES) {
       for (const layer of NON_STARTER_LAYERS) {
         for (let i = 0; i < 20; i++) {
-          const sites = composeFor(dreamscape, layer, {
-            playerHasBanes: true,
-          });
+          const sites = composeFor(dreamscape, layer);
           const signature = sites.filter(
             (s) => s.type === dreamscape.signatureSite,
           );
@@ -207,7 +199,6 @@ describe("generateSiteComposition", () => {
       for (const layer of NON_STARTER_LAYERS) {
         for (let i = 0; i < 30; i++) {
           const sites = composeFor(dreamscape, layer, {
-            playerHasBanes: true,
             hasKnownDreamsign: true,
           });
           for (const [type, count] of Object.entries(counts(sites))) {
@@ -290,7 +281,6 @@ describe("generateSiteComposition", () => {
   it("assigns unique IDs to all sites", () => {
     const sites = composeFor(NON_STARTER_DREAMSCAPES[0], 1, {
       hasKnownDreamsign: true,
-      playerHasBanes: true,
     });
     const ids = sites.map((s) => s.id);
     expect(new Set(ids).size).toBe(ids.length);
@@ -298,22 +288,18 @@ describe("generateSiteComposition", () => {
 
   it("returns the starter's fixed site list with no enhancement and no fill", () => {
     expect(STARTER_DREAMSCAPE.fixedSites).toBeDefined();
-    for (const level of [false, true]) {
-      for (let i = 0; i < 20; i++) {
-        resetAtlasGenerator();
-        const { sites, enhancedSiteType } = generateSiteComposition({
-          layer: 0,
-          dreamscape: STARTER_DREAMSCAPE,
-          dreamscapes: TEST_DREAMSCAPES,
-          context: defaultContext({ playerHasBanes: level }),
-          hasKnownDreamsign: false,
-        });
-        expect(sites.map((s) => s.type)).toEqual(
-          STARTER_DREAMSCAPE.fixedSites,
-        );
-        expect(sites.some((s) => s.isEnhanced)).toBe(false);
-        expect(enhancedSiteType).toBeNull();
-      }
+    for (let i = 0; i < 20; i++) {
+      resetAtlasGenerator();
+      const { sites, enhancedSiteType } = generateSiteComposition({
+        layer: 0,
+        dreamscape: STARTER_DREAMSCAPE,
+        dreamscapes: TEST_DREAMSCAPES,
+        context: defaultContext(),
+        hasKnownDreamsign: false,
+      });
+      expect(sites.map((s) => s.type)).toEqual(STARTER_DREAMSCAPE.fixedSites);
+      expect(sites.some((s) => s.isEnhanced)).toBe(false);
+      expect(enhancedSiteType).toBeNull();
     }
   });
 });

@@ -30,7 +30,7 @@ export function createStartInBattleState(
 
   const atlas = generateInitialAtlas(
     0,
-    { playerHasBanes: false },
+    {},
     {
       dreamscapes: questContent.dreamscapes,
       atlasConfig: questContent.atlasConfig,

@@ -13,7 +13,6 @@ import { logEvent } from "../logging";
 
 /** Parameters for site generation that require external data. */
 export interface SiteGenerationContext {
-  playerHasBanes: boolean;
   /**
    * Active dreamscape modifiers at generation time. Site appearance boosts
    * increase the targeted site's base pool weight by their percentage; boosts
@@ -308,7 +307,7 @@ export interface SiteCompositionInput {
   dreamscape: DreamscapeContent | null;
   /** Every dreamscape definition, used to source the fill pool. */
   dreamscapes: readonly DreamscapeContent[];
-  /** Site-generation tuning (banes, active dreamscape modifiers). */
+  /** Site-generation tuning (active dreamscape modifiers). */
   context: SiteGenerationContext;
   /**
    * Whether this node carries a pre-revealed known dreamsign. When true, one

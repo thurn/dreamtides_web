@@ -292,8 +292,8 @@ afterEach(() => {
   resetLog();
 });
 
-describe("ScreenRouter DreamJourney routing", () => {
-  it("renders the classic journey path for a DreamJourney site in classic config", () => {
+describe("ScreenRouter DreamAugury routing", () => {
+  it("renders the classic journey path for a DreamAugury site in classic config", () => {
     const site = makeSite("DreamAugury");
     const state = makeStateFor(site);
     const container = renderWithQuest({
@@ -308,7 +308,7 @@ describe("ScreenRouter DreamJourney routing", () => {
     expect(container.querySelector('[data-testid="dream-merchant-v2-screen"]')).toBeNull();
   });
 
-  it("renders the Dream Merchant v2 screen for a DreamJourney site in v2 config", () => {
+  it("renders the Dream Merchant v2 screen for a DreamAugury site in v2 config", () => {
     const site = makeSite("DreamAugury");
     const state = makeStateFor(site);
     const container = renderWithQuest({
@@ -429,7 +429,7 @@ describe("ScreenRouter DreamJourney routing", () => {
     )).toBe(true);
   });
 
-  it("does not route a non-DreamJourney site to the v2 screen in v2 config", () => {
+  it("does not route a non-DreamAugury site to the v2 screen in v2 config", () => {
     const site = makeSite("Reward");
     const state = makeStateFor(site);
     const container = renderWithQuest({

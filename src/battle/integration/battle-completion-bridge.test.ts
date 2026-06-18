@@ -94,7 +94,6 @@ function makeInput(
     essenceReward: 200,
     isMiniboss: false,
     isFinalBoss: false,
-    playerHasBanes: true,
     atlasBuildContext: TEST_ATLAS_BUILD_CONTEXT,
     mutations: makeMutations(),
     ...overrides,
@@ -161,7 +160,7 @@ describe("completeBattleSiteVictory", () => {
       input.atlasSnapshot,
       "dreamscape-1",
       3,
-      { playerHasBanes: true },
+      {},
       TEST_ATLAS_BUILD_CONTEXT,
     );
     expect(input.mutations.updateAtlas).toHaveBeenCalledWith(updatedAtlas);
@@ -215,7 +214,6 @@ describe("completeBattleSiteVictory", () => {
       },
       essenceReward: 400,
       isFinalBoss: true,
-      playerHasBanes: false,
       mutations: makeMutations(),
       clearBattleStateForRoom,
     });
@@ -260,7 +258,6 @@ describe("completeBattleSiteVictory", () => {
       "dreamscape-1",
       3,
       {
-        playerHasBanes: true,
         dreamscapeModifiers: [modifier],
       },
       TEST_ATLAS_BUILD_CONTEXT,
