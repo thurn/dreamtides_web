@@ -13,6 +13,7 @@ import type { AffiliationContent } from "../types/content.ts";
 import type { CardData } from "../types/cards.ts";
 import { buildPoolData } from "../draft/pool/pool-data.ts";
 import type { PoolData } from "../draft/pool/types.ts";
+import { weightedSample } from "../draft/pool/rng.ts";
 import {
   AFFILIATION_MIN_MULTIPLIER,
   affiliationWeight,
@@ -198,6 +199,57 @@ describe("affiliation reweighting weight contract", () => {
     }
 
     expect(weightedHits).toBeGreaterThan(unweightedHits);
+  });
+
+  it("nudges transfiguration/duplication candidate selection toward affiliated deck cards", () => {
+    // The transfiguration/duplication site surfaces a small candidate set by a
+    // weighted-without-replacement draw over the player's deck entries, keyed by
+    // each entry's card number through the affiliation `cardNumber -> multiplier`
+    // map (this mirrors `selectCardChoiceEntryIds`'s `weightedSample` call). This
+    // asserts that draw surfaces affiliated cards more than a uniform shuffle of
+    // the same deck.
+    const { affiliation, ctx } = firstScorableAffiliation();
+    const numberWeights = buildAffiliationNumberWeights(ctx);
+
+    const numberById = new Map(CARDS.map((c) => [c.id, c.cardNumber]));
+    const signatureNumbers = new Set(
+      affiliation.signatureCards
+        .map((uuid) => numberById.get(uuid))
+        .filter((n): n is number => n !== undefined),
+    );
+    expect(signatureNumbers.size).toBeGreaterThan(0);
+
+    // A deck of every card (one entry each), the candidate universe a site draws
+    // from. Each entry carries its card number, the key the nudge multiplies on.
+    const deck = CARDS.map((c, i) => ({
+      entryId: `deck-${String(i)}`,
+      cardNumber: c.cardNumber,
+    }));
+
+    const DRAWS = 4000;
+    const LIMIT = 3; // the site's normal-mode candidate cap.
+    let weightedHits = 0;
+    let uniformHits = 0;
+    const rngW = mulberry32(0x5eed1);
+    const rngU = mulberry32(0x5eed2);
+    for (let i = 0; i < DRAWS; i++) {
+      const weighted = weightedSample(
+        rngW,
+        deck,
+        (entry) => numberWeights.get(entry.cardNumber) ?? 1,
+        LIMIT,
+      );
+      for (const entry of weighted) {
+        if (signatureNumbers.has(entry.cardNumber)) weightedHits++;
+      }
+      // Uniform: equal weight on every entry, the neutral-dreamscape fallback.
+      const uniform = weightedSample(rngU, deck, () => 1, LIMIT);
+      for (const entry of uniform) {
+        if (signatureNumbers.has(entry.cardNumber)) uniformHits++;
+      }
+    }
+
+    expect(weightedHits).toBeGreaterThan(uniformHits);
   });
 
   it("opponentAffiliationBias keeps every candidate with a positive weight", () => {

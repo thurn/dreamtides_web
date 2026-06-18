@@ -73,7 +73,11 @@ import {
   rerollCost,
   shopSlotsToRuntime,
 } from "../shop/shop-generator";
-import { resolveNodeAffiliationWeights } from "../affiliations/affiliation-weights";
+import {
+  logAffiliationDraw,
+  resolveNodeAffiliationWeights,
+} from "../affiliations/affiliation-weights";
+import { weightedSample } from "../draft/pool/rng";
 import {
   assignTransfiguration,
   transfigurationEffectDetails,
@@ -479,14 +483,31 @@ function selectCardChoiceEntryIds({
   cardDatabase,
   kind,
   isEnhanced,
+  affiliationWeights,
 }: {
   deck: readonly DeckEntry[];
   cardDatabase: Map<number, CardData>;
   kind: "transfiguration" | "duplication";
   isEnhanced: boolean;
+  affiliationWeights?: ReadonlyMap<number, number>;
 }): string[] {
   const entryIds: string[] = [];
-  const entries = isEnhanced ? [...deck] : shuffled(deck);
+  // Enhanced (home dreamscape) mode lets the player pick any deck card, so the
+  // candidate order is irrelevant and the affiliation nudge does not apply. In
+  // normal mode the candidate set is a genuine random draw of which deck cards
+  // to surface: bias it toward the dreamscape's affiliation when one applies
+  // (weighted without replacement, every entry floored above 0 so any card can
+  // still surface), falling back to a uniform shuffle for neutral dreamscapes.
+  const entries = isEnhanced
+    ? [...deck]
+    : affiliationWeights !== undefined
+      ? weightedSample(
+          Math.random,
+          deck,
+          (entry) => affiliationWeights.get(entry.cardNumber) ?? 1,
+          deck.length,
+        )
+      : shuffled(deck);
   const limit = isEnhanced ? Number.POSITIVE_INFINITY : 3;
 
   for (const entry of entries) {
@@ -530,19 +551,44 @@ function buildCardChoiceRuntime({
   cardDatabase,
   kind,
   isEnhanced,
+  affiliation,
 }: {
   siteId: string;
   deck: readonly DeckEntry[];
   cardDatabase: Map<number, CardData>;
   kind: "transfiguration" | "duplication";
   isEnhanced: boolean;
+  affiliation?: { weights: Map<number, number>; affiliationId: string };
 }): CardChoiceSiteRuntime {
+  // The affiliation nudge only biases the random candidate draw in normal mode;
+  // enhanced mode surfaces the whole deck so the nudge would be meaningless.
+  const affiliationWeights =
+    !isEnhanced && affiliation !== undefined ? affiliation.weights : undefined;
   const entryIds = selectCardChoiceEntryIds({
     deck,
     cardDatabase,
     kind,
     isEnhanced,
+    affiliationWeights,
   });
+
+  if (affiliationWeights !== undefined) {
+    const pickedCardNumbers: number[] = [];
+    const deckByEntryId = new Map(deck.map((entry) => [entry.entryId, entry]));
+    for (const entryId of entryIds) {
+      const entry = deckByEntryId.get(entryId);
+      if (entry !== undefined) pickedCardNumbers.push(entry.cardNumber);
+    }
+    logAffiliationDraw({
+      drawSite:
+        kind === "duplication"
+          ? "duplication_candidates"
+          : "transfiguration_candidates",
+      affiliationId: affiliation?.affiliationId,
+      candidateWeights: affiliationWeights,
+      picked: pickedCardNumbers,
+    });
+  }
 
   if (kind === "duplication") {
     return {
@@ -2479,6 +2525,10 @@ export function MultiplayerQuestProvider({
               cardDatabase: current.questContent.cardDatabase,
               kind,
               isEnhanced: site?.isEnhanced ?? false,
+              affiliation: currentAffiliationWeights(
+                current.state,
+                current.questContent,
+              ),
             })
           : null;
       const now = new Date().toISOString();
