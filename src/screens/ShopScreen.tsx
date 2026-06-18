@@ -1,18 +1,18 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import type { CSSProperties } from "react";
 import type { CardData } from "../types/cards";
 import type { SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
-import { DreamGuideFrame } from "../components/DreamGuideFrame";
 import { DreamsignArtTile } from "../components/DreamsignArtTile";
 import { EssenceValue } from "../components/EssenceValue";
 import { HoverZoomCard } from "../components/HoverZoomCard";
 import { RulesText } from "../components/RulesText";
-import { CARD_ASPECT_RATIO } from "../components/card-aspect";
-import { SIZE_PRESETS } from "../components/card-size";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
+import { logEvent } from "../logging";
+import { guideForSiteType } from "../data/dreamscapes";
+import { guidePortraitUrl } from "../atlas/atlas-display";
 import {
   effectiveDiscountPercent,
   effectivePrice,
@@ -21,28 +21,50 @@ import {
   type ShopPriceModifiers,
   type ShopSlot,
 } from "../shop/shop-generator";
+import "./shop-screen.css";
 
 /** Props for the ShopScreen component. */
 interface ShopScreenProps {
   site: SiteState;
 }
 
+/** The width each ware slot occupies in the offers grid, in pixels. */
+const WARE_SLOT_WIDTH = 168;
+
 /**
- * Renders the Shop site screen with a 2x3 item grid, purchasing, and a
- * single-use reroll affordance.
+ * How long a purchased ware plays its lift-and-fade before the buy mutation
+ * commits and the slot settles into its acquired ghost.
+ */
+const SHOP_BUY_MS = 480;
+
+/**
+ * The Shop site as an immersive, full-bleed scene. The resident guide — Tobias
+ * Tanglefur at a Card Shop, Amunet at the Dreamsign Market — lays out wares over
+ * the dimmed dreamscape (supplied by the shared site scene backdrop) so the
+ * player can spend essence on cards and Dreamsigns.
  *
- * Every visit to a Shop site exposes exactly one reroll. The reroll
- * affordance lives outside the inventory grid so it is always visible.
- * Triggering it refreshes all unsold slots and disables the affordance
- * for the rest of the visit. Reroll state is scoped per Shop site via
- * `rerollCount` on the site runtime, so each Shop in the atlas owns its
- * own fresh reroll.
+ * Every visit exposes exactly one reroll. Triggering it refreshes all unsold
+ * wares and disables the affordance for the rest of the visit; reroll state is
+ * scoped per Shop site via `rerollCount` on the site runtime, so each Shop owns
+ * its own fresh reroll. The Specialty Shop and the Dreamsign Market share this
+ * surface, detecting their variant from `site.type`.
+ *
+ * The composition mirrors the Purge surface: a frosted wallet HUD, a centered
+ * row of card-sized offers plus a reroll tile, a de-emphasized "Leave Shop"
+ * link, a deck tray where purchases land, and the guide with a speech bubble
+ * docked to the lower-left in landscape (see src/screens/shop-screen.css).
  */
 export function ShopScreen({ site }: ShopScreenProps) {
-  const { state, mutations, cardDatabase } = useQuest();
-  const { essence } = state;
+  const { state, mutations, cardDatabase, questContent } = useQuest();
+  const { essence, deck } = state;
   const isSpecialty = site.type === "SpecialtyShop";
   const isDreamsignMarket = site.type === "DreamsignMarket";
+  const shopName = isSpecialty
+    ? "Specialty Shop"
+    : isDreamsignMarket
+      ? "Dreamsign Market"
+      : "Card Shop";
+
   const runtime = state.siteRuntime[site.id];
   const priceModifiers = useMemo<ShopPriceModifiers>(
     () => ({
@@ -60,6 +82,18 @@ export function ShopScreen({ site }: ShopScreenProps) {
   const rerollCount = runtime?.kind === "shop" ? runtime.rerollCount : 0;
   const [overlayCard, setOverlayCard] = useState<CardData | null>(null);
 
+  // The resident guide for this site type, resolved from guide content so the
+  // name, portrait, and dialog stay data-driven (matching the Purge surface).
+  // Some shop variants (e.g. the Specialty Shop) have no resident guide.
+  const guide = useMemo(
+    () => guideForSiteType(questContent.guides, site.type),
+    [questContent.guides, site.type],
+  );
+  const guideLine = useMemo(() => {
+    if (guide === null || guide.dialog.length === 0) return null;
+    return guide.dialog[Math.floor(Math.random() * guide.dialog.length)];
+  }, [guide]);
+
   const currentRerollCost = useMemo(
     () => rerollCost(0, site.isEnhanced),
     [site.isEnhanced],
@@ -72,7 +106,10 @@ export function ShopScreen({ site }: ShopScreenProps) {
   const visibleCardOffers = useMemo(
     () =>
       slots
-        .filter((slot) => !slot.purchased && slot.itemType === "card" && slot.card !== null)
+        .filter(
+          (slot) =>
+            !slot.purchased && slot.itemType === "card" && slot.card !== null,
+        )
         .map((slot) => slot.card)
         .filter((card): card is CardData => card !== null),
     [slots],
@@ -87,6 +124,30 @@ export function ShopScreen({ site }: ShopScreenProps) {
       ),
     [visibleCardOffers, state.resolvedPackage],
   );
+
+  // Entrance animation, mirroring the Purge surface.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const id = setTimeout(() => setMounted(true), 20);
+    return () => clearTimeout(id);
+  }, []);
+
+  // Slots mid-purchase: the ware lifts and fades before the buy commits.
+  const [buying, setBuying] = useState<Set<number>>(() => new Set());
+
+  // Deck tray bump whenever a purchase lands and the deck grows.
+  const [trayBump, setTrayBump] = useState(false);
+  const prevDeckSize = useRef(deck.length);
+  useEffect(() => {
+    if (deck.length > prevDeckSize.current) {
+      setTrayBump(true);
+      const id = setTimeout(() => setTrayBump(false), 450);
+      prevDeckSize.current = deck.length;
+      return () => clearTimeout(id);
+    }
+    prevDeckSize.current = deck.length;
+    return undefined;
+  }, [deck.length]);
 
   useEffect(() => {
     if (runtime === undefined) {
@@ -105,11 +166,37 @@ export function ShopScreen({ site }: ShopScreenProps) {
     [mutations],
   );
 
+  // Log once per visit, after the shop runtime is stocked, so a production
+  // visit can be reconstructed: which variant, whether enhanced, how many wares
+  // were laid out, and the wallet the player walked in with. The runtime is
+  // created by an effect on first render, so this waits for the stocked slots
+  // rather than firing on the empty initial render.
+  const loggedEntryRef = useRef(false);
+  useEffect(() => {
+    if (loggedEntryRef.current || runtime?.kind !== "shop") return;
+    loggedEntryRef.current = true;
+    logEvent("site_entered", {
+      siteType: site.type,
+      isEnhanced: site.isEnhanced,
+      wareCount: slots.length,
+      essence,
+    });
+  }, [runtime, site.type, site.isEnhanced, slots.length, essence]);
+
   const handleBuy = useCallback(
     (index: number) => {
-      mutations.buyShopSlot(site.id, index);
+      if (buying.has(index)) return;
+      setBuying((prev) => new Set(prev).add(index));
+      window.setTimeout(() => {
+        mutations.buyShopSlot(site.id, index);
+        setBuying((prev) => {
+          const next = new Set(prev);
+          next.delete(index);
+          return next;
+        });
+      }, SHOP_BUY_MS);
     },
-    [mutations, site.id],
+    [buying, mutations, site.id],
   );
 
   const handleReroll = useCallback(() => {
@@ -122,103 +209,119 @@ export function ShopScreen({ site }: ShopScreenProps) {
 
   if (runtime?.kind !== "shop") {
     return (
-      <motion.div
-        className="flex min-h-full flex-col items-center justify-center px-4 py-6 md:px-8 md:py-8"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.4 }}
-      >
-        <p className="text-sm opacity-70">Opening shop...</p>
-      </motion.div>
+      <div className="shop-site" data-testid="shop-screen">
+        <p className="sh-status">Opening shop…</p>
+      </div>
     );
   }
 
+  const wareSlotState = (index: number, canAfford: boolean): string => {
+    if (buying.has(index)) return "bought";
+    const base = mounted ? "show" : "enter";
+    return canAfford ? base : `${base} dim`;
+  };
+
   return (
-    <motion.div
-      className="flex min-h-full flex-col items-center px-4 py-6 md:px-8 md:py-8"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.4 }}
+    <div
+      className={`shop-site${mounted ? " mounted" : ""}`}
+      data-testid="shop-screen"
+      data-shop-variant={site.type}
     >
-      <DreamGuideFrame site={site} />
-      {/* Header */}
-      <div className="mb-6 text-center">
-        <h2
-          className="text-2xl font-bold tracking-wide md:text-3xl"
-          style={{ color: "#a855f7" }}
-        >
-          {isSpecialty
-            ? "Specialty Shop"
-            : isDreamsignMarket
-              ? "Dreamsign Market"
-              : "Shop"}
-        </h2>
-        {site.isEnhanced && (
-          <span
-            className="mt-2 inline-block rounded-full px-3 py-1 text-sm font-bold"
-            style={{
-              background: "rgba(168, 85, 247, 0.15)",
-              color: "#c084fc",
-              border: "1px solid rgba(168, 85, 247, 0.3)",
-            }}
-          >
-            Enhanced -- Free Reroll
+      {/* Header: shop name + wallet */}
+      <div className="sh-hud">
+        <div className="sh-title">
+          <span className="sh-title-k">Wares</span>
+          <span className="sh-title-v">{shopName}</span>
+          {site.isEnhanced && <span className="sh-enh">Enhanced · Free Reroll</span>}
+        </div>
+        <div className={`sh-wallet${trayBump ? " flash" : ""}`}>
+          <span className="sh-wallet-k">Essence</span>
+          <span className="sh-wallet-v">
+            <EssenceValue amount={essence} color="inherit" />
           </span>
-        )}
+        </div>
       </div>
 
-      {/* Item grid: 3 columns desktop, 2 tablet */}
+      {/* Offers grid: wares + a single-use reroll tile */}
       <div
-        className="w-full max-w-6xl"
-        style={{
-          display: "grid",
-          gap: SIZE_PRESETS.medium.gap,
-          gridTemplateColumns: SIZE_PRESETS.medium.columns,
-        }}
+        className="sh-grid"
+        style={{ "--sh-cardw": `${WARE_SLOT_WIDTH}px` } as CSSProperties}
       >
         {slots.map((slot, index) => (
           <ShopSlotCard
             key={`shop-slot-${String(index)}`}
             slot={slot}
             index={index}
+            slotState={wareSlotState(
+              index,
+              effectivePrice(slot, priceModifiers) <= essence,
+            )}
             canAfford={effectivePrice(slot, priceModifiers) <= essence}
             priceModifiers={priceModifiers}
             onBuy={handleBuy}
             onCardClick={setOverlayCard}
           />
         ))}
+
+        {/* Reroll — the mock-up's "restock", sized as one more ware. */}
+        <RerollTile
+          state={mounted ? "show" : "enter"}
+          cost={currentRerollCost}
+          used={rerollUsed}
+          available={rerollAvailable}
+          onClick={handleReroll}
+        />
       </div>
 
-      {/* Reroll affordance: always rendered, single-use per visit */}
-      <RerollButton
-        cost={currentRerollCost}
-        used={rerollUsed}
-        available={rerollAvailable}
-        onClick={handleReroll}
-      />
+      {/* Footer */}
+      <div className="sh-foot">
+        <button
+          type="button"
+          className="sh-leave"
+          data-testid="shop-leave"
+          onClick={handleLeave}
+        >
+          <i className="bxf bx-walk" aria-hidden="true" />
+          Leave Shop
+        </button>
+      </div>
 
-      {/* Leave button */}
-      <button
-        className="mt-4 rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
-        style={{
-          background: "rgba(107, 114, 128, 0.2)",
-          border: "1px solid rgba(107, 114, 128, 0.4)",
-          color: "#9ca3af",
-        }}
-        onClick={handleLeave}
-      >
-        Leave Shop
-      </button>
+      {/* Deck tray — where purchases land */}
+      <div className={`sh-tray${trayBump ? " bump" : ""}`} aria-hidden="true">
+        <div className="sh-tray-stack">
+          <span />
+          <span />
+          <span />
+        </div>
+        <div>
+          <div className="sh-tray-k">Deck</div>
+          <div className="sh-tray-v">{deck.length}</div>
+        </div>
+      </div>
+
+      {/* Resident guide + speech bubble (docked lower-left in landscape) */}
+      {guide !== null && (
+        <div className="sh-guide" aria-hidden="true">
+          <div className="sh-bubble">
+            <span className="sh-bubble-mono">{guide.name}</span>
+            {guideLine !== null && <p>{`“${guideLine}”`}</p>}
+          </div>
+          <img
+            className="sh-guide-img"
+            src={guidePortraitUrl(guide.id)}
+            alt={guide.name}
+          />
+        </div>
+      )}
 
       <CardOverlay card={overlayCard} onClose={() => setOverlayCard(null)} />
-    </motion.div>
+    </div>
   );
 }
 
-/** Props for the standalone reroll button. */
-interface RerollButtonProps {
+/** Props for the single-use reroll tile. */
+interface RerollTileProps {
+  state: string;
   cost: number;
   used: boolean;
   available: boolean;
@@ -226,61 +329,67 @@ interface RerollButtonProps {
 }
 
 /**
- * Renders the single-use reroll affordance below the shop grid. The
- * button is always visible: it shows the cost when available, "Reroll
- * Used" when the player has already rerolled this visit, and a faded
- * cost when the player cannot afford it.
+ * The reroll affordance, presented as one more ware-sized tile in the grid. The
+ * button text and `data-shop-reroll-*` hooks match the shop's reroll contract:
+ * an essence cost when available, a free reroll on enhanced visits, and a spent
+ * "Reroll Used" state once the single per-visit reroll is gone.
  */
-function RerollButton({ cost, used, available, onClick }: RerollButtonProps) {
+function RerollTile({ state, cost, used, available, onClick }: RerollTileProps) {
   return (
-    <button
-      className="mt-8 flex items-center justify-center gap-2 rounded-lg px-6 py-2.5 text-base font-bold transition-opacity"
-      style={{
-        background: available ? "#7c3aed" : "#4b5563",
-        color: available ? "#ffffff" : "#9ca3af",
-        opacity: available ? 1 : 0.6,
-        cursor: available ? "pointer" : "not-allowed",
-        border: "1px solid rgba(168, 85, 247, 0.4)",
-        boxShadow: available ? "0 0 12px rgba(168, 85, 247, 0.25)" : "none",
-      }}
-      disabled={!available}
-      onClick={onClick}
-      data-shop-reroll-button=""
-      data-shop-reroll-used={used ? "true" : "false"}
-    >
-      {used ? (
-        <span>Reroll Used</span>
-      ) : cost === 0 ? (
-        <span>Reroll Shop (FREE)</span>
-      ) : (
-        <span className="flex items-center gap-1">
-          <span>Reroll Shop ·</span>
-          <EssenceValue
-            amount={cost}
-            color="inherit"
-            className="font-bold"
-            data-shop-reroll-cost=""
-          />
-        </span>
-      )}
-    </button>
+    <div className={`sh-restock ${state}`}>
+      <div className={`sh-restock-tile${used ? " spent" : ""}`}>
+        <div className="sh-restock-ico">
+          <i className="bxf bx-refresh" aria-hidden="true" />
+        </div>
+        <div className="sh-restock-name">{used ? "Restocked" : "Reroll"}</div>
+        <div className="sh-restock-sub">
+          {used ? "The shelves are set." : "Refresh the wares, once."}
+        </div>
+      </div>
+      <button
+        type="button"
+        className="sh-restock-btn"
+        data-shop-reroll-button=""
+        data-shop-reroll-used={used ? "true" : "false"}
+        disabled={!available}
+        onClick={onClick}
+      >
+        {used ? (
+          <span>Reroll Used</span>
+        ) : cost === 0 ? (
+          <span>Reroll Shop (FREE)</span>
+        ) : (
+          <>
+            <span className="sh-buy-label">Reroll Shop</span>
+            <EssenceValue
+              amount={cost}
+              color="inherit"
+              className="sh-reroll-cost"
+              data-shop-reroll-cost=""
+            />
+          </>
+        )}
+      </button>
+    </div>
   );
 }
 
-/** Props for a single shop slot card. */
+/** Props for a single shop ware. */
 interface ShopSlotCardProps {
   slot: ShopSlot;
   index: number;
+  slotState: string;
   canAfford: boolean;
   priceModifiers: ShopPriceModifiers;
   onBuy: (index: number) => void;
   onCardClick: (card: CardData) => void;
 }
 
-/** Renders a single slot in the shop grid. */
+/** Renders a single ware in the offers grid. */
 function ShopSlotCard({
   slot,
   index,
+  slotState,
   canAfford,
   priceModifiers,
   onBuy,
@@ -288,15 +397,11 @@ function ShopSlotCard({
 }: ShopSlotCardProps) {
   if (slot.purchased) {
     return (
-      <div
-        className="rounded-lg opacity-20"
-        style={{
-          aspectRatio: CARD_ASPECT_RATIO,
-          background:
-            "linear-gradient(145deg, #1a1025 0%, #0f0a18 60%, #0d0814 100%)",
-          border: "1px dashed rgba(107, 114, 128, 0.15)",
-        }}
-      />
+      <div className="sh-slot" style={{ "--i": index } as CSSProperties}>
+        <div className="sh-ghost">
+          <span>Acquired</span>
+        </div>
+      </div>
     );
   }
 
@@ -306,53 +411,19 @@ function ShopSlotCard({
 
   if (slot.itemType === "dreamsign" && slot.dreamsign) {
     const ds = slot.dreamsign;
-    const baneStyling = ds.isBane
-      ? {
-          border: "1px solid rgba(239, 68, 68, 0.40)",
-          boxShadow: "0 0 8px rgba(239, 68, 68, 0.15)",
-        }
-      : {
-          border: "1px solid rgba(168, 85, 247, 0.3)",
-          boxShadow: "0 0 8px rgba(168, 85, 247, 0.12)",
-        };
     return (
-      <div className="flex flex-col gap-2">
-        <div
-          className="flex flex-col items-center justify-center gap-2 rounded-lg p-3"
-          style={{
-            aspectRatio: CARD_ASPECT_RATIO,
-            background:
-              "linear-gradient(145deg, #1a1025 0%, #0f0a18 60%, #0d0814 100%)",
-            ...baneStyling,
-          }}
-        >
-          <DreamsignArtTile dreamsign={ds} sizePx={96} />
-          {ds.isBane && (
-            <span
-              className="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
-              style={{
-                background: "rgba(239, 68, 68, 0.16)",
-                color: "#fecaca",
-                border: "1px solid rgba(239, 68, 68, 0.40)",
-              }}
-            >
-              Bane
-            </span>
-          )}
-          <h3
-            className="text-center text-sm font-bold"
-            style={{ color: ds.isBane ? "#fca5a5" : "#f8fafc" }}
-          >
-            {ds.name}
-          </h3>
-          <div
-            className="text-center text-[10px] leading-tight opacity-70"
-            style={{ color: "#e2e8f0" }}
-          >
-            <RulesText text={ds.effectDescription} />
+      <div className={`sh-slot ${slotState}`} style={{ "--i": index } as CSSProperties}>
+        <div className="sh-card">
+          <div className={`sh-sign${ds.isBane ? " is-bane" : ""}`}>
+            {ds.isBane && <span className="sh-sign-bane-tag">Bane</span>}
+            <DreamsignArtTile dreamsign={ds} sizePx={96} />
+            <div className="sh-sign-name">{ds.name}</div>
+            <div className="sh-sign-rule">
+              <RulesText text={ds.effectDescription} />
+            </div>
           </div>
         </div>
-        <PriceButton
+        <BuyButton
           price={price}
           canAfford={canAfford}
           onClick={() => onBuy(index)}
@@ -362,26 +433,27 @@ function ShopSlotCard({
     );
   }
 
-  // Card slot
   if (slot.card) {
     const card = slot.card;
     return (
-      <div className="flex flex-col gap-2">
-        <HoverZoomCard logSurface="shop" glossaryText={card.renderedText}>
-          <div
-            data-testid={`shop-offer-row-${String(index)}`}
-            tabIndex={0}
-            aria-label={`Shop offer: ${card.name}`}
-            className="rounded-md outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
-          >
-            <CardDisplay
-              card={card}
-              suppressHoverHelp
-              onClick={() => onCardClick(card)}
-            />
-          </div>
-        </HoverZoomCard>
-        <PriceButton
+      <div className={`sh-slot ${slotState}`} style={{ "--i": index } as CSSProperties}>
+        <div className="sh-card">
+          <HoverZoomCard logSurface="shop" glossaryText={card.renderedText}>
+            <div
+              data-testid={`shop-offer-row-${String(index)}`}
+              tabIndex={0}
+              aria-label={`Shop offer: ${card.name}`}
+              className="rounded-md outline-none focus-visible:ring-2 focus-visible:ring-purple-400"
+            >
+              <CardDisplay
+                card={card}
+                suppressHoverHelp
+                onClick={() => onCardClick(card)}
+              />
+            </div>
+          </HoverZoomCard>
+        </div>
+        <BuyButton
           price={price}
           canAfford={canAfford}
           onClick={() => onBuy(index)}
@@ -395,7 +467,7 @@ function ShopSlotCard({
 }
 
 /** Renders the Buy button with the effective (post-discount) essence price. */
-function PriceButton({
+function BuyButton({
   price,
   canAfford,
   onClick,
@@ -406,37 +478,25 @@ function PriceButton({
 }) {
   return (
     <button
-      className="flex w-full items-center justify-center gap-2 rounded-lg px-3 py-2 text-sm font-bold transition-opacity"
-      style={{
-        background: canAfford ? "#7c3aed" : "#4b5563",
-        color: canAfford ? "#ffffff" : "#9ca3af",
-        opacity: canAfford ? 1 : 0.6,
-        cursor: canAfford ? "pointer" : "not-allowed",
-      }}
+      type="button"
+      className="sh-buy"
       disabled={!canAfford}
       onClick={onClick}
     >
-      <span>Buy</span>
-      {/* Essence price is part of the button label, so the value and its
-          crypto glyph read in the button's own white text rather than the
+      <span className="sh-buy-label">Buy</span>
+      {/* The essence price is part of the button label, so the value and its
+          crypto glyph read in the button's own light text rather than the
           purple used for plain essence values elsewhere. */}
       <EssenceValue
         amount={price}
         color="inherit"
-        className="font-bold"
         data-shop-price=""
       />
     </button>
   );
 }
 
+/** Sale caption shown under a discounted ware. */
 function ShopSaleText({ discountPercent }: { discountPercent: number }) {
-  return (
-    <p
-      className="text-center text-[10px] font-black uppercase tracking-[0.18em]"
-      style={{ color: "#fca5a5" }}
-    >
-      Sale {String(discountPercent)}% Off
-    </p>
-  );
+  return <p className="sh-sale">Sale {String(discountPercent)}% Off</p>;
 }
