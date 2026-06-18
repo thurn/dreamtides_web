@@ -288,6 +288,33 @@ describe("DuplicationSiteScreen", () => {
     });
   });
 
+  it("renders without crashing for a legacy runtime missing the entry-id fields", () => {
+    // Rooms persisted before the shared card-choice runtime added `entryIds` and
+    // `acceptedEntryIds` deserialize without those fields. The screen must treat
+    // the missing arrays as empty rather than dereferencing `.length` on
+    // undefined.
+    const mutations = makeMutations();
+    setQuestContext(
+      makeState({
+        siteRuntime: {
+          "site-1": {
+            kind: "cardChoice",
+            choiceKind: "duplication",
+          } as unknown as QuestState["siteRuntime"][string],
+        },
+      }),
+      mutations,
+    );
+    const { container, root } = mount(<DuplicationSiteScreen site={makeSite()} />);
+
+    expect(container.textContent).toContain("No cards available.");
+    expect(mutations.ensureCardChoiceRuntime).not.toHaveBeenCalled();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("accepts a shared card choice through the composed mutation", () => {
     const mutations = makeMutations();
     setQuestContext(makeState(), mutations);

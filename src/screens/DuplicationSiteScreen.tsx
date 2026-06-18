@@ -72,11 +72,11 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
           deck,
           cardDatabase,
           site.id,
-          cardChoiceRuntime.entryIds,
+          cardChoiceRuntime.entryIds ?? [],
         ),
     [cardChoiceRuntime, cardDatabase, deck, site.id],
   );
-  const duplicated = (cardChoiceRuntime?.acceptedEntryIds.length ?? 0) > 0;
+  const duplicated = (cardChoiceRuntime?.acceptedEntryIds?.length ?? 0) > 0;
 
   // Enhanced mode state
   const [enhancedPickedEntry, setEnhancedPickedEntry] =
