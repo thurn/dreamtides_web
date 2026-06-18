@@ -857,7 +857,7 @@ art-owned = false
 card-number = 46
 
 [[cards]]
-name = "Conduit of Ashes"
+name = "Driftcaller Sovereign"
 mtg-name = "Lotus Petal"
 id = "eae928f6-aab2-415e-b4b1-b9c3ed8e6818"
 rendered-text = "Abandon this character: Gain 1●."
@@ -868,10 +868,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 0
-tags = ["Lotus Petal", "Art Rework", "June17"]
-image-number = 1053081881
+tags = ["Lotus Petal", "Art Rework", "June17", "Art OK"]
+image-number = 447372529
 art-owned = false
 card-number = 47
+art = { x = -1, y = 1, scale = 1.3 }
 
 [[cards]]
 name = "Ghostlight Wolves"
@@ -1123,7 +1124,7 @@ art-owned = false
 card-number = 60
 
 [[cards]]
-name = "Starrunner"
+name = "Cinderfang"
 mtg-name = "Devoted Druid"
 id = "d30bd488-f921-49cb-a44f-353c54cb6548"
 rendered-text = """
@@ -1139,10 +1140,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "June17"]
-image-number = 2586513019
+tags = ["Art Rework", "June17", "Art OK"]
+image-number = 2251144875
 art-owned = false
 card-number = 61
+art = { x = 0.597, y = 1, scale = 1.07 }
 
 [[cards]]
 name = "Weblight Waif"
@@ -1934,7 +1936,7 @@ art-owned = false
 card-number = 104
 
 [[cards]]
-name = "Blightmaw"
+name = "Canopy Lookout"
 mtg-name = "Chromatic Sphere"
 id = "f82c7407-b642-4ab1-8878-171f9121b3eb"
 rendered-text = "Abandon this character: Draw a card."
@@ -1945,10 +1947,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Lotus Petal", "Art Rework", "June17"]
-image-number = 447372598
+tags = ["Lotus Petal", "Art Rework", "June17", "Art OK"]
+image-number = 2427491213
 art-owned = false
 card-number = 105
+art = { x = -0.294, y = 0.271, scale = 1.47 }
 
 [[cards]]
 name = "Moonbound Wolf"
@@ -2618,7 +2621,7 @@ art-owned = false
 card-number = 141
 
 [[cards]]
-name = "Blight Weaver2"
+name = "Haunted Betrayer"
 mtg-name = "Mana Vault"
 id = "465d3463-1d8a-466d-b91f-b1993332b4d3"
 rendered-text = """
@@ -2632,10 +2635,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 0
-tags = ["Art Rework", "June17"]
-image-number = 436090600
+tags = ["Art Rework", "June17", "Art OK"]
+image-number = 1798382134
 art-owned = false
 card-number = 142
+art = { x = 0.135, y = 0.351, scale = 1.57 }
 
 [[cards]]
 name = "Nocturne"
@@ -3157,7 +3161,7 @@ art-owned = false
 card-number = 170
 
 [[cards]]
-name = "Fathomscourge"
+name = "Railgun Reinforcer"
 mtg-name = "Oni-Cult Anvil"
 id = "f0a70e7d-46af-4d32-92cc-9d510e97a07e"
 rendered-text = "Once per turn, when an allied warrior is dissolved, materialize a 1✦ warrior figment."
@@ -3168,10 +3172,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Figment Maker", "Art Rework", "June17"]
-image-number = 2022594404
+tags = ["Figment Maker", "Art Rework", "June17", "Art OK"]
+image-number = 2186149279
 art-owned = false
 card-number = 171
+art = { x = 0.084, y = 0.369, scale = 1.17 }
 
 [[cards]]
 name = "Ruthless Conquerer"
@@ -3548,7 +3553,7 @@ card-number = 192
 art = { x = -0.414, y = 0.3, scale = 1.17 }
 
 [[cards]]
-name = "Pyre Challenger"
+name = "Cloudback Courier"
 mtg-name = "Gau, Feral Youth"
 id = "b4df0b25-0c46-4faa-8db6-84f5f3c3444b"
 rendered-text = """
@@ -3562,11 +3567,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "June17"]
-image-number = 2023111781
+tags = ["Art Rework", "June17", "Art OK"]
+image-number = 519475330
 art-owned = false
 card-number = 193
-art = { x = 0.084, y = 0.032, scale = 1.17 }
+art = { x = 0.903, y = 0.212, scale = 1.37 }
 
 [[cards]]
 name = "Thornwood Delver"
@@ -4399,21 +4404,22 @@ art-owned = false
 card-number = 239
 
 [[cards]]
-name = "Dreadcall Warden2"
+name = "Impending Fury"
 mtg-name = "Kaito Shizuki"
 id = "3b5f5686-f63b-4998-b713-2f6777ecbb5f"
 rendered-text = "▸Night: Draw a card, then discard a card unless you have an allied challenger."
 energy-cost = 2
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Warrior"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June17"]
-image-number = 2521694547
+tags = ["Art Rework", "June17", "Art OK"]
+image-number = 695511856
 art-owned = true
 card-number = 240
+art = { x = -0.084, y = 0.369, scale = 1.17 }
 
 [[cards]]
 name = "Last Beacon"
@@ -4988,7 +4994,7 @@ card-number = 271
 art = { x = 0, y = 1, scale = 1.27 }
 
 [[cards]]
-name = "Worldsong Behemoth"
+name = "Shadowpaw"
 mtg-name = "Llanowar Elves"
 id = "b5fbff03-f850-4627-94eb-12ed4dc15334"
 rendered-text = "▸Dawn: Gain 1●."
@@ -4999,11 +5005,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Elves", "Art Rework", "June17"]
-image-number = 1621160797
+tags = ["Elves", "Art Rework", "June17", "Art OK"]
+image-number = 410444914
 art-owned = false
 card-number = 272
-art = { x = 0.252, y = 0.839, scale = 1.17 }
+art = { x = 0.441, y = -0.361, scale = 1.87 }
 
 [[cards]]
 name = "Cinderblade Legionnaire"
@@ -6530,7 +6536,7 @@ art-owned = false
 card-number = 354
 
 [[cards]]
-name = "Marrow Mimic"
+name = "Advance Gunner"
 mtg-name = "Chromatic Star"
 id = "e4ab6a18-c3b2-4149-a446-c7c1e8d66714"
 rendered-text = """
@@ -6544,10 +6550,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "June17"]
-image-number = 1450052378
+tags = ["Art Rework", "June17", "Art OK"]
+image-number = 1511229272
 art-owned = false
 card-number = 355
+art = { x = 0, y = -0.362, scale = 1.37 }
 
 [[cards]]
 name = "Signal Resonant"
@@ -7355,7 +7362,7 @@ art-owned = true
 card-number = 398
 
 [[cards]]
-name = "Ochre Prospector"
+name = "Night Raid Commando"
 mtg-name = "Wizard's Rockets"
 id = "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6"
 rendered-text = """
@@ -7369,10 +7376,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June17"]
-image-number = 581686579
+tags = ["Art Rework", "June17", "Art OK"]
+image-number = 432001921
 art-owned = false
 card-number = 399
+art = { x = 0.025, y = 1, scale = 1.2 }
 
 [[cards]]
 name = "Inferno's Herald"
@@ -8228,7 +8236,7 @@ art-owned = false
 card-number = 445
 
 [[cards]]
-name = "Stoneborn Eternal"
+name = "Ethereal Courser"
 mtg-name = "Nettle Sentinel"
 id = "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a"
 rendered-text = "When you play a spirit animal, return this character to hand. It costs 0● this turn."
@@ -8239,10 +8247,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "June18"]
-image-number = 2433164309
+tags = ["Art Rework", "June18", "Art OK"]
+image-number = 2127752123
 art-owned = false
 card-number = 446
+art = { x = -0.084, y = -0.29, scale = 1.37 }
 
 [[cards]]
 name = "A New Adventure"

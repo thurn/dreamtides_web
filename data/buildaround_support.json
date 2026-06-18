@@ -400,7 +400,7 @@
       ]
     },
     "465d3463-1d8a-466d-b91f-b1993332b4d3": {
-      "name": "Blight Weaver2",
+      "name": "Haunted Betrayer",
       "needs": [],
       "supports": [
         "warriors",
@@ -408,7 +408,7 @@
       ]
     },
     "f82c7407-b642-4ab1-8878-171f9121b3eb": {
-      "name": "Blightmaw",
+      "name": "Canopy Lookout",
       "needs": [],
       "supports": [
         "warriors",
@@ -746,7 +746,7 @@
       ]
     },
     "eae928f6-aab2-415e-b4b1-b9c3ed8e6818": {
-      "name": "Conduit of Ashes",
+      "name": "Driftcaller Sovereign",
       "needs": [],
       "supports": [
         "spirit-animals",
@@ -993,7 +993,7 @@
       ]
     },
     "3b5f5686-f63b-4998-b713-2f6777ecbb5f": {
-      "name": "Dreadcall Warden2",
+      "name": "Impending Fury",
       "needs": [],
       "supports": [
         "warriors",
@@ -1496,7 +1496,7 @@
       ]
     },
     "f0a70e7d-46af-4d32-92cc-9d510e97a07e": {
-      "name": "Fathomscourge",
+      "name": "Railgun Reinforcer",
       "needs": [
         {
           "theme": "warriors",
@@ -2478,7 +2478,7 @@
       ]
     },
     "e4ab6a18-c3b2-4149-a446-c7c1e8d66714": {
-      "name": "Marrow Mimic",
+      "name": "Advance Gunner",
       "needs": [],
       "supports": [
         "warriors",
@@ -2730,7 +2730,7 @@
       ]
     },
     "1cbbfd57-f510-4a02-a4b3-f043a4fb99d6": {
-      "name": "Ochre Prospector",
+      "name": "Night Raid Commando",
       "needs": [],
       "supports": [
         "warriors",
@@ -2992,7 +2992,7 @@
       ]
     },
     "b4df0b25-0c46-4faa-8db6-84f5f3c3444b": {
-      "name": "Pyre Challenger",
+      "name": "Cloudback Courier",
       "needs": [],
       "supports": [
         "warriors",
@@ -3990,7 +3990,7 @@
       ]
     },
     "d30bd488-f921-49cb-a44f-353c54cb6548": {
-      "name": "Starrunner",
+      "name": "Cinderfang",
       "needs": [],
       "supports": [
         "spirit-animals",
@@ -4057,7 +4057,7 @@
       ]
     },
     "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a": {
-      "name": "Stoneborn Eternal",
+      "name": "Ethereal Courser",
       "needs": [
         {
           "theme": "spirit-animals",
@@ -4866,7 +4866,7 @@
       ]
     },
     "b5fbff03-f850-4627-94eb-12ed4dc15334": {
-      "name": "Worldsong Behemoth",
+      "name": "Shadowpaw",
       "needs": [],
       "supports": [
         "spirit-animals",
