@@ -422,6 +422,7 @@ describe("room service", () => {
             nodes: {},
             startingNodeId: "dreamscape-1",
             bossNodeId: "",
+            bossIncarnationId: null,
             currentNodeId: null,
             knownDreamsignCarrierIds: [],
           },

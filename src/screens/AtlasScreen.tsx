@@ -27,6 +27,7 @@ import {
 } from "../atlas/atlas-display";
 import type {
   AffiliationContent,
+  ApollyonIncarnationContent,
   DreamGuideContent,
   DreamscapeContent,
   DreamsignTemplate,
@@ -64,6 +65,12 @@ interface ResolvedAtlasNode {
   guide: DreamGuideContent | null;
   affiliation: AffiliationContent | null;
   dreamsign: DreamsignTemplate | null;
+  /**
+   * The Apollyon incarnation presenting the boss node (`null` for non-boss
+   * nodes, or when no incarnation was assigned). Drives the boss preview's
+   * title and short deck description.
+   */
+  bossIncarnation: ApollyonIncarnationContent | null;
 }
 
 /** Builds the resolved-node lookup, fitting the run graph into the stage rect. */
@@ -125,6 +132,14 @@ function resolveAtlasNodes(
             (t) => t.id === node.knownDreamsignId,
           ) ?? null)
         : null;
+    // The boss node presents the run's chosen Apollyon incarnation; resolve its
+    // title and short deck description for the boss preview.
+    const bossIncarnation =
+      isBoss && atlas.bossIncarnationId != null
+        ? ((questContent.apollyonIncarnations ?? []).find(
+            (i) => i.id === atlas.bossIncarnationId,
+          ) ?? null)
+        : null;
 
     // The node face: the boss is always the icon; a revealed dreamscape shows
     // its circular icon; an unrevealed node shows the empty round frame.
@@ -160,6 +175,7 @@ function resolveAtlasNodes(
       guide,
       affiliation,
       dreamsign,
+      bossIncarnation,
     });
   }
 
@@ -220,7 +236,7 @@ interface PreviewProps {
  * art, resident guide, and the signature site / site bonus / affiliation rows).
  */
 function Preview({ resolved }: PreviewProps) {
-  const { view, dreamscape, guide, affiliation } = resolved;
+  const { view, dreamscape, guide, affiliation, bossIncarnation } = resolved;
   const node = view.node;
   const isBoss = view.isBoss;
   const isUnrevealed = node.state === "unrevealed" && !isBoss;
@@ -279,7 +295,9 @@ function Preview({ resolved }: PreviewProps) {
           <div className="scene-fade boss-fade" />
           <div className="preview-title">
             <div className="ds-name">{BOSS_DISPLAY.place}</div>
-            <div className="guide-name boss-subtitle">{BOSS_DISPLAY.title}</div>
+            <div className="guide-name boss-subtitle">
+              {bossIncarnation?.title ?? BOSS_DISPLAY.title}
+            </div>
           </div>
         </div>
         <div className="preview-info">
@@ -297,7 +315,9 @@ function Preview({ resolved }: PreviewProps) {
             <i className="fa-solid fa-bolt row-ico danger" aria-hidden="true" />
             <div>
               <div className="eyebrow">The Doom of Humanity</div>
-              <p className="row-text">{BOSS_DISPLAY.intro}</p>
+              <p className="row-text">
+                {bossIncarnation?.description ?? BOSS_DISPLAY.intro}
+              </p>
             </div>
           </div>
         </div>
@@ -613,6 +633,7 @@ export function AtlasScreen() {
         dreamscapes: questContent.dreamscapes,
         atlasConfig: questContent.atlasConfig,
         dreamsignPoolIds: state.remainingDreamsignPool,
+        apollyonIncarnations: questContent.apollyonIncarnations,
       },
       { logEvents: true },
     );
@@ -627,6 +648,7 @@ export function AtlasScreen() {
       regeneratedNodeCount: Object.keys(regenerated.nodes).length,
       startingNodeId: regenerated.startingNodeId,
       bossNodeId: regenerated.bossNodeId,
+      bossIncarnationId: regenerated.bossIncarnationId ?? null,
     });
     mutations.updateAtlas(regenerated);
     // After completing a dreamscape the player stands at the atlas frontier with

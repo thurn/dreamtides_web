@@ -69,6 +69,19 @@ export interface DreamGuideContent {
 }
 
 /**
+ * One of Apollyon's ten incarnations, sourced from apollyon_incarnations.toml.
+ * Atlas generation picks a single incarnation per run to present the boss node:
+ * its `title` (epithet) and `description` (short deck summary) are surfaced in
+ * the UI. `deckType` is design-reference metadata and is never displayed.
+ */
+export interface ApollyonIncarnationContent {
+  id: string;
+  title: string;
+  description: string;
+  deckType: string;
+}
+
+/**
  * A thematic affiliation backing a dreamscape, sourced from affiliations.toml.
  * `signatureCards` are curated cards_v2 UUIDs exemplifying the theme;
  * `weightStrength` and `opponentBiasStrength` tune how strongly later systems

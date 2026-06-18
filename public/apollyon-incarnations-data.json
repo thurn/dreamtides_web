@@ -1,0 +1,62 @@
+[
+  {
+    "id": "howl_at_worlds_end",
+    "title": "Apollyon, the Howl at World's End",
+    "description": "Cheap spirits multiply, then rise as one devouring chorus.",
+    "deckType": "Spirit Animal Flood"
+  },
+  {
+    "id": "last_causality",
+    "title": "Apollyon, the Last Causality",
+    "description": "Each event births another, until consequence becomes catastrophe.",
+    "deckType": "Event Chain/Storm"
+  },
+  {
+    "id": "marshal_of_the_final_host",
+    "title": "Apollyon, Marshal of the Final Host",
+    "description": "Warriors gather behind sharpened ranks and strike before mercy.",
+    "deckType": "Warrior Support Aggro"
+  },
+  {
+    "id": "butcher_of_the_unfallen",
+    "title": "Apollyon, the Butcher of the Unfallen",
+    "description": "Every sacrifice feeds survivors who refuse to stay dead.",
+    "deckType": "Abandon/Survivor Replenishment"
+  },
+  {
+    "id": "crawling_return",
+    "title": "Apollyon, the Crawling Return",
+    "description": "Small dead things return endlessly, profiting from every crossing.",
+    "deckType": "Cheap-Character Recursion"
+  },
+  {
+    "id": "closed_grave",
+    "title": "Apollyon, the Closed Grave",
+    "description": "Free souls cycle through death, scoring value with each return.",
+    "deckType": "Reclaim Loop"
+  },
+  {
+    "id": "keeper_of_cast_off_names",
+    "title": "Apollyon, Keeper of Cast-Off Names",
+    "description": "Discarded cards become omens, then return sharper than before.",
+    "deckType": "Discard/Reclaim"
+  },
+  {
+    "id": "sovereign_of_the_full_void",
+    "title": "Apollyon, Sovereign of the Full Void",
+    "description": "The void swells quickly, then empties itself into victory.",
+    "deckType": "Void-Density Recursion"
+  },
+  {
+    "id": "the_unplaceable",
+    "title": "Apollyon, the Unplaceable",
+    "description": "Phasing outsiders slip past danger while disordering every defense.",
+    "deckType": "Outsider Tempo"
+  },
+  {
+    "id": "herald_of_the_roused_blade",
+    "title": "Apollyon, Herald of the Roused Blade",
+    "description": "Events awaken warriors into sudden, repeated bursts of violence.",
+    "deckType": "Event/Awaken Warriors"
+  }
+]

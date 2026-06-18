@@ -215,6 +215,14 @@ export interface DreamAtlas {
   startingNodeId: string;
   /** The layer-6 boss node, always revealed from the start of the run. */
   bossNodeId: string;
+  /**
+   * The Apollyon incarnation chosen for this run, identifying which guise the
+   * boss node presents (title + short deck description). Resolves against
+   * `QuestContent.apollyonIncarnations`. Absent or `null` on atlases generated
+   * before an incarnation was assigned, in which case the UI falls back to the
+   * default boss presentation.
+   */
+  bossIncarnationId?: string | null;
   /** The node the player currently occupies, or `null` between dreamscapes. */
   currentNodeId: string | null;
   /** Node ids that carry a pre-revealed known dreamsign. */

@@ -122,6 +122,7 @@ function normalizeAtlas(atlas: DreamAtlas | undefined): DreamAtlas {
     nodes,
     startingNodeId: atlas.startingNodeId ?? defaults.startingNodeId,
     bossNodeId: atlas.bossNodeId ?? defaults.bossNodeId,
+    bossIncarnationId: atlas.bossIncarnationId ?? defaults.bossIncarnationId ?? null,
     currentNodeId: atlas.currentNodeId ?? defaults.currentNodeId,
     knownDreamsignCarrierIds: coerceArray<string>(
       atlas.knownDreamsignCarrierIds,

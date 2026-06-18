@@ -463,6 +463,7 @@ export function startQuestFromDreamcaller({
       dreamscapes: questContent.dreamscapes,
       atlasConfig: questContent.atlasConfig,
       dreamsignPoolIds: resolvedPackage.dreamsignPoolIds,
+      apollyonIncarnations: questContent.apollyonIncarnations,
     },
     { logEvents: false },
   );

@@ -6,7 +6,10 @@ import type {
   SiteState,
   SiteType,
 } from "../types/quest";
-import type { DreamscapeContent } from "../types/content";
+import type {
+  ApollyonIncarnationContent,
+  DreamscapeContent,
+} from "../types/content";
 import { otherGuideSignatureSites } from "../data/dreamscapes";
 import { draftSiteData } from "../draft/draft-site-config";
 import { logEvent } from "../logging";
@@ -33,6 +36,12 @@ export interface AtlasBuildContext {
   atlasConfig: AtlasConfig;
   /** Dreamsign ids eligible to be granted as pre-revealed known dreamsigns. */
   dreamsignPoolIds: readonly string[];
+  /**
+   * Apollyon's incarnations; generation picks one to present the boss node. May
+   * be empty in legacy or test contexts, in which case no incarnation is
+   * assigned and the boss falls back to its default presentation.
+   */
+  apollyonIncarnations?: readonly ApollyonIncarnationContent[];
 }
 
 export interface AtlasGenerationOptions {
@@ -924,6 +933,13 @@ export function generateInitialAtlas(
   const startingNodeId = layers[0][0];
   const bossNodeId = layers[layers.length - 1][0];
 
+  // Pick one of Apollyon's incarnations to present the boss node for this run.
+  const incarnations = build.apollyonIncarnations ?? [];
+  const bossIncarnationId =
+    incarnations.length > 0
+      ? incarnations[randomInt(0, incarnations.length - 1)].id
+      : null;
+
   const dreamscapeWeights = new Map<string, number>();
   for (const dreamscape of build.dreamscapes) {
     if (!dreamscape.isStarter) {
@@ -936,6 +952,7 @@ export function generateInitialAtlas(
     nodes,
     startingNodeId,
     bossNodeId,
+    bossIncarnationId,
     currentNodeId: startingNodeId,
     knownDreamsignCarrierIds: [],
   };
@@ -984,6 +1001,10 @@ export function generateInitialAtlas(
       connectionAverage: cfg.connectionAverage,
       startingNodeId,
       bossNodeId,
+      // The Apollyon guise chosen for the boss node, plus the pool it was drawn
+      // from, so a log read can reconstruct why this incarnation appeared.
+      bossIncarnationId,
+      apollyonIncarnationIds: incarnations.map((i) => i.id),
       forwardIds,
       edges,
       // Effective TOML tuning that drove every random draw, captured because the

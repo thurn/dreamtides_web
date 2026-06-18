@@ -495,6 +495,7 @@ describe("quest state actions", () => {
       nodes: {},
       startingNodeId: "",
       bossNodeId: "",
+      bossIncarnationId: null,
       currentNodeId: null,
       knownDreamsignCarrierIds: [],
     });

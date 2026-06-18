@@ -35,6 +35,7 @@ export function createStartInBattleState(
       dreamscapes: questContent.dreamscapes,
       atlasConfig: questContent.atlasConfig,
       dreamsignPoolIds: resolvedPackage.dreamsignPoolIds,
+      apollyonIncarnations: questContent.apollyonIncarnations,
     },
   );
   const dreamscapeWithBattle = atlas.nodes[atlas.startingNodeId];

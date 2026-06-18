@@ -37,10 +37,16 @@ import {
 } from "./cards-v2-database";
 import { loadDreamcallersV2 } from "./dreamcallers-v2-database";
 import { loadDreamwellCards, type DreamwellCard } from "./dreamwell-database";
-import { loadAffiliations, loadDreamGuides, loadDreamscapes } from "./dreamscapes";
+import {
+  loadAffiliations,
+  loadApollyonIncarnations,
+  loadDreamGuides,
+  loadDreamscapes,
+} from "./dreamscapes";
 import { loadAtlasConfig } from "./atlas-config";
 import type {
   AffiliationContent,
+  ApollyonIncarnationContent,
   DreamGuideContent,
   DreamscapeContent,
 } from "../types/content";
@@ -84,6 +90,13 @@ export interface QuestContent {
    * Dream Atlas generation tuning, loaded from `public/atlas-config-data.json`.
    */
   atlasConfig: AtlasConfig;
+  /**
+   * Apollyon's ten incarnations, loaded from
+   * `public/apollyon-incarnations-data.json`. Atlas generation picks one per run
+   * to present the boss node; the Atlas UI resolves the chosen incarnation's
+   * title and description by `DreamAtlas.bossIncarnationId`.
+   */
+  apollyonIncarnations?: readonly ApollyonIncarnationContent[];
   poolContext?: RunPoolContext;
   /**
    * Draft mode for this run: `"replay"` activates the record-replay draft;
@@ -662,6 +675,7 @@ export async function loadQuestContent(
     affiliations,
     guides,
     atlasConfig,
+    apollyonIncarnations,
   ] = await Promise.all([
     loadCardsV2Database(),
     loadDreamcallersV2(),
@@ -702,6 +716,9 @@ export async function loadQuestContent(
     // present the resident guide and their home specialty.
     loadDreamGuides(),
     loadAtlasConfig(),
+    // Apollyon's incarnations are small and always loaded so the Atlas can
+    // present a per-run guise for the boss node.
+    loadApollyonIncarnations(),
   ]);
 
   const dreamcallers: DreamcallerContent[] = draftDreamcallers.map((dc) => ({
@@ -776,6 +793,7 @@ export async function loadQuestContent(
       affiliations,
       guides,
       atlasConfig,
+      apollyonIncarnations,
       poolContext,
       draftMode,
       draftRecords,
@@ -795,6 +813,7 @@ export async function loadQuestContent(
     affiliations,
     guides,
     atlasConfig,
+    apollyonIncarnations,
     poolContext,
     draftMode,
     merchantCorpus,

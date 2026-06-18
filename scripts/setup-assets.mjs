@@ -577,6 +577,20 @@ export function transformDreamscape(dreamscape) {
 }
 
 /**
+ * Convert a TOML Apollyon incarnation record to its runtime JSON
+ * representation, renaming keys kebab->camel (so `deck-type` becomes
+ * `deckType`). The `deckType` is design-reference metadata only and is never
+ * surfaced in the UI.
+ */
+export function transformIncarnation(incarnation) {
+  const result = {};
+  for (const [key, value] of Object.entries(incarnation)) {
+    result[kebabToCamel(key)] = value;
+  }
+  return result;
+}
+
+/**
  * Convert a TOML Dream Guide record to its runtime JSON representation, renaming
  * keys kebab->camel.
  */
@@ -751,6 +765,11 @@ export function setupAssets({
   dreamGuidesTomlPath = join(DATA_DIR, "tabula", "dream_guides.toml"),
   affiliationsTomlPath = join(DATA_DIR, "tabula", "affiliations.toml"),
   atlasConfigTomlPath = join(DATA_DIR, "tabula", "atlas_config.toml"),
+  apollyonIncarnationsTomlPath = join(
+    DATA_DIR,
+    "tabula",
+    "apollyon_incarnations.toml",
+  ),
   figmentTomlPath = join(DATA_DIR, "tabula", "figments.toml"),
   merchantCorpusJsonPath = join(DATA_DIR, "merchant_corpus.json"),
   publicDir = PUBLIC_DIR,
@@ -785,6 +804,10 @@ export function setupAssets({
   const dreamGuidesJsonPath = join(publicDir, "dream-guides-data.json");
   const affiliationsJsonPath = join(publicDir, "affiliations-data.json");
   const atlasConfigJsonPath = join(publicDir, "atlas-config-data.json");
+  const apollyonIncarnationsJsonPath = join(
+    publicDir,
+    "apollyon-incarnations-data.json",
+  );
   const figmentJsonPath = join(publicDir, "figments-data.json");
   const merchantCorpusPublicPath = join(publicDir, "merchant-corpus-data.json");
   const journeyExtensionJsonPath = join(journeysDir, "imageId-extension.json");
@@ -1101,6 +1124,33 @@ export function setupAssets({
     JSON.stringify(jsonAtlasConfig, null, 2) + "\n",
   );
   console.log("Wrote atlas config to atlas-config-data.json");
+
+  // Apollyon incarnations: the final Dreamcaller's ten guises. Parse the TOML
+  // and write the kebab->camel JSON the runtime loader fetches at
+  // /apollyon-incarnations-data.json; Atlas generation picks one to present the
+  // boss node.
+  console.log("Parsing apollyon_incarnations.toml...");
+  const apollyonIncarnationsTomlContent = readFileSync(
+    apollyonIncarnationsTomlPath,
+    "utf8",
+  );
+  const parsedIncarnations = parse(apollyonIncarnationsTomlContent);
+  const allIncarnations = parsedIncarnations.incarnations;
+
+  if (!Array.isArray(allIncarnations)) {
+    throw new Error(
+      "Expected [[incarnations]] array in apollyon_incarnations.toml",
+    );
+  }
+
+  const jsonIncarnations = allIncarnations.map(transformIncarnation);
+  writeFileSync(
+    apollyonIncarnationsJsonPath,
+    JSON.stringify(jsonIncarnations, null, 2) + "\n",
+  );
+  console.log(
+    `Wrote ${jsonIncarnations.length} Apollyon incarnations to apollyon-incarnations-data.json`,
+  );
 
   // Figments: parse the figment catalog TOML and write the kebab->camel JSON
   // the battle UI fetches to source each figment type's name, character type,

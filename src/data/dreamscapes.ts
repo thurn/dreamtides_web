@@ -1,5 +1,6 @@
 import type {
   AffiliationContent,
+  ApollyonIncarnationContent,
   DreamGuideContent,
   DreamscapeContent,
 } from "../types/content";
@@ -9,6 +10,7 @@ import type { SiteType } from "../types/quest";
 // shapes alongside their loaders from one module.
 export type {
   AffiliationContent,
+  ApollyonIncarnationContent,
   DreamGuideContent,
   DreamscapeContent,
 } from "../types/content";
@@ -16,6 +18,7 @@ export type {
 const DREAMSCAPES_JSON_PATH = "/dreamscapes-data.json";
 const DREAM_GUIDES_JSON_PATH = "/dream-guides-data.json";
 const AFFILIATIONS_JSON_PATH = "/affiliations-data.json";
+const APOLLYON_INCARNATIONS_JSON_PATH = "/apollyon-incarnations-data.json";
 
 async function fetchJson<T>(path: string, label: string): Promise<T> {
   const response = await fetch(path);
@@ -48,6 +51,16 @@ export async function loadAffiliations(): Promise<AffiliationContent[]> {
   return fetchJson<AffiliationContent[]>(
     AFFILIATIONS_JSON_PATH,
     "affiliation data",
+  );
+}
+
+/** Fetches Apollyon's incarnation definitions from the asset pipeline output. */
+export async function loadApollyonIncarnations(): Promise<
+  ApollyonIncarnationContent[]
+> {
+  return fetchJson<ApollyonIncarnationContent[]>(
+    APOLLYON_INCARNATIONS_JSON_PATH,
+    "Apollyon incarnation data",
   );
 }
 

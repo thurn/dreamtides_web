@@ -363,6 +363,7 @@ export function createDefaultState(): QuestState {
       nodes: {},
       startingNodeId: "",
       bossNodeId: "",
+      bossIncarnationId: null,
       currentNodeId: null,
       knownDreamsignCarrierIds: [],
     },
