@@ -13,11 +13,11 @@ export const STANDARD_CARD_PRICE = 100;
 /** Fixed price for specialty-shop card items. */
 export const SPECIALTY_CARD_PRICE = 200;
 
-/** Fixed price for dreamsign items, paid in omens. */
-const DREAMSIGN_OMEN_PRICE = 2;
+/** Fixed price for dreamsign items, paid in essence. */
+const DREAMSIGN_ESSENCE_PRICE = 50;
 
-/** Base cost for a shop reroll, paid in omens. */
-const REROLL_OMEN_COST = 1;
+/** Base cost for a shop reroll, paid in essence. */
+const REROLL_ESSENCE_COST = 50;
 
 /** Standard shop composition: 3 cards and 2 dreamsigns to purchase. */
 const STANDARD_CARD_COUNT = 3;
@@ -38,7 +38,6 @@ export interface ShopSlot {
 
 export interface ShopPriceModifiers {
   essenceDiscountPercent?: number;
-  upcomingOmenDiscounts?: number;
 }
 
 type ShopPricedSlot = Pick<
@@ -91,43 +90,35 @@ export interface ShopInventoryResult {
   draftState: DraftState | null;
 }
 
-/** Returns the total discount for a slot after shop-wide modifiers. */
+/**
+ * Returns the total discount for a slot after shop-wide modifiers. Every slot
+ * is essence-priced, so the shop-wide essence discount applies to cards and
+ * Dreamsigns alike.
+ */
 export function effectiveDiscountPercent(
   slot: ShopPricedSlot,
   modifiers: ShopPriceModifiers = {},
 ): number {
   const slotDiscount = Math.max(0, slot.discountPercent);
-  const essenceDiscount =
-    slot.itemType === "card"
-      ? Math.max(0, modifiers.essenceDiscountPercent ?? 0)
-      : 0;
+  const essenceDiscount = Math.max(0, modifiers.essenceDiscountPercent ?? 0);
   return Math.min(100, slotDiscount + essenceDiscount);
 }
 
-/** Returns the effective price of a slot after discount. */
+/** Returns the effective essence price of a slot after discount. */
 export function effectivePrice(
   slot: ShopPricedSlot,
   modifiers: ShopPriceModifiers = {},
 ): number {
   const discountPercent = effectiveDiscountPercent(slot, modifiers);
-  const percentDiscountedPrice =
-    discountPercent === 0
-      ? slot.basePrice
-      : Math.round(slot.basePrice * (1 - discountPercent / 100));
-  if (
-    slot.itemType === "dreamsign" &&
-    percentDiscountedPrice > 0 &&
-    (modifiers.upcomingOmenDiscounts ?? 0) > 0
-  ) {
-    return percentDiscountedPrice - 1;
-  }
-  return percentDiscountedPrice;
+  return discountPercent === 0
+    ? slot.basePrice
+    : Math.round(slot.basePrice * (1 - discountPercent / 100));
 }
 
-/** Computes the omen reroll cost. Enhanced shops reroll for free. */
+/** Computes the essence reroll cost. Enhanced shops reroll for free. */
 export function rerollCost(_rerollCount: number, isEnhanced: boolean): number {
   if (isEnhanced) return 0;
-  return REROLL_OMEN_COST;
+  return REROLL_ESSENCE_COST;
 }
 
 export function shopSlotsToRuntime(
@@ -324,7 +315,7 @@ export function generateShopInventory(
         itemType: "dreamsign",
         card: null,
         dreamsign,
-        basePrice: DREAMSIGN_OMEN_PRICE,
+        basePrice: DREAMSIGN_ESSENCE_PRICE,
         discountPercent: 0,
         purchased: false,
       });

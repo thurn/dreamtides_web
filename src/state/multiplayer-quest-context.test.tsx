@@ -335,7 +335,7 @@ function makeMerchantProviderFixture(): {
 } {
   const site = makeMerchantTestSite({
     id: "site-merchant-provider",
-    type: "DreamJourney",
+    type: "DreamAugury",
   });
   const state = makeMerchantTestQuestState({
     seed: "merchant-provider-seed",
@@ -1246,7 +1246,6 @@ describe("MultiplayerQuestProvider", () => {
       essence: 125,
       shopModifiers: {
         freeRerolls: 0,
-        upcomingOmenDiscounts: 0,
         essenceDiscountPercent: 50,
       },
       siteRuntime: {
@@ -1487,13 +1486,12 @@ describe("MultiplayerQuestProvider", () => {
     ]);
   });
 
-  it("buys a shared shop Dreamsign slot with omens", () => {
+  it("buys a shared shop Dreamsign slot with essence", () => {
     const captured: QuestContextValue[] = [];
     const dreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");
     const questState: QuestState = {
       ...createDefaultState(),
       essence: 250,
-      omens: 5,
       siteRuntime: {
         "site-1": {
           kind: "shop",
@@ -1501,7 +1499,7 @@ describe("MultiplayerQuestProvider", () => {
             {
               itemType: "dreamsign",
               dreamsign,
-              basePrice: 2,
+              basePrice: 50,
               discountPercent: 0,
               purchased: false,
             },
@@ -1525,134 +1523,28 @@ describe("MultiplayerQuestProvider", () => {
     captured[captured.length - 1]?.mutations.buyShopSlot("site-1", 0);
     const nextRoom = latestRoomTransactionUpdater()?.(session.room);
 
-    // Dreamsigns are paid for in omens; essence is untouched.
-    expect(nextRoom?.questState?.essence).toBe(250);
-    expect(nextRoom?.questState?.omens).toBe(3);
+    // Every shop item — including Dreamsigns — is paid for in essence.
+    expect(nextRoom?.questState?.essence).toBe(200);
     expect(nextRoom?.questState?.dreamsigns).toEqual([dreamsign]);
+    expect(nextRoom?.actionLog?.["action-1"]?.summary).toMatchObject({
+      itemType: "dreamsign",
+      basePrice: 50,
+      discountedPrice: 50,
+      currency: "essence",
+    });
     expect(nextRoom?.questState?.siteRuntime["site-1"]).toEqual({
       kind: "shop",
       slots: [
         {
           itemType: "dreamsign",
           dreamsign,
-          basePrice: 2,
+          basePrice: 50,
           discountPercent: 0,
           purchased: true,
         },
       ],
       rerollCount: 0,
       remainingDreamsignPoolIds: [],
-    });
-  });
-
-  it("spends one upcoming omen discount on a shared Dreamsign shop purchase", () => {
-    const captured: QuestContextValue[] = [];
-    const dreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");
-    const questState: QuestState = {
-      ...createDefaultState(),
-      essence: 250,
-      omens: 2,
-      shopModifiers: {
-        freeRerolls: 0,
-        upcomingOmenDiscounts: 1,
-        essenceDiscountPercent: 0,
-      },
-      siteRuntime: {
-        "site-1": {
-          kind: "shop",
-          slots: [
-            {
-              itemType: "dreamsign",
-              dreamsign,
-              basePrice: 2,
-              discountPercent: 0,
-              purchased: false,
-            },
-          ],
-          rerollCount: 0,
-          remainingDreamsignPoolIds: [],
-        },
-      },
-    };
-    const session = makeSession(questState);
-    mount(
-      <MultiplayerQuestProvider
-        database={database}
-        session={session}
-        questContent={makeQuestContent()}
-      >
-        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
-      </MultiplayerQuestProvider>,
-    );
-
-    captured[captured.length - 1]?.mutations.buyShopSlot("site-1", 0);
-    const nextRoom = latestRoomTransactionUpdater()?.(session.room);
-
-    expect(nextRoom?.questState?.omens).toBe(1);
-    expect(nextRoom?.questState?.shopModifiers.upcomingOmenDiscounts).toBe(0);
-    expect(nextRoom?.questState?.dreamsigns).toEqual([dreamsign]);
-    expect(nextRoom?.actionLog?.["action-1"]?.summary).toMatchObject({
-      itemType: "dreamsign",
-      basePrice: 2,
-      discountedPrice: 1,
-      currency: "omens",
-      omenDiscountApplied: true,
-      upcomingOmenDiscountsRemaining: 0,
-    });
-  });
-
-  it("keeps upcoming omen discounts after a free shared Dreamsign shop purchase", () => {
-    const captured: QuestContextValue[] = [];
-    const dreamsign = makeDreamsign("dreamsign-1", "Dreamsign One");
-    const questState: QuestState = {
-      ...createDefaultState(),
-      omens: 0,
-      shopModifiers: {
-        freeRerolls: 0,
-        upcomingOmenDiscounts: 1,
-        essenceDiscountPercent: 0,
-      },
-      siteRuntime: {
-        "site-1": {
-          kind: "shop",
-          slots: [
-            {
-              itemType: "dreamsign",
-              dreamsign,
-              basePrice: 0,
-              discountPercent: 0,
-              purchased: false,
-            },
-          ],
-          rerollCount: 0,
-          remainingDreamsignPoolIds: [],
-        },
-      },
-    };
-    const session = makeSession(questState);
-    mount(
-      <MultiplayerQuestProvider
-        database={database}
-        session={session}
-        questContent={makeQuestContent()}
-      >
-        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
-      </MultiplayerQuestProvider>,
-    );
-
-    captured[captured.length - 1]?.mutations.buyShopSlot("site-1", 0);
-    const nextRoom = latestRoomTransactionUpdater()?.(session.room);
-
-    expect(nextRoom?.questState?.omens).toBe(0);
-    expect(nextRoom?.questState?.shopModifiers.upcomingOmenDiscounts).toBe(1);
-    expect(nextRoom?.questState?.dreamsigns).toEqual([dreamsign]);
-    expect(nextRoom?.actionLog?.["action-1"]?.summary).toMatchObject({
-      itemType: "dreamsign",
-      basePrice: 0,
-      discountedPrice: 0,
-      currency: "omens",
-      omenDiscountApplied: false,
-      upcomingOmenDiscountsRemaining: 1,
     });
   });
 
@@ -1709,7 +1601,6 @@ describe("MultiplayerQuestProvider", () => {
     const questState: QuestState = {
       ...createDefaultState(),
       essence: 200,
-      omens: 3,
       remainingDreamsignPool: [],
       siteRuntime: {
         "site-1": {
@@ -1759,10 +1650,9 @@ describe("MultiplayerQuestProvider", () => {
     const nextRoom = updater?.(session.room);
     const runtime = nextRoom?.questState?.siteRuntime["site-1"];
 
-    // Reroll costs 1 omen exactly once and advances rerollCount so the
-    // affordance disables for the rest of the visit. Essence is untouched.
-    expect(nextRoom?.questState?.essence).toBe(200);
-    expect(nextRoom?.questState?.omens).toBe(2);
+    // Reroll spends essence exactly once and advances rerollCount so the
+    // affordance disables for the rest of the visit.
+    expect(nextRoom?.questState?.essence).toBe(150);
     expect(runtime?.kind).toBe("shop");
     expect(runtime?.kind === "shop" ? runtime.rerollCount : null).toBe(1);
     // Purchased slots are preserved verbatim.
@@ -1780,7 +1670,7 @@ describe("MultiplayerQuestProvider", () => {
       source: "shop_reroll",
       summary: {
         siteId: "site-1",
-        rerollCost: 1,
+        rerollCost: 50,
         rerollCount: 1,
         freeReroll: false,
       },
@@ -1848,7 +1738,6 @@ describe("MultiplayerQuestProvider", () => {
     const questState: QuestState = {
       ...createDefaultState(),
       essence: 200,
-      omens: 3,
       remainingDreamsignPool: [],
       siteRuntime: {
         "site-1": {
@@ -2715,7 +2604,7 @@ describe("MultiplayerQuestProvider", () => {
     expect(nextState.visitedSites).toContain(fixture.site.id);
     expect(nextState.atlas.nodes["dreamscape-a"]?.sites[0]?.isVisited).toBe(true);
     expect(nextState.siteRuntime[fixture.site.id]).toEqual({
-      kind: "dreamJourney",
+      kind: "dreamAugury",
       completed: true,
     });
     expect(nextState.screen).toEqual({ type: "dreamscape" });
@@ -2809,7 +2698,7 @@ describe("MultiplayerQuestProvider", () => {
     expect(nextRoom?.questState?.essence).toBe(fixture.state.essence);
     expect(nextRoom?.questState?.visitedSites).toContain(fixture.site.id);
     expect(nextRoom?.questState?.siteRuntime[fixture.site.id]).toEqual({
-      kind: "dreamJourney",
+      kind: "dreamAugury",
       completed: true,
     });
     expect(nextRoom?.questState?.screen).toEqual({ type: "dreamscape" });
@@ -2828,7 +2717,7 @@ describe("MultiplayerQuestProvider", () => {
   });
 
   it(
-    "completeDreamJourneySite marks the site visited without mutating " +
+    "completeDreamAugurySite marks the site visited without mutating " +
       "deck or resources",
     () => {
       // Contract: the new mutation walks visit-tracking bookkeeping only.
@@ -2848,11 +2737,10 @@ describe("MultiplayerQuestProvider", () => {
       const questState: QuestState = {
         ...createDefaultState(),
         essence: 250,
-        omens: 5,
         deck: initialDeck,
         dreamsigns: initialDreamsigns,
         siteRuntime: {
-          "site-1": { kind: "dreamJourney", completed: false },
+          "site-1": { kind: "dreamAugury", completed: false },
         },
         atlas: {
           nodes: {
@@ -2866,7 +2754,7 @@ describe("MultiplayerQuestProvider", () => {
               sites: [
                 {
                   id: "site-1",
-                  type: "DreamJourney",
+                  type: "DreamAugury",
                   isEnhanced: false,
                   isVisited: false,
                 },
@@ -2899,21 +2787,20 @@ describe("MultiplayerQuestProvider", () => {
         </MultiplayerQuestProvider>,
       );
 
-      captured[captured.length - 1]?.mutations.completeDreamJourneySite(
+      captured[captured.length - 1]?.mutations.completeDreamAugurySite(
         "site-1",
       );
       const nextRoom = latestRoomTransactionUpdater()?.(session.room);
 
       expect(nextRoom?.questState?.visitedSites).toEqual(["site-1"]);
       expect(nextRoom?.questState?.siteRuntime["site-1"]).toEqual({
-        kind: "dreamJourney",
+        kind: "dreamAugury",
         completed: true,
       });
       // Deck and resources MUST be untouched.
       expect(nextRoom?.questState?.deck).toEqual(initialDeck);
       expect(nextRoom?.questState?.dreamsigns).toEqual(initialDreamsigns);
       expect(nextRoom?.questState?.essence).toBe(250);
-      expect(nextRoom?.questState?.omens).toBe(5);
       expect(nextRoom?.questState?.essenceCap).toBe(questState.essenceCap);
       expect(nextRoom?.questState?.maxDreamsigns).toBe(
         questState.maxDreamsigns,
@@ -2923,8 +2810,8 @@ describe("MultiplayerQuestProvider", () => {
       expect(nextRoom?.actionLog?.["action-1"]).toEqual({
         timestamp: nextRoom?.metadata.updatedAt,
         actorId: "client-1",
-        action: "completeDreamJourneySite",
-        source: "dream_journey",
+        action: "completeDreamAugurySite",
+        source: "dream_augury",
         summary: { siteId: "site-1", isEnhanced: false },
       });
     },
@@ -2936,7 +2823,6 @@ describe("MultiplayerQuestProvider", () => {
       ...createDefaultState(),
       essence: 450,
       essenceCap: 500,
-      omens: 1,
     };
     const session = makeSession(questState);
     mount(
@@ -2966,13 +2852,6 @@ describe("MultiplayerQuestProvider", () => {
         delta: 50,
       },
     });
-
-    captured[captured.length - 1]?.mutations.changeOmens(
-      -10,
-      "journey:omen_cost",
-    );
-    const omenRoom = latestRoomTransactionUpdater()?.(session.room);
-    expect(omenRoom?.questState?.omens).toBe(0);
 
     captured[captured.length - 1]?.mutations.changeMaxEssence(
       -400,
@@ -3369,7 +3248,6 @@ describe("MultiplayerQuestProvider", () => {
     const captured: QuestContextValue[] = [];
     const questState: QuestState = {
       ...createDefaultState(),
-      omens: 1,
       deck: [
         {
           entryId: "deck-1",
@@ -3436,7 +3314,6 @@ describe("MultiplayerQuestProvider", () => {
 
     const committedRoom = baneRoom as MultiplayerRoom;
     captured[captured.length - 1]?.mutations.incrementCompletionLevel(
-      0,
       0,
       null,
       null,
@@ -3595,7 +3472,6 @@ describe("MultiplayerQuestProvider", () => {
     const site = makeSite("shop-site", "Shop");
     const questState: QuestState = {
       ...createDefaultState(),
-      omens: 0,
       remainingDreamsignPool: [],
       siteRuntime: {
         [site.id]: {
@@ -3633,15 +3509,6 @@ describe("MultiplayerQuestProvider", () => {
       essenceDiscountRoom?.questState?.shopModifiers.essenceDiscountPercent,
     ).toBe(15);
 
-    captured[captured.length - 1]?.mutations.grantShopOmenDiscounts(
-      1,
-      "journey:omen_discount",
-    );
-    const omenDiscountRoom = latestRoomTransactionUpdater()?.(session.room);
-    expect(
-      omenDiscountRoom?.questState?.shopModifiers.upcomingOmenDiscounts,
-    ).toBe(1);
-
     const committedRoom = freeRoom as MultiplayerRoom;
     const committedSession: RoomSession = {
       ...session,
@@ -3661,7 +3528,6 @@ describe("MultiplayerQuestProvider", () => {
 
     captured[captured.length - 1]?.mutations.rerollShop(site);
     const rerollRoom = latestRoomTransactionUpdater()?.(committedRoom);
-    expect(rerollRoom?.questState?.omens).toBe(0);
     expect(rerollRoom?.questState?.shopModifiers.freeRerolls).toBe(1);
     const runtime = rerollRoom?.questState?.siteRuntime[site.id];
     expect(runtime?.kind).toBe("shop");

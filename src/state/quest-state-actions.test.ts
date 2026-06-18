@@ -251,10 +251,11 @@ describe("quest state actions", () => {
 
   it("changes quest essence without replacing the deck", () => {
     const prev = createDefaultState();
+    const startingEssence = prev.essence;
     const next = changeQuestEssence(prev, 25);
 
-    expect(next.essence).toBe(275);
-    expect(prev.essence).toBe(250);
+    expect(next.essence).toBe(startingEssence + 25);
+    expect(prev.essence).toBe(startingEssence);
     expect(next.deck).toBe(prev.deck);
   });
 
@@ -409,7 +410,7 @@ describe("quest state actions", () => {
     expect(next.dreamcaller).toEqual(toQuestDreamcaller(dreamcaller));
     expect(next.dreamcaller?.startingEssence).toBe(275);
     expect(next.essence).toBe(dreamcaller.startingEssence);
-    expect(prev.essence).toBe(250);
+    expect(prev.essence).toBe(createDefaultState().essence);
     // The package is built from the run pool context at quest start; assert a
     // non-empty draft pool was produced rather than checking exact card numbers.
     expect(next.resolvedPackage).not.toBeNull();

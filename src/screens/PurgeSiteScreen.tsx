@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import type { SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
 import { EssenceValue } from "../components/EssenceValue";
+import { RulesText } from "../components/RulesText";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import {
@@ -29,7 +30,40 @@ const ESSENCE_COLOR = "var(--color-essence)";
  */
 export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
   const { state, mutations, cardDatabase } = useQuest();
-  const { deck, essence } = state;
+  const { deck, essence, dreamsigns } = state;
+
+  // Banes are removed for free at a Purge site. Split the deck so bane cards
+  // sit in their own free section, and surface bane Dreamsigns alongside them.
+  const baneCards = useMemo(() => deck.filter((entry) => entry.isBane), [deck]);
+  const purgeableCards = useMemo(
+    () => deck.filter((entry) => !entry.isBane),
+    [deck],
+  );
+  const baneDreamsignIndices = useMemo(
+    () =>
+      dreamsigns
+        .map((dreamsign, index) => ({ dreamsign, index }))
+        .filter(({ dreamsign }) => dreamsign.isBane)
+        .map(({ index }) => index),
+    [dreamsigns],
+  );
+  const hasBanes = baneCards.length > 0 || baneDreamsignIndices.length > 0;
+
+  // Selected bane removals (free). Keyed `card:<entryId>` / `dreamsign:<index>`.
+  const [selectedBaneKeys, setSelectedBaneKeys] = useState<Set<string>>(
+    () => new Set(),
+  );
+  const toggleBane = useCallback((key: string) => {
+    setSelectedBaneKeys((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  }, []);
 
   const modifiers: PurgePriceModifiers = useMemo(
     () => ({
@@ -51,9 +85,9 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
     () =>
       Math.min(
         maxAffordablePurgeCount(essence, MAX_PURGE_PER_VISIT, modifiers),
-        deck.length,
+        purgeableCards.length,
       ),
-    [essence, modifiers, deck.length],
+    [essence, modifiers, purgeableCards.length],
   );
 
   const selectedCount = selectedEntryIds.length;
@@ -80,8 +114,25 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
     [affordableCount],
   );
 
+  const selectedBaneCardEntryIds = useMemo(
+    () =>
+      baneCards
+        .filter((entry) => selectedBaneKeys.has(`card:${entry.entryId}`))
+        .map((entry) => entry.entryId),
+    [baneCards, selectedBaneKeys],
+  );
+  const selectedBaneDreamsignIndices = useMemo(
+    () =>
+      baneDreamsignIndices.filter((index) =>
+        selectedBaneKeys.has(`dreamsign:${String(index)}`),
+      ),
+    [baneDreamsignIndices, selectedBaneKeys],
+  );
+  const selectedBaneCount =
+    selectedBaneCardEntryIds.length + selectedBaneDreamsignIndices.length;
+
   const handlePurge = useCallback(() => {
-    if (selectedEntryIds.length === 0) return;
+    if (selectedEntryIds.length === 0 && selectedBaneCount === 0) return;
 
     const purgedEntries = selectedEntryIds
       .map((entryId) => deck.find((e) => e.entryId === entryId))
@@ -97,6 +148,9 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
       count: purgedCardNumbers.length,
       perCardPrices,
       totalCost: cost,
+      banesRemovedCount: selectedBaneCount,
+      baneCardsRemoved: selectedBaneCardEntryIds.length,
+      baneDreamsignsRemoved: selectedBaneDreamsignIndices.length,
       isEnhanced: site.isEnhanced,
       discountPercent,
       essenceBefore: essence,
@@ -107,12 +161,16 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
 
     mutations.purgeDeckCards(
       site.id,
-      purgedEntries.map((entry) => entry.entryId),
+      [...purgedEntries.map((entry) => entry.entryId), ...selectedBaneCardEntryIds],
       cost,
       "purge",
+      selectedBaneDreamsignIndices,
     );
   }, [
     selectedEntryIds,
+    selectedBaneCount,
+    selectedBaneCardEntryIds,
+    selectedBaneDreamsignIndices,
     deck,
     modifiers,
     mutations,
@@ -233,18 +291,24 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
           className="rounded-lg px-6 py-2.5 text-base font-bold transition-opacity"
           style={{
             background:
-              selectedCount > 0
+              selectedCount > 0 || selectedBaneCount > 0
                 ? "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)"
                 : "#4b5563",
-            color: selectedCount > 0 ? "#ffffff" : "#9ca3af",
-            opacity: selectedCount > 0 ? 1 : 0.6,
-            cursor: selectedCount > 0 ? "pointer" : "not-allowed",
+            color:
+              selectedCount > 0 || selectedBaneCount > 0
+                ? "#ffffff"
+                : "#9ca3af",
+            opacity: selectedCount > 0 || selectedBaneCount > 0 ? 1 : 0.6,
+            cursor:
+              selectedCount > 0 || selectedBaneCount > 0
+                ? "pointer"
+                : "not-allowed",
           }}
-          disabled={selectedCount === 0}
+          disabled={selectedCount === 0 && selectedBaneCount === 0}
           onClick={handlePurge}
         >
-          Purge {String(selectedCount)} Card
-          {selectedCount !== 1 ? "s" : ""}
+          Remove {String(selectedCount + selectedBaneCount)} Card
+          {selectedCount + selectedBaneCount !== 1 ? "s" : ""}
           {selectedCount > 0 ? (
             <>
               {" — "}
@@ -265,9 +329,94 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
         </button>
       </div>
 
+      {/* Banes section — always free to remove. */}
+      {hasBanes && (
+        <div className="mb-6 w-full max-w-5xl">
+          <p
+            className="mb-2 text-center text-sm font-bold uppercase tracking-wider"
+            style={{ color: "#fca5a5" }}
+          >
+            Banes — free to remove
+          </p>
+          <div
+            className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6"
+            data-purge-bane-grid=""
+          >
+            {baneCards.map((entry) => {
+              const card = cardDatabase.get(entry.cardNumber);
+              if (!card) return null;
+              const key = `card:${entry.entryId}`;
+              const isSelected = selectedBaneKeys.has(key);
+              return (
+                <div
+                  key={key}
+                  data-purge-bane-key={key}
+                  data-purge-bane-selected={isSelected ? "true" : "false"}
+                >
+                  <CardDisplay
+                    card={card}
+                    onClick={() => toggleBane(key)}
+                    selected={isSelected}
+                    selectionColor="#dc2626"
+                  />
+                </div>
+              );
+            })}
+            {baneDreamsignIndices.map((index) => {
+              const dreamsign = dreamsigns[index];
+              const key = `dreamsign:${String(index)}`;
+              const isSelected = selectedBaneKeys.has(key);
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  data-purge-bane-key={key}
+                  data-purge-bane-selected={isSelected ? "true" : "false"}
+                  onClick={() => toggleBane(key)}
+                  className="flex flex-col items-center justify-center gap-1 rounded-lg p-3 text-center outline-none"
+                  style={{
+                    background:
+                      "linear-gradient(145deg, #1a0a0a 0%, #1a0510 60%, #0d0814 100%)",
+                    border: isSelected
+                      ? "2px solid #dc2626"
+                      : "1px solid rgba(220, 38, 38, 0.4)",
+                    boxShadow: isSelected
+                      ? "0 0 18px rgba(220, 38, 38, 0.45)"
+                      : "none",
+                  }}
+                >
+                  <span
+                    className="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
+                    style={{
+                      background: "rgba(220, 38, 38, 0.15)",
+                      color: "#fca5a5",
+                      border: "1px solid rgba(220, 38, 38, 0.3)",
+                    }}
+                  >
+                    Bane
+                  </span>
+                  <span
+                    className="text-sm font-bold"
+                    style={{ color: "#fca5a5" }}
+                  >
+                    {dreamsign.name}
+                  </span>
+                  <span
+                    className="text-[10px] leading-tight opacity-70"
+                    style={{ color: "#e2e8f0" }}
+                  >
+                    <RulesText text={dreamsign.effectDescription} />
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
       {/* Deck grid */}
       <div className="grid w-full max-w-5xl grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-        {deck.map((entry, index) => {
+        {purgeableCards.map((entry, index) => {
           const card = cardDatabase.get(entry.cardNumber);
           if (!card) return null;
           const order = selectedEntryIds.indexOf(entry.entryId);

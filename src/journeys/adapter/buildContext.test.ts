@@ -101,7 +101,6 @@ function makeQuestState(overrides: {
     seed: overrides.seed ?? "test-seed",
     essence: overrides.essence ?? 100,
     essenceCap: overrides.essenceCap ?? 500,
-    omens: overrides.omens ?? 5,
     maxDreamsigns: 12,
     deck: overrides.deck ?? [],
     dreamcaller: makeDreamcaller(),
@@ -129,7 +128,6 @@ function makeQuestState(overrides: {
     battleModifiers: [],
     shopModifiers: {
       freeRerolls: 0,
-      upcomingOmenDiscounts: 0,
       essenceDiscountPercent: 0,
     },
     dreamscapeModifiers: [],
@@ -137,7 +135,7 @@ function makeQuestState(overrides: {
 }
 
 function makeSite(id: string): SiteState {
-  return { id, type: "DreamJourney", isEnhanced: false, isVisited: false };
+  return { id, type: "DreamAugury", isEnhanced: false, isVisited: false };
 }
 
 describe("normalizeRarity", () => {
@@ -410,7 +408,6 @@ describe("buildJourneyContext projections", () => {
     const questState = makeQuestState({
       essence: 123,
       essenceCap: 400,
-      omens: 7,
       completionLevel: 2,
       dreamsigns,
       remainingDreamsignPool: ["ds-pool-1", "ds-pool-2"],
@@ -426,7 +423,9 @@ describe("buildJourneyContext projections", () => {
     expect(context.state.quest.resources).toEqual({
       essence: 123,
       maxEssence: 400,
-      omens: 7,
+      // The single-currency economy always projects omens as zero into the
+      // classic journey's internal resource model.
+      omens: 0,
       dreamscape: 2,
     });
     expect(context.state.quest.activeDreamsigns).toEqual([

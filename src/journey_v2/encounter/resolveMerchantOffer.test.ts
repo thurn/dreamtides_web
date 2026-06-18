@@ -58,7 +58,7 @@ function makeFixture(overrides: { seed?: string } = {}): {
 } {
   const site = makeMerchantTestSite({
     id: "site-merchant-resolve",
-    type: "DreamJourney",
+    type: "DreamAugury",
   });
   const { cards, corpus } = poolCards(30);
   const { templates, profiles } = dreamsignFixture(10);

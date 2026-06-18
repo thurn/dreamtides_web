@@ -45,13 +45,11 @@ export type SiteType =
   | "SpecialtyShop"
   | "DreamsignOffering"
   | "DreamsignDraft"
-  | "DreamJourney"
   | "Purge"
   | "Essence"
   | "Transfiguration"
   | "Duplication"
   | "Reward"
-  | "Cleanse"
   | "DreamAugury"
   | "DreamsignMarket"
   | "DreamsignRevelation"
@@ -335,12 +333,12 @@ export type CardChoiceSiteRuntime = {
     }
 );
 
-/** Runtime state for a Dream Journey site. */
-export interface DreamJourneySiteRuntime {
-  kind: "dreamJourney";
+/** Runtime state for a Dream Augury site. */
+export interface DreamAugurySiteRuntime {
+  kind: "dreamAugury";
   completed: boolean;
   /**
-   * Debug reroll counter. Incremented by `rerollDreamJourney` to regenerate the
+   * Debug reroll counter. Incremented by `rerollDreamAugury` to regenerate the
    * encounter from the same quest parameters. Mixed into the encounter RNG salt
    * by `buildMerchantContext`, so the persisted value drives both the displayed
    * encounter and the signature checks on accept/decline. Absent (or `0`) for an
@@ -349,8 +347,8 @@ export interface DreamJourneySiteRuntime {
   rerollNonce?: number;
   /**
    * Debug-only: forces the first generated offer to use this archetype (a
-   * `MerchantArchetypeId`). Set by `forceDreamJourneyArchetype` from the Journey
-   * V2 "force a category" debug dropdown. Read by `buildMerchantContext` and
+   * `MerchantArchetypeId`). Set by `forceDreamAuguryArchetype` from the Dream
+   * Augury "force a category" debug dropdown. Read by `buildMerchantContext` and
    * honored during encounter generation, so it drives both the displayed
    * encounter and the signature checks on accept/decline. Absent when no
    * category is forced; the value is ignored if it is not eligible for the
@@ -366,7 +364,7 @@ export type SiteRuntimeState =
   | DreamsignOfferSiteRuntime
   | EssenceSiteRuntime
   | CardChoiceSiteRuntime
-  | DreamJourneySiteRuntime;
+  | DreamAugurySiteRuntime;
 
 /** Discriminated union for the current screen. */
 export type Screen =
@@ -378,7 +376,7 @@ export type Screen =
   | { type: "questFailed" };
 
 /**
- * A modifier that affects upcoming battle resolutions. Pushed by Dream Journey
+ * A modifier that affects upcoming battle resolutions. Pushed by Dream Augury
  * effects; decremented by `incrementCompletionLevel` each time a battle
  * completes. Entries at `battlesRemaining === 0` drop on the same tick that
  * brought them to zero. Battle initialization reads `battleModifiers` to apply
@@ -436,14 +434,12 @@ export type DreamscapeModifier =
     };
 
 /**
- * Shop-side modifiers stacked by Dream Journey rewards. Free-reroll grants
- * stack additively and are consumed by `rerollShop`; the omen-discount queue
- * holds one-use −1-omen tokens; `essenceDiscountPercent` is a permanent
- * additive discount on essence-priced shop slots.
+ * Shop-side modifiers stacked by Dream Augury rewards. Free-reroll grants
+ * stack additively and are consumed by `rerollShop`; `essenceDiscountPercent`
+ * is a permanent additive discount on essence-priced shop slots.
  */
 export interface ShopModifiers {
   readonly freeRerolls: number;
-  readonly upcomingOmenDiscounts: number;
   readonly essenceDiscountPercent: number;
 }
 
@@ -461,14 +457,9 @@ export interface QuestState {
   essence: number;
   /**
    * Maximum essence the player can hold. Essence gained beyond this cap is
-   * lost. Defaults to 500; effects such as Dream Journey rewards can raise it.
+   * lost. Defaults to 500; effects such as Dream Augury rewards can raise it.
    */
   essenceCap: number;
-  /**
-   * Omens currency. Spent only on shop Dreamsign purchases and shop rerolls.
-   * Uncapped.
-   */
-  omens: number;
   /**
    * Maximum number of Dreamsigns the player can hold at once. Defaults to 12;
    * certain effects can reduce it.
@@ -504,9 +495,9 @@ export interface QuestState {
    */
   readonly battleModifiers: readonly BattleModifier[];
   /**
-   * Modifiers consumed at shop sites. Free-reroll grants stack additively,
-   * the omen-discount queue is FIFO, and the essence discount is a permanent
-   * additive percentage applied to every essence-priced shop purchase.
+   * Modifiers consumed at shop sites. Free-reroll grants stack additively, and
+   * the essence discount is a permanent additive percentage applied to every
+   * essence-priced shop purchase.
    */
   readonly shopModifiers: ShopModifiers;
   /**

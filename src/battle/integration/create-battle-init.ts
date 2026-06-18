@@ -215,8 +215,6 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     isMiniboss: completionLevelAtStart === 3,
     isFinalBoss: completionLevelAtStart === 6,
     essenceReward,
-    // Victory grants 1-3 omens, scaling with completed dreamscapes.
-    omenReward: Math.min(3, 1 + Math.floor(completionLevelAtStart / 2)),
     openingHandSize: 5,
     // The opening dreamscape (completion level 0) is a shorter, gentler
     // introduction won at 10 points; every later dreamscape is played to 25.

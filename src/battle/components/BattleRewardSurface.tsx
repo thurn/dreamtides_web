@@ -55,7 +55,6 @@ export function BattleRewardSurface({
   canCancel,
   enemyName,
   essenceReward,
-  omenReward,
   playerScore,
   enemyScore,
   rewardSource,
@@ -68,7 +67,6 @@ export function BattleRewardSurface({
   canCancel: boolean;
   enemyName?: string | null;
   essenceReward: number;
-  omenReward: number;
   playerScore?: number | null;
   enemyScore?: number | null;
   rewardSource: string;
@@ -236,27 +234,6 @@ export function BattleRewardSurface({
         <div className="flex items-center gap-2">
           <EssenceCountUp target={essenceReward} duration={800} />
         </div>
-      </motion.div>
-
-      <motion.div
-        data-battle-reward-omens=""
-        className="flex flex-col items-center gap-1"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.3 }}
-      >
-        <span
-          className={`${typography.caption} font-semibold uppercase tracking-[0.22em]`}
-          style={{ color: "#fbbf24" }}
-        >
-          Omens Earned
-        </span>
-        <span
-          className="text-2xl font-black tabular-nums"
-          style={{ color: "#fbbf24" }}
-        >
-          +{String(omenReward)}
-        </span>
       </motion.div>
 
       <motion.div

@@ -408,7 +408,6 @@ describe("room service", () => {
           seed: "default",
           essence: 250,
           essenceCap: 500,
-          omens: 0,
           maxDreamsigns: 12,
           deck: [],
           dreamcaller: null,
@@ -436,7 +435,6 @@ describe("room service", () => {
           battleModifiers: [],
           shopModifiers: {
             freeRerolls: 0,
-            upcomingOmenDiscounts: 0,
             essenceDiscountPercent: 0,
           },
           dreamscapeModifiers: [],

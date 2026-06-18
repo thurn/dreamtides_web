@@ -254,11 +254,10 @@ const SITE_TYPE_FOR_APPLY_BY_JOURNEY_LABEL: ReadonlyMap<string, SiteTypeForApply
   ["DreamsignOffering", "DreamsignOffering"],
   ["Dreamsign Draft", "DreamsignDraft"],
   ["DreamsignDraft", "DreamsignDraft"],
-  ["Dream Journey", "DreamJourney"],
-  ["DreamJourney", "DreamJourney"],
+  ["Dream Augury", "DreamAugury"],
+  ["DreamAugury", "DreamAugury"],
   ["Duplication", "Duplication"],
   ["Reward", "Reward"],
-  ["Cleanse", "Cleanse"],
 ]);
 
 function siteTypeForApply(templateId: string, siteLabel: string): SiteTypeForApply | undefined {

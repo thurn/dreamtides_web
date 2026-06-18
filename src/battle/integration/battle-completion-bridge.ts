@@ -30,7 +30,6 @@ export interface CompleteBattleSiteVictoryInput {
   completionLevelAtBattleStart: number;
   atlasSnapshot: DreamAtlas;
   essenceReward: number;
-  omenReward: number;
   isMiniboss: boolean;
   isFinalBoss: boolean;
   playerHasBanes: boolean;
@@ -63,7 +62,6 @@ export function completeBattleSiteVictory(
     completionLevelAtBattleStart,
     atlasSnapshot,
     essenceReward,
-    omenReward,
     isMiniboss,
     isFinalBoss,
     playerHasBanes,
@@ -95,29 +93,14 @@ export function completeBattleSiteVictory(
     battleId,
     siteId,
   });
-  if (omenReward !== 0) {
-    logEvent("omens_granted", {
-      amount: omenReward,
-      source: "battle_reward",
-      battleId,
-      siteId,
-    });
-  }
   mutations.markSiteVisited(siteId);
-  mutations.incrementCompletionLevel(
-    essenceReward,
-    omenReward,
-    null,
-    null,
-    isMiniboss,
-  );
+  mutations.incrementCompletionLevel(essenceReward, null, null, isMiniboss);
   logEvent("battle_proto_completion_applied", {
     battleId,
     completionLevelAtBattleStart,
     completionLevelAfterVictory: completionLevelAtBattleStart + 1,
     dreamscapeId,
     essenceReward,
-    omenReward,
     isFinalBoss,
     isMiniboss,
     siteId,
@@ -125,7 +108,7 @@ export function completeBattleSiteVictory(
 
   logEvent("site_completed", {
     siteType: "Battle",
-    outcome: `Victory - earned ${String(essenceReward)} essence and ${String(omenReward)} omens`,
+    outcome: `Victory - earned ${String(essenceReward)} essence`,
   });
 
   const completeQuestHandoff = () => {

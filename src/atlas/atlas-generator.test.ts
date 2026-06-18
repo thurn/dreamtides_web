@@ -11,6 +11,7 @@ import {
   resetAtlasGenerator,
   siteTypeDescription,
   siteTypeIcon,
+  ALL_SITE_TYPES,
   type AtlasBuildContext,
   type SiteGenerationContext,
 } from "./atlas-generator";
@@ -247,24 +248,6 @@ describe("generateSiteComposition", () => {
         }
       }
     }
-  });
-
-  it("excludes Cleanse when the player has no banes, can include it when they do", () => {
-    const dreamscape = NON_STARTER_DREAMSCAPES[0];
-    for (let i = 0; i < 50; i++) {
-      const sites = composeFor(dreamscape, 3, { playerHasBanes: false });
-      expect(sites.some((s) => s.type === "Cleanse")).toBe(false);
-    }
-    let foundCleanse = false;
-    for (const ds of NON_STARTER_DREAMSCAPES) {
-      for (let i = 0; i < 100 && !foundCleanse; i++) {
-        const sites = composeFor(ds, 3, { playerHasBanes: true });
-        if (sites.some((s) => s.type === "Cleanse")) {
-          foundCleanse = true;
-        }
-      }
-    }
-    expect(foundCleanse).toBe(true);
   });
 
   it("weights Transfiguration and Duplication up in later layers", () => {
@@ -659,7 +642,7 @@ describe("previewSiteTypes", () => {
       { id: "s1", type: "Shop", isEnhanced: false, isVisited: false },
       { id: "s2", type: "Essence", isEnhanced: false, isVisited: false },
       { id: "s3", type: "Purge", isEnhanced: false, isVisited: false },
-      { id: "s4", type: "DreamJourney", isEnhanced: false, isVisited: false },
+      { id: "s4", type: "DreamAugury", isEnhanced: false, isVisited: false },
     ]);
     const preview = previewSiteTypes(node);
     expect(preview.length).toBeLessThanOrEqual(3);
@@ -728,7 +711,7 @@ describe("revealedAtlasSite", () => {
     const sites = [
       makeSite("s1", "Draft"),
       makeSite("s2", "Shop"),
-      makeSite("s3", "DreamJourney"),
+      makeSite("s3", "DreamAugury"),
       makeSite("s4", "Essence"),
       makeSite("s5", "Battle"),
     ];
@@ -742,7 +725,7 @@ describe("revealedAtlasSite", () => {
       makeSite("a", "Draft"),
       makeSite("b", "Shop"),
       makeSite("c", "Essence"),
-      makeSite("d", "DreamJourney"),
+      makeSite("d", "DreamAugury"),
       makeSite("e", "Battle"),
     ];
     const distinctTypes = new Set<SiteType>();
@@ -793,22 +776,6 @@ describe("revealedAtlasSite", () => {
     expect(revealed?.type).not.toBe("Battle");
   });
 });
-
-const ALL_SITE_TYPES: SiteType[] = [
-  "Battle",
-  "Draft",
-  "Shop",
-  "SpecialtyShop",
-  "DreamsignOffering",
-  "DreamsignDraft",
-  "DreamJourney",
-  "Purge",
-  "Essence",
-  "Transfiguration",
-  "Duplication",
-  "Reward",
-  "Cleanse",
-];
 
 describe("siteTypeDescription", () => {
   it("returns a non-empty string for every site type", () => {

@@ -86,13 +86,13 @@ export interface QuestMutations {
     copyCount: number,
   ) => void;
   /**
-   * Marks a Dream Journey site as completed and returns to the dreamscape.
-   * The journey screen is responsible for any narrative interaction; the
+   * Marks a Dream Augury site as completed and returns to the dreamscape.
+   * The augury screen is responsible for any narrative interaction; the
    * mutation itself applies no deck or resource changes — it lazily ensures
    * a runtime slot exists, flips the `completed` flag, and walks the
    * visit-tracking bookkeeping.
    */
-  completeDreamJourneySite: (siteId: string) => void;
+  completeDreamAugurySite: (siteId: string) => void;
   acceptDreamMerchantOffer: (
     siteId: string,
     request: MerchantAcceptRequest,
@@ -102,15 +102,15 @@ export interface QuestMutations {
     request: MerchantDeclineRequest,
   ) => void;
   /**
-   * Debug-only: regenerates the Dream Journey encounter for a site using the
+   * Debug-only: regenerates the Dream Augury encounter for a site using the
    * same quest parameters by bumping `siteRuntime[siteId].rerollNonce`. Any
    * prior commit is cleared so the fresh encounter starts from a clean slate.
    * Optional because it is exposed only by the live quest providers, not by
    * lightweight test/demo mutation stubs.
    */
-  rerollDreamJourney?: (siteId: string) => void;
+  rerollDreamAugury?: (siteId: string) => void;
   /**
-   * Debug-only: forces the next generated Dream Journey encounter to include an
+   * Debug-only: forces the next generated Dream Augury encounter to include an
    * offer of the given archetype (in slot A), or clears the force when passed
    * `null`. Bumps `rerollNonce` so the encounter regenerates, and persists the
    * choice on `siteRuntime[siteId].forcedArchetypeId` so subsequent rerolls keep
@@ -118,7 +118,7 @@ export interface QuestMutations {
    * eligible for the current quest state is ignored by the generator. Optional
    * because it is exposed only by the live quest providers.
    */
-  forceDreamJourneyArchetype?: (
+  forceDreamAuguryArchetype?: (
     siteId: string,
     archetypeId: MerchantArchetypeId | null,
   ) => void;
@@ -126,16 +126,6 @@ export interface QuestMutations {
   addCard: (cardNumber: number, source: string) => void;
   addBaneCard: (cardNumber: number, source: string) => void;
   removeCard: (entryId: string, source: string) => void;
-  /**
-   * Removes up to 3 chosen Bane cards / Bane Dreamsigns at a Cleanse site,
-   * then completes the site. Non-Bane selections are ignored and the total
-   * is capped at 3.
-   */
-  cleanseBanes: (
-    siteId: string,
-    cardEntryIds: string[],
-    dreamsignIndices: number[],
-  ) => void;
   /**
    * Apply a transfiguration to a deck entry, or clear it when `type` is
    * `null`. The null variant supports Dream Journey reward templates that
@@ -171,7 +161,6 @@ export interface QuestMutations {
   ) => void;
   incrementCompletionLevel: (
     essenceReward: number,
-    omenReward: number,
     rewardCardNumber: number | null,
     rewardCardName: string | null,
     isMiniboss: boolean,
@@ -208,9 +197,7 @@ export interface QuestMutations {
   loadQuestState?: (state: QuestState, source: string) => void;
   resetQuest: () => void;
 
-  // ---- Dream Journey effect plumbing (Wave 1) ----
-  /** Adjust omens by `delta`; clamps at 0 (omens are uncapped above). */
-  changeOmens: (delta: number, source: string) => void;
+  // ---- Dream Augury effect plumbing (Wave 1) ----
   /** Set essence to `value`, clamped to `[0, essenceCap]`. */
   setEssence: (value: number, source: string) => void;
   /** Add `delta` to `essenceCap`; current essence clamps to the new cap. */
@@ -235,13 +222,16 @@ export interface QuestMutations {
   /**
    * Purge the given deck entries at a Purge site: removes the entries, spends
    * `cost` essence, marks the site visited, and returns to the dreamscape, all
-   * atomically.
+   * atomically. `baneDreamsignIndices` removes the listed bane Dreamsigns in
+   * the same visit for free (banes are always free to remove at Purge); only
+   * indices that point at a bane Dreamsign are removed.
    */
   purgeDeckCards: (
     siteId: string,
     entryIds: readonly string[],
     cost: number,
     source: string,
+    baneDreamsignIndices?: readonly number[],
   ) => void;
   /** Add a duplicate of the deck entry with the given entryId. */
   duplicateDeckEntry: (entryId: string, source: string) => void;
@@ -321,8 +311,6 @@ export interface QuestMutations {
   grantFreeShopRerolls: (count: number, source: string) => void;
   /** Add `percent` to `shopModifiers.essenceDiscountPercent`. */
   applyShopEssenceDiscount: (percent: number, source: string) => void;
-  /** Increment `shopModifiers.upcomingOmenDiscounts` by `count`. */
-  grantShopOmenDiscounts: (count: number, source: string) => void;
   /**
    * Stack a `boost_site_appearance` modifier for the next `dreamscapes`
    * dreamscapes; atlas generation consumes it during future site composition.
@@ -360,9 +348,8 @@ export function QuestContextProvider({
 export function createDefaultState(): QuestState {
   return {
     seed: "default",
-    essence: 250,
+    essence: 200,
     essenceCap: 500,
-    omens: 0,
     maxDreamsigns: 12,
     deck: [],
     dreamcaller: null,
@@ -390,7 +377,6 @@ export function createDefaultState(): QuestState {
     battleModifiers: [],
     shopModifiers: {
       freeRerolls: 0,
-      upcomingOmenDiscounts: 0,
       essenceDiscountPercent: 0,
     },
     dreamscapeModifiers: [],

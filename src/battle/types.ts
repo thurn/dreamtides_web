@@ -204,8 +204,6 @@ export interface BattleInit {
   isMiniboss: boolean;
   isFinalBoss: boolean;
   essenceReward: number;
-  /** Omens granted on victory, 1-3, scaling with completed dreamscapes. */
-  omenReward: number;
   openingHandSize: number;
   scoreToWin: number;
   turnLimit: number;

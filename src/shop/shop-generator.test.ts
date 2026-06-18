@@ -123,7 +123,7 @@ describe("effectivePrice", () => {
     expect(result).toBe(0);
   });
 
-  it("does not apply the essence discount to Dreamsign omen prices", () => {
+  it("applies the essence discount to Dreamsign prices", () => {
     const result = effectivePrice(
       {
         itemType: "dreamsign",
@@ -134,36 +134,16 @@ describe("effectivePrice", () => {
           effectDescription: "First effect.",
           isBane: false,
         },
-        basePrice: 2,
+        basePrice: 50,
         discountPercent: 0,
         purchased: false,
       },
       { essenceDiscountPercent: 50 },
     );
-    expect(result).toBe(2);
+    expect(result).toBe(25);
   });
 
-  it("applies one upcoming omen discount to positive Dreamsign omen prices", () => {
-    const result = effectivePrice(
-      {
-        itemType: "dreamsign",
-        card: null,
-        dreamsign: {
-          id: "dreamsign-1",
-          name: "Dreamsign One",
-          effectDescription: "First effect.",
-          isBane: false,
-        },
-        basePrice: 2,
-        discountPercent: 0,
-        purchased: false,
-      },
-      { upcomingOmenDiscounts: 1 },
-    );
-    expect(result).toBe(1);
-  });
-
-  it("leaves free Dreamsign slots free without spending an omen discount", () => {
+  it("leaves free Dreamsign slots free", () => {
     const result = effectivePrice(
       {
         itemType: "dreamsign",
@@ -178,15 +158,15 @@ describe("effectivePrice", () => {
         discountPercent: 0,
         purchased: false,
       },
-      { upcomingOmenDiscounts: 1 },
+      { },
     );
     expect(result).toBe(0);
   });
 });
 
 describe("rerollCost", () => {
-  it("costs 1 omen for a regular shop", () => {
-    expect(rerollCost(0, false)).toBe(1);
+  it("costs essence for a regular shop", () => {
+    expect(rerollCost(0, false)).toBeGreaterThan(0);
   });
 
   it("is free for an enhanced shop", () => {
@@ -307,7 +287,7 @@ describe("generateShopInventory", () => {
     ).toBe(2);
   });
 
-  it("dreamsign slots are priced in omens", () => {
+  it("dreamsign slots are priced in essence", () => {
     const result = generateShopInventory({
       cardDatabase: db,
       draftState: makeDraftState({ 1: 1, 2: 1, 3: 1 }),
@@ -316,7 +296,7 @@ describe("generateShopInventory", () => {
     });
     for (const slot of result.slots) {
       if (slot.itemType === "dreamsign") {
-        expect(slot.basePrice).toBe(2);
+        expect(slot.basePrice).toBeGreaterThan(0);
       }
     }
   });

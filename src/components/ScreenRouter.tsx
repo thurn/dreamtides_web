@@ -15,7 +15,7 @@ import { PurgeSiteScreen } from "../screens/PurgeSiteScreen";
 import { TransfigurationSiteScreen } from "../screens/TransfigurationSiteScreen";
 import { DuplicationSiteScreen } from "../screens/DuplicationSiteScreen";
 import { RewardSiteScreen } from "../screens/RewardSiteScreen";
-import { CleanseSiteScreen } from "../screens/CleanseSiteScreen";
+import { StubSiteScreen } from "../screens/StubSiteScreen";
 import {
   JourneyScreen,
   buildJourneyContext,
@@ -150,9 +150,13 @@ function SiteScreen({
     );
   }
 
-  if (site.type === "Shop" || site.type === "SpecialtyShop") {
-    // The Specialty Shop uses identical UI to the regular Shop; ShopScreen
-    // detects the variant from `site.type`.
+  if (
+    site.type === "Shop" ||
+    site.type === "SpecialtyShop" ||
+    site.type === "DreamsignMarket"
+  ) {
+    // The Specialty Shop and the Dreamsign Market share the regular Shop UI;
+    // ShopScreen detects the variant from `site.type`.
     return <ShopScreen site={site} />;
   }
 
@@ -164,17 +168,19 @@ function SiteScreen({
     return <DreamsignOfferingScreen site={site} />;
   }
 
-  if (site.type === "DreamsignDraft") {
+  // The Dreamsign Revelation reveals several dreamsigns and lets the player
+  // choose one, reusing the dreamsign draft offering screen.
+  if (site.type === "DreamsignDraft" || site.type === "DreamsignRevelation") {
     return <DreamsignDraftScreen site={site} />;
   }
 
-  if (site.type === "DreamJourney") {
+  if (site.type === "DreamAugury") {
     if (runtimeConfig.journeyVariant === "v2") {
       return <DreamMerchantSiteScreen site={site} />;
     }
 
     return (
-      <DreamJourneySiteScreen
+      <DreamAugurySiteScreen
         site={site}
         runtimeConfig={runtimeConfig}
         onJourneyExplanationChange={onJourneyExplanationChange}
@@ -198,8 +204,12 @@ function SiteScreen({
     return <RewardSiteScreen site={site} />;
   }
 
-  if (site.type === "Cleanse") {
-    return <CleanseSiteScreen site={site} />;
+  if (
+    site.type === "TemptingOffer" ||
+    site.type === "Gamble" ||
+    site.type === "TemporalFork"
+  ) {
+    return <StubSiteScreen site={site} />;
   }
 
   return <GenericSitePlaceholder site={site} />;
@@ -209,11 +219,11 @@ function SiteScreen({
  * Wrapper that bridges the quest prototype's site state to the journeys
  * module. Builds the `JourneyContext` from live quest state + content via
  * the adapter boundary, and forwards `onClose` to the
- * `completeDreamJourneySite` mutation. The `site_completed` log event the
- * screen produces fires inside `completeDreamJourneySite` so analytics
+ * `completeDreamAugurySite` mutation. The `site_completed` log event the
+ * screen produces fires inside `completeDreamAugurySite` so analytics
  * stay consistent with other site types.
  */
-function DreamJourneySiteScreen({
+function DreamAugurySiteScreen({
   site,
   runtimeConfig,
   onJourneyExplanationChange,
@@ -226,13 +236,13 @@ function DreamJourneySiteScreen({
 
   useEffect(() => {
     logEvent("site_entered", {
-      siteType: "DreamJourney",
+      siteType: "DreamAugury",
       isEnhanced: site.isEnhanced,
     });
   }, [site.id, site.isEnhanced]);
 
   const handleClose = useCallback(() => {
-    mutations.completeDreamJourneySite(site.id);
+    mutations.completeDreamAugurySite(site.id);
   }, [mutations, site.id]);
 
   const contentBundle = useMemo(
@@ -277,7 +287,7 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
 
   useEffect(() => {
     logEvent("site_entered", {
-      siteType: "DreamJourney",
+      siteType: "DreamAugury",
       isEnhanced: site.isEnhanced,
     });
   }, [site.id, site.isEnhanced]);
@@ -401,11 +411,11 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
     [mutations, site.id],
   );
   const handleReroll = useCallback(() => {
-    mutations.rerollDreamJourney?.(site.id);
+    mutations.rerollDreamAugury?.(site.id);
   }, [mutations, site.id]);
   const handleForceArchetype = useCallback(
     (archetypeId: MerchantArchetypeId | null) => {
-      mutations.forceDreamJourneyArchetype?.(site.id, archetypeId);
+      mutations.forceDreamAuguryArchetype?.(site.id, archetypeId);
     },
     [mutations, site.id],
   );
@@ -416,7 +426,7 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
       reason: "encounter_unavailable",
       message: encounterResult.ok ? undefined : encounterResult.message,
     });
-    mutations.completeDreamJourneySite(site.id);
+    mutations.completeDreamAugurySite(site.id);
   }, [encounterResult, mutations, site.id]);
 
   if (!encounterResult.ok) {
@@ -458,7 +468,7 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
       onDecline={handleDecline}
       onReroll={handleReroll}
       onForceArchetype={
-        mutations.forceDreamJourneyArchetype === undefined
+        mutations.forceDreamAuguryArchetype === undefined
           ? undefined
           : handleForceArchetype
       }

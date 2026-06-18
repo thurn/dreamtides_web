@@ -256,14 +256,13 @@ function purgeMandatoryForLayer(layer: number): boolean {
  * `homeSite`, at the given 0-indexed atlas layer. The fill draws from the other
  * dreamscapes' signature sites plus a generic Essence site. Transfiguration and
  * Duplication — the late-game card-shaping sites — are weighted up in the later
- * layers so deck refinement shows up once the deck is built. Cleanse joins the
- * pool only while the player carries banes so the bane-removal flow has a home.
+ * layers so deck refinement shows up once the deck is built. Bane removal is
+ * handled at the Purge site, which appears in the mandatory early-layer slots.
  */
 function buildFillPool(
   layer: number,
   homeSite: SiteType,
   dreamscapes: readonly DreamscapeContent[],
-  playerHasBanes: boolean,
 ): Array<[SiteType, number]> {
   const lateGame = layer >= 4;
   const pool: Array<[SiteType, number]> = [];
@@ -279,11 +278,6 @@ function buildFillPool(
 
   // A generic Essence site is always an eligible fill option.
   pool.push(["Essence", 3]);
-
-  // Cleanse is offered only while the player has banes to remove.
-  if (playerHasBanes) {
-    pool.push(["Cleanse", 2]);
-  }
 
   return pool;
 }
@@ -301,7 +295,7 @@ export function additionalSiteTypesForLevel(
   context: SiteGenerationContext,
 ): SiteType[] {
   return applySiteRemovalModifiers(
-    buildFillPool(layer, homeSite, dreamscapes, context.playerHasBanes),
+    buildFillPool(layer, homeSite, dreamscapes),
     context.dreamscapeModifiers,
   ).map(([siteType]) => siteType);
 }
@@ -418,12 +412,7 @@ export function generateSiteComposition(
   // site keeps every guide site in the pool when the node has no dreamscape.
   const fillPool = applySiteAppearanceBoosts(
     applySiteRemovalModifiers(
-      buildFillPool(
-        layer,
-        homeSite ?? "Battle",
-        dreamscapes,
-        context.playerHasBanes,
-      ),
+      buildFillPool(layer, homeSite ?? "Battle", dreamscapes),
       context.dreamscapeModifiers,
     ),
     context.dreamscapeModifiers,
@@ -1210,12 +1199,6 @@ const SITE_TYPE_META: Record<
     enhancedDescription:
       "Enhanced dreamsign site: a richer dreamsign draft is offered.",
   },
-  DreamJourney: {
-    icon: "bx bx-moon-star",
-    name: "Dream Journey",
-    description: "Pick a world-effect branch that shapes the run.",
-    enhancedDescription: "Pick a world-effect branch that shapes the run.",
-  },
   Purge: {
     icon: "bx bx-hot",
     name: "Purge",
@@ -1249,12 +1232,6 @@ const SITE_TYPE_META: Record<
     description: "Claim a card, dreamsign, or pile of essence.",
     enhancedDescription: "Claim a card, dreamsign, or pile of essence.",
   },
-  Cleanse: {
-    icon: "bx bx-snowflake",
-    name: "Cleanse",
-    description: "Remove a bane from your deck.",
-    enhancedDescription: "Remove a bane from your deck.",
-  },
   DreamAugury: {
     icon: "bx bx-eye",
     name: "Dream Augury",
@@ -1263,14 +1240,14 @@ const SITE_TYPE_META: Record<
       "Enhanced augury: bigger rewards, curated to your deck.",
   },
   DreamsignMarket: {
-    icon: "bx bx-store",
+    icon: "bx bx-shopping-bag",
     name: "Dreamsign Market",
     description: "Buy a dreamsign from a rotating selection.",
     enhancedDescription:
       "Enhanced market: restock the dreamsign choices once for free.",
   },
   DreamsignRevelation: {
-    icon: "bx bx-sparkles",
+    icon: "bx bx-bulb",
     name: "Dreamsign Revelation",
     description: "Choose one dreamsign from several revealed options.",
     enhancedDescription:
@@ -1298,6 +1275,15 @@ const SITE_TYPE_META: Record<
       "Enhanced fork: longer duration and sooner future rewards.",
   },
 };
+
+/**
+ * The canonical list of every {@link SiteType}, derived from the single
+ * `SITE_TYPE_META` source of truth. Used by the screen-router dispatch
+ * completeness tests so a newly added site type is automatically exercised.
+ */
+export const ALL_SITE_TYPES: readonly SiteType[] = Object.keys(
+  SITE_TYPE_META,
+) as SiteType[];
 
 /** Returns the Boxicons class name for the given site type. */
 export function siteTypeIcon(siteType: SiteType): string {

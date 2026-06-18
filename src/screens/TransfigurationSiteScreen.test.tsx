@@ -80,14 +80,13 @@ function makeMutations(): QuestMutations {
     ensureCardChoiceRuntime: vi.fn(),
     acceptTransfigurationChoice: vi.fn(),
     acceptDuplicationChoice: vi.fn(),
-    completeDreamJourneySite: vi.fn(),
+    completeDreamAugurySite: vi.fn(),
     acceptDreamMerchantOffer: vi.fn(),
     declineDreamMerchant: vi.fn(),
     pickDraftCard: vi.fn(),
     addCard: vi.fn(),
     addBaneCard: vi.fn(),
     removeCard: vi.fn(),
-    cleanseBanes: vi.fn(),
     transfigureCard: vi.fn(),
     changeDeckEntryType: vi.fn(),
     changeDeckEntryKeywords: vi.fn(),
@@ -106,7 +105,6 @@ function makeMutations(): QuestMutations {
     dismissStartingDeckPopup: vi.fn(),
     bootstrapStartInBattle: vi.fn(),
     resetQuest: vi.fn(),
-    changeOmens: vi.fn(),
     setEssence: vi.fn(),
     changeMaxEssence: vi.fn(),
     addCardById: vi.fn(),
@@ -124,7 +122,6 @@ function makeMutations(): QuestMutations {
     removeSiteTypeFromNextDreamscapes: vi.fn(),
     grantFreeShopRerolls: vi.fn(),
     applyShopEssenceDiscount: vi.fn(),
-    grantShopOmenDiscounts: vi.fn(),
     boostSiteAppearance: vi.fn(),
   };
 }
@@ -134,7 +131,6 @@ function makeState(overrides: Partial<QuestState> = {}): QuestState {
     seed: "test-seed",
     essence: 250,
     essenceCap: 500,
-    omens: 0,
     maxDreamsigns: 12,
     deck: [
       {
@@ -191,7 +187,6 @@ function makeState(overrides: Partial<QuestState> = {}): QuestState {
     battleModifiers: [],
     shopModifiers: {
       freeRerolls: 0,
-      upcomingOmenDiscounts: 0,
       essenceDiscountPercent: 0,
     },
     dreamscapeModifiers: [],

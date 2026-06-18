@@ -36,7 +36,10 @@ export function createJourneyMutations(
       mutations.changeEssence(delta, source);
     },
     changeOmens: (delta, source) => {
-      mutations.changeOmens(delta, source);
+      // The single-currency economy routes omen rewards into essence: the
+      // classic journey reducer still issues omen deltas, which are applied as
+      // essence so the legacy path stays functional.
+      mutations.changeEssence(delta, source);
     },
     setEssence: (value, source) => {
       mutations.setEssence(value, source);
@@ -131,8 +134,9 @@ export function createJourneyMutations(
     applyShopEssenceDiscount: (percent, source) => {
       mutations.applyShopEssenceDiscount(percent, source);
     },
-    grantShopOmenDiscounts: (count, source) => {
-      mutations.grantShopOmenDiscounts(count, source);
+    grantShopOmenDiscounts: (_count, _source) => {
+      // Shop Dreamsigns are essence-priced; the classic journey's omen-discount
+      // grant has no essence-economy equivalent and is intentionally a no-op.
     },
 
     // ---- Site boost ----------------------------------------------------

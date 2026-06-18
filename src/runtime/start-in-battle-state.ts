@@ -48,9 +48,8 @@ export function createStartInBattleState(
 
   return {
     seed,
-    essence: 250,
+    essence: 200,
     essenceCap: 500,
-    omens: 0,
     maxDreamsigns: 12,
     deck: STARTER_CARD_NUMBERS.map((cardNumber, index) => ({
       entryId: `deck-${String(index + 1)}`,
@@ -76,7 +75,6 @@ export function createStartInBattleState(
     battleModifiers: [],
     shopModifiers: {
       freeRerolls: 0,
-      upcomingOmenDiscounts: 0,
       essenceDiscountPercent: 0,
     },
     dreamscapeModifiers: [],

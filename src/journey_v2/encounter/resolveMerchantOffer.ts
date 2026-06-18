@@ -144,7 +144,7 @@ function markSiteComplete(state: QuestState, siteId: string): QuestState | null 
       ...completed,
       siteRuntime: {
         ...completed.siteRuntime,
-        [siteId]: { kind: "dreamJourney", completed: true },
+        [siteId]: { kind: "dreamAugury", completed: true },
       },
     },
     { type: "dreamscape" },

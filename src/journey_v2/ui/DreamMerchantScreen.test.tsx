@@ -207,7 +207,7 @@ function encounter(offers: readonly MerchantOffer[]): MerchantEncounter {
 
 const site = {
   id: "site-1",
-  type: "DreamJourney" as const,
+  type: "DreamAugury" as const,
   isEnhanced: false,
   isVisited: false,
 };

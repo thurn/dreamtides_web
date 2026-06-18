@@ -39,18 +39,15 @@ interface ShopScreenProps {
  */
 export function ShopScreen({ site }: ShopScreenProps) {
   const { state, mutations, cardDatabase } = useQuest();
-  const { essence, omens } = state;
+  const { essence } = state;
   const isSpecialty = site.type === "SpecialtyShop";
+  const isDreamsignMarket = site.type === "DreamsignMarket";
   const runtime = state.siteRuntime[site.id];
   const priceModifiers = useMemo<ShopPriceModifiers>(
     () => ({
       essenceDiscountPercent: state.shopModifiers.essenceDiscountPercent,
-      upcomingOmenDiscounts: state.shopModifiers.upcomingOmenDiscounts,
     }),
-    [
-      state.shopModifiers.essenceDiscountPercent,
-      state.shopModifiers.upcomingOmenDiscounts,
-    ],
+    [state.shopModifiers.essenceDiscountPercent],
   );
   const slots = useMemo<ShopSlot[]>(
     () =>
@@ -67,8 +64,8 @@ export function ShopScreen({ site }: ShopScreenProps) {
     [site.isEnhanced],
   );
   const rerollUsed = rerollCount > 0;
-  // Rerolls are paid for in omens.
-  const canAffordReroll = currentRerollCost <= omens;
+  // Rerolls are paid for in essence.
+  const canAffordReroll = currentRerollCost <= essence;
   const rerollAvailable = !rerollUsed && canAffordReroll;
 
   const visibleCardOffers = useMemo(
@@ -150,7 +147,11 @@ export function ShopScreen({ site }: ShopScreenProps) {
           className="text-2xl font-bold tracking-wide md:text-3xl"
           style={{ color: "#a855f7" }}
         >
-          {isSpecialty ? "Specialty Shop" : "Shop"}
+          {isSpecialty
+            ? "Specialty Shop"
+            : isDreamsignMarket
+              ? "Dreamsign Market"
+              : "Shop"}
         </h2>
         {site.isEnhanced && (
           <span
@@ -180,11 +181,7 @@ export function ShopScreen({ site }: ShopScreenProps) {
             key={`shop-slot-${String(index)}`}
             slot={slot}
             index={index}
-            canAfford={
-              slot.itemType === "dreamsign"
-                ? effectivePrice(slot, priceModifiers) <= omens
-                : effectivePrice(slot, priceModifiers) <= essence
-            }
+            canAfford={effectivePrice(slot, priceModifiers) <= essence}
             priceModifiers={priceModifiers}
             onBuy={handleBuy}
             onCardClick={setOverlayCard}
@@ -254,12 +251,15 @@ function RerollButton({ cost, used, available, onClick }: RerollButtonProps) {
       ) : cost === 0 ? (
         <span>Reroll Shop (FREE)</span>
       ) : (
-        <>
-          <span>{`Reroll Shop · ${String(cost)} `}</span>
-          <span style={{ color: "#fbbf24" }} data-shop-omens-label="">
-            Omens
-          </span>
-        </>
+        <span className="flex items-center gap-1">
+          <span>Reroll Shop ·</span>
+          <EssenceValue
+            amount={cost}
+            color="inherit"
+            className="font-bold"
+            data-shop-reroll-cost=""
+          />
+        </span>
       )}
     </button>
   );
@@ -352,7 +352,6 @@ function ShopSlotCard({
         </div>
         <PriceButton
           price={price}
-          currency="omens"
           canAfford={canAfford}
           onClick={() => onBuy(index)}
         />
@@ -382,7 +381,6 @@ function ShopSlotCard({
         </HoverZoomCard>
         <PriceButton
           price={price}
-          currency="essence"
           canAfford={canAfford}
           onClick={() => onBuy(index)}
         />
@@ -394,15 +392,13 @@ function ShopSlotCard({
   return null;
 }
 
-/** Renders the Buy button with the effective (post-discount) price. */
+/** Renders the Buy button with the effective (post-discount) essence price. */
 function PriceButton({
   price,
-  currency,
   canAfford,
   onClick,
 }: {
   price: number;
-  currency: "essence" | "omens";
   canAfford: boolean;
   onClick: () => void;
 }) {
@@ -419,34 +415,15 @@ function PriceButton({
       onClick={onClick}
     >
       <span>Buy</span>
-      {currency === "essence" ? (
-        // Essence price is part of the button label, so the value and its
-        // crypto glyph read in the button's own white text rather than the
-        // purple used for plain essence values elsewhere.
-        <EssenceValue
-          amount={price}
-          color="inherit"
-          className="font-bold"
-          data-shop-price=""
-        />
-      ) : (
-        <>
-          <span
-            style={{ color: "#fbbf24" }}
-            className="tabular-nums"
-            data-shop-price=""
-          >
-            {String(price)}
-          </span>
-          <span
-            className="text-xs"
-            style={{ color: "#fbbf24" }}
-            data-shop-currency-label=""
-          >
-            Omens
-          </span>
-        </>
-      )}
+      {/* Essence price is part of the button label, so the value and its
+          crypto glyph read in the button's own white text rather than the
+          purple used for plain essence values elsewhere. */}
+      <EssenceValue
+        amount={price}
+        color="inherit"
+        className="font-bold"
+        data-shop-price=""
+      />
     </button>
   );
 }

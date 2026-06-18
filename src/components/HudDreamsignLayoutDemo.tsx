@@ -91,14 +91,13 @@ const mutations: QuestMutations = {
   ensureCardChoiceRuntime: noop,
   acceptTransfigurationChoice: noop,
   acceptDuplicationChoice: noop,
-  completeDreamJourneySite: noop,
+  completeDreamAugurySite: noop,
   acceptDreamMerchantOffer: noop,
   declineDreamMerchant: noop,
   pickDraftCard: noop,
   addCard: noop,
   addBaneCard: noop,
   removeCard: noop,
-  cleanseBanes: noop,
   transfigureCard: noop,
   changeDeckEntryType: noop,
   changeDeckEntryKeywords: noop,
@@ -117,7 +116,6 @@ const mutations: QuestMutations = {
   dismissStartingDeckPopup: noop,
   bootstrapStartInBattle: noop,
   resetQuest: noop,
-  changeOmens: noop,
   setEssence: noop,
   changeMaxEssence: noop,
   addCardById: noopAddCard,
@@ -135,7 +133,6 @@ const mutations: QuestMutations = {
   removeSiteTypeFromNextDreamscapes: noop,
   grantFreeShopRerolls: noop,
   applyShopEssenceDiscount: noop,
-  grantShopOmenDiscounts: noop,
   boostSiteAppearance: noop,
 };
 
@@ -143,7 +140,6 @@ const demoQuestContext: QuestContextValue = {
   state: {
     ...createDefaultState(),
     essence: 250,
-    omens: 3,
     maxDreamsigns: 12,
     deck: [
       {

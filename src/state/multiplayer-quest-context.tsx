@@ -31,7 +31,7 @@ import type {
   EssenceSiteRuntime,
   BattleModifier,
   CardChoiceSiteRuntime,
-  DreamJourneySiteRuntime,
+  DreamAugurySiteRuntime,
   QuestFailureSummary,
   QuestState,
   RewardSiteRuntime,
@@ -218,7 +218,6 @@ function runtimeSlotPrice(slot: {
   discountPercent: number;
 }, modifiers: {
   essenceDiscountPercent: number;
-  upcomingOmenDiscounts?: number;
 }): number {
   return effectivePrice(slot, modifiers);
 }
@@ -1247,7 +1246,6 @@ export function MultiplayerQuestProvider({
   const incrementCompletionLevel = useCallback(
     (
       essenceReward: number,
-      omenReward: number,
       rewardCardNumber: number | null,
       rewardCardName: string | null,
       isMiniboss: boolean,
@@ -1290,7 +1288,6 @@ export function MultiplayerQuestProvider({
             questState: {
               ...room.questState,
               completionLevel: newLevel,
-              omens: room.questState.omens + omenReward,
               screen,
               battleModifiers,
               deck,
@@ -1308,7 +1305,6 @@ export function MultiplayerQuestProvider({
                 source: "battle_reward",
                 summary: {
                   essenceReward,
-                  omenReward,
                   rewardCardNumber,
                   rewardCardName,
                   isMiniboss,
@@ -1375,89 +1371,6 @@ export function MultiplayerQuestProvider({
       },
     });
   }, []);
-
-  const cleanseBanes = useCallback(
-    (siteId: string, cardEntryIds: string[], dreamsignIndices: number[]) => {
-      const current = currentRef.current;
-      if (current.state.visitedSites.includes(siteId)) {
-        return;
-      }
-      const now = new Date().toISOString();
-      const actionId = crypto.randomUUID();
-      writeRoomTransaction({
-        database: current.database,
-        roomId: current.session.roomId,
-        updater: (room) => {
-          if (room === null || room.questState === null) {
-            return room ?? undefined;
-          }
-          if (room.questState.visitedSites.includes(siteId)) {
-            return room;
-          }
-          const cardIdSelection = new Set(cardEntryIds);
-          const baneCardEntryIds = room.questState.deck
-            .filter(
-              (entry) => entry.isBane && cardIdSelection.has(entry.entryId),
-            )
-            .map((entry) => entry.entryId);
-          const baneDreamsignIndices = [...new Set(dreamsignIndices)]
-            .filter(
-              (index) => room.questState?.dreamsigns[index]?.isBane === true,
-            )
-            .sort((a, b) => a - b);
-
-          // Up to 3 banes total may be removed at a Cleanse site.
-          const cappedCardEntryIds = baneCardEntryIds.slice(0, 3);
-          const cappedDreamsignIndices = baneDreamsignIndices.slice(
-            0,
-            Math.max(0, 3 - cappedCardEntryIds.length),
-          );
-          const cardIdSet = new Set(cappedCardEntryIds);
-          const dreamsignIndexSet = new Set(cappedDreamsignIndices);
-
-          const next = setQuestScreen(
-            completeQuestSite(
-              {
-                ...room.questState,
-                deck: room.questState.deck.filter(
-                  (entry) => !cardIdSet.has(entry.entryId),
-                ),
-                dreamsigns: room.questState.dreamsigns.filter(
-                  (_, index) => !dreamsignIndexSet.has(index),
-                ),
-              },
-              siteId,
-            ),
-            { type: "dreamscape" },
-          );
-
-          return {
-            ...room,
-            questState: next,
-            metadata: {
-              ...room.metadata,
-              updatedAt: now,
-            },
-            actionLog: {
-              ...(room.actionLog ?? {}),
-              [actionId]: buildActionLogEntry({
-                timestamp: now,
-                actorId: current.session.clientId,
-                action: "cleanseBanes",
-                source: "cleanse_site",
-                summary: {
-                  siteId,
-                  banesRemovedCount:
-                    cappedCardEntryIds.length + cappedDreamsignIndices.length,
-                },
-              }),
-            },
-          };
-        },
-      });
-    },
-    [],
-  );
 
   const pickDraftCard = useCallback((siteId: string, cardNumber: number) => {
     const current = currentRef.current;
@@ -2069,6 +1982,9 @@ export function MultiplayerQuestProvider({
   const ensureShopRuntime = useCallback(
     (site: SiteState, specialtyOnly: boolean) => {
       const current = currentRef.current;
+      // The Dreamsign Market is a dreamsign-only shop: no card slots, three
+      // essence-priced Dreamsign slots, and the standard essence restock.
+      const dreamsignMarket = site.type === "DreamsignMarket";
       const expectedRemainingDreamsignPool = [
         ...current.state.remainingDreamsignPool,
       ];
@@ -2093,7 +2009,7 @@ export function MultiplayerQuestProvider({
         );
         const generated = generateShopInventory({
           cardDatabase: current.questContent.cardDatabase,
-          draftState: shopDraftState,
+          draftState: dreamsignMarket ? null : shopDraftState,
           remainingDreamsignPoolIds: expectedRemainingDreamsignPool,
           dreamsignTemplates: current.questContent.dreamsignTemplates,
           dreamsignRegenerationPoolIds:
@@ -2103,6 +2019,7 @@ export function MultiplayerQuestProvider({
             : undefined,
           affiliationNumberWeights: affiliation?.weights,
           affiliationId: affiliation?.affiliationId,
+          ...(dreamsignMarket ? { cardCount: 0, dreamsignCount: 3 } : {}),
         });
         runtime = {
           kind: "shop",
@@ -2227,24 +2144,12 @@ export function MultiplayerQuestProvider({
             return room;
           }
 
-          const priceBeforeOmenDiscount = runtimeSlotPrice(slot, {
-            essenceDiscountPercent:
-              room.questState.shopModifiers.essenceDiscountPercent,
-          });
           const price = runtimeSlotPrice(slot, {
             essenceDiscountPercent:
               room.questState.shopModifiers.essenceDiscountPercent,
-            upcomingOmenDiscounts:
-              room.questState.shopModifiers.upcomingOmenDiscounts,
           });
-          // Cards cost essence; Dreamsigns cost omens.
-          const payInOmens = slot.itemType === "dreamsign";
-          const omenDiscountApplied =
-            payInOmens && price < priceBeforeOmenDiscount;
-          const availableCurrency = payInOmens
-            ? room.questState.omens
-            : room.questState.essence;
-          if (price > availableCurrency) {
+          // Every shop item — cards and Dreamsigns alike — is paid in essence.
+          if (price > room.questState.essence) {
             return room;
           }
           const purgedDreamsign =
@@ -2261,38 +2166,21 @@ export function MultiplayerQuestProvider({
             return room;
           }
 
-          const upcomingOmenDiscounts =
-            payInOmens && omenDiscountApplied
-              ? room.questState.shopModifiers.upcomingOmenDiscounts - 1
-              : room.questState.shopModifiers.upcomingOmenDiscounts;
-          let next: QuestState = payInOmens
-            ? {
-                ...room.questState,
-                omens: room.questState.omens - price,
-                shopModifiers: {
-                  ...room.questState.shopModifiers,
-                  upcomingOmenDiscounts,
-                },
-              }
-            : {
-                ...room.questState,
-                essence: clampEssence(
-                  room.questState.essence - price,
-                  room.questState.essenceCap,
-                ),
-              };
+          let next: QuestState = {
+            ...room.questState,
+            essence: clampEssence(
+              room.questState.essence - price,
+              room.questState.essenceCap,
+            ),
+          };
           const summary: Record<string, unknown> = {
             siteId,
             slotIndex,
             itemType: slot.itemType,
             basePrice: slot.basePrice,
             discountedPrice: price,
-            currency: payInOmens ? "omens" : "essence",
+            currency: "essence",
           };
-          if (payInOmens) {
-            summary.omenDiscountApplied = omenDiscountApplied;
-            summary.upcomingOmenDiscountsRemaining = upcomingOmenDiscounts;
-          }
 
           if (slot.itemType === "card") {
             next = {
@@ -2378,11 +2266,11 @@ export function MultiplayerQuestProvider({
       return;
     }
 
-    const expectedOmens = current.state.omens;
+    const expectedEssence = current.state.essence;
     const expectedFreeRerolls = current.state.shopModifiers.freeRerolls;
     const useFreeReroll = expectedFreeRerolls > 0;
     const cost = useFreeReroll ? 0 : rerollCost(0, site.isEnhanced);
-    if (!useFreeReroll && cost > expectedOmens) {
+    if (!useFreeReroll && cost > expectedEssence) {
       return;
     }
     const expectedDraftSignature = stableStringify(current.state.draftState);
@@ -2399,9 +2287,12 @@ export function MultiplayerQuestProvider({
       current.state,
       current.questContent,
     );
+    // The Dreamsign Market is dreamsign-only; its reroll restocks the three
+    // Dreamsign slots and never draws cards.
+    const dreamsignMarket = site.type === "DreamsignMarket";
     const generated = generateShopInventory({
       cardDatabase: current.questContent.cardDatabase,
-      draftState: shopDraftState,
+      draftState: dreamsignMarket ? null : shopDraftState,
       remainingDreamsignPoolIds: expectedRuntime.remainingDreamsignPoolIds,
       dreamsignTemplates: current.questContent.dreamsignTemplates,
       dreamsignRegenerationPoolIds:
@@ -2412,6 +2303,7 @@ export function MultiplayerQuestProvider({
           : undefined,
       affiliationNumberWeights: affiliation?.weights,
       affiliationId: affiliation?.affiliationId,
+      ...(dreamsignMarket ? { cardCount: 0, dreamsignCount: 3 } : {}),
     });
     const nextDraftState = isDeckFitDraft
       ? current.state.draftState
@@ -2443,7 +2335,7 @@ export function MultiplayerQuestProvider({
           runtime === undefined ||
           runtime.kind !== "shop" ||
           runtime.rerollCount !== expectedRuntime.rerollCount ||
-          (!useFreeReroll && room.questState.omens !== expectedOmens) ||
+          (!useFreeReroll && room.questState.essence !== expectedEssence) ||
           (useFreeReroll &&
             room.questState.shopModifiers.freeRerolls !==
               expectedFreeRerolls) ||
@@ -2465,9 +2357,12 @@ export function MultiplayerQuestProvider({
           ...room,
           questState: {
             ...room.questState,
-            omens: useFreeReroll
-              ? room.questState.omens
-              : room.questState.omens - cost,
+            essence: useFreeReroll
+              ? room.questState.essence
+              : clampEssence(
+                  room.questState.essence - cost,
+                  room.questState.essenceCap,
+                ),
             shopModifiers: useFreeReroll
               ? {
                   ...room.questState.shopModifiers,
@@ -2981,7 +2876,7 @@ export function MultiplayerQuestProvider({
     [],
   );
 
-  const completeDreamJourneySite = useCallback((siteId: string) => {
+  const completeDreamAugurySite = useCallback((siteId: string) => {
     const current = currentRef.current;
     const site = findSite(current.state, siteId);
     const isEnhanced = site?.isEnhanced ?? false;
@@ -3001,14 +2896,14 @@ export function MultiplayerQuestProvider({
         const existingRuntime = room.questState.siteRuntime[siteId];
         if (
           existingRuntime !== undefined &&
-          (existingRuntime.kind !== "dreamJourney" || existingRuntime.completed)
+          (existingRuntime.kind !== "dreamAugury" || existingRuntime.completed)
         ) {
           return room;
         }
-        const runtime: DreamJourneySiteRuntime =
-          existingRuntime?.kind === "dreamJourney"
+        const runtime: DreamAugurySiteRuntime =
+          existingRuntime?.kind === "dreamAugury"
             ? existingRuntime
-            : { kind: "dreamJourney", completed: false };
+            : { kind: "dreamAugury", completed: false };
 
         const next = completeSiteAndReturnToDreamscape(
           {
@@ -3033,8 +2928,8 @@ export function MultiplayerQuestProvider({
             [actionId]: buildActionLogEntry({
               timestamp: now,
               actorId: current.session.clientId,
-              action: "completeDreamJourneySite",
-              source: "dream_journey",
+              action: "completeDreamAugurySite",
+              source: "dream_augury",
               summary: {
                 siteId,
                 isEnhanced,
@@ -3046,7 +2941,7 @@ export function MultiplayerQuestProvider({
     });
   }, []);
 
-  const rerollDreamJourney = useCallback((siteId: string) => {
+  const rerollDreamAugury = useCallback((siteId: string) => {
     const current = currentRef.current;
     const now = new Date().toISOString();
     const actionId = crypto.randomUUID();
@@ -3061,30 +2956,30 @@ export function MultiplayerQuestProvider({
         const existingRuntime = room.questState.siteRuntime[siteId];
         if (
           existingRuntime !== undefined &&
-          existingRuntime.kind !== "dreamJourney"
+          existingRuntime.kind !== "dreamAugury"
         ) {
           return room;
         }
         if (
-          existingRuntime?.kind === "dreamJourney" &&
+          existingRuntime?.kind === "dreamAugury" &&
           existingRuntime.completed
         ) {
           return room;
         }
         const previousNonce =
-          existingRuntime?.kind === "dreamJourney"
+          existingRuntime?.kind === "dreamAugury"
             ? existingRuntime.rerollNonce ?? 0
             : 0;
         const nextNonce = previousNonce + 1;
         const forcedArchetypeId =
-          existingRuntime?.kind === "dreamJourney"
+          existingRuntime?.kind === "dreamAugury"
             ? existingRuntime.forcedArchetypeId
             : undefined;
         // Rebuild the runtime from scratch so the rerolled encounter is a clean
         // slate. A debug-forced archetype is preserved so a developer can reroll
         // within a forced category to cycle its targets.
-        const runtime: DreamJourneySiteRuntime = {
-          kind: "dreamJourney",
+        const runtime: DreamAugurySiteRuntime = {
+          kind: "dreamAugury",
           completed: false,
           rerollNonce: nextNonce,
           ...(forcedArchetypeId === undefined ? {} : { forcedArchetypeId }),
@@ -3120,7 +3015,7 @@ export function MultiplayerQuestProvider({
     });
   }, []);
 
-  const forceDreamJourneyArchetype = useCallback(
+  const forceDreamAuguryArchetype = useCallback(
     (siteId: string, archetypeId: MerchantArchetypeId | null) => {
       const current = currentRef.current;
       const now = new Date().toISOString();
@@ -3136,18 +3031,18 @@ export function MultiplayerQuestProvider({
           const existingRuntime = room.questState.siteRuntime[siteId];
           if (
             existingRuntime !== undefined &&
-            existingRuntime.kind !== "dreamJourney"
+            existingRuntime.kind !== "dreamAugury"
           ) {
             return room;
           }
           if (
-            existingRuntime?.kind === "dreamJourney" &&
+            existingRuntime?.kind === "dreamAugury" &&
             existingRuntime.completed
           ) {
             return room;
           }
           const previousNonce =
-            existingRuntime?.kind === "dreamJourney"
+            existingRuntime?.kind === "dreamAugury"
               ? existingRuntime.rerollNonce ?? 0
               : 0;
           const nextNonce = previousNonce + 1;
@@ -3155,8 +3050,8 @@ export function MultiplayerQuestProvider({
           // the forced archetype. The runtime is rebuilt from scratch so any
           // prior commit is dropped — the regenerated encounter is a clean
           // slate.
-          const runtime: DreamJourneySiteRuntime = {
-            kind: "dreamJourney",
+          const runtime: DreamAugurySiteRuntime = {
+            kind: "dreamAugury",
             completed: false,
             rerollNonce: nextNonce,
             ...(archetypeId === null
@@ -3383,49 +3278,6 @@ export function MultiplayerQuestProvider({
     },
     [],
   );
-
-  const changeOmens = useCallback((delta: number, source: string) => {
-    const current = currentRef.current;
-    const now = new Date().toISOString();
-    const actionId = crypto.randomUUID();
-
-    writeRoomTransaction({
-      database: current.database,
-      roomId: current.session.roomId,
-      updater: (room) => {
-        if (room === null || room.questState === null) {
-          return room ?? undefined;
-        }
-        const oldValue = room.questState.omens;
-        const newValue = Math.max(0, oldValue + delta);
-        return {
-          ...room,
-          questState: {
-            ...room.questState,
-            omens: newValue,
-          },
-          metadata: {
-            ...room.metadata,
-            updatedAt: now,
-          },
-          actionLog: {
-            ...(room.actionLog ?? {}),
-            [actionId]: buildActionLogEntry({
-              timestamp: now,
-              actorId: current.session.clientId,
-              action: "changeOmens",
-              source,
-              summary: {
-                oldValue,
-                newValue,
-                delta,
-              },
-            }),
-          },
-        };
-      },
-    });
-  }, []);
 
   const setEssence = useCallback((value: number, source: string) => {
     const current = currentRef.current;
@@ -3746,6 +3598,7 @@ export function MultiplayerQuestProvider({
       entryIds: readonly string[],
       cost: number,
       source: string,
+      baneDreamsignIndices: readonly number[] = [],
     ) => {
       const current = currentRef.current;
       const now = new Date().toISOString();
@@ -3771,10 +3624,23 @@ export function MultiplayerQuestProvider({
           const deck = qs.deck.filter(
             (entry) => !entryIdSet.has(entry.entryId),
           );
+          // Bane Dreamsigns are removed for free in the same visit. Only
+          // indices that point at an actual bane Dreamsign are honored.
+          const baneDreamsignIndexSet = new Set(
+            baneDreamsignIndices.filter(
+              (index) => qs.dreamsigns[index]?.isBane === true,
+            ),
+          );
+          const removedBaneDreamsigns = qs.dreamsigns.filter(
+            (_, index) => baneDreamsignIndexSet.has(index),
+          );
+          const dreamsigns = qs.dreamsigns.filter(
+            (_, index) => !baneDreamsignIndexSet.has(index),
+          );
           const essenceBefore = qs.essence;
           const essence = clampEssence(essenceBefore - cost, qs.essenceCap);
           const next = completeSiteAndReturnToDreamscape(
-            { ...qs, deck, essence },
+            { ...qs, deck, dreamsigns, essence },
             siteId,
           );
 
@@ -3797,6 +3663,8 @@ export function MultiplayerQuestProvider({
                   cost,
                   count: purged.length,
                   cardNumbers: purged.map((entry) => entry.cardNumber),
+                  baneCardsRemoved: purged.filter((entry) => entry.isBane).length,
+                  baneDreamsignsRemoved: removedBaneDreamsigns.length,
                   essenceBefore,
                   essenceAfter: essence,
                 },
@@ -4427,55 +4295,6 @@ export function MultiplayerQuestProvider({
     [],
   );
 
-  const grantShopOmenDiscounts = useCallback(
-    (count: number, source: string) => {
-      if (count <= 0) {
-        return;
-      }
-      const current = currentRef.current;
-      const now = new Date().toISOString();
-      const actionId = crypto.randomUUID();
-
-      writeRoomTransaction({
-        database: current.database,
-        roomId: current.session.roomId,
-        updater: (room) => {
-          if (room === null || room.questState === null) {
-            return room ?? undefined;
-          }
-          return {
-            ...room,
-            questState: {
-              ...room.questState,
-              shopModifiers: {
-                ...room.questState.shopModifiers,
-                upcomingOmenDiscounts:
-                  room.questState.shopModifiers.upcomingOmenDiscounts + count,
-              },
-            },
-            metadata: {
-              ...room.metadata,
-              updatedAt: now,
-            },
-            actionLog: {
-              ...(room.actionLog ?? {}),
-              [actionId]: buildActionLogEntry({
-                timestamp: now,
-                actorId: current.session.clientId,
-                action: "grantShopOmenDiscounts",
-                source,
-                summary: {
-                  count,
-                },
-              }),
-            },
-          };
-        },
-      });
-    },
-    [],
-  );
-
   const boostSiteAppearance = useCallback(
     (
       siteType: SiteType,
@@ -4553,9 +4372,9 @@ export function MultiplayerQuestProvider({
       ensureCardChoiceRuntime,
       acceptTransfigurationChoice,
       acceptDuplicationChoice,
-      completeDreamJourneySite,
-      rerollDreamJourney,
-      forceDreamJourneyArchetype,
+      completeDreamAugurySite,
+      rerollDreamAugury,
+      forceDreamAuguryArchetype,
       acceptDreamMerchantOffer,
       declineDreamMerchant,
       pickDraftCard,
@@ -4566,7 +4385,6 @@ export function MultiplayerQuestProvider({
       removeCard: (_entryId: string, _source: string) => {
         unavailableMutation("removeCard");
       },
-      cleanseBanes,
       transfigureCard,
       changeDeckEntryType,
       changeDeckEntryKeywords,
@@ -4586,7 +4404,6 @@ export function MultiplayerQuestProvider({
       bootstrapStartInBattle,
       loadQuestState,
       resetQuest,
-      changeOmens,
       setEssence,
       changeMaxEssence,
       addCardById,
@@ -4604,7 +4421,6 @@ export function MultiplayerQuestProvider({
       removeSiteTypeFromNextDreamscapes,
       grantFreeShopRerolls,
       applyShopEssenceDiscount,
-      grantShopOmenDiscounts,
       boostSiteAppearance,
     }),
     [
@@ -4620,10 +4436,8 @@ export function MultiplayerQuestProvider({
       buyShopSlot,
       changeEssence,
       changeMaxEssence,
-      changeOmens,
       changeDeckEntryType,
       changeDeckEntryKeywords,
-      cleanseBanes,
       completeSite,
       dismissStartingDeckPopup,
       duplicateDeckEntry,
@@ -4637,12 +4451,11 @@ export function MultiplayerQuestProvider({
       ensureCardChoiceRuntime,
       acceptTransfigurationChoice,
       acceptDuplicationChoice,
-      completeDreamJourneySite,
+      completeDreamAugurySite,
       acceptDreamMerchantOffer,
       declineDreamMerchant,
       ensureShopRuntime,
       grantFreeShopRerolls,
-      grantShopOmenDiscounts,
       incrementCompletionLevel,
       loadQuestState,
       markSiteVisited,

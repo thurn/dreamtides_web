@@ -371,7 +371,6 @@ function normalizeQuestState(questState: QuestState | null | undefined): QuestSt
     seed,
     essence: questState.essence ?? defaults.essence,
     essenceCap: questState.essenceCap ?? defaults.essenceCap,
-    omens: questState.omens ?? defaults.omens,
     maxDreamsigns: questState.maxDreamsigns ?? defaults.maxDreamsigns,
     deck: normalizeDeck(questState.deck),
     dreamcaller: normalizeDreamcaller(questState.dreamcaller),

@@ -22,6 +22,7 @@ import {
   makeMerchantTestQuestState,
 } from "../journey_v2/testing/fixtures";
 import { getLogEntries, resetLog } from "../logging";
+import { ALL_SITE_TYPES } from "../atlas/atlas-generator";
 
 vi.mock("framer-motion", () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => <>{children}</>,
@@ -147,14 +148,13 @@ function makeMutations(): QuestMutations {
     ensureCardChoiceRuntime: vi.fn(),
     acceptTransfigurationChoice: vi.fn(),
     acceptDuplicationChoice: vi.fn(),
-    completeDreamJourneySite: vi.fn(),
+    completeDreamAugurySite: vi.fn(),
     acceptDreamMerchantOffer: vi.fn(),
     declineDreamMerchant: vi.fn(),
     pickDraftCard: vi.fn(),
     addCard: vi.fn(),
     addBaneCard: vi.fn(),
     removeCard: vi.fn(),
-    cleanseBanes: vi.fn(),
     transfigureCard: vi.fn(),
     setDreamcallerSelection: vi.fn(),
     setCardSourceDebug: vi.fn(),
@@ -171,7 +171,6 @@ function makeMutations(): QuestMutations {
     dismissStartingDeckPopup: vi.fn(),
     bootstrapStartInBattle: vi.fn(),
     resetQuest: vi.fn(),
-    changeOmens: vi.fn(),
     setEssence: vi.fn(),
     changeMaxEssence: vi.fn(),
     addCardById: vi.fn(() => null),
@@ -191,7 +190,6 @@ function makeMutations(): QuestMutations {
     removeSiteTypeFromNextDreamscapes: vi.fn(),
     grantFreeShopRerolls: vi.fn(),
     applyShopEssenceDiscount: vi.fn(),
-    grantShopOmenDiscounts: vi.fn(),
     boostSiteAppearance: vi.fn(),
   };
 }
@@ -296,7 +294,7 @@ afterEach(() => {
 
 describe("ScreenRouter DreamJourney routing", () => {
   it("renders the classic journey path for a DreamJourney site in classic config", () => {
-    const site = makeSite("DreamJourney");
+    const site = makeSite("DreamAugury");
     const state = makeStateFor(site);
     const container = renderWithQuest({
       state,
@@ -311,7 +309,7 @@ describe("ScreenRouter DreamJourney routing", () => {
   });
 
   it("renders the Dream Merchant v2 screen for a DreamJourney site in v2 config", () => {
-    const site = makeSite("DreamJourney");
+    const site = makeSite("DreamAugury");
     const state = makeStateFor(site);
     const container = renderWithQuest({
       state,
@@ -324,7 +322,7 @@ describe("ScreenRouter DreamJourney routing", () => {
   });
 
   it("logs the generated encounter debug once per encounter signature under strict mode", () => {
-    const site = makeSite("DreamJourney");
+    const site = makeSite("DreamAugury");
     const state = makeStateFor(site);
     renderWithQuest({
       state,
@@ -354,7 +352,7 @@ describe("ScreenRouter DreamJourney routing", () => {
   });
 
   it("emits a per-offer merchant_offer_built event joined to the encounter", () => {
-    const site = makeSite("DreamJourney");
+    const site = makeSite("DreamAugury");
     const state = makeStateFor(site);
     renderWithQuest({
       state,
@@ -393,7 +391,7 @@ describe("ScreenRouter DreamJourney routing", () => {
   it("sets card source debug for visible merchant grant cards", () => {
     // Use a fixture with a strong corpus quality signal so at least one
     // grant offer (strong_card or similar) appears in the encounter.
-    const site = makeSite("DreamJourney");
+    const site = makeSite("DreamAugury");
     // Build content with no dreamsigns so dreamsign_draft is ineligible and
     // the generator falls back to grant/improve/etc. families that yield cards.
     const cards = fixtureCards();
@@ -445,7 +443,7 @@ describe("ScreenRouter DreamJourney routing", () => {
   });
 
   it("renders a contained v2 fallback when merchant generation is unavailable", () => {
-    const site = makeSite("DreamJourney");
+    const site = makeSite("DreamAugury");
     const state = makeStateFor(site);
     const mutations = makeMutations();
     const container = renderWithQuest({
@@ -467,6 +465,89 @@ describe("ScreenRouter DreamJourney routing", () => {
       walkAway.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
 
-    expect(mutations.completeDreamJourneySite).toHaveBeenCalledWith(site.id);
+    expect(mutations.completeDreamAugurySite).toHaveBeenCalledWith(site.id);
+  });
+});
+
+describe("ScreenRouter site-dispatch completeness", () => {
+  // The fallthrough placeholder copy rendered only when no site-type branch
+  // matches. Reaching it means a SiteType is unhandled by the router.
+  const FALLTHROUGH_TEXT = "This site will be implemented in a later task.";
+
+  // Battle routes into the heavy playable-battle stack, which needs a full
+  // battle init that this lightweight harness does not assemble. Its dispatch
+  // is covered by BattleSiteRoute's own tests; every other site type must
+  // resolve to a real screen here.
+  const NON_BATTLE_SITE_TYPES = ALL_SITE_TYPES.filter(
+    (type) => type !== "Battle",
+  );
+
+  it("resolves a real screen for every non-Battle site type", () => {
+    for (const type of NON_BATTLE_SITE_TYPES) {
+      const site = makeSite(type);
+      const container = renderWithQuest({
+        state: makeStateFor(site),
+        questContent: merchantContent(),
+        children: (
+          <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+        ),
+      });
+
+      expect(
+        container.querySelector('[data-quest-screen="site"]'),
+        `expected site screen for ${type}`,
+      ).not.toBeNull();
+      expect(
+        container.textContent,
+        `site type ${type} fell through to the generic placeholder`,
+      ).not.toContain(FALLTHROUGH_TEXT);
+      expect(
+        container.textContent,
+        `site type ${type} did not resolve to a site`,
+      ).not.toContain("Site not found.");
+    }
+  });
+
+  it("routes the three stub site types to the stub screen and completes them", () => {
+    const stubTypes = ALL_SITE_TYPES.filter(
+      (type) =>
+        type === "TemptingOffer" ||
+        type === "Gamble" ||
+        type === "TemporalFork",
+    );
+    expect(stubTypes.length).toBe(3);
+
+    for (const type of stubTypes) {
+      const site = makeSite(type);
+      const mutations = makeMutations();
+      const container = renderWithQuest({
+        state: makeStateFor(site),
+        questContent: merchantContent(),
+        mutations,
+        children: (
+          <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />
+        ),
+      });
+
+      const stub = container.querySelector("[data-stub-site-screen]");
+      expect(stub, `expected stub screen for ${type}`).not.toBeNull();
+      expect(stub?.getAttribute("data-stub-site-type")).toBe(type);
+
+      const continueButton = container.querySelector(
+        "[data-stub-site-continue]",
+      );
+      if (!(continueButton instanceof HTMLButtonElement)) {
+        throw new Error(`expected a Continue button for ${type}`);
+      }
+      act(() => {
+        continueButton.dispatchEvent(
+          new MouseEvent("click", { bubbles: true }),
+        );
+      });
+      expect(mutations.completeSite).toHaveBeenCalledWith(
+        site.id,
+        "stub_site_continue",
+      );
+    }
   });
 });

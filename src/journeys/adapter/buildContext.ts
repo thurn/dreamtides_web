@@ -287,7 +287,10 @@ export function buildJourneyContext(
     resources: {
       essence: questState.essence,
       maxEssence: questState.essenceCap,
-      omens: questState.omens,
+      // The single-currency economy folds omens into essence; the classic
+      // journey projection keeps an omens slot for its internal vocabulary and
+      // always reads it as zero.
+      omens: 0,
       // Spec specified `dreamscape: state.currentDreamscape?.number ?? 0`, but
       // the prototype types `currentDreamscape` as `string | null` (a node id).
       // `completionLevel` is the prototype's equivalent numeric dreamscape

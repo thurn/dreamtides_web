@@ -9,13 +9,19 @@ import {
 } from "./purge-pricing";
 
 describe("purgeMarginalCost", () => {
-  it("follows the 30 + 8*N*(N+1) curve", () => {
-    expect(purgeMarginalCost(1)).toBe(46);
-    expect(purgeMarginalCost(2)).toBe(78);
-    expect(purgeMarginalCost(3)).toBe(126);
-    expect(purgeMarginalCost(4)).toBe(190);
-    expect(purgeMarginalCost(5)).toBe(270);
-    expect(purgeMarginalCost(6)).toBe(366);
+  it("follows the 30 + 5*N*(N+1) curve", () => {
+    expect(purgeMarginalCost(1)).toBe(40);
+    expect(purgeMarginalCost(2)).toBe(60);
+    expect(purgeMarginalCost(3)).toBe(90);
+    expect(purgeMarginalCost(4)).toBe(130);
+    expect(purgeMarginalCost(5)).toBe(180);
+    expect(purgeMarginalCost(6)).toBe(240);
+  });
+
+  it("matches the doc's marginal-cost anchors for the first five cards", () => {
+    expect([1, 2, 3, 4, 5].map((n) => purgeMarginalCost(n))).toEqual([
+      40, 60, 90, 130, 180,
+    ]);
   });
 
   it("is zero or below for non-positive indices", () => {
@@ -33,11 +39,19 @@ describe("purgeMarginalCost", () => {
 describe("purgeVisitCost", () => {
   it("is the running sum of per-card prices", () => {
     expect(purgeVisitCost(0)).toBe(0);
-    expect(purgeVisitCost(1)).toBe(46);
-    expect(purgeVisitCost(2)).toBe(124);
-    expect(purgeVisitCost(3)).toBe(250);
-    expect(purgeVisitCost(4)).toBe(440);
-    expect(purgeVisitCost(5)).toBe(710);
+    expect(purgeVisitCost(1)).toBe(40);
+    expect(purgeVisitCost(2)).toBe(100);
+    expect(purgeVisitCost(3)).toBe(190);
+    expect(purgeVisitCost(4)).toBe(320);
+    expect(purgeVisitCost(5)).toBe(500);
+    expect(purgeVisitCost(6)).toBe(740);
+  });
+
+  it("matches the doc's economy anchors", () => {
+    // One standard shop card costs 100 essence; purging two cards in a visit
+    // costs the same. The default cap (five cards) costs 500 essence.
+    expect(purgeVisitCost(2)).toBe(100);
+    expect(purgeVisitCost(5)).toBe(500);
   });
 
   it("equals the sum of marginal costs across the visit", () => {
@@ -77,14 +91,14 @@ describe("discounts", () => {
 
 describe("maxAffordablePurgeCount", () => {
   it("returns how many cards fit in the budget", () => {
-    // Cumulative: 46, 124, 250, 440, 710.
+    // Cumulative: 40, 100, 190, 320, 500.
     expect(maxAffordablePurgeCount(0, 6)).toBe(0);
-    expect(maxAffordablePurgeCount(45, 6)).toBe(0);
-    expect(maxAffordablePurgeCount(46, 6)).toBe(1);
-    expect(maxAffordablePurgeCount(124, 6)).toBe(2);
-    expect(maxAffordablePurgeCount(249, 6)).toBe(2);
-    expect(maxAffordablePurgeCount(250, 6)).toBe(3);
-    expect(maxAffordablePurgeCount(710, 6)).toBe(5);
+    expect(maxAffordablePurgeCount(39, 6)).toBe(0);
+    expect(maxAffordablePurgeCount(40, 6)).toBe(1);
+    expect(maxAffordablePurgeCount(100, 6)).toBe(2);
+    expect(maxAffordablePurgeCount(189, 6)).toBe(2);
+    expect(maxAffordablePurgeCount(190, 6)).toBe(3);
+    expect(maxAffordablePurgeCount(500, 6)).toBe(5);
   });
 
   it("never exceeds the requested cap", () => {

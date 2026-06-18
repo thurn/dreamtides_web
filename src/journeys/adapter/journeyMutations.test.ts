@@ -102,7 +102,8 @@ describe("createJourneyMutations passthrough", () => {
 
     expect(calls).toEqual([
       { method: "changeEssence", args: [-3, "dream_journey:pay_essence"] },
-      { method: "changeOmens", args: [2, "dream_journey:gain_omens"] },
+      // The single-currency economy routes omen gains into essence.
+      { method: "changeEssence", args: [2, "dream_journey:gain_omens"] },
       { method: "setEssence", args: [0, "dream_journey:zero_essence"] },
       { method: "changeMaxEssence", args: [10, "dream_journey:increase_max_essence"] },
       { method: "addCardById", args: ["card-501", "dream_journey:gain_card"] },
@@ -123,7 +124,7 @@ describe("createJourneyMutations passthrough", () => {
       { method: "pushTemporaryBaneGrant", args: ["Despair", 1, 3, "dream_journey:temp_bane"] },
       { method: "grantFreeShopRerolls", args: [2, "dream_journey:free_rerolls"] },
       { method: "applyShopEssenceDiscount", args: [20, "dream_journey:shop_disc"] },
-      { method: "grantShopOmenDiscounts", args: [3, "dream_journey:omen_disc"] },
+      // grantShopOmenDiscounts is a no-op in the single-currency economy.
       { method: "boostSiteAppearance", args: ["Shop", 20, 3, "dream_journey:boost_site"] },
     ]);
     expect(addedEntryId).toBe("quest-entry-1");

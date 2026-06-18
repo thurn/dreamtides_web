@@ -74,14 +74,13 @@ function makeMutations(): QuestMutations {
     ensureCardChoiceRuntime: vi.fn(),
     acceptTransfigurationChoice: vi.fn(),
     acceptDuplicationChoice: vi.fn(),
-    completeDreamJourneySite: vi.fn(),
+    completeDreamAugurySite: vi.fn(),
     acceptDreamMerchantOffer: vi.fn(),
     declineDreamMerchant: vi.fn(),
     pickDraftCard: vi.fn(),
     addCard: vi.fn(),
     addBaneCard: vi.fn(),
     removeCard: vi.fn(),
-    cleanseBanes: vi.fn(),
     transfigureCard: vi.fn(),
     changeDeckEntryType: vi.fn(),
     changeDeckEntryKeywords: vi.fn(),
@@ -100,7 +99,6 @@ function makeMutations(): QuestMutations {
     dismissStartingDeckPopup: vi.fn(),
     bootstrapStartInBattle: vi.fn(),
     resetQuest: vi.fn(),
-    changeOmens: vi.fn(),
     setEssence: vi.fn(),
     changeMaxEssence: vi.fn(),
     addCardById: vi.fn(),
@@ -118,7 +116,6 @@ function makeMutations(): QuestMutations {
     removeSiteTypeFromNextDreamscapes: vi.fn(),
     grantFreeShopRerolls: vi.fn(),
     applyShopEssenceDiscount: vi.fn(),
-    grantShopOmenDiscounts: vi.fn(),
     boostSiteAppearance: vi.fn(),
   };
 }
@@ -150,7 +147,6 @@ function makeState(slots: RuntimeShopSlot[]): QuestState {
     seed: "test-seed",
     essence: 500,
     essenceCap: 500,
-    omens: 5,
     maxDreamsigns: 12,
     deck: [],
     dreamcaller: null,
@@ -185,7 +181,6 @@ function makeState(slots: RuntimeShopSlot[]): QuestState {
     battleModifiers: [],
     shopModifiers: {
       freeRerolls: 0,
-      upcomingOmenDiscounts: 0,
       essenceDiscountPercent: 0,
     },
     dreamscapeModifiers: [],
@@ -336,7 +331,6 @@ describe("ShopScreen", () => {
       ]),
       shopModifiers: {
         freeRerolls: 0,
-        upcomingOmenDiscounts: 0,
         essenceDiscountPercent: 50,
       },
     };
@@ -375,7 +369,6 @@ describe("ShopScreen", () => {
       ]),
       shopModifiers: {
         freeRerolls: 0,
-        upcomingOmenDiscounts: 0,
         essenceDiscountPercent: 50,
       },
     };
@@ -535,7 +528,7 @@ describe("ShopScreen", () => {
     });
   });
 
-  it("always renders an active reroll affordance with a 1 omen cost when the reroll has not been used this visit", () => {
+  it("always renders an active reroll affordance with an essence cost when the reroll has not been used this visit", () => {
     setQuestContext(
       makeState([
         {
@@ -566,16 +559,10 @@ describe("ShopScreen", () => {
     expect(rerollButton?.disabled).toBe(false);
     expect(rerollButton?.dataset.shopRerollUsed).toBe("false");
     expect(rerollButton?.textContent).toContain("Reroll Shop");
-    expect(rerollButton?.textContent).toContain("1");
-    expect(rerollButton?.textContent).not.toContain("◆");
-    expect(rerollButton?.textContent).not.toContain("⬢");
 
-    // Rerolls are paid for in omens.
-    const labels = rerollButton?.querySelectorAll("[data-shop-omens-label]");
-    expect(labels?.length).toBeGreaterThan(0);
-    if (labels) {
-      expect(labels[0]?.textContent).toBe("Omens");
-    }
+    // Rerolls are paid for in essence; the cost renders as an essence value.
+    const costEl = rerollButton?.querySelector("[data-shop-reroll-cost]");
+    expect(costEl).not.toBeNull();
 
     act(() => {
       root.unmount();
@@ -672,7 +659,7 @@ describe("ShopScreen", () => {
     });
   });
 
-  it("shows discounted Dreamsign prices when an upcoming omen discount is available", () => {
+  it("prices Dreamsign slots in essence", () => {
     const state: QuestState = {
       ...makeState([
         {
@@ -683,14 +670,13 @@ describe("ShopScreen", () => {
             effectDescription: "First effect.",
             isBane: false,
           },
-          basePrice: 2,
+          basePrice: 50,
           discountPercent: 0,
           purchased: false,
         },
       ]),
       shopModifiers: {
         freeRerolls: 0,
-        upcomingOmenDiscounts: 1,
         essenceDiscountPercent: 0,
       },
     };
@@ -707,10 +693,13 @@ describe("ShopScreen", () => {
       />,
     );
 
+    // The Dreamsign Buy button carries an essence price, not omens.
     const buyButton = Array.from(container.querySelectorAll("button")).find(
-      (button) => button.textContent?.includes("Omens"),
+      (button) => button.textContent?.startsWith("Buy"),
     );
-    expect(buyButton?.textContent).toContain("Buy1Omens");
+    expect(buyButton).not.toBeUndefined();
+    expect(buyButton?.textContent).not.toContain("Omens");
+    expect(buyButton?.querySelector("[data-shop-price]")).not.toBeNull();
 
     act(() => {
       root.unmount();
