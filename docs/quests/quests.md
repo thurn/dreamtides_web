@@ -195,7 +195,11 @@ no Dream Guide and no affiliation. Instead it is home to **Apollyon, the Doom of
 Humanity**, the final boss of Dreamtides. Apollyon appears in many different
 forms — each form plays a different deck and takes on its own unique abilities
 (see [Boss Dreamcallers](bosses.md)) — but it is always the same named
-character. Limbo's only site is the final [Battle](#battle) against Apollyon.
+character. Otherwise Limbo functions like a normal dreamscape: it generates a
+random collection of [sites](#dreamscape-generation) drawn from the fill pool,
+culminating in the final [Battle](#battle) against Apollyon, which is visited
+last. Because Limbo has no home guide, none of its sites are enhanced, and
+because it has no affiliation, no affiliation nudge applies to its draws.
 
 - **Aesthetic:** A dark fantasy void at the end of all dreams.
 
@@ -959,6 +963,12 @@ The contents of a non-starter dreamscape are assembled as follows:
    example, become more common later in the quest. When the node carries a
    [known dreamsign](#known-dreamsigns), a [Dreamsign Reward](#dreamsign-reward)
    site takes one of these fill slots.
+
+Limbo uses this same generation process, with two adjustments that follow from
+its lack of a Dream Guide: it has no enhanced home-guide signature site among its
+mandatory sites, and every fill site it draws is non-enhanced. Its mandatory
+sites are therefore just the final Battle against Apollyon (visited last), and
+the remaining slots are drawn from the fill pool.
 
 All site types can appear a maximum of 1 time in a dreamscape, with the exception
 that there can be up to 2 Draft sites.
