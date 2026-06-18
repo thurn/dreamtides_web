@@ -20,7 +20,7 @@ dialog = [
   "Welcome, friend! Browse a while.",
   "I've set aside something just for you.",
 ]
-home-specialty = "Discounted cards drawn from the player's Dreamcaller signature tide."
+home-specialty = "Tobias offers strong cards at a steep discount."
 
 [[guides]]
 id = "amunet_the_tomb_keeper"
@@ -31,7 +31,7 @@ dialog = [
   "The sands remember all dreams.",
   "Choose, and I shall show you another.",
 ]
-home-specialty = "Restock the dreamsign choices once for free."
+home-specialty = "Amunet will restock the dreamsign choices once at no cost."
 
 [[guides]]
 id = "sigrun"
@@ -42,7 +42,7 @@ dialog = [
   "The frost reveals what is hidden.",
   "Your path is clearer than most.",
 ]
-home-specialty = "Always a choice (never a single random dreamsign), more choices, tailored to the deck."
+home-specialty = "Sigrún offers several dreamsign choices, tailored to your deck."
 
 [[guides]]
 id = "durgan_forgehammer"
@@ -53,7 +53,7 @@ dialog = [
   "Stoke the forge — let's reshape it.",
   "Any card, any temper you like.",
 ]
-home-specialty = "Pick any card and any applicable transfiguration."
+home-specialty = "Durgan can transfigure any card in your deck."
 
 [[guides]]
 id = "deacon_holt"
@@ -64,7 +64,7 @@ dialog = [
   "We endure together, don't we?",
   "Pick one, and I'll make another.",
 ]
-home-specialty = "Pick any card to duplicate."
+home-specialty = "Deacon Holt can pick any card to duplicate."
 
 [[guides]]
 id = "master_takeshi"
@@ -75,7 +75,7 @@ dialog = [
   "Let go of what weighs you down.",
   "A cleaner blade cuts truer.",
 ]
-home-specialty = "Remove up to 3 cards or banes for free."
+home-specialty = "Master Takeshi will purge cards from your deck at no cost."
 
 [[guides]]
 id = "aldric_the_seer"
@@ -86,7 +86,7 @@ dialog = [
   "I have foreseen your arrival.",
   "Great fortune awaits the worthy.",
 ]
-home-specialty = "Bigger rewards, curated to the deck."
+home-specialty = "Aldric offers curated visions of the future."
 
 [[guides]]
 id = "maddox"
@@ -97,7 +97,7 @@ dialog = [
   "Out here, every deal's a gamble.",
   "Two offers. Pick your poison.",
 ]
-home-specialty = "Choose between two offers."
+home-specialty = "Maddox will make you two offers to improve your deck."
 
 [[guides]]
 id = "gravok"
@@ -108,7 +108,7 @@ dialog = [
   "Fortune favors the bold, traveler.",
   "No fee tonight. Big stakes, though.",
 ]
-home-specialty = "No initial fee, bigger payouts."
+home-specialty = "Gravok awlays offers you his highest rewards and best odds."
 
 [[guides]]
 id = "layaway"
@@ -119,4 +119,4 @@ dialog = [
   "Pay later, collect sooner. Deal?",
   "Time's just another currency, choom.",
 ]
-home-specialty = "Longer duration / sooner future rewards."
+home-specialty = "Layaway will shape the future towards your needs."

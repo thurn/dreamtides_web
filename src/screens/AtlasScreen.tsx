@@ -1,4 +1,11 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import type { ReactNode } from "react";
 import { useQuest } from "../state/quest-context";
 import { AtlasNode, type AtlasNodeView } from "../components/AtlasNode";
@@ -64,7 +71,9 @@ function resolveAtlasNodes(
   atlas: DreamAtlas,
   questContent: QuestContent,
 ): Map<string, ResolvedAtlasNode> {
-  const positioned = Object.values(atlas.nodes).filter((n) => Boolean(n.position));
+  const positioned = Object.values(atlas.nodes).filter((n) =>
+    Boolean(n.position),
+  );
   const resolved = new Map<string, ResolvedAtlasNode>();
   if (positioned.length === 0) {
     return resolved;
@@ -97,7 +106,8 @@ function resolveAtlasNodes(
     const isBoss = node.id === atlas.bossNodeId;
     const dreamscape =
       node.dreamscapeId !== null
-        ? (questContent.dreamscapes.find((d) => d.id === node.dreamscapeId) ?? null)
+        ? (questContent.dreamscapes.find((d) => d.id === node.dreamscapeId) ??
+          null)
         : null;
     const guide =
       dreamscape?.guideId != null
@@ -105,13 +115,15 @@ function resolveAtlasNodes(
         : null;
     const affiliation =
       dreamscape?.affiliationId != null
-        ? (questContent.affiliations.find((a) => a.id === dreamscape.affiliationId) ??
-          null)
+        ? (questContent.affiliations.find(
+            (a) => a.id === dreamscape.affiliationId,
+          ) ?? null)
         : null;
     const dreamsign =
       node.knownDreamsignId !== null
-        ? (questContent.dreamsignTemplates.find((t) => t.id === node.knownDreamsignId) ??
-          null)
+        ? (questContent.dreamsignTemplates.find(
+            (t) => t.id === node.knownDreamsignId,
+          ) ?? null)
         : null;
 
     // The node face: the boss is always the icon; a revealed dreamscape shows
@@ -128,7 +140,9 @@ function resolveAtlasNodes(
         : atlasSiteIcon(dreamscape.signatureSite);
 
     const knownDreamsignIconUrl =
-      dreamsign?.imageName != null ? dreamsignIconUrl(dreamsign.imageName) : null;
+      dreamsign?.imageName != null
+        ? dreamsignIconUrl(dreamsign.imageName)
+        : null;
 
     resolved.set(node.id, {
       view: {
@@ -183,7 +197,12 @@ function renderDreamsignRules(text: string): ReactNode[] {
         <i
           className="bxf bx-fire-alt"
           aria-hidden="true"
-          style={{ color: "var(--dt-energy)", fontSize: 16, verticalAlign: -2, margin: "0 1px" }}
+          style={{
+            color: "var(--dt-energy)",
+            fontSize: 16,
+            verticalAlign: -2,
+            margin: "0 1px",
+          }}
         />
       )}
     </span>
@@ -206,11 +225,13 @@ function Preview({ resolved }: PreviewProps) {
   const isBoss = view.isBoss;
   const isUnrevealed = node.state === "unrevealed" && !isBoss;
   const ref = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState<{ left: number; top: number; ready: boolean }>({
-    left: 0,
-    top: 0,
-    ready: false,
-  });
+  const [pos, setPos] = useState<{ left: number; top: number; ready: boolean }>(
+    {
+      left: 0,
+      top: 0,
+      ready: false,
+    },
+  );
 
   useLayoutEffect(() => {
     const height = ref.current?.offsetHeight ?? 480;
@@ -241,8 +262,8 @@ function Preview({ resolved }: PreviewProps) {
           <div className="eyebrow">Unrevealed</div>
           <div className="mini-title">An Unseen Dream</div>
           <p className="mini-text">
-            This dreamscape is revealed only as you draw near. Travel onward to learn
-            what waits here.
+            This dreamscape is revealed only as you draw near. Travel onward to
+            learn what waits here.
           </p>
         </div>
       </div>
@@ -267,7 +288,10 @@ function Preview({ resolved }: PreviewProps) {
         </div>
         <div className="preview-info">
           <div className="info-row">
-            <i className="fa-solid fa-skull row-ico danger" aria-hidden="true" />
+            <i
+              className="fa-solid fa-skull row-ico danger"
+              aria-hidden="true"
+            />
             <div>
               <div className="eyebrow">Layer VII · Final Battle</div>
               <div className="row-val">Confront {BOSS_DISPLAY.name}</div>
@@ -281,7 +305,10 @@ function Preview({ resolved }: PreviewProps) {
             </div>
           </div>
           <div className="info-row">
-            <i className="fa-solid fa-flag-checkered row-ico danger" aria-hidden="true" />
+            <i
+              className="fa-solid fa-flag-checkered row-ico danger"
+              aria-hidden="true"
+            />
             <div>
               <div className="eyebrow">Victory</div>
               <div className="row-val dim">{BOSS_DISPLAY.closer}</div>
@@ -303,7 +330,11 @@ function Preview({ resolved }: PreviewProps) {
   }
 
   return (
-    <div className={`preview${guide ? " has-guide" : ""}`} ref={ref} style={style}>
+    <div
+      className={`preview${guide ? " has-guide" : ""}`}
+      ref={ref}
+      style={style}
+    >
       <div
         className="preview-scene"
         style={{ backgroundImage: `url(${dreamscapeSceneUrl(dreamscape.id)})` }}
@@ -323,21 +354,26 @@ function Preview({ resolved }: PreviewProps) {
                 aria-hidden="true"
               />
               <div>
-                <div className="eyebrow">Signature Site</div>
-                <div className="row-val">{siteTypeName(dreamscape.signatureSite)}</div>
+                <div className="eyebrow">Site</div>
+                <div className="row-val">
+                  {siteTypeName(dreamscape.signatureSite)}
+                </div>
               </div>
             </div>
             <div className="info-row">
               <i className="fa-solid fa-star row-ico gold" aria-hidden="true" />
               <div>
-                <div className="eyebrow">Site Bonus</div>
+                <div className="eyebrow">Bonus</div>
                 <p className="row-text">{guide.homeSpecialty}</p>
               </div>
             </div>
             <div className="info-row">
-              <i className={`${AFFILIATION_ROW_ICON_CLASS} row-ico`} aria-hidden="true" />
+              <i
+                className={`${AFFILIATION_ROW_ICON_CLASS} row-ico`}
+                aria-hidden="true"
+              />
               <div>
-                <div className="eyebrow">Card Affiliation</div>
+                <div className="eyebrow">Affiliation</div>
                 {affiliation ? (
                   <span className="aff-pill">{affiliation.name}</span>
                 ) : (
@@ -353,7 +389,7 @@ function Preview({ resolved }: PreviewProps) {
               aria-hidden="true"
               style={{ color: "var(--dt-accent-strong)", marginRight: 8 }}
             />
-            {dreamscape.aesthetic} Every run begins here.
+            A quiet place where every dream quest begins.
           </p>
         )}
       </div>
@@ -381,11 +417,13 @@ interface DreamsignCardProps {
 function DreamsignCard({ resolved }: DreamsignCardProps) {
   const { view, dreamsign } = resolved;
   const ref = useRef<HTMLDivElement>(null);
-  const [pos, setPos] = useState<{ left: number; top: number; ready: boolean }>({
-    left: 0,
-    top: 0,
-    ready: false,
-  });
+  const [pos, setPos] = useState<{ left: number; top: number; ready: boolean }>(
+    {
+      left: 0,
+      top: 0,
+      ready: false,
+    },
+  );
 
   useLayoutEffect(() => {
     const height = ref.current?.offsetHeight ?? 330;
@@ -433,7 +471,9 @@ function DreamsignCard({ resolved }: DreamsignCardProps) {
       </div>
       <div className="dsc-body">
         <div className="dsc-name">{dreamsign.name}</div>
-        <p className="dsc-rules">{renderDreamsignRules(dreamsign.effectDescription)}</p>
+        <p className="dsc-rules">
+          {renderDreamsignRules(dreamsign.effectDescription)}
+        </p>
       </div>
     </div>
   );
@@ -484,7 +524,9 @@ export function AtlasScreen() {
 
   useEffect(() => {
     const fit = () => {
-      setScale(Math.min(window.innerWidth / STAGE_W, window.innerHeight / STAGE_H));
+      setScale(
+        Math.min(window.innerWidth / STAGE_W, window.innerHeight / STAGE_H),
+      );
     };
     fit();
     window.addEventListener("resize", fit);
@@ -542,7 +584,9 @@ export function AtlasScreen() {
 
   // Subtitle: the layer the player is currently choosing into.
   const choiceLayer = useMemo(() => {
-    const available = Object.values(atlas.nodes).find((n) => n.state === "available");
+    const available = Object.values(atlas.nodes).find(
+      (n) => n.state === "available",
+    );
     return available?.layer ?? null;
   }, [atlas.nodes]);
 
@@ -652,7 +696,13 @@ export function AtlasScreen() {
                 <stop offset="0" stopColor="#fbbf24" />
                 <stop offset="1" stopColor="#d4a017" />
               </linearGradient>
-              <linearGradient id="dream-atlas-openg" x1="0" y1="0" x2="1" y2="0">
+              <linearGradient
+                id="dream-atlas-openg"
+                x1="0"
+                y1="0"
+                x2="1"
+                y2="0"
+              >
                 <stop offset="0" stopColor="#a855f7" />
                 <stop offset="1" stopColor="#7c3aed" />
               </linearGradient>

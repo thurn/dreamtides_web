@@ -27,7 +27,7 @@ opponent-bias-strength = 2.0
 
 [[affiliations]]
 id = "erode_void"
-name = "Erode / Void Matters"
+name = "The Void"
 signature-cards = [
   "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", # Graywatch
   "25d00336-5ad7-433b-8ced-71720a9f074a", # Wheel of the Heavens
@@ -40,8 +40,11 @@ opponent-bias-strength = 2.0
 
 [[affiliations]]
 id = "removal"
-name = "Removal / Dissolve-Banish"
+name = "Tempo"
 signature-cards = [
+  "954e8d50-d494-4fb2-b4c7-74979083b774", # Driftrider
+  "4f29a241-9265-4669-a189-5a2a91923e12", # Vanishing Inquisitor
+  "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb", # Thronebound Arbiter
   "7be2e6d7-abff-4c44-a0c3-35460da1693c", # Gatebound Warden
   "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", # Fading Farewell
   "3e6a5236-9850-4a69-9fe1-48389365a399", # Dusk Duelist
@@ -52,7 +55,7 @@ opponent-bias-strength = 2.0
 
 [[affiliations]]
 id = "storm_events"
-name = "Storm / Events"
+name = "Events"
 signature-cards = [
   "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", # Miraculous Arrival
   "967c714f-40c5-4a77-8e22-40691a2755d4", # Passage Through Oblivion
@@ -65,7 +68,7 @@ opponent-bias-strength = 2.0
 
 [[affiliations]]
 id = "inexpensive_characters"
-name = "Inexpensive Characters"
+name = "Characters"
 signature-cards = [
   "9b9c2743-75b3-499d-b5fb-c3429c92d420", # Driftcaller Sovereign
   "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", # Ethereal Trailblazer
@@ -91,7 +94,7 @@ opponent-bias-strength = 2.0
 
 [[affiliations]]
 id = "abandon_sacrifice"
-name = "Abandon / Sacrifice"
+name = "Abandon"
 signature-cards = [
   "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", # Pathwalker
   "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", # Riftwalker

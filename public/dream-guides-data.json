@@ -8,7 +8,7 @@
       "Welcome, friend! Browse a while.",
       "I've set aside something just for you."
     ],
-    "homeSpecialty": "Discounted cards drawn from the player's Dreamcaller signature tide."
+    "homeSpecialty": "Tobias offers strong cards at a steep discount."
   },
   {
     "id": "amunet_the_tomb_keeper",
@@ -19,7 +19,7 @@
       "The sands remember all dreams.",
       "Choose, and I shall show you another."
     ],
-    "homeSpecialty": "Restock the dreamsign choices once for free."
+    "homeSpecialty": "Amunet will restock the dreamsign choices once at no cost."
   },
   {
     "id": "sigrun",
@@ -30,7 +30,7 @@
       "The frost reveals what is hidden.",
       "Your path is clearer than most."
     ],
-    "homeSpecialty": "Always a choice (never a single random dreamsign), more choices, tailored to the deck."
+    "homeSpecialty": "Sigrún offers several dreamsign choices, tailored to your deck."
   },
   {
     "id": "durgan_forgehammer",
@@ -41,7 +41,7 @@
       "Stoke the forge — let's reshape it.",
       "Any card, any temper you like."
     ],
-    "homeSpecialty": "Pick any card and any applicable transfiguration."
+    "homeSpecialty": "Durgan can transfigure any card in your deck."
   },
   {
     "id": "deacon_holt",
@@ -52,7 +52,7 @@
       "We endure together, don't we?",
       "Pick one, and I'll make another."
     ],
-    "homeSpecialty": "Pick any card to duplicate."
+    "homeSpecialty": "Deacon Holt can pick any card to duplicate."
   },
   {
     "id": "master_takeshi",
@@ -63,7 +63,7 @@
       "Let go of what weighs you down.",
       "A cleaner blade cuts truer."
     ],
-    "homeSpecialty": "Remove up to 3 cards or banes for free."
+    "homeSpecialty": "Master Takeshi will purge cards from your deck at no cost."
   },
   {
     "id": "aldric_the_seer",
@@ -74,7 +74,7 @@
       "I have foreseen your arrival.",
       "Great fortune awaits the worthy."
     ],
-    "homeSpecialty": "Bigger rewards, curated to the deck."
+    "homeSpecialty": "Aldric offers curated visions of the future."
   },
   {
     "id": "maddox",
@@ -85,7 +85,7 @@
       "Out here, every deal's a gamble.",
       "Two offers. Pick your poison."
     ],
-    "homeSpecialty": "Choose between two offers."
+    "homeSpecialty": "Maddox will make you two offers to improve your deck."
   },
   {
     "id": "gravok",
@@ -96,7 +96,7 @@
       "Fortune favors the bold, traveler.",
       "No fee tonight. Big stakes, though."
     ],
-    "homeSpecialty": "No initial fee, bigger payouts."
+    "homeSpecialty": "Gravok awlays offers you his highest rewards and best odds."
   },
   {
     "id": "layaway",
@@ -107,6 +107,6 @@
       "Pay later, collect sooner. Deal?",
       "Time's just another currency, choom."
     ],
-    "homeSpecialty": "Longer duration / sooner future rewards."
+    "homeSpecialty": "Layaway will shape the future towards your needs."
   }
 ]
