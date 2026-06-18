@@ -4,6 +4,7 @@ import type { CardData } from "../types/cards";
 import type { SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
+import { DreamGuideFrame } from "../components/DreamGuideFrame";
 import { DreamsignArtTile } from "../components/DreamsignArtTile";
 import { EssenceValue } from "../components/EssenceValue";
 import { HoverZoomCard } from "../components/HoverZoomCard";
@@ -141,6 +142,7 @@ export function ShopScreen({ site }: ShopScreenProps) {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4 }}
     >
+      <DreamGuideFrame site={site} />
       {/* Header */}
       <div className="mb-6 text-center">
         <h2

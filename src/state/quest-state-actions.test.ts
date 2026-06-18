@@ -2,6 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   loadTestAffiliations,
   loadTestAtlasConfig,
+  loadTestDreamGuides,
   loadTestDreamscapes,
   makeTestAtlasNode,
 } from "../__test-helpers__/atlas-fixtures";
@@ -83,6 +84,7 @@ function makeQuestContent(
     dreamwellCards: [],    dreamsignTemplates: [],
     dreamscapes: loadTestDreamscapes(),
     affiliations: loadTestAffiliations(),
+    guides: loadTestDreamGuides(),
     atlasConfig: loadTestAtlasConfig(),
     poolContext: makeTestPoolContext(["dreamsign-a", "dreamsign-b"]),
   };

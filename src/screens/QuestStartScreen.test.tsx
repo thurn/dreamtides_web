@@ -246,7 +246,7 @@ function setQuestContext(): void {
       cardDatabase: new Map(),
       dreamcallers: [...OFFERED_DREAMCALLERS],
 
-      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES,      affiliations: [],      atlasConfig: MINIMAL_ATLAS_CONFIG,
+      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES,      affiliations: [], guides: [],      atlasConfig: MINIMAL_ATLAS_CONFIG,
     },
   });
 }

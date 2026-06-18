@@ -94,3 +94,18 @@ export function otherGuideSignatureSites(
 ): SiteType[] {
   return guideSignatureSites(dreamscapes).filter((site) => site !== homeSite);
 }
+
+/**
+ * The Dream Guide resident at a given site type, or `null` when no guide tends
+ * that site type. Each guide tends exactly one site type (its home dreamscape's
+ * signature site), so a guide appears wherever that site type appears — in its
+ * home dreamscape (where the site is enhanced) and as fill in other dreamscapes
+ * (where the same site type is unenhanced). The frame presentation uses this to
+ * resolve which guide greets the player at a guide-bearing site screen.
+ */
+export function guideForSiteType(
+  guides: readonly DreamGuideContent[],
+  siteType: SiteType,
+): DreamGuideContent | null {
+  return guides.find((guide) => guide.siteType === siteType) ?? null;
+}

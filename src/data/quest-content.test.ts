@@ -128,6 +128,9 @@ describe("loadQuestContent", () => {
         if (path === "/affiliations-data.json") {
           return Promise.resolve({ ok: true, json: () => Promise.resolve([]) });
         }
+        if (path === "/dream-guides-data.json") {
+          return Promise.resolve({ ok: true, json: () => Promise.resolve([]) });
+        }
         if (path === "/atlas-config-data.json") {
           return Promise.resolve({
             ok: true,

@@ -42,6 +42,7 @@ import { logEvent } from "../logging";
 import type { Screen, SiteState } from "../types/quest";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { BattleSiteRoute } from "./BattleSiteRoute";
+import { DreamGuideFrame } from "./DreamGuideFrame";
 import { ErrorBoundary } from "./ErrorBoundary";
 
 /** Computes a stable key for AnimatePresence from the current screen. */
@@ -270,14 +271,17 @@ function DreamAugurySiteScreen({
   );
 
   return (
-    <JourneyScreen
-      context={journeyContext}
-      onClose={handleClose}
-      siteId={site.id}
-      mutations={journeyMutations}
-      debugForcing={debugForcing}
-      onExplanationChange={onJourneyExplanationChange}
-    />
+    <>
+      <DreamGuideFrame site={site} />
+      <JourneyScreen
+        context={journeyContext}
+        onClose={handleClose}
+        siteId={site.id}
+        mutations={journeyMutations}
+        debugForcing={debugForcing}
+        onExplanationChange={onJourneyExplanationChange}
+      />
+    </>
   );
 }
 
@@ -435,6 +439,7 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
         className="min-h-full bg-[#090b10] p-6 text-slate-100"
         data-testid="dream-merchant-v2-fallback"
       >
+        <DreamGuideFrame site={site} />
         <section className="mx-auto grid min-h-[70vh] max-w-2xl place-items-center text-center">
           <div className="grid gap-4">
             <h2 className="text-2xl font-bold">Dream Merchant</h2>
@@ -456,25 +461,28 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
   }
 
   return (
-    <DreamMerchantScreen
-      // Reset the screen's local selection state whenever the encounter changes
-      // (e.g. after a debug reroll regenerates the offers).
-      key={encounterResult.encounter.encounterSignature}
-      site={site}
-      context={merchantContext}
-      questState={state}
-      encounter={encounterResult.encounter}
-      onAcceptOffer={handleAcceptOffer}
-      onDecline={handleDecline}
-      onReroll={handleReroll}
-      onForceArchetype={
-        mutations.forceDreamAuguryArchetype === undefined
-          ? undefined
-          : handleForceArchetype
-      }
-      eligibleArchetypeIds={encounterResult.debug.eligibleArchetypeIds}
-      forcedArchetypeId={merchantContext.forcedArchetypeId ?? null}
-    />
+    <>
+      <DreamGuideFrame site={site} />
+      <DreamMerchantScreen
+        // Reset the screen's local selection state whenever the encounter
+        // changes (e.g. after a debug reroll regenerates the offers).
+        key={encounterResult.encounter.encounterSignature}
+        site={site}
+        context={merchantContext}
+        questState={state}
+        encounter={encounterResult.encounter}
+        onAcceptOffer={handleAcceptOffer}
+        onDecline={handleDecline}
+        onReroll={handleReroll}
+        onForceArchetype={
+          mutations.forceDreamAuguryArchetype === undefined
+            ? undefined
+            : handleForceArchetype
+        }
+        eligibleArchetypeIds={encounterResult.debug.eligibleArchetypeIds}
+        forcedArchetypeId={merchantContext.forcedArchetypeId ?? null}
+      />
+    </>
   );
 }
 

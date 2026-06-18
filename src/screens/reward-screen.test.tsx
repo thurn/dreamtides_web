@@ -214,7 +214,7 @@ function setQuestContext(
       cardDatabase,
       dreamcallers: [],
 
-      dreamwellCards: [],      dreamsignTemplates: DREAMSIGN_TEMPLATES,      dreamscapes: MINIMAL_DREAMSCAPES,      affiliations: [],      atlasConfig: MINIMAL_ATLAS_CONFIG,
+      dreamwellCards: [],      dreamsignTemplates: DREAMSIGN_TEMPLATES,      dreamscapes: MINIMAL_DREAMSCAPES,      affiliations: [], guides: [],      atlasConfig: MINIMAL_ATLAS_CONFIG,
     },
   });
 }

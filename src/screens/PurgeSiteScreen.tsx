@@ -2,6 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import type { SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
+import { DreamGuideFrame } from "../components/DreamGuideFrame";
 import { EssenceValue } from "../components/EssenceValue";
 import { RulesText } from "../components/RulesText";
 import { useQuest } from "../state/quest-context";
@@ -201,6 +202,7 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4 }}
     >
+      <DreamGuideFrame site={site} />
       {/* Header */}
       <div className="mb-4 text-center">
         <h2

@@ -37,9 +37,13 @@ import {
 } from "./cards-v2-database";
 import { loadDreamcallersV2 } from "./dreamcallers-v2-database";
 import { loadDreamwellCards, type DreamwellCard } from "./dreamwell-database";
-import { loadAffiliations, loadDreamscapes } from "./dreamscapes";
+import { loadAffiliations, loadDreamGuides, loadDreamscapes } from "./dreamscapes";
 import { loadAtlasConfig } from "./atlas-config";
-import type { AffiliationContent, DreamscapeContent } from "../types/content";
+import type {
+  AffiliationContent,
+  DreamGuideContent,
+  DreamscapeContent,
+} from "../types/content";
 import type { AtlasConfig } from "../types/quest";
 import { STARTER_CARD_NUMBERS } from "./starter-cards";
 import { buildFitModel, type FitModel } from "../draft/replay/fit-model";
@@ -70,6 +74,12 @@ export interface QuestContent {
    * `src/affiliations/affiliation-weights.ts`).
    */
   affiliations: readonly AffiliationContent[];
+  /**
+   * Dream Guide definitions, loaded from `public/dream-guides-data.json`. Each
+   * guide tends one site type (its home dreamscape's signature site) and carries
+   * the dialog and `homeSpecialty` copy the guide frame presents at that site.
+   */
+  guides: readonly DreamGuideContent[];
   /**
    * Dream Atlas generation tuning, loaded from `public/atlas-config-data.json`.
    */
@@ -650,6 +660,7 @@ export async function loadQuestContent(
     dreamsignProfiles,
     dreamscapes,
     affiliations,
+    guides,
     atlasConfig,
   ] = await Promise.all([
     loadCardsV2Database(),
@@ -687,6 +698,9 @@ export async function loadQuestContent(
     // Affiliations are small and always loaded so affiliated card draws can
     // reweight toward a dreamscape's faction.
     loadAffiliations(),
+    // Dream Guides are small and always loaded so guide-bearing site screens can
+    // present the resident guide and their home specialty.
+    loadDreamGuides(),
     loadAtlasConfig(),
   ]);
 
@@ -760,6 +774,7 @@ export async function loadQuestContent(
       dreamsignTemplates,
       dreamscapes,
       affiliations,
+      guides,
       atlasConfig,
       poolContext,
       draftMode,
@@ -778,6 +793,7 @@ export async function loadQuestContent(
     dreamsignTemplates,
     dreamscapes,
     affiliations,
+    guides,
     atlasConfig,
     poolContext,
     draftMode,

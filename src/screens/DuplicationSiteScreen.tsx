@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import type { SiteState, DeckEntry } from "../types/quest";
 import type { CardData } from "../types/cards";
 import { CardDisplay } from "../components/CardDisplay";
+import { DreamGuideFrame } from "../components/DreamGuideFrame";
 import { useQuest } from "../state/quest-context";
 
 /** Props for the DuplicationSiteScreen component. */
@@ -145,6 +146,7 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.4 }}
       >
+        <DreamGuideFrame site={site} />
         <div className="mb-6 text-center">
           <h2
             className="text-2xl font-bold tracking-wide md:text-3xl"
@@ -235,6 +237,7 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4 }}
     >
+      <DreamGuideFrame site={site} />
       <div className="mb-6 text-center">
         <h2
           className="text-2xl font-bold tracking-wide md:text-3xl"

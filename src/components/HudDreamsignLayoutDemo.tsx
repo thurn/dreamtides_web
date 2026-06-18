@@ -186,7 +186,7 @@ const demoQuestContext: QuestContextValue = {
     dreamwellCards: [],
     dreamsignTemplates: demoTemplates,
     dreamscapes: [],
-    affiliations: [],
+    affiliations: [], guides: [],
     atlasConfig: {
       layerSpecs: [],
       connectionAverage: 2,

@@ -246,7 +246,7 @@ function makeQuestContent(): QuestContent {
     cardDatabase: new Map<number, CardData>(),
     dreamcallers: [],
 
-    dreamwellCards: [],    dreamsignTemplates: [],    dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [],    atlasConfig: MINIMAL_ATLAS_CONFIG,
+    dreamwellCards: [],    dreamsignTemplates: [],    dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [], guides: [],    atlasConfig: MINIMAL_ATLAS_CONFIG,
   };
 }
 
@@ -259,7 +259,7 @@ function setQuestState(state: QuestState): void {
       cardDatabase: new Map(),
       dreamcallers: [],
 
-      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [],      atlasConfig: MINIMAL_ATLAS_CONFIG,
+      dreamwellCards: [],      dreamsignTemplates: [],      dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [], guides: [],      atlasConfig: MINIMAL_ATLAS_CONFIG,
     },
   });
 }
@@ -497,7 +497,7 @@ describe("QuestApp", () => {
         cardDatabase: new Map(),
         dreamcallers: [],
 
-        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [],        atlasConfig: MINIMAL_ATLAS_CONFIG,
+        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [], guides: [],        atlasConfig: MINIMAL_ATLAS_CONFIG,
       },
     });
 
@@ -615,7 +615,7 @@ describe("QuestApp", () => {
         cardDatabase: new Map(),
         dreamcallers: [],
 
-        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [],        atlasConfig: MINIMAL_ATLAS_CONFIG,
+        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [], guides: [],        atlasConfig: MINIMAL_ATLAS_CONFIG,
       },
     });
 
@@ -651,7 +651,7 @@ describe("QuestApp", () => {
         cardDatabase: new Map(),
         dreamcallers: [],
 
-        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [],        atlasConfig: MINIMAL_ATLAS_CONFIG,
+        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES, affiliations: [], guides: [],        atlasConfig: MINIMAL_ATLAS_CONFIG,
       },
     });
 

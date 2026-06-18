@@ -1,6 +1,10 @@
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import type { AffiliationContent, DreamscapeContent } from "../types/content";
+import type {
+  AffiliationContent,
+  DreamGuideContent,
+  DreamscapeContent,
+} from "../types/content";
 import type {
   AtlasConfig,
   DreamAtlas,
@@ -59,6 +63,11 @@ export function loadTestDreamscapes(): DreamscapeContent[] {
 /** The live affiliation definitions from the compiled bundle. */
 export function loadTestAffiliations(): AffiliationContent[] {
   return readPublicJson<AffiliationContent[]>("affiliations-data.json");
+}
+
+/** The live Dream Guide definitions from the compiled bundle. */
+export function loadTestDreamGuides(): DreamGuideContent[] {
+  return readPublicJson<DreamGuideContent[]>("dream-guides-data.json");
 }
 
 /** The live Dream Atlas generation tuning from the compiled bundle. */

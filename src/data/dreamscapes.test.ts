@@ -2,11 +2,14 @@ import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
+  guideForSiteType,
   loadAffiliations,
   loadDreamGuides,
   loadDreamscapes,
 } from "./dreamscapes";
 import { loadAtlasConfig } from "./atlas-config";
+import { generateSiteComposition } from "../atlas/atlas-generator";
+import type { DreamscapeContent } from "../types/content";
 
 // Referential-integrity test for the dreamscape / guide / affiliation / atlas
 // content bundles. It runs against the *compiled* JSON the asset pipeline emits
@@ -125,6 +128,79 @@ describe("dreamscape content referential integrity", () => {
       expect(a.signatureCards.length).toBeGreaterThan(0);
       for (const uuid of a.signatureCards) {
         expect(cardIds.has(uuid)).toBe(true);
+      }
+    }
+  });
+
+  it("every non-starter dreamscape's signature site resolves to the guide whose home it is", async () => {
+    const [dreamscapes, guides] = await Promise.all([
+      loadDreamscapes(),
+      loadDreamGuides(),
+    ]);
+    for (const d of dreamscapes) {
+      if (d.isStarter) continue;
+      // The guide who tends this dreamscape's signature site type...
+      const guide = guideForSiteType(guides, d.signatureSite);
+      expect(guide).not.toBeNull();
+      // ...must be the guide whose home dreamscape this is. This is the
+      // dreamscape <-> guide <-> signature-site contract the frame and the
+      // home-enhancement trigger both rely on.
+      expect((guide as { homeDreamscapeId: string }).homeDreamscapeId).toBe(
+        d.id,
+      );
+      // And that guide must be the one the dreamscape names as its resident.
+      expect((guide as { id: string }).id).toBe(d.guideId);
+    }
+  });
+
+  it("a guide's signature site is enhanced in its home dreamscape and unenhanced elsewhere", async () => {
+    const [dreamscapes, guides] = await Promise.all([
+      loadDreamscapes(),
+      loadDreamGuides(),
+    ]);
+    const context = { dreamscapeModifiers: [] };
+    const homeOf = (siteType: string): DreamscapeContent | undefined =>
+      dreamscapes.find((d) => !d.isStarter && d.signatureSite === siteType);
+
+    for (const guide of guides) {
+      const home = homeOf(guide.siteType);
+      // Every guide must have a home dreamscape whose signature site it tends.
+      expect(home).toBeDefined();
+      if (home === undefined) continue;
+
+      // Composing the home dreamscape always marks its signature site enhanced.
+      const homeComposition = generateSiteComposition({
+        layer: 3,
+        dreamscape: home,
+        dreamscapes,
+        context,
+      });
+      expect(homeComposition.enhancedSiteType).toBe(guide.siteType);
+      const homeSite = homeComposition.sites.find(
+        (s) => s.type === guide.siteType,
+      );
+      expect(homeSite).toBeDefined();
+      expect(homeSite?.isEnhanced).toBe(true);
+
+      // The same site type, composed for a *different* dreamscape, is never the
+      // enhanced signature site of that dreamscape, so any instance of it that
+      // appears (as fill) is unenhanced.
+      const elsewhere = dreamscapes.find(
+        (d) => !d.isStarter && d.signatureSite !== guide.siteType,
+      );
+      expect(elsewhere).toBeDefined();
+      if (elsewhere === undefined) continue;
+      const elsewhereComposition = generateSiteComposition({
+        layer: 3,
+        dreamscape: elsewhere,
+        dreamscapes,
+        context,
+      });
+      expect(elsewhereComposition.enhancedSiteType).not.toBe(guide.siteType);
+      for (const site of elsewhereComposition.sites) {
+        if (site.type === guide.siteType) {
+          expect(site.isEnhanced).toBe(false);
+        }
       }
     }
   });
