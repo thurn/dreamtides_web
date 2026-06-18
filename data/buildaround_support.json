@@ -371,7 +371,7 @@
       ]
     },
     "f0165a60-df1c-41db-87bb-a784c26835a5": {
-      "name": "Blazebound Sentinel",
+      "name": "Turquoise Aurelia",
       "needs": [],
       "supports": [
         "spirit-animals",
@@ -1432,7 +1432,7 @@
       ]
     },
     "48257e3e-9600-4edf-a905-e73a41ab5ec1": {
-      "name": "Ethereal Trailblazer",
+      "name": "Flamboyant Flamingo",
       "needs": [],
       "supports": [
         "spirit-animals",
@@ -1926,7 +1926,7 @@
       ]
     },
     "7dd2214f-8d16-453a-9f28-62712e64eae1": {
-      "name": "Hallowed Stag",
+      "name": "Ambersting",
       "needs": [],
       "supports": [
         "spirit-animals",
@@ -2614,7 +2614,7 @@
       ]
     },
     "eed92573-8052-494c-adae-9838de5375a1": {
-      "name": "Mountainwatch Alpha",
+      "name": "Blood Moon Triad",
       "needs": [
         {
           "theme": "spirit-animals",
@@ -2626,7 +2626,7 @@
       ]
     },
     "edb479be-68a5-45bc-bd19-2602156edb57": {
-      "name": "Mystic Runefish",
+      "name": "Sunshadow Eagle",
       "needs": [
         {
           "theme": "spirit-animals",
@@ -3944,7 +3944,7 @@
       ]
     },
     "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c": {
-      "name": "Starchaser",
+      "name": "Amythest Aurelia",
       "needs": [],
       "supports": [
         "spirit-animals",
@@ -4123,7 +4123,7 @@
       "supports": []
     },
     "61060827-8bed-4b63-b63d-6c3b0536e941": {
-      "name": "Sunshadow Eagle",
+      "name": "Vigilant Howler",
       "needs": [
         {
           "theme": "spirit-animals",
@@ -4467,7 +4467,7 @@
       ]
     },
     "14ac6804-ed1d-4148-aad7-11796b6fff6c": {
-      "name": "Undying Fang",
+      "name": "Luminwings",
       "needs": [
         {
           "theme": "spirit-animals",
@@ -4580,7 +4580,7 @@
       ]
     },
     "a36898f6-707e-4b28-89dc-ec896f484203": {
-      "name": "Verdant Pilgrim",
+      "name": "Empyreal Light",
       "needs": [],
       "supports": [
         "spirit-animals"

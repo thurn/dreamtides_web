@@ -1826,7 +1826,7 @@ art-owned = false
 card-number = 98
 
 [[cards]]
-name = "Starchaser"
+name = "Amythest Aurelia"
 mtg-name = "Avacyn's Pilgrim"
 id = "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c"
 rendered-text = '''
@@ -1840,10 +1840,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Elves", "Art Rework", "June18"]
-image-number = 748956871
+tags = ["Elves", "Art Rework", "June18", "Art OK"]
+image-number = 432001513
 art-owned = false
 card-number = 99
+art = { x = 0, y = 0.266, scale = 1.17 }
 
 [[cards]]
 name = "Sunset Chapel Rest"
@@ -2083,7 +2084,7 @@ art-owned = false
 card-number = 112
 
 [[cards]]
-name = "Sunshadow Eagle"
+name = "Vigilant Howler"
 mtg-name = "Heritage Druid"
 id = "61060827-8bed-4b63-b63d-6c3b0536e941"
 rendered-text = """
@@ -2097,10 +2098,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "June18"]
-image-number = 2303852061
+tags = ["Art Rework", "June18", "Art OK"]
+image-number = 331258328
 art-owned = false
 card-number = 113
+art = { x = 0, y = 0.432, scale = 1.87 }
 
 [[cards]]
 name = "Vertiginous Leap"
@@ -2735,7 +2737,7 @@ art-owned = false
 card-number = 147
 
 [[cards]]
-name = "Mountainwatch Alpha"
+name = "Blood Moon Triad"
 mtg-name = "Priest of Titania"
 id = "eed92573-8052-494c-adae-9838de5375a1"
 rendered-text = "☪: Gain 1● for each allied spirit animal."
@@ -2746,10 +2748,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Spirit Lord", "Art Rework", "June18"]
-image-number = 2261959337
+tags = ["Spirit Lord", "Art Rework", "June18", "Art OK"]
+image-number = 2293194523
 art-owned = false
 card-number = 148
+art = { x = 0, y = 1, scale = 1.37 }
 
 [[cards]]
 name = "Glimmerwood Scout"
@@ -4221,7 +4224,7 @@ art-owned = false
 card-number = 229
 
 [[cards]]
-name = "Undying Fang"
+name = "Luminwings"
 mtg-name = "Arbor Elf"
 id = "14ac6804-ed1d-4148-aad7-11796b6fff6c"
 rendered-text = "▸Dawn: Gain 1●. With 3 allied spirit animals, gain 2● instead."
@@ -4232,11 +4235,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 0
-tags = ["Elves", "Art Rework", "June18"]
-image-number = 2018848976
+tags = ["Elves", "Art Rework", "June18", "Art OK"]
+image-number = 529374502
 art-owned = false
 card-number = 230
-art = { x = -0.042, y = 0.369, scale = 1.17 }
+art = { x = 0.06, y = 0.369, scale = 1.57 }
 
 [[cards]]
 name = "Vengeance Taker"
@@ -4550,7 +4553,7 @@ card-number = 247
 art = { x = 0.546, y = 0.608, scale = 1.17 }
 
 [[cards]]
-name = "Mystic Runefish"
+name = "Sunshadow Eagle"
 mtg-name = "Allosaurus Shepherd"
 id = "edb479be-68a5-45bc-bd19-2602156edb57"
 rendered-text = "5●, ☪: Each allied spirit animal's ✦ becomes 7."
@@ -4561,11 +4564,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June18"]
-image-number = 726444853
+tags = ["Art Rework", "June18", "Art OK"]
+image-number = 2303852061
 art-owned = false
 card-number = 248
-art = { x = -0.912, y = 1, scale = 1.17 }
+art = { x = -0.071, y = 1, scale = 1.16 }
 
 [[cards]]
 name = "Duskreaper"
@@ -4808,7 +4811,7 @@ card-number = 261
 art = { x = 0, y = -0.627, scale = 1.57 }
 
 [[cards]]
-name = "Hallowed Stag"
+name = "Ambersting"
 mtg-name = "Elves of Deep Shadow"
 id = "7dd2214f-8d16-453a-9f28-62712e64eae1"
 rendered-text = '''
@@ -4822,10 +4825,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 0
-tags = ["Elves", "Art Rework", "June18"]
-image-number = 2261959339
+tags = ["Elves", "Art Rework", "June18", "Art OK"]
+image-number = 519475345
 art-owned = false
 card-number = 262
+art = { x = 0, y = 1, scale = 1.1 }
 
 [[cards]]
 name = "Intermezzo Balladeer"
@@ -5970,7 +5974,7 @@ art-owned = false
 card-number = 324
 
 [[cards]]
-name = "Verdant Pilgrim"
+name = "Empyreal Light"
 mtg-name = "Quirion Ranger"
 id = "a36898f6-707e-4b28-89dc-ec896f484203"
 rendered-text = "☪: Awaken an ally."
@@ -5981,10 +5985,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Awaken", "Art Rework", "June18"]
-image-number = 2667786597
+tags = ["Awaken", "Art Rework", "June18", "Art OK"]
+image-number = 1913887474
 art-owned = false
 card-number = 325
+art = { x = -0.42, y = 0.839, scale = 1.17 }
 
 [[cards]]
 name = "Fell Swoop"
@@ -6708,7 +6713,7 @@ card-number = 363
 art = { x = 0.433, y = 1, scale = 1.11 }
 
 [[cards]]
-name = "Ethereal Trailblazer"
+name = "Flamboyant Flamingo"
 mtg-name = "Elvish Mystic"
 id = "48257e3e-9600-4edf-a905-e73a41ab5ec1"
 rendered-text = "▸Dawn: Gain 1●."
@@ -6719,10 +6724,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 0
-tags = ["Elves", "Art Rework", "June18"]
-image-number = 1047769090
+tags = ["Elves", "Art Rework", "June18", "Art OK"]
+image-number = 662452981
 art-owned = true
 card-number = 364
+art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Aspiring Guardian"
@@ -7544,7 +7550,7 @@ art-owned = true
 card-number = 408
 
 [[cards]]
-name = "Blazebound Sentinel"
+name = "Turquoise Aurelia"
 mtg-name = "Fyndhorn Elves"
 id = "f0165a60-df1c-41db-87bb-a784c26835a5"
 rendered-text = '''
@@ -7558,10 +7564,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Elves", "Art Rework", "June18"]
-image-number = 2131591267
+tags = ["Elves", "Art Rework", "June18", "Art OK"]
+image-number = 425039590
 art-owned = false
 card-number = 409
+art = { x = 0, y = 0.266, scale = 1.17 }
 
 [[cards]]
 name = "Break the Sequence"
