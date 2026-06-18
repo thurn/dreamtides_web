@@ -1,0 +1,119 @@
+[
+  {
+    "id": "firstlight_meadow",
+    "name": "Firstlight Meadow",
+    "aesthetic": "A tranquil meadow at sunrise.",
+    "signatureSite": "Draft",
+    "siteIcon": "game-icons.net/sbed/flag",
+    "isStarter": true,
+    "fixedSites": [
+      "Draft",
+      "Draft",
+      "DreamsignRevelation",
+      "Purge",
+      "Battle"
+    ],
+    "guideId": null,
+    "affiliationId": null
+  },
+  {
+    "id": "tumbleleaf_village",
+    "name": "Tumbleleaf Village",
+    "aesthetic": "A cozy fantasy village of anthropomorphic animals.",
+    "guideId": "tobias_tanglefur",
+    "signatureSite": "Shop",
+    "affiliationId": "spirit_animals",
+    "siteIcon": "game-icons.net/sbed/shop",
+    "isStarter": false
+  },
+  {
+    "id": "pharaohs_gate",
+    "name": "Pharaoh's Gate",
+    "aesthetic": "An ancient Egyptian realm of sun-baked stone and gold.",
+    "guideId": "amunet_the_tomb_keeper",
+    "signatureSite": "DreamsignMarket",
+    "affiliationId": "erode_void",
+    "siteIcon": "game-icons.net/sbed/great-pyramid",
+    "isStarter": false
+  },
+  {
+    "id": "winterwake_fjords",
+    "name": "Winterwake Fjords",
+    "aesthetic": "A snowy viking village beneath frozen cliffs.",
+    "guideId": "sigrun",
+    "signatureSite": "DreamsignRevelation",
+    "affiliationId": "removal",
+    "siteIcon": "game-icons.net/sbed/fire",
+    "isStarter": false
+  },
+  {
+    "id": "frostforge",
+    "name": "Frostforge",
+    "aesthetic": "A dwarven fortress of anvils and glowing forges.",
+    "guideId": "durgan_forgehammer",
+    "signatureSite": "Transfiguration",
+    "affiliationId": "storm_events",
+    "siteIcon": "game-icons.net/sbed/anvil-impact",
+    "isStarter": false
+  },
+  {
+    "id": "hopes_end",
+    "name": "Hope's End",
+    "aesthetic": "A rural town in the grip of a zombie apocalypse.",
+    "guideId": "deacon_holt",
+    "signatureSite": "Duplication",
+    "affiliationId": "inexpensive_characters",
+    "siteIcon": "stack.svg",
+    "isStarter": false
+  },
+  {
+    "id": "tsukiren",
+    "name": "Tsukiren",
+    "aesthetic": "A samurai-era Japanese kingdom of paper lanterns and steel.",
+    "guideId": "master_takeshi",
+    "signatureSite": "Purge",
+    "affiliationId": "warriors",
+    "siteIcon": "game-icons.net/sbed/small-fire",
+    "isStarter": false
+  },
+  {
+    "id": "blackthorn_keep",
+    "name": "Blackthorn Keep",
+    "aesthetic": "A dark fantasy castle wreathed in storm and shadow.",
+    "guideId": "aldric_the_seer",
+    "signatureSite": "DreamAugury",
+    "affiliationId": "abandon_sacrifice",
+    "siteIcon": "game-icons.net/sbed/crystal-ball",
+    "isStarter": false
+  },
+  {
+    "id": "rust_expanse",
+    "name": "The Rust Expanse",
+    "aesthetic": "A Mad-Max post-apocalyptic wasteland of scrap and dust.",
+    "guideId": "maddox",
+    "signatureSite": "TemptingOffer",
+    "affiliationId": "survivors",
+    "siteIcon": "game-icons.net/sbed/scales",
+    "isStarter": false
+  },
+  {
+    "id": "farpoint_station",
+    "name": "Farpoint Station",
+    "aesthetic": "A sci-fi outpost clinging to a distant planet.",
+    "guideId": "gravok",
+    "signatureSite": "Gamble",
+    "affiliationId": "figments",
+    "siteIcon": "game-icons.net/sbed/two-coins",
+    "isStarter": false
+  },
+  {
+    "id": "grid_city",
+    "name": "Grid City",
+    "aesthetic": "A neon-drenched cyberpunk city of rain and chrome.",
+    "guideId": "layaway",
+    "signatureSite": "TemporalFork",
+    "affiliationId": "discard",
+    "siteIcon": "game-icons.net/sbed/sands-of-time",
+    "isStarter": false
+  }
+]

@@ -4,6 +4,7 @@
  * this constant so RTDB-stripped rooms render with a sensible value.
  */
 import type { PoolVariant } from "../draft/pool/types.ts";
+import type { SiteType } from "./quest.ts";
 
 export const DEFAULT_STARTING_ESSENCE = 250;
 
@@ -33,6 +34,52 @@ export interface DreamsignTemplate {
   effectDescription: string;
   imageName?: string;
   imageAlt?: string;
+}
+
+/**
+ * One dreamscape region of the Dream Atlas, sourced from dreamscapes.toml. The
+ * starter dreamscape (`isStarter`) opens every run with a `fixedSites` sequence
+ * and carries no guide or affiliation; every other dreamscape has a resident
+ * `guideId` and a thematic `affiliationId`.
+ */
+export interface DreamscapeContent {
+  id: string;
+  name: string;
+  aesthetic: string;
+  guideId: string | null;
+  signatureSite: SiteType;
+  affiliationId: string | null;
+  siteIcon: string;
+  isStarter: boolean;
+  fixedSites?: SiteType[];
+}
+
+/**
+ * A Dream Guide: the resident character of a non-starter dreamscape, sourced
+ * from dream_guides.toml. The guide enhances `siteType` (their home
+ * dreamscape's signature site); `homeSpecialty` describes that enhancement.
+ */
+export interface DreamGuideContent {
+  id: string;
+  name: string;
+  homeDreamscapeId: string;
+  siteType: SiteType;
+  dialog: string[];
+  homeSpecialty: string;
+}
+
+/**
+ * A thematic affiliation backing a dreamscape, sourced from affiliations.toml.
+ * `signatureCards` are curated cards_v2 UUIDs exemplifying the theme;
+ * `weightStrength` and `opponentBiasStrength` tune how strongly later systems
+ * pull draft content and opponent decks toward them.
+ */
+export interface AffiliationContent {
+  id: string;
+  name: string;
+  signatureCards: string[];
+  weightStrength: number;
+  opponentBiasStrength: number;
 }
 
 /**

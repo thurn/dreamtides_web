@@ -1023,6 +1023,48 @@ const SITE_TYPE_META: Record<
     description: "Remove a bane from your deck.",
     enhancedDescription: "Remove a bane from your deck.",
   },
+  DreamAugury: {
+    icon: "bx bx-eye",
+    name: "Dream Augury",
+    description: "Claim a reward foreseen by the dreamscape's seer.",
+    enhancedDescription:
+      "Enhanced augury: bigger rewards, curated to your deck.",
+  },
+  DreamsignMarket: {
+    icon: "bx bx-store",
+    name: "Dreamsign Market",
+    description: "Buy a dreamsign from a rotating selection.",
+    enhancedDescription:
+      "Enhanced market: restock the dreamsign choices once for free.",
+  },
+  DreamsignRevelation: {
+    icon: "bx bx-sparkles",
+    name: "Dreamsign Revelation",
+    description: "Choose one dreamsign from several revealed options.",
+    enhancedDescription:
+      "Enhanced revelation: always a choice, with more options tailored to your deck.",
+  },
+  TemptingOffer: {
+    icon: "bx bx-bolt-circle",
+    name: "Tempting Offer",
+    description: "Take a risky deal for an outsized payoff.",
+    enhancedDescription:
+      "Enhanced offer: choose between two competing offers.",
+  },
+  Gamble: {
+    icon: "bx bx-coins",
+    name: "Gamble",
+    description: "Wager essence on an uncertain reward.",
+    enhancedDescription:
+      "Enhanced gamble: no initial fee, with bigger payouts.",
+  },
+  TemporalFork: {
+    icon: "bx bx-hourglass",
+    name: "Temporal Fork",
+    description: "Defer a reward now to claim more of it later.",
+    enhancedDescription:
+      "Enhanced fork: longer duration and sooner future rewards.",
+  },
 };
 
 /** Returns the Boxicons class name for the given site type. */

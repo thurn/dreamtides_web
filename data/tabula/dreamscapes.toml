@@ -1,0 +1,116 @@
+# Dreamscape definitions for the Dream Atlas. Each entry is a themed region the
+# player can travel to. The starter dreamscape (Firstlight Meadow) opens every
+# run with a fixed sequence of sites and carries no guide or affiliation; every
+# other dreamscape has a resident Dream Guide and a thematic affiliation that
+# steers its draft and battle content.
+#
+# Fields:
+#   id              Stable identifier referenced by guides and atlas generation.
+#   name            Player-facing dreamscape name.
+#   aesthetic       Art-direction / mood description for the region.
+#   guide-id        Resident Dream Guide id (omitted for the starter).
+#   signature-site  The SiteType this dreamscape is known for; its guide enhances
+#                   this site type in the dreamscape they call home.
+#   affiliation-id  Thematic affiliation id steering content (omitted for starter).
+#   site-icon       Icon reference for the dreamscape marker on the Atlas.
+#   is-starter      Present and true only on the run's opening dreamscape.
+#   fixed-sites     Ordered SiteType list the starter always presents.
+
+[[dreamscapes]]
+id = "firstlight_meadow"
+name = "Firstlight Meadow"
+aesthetic = "A tranquil meadow at sunrise."
+signature-site = "Draft"
+site-icon = "game-icons.net/sbed/flag"
+is-starter = true
+fixed-sites = ["Draft", "Draft", "DreamsignRevelation", "Purge", "Battle"]
+
+[[dreamscapes]]
+id = "tumbleleaf_village"
+name = "Tumbleleaf Village"
+aesthetic = "A cozy fantasy village of anthropomorphic animals."
+guide-id = "tobias_tanglefur"
+signature-site = "Shop"
+affiliation-id = "spirit_animals"
+site-icon = "game-icons.net/sbed/shop"
+
+[[dreamscapes]]
+id = "pharaohs_gate"
+name = "Pharaoh's Gate"
+aesthetic = "An ancient Egyptian realm of sun-baked stone and gold."
+guide-id = "amunet_the_tomb_keeper"
+signature-site = "DreamsignMarket"
+affiliation-id = "erode_void"
+site-icon = "game-icons.net/sbed/great-pyramid"
+
+[[dreamscapes]]
+id = "winterwake_fjords"
+name = "Winterwake Fjords"
+aesthetic = "A snowy viking village beneath frozen cliffs."
+guide-id = "sigrun"
+signature-site = "DreamsignRevelation"
+affiliation-id = "removal"
+site-icon = "game-icons.net/sbed/fire"
+
+[[dreamscapes]]
+id = "frostforge"
+name = "Frostforge"
+aesthetic = "A dwarven fortress of anvils and glowing forges."
+guide-id = "durgan_forgehammer"
+signature-site = "Transfiguration"
+affiliation-id = "storm_events"
+site-icon = "game-icons.net/sbed/anvil-impact"
+
+[[dreamscapes]]
+id = "hopes_end"
+name = "Hope's End"
+aesthetic = "A rural town in the grip of a zombie apocalypse."
+guide-id = "deacon_holt"
+signature-site = "Duplication"
+affiliation-id = "inexpensive_characters"
+site-icon = "stack.svg"
+
+[[dreamscapes]]
+id = "tsukiren"
+name = "Tsukiren"
+aesthetic = "A samurai-era Japanese kingdom of paper lanterns and steel."
+guide-id = "master_takeshi"
+signature-site = "Purge"
+affiliation-id = "warriors"
+site-icon = "game-icons.net/sbed/small-fire"
+
+[[dreamscapes]]
+id = "blackthorn_keep"
+name = "Blackthorn Keep"
+aesthetic = "A dark fantasy castle wreathed in storm and shadow."
+guide-id = "aldric_the_seer"
+signature-site = "DreamAugury"
+affiliation-id = "abandon_sacrifice"
+site-icon = "game-icons.net/sbed/crystal-ball"
+
+[[dreamscapes]]
+id = "rust_expanse"
+name = "The Rust Expanse"
+aesthetic = "A Mad-Max post-apocalyptic wasteland of scrap and dust."
+guide-id = "maddox"
+signature-site = "TemptingOffer"
+affiliation-id = "survivors"
+site-icon = "game-icons.net/sbed/scales"
+
+[[dreamscapes]]
+id = "farpoint_station"
+name = "Farpoint Station"
+aesthetic = "A sci-fi outpost clinging to a distant planet."
+guide-id = "gravok"
+signature-site = "Gamble"
+affiliation-id = "figments"
+site-icon = "game-icons.net/sbed/two-coins"
+
+[[dreamscapes]]
+id = "grid_city"
+name = "Grid City"
+aesthetic = "A neon-drenched cyberpunk city of rain and chrome."
+guide-id = "layaway"
+signature-site = "TemporalFork"
+affiliation-id = "discard"
+site-icon = "game-icons.net/sbed/sands-of-time"

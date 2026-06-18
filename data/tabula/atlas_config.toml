@@ -1,0 +1,36 @@
+# Dream Atlas generation tuning. The Atlas is a fixed 7-layer directed graph the
+# player traverses from the starter dreamscape to the final layer. Each layer
+# spec gives the inclusive width range (number of dreamscape nodes) for that
+# layer; `connection-average` tunes how many forward edges each node receives.
+#
+# `bonus-reveal` controls how many extra forward nodes are revealed (beyond the
+# immediate next layer) on arrival at a node, as a triangular {min, max, mode}.
+# `repeat-discourage-strength` penalizes placing the same dreamscape twice in
+# one atlas.
+#
+# `[known-dreamsign]` governs the placement of pre-revealed dreamsign sites
+# across the atlas: at most `max-per-atlas`, only on `eligible-layers`, each
+# eligible slot taken with `placement-probability`, biased toward earlier layers
+# by `early-reveal-bias`.
+
+layer-specs = [
+  { min = 1, max = 1 },
+  { min = 2, max = 2 },
+  { min = 3, max = 3 },
+  { min = 3, max = 4 },
+  { min = 3, max = 5 },
+  { min = 3, max = 5 },
+  { min = 1, max = 1 },
+]
+
+connection-average = 2.0
+
+bonus-reveal = { min = 0, max = 2, mode = 1 }
+
+repeat-discourage-strength = 2.0
+
+[known-dreamsign]
+max-per-atlas = 2
+eligible-layers = [3, 4, 5, 6]
+placement-probability = 0.5
+early-reveal-bias = 1.0

@@ -51,7 +51,47 @@ export type SiteType =
   | "Transfiguration"
   | "Duplication"
   | "Reward"
-  | "Cleanse";
+  | "Cleanse"
+  | "DreamAugury"
+  | "DreamsignMarket"
+  | "DreamsignRevelation"
+  | "TemptingOffer"
+  | "Gamble"
+  | "TemporalFork";
+
+/**
+ * Lifecycle state of one Dream Atlas node in the v2 atlas model. A node starts
+ * `unrevealed`, becomes `revealedLocked` when shown but not yet reachable,
+ * `available` when the player can travel to it, `completed` once cleared, and
+ * `forgone` when a sibling branch was taken and this one can no longer be
+ * reached.
+ */
+export type AtlasNodeState =
+  | "unrevealed"
+  | "revealedLocked"
+  | "available"
+  | "completed"
+  | "forgone";
+
+/** One layer's inclusive node-count range in the 7-layer Dream Atlas. */
+export interface AtlasLayerSpec {
+  min: number;
+  max: number;
+}
+
+/** Generation tuning for the v2 Dream Atlas, sourced from atlas_config.toml. */
+export interface AtlasConfig {
+  layerSpecs: AtlasLayerSpec[];
+  connectionAverage: number;
+  bonusReveal: { min: number; max: number; mode: number };
+  repeatDiscourageStrength: number;
+  knownDreamsign: {
+    maxPerAtlas: number;
+    eligibleLayers: number[];
+    placementProbability: number;
+    earlyRevealBias: number;
+  };
+}
 
 /** An entry in the player's deck. Duplicates are possible. */
 export interface DeckEntry {

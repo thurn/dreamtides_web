@@ -1,0 +1,112 @@
+[
+  {
+    "id": "tobias_tanglefur",
+    "name": "Tobias Tanglefur",
+    "homeDreamscapeId": "tumbleleaf_village",
+    "siteType": "Shop",
+    "dialog": [
+      "Welcome, friend! Browse a while.",
+      "I've set aside something just for you."
+    ],
+    "homeSpecialty": "Discounted cards drawn from the player's Dreamcaller signature tide."
+  },
+  {
+    "id": "amunet_the_tomb_keeper",
+    "name": "Amunet, the Tomb-Keeper",
+    "homeDreamscapeId": "pharaohs_gate",
+    "siteType": "DreamsignMarket",
+    "dialog": [
+      "The sands remember all dreams.",
+      "Choose, and I shall show you another."
+    ],
+    "homeSpecialty": "Restock the dreamsign choices once for free."
+  },
+  {
+    "id": "sigrun",
+    "name": "Sigrún",
+    "homeDreamscapeId": "winterwake_fjords",
+    "siteType": "DreamsignRevelation",
+    "dialog": [
+      "The frost reveals what is hidden.",
+      "Your path is clearer than most."
+    ],
+    "homeSpecialty": "Always a choice (never a single random dreamsign), more choices, tailored to the deck."
+  },
+  {
+    "id": "durgan_forgehammer",
+    "name": "Durgan Forgehammer",
+    "homeDreamscapeId": "frostforge",
+    "siteType": "Transfiguration",
+    "dialog": [
+      "Stoke the forge — let's reshape it.",
+      "Any card, any temper you like."
+    ],
+    "homeSpecialty": "Pick any card and any applicable transfiguration."
+  },
+  {
+    "id": "deacon_holt",
+    "name": "Deacon Holt",
+    "homeDreamscapeId": "hopes_end",
+    "siteType": "Duplication",
+    "dialog": [
+      "We endure together, don't we?",
+      "Pick one, and I'll make another."
+    ],
+    "homeSpecialty": "Pick any card to duplicate."
+  },
+  {
+    "id": "master_takeshi",
+    "name": "Master Takeshi",
+    "homeDreamscapeId": "tsukiren",
+    "siteType": "Purge",
+    "dialog": [
+      "Let go of what weighs you down.",
+      "A cleaner blade cuts truer."
+    ],
+    "homeSpecialty": "Remove up to 3 cards or banes for free."
+  },
+  {
+    "id": "aldric_the_seer",
+    "name": "Aldric, the Seer",
+    "homeDreamscapeId": "blackthorn_keep",
+    "siteType": "DreamAugury",
+    "dialog": [
+      "I have foreseen your arrival.",
+      "Great fortune awaits the worthy."
+    ],
+    "homeSpecialty": "Bigger rewards, curated to the deck."
+  },
+  {
+    "id": "maddox",
+    "name": "Maddox",
+    "homeDreamscapeId": "rust_expanse",
+    "siteType": "TemptingOffer",
+    "dialog": [
+      "Out here, every deal's a gamble.",
+      "Two offers. Pick your poison."
+    ],
+    "homeSpecialty": "Choose between two offers."
+  },
+  {
+    "id": "gravok",
+    "name": "Gravok",
+    "homeDreamscapeId": "farpoint_station",
+    "siteType": "Gamble",
+    "dialog": [
+      "Fortune favors the bold, traveler.",
+      "No fee tonight. Big stakes, though."
+    ],
+    "homeSpecialty": "No initial fee, bigger payouts."
+  },
+  {
+    "id": "layaway",
+    "name": "\"Layaway\"",
+    "homeDreamscapeId": "grid_city",
+    "siteType": "TemporalFork",
+    "dialog": [
+      "Pay later, collect sooner. Deal?",
+      "Time's just another currency, choom."
+    ],
+    "homeSpecialty": "Longer duration / sooner future rewards."
+  }
+]

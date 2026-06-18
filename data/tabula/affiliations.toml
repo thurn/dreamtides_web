@@ -1,0 +1,140 @@
+# Affiliations: the thematic faction backing each non-starter dreamscape. An
+# affiliation's `signature-cards` are a curated set of cards that exemplify its
+# theme; later draft and battle systems reweight content toward these cards
+# (`weight-strength`) and bias opponent decks toward them
+# (`opponent-bias-strength`). These curations are placeholders chosen by theme;
+# the IDF reweighting math is owned by a later task.
+#
+# Fields:
+#   id                       Stable identifier referenced by dreamscapes.
+#   name                     Player-facing affiliation name.
+#   signature-cards          Curated cards_v2 UUIDs exemplifying the theme.
+#   weight-strength          Pull strength applied when reweighting draft content.
+#   opponent-bias-strength   Pull strength applied when biasing opponent decks.
+
+[[affiliations]]
+id = "spirit_animals"
+name = "Spirit Animals"
+signature-cards = [
+  "9b9c2743-75b3-499d-b5fb-c3429c92d420", # Driftcaller Sovereign
+  "401bb341-8385-41e9-8f6f-7b48e9ce174d", # Soulflame Predator
+  "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", # Ghostlight Wolves
+  "4e3c04a9-1cdd-468a-b42a-40157ed9c9d6", # Eternal Stag
+  "d30bd488-f921-49cb-a44f-353c54cb6548", # Starrunner
+]
+weight-strength = 2.0
+opponent-bias-strength = 2.0
+
+[[affiliations]]
+id = "erode_void"
+name = "Erode / Void Matters"
+signature-cards = [
+  "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", # Graywatch
+  "25d00336-5ad7-433b-8ced-71720a9f074a", # Wheel of the Heavens
+  "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", # The Deathsworn
+  "738a5af0-f848-4d48-bceb-9a43c9b11066", # Reclaimer of Lost Paths
+  "6f1833a0-30f5-4718-9a3e-7620beb72bfc", # Clockwork Salvager
+]
+weight-strength = 2.0
+opponent-bias-strength = 2.0
+
+[[affiliations]]
+id = "removal"
+name = "Removal / Dissolve-Banish"
+signature-cards = [
+  "7be2e6d7-abff-4c44-a0c3-35460da1693c", # Gatebound Warden
+  "8a6fc6ea-9a88-441e-bdc2-d40dfec37481", # Fading Farewell
+  "3e6a5236-9850-4a69-9fe1-48389365a399", # Dusk Duelist
+  "6044f6da-cf71-4dbb-9feb-f71ae66a4f5b", # Molten Duel
+]
+weight-strength = 2.0
+opponent-bias-strength = 2.0
+
+[[affiliations]]
+id = "storm_events"
+name = "Storm / Events"
+signature-cards = [
+  "b56ef7e8-c634-4d40-ac08-fab591dfbc4a", # Miraculous Arrival
+  "967c714f-40c5-4a77-8e22-40691a2755d4", # Passage Through Oblivion
+  "be72bd04-21a6-4035-a117-2b7213ad1a34", # Arc Gate Opening
+  "f8678d24-f18b-4c94-a6c2-50efb8193b7f", # Moonlit Voyage
+  "3cda9dd7-cb81-43c1-9db5-1444d7363e13", # Spirit Bond
+]
+weight-strength = 2.0
+opponent-bias-strength = 2.0
+
+[[affiliations]]
+id = "inexpensive_characters"
+name = "Inexpensive Characters"
+signature-cards = [
+  "9b9c2743-75b3-499d-b5fb-c3429c92d420", # Driftcaller Sovereign
+  "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", # Ethereal Trailblazer
+  "975f49d3-213a-43fc-8079-5fe40f126a7b", # Scrap Reclaimer
+  "e455225f-c444-44a2-8796-805cae2b755f", # Oracle of Shifting Skies
+  "29c4c45d-33df-42ac-bf28-387eb00264aa", # Architect of Memory
+]
+weight-strength = 2.0
+opponent-bias-strength = 2.0
+
+[[affiliations]]
+id = "warriors"
+name = "Warriors"
+signature-cards = [
+  "724a1362-3f0f-4b77-b14e-22c0b877349a", # Radiants' Captain
+  "1ce0f0f2-4b1a-483d-b93b-74c36e946a08", # The Deathsworn
+  "ebda8a89-9cc7-4fcd-96bd-0e022bb88a49", # Ethereal Trailblazer
+  "6f1833a0-30f5-4718-9a3e-7620beb72bfc", # Clockwork Salvager
+  "78673e2b-a6d1-43de-8850-3d3327de5cc6", # Spirit Field Reclaimer
+]
+weight-strength = 2.0
+opponent-bias-strength = 2.0
+
+[[affiliations]]
+id = "abandon_sacrifice"
+name = "Abandon / Sacrifice"
+signature-cards = [
+  "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005", # Pathwalker
+  "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", # Riftwalker
+  "8855e20c-e23f-4499-a5e8-a7a46ff81d2b", # Desolation's Edge
+  "eae928f6-aab2-415e-b4b1-b9c3ed8e6818", # Conduit of Ashes
+  "5639053e-1fe3-4a42-b9c3-3fdf894bfab6", # Ashen Remnant
+]
+weight-strength = 2.0
+opponent-bias-strength = 2.0
+
+[[affiliations]]
+id = "survivors"
+name = "Survivors"
+signature-cards = [
+  "3a59cd3d-08a9-4a75-a5ab-c91b19d2d8c1", # Graywatch
+  "f3985df4-0867-4fd6-8312-6b358dc26883", # Marrow Drinker
+  "ea118471-164b-4d7f-bb02-044c862ed07e", # Wreckland Maverick
+  "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40", # Ashwalker
+]
+weight-strength = 2.0
+opponent-bias-strength = 2.0
+
+[[affiliations]]
+id = "figments"
+name = "Figments"
+signature-cards = [
+  "f4082c01-fdc8-4583-afdb-76bac980b3bf", # Wasteland Holdout
+  "89c0d03c-2199-415a-bc66-89e451034328", # Sylvan Matriarch
+  "cbabe603-1333-42bd-85c0-555c664b60b3", # Avatar of Cosmic Reckoning
+  "90a6a7a0-b739-475e-8379-647741aab423", # Voidsire
+]
+weight-strength = 2.0
+opponent-bias-strength = 2.0
+
+[[affiliations]]
+id = "discard"
+name = "Discard"
+signature-cards = [
+  "68978d92-aa8b-4873-bb0b-6e52f12b0849", # Chronicle Reclaimer
+  "12bb1efa-463b-4ac8-b9bd-e5bd135c3eb4", # Gearwright
+  "6f1833a0-30f5-4718-9a3e-7620beb72bfc", # Clockwork Salvager
+  "975f49d3-213a-43fc-8079-5fe40f126a7b", # Scrap Reclaimer
+  "4124a05c-b6dd-4334-b202-59fa17d77668", # Unbroken
+]
+weight-strength = 2.0
+opponent-bias-strength = 2.0

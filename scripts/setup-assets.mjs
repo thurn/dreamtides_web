@@ -522,6 +522,71 @@ export function transformDreamsignProfile(profile) {
 }
 
 /**
+ * Convert a TOML dreamscape record to its runtime JSON representation. Keys are
+ * renamed kebab->camel. The starter dreamscape omits `guide-id`/`affiliation-id`
+ * in the TOML; those normalize to `null` so the runtime always sees an explicit
+ * value, and `is-starter` defaults to `false` for the non-starter regions.
+ */
+export function transformDreamscape(dreamscape) {
+  const result = {};
+  for (const [key, value] of Object.entries(dreamscape)) {
+    result[kebabToCamel(key)] = value;
+  }
+  if (result.guideId == null) result.guideId = null;
+  if (result.affiliationId == null) result.affiliationId = null;
+  if (typeof result.isStarter !== "boolean") result.isStarter = false;
+  return result;
+}
+
+/**
+ * Convert a TOML Dream Guide record to its runtime JSON representation, renaming
+ * keys kebab->camel.
+ */
+export function transformGuide(guide) {
+  const result = {};
+  for (const [key, value] of Object.entries(guide)) {
+    result[kebabToCamel(key)] = value;
+  }
+  return result;
+}
+
+/**
+ * Convert a TOML affiliation record to its runtime JSON representation, renaming
+ * keys kebab->camel. `signature-cards` are authored as stable cards_v2 UUIDs and
+ * pass through unchanged; the build validates them against the card database.
+ */
+export function transformAffiliation(affiliation) {
+  const result = {};
+  for (const [key, value] of Object.entries(affiliation)) {
+    result[kebabToCamel(key)] = value;
+  }
+  return result;
+}
+
+/**
+ * Convert the parsed atlas_config TOML object to its runtime JSON
+ * representation. The top-level scalar/array keys and the nested
+ * `known-dreamsign` table are renamed kebab->camel; `layer-specs` and
+ * `bonus-reveal` are plain numeric tables passed through verbatim.
+ */
+export function transformAtlasConfig(config) {
+  const result = {};
+  for (const [key, value] of Object.entries(config)) {
+    const camelKey = kebabToCamel(key);
+    if (value !== null && typeof value === "object" && !Array.isArray(value)) {
+      const nested = {};
+      for (const [nestedKey, nestedValue] of Object.entries(value)) {
+        nested[kebabToCamel(nestedKey)] = nestedValue;
+      }
+      result[camelKey] = nested;
+    } else {
+      result[camelKey] = value;
+    }
+  }
+  return result;
+}
+
+/**
  * Parse `cards_v2.toml` and write both runtime card JSON catalogs — the
  * Special-filtered `card-data.json` the quest/battle runtime fetches, and the
  * unfiltered `cards_v2-data.json` that `cards-v2-database.ts` fetches with the
@@ -644,6 +709,10 @@ export function setupAssets({
   dreamwellTomlPath = join(DATA_DIR, "tabula", "dreamwell.toml"),
   dreamsignTomlPath = join(DATA_DIR, "tabula", "dreamsigns.toml"),
   dreamsignProfilesTomlPath = join(DATA_DIR, "tabula", "dreamsign_profiles.toml"),
+  dreamscapesTomlPath = join(DATA_DIR, "tabula", "dreamscapes.toml"),
+  dreamGuidesTomlPath = join(DATA_DIR, "tabula", "dream_guides.toml"),
+  affiliationsTomlPath = join(DATA_DIR, "tabula", "affiliations.toml"),
+  atlasConfigTomlPath = join(DATA_DIR, "tabula", "atlas_config.toml"),
   figmentTomlPath = join(DATA_DIR, "tabula", "figments.toml"),
   merchantCorpusJsonPath = join(DATA_DIR, "merchant_corpus.json"),
   publicDir = PUBLIC_DIR,
@@ -667,6 +736,10 @@ export function setupAssets({
   const dreamwellJsonPath = join(publicDir, "dreamwell-data.json");
   const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
   const dreamsignProfilesJsonPath = join(publicDir, "dreamsign-profiles-data.json");
+  const dreamscapesJsonPath = join(publicDir, "dreamscapes-data.json");
+  const dreamGuidesJsonPath = join(publicDir, "dream-guides-data.json");
+  const affiliationsJsonPath = join(publicDir, "affiliations-data.json");
+  const atlasConfigJsonPath = join(publicDir, "atlas-config-data.json");
   const figmentJsonPath = join(publicDir, "figments-data.json");
   const merchantCorpusPublicPath = join(publicDir, "merchant-corpus-data.json");
   const journeyExtensionJsonPath = join(journeysDir, "imageId-extension.json");
@@ -909,6 +982,80 @@ export function setupAssets({
   console.log(
     `Wrote ${jsonDreamsignProfiles.length} dreamsign profiles to dreamsign-profiles-data.json`,
   );
+
+  // Dreamscapes: the themed Dream Atlas regions. Parse the TOML and write the
+  // kebab->camel JSON the runtime loader fetches at /dreamscapes-data.json.
+  console.log("Parsing dreamscapes.toml...");
+  const dreamscapesTomlContent = readFileSync(dreamscapesTomlPath, "utf8");
+  const parsedDreamscapes = parse(dreamscapesTomlContent);
+  const allDreamscapes = parsedDreamscapes.dreamscapes;
+
+  if (!Array.isArray(allDreamscapes)) {
+    throw new Error("Expected [[dreamscapes]] array in dreamscapes.toml");
+  }
+
+  const jsonDreamscapes = allDreamscapes.map(transformDreamscape);
+  writeFileSync(
+    dreamscapesJsonPath,
+    JSON.stringify(jsonDreamscapes, null, 2) + "\n",
+  );
+  console.log(`Wrote ${jsonDreamscapes.length} dreamscapes to dreamscapes-data.json`);
+
+  // Dream Guides: the resident character of each non-starter dreamscape. Parse
+  // the TOML and write the kebab->camel JSON fetched at /dream-guides-data.json.
+  console.log("Parsing dream_guides.toml...");
+  const dreamGuidesTomlContent = readFileSync(dreamGuidesTomlPath, "utf8");
+  const parsedDreamGuides = parse(dreamGuidesTomlContent);
+  const allDreamGuides = parsedDreamGuides.guides;
+
+  if (!Array.isArray(allDreamGuides)) {
+    throw new Error("Expected [[guides]] array in dream_guides.toml");
+  }
+
+  const jsonDreamGuides = allDreamGuides.map(transformGuide);
+  writeFileSync(
+    dreamGuidesJsonPath,
+    JSON.stringify(jsonDreamGuides, null, 2) + "\n",
+  );
+  console.log(`Wrote ${jsonDreamGuides.length} dream guides to dream-guides-data.json`);
+
+  // Affiliations: the thematic factions backing each dreamscape. Signature
+  // cards are authored as stable cards_v2 UUIDs; validate them against the card
+  // database up front so a dangling UUID fails the build loudly.
+  console.log("Parsing affiliations.toml...");
+  const affiliationsTomlContent = readFileSync(affiliationsTomlPath, "utf8");
+  const parsedAffiliations = parse(affiliationsTomlContent);
+  const allAffiliations = parsedAffiliations.affiliations;
+
+  if (!Array.isArray(allAffiliations)) {
+    throw new Error("Expected [[affiliations]] array in affiliations.toml");
+  }
+
+  const jsonAffiliations = allAffiliations.map(transformAffiliation);
+  for (const affiliation of jsonAffiliations) {
+    validateCardIds(
+      affiliation.signatureCards ?? [],
+      cardMaps.idToName,
+      `affiliations.toml (${affiliation.id})`,
+    );
+  }
+  writeFileSync(
+    affiliationsJsonPath,
+    JSON.stringify(jsonAffiliations, null, 2) + "\n",
+  );
+  console.log(`Wrote ${jsonAffiliations.length} affiliations to affiliations-data.json`);
+
+  // Atlas generation tuning: a single TOML table written as the kebab->camel
+  // JSON the runtime loader fetches at /atlas-config-data.json.
+  console.log("Parsing atlas_config.toml...");
+  const atlasConfigTomlContent = readFileSync(atlasConfigTomlPath, "utf8");
+  const parsedAtlasConfig = parse(atlasConfigTomlContent);
+  const jsonAtlasConfig = transformAtlasConfig(parsedAtlasConfig);
+  writeFileSync(
+    atlasConfigJsonPath,
+    JSON.stringify(jsonAtlasConfig, null, 2) + "\n",
+  );
+  console.log("Wrote atlas config to atlas-config-data.json");
 
   // Figments: parse the figment catalog TOML and write the kebab->camel JSON
   // the battle UI fetches to source each figment type's name, character type,

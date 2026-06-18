@@ -1,0 +1,140 @@
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
+import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  loadAffiliations,
+  loadDreamGuides,
+  loadDreamscapes,
+} from "./dreamscapes";
+import { loadAtlasConfig } from "./atlas-config";
+
+// Referential-integrity test for the dreamscape / guide / affiliation / atlas
+// content bundles. It runs against the *compiled* JSON the asset pipeline emits
+// (`public/*-data.json`), loading each through its real loader. `fetch` is
+// stubbed to read the served JSON straight off disk so the loaders exercise the
+// production code path against production data.
+//
+// The assertions are structural contracts only: ids resolve, exactly one
+// starter exists, every cross-reference points at a real entry, and every
+// curated signature-card UUID names a card that exists in the card database.
+// It deliberately asserts no specific names, counts, or content limits beyond
+// "exactly one starter", so authoring edits to the TOML never break it.
+
+const PUBLIC_DIR = join(import.meta.dirname, "..", "..", "public");
+
+function readPublicJson(filename: string): unknown {
+  return JSON.parse(readFileSync(join(PUBLIC_DIR, filename), "utf8"));
+}
+
+beforeAll(() => {
+  // The compiled bundles are emitted by `npm run setup-assets`. If a fresh
+  // worktree has not run it yet, fail loudly with the fix rather than a
+  // confusing ENOENT deep inside a fetch stub.
+  for (const filename of [
+    "dreamscapes-data.json",
+    "dream-guides-data.json",
+    "affiliations-data.json",
+    "atlas-config-data.json",
+    "cards_v2-data.json",
+  ]) {
+    const path = join(PUBLIC_DIR, filename);
+    if (!existsSync(path)) {
+      throw new Error(
+        `Missing ${filename}; run \`npm run setup-assets\` before this test.`,
+      );
+    }
+  }
+});
+
+beforeEach(() => {
+  vi.restoreAllMocks();
+  // Serve each /<name>-data.json request from the compiled public bundle.
+  vi.stubGlobal(
+    "fetch",
+    vi.fn((input: string | URL) => {
+      const filename = String(input).replace(/^\//u, "");
+      const path = join(PUBLIC_DIR, filename);
+      if (!existsSync(path)) {
+        return Promise.resolve({
+          ok: false,
+          status: 404,
+          statusText: "Not Found",
+        });
+      }
+      return Promise.resolve({
+        ok: true,
+        json: () => Promise.resolve(JSON.parse(readFileSync(path, "utf8"))),
+      });
+    }),
+  );
+});
+
+describe("dreamscape content referential integrity", () => {
+  it("every dreamscape has a non-empty id and name", async () => {
+    const dreamscapes = await loadDreamscapes();
+    expect(dreamscapes.length).toBeGreaterThan(0);
+    for (const d of dreamscapes) {
+      expect(typeof d.id).toBe("string");
+      expect(d.id.length).toBeGreaterThan(0);
+      expect(typeof d.name).toBe("string");
+      expect(d.name.length).toBeGreaterThan(0);
+    }
+  });
+
+  it("exactly one dreamscape is the starter", async () => {
+    const dreamscapes = await loadDreamscapes();
+    const starters = dreamscapes.filter((d) => d.isStarter);
+    expect(starters.length).toBe(1);
+  });
+
+  it("every non-starter dreamscape resolves its guide and affiliation", async () => {
+    const [dreamscapes, guides, affiliations] = await Promise.all([
+      loadDreamscapes(),
+      loadDreamGuides(),
+      loadAffiliations(),
+    ]);
+    const guideIds = new Set(guides.map((g) => g.id));
+    const affiliationIds = new Set(affiliations.map((a) => a.id));
+    for (const d of dreamscapes) {
+      if (d.isStarter) continue;
+      expect(d.guideId).not.toBeNull();
+      expect(guideIds.has(d.guideId as string)).toBe(true);
+      expect(d.affiliationId).not.toBeNull();
+      expect(affiliationIds.has(d.affiliationId as string)).toBe(true);
+    }
+  });
+
+  it("every guide's home dreamscape resolves", async () => {
+    const [dreamscapes, guides] = await Promise.all([
+      loadDreamscapes(),
+      loadDreamGuides(),
+    ]);
+    const dreamscapeIds = new Set(dreamscapes.map((d) => d.id));
+    for (const g of guides) {
+      expect(typeof g.homeDreamscapeId).toBe("string");
+      expect(dreamscapeIds.has(g.homeDreamscapeId)).toBe(true);
+    }
+  });
+
+  it("every affiliation's signature cards are non-empty and exist in the card database", async () => {
+    const affiliations = await loadAffiliations();
+    const cards = readPublicJson("cards_v2-data.json") as { id: string }[];
+    const cardIds = new Set(cards.map((c) => c.id));
+    expect(affiliations.length).toBeGreaterThan(0);
+    for (const a of affiliations) {
+      expect(a.signatureCards.length).toBeGreaterThan(0);
+      for (const uuid of a.signatureCards) {
+        expect(cardIds.has(uuid)).toBe(true);
+      }
+    }
+  });
+
+  it("loads the atlas config with a layer spec per layer", async () => {
+    const config = await loadAtlasConfig();
+    expect(config.layerSpecs.length).toBeGreaterThan(0);
+    for (const spec of config.layerSpecs) {
+      expect(spec.min).toBeLessThanOrEqual(spec.max);
+    }
+    expect(config.knownDreamsign.maxPerAtlas).toBeGreaterThanOrEqual(0);
+  });
+});
