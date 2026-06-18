@@ -43,6 +43,14 @@ That means:
 Your output is production code that *looks like* the mock-up and *works like*
 the rest of the app.
 
+## Step 0: Work in a worktree
+
+Do this design-import work in an isolated git worktree — run the **`/wt`**
+skill ([../../../.claude/skills/wt/SKILL.md](../../../.claude/skills/wt/SKILL.md), also at
+`~/.claude/skills/wt/SKILL.md`) first, before reading the design or touching
+code, and perform everything below inside that worktree. Its commits can be
+replayed onto `master` when the import is done.
+
 ## Step 1: Read the design with the connector
 
 The "Claude Design connector" is the **DesignSync** tool. Parse the URL:
