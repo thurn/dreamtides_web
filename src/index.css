@@ -567,6 +567,29 @@ button:disabled {
   padding-bottom: 6rem;
 }
 
+/*
+ * Dream Guide side-dock clearance.
+ *
+ * In landscape the Dream Guide frame docks to the left edge with
+ * `position: fixed` (left 0.75rem, width 176px → right edge ~188px) and is
+ * lifted out of the content flow. Guide-bearing site screens center their
+ * content with `flex flex-col items-center`, so at narrower landscape widths
+ * (~1024px) the centered columns widen toward the edges and the first column
+ * slides under the dock. Reserving left padding on the screen container that
+ * holds a landscape guide frame pushes the centered content clear of the dock
+ * (188px dock + breathing room). The `:has()` match is keyed on the frame's
+ * own orientation attribute, which the component sets to "portrait" in
+ * portrait — so the top, in-flow portrait dock receives no padding and its
+ * layout is untouched.
+ */
+[data-quest-screen]
+  > div:has(> [data-dream-guide-frame][data-guide-orientation="landscape"]),
+[data-quest-screen]:has(
+    > [data-dream-guide-frame][data-guide-orientation="landscape"]
+  ) {
+  padding-left: 13rem;
+}
+
 @media (max-height: 480px) and (orientation: landscape) {
   .dreamsign-draft-screen {
     padding-top: 0.5rem;

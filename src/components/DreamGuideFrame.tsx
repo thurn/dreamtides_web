@@ -75,7 +75,6 @@ export function DreamGuideFrame({ site }: DreamGuideFrameProps) {
       guideId: guide.id,
       siteType: site.type,
       isEnhanced: site.isEnhanced,
-      showsHomeSpecialty: site.isEnhanced,
     });
   }, [guide, site.type, site.isEnhanced]);
 
