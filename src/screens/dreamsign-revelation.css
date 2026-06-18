@@ -25,18 +25,6 @@
   -webkit-font-smoothing: antialiased;
 }
 
-/* ---- Eyebrow ---- */
-.dreamsign-revelation .dsr-eyebrow {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 13px;
-  letter-spacing: 0.26em;
-  text-transform: uppercase;
-  color: #d8b4fe;
-  text-align: center;
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
-  z-index: 6;
-}
-
 /* ---- Offer row ---- */
 .dreamsign-revelation .dsr-row {
   display: flex;
