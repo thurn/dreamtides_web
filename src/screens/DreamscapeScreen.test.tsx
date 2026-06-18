@@ -1,57 +1,10 @@
 // @vitest-environment jsdom
 
 import { renderToStaticMarkup } from "react-dom/server";
-import { MINIMAL_ATLAS_CONFIG, MINIMAL_DREAMSCAPES } from "../__test-helpers__/atlas-fixtures";
 import { describe, expect, it, vi } from "vitest";
-import type { ReactNode, HTMLAttributes } from "react";
 import { DreamscapeScreen } from "./DreamscapeScreen";
 import { useQuest } from "../state/quest-context";
-import type { QuestState } from "../types/quest";
-
-vi.mock("framer-motion", () => ({
-  motion: {
-    div: ({
-      animate: _animate,
-      children,
-      exit: _exit,
-      initial: _initial,
-      layout: _layout,
-      transition: _transition,
-      whileHover: _whileHover,
-      whileTap: _whileTap,
-      ...props
-    }: {
-      animate?: unknown;
-      children: ReactNode;
-      exit?: unknown;
-      initial?: unknown;
-      layout?: unknown;
-      transition?: unknown;
-      whileHover?: unknown;
-      whileTap?: unknown;
-    } & HTMLAttributes<HTMLDivElement>) => <div {...props}>{children}</div>,
-    button: ({
-      animate: _animate,
-      children,
-      exit: _exit,
-      initial: _initial,
-      layout: _layout,
-      transition: _transition,
-      whileHover: _whileHover,
-      whileTap: _whileTap,
-      ...props
-    }: {
-      animate?: unknown;
-      children: ReactNode;
-      exit?: unknown;
-      initial?: unknown;
-      layout?: unknown;
-      transition?: unknown;
-      whileHover?: unknown;
-      whileTap?: unknown;
-    } & HTMLAttributes<HTMLButtonElement>) => <button {...props}>{children}</button>,
-  },
-}));
+import type { QuestState, SiteState } from "../types/quest";
 
 vi.mock("../state/quest-context", () => ({
   useQuest: vi.fn(),
@@ -61,18 +14,9 @@ vi.mock("../logging", () => ({
   logEvent: vi.fn(),
 }));
 
-function makeState(overrides?: Partial<QuestState>): QuestState {
+/** Builds a single-dreamscape quest state with the given sites. */
+function makeState(sites: SiteState[]): QuestState {
   return {
-    seed: "test-seed",
-    essence: 250,
-    essenceCap: 500,
-    maxDreamsigns: 12,
-    deck: [],
-    dreamcaller: null,
-    resolvedPackage: null,
-    cardSourceDebug: null,
-    remainingDreamsignPool: [],
-    dreamsigns: [],
     completionLevel: 0,
     atlas: {
       nodes: {
@@ -89,26 +33,7 @@ function makeState(overrides?: Partial<QuestState>): QuestState {
           backwardIds: [],
           knownDreamsignId: null,
           position: { x: 0, y: 0 },
-          sites: [
-            {
-              id: "site-1",
-              type: "Draft",
-              isEnhanced: false,
-              isVisited: false,
-            },
-            {
-              id: "site-2",
-              type: "Reward",
-              isEnhanced: false,
-              isVisited: false,
-            },
-            {
-              id: "site-3",
-              type: "Battle",
-              isEnhanced: false,
-              isVisited: false,
-            },
-          ],
+          sites,
         },
       },
       startingNodeId: "dreamscape-1",
@@ -118,223 +43,53 @@ function makeState(overrides?: Partial<QuestState>): QuestState {
       knownDreamsignCarrierIds: [],
     },
     currentDreamscape: "dreamscape-1",
-    visitedSites: [],
-    siteRuntime: {},
-    draftState: null,
     screen: { type: "dreamscape" },
-    activeSiteId: null,
-    failureSummary: null,
-    hasSeenStartingDeckPopup: false,
-    battleModifiers: [],
-    shopModifiers: {
-      freeRerolls: 0,
-      essenceDiscountPercent: 0,
-    },
-    dreamscapeModifiers: [],
-    ...overrides,
-  };
+  } as unknown as QuestState;
 }
 
+/** Mounts the screen with a mocked quest context for the given sites. */
+function renderScreen(sites: SiteState[]): string {
+  vi.mocked(useQuest).mockReturnValue({
+    state: makeState(sites),
+    mutations: { setScreen: vi.fn() },
+  } as unknown as ReturnType<typeof useQuest>);
+  return renderToStaticMarkup(<DreamscapeScreen />);
+}
+
+const DRAFT: SiteState = { id: "site-1", type: "Draft", isEnhanced: false, isVisited: false };
+const REWARD: SiteState = { id: "site-2", type: "Reward", isEnhanced: false, isVisited: false };
+const BATTLE: SiteState = { id: "site-3", type: "Battle", isEnhanced: false, isVisited: false };
+
 describe("DreamscapeScreen", () => {
-  it("shows the exact remaining site count while battle is locked", () => {
-    vi.mocked(useQuest).mockReturnValue({
-      state: makeState(),
-      mutations: {
-        changeEssence: vi.fn(),
-        startQuest: vi.fn(),
-        completeSite: vi.fn(),
-    ensureRewardSiteRuntime: vi.fn(),
-    acceptRewardSite: vi.fn(),
-    ensureDreamsignOfferRuntime: vi.fn(),
-    acceptDreamsignOffer: vi.fn(),
-    rejectDreamsignOffer: vi.fn(),
-    ensureEssenceSiteRuntime: vi.fn(),
-    acceptEssenceSite: vi.fn(),
-        ensureShopRuntime: vi.fn(),
-        buyShopSlot: vi.fn(),
-        rerollShop: vi.fn(),
-        ensureCardChoiceRuntime: vi.fn(),
-        acceptTransfigurationChoice: vi.fn(),
-        acceptDuplicationChoice: vi.fn(),
-        completeDreamAugurySite: vi.fn(),
-    acceptDreamMerchantOffer: vi.fn(),
-    declineDreamMerchant: vi.fn(),
-        pickDraftCard: vi.fn(),
-        addCard: vi.fn(),
-        addBaneCard: vi.fn(),
-        removeCard: vi.fn(),
-        transfigureCard: vi.fn(),
-        changeDeckEntryType: vi.fn(),
-        changeDeckEntryKeywords: vi.fn(),
-        setDreamcallerSelection: vi.fn(),
-        setCardSourceDebug: vi.fn(),
-        addDreamsign: vi.fn(),
-        removeDreamsign: vi.fn(),
-        setRemainingDreamsignPool: vi.fn(),
-        incrementCompletionLevel: vi.fn(),
-        setScreen: vi.fn(),
-        markSiteVisited: vi.fn(),
-        setCurrentDreamscape: vi.fn(),
-        updateAtlas: vi.fn(),
-        setDraftState: vi.fn(),
-        setFailureSummary: vi.fn(),
-        dismissStartingDeckPopup: vi.fn(),
-        bootstrapStartInBattle: vi.fn(),
-        resetQuest: vi.fn(),
-        setEssence: vi.fn(),
-        changeMaxEssence: vi.fn(),
-        addCardById: vi.fn(),
-        addCardByIdWithTransfiguration: vi.fn(),
-        addBaneCardById: vi.fn(),
-        removeDeckEntry: vi.fn(),
-        purgeDeckCards: vi.fn(),
-        duplicateDeckEntry: vi.fn(),
-        purgeRandomBaneCards: vi.fn(),
-        purgeAllBaneCards: vi.fn(),
-        pushBattleRewardModifier: vi.fn(),
-        pushTemporaryBaneGrant: vi.fn(),
-        addSiteToDreamscape: vi.fn(),
-        replaceSiteType: vi.fn(),
-        removeSiteTypeFromNextDreamscapes: vi.fn(),
-        grantFreeShopRerolls: vi.fn(),
-        applyShopEssenceDiscount: vi.fn(),
-        boostSiteAppearance: vi.fn(),
-      },
-      cardDatabase: new Map(),
-      questContent: {
-        cardDatabase: new Map(),
-        dreamcallers: [],
-
-        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES,        affiliations: [], guides: [],        atlasConfig: MINIMAL_ATLAS_CONFIG,
-      },
-    });
-
-    const html = renderToStaticMarkup(<DreamscapeScreen />);
-
-    expect(html).toContain("Complete 2 remaining sites to unlock the battle");
-    expect(html).toContain("Complete 2 remaining sites to unlock");
+  it("renders the dreamscape scene art and title", () => {
+    const html = renderScreen([DRAFT, REWARD, BATTLE]);
+    expect(html).toContain("Crystal Spire");
+    expect(html).toContain("/dreamscapes/test_dreamscape.png");
   });
 
-  it("shows battle unlocked once all non-battle sites are visited", () => {
-    vi.mocked(useQuest).mockReturnValue({
-      state: makeState({
-        atlas: {
-          nodes: {
-            "dreamscape-1": {
-              id: "dreamscape-1",
-              layer: 0,
-              indexInLayer: 0,
-              dreamscapeId: "test_dreamscape",
-              biomeName: "Crystal Spire",
-              biomeColor: "#38bdf8",
-              state: "available",
-              enhancedSiteType: null,
-              forwardIds: [],
-              backwardIds: [],
-              knownDreamsignId: null,
-              position: { x: 0, y: 0 },
-              sites: [
-                {
-                  id: "site-1",
-                  type: "Draft",
-                  isEnhanced: false,
-                  isVisited: true,
-                },
-                {
-                  id: "site-2",
-                  type: "Reward",
-                  isEnhanced: false,
-                  isVisited: true,
-                },
-                {
-                  id: "site-3",
-                  type: "Battle",
-                  isEnhanced: false,
-                  isVisited: false,
-                },
-              ],
-            },
-          },
-          startingNodeId: "dreamscape-1",
-          bossNodeId: "dreamscape-1",
-          currentNodeId: "dreamscape-1",
-          layers: [],
-          knownDreamsignCarrierIds: [],
-        },
-      }),
-      mutations: {
-        changeEssence: vi.fn(),
-        startQuest: vi.fn(),
-        completeSite: vi.fn(),
-    ensureRewardSiteRuntime: vi.fn(),
-    acceptRewardSite: vi.fn(),
-    ensureDreamsignOfferRuntime: vi.fn(),
-    acceptDreamsignOffer: vi.fn(),
-    rejectDreamsignOffer: vi.fn(),
-    ensureEssenceSiteRuntime: vi.fn(),
-    acceptEssenceSite: vi.fn(),
-        ensureShopRuntime: vi.fn(),
-        buyShopSlot: vi.fn(),
-        rerollShop: vi.fn(),
-        ensureCardChoiceRuntime: vi.fn(),
-        acceptTransfigurationChoice: vi.fn(),
-        acceptDuplicationChoice: vi.fn(),
-        completeDreamAugurySite: vi.fn(),
-    acceptDreamMerchantOffer: vi.fn(),
-    declineDreamMerchant: vi.fn(),
-        pickDraftCard: vi.fn(),
-        addCard: vi.fn(),
-        addBaneCard: vi.fn(),
-        removeCard: vi.fn(),
-        transfigureCard: vi.fn(),
-        changeDeckEntryType: vi.fn(),
-        changeDeckEntryKeywords: vi.fn(),
-        setDreamcallerSelection: vi.fn(),
-        setCardSourceDebug: vi.fn(),
-        addDreamsign: vi.fn(),
-        removeDreamsign: vi.fn(),
-        setRemainingDreamsignPool: vi.fn(),
-        incrementCompletionLevel: vi.fn(),
-        setScreen: vi.fn(),
-        markSiteVisited: vi.fn(),
-        setCurrentDreamscape: vi.fn(),
-        updateAtlas: vi.fn(),
-        setDraftState: vi.fn(),
-        setFailureSummary: vi.fn(),
-        dismissStartingDeckPopup: vi.fn(),
-        bootstrapStartInBattle: vi.fn(),
-        resetQuest: vi.fn(),
-        setEssence: vi.fn(),
-        changeMaxEssence: vi.fn(),
-        addCardById: vi.fn(),
-        addCardByIdWithTransfiguration: vi.fn(),
-        addBaneCardById: vi.fn(),
-        removeDeckEntry: vi.fn(),
-        purgeDeckCards: vi.fn(),
-        duplicateDeckEntry: vi.fn(),
-        purgeRandomBaneCards: vi.fn(),
-        purgeAllBaneCards: vi.fn(),
-        pushBattleRewardModifier: vi.fn(),
-        pushTemporaryBaneGrant: vi.fn(),
-        addSiteToDreamscape: vi.fn(),
-        replaceSiteType: vi.fn(),
-        removeSiteTypeFromNextDreamscapes: vi.fn(),
-        grantFreeShopRerolls: vi.fn(),
-        applyShopEssenceDiscount: vi.fn(),
-        boostSiteAppearance: vi.fn(),
-      },
-      cardDatabase: new Map(),
-      questContent: {
-        cardDatabase: new Map(),
-        dreamcallers: [],
+  it("renders one node button per site", () => {
+    const html = renderScreen([DRAFT, REWARD, BATTLE]);
+    expect(html).toContain('data-site-id="site-1"');
+    expect(html).toContain('data-site-id="site-2"');
+    expect(html).toContain('data-site-id="site-3"');
+  });
 
-        dreamwellCards: [],        dreamsignTemplates: [],        dreamscapes: MINIMAL_DREAMSCAPES,        affiliations: [], guides: [],        atlasConfig: MINIMAL_ATLAS_CONFIG,
-      },
-    });
+  it("tracks the exact remaining site count while the keeper is locked", () => {
+    const html = renderScreen([DRAFT, REWARD, BATTLE]);
+    expect(html).toContain("2 sites remain to unlock the keeper");
+    // The battle node is locked until the other sites are visited.
+    expect(html).toContain('data-site-type="Battle"');
+    expect(html).toMatch(/data-site-type="Battle"[^>]*data-site-locked="true"/);
+  });
 
-    const html = renderToStaticMarkup(<DreamscapeScreen />);
-
-    expect(html).toContain("Battle unlocked");
-    expect(html).not.toContain("remaining sites");
+  it("unlocks the keeper once all non-battle sites are visited", () => {
+    const html = renderScreen([
+      { ...DRAFT, isVisited: true },
+      { ...REWARD, isVisited: true },
+      BATTLE,
+    ]);
+    expect(html).toContain("Keeper unlocked");
+    expect(html).not.toContain("remain to unlock the keeper");
+    expect(html).toMatch(/data-site-type="Battle"[^>]*data-site-locked="false"/);
   });
 });

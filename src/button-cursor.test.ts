@@ -14,8 +14,8 @@ import { describe, expect, it } from "vitest";
  * tests pin that contract so we keep the affordance everywhere the
  * prototype renders a button.
  *
- * `SiteCard` (the atlas/dreamscape row button) participates in the same
- * contract: it must let the global rule pick the cursor instead of
+ * `DreamscapeSiteNode` (the floating dreamscape site button) participates in
+ * the same contract: it must let the global rule pick the cursor instead of
  * hard-coding a per-state cursor inline, because an inline cursor wins the
  * cascade over the global rule.
  */
@@ -24,7 +24,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const SRC_DIR = path.resolve(__dirname);
 const INDEX_CSS = path.join(SRC_DIR, "index.css");
-const SITE_CARD = path.join(SRC_DIR, "components", "SiteCard.tsx");
+const SITE_NODE = path.join(SRC_DIR, "components", "DreamscapeSiteNode.tsx");
 
 describe("button cursor affordance", () => {
   it("declares the global pointer cursor for enabled buttons", () => {
@@ -37,11 +37,11 @@ describe("button cursor affordance", () => {
     expect(css).toMatch(/button:disabled\s*{[^}]*cursor:\s*not-allowed/);
   });
 
-  it("does not force a per-state cursor on the SiteCard button", () => {
-    // Inline `cursor:` styles win over the global rule, so the SiteCard
+  it("does not force a per-state cursor on the dreamscape site-node button", () => {
+    // Inline `cursor:` styles win over the global rule, so the site-node
     // button must defer to the cascade for locked, visited, and active
     // states.
-    const tsx = readFileSync(SITE_CARD, "utf8");
+    const tsx = readFileSync(SITE_NODE, "utf8");
     expect(tsx).not.toMatch(/cursor:\s*['"](?:default|pointer|not-allowed)['"]/);
   });
 });

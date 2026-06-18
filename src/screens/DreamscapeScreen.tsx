@@ -1,34 +1,141 @@
-import { useCallback, useMemo } from "react";
-import { motion } from "framer-motion";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQuest } from "../state/quest-context";
-import { SiteCard } from "../components/SiteCard";
-import { DreamGuideFrame } from "../components/DreamGuideFrame";
+import {
+  enhancedSiteDescription,
+  siteTypeDescription,
+  siteTypeIcon,
+  siteTypeName,
+} from "../atlas/atlas-generator";
+import { dreamscapeSceneUrl } from "../atlas/atlas-display";
+import { draftSitePickCount } from "../draft/draft-site-config";
+import {
+  DreamscapeMotes,
+  DreamscapeSiteNode,
+  DreamscapeSitePopover,
+  type DreamscapeSiteModel,
+} from "../components/DreamscapeSiteNode";
+import { scatterSites, seedFromString } from "./dreamscape-scatter";
 import { logEvent } from "../logging";
+import "./dreamscape.css";
 
-/** The dreamscape view: shows all sites in the current dreamscape. */
+/** Diameter, in px, of a wayside site disc (battle keepers scale up from here). */
+const NODE_SIZE = 60;
+
+/** Default accent for an ordinary site node, as a `#rrggbb` hex. */
+const DEFAULT_ACCENT = "#a855f7";
+
+/** Battle label by completion level: final boss, miniboss, or a plain battle. */
+function battleLabel(completionLevel: number): string {
+  if (completionLevel === 6) return "Final Boss";
+  if (completionLevel === 3) return "Miniboss";
+  return "Battle";
+}
+
+/** Battle accent (`#rrggbb`) by completion level + lock state. */
+function battleAccent(completionLevel: number, isLocked: boolean): string {
+  if (isLocked) return "#6b7280";
+  if (completionLevel === 6) return "#fbbf24";
+  return "#ef4444";
+}
+
+/**
+ * The dreamscape detail screen. The dreamscape fills the viewport as its scene
+ * art; each site floats in the scene as a circular node, and hovering a node
+ * raises a frosted popover with its name and a one-line mechanic blurb. The
+ * keeper battle is gated behind the dreamscape's other sites: while locked it
+ * shows grey with a padlock, and a status eyebrow under the title tracks how
+ * many sites remain to unlock it.
+ */
 export function DreamscapeScreen() {
   const { state, mutations } = useQuest();
   const { currentDreamscape, completionLevel } = state;
 
   const node = currentDreamscape !== null ? state.atlas.nodes[currentDreamscape] : undefined;
-  const remainingNonBattleSiteCount = node?.sites.filter(
-    (site) => site.type !== "Battle" && !site.isVisited,
-  ).length ?? 0;
+
+  const remainingNonBattleSiteCount = useMemo(
+    () =>
+      node?.sites.filter((site) => site.type !== "Battle" && !site.isVisited).length ?? 0,
+    [node],
+  );
 
   const allNonBattleVisited = useMemo(() => {
     if (!node) return false;
-    return node.sites
-      .filter((s) => s.type !== "Battle")
-      .every((s) => s.isVisited);
+    return node.sites.filter((s) => s.type !== "Battle").every((s) => s.isVisited);
   }, [node]);
 
-  // The dreamscape's signature (enhanced) site: the resident guide's home site.
-  // The guide frame is keyed off it so the resident guide greets the player on
-  // the dreamscape overview and surfaces their home specialty.
-  const enhancedSite = useMemo(
-    () => node?.sites.find((s) => s.isEnhanced) ?? null,
-    [node],
-  );
+  // Build the placed-site models: stable seeded scatter + per-site label,
+  // blurb, accent, and interaction state. Battles are locked until every other
+  // site in the dreamscape has been visited.
+  const models = useMemo<DreamscapeSiteModel[]>(() => {
+    if (!node) return [];
+    const positions = scatterSites(node.sites.length, seedFromString(node.id));
+    return node.sites.map((site, index) => {
+      const isBattle = site.type === "Battle";
+      const isLocked = isBattle && !allNonBattleVisited;
+      const isInteractive = !site.isVisited && !isLocked;
+      const label = isBattle
+        ? battleLabel(completionLevel)
+        : site.type === "Draft"
+          ? `Draft ${String(draftSitePickCount(site))}x`
+          : siteTypeName(site.type);
+      const blurb =
+        site.isEnhanced && !isBattle
+          ? enhancedSiteDescription(site.type)
+          : siteTypeDescription(site.type);
+      const accent = isBattle
+        ? battleAccent(completionLevel, isLocked)
+        : site.isEnhanced
+          ? node.biomeColor
+          : DEFAULT_ACCENT;
+      return {
+        site,
+        pos: positions[index] ?? { x: 50, y: 58 },
+        index,
+        isBattle,
+        isLocked,
+        isInteractive,
+        label,
+        blurb,
+        icon: siteTypeIcon(site.type),
+        accent,
+      };
+    });
+  }, [node, allNonBattleVisited, completionLevel]);
+
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  // Cross-fade the scene art in whenever the dreamscape changes.
+  const dreamscapeId = node?.dreamscapeId ?? null;
+  const [sceneShown, setSceneShown] = useState(false);
+  useEffect(() => {
+    setSceneShown(false);
+    const id = setTimeout(() => setSceneShown(true), 30);
+    return () => clearTimeout(id);
+  }, [dreamscapeId]);
+
+  // Reconstruction log: which dreamscape was presented, its keeper-unlock state,
+  // and the exact seeded layout of every site node shown on the overview.
+  useEffect(() => {
+    if (!node) return;
+    logEvent("dreamscape_overview_presented", {
+      nodeId: node.id,
+      dreamscapeId: node.dreamscapeId,
+      biomeName: node.biomeName,
+      completionLevel,
+      layoutSeed: seedFromString(node.id),
+      battleUnlocked: allNonBattleVisited,
+      remainingNonBattleSiteCount,
+      sites: models.map((m) => ({
+        siteId: m.site.id,
+        type: m.site.type,
+        isEnhanced: m.site.isEnhanced,
+        isVisited: m.site.isVisited,
+        isLocked: m.isLocked,
+        pos: m.pos,
+      })),
+    });
+    // Re-log only when the presented dreamscape changes, not on hover.
+  }, [node?.id]);
 
   const handleSiteClick = useCallback(
     (siteId: string) => {
@@ -50,63 +157,63 @@ export function DreamscapeScreen() {
 
   if (!node) {
     return (
-      <div className="flex h-full items-center justify-center p-8">
-        <p className="text-lg opacity-50">No dreamscape selected.</p>
+      <div className="dreamscape-detail" data-dreamscape-detail="">
+        <p className="ds-empty">No dreamscape selected.</p>
       </div>
     );
   }
 
-  return (
-    <motion.div
-      className="flex h-full flex-col items-center px-4 py-6 md:px-8 md:py-8"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.4 }}
-    >
-      {/* Resident Dream Guide framing. The frame docks to the top in portrait
-          and to the left edge in landscape; it greets the player on the
-          dreamscape overview keyed off the dreamscape's signature (enhanced)
-          site and surfaces the guide's home specialty. Renders nothing when the
-          dreamscape's signature site has no resident guide. */}
-      {enhancedSite !== null && <DreamGuideFrame site={enhancedSite} />}
+  const sceneUrl = dreamscapeId !== null ? dreamscapeSceneUrl(dreamscapeId) : null;
+  const title = node.biomeName.length > 0 ? node.biomeName : "An Unknown Dream";
+  const hoveredModel = hoveredIndex !== null ? (models[hoveredIndex] ?? null) : null;
 
-      {/* Biome header banner */}
-      <div className="mb-6 text-center md:mb-8">
-        <h2
-          className="text-2xl font-bold tracking-wide md:text-3xl"
-          style={{ color: node.biomeColor }}
-        >
-          {node.biomeName}
-        </h2>
-        <p className="mt-1 text-sm opacity-50">
+  return (
+    <div
+      className="dreamscape-detail"
+      data-dreamscape-detail=""
+      data-dreamscape-id={dreamscapeId ?? undefined}
+      data-battle-unlocked={allNonBattleVisited ? "true" : "false"}
+    >
+      <div className="ds-scene">
+        {sceneUrl !== null && (
+          <img
+            key={dreamscapeId ?? "scene"}
+            className={sceneShown ? "shown" : ""}
+            src={sceneUrl}
+            alt={title}
+          />
+        )}
+      </div>
+
+      <DreamscapeMotes on />
+      <div className="ds-vignette" />
+      <div className="ds-title-scrim" />
+
+      <div className="ds-title-block">
+        <h1 className="ds-name">{title}</h1>
+        <p className={"ds-eyebrow" + (allNonBattleVisited ? " unlocked" : "")}>
           {allNonBattleVisited
-            ? "Battle unlocked"
+            ? "Keeper unlocked"
             : remainingNonBattleSiteCount === 1
-              ? "Complete 1 remaining site to unlock the battle"
-              : `Complete ${String(remainingNonBattleSiteCount)} remaining sites to unlock the battle`}
+              ? "1 site remains to unlock the keeper"
+              : `${String(remainingNonBattleSiteCount)} sites remain to unlock the keeper`}
         </p>
       </div>
 
-      {/* Site list */}
-      <div className="flex w-full max-w-lg flex-col gap-3 md:gap-4">
-        {node.sites.map((site) => {
-          const isBattle = site.type === "Battle";
-          const isLocked = isBattle && !allNonBattleVisited;
+      {models.map((model) => (
+        <DreamscapeSiteNode
+          key={model.site.id}
+          model={model}
+          size={NODE_SIZE}
+          motion
+          hovered={hoveredIndex === model.index}
+          anyHover={hoveredIndex !== null}
+          onHover={setHoveredIndex}
+          onSelect={handleSiteClick}
+        />
+      ))}
 
-          return (
-            <SiteCard
-              key={site.id}
-              site={site}
-              isLocked={isLocked}
-              completionLevel={completionLevel}
-              biomeColor={node.biomeColor}
-              remainingSitesToUnlockBattle={remainingNonBattleSiteCount}
-              onSiteClick={handleSiteClick}
-            />
-          );
-        })}
-      </div>
-    </motion.div>
+      {hoveredModel !== null && <DreamscapeSitePopover model={hoveredModel} />}
+    </div>
   );
 }
