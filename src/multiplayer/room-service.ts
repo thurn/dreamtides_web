@@ -43,6 +43,7 @@ import type {
   QuestState,
   RewardSiteRuntime,
   SiteRuntimeState,
+  SiteState,
 } from "../types/quest";
 
 export type RoomSubscriptionSnapshot =
@@ -67,16 +68,36 @@ function normalizeDeck(deck: readonly DeckEntry[] | undefined): DeckEntry[] {
   return deck.map(normalizeDeckEntry);
 }
 
+/**
+ * Coerce an RTDB-round-tripped value back into an array of values, preserving
+ * each element as-is. Realtime Database stores arrays as numeric-keyed objects
+ * and drops empty ones, so an array arrives as either an array, an object keyed
+ * by index, or `undefined`. This is used for arrays whose elements are strings
+ * or objects (site states, id lists, atlas layers) where no per-element
+ * coercion is needed beyond rebuilding the array container.
+ */
+function coerceArray<T>(value: unknown): T[] {
+  if (Array.isArray(value)) {
+    return value as T[];
+  }
+  if (value !== null && typeof value === "object") {
+    return Object.values(value as Record<string, T>);
+  }
+  return [];
+}
+
 function normalizeDreamscapeNode(node: DreamscapeNode): DreamscapeNode {
   return {
     ...node,
-    sites: node.sites ?? [],
+    // RTDB drops empty arrays and null on write and stores non-empty arrays as
+    // numeric-keyed objects; coerce each array field back to a real array (empty
+    // when missing) so the new node shape always round-trips intact and
+    // downstream iteration never reads `undefined` or a plain object.
+    sites: coerceArray<SiteState>(node.sites),
     enhancedSiteType: node.enhancedSiteType ?? null,
-    // RTDB drops empty arrays and null on write; restore the optional/edge
-    // fields so the new node shape always round-trips intact.
     dreamscapeId: node.dreamscapeId ?? null,
-    forwardIds: node.forwardIds ?? [],
-    backwardIds: node.backwardIds ?? [],
+    forwardIds: coerceArray<string>(node.forwardIds),
+    backwardIds: coerceArray<string>(node.backwardIds),
     knownDreamsignId: node.knownDreamsignId ?? null,
   };
 }
@@ -91,14 +112,20 @@ function normalizeAtlas(atlas: DreamAtlas | undefined): DreamAtlas {
   for (const [id, node] of Object.entries(rawNodes)) {
     nodes[id] = normalizeDreamscapeNode(node);
   }
+  // `layers` is a `string[][]`; both the outer list and each inner per-layer
+  // list can arrive as numeric-keyed objects or be dropped when empty.
+  const layers = coerceArray<unknown>(atlas.layers).map((layer) =>
+    coerceArray<string>(layer),
+  );
   return {
-    layers: atlas.layers ?? defaults.layers,
+    layers: layers.length > 0 ? layers : defaults.layers,
     nodes,
     startingNodeId: atlas.startingNodeId ?? defaults.startingNodeId,
     bossNodeId: atlas.bossNodeId ?? defaults.bossNodeId,
     currentNodeId: atlas.currentNodeId ?? defaults.currentNodeId,
-    knownDreamsignCarrierIds:
-      atlas.knownDreamsignCarrierIds ?? defaults.knownDreamsignCarrierIds,
+    knownDreamsignCarrierIds: coerceArray<string>(
+      atlas.knownDreamsignCarrierIds,
+    ),
   };
 }
 

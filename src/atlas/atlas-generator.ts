@@ -1101,8 +1101,14 @@ export function advanceAtlas(
 
   setNodeState(state, completedNodeId, "completed");
 
+  // A persisted atlas can arrive with empty arrays stripped (RTDB drops them on
+  // write), so iterate every array field defensively rather than throwing while
+  // advancing — the boss node carries `forwardIds: []` and the starting node
+  // carries `backwardIds: []`, and unrevealed layers may be missing entirely.
+  const atlasLayers = Array.isArray(atlas.layers) ? atlas.layers : [];
+  const completedLayer = atlasLayers[completedNode.layer];
   // Forgo the sibling choices in the completed node's layer.
-  for (const siblingId of atlas.layers[completedNode.layer]) {
+  for (const siblingId of Array.isArray(completedLayer) ? completedLayer : []) {
     if (siblingId === completedNodeId) {
       continue;
     }
@@ -1112,15 +1118,25 @@ export function advanceAtlas(
     }
   }
 
-  // The completed node's forward targets become the next available choices.
-  for (const targetId of completedNode.forwardIds) {
+  // The completed node's forward targets become the next available choices. The
+  // boss node has no forward targets, so its stripped `forwardIds` reads as
+  // `undefined` off a persisted atlas — guard so winning the final boss never
+  // throws and aborts the post-victory advance.
+  const forwardIds = Array.isArray(completedNode.forwardIds)
+    ? completedNode.forwardIds
+    : [];
+  for (const targetId of forwardIds) {
     setNodeState(state, targetId, "available");
   }
 
   // Reveal the layer two ahead of the completed layer.
+  const nextLayers = Array.isArray(nextAtlas.layers) ? nextAtlas.layers : [];
   const revealLayer = completedNode.layer + 2;
-  if (revealLayer < nextAtlas.layers.length) {
-    for (const nodeId of nextAtlas.layers[revealLayer]) {
+  if (revealLayer < nextLayers.length) {
+    const revealLayerNodes = nextLayers[revealLayer];
+    for (const nodeId of Array.isArray(revealLayerNodes)
+      ? revealLayerNodes
+      : []) {
       const node = nextAtlas.nodes[nodeId];
       if (node.state === "unrevealed") {
         setNodeState(state, nodeId, "revealedLocked");
@@ -1132,8 +1148,8 @@ export function advanceAtlas(
     logEvent("atlas_advanced", {
       completedNodeId,
       completedLayer: completedNode.layer,
-      forwardTargets: completedNode.forwardIds,
-      revealedLayer: revealLayer < nextAtlas.layers.length ? revealLayer : null,
+      forwardTargets: forwardIds,
+      revealedLayer: revealLayer < nextLayers.length ? revealLayer : null,
       completionLevel,
     });
   }
@@ -1353,7 +1369,11 @@ export function siteTypeDescription(siteType: SiteType): string {
  */
 export function previewSiteTypes(node: DreamscapeNode): SiteType[] {
   const excluded: Set<SiteType> = new Set(["Battle", "Draft"]);
-  return node.sites
+  // A persisted node can lack a `sites` array entirely (RTDB drops empty arrays
+  // on write); treat that as no previewable sites rather than throwing while the
+  // atlas renders, matching `revealedAtlasSite`.
+  const sites = Array.isArray(node.sites) ? node.sites : [];
+  return sites
     .filter((s) => !excluded.has(s.type))
     .map((s) => s.type)
     .slice(0, 3);

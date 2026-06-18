@@ -521,7 +521,14 @@ describe("room service", () => {
     const ready = listener.mock.calls[0][0] as { room: MultiplayerRoom };
     const restoredNode = ready.room.questState?.atlas.nodes["dreamscape-1"];
     expect(restoredNode?.sites).toEqual([]);
+    // RTDB strips every empty array, not just `sites`: the boss node's
+    // `forwardIds` and the starting node's `backwardIds` round-trip absent.
+    // Restoring them keeps the post-victory atlas advance from crashing.
+    expect(restoredNode?.forwardIds).toEqual([]);
+    expect(restoredNode?.backwardIds).toEqual([]);
     expect(restoredNode?.enhancedSiteType).toBeNull();
+    // Atlas-level empty arrays are also restored.
+    expect(ready.room.questState?.atlas.knownDreamsignCarrierIds).toEqual([]);
     expect(ready.room.questState?.draftState).toEqual({
       mode: "pool",
       pickNumber: 1,
@@ -532,6 +539,55 @@ describe("room service", () => {
       activeSiteId: null,
       siteShownCardNumbers: [],
     });
+  });
+
+  it("coerces atlas arrays that arrived as numeric-keyed objects from RTDB", () => {
+    const listener = vi.fn();
+    // RTDB stores non-empty arrays as numeric-keyed objects. The normalizer must
+    // rebuild real arrays for node id lists and the atlas `layers` matrix so
+    // downstream iteration sees arrays, not plain objects.
+    const strippedQuestState = {
+      ...createDefaultState(),
+      atlas: {
+        startingNodeId: "dreamscape-1",
+        bossNodeId: "dreamscape-2",
+        layers: { "0": { "0": "dreamscape-1" }, "1": { "0": "dreamscape-2" } },
+        knownDreamsignCarrierIds: { "0": "dreamscape-2" },
+        nodes: {
+          "dreamscape-1": {
+            id: "dreamscape-1",
+            state: "available" as const,
+            forwardIds: { "0": "dreamscape-2" },
+          },
+          "dreamscape-2": {
+            id: "dreamscape-2",
+            state: "revealedLocked" as const,
+            backwardIds: { "0": "dreamscape-1" },
+          },
+        },
+      },
+    };
+    const room = {
+      ...createRoomRecord(timestamp),
+      questState: strippedQuestState,
+    };
+    firebaseMocks.onValue.mockImplementation(
+      (_entryRef, next: SnapshotListener) => {
+        next({ exists: () => true, val: () => room });
+        return vi.fn();
+      },
+    );
+
+    subscribeToRoom(database, "ab12", listener);
+
+    const ready = listener.mock.calls[0][0] as { room: MultiplayerRoom };
+    const atlas = ready.room.questState?.atlas;
+    expect(atlas?.layers).toEqual([["dreamscape-1"], ["dreamscape-2"]]);
+    expect(atlas?.knownDreamsignCarrierIds).toEqual(["dreamscape-2"]);
+    expect(atlas?.nodes["dreamscape-1"].forwardIds).toEqual(["dreamscape-2"]);
+    expect(atlas?.nodes["dreamscape-1"].backwardIds).toEqual([]);
+    expect(atlas?.nodes["dreamscape-2"].backwardIds).toEqual(["dreamscape-1"]);
+    expect(atlas?.nodes["dreamscape-2"].forwardIds).toEqual([]);
   });
 
   it("round-trips a replay draft state whose packSequence arrived as numeric-keyed objects", () => {

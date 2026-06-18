@@ -642,6 +642,81 @@ describe("advanceAtlas", () => {
     expect(advanced.nodes[persisted.startingNodeId].state).toBe("completed");
   });
 
+  // Realtime Database drops EVERY empty array on write, not just `sites`. The
+  // boss node carries `forwardIds: []` and the starting node carries
+  // `backwardIds: []`, so a round-tripped atlas loses those keys too. advanceAtlas
+  // runs on every victory including the final boss (isFinalBoss only gates the
+  // screen change, not the advance), so an unguarded `forwardIds` iteration
+  // throws `forwardIds is not iterable` at the worst possible moment — winning
+  // the run — stranding quest progression. This drives the full graph from start
+  // through every layer up to and INCLUDING the boss on an atlas with all empty
+  // arrays stripped, asserting no throw and that the boss ends completed.
+  it("advances a fully RTDB-stripped atlas through every layer including the boss", () => {
+    const original = freshAtlas();
+
+    // Capture the navigation path off the intact atlas before stripping, since a
+    // stripped atlas can no longer report a node's forward targets. Always take
+    // the first forward edge so the walk follows a real start-to-boss route.
+    const path: string[] = [original.startingNodeId];
+    let walkId: string = original.startingNodeId;
+    while (original.nodes[walkId].forwardIds.length > 0) {
+      walkId = original.nodes[walkId].forwardIds[0];
+      path.push(walkId);
+    }
+    const bossId = path[path.length - 1];
+    expect(bossId).toBe(original.bossNodeId);
+
+    // Simulate RTDB stripping: delete every empty array on every node and at the
+    // atlas level. Non-empty arrays survive; empty ones vanish entirely.
+    const stripEmptyArrays = <T extends object>(obj: T): T => {
+      const next = { ...obj } as Record<string, unknown>;
+      for (const [key, value] of Object.entries(next)) {
+        if (Array.isArray(value) && value.length === 0) {
+          delete next[key];
+        }
+      }
+      return next as T;
+    };
+
+    const strippedNodes: Record<string, DreamscapeNode> = {};
+    for (const [id, node] of Object.entries(original.nodes)) {
+      strippedNodes[id] = stripEmptyArrays(node);
+    }
+    const stripped = stripEmptyArrays({
+      ...original,
+      nodes: strippedNodes,
+    });
+
+    // Sanity: the boss node really did lose its forwardIds, and the start lost
+    // its backwardIds — the exact shape that crashes the unguarded path.
+    expect(
+      (stripped.nodes[bossId] as Partial<DreamscapeNode>).forwardIds,
+    ).toBeUndefined();
+    expect(
+      (stripped.nodes[stripped.startingNodeId] as Partial<DreamscapeNode>)
+        .backwardIds,
+    ).toBeUndefined();
+
+    let atlas = stripped;
+    let completionLevel = 0;
+    expect(() => {
+      for (const nodeId of path) {
+        atlas = advanceAtlas(
+          atlas,
+          nodeId,
+          completionLevel,
+          defaultContext(),
+          buildContext(),
+          { logEvents: false },
+        );
+        completionLevel += 1;
+      }
+    }).not.toThrow();
+
+    // The boss advance applied: the boss node is completed.
+    expect(atlas.nodes[bossId].state).toBe("completed");
+  });
+
   // The Atlas UI styles all five AtlasNodeState values distinctly. If a played
   // run could never produce one of those states, the corresponding UI treatment
   // would be dead code that silently masks a regression. This drives the real
