@@ -29,6 +29,7 @@ import { STARTER_CARD_NUMBERS } from "./data/starter-cards";
 import { getSavedQuest } from "./state/saved-quests";
 import { logEvent } from "./logging";
 import type { RuntimeConfig } from "./runtime/runtime-config";
+import { findQaScene } from "./runtime/qa-scenes";
 import type { QuestState } from "./types/quest";
 import {
   JourneyExplanationOverlay,
@@ -67,6 +68,7 @@ export function QuestApp({
     useState<JourneyExplanation | null>(null);
   const previousScreenTypeRef = useRef(state.screen.type);
   const startInBattleFiredRef = useRef(false);
+  const gotoSceneFiredRef = useRef(false);
   const loadQuestFiredRef = useRef(false);
   const loadQuestName = runtimeConfig.loadQuestName ?? null;
   // `?loadQuest=<name>` boot flow: 'pending' holds a loading screen until the
@@ -93,6 +95,28 @@ export function QuestApp({
     startInBattleFiredRef.current = true;
     mutations.bootstrapStartInBattle();
   }, [runtimeConfig.startInBattle, state.dreamcaller, mutations]);
+
+  // `?goto=<scene>`: replace the freshly created room's empty quest state with
+  // one parked on a developer QA scene (e.g. `?goto=atlas`), letting browser QA
+  // open screens that are otherwise reachable only by playing battles forward.
+  // Mirrors `?startInBattle=1`: fires once per mount, and the multiplayer
+  // mutation guards on `dreamcaller === null` so a reload is a no-op.
+  useEffect(() => {
+    const gotoScene = runtimeConfig.gotoScene ?? null;
+    if (
+      gotoScene === null ||
+      gotoSceneFiredRef.current ||
+      state.dreamcaller !== null
+    ) {
+      return;
+    }
+    if (mutations.bootstrapQaScene === undefined) {
+      return;
+    }
+
+    gotoSceneFiredRef.current = true;
+    mutations.bootstrapQaScene(gotoScene);
+  }, [runtimeConfig.gotoScene, state.dreamcaller, mutations]);
 
   // `?loadQuest=<name>`: fetch the named snapshot from the dev server and
   // replace the room's quest state with it, then render the loaded run. Fires
@@ -318,6 +342,23 @@ export function QuestApp({
       <div className="flex h-screen flex-col items-center justify-center gap-3 p-8">
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
         <p className="text-lg opacity-80">Entering battle...</p>
+      </div>
+    );
+  }
+
+  // `?goto=<scene>`: hold a loading screen — rather than the Dreamcaller
+  // selection screen — until `bootstrapQaScene` round-trips through Firebase,
+  // so QA lands directly on the requested scene (e.g. the Dream Atlas).
+  const gotoSceneName = runtimeConfig.gotoScene ?? null;
+  if (
+    gotoSceneName !== null &&
+    findQaScene(gotoSceneName) !== null &&
+    state.dreamcaller === null
+  ) {
+    return (
+      <div className="flex h-screen flex-col items-center justify-center gap-3 p-8">
+        <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
+        <p className="text-lg opacity-80">Opening QA scene...</p>
       </div>
     );
   }

@@ -3,7 +3,7 @@ import type { Database } from "firebase/database";
 import { mergeCardKeywordModification } from "../card-type-change";
 import { resetBattleCompletionBridge } from "../battle/integration/battle-completion-bridge";
 import type { QuestContent } from "../data/quest-content";
-import { resetLog } from "../logging";
+import { logEvent, resetLog } from "../logging";
 import {
   runRoomTransaction,
   writeRoomUpdate,
@@ -64,6 +64,7 @@ import {
   updateQuestAtlas,
 } from "./quest-state-actions";
 import { createStartInBattleState } from "../runtime/start-in-battle-state";
+import { buildQaScene, findQaScene } from "../runtime/qa-scenes";
 import { generateRewardSiteData } from "../rewards/reward-generator";
 import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 import {
@@ -1036,6 +1037,80 @@ export function MultiplayerQuestProvider({
         return {
           ...room,
           questState: battleState,
+          battleState: null,
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+          actionLog: {
+            ...(room.actionLog ?? {}),
+            [actionId]: actionEntry,
+          },
+        };
+      },
+    });
+  }, []);
+
+  const bootstrapQaScene = useCallback((sceneId: string) => {
+    const current = currentRef.current;
+    if (current.state.dreamcaller !== null) {
+      return;
+    }
+    const scene = findQaScene(sceneId);
+    if (scene === null) {
+      logEvent("debug_qa_scene_loaded", {
+        source: "goto_url",
+        sceneId,
+        outcome: "unknown_scene",
+      });
+      return;
+    }
+    const sceneState = buildQaScene(sceneId, current.questContent);
+    if (sceneState === null) {
+      logEvent("debug_qa_scene_loaded", {
+        source: "goto_url",
+        sceneId: scene.id,
+        outcome: "build_failed",
+      });
+      return;
+    }
+    const now = new Date().toISOString();
+    const actionId = crypto.randomUUID();
+    const actionEntry = buildActionLogEntry({
+      timestamp: now,
+      actorId: current.session.clientId,
+      action: "bootstrapQaScene",
+      source: "goto_url",
+      summary: {
+        sceneId: scene.id,
+        dreamcallerId: sceneState.dreamcaller?.id ?? null,
+        screen: sceneState.screen.type,
+        seed: sceneState.seed,
+        bossIncarnationId: sceneState.atlas.bossIncarnationId ?? null,
+      },
+    });
+    logEvent("debug_qa_scene_loaded", {
+      source: "goto_url",
+      sceneId: scene.id,
+      outcome: "applied",
+      screen: sceneState.screen.type,
+      seed: sceneState.seed,
+      bossIncarnationId: sceneState.atlas.bossIncarnationId ?? null,
+    });
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (
+          room === null ||
+          (room.questState !== null && room.questState.dreamcaller !== null)
+        ) {
+          return room ?? undefined;
+        }
+
+        return {
+          ...room,
+          questState: sceneState,
           battleState: null,
           metadata: {
             ...room.metadata,
@@ -4402,6 +4477,7 @@ export function MultiplayerQuestProvider({
       setFailureSummary,
       dismissStartingDeckPopup,
       bootstrapStartInBattle,
+      bootstrapQaScene,
       loadQuestState,
       resetQuest,
       setEssence,

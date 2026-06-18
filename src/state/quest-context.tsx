@@ -188,6 +188,17 @@ export interface QuestMutations {
    */
   bootstrapStartInBattle: () => void;
   /**
+   * Debug-only: replaces an uninitialized quest state with one parked on a
+   * developer QA scene (see `src/runtime/qa-scenes.ts`), skipping Dreamcaller
+   * selection so screens reachable only by playing battles forward — such as
+   * the Dream Atlas boss preview — can be opened directly for browser QA.
+   * Drives the `?goto=<scene>` runtime flag. No-op once a Dreamcaller is
+   * selected, mirroring `bootstrapStartInBattle`. Optional because only the
+   * live multiplayer provider implements it; lightweight test/demo mutation
+   * stubs omit it.
+   */
+  bootstrapQaScene?: (sceneId: string) => void;
+  /**
    * Debug-only: replaces the entire quest state with a previously saved
    * snapshot (a named save loaded from the developer's file system via the
    * debug overlay). Clears the battle slot, mirroring `resetQuest`. Optional

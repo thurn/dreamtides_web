@@ -53,6 +53,16 @@ export interface RuntimeConfig {
    * since that serves the endpoint.
    */
   loadQuestName?: string | null;
+  /**
+   * Id of a developer QA scene to jump straight to on boot, from `?goto=`. When
+   * set, the app replaces the freshly created room's empty quest state with one
+   * parked on that screen (built from live quest content; see
+   * `src/runtime/qa-scenes.ts`), so screens otherwise reachable only by playing
+   * battles forward — such as the Dream Atlas boss preview — can be opened
+   * directly for browser QA. Null when absent. `parseRuntimeConfig` always sets
+   * it; it is optional only so test config literals can omit it.
+   */
+  gotoScene?: string | null;
 }
 
 export type DatabaseMode = "emulator" | "realtime";
@@ -83,7 +93,16 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     debugJourneyReward: parseDebugJourneyId(params.get("debugJourneyReward")),
     debugJourneyCost: parseDebugJourneyId(params.get("debugJourneyCost")),
     loadQuestName: parseLoadQuestName(params.get("loadQuest")),
+    gotoScene: parseGotoScene(params.get("goto")),
   };
+}
+
+function parseGotoScene(rawScene: string | null): string | null {
+  if (rawScene === null) {
+    return null;
+  }
+  const trimmed = rawScene.trim();
+  return trimmed === "" ? null : trimmed;
 }
 
 function parseJourneyVariant(rawJourney: string | null): JourneyVariant {

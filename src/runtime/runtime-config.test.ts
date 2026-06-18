@@ -19,6 +19,20 @@ describe("parseRuntimeConfig", () => {
       debugJourneyReward: null,
       debugJourneyCost: null,
       loadQuestName: null,
+      gotoScene: null,
+    });
+  });
+
+  describe("gotoScene", () => {
+    it("returns null when goto is absent or blank", () => {
+      expect(parseRuntimeConfig("").gotoScene).toBeNull();
+      expect(parseRuntimeConfig("?goto=").gotoScene).toBeNull();
+      expect(parseRuntimeConfig("?goto=%20%20").gotoScene).toBeNull();
+    });
+
+    it("returns the trimmed, decoded scene id when goto is present", () => {
+      expect(parseRuntimeConfig("?goto=atlas").gotoScene).toBe("atlas");
+      expect(parseRuntimeConfig("?goto=%20atlas%20").gotoScene).toBe("atlas");
     });
   });
 

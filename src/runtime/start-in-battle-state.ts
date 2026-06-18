@@ -4,12 +4,34 @@ import { toQuestDreamcaller } from "../data/dreamcaller-selection";
 import { initializeDraftState } from "../draft/draft-engine";
 import { buildDreamcallerPackage } from "../data/quest-content";
 import type { QuestContent } from "../data/quest-content";
-import type { QuestState } from "../types/quest";
+import type { DreamAtlas, DreamscapeNode, QuestState } from "../types/quest";
 import { generateQuestSeed } from "../state/quest-state-actions";
 
-export function createStartInBattleState(
+/**
+ * A fully valid quest state parked on the Dream Atlas, plus the generated atlas
+ * and its starter node, shared by every developer-only "jump straight to a
+ * screen" entry point. The base {@link QuestState} is the between-dreamscapes
+ * resting state (atlas screen, no dreamscape entered); callers that need a
+ * different screen override `screen`/`currentDreamscape`/`activeSiteId` on top
+ * of it (see {@link createStartInBattleState}).
+ */
+export interface QaQuestFoundation {
+  state: QuestState;
+  atlas: DreamAtlas;
+  starterNode: DreamscapeNode;
+}
+
+/**
+ * Builds the common foundation for developer jump-to-screen flows
+ * (`?startInBattle=1`, `?goto=<scene>`): the first Dreamcaller, its resolved
+ * draft package, the starter deck, and a freshly generated atlas with its boss
+ * node and Apollyon incarnation. Returns null when required quest content is
+ * missing. The returned `state` is the resting atlas state; nothing here is
+ * specific to any one target screen.
+ */
+export function createQaQuestFoundation(
   questContent: QuestContent,
-): QuestState | null {
+): QaQuestFoundation | null {
   const dreamcaller = questContent.dreamcallers[0];
 
   if (dreamcaller === undefined) {
@@ -38,16 +60,13 @@ export function createStartInBattleState(
       apollyonIncarnations: questContent.apollyonIncarnations,
     },
   );
-  const dreamscapeWithBattle = atlas.nodes[atlas.startingNodeId];
-  const battleSite = dreamscapeWithBattle.sites.find(
-    (site) => site.type === "Battle",
-  );
+  const starterNode = atlas.nodes[atlas.startingNodeId];
 
-  if (battleSite === undefined) {
+  if (starterNode === undefined) {
     return null;
   }
 
-  return {
+  const state: QuestState = {
     seed,
     essence: 200,
     essenceCap: 500,
@@ -65,12 +84,12 @@ export function createStartInBattleState(
     dreamsigns: [],
     completionLevel: 0,
     atlas,
-    currentDreamscape: dreamscapeWithBattle.id,
+    currentDreamscape: null,
     visitedSites: [],
     siteRuntime: {},
     draftState: initializeDraftState(questContent.cardDatabase, resolvedPackage),
-    screen: { type: "site", siteId: battleSite.id },
-    activeSiteId: battleSite.id,
+    screen: { type: "atlas" },
+    activeSiteId: null,
     failureSummary: null,
     hasSeenStartingDeckPopup: true,
     battleModifiers: [],
@@ -79,5 +98,32 @@ export function createStartInBattleState(
       essenceDiscountPercent: 0,
     },
     dreamscapeModifiers: [],
+  };
+
+  return { state, atlas, starterNode };
+}
+
+export function createStartInBattleState(
+  questContent: QuestContent,
+): QuestState | null {
+  const foundation = createQaQuestFoundation(questContent);
+
+  if (foundation === null) {
+    return null;
+  }
+
+  const battleSite = foundation.starterNode.sites.find(
+    (site) => site.type === "Battle",
+  );
+
+  if (battleSite === undefined) {
+    return null;
+  }
+
+  return {
+    ...foundation.state,
+    currentDreamscape: foundation.starterNode.id,
+    screen: { type: "site", siteId: battleSite.id },
+    activeSiteId: battleSite.id,
   };
 }
