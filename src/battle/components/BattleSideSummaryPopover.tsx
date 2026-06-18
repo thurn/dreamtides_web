@@ -1,6 +1,7 @@
 import { useEffect, useRef } from "react";
 import type {
   BattleDreamcallerSummary,
+  BattleDreamsignSummary,
   BattleMutableState,
   BattleSide,
 } from "../types";
@@ -10,6 +11,7 @@ import { RulesText } from "../../components/RulesText";
 
 export function BattleSideSummaryPopover({
   dreamcaller = null,
+  dreamsigns = [],
   isSelected = false,
   isActive,
   onClose,
@@ -19,6 +21,12 @@ export function BattleSideSummaryPopover({
   title,
 }: {
   dreamcaller?: BattleDreamcallerSummary | null;
+  /**
+   * The dreamsigns this side carries, shown beneath the Dreamcaller summary so
+   * the player can read the opponent's dreamsign before the battle begins
+   * (quests doc "Battle"). Empty for a side carrying no dreamsigns.
+   */
+  dreamsigns?: readonly BattleDreamsignSummary[];
   isSelected?: boolean;
   isActive: boolean;
   onClose: () => void;
@@ -80,17 +88,42 @@ export function BattleSideSummaryPopover({
       </div>
 
       {showDreamcallerSummary ? (
-        <div className="battle-dreamcaller-card summary-dreamcaller-card" data-battle-summary-dreamcaller-card="">
-          <div className="battle-dreamcaller-card-art">
-            <DreamcallerPortrait dreamcaller={dreamcaller} variant="panel" />
-          </div>
-          <div className="battle-dreamcaller-card-copy">
-            <h4>{dreamcaller.name}</h4>
-            <div className="dreamcaller-text" data-battle-summary-dreamcaller-rules="">
-              <RulesText text={dreamcaller.renderedText} />
+        <>
+          <div className="battle-dreamcaller-card summary-dreamcaller-card" data-battle-summary-dreamcaller-card="">
+            <div className="battle-dreamcaller-card-art">
+              <DreamcallerPortrait dreamcaller={dreamcaller} variant="panel" />
+            </div>
+            <div className="battle-dreamcaller-card-copy">
+              <h4>{dreamcaller.name}</h4>
+              <div className="dreamcaller-text" data-battle-summary-dreamcaller-rules="">
+                <RulesText text={dreamcaller.renderedText} />
+              </div>
             </div>
           </div>
-        </div>
+          <div className="floating-section" data-battle-summary-dreamsigns="">
+            <h4>Dreamsigns</h4>
+            {dreamsigns.length === 0 ? (
+              <div className="floating-empty">No active Dreamsigns.</div>
+            ) : (
+              <div className="dreamsign-list">
+                {dreamsigns.map((dreamsign) => (
+                  <div
+                    key={`${dreamsign.name}-${dreamsign.effectDescription}`}
+                    className="dreamsign-card"
+                  >
+                    <div className="dreamsign-head">
+                      <strong>{dreamsign.name}</strong>
+                      {dreamsign.isBane ? (
+                        <span className="dreamsign-badge bane">Bane</span>
+                      ) : null}
+                    </div>
+                    <p>{dreamsign.effectDescription}</p>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </>
       ) : (
         <div className="summary-grid">
           <div className="summary-stat">

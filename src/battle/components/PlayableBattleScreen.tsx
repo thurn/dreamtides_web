@@ -1108,6 +1108,9 @@ function PlayableBattleScreenInner({
             ? battleInit.dreamcallerSummary?.title ?? ""
             : battleInit.enemyDescriptor.subtitle}
           dreamcaller={openSideSummary === "player" ? battleInit.dreamcallerSummary : enemyDreamcallerSummary}
+          dreamsigns={openSideSummary === "player"
+            ? battleInit.dreamsignSummaries
+            : battleInit.enemyDescriptor.dreamsigns}
           isActive={reducerState.mutable.activeSide === openSideSummary}
           isSelected={false}
           onClose={() => {

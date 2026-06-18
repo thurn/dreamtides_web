@@ -5,7 +5,12 @@ import type { SharedBattleState } from "../multiplayer/battle-types";
 import { createBattleInit } from "../battle/integration/create-battle-init";
 import { createInitialBattleState } from "../battle/state/create-initial-state";
 import type { CardData } from "../types/cards";
-import type { DreamcallerContent, DreamsignTemplate } from "../types/content";
+import type {
+  AffiliationContent,
+  DreamcallerContent,
+  DreamscapeContent,
+  DreamsignTemplate,
+} from "../types/content";
 import type { DreamwellCard } from "../data/dreamwell-database";
 import type { RunPoolContext } from "../data/quest-content";
 import type { QuestState, SiteState } from "../types/quest";
@@ -50,6 +55,8 @@ export function useEnsureBattleSession(input: {
   >;
   cardDatabase: ReadonlyMap<number, CardData>;
   dreamcallers: readonly DreamcallerContent[];
+  dreamscapes?: readonly DreamscapeContent[];
+  affiliations?: readonly AffiliationContent[];
   dreamwellCards: readonly DreamwellCard[];
   dreamsignTemplates?: readonly DreamsignTemplate[];
   poolContext?: RunPoolContext;
@@ -73,6 +80,8 @@ export function useEnsureBattleSession(input: {
       state: input.questState,
       cardDatabase: input.cardDatabase,
       dreamcallers: input.dreamcallers,
+      dreamscapes: input.dreamscapes,
+      affiliations: input.affiliations,
       dreamwellCards: input.dreamwellCards,
       dreamsignTemplates: input.dreamsignTemplates,
       poolContext: input.poolContext,
@@ -95,10 +104,12 @@ export function useEnsureBattleSession(input: {
     input.aiMode,
     input.battleEntryKey,
     input.battleState,
+    input.affiliations,
     input.cardDatabase,
     input.clientId,
     input.database,
     input.dreamcallers,
+    input.dreamscapes,
     input.dreamwellCards,
     input.dreamsignTemplates,
     input.poolContext,

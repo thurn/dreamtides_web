@@ -554,28 +554,53 @@ describe("createBattleInit", () => {
       expect(init.enemyDescriptor.dreamsigns).toEqual([]);
     });
 
-    it("gives the opponent concrete dreamsigns drawn from the supplied templates", () => {
+    it("gives a post-midpoint opponent a single concrete dreamsign drawn from the supplied templates", () => {
+      const baseState = makeBattleTestState();
+      const templates = [
+        {
+          id: "enemy-sign-1",
+          name: "Enemy Sign One",
+          effectDescription: "An opposing boon.",
+        },
+        {
+          id: "enemy-sign-2",
+          name: "Enemy Sign Two",
+          effectDescription: "Another opposing boon.",
+        },
+      ];
+      // makeBattleTestState's atlas has no per-layer node lists, so the run
+      // length resolves to the default 7-layer run (midpoint = completion
+      // level 3); a battle at completion level 4 is past the midpoint.
       const init = createBattleInit({
         ...makeBaseInput(),
+        state: { ...baseState, completionLevel: 4 },
+        dreamsignTemplates: templates,
+      });
+
+      expect(init.enemyDescriptor.dreamsigns).toHaveLength(1);
+      const dreamsignNames = new Set(templates.map((t) => t.name));
+      for (const dreamsign of init.enemyDescriptor.dreamsigns) {
+        expect(dreamsignNames.has(dreamsign.name)).toBe(true);
+        expect(dreamsign.isBane).toBe(false);
+      }
+    });
+
+    it("gives a pre-midpoint opponent no dreamsigns even when templates are supplied", () => {
+      const baseState = makeBattleTestState();
+      const init = createBattleInit({
+        ...makeBaseInput(),
+        // Completion level 0 is the first battle, well before the run midpoint.
+        state: { ...baseState, completionLevel: 0 },
         dreamsignTemplates: [
           {
             id: "enemy-sign-1",
             name: "Enemy Sign One",
             effectDescription: "An opposing boon.",
           },
-          {
-            id: "enemy-sign-2",
-            name: "Enemy Sign Two",
-            effectDescription: "Another opposing boon.",
-          },
         ],
       });
 
-      expect(init.enemyDescriptor.dreamsigns.length).toBeGreaterThanOrEqual(1);
-      for (const dreamsign of init.enemyDescriptor.dreamsigns) {
-        expect(typeof dreamsign.name).toBe("string");
-        expect(dreamsign.isBane).toBe(false);
-      }
+      expect(init.enemyDescriptor.dreamsigns).toHaveLength(0);
     });
   });
 

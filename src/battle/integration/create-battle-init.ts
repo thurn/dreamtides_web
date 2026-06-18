@@ -1,11 +1,12 @@
 import type { CardData } from "../../types/cards";
 import type {
+  AffiliationContent,
   DreamcallerContent,
+  DreamscapeContent,
   DreamsignTemplate,
 } from "../../types/content";
 import type { BattleModifier, QuestState, SiteState } from "../../types/quest";
 import type { RunPoolContext } from "../../data/quest-content";
-import { generatePoolFromData } from "../../draft/pool/generate";
 import { DEFAULT_POOL_VARIANT } from "../../draft/pool/types";
 import { applyDeckEntryCardModification } from "../../card-type-change";
 import { applyTransfigurationToCard } from "../../transfiguration/transfiguration-logic";
@@ -13,6 +14,15 @@ import { createBattleRngStreams, deriveBattleSeed } from "../random";
 import type { BattleRng } from "../random";
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
 import { buildAiStarterDeck } from "../ai/deck";
+import {
+  buildOpponentDeck,
+  buildOpponentDreamsigns,
+  logOpponentDeckConstructed,
+  resolveBattleAffiliation,
+  resolveRunLayerCount,
+  selectOpponentDreamcaller,
+  type OpponentDeckBuild,
+} from "./opponent-deck";
 import type {
   BattleDeckCardDefinition,
   BattleDreamcallerSummary,
@@ -68,6 +78,19 @@ export interface CreateBattleInitInput {
   >;
   cardDatabase: ReadonlyMap<number, CardData>;
   dreamcallers: readonly DreamcallerContent[];
+  /**
+   * Dreamscape definitions, used to resolve the affiliation backing the
+   * dreamscape this battle takes place in so the opponent deck can lean toward
+   * it. Optional so battle-engine tests can omit it; an absent list (or a
+   * neutral dreamscape) yields an unbiased opponent build.
+   */
+  dreamscapes?: readonly DreamscapeContent[];
+  /**
+   * Thematic affiliations backing dreamscapes (`data/tabula/affiliations.toml`).
+   * Resolved together with {@link dreamscapes} to bias the opponent deck toward
+   * the battle's affiliation. Optional, mirroring {@link dreamscapes}.
+   */
+  affiliations?: readonly AffiliationContent[];
   /**
    * The shared Dreamwell card catalog (`data/tabula/dreamwell.toml`). Built into
    * the per-battle Dreamwell deck both players draw from. Optional so
@@ -165,28 +188,80 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
       }
       return freezeBattleDeckCardDefinition(normalizePlayerDeckCard(entry, card));
     });
-  const { descriptor: rawEnemyDescriptor, signatureCards: enemySignatureCards } =
-    createEnemyDescriptor(
-      dreamcallers,
-      dreamsignTemplates,
+  // The opponent is built by emulating its Dreamcaller's journey to the
+  // equivalent run depth (quests doc "Battle"): a deterministic opponent
+  // Dreamcaller, a single dreamsign from the run midpoint onward, and a deck
+  // simulated from that Dreamcaller's tides, biased toward the dreamscape's
+  // affiliation and scaled by run progress.
+  const completionLevelAtStart = state.completionLevel;
+  const layerCount = resolveRunLayerCount(state.atlas.layers);
+  const opponentDreamcaller = selectOpponentDreamcaller(
+    dreamcallers,
+    state.dreamcaller?.id ?? null,
+    streams.enemyDescriptor,
+  );
+  const opponentDreamsigns = buildOpponentDreamsigns(
+    completionLevelAtStart,
+    layerCount,
+    dreamsignTemplates,
+    streams.enemyDescriptor,
+  );
+  const currentNode =
+    state.currentDreamscape === null
+      ? null
+      : state.atlas.nodes[state.currentDreamscape] ?? null;
+  const battleAffiliation = resolveBattleAffiliation(
+    currentNode,
+    input.dreamscapes ?? [],
+    input.affiliations ?? [],
+  );
+  const enemyDescriptor = freezeBattleEnemyDescriptor(
+    buildEnemyDescriptor(
+      opponentDreamcaller,
+      opponentDreamsigns,
       streams.enemyDescriptor.nextFloat,
-    );
-  const enemyDescriptor = freezeBattleEnemyDescriptor(rawEnemyDescriptor);
-  const enemyDeckDefinition = createEnemyDeckDefinition(
-    enemySignatureCards,
-    input.poolContext,
+    ),
+  );
+  const poolSeed = deriveEnemyPoolSeed(seed);
+  const aiMode = input.aiMode ?? false;
+  const opponentBuild = aiMode
+    ? null
+    : buildOpponentDeck({
+        opponentDreamcaller,
+        poolContext: input.poolContext,
+        cardDatabase,
+        affiliation: battleAffiliation,
+        completionLevel: completionLevelAtStart,
+        layerCount,
+        poolSeed,
+        rng: streams.enemyDeckOrder,
+      });
+  const enemyDeckDefinition = finalizeEnemyDeck(
+    opponentBuild,
     cardDatabase,
     streams.enemyDeckOrder,
-    seed,
-    input.aiMode ?? false,
+    aiMode,
   ).map(freezeBattleDeckCardDefinition);
+  logOpponentDeckConstructed({
+    battleEntryKey,
+    opponentDreamcaller,
+    poolVariant: aiMode
+      ? "ai_starter"
+      : input.poolContext?.poolVariant ?? DEFAULT_POOL_VARIANT,
+    poolSeed,
+    completionLevel: completionLevelAtStart,
+    layerCount,
+    affiliation: battleAffiliation,
+    dreamsigns: opponentDreamsigns,
+    build: opponentBuild,
+    fallbackDeckSize: enemyDeckDefinition.length,
+  });
   const dreamwellDeck = buildDreamwellDeck(
     input.dreamwellCards ?? [],
     streams.dreamwellDeck,
   ).map((definition) => Object.freeze(definition));
   const dreamcallerSummary = freezeBattleDreamcallerSummary(state.dreamcaller);
   const dreamsignSummaries = state.dreamsigns.map(freezeBattleDreamsignSummary);
-  const completionLevelAtStart = state.completionLevel;
   const essenceReward = applyBattleRewardModifiers(
     100 + completionLevelAtStart * 50,
     state.battleModifiers,
@@ -341,65 +416,49 @@ function resolveSeed(
   return seedOverride;
 }
 
-export function createEnemyDescriptor(
-  dreamcallers: readonly DreamcallerContent[],
+/**
+ * Assembles the enemy descriptor shown before the battle (quests doc "Battle"):
+ * the chosen opponent Dreamcaller's identity and ability text, plus the concrete
+ * dreamsigns it carries (none before the run midpoint, one from the midpoint on).
+ * The dreamsigns are resolved by the caller via
+ * {@link buildOpponentDreamsigns} so the midpoint gating lives in one place;
+ * this only renders them for display. Falls back to a synthetic descriptor when
+ * no opponent Dreamcaller is available.
+ */
+export function buildEnemyDescriptor(
+  opponentDreamcaller: DreamcallerContent | null,
   dreamsignTemplates: readonly DreamsignTemplate[],
   random: () => number,
-): { descriptor: BattleEnemyDescriptor; signatureCards: readonly string[] } {
-  if (dreamcallers.length === 0) {
+): BattleEnemyDescriptor {
+  const dreamsigns: BattleDreamsignSummary[] = dreamsignTemplates.map(
+    (template) => ({
+      name: template.name,
+      effectDescription: template.effectDescription,
+      isBane: false,
+    }),
+  );
+
+  if (opponentDreamcaller === null) {
     return {
-      descriptor: {
-        id: "enemy:fallback",
-        name: "Spectral Rival",
-        subtitle: "Battlefield Projection",
-        imageNumber: "001",
-        portraitSeed: 0,
-        abilityText: "A synthetic opponent assembled for prototype combat.",
-        dreamsigns: Object.freeze([]),
-      },
-      signatureCards: [],
+      id: "enemy:fallback",
+      name: "Spectral Rival",
+      subtitle: "Battlefield Projection",
+      imageNumber: "001",
+      portraitSeed: 0,
+      abilityText: "A synthetic opponent assembled for prototype combat.",
+      dreamsigns,
     };
   }
 
-  const template = pickRandom(dreamcallers, random);
-  const dreamsignCount = Math.floor(random() * 3) + 1;
   const portraitSeed = Math.floor(random() * 1_000_000);
-
-  // The opponent's Dreamsigns are concrete: drawn from the full template pool
-  // so they can be shown before the battle.
-  const dreamsignPool = dreamsignTemplates;
-  const dreamsigns: BattleDreamsignSummary[] = [];
-  const usedDreamsignIds = new Set<string>();
-  let attempts = 0;
-  while (
-    dreamsigns.length < dreamsignCount &&
-    dreamsignPool.length > 0 &&
-    attempts < dreamsignPool.length * 4
-  ) {
-    attempts += 1;
-    const candidate = pickRandom(dreamsignPool, random);
-    if (usedDreamsignIds.has(candidate.id)) {
-      continue;
-    }
-    usedDreamsignIds.add(candidate.id);
-    dreamsigns.push({
-      name: candidate.name,
-      effectDescription: candidate.effectDescription,
-      isBane: false,
-    });
-  }
-
   return {
-    descriptor: {
-      id: `enemy:${template.id}:${String(portraitSeed)}`,
-      name: template.name,
-      subtitle: "",
-      imageNumber: template.imageNumber,
-      portraitSeed,
-      abilityText: template.renderedText,
-      dreamsigns,
-    },
-    signatureCards: template.signatureCards ?? [],
+    id: `enemy:${opponentDreamcaller.id}:${String(portraitSeed)}`,
+    name: opponentDreamcaller.name,
+    subtitle: "",
+    imageNumber: opponentDreamcaller.imageNumber,
+    portraitSeed,
+    abilityText: opponentDreamcaller.renderedText,
+    dreamsigns,
   };
 }
 
@@ -414,62 +473,30 @@ function deriveEnemyPoolSeed(seed: number): number {
 }
 
 /**
- * Builds the enemy battle deck from the run's pool strategy
- * (`poolContext.poolVariant`, default `pickcohere`) steered by the enemy
- * Dreamcaller's signature cards, mirroring how the player's draft pool is built.
+ * Turns an {@link OpponentDeckBuild} (or the AI-mode / fallback path) into the
+ * concrete enemy battle deck: the chosen cards padded up to
+ * `MIN_BATTLE_DECK_SIZE` and shuffled into the enemy draw order.
  *
- * With a `poolContext`, a pool is generated from the run's decklist corpus
- * steered by `enemySignatureCards`; the chosen anchor decklist's card names are
- * resolved to V2 card numbers via the name index, then to `CardData` via the
- * card database (unresolved/missing entries are dropped). When `poolContext` is
- * absent — or the resolved list is empty, as only `idf3` produces a starter
- * deck — the deck falls back to a shuffled sample of draftable cards
- * (non-starter, numeric cost) so the enemy always has a non-empty deck. The
- * chosen cards are padded up to `MIN_BATTLE_DECK_SIZE`,
- * then shuffled into the enemy draw order.
+ *  - In `aiMode` the deck is the fixed AI Starter deck (3 copies of each
+ *    starter), shuffled through the enemy-deck RNG stream.
+ *  - Otherwise the simulated-journey build's cards are used. When the build is
+ *    `null` (no `poolContext`, or the simulated pool resolved to no cards) the
+ *    deck falls back to a shuffled sample of draftable cards (non-starter,
+ *    numeric cost) so the enemy always has a non-empty deck.
  */
-function createEnemyDeckDefinition(
-  enemySignatureCards: readonly string[],
-  poolContext: RunPoolContext | undefined,
+function finalizeEnemyDeck(
+  build: OpponentDeckBuild | null,
   cardDatabase: ReadonlyMap<number, CardData>,
   rng: BattleRng,
-  battleSeed: number,
   aiMode: boolean,
 ): BattleDeckCardDefinition[] {
-  // AI mode builds the enemy deck from the fixed AI Starter deck (3 copies of
-  // each starter, 30 cards >= MIN_BATTLE_DECK_SIZE so no padding is needed),
-  // then shuffles it through the enemy-deck RNG stream to match the
-  // determinism and shape of the steered/fallback paths below.
   if (aiMode) {
     return rng
       .shuffle(buildAiStarterDeck(cardDatabase))
       .map(cloneBattleDeckCardDefinition);
   }
 
-  let chosen: CardData[] = [];
-
-  if (poolContext !== undefined) {
-    const pool = generatePoolFromData(
-      poolContext.poolData,
-      deriveEnemyPoolSeed(battleSeed),
-      /* seedArchetypes */ undefined,
-      poolContext.poolVariant ?? DEFAULT_POOL_VARIANT,
-      /* themeArchetypes */ undefined,
-      /* targetSize */ undefined,
-      enemySignatureCards,
-    );
-    for (const name of pool.starterDeck ?? []) {
-      const cardNumber = poolContext.nameIndex.get(name);
-      if (cardNumber === undefined) {
-        continue;
-      }
-      const card = cardDatabase.get(cardNumber);
-      if (card === undefined) {
-        continue;
-      }
-      chosen.push(card);
-    }
-  }
+  let chosen: CardData[] = build?.cards ?? [];
 
   if (chosen.length === 0) {
     chosen = rng.shuffle(
@@ -615,8 +642,4 @@ function deepFreeze<T>(value: T): T {
   }
 
   return Object.freeze(value);
-}
-
-function pickRandom<T>(items: readonly T[], random: () => number): T {
-  return items[Math.floor(random() * items.length)];
 }

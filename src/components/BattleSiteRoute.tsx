@@ -47,6 +47,8 @@ export function BattleSiteRoute({
     questState: state,
     cardDatabase,
     dreamcallers: questContent.dreamcallers,
+    dreamscapes: questContent.dreamscapes,
+    affiliations: questContent.affiliations,
     dreamwellCards: questContent.dreamwellCards,
     dreamsignTemplates: questContent.dreamsignTemplates,
     poolContext: questContent.poolContext,
