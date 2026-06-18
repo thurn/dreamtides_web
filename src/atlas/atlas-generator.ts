@@ -461,7 +461,7 @@ export function generateSiteComposition(
       draftCount,
       purgeMandatory: purgeMandatoryForLayer(layer),
       hasKnownDreamsign: hasKnownDreamsign === true,
-      fillWeights: fillPool.map(([type, weight]) => ({ type, weight })),
+      fillWeights: remainingPool.map(([type, weight]) => ({ type, weight })),
       fillChosen: chosenFill,
       siteTypes: sites.map((s) => s.type),
     });

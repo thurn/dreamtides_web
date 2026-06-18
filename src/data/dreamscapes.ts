@@ -62,23 +62,12 @@ export async function loadAffiliations(): Promise<AffiliationContent[]> {
 // mapping the generator relies on.
 
 /**
- * The signature site of a dreamscape: the site type its resident guide enhances
- * in their home dreamscape. The starter (Firstlight Meadow) reports its own
- * `signatureSite` even though it presents a fixed site list and enhances nothing.
- */
-export function dreamscapeSignatureSite(
-  dreamscape: DreamscapeContent,
-): SiteType {
-  return dreamscape.signatureSite;
-}
-
-/**
  * The signature site types of every non-starter dreamscape. Each is a distinct
  * site type (the 10 guide site types), so the result has no duplicates. This is
  * the universe the composition fill pool draws the "other guides' signature
  * sites" from.
  */
-export function guideSignatureSites(
+function guideSignatureSites(
   dreamscapes: readonly DreamscapeContent[],
 ): SiteType[] {
   const sites: SiteType[] = [];
