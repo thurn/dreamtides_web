@@ -205,23 +205,42 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
   return { container, root };
 }
 
-function clickFirstDuplicate(container: HTMLElement): void {
-  const button = Array.from(container.querySelectorAll("button")).find(
-    (candidate) => candidate.textContent?.trim().startsWith("Duplicate x"),
+/**
+ * Selects the first candidate card, then confirms the duplication and advances
+ * past the lift animation so the mutation commits. Selection lives on the card
+ * wrapper (not the mocked CardDisplay), so the wrapper carries the click.
+ */
+function selectFirstAndConfirm(container: HTMLElement): void {
+  const card = container.querySelector<HTMLElement>("[data-duplication-entry]");
+  if (card === null) {
+    throw new Error("Missing duplication candidate");
+  }
+  const clickable = card.querySelector<HTMLElement>(".dup-card") ?? card;
+  act(() => {
+    clickable.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  });
+
+  const confirm = container.querySelector<HTMLButtonElement>(
+    "[data-testid='duplication-confirm']",
   );
-  if (button === undefined) {
-    throw new Error("Missing duplicate button");
+  if (confirm === null) {
+    throw new Error("Missing duplicate confirm button");
   }
   act(() => {
-    button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    confirm.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  });
+  act(() => {
+    vi.runAllTimers();
   });
 }
 
 beforeEach(() => {
   vi.clearAllMocks();
+  vi.useFakeTimers();
 });
 
 afterEach(() => {
+  vi.useRealTimers();
   document.body.innerHTML = "";
 });
 
@@ -320,7 +339,7 @@ describe("DuplicationSiteScreen", () => {
     setQuestContext(makeState(), mutations);
     const { container, root } = mount(<DuplicationSiteScreen site={makeSite()} />);
 
-    clickFirstDuplicate(container);
+    selectFirstAndConfirm(container);
 
     expect(mutations.acceptDuplicationChoice).toHaveBeenCalledWith(
       "site-1",

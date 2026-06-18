@@ -1,23 +1,39 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import type { CSSProperties } from "react";
 import type { SiteState, DeckEntry } from "../types/quest";
 import type { CardData } from "../types/cards";
 import { CardDisplay } from "../components/CardDisplay";
-import { DreamGuideFrame } from "../components/DreamGuideFrame";
 import { useQuest } from "../state/quest-context";
+import { logEvent } from "../logging";
+import { guideForSiteType } from "../data/dreamscapes";
+import { guidePortraitUrl } from "../atlas/atlas-display";
+import "./duplication-site.css";
 
 /** Props for the DuplicationSiteScreen component. */
 interface DuplicationSiteScreenProps {
   site: SiteState;
 }
 
-/** A deck entry paired with a random copy count for duplication. */
+/** A deck entry paired with a deterministic copy count for duplication. */
 interface DuplicationCandidate {
   entry: DeckEntry;
   card: CardData;
   copyCount: number;
 }
 
+/** How long the copy "lifts away" before the mutation returns to the map. */
+const DUPLICATE_LIFT_MS = 640;
+
+/** Width each card slot occupies in the deck grid, in pixels. */
+const CARD_SLOT_WIDTH = 168;
+
+const ACCENT_COLOR = "#c084fc";
+
+/**
+ * The number of copies a given deck entry yields at a given site, derived
+ * deterministically so the offer is stable across re-renders and matches the
+ * count the `acceptDuplicationChoice` mutation will commit.
+ */
 export function duplicationCopyCount(siteId: string, entryId: string): number {
   let hash = 0;
   for (const char of `${siteId}:${entryId}`) {
@@ -26,7 +42,7 @@ export function duplicationCopyCount(siteId: string, entryId: string): number {
   return (hash % 4) + 1;
 }
 
-/** Builds duplication candidates from shared runtime entry ids. */
+/** Builds duplication candidates from the shared runtime's entry ids. */
 function buildCandidates(
   deck: DeckEntry[],
   cardDatabase: Map<number, CardData>,
@@ -46,17 +62,41 @@ function buildCandidates(
   return candidates;
 }
 
-/** Renders the Duplication site screen. */
+/**
+ * The Duplication site as an immersive, full-bleed scene. Deacon Holt opens the
+ * quest deck over the dimmed dreamscape (supplied by the shared site scene
+ * backdrop) so the player can pick one card and add copies of it to the deck.
+ *
+ * The surface mirrors the sibling Purge and Dreamsign Revelation screens: a
+ * frosted summary HUD, a centered deck grid of selectable cards, a
+ * de-emphasized "walk on" link beside the commit button, and the resident
+ * guide with a speech bubble docked to the lower-left in landscape. At an
+ * enhanced site (Hope's End, Holt's home) the runtime surfaces the entire deck
+ * to choose from; otherwise it surfaces a small random hand. Either way the
+ * interaction is the same: select one card, then confirm. The copy count each
+ * card yields (1–4) is fixed per card and surfaced on its chip and in the HUD.
+ */
 export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
-  const { state, mutations, cardDatabase } = useQuest();
+  const { state, mutations, cardDatabase, questContent } = useQuest();
   const { deck } = state;
   const runtime = state.siteRuntime[site.id];
   const cardChoiceRuntime =
     runtime !== undefined &&
-      runtime.kind === "cardChoice" &&
-      runtime.choiceKind === "duplication"
+    runtime.kind === "cardChoice" &&
+    runtime.choiceKind === "duplication"
       ? runtime
       : null;
+
+  // Deacon Holt tends every Duplication site; resolve him from guide content so
+  // his name, portrait, and dialog stay data-driven, matching the Purge screen.
+  const guide = useMemo(
+    () => guideForSiteType(questContent.guides, "Duplication"),
+    [questContent.guides],
+  );
+  const guideLine = useMemo(() => {
+    if (guide === null || guide.dialog.length === 0) return null;
+    return guide.dialog[Math.floor(Math.random() * guide.dialog.length)];
+  }, [guide]);
 
   useEffect(() => {
     if (runtime === undefined) {
@@ -69,325 +109,246 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
       cardChoiceRuntime === null
         ? []
         : buildCandidates(
-          deck,
-          cardDatabase,
-          site.id,
-          cardChoiceRuntime.entryIds ?? [],
-        ),
+            deck,
+            cardDatabase,
+            site.id,
+            cardChoiceRuntime.entryIds ?? [],
+          ),
     [cardChoiceRuntime, cardDatabase, deck, site.id],
   );
+
+  // A choice already committed this visit (e.g. a re-render before the return
+  // to the map) locks the surface so the offer cannot be taken twice.
   const duplicated = (cardChoiceRuntime?.acceptedEntryIds?.length ?? 0) > 0;
 
-  // Enhanced mode state
-  const [enhancedPickedEntry, setEnhancedPickedEntry] =
-    useState<DeckEntry | null>(null);
-  const [enhancedCopyCount, setEnhancedCopyCount] = useState<number>(0);
+  // The selected entry id; single-select, toggled off by re-clicking.
+  const [pickedEntryId, setPickedEntryId] = useState<string | null>(null);
+  // Entrance + lift animation, mirroring the Purge surface.
+  const [mounted, setMounted] = useState(false);
+  const [copying, setCopying] = useState(false);
 
-  const handleDuplicate = useCallback(
-    (candidate: DuplicationCandidate) => {
-      if (duplicated) return;
-      mutations.acceptDuplicationChoice(
-        site.id,
-        candidate.entry.entryId,
-        candidate.copyCount,
-      );
-    },
-    [duplicated, mutations, site.id],
+  useEffect(() => {
+    const id = setTimeout(() => setMounted(true), 20);
+    return () => clearTimeout(id);
+  }, []);
+
+  useEffect(() => {
+    // Log once per visit, on first mount, for behaviour reconstruction.
+    logEvent("site_entered", {
+      siteType: site.type,
+      isEnhanced: site.isEnhanced,
+      deckSize: deck.length,
+      candidateCount: cardChoiceRuntime?.entryIds?.length ?? 0,
+    });
+  }, []);
+
+  const picked = useMemo(
+    () => candidates.find((c) => c.entry.entryId === pickedEntryId) ?? null,
+    [candidates, pickedEntryId],
   );
 
-  const handleEnhancedPick = useCallback(
-    (entry: DeckEntry) => {
-      const card = cardDatabase.get(entry.cardNumber);
-      if (!card) return;
-      setEnhancedPickedEntry(entry);
-      setEnhancedCopyCount(duplicationCopyCount(site.id, entry.entryId));
+  const toggle = useCallback(
+    (entryId: string) => {
+      if (copying || duplicated) return;
+      setPickedEntryId((prev) => (prev === entryId ? null : entryId));
     },
-    [cardDatabase, site.id],
+    [copying, duplicated],
   );
 
-  const handleEnhancedDuplicate = useCallback(() => {
-    if (duplicated || !enhancedPickedEntry) return;
-    const card = cardDatabase.get(enhancedPickedEntry.cardNumber);
-    if (!card) return;
+  const handleConfirm = useCallback(() => {
+    if (picked === null || copying || duplicated) return;
+    const { entry, copyCount } = picked;
+    setCopying(true);
 
-    mutations.acceptDuplicationChoice(
-      site.id,
-      enhancedPickedEntry.entryId,
-      enhancedCopyCount,
-    );
+    logEvent("duplication_completed", {
+      siteId: site.id,
+      entryId: entry.entryId,
+      cardNumber: entry.cardNumber,
+      copyCount,
+      isEnhanced: site.isEnhanced,
+      deckSizeBefore: deck.length,
+      deckSizeAfter: deck.length + copyCount,
+      currentDreamscape: state.currentDreamscape,
+      completionLevel: state.completionLevel,
+    });
+
+    // Let the copy lift away, then commit; the mutation returns to the map.
+    window.setTimeout(() => {
+      mutations.acceptDuplicationChoice(site.id, entry.entryId, copyCount);
+    }, DUPLICATE_LIFT_MS);
   }, [
+    picked,
+    copying,
     duplicated,
-    enhancedPickedEntry,
-    enhancedCopyCount,
-    cardDatabase,
     mutations,
     site.id,
+    site.isEnhanced,
+    deck.length,
+    state.currentDreamscape,
+    state.completionLevel,
   ]);
 
   const handleClose = useCallback(() => {
+    if (copying) return;
+    logEvent("site_completed", {
+      siteType: "Duplication",
+      outcome: "skipped",
+    });
     mutations.completeSite(site.id, "duplication_skipped");
-  }, [mutations, site.id]);
+  }, [copying, mutations, site.id]);
 
   if (cardChoiceRuntime === null) {
     return (
-      <div className="flex min-h-full items-center justify-center px-4 py-6">
-        <p className="text-lg opacity-60">Preparing choices...</p>
+      <div className="duplication-site is-status" data-testid="duplication-site-screen">
+        <p className="dup-status">Preparing choices...</p>
       </div>
     );
   }
 
-  // Enhanced mode: full deck browser
-  if (site.isEnhanced) {
-    return (
-      <motion.div
-        className="flex min-h-full flex-col items-center px-4 py-6 md:px-8 md:py-8"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.4 }}
-      >
-        <DreamGuideFrame site={site} />
-        <div className="mb-6 text-center">
-          <h2
-            className="text-2xl font-bold tracking-wide md:text-3xl"
-            style={{ color: "#3b82f6" }}
-          >
-            Duplication
-          </h2>
-          <span
-            className="mt-2 inline-block rounded-full px-3 py-1 text-sm font-bold"
-            style={{
-              background: "rgba(168, 85, 247, 0.15)",
-              color: "#c084fc",
-              border: "1px solid rgba(168, 85, 247, 0.3)",
-            }}
-          >
-            Enhanced -- Choose any card
-          </span>
-          <p className="mt-2 text-sm opacity-60">
-            {enhancedPickedEntry
-              ? "Review the duplication offer below."
-              : "Pick any card from your deck to duplicate."}
-          </p>
-        </div>
+  const hasPick = picked !== null;
+  const copyCount = picked?.copyCount ?? 0;
+  const deckAfter = deck.length + copyCount;
 
-        {!enhancedPickedEntry && !duplicated && (
-          <div className="grid w-full max-w-5xl grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-            {candidates.map((candidate, index) => {
-              return (
-                <motion.div
-                  key={candidate.entry.entryId}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: index * 0.03 }}
-                >
-                  <CardDisplay
-                    card={candidate.card}
-                    onClick={() => handleEnhancedPick(candidate.entry)}
-                  />
-                </motion.div>
-              );
-            })}
+  const slotState = (selected: boolean): string => {
+    if (copying && selected) return "copying";
+    return mounted ? "show" : "enter";
+  };
+
+  return (
+    <div
+      className={`duplication-site${mounted ? " mounted" : ""}`}
+      data-testid="duplication-site-screen"
+    >
+      {/* Summary HUD */}
+      <div className="dup-summary">
+        <div className="dup-cell">
+          <span className="dup-cell-k">Deck after</span>
+          <span className="dup-cell-v">
+            {deckAfter}
+            <span className="unit">/ {deck.length}</span>
+          </span>
+        </div>
+        <div className="dup-cell is-copies">
+          <span className="dup-cell-k">Copies added</span>
+          <span className="dup-cell-v">
+            {hasPick ? (
+              `×${String(copyCount)}`
+            ) : (
+              <span className="dup-cell-note">Pick a card</span>
+            )}
+          </span>
+        </div>
+        {site.isEnhanced && (
+          <div className="dup-cell is-enhanced" data-duplication-enhanced="true">
+            <span className="dup-cell-k">Enhanced</span>
+            <span className="dup-cell-v">Any card</span>
           </div>
         )}
-
-        {enhancedPickedEntry && !duplicated && (
-          <EnhancedDuplicationPreview
-            entry={enhancedPickedEntry}
-            copyCount={enhancedCopyCount}
-            cardDatabase={cardDatabase}
-            onDuplicate={handleEnhancedDuplicate}
-          />
-        )}
-
-        {duplicated && (
-          <motion.div
-            className="mt-4 text-center"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-          >
-            <p className="text-lg font-bold" style={{ color: "#3b82f6" }}>
-              Cards duplicated!
-            </p>
-          </motion.div>
-        )}
-
-        <button
-          className="mt-8 rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
-          style={{
-            background: "rgba(107, 114, 128, 0.2)",
-            border: "1px solid rgba(107, 114, 128, 0.4)",
-            color: "#9ca3af",
-          }}
-          onClick={handleClose}
-        >
-          Close
-        </button>
-
-      </motion.div>
-    );
-  }
-
-  // Normal mode: 3 random candidates
-  return (
-    <motion.div
-      className="flex min-h-full flex-col items-center px-4 py-6 md:px-8 md:py-8"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.4 }}
-    >
-      <DreamGuideFrame site={site} />
-      <div className="mb-6 text-center">
-        <h2
-          className="text-2xl font-bold tracking-wide md:text-3xl"
-          style={{ color: "#3b82f6" }}
-        >
-          Duplication
-        </h2>
-        <p className="mt-2 text-sm opacity-60">
-          Choose a card to add copies to your deck.
-        </p>
       </div>
 
+      {/* Deck grid — one selectable card per candidate. */}
       {candidates.length === 0 ? (
-        <p className="mt-8 text-lg opacity-50">No cards available.</p>
+        <p className="dup-status">No cards available.</p>
       ) : (
-        <div className="flex w-full max-w-4xl flex-col gap-6 md:flex-row md:justify-center">
-          {candidates.map((candidate, index) => (
-            <motion.div
-              key={candidate.entry.entryId}
-              className="flex flex-col items-center gap-3 rounded-xl p-4"
-              style={{
-                background: "rgba(15, 10, 24, 0.8)",
-                border: "1px solid rgba(59, 130, 246, 0.3)",
-                boxShadow: "0 0 12px rgba(59, 130, 246, 0.1)",
-                flex: "1 1 0",
-                maxWidth: "260px",
-              }}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: index * 0.15 }}
-            >
-              <div style={{ width: "100%" }}>
-                <CardDisplay
-                  card={candidate.card}
-                />
-              </div>
-
-              {/* Copy count indicator */}
+        <div
+          className="dup-deck"
+          style={{ "--dup-cardw": `${CARD_SLOT_WIDTH}px` } as CSSProperties}
+        >
+          {candidates.map((candidate, index) => {
+            const entryId = candidate.entry.entryId;
+            const selected = pickedEntryId === entryId;
+            const dimmed = hasPick && !selected;
+            return (
               <div
-                className="flex items-center gap-2 rounded-lg px-3 py-1.5"
-                style={{
-                  background: "rgba(59, 130, 246, 0.1)",
-                  border: "1px solid rgba(59, 130, 246, 0.3)",
-                }}
+                key={entryId}
+                className={`dup-slot ${slotState(selected)}${selected ? " selected" : ""}${dimmed ? " dimmed" : ""}`}
+                style={{ "--i": index } as CSSProperties}
+                data-duplication-entry={entryId}
+                data-duplication-selected={selected ? "true" : "false"}
               >
-                <span
-                  className="text-sm font-bold"
-                  style={{ color: "#3b82f6" }}
-                >
-                  x{String(candidate.copyCount)}
-                </span>
-                <span className="text-xs opacity-60">
-                  {candidate.copyCount === 1 ? "copy" : "copies"}
-                </span>
-              </div>
+                {/* copy-count chip, brightened when this card is chosen */}
+                <div className="dup-chip">
+                  <i className="bxf bx-copy" aria-hidden="true" />
+                  {`×${String(candidate.copyCount)}`}
+                </div>
 
-              {/* Duplicate button */}
-              <button
-                className="w-full rounded-lg px-4 py-2 text-sm font-bold transition-opacity hover:opacity-90"
-                style={{
-                  background: duplicated
-                    ? "#4b5563"
-                    : "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
-                  color: duplicated ? "#9ca3af" : "#ffffff",
-                  opacity: duplicated ? 0.6 : 1,
-                  cursor: duplicated ? "not-allowed" : "pointer",
-                }}
-                disabled={duplicated}
-                onClick={() => handleDuplicate(candidate)}
-              >
-                Duplicate x{String(candidate.copyCount)}
-              </button>
-            </motion.div>
-          ))}
+                <div className="dup-card-wrap">
+                  {/* ghost copy slides out behind the chosen card */}
+                  <div className="dup-ghost" aria-hidden="true">
+                    <CardDisplay card={candidate.card} />
+                  </div>
+
+                  <div
+                    className="dup-card"
+                    role="button"
+                    tabIndex={0}
+                    aria-pressed={selected}
+                    aria-label={`Duplicate ${candidate.card.name} (${String(candidate.copyCount)} ${candidate.copyCount === 1 ? "copy" : "copies"})`}
+                    onClick={() => toggle(entryId)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        toggle(entryId);
+                      }
+                    }}
+                  >
+                    <CardDisplay
+                      card={candidate.card}
+                      selected={selected}
+                      selectionColor={ACCENT_COLOR}
+                    />
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
 
-      <button
-        className="mt-8 rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
-        style={{
-          background: "rgba(107, 114, 128, 0.2)",
-          border: "1px solid rgba(107, 114, 128, 0.4)",
-          color: "#9ca3af",
-        }}
-        onClick={handleClose}
-      >
-        Close
-      </button>
-
-    </motion.div>
-  );
-}
-
-/** Renders the enhanced mode preview for a picked card. */
-function EnhancedDuplicationPreview({
-  entry,
-  copyCount,
-  cardDatabase,
-  onDuplicate,
-}: {
-  entry: DeckEntry;
-  copyCount: number;
-  cardDatabase: Map<number, CardData>;
-  onDuplicate: () => void;
-}) {
-  const card = cardDatabase.get(entry.cardNumber);
-  if (!card) return null;
-
-  return (
-    <motion.div
-      className="flex flex-col items-center gap-4 rounded-xl p-6"
-      style={{
-        background: "rgba(15, 10, 24, 0.8)",
-        border: "1px solid rgba(59, 130, 246, 0.3)",
-        boxShadow: "0 0 16px rgba(59, 130, 246, 0.15)",
-        maxWidth: "280px",
-      }}
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3 }}
-    >
-      <div style={{ width: "100%" }}>
-        <CardDisplay card={card} />
+      {/* Footer */}
+      <div className="dup-foot">
+        <button
+          type="button"
+          className="dup-walk"
+          data-testid="duplication-walk-on"
+          onClick={handleClose}
+        >
+          Walk on
+        </button>
+        <button
+          type="button"
+          className="dup-dupe-btn"
+          data-testid="duplication-confirm"
+          disabled={!hasPick || copying || duplicated}
+          onClick={handleConfirm}
+        >
+          <i className="bxf bx-copy" aria-hidden="true" />
+          Duplicate this card
+          {hasPick && (
+            <span className="dup-dupe-count">{`×${String(copyCount)}`}</span>
+          )}
+        </button>
       </div>
 
-      <div
-        className="flex items-center gap-2 rounded-lg px-3 py-1.5"
-        style={{
-          background: "rgba(59, 130, 246, 0.1)",
-          border: "1px solid rgba(59, 130, 246, 0.3)",
-        }}
-      >
-        <span className="text-sm font-bold" style={{ color: "#3b82f6" }}>
-          x{String(copyCount)}
-        </span>
-        <span className="text-xs opacity-60">
-          {copyCount === 1 ? "copy" : "copies"}
-        </span>
+      {/* collection target, bottom-right — where the copy lands on confirm */}
+      <div className="dup-tray" aria-hidden="true">
+        <i className="bxf bx-layers" />
       </div>
 
-      <button
-        className="w-full rounded-lg px-4 py-2 text-sm font-bold transition-opacity hover:opacity-90"
-        style={{
-          background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
-          color: "#ffffff",
-        }}
-        onClick={onDuplicate}
-      >
-        Duplicate x{String(copyCount)}
-      </button>
-    </motion.div>
+      {/* Deacon Holt + speech bubble (docked lower-left in landscape) */}
+      {guide !== null && (
+        <div className="dup-guide" aria-hidden="true">
+          <div className="dup-bubble">
+            <span className="dup-bubble-mono">{guide.name}</span>
+            {guideLine !== null && <p>{`“${guideLine}”`}</p>}
+          </div>
+          <img
+            className="dup-holt"
+            src={guidePortraitUrl(guide.id)}
+            alt={guide.name}
+          />
+        </div>
+      )}
+    </div>
   );
 }
