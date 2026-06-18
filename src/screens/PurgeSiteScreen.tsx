@@ -1,12 +1,13 @@
-import { useCallback, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import type { CSSProperties } from "react";
 import type { SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
-import { DreamGuideFrame } from "../components/DreamGuideFrame";
-import { EssenceValue } from "../components/EssenceValue";
+import { EssenceGlyph, EssenceValue } from "../components/EssenceValue";
 import { RulesText } from "../components/RulesText";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
+import { guideForSiteType } from "../data/dreamscapes";
+import { guidePortraitUrl, dreamsignIconUrl } from "../atlas/atlas-display";
 import {
   MAX_PURGE_PER_VISIT,
   maxAffordablePurgeCount,
@@ -15,31 +16,52 @@ import {
   purgeVisitCost,
   type PurgePriceModifiers,
 } from "../purge/purge-pricing";
+import "./purge-site.css";
 
 /** Props for the PurgeSiteScreen component. */
 interface PurgeSiteScreenProps {
   site: SiteState;
 }
 
+/** How long the dissolve animation plays before the cards leave the deck. */
+const PURGE_DISSOLVE_MS = 640;
+
+/** The width each card slot occupies in the deck grid, in pixels. */
+const CARD_SLOT_WIDTH = 148;
+
 const ESSENCE_COLOR = "var(--color-essence)";
 
 /**
- * Renders the Purge site screen. The player pays escalating essence to remove
- * cards from their deck. The Nth card removed this visit costs more than the
- * previous one (see src/purge/purge-pricing.ts), so thinning one or two cards
- * is cheap while emptying a large part of the deck is a major commitment.
+ * The Purge site as an immersive, full-bleed scene. Master Takeshi opens the
+ * quest deck over the dimmed dreamscape (supplied by the shared site scene
+ * backdrop) so the player can spend escalating essence to remove cards for
+ * good; banes — both bane cards and bane Dreamsigns — leave for free.
+ *
+ * Pricing escalates with each card removed this visit (see
+ * src/purge/purge-pricing.ts), so thinning one or two cards stays cheap while
+ * emptying a large part of the deck is a major commitment. The surface mirrors
+ * the Dreamsign Revelation: a frosted summary HUD, a centered deck grid of
+ * selectable cards, a de-emphasized "walk on" link beside the commit button,
+ * and the resident guide with a speech bubble docked to the lower-left.
  */
 export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
-  const { state, mutations, cardDatabase } = useQuest();
+  const { state, mutations, cardDatabase, questContent } = useQuest();
   const { deck, essence, dreamsigns } = state;
 
-  // Banes are removed for free at a Purge site. Split the deck so bane cards
-  // sit in their own free section, and surface bane Dreamsigns alongside them.
-  const baneCards = useMemo(() => deck.filter((entry) => entry.isBane), [deck]);
-  const purgeableCards = useMemo(
-    () => deck.filter((entry) => !entry.isBane),
-    [deck],
+  // Master Takeshi tends every Purge site; resolve him from guide content so his
+  // name, portrait, and dialog stay data-driven, matching the Revelation.
+  const guide = useMemo(
+    () => guideForSiteType(questContent.guides, "Purge"),
+    [questContent.guides],
   );
+  const guideLine = useMemo(() => {
+    if (guide === null || guide.dialog.length === 0) return null;
+    return guide.dialog[Math.floor(Math.random() * guide.dialog.length)];
+  }, [guide]);
+
+  // Bane cards and bane Dreamsigns are removed for free. Bane cards live in the
+  // deck and render inline with a free chip; bane Dreamsigns have no card art
+  // and render as self-contained tiles after the deck.
   const baneDreamsignIndices = useMemo(
     () =>
       dreamsigns
@@ -48,7 +70,6 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
         .map(({ index }) => index),
     [dreamsigns],
   );
-  const hasBanes = baneCards.length > 0 || baneDreamsignIndices.length > 0;
 
   // Selected bane removals (free). Keyed `card:<entryId>` / `dreamsign:<index>`.
   const [selectedBaneKeys, setSelectedBaneKeys] = useState<Set<string>>(
@@ -76,6 +97,11 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
 
   const discountPercent = purgeDiscountPercent(modifiers);
 
+  const purgeableCount = useMemo(
+    () => deck.filter((entry) => !entry.isBane).length,
+    [deck],
+  );
+
   // Selection is ordered so the price of each selected card reflects the order
   // it was chosen: the first card chosen is the cheapest.
   const [selectedEntryIds, setSelectedEntryIds] = useState<string[]>([]);
@@ -86,9 +112,9 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
     () =>
       Math.min(
         maxAffordablePurgeCount(essence, MAX_PURGE_PER_VISIT, modifiers),
-        purgeableCards.length,
+        purgeableCount,
       ),
-    [essence, modifiers, purgeableCards.length],
+    [essence, modifiers, purgeableCount],
   );
 
   const selectedCount = selectedEntryIds.length;
@@ -98,6 +124,8 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
   );
   const nextCardPrice = purgeCardPrice(selectedCount + 1, modifiers);
   const canSelectMore = selectedCount < affordableCount;
+  const atVisitLimit = selectedCount >= MAX_PURGE_PER_VISIT;
+  const essenceAfter = Math.max(0, essence - totalCost);
 
   const toggleSelection = useCallback(
     (entryId: string) => {
@@ -117,10 +145,13 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
 
   const selectedBaneCardEntryIds = useMemo(
     () =>
-      baneCards
-        .filter((entry) => selectedBaneKeys.has(`card:${entry.entryId}`))
+      deck
+        .filter(
+          (entry) =>
+            entry.isBane && selectedBaneKeys.has(`card:${entry.entryId}`),
+        )
         .map((entry) => entry.entryId),
-    [baneCards, selectedBaneKeys],
+    [deck, selectedBaneKeys],
   );
   const selectedBaneDreamsignIndices = useMemo(
     () =>
@@ -131,9 +162,29 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
   );
   const selectedBaneCount =
     selectedBaneCardEntryIds.length + selectedBaneDreamsignIndices.length;
+  const removeCount = selectedCount + selectedBaneCount;
+
+  // Entrance animation, mirroring the Revelation surface.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const id = setTimeout(() => setMounted(true), 20);
+    return () => clearTimeout(id);
+  }, []);
+
+  // Slot keys mid-dissolve while a confirmed purge plays its animation.
+  const [purging, setPurging] = useState<Set<string> | null>(null);
+
+  useEffect(() => {
+    // Log once per visit, on first mount.
+    logEvent("site_entered", {
+      siteType: site.type,
+      isEnhanced: site.isEnhanced,
+      deckSize: deck.length,
+    });
+  }, []);
 
   const handlePurge = useCallback(() => {
-    if (selectedEntryIds.length === 0 && selectedBaneCount === 0) return;
+    if (removeCount === 0 || purging) return;
 
     const purgedEntries = selectedEntryIds
       .map((entryId) => deck.find((e) => e.entryId === entryId))
@@ -143,6 +194,16 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
       purgeCardPrice(order + 1, modifiers),
     );
     const cost = purgeVisitCost(purgedEntries.length, modifiers);
+
+    // Mark the chosen slots as dissolving, then commit once the animation ends.
+    const dissolving = new Set<string>([
+      ...selectedEntryIds.map((entryId) => `slot:card:${entryId}`),
+      ...selectedBaneCardEntryIds.map((entryId) => `slot:card:${entryId}`),
+      ...selectedBaneDreamsignIndices.map(
+        (index) => `slot:sign:${String(index)}`,
+      ),
+    ]);
+    setPurging(dissolving);
 
     logEvent("purge_completed", {
       purgedCardNumbers,
@@ -160,14 +221,24 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
       currentDreamscape: state.currentDreamscape,
     });
 
-    mutations.purgeDeckCards(
-      site.id,
-      [...purgedEntries.map((entry) => entry.entryId), ...selectedBaneCardEntryIds],
-      cost,
-      "purge",
-      selectedBaneDreamsignIndices,
-    );
+    window.setTimeout(() => {
+      mutations.purgeDeckCards(
+        site.id,
+        [
+          ...purgedEntries.map((entry) => entry.entryId),
+          ...selectedBaneCardEntryIds,
+        ],
+        cost,
+        "purge",
+        selectedBaneDreamsignIndices,
+      );
+      setSelectedEntryIds([]);
+      setSelectedBaneKeys(new Set());
+      setPurging(null);
+    }, PURGE_DISSOLVE_MS);
   }, [
+    removeCount,
+    purging,
     selectedEntryIds,
     selectedBaneCount,
     selectedBaneCardEntryIds,
@@ -184,280 +255,219 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
   ]);
 
   const handleClose = useCallback(() => {
+    if (purging) return;
     logEvent("site_completed", {
       siteType: "Purge",
       outcome: "skipped",
     });
     mutations.markSiteVisited(site.id);
     mutations.setScreen({ type: "dreamscape" });
-  }, [mutations, site.id]);
+  }, [mutations, purging, site.id]);
 
-  const remainingEssence = Math.max(0, essence - totalCost);
+  const slotState = (key: string): string => {
+    if (purging?.has(key)) return "purging";
+    return mounted ? "show" : "enter";
+  };
 
   return (
-    <motion.div
-      className="flex min-h-full flex-col items-center px-4 py-6 md:px-8 md:py-8"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.4 }}
+    <div
+      className={`purge-site${mounted ? " mounted" : ""}`}
+      data-testid="purge-site-screen"
     >
-      <DreamGuideFrame site={site} />
-      {/* Header */}
-      <div className="mb-4 text-center">
-        <h2
-          className="text-2xl font-bold tracking-wide md:text-3xl"
-          style={{ color: "#ef4444" }}
-        >
-          Purge
-        </h2>
-        {site.isEnhanced && (
-          <span
-            className="mt-2 inline-block rounded-full px-3 py-1 text-sm font-bold"
-            style={{
-              background: "rgba(168, 85, 247, 0.15)",
-              color: "#c084fc",
-              border: "1px solid rgba(168, 85, 247, 0.3)",
-            }}
-          >
-            Enhanced — {String(discountPercent)}% off every card
+      {/* Summary HUD */}
+      <div className="pg-summary">
+        <div className="pg-cell">
+          <span className="pg-cell-k">Essence after</span>
+          <span className="pg-cell-v">
+            <EssenceValue amount={essenceAfter} color="inherit" />
+            <span className="unit">/ {essence}</span>
           </span>
+        </div>
+        <div className="pg-cell is-next">
+          <span className="pg-cell-k">Next card</span>
+          <span className="pg-cell-v">
+            {atVisitLimit ? (
+              <span className="pg-cell-note">Visit limit reached</span>
+            ) : canSelectMore ? (
+              <EssenceValue amount={nextCardPrice} color="inherit" />
+            ) : (
+              <span className="pg-cell-note">Not enough essence</span>
+            )}
+          </span>
+        </div>
+        {site.isEnhanced && (
+          <div className="pg-cell is-enhanced" data-purge-enhanced="true">
+            <span className="pg-cell-k">Enhanced</span>
+            <span className="pg-cell-v">{discountPercent}% off</span>
+          </div>
         )}
-        <p className="mt-2 text-sm opacity-60">
-          Pay essence to permanently remove cards. Each card removed this visit
-          costs more than the last.
-        </p>
       </div>
 
-      {/* Cost / essence summary */}
-      <div className="mb-4 flex flex-wrap items-center justify-center gap-3 text-sm font-medium">
-        <span
-          className="rounded-lg px-4 py-2"
-          style={{
-            background: "rgba(239, 68, 68, 0.12)",
-            border: "1px solid rgba(239, 68, 68, 0.35)",
-            color: "#fca5a5",
-          }}
+      {/* Deck grid — paid cards, inline bane cards, then bane Dreamsign tiles. */}
+      {deck.length === 0 && baneDreamsignIndices.length === 0 ? (
+        <p className="pg-status">Your deck is empty.</p>
+      ) : (
+        <div
+          className="pg-deck"
+          style={{ "--pg-cardw": `${CARD_SLOT_WIDTH}px` } as CSSProperties}
         >
-          {String(selectedCount)} selected — cost{" "}
-          <EssenceValue
-            amount={totalCost}
-            color={ESSENCE_COLOR}
-            className="font-bold"
-          />
-        </span>
-        <span
-          className="rounded-lg px-4 py-2"
-          style={{
-            background: "rgba(148, 163, 184, 0.12)",
-            border: "1px solid rgba(148, 163, 184, 0.3)",
-          }}
-        >
-          Essence after:{" "}
-          <EssenceValue
-            amount={remainingEssence}
-            color={ESSENCE_COLOR}
-            className="font-bold"
-          />{" "}
-          / <EssenceValue amount={essence} color={ESSENCE_COLOR} />
-        </span>
-        <span
-          className="rounded-lg px-4 py-2"
-          style={{
-            background: "rgba(148, 163, 184, 0.12)",
-            border: "1px solid rgba(148, 163, 184, 0.3)",
-            opacity: canSelectMore ? 1 : 0.5,
-          }}
-        >
-          {canSelectMore ? (
-            <>
-              Next card:{" "}
-              <EssenceValue
-                amount={nextCardPrice}
-                color={ESSENCE_COLOR}
-                className="font-bold"
-              />
-            </>
-          ) : selectedCount >= MAX_PURGE_PER_VISIT ? (
-            "Visit limit reached"
-          ) : (
-            "Not enough essence for another"
-          )}
-        </span>
-      </div>
+          {deck.map((entry, index) => {
+            const card = cardDatabase.get(entry.cardNumber);
+            if (!card) return null;
+            const slotKey = `slot:card:${entry.entryId}`;
+            const baneKey = `card:${entry.entryId}`;
 
-      {/* Action buttons — kept above the deck grid so the Purge button stays
-          visible without scrolling past a long deck. */}
-      <div className="mb-6 flex gap-4">
-        <button
-          className="rounded-lg px-6 py-2.5 text-base font-bold transition-opacity"
-          style={{
-            background:
-              selectedCount > 0 || selectedBaneCount > 0
-                ? "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)"
-                : "#4b5563",
-            color:
-              selectedCount > 0 || selectedBaneCount > 0
-                ? "#ffffff"
-                : "#9ca3af",
-            opacity: selectedCount > 0 || selectedBaneCount > 0 ? 1 : 0.6,
-            cursor:
-              selectedCount > 0 || selectedBaneCount > 0
-                ? "pointer"
-                : "not-allowed",
-          }}
-          disabled={selectedCount === 0 && selectedBaneCount === 0}
-          onClick={handlePurge}
-        >
-          Remove {String(selectedCount + selectedBaneCount)} Card
-          {selectedCount + selectedBaneCount !== 1 ? "s" : ""}
-          {selectedCount > 0 ? (
-            <>
-              {" — "}
-              <EssenceValue amount={totalCost} color="inherit" />
-            </>
-          ) : null}
-        </button>
-        <button
-          className="rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
-          style={{
-            background: "rgba(107, 114, 128, 0.2)",
-            border: "1px solid rgba(107, 114, 128, 0.4)",
-            color: "#9ca3af",
-          }}
-          onClick={handleClose}
-        >
-          Close
-        </button>
-      </div>
-
-      {/* Banes section — always free to remove. */}
-      {hasBanes && (
-        <div className="mb-6 w-full max-w-5xl">
-          <p
-            className="mb-2 text-center text-sm font-bold uppercase tracking-wider"
-            style={{ color: "#fca5a5" }}
-          >
-            Banes — free to remove
-          </p>
-          <div
-            className="grid grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6"
-            data-purge-bane-grid=""
-          >
-            {baneCards.map((entry) => {
-              const card = cardDatabase.get(entry.cardNumber);
-              if (!card) return null;
-              const key = `card:${entry.entryId}`;
-              const isSelected = selectedBaneKeys.has(key);
+            if (entry.isBane) {
+              const isSelected = selectedBaneKeys.has(baneKey);
               return (
                 <div
-                  key={key}
-                  data-purge-bane-key={key}
+                  key={entry.entryId}
+                  className={`pg-slot is-bane ${slotState(slotKey)}${isSelected ? " selected" : ""}`}
+                  style={{ "--i": index } as CSSProperties}
+                  data-purge-bane-key={baneKey}
                   data-purge-bane-selected={isSelected ? "true" : "false"}
                 >
+                  <div className="pg-chip free">
+                    <i className="bxf bx-wind" aria-hidden="true" /> Free
+                  </div>
+                  <div className="pg-bane-tag">Bane</div>
+                  <div className="pg-bane-wash" aria-hidden="true" />
                   <CardDisplay
                     card={card}
-                    onClick={() => toggleBane(key)}
+                    onClick={() => toggleBane(baneKey)}
                     selected={isSelected}
-                    selectionColor="#dc2626"
+                    selectionColor="#ef4444"
                   />
                 </div>
               );
-            })}
-            {baneDreamsignIndices.map((index) => {
-              const dreamsign = dreamsigns[index];
-              const key = `dreamsign:${String(index)}`;
-              const isSelected = selectedBaneKeys.has(key);
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  data-purge-bane-key={key}
-                  data-purge-bane-selected={isSelected ? "true" : "false"}
-                  onClick={() => toggleBane(key)}
-                  className="flex flex-col items-center justify-center gap-1 rounded-lg p-3 text-center outline-none"
-                  style={{
-                    background:
-                      "linear-gradient(145deg, #1a0a0a 0%, #1a0510 60%, #0d0814 100%)",
-                    border: isSelected
-                      ? "2px solid #dc2626"
-                      : "1px solid rgba(220, 38, 38, 0.4)",
-                    boxShadow: isSelected
-                      ? "0 0 18px rgba(220, 38, 38, 0.45)"
-                      : "none",
+            }
+
+            const order = selectedEntryIds.indexOf(entry.entryId);
+            const isSelected = order !== -1;
+            const cardPrice = isSelected
+              ? purgeCardPrice(order + 1, modifiers)
+              : null;
+            const disabled = !isSelected && !canSelectMore;
+            return (
+              <div
+                key={entry.entryId}
+                className={`pg-slot ${slotState(slotKey)}${isSelected ? " selected" : ""}${disabled ? " disabled" : ""}`}
+                style={{ "--i": index } as CSSProperties}
+                data-purge-card-selected={isSelected ? "true" : "false"}
+              >
+                {cardPrice !== null && (
+                  <div className="pg-chip">
+                    <EssenceGlyph /> {cardPrice}
+                  </div>
+                )}
+                <CardDisplay
+                  card={card}
+                  onClick={
+                    disabled ? undefined : () => toggleSelection(entry.entryId)
+                  }
+                  selected={isSelected}
+                  selectionColor="#ef4444"
+                />
+              </div>
+            );
+          })}
+
+          {baneDreamsignIndices.map((dsIndex, gridIndex) => {
+            const dreamsign = dreamsigns[dsIndex];
+            const baneKey = `dreamsign:${String(dsIndex)}`;
+            const slotKey = `slot:sign:${String(dsIndex)}`;
+            const isSelected = selectedBaneKeys.has(baneKey);
+            return (
+              <div
+                key={baneKey}
+                className={`pg-slot is-bane ${slotState(slotKey)}${isSelected ? " selected" : ""}`}
+                style={{ "--i": deck.length + gridIndex } as CSSProperties}
+                data-purge-bane-key={baneKey}
+                data-purge-bane-selected={isSelected ? "true" : "false"}
+              >
+                <div className="pg-chip free">
+                  <i className="bxf bx-wind" aria-hidden="true" /> Free
+                </div>
+                <div
+                  className="pg-sign"
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Bane Dreamsign: ${dreamsign.name}`}
+                  onClick={() => toggleBane(baneKey)}
+                  onKeyDown={(event) => {
+                    if (event.key === "Enter" || event.key === " ") {
+                      event.preventDefault();
+                      toggleBane(baneKey);
+                    }
                   }}
                 >
-                  <span
-                    className="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"
-                    style={{
-                      background: "rgba(220, 38, 38, 0.15)",
-                      color: "#fca5a5",
-                      border: "1px solid rgba(220, 38, 38, 0.3)",
-                    }}
-                  >
-                    Bane
-                  </span>
-                  <span
-                    className="text-sm font-bold"
-                    style={{ color: "#fca5a5" }}
-                  >
-                    {dreamsign.name}
-                  </span>
-                  <span
-                    className="text-[10px] leading-tight opacity-70"
-                    style={{ color: "#e2e8f0" }}
-                  >
+                  <div className="pg-bane-tag">Bane</div>
+                  {dreamsign.imageName ? (
+                    <img
+                      className="pg-sign-art"
+                      src={dreamsignIconUrl(String(dreamsign.imageName))}
+                      alt={dreamsign.imageAlt ?? dreamsign.name}
+                    />
+                  ) : (
+                    <div className="pg-sign-fallback" aria-hidden="true">
+                      ✦
+                    </div>
+                  )}
+                  <div className="pg-sign-name">{dreamsign.name}</div>
+                  <div className="pg-sign-rule">
                     <RulesText text={dreamsign.effectDescription} />
-                  </span>
-                </button>
-              );
-            })}
-          </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
         </div>
       )}
 
-      {/* Deck grid */}
-      <div className="grid w-full max-w-5xl grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-        {purgeableCards.map((entry, index) => {
-          const card = cardDatabase.get(entry.cardNumber);
-          if (!card) return null;
-          const order = selectedEntryIds.indexOf(entry.entryId);
-          const isSelected = order !== -1;
-          const cardPrice = isSelected
-            ? purgeCardPrice(order + 1, modifiers)
-            : null;
-          const isAffordable = isSelected || canSelectMore;
-          return (
-            <motion.div
-              key={entry.entryId}
-              className="relative"
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.3, delay: index * 0.03 }}
-              style={{ opacity: isAffordable ? 1 : 0.4 }}
-            >
-              <CardDisplay
-                card={card}
-                onClick={() => toggleSelection(entry.entryId)}
-                selected={isSelected}
-                selectionColor="#ef4444"
-              />
-              {cardPrice !== null && (
-                <span
-                  className="pointer-events-none absolute -right-1 -top-1 z-10 rounded-full px-2 py-0.5 text-xs font-bold shadow"
-                  style={{
-                    background: "#dc2626",
-                    color: "#ffffff",
-                    border: "1px solid rgba(255, 255, 255, 0.4)",
-                  }}
-                >
-                  <EssenceValue amount={cardPrice} color="inherit" />
-                </span>
-              )}
-            </motion.div>
-          );
-        })}
+      {/* Footer */}
+      <div className="pg-foot">
+        <button
+          type="button"
+          className="pg-walk"
+          data-testid="purge-walk-on"
+          onClick={handleClose}
+        >
+          Walk on
+        </button>
+        <button
+          type="button"
+          className="pg-purge-btn"
+          data-testid="purge-confirm"
+          disabled={removeCount === 0 || purging !== null}
+          onClick={handlePurge}
+        >
+          <i className="bxf bx-hot" aria-hidden="true" />
+          {removeCount === 0
+            ? "Purge cards"
+            : `Purge ${String(removeCount)} ${removeCount === 1 ? "card" : "cards"}`}
+          {selectedCount > 0 && (
+            <span className="pg-purge-cost">
+              {" · "}
+              <EssenceValue amount={totalCost} color={ESSENCE_COLOR} />
+            </span>
+          )}
+        </button>
       </div>
-    </motion.div>
+
+      {/* Master Takeshi + speech bubble */}
+      {guide !== null && (
+        <div className="pg-guide" aria-hidden="true">
+          <div className="pg-bubble">
+            <span className="pg-bubble-mono">{guide.name}</span>
+            {guideLine !== null && <p>{`“${guideLine}”`}</p>}
+          </div>
+          <img
+            className="pg-takeshi"
+            src={guidePortraitUrl(guide.id)}
+            alt={guide.name}
+          />
+        </div>
+      )}
+    </div>
   );
 }
