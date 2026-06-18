@@ -14,8 +14,9 @@
 // decks that hold that card cohere with the probe. A signature card sits in the
 // decks most like the probe and scores high; an unrelated card sits in decks far
 // from the probe and scores ~0. The affinity (0..1) is mapped to a multiplicative
-// weight by the affiliation's `weightStrength`, and every multiplier is floored
-// strictly above 0 so reweighting biases the draw without zeroing the pool.
+// weight by the affiliation's `weightStrength`: unaffiliated cards keep their base
+// selection weight (multiplier 1) while affiliated cards receive a multiplier above 1,
+// so every card stays selectable and affiliated cards simply appear more often.
 //
 // The IDF corpus is keyed by card NAME (the decklists are name arrays), while
 // affiliation `signatureCards` and the draw sites both speak card UUIDs / card
@@ -39,9 +40,9 @@ import {
 } from "../draft/pool/variant-idf.ts";
 
 /**
- * The smallest multiplier any card receives. Floored strictly above 0 so an
- * unaffiliated card is damped relative to a signature card but is never removed
- * from the draw — the doc guarantees any card can still appear.
+ * The smallest multiplier any card receives. Unaffiliated cards keep their base
+ * selection weight at this floor (multiplier 1) while affiliated cards receive
+ * a multiplier above 1 — the doc guarantees any card can still appear.
  */
 export const AFFILIATION_MIN_MULTIPLIER = 1;
 
@@ -118,10 +119,11 @@ function computeAffinityByName(
 
 /**
  * Builds an {@link AffiliationWeightContext} for one affiliated dreamscape. Reuses
- * the run's cached IDF corpus (`idfCorpus`), so calling this per draw inside a
- * dreamscape is cheap. Returns `null` when the affiliation cannot bias the draw —
- * no usable decklist corpus, or none of its signature cards carry IDF weight — so
- * the caller cleanly skips reweighting and draws unbiased.
+ * the run's cached IDF corpus, but the per-card affinity computation (cosine over
+ * all corpus decks) runs on each call — acceptable at the current corpus size.
+ * Returns `null` when the affiliation cannot bias the draw — no usable decklist
+ * corpus, or none of its signature cards carry IDF weight — so the caller cleanly
+ * skips reweighting and draws unbiased.
  */
 export function buildAffiliationWeightContext(
   poolData: PoolData,
