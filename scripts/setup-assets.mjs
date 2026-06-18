@@ -565,9 +565,9 @@ export function transformAffiliation(affiliation) {
 
 /**
  * Convert the parsed atlas_config TOML object to its runtime JSON
- * representation. The top-level scalar/array keys and the nested
- * `known-dreamsign` table are renamed kebab->camel; `layer-specs` and
- * `bonus-reveal` are plain numeric tables passed through verbatim.
+ * representation. Top-level keys are renamed kebab->camel; nested objects
+ * (tables) have their inner keys renamed kebab->camel as well; arrays pass
+ * through unchanged.
  */
 export function transformAtlasConfig(config) {
   const result = {};

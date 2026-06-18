@@ -63,8 +63,7 @@ export type SiteType =
  * Lifecycle state of one Dream Atlas node in the v2 atlas model. A node starts
  * `unrevealed`, becomes `revealedLocked` when shown but not yet reachable,
  * `available` when the player can travel to it, `completed` once cleared, and
- * `forgone` when a sibling branch was taken and this one can no longer be
- * reached.
+ * `forgone` when a sibling branch was taken and this one is unreachable.
  */
 export type AtlasNodeState =
   | "unrevealed"
