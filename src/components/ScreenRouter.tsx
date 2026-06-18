@@ -11,6 +11,7 @@ import { ShopScreen } from "../screens/ShopScreen";
 import { EssenceSiteScreen } from "../screens/EssenceSiteScreen";
 import { DreamsignOfferingScreen } from "../screens/DreamsignOfferingScreen";
 import { DreamsignDraftScreen } from "../screens/DreamsignDraftScreen";
+import { DreamsignRevelationScreen } from "../screens/DreamsignRevelationScreen";
 import { PurgeSiteScreen } from "../screens/PurgeSiteScreen";
 import { TransfigurationSiteScreen } from "../screens/TransfigurationSiteScreen";
 import { DuplicationSiteScreen } from "../screens/DuplicationSiteScreen";
@@ -44,6 +45,8 @@ import type { RuntimeConfig } from "../runtime/runtime-config";
 import { BattleSiteRoute } from "./BattleSiteRoute";
 import { DreamGuideFrame } from "./DreamGuideFrame";
 import { ErrorBoundary } from "./ErrorBoundary";
+import { SiteSceneBackdrop } from "./SiteSceneBackdrop";
+import type { ReactNode } from "react";
 
 /** Computes a stable key for AnimatePresence from the current screen. */
 function screenKey(screen: Screen): string {
@@ -137,10 +140,8 @@ function SiteScreen({
     );
   }
 
-  if (site.type === "Draft") {
-    return <DraftSiteScreen siteId={siteId} />;
-  }
-
+  // The keeper battle runs in its own full-screen shell with its own backdrop,
+  // so it is not wrapped in the dreamscape scene backdrop.
   if (site.type === "Battle") {
     return (
       <BattleSiteRoute
@@ -151,69 +152,63 @@ function SiteScreen({
     );
   }
 
-  if (
+  // Every other site is presented over its dreamscape's dimmed scene art.
+  let content: ReactNode;
+  if (site.type === "Draft") {
+    content = <DraftSiteScreen siteId={siteId} />;
+  } else if (
     site.type === "Shop" ||
     site.type === "SpecialtyShop" ||
     site.type === "DreamsignMarket"
   ) {
     // The Specialty Shop and the Dreamsign Market share the regular Shop UI;
     // ShopScreen detects the variant from `site.type`.
-    return <ShopScreen site={site} />;
-  }
-
-  if (site.type === "Essence") {
-    return <EssenceSiteScreen site={site} />;
-  }
-
-  if (site.type === "DreamsignOffering") {
-    return <DreamsignOfferingScreen site={site} />;
-  }
-
-  // The Dreamsign Revelation reveals several dreamsigns and lets the player
-  // choose one, reusing the dreamsign draft offering screen.
-  if (site.type === "DreamsignDraft" || site.type === "DreamsignRevelation") {
-    return <DreamsignDraftScreen site={site} />;
-  }
-
-  if (site.type === "DreamAugury") {
-    if (runtimeConfig.journeyVariant === "v2") {
-      return <DreamMerchantSiteScreen site={site} />;
-    }
-
-    return (
-      <DreamAugurySiteScreen
-        site={site}
-        runtimeConfig={runtimeConfig}
-        onJourneyExplanationChange={onJourneyExplanationChange}
-      />
-    );
-  }
-
-  if (site.type === "Purge") {
-    return <PurgeSiteScreen site={site} />;
-  }
-
-  if (site.type === "Transfiguration") {
-    return <TransfigurationSiteScreen site={site} />;
-  }
-
-  if (site.type === "Duplication") {
-    return <DuplicationSiteScreen site={site} />;
-  }
-
-  if (site.type === "Reward") {
-    return <RewardSiteScreen site={site} />;
-  }
-
-  if (
+    content = <ShopScreen site={site} />;
+  } else if (site.type === "Essence") {
+    content = <EssenceSiteScreen site={site} />;
+  } else if (site.type === "DreamsignOffering") {
+    content = <DreamsignOfferingScreen site={site} />;
+  } else if (site.type === "DreamsignDraft") {
+    content = <DreamsignDraftScreen site={site} />;
+  } else if (site.type === "DreamsignRevelation") {
+    // The Dreamsign Revelation reveals several dreamsigns over the scene and
+    // lets the player take one as an immersive, full-bleed offer.
+    content = <DreamsignRevelationScreen site={site} />;
+  } else if (site.type === "DreamAugury") {
+    content =
+      runtimeConfig.journeyVariant === "v2" ? (
+        <DreamMerchantSiteScreen site={site} />
+      ) : (
+        <DreamAugurySiteScreen
+          site={site}
+          runtimeConfig={runtimeConfig}
+          onJourneyExplanationChange={onJourneyExplanationChange}
+        />
+      );
+  } else if (site.type === "Purge") {
+    content = <PurgeSiteScreen site={site} />;
+  } else if (site.type === "Transfiguration") {
+    content = <TransfigurationSiteScreen site={site} />;
+  } else if (site.type === "Duplication") {
+    content = <DuplicationSiteScreen site={site} />;
+  } else if (site.type === "Reward") {
+    content = <RewardSiteScreen site={site} />;
+  } else if (
     site.type === "TemptingOffer" ||
     site.type === "Gamble" ||
     site.type === "TemporalFork"
   ) {
-    return <StubSiteScreen site={site} />;
+    content = <StubSiteScreen site={site} />;
+  } else {
+    content = <GenericSitePlaceholder site={site} />;
   }
 
-  return <GenericSitePlaceholder site={site} />;
+  return (
+    <>
+      <SiteSceneBackdrop />
+      <div className="site-screen-content">{content}</div>
+    </>
+  );
 }
 
 /**

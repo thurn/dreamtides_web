@@ -1,0 +1,401 @@
+/*
+ * Dreamsign Revelation site screen. Sigrún reveals several dreamsigns over the
+ * dimmed dreamscape scene (supplied by the shared site scene backdrop) and the
+ * player takes one or walks on. The composition flows responsively: a centered
+ * offer row of glowing dreamsign cards, a de-emphasized "walk on" link, and
+ * Sigrún with a speech bubble docked to the lower-left in landscape. All rules
+ * are scoped under `.dreamsign-revelation`.
+ */
+/* Fixed full-viewport composition (matching the dreamscape overview screen)
+ * so the offer always centers and Sigrún anchors to the bottom regardless of
+ * document height. It sits above the shared scene backdrop (which is also
+ * fixed) via the `.site-screen-content` stacking context. */
+.dreamsign-revelation {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 26px;
+  padding: 40px 24px 104px;
+  overflow: hidden;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: #e2e8f0;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Eyebrow ---- */
+.dreamsign-revelation .dsr-eyebrow {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 13px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: #d8b4fe;
+  text-align: center;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
+  z-index: 6;
+}
+
+/* ---- Offer row ---- */
+.dreamsign-revelation .dsr-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: 30px;
+  z-index: 6;
+}
+
+.dreamsign-revelation .dsr-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  transition:
+    opacity 0.5s ease,
+    transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 0.5s ease;
+}
+.dreamsign-revelation .dsr-col.state-out {
+  opacity: 0;
+  transform: translateY(28px);
+}
+.dreamsign-revelation .dsr-col.state-in {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: calc(var(--i) * 95ms);
+}
+.dreamsign-revelation .dsr-col.state-dimmed {
+  opacity: 0.18;
+  transform: scale(0.95);
+  filter: blur(1.5px);
+  pointer-events: none;
+}
+.dreamsign-revelation .dsr-col.state-fly {
+  opacity: 0;
+  transform: translate(38vw, 42vh) scale(0.26) rotate(-6deg);
+  transition:
+    opacity 0.8s ease 0.15s,
+    transform 0.9s cubic-bezier(0.5, 0, 0.6, 1);
+  pointer-events: none;
+}
+
+/* ---- Dreamsign card ---- */
+.dreamsign-revelation .dsr-card {
+  position: relative;
+  width: 250px;
+  cursor: pointer;
+  padding: 18px 18px 20px;
+  border-radius: 18px;
+  background: rgba(20, 15, 33, 0.62);
+  border: 1px solid rgba(124, 58, 237, 0.22);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+  outline: none;
+}
+.dreamsign-revelation .dsr-card:hover,
+.dreamsign-revelation .dsr-card:focus-visible {
+  transform: translateY(-9px);
+  border-color: rgba(168, 85, 247, 0.45);
+  box-shadow:
+    0 18px 40px rgba(0, 0, 0, 0.55),
+    0 0 34px rgba(168, 85, 247, 0.4);
+}
+.dreamsign-revelation .dsr-card.bane {
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.dreamsign-revelation .dsr-aura {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  width: 200px;
+  height: 200px;
+  margin-left: -100px;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0.65;
+  filter: blur(15px);
+  background: conic-gradient(
+    from 0deg,
+    rgba(168, 85, 247, 0),
+    rgba(168, 85, 247, 0.5),
+    rgba(124, 77, 255, 0),
+    rgba(216, 180, 254, 0.45),
+    rgba(168, 85, 247, 0)
+  );
+  animation: dsr-auraspin 20s linear infinite;
+}
+.dreamsign-revelation .dsr-card.bane .dsr-aura {
+  background: conic-gradient(
+    from 0deg,
+    rgba(239, 68, 68, 0),
+    rgba(239, 68, 68, 0.5),
+    rgba(127, 29, 29, 0),
+    rgba(252, 165, 165, 0.4),
+    rgba(239, 68, 68, 0)
+  );
+}
+@keyframes dsr-auraspin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.dreamsign-revelation .dsr-art-wrap {
+  position: relative;
+  height: 140px;
+  display: grid;
+  place-items: center;
+}
+.dreamsign-revelation .dsr-art {
+  max-width: 86%;
+  max-height: 140px;
+  object-fit: contain;
+  filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.55));
+  transition: transform 0.25s ease;
+}
+.dreamsign-revelation .dsr-card:hover .dsr-art {
+  transform: scale(1.06) translateY(-2px);
+}
+.dreamsign-revelation .dsr-art-fallback {
+  display: grid;
+  place-items: center;
+  width: 96px;
+  height: 96px;
+  font-size: 2.4rem;
+  color: #c084fc;
+}
+
+.dreamsign-revelation .dsr-meta {
+  position: relative;
+  text-align: center;
+  margin-top: 12px;
+}
+.dreamsign-revelation .dsr-kind {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6b7280;
+}
+.dreamsign-revelation .dsr-kind.bane {
+  color: #fca5a5;
+}
+.dreamsign-revelation .dsr-name {
+  font-family: "EB Garamond", Georgia, serif;
+  font-size: 24px;
+  line-height: 1.05;
+  color: #f6f6f5;
+  margin-top: 3px;
+}
+.dreamsign-revelation .dsr-rule {
+  font-family: "Fira Sans Condensed", "Inter", sans-serif;
+  font-size: 14px;
+  line-height: 1.36;
+  color: #94a3b8;
+  margin-top: 9px;
+  min-height: 56px;
+  text-wrap: pretty;
+}
+
+/* ---- Take button ---- */
+.dreamsign-revelation .dsr-take {
+  width: 200px;
+  padding: 11px 0;
+  border: 0;
+  border-radius: 8px;
+  cursor: pointer;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: #fff;
+  background: linear-gradient(180deg, #8b5cff, #6a35e0);
+  box-shadow:
+    0 6px 16px rgba(80, 40, 180, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.14s ease,
+    filter 0.14s ease;
+}
+.dreamsign-revelation .dsr-take:hover {
+  filter: brightness(1.08);
+  box-shadow:
+    0 8px 22px rgba(110, 60, 230, 0.6),
+    0 0 22px rgba(168, 85, 247, 0.5);
+}
+.dreamsign-revelation .dsr-take:active {
+  transform: scale(0.97);
+}
+
+/* ---- De-emphasized walk-on ---- */
+.dreamsign-revelation .dsr-skip {
+  margin-top: 4px;
+  padding: 11px 26px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 18px;
+  color: #94a3b8;
+  letter-spacing: 0.02em;
+  transition: color 0.14s ease;
+  z-index: 6;
+}
+.dreamsign-revelation .dsr-skip:hover {
+  color: #e2e8f0;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* ---- Sigrún + speech bubble ---- */
+/* A flex column anchored to the lower-left: bubble above the portrait so the
+ * bubble can never clip the top edge regardless of portrait height. The offer
+ * stage reserves room to Sigrún's right (see the wide-viewport rule below) so
+ * she never overlaps the cards. */
+.dreamsign-revelation .dsr-guide {
+  position: absolute;
+  left: 24px;
+  bottom: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  max-width: 296px;
+  max-height: 100%;
+  pointer-events: none;
+}
+.dreamsign-revelation .dsr-sigrun {
+  height: clamp(300px, 40vh, 420px);
+  width: auto;
+  display: block;
+  filter:
+    drop-shadow(0 18px 40px rgba(0, 0, 0, 0.6))
+    drop-shadow(0 0 60px rgba(124, 77, 255, 0.22));
+  -webkit-mask-image: linear-gradient(180deg, #000 86%, transparent 99%);
+  mask-image: linear-gradient(180deg, #000 86%, transparent 99%);
+  opacity: 0;
+  transform: translateX(-26px);
+  transition:
+    transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1),
+    opacity 0.6s;
+}
+.dreamsign-revelation.mounted .dsr-sigrun {
+  opacity: 1;
+  transform: translateX(0);
+}
+.dreamsign-revelation .dsr-bubble {
+  position: relative;
+  margin-left: 28px;
+  margin-bottom: 6px;
+  width: 250px;
+  padding: 16px 20px 18px;
+  border-radius: 18px 18px 18px 4px;
+  background: rgba(20, 14, 34, 0.82);
+  border: 1px solid rgba(168, 85, 247, 0.45);
+  backdrop-filter: blur(14px);
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.5),
+    0 0 20px rgba(168, 85, 247, 0.15);
+  opacity: 0;
+  transform: translateY(10px) scale(0.96);
+  transition:
+    opacity 0.4s 0.25s,
+    transform 0.4s 0.25s;
+}
+.dreamsign-revelation.mounted .dsr-bubble {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+.dreamsign-revelation .dsr-bubble::after {
+  content: "";
+  position: absolute;
+  left: 26px;
+  bottom: -9px;
+  width: 18px;
+  height: 18px;
+  background: rgba(20, 14, 34, 0.82);
+  border-right: 1px solid rgba(168, 85, 247, 0.45);
+  border-bottom: 1px solid rgba(168, 85, 247, 0.45);
+  transform: rotate(45deg);
+}
+.dreamsign-revelation .dsr-bubble-mono {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 10px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: #c084fc;
+}
+.dreamsign-revelation .dsr-bubble p {
+  margin: 7px 0 0;
+  font-family: "EB Garamond", Georgia, serif;
+  font-style: italic;
+  font-size: 19px;
+  line-height: 1.34;
+  color: #f6f6f5;
+  text-wrap: pretty;
+}
+
+/* ---- Collection tray (fly-to target) ---- */
+.dreamsign-revelation .dsr-tray {
+  position: absolute;
+  right: 30px;
+  bottom: 78px;
+  z-index: 3;
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  border: 1px dashed rgba(168, 85, 247, 0.45);
+  background: rgba(14, 9, 26, 0.5);
+  display: grid;
+  place-items: center;
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+}
+.dreamsign-revelation .dsr-tray span {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #a855f7;
+  box-shadow: 0 0 12px #a855f7;
+  opacity: 0.5;
+}
+
+/* ---- Status line (loading / exhausted pool) ---- */
+.dreamsign-revelation .dsr-status {
+  font-size: 14px;
+  color: rgba(226, 232, 240, 0.7);
+  z-index: 6;
+}
+
+/* On wide viewports, reserve the lower-left for Sigrún by shifting the offer
+ * stage to her right so the two never overlap. On narrower viewports there is
+ * no room for both, so Sigrún steps aside and the offer takes the full stage. */
+@media (min-width: 1200px) {
+  .dreamsign-revelation {
+    padding-left: 312px;
+  }
+}
+@media (max-width: 1199px) {
+  .dreamsign-revelation .dsr-guide {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dreamsign-revelation .dsr-aura {
+    animation: none !important;
+  }
+  .dreamsign-revelation .dsr-sigrun,
+  .dreamsign-revelation .dsr-bubble,
+  .dreamsign-revelation .dsr-col {
+    transition: none !important;
+  }
+}

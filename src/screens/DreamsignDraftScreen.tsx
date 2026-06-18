@@ -205,7 +205,7 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
  * the offering palette but switches the primary border tone to red so the
  * destructive intent reads at a glance.
  */
-function DreamsignPurgeOverlay({
+export function DreamsignPurgeOverlay({
   maxDreamsigns,
   pendingDreamsign,
   currentDreamsigns,
