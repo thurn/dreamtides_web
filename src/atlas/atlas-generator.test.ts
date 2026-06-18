@@ -21,6 +21,7 @@ import {
   makeTestAtlasNode,
 } from "../__test-helpers__/atlas-fixtures";
 import type {
+  AtlasNodeState,
   DreamAtlas,
   DreamscapeNode,
   SiteState,
@@ -597,6 +598,66 @@ describe("advanceAtlas", () => {
       { logEvents: false },
     );
     expect(result).toBe(atlas);
+  });
+
+  // The Atlas UI styles all five AtlasNodeState values distinctly. If a played
+  // run could never produce one of those states, the corresponding UI treatment
+  // would be dead code that silently masks a regression. This drives the real
+  // generator + advance logic from start through every layer (always taking the
+  // first available forward node) and asserts that every AtlasNodeState value
+  // shows up somewhere across the run, so the UI always has each state to render.
+  it("produces every AtlasNodeState across a played-through quest", () => {
+    let atlas = freshAtlas();
+    const seenStates = new Set<AtlasNodeState>();
+
+    const recordStates = (a: DreamAtlas) => {
+      for (const node of Object.values(a.nodes)) {
+        seenStates.add(node.state);
+      }
+    };
+    recordStates(atlas);
+
+    // Walk forward layer by layer: complete the current node, then step to one of
+    // its now-available forward targets, until the boss (a node with no forward
+    // edges) is completed.
+    let currentId: string = atlas.startingNodeId;
+    let completionLevel = 0;
+    // Bounded by the fixed 7-layer depth; the guard prevents an infinite loop if
+    // the graph were ever malformed.
+    for (let step = 0; step < atlas.layers.length + 2; step++) {
+      atlas = advanceAtlas(
+        atlas,
+        currentId,
+        completionLevel,
+        defaultContext(),
+        buildContext(),
+        { logEvents: false },
+      );
+      recordStates(atlas);
+      completionLevel += 1;
+
+      const forwardIds = atlas.nodes[currentId].forwardIds;
+      if (forwardIds.length === 0) {
+        break;
+      }
+      // Prefer an available forward node; the generator marks forward targets of
+      // a completed node available.
+      const nextId =
+        forwardIds.find((id) => atlas.nodes[id].state === "available") ??
+        forwardIds[0];
+      currentId = nextId;
+    }
+
+    const allStates: AtlasNodeState[] = [
+      "unrevealed",
+      "revealedLocked",
+      "available",
+      "completed",
+      "forgone",
+    ];
+    for (const expected of allStates) {
+      expect(seenStates).toContain(expected);
+    }
   });
 });
 

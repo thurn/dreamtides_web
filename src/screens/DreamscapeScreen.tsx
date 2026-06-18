@@ -2,6 +2,7 @@ import { useCallback, useMemo } from "react";
 import { motion } from "framer-motion";
 import { useQuest } from "../state/quest-context";
 import { SiteCard } from "../components/SiteCard";
+import { DreamGuideFrame } from "../components/DreamGuideFrame";
 import { logEvent } from "../logging";
 
 /** The dreamscape view: shows all sites in the current dreamscape. */
@@ -20,6 +21,14 @@ export function DreamscapeScreen() {
       .filter((s) => s.type !== "Battle")
       .every((s) => s.isVisited);
   }, [node]);
+
+  // The dreamscape's signature (enhanced) site: the resident guide's home site.
+  // The guide frame is keyed off it so the resident guide greets the player on
+  // the dreamscape overview and surfaces their home specialty.
+  const enhancedSite = useMemo(
+    () => node?.sites.find((s) => s.isEnhanced) ?? null,
+    [node],
+  );
 
   const handleSiteClick = useCallback(
     (siteId: string) => {
@@ -55,6 +64,13 @@ export function DreamscapeScreen() {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4 }}
     >
+      {/* Resident Dream Guide framing. The frame docks to the top in portrait
+          and to the left edge in landscape; it greets the player on the
+          dreamscape overview keyed off the dreamscape's signature (enhanced)
+          site and surfaces the guide's home specialty. Renders nothing when the
+          dreamscape's signature site has no resident guide. */}
+      {enhancedSite !== null && <DreamGuideFrame site={enhancedSite} />}
+
       {/* Biome header banner */}
       <div className="mb-6 text-center md:mb-8">
         <h2

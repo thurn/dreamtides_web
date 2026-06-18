@@ -1284,9 +1284,44 @@ export const ALL_SITE_TYPES: readonly SiteType[] = Object.keys(
   SITE_TYPE_META,
 ) as SiteType[];
 
+/**
+ * Neutral metadata used when a node carries a site type that is not in the
+ * current {@link SITE_TYPE_META} table. A persisted save from an earlier build
+ * can reference a site type string that the current build does not define; the
+ * atlas and dreamscape renderers look these values up by `site.type`, so a
+ * missing entry would throw while reading `.icon`/`.name`. Falling back to this
+ * placeholder keeps those screens rendering a safe neutral marker instead of
+ * white-screening for a player or QA loading an old save.
+ */
+const FALLBACK_SITE_TYPE_META = {
+  icon: "bx bx-help-circle",
+  name: "Unknown Site",
+  description: "An unfamiliar site from an earlier dream.",
+  enhancedDescription: "An unfamiliar site from an earlier dream.",
+} as const;
+
+/**
+ * Resolves the metadata for `siteType`, returning a neutral placeholder for any
+ * value absent from {@link SITE_TYPE_META}. The cast on the lookup is required
+ * because callers may pass a legacy site-type string that is not assignable to
+ * the current {@link SiteType} union.
+ */
+function siteTypeMeta(siteType: SiteType): {
+  icon: string;
+  name: string;
+  description: string;
+  enhancedDescription: string;
+} {
+  return (
+    (SITE_TYPE_META as Record<string, (typeof SITE_TYPE_META)[SiteType]>)[
+      siteType
+    ] ?? FALLBACK_SITE_TYPE_META
+  );
+}
+
 /** Returns the Boxicons class name for the given site type. */
 export function siteTypeIcon(siteType: SiteType): string {
-  return SITE_TYPE_META[siteType].icon;
+  return siteTypeMeta(siteType).icon;
 }
 
 /**
@@ -1295,17 +1330,17 @@ export function siteTypeIcon(siteType: SiteType): string {
  * distinct enhanced behaviour this falls back to the standard description.
  */
 export function enhancedSiteDescription(siteType: SiteType): string {
-  return SITE_TYPE_META[siteType].enhancedDescription;
+  return siteTypeMeta(siteType).enhancedDescription;
 }
 
 /** Returns the display name for the given site type. */
 export function siteTypeName(siteType: SiteType): string {
-  return SITE_TYPE_META[siteType].name;
+  return siteTypeMeta(siteType).name;
 }
 
 /** Returns a one-line description for the given site type. */
 export function siteTypeDescription(siteType: SiteType): string {
-  return SITE_TYPE_META[siteType].description;
+  return siteTypeMeta(siteType).description;
 }
 
 /**
@@ -1333,7 +1368,10 @@ export function previewSiteTypes(node: DreamscapeNode): SiteType[] {
  * Returns `null` only for nodes with no previewable sites (e.g. unrevealed).
  */
 export function revealedAtlasSite(node: DreamscapeNode): SiteState | null {
-  const candidates = node.sites.filter(
+  // A legacy persisted node can lack a `sites` array entirely; treat that as no
+  // previewable site rather than throwing while the atlas renders.
+  const sites = Array.isArray(node.sites) ? node.sites : [];
+  const candidates = sites.filter(
     (s) => s.type !== "Battle" && s.type !== "Draft",
   );
   if (candidates.length === 0) {

@@ -26,9 +26,16 @@ export function AtlasScreen() {
   } | null>(null);
   const didDrag = useRef(false);
 
-  const viewportOffset = useMemo(() => {
-    const nodeList = Object.values(atlas.nodes);
-    if (nodeList.length === 0) return { x: 0, y: 0 };
+  // The atlas content spans the full 7-layer width, which is wider than a single
+  // node. The viewBox is sized to the content's bounding box plus a generous
+  // margin so the starter and boss nodes at the far edges — and their below-node
+  // labels ("YOU STARTED HERE", biome names) — are never clipped at the
+  // viewport borders. The whole graph is then centred within that box.
+  const { viewportOffset, svgWidth, svgHeight } = useMemo(() => {
+    const nodeList = Object.values(atlas.nodes).filter((n) => Boolean(n.position));
+    if (nodeList.length === 0) {
+      return { viewportOffset: { x: 0, y: 0 }, svgWidth: 1200, svgHeight: 800 };
+    }
 
     let minX = Infinity;
     let maxX = -Infinity;
@@ -41,7 +48,18 @@ export function AtlasScreen() {
       maxY = Math.max(maxY, node.position.y);
     }
 
-    return { x: -(minX + maxX) / 2, y: -(minY + maxY) / 2 };
+    // Margin covers the largest node radius, its "you started here" label, and
+    // breathing room so edge nodes sit clear of the viewport border.
+    const MARGIN_X = 140;
+    const MARGIN_Y = 110;
+    const width = Math.max(1200, maxX - minX + MARGIN_X * 2);
+    const height = Math.max(800, maxY - minY + MARGIN_Y * 2);
+
+    return {
+      viewportOffset: { x: -(minX + maxX) / 2, y: -(minY + maxY) / 2 },
+      svgWidth: width,
+      svgHeight: height,
+    };
   }, [atlas.nodes]);
 
   const handleMouseDown = useCallback(
@@ -149,8 +167,6 @@ export function AtlasScreen() {
     [atlas.nodes, mutations],
   );
 
-  const svgWidth = 1200;
-  const svgHeight = 800;
   const transformX = svgWidth / 2 + viewportOffset.x + pan.x;
   const transformY = svgHeight / 2 + viewportOffset.y + pan.y;
 
@@ -212,9 +228,11 @@ export function AtlasScreen() {
 
           <g transform={`translate(${String(transformX)}, ${String(transformY)})`}>
             {Object.values(atlas.nodes).flatMap((fromNode) =>
-              fromNode.forwardIds.map((toId) => {
+              (fromNode.forwardIds ?? []).map((toId) => {
                 const toNode = atlas.nodes[toId];
-                if (!toNode) return null;
+                if (!toNode || !fromNode.position || !toNode.position) {
+                  return null;
+                }
 
                 // An edge reads "active" only when both endpoints are visible to
                 // the player (revealed in some form), so connections into still
@@ -238,14 +256,17 @@ export function AtlasScreen() {
               }),
             )}
 
-            {Object.values(atlas.nodes).map((node) => (
-              <AtlasNode
-                key={node.id}
-                node={node}
-                isStarting={node.id === atlas.startingNodeId}
-                onNodeClick={handleNodeClick}
-              />
-            ))}
+            {Object.values(atlas.nodes)
+              .filter((node) => Boolean(node.position))
+              .map((node) => (
+                <AtlasNode
+                  key={node.id}
+                  node={node}
+                  isStarting={node.id === atlas.startingNodeId}
+                  isBoss={node.id === atlas.bossNodeId}
+                  onNodeClick={handleNodeClick}
+                />
+              ))}
           </g>
         </svg>
       </div>
