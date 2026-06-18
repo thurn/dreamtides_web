@@ -532,7 +532,7 @@ toward claiming it.
 and then to the dreamsign display in the bottom-right corner of the screen, playing
 its acquisition particle effect, after which the camera pulls back to the map.
 
-Icon: `game-icons.net/delapouite/gift`
+Icon: `boxicons3/treasure-chest`
 
 ### Transfiguration
 
