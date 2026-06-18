@@ -69,5 +69,4 @@ export const BOSS_DISPLAY = {
   figureUrl: "/dream-guides/apollyon.png",
   intro:
     "A Dreamcaller of annihilating power — his own deck, dreamsigns, and abilities bend the dream toward ruin.",
-  closer: "Every path to the final layer leads here. Defeat him and the quest is won.",
 } as const;

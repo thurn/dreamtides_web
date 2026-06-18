@@ -444,6 +444,41 @@ describe("generateInitialAtlas structural invariants", () => {
     }
   });
 
+  it("draws known dreamsigns from random positions in the available pool", () => {
+    const atlasConfig = {
+      ...TEST_ATLAS_CONFIG,
+      knownDreamsign: {
+        ...TEST_ATLAS_CONFIG.knownDreamsign,
+        maxPerAtlas: 1,
+        placementProbability: 1,
+      },
+    };
+
+    vi.spyOn(Math, "random").mockReturnValue(0);
+    const firstDraw = generateInitialAtlas(
+      0,
+      defaultContext(),
+      buildContext({ atlasConfig }),
+      { logEvents: false },
+    );
+    const firstCarrier = firstDraw.knownDreamsignCarrierIds[0];
+    expect(firstDraw.nodes[firstCarrier].knownDreamsignId).toBe(
+      TEST_DREAMSIGN_POOL[0],
+    );
+
+    vi.mocked(Math.random).mockReturnValue(0.999999);
+    const lastDraw = generateInitialAtlas(
+      0,
+      defaultContext(),
+      buildContext({ atlasConfig }),
+      { logEvents: false },
+    );
+    const lastCarrier = lastDraw.knownDreamsignCarrierIds[0];
+    expect(lastDraw.nodes[lastCarrier].knownDreamsignId).toBe(
+      TEST_DREAMSIGN_POOL[TEST_DREAMSIGN_POOL.length - 1],
+    );
+  });
+
   it("reveals the boss and starter at start, with a small bonus reveal", () => {
     for (let iter = 0; iter < 60; iter++) {
       const atlas = freshAtlas();

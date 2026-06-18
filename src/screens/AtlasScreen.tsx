@@ -236,15 +236,17 @@ function Preview({ resolved }: PreviewProps) {
   useLayoutEffect(() => {
     const height = ref.current?.offsetHeight ?? 480;
     const previewWidth = isUnrevealed ? 320 : 560;
+    const combinedWidth =
+      previewWidth + (resolved.dreamsign === null ? 0 : 14 + 308);
     const gap = 92;
     let left = view.left + gap;
-    if (left + previewWidth > STAGE_W - 24) {
+    if (left + combinedWidth > STAGE_W - 24) {
       left = view.left - gap - previewWidth;
     }
     let top = view.top - height / 2;
     top = Math.max(20, Math.min(top, STAGE_H - height - 20));
     setPos({ left, top, ready: true });
-  }, [view.left, view.top, isUnrevealed]);
+  }, [isUnrevealed, resolved.dreamsign, view.left, view.top]);
 
   const style = {
     left: pos.left,
@@ -255,9 +257,6 @@ function Preview({ resolved }: PreviewProps) {
   if (isUnrevealed) {
     return (
       <div className="preview preview-mini" ref={ref} style={style}>
-        <div className="mini-icon">
-          <i className="fa-solid fa-question" aria-hidden="true" />
-        </div>
         <div>
           <div className="eyebrow">Unrevealed</div>
           <div className="mini-title">An Unseen Dream</div>
@@ -278,9 +277,6 @@ function Preview({ resolved }: PreviewProps) {
           style={{ backgroundImage: `url(${BOSS_DISPLAY.sceneUrl})` }}
         >
           <div className="scene-fade boss-fade" />
-          <div className="boss-flag">
-            <i className="fa-solid fa-skull" aria-hidden="true" /> Final Dream
-          </div>
           <div className="preview-title">
             <div className="ds-name">{BOSS_DISPLAY.place}</div>
             <div className="guide-name boss-subtitle">{BOSS_DISPLAY.title}</div>
@@ -293,25 +289,15 @@ function Preview({ resolved }: PreviewProps) {
               aria-hidden="true"
             />
             <div>
-              <div className="eyebrow">Layer VII · Final Battle</div>
+              <div className="eyebrow">Final Battle</div>
               <div className="row-val">Confront {BOSS_DISPLAY.name}</div>
             </div>
           </div>
           <div className="info-row">
             <i className="fa-solid fa-bolt row-ico danger" aria-hidden="true" />
             <div>
-              <div className="eyebrow">The Dreamer at the End</div>
+              <div className="eyebrow">The Doom of Humanity</div>
               <p className="row-text">{BOSS_DISPLAY.intro}</p>
-            </div>
-          </div>
-          <div className="info-row">
-            <i
-              className="fa-solid fa-flag-checkered row-ico danger"
-              aria-hidden="true"
-            />
-            <div>
-              <div className="eyebrow">Victory</div>
-              <div className="row-val dim">{BOSS_DISPLAY.closer}</div>
             </div>
           </div>
         </div>
@@ -427,13 +413,15 @@ function DreamsignCard({ resolved }: DreamsignCardProps) {
 
   useLayoutEffect(() => {
     const height = ref.current?.offsetHeight ?? 330;
-    const previewWidth = 560;
+    const previewWidth =
+      view.node.state === "unrevealed" && !view.isBoss ? 320 : 560;
     const signWidth = 308;
     const gap = 92;
     const innerGap = 14;
+    const combinedWidth = previewWidth + innerGap + signWidth;
     let previewLeft = view.left + gap;
     let left: number;
-    if (previewLeft + previewWidth > STAGE_W - 24) {
+    if (previewLeft + combinedWidth > STAGE_W - 24) {
       previewLeft = view.left - gap - previewWidth;
       left = previewLeft - innerGap - signWidth;
     } else {
@@ -443,7 +431,7 @@ function DreamsignCard({ resolved }: DreamsignCardProps) {
     let top = view.top - height / 2;
     top = Math.max(20, Math.min(top, STAGE_H - height - 20));
     setPos({ left, top, ready: true });
-  }, [view.left, view.top]);
+  }, [view.isBoss, view.left, view.node.state, view.top]);
 
   if (dreamsign === null) {
     return null;
@@ -734,7 +722,7 @@ export function AtlasScreen() {
               <div
                 className="layer-head"
                 key={head.layer}
-                style={{ left: head.x, top: 150 }}
+                style={{ left: head.x, top: 120 }}
               >
                 {romanForLayer(head.layer)}
               </div>
@@ -765,7 +753,7 @@ export function AtlasScreen() {
             <div className="atlas-title">Dream Atlas</div>
             <div className="atlas-sub">
               {choiceLayer !== null
-                ? `Layer ${romanForLayer(choiceLayer)} of VII · choose your next dream`
+                ? `Layer ${romanForLayer(choiceLayer)} · Choose your next dream`
                 : "Seven layers to the final dream"}
             </div>
           </div>

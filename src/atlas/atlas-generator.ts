@@ -840,7 +840,11 @@ function placeKnownDreamsigns(
         remainingCandidates.splice(i, 1);
       }
     }
-    const dreamsignId = state.remainingDreamsignIds.shift();
+    const dreamsignIndex = randomInt(
+      0,
+      state.remainingDreamsignIds.length - 1,
+    );
+    const [dreamsignId] = state.remainingDreamsignIds.splice(dreamsignIndex, 1);
     if (dreamsignId === undefined) {
       break;
     }
@@ -1262,7 +1266,7 @@ const SITE_TYPE_META: Record<
   },
   Shop: {
     icon: "bxf bx-store-alt-2",
-    name: "Shop",
+    name: "Card Shop",
     description: "Spend essence to buy cards, dreamsigns, or rerolls.",
     enhancedDescription: "Enhanced shop: rerolling the inventory is free.",
   },

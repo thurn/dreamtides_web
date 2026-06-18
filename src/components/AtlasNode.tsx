@@ -36,7 +36,7 @@ interface AtlasNodeProps {
  * One node on the redesigned Dream Atlas: a circular dreamscape icon in an
  * ornate frame with a per-state glow and stacked badges (signature site, known
  * dreamsign, completion check, boss skull). Unrevealed nodes render the empty
- * round frame with a question mark. Visual state classes
+ * round frame. Visual state classes
  * (`node-available`, `node-completed`, ...) drive the glow treatment in
  * `atlas.css`.
  */
@@ -74,9 +74,6 @@ export function AtlasNode({
     face = (
       <div className="unrevealed-face">
         <img className="frame-img" src={ROUND_FRAME_URL} alt="" draggable={false} />
-        <div className="unrevealed-q">
-          <i className="fa-solid fa-question" aria-hidden="true" />
-        </div>
       </div>
     );
   }

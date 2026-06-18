@@ -112,13 +112,13 @@
 }
 .dream-atlas .edge { fill: none; }
 .dream-atlas .edge-dim {
-  stroke: rgba(135, 115, 175, 0.22);
-  stroke-width: 2.5;
+  stroke: rgba(170, 150, 205, 0.42);
+  stroke-width: 3;
   stroke-linecap: round;
 }
 .dream-atlas .edge-locked {
-  stroke: rgba(124, 58, 237, 0.24);
-  stroke-width: 2.5;
+  stroke: rgba(139, 92, 246, 0.44);
+  stroke-width: 3;
   stroke-dasharray: 3 9;
   stroke-linecap: round;
 }
@@ -223,22 +223,6 @@
   width: 100%;
   height: 100%;
 }
-.dream-atlas .unrevealed-q {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 60%;
-  height: 60%;
-  border-radius: 50%;
-  background: radial-gradient(closest-side, #161226, #0b0814);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #4a4366;
-  font-size: 34px;
-}
-
 /* ---- Node badges ---- */
 .dream-atlas .site-badges {
   position: absolute;
@@ -409,7 +393,7 @@
   background: var(--dt-surface);
 }
 .dream-atlas .preview.has-guide .preview-info {
-  padding-right: 184px;
+  padding-right: 214px;
   min-height: 176px;
 }
 .dream-atlas .start-text {
@@ -474,19 +458,6 @@
   padding: 18px;
   align-items: center;
 }
-.dream-atlas .mini-icon {
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  flex: none;
-  background: radial-gradient(closest-side, #161226, #0b0814);
-  border: 1px solid var(--dt-border);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #4a4366;
-  font-size: 30px;
-}
 .dream-atlas .mini-title {
   font-family: var(--dt-font-serif);
   font-size: 21px;
@@ -514,24 +485,6 @@
   text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9), 0 0 22px rgba(239, 68, 68, 0.55);
 }
 .dream-atlas .boss-subtitle { color: #f87171 !important; }
-.dream-atlas .boss-flag {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 3;
-  font-family: var(--dt-font-mono);
-  font-size: 11px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: #fff;
-  background: linear-gradient(180deg, #ef4444, #991b1b);
-  padding: 4px 11px;
-  border-radius: 999px;
-  display: flex;
-  gap: 6px;
-  align-items: center;
-  box-shadow: 0 0 16px rgba(239, 68, 68, 0.6);
-}
 .dream-atlas .boss-figure {
   right: -10px;
   top: 96px;
@@ -627,7 +580,6 @@
   font-family: var(--dt-font-mono);
   font-size: 12px;
   letter-spacing: 0.1em;
-  text-transform: uppercase;
   color: var(--dt-text-dim);
 }
 
