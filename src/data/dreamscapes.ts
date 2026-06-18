@@ -3,6 +3,7 @@ import type {
   DreamGuideContent,
   DreamscapeContent,
 } from "../types/content";
+import type { SiteType } from "../types/quest";
 
 // Re-export the content types so callers can import dreamscape/guide/affiliation
 // shapes alongside their loaders from one module.
@@ -48,4 +49,59 @@ export async function loadAffiliations(): Promise<AffiliationContent[]> {
     AFFILIATIONS_JSON_PATH,
     "affiliation data",
   );
+}
+
+// ---------------------------------------------------------------------------
+// Dreamscape -> guide -> signature site helpers
+// ---------------------------------------------------------------------------
+//
+// Every non-starter dreamscape has a resident Dream Guide whose home specialty
+// is a single signature site type. Site composition treats that signature site
+// as the dreamscape's enhanced site and draws fill from the *other* dreamscapes'
+// signature sites, so these helpers centralise the dreamscape -> signature-site
+// mapping the generator relies on.
+
+/**
+ * The signature site of a dreamscape: the site type its resident guide enhances
+ * in their home dreamscape. The starter (Firstlight Meadow) reports its own
+ * `signatureSite` even though it presents a fixed site list and enhances nothing.
+ */
+export function dreamscapeSignatureSite(
+  dreamscape: DreamscapeContent,
+): SiteType {
+  return dreamscape.signatureSite;
+}
+
+/**
+ * The signature site types of every non-starter dreamscape. Each is a distinct
+ * site type (the 10 guide site types), so the result has no duplicates. This is
+ * the universe the composition fill pool draws the "other guides' signature
+ * sites" from.
+ */
+export function guideSignatureSites(
+  dreamscapes: readonly DreamscapeContent[],
+): SiteType[] {
+  const sites: SiteType[] = [];
+  for (const dreamscape of dreamscapes) {
+    if (dreamscape.isStarter) {
+      continue;
+    }
+    if (!sites.includes(dreamscape.signatureSite)) {
+      sites.push(dreamscape.signatureSite);
+    }
+  }
+  return sites;
+}
+
+/**
+ * The signature sites of every non-starter dreamscape *except* `homeSite`,
+ * i.e. the fill candidates for a dreamscape whose own enhanced site is
+ * `homeSite`. The home site is excluded so the dreamscape's signature site is
+ * never duplicated by the fill.
+ */
+export function otherGuideSignatureSites(
+  dreamscapes: readonly DreamscapeContent[],
+  homeSite: SiteType,
+): SiteType[] {
+  return guideSignatureSites(dreamscapes).filter((site) => site !== homeSite);
 }

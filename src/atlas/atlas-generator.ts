@@ -7,6 +7,7 @@ import type {
   SiteType,
 } from "../types/quest";
 import type { DreamscapeContent } from "../types/content";
+import { otherGuideSignatureSites } from "../data/dreamscapes";
 import { draftSiteData } from "../draft/draft-site-config";
 import { logEvent } from "../logging";
 
@@ -222,148 +223,224 @@ function applySiteAppearanceBoosts(
   });
 }
 
-/** Builds the weighted site pool based on completion level. */
-function buildAdditionalSitePool(
-  completionLevel: number,
+/**
+ * Mandatory draft count for a dreamscape by its 0-indexed atlas layer. Early
+ * layers seed the deck with two drafts, the middle layers offer one, and the
+ * late layers offer none (the deck is built; later layers favour engine and
+ * payoff sites). Layer 0 is the starter and uses its fixed site list instead.
+ */
+function draftCountForLayer(layer: number): number {
+  if (layer <= 1) {
+    return 2;
+  }
+  if (layer <= 3) {
+    return 1;
+  }
+  return 0;
+}
+
+/**
+ * Whether Purge is a *mandatory* site for a dreamscape at the given 0-indexed
+ * atlas layer. Purge is guaranteed in the early layers so deck-thinning is
+ * always available while the deck is still forming; from the later layers it is
+ * not guaranteed but can still appear in the random fill. The starter (layer 0)
+ * carries its own Purge in its fixed site list, so mandatory placement covers
+ * 0-indexed layers 1 and 2 (the doc's layers 2 and 3).
+ */
+function purgeMandatoryForLayer(layer: number): boolean {
+  return layer === 1 || layer === 2;
+}
+
+/**
+ * The base weighted fill pool for a dreamscape whose own enhanced site is
+ * `homeSite`, at the given 0-indexed atlas layer. The fill draws from the other
+ * dreamscapes' signature sites plus a generic Essence site. Transfiguration and
+ * Duplication — the late-game card-shaping sites — are weighted up in the later
+ * layers so deck refinement shows up once the deck is built. Cleanse joins the
+ * pool only while the player carries banes so the bane-removal flow has a home.
+ */
+function buildFillPool(
+  layer: number,
+  homeSite: SiteType,
+  dreamscapes: readonly DreamscapeContent[],
   playerHasBanes: boolean,
 ): Array<[SiteType, number]> {
+  const lateGame = layer >= 4;
   const pool: Array<[SiteType, number]> = [];
 
-  // Early game (all levels): Shop, Essence, DreamsignOffering, DreamsignDraft
-  pool.push(["Shop", 3]);
+  for (const siteType of otherGuideSignatureSites(dreamscapes, homeSite)) {
+    let weight = 3;
+    if (siteType === "Transfiguration" || siteType === "Duplication") {
+      // The card-shaping sites become more common in the later layers.
+      weight = lateGame ? 5 : 1;
+    }
+    pool.push([siteType, weight]);
+  }
+
+  // A generic Essence site is always an eligible fill option.
   pool.push(["Essence", 3]);
-  pool.push(["DreamsignOffering", 3]);
-  pool.push(["DreamsignDraft", 1]);
 
-  // Reward available at all levels
-  pool.push(["Reward", 2]);
-
-  // Cleanse only when player has banes
+  // Cleanse is offered only while the player has banes to remove.
   if (playerHasBanes) {
     pool.push(["Cleanse", 2]);
   }
 
-  // Mid game (level 3+): add DreamJourney
-  if (completionLevel >= 3) {
-    pool.push(["DreamJourney", 2]);
-  }
-
-  // Late game (level 5+): add Transfiguration, Duplication
-  if (completionLevel >= 5) {
-    pool.push(["Transfiguration", 2]);
-    pool.push(["Duplication", 2]);
-  }
-
-  // SpecialtyShop uncommon at any level
-  pool.push(["SpecialtyShop", 1]);
-
   return pool;
 }
 
-/** Returns the additional site types that can appear for the given context. */
+/**
+ * Returns the fill site types eligible for a dreamscape at the given 0-indexed
+ * layer, after applying active site-removal modifiers. `homeSite` is the
+ * dreamscape's own enhanced signature site, excluded from the fill so it is
+ * never duplicated.
+ */
 export function additionalSiteTypesForLevel(
-  completionLevel: number,
+  layer: number,
+  homeSite: SiteType,
+  dreamscapes: readonly DreamscapeContent[],
   context: SiteGenerationContext,
 ): SiteType[] {
   return applySiteRemovalModifiers(
-    buildAdditionalSitePool(completionLevel, context.playerHasBanes),
+    buildFillPool(layer, homeSite, dreamscapes, context.playerHasBanes),
     context.dreamscapeModifiers,
   ).map(([siteType]) => siteType);
 }
 
-/**
- * Fixed composition for the first dreamscape of a run. The opening encounter
- * is hand-tuned for onboarding — drafts to seed the deck, a Dreamsign draft to
- * introduce the sign mechanic, a Dream Journey to teach the world-effect
- * cadence, a Purge to introduce paid deck thinning, and a Battle to close it
- * out.
- */
-const FIRST_DREAMSCAPE_SITE_TYPES: readonly SiteType[] = [
-  "Draft",
-  "Draft",
-  "DreamsignDraft",
-  "DreamJourney",
-  "Purge",
-  "Battle",
-];
+/** Inputs to {@link generateSiteComposition}. */
+export interface SiteCompositionInput {
+  /** 0-indexed atlas layer of the node (0 = starter, 6 = boss). */
+  layer: number;
+  /** The dreamscape assigned to the node, or `null` if none is assigned. */
+  dreamscape: DreamscapeContent | null;
+  /** Every dreamscape definition, used to source the fill pool. */
+  dreamscapes: readonly DreamscapeContent[];
+  /** Site-generation tuning (banes, active dreamscape modifiers). */
+  context: SiteGenerationContext;
+  /**
+   * Whether this node carries a pre-revealed known dreamsign. When true, one
+   * fill slot becomes a Dreamsign Reward site granting that dreamsign on visit.
+   */
+  hasKnownDreamsign?: boolean;
+}
 
-/** Generates the site composition for a dreamscape. Total: 3-6 sites. */
-export function generateSiteComposition(
-  completionLevel: number,
-  isFirstDreamscape: boolean,
-  context: SiteGenerationContext,
-): SiteState[] {
-  if (isFirstDreamscape) {
-    return FIRST_DREAMSCAPE_SITE_TYPES.map((type) => ({
-      id: nextSiteId(),
-      type,
-      isEnhanced: false,
-      isVisited: false,
-      ...(type === "Draft" ? { data: draftSiteData() } : {}),
-    }));
-  }
+/** The result of composing a dreamscape's sites. */
+export interface SiteCompositionResult {
+  sites: SiteState[];
+  /** The signature site type marked enhanced, or `null` when none was. */
+  enhancedSiteType: SiteType | null;
+}
 
-  const sites: SiteState[] = [];
-
-  // Draft sites based on completion level
-  let draftCount: number;
-  if (completionLevel <= 1) {
-    draftCount = 2;
-  } else if (completionLevel <= 3) {
-    draftCount = 1;
-  } else {
-    draftCount = 0;
-  }
-  for (let i = 0; i < draftCount; i++) {
-    sites.push({
-      id: nextSiteId(),
-      type: "Draft",
-      isEnhanced: false,
-      isVisited: false,
-      data: draftSiteData(),
-    });
-  }
-
-  // Purge is guaranteed in every dreamscape so the player can always pay to
-  // thin their deck. It is priced per visit (see src/purge/purge-pricing.ts).
-  sites.push({
+/** Builds a fresh, unvisited site of the given type. */
+function makeSite(type: SiteType, isEnhanced: boolean): SiteState {
+  return {
     id: nextSiteId(),
-    type: "Purge",
-    isEnhanced: false,
+    type,
+    isEnhanced,
     isVisited: false,
-  });
+    ...(type === "Draft" ? { data: draftSiteData() } : {}),
+  };
+}
 
-  // Additional sites from the weighted pool, clamped so total is 3-6.
-  // Fixed count = drafts + guaranteed Purge + battle (always 1).
-  const fixedCount = sites.length + 1;
-  const minAdditional = Math.max(2, 3 - fixedCount);
-  const maxAdditional = Math.max(minAdditional, 6 - fixedCount);
-  const pool = applySiteAppearanceBoosts(
+/**
+ * Generates the ordered site composition for one dreamscape node, following the
+ * doc's named-dreamscape rules. Total sites stay within 3-6 and the Battle is
+ * always last in visit order.
+ *
+ * The starter dreamscape (layer 0, `isStarter`) returns its fixed site list with
+ * no enhancement and no fill. Every other dreamscape is built from:
+ *
+ * - **Mandatory** sites: the home guide's signature site, marked enhanced; a
+ *   Purge in the early layers (see {@link purgeMandatoryForLayer}); Draft sites
+ *   per {@link draftCountForLayer}; and a Battle, placed last.
+ * - **Fill** sites drawn from the other dreamscapes' signature sites plus
+ *   Essence (see {@link buildFillPool}), sampled without replacement so every
+ *   non-Draft type appears at most once. A known-dreamsign carrier consumes one
+ *   fill slot with a Dreamsign Reward site.
+ *
+ * The composition is logged (layer, weights, chosen sites) for reconstruction.
+ */
+export function generateSiteComposition(
+  input: SiteCompositionInput,
+  logEvents = false,
+): SiteCompositionResult {
+  const { layer, dreamscape, dreamscapes, context, hasKnownDreamsign } = input;
+
+  // Starter dreamscape: fixed list, no enhancement, no fill.
+  if (dreamscape?.isStarter === true && dreamscape.fixedSites !== undefined) {
+    const sites = dreamscape.fixedSites.map((type) => makeSite(type, false));
+    if (logEvents) {
+      logEvent("dreamscape_site_composition", {
+        dreamscapeId: dreamscape.id,
+        layer,
+        isStarter: true,
+        siteTypes: sites.map((s) => s.type),
+        enhancedSiteType: null,
+      });
+    }
+    return { sites, enhancedSiteType: null };
+  }
+
+  const homeSite = dreamscape?.signatureSite ?? null;
+  // Types already placed, so fill never duplicates a non-Draft type.
+  const usedTypes = new Set<SiteType>();
+  // Non-battle sites, in visit order. Battle is appended last at the end.
+  const preBattle: SiteState[] = [];
+
+  // --- Mandatory: home guide's signature site, enhanced. ---
+  let enhancedSiteType: SiteType | null = null;
+  if (homeSite !== null) {
+    preBattle.push(makeSite(homeSite, true));
+    usedTypes.add(homeSite);
+    enhancedSiteType = homeSite;
+  }
+
+  // --- Mandatory: Draft sites per the layer table. ---
+  const draftCount = draftCountForLayer(layer);
+  for (let i = 0; i < draftCount; i++) {
+    preBattle.push(makeSite("Draft", false));
+  }
+
+  // --- Mandatory: Purge in the early layers. ---
+  if (purgeMandatoryForLayer(layer) && !usedTypes.has("Purge")) {
+    preBattle.push(makeSite("Purge", false));
+    usedTypes.add("Purge");
+  }
+
+  // --- Known-dreamsign carrier: one fill slot becomes a Dreamsign Reward. ---
+  if (hasKnownDreamsign === true && !usedTypes.has("Reward")) {
+    preBattle.push(makeSite("Reward", false));
+    usedTypes.add("Reward");
+  }
+
+  // --- Fill from the weighted pool until total sites reach 3-6. ---
+  // The total includes the trailing Battle, so the pre-battle target is 2-5.
+  // `Battle` is never a guide signature site, so passing it as the excluded home
+  // site keeps every guide site in the pool when the node has no dreamscape.
+  const fillPool = applySiteAppearanceBoosts(
     applySiteRemovalModifiers(
-      buildAdditionalSitePool(completionLevel, context.playerHasBanes),
+      buildFillPool(
+        layer,
+        homeSite ?? "Battle",
+        dreamscapes,
+        context.playerHasBanes,
+      ),
       context.dreamscapeModifiers,
     ),
     context.dreamscapeModifiers,
   );
-  // Every non-Draft site type appears at most once per dreamscape, so the
-  // additional sites are sampled without replacement: a type is removed from
-  // the working pool once it is picked.
-  const remainingPool = [...pool];
-  const additionalCount = Math.min(
-    randomInt(minAdditional, maxAdditional),
-    remainingPool.length,
-  );
-  for (let i = 0; i < additionalCount; i++) {
-    if (remainingPool.length === 0) {
-      break;
-    }
+  // Sample without replacement: every non-Draft type appears at most once.
+  const remainingPool = fillPool.filter(([type]) => !usedTypes.has(type));
+  const minPreBattle = 2;
+  const maxPreBattle = 5;
+  const minFill = Math.max(0, minPreBattle - preBattle.length);
+  const maxFill = Math.max(minFill, maxPreBattle - preBattle.length);
+  const fillCount = Math.min(randomInt(minFill, maxFill), remainingPool.length);
+  const chosenFill: SiteType[] = [];
+  for (let i = 0; i < fillCount && remainingPool.length > 0; i++) {
     const siteType = weightedPick(remainingPool);
-    sites.push({
-      id: nextSiteId(),
-      type: siteType,
-      isEnhanced: false,
-      isVisited: false,
-    });
+    preBattle.push(makeSite(siteType, false));
+    usedTypes.add(siteType);
+    chosenFill.push(siteType);
     for (let index = remainingPool.length - 1; index >= 0; index -= 1) {
       if (remainingPool[index][0] === siteType) {
         remainingPool.splice(index, 1);
@@ -371,15 +448,26 @@ export function generateSiteComposition(
     }
   }
 
-  // Battle site always last
-  sites.push({
-    id: nextSiteId(),
-    type: "Battle",
-    isEnhanced: false,
-    isVisited: false,
-  });
+  // --- Battle, always last. ---
+  const sites = [...preBattle, makeSite("Battle", false)];
 
-  return sites;
+  if (logEvents) {
+    logEvent("dreamscape_site_composition", {
+      dreamscapeId: dreamscape?.id ?? null,
+      layer,
+      isStarter: false,
+      homeSite,
+      enhancedSiteType,
+      draftCount,
+      purgeMandatory: purgeMandatoryForLayer(layer),
+      hasKnownDreamsign: hasKnownDreamsign === true,
+      fillWeights: fillPool.map(([type, weight]) => ({ type, weight })),
+      fillChosen: chosenFill,
+      siteTypes: sites.map((s) => s.type),
+    });
+  }
+
+  return { sites, enhancedSiteType };
 }
 
 /** Default accent colour for a node before a dreamscape is assigned. */
@@ -422,24 +510,6 @@ function fnv1aHash(value: string): number {
 /** Deterministic accent colour for a dreamscape, by its id. */
 function accentColorForDreamscape(dreamscapeId: string): string {
   return ACCENT_COLORS[fnv1aHash(dreamscapeId) % ACCENT_COLORS.length];
-}
-
-/**
- * Marks the dreamscape's signature (enhanced) site type on matching sites.
- * Returns the enhanced site type if any site matched, null otherwise.
- */
-function applyEnhancement(
-  sites: SiteState[],
-  signatureSite: SiteType,
-): SiteType | null {
-  let enhancedType: SiteType | null = null;
-  for (let i = 0; i < sites.length; i++) {
-    if (sites[i].type === signatureSite) {
-      sites[i] = { ...sites[i], isEnhanced: true };
-      enhancedType = signatureSite;
-    }
-  }
-  return enhancedType;
 }
 
 /**
@@ -648,17 +718,20 @@ function revealNodeDreamscape(state: AtlasState, nodeId: string): void {
     dreamscape = null;
   }
 
-  const sites = generateSiteComposition(
-    state.completionLevel,
-    isFirstDreamscape,
-    state.siteContext,
+  // Composition is keyed off the node's atlas layer (not the run-wide
+  // completion level), since a node can be revealed ahead of the player's
+  // progress (the boss and bonus reveals) and the doc's draft/Purge rules are
+  // per-layer. The starter (layer 0) returns its fixed list and no enhancement.
+  const { sites, enhancedSiteType } = generateSiteComposition(
+    {
+      layer: node.layer,
+      dreamscape,
+      dreamscapes: state.context.dreamscapes,
+      context: state.siteContext,
+      hasKnownDreamsign: node.knownDreamsignId !== null,
+    },
+    state.logEvents,
   );
-  // The starter (layer 0) keeps every opening site standard, so no enhancement
-  // is applied there.
-  const enhancedSiteType =
-    isFirstDreamscape || dreamscape === null
-      ? null
-      : applyEnhancement(sites, dreamscape.signatureSite);
 
   state.atlas.nodes[nodeId] = {
     ...node,

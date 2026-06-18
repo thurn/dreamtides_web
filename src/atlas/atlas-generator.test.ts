@@ -61,230 +61,275 @@ beforeEach(() => {
   vi.spyOn(console, "log").mockImplementation(() => {});
 });
 
+// ---------------------------------------------------------------------------
+// Site composition fixtures derived from the live dreamscape data, so the tests
+// never hardcode dreamscape names, signature sites, or layer counts that an
+// authoring edit could invalidate.
+// ---------------------------------------------------------------------------
+
+const STARTER_DREAMSCAPE = (() => {
+  const starter = TEST_DREAMSCAPES.find((d) => d.isStarter);
+  if (starter === undefined) {
+    throw new Error("test data has no starter dreamscape");
+  }
+  return starter;
+})();
+
+const NON_STARTER_DREAMSCAPES = TEST_DREAMSCAPES.filter((d) => !d.isStarter);
+
+/** Layers a non-starter dreamscape can occupy: 0-indexed atlas layers 1..6. */
+const NON_STARTER_LAYERS = Array.from(
+  { length: TEST_ATLAS_CONFIG.layerSpecs.length - 1 },
+  (_, i) => i + 1,
+);
+
+/** Expected mandatory draft count for a 0-indexed atlas layer (doc table). */
+function expectedDraftCount(layer: number): number {
+  if (layer <= 1) return 2;
+  if (layer <= 3) return 1;
+  return 0;
+}
+
+/** Layers where Purge is mandatory (0-indexed 1 and 2; doc layers 2 and 3). */
+function expectsMandatoryPurge(layer: number): boolean {
+  return layer === 1 || layer === 2;
+}
+
+function composeFor(
+  dreamscape: (typeof NON_STARTER_DREAMSCAPES)[number],
+  layer: number,
+  overrides?: Partial<{
+    playerHasBanes: boolean;
+    hasKnownDreamsign: boolean;
+  }>,
+): SiteState[] {
+  resetAtlasGenerator();
+  return generateSiteComposition({
+    layer,
+    dreamscape,
+    dreamscapes: TEST_DREAMSCAPES,
+    context: defaultContext({ playerHasBanes: overrides?.playerHasBanes }),
+    hasKnownDreamsign: overrides?.hasKnownDreamsign,
+  }).sites;
+}
+
+function counts(sites: SiteState[]): Partial<Record<SiteType, number>> {
+  const out: Partial<Record<SiteType, number>> = {};
+  for (const site of sites) {
+    out[site.type] = (out[site.type] ?? 0) + 1;
+  }
+  return out;
+}
+
 describe("generateSiteComposition", () => {
-  it("produces 3-6 sites for level 0 first dreamscape", () => {
-    for (let i = 0; i < 50; i++) {
-      resetAtlasGenerator();
-      const sites = generateSiteComposition(0, true, defaultContext());
-      expect(sites.length).toBeGreaterThanOrEqual(3);
-      expect(sites.length).toBeLessThanOrEqual(6);
-    }
-  });
-
-  it("produces 3-6 sites for level 0 non-first dreamscape", () => {
-    for (let i = 0; i < 50; i++) {
-      resetAtlasGenerator();
-      const sites = generateSiteComposition(0, false, defaultContext());
-      expect(sites.length).toBeGreaterThanOrEqual(3);
-      expect(sites.length).toBeLessThanOrEqual(6);
-    }
-  });
-
-  it("produces 3-6 sites for level 3", () => {
-    for (let i = 0; i < 50; i++) {
-      resetAtlasGenerator();
-      const sites = generateSiteComposition(3, false, defaultContext());
-      expect(sites.length).toBeGreaterThanOrEqual(3);
-      expect(sites.length).toBeLessThanOrEqual(6);
-    }
-  });
-
-  it("produces 3-6 sites for level 5+", () => {
-    for (let i = 0; i < 50; i++) {
-      resetAtlasGenerator();
-      const sites = generateSiteComposition(7, false, defaultContext());
-      expect(sites.length).toBeGreaterThanOrEqual(3);
-      expect(sites.length).toBeLessThanOrEqual(6);
-    }
-  });
-
-  it("includes 2 draft sites at level 0", () => {
-    const sites = generateSiteComposition(0, false, defaultContext());
-    const drafts = sites.filter((s) => s.type === "Draft");
-    expect(drafts.length).toBe(2);
-  });
-
-  it("requires clearing at least 4 non-battle sites before the first level-0 battle unlocks", () => {
-    const sites = generateSiteComposition(0, true, defaultContext());
-    const nonBattleSites = sites.filter((site) => site.type !== "Battle");
-
-    expect(nonBattleSites.length).toBeGreaterThanOrEqual(4);
-    expect(nonBattleSites[0].type).toBe("Draft");
-    expect(nonBattleSites[1].type).toBe("Draft");
-  });
-
-  it("includes 1 draft site at level 2", () => {
-    const sites = generateSiteComposition(2, false, defaultContext());
-    const drafts = sites.filter((s) => s.type === "Draft");
-    expect(drafts.length).toBe(1);
-  });
-
-  it("includes 0 draft sites at level 5", () => {
-    const sites = generateSiteComposition(5, false, defaultContext());
-    const drafts = sites.filter((s) => s.type === "Draft");
-    expect(drafts.length).toBe(0);
-  });
-
-  it("always ends with a Battle site", () => {
-    for (let level = 0; level <= 7; level++) {
-      resetAtlasGenerator();
-      const sites = generateSiteComposition(level, false, defaultContext());
-      expect(sites[sites.length - 1].type).toBe("Battle");
-    }
-  });
-
-  it("includes exactly one Purge site in the first dreamscape", () => {
-    const sites = generateSiteComposition(0, true, defaultContext());
-    expect(sites.filter((s) => s.type === "Purge").length).toBe(1);
-  });
-
-  it("includes exactly one Purge site at every level", () => {
-    for (let level = 0; level <= 7; level++) {
-      for (let i = 0; i < 20; i++) {
-        resetAtlasGenerator();
-        const sites = generateSiteComposition(
-          level,
-          false,
-          defaultContext({ playerHasBanes: true }),
-        );
-        expect(sites.filter((s) => s.type === "Purge").length).toBe(1);
+  it("produces 3-6 sites per non-starter dreamscape at every layer", () => {
+    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
+      for (const layer of NON_STARTER_LAYERS) {
+        for (let i = 0; i < 20; i++) {
+          const sites = composeFor(dreamscape, layer, {
+            playerHasBanes: true,
+          });
+          expect(sites.length).toBeGreaterThanOrEqual(3);
+          expect(sites.length).toBeLessThanOrEqual(6);
+        }
       }
     }
   });
 
-  it("has at least 2 non-draft non-battle sites for hover preview", () => {
-    for (let i = 0; i < 50; i++) {
-      resetAtlasGenerator();
-      const sites = generateSiteComposition(0, true, defaultContext());
-      const previewable = sites.filter(
-        (s) => s.type !== "Battle" && s.type !== "Draft",
-      );
-      expect(previewable.length).toBeGreaterThanOrEqual(2);
+  it("places exactly one Battle, always last in visit order", () => {
+    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
+      for (const layer of NON_STARTER_LAYERS) {
+        for (let i = 0; i < 20; i++) {
+          const sites = composeFor(dreamscape, layer, {
+            playerHasBanes: true,
+          });
+          expect(sites.filter((s) => s.type === "Battle")).toHaveLength(1);
+          expect(sites[sites.length - 1].type).toBe("Battle");
+        }
+      }
     }
   });
 
-  it("assigns unique IDs to all sites", () => {
-    const sites = generateSiteComposition(0, true, defaultContext());
-    const ids = sites.map((s) => s.id);
-    expect(new Set(ids).size).toBe(ids.length);
+  it("includes the home guide's signature site, marked enhanced", () => {
+    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
+      for (const layer of NON_STARTER_LAYERS) {
+        for (let i = 0; i < 20; i++) {
+          const sites = composeFor(dreamscape, layer, {
+            playerHasBanes: true,
+          });
+          const signature = sites.filter(
+            (s) => s.type === dreamscape.signatureSite,
+          );
+          expect(signature).toHaveLength(1);
+          expect(signature[0].isEnhanced).toBe(true);
+          // It is the only enhanced site.
+          expect(sites.filter((s) => s.isEnhanced)).toHaveLength(1);
+        }
+      }
+    }
   });
 
-  it("never repeats a non-Draft site type within a dreamscape", () => {
-    for (let level = 0; level <= 7; level++) {
-      for (let i = 0; i < 50; i++) {
-        resetAtlasGenerator();
-        const sites = generateSiteComposition(
-          level,
-          false,
-          defaultContext({ playerHasBanes: true }),
-        );
-        const counts: Partial<Record<SiteType, number>> = {};
-        for (const site of sites) {
-          counts[site.type] = (counts[site.type] ?? 0) + 1;
+  it("matches the per-layer draft count from the doc table", () => {
+    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
+      for (const layer of NON_STARTER_LAYERS) {
+        for (let i = 0; i < 20; i++) {
+          const sites = composeFor(dreamscape, layer);
+          const drafts = sites.filter((s) => s.type === "Draft");
+          expect(drafts).toHaveLength(expectedDraftCount(layer));
         }
-        for (const [type, count] of Object.entries(counts)) {
-          if (type === "Draft") {
-            expect(count).toBeLessThanOrEqual(2);
-          } else {
-            expect(count).toBeLessThanOrEqual(1);
+      }
+    }
+  });
+
+  it("guarantees Purge in the early layers (and allows it only as fill later)", () => {
+    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
+      for (const layer of NON_STARTER_LAYERS) {
+        let mandatoryAllHadPurge = true;
+        for (let i = 0; i < 30; i++) {
+          const sites = composeFor(dreamscape, layer);
+          const hasPurge = sites.some((s) => s.type === "Purge");
+          if (expectsMandatoryPurge(layer) && !hasPurge) {
+            mandatoryAllHadPurge = false;
+          }
+          // Purge, when present, is never duplicated.
+          expect(sites.filter((s) => s.type === "Purge").length).toBeLessThanOrEqual(1);
+        }
+        if (expectsMandatoryPurge(layer)) {
+          expect(mandatoryAllHadPurge).toBe(true);
+        }
+      }
+    }
+  });
+
+  it("keeps each non-Draft type to at most one and Draft to at most two", () => {
+    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
+      for (const layer of NON_STARTER_LAYERS) {
+        for (let i = 0; i < 30; i++) {
+          const sites = composeFor(dreamscape, layer, {
+            playerHasBanes: true,
+            hasKnownDreamsign: true,
+          });
+          for (const [type, count] of Object.entries(counts(sites))) {
+            if (type === "Draft") {
+              expect(count).toBeLessThanOrEqual(2);
+            } else {
+              expect(count).toBeLessThanOrEqual(1);
+            }
           }
         }
       }
     }
   });
 
-  it("leaves Reward sites unresolved until the player enters them", () => {
-    let foundReward = false;
-    for (let i = 0; i < 100; i++) {
-      resetAtlasGenerator();
-      const sites = generateSiteComposition(0, false, defaultContext());
-      const reward = sites.find((s) => s.type === "Reward");
-      if (reward) {
-        foundReward = true;
-        expect(reward.data).toBeUndefined();
-        break;
+  it("gives a known-dreamsign carrier exactly one Dreamsign Reward site", () => {
+    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
+      for (const layer of NON_STARTER_LAYERS) {
+        for (let i = 0; i < 20; i++) {
+          const sites = composeFor(dreamscape, layer, {
+            hasKnownDreamsign: true,
+          });
+          expect(sites.filter((s) => s.type === "Reward")).toHaveLength(1);
+        }
       }
     }
-    expect(foundReward).toBe(true);
   });
 
-  it("excludes Cleanse sites when player has no banes", () => {
-    for (let i = 0; i < 100; i++) {
-      resetAtlasGenerator();
-      const sites = generateSiteComposition(
-        0,
-        false,
-        defaultContext({ playerHasBanes: false }),
-      );
-      const cleanse = sites.filter((s) => s.type === "Cleanse");
-      expect(cleanse.length).toBe(0);
+  it("does not add a Dreamsign Reward when the node carries no known dreamsign", () => {
+    // A node without a known dreamsign can still randomly roll a Reward only if
+    // Reward were in the fill pool; it is not, so Reward never appears.
+    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
+      for (const layer of NON_STARTER_LAYERS) {
+        for (let i = 0; i < 20; i++) {
+          const sites = composeFor(dreamscape, layer, {
+            hasKnownDreamsign: false,
+          });
+          expect(sites.some((s) => s.type === "Reward")).toBe(false);
+        }
+      }
     }
   });
 
-  it("can include Cleanse sites when player has banes", () => {
+  it("excludes Cleanse when the player has no banes, can include it when they do", () => {
+    const dreamscape = NON_STARTER_DREAMSCAPES[0];
+    for (let i = 0; i < 50; i++) {
+      const sites = composeFor(dreamscape, 3, { playerHasBanes: false });
+      expect(sites.some((s) => s.type === "Cleanse")).toBe(false);
+    }
     let foundCleanse = false;
-    for (let i = 0; i < 200; i++) {
-      resetAtlasGenerator();
-      const sites = generateSiteComposition(
-        0,
-        false,
-        defaultContext({ playerHasBanes: true }),
-      );
-      if (sites.some((s) => s.type === "Cleanse")) {
-        foundCleanse = true;
-        break;
+    for (const ds of NON_STARTER_DREAMSCAPES) {
+      for (let i = 0; i < 100 && !foundCleanse; i++) {
+        const sites = composeFor(ds, 3, { playerHasBanes: true });
+        if (sites.some((s) => s.type === "Cleanse")) {
+          foundCleanse = true;
+        }
       }
     }
     expect(foundCleanse).toBe(true);
   });
 
-  it("first dreamscape always has exactly 2x Draft, 1x DreamsignDraft, 1x DreamJourney, 1x Purge, 1x Battle regardless of seed", () => {
-    const seeds = [0, 0.123, 0.337, 0.5, 0.728, 0.999];
-    for (const seed of seeds) {
-      resetAtlasGenerator();
-      let counter = seed;
-      const randomSpy = vi.spyOn(Math, "random").mockImplementation(() => {
-        counter = (counter * 9301 + 49297) % 233280;
-        return counter / 233280;
-      });
-      try {
-        const sites = generateSiteComposition(0, true, defaultContext());
-        expect(sites).toHaveLength(6);
-        const counts: Record<string, number> = {};
-        for (const site of sites) {
-          counts[site.type] = (counts[site.type] ?? 0) + 1;
+  it("weights Transfiguration and Duplication up in later layers", () => {
+    // Statistical: over many late-layer draws, the card-shaping sites appear more
+    // often than in early layers. Pick a dreamscape whose own signature site is
+    // neither, so both stay in its fill pool.
+    const dreamscape = NON_STARTER_DREAMSCAPES.find(
+      (d) =>
+        d.signatureSite !== "Transfiguration" &&
+        d.signatureSite !== "Duplication",
+    );
+    expect(dreamscape).toBeDefined();
+    const cardShaping = new Set<SiteType>(["Transfiguration", "Duplication"]);
+    function rate(layer: number): number {
+      let hits = 0;
+      const trials = 400;
+      for (let i = 0; i < trials; i++) {
+        const sites = composeFor(dreamscape!, layer);
+        if (sites.some((s) => cardShaping.has(s.type))) {
+          hits += 1;
         }
-        expect(counts).toEqual({
-          Draft: 2,
-          DreamsignDraft: 1,
-          DreamJourney: 1,
-          Purge: 1,
-          Battle: 1,
-        });
-        expect(sites[sites.length - 1].type).toBe("Battle");
-      } finally {
-        randomSpy.mockRestore();
+      }
+      return hits / trials;
+    }
+    expect(rate(5)).toBeGreaterThan(rate(2));
+  });
+
+  it("leaves Draft site data attached and other sites unresolved", () => {
+    const dreamscape = NON_STARTER_DREAMSCAPES[0];
+    const sites = composeFor(dreamscape, 1, { hasKnownDreamsign: true });
+    for (const site of sites) {
+      if (site.type === "Draft") {
+        expect(site.data).toBeDefined();
+      } else {
+        expect(site.data).toBeUndefined();
       }
     }
   });
 
-  it("first dreamscape composition is independent of completionLevel and banes", () => {
-    for (const level of [0, 1, 2, 3, 4, 5, 7]) {
-      for (const playerHasBanes of [false, true]) {
+  it("assigns unique IDs to all sites", () => {
+    const sites = composeFor(NON_STARTER_DREAMSCAPES[0], 1, {
+      hasKnownDreamsign: true,
+      playerHasBanes: true,
+    });
+    const ids = sites.map((s) => s.id);
+    expect(new Set(ids).size).toBe(ids.length);
+  });
+
+  it("returns the starter's fixed site list with no enhancement and no fill", () => {
+    expect(STARTER_DREAMSCAPE.fixedSites).toBeDefined();
+    for (const level of [false, true]) {
+      for (let i = 0; i < 20; i++) {
         resetAtlasGenerator();
-        const sites = generateSiteComposition(
-          level,
-          true,
-          defaultContext({ playerHasBanes }),
+        const { sites, enhancedSiteType } = generateSiteComposition({
+          layer: 0,
+          dreamscape: STARTER_DREAMSCAPE,
+          dreamscapes: TEST_DREAMSCAPES,
+          context: defaultContext({ playerHasBanes: level }),
+          hasKnownDreamsign: false,
+        });
+        expect(sites.map((s) => s.type)).toEqual(
+          STARTER_DREAMSCAPE.fixedSites,
         );
-        expect(sites.map((s) => s.type)).toEqual([
-          "Draft",
-          "Draft",
-          "DreamsignDraft",
-          "DreamJourney",
-          "Purge",
-          "Battle",
-        ]);
+        expect(sites.some((s) => s.isEnhanced)).toBe(false);
+        expect(enhancedSiteType).toBeNull();
       }
     }
   });
@@ -790,10 +835,26 @@ describe("siteTypeIcon", () => {
 });
 
 describe("additionalSiteTypesForLevel", () => {
-  it("returns the available additional site types for a level", () => {
-    const types = additionalSiteTypesForLevel(0, defaultContext());
-    expect(types).toContain("Shop");
+  it("returns the fill candidate site types for a dreamscape layer", () => {
+    const dreamscape = NON_STARTER_DREAMSCAPES[0];
+    const types = additionalSiteTypesForLevel(
+      3,
+      dreamscape.signatureSite,
+      TEST_DREAMSCAPES,
+      defaultContext(),
+    );
+    // Essence is always an eligible fill option.
     expect(types).toContain("Essence");
+    // The dreamscape's own signature site is excluded from its fill.
+    expect(types).not.toContain(dreamscape.signatureSite);
+    // Another dreamscape's signature site is an eligible fill option.
+    const otherSignature = NON_STARTER_DREAMSCAPES.find(
+      (d) => d.signatureSite !== dreamscape.signatureSite,
+    )?.signatureSite;
+    expect(otherSignature).toBeDefined();
+    if (otherSignature !== undefined) {
+      expect(types).toContain(otherSignature);
+    }
   });
 });
 
