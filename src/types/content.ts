@@ -6,7 +6,7 @@
 import type { PoolVariant } from "../draft/pool/types.ts";
 import type { SiteType } from "./quest.ts";
 
-export const DEFAULT_STARTING_ESSENCE = 250;
+export const DEFAULT_STARTING_ESSENCE = 200;
 
 export interface DreamcallerContent {
   id: string;

@@ -12,6 +12,7 @@ import { dirname, join } from "node:path";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   buildDraftRecords,
+  DEFAULT_STARTING_ESSENCE,
   imageHash,
   parseEnergyCost,
   parseSpark,
@@ -184,7 +185,7 @@ rendered-text = "Use the canonical Dreamsign text."
         title: "Keeper of Test Cases",
         renderedText: "Trigger an ability.",
         imageNumber: "0007",
-        startingEssence: 250,
+        startingEssence: DEFAULT_STARTING_ESSENCE,
       },
     ]);
     expect(dreamsigns).toEqual([
@@ -280,7 +281,7 @@ rendered-text = ""
       readFileSync(join(publicDir, "dreamcallers-v2-data.json"), "utf8"),
     );
     expect(dreamcallers[0].startingEssence).toBe(220);
-    expect(dreamcallers[1].startingEssence).toBe(250);
+    expect(dreamcallers[1].startingEssence).toBe(DEFAULT_STARTING_ESSENCE);
   });
 
   it("retains the rarity field on Legendary cards and omits it otherwise", () => {

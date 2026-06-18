@@ -348,7 +348,7 @@ export function validateCardIds(keys, idToName, label) {
  * `starting-essence` value. Mirrors `DEFAULT_STARTING_ESSENCE` in
  * `src/types/content.ts`.
  */
-export const DEFAULT_STARTING_ESSENCE = 250;
+export const DEFAULT_STARTING_ESSENCE = 200;
 
 /**
  * Bane card names that must be retained in the runtime card catalog despite

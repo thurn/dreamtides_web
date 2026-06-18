@@ -1,4 +1,4 @@
-// QA-only helper (not committed): generates a v2 mid-run Dream Atlas with every
+// Committed QA helper: generates a v2 mid-run Dream Atlas with every
 // AtlasNodeState present and writes it into a saved-quest fixture so the atlas
 // screen's completed/forgone visuals can be browser-QA'd. Run with vite-node.
 import { readFileSync, writeFileSync } from "node:fs";

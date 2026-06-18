@@ -15,6 +15,7 @@ import {
   writeRoomUpdate,
 } from "./room-service";
 import { createDefaultState } from "../state/quest-context";
+import { DEFAULT_STARTING_ESSENCE } from "../types/content";
 
 type SnapshotStub = {
   exists: () => boolean;
@@ -1077,10 +1078,12 @@ describe("room service", () => {
     subscribeToRoom(database, "ab12", listener);
 
     const ready = listener.mock.calls[0][0] as { room: MultiplayerRoom };
-    expect(ready.room.questState?.dreamcaller?.startingEssence).toBe(250);
+    expect(ready.room.questState?.dreamcaller?.startingEssence).toBe(
+      DEFAULT_STARTING_ESSENCE,
+    );
     expect(
       ready.room.questState?.resolvedPackage?.dreamcaller.startingEssence,
-    ).toBe(250);
+    ).toBe(DEFAULT_STARTING_ESSENCE);
   });
 
   it("emits missing when the room snapshot does not exist", () => {

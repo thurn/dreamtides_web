@@ -9,6 +9,7 @@ import { DEFAULT_POOL_VARIANT } from "../draft/pool";
 import type { CardData } from "../types/cards";
 import type { DraftRecord } from "./cards-v2-database";
 import type { DreamcallerContent } from "../types/content";
+import { DEFAULT_STARTING_ESSENCE } from "../types/content";
 import type { FitModel } from "../draft/replay/fit-model";
 import {
   selectRecordIndex,
@@ -390,7 +391,7 @@ describe("loadQuestContent", () => {
 
     expect(content.dreamcallers.map((dc) => dc.id)).toEqual(["dc-a", "dc-b"]);
     // A zero startingEssence falls back to the default rather than being dropped.
-    expect(content.dreamcallers[0].startingEssence).toBe(250);
+    expect(content.dreamcallers[0].startingEssence).toBe(DEFAULT_STARTING_ESSENCE);
   });
 
   it("populates draftMode, draftRecords, and fitModel in replay mode", async () => {
