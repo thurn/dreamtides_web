@@ -1,118 +1,566 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "framer-motion";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import { useQuest } from "../state/quest-context";
-import { AtlasNode } from "../components/AtlasNode";
+import { AtlasNode, type AtlasNodeView } from "../components/AtlasNode";
 import {
   generateInitialAtlas,
+  revealedAtlasSite,
+  siteTypeName,
   type SiteGenerationContext,
 } from "../atlas/atlas-generator";
+import {
+  AFFILIATION_ROW_ICON_CLASS,
+  BOSS_DISPLAY,
+  STARTER_FLAG_ICON_CLASS,
+  atlasSiteIcon,
+  dreamscapeIconUrl,
+  dreamscapeSceneUrl,
+  dreamsignIconUrl,
+  guidePortraitUrl,
+} from "../atlas/atlas-display";
+import type {
+  AffiliationContent,
+  DreamGuideContent,
+  DreamscapeContent,
+  DreamsignTemplate,
+} from "../types/content";
+import type { DreamAtlas, DreamscapeNode } from "../types/quest";
+import type { QuestContent } from "../data/quest-content";
 import { logEvent } from "../logging";
+import "../atlas/atlas.css";
 
-const DRAG_THRESHOLD = 5;
+/** The fixed design canvas the atlas stage scales to fit (letterboxed). */
+const STAGE_W = 1920;
+const STAGE_H = 1080;
 
-/** The Dream Atlas screen: a pannable radial graph of dreamscape nodes. */
+/**
+ * Stage-space rectangle the run graph is fitted into. Leaves room above for the
+ * title block and layer numerals, and below for the persistent bottom HUD.
+ */
+const CONTENT_RECT = { left: 180, right: 1748, top: 256, bottom: 838 };
+
+const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII"];
+
+/** Roman numeral for a 0-indexed atlas layer (0 -> "I"). */
+function romanForLayer(layer: number): string {
+  return ROMAN[layer] ?? String(layer + 1);
+}
+
+/**
+ * Everything one node needs across the node face and its hover preview,
+ * resolved once from quest content. The `view` field feeds {@link AtlasNode};
+ * the resolved content drives the preview/dreamsign cards.
+ */
+interface ResolvedAtlasNode {
+  view: AtlasNodeView;
+  dreamscape: DreamscapeContent | null;
+  guide: DreamGuideContent | null;
+  affiliation: AffiliationContent | null;
+  dreamsign: DreamsignTemplate | null;
+}
+
+/** Builds the resolved-node lookup, fitting the run graph into the stage rect. */
+function resolveAtlasNodes(
+  atlas: DreamAtlas,
+  questContent: QuestContent,
+): Map<string, ResolvedAtlasNode> {
+  const positioned = Object.values(atlas.nodes).filter((n) => Boolean(n.position));
+  const resolved = new Map<string, ResolvedAtlasNode>();
+  if (positioned.length === 0) {
+    return resolved;
+  }
+
+  let minX = Infinity;
+  let maxX = -Infinity;
+  let minY = Infinity;
+  let maxY = -Infinity;
+  for (const node of positioned) {
+    minX = Math.min(minX, node.position.x);
+    maxX = Math.max(maxX, node.position.x);
+    minY = Math.min(minY, node.position.y);
+    maxY = Math.max(maxY, node.position.y);
+  }
+
+  const mapX = (x: number): number =>
+    maxX === minX
+      ? (CONTENT_RECT.left + CONTENT_RECT.right) / 2
+      : CONTENT_RECT.left +
+        ((x - minX) / (maxX - minX)) * (CONTENT_RECT.right - CONTENT_RECT.left);
+  const mapY = (y: number): number =>
+    maxY === minY
+      ? (CONTENT_RECT.top + CONTENT_RECT.bottom) / 2
+      : CONTENT_RECT.top +
+        ((y - minY) / (maxY - minY)) * (CONTENT_RECT.bottom - CONTENT_RECT.top);
+
+  for (const node of positioned) {
+    const isStarter = node.id === atlas.startingNodeId;
+    const isBoss = node.id === atlas.bossNodeId;
+    const dreamscape =
+      node.dreamscapeId !== null
+        ? (questContent.dreamscapes.find((d) => d.id === node.dreamscapeId) ?? null)
+        : null;
+    const guide =
+      dreamscape?.guideId != null
+        ? (questContent.guides.find((g) => g.id === dreamscape.guideId) ?? null)
+        : null;
+    const affiliation =
+      dreamscape?.affiliationId != null
+        ? (questContent.affiliations.find((a) => a.id === dreamscape.affiliationId) ??
+          null)
+        : null;
+    const dreamsign =
+      node.knownDreamsignId !== null
+        ? (questContent.dreamsignTemplates.find((t) => t.id === node.knownDreamsignId) ??
+          null)
+        : null;
+
+    // The node face: the boss is always the icon; a revealed dreamscape shows
+    // its circular icon; an unrevealed node shows the empty round frame.
+    const iconUrl =
+      isBoss || dreamscape === null ? null : dreamscapeIconUrl(dreamscape.id);
+
+    // The signature-site badge is shown only for non-starter, non-boss revealed
+    // dreamscapes; the starter shows just its meadow icon, the boss its skull.
+    const revealedSite = revealedAtlasSite(node);
+    const siteBadgeIconClass =
+      isBoss || isStarter || dreamscape === null || revealedSite === null
+        ? null
+        : atlasSiteIcon(dreamscape.signatureSite);
+
+    const knownDreamsignIconUrl =
+      dreamsign?.imageName != null ? dreamsignIconUrl(dreamsign.imageName) : null;
+
+    resolved.set(node.id, {
+      view: {
+        node,
+        left: mapX(node.position.x),
+        top: mapY(node.position.y),
+        size: isBoss || isStarter ? 150 : 132,
+        isStarter,
+        isBoss,
+        iconUrl,
+        siteBadgeIconClass,
+        knownDreamsignIconUrl,
+      },
+      dreamscape,
+      guide,
+      affiliation,
+      dreamsign,
+    });
+  }
+
+  return resolved;
+}
+
+/** SVG edge styling derived from the two endpoints' lifecycle states. */
+type EdgeKind = "traveled" | "open" | "dim" | "locked";
+
+function edgeKind(from: DreamscapeNode, to: DreamscapeNode): EdgeKind {
+  if (from.state === "completed" && to.state === "completed") {
+    return "traveled";
+  }
+  if (from.state === "completed" && to.state === "available") {
+    return "open";
+  }
+  if (from.state === "unrevealed" || to.state === "unrevealed") {
+    return "locked";
+  }
+  if (from.state === "revealedLocked" || to.state === "revealedLocked") {
+    return "locked";
+  }
+  return "dim";
+}
+
+/* ----------------------------- Hover previews ----------------------------- */
+
+/** Splits dreamsign rules text on `[E]` markers, inserting the energy glyph. */
+function renderDreamsignRules(text: string): ReactNode[] {
+  const parts = text.split("[E]");
+  return parts.map((part, i) => (
+    <span key={i}>
+      {part}
+      {i < parts.length - 1 && (
+        <i
+          className="bxf bx-fire-alt"
+          aria-hidden="true"
+          style={{ color: "var(--dt-energy)", fontSize: 16, verticalAlign: -2, margin: "0 1px" }}
+        />
+      )}
+    </span>
+  ));
+}
+
+interface PreviewProps {
+  resolved: ResolvedAtlasNode;
+}
+
+/**
+ * Floating detail card shown beside a hovered node. Auto-flips to whichever side
+ * of the node has room and is vertically clamped to the stage. Three variants:
+ * unrevealed (compact), boss (red Final Dream), and a revealed dreamscape (scene
+ * art, resident guide, and the signature site / site bonus / affiliation rows).
+ */
+function Preview({ resolved }: PreviewProps) {
+  const { view, dreamscape, guide, affiliation } = resolved;
+  const node = view.node;
+  const isBoss = view.isBoss;
+  const isUnrevealed = node.state === "unrevealed" && !isBoss;
+  const ref = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState<{ left: number; top: number; ready: boolean }>({
+    left: 0,
+    top: 0,
+    ready: false,
+  });
+
+  useLayoutEffect(() => {
+    const height = ref.current?.offsetHeight ?? 480;
+    const previewWidth = isUnrevealed ? 320 : 560;
+    const gap = 92;
+    let left = view.left + gap;
+    if (left + previewWidth > STAGE_W - 24) {
+      left = view.left - gap - previewWidth;
+    }
+    let top = view.top - height / 2;
+    top = Math.max(20, Math.min(top, STAGE_H - height - 20));
+    setPos({ left, top, ready: true });
+  }, [view.left, view.top, isUnrevealed]);
+
+  const style = {
+    left: pos.left,
+    top: pos.top,
+    visibility: pos.ready ? ("visible" as const) : ("hidden" as const),
+  };
+
+  if (isUnrevealed) {
+    return (
+      <div className="preview preview-mini" ref={ref} style={style}>
+        <div className="mini-icon">
+          <i className="fa-solid fa-question" aria-hidden="true" />
+        </div>
+        <div>
+          <div className="eyebrow">Unrevealed</div>
+          <div className="mini-title">An Unseen Dream</div>
+          <p className="mini-text">
+            This dreamscape is revealed only as you draw near. Travel onward to learn
+            what waits here.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isBoss) {
+    return (
+      <div className="preview has-guide is-boss" ref={ref} style={style}>
+        <div
+          className="preview-scene"
+          style={{ backgroundImage: `url(${BOSS_DISPLAY.sceneUrl})` }}
+        >
+          <div className="scene-fade boss-fade" />
+          <div className="boss-flag">
+            <i className="fa-solid fa-skull" aria-hidden="true" /> Final Dream
+          </div>
+          <div className="preview-title">
+            <div className="ds-name">{BOSS_DISPLAY.place}</div>
+            <div className="guide-name boss-subtitle">{BOSS_DISPLAY.title}</div>
+          </div>
+        </div>
+        <div className="preview-info">
+          <div className="info-row">
+            <i className="fa-solid fa-skull row-ico danger" aria-hidden="true" />
+            <div>
+              <div className="eyebrow">Layer VII · Final Battle</div>
+              <div className="row-val">Confront {BOSS_DISPLAY.name}</div>
+            </div>
+          </div>
+          <div className="info-row">
+            <i className="fa-solid fa-bolt row-ico danger" aria-hidden="true" />
+            <div>
+              <div className="eyebrow">The Dreamer at the End</div>
+              <p className="row-text">{BOSS_DISPLAY.intro}</p>
+            </div>
+          </div>
+          <div className="info-row">
+            <i className="fa-solid fa-flag-checkered row-ico danger" aria-hidden="true" />
+            <div>
+              <div className="eyebrow">Victory</div>
+              <div className="row-val dim">{BOSS_DISPLAY.closer}</div>
+            </div>
+          </div>
+        </div>
+        <img
+          className="preview-guide boss-figure"
+          src={BOSS_DISPLAY.figureUrl}
+          alt={BOSS_DISPLAY.name}
+          draggable={false}
+        />
+      </div>
+    );
+  }
+
+  if (dreamscape === null) {
+    return null;
+  }
+
+  return (
+    <div className={`preview${guide ? " has-guide" : ""}`} ref={ref} style={style}>
+      <div
+        className="preview-scene"
+        style={{ backgroundImage: `url(${dreamscapeSceneUrl(dreamscape.id)})` }}
+      >
+        <div className="scene-fade" />
+        <div className="preview-title">
+          <div className="ds-name">{dreamscape.name}</div>
+          {guide && <div className="guide-name">{guide.name}</div>}
+        </div>
+      </div>
+      <div className="preview-info">
+        {guide ? (
+          <>
+            <div className="info-row">
+              <i
+                className={`${atlasSiteIcon(dreamscape.signatureSite)} row-ico`}
+                aria-hidden="true"
+              />
+              <div>
+                <div className="eyebrow">Signature Site</div>
+                <div className="row-val">{siteTypeName(dreamscape.signatureSite)}</div>
+              </div>
+            </div>
+            <div className="info-row">
+              <i className="fa-solid fa-star row-ico gold" aria-hidden="true" />
+              <div>
+                <div className="eyebrow">Site Bonus</div>
+                <p className="row-text">{guide.homeSpecialty}</p>
+              </div>
+            </div>
+            <div className="info-row">
+              <i className={`${AFFILIATION_ROW_ICON_CLASS} row-ico`} aria-hidden="true" />
+              <div>
+                <div className="eyebrow">Card Affiliation</div>
+                {affiliation ? (
+                  <span className="aff-pill">{affiliation.name}</span>
+                ) : (
+                  <div className="row-val dim">None — a neutral on-ramp</div>
+                )}
+              </div>
+            </div>
+          </>
+        ) : (
+          <p className="start-text">
+            <i
+              className={`${STARTER_FLAG_ICON_CLASS}`}
+              aria-hidden="true"
+              style={{ color: "var(--dt-accent-strong)", marginRight: 8 }}
+            />
+            {dreamscape.aesthetic} Every run begins here.
+          </p>
+        )}
+      </div>
+      {guide && (
+        <img
+          className="preview-guide"
+          src={guidePortraitUrl(guide.id)}
+          alt={guide.name}
+          draggable={false}
+        />
+      )}
+    </div>
+  );
+}
+
+interface DreamsignCardProps {
+  resolved: ResolvedAtlasNode;
+}
+
+/**
+ * Dedicated dreamsign card shown alongside the dreamscape preview when a node
+ * carries a pre-revealed known dreamsign. Sits just outside the preview, on the
+ * same side the preview flipped to.
+ */
+function DreamsignCard({ resolved }: DreamsignCardProps) {
+  const { view, dreamsign } = resolved;
+  const ref = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState<{ left: number; top: number; ready: boolean }>({
+    left: 0,
+    top: 0,
+    ready: false,
+  });
+
+  useLayoutEffect(() => {
+    const height = ref.current?.offsetHeight ?? 330;
+    const previewWidth = 560;
+    const signWidth = 308;
+    const gap = 92;
+    const innerGap = 14;
+    let previewLeft = view.left + gap;
+    let left: number;
+    if (previewLeft + previewWidth > STAGE_W - 24) {
+      previewLeft = view.left - gap - previewWidth;
+      left = previewLeft - innerGap - signWidth;
+    } else {
+      left = previewLeft + previewWidth + innerGap;
+    }
+    left = Math.max(24, Math.min(left, STAGE_W - signWidth - 24));
+    let top = view.top - height / 2;
+    top = Math.max(20, Math.min(top, STAGE_H - height - 20));
+    setPos({ left, top, ready: true });
+  }, [view.left, view.top]);
+
+  if (dreamsign === null) {
+    return null;
+  }
+
+  const style = {
+    left: pos.left,
+    top: pos.top,
+    visibility: pos.ready ? ("visible" as const) : ("hidden" as const),
+  };
+
+  return (
+    <div className="dreamsign-card" ref={ref} style={style}>
+      <div className="dsc-art">
+        <div className="dsc-aura" />
+        <div className="dsc-glow" />
+        {dreamsign.imageName != null && (
+          <img
+            className="dsc-icon"
+            src={dreamsignIconUrl(dreamsign.imageName)}
+            alt=""
+            draggable={false}
+          />
+        )}
+      </div>
+      <div className="dsc-body">
+        <div className="dsc-name">{dreamsign.name}</div>
+        <p className="dsc-rules">{renderDreamsignRules(dreamsign.effectDescription)}</p>
+      </div>
+    </div>
+  );
+}
+
+/* -------------------------------- Motes ----------------------------------- */
+
+interface Mote {
+  left: string;
+  top: string;
+  size: number;
+  duration: string;
+  delay: string;
+  opacity: number;
+}
+
+function buildMotes(): Mote[] {
+  const motes: Mote[] = [];
+  for (let i = 0; i < 26; i++) {
+    const size = 2 + Math.random() * 4;
+    motes.push({
+      left: `${String(Math.random() * 100)}%`,
+      top: `${String(Math.random() * 100)}%`,
+      size,
+      duration: `${String(9 + Math.random() * 10)}s`,
+      delay: `${String(-Math.random() * 12)}s`,
+      opacity: 0.15 + Math.random() * 0.4,
+    });
+  }
+  return motes;
+}
+
+/* ------------------------------- AtlasScreen ------------------------------ */
+
+/**
+ * The Dream Atlas: the between-battles map where the player chooses which
+ * dreamscape to enter next, across seven layers, on the way to the final dream.
+ * The run graph is fitted into a fixed 1920x1080 stage that scales to fit the
+ * viewport (letterboxed); nodes, edges, hover previews, and the title block all
+ * live in that stage. The persistent bottom HUD is rendered by the app shell.
+ */
 export function AtlasScreen() {
   const { state, mutations, questContent } = useQuest();
   const { atlas } = state;
-
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [isPointerDown, setIsPointerDown] = useState(false);
-  const dragStart = useRef<{
-    x: number;
-    y: number;
-    panX: number;
-    panY: number;
-  } | null>(null);
-  const didDrag = useRef(false);
-
-  // The atlas content spans the full 7-layer width, which is wider than a single
-  // node. The viewBox is sized to the content's bounding box plus a generous
-  // margin so the starter and boss nodes at the far edges — and their below-node
-  // labels ("YOU STARTED HERE", biome names) — are never clipped at the
-  // viewport borders. The whole graph is then centred within that box.
-  const { viewportOffset, svgWidth, svgHeight } = useMemo(() => {
-    const nodeList = Object.values(atlas.nodes).filter((n) => Boolean(n.position));
-    if (nodeList.length === 0) {
-      return { viewportOffset: { x: 0, y: 0 }, svgWidth: 1200, svgHeight: 800 };
-    }
-
-    let minX = Infinity;
-    let maxX = -Infinity;
-    let minY = Infinity;
-    let maxY = -Infinity;
-    for (const node of nodeList) {
-      minX = Math.min(minX, node.position.x);
-      maxX = Math.max(maxX, node.position.x);
-      minY = Math.min(minY, node.position.y);
-      maxY = Math.max(maxY, node.position.y);
-    }
-
-    // Margin covers the largest node radius, its "you started here" label, and
-    // breathing room so edge nodes sit clear of the viewport border.
-    const MARGIN_X = 140;
-    const MARGIN_Y = 110;
-    const width = Math.max(1200, maxX - minX + MARGIN_X * 2);
-    const height = Math.max(800, maxY - minY + MARGIN_Y * 2);
-
-    return {
-      viewportOffset: { x: -(minX + maxX) / 2, y: -(minY + maxY) / 2 },
-      svgWidth: width,
-      svgHeight: height,
-    };
-  }, [atlas.nodes]);
-
-  const handleMouseDown = useCallback(
-    (e: React.MouseEvent) => {
-      if (e.button !== 0) return;
-      setIsPointerDown(true);
-      didDrag.current = false;
-      dragStart.current = {
-        x: e.clientX,
-        y: e.clientY,
-        panX: pan.x,
-        panY: pan.y,
-      };
-    },
-    [pan],
-  );
+  const [hover, setHover] = useState<string | null>(null);
+  const [scale, setScale] = useState(1);
+  const motes = useMemo(() => buildMotes(), []);
 
   useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!dragStart.current) return;
-      const dx = e.clientX - dragStart.current.x;
-      const dy = e.clientY - dragStart.current.y;
-      if (
-        Math.abs(dx) > DRAG_THRESHOLD ||
-        Math.abs(dy) > DRAG_THRESHOLD
-      ) {
-        didDrag.current = true;
-      }
-      setPan({
-        x: dragStart.current.panX + dx,
-        y: dragStart.current.panY + dy,
-      });
+    const fit = () => {
+      setScale(Math.min(window.innerWidth / STAGE_W, window.innerHeight / STAGE_H));
     };
-
-    const handleMouseUp = () => {
-      setIsPointerDown(false);
-      dragStart.current = null;
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseup", handleMouseUp);
+    fit();
+    window.addEventListener("resize", fit);
     return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseup", handleMouseUp);
+      window.removeEventListener("resize", fit);
     };
   }, []);
 
+  const resolved = useMemo(
+    () => resolveAtlasNodes(atlas, questContent),
+    [atlas, questContent],
+  );
+
+  // Forward edges, drawn from each node's `forwardIds`, styled by endpoint state.
+  const edges = useMemo(() => {
+    const list: Array<{
+      key: string;
+      x1: number;
+      y1: number;
+      x2: number;
+      y2: number;
+      kind: EdgeKind;
+    }> = [];
+    for (const from of Object.values(atlas.nodes)) {
+      const fromView = resolved.get(from.id);
+      if (fromView === undefined) continue;
+      for (const toId of from.forwardIds ?? []) {
+        const to = atlas.nodes[toId];
+        const toView = resolved.get(toId);
+        if (to === undefined || toView === undefined) continue;
+        list.push({
+          key: `${from.id}-${toId}`,
+          x1: fromView.view.left,
+          y1: fromView.view.top,
+          x2: toView.view.left,
+          y2: toView.view.top,
+          kind: edgeKind(from, to),
+        });
+      }
+    }
+    return list;
+  }, [atlas.nodes, resolved]);
+
+  // Layer numerals: one watermark per layer, centred on that layer's column.
+  const layerHeads = useMemo(() => {
+    const heads: Array<{ layer: number; x: number }> = [];
+    atlas.layers.forEach((layerIds, layer) => {
+      const first = layerIds.map((id) => resolved.get(id)).find(Boolean);
+      if (first !== undefined) {
+        heads.push({ layer, x: first.view.left });
+      }
+    });
+    return heads;
+  }, [atlas.layers, resolved]);
+
+  // Subtitle: the layer the player is currently choosing into.
+  const choiceLayer = useMemo(() => {
+    const available = Object.values(atlas.nodes).find((n) => n.state === "available");
+    return available?.layer ?? null;
+  }, [atlas.nodes]);
+
+  const handleNodeClick = useCallback(
+    (nodeId: string) => {
+      const node = atlas.nodes[nodeId];
+      if (!node || node.state !== "available") return;
+      mutations.setCurrentDreamscape(nodeId);
+      mutations.setScreen({ type: "dreamscape" });
+    },
+    [atlas.nodes, mutations],
+  );
+
   /**
    * Debug-only: discard the persisted atlas and rebuild a fresh 7-layer atlas
-   * with the current generation logic, so we can iterate on atlas generation and
-   * see the result live without starting a new quest. Because every node ID is
-   * reissued, the current dreamscape is reset to the freshly generated starter
-   * so the rest of the quest state stays internally consistent.
+   * with the current generation logic so atlas generation can be iterated live
+   * without starting a new quest. Every node id is reissued, so the current
+   * dreamscape is reset to the freshly generated starter.
    */
   const handleDebugRegenerate = useCallback(() => {
     const context: SiteGenerationContext = {
@@ -120,7 +568,6 @@ export function AtlasScreen() {
         ? { dreamscapeModifiers: state.dreamscapeModifiers }
         : {}),
     };
-    const previousNodeCount = Object.keys(state.atlas.nodes).length;
     const regenerated = generateInitialAtlas(
       state.completionLevel,
       context,
@@ -131,145 +578,143 @@ export function AtlasScreen() {
       },
       { logEvents: true },
     );
-
     logEvent("debug_atlas_regenerated", {
       source: "atlas_debug_refresh",
       completionLevel: state.completionLevel,
       dreamscapeModifierCount: state.dreamscapeModifiers.length,
-      previousNodeCount,
       regeneratedNodeCount: Object.keys(regenerated.nodes).length,
       startingNodeId: regenerated.startingNodeId,
       bossNodeId: regenerated.bossNodeId,
     });
-
     mutations.updateAtlas(regenerated);
     mutations.setCurrentDreamscape(regenerated.startingNodeId);
+    setHover(null);
   }, [
-    state.deck,
-    state.dreamsigns,
     state.dreamscapeModifiers,
     state.completionLevel,
-    state.atlas.nodes,
     state.remainingDreamsignPool,
     questContent,
     mutations,
   ]);
 
-  const handleNodeClick = useCallback(
-    (nodeId: string) => {
-      if (didDrag.current) return;
-      const node = atlas.nodes[nodeId];
-      if (!node || node.state !== "available") return;
-
-      mutations.setCurrentDreamscape(nodeId);
-      mutations.setScreen({ type: "dreamscape" });
-    },
-    [atlas.nodes, mutations],
-  );
-
-  const transformX = svgWidth / 2 + viewportOffset.x + pan.x;
-  const transformY = svgHeight / 2 + viewportOffset.y + pan.y;
+  const hovered = hover !== null ? (resolved.get(hover) ?? null) : null;
 
   return (
-    <motion.div
-      className="flex h-full w-full flex-col items-center justify-center"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.4 }}
-    >
-      <div className="mb-2 text-center">
-        <h2
-          className="text-2xl font-bold tracking-wide"
-          style={{ color: "#a855f7" }}
+    <div className="dream-atlas">
+      <div className="viewport">
+        <div
+          className="stage"
+          style={{ transform: `translate(-50%, -50%) scale(${String(scale)})` }}
         >
-          Dream Atlas
-        </h2>
-        <p className="text-sm opacity-50">
-          Click a glowing node to enter a dreamscape
-        </p>
-        <button
-          type="button"
-          onClick={handleDebugRegenerate}
-          data-testid="atlas-debug-regenerate"
-          className="mt-2 rounded border px-2 py-1 text-xs font-medium tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-300"
-          style={{
-            background: "rgba(217, 119, 6, 0.12)",
-            border: "1px solid rgba(217, 119, 6, 0.4)",
-            color: "#fbbf24",
-          }}
-        >
-          {"🔄 Debug: Regenerate Atlas"}
-        </button>
-      </div>
+          <div className="wash" />
 
-      <div
-        ref={containerRef}
-        className="relative w-full flex-1 overflow-hidden"
-        style={{
-          cursor: isPointerDown ? "grabbing" : "grab",
-          minHeight: "400px",
-        }}
-        onMouseDown={handleMouseDown}
-      >
-        <svg
-          width="100%"
-          height="100%"
-          viewBox={`0 0 ${String(svgWidth)} ${String(svgHeight)}`}
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <defs aria-hidden="true">
-            <style aria-hidden="true">
-              {
-                "@keyframes dashFlow{to{stroke-dashoffset:-20}}.atlas-edge{stroke-dasharray:6 4;animation:dashFlow 1.5s linear infinite}"
-              }
-            </style>
-          </defs>
+          <div className="motes">
+            {motes.map((mote, i) => (
+              <span
+                key={i}
+                className="mote"
+                style={{
+                  left: mote.left,
+                  top: mote.top,
+                  width: mote.size,
+                  height: mote.size,
+                  animationDuration: mote.duration,
+                  animationDelay: mote.delay,
+                  opacity: mote.opacity,
+                }}
+              />
+            ))}
+          </div>
 
-          <g transform={`translate(${String(transformX)}, ${String(transformY)})`}>
-            {Object.values(atlas.nodes).flatMap((fromNode) =>
-              (fromNode.forwardIds ?? []).map((toId) => {
-                const toNode = atlas.nodes[toId];
-                if (!toNode || !fromNode.position || !toNode.position) {
-                  return null;
-                }
-
-                // An edge reads "active" only when both endpoints are visible to
-                // the player (revealed in some form), so connections into still
-                // unrevealed nodes stay faint.
-                const isActive =
-                  fromNode.state !== "unrevealed" &&
-                  toNode.state !== "unrevealed";
-
-                return (
-                  <line
-                    key={`edge-${fromNode.id}-${toId}`}
-                    className="atlas-edge"
-                    x1={fromNode.position.x}
-                    y1={fromNode.position.y}
-                    x2={toNode.position.x}
-                    y2={toNode.position.y}
-                    stroke={isActive ? "#a855f780" : "#4a386040"}
-                    strokeWidth={isActive ? 2 : 1}
-                  />
-                );
-              }),
-            )}
-
-            {Object.values(atlas.nodes)
-              .filter((node) => Boolean(node.position))
-              .map((node) => (
-                <AtlasNode
-                  key={node.id}
-                  node={node}
-                  isStarting={node.id === atlas.startingNodeId}
-                  isBoss={node.id === atlas.bossNodeId}
-                  onNodeClick={handleNodeClick}
+          <svg
+            className="edges"
+            viewBox={`0 0 ${String(STAGE_W)} ${String(STAGE_H)}`}
+            width={STAGE_W}
+            height={STAGE_H}
+          >
+            <defs>
+              <linearGradient id="dream-atlas-gold" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stopColor="#fbbf24" />
+                <stop offset="1" stopColor="#d4a017" />
+              </linearGradient>
+              <linearGradient id="dream-atlas-openg" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stopColor="#a855f7" />
+                <stop offset="1" stopColor="#7c3aed" />
+              </linearGradient>
+            </defs>
+            {edges.map((edge) => (
+              <g key={edge.key}>
+                <line
+                  className={`edge edge-${edge.kind}`}
+                  x1={edge.x1}
+                  y1={edge.y1}
+                  x2={edge.x2}
+                  y2={edge.y2}
                 />
-              ))}
-          </g>
-        </svg>
+                {edge.kind === "open" && (
+                  <line
+                    className="edge-open-flow"
+                    x1={edge.x1}
+                    y1={edge.y1}
+                    x2={edge.x2}
+                    y2={edge.y2}
+                  />
+                )}
+              </g>
+            ))}
+          </svg>
+
+          <div className="layer-heads">
+            {layerHeads.map((head) => (
+              <div
+                className="layer-head"
+                key={head.layer}
+                style={{ left: head.x, top: 150 }}
+              >
+                {romanForLayer(head.layer)}
+              </div>
+            ))}
+          </div>
+
+          <div className="nodes">
+            {Array.from(resolved.values()).map((entry) => (
+              <AtlasNode
+                key={entry.view.node.id}
+                view={entry.view}
+                hovered={hover === entry.view.node.id}
+                onEnter={setHover}
+                onLeave={() => {
+                  setHover(null);
+                }}
+                onClick={handleNodeClick}
+              />
+            ))}
+          </div>
+
+          {hovered && <Preview resolved={hovered} />}
+          {hovered && hovered.dreamsign !== null && (
+            <DreamsignCard resolved={hovered} />
+          )}
+
+          <div className="hud-top">
+            <div className="atlas-title">Dream Atlas</div>
+            <div className="atlas-sub">
+              {choiceLayer !== null
+                ? `Layer ${romanForLayer(choiceLayer)} of VII · choose your next dream`
+                : "Seven layers to the final dream"}
+            </div>
+          </div>
+
+          <button
+            type="button"
+            className="atlas-debug"
+            data-testid="atlas-debug-regenerate"
+            onClick={handleDebugRegenerate}
+          >
+            {"🔄 Debug: Regenerate Atlas"}
+          </button>
+        </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

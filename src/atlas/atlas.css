@@ -1,0 +1,659 @@
+/*
+ * Dream Atlas screen styles. Ported from the design handoff mockup and scoped
+ * under `.dream-atlas` so the generic class names (.node, .preview, .edge,
+ * .eyebrow, ...) never collide with the rest of the app. Design tokens are
+ * declared locally on the root so the screen does not depend on the external
+ * design system bundle.
+ */
+.dream-atlas {
+  --dt-font-serif: "EB Garamond", Georgia, "Times New Roman", serif;
+  --dt-font-ui: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --dt-font-mono: "JetBrains Mono", ui-monospace, monospace;
+  --dt-font-rules: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --dt-text: #ece7f5;
+  --dt-text-dim: #b3aac8;
+  --dt-text-faint: #7b7299;
+  --dt-surface: #1a1525;
+  --dt-accent-strong: #a855f7;
+  --dt-primary: #7c3aed;
+  --dt-gold: #d4a017;
+  --dt-gold-light: #fbbf24;
+  --dt-line: rgba(168, 85, 247, 0.18);
+  --dt-line-strong: rgba(168, 85, 247, 0.42);
+  --dt-accent-soft: rgba(168, 85, 247, 0.12);
+  --dt-border: rgba(148, 163, 184, 0.28);
+  --dt-essence: #c084fc;
+  --dt-energy: #c084fc;
+  --dt-wash-journey: radial-gradient(120% 95% at 50% 30%, #241a3a 0%, #140e22 55%, #0a0612 100%);
+  --dt-gradient-title: linear-gradient(90deg, #f3eefb, #c084fc);
+
+  font-family: var(--dt-font-ui);
+  color: var(--dt-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.dream-atlas .viewport {
+  position: fixed;
+  inset: 0;
+  background: #000;
+  overflow: hidden;
+}
+.dream-atlas .stage {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1920px;
+  height: 1080px;
+  transform-origin: center center;
+  overflow: hidden;
+  background: #0a0612;
+}
+
+/* ---- Background wash + drifting motes ---- */
+.dream-atlas .wash {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--dt-wash-journey);
+}
+.dream-atlas .wash::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(120% 100% at 50% 42%, transparent 52%, rgba(5, 2, 8, 0.78) 100%);
+}
+.dream-atlas .motes {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.dream-atlas .mote {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(216, 180, 254, 0.95), transparent);
+  animation: dream-atlas-drift linear infinite;
+}
+@keyframes dream-atlas-drift {
+  0% { transform: translate(0, 0); }
+  50% { transform: translate(16px, -30px); }
+  100% { transform: translate(0, 0); }
+}
+@keyframes dream-atlas-pulse {
+  0%, 100% { opacity: 0.55; }
+  50% { opacity: 1; }
+}
+
+/* ---- Layer numerals (faint watermark) ---- */
+.dream-atlas .layer-heads {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.dream-atlas .layer-head {
+  position: absolute;
+  transform: translateX(-50%);
+  font-family: var(--dt-font-serif);
+  font-size: 28px;
+  font-weight: 600;
+  color: rgba(216, 180, 254, 0.26);
+  letter-spacing: 0.12em;
+}
+
+/* ---- Connections ---- */
+.dream-atlas .edges {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
+.dream-atlas .edge { fill: none; }
+.dream-atlas .edge-dim {
+  stroke: rgba(135, 115, 175, 0.22);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+}
+.dream-atlas .edge-locked {
+  stroke: rgba(124, 58, 237, 0.24);
+  stroke-width: 2.5;
+  stroke-dasharray: 3 9;
+  stroke-linecap: round;
+}
+.dream-atlas .edge-traveled {
+  stroke: url(#dream-atlas-gold);
+  stroke-width: 5;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.55));
+}
+.dream-atlas .edge-open {
+  stroke: url(#dream-atlas-openg);
+  stroke-width: 4;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6));
+}
+.dream-atlas .edge-open-flow {
+  stroke: #ede0ff;
+  stroke-width: 2;
+  stroke-dasharray: 2 16;
+  stroke-linecap: round;
+  animation: dream-atlas-flow 1s linear infinite;
+}
+@keyframes dream-atlas-flow {
+  to { stroke-dashoffset: -18; }
+}
+
+/* ---- Nodes ---- */
+.dream-atlas .nodes {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+}
+.dream-atlas .node {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dream-atlas .node-art {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  transition: transform 0.14s ease;
+}
+.dream-atlas .frame-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  -webkit-user-drag: none;
+  user-select: none;
+}
+.dream-atlas .node-glow {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 74%;
+  height: 74%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.dream-atlas .node-completed .node-glow {
+  background: radial-gradient(closest-side, rgba(212, 160, 23, 0.22), transparent);
+  box-shadow: 0 0 26px 3px rgba(212, 160, 23, 0.45);
+}
+.dream-atlas .node-available { cursor: pointer; }
+.dream-atlas .node-available .node-glow {
+  background: radial-gradient(closest-side, rgba(168, 85, 247, 0.32), transparent);
+  box-shadow: 0 0 32px 6px rgba(168, 85, 247, 0.6);
+  animation: dream-atlas-pulse 2.6s ease-in-out infinite;
+}
+.dream-atlas .node-revealedLocked .node-glow {
+  box-shadow: 0 0 16px 2px rgba(124, 58, 237, 0.22);
+}
+.dream-atlas .node-unrevealed .node-glow {
+  box-shadow: 0 0 14px 2px rgba(80, 70, 110, 0.22);
+}
+.dream-atlas .node-boss .node-glow {
+  background: radial-gradient(closest-side, rgba(239, 68, 68, 0.3), transparent);
+  box-shadow: 0 0 42px 9px rgba(239, 68, 68, 0.5);
+  animation: dream-atlas-pulse 3.4s ease-in-out infinite;
+}
+
+.dream-atlas .node-forgone {
+  filter: grayscale(0.85) brightness(0.5);
+  opacity: 0.5;
+}
+.dream-atlas .node-forgone .node-glow { display: none; }
+
+.dream-atlas .node.is-hover .node-art { transform: scale(1.07); }
+.dream-atlas .node-available.is-hover .node-glow {
+  box-shadow: 0 0 42px 10px rgba(168, 85, 247, 0.85);
+}
+
+.dream-atlas .unrevealed-face {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.dream-atlas .unrevealed-q {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  height: 60%;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, #161226, #0b0814);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4a4366;
+  font-size: 34px;
+}
+
+/* ---- Node badges ---- */
+.dream-atlas .site-badges {
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  gap: 5px;
+}
+.dream-atlas .site-badge {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #2a2040, #14101f);
+  border: 1px solid var(--dt-line-strong);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--dt-accent-strong);
+  box-shadow: 0 2px 7px rgba(0, 0, 0, 0.55);
+}
+.dream-atlas .site-badge-glyph { font-size: 21px; line-height: 1; }
+.dream-atlas .check-badge {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  z-index: 6;
+  background: linear-gradient(180deg, #fbbf24, #d4a017);
+  color: #1a1525;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 21px;
+  border: 2px solid #0a0612;
+}
+.dream-atlas .boss-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  z-index: 6;
+  background: radial-gradient(closest-side, #ef4444, #7f1d1d);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  border: 2px solid #0a0612;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.8);
+}
+.dream-atlas .known-badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  z-index: 7;
+  background: radial-gradient(closest-side, #2a2040, #14101f);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--dt-gold);
+  box-shadow: 0 0 14px rgba(250, 204, 21, 0.6);
+}
+.dream-atlas .known-badge img {
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
+  pointer-events: none;
+}
+.dream-atlas .known-badge::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.5);
+  animation: dream-atlas-signpulse 2.4s ease-out infinite;
+}
+@keyframes dream-atlas-signpulse {
+  0% { box-shadow: 0 0 0 0 rgba(250, 204, 21, 0.5); }
+  70%, 100% { box-shadow: 0 0 0 10px rgba(250, 204, 21, 0); }
+}
+
+/* ---- Hover preview card ---- */
+.dream-atlas .preview {
+  position: absolute;
+  z-index: 30;
+  width: 560px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--dt-surface);
+  border: 1px solid var(--dt-line-strong);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.7), 0 0 40px rgba(168, 85, 247, 0.25);
+  pointer-events: none;
+  animation: dream-atlas-preview-in 0.14s ease both;
+}
+@keyframes dream-atlas-preview-in {
+  from { transform: translateY(6px); }
+  to { transform: none; }
+}
+.dream-atlas .preview-scene {
+  position: relative;
+  height: 300px;
+  background-size: cover;
+  background-position: center;
+}
+.dream-atlas .scene-fade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(10, 6, 18, 0.05) 28%, rgba(10, 6, 18, 0.5) 66%, rgba(26, 21, 37, 0.97));
+}
+.dream-atlas .preview-guide {
+  position: absolute;
+  right: -4px;
+  top: 130px;
+  height: 340px;
+  z-index: 6;
+  filter: drop-shadow(-7px 6px 16px rgba(124, 58, 237, 0.6));
+  pointer-events: none;
+}
+.dream-atlas .preview-title {
+  position: absolute;
+  left: 22px;
+  bottom: 14px;
+  z-index: 3;
+  max-width: 320px;
+  display: flex;
+  flex-direction: column;
+}
+.dream-atlas .ds-name {
+  font-family: var(--dt-font-serif);
+  font-size: 31px;
+  font-weight: 600;
+  color: #f6f6f5;
+  line-height: 1.08;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.85);
+}
+.dream-atlas .guide-name {
+  font-family: var(--dt-font-ui);
+  font-style: normal;
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--dt-essence);
+  margin-top: 5px;
+  text-shadow: 0 1px 8px #000, 0 0 14px rgba(10, 6, 18, 0.9);
+}
+.dream-atlas .eyebrow {
+  font-family: var(--dt-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--dt-text-faint);
+}
+
+.dream-atlas .preview-info {
+  padding: 16px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  background: var(--dt-surface);
+}
+.dream-atlas .preview.has-guide .preview-info {
+  padding-right: 184px;
+  min-height: 176px;
+}
+.dream-atlas .start-text {
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--dt-text-dim);
+  margin: 0;
+  font-family: var(--dt-font-rules);
+}
+.dream-atlas .info-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.dream-atlas .row-ico {
+  font-size: 20px;
+  color: var(--dt-accent-strong);
+  margin-top: 2px;
+  width: 22px;
+  text-align: center;
+  flex: none;
+}
+.dream-atlas .row-ico.gold { color: var(--dt-gold-light); }
+.dream-atlas .row-ico.danger { color: #f87171; }
+.dream-atlas .row-val {
+  font-family: var(--dt-font-serif);
+  font-size: 18px;
+  color: var(--dt-text);
+  font-weight: 600;
+}
+.dream-atlas .row-val.dim {
+  color: var(--dt-text-dim);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 15px;
+}
+.dream-atlas .row-text {
+  margin: 2px 0 0;
+  font-size: 13.5px;
+  line-height: 1.45;
+  color: var(--dt-text-dim);
+  font-family: var(--dt-font-rules);
+}
+.dream-atlas .aff-pill {
+  display: inline-block;
+  margin-top: 4px;
+  font-family: var(--dt-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--dt-accent-strong);
+  background: var(--dt-accent-soft);
+  border: 1px solid var(--dt-line-strong);
+  padding: 3px 11px;
+  border-radius: 999px;
+}
+
+.dream-atlas .preview-mini {
+  width: 320px;
+  display: flex;
+  gap: 14px;
+  padding: 18px;
+  align-items: center;
+}
+.dream-atlas .mini-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  flex: none;
+  background: radial-gradient(closest-side, #161226, #0b0814);
+  border: 1px solid var(--dt-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #4a4366;
+  font-size: 30px;
+}
+.dream-atlas .mini-title {
+  font-family: var(--dt-font-serif);
+  font-size: 21px;
+  color: #f6f6f5;
+  margin: 1px 0 4px;
+}
+.dream-atlas .mini-text {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.45;
+  color: var(--dt-text-dim);
+  font-family: var(--dt-font-rules);
+}
+
+/* ---- Boss (Final Dream) preview ---- */
+.dream-atlas .boss-fade {
+  background: linear-gradient(180deg, rgba(10, 6, 18, 0.05) 22%, rgba(40, 8, 12, 0.5) 60%, rgba(26, 10, 14, 0.97)) !important;
+}
+.dream-atlas .preview.is-boss {
+  border-color: rgba(239, 68, 68, 0.5);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.7), 0 0 44px rgba(239, 68, 68, 0.3);
+}
+.dream-atlas .is-boss .ds-name {
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.9), 0 0 22px rgba(239, 68, 68, 0.55);
+}
+.dream-atlas .boss-subtitle { color: #f87171 !important; }
+.dream-atlas .boss-flag {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 3;
+  font-family: var(--dt-font-mono);
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  background: linear-gradient(180deg, #ef4444, #991b1b);
+  padding: 4px 11px;
+  border-radius: 999px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.6);
+}
+.dream-atlas .boss-figure {
+  right: -10px;
+  top: 96px;
+  height: 384px;
+  filter: drop-shadow(-7px 8px 18px rgba(239, 68, 68, 0.55));
+}
+.dream-atlas .is-boss .preview-info { padding-right: 208px; }
+
+/* ---- Dreamsign card ---- */
+.dream-atlas .dreamsign-card {
+  position: absolute;
+  z-index: 32;
+  width: 308px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--dt-surface);
+  border: 1px solid var(--dt-gold);
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.72), 0 0 34px rgba(250, 204, 21, 0.28);
+  pointer-events: none;
+  animation: dream-atlas-preview-in 0.14s ease both;
+}
+.dream-atlas .dsc-art {
+  position: relative;
+  height: 210px;
+  overflow: hidden;
+  background: radial-gradient(110% 92% at 50% 42%, #2a2040, #14101f 62%, #0a0612);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.dream-atlas .dsc-aura {
+  position: absolute;
+  width: 230px;
+  height: 230px;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(250, 204, 21, 0), rgba(250, 204, 21, 0.3), rgba(168, 85, 247, 0.05), rgba(250, 204, 21, 0.2), rgba(250, 204, 21, 0));
+  filter: blur(7px);
+  animation: dream-atlas-signspin 9s linear infinite;
+}
+.dream-atlas .dsc-glow {
+  position: absolute;
+  width: 168px;
+  height: 168px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(250, 204, 21, 0.4), transparent);
+}
+.dream-atlas .dsc-icon {
+  position: relative;
+  z-index: 1;
+  width: 134px;
+  height: 134px;
+  object-fit: contain;
+  filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.55));
+}
+@keyframes dream-atlas-signspin {
+  to { transform: rotate(360deg); }
+}
+.dream-atlas .dsc-body { padding: 15px 18px 18px; }
+.dream-atlas .dsc-name {
+  font-family: var(--dt-font-serif);
+  font-size: 25px;
+  font-weight: 600;
+  color: #f6f6f5;
+  line-height: 1.05;
+}
+.dream-atlas .dsc-rules {
+  margin: 9px 0 0;
+  font-family: var(--dt-font-rules);
+  font-size: 15px;
+  line-height: 1.42;
+  color: var(--dt-text);
+}
+
+/* ---- Title block ---- */
+.dream-atlas .hud-top {
+  position: absolute;
+  top: 40px;
+  left: 56px;
+  z-index: 10;
+}
+.dream-atlas .atlas-title {
+  font-family: var(--dt-font-serif);
+  font-size: 42px;
+  font-weight: 600;
+  line-height: 1;
+  background: var(--dt-gradient-title);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin: 3px 0;
+}
+.dream-atlas .atlas-sub {
+  font-family: var(--dt-font-mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--dt-text-dim);
+}
+
+.dream-atlas .atlas-debug {
+  position: absolute;
+  top: 46px;
+  right: 48px;
+  z-index: 10;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  background: rgba(217, 119, 6, 0.12);
+  border: 1px solid rgba(217, 119, 6, 0.4);
+  color: #fbbf24;
+}
+.dream-atlas .atlas-debug:hover { background: rgba(217, 119, 6, 0.22); }
+
+@media (prefers-reduced-motion: reduce) {
+  .dream-atlas .mote,
+  .dream-atlas .node-glow,
+  .dream-atlas .known-badge::after,
+  .dream-atlas .dsc-aura,
+  .dream-atlas .edge-open-flow {
+    animation: none !important;
+  }
+}

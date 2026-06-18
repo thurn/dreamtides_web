@@ -1,0 +1,94 @@
+import type { SiteType } from "../types/quest";
+import { siteTypeIcon } from "./atlas-generator";
+
+/**
+ * Visual presentation data for the redesigned Dream Atlas screen. The Atlas
+ * renders the run graph as circular dreamscape-icon nodes in an ornate frame,
+ * with rich hover-preview cards (scene art + resident Dream Guide). The art
+ * resolves directly from ids; this module centralises the id -> URL mapping, the
+ * Atlas-specific site iconography, and the fixed Layer-VII final-dream copy.
+ *
+ * Assets are produced by `scripts/setup-assets.mjs` and served from `public/`:
+ *   - `/dreamscapes/<id>.png`       rectangular scene art (hover-card header)
+ *   - `/dreamscape-icons/<id>.png`  circular node icon
+ *   - `/dream-guides/<guideId>.png` Dream Guide character render
+ *   - `/atlas/Round_frame_main.png` ornate frame for unrevealed nodes
+ */
+
+/** Rectangular scene art for a dreamscape, shown in the hover-preview header. */
+export function dreamscapeSceneUrl(dreamscapeId: string): string {
+  return `/dreamscapes/${dreamscapeId}.png`;
+}
+
+/** Circular node icon for a dreamscape, shown inside the atlas node frame. */
+export function dreamscapeIconUrl(dreamscapeId: string): string {
+  return `/dreamscape-icons/${dreamscapeId}.png`;
+}
+
+/** Character render of a Dream Guide, shown standing over the preview seam. */
+export function guidePortraitUrl(guideId: string): string {
+  return `/dream-guides/${guideId}.png`;
+}
+
+/** A dreamsign's icon art (its `imageName`), shown on the badge and sign card. */
+export function dreamsignIconUrl(imageName: string): string {
+  return `/dreamsigns/${imageName}`;
+}
+
+/** Ornate round frame used as the face of an unrevealed atlas node. */
+export const ROUND_FRAME_URL = "/atlas/Round_frame_main.png";
+
+/** Boxicons class used for the "Card Affiliation" row in the preview card. */
+export const AFFILIATION_ROW_ICON_CLASS = "bxf bx-rectangle-vertical";
+
+/**
+ * Atlas-specific site iconography, per the Dream Atlas handoff. The game's icon
+ * system is Boxicons 3, filled variant (`bxf bx-*`); Transfiguration is the lone
+ * Font Awesome exception because Boxicons has no hammer glyph. Only the site
+ * types that surface on the Atlas (the ten guide signature sites) are listed;
+ * any other type falls back to the shared {@link siteTypeIcon} table.
+ */
+const ATLAS_SITE_ICON_OVERRIDES: Partial<Record<SiteType, string>> = {
+  Shop: "bxf bx-store-alt-2",
+  SpecialtyShop: "bxf bx-store-alt-2",
+  DreamsignMarket: "bxf bx-pyramid",
+  DreamsignRevelation: "bxf bx-meteor",
+  Transfiguration: "fa-solid fa-hammer",
+  Duplication: "bxf bx-copy",
+  Purge: "bxf bx-hot",
+  DreamAugury: "bxf bx-eye",
+  TemptingOffer: "bxf bx-law",
+  Gamble: "bxf bx-coin",
+  TemporalFork: "bxf bx-clock",
+};
+
+/**
+ * Icon class for a site as shown on the Dream Atlas. Prefers the handoff's
+ * Boxicons-3 filled mapping and falls back to the shared site-type icon for
+ * types that never appear as a node's signature site (e.g. Battle, Draft,
+ * Essence).
+ */
+export function atlasSiteIcon(siteType: SiteType): string {
+  return ATLAS_SITE_ICON_OVERRIDES[siteType] ?? siteTypeIcon(siteType);
+}
+
+/** Font Awesome flag glyph the starting dreamscape shows as its site mark. */
+export const STARTER_FLAG_ICON_CLASS = "fa-solid fa-flag";
+
+/**
+ * The Layer-VII final dream. The atlas always presents the boss node as Limbo,
+ * guarded by Apollyon, independent of which dreamscape the generator assigned
+ * the boss node for its battle. Copy is player-facing flavour for the boss
+ * hover card.
+ */
+export const BOSS_DISPLAY = {
+  place: "Limbo",
+  name: "Apollyon",
+  title: "Apollyon, the Doom of Humanity",
+  sceneUrl: "/dreamscapes/limbo.png",
+  iconUrl: "/dreamscape-icons/limbo.png",
+  figureUrl: "/dream-guides/apollyon.png",
+  intro:
+    "A Dreamcaller of annihilating power — his own deck, dreamsigns, and abilities bend the dream toward ruin.",
+  closer: "Every path to the final layer leads here. Defeat him and the quest is won.",
+} as const;

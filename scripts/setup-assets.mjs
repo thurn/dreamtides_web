@@ -27,6 +27,44 @@ const DREAMCALLER_ART_DIR_CANDIDATES = [
 ];
 const DREAMSIGN_ART_DIR = join(homedir(), "Documents", "dreamsigns", "filtered");
 const JOURNEY_ART_DIR = join(homedir(), "Documents", "shutterstock", "images_journeys");
+
+// Dream Atlas art. Each dreamscape ships a rectangular scene image
+// (`<id>.png`, the hover-card art) and a circular node icon (`<id>_icon.png`).
+// Dream-guide character renders (one per guide, plus the boss `apollyon.png`)
+// and the ornate round frame used for unrevealed nodes round out the set.
+const DREAMSCAPE_SCENE_ART_DIR = join(homedir(), "Documents", "synty", "dreamscape_images");
+const DREAMSCAPE_ICON_ART_DIR = join(homedir(), "Documents", "synty", "dreamscape_icons");
+const DREAM_GUIDE_ART_DIR = join(homedir(), "Documents", "synty", "dream_guides");
+
+/**
+ * Maps each Dream Guide id to the basename of its character render in
+ * {@link DREAM_GUIDE_ART_DIR}. The source files use short forms, so this table
+ * lets the pipeline emit `public/dream-guides/<guideId>.png`, letting the atlas
+ * resolve a guide's portrait directly from its id.
+ */
+const GUIDE_PORTRAIT_SOURCE_BY_ID = {
+  tobias_tanglefur: "tobias.png",
+  amunet_the_tomb_keeper: "amunet.png",
+  sigrun: "sigrun.png",
+  durgan_forgehammer: "durgan.png",
+  deacon_holt: "holt.png",
+  master_takeshi: "takeshi.png",
+  aldric_the_seer: "aldric.png",
+  maddox: "maddox.png",
+  gravok: "gravok.png",
+  layaway: "layaway.png",
+};
+
+/**
+ * The Layer-VII final dream. Visually the atlas always presents the boss node
+ * as Limbo guarded by Apollyon, independent of whichever dreamscape the
+ * generator assigns the boss node for its battle. The scene/icon reuse the
+ * Limbo dreamscape art and the figure is Apollyon's character render.
+ */
+const BOSS_SCENE_SOURCE = "limbo.png";
+const BOSS_ICON_SOURCE = "limbo_icon.png";
+const BOSS_FIGURE_SOURCE = "apollyon.png";
+const ROUND_FRAME_SOURCE = "Round_frame_main.png";
 const CARD_FRAME_ART_DIR = join(
   homedir(),
   "dreamtides",
@@ -721,12 +759,19 @@ export function setupAssets({
   dreamsignArtDir = DREAMSIGN_ART_DIR,
   journeyArtDir = JOURNEY_ART_DIR,
   cardFrameArtDir = CARD_FRAME_ART_DIR,
+  dreamscapeSceneArtDir = DREAMSCAPE_SCENE_ART_DIR,
+  dreamscapeIconArtDir = DREAMSCAPE_ICON_ART_DIR,
+  dreamGuideArtDir = DREAM_GUIDE_ART_DIR,
 } = {}) {
   const cardsDir = join(publicDir, "cards");
   const cardFrameDir = join(publicDir, "card-frame");
   const dreamcallersDir = join(publicDir, "dreamcallers");
   const dreamsignsDir = join(publicDir, "dreamsigns");
   const journeysDir = join(publicDir, "journeys");
+  const dreamscapesArtDir = join(publicDir, "dreamscapes");
+  const dreamscapeIconsDir = join(publicDir, "dreamscape-icons");
+  const dreamGuidesDir = join(publicDir, "dream-guides");
+  const atlasArtDir = join(publicDir, "atlas");
   const cardJsonPath = join(publicDir, "card-data.json");
   const cardV2JsonPath = join(publicDir, "cards_v2-data.json");
   const decklistsJsonPath = join(publicDir, "decklists-data.json");
@@ -1359,6 +1404,82 @@ export function setupAssets({
   console.log(
     `Linked ${linkedCardFrameArt} of ${CARD_FRAME_FILES.length} card frame images (${missingCardFrameArt} missing)`,
   );
+
+  // Dream Atlas art. Each dreamscape's rectangular scene
+  // (`<id>.png`, the hover-card art) and circular node icon (`<id>_icon.png`)
+  // are symlinked into `public/dreamscapes/<id>.png` and
+  // `public/dreamscape-icons/<id>.png` so the atlas resolves both directly from
+  // a node's dreamscape id. The Layer-VII final dream (Limbo / Apollyon) is
+  // linked under the fixed `limbo` / `apollyon` keys the atlas reads. Missing
+  // source files warn-and-continue like the other art directories so a fresh
+  // checkout without the synty art still builds.
+  recreateDir(dreamscapesArtDir);
+  recreateDir(dreamscapeIconsDir);
+  let linkedDreamscapeArt = 0;
+  let missingDreamscapeArt = 0;
+  const linkDreamscapeImage = (sourceDir, sourceFile, destDir, destFile) => {
+    const sourcePath = join(sourceDir, sourceFile);
+    if (existsSync(sourcePath)) {
+      symlinkSync(sourcePath, join(destDir, destFile));
+      linkedDreamscapeArt++;
+    } else {
+      console.warn(`  Warning: missing dreamscape art ${sourcePath}`);
+      missingDreamscapeArt++;
+    }
+  };
+  for (const dreamscape of jsonDreamscapes) {
+    linkDreamscapeImage(
+      dreamscapeSceneArtDir,
+      `${dreamscape.id}.png`,
+      dreamscapesArtDir,
+      `${dreamscape.id}.png`,
+    );
+    linkDreamscapeImage(
+      dreamscapeIconArtDir,
+      `${dreamscape.id}_icon.png`,
+      dreamscapeIconsDir,
+      `${dreamscape.id}.png`,
+    );
+  }
+  // The final-dream (Limbo) scene + node icon, keyed `limbo` for the atlas.
+  linkDreamscapeImage(dreamscapeSceneArtDir, BOSS_SCENE_SOURCE, dreamscapesArtDir, "limbo.png");
+  linkDreamscapeImage(dreamscapeIconArtDir, BOSS_ICON_SOURCE, dreamscapeIconsDir, "limbo.png");
+  console.log(
+    `Linked ${linkedDreamscapeArt} dreamscape scene/icon images (${missingDreamscapeArt} missing)`,
+  );
+
+  // Dream Guide character renders, one per guide keyed by guide id, plus the
+  // boss figure Apollyon under the fixed `apollyon` key.
+  recreateDir(dreamGuidesDir);
+  let linkedGuideArt = 0;
+  let missingGuideArt = 0;
+  const linkGuidePortrait = (sourceFile, destFile) => {
+    const sourcePath = join(dreamGuideArtDir, sourceFile);
+    if (existsSync(sourcePath)) {
+      symlinkSync(sourcePath, join(dreamGuidesDir, destFile));
+      linkedGuideArt++;
+    } else {
+      console.warn(`  Warning: missing dream guide art ${sourcePath}`);
+      missingGuideArt++;
+    }
+  };
+  for (const [guideId, sourceFile] of Object.entries(GUIDE_PORTRAIT_SOURCE_BY_ID)) {
+    linkGuidePortrait(sourceFile, `${guideId}.png`);
+  }
+  linkGuidePortrait(BOSS_FIGURE_SOURCE, "apollyon.png");
+  console.log(
+    `Linked ${linkedGuideArt} dream guide portraits (${missingGuideArt} missing)`,
+  );
+
+  // The ornate round frame used for unrevealed atlas nodes.
+  recreateDir(atlasArtDir);
+  const roundFrameSource = join(dreamscapeIconArtDir, ROUND_FRAME_SOURCE);
+  if (existsSync(roundFrameSource)) {
+    symlinkSync(roundFrameSource, join(atlasArtDir, ROUND_FRAME_SOURCE));
+    console.log("Linked atlas round frame image");
+  } else {
+    console.warn(`  Warning: missing atlas round frame ${roundFrameSource}`);
+  }
 
   console.log("Asset setup complete.");
 }
