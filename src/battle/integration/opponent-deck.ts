@@ -32,7 +32,7 @@ import type { BattleRng } from "../random";
 /**
  * Default run length used when the atlas snapshot does not carry its per-layer
  * node lists (e.g. battle-engine tests build a minimal atlas). The live run is
- * a {@link https | 7-layer} atlas, so the midpoint derives from 7 unless the
+ * a 7-layer atlas, so the midpoint derives from 7 unless the
  * caller supplies a populated atlas, which always wins.
  */
 export const DEFAULT_RUN_LAYER_COUNT = 7;
@@ -116,7 +116,7 @@ export function opponentDistinctCardCount(
  * later decks are denser with their best cards. Monotonically non-decreasing in
  * `completionLevel`.
  */
-export function opponentCopiesPerCard(
+function opponentCopiesPerCard(
   completionLevel: number,
   layerCount: number,
 ): number {
@@ -179,7 +179,7 @@ export function resolveBattleAffiliation(
   return resolveNodeAffiliation(node, dreamscapes, affiliations);
 }
 
-/** Weighted card with its source affinity for deterministic weighted draws. */
+/** A card paired with its selection weight for deterministic weighted draws. */
 interface WeightedCandidate {
   card: CardData;
   weight: number;
