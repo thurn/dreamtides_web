@@ -700,7 +700,13 @@ function discourageRepeat(state: AtlasState, dreamscapeId: string): void {
  */
 function revealNodeDreamscape(state: AtlasState, nodeId: string): void {
   const node = state.atlas.nodes[nodeId];
-  if (node.dreamscapeId !== null) {
+  // A node carries a dreamscape once it has been revealed. Treat `undefined` as
+  // "not yet revealed" alongside `null`: Realtime Database drops a stored `null`
+  // on write and `structuredClone` drops an `undefined`-valued key, so a node
+  // arriving here off a persisted/snapshotted atlas reports `dreamscapeId` as
+  // `undefined` rather than `null`. A strict `!== null` check would treat such a
+  // node as already revealed and skip assigning its dreamscape and sites.
+  if ((node.dreamscapeId ?? null) !== null) {
     return;
   }
 
@@ -726,7 +732,7 @@ function revealNodeDreamscape(state: AtlasState, nodeId: string): void {
       dreamscape,
       dreamscapes: state.context.dreamscapes,
       context: state.siteContext,
-      hasKnownDreamsign: node.knownDreamsignId !== null,
+      hasKnownDreamsign: (node.knownDreamsignId ?? null) !== null,
     },
     state.logEvents,
   );
@@ -768,7 +774,12 @@ function setNodeState(
   next: DreamscapeNode["state"],
 ): void {
   const node = state.atlas.nodes[nodeId];
-  if (next !== "unrevealed" && node.dreamscapeId === null) {
+  // Reveal whenever the node becomes visible and has no dreamscape yet. A node
+  // off a persisted/snapshotted atlas reports `dreamscapeId` as `undefined`
+  // (RTDB drops a stored `null`; `structuredClone` drops an `undefined` key), so
+  // the nullish check must catch `undefined` as well as `null` — otherwise an
+  // advanced forward node is left without a dreamscape or sites.
+  if (next !== "unrevealed" && (node.dreamscapeId ?? null) === null) {
     revealNodeDreamscape(state, nodeId);
   }
   state.atlas.nodes[nodeId] = {

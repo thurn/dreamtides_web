@@ -776,6 +776,73 @@ describe("advanceAtlas", () => {
       expect(seenStates).toContain(expected);
     }
   });
+
+  // The atlas snapshot the battle-completion bridge hands to `advanceAtlas` comes
+  // off persisted state, where Realtime Database has dropped every stored `null`
+  // and `structuredClone` has dropped every `undefined`-valued key — so an
+  // unrevealed node arrives with `dreamscapeId` absent (`undefined`) rather than
+  // `null`. If the reveal guard only treats a strict `null` as "needs revealing",
+  // the just-completed node's forward targets are flipped to `available` but never
+  // get a dreamscape or sites, stranding the player on a blank, dead-end
+  // dreamscape with no battle to advance the run. This reproduces that snapshot
+  // shape and asserts the advance fully reveals the forward (and look-ahead)
+  // nodes.
+  it("reveals forward nodes whose dreamscapeId arrived as undefined (RTDB null-drop)", () => {
+    const original = freshAtlas();
+
+    // Reshape every still-unrevealed node the way a persist/snapshot round-trip
+    // does: drop `dreamscapeId` entirely (RTDB strips the stored `null`), clear
+    // the name, and drop the empty `sites` array. Revealed nodes (start/boss/
+    // bonus) keep their assigned dreamscape and sites.
+    const snapshotNodes: Record<string, DreamscapeNode> = {};
+    for (const [id, node] of Object.entries(original.nodes)) {
+      if (node.dreamscapeId === null) {
+        const { dreamscapeId: _dropped, ...rest } = node;
+        // The `dreamscapeId` key is intentionally absent to mirror the persisted
+        // snapshot shape (RTDB drops the stored `null`); cast through `unknown`
+        // since the literal deliberately omits a required field.
+        snapshotNodes[id] = {
+          ...rest,
+          biomeName: "",
+          sites: [],
+        } as unknown as DreamscapeNode;
+      } else {
+        snapshotNodes[id] = node;
+      }
+    }
+    const snapshot: DreamAtlas = { ...original, nodes: snapshotNodes };
+
+    // Sanity: the layer-1 forward targets really did lose their dreamscapeId key.
+    const forwardTargets = original.nodes[original.startingNodeId].forwardIds;
+    expect(forwardTargets.length).toBeGreaterThan(0);
+    for (const id of forwardTargets) {
+      expect(
+        (snapshot.nodes[id] as Partial<DreamscapeNode>).dreamscapeId,
+      ).toBeUndefined();
+    }
+
+    const advanced = advanceAtlas(
+      snapshot,
+      snapshot.startingNodeId,
+      1,
+      defaultContext(),
+      buildContext(),
+      { logEvents: false },
+    );
+
+    // Every newly-available forward node is fully revealed: it carries a real
+    // dreamscape, a name, and a non-empty site list ending in a Battle so the
+    // player can actually clear it and progress.
+    for (const id of forwardTargets) {
+      const node = advanced.nodes[id];
+      expect(node.state).toBe("available");
+      expect(node.dreamscapeId).not.toBeNull();
+      expect(node.dreamscapeId).not.toBeUndefined();
+      expect(node.biomeName).not.toBe("");
+      expect(node.sites.length).toBeGreaterThan(0);
+      expect(node.sites.some((s) => s.type === "Battle")).toBe(true);
+    }
+  });
 });
 
 describe("edgesCross", () => {
