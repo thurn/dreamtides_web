@@ -19,9 +19,13 @@ const DREAMSIGN_ESSENCE_PRICE = 50;
 /** Base cost for a shop reroll, paid in essence. */
 const REROLL_ESSENCE_COST = 50;
 
-/** Standard shop composition: 3 cards and 2 dreamsigns to purchase. */
-const STANDARD_CARD_COUNT = 3;
-const STANDARD_DREAMSIGN_COUNT = 2;
+/**
+ * Standard Card Shop composition: 5 cards to purchase and no dreamsigns.
+ * Dreamsigns are sold exclusively at the Dreamsign Market, which overrides
+ * these counts to 0 cards and 3 dreamsigns.
+ */
+const STANDARD_CARD_COUNT = 5;
+const STANDARD_DREAMSIGN_COUNT = 0;
 
 /** The types of items that can appear in a shop slot. */
 export type ShopItemType = "card" | "dreamsign";

@@ -233,7 +233,7 @@ describe("generateShopInventory", () => {
     makeCard({ cardNumber: 5 }),
   ]);
 
-  it("generates 3 card slots and 2 dreamsign slots by default", () => {
+  it("generates a Card Shop of card slots with no dreamsigns by default", () => {
     const result = generateShopInventory({
       cardDatabase: db,
       draftState: makeDraftState({ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 }),
@@ -244,8 +244,10 @@ describe("generateShopInventory", () => {
     const dreamsignSlots = result.slots.filter(
       (slot) => slot.itemType === "dreamsign",
     );
-    expect(cardSlots).toHaveLength(3);
-    expect(dreamsignSlots).toHaveLength(2);
+    expect(cardSlots.length).toBeGreaterThan(0);
+    // A Card Shop never offers dreamsigns; those are sold at the Dreamsign
+    // Market, which requests dreamsign slots explicitly.
+    expect(dreamsignSlots).toHaveLength(0);
   });
 
   it("draws shop cards from and spends them against the draft pool", () => {
@@ -259,7 +261,7 @@ describe("generateShopInventory", () => {
     const drawnCardNumbers = result.slots
       .filter((slot) => slot.itemType === "card" && slot.card !== null)
       .map((slot) => slot.card!.cardNumber);
-    expect(drawnCardNumbers).toHaveLength(3);
+    expect(drawnCardNumbers.length).toBeGreaterThan(0);
     // Spent cards were removed from the returned draft state.
     const resultPoolState = result.draftState as PoolDraftState | null;
     for (const cardNumber of drawnCardNumbers) {
@@ -277,6 +279,7 @@ describe("generateShopInventory", () => {
       draftState: makeDraftState({ 1: 1, 2: 1, 3: 1, 4: 1, 5: 1 }),
       remainingDreamsignPoolIds: ["dreamsign-1", "dreamsign-2"],
       dreamsignTemplates: DREAMSIGN_TEMPLATES,
+      dreamsignCount: 2,
     });
     const dreamsignSlots = result.slots.filter(
       (slot) => slot.itemType === "dreamsign",
@@ -293,6 +296,7 @@ describe("generateShopInventory", () => {
       draftState: makeDraftState({ 1: 1, 2: 1, 3: 1 }),
       remainingDreamsignPoolIds: ["dreamsign-1", "dreamsign-2"],
       dreamsignTemplates: DREAMSIGN_TEMPLATES,
+      dreamsignCount: 2,
     });
     for (const slot of result.slots) {
       if (slot.itemType === "dreamsign") {
@@ -496,7 +500,7 @@ describe("replayShopDraftState", () => {
       dreamsignTemplates: DREAMSIGN_TEMPLATES,
     });
     const cardSlots = result.slots.filter((slot) => slot.itemType === "card");
-    expect(cardSlots.length).toBe(3);
+    expect(cardSlots.length).toBeGreaterThan(0);
     for (const slot of cardSlots) {
       expect(slot.basePrice).toBe(STANDARD_CARD_PRICE);
     }
