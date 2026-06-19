@@ -35,6 +35,7 @@
     "seed-tide-relationships": "node scripts/seed-tide-relationships.mjs",
     "bake-tides3": "node scripts/bake-tides3.mjs",
     "bake-tides4": "node scripts/bake-tides4.mjs",
+    "check-tides4": "node scripts/check-tides4.mjs",
     "tides-similarity": "node scripts/tides-similarity-experiment.mjs",
     "bake-draft-records": "node scripts/rebuild-adapted-draft-records.mjs"
   },
