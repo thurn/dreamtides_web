@@ -34,7 +34,8 @@ function popoverEyebrow(model: DreamscapeSiteModel): {
   className: string;
 } {
   if (model.isBattle) return { text: "Keeper", className: "battle" };
-  if (model.site.isEnhanced) return { text: "Enhanced site", className: "enhanced" };
+  if (model.site.isEnhanced)
+    return { text: "Enhanced site", className: "enhanced" };
   return { text: "Site", className: "" };
 }
 
@@ -108,12 +109,23 @@ export function DreamscapeSiteNode({
       data-site-locked={isLocked ? "true" : "false"}
       data-interactive={isInteractive ? "true" : "false"}
     >
-      <span className="ds-disc" style={{ boxShadow: ring, borderColor: `${accent}73` }}>
+      <span
+        className="ds-disc"
+        style={{ boxShadow: ring, borderColor: `${accent}73` }}
+      >
         <span
           className="ds-ico"
-          style={{ fontSize: diameter * 0.52, width: diameter * 0.52, height: diameter * 0.52 }}
+          style={{
+            fontSize: diameter * 0.52,
+            width: diameter * 0.52,
+            height: diameter * 0.52,
+          }}
         >
-          <i className={model.icon} aria-hidden="true" style={{ fontSize: "inherit", lineHeight: 1 }} />
+          <i
+            className={model.icon}
+            aria-hidden="true"
+            style={{ fontSize: "inherit", lineHeight: 1 }}
+          />
         </span>
       </span>
       {isBattle && !isLocked && !site.isVisited && (
@@ -139,7 +151,11 @@ export function DreamscapeSiteNode({
  * so it stays clear of the stage edges. Battle and enhanced sites carry a tinted
  * eyebrow; locked and visited sites add a status note.
  */
-export function DreamscapeSitePopover({ model }: { model: DreamscapeSiteModel }) {
+export function DreamscapeSitePopover({
+  model,
+}: {
+  model: DreamscapeSiteModel;
+}) {
   const { pos, site, isLocked, label, blurb, accent } = model;
   const openLeft = pos.x > 52; // node on the right → card to its left
   const openUp = pos.y > 60; // node low → card above
@@ -147,7 +163,10 @@ export function DreamscapeSitePopover({ model }: { model: DreamscapeSiteModel })
 
   const note =
     isLocked && !site.isVisited
-      ? { text: "Defeat the keeper's wards: clear the dreamscape's other sites first.", className: "locked" }
+      ? {
+          text: "You must visit the other sites in this dreamscape first.",
+          className: "locked",
+        }
       : site.isVisited
         ? { text: "Already visited.", className: "visited" }
         : null;
@@ -169,13 +188,17 @@ export function DreamscapeSitePopover({ model }: { model: DreamscapeSiteModel })
             <i className={model.icon} aria-hidden="true" />
           </span>
           <div style={{ minWidth: 0 }}>
-            <div className={`ds-pop-eyebrow ${eyebrow.className}`}>{eyebrow.text}</div>
+            <div className={`ds-pop-eyebrow ${eyebrow.className}`}>
+              {eyebrow.text}
+            </div>
             <div className="ds-pop-name">{label}</div>
           </div>
         </div>
         <div className="ds-pop-body">
           {blurb}
-          {note !== null && <div className={`ds-pop-note ${note.className}`}>{note.text}</div>}
+          {note !== null && (
+            <div className={`ds-pop-note ${note.className}`}>{note.text}</div>
+          )}
         </div>
       </div>
     </div>

@@ -676,12 +676,10 @@ function drawDreamscapeForNode(
   const MAX_ATTEMPTS = 12;
   let fallback: DreamscapeContent | null = null;
   for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
-    const weighted = nonStarter.map(
-      (d): [DreamscapeContent, number] => [
-        d,
-        state.dreamscapeWeights.get(d.id) ?? 1,
-      ],
-    );
+    const weighted = nonStarter.map((d): [DreamscapeContent, number] => [
+      d,
+      state.dreamscapeWeights.get(d.id) ?? 1,
+    ]);
     const candidate = weightedPick(weighted);
     fallback ??= candidate;
     if (!ineligibleDreamscapeIds.has(candidate.id)) {
@@ -849,10 +847,7 @@ function placeKnownDreamsigns(
         remainingCandidates.splice(i, 1);
       }
     }
-    const dreamsignIndex = randomInt(
-      0,
-      state.remainingDreamsignIds.length - 1,
-    );
+    const dreamsignIndex = randomInt(0, state.remainingDreamsignIds.length - 1);
     const [dreamsignId] = state.remainingDreamsignIds.splice(dreamsignIndex, 1);
     if (dreamsignId === undefined) {
       break;
@@ -1048,7 +1043,11 @@ export function generateInitialAtlas(
     bonusReveals.push(shuffledBonus.splice(idx, 1)[0]);
   }
 
-  const startRevealed = new Set<string>([startingNodeId, bossNodeId, ...bonusReveals]);
+  const startRevealed = new Set<string>([
+    startingNodeId,
+    bossNodeId,
+    ...bonusReveals,
+  ]);
 
   // Place known dreamsigns before driving reveal states so an early carrier can
   // be among the start-revealed nodes.
@@ -1106,7 +1105,10 @@ export function advanceAtlas(
     }
   }
   for (const node of Object.values(atlas.nodes)) {
-    if (node.dreamscapeId !== null && dreamscapeWeights.has(node.dreamscapeId)) {
+    if (
+      node.dreamscapeId !== null &&
+      dreamscapeWeights.has(node.dreamscapeId)
+    ) {
       dreamscapeWeights.set(
         node.dreamscapeId,
         (dreamscapeWeights.get(node.dreamscapeId) ?? 1) /
@@ -1236,16 +1238,19 @@ export function regenerateAtlasForProgress(
   options: AtlasGenerationOptions = {},
 ): DreamAtlas {
   let atlas = generateInitialAtlas(0, context, build, options);
-  for (
-    let completion = 1;
-    completion <= completedDreamscapes;
-    completion++
-  ) {
+  for (let completion = 1; completion <= completedDreamscapes; completion++) {
     const nodeToComplete = pickReplayCompletionNode(atlas);
     if (nodeToComplete === null) {
       break;
     }
-    atlas = advanceAtlas(atlas, nodeToComplete, completion, context, build, options);
+    atlas = advanceAtlas(
+      atlas,
+      nodeToComplete,
+      completion,
+      context,
+      build,
+      options,
+    );
   }
   return atlas;
 }
@@ -1276,14 +1281,15 @@ const SITE_TYPE_META: Record<
   Battle: {
     icon: "bxf bx-sword-alt",
     name: "Battle",
-    description: "Fight the dreamscape's keeper to clear it.",
-    enhancedDescription: "Fight the dreamscape's keeper to clear it.",
+    description: "A battle against this dream's guardian.",
+    enhancedDescription: "A battle against this dream's guardian.",
   },
   Draft: {
     icon: "bxf bx-rectangle-vertical",
     name: "Draft",
     description: "Pick a card from a curated offer to add to your deck.",
-    enhancedDescription: "Pick a card from a curated offer to add to your deck.",
+    enhancedDescription:
+      "Pick a card from a curated offer to add to your deck.",
   },
   Shop: {
     icon: "bxf bx-store-alt-2",
@@ -1369,8 +1375,7 @@ const SITE_TYPE_META: Record<
     icon: "bxf bx-law",
     name: "Tempting Offer",
     description: "Take a risky deal for an outsized payoff.",
-    enhancedDescription:
-      "Enhanced offer: choose between two competing offers.",
+    enhancedDescription: "Enhanced offer: choose between two competing offers.",
   },
   Gamble: {
     icon: "bxf bx-coin",
