@@ -12,7 +12,7 @@ export interface DreamscapeSiteModel {
   site: SiteState;
   pos: ScatterPoint;
   index: number;
-  /** This site is the dreamscape's keeper battle. */
+  /** This site is the dreamscape's guardian battle. */
   isBattle: boolean;
   /** A battle gated behind the dreamscape's other, unvisited sites. */
   isLocked: boolean;
@@ -33,24 +33,20 @@ function popoverEyebrow(model: DreamscapeSiteModel): {
   text: string;
   className: string;
 } {
-  if (model.isBattle) return { text: "Keeper", className: "battle" };
-  if (model.site.isEnhanced)
-    return { text: "Enhanced site", className: "enhanced" };
+  if (model.isBattle) return { text: "Guardian", className: "battle" };
   return { text: "Site", className: "" };
 }
 
 /**
  * A single floating site node: a dark disc with a white glyph, a soft accent
  * ring, and a calm drift. Battle nodes are larger and carry a pulsing ring;
- * visited and locked nodes dim and show a status badge. The node fades back when
- * another node is hovered so the focused site reads clearly against the scene.
+ * visited and locked nodes dim and show a status badge.
  */
 export function DreamscapeSiteNode({
   model,
   size,
   motion,
   hovered,
-  anyHover,
   onHover,
   onSelect,
 }: {
@@ -58,19 +54,17 @@ export function DreamscapeSiteNode({
   size: number;
   motion: boolean;
   hovered: boolean;
-  anyHover: boolean;
   onHover: (index: number | null) => void;
   onSelect: (siteId: string) => void;
 }) {
   const { site, pos, index, isBattle, isLocked, isInteractive, accent } = model;
 
-  // Battle keepers loom a little larger than the wayside sites.
+  // Battle guardians loom a little larger than the wayside sites.
   const diameter = isBattle ? Math.round(size * 1.22) : size;
-  // A locked keeper stays at full opacity but is desaturated to a clear,
+  // A locked guardian stays at full opacity but is desaturated to a clear,
   // readable "disabled" grey — the old translucent treatment washed out against
   // the bright scene art and was hard to see.
-  const dim = (anyHover && !hovered) || site.isVisited;
-  const opacity = site.isVisited ? 0.42 : dim ? 0.5 : 1;
+  const opacity = site.isVisited ? 0.42 : 1;
   const lockedFilter = isLocked ? "grayscale(1) brightness(0.62)" : undefined;
 
   // Ring + border derive from the node's `#rrggbb` accent with alpha suffixes.
@@ -153,8 +147,8 @@ export function DreamscapeSiteNode({
 /**
  * The frosted hover card for the focused node. It opens toward open space —
  * leftward when the node sits on the right half, upward when the node sits low —
- * so it stays clear of the stage edges. Battle and enhanced sites carry a tinted
- * eyebrow; locked and visited sites add a status note.
+ * so it stays clear of the stage edges. Battle sites carry a tinted eyebrow;
+ * locked and visited sites add a status note.
  */
 export function DreamscapeSitePopover({
   model,

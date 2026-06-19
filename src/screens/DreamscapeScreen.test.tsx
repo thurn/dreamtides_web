@@ -74,22 +74,21 @@ describe("DreamscapeScreen", () => {
     expect(html).toContain('data-site-id="site-3"');
   });
 
-  it("tracks the exact remaining site count while the keeper is locked", () => {
+  it("locks the guardian battle while other sites remain unvisited", () => {
     const html = renderScreen([DRAFT, REWARD, BATTLE]);
-    expect(html).toContain("2 sites remain to unlock the keeper");
     // The battle node is locked until the other sites are visited.
     expect(html).toContain('data-site-type="Battle"');
     expect(html).toMatch(/data-site-type="Battle"[^>]*data-site-locked="true"/);
+    expect(html).toContain('data-battle-unlocked="false"');
   });
 
-  it("unlocks the keeper once all non-battle sites are visited", () => {
+  it("unlocks the guardian once all non-battle sites are visited", () => {
     const html = renderScreen([
       { ...DRAFT, isVisited: true },
       { ...REWARD, isVisited: true },
       BATTLE,
     ]);
-    expect(html).toContain("Keeper unlocked");
-    expect(html).not.toContain("remain to unlock the keeper");
     expect(html).toMatch(/data-site-type="Battle"[^>]*data-site-locked="false"/);
+    expect(html).toContain('data-battle-unlocked="true"');
   });
 });

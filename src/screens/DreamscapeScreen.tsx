@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQuest } from "../state/quest-context";
 import {
-  enhancedSiteDescription,
   siteTypeDescription,
   siteTypeIcon,
   siteTypeName,
@@ -18,7 +17,7 @@ import { scatterSites, seedFromString } from "./dreamscape-scatter";
 import { logEvent } from "../logging";
 import "./dreamscape.css";
 
-/** Diameter, in px, of a wayside site disc (battle keepers scale up from here). */
+/** Diameter, in px, of a wayside site disc (battle guardians scale up from here). */
 const NODE_SIZE = 60;
 
 /** Default accent for an ordinary site node, as a `#rrggbb` hex. */
@@ -42,9 +41,8 @@ function battleAccent(completionLevel: number, isLocked: boolean): string {
  * The dreamscape detail screen. The dreamscape fills the viewport as its scene
  * art; each site floats in the scene as a circular node, and hovering a node
  * raises a frosted popover with its name and a one-line mechanic blurb. The
- * keeper battle is gated behind the dreamscape's other sites: while locked it
- * shows grey with a padlock, and a status eyebrow under the title tracks how
- * many sites remain to unlock it.
+ * guardian battle is gated behind the dreamscape's other sites: while locked it
+ * shows grey with a padlock.
  */
 export function DreamscapeScreen() {
   const { state, mutations } = useQuest();
@@ -78,15 +76,10 @@ export function DreamscapeScreen() {
         : site.type === "Draft"
           ? `Draft ${String(draftSitePickCount(site))}x`
           : siteTypeName(site.type);
-      const blurb =
-        site.isEnhanced && !isBattle
-          ? enhancedSiteDescription(site.type)
-          : siteTypeDescription(site.type);
+      const blurb = siteTypeDescription(site.type);
       const accent = isBattle
         ? battleAccent(completionLevel, isLocked)
-        : site.isEnhanced
-          ? node.biomeColor
-          : DEFAULT_ACCENT;
+        : DEFAULT_ACCENT;
       return {
         site,
         pos: positions[index] ?? { x: 50, y: 58 },
@@ -113,7 +106,7 @@ export function DreamscapeScreen() {
     return () => clearTimeout(id);
   }, [dreamscapeId]);
 
-  // Reconstruction log: which dreamscape was presented, its keeper-unlock state,
+  // Reconstruction log: which dreamscape was presented, its guardian-unlock state,
   // and the exact seeded layout of every site node shown on the overview.
   useEffect(() => {
     if (!node) return;
@@ -191,13 +184,6 @@ export function DreamscapeScreen() {
 
       <div className="ds-title-block">
         <h1 className="ds-name">{title}</h1>
-        <p className={"ds-eyebrow" + (allNonBattleVisited ? " unlocked" : "")}>
-          {allNonBattleVisited
-            ? "Keeper unlocked"
-            : remainingNonBattleSiteCount === 1
-              ? "1 site remains to unlock the keeper"
-              : `${String(remainingNonBattleSiteCount)} sites remain to unlock the keeper`}
-        </p>
       </div>
 
       {/* Visited sites are cleared from the scene; only the sites still to do
@@ -212,7 +198,6 @@ export function DreamscapeScreen() {
             size={NODE_SIZE}
             motion
             hovered={hoveredIndex === model.index}
-            anyHover={hoveredIndex !== null}
             onHover={setHoveredIndex}
             onSelect={handleSiteClick}
           />
