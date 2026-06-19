@@ -22,6 +22,7 @@ import { generatePoolFromData } from "../draft/pool/generate.ts";
 import { buildPoolData } from "../draft/pool/pool-data";
 import { loadFigmentDatabase } from "./figment-database";
 import {
+  buildLegendaryCardNumbers,
   buildNameIndex,
   loadAffinityCorpus,
   loadCardsV2Database,
@@ -136,6 +137,12 @@ export interface QuestContent {
 export interface RunPoolContext {
   poolData: PoolData;
   nameIndex: Map<string, number>;
+  /**
+   * Card numbers whose rarity is `Legendary`. Pools cap these at a single
+   * copy; absent contexts (e.g. tests) leave the set empty and apply no
+   * legendary-specific cap.
+   */
+  legendaryCardNumbers?: ReadonlySet<number>;
   allDreamsignPoolIds: string[];
   /**
    * Pool-construction strategy for this run, from `?algo=`. Absent contexts
@@ -398,12 +405,23 @@ export function buildDreamcallerPackage(
   const pool = generateDreamcallerPool(dreamcaller, ctx, questSeed);
   logPoolConstructed(dreamcaller, ctx, pool);
 
-  const { draftPoolCopiesByCard, unresolvedNames } = resolvePool(pool, ctx.nameIndex);
+  const { draftPoolCopiesByCard, unresolvedNames, cappedLegendaryCardNumbers } =
+    resolvePool(pool, ctx.nameIndex, ctx.legendaryCardNumbers);
   if (unresolvedNames.length > 0) {
     logEvent("build_dreamcaller_package_unresolved_names", {
       dreamcallerId: dreamcaller.id,
       unresolvedCount: unresolvedNames.length,
       unresolvedNames,
+    });
+  }
+  if (cappedLegendaryCardNumbers.length > 0) {
+    // Record which legendaries the pool asked to duplicate so a production
+    // pool can be reconstructed: the generator wanted >1 copy, the one-copy
+    // legendary cap reduced each to a single copy.
+    logEvent("build_dreamcaller_package_legendary_capped", {
+      dreamcallerId: dreamcaller.id,
+      cappedCount: cappedLegendaryCardNumbers.length,
+      cappedLegendaryCardNumbers,
     });
   }
   for (const starter of STARTER_CARD_NUMBERS) {
@@ -734,6 +752,7 @@ export async function loadQuestContent(
   // Build the name index once; reused by both poolContext and (in replay mode)
   // the fit model to avoid building it twice.
   const nameIndex = buildNameIndex(cardDatabase);
+  const legendaryCardNumbers = buildLegendaryCardNumbers(cardDatabase);
 
   const poolData = buildPoolData(
     Array.from(cardDatabase.values()),
@@ -766,6 +785,7 @@ export async function loadQuestContent(
   const poolContext: RunPoolContext = {
     poolData,
     nameIndex,
+    legendaryCardNumbers,
     allDreamsignPoolIds: dreamsignTemplates.map((template) => template.id),
     poolVariant,
   };

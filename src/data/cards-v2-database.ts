@@ -181,12 +181,35 @@ export function buildNameIndex(
   return index;
 }
 
+/**
+ * Build the set of card numbers whose rarity is `Legendary`. Used by
+ * {@link resolvePool} to cap legendary cards at a single copy per pool while
+ * ordinary cards keep the standard two-copy allowance.
+ */
+export function buildLegendaryCardNumbers(
+  database: Map<number, CardData>,
+): Set<number> {
+  const legendary = new Set<number>();
+  for (const card of database.values()) {
+    if (card.rarity === "Legendary") {
+      legendary.add(card.cardNumber);
+    }
+  }
+  return legendary;
+}
+
 /** A generated pool resolved against the v2 card database. */
 export interface ResolvedPool {
   /** Fixed draft multiset keyed by card number (as string), values 1 or 2. */
   draftPoolCopiesByCard: Record<string, number>;
   /** Pool names that had no matching card in the v2 database. */
   unresolvedNames: string[];
+  /**
+   * Card numbers whose copy count was reduced to one because the card is
+   * `Legendary` and the generated pool asked for more than one copy. Surfaced
+   * so callers can log which legendaries hit the single-copy cap.
+   */
+  cappedLegendaryCardNumbers: number[];
 }
 
 /**
@@ -194,13 +217,19 @@ export interface ResolvedPool {
  * `draftPoolCopiesByCard` multiset the draft engine consumes. Names absent
  * from the database are collected in `unresolvedNames` and dropped from the
  * pool.
+ *
+ * Ordinary cards are capped at two copies. Legendary cards (those whose card
+ * number appears in `legendaryCardNumbers`) are capped at one copy, so a pool
+ * never contains a duplicate legendary.
  */
 export function resolvePool(
   pool: GeneratedPool,
   nameIndex: Map<string, number>,
+  legendaryCardNumbers: ReadonlySet<number> = new Set<number>(),
 ): ResolvedPool {
   const draftPoolCopiesByCard: Record<string, number> = {};
   const unresolvedNames: string[] = [];
+  const cappedLegendaryCardNumbers: number[] = [];
 
   for (const [name, copies] of pool.counts) {
     const cardNumber = nameIndex.get(name);
@@ -208,8 +237,17 @@ export function resolvePool(
       unresolvedNames.push(name);
       continue;
     }
-    draftPoolCopiesByCard[String(cardNumber)] = Math.min(2, copies);
+    const isLegendary = legendaryCardNumbers.has(cardNumber);
+    const cap = isLegendary ? 1 : 2;
+    if (isLegendary && copies > 1) {
+      cappedLegendaryCardNumbers.push(cardNumber);
+    }
+    draftPoolCopiesByCard[String(cardNumber)] = Math.min(cap, copies);
   }
 
-  return { draftPoolCopiesByCard, unresolvedNames };
+  return {
+    draftPoolCopiesByCard,
+    unresolvedNames,
+    cappedLegendaryCardNumbers,
+  };
 }
