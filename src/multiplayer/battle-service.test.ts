@@ -3,11 +3,10 @@ import { runTransaction } from "firebase/database";
 import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../battle/types";
 import {
   applyBattleCommandToRoom,
+  applyBattleHistoryNavToRoom,
   clearBattleStateInRoom,
   ensureBattleSession,
-  redoBattleInRoom,
   resetBattleInRoom,
-  undoBattleInRoom,
 } from "./battle-service";
 import { normalizeBattleStateSnapshot } from "./battle-normalize";
 import { createBattleInit } from "../battle/integration/create-battle-init";
@@ -405,7 +404,8 @@ describe("applyBattleCommandToRoom", () => {
     expect(next).not.toBe(initialRoom);
     const updatedBattle = next.battleState!;
     expect(updatedBattle.reducer.commandSerial).toBe(1);
-    expect(updatedBattle.reducer.history.past.length).toBe(1);
+    // History is kept client-local and never persisted into the room.
+    expect(updatedBattle.reducer.history).toEqual({ past: [], future: [] });
     expect(updatedBattle.reducer.lastActivityKind).toBe("command");
     expect(next.actionLog!["action-1"].action).toBe("battle:DEBUG_EDIT");
     expect(next.actionLog!["action-1"].source).toBe("hand-tray");
@@ -529,81 +529,74 @@ function buildRoomWithOneCommittedCommand() {
   });
 }
 
-describe("undoBattleInRoom and redoBattleInRoom", () => {
-  it("undo moves the latest past entry into future and bumps commandSerial", () => {
+describe("applyBattleHistoryNavToRoom", () => {
+  it("writes the client-restored snapshot as the live state and bumps commandSerial", () => {
     const seeded = buildRoomWithOneCommittedCommand();
-    const next = undoBattleInRoom({
+    const restoredMutable = seeded.battleState!.reducer.mutable;
+    const next = applyBattleHistoryNavToRoom({
       room: seeded,
+      direction: "undo",
+      restored: {
+        mutable: restoredMutable,
+        lastTransition: null,
+        restoredCommandLabel: "Move card",
+      },
       now: "2026-05-09T00:00:01.000Z",
       actorId: "client-a",
       actionId: "u1",
     });
-    expect(next.battleState!.reducer.history.past.length).toBe(0);
-    expect(next.battleState!.reducer.history.future.length).toBe(1);
+    expect(next.battleState!.reducer.mutable).toBe(restoredMutable);
+    // The growing history stays client-local; the room records only the result.
+    expect(next.battleState!.reducer.history).toEqual({ past: [], future: [] });
     expect(next.battleState!.reducer.commandSerial).toBe(
       seeded.battleState!.reducer.commandSerial + 1,
     );
     expect(next.battleState!.reducer.lastActivityKind).toBe("undo");
     expect(next.actionLog!["u1"].action).toBe("battle:UNDO");
-    const restoredEntry = next.battleState!.reducer.history.future[0];
-    expect(next.actionLog!["u1"].summary.restoredCommandLabel).toBe(
-      restoredEntry.metadata.label,
-    );
+    expect(next.actionLog!["u1"].summary.restoredCommandLabel).toBe("Move card");
   });
 
-  it("undo no-ops when past is empty", () => {
-    const seeded = buildFreshRoom();
-    const next = undoBattleInRoom({
-      room: seeded,
-      now: "2026-05-09T00:00:01.000Z",
-      actorId: "client-a",
-      actionId: "u1",
-    });
-    expect(next).toBe(seeded);
-  });
-
-  it("redo moves head of future to past and bumps commandSerial", () => {
+  it("labels a redo navigation as battle:REDO with the redo activity kind", () => {
     const seeded = buildRoomWithOneCommittedCommand();
-    const undone = undoBattleInRoom({
+    const next = applyBattleHistoryNavToRoom({
       room: seeded,
-      now: "2026-05-09T00:00:01.000Z",
-      actorId: "client-a",
-      actionId: "u1",
-    });
-    const next = redoBattleInRoom({
-      room: undone,
+      direction: "redo",
+      restored: {
+        mutable: seeded.battleState!.reducer.mutable,
+        lastTransition: null,
+        restoredCommandLabel: "Move card",
+      },
       now: "2026-05-09T00:00:02.000Z",
       actorId: "client-a",
       actionId: "r1",
     });
-    expect(next.battleState!.reducer.history.past.length).toBe(1);
-    expect(next.battleState!.reducer.history.future.length).toBe(0);
-    expect(next.battleState!.reducer.commandSerial).toBe(
-      undone.battleState!.reducer.commandSerial + 1,
-    );
     expect(next.battleState!.reducer.lastActivityKind).toBe("redo");
     expect(next.actionLog!["r1"].action).toBe("battle:REDO");
-    const restoredEntry =
-      next.battleState!.reducer.history.past[
-        next.battleState!.reducer.history.past.length - 1
-      ];
-    expect(next.actionLog!["r1"].summary.restoredCommandLabel).toBe(
-      restoredEntry.metadata.label,
-    );
   });
 
-  it("redo no-ops when future is empty", () => {
-    const seeded = buildFreshRoom();
-    const next = redoBattleInRoom({
+  it("omits restoredCommandLabel from the summary when it is null", () => {
+    const seeded = buildRoomWithOneCommittedCommand();
+    const next = applyBattleHistoryNavToRoom({
       room: seeded,
+      direction: "undo",
+      restored: {
+        mutable: seeded.battleState!.reducer.mutable,
+        lastTransition: null,
+        restoredCommandLabel: null,
+      },
       now: "2026-05-09T00:00:01.000Z",
       actorId: "client-a",
-      actionId: "r1",
+      actionId: "u1",
     });
-    expect(next).toBe(seeded);
+    expect(
+      Object.prototype.hasOwnProperty.call(
+        next.actionLog!["u1"].summary,
+        "restoredCommandLabel",
+      ),
+    ).toBe(false);
   });
 
-  it("undo on null battleState returns the room unchanged", () => {
+  it("returns the room unchanged when battleState is null", () => {
     const room: MultiplayerRoom = {
       metadata: { schemaVersion: 2, createdAt: "0", updatedAt: "0" },
       questState: null,
@@ -611,8 +604,23 @@ describe("undoBattleInRoom and redoBattleInRoom", () => {
       presence: {},
       actionLog: {},
     };
-    const next = undoBattleInRoom({
+    const next = applyBattleHistoryNavToRoom({
       room,
+      direction: "undo",
+      restored: {
+        mutable: createInitialBattleState(
+          createBattleInit({
+            battleEntryKey: "nav-null",
+            site: makeBattleTestSite(),
+            state: makeBattleTestState(),
+            cardDatabase: makeBattleTestCardDatabase(),
+            dreamcallers: makeBattleTestDreamcallers(),
+            seedOverride: 1,
+          }),
+        ),
+        lastTransition: null,
+        restoredCommandLabel: null,
+      },
       now: "x",
       actorId: "client-a",
       actionId: "u1",

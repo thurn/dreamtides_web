@@ -239,7 +239,7 @@ describe("useMultiplayerBattle", () => {
     expect(value.reducerState).toBeNull();
   });
 
-  it("dispatches UNDO/REDO through dispatchBattleHistoryNav", async () => {
+  it("dispatches UNDO/REDO through dispatchBattleHistoryNav with a restored snapshot", async () => {
     const fakeBattleState = makeFakeBattleState();
     const captured: MultiplayerBattleValue[] = [];
     mount(
@@ -256,6 +256,20 @@ describe("useMultiplayerBattle", () => {
 
     const value = captured[captured.length - 1];
     expect(value).toBeDefined();
+
+    // Undo/redo navigate the client-local history, so a command must land first
+    // to give them something to restore.
+    await act(async () => {
+      value.dispatch({
+        type: "APPLY_COMMAND",
+        command: {
+          id: "DEBUG_EDIT",
+          edit: { kind: "ADJUST_SCORE", side: "player", amount: 1 },
+          sourceSurface: "status-strip",
+        },
+      });
+      await Promise.resolve();
+    });
 
     await act(async () => {
       value.dispatch({ type: "UNDO" });

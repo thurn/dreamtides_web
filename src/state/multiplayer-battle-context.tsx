@@ -40,10 +40,29 @@ export interface MultiplayerBattleValue {
 export const MultiplayerBattleContext =
   createContext<MultiplayerBattleValue | null>(null);
 
-interface OptimisticBattleReducerState {
+/**
+ * The client's authoritative battle state. It carries the FULL undo/redo history
+ * (which is never synced to Firebase — see {@link battleService}) and is advanced
+ * locally by every command/undo/redo. `serial` is the command serial this state
+ * corresponds to, used to tell our own already-applied writes (room serial ==
+ * ours) apart from a remote change (room serial ahead of ours).
+ */
+interface LocalBattleState {
   battleId: string;
   reducerState: BattleReducerState;
   serial: number;
+}
+
+function seedLocalFromShared(
+  battleState: SharedBattleState,
+): LocalBattleState {
+  const reducerState = createReducerStateFromSharedBattleState(battleState);
+  return {
+    battleId: battleState.init.battleId,
+    // `reducerState` is non-null because `battleState` is non-null.
+    reducerState: reducerState as BattleReducerState,
+    serial: battleState.reducer.commandSerial,
+  };
 }
 
 export function MultiplayerBattleProvider({
@@ -63,86 +82,109 @@ export function MultiplayerBattleProvider({
 }) {
   const stateRef = useRef({ database, roomId, clientId });
   stateRef.current = { database, roomId, clientId };
-  const [optimistic, setOptimistic] = useState<OptimisticBattleReducerState | null>(null);
 
+  // `local` is the displayed/authoritative state with full history; `localRef`
+  // mirrors it so `dispatch` reads the freshest value synchronously even across
+  // several dispatches within one render tick.
+  const [local, setLocal] = useState<LocalBattleState | null>(null);
+  const localRef = useRef<LocalBattleState | null>(null);
+  const commitLocal = useCallback((next: LocalBattleState | null) => {
+    localRef.current = next;
+    setLocal(next);
+  }, []);
+
+  // A committed view rebuilt straight from the synced room, used for the first
+  // render (before the reconciliation effect seeds `local`) and as the seed/
+  // reseed source.
   const committedReducerState = useMemo<BattleReducerState | null>(
     () => createReducerStateFromSharedBattleState(battleState),
     [battleState],
   );
 
+  // Reconcile the local authoritative state with the synced room. Reseed on a
+  // fresh/changed battle or when the room's serial runs AHEAD of ours (a remote
+  // change we did not produce — its history is not ours to keep). When the room
+  // is the same age or behind (our own optimistic writes not yet echoed), keep
+  // the local state and its history.
   useEffect(() => {
     if (battleState === null) {
-      setOptimistic(null);
+      commitLocal(null);
       return;
     }
+    const current = localRef.current;
+    if (
+      current === null ||
+      current.battleId !== battleState.init.battleId ||
+      battleState.reducer.commandSerial > current.serial
+    ) {
+      commitLocal(seedLocalFromShared(battleState));
+    }
+  }, [battleState, commitLocal]);
 
-    setOptimistic((current) => {
-      if (current === null) return null;
-      if (current.battleId !== battleState.init.battleId) return null;
-      if (battleState.reducer.commandSerial >= current.serial) return null;
-      return current;
-    });
-  }, [battleState]);
-
-  const reducerState = optimistic?.reducerState ?? committedReducerState;
+  const reducerState = local?.reducerState ?? committedReducerState;
 
   const dispatch = useCallback((action: BattleControllerAction) => {
     const { database: db, roomId: id, clientId: actor } = stateRef.current;
-    const failedBattleId = battleState?.init.battleId ?? null;
-    setOptimistic((current) => {
-      if (battleState === null || committedReducerState === null) {
-        return current;
-      }
+    if (battleState === null) {
+      return;
+    }
+    const failedBattleId = battleState.init.battleId;
 
-      const isSameOptimisticBattle = current?.battleId === battleState.init.battleId;
-      const source = isSameOptimisticBattle
-        ? current.reducerState
-        : committedReducerState;
-      const next = battleControllerReducer(source, action);
-      if (next === source) {
-        return current;
-      }
-
-      return {
+    // Advance the local authoritative state. The base is our current local state
+    // when it belongs to this battle, otherwise a fresh seed from the room.
+    const current = localRef.current;
+    const base =
+      current !== null && current.battleId === battleState.init.battleId
+        ? current
+        : seedLocalFromShared(battleState);
+    const next = battleControllerReducer(base.reducerState, action);
+    const changed = next !== base.reducerState;
+    if (changed) {
+      commitLocal({
         battleId: battleState.init.battleId,
         reducerState: next,
-        serial: (isSameOptimisticBattle
-          ? current.serial
-          : battleState.reducer.commandSerial) + 1,
-      };
-    });
+        serial: base.serial + 1,
+      });
+    }
+
+    const onWriteError = (label: string) => (error: unknown) => {
+      // Roll back to the synced room state on a failed write so the client does
+      // not diverge from the persisted truth.
+      if (localRef.current?.battleId === failedBattleId) {
+        commitLocal(seedLocalFromShared(battleState));
+      }
+      console.error(label, error);
+    };
 
     switch (action.type) {
       case "APPLY_COMMAND":
+        // The room is authoritative for commands, so always forward them (a
+        // command that no-ops locally simply no-ops in the transaction too).
         void dispatchBattleCommandToRoom({
           database: db,
           roomId: id,
           command: action.command,
           actorId: actor,
-        }).catch((error: unknown) => {
-          if (failedBattleId !== null) {
-            setOptimistic((current) =>
-              current?.battleId === failedBattleId ? null : current,
-            );
-          }
-          console.error("Failed to dispatch battle command", error);
-        });
+        }).catch(onWriteError("Failed to dispatch battle command"));
         return;
       case "UNDO":
       case "REDO":
+        // Undo/redo navigate the client-local history; persist the restored
+        // snapshot only when there was actually something to navigate.
+        if (!changed) {
+          return;
+        }
         void dispatchBattleHistoryNav({
           database: db,
           roomId: id,
           direction: action.type === "UNDO" ? "undo" : "redo",
+          restored: {
+            mutable: next.mutable,
+            lastTransition: next.lastTransition,
+            restoredCommandLabel: next.lastActivity?.metadata.label ?? null,
+          },
           actorId: actor,
-        }).catch((error: unknown) => {
-          if (failedBattleId !== null) {
-            setOptimistic((current) =>
-              current?.battleId === failedBattleId ? null : current,
-            );
-          }
-          console.error("Failed to dispatch battle history nav", error);
-        });
+        }).catch(onWriteError("Failed to dispatch battle history nav"));
         return;
       default: {
         const _exhaustive: never = action;
@@ -150,7 +192,7 @@ export function MultiplayerBattleProvider({
         return;
       }
     }
-  }, [battleState, committedReducerState]);
+  }, [battleState, commitLocal]);
 
   const value = useMemo<MultiplayerBattleValue>(
     () => ({
