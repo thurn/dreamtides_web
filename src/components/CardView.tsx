@@ -43,7 +43,7 @@ const SPARK_CHANGE_TINT = "#67e8f9";
 /**
  * Fallback art crop for cards that carry no authored `art` setting: centered
  * with a slight cover zoom that hides source letterboxing. The card editor's
- * art-edit mode overrides this per card by writing an `art` table to the card
+ * focused editor overrides this per card by writing an `art` table to the card
  * TOML. `x`/`y` are normalized pan positions (-1..1, 0 = centered) and `scale`
  * is the cover zoom.
  */

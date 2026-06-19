@@ -13,7 +13,7 @@ export type EditableDreamwellField =
 
 /**
  * All Dreamwell fields the editor can save: the inline-editable fields plus
- * `image-number` and the `art` crop, both set through the art-edit modal.
+ * `image-number` and the `art` crop, both set through the focused editor.
  */
 export type SavableDreamwellField =
   | EditableDreamwellField
@@ -57,8 +57,8 @@ export interface EditorDreamwellRecord {
 export interface DreamwellDisplayState {
   searchText: string;
   /**
-   * When on, clicking a card opens the art-edit modal (mirrors the figment
-   * editor's art-edit mode) instead of starting an inline text edit.
+   * When on, clicking a card opens its focused editor (mirrors the figment
+   * editor's edit mode) instead of starting an inline text edit.
    */
   artEditing: boolean;
   sort: DreamwellSortField;

@@ -19,7 +19,7 @@ export type Rarity = "Legendary" | "Starter" | "Special";
  * edge. The pan is normalized (not pixels) so the stored value is independent
  * of the source image's dimensions; `CardView` resolves it against the loaded
  * image's aspect ratio so the frame always stays fully covered. Authored
- * through the card editor's art-edit mode and stored as the inline `art` table
+ * through the card editor's focused editor and stored as the inline `art` table
  * in the card TOML; absent on cards that have never been cropped, in which case
  * `CardView` falls back to its default crop.
  */

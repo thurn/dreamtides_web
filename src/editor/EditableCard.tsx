@@ -476,10 +476,10 @@ export default function EditableCard({
   };
 
   if (artEditing) {
-    // Art-edit mode replaces inline field editing: clicking the card opens the
-    // art crop editor. CardView handles the click and button semantics itself,
-    // so the card is not wrapped in an element whose styles would cascade into
-    // the card chrome. The preview reflects the card's saved art.
+    // Edit mode replaces inline field editing: clicking the card opens the
+    // focused editor for the whole card. CardView handles the click and button
+    // semantics itself, so the card is not wrapped in an element whose styles
+    // would cascade into the card chrome. The preview reflects the card's saved art.
     return (
       <article
         ref={cardRef}

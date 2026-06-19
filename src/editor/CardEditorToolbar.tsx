@@ -203,9 +203,9 @@ export default function CardEditorToolbar({
 
       <ModeToggle
         active={displayState.artEditing}
-        icon="🖼"
-        label="Art"
-        title="Click a card to pan and zoom its art crop"
+        icon="✎"
+        label="Edit"
+        title="Click a card to open its focused editor"
         onToggle={() =>
           updateDisplayState({ artEditing: !displayState.artEditing })
         }

@@ -51,7 +51,7 @@ export interface SaveEditorFigmentFieldRequest {
   clientRevision?: number;
 }
 
-/** Request to save a figment's art crop through the art-edit modal. */
+/** Request to save a figment's art crop through the focused editor. */
 export interface SaveEditorFigmentArtRequest {
   id: string;
   art: ArtCrop;

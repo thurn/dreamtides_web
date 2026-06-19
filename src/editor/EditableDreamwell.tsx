@@ -55,8 +55,9 @@ function wholeNumberDraft(value: EditableFieldValue): number | null {
  * {@link DreamwellCardView}, with its name heading, rules box, and energy orb
  * wrapped in inline {@link EditableField} editors — double-click any of them to
  * edit in place, exactly like the card, dreamsign, and figment editors. The tier
- * is edited inline through the caption beneath the card; the art image and its
- * pan/zoom crop are set through the art-edit modal opened in art-edit mode.
+ * is edited inline through the caption beneath the card. Edit mode instead opens
+ * the focused editor for the whole record, where every field — the art image and
+ * its pan/zoom crop included — is edited together.
  */
 export default function EditableDreamwell({
   record,
@@ -151,7 +152,7 @@ export default function EditableDreamwell({
         >
           <button
             type="button"
-            aria-label={`Edit art for ${visibleName}`}
+            aria-label={`Edit ${visibleName}`}
             onClick={() => onOpenArtEditor(record)}
             style={{
               display: "block",

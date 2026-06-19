@@ -859,7 +859,7 @@ function FigmentEditorToolbar({
           fontWeight: 700,
         }}
       >
-        {displayState.artEditing ? "Art edit: on" : "Art edit: off"}
+        {displayState.artEditing ? "Edit mode: on" : "Edit mode: off"}
       </button>
       <span style={{ fontSize: "0.78rem", color: "#8a948f", marginLeft: "auto" }}>
         {visibleCount} / {totalCount}

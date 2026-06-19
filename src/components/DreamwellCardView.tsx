@@ -53,7 +53,7 @@ export interface DreamwellCardViewData {
   imageNumber: number;
   /**
    * Curated pan/zoom crop framing the card art, authored through the Dreamwell
-   * editor's art-edit mode and stored as the inline `art` table in the dreamwell
+   * editor's focused editor and stored as the inline `art` table in the dreamwell
    * TOML. Absent on cards that have never been framed, in which case the art is
    * shown at its default top-anchored full cover.
    */
@@ -586,7 +586,7 @@ export function DreamwellCardView({
           fontSize: "2.9cqw",
           lineHeight: 1.2,
           // Pin the alignment so the box never inherits centering from an editor
-          // wrapper (e.g. the art-edit mode's clickable `<button>`).
+          // wrapper (e.g. edit mode's clickable `<button>`).
           textAlign: "left",
           textShadow: "0 0.15cqw 0.15cqw rgba(0, 0, 0, 0.55)",
         }}

@@ -127,7 +127,7 @@ export interface EditorDisplayState {
    */
   tideEditing: boolean;
   /**
-   * When true the grid enters art-edit mode: clicking a card opens the art crop
+   * When true the grid enters edit mode: clicking a card opens its focused
    * editor instead of editing inline fields.
    */
   artEditing: boolean;
@@ -135,7 +135,7 @@ export interface EditorDisplayState {
    * Tag name for checkbox tagging mode. When non-empty the grid renders a big
    * checkbox on each card that toggles this one tag, hiding all other tag and
    * tide chips. Empty means checkbox tagging is off. This mode coexists with
-   * art-edit mode, so a card can be art-cropped and checkbox-tagged at once.
+   * edit mode, so a card can be edited and checkbox-tagged at once.
    */
   checkboxTag: string;
   /**
@@ -170,14 +170,14 @@ export interface SaveEditorCardFieldRequest {
   clientRevision?: number;
 }
 
-/** Request to save a card's art crop through the art-edit modal. */
+/** Request to save a card's art crop through the focused editor. */
 export interface SaveEditorCardArtRequest {
   id: string;
   art: ArtCrop;
 }
 
 /**
- * Request to point a card at a different art image through the art-edit modal.
+ * Request to point a card at a different art image through the focused editor.
  * The number is resolved to `/cards/<imageNumber>.webp` at render time.
  */
 export interface SaveEditorCardImageNumberRequest {
