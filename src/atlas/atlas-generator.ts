@@ -1285,8 +1285,7 @@ export const STARTING_DREAMSCAPE_ICON_CLASS = "bx bx-flag";
  * Metadata for each site type. `icon` is a Boxicons (v3) class name following
  * the suggestions in `docs/quests/quests.md`; icons are rendered with the
  * vendored Boxicons webfont rather than emoji so they stay visually consistent
- * with the rest of the UI. `enhancedDescription` is the "what is special about
- * this dreamscape" line shown when the site is the dreamscape's enhanced site.
+ * with the rest of the UI.
  */
 const SITE_TYPE_META: Record<
   SiteType,
@@ -1294,121 +1293,92 @@ const SITE_TYPE_META: Record<
     icon: string;
     name: string;
     description: string;
-    enhancedDescription: string;
   }
 > = {
   Battle: {
     icon: "bxf bx-sword-alt",
     name: "Battle",
     description: "A battle against this dream's guardian.",
-    enhancedDescription: "A battle against this dream's guardian.",
   },
   Draft: {
     icon: "bxf bx-rectangle-vertical",
     name: "Draft",
     description: "Pick a card from a curated offer to add to your deck.",
-    enhancedDescription:
-      "Pick a card from a curated offer to add to your deck.",
   },
   Shop: {
     icon: "bxf bx-store-alt-2",
     name: "Card Shop",
     description: "Spend essence to buy cards, dreamsigns, or rerolls.",
-    enhancedDescription: "Enhanced shop: rerolling the inventory is free.",
   },
   SpecialtyShop: {
     icon: "bxf bx-store",
     name: "Specialty Shop",
     description: "A rare shop with a focused, themed inventory.",
-    enhancedDescription: "A rare shop with a focused, themed inventory.",
   },
   DreamsignOffering: {
     icon: "bxf bx-sparkles",
     name: "Dreamsign Offering",
     description: "Accept a dreamsign passive, or refuse for essence.",
-    enhancedDescription:
-      "Enhanced dreamsign site: a richer dreamsign draft is offered.",
   },
   DreamsignDraft: {
     icon: "bxf bx-sparkles-alt",
     name: "Dreamsign Draft",
     description: "Choose one dreamsign from several offered options.",
-    enhancedDescription:
-      "Enhanced dreamsign site: a richer dreamsign draft is offered.",
   },
   Purge: {
     icon: "bxf bx-hot",
     name: "Purge",
     description: "Remove a card from your deck.",
-    enhancedDescription:
-      "Enhanced purge: every card removed this visit is 30% cheaper.",
   },
   Essence: {
     icon: "bxf bx-diamond-alt",
     name: "Essence",
     description: "Collect a pile of essence.",
-    enhancedDescription: "Enhanced essence: the essence granted is doubled.",
   },
   Transfiguration: {
     icon: "fa-solid fa-hammer",
     name: "Transfiguration",
     description: "Badge a card with a colored transfiguration.",
-    enhancedDescription:
-      "Enhanced transfiguration: you choose which card is transfigured.",
   },
   Duplication: {
     icon: "bxf bx-copy",
     name: "Duplication",
     description: "Make a copy of a card already in your deck.",
-    enhancedDescription:
-      "Enhanced duplication: you choose which card is duplicated.",
   },
   Reward: {
     icon: "bxf bx-treasure-chest",
     name: "Reward",
     description: "Claim a card, dreamsign, or pile of essence.",
-    enhancedDescription: "Claim a card, dreamsign, or pile of essence.",
   },
   DreamAugury: {
     icon: "bxf bx-eye",
     name: "Dream Augury",
     description: "Claim a reward foreseen by the dreamscape's seer.",
-    enhancedDescription:
-      "Enhanced augury: bigger rewards, curated to your deck.",
   },
   DreamsignMarket: {
     icon: "bxf bx-pyramid",
     name: "Dreamsign Market",
     description: "Buy a dreamsign from a rotating selection.",
-    enhancedDescription:
-      "Enhanced market: restock the dreamsign choices once for free.",
   },
   DreamsignRevelation: {
     icon: "bxf bx-meteor",
     name: "Dreamsign Revelation",
     description: "Choose one dreamsign from several revealed options.",
-    enhancedDescription:
-      "Enhanced revelation: always a choice, with more options tailored to your deck.",
   },
   TemptingOffer: {
     icon: "bxf bx-law",
     name: "Offer",
     description: "Take a risky deal for an outsized payoff.",
-    enhancedDescription: "Enhanced offer: choose between two competing offers.",
   },
   Gamble: {
     icon: "bxf bx-coin",
     name: "Gamble",
     description: "Wager essence on an uncertain reward.",
-    enhancedDescription:
-      "Enhanced gamble: no initial fee, with bigger payouts.",
   },
   TemporalFork: {
     icon: "bxf bx-clock",
     name: "Temporal Fork",
     description: "Defer a reward now to claim more of it later.",
-    enhancedDescription:
-      "Enhanced fork: longer duration and sooner future rewards.",
   },
 };
 
@@ -1434,7 +1404,6 @@ const FALLBACK_SITE_TYPE_META = {
   icon: "bx bx-help-circle",
   name: "Unknown Site",
   description: "An unfamiliar site from an earlier dream.",
-  enhancedDescription: "An unfamiliar site from an earlier dream.",
 } as const;
 
 /**
@@ -1447,7 +1416,6 @@ function siteTypeMeta(siteType: SiteType): {
   icon: string;
   name: string;
   description: string;
-  enhancedDescription: string;
 } {
   return (
     (SITE_TYPE_META as Record<string, (typeof SITE_TYPE_META)[SiteType]>)[
@@ -1459,15 +1427,6 @@ function siteTypeMeta(siteType: SiteType): {
 /** Returns the Boxicons class name for the given site type. */
 export function siteTypeIcon(siteType: SiteType): string {
   return siteTypeMeta(siteType).icon;
-}
-
-/**
- * Returns the line describing what is special about a dreamscape whose enhanced
- * site is `siteType` — used by the atlas hover tooltip. For site types with no
- * distinct enhanced behaviour this falls back to the standard description.
- */
-export function enhancedSiteDescription(siteType: SiteType): string {
-  return siteTypeMeta(siteType).enhancedDescription;
 }
 
 /** Returns the display name for the given site type. */
