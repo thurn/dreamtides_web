@@ -7,6 +7,7 @@ import { generateQuestSeed } from "../state/quest-state-actions";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
 import { EssenceValue } from "../components/EssenceValue";
 import { HoverPopover } from "../components/HoverPopover";
+import { CardTermDefinitions } from "../components/CardTermDefinitions";
 import { RulesText } from "../components/RulesText";
 import type { Tides4Color, Tides4DeckJson } from "../draft/pool/tides4-io";
 import type { DreamcallerContent } from "../types/content";
@@ -222,12 +223,21 @@ export function QuestStartScreen() {
                     boxShadow: `0 14px 28px ${accentColor}16`,
                   }}
                 />
-                <div
+                {/* Hovering the description reveals the definitions for any
+                    glossary terms it uses (e.g. "ephemeral"), matching the
+                    term-definition panel shown beside cards. */}
+                <HoverPopover
+                  triggerAs="div"
                   className="flex flex-1 items-center justify-center px-2 text-center text-sm leading-relaxed opacity-80"
                   style={{ color: "#e2e8f0" }}
+                  placement="top"
+                  maxWidthPx={null}
+                  content={
+                    <CardTermDefinitions text={dreamcaller.renderedText} />
+                  }
                 >
                   <RulesText text={dreamcaller.renderedText} />
-                </div>
+                </HoverPopover>
                 <div
                   className="mt-3 flex items-baseline justify-center gap-1.5 text-sm font-semibold"
                   data-starting-essence={dreamcaller.id}
@@ -275,12 +285,16 @@ export function QuestStartScreen() {
                     >
                       <i
                         aria-label="About signature cards"
-                        className="bx bx-info-circle text-sm leading-none"
+                        className="bx bx-info-circle text-sm leading-none align-middle"
                         data-signature-cards-info-icon={dreamcaller.id}
                         style={{
                           color: "#94a3b8",
                           cursor: "help",
                           pointerEvents: "auto",
+                          // The Boxicons glyph sits high in its em box; a small
+                          // downward nudge centers it on the adjacent label.
+                          position: "relative",
+                          top: "1px",
                         }}
                       />
                     </HoverPopover>
@@ -339,12 +353,16 @@ export function QuestStartScreen() {
                     >
                       <i
                         aria-label="About draft tides"
-                        className="bx bx-info-circle text-sm leading-none"
+                        className="bx bx-info-circle text-sm leading-none align-middle"
                         data-dreamcaller-tides-info-icon={dreamcaller.id}
                         style={{
                           color: "#94a3b8",
                           cursor: "help",
                           pointerEvents: "auto",
+                          // The Boxicons glyph sits high in its em box; a small
+                          // downward nudge centers it on the adjacent label.
+                          position: "relative",
+                          top: "1px",
                         }}
                       />
                     </HoverPopover>

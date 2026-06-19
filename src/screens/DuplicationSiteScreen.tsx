@@ -6,6 +6,7 @@ import { CardDisplay } from "../components/CardDisplay";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { SiteGuide } from "../components/SiteGuide";
+import { SiteCloseButton } from "../components/SiteCloseButton";
 import "./duplication-site.css";
 
 /** Props for the DuplicationSiteScreen component. */
@@ -67,9 +68,10 @@ function buildCandidates(
  * backdrop) so the player can pick one card and add copies of it to the deck.
  *
  * The surface mirrors the sibling Purge and Dreamsign Revelation screens: a
- * frosted summary HUD, a centered deck grid of selectable cards, a
- * de-emphasized "walk on" link beside the commit button, and the resident
- * guide with a speech bubble docked to the lower-left in landscape. At an
+ * frosted summary HUD, a centered deck grid of selectable cards, the commit
+ * button in the footer, a red close button in the top-right corner to leave,
+ * and the resident guide with a speech bubble docked to the lower-left in
+ * landscape. At an
  * enhanced site (Hope's End, Holt's home) the runtime surfaces the entire deck
  * to choose from; otherwise it surfaces a small random hand. Either way the
  * interaction is the same: select one card, then confirm. The copy count each
@@ -297,14 +299,6 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
       <div className="dup-foot">
         <button
           type="button"
-          className="dup-walk"
-          data-testid="duplication-walk-on"
-          onClick={handleClose}
-        >
-          Walk on
-        </button>
-        <button
-          type="button"
           className="dup-dupe-btn"
           data-testid="duplication-confirm"
           disabled={!hasPick || copying || duplicated}
@@ -325,6 +319,12 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
 
       {/* Deacon Holt (shared SiteGuide), docked lower-left in landscape. */}
       <SiteGuide siteType="Duplication" isEnhanced={site.isEnhanced} />
+
+      <SiteCloseButton
+        onClose={handleClose}
+        testId="duplication-walk-on"
+        disabled={copying || duplicated}
+      />
     </div>
   );
 }

@@ -5,6 +5,7 @@ import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { dreamsignIconUrl } from "../atlas/atlas-display";
 import { SiteGuide } from "../components/SiteGuide";
+import { SiteCloseButton } from "../components/SiteCloseButton";
 import {
   DREAMSIGN_HOVER_DELAY_MS,
   DreamsignHoverCard,
@@ -23,9 +24,10 @@ const FLY_TO_TRAY_MS = 1000;
 
 /**
  * The Dreamsign Revelation. Sigrún reveals 3 dreamsigns (4 when enhanced) over
- * the dimmed dreamscape scene; the player takes one — which glows and flies to
- * the collection tray — or walks on for nothing. Shares the dreamsign-offer
- * data flow with the dreamsign draft (option draw, accept, at-cap purge), but
+ * the dimmed dreamscape scene; the player takes one — which glows and flies
+ * toward the Dreamsign collection in the bottom-left HUD — or leaves via the
+ * red close button in the top-right corner. Shares the dreamsign-offer data
+ * flow with the dreamsign draft (option draw, accept, at-cap purge), but
  * presents it as a full immersive scene rather than the card-grid offering.
  */
 export function DreamsignRevelationScreen({
@@ -142,23 +144,16 @@ export function DreamsignRevelationScreen({
             ))}
           </div>
 
-          <button
-            type="button"
-            className="dsr-skip"
-            data-testid="dreamsign-revelation-skip"
-            onClick={handleSkip}
-            title="Walk on. Every revealed Dreamsign is removed from this run's pool."
-          >
-            Walk on — gain nothing
-          </button>
         </>
       )}
 
       <SiteGuide siteType="DreamsignRevelation" isEnhanced={site.isEnhanced} />
 
-      <div className="dsr-tray" aria-hidden="true">
-        <span />
-      </div>
+      <SiteCloseButton
+        onClose={handleSkip}
+        testId="dreamsign-revelation-skip"
+        disabled={chosenIndex !== null}
+      />
     </div>
   );
 }

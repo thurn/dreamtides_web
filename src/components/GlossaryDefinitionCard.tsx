@@ -1,4 +1,5 @@
 import type { GlossaryEntry } from "../data/glossary";
+import { RulesText } from "./RulesText";
 
 /**
  * Shared visual card used to render a single glossary entry as a
@@ -36,9 +37,13 @@ export function GlossaryDefinitionCard({
       >
         {entry.term}
       </p>
-      <p className="mt-1" style={{ color: "#f8fafc" }}>
-        {entry.definition}
-      </p>
+      {/* Render through the shared rules-text renderer so glyphs in a
+          definition (the lunar ☪ in "Awakened", the spark ✦, energy ●, etc.)
+          are swapped for the same Boxicons marks shown in card rules text,
+          instead of printing the raw Unicode character. */}
+      <div className="mt-1" style={{ color: "#f8fafc" }}>
+        <RulesText text={entry.definition} />
+      </div>
     </div>
   );
 }

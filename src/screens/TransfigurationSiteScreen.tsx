@@ -4,6 +4,7 @@ import type { SiteState, DeckEntry } from "../types/quest";
 import type { CardData } from "../types/cards";
 import { CardDisplay } from "../components/CardDisplay";
 import { SiteGuide } from "../components/SiteGuide";
+import { SiteCloseButton } from "../components/SiteCloseButton";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import {
@@ -62,8 +63,8 @@ function buildCandidates(
  * Forgehammer (the shared {@link SiteGuide}) offers to reforge a card over the
  * dimmed dreamscape. The surface mirrors the Purge and Duplication screens: no
  * heading (the guide's bubble carries the narration), a centered row of
- * before -> after card pairs the player accepts one of, and a de-emphasized
- * "walk on" footer link. When enhanced, the player first picks any
+ * before -> after card pairs the player accepts one of, and a red close button
+ * in the top-right corner to leave. When enhanced, the player first picks any
  * untransfigured card from a deck grid and then reviews its single preview.
  */
 export function TransfigurationSiteScreen({
@@ -175,7 +176,10 @@ export function TransfigurationSiteScreen({
   }, [mutations, site.id]);
 
   const guide = (
-    <SiteGuide siteType="Transfiguration" isEnhanced={site.isEnhanced} />
+    <>
+      <SiteGuide siteType="Transfiguration" isEnhanced={site.isEnhanced} />
+      <SiteCloseButton onClose={handleClose} testId="transfiguration-close" />
+    </>
   );
 
   if (cardChoiceRuntime === null) {
@@ -235,12 +239,6 @@ export function TransfigurationSiteScreen({
             The card is reforged.
           </p>
         )}
-
-        <div className="tf-foot">
-          <button type="button" className="tf-walk" onClick={handleClose}>
-            Walk on
-          </button>
-        </div>
 
         {guide}
       </div>
@@ -303,12 +301,6 @@ export function TransfigurationSiteScreen({
           })}
         </div>
       )}
-
-      <div className="tf-foot">
-        <button type="button" className="tf-walk" onClick={handleClose}>
-          Walk on
-        </button>
-      </div>
 
       {guide}
     </div>

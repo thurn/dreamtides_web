@@ -164,9 +164,14 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
       "When this character loses a challenge, it dissolves the opposing character.",
   },
   {
+    term: "Support",
+    definition:
+      "A back-rank character supports the up-to-two front-rank allies ahead of it; non-figment characters only.",
+    variants: ["supports", "supporting"],
+  },
+  {
     term: "Supported",
-    definition: "Characters directly in front of this character.",
-    variants: ["supporting", "support", "supports"],
+    definition: "A front-rank character benefiting from the allies behind it.",
   },
   {
     term: "Challenger",

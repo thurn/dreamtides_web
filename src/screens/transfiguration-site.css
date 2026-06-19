@@ -3,8 +3,8 @@
  * to reforge a card over the dimmed dreamscape scene (supplied by the shared
  * site scene backdrop). The composition mirrors the Purge and Duplication
  * surfaces: an optional frosted summary pill, a centered row of before -> after
- * card pairs (or, when enhanced, a deck grid to pick any card), and a footer
- * with a de-emphasized "walk on" link. All rules are scoped under
+ * card pairs (or, when enhanced, a deck grid to pick any card), and a red close
+ * button in the top-right corner to leave. All rules are scoped under
  * `.transfiguration-site`.
  */
 .transfiguration-site {
@@ -214,28 +214,6 @@
 }
 .transfiguration-site .tf-reject:hover {
   filter: brightness(1.12);
-}
-
-/* ---- Footer ---- */
-.transfiguration-site .tf-foot {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-  z-index: 6;
-}
-.transfiguration-site .tf-walk {
-  padding: 11px 26px;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  font-size: 16px;
-  color: #94a3b8;
-  transition: color 0.14s ease;
-}
-.transfiguration-site .tf-walk:hover {
-  color: #e2e8f0;
-  text-decoration: underline;
-  text-underline-offset: 4px;
 }
 
 /* ---- Status line (loading / empty) ---- */

@@ -2,10 +2,11 @@
  * Purge site screen. Master Takeshi opens the quest deck over the dimmed
  * dreamscape scene (supplied by the shared site scene backdrop) so the player
  * can spend escalating essence to remove cards for good; banes leave for free.
- * The composition mirrors the Dreamsign Revelation surface: a frosted summary
- * HUD, a centered deck grid of selectable cards, a de-emphasized "walk on" link
- * beside the commit button, and Master Takeshi with a speech bubble docked to
- * the lower-left in landscape. All rules are scoped under `.purge-site`.
+ * A fixed top bar holds the essence readouts on the left and the purge commit
+ * button on the right, above a scrolling grid of selectable cards. A red close
+ * button in the top-right corner leaves the site, and Master Takeshi sits with
+ * a speech bubble docked to the lower-left in landscape. All rules are scoped
+ * under `.purge-site`.
  */
 
 /* Fixed full-viewport composition sitting above the shared scene backdrop (also
@@ -17,24 +18,33 @@
   inset: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  /* `safe center` keeps the stage centered when the deck fits, but falls back to
-   * top-aligned once the deck is tall enough to overflow — otherwise the first
-   * rows would be pushed above the scroll origin and become unreachable. */
-  justify-content: safe center;
-  gap: 22px;
-  padding: 40px 24px 104px;
-  overflow: hidden auto;
+  /* A fixed top bar (essence readouts + purge button) over a scrolling deck
+   * region. The deck scrolls inside `.pg-scroll`, not the whole screen, so the
+   * top row of cards always starts below the bar and never slips off the top. */
+  overflow: hidden;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color: #e2e8f0;
   -webkit-font-smoothing: antialiased;
+}
+
+/* ---- Top bar: essence readouts left, purge button right ---- */
+.purge-site .pg-topbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  /* Extra right padding reserves the top-right corner for the close button so
+   * the purge commit button never slides under it. */
+  padding: 18px 74px 18px 20px;
+  z-index: 8;
 }
 
 /* ---- Summary HUD bar — frosted, two readouts ---- */
 .purge-site .pg-summary {
   display: flex;
   align-items: stretch;
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   border-radius: 14px;
   background: rgba(16, 11, 28, 0.72);
   border: 1px solid rgba(168, 85, 247, 0.45);
@@ -92,6 +102,17 @@
   color: #94a3b8;
 }
 
+/* ---- Scrolling deck region (below the fixed top bar) ---- */
+.purge-site .pg-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  overflow-y: auto;
+  /* Generous chip headroom up top so a selected card's price chip is not
+   * clipped by the scroll edge; bottom room clears the HUD bar. */
+  padding: 26px 24px 96px;
+}
+
 /* ---- Deck grid ---- */
 .purge-site .pg-deck {
   display: grid;
@@ -100,6 +121,7 @@
   gap: 30px 20px;
   width: 100%;
   max-width: 1080px;
+  margin: 0 auto;
   z-index: 6;
 }
 .purge-site .pg-slot {
@@ -268,30 +290,9 @@
   text-wrap: pretty;
 }
 
-/* ---- Footer ---- */
-.purge-site .pg-foot {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  z-index: 6;
-}
-.purge-site .pg-walk {
-  padding: 12px 22px;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size: 17px;
-  color: #94a3b8;
-  letter-spacing: 0.01em;
-  transition: color 0.14s ease;
-}
-.purge-site .pg-walk:hover {
-  color: #e2e8f0;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
+/* ---- Purge commit button (top bar, right) ---- */
 .purge-site .pg-purge-btn {
+  flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -350,7 +351,7 @@
  * by shifting the stage to his right so the two never overlap. On narrower
  * viewports the guide hides itself and the stage takes the full width. */
 @media (min-width: 1200px) {
-  .purge-site {
+  .purge-site .pg-scroll {
     padding-left: 312px;
   }
 }

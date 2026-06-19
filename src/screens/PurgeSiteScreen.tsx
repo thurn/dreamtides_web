@@ -8,6 +8,7 @@ import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { dreamsignIconUrl } from "../atlas/atlas-display";
 import { SiteGuide } from "../components/SiteGuide";
+import { SiteCloseButton } from "../components/SiteCloseButton";
 import {
   MAX_PURGE_PER_VISIT,
   maxAffordablePurgeCount,
@@ -39,10 +40,11 @@ const ESSENCE_COLOR = "var(--color-essence)";
  *
  * Pricing escalates with each card removed this visit (see
  * src/purge/purge-pricing.ts), so thinning one or two cards stays cheap while
- * emptying a large part of the deck is a major commitment. The surface mirrors
- * the Dreamsign Revelation: a frosted summary HUD, a centered deck grid of
- * selectable cards, a de-emphasized "walk on" link beside the commit button,
- * and the resident guide with a speech bubble docked to the lower-left.
+ * emptying a large part of the deck is a major commitment. A fixed top bar
+ * holds the essence readouts on the left and the purge commit button on the
+ * right, above a scrolling grid of selectable cards. A red close button in the
+ * top-right corner leaves the site, and the resident guide sits with a speech
+ * bubble docked to the lower-left.
  */
 export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
   const { state, mutations, cardDatabase } = useQuest();
@@ -263,39 +265,64 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
       className={`purge-site${mounted ? " mounted" : ""}`}
       data-testid="purge-site-screen"
     >
-      {/* Summary HUD */}
-      <div className="pg-summary">
-        <div className="pg-cell">
-          <span className="pg-cell-k">Essence after</span>
-          <span className="pg-cell-v">
-            <EssenceValue amount={essenceAfter} color="inherit" />
-            <span className="unit">/ {essence}</span>
-          </span>
-        </div>
-        <div className="pg-cell is-next">
-          <span className="pg-cell-k">Next card</span>
-          <span className="pg-cell-v">
-            {atVisitLimit ? (
-              <span className="pg-cell-note">Visit limit reached</span>
-            ) : canSelectMore ? (
-              <EssenceValue amount={nextCardPrice} color="inherit" />
-            ) : (
-              <span className="pg-cell-note">Not enough essence</span>
-            )}
-          </span>
-        </div>
-        {site.isEnhanced && (
-          <div className="pg-cell is-enhanced" data-purge-enhanced="true">
-            <span className="pg-cell-k">Enhanced</span>
-            <span className="pg-cell-v">{discountPercent}% off</span>
+      {/* Top bar: essence readouts pinned left, the commit button pinned right
+          so the way to purge is always visible above the scrolling deck. */}
+      <div className="pg-topbar">
+        <div className="pg-summary">
+          <div className="pg-cell">
+            <span className="pg-cell-k">Essence after</span>
+            <span className="pg-cell-v">
+              <EssenceValue amount={essenceAfter} color="inherit" />
+              <span className="unit">/ {essence}</span>
+            </span>
           </div>
-        )}
+          <div className="pg-cell is-next">
+            <span className="pg-cell-k">Next card</span>
+            <span className="pg-cell-v">
+              {atVisitLimit ? (
+                <span className="pg-cell-note">Visit limit reached</span>
+              ) : canSelectMore ? (
+                <EssenceValue amount={nextCardPrice} color="inherit" />
+              ) : (
+                <span className="pg-cell-note">Not enough essence</span>
+              )}
+            </span>
+          </div>
+          {site.isEnhanced && (
+            <div className="pg-cell is-enhanced" data-purge-enhanced="true">
+              <span className="pg-cell-k">Enhanced</span>
+              <span className="pg-cell-v">{discountPercent}% off</span>
+            </div>
+          )}
+        </div>
+
+        <button
+          type="button"
+          className="pg-purge-btn"
+          data-testid="purge-confirm"
+          disabled={removeCount === 0 || purging !== null}
+          onClick={handlePurge}
+        >
+          <i className="bxf bx-hot" aria-hidden="true" />
+          {removeCount === 0
+            ? "Purge cards"
+            : `Purge ${String(removeCount)} ${removeCount === 1 ? "card" : "cards"}`}
+          {selectedCount > 0 && (
+            <span className="pg-purge-cost">
+              {" · "}
+              <EssenceValue amount={totalCost} color={ESSENCE_COLOR} />
+            </span>
+          )}
+        </button>
       </div>
 
-      {/* Deck grid — paid cards, inline bane cards, then bane Dreamsign tiles. */}
+      {/* Scrollable deck area — paid cards, inline bane cards, then bane
+          Dreamsign tiles. The scroll is contained below the fixed top bar so
+          the first row of cards never slips above the top edge. */}
       {deck.length === 0 && baneDreamsignIndices.length === 0 ? (
         <p className="pg-status">Your deck is empty.</p>
       ) : (
+        <div className="pg-scroll">
         <div
           className="pg-deck"
           style={{ "--pg-cardw": `${CARD_SLOT_WIDTH}px` } as CSSProperties}
@@ -411,40 +438,17 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
             );
           })}
         </div>
+        </div>
       )}
-
-      {/* Footer */}
-      <div className="pg-foot">
-        <button
-          type="button"
-          className="pg-walk"
-          data-testid="purge-walk-on"
-          onClick={handleClose}
-        >
-          Walk on
-        </button>
-        <button
-          type="button"
-          className="pg-purge-btn"
-          data-testid="purge-confirm"
-          disabled={removeCount === 0 || purging !== null}
-          onClick={handlePurge}
-        >
-          <i className="bxf bx-hot" aria-hidden="true" />
-          {removeCount === 0
-            ? "Purge cards"
-            : `Purge ${String(removeCount)} ${removeCount === 1 ? "card" : "cards"}`}
-          {selectedCount > 0 && (
-            <span className="pg-purge-cost">
-              {" · "}
-              <EssenceValue amount={totalCost} color={ESSENCE_COLOR} />
-            </span>
-          )}
-        </button>
-      </div>
 
       {/* Master Takeshi (shared SiteGuide), docked lower-left in landscape. */}
       <SiteGuide siteType="Purge" isEnhanced={site.isEnhanced} />
+
+      <SiteCloseButton
+        onClose={handleClose}
+        testId="purge-walk-on"
+        disabled={purging !== null}
+      />
     </div>
   );
 }

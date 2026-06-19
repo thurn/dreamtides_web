@@ -1,9 +1,9 @@
 /*
  * Dreamsign Revelation site screen. Sigrún reveals several dreamsigns over the
  * dimmed dreamscape scene (supplied by the shared site scene backdrop) and the
- * player takes one or walks on. The composition flows responsively: a centered
- * offer row showing only each dreamsign's art above its Take button (the name
- * and rules text live in the hover card), a de-emphasized "walk on" link, and
+ * player takes one or leaves via the top-right close button. The composition
+ * flows responsively: a centered offer row showing only each dreamsign's art
+ * above its Take button (the name and rules text live in the hover card) and
  * Sigrún with a speech bubble docked to the lower-left in landscape. All rules
  * are scoped under `.dreamsign-revelation`.
  */
@@ -61,9 +61,11 @@
   filter: blur(1.5px);
   pointer-events: none;
 }
+/* The chosen sign flies toward the Dreamsign collection in the bottom-left of
+ * the HUD, so the motion reads as "this goes into my dreamsigns". */
 .dreamsign-revelation .dsr-col.state-fly {
   opacity: 0;
-  transform: translate(38vw, 42vh) scale(0.26) rotate(-6deg);
+  transform: translate(-32vw, 45vh) scale(0.26) rotate(-6deg);
   transition:
     opacity 0.8s ease 0.15s,
     transform 0.9s cubic-bezier(0.5, 0, 0.6, 1);
@@ -150,51 +152,6 @@
 }
 .dreamsign-revelation .dsr-take:active {
   transform: scale(0.97);
-}
-
-/* ---- De-emphasized walk-on ---- */
-.dreamsign-revelation .dsr-skip {
-  margin-top: 4px;
-  padding: 11px 26px;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size: 18px;
-  color: #94a3b8;
-  letter-spacing: 0.02em;
-  transition: color 0.14s ease;
-  z-index: 6;
-}
-.dreamsign-revelation .dsr-skip:hover {
-  color: #e2e8f0;
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
-
-/* ---- Collection tray (fly-to target) ---- */
-.dreamsign-revelation .dsr-tray {
-  position: absolute;
-  right: 30px;
-  bottom: 78px;
-  z-index: 3;
-  width: 60px;
-  height: 60px;
-  border-radius: 16px;
-  border: 1px dashed rgba(168, 85, 247, 0.45);
-  background: rgba(14, 9, 26, 0.5);
-  display: grid;
-  place-items: center;
-  backdrop-filter: blur(6px);
-  pointer-events: none;
-}
-.dreamsign-revelation .dsr-tray span {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: #a855f7;
-  box-shadow: 0 0 12px #a855f7;
-  opacity: 0.5;
 }
 
 /* ---- Status line (loading / exhausted pool) ---- */

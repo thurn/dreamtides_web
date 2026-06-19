@@ -3,10 +3,11 @@
  * dreamscape scene (supplied by the shared site scene backdrop) so the player
  * can pick one card and add copies of it to the deck. The composition mirrors
  * the sibling Purge and Dreamsign Revelation surfaces: a frosted summary HUD, a
- * centered deck grid of selectable cards, a de-emphasized "walk on" link beside
- * the commit button, and Deacon Holt with a speech bubble docked to the
- * lower-left in landscape. The creative, additive action reads in violet
- * throughout. All rules are scoped under `.duplication-site`.
+ * centered deck grid of selectable cards, the commit button in the footer, a
+ * red close button in the top-right corner to leave, and Deacon Holt with a
+ * speech bubble docked to the lower-left in landscape. The creative, additive
+ * action reads in violet throughout. All rules are scoped under
+ * `.duplication-site`.
  */
 
 /* Fixed full-viewport composition sitting above the shared scene backdrop (also
@@ -234,22 +235,6 @@
   align-items: center;
   gap: 14px;
   z-index: 6;
-}
-.duplication-site .dup-walk {
-  padding: 12px 22px;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size: 17px;
-  color: #94a3b8;
-  letter-spacing: 0.01em;
-  transition: color 0.14s ease;
-}
-.duplication-site .dup-walk:hover {
-  color: #e2e8f0;
-  text-decoration: underline;
-  text-underline-offset: 4px;
 }
 .duplication-site .dup-dupe-btn {
   display: inline-flex;
