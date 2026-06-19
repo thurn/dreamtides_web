@@ -1,0 +1,97 @@
+import type { DreamwellCardViewData } from "../components/DreamwellCardView";
+
+/** Dreamwell fields the editor can save. */
+export type SavableDreamwellField =
+  | "name"
+  | "rendered-text"
+  | "energy-added"
+  | "order"
+  | "image-number";
+
+export type DreamwellSortField =
+  | "sourceOrder"
+  | "name"
+  | "energyAdded"
+  | "order";
+export type DreamwellSortDirection = "asc" | "desc";
+export type DreamwellSize = "small" | "medium" | "large";
+
+/**
+ * The highest deck `order` slot a Dreamwell card may occupy. Mirrors
+ * `MAX_DREAMWELL_ORDER` in `scripts/dreamwell-editor-data.mjs`; the order
+ * selector offers slots 0-4.
+ */
+export const MAX_DREAMWELL_ORDER = 4;
+
+/**
+ * A Dreamwell record as the editor sees it. Keeps the TOML-facing kebab-case
+ * keys (`rendered-text`, `energy-added`, `image-number`) so the save payloads
+ * map straight onto the source fields.
+ */
+export interface EditorDreamwellRecord {
+  id: string;
+  name: string;
+  "rendered-text": string;
+  "energy-added": number;
+  order: number;
+  "image-number": number;
+  "card-number": number;
+  sourceIndex: number;
+  source: Record<string, unknown>;
+}
+
+export interface DreamwellDisplayState {
+  searchText: string;
+  sort: DreamwellSortField;
+  dir: DreamwellSortDirection;
+  size: DreamwellSize;
+}
+
+export interface LoadEditorDreamwellResponse {
+  dreamwell: EditorDreamwellRecord[];
+}
+
+export interface SaveEditorDreamwellFieldRequest {
+  id: string;
+  field: SavableDreamwellField;
+  value: unknown;
+  clientRevision?: number;
+}
+
+export interface EditorSaveTiming {
+  readMs: number;
+  patchMs: number;
+  refreshMs: number;
+  confirmMs: number;
+  totalMs: number;
+}
+
+export interface SaveEditorDreamwellFieldResponse {
+  dreamwell: EditorDreamwellRecord;
+  clientRevision?: number;
+  timing: EditorSaveTiming;
+}
+
+export interface DreamwellEditorApiClient {
+  loadEditorDreamwell(signal?: AbortSignal): Promise<EditorDreamwellRecord[]>;
+  saveEditorDreamwellField(
+    request: SaveEditorDreamwellFieldRequest,
+  ): Promise<SaveEditorDreamwellFieldResponse>;
+}
+
+/**
+ * Build the {@link DreamwellCardViewData} the in-game Dreamwell card frame
+ * renders for an editor record, so the editor preview is pixel-identical to the
+ * battle card.
+ */
+export function dreamwellPreviewCard(
+  record: EditorDreamwellRecord,
+): DreamwellCardViewData {
+  return {
+    id: record.id,
+    name: record.name,
+    renderedText: record["rendered-text"],
+    energyAdded: record["energy-added"],
+    imageNumber: record["image-number"],
+  };
+}

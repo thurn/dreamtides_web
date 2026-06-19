@@ -42,8 +42,9 @@ describe("generated card data drift Vite integration", () => {
     // a full reload. buildaround_support.json (regenerated on every card save),
     // data/tides4.jsonc, and the public dreamcaller/tides4 JSON catalogs (all
     // rewritten by the dreamcaller editor) are ignored so those editor saves do
-    // not reload the page either. The generated card data paths round out the
-    // list.
+    // not reload the page either. The public dreamwell JSON catalog (rewritten
+    // by the Dreamwell editor on every save) is ignored for the same reason. The
+    // generated card data paths round out the list.
     expect(viteConfig.server?.watch?.ignored).toEqual([
       resolve(join(rootDir, "data", "tabula")) + "/**",
       resolve(join(rootDir, "saved-quests")) + "/**",
@@ -53,6 +54,7 @@ describe("generated card data drift Vite integration", () => {
       resolve(join(rootDir, "data", "tides4.jsonc")),
       resolve(join(rootDir, "public", "dreamcallers-v2-data.json")),
       resolve(join(rootDir, "public", "tides4-data.json")),
+      resolve(join(rootDir, "public", "dreamwell-data.json")),
       ...generatedCardDataWatchPaths,
     ]);
   });

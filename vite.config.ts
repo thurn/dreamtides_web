@@ -10,6 +10,8 @@ import { createDreamsignEditorApiMiddleware } from "./scripts/dreamsign-editor-a
 import { createDreamcallerEditorApiMiddleware } from "./scripts/dreamcaller-editor-api.mjs";
 import { createFigmentEditorApiMiddleware } from "./scripts/figment-editor-api.mjs";
 import { refreshFigmentDataJson } from "./scripts/figment-editor-data.mjs";
+import { createDreamwellEditorApiMiddleware } from "./scripts/dreamwell-editor-api.mjs";
+import { refreshDreamwellDataJson } from "./scripts/dreamwell-editor-data.mjs";
 import { createImageViewerApiMiddleware } from "./scripts/image-viewer-api.mjs";
 import { createCardImageApiMiddleware } from "./scripts/card-image-api.mjs";
 import { createSavedQuestsApiMiddleware } from "./scripts/saved-quests-api.mjs";
@@ -138,6 +140,100 @@ function figmentDataHotReloadPlugin(): Plugin {
             type: "error",
             err: {
               message: "Failed to regenerate figment data from figments.toml",
+              stack: message,
+            },
+          });
+        }
+      };
+
+      const scheduleReload = (): void => {
+        if (pendingReload !== null) {
+          clearTimeout(pendingReload);
+        }
+        pendingReload = setTimeout(() => {
+          pendingReload = null;
+          regenerateAndReload();
+        }, 150);
+      };
+
+      const watcher = fs.watch(
+        tomlDir,
+        { persistent: false },
+        (_eventType, filename) => {
+          if (filename === null || filename.toString() === tomlBasename) {
+            scheduleReload();
+          }
+        },
+      );
+
+      let closed = false;
+      const closeWatcher = (): void => {
+        if (closed) {
+          return;
+        }
+        closed = true;
+        if (pendingReload !== null) {
+          clearTimeout(pendingReload);
+          pendingReload = null;
+        }
+        watcher.close();
+      };
+
+      server.httpServer?.once("close", closeWatcher);
+      server.watcher.once("close", closeWatcher);
+    },
+  };
+}
+
+/** Vite plugin that serves local Dreamwell editor read/write endpoints. */
+function dreamwellEditorApiPlugin(): Plugin {
+  return {
+    name: "dreamwell-editor-api",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(createDreamwellEditorApiMiddleware({ rootDir: __dirname }));
+    },
+  };
+}
+
+/**
+ * Dev-only Vite plugin that hot-reloads Dreamwell data into a running battle
+ * when `data/tabula/dreamwell.toml` is edited. The TOML directory is ignored by
+ * the dev watcher (see `server.watch.ignored`), so this plugin watches the file
+ * directly, regenerates `public/dreamwell-data.json` via
+ * {@link refreshDreamwellDataJson}, and emits a `dreamwell-data:changed` custom
+ * HMR event. Only the battle/quest app reloads on that event (see src/main.tsx);
+ * the editor pages ignore it, so saving in the Dreamwell editor never reloads
+ * the page out from under an open card editor. `apply: "serve"` keeps it out of
+ * production builds.
+ */
+function dreamwellDataHotReloadPlugin(): Plugin {
+  const dreamwellTomlPath = path.resolve(
+    path.join(__dirname, "data", "tabula", "dreamwell.toml"),
+  );
+  const tomlDir = path.dirname(dreamwellTomlPath);
+  const tomlBasename = path.basename(dreamwellTomlPath);
+
+  return {
+    name: "dreamwell-data-hot-reload",
+    apply: "serve",
+    configureServer(server) {
+      let pendingReload: ReturnType<typeof setTimeout> | null = null;
+
+      const regenerateAndReload = (): void => {
+        try {
+          refreshDreamwellDataJson({ rootDir: __dirname });
+          console.log(
+            "[dreamwell-data] dreamwell.toml changed -> regenerated dreamwell-data.json -> notifying running app",
+          );
+          server.ws.send({ type: "custom", event: "dreamwell-data:changed" });
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error);
+          console.error(`[dreamwell-data] hot reload failed: ${message}`);
+          server.ws.send({
+            type: "error",
+            err: {
+              message: "Failed to regenerate Dreamwell data from dreamwell.toml",
               stack: message,
             },
           });
@@ -453,6 +549,8 @@ export default defineConfig({
     dreamcallerEditorApiPlugin(),
     figmentEditorApiPlugin(),
     figmentDataHotReloadPlugin(),
+    dreamwellEditorApiPlugin(),
+    dreamwellDataHotReloadPlugin(),
     imageViewerApiPlugin(),
     cardImageApiPlugin(),
     savedQuestsApiPlugin(),
@@ -514,6 +612,10 @@ export default defineConfig({
         path.resolve(path.join(__dirname, "data", "tides4.jsonc")),
         path.resolve(path.join(__dirname, "public", "dreamcallers-v2-data.json")),
         path.resolve(path.join(__dirname, "public", "tides4-data.json")),
+        // The Dreamwell editor regenerates public/dreamwell-data.json on every
+        // save; ignore it so an editor save does not trigger a full page reload
+        // that closes the open card editor mid-edit.
+        path.resolve(path.join(__dirname, "public", "dreamwell-data.json")),
         ...generatedCardDataWatchPaths,
       ],
     },

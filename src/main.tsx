@@ -42,6 +42,11 @@ if (pathname === "/editor") {
     "./editor/FigmentEditorApp"
   );
   renderStrict(<FigmentEditorApp />);
+} else if (pathname === "/dreamwell") {
+  const { default: DreamwellEditorApp } = await import(
+    "./editor/DreamwellEditorApp"
+  );
+  renderStrict(<DreamwellEditorApp />);
 } else if (pathname === "/images") {
   const { default: ImageViewerApp } = await import(
     "./image_viewer/ImageViewerApp"
@@ -61,6 +66,7 @@ if (pathname === "/editor") {
     };
     import.meta.hot.on("card-data:changed", reloadForData);
     import.meta.hot.on("figment-data:changed", reloadForData);
+    import.meta.hot.on("dreamwell-data:changed", reloadForData);
   }
 
   const [
