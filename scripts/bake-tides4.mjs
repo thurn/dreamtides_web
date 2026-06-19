@@ -91,17 +91,6 @@ const TUNING = {
   neutralSeedPriorFloor: 0.25,
 };
 
-function readJson(rel) {
-  const path = resolve(ROOT, rel);
-  if (!existsSync(path)) {
-    console.error(
-      `Missing ${rel}. Run \`npm run setup-assets\` first to build the public assets the bake reads.`,
-    );
-    process.exit(1);
-  }
-  return JSON.parse(readFileSync(path, "utf8"));
-}
-
 /**
  * Read the hand-authored identity annotations (shortName/summary/description)
  * from a previously baked tides4 artifact, keyed by stable tide id. Returns an
@@ -514,14 +503,13 @@ function stripJsonc(text) {
 }
 
 // Read the override document, or null when it is absent (the layer is optional).
-function readOverrides(rel) {
-  const path = resolve(ROOT, rel);
+function readOverrides(rel, rootDir = ROOT) {
+  const path = resolve(rootDir, rel);
   if (!existsSync(path)) return null;
   try {
     return JSON.parse(stripJsonc(readFileSync(path, "utf8")));
   } catch (err) {
-    console.error(`Failed to parse ${rel}: ${err.message}`);
-    process.exit(1);
+    throw new Error(`Failed to parse ${rel}: ${err.message}`);
   }
 }
 
@@ -530,8 +518,10 @@ function readOverrides(rel) {
 function makeCardEntry(id, copies, nameOf, detailOf) {
   const name = nameOf(id);
   if (name === undefined) {
-    console.error(`Override references unknown card UUID ${id} (no current name).`);
-    process.exit(1);
+    throw new Error(
+      `data/tides4-overrides.jsonc references unknown card UUID ${id} (no current ` +
+        `name in cards_v2.toml). Fix or remove that UUID in the overrides file.`,
+    );
   }
   const detail = detailOf(id) ?? {};
   const entry = { id, name };
@@ -563,11 +553,12 @@ function removeCardsFromTide(tide, idSet) {
   return before - tide.cards.length;
 }
 
-// Apply the override layer in place over the grown tides. Deterministic; logs
-// every decision so a bake's curation is reconstructable from its output.
-function applyOverrides(tides, overrides, nameOf, detailOf) {
+// Apply the override layer in place over the grown tides. Deterministic; reports
+// every decision through `logger` so a bake's curation is reconstructable from its
+// output (pass a noop logger to stay silent, e.g. from the staleness check).
+function applyOverrides(tides, overrides, nameOf, detailOf, logger = () => {}) {
   if (!overrides) {
-    console.log("[overrides] none (data/tides4-overrides.jsonc absent).");
+    logger("[overrides] none (data/tides4-overrides.jsonc absent).");
     return;
   }
   const tideById = new Map(tides.map((t) => [t.id, t]));
@@ -621,7 +612,7 @@ function applyOverrides(tides, overrides, nameOf, detailOf) {
     const homes = candidates.slice(0, target).map((x) => x.t);
     const homeIds = new Set(homes.map((t) => t.id));
     if (candidates.length < target) {
-      console.warn(
+      logger(
         `[overrides] combo "${pairing.name}": only ${candidates.length} candidate ` +
           `tides hold a combo half; wanted ${target}. All become homes.`,
       );
@@ -655,7 +646,7 @@ function applyOverrides(tides, overrides, nameOf, detailOf) {
       }
     }
 
-    console.log(
+    logger(
       `[overrides] combo "${pairing.name}": ${homes.length} home tide(s) ` +
         `[${homes.map((t) => t.id).join(", ")}]; added enabler to ${enablerAdds} ` +
         `[${promoted.join(", ") || "none"}]; stripped ${strippedCards} orphaned ` +
@@ -667,10 +658,11 @@ function applyOverrides(tides, overrides, nameOf, detailOf) {
   for (const [tideId, ops] of Object.entries(overrides.tideCardOverrides ?? {})) {
     const tide = tideById.get(tideId);
     if (!tide) {
-      console.error(
-        `[overrides] tideCardOverrides references unknown tide id ${tideId}.`,
+      throw new Error(
+        `data/tides4-overrides.jsonc tideCardOverrides references unknown tide id ` +
+          `"${tideId}". Valid tide ids are tide-sig-NN / tide-fac-NN / tide-neu-NN ` +
+          `as listed in data/tides4.jsonc.`,
       );
-      process.exit(1);
     }
     let changed = false;
     if (ops.remove?.length) {
@@ -681,31 +673,59 @@ function applyOverrides(tides, overrides, nameOf, detailOf) {
       if (addCardToTide(tide, id, copies ?? 2, nameOf, detailOf)) changed = true;
     }
     if (changed) sortTideCards(tide);
-    console.log(`[overrides] tideCardOverrides applied to ${tideId}.`);
+    logger(`[overrides] tideCardOverrides applied to ${tideId}.`);
   }
 }
 
-// --- Main ---------------------------------------------------------------------
+// --- Reusable build API -------------------------------------------------------
+// `run()` (the CLI bake) and `scripts/lib/tides4-check.mjs` (the staleness guard)
+// share these so the guard re-bakes through the EXACT generator, never a copy.
 
-function run() {
-  const argv = process.argv.slice(2);
-  const outRel = str(argv, "--out", "data/tides4.jsonc");
-  const docRel = str(argv, "--doc", "docs/cards2/tides4_decklists.md");
-  TUNING.facetSize = num(argv, "--facet-size", TUNING.facetSize);
-  TUNING.facetBudget = num(argv, "--facet-budget", TUNING.facetBudget);
-  TUNING.neutralTideSize = num(argv, "--neutral-size", TUNING.neutralTideSize);
+const BAKE_INPUT_FILES = {
+  cards: "public/cards_v2-data.json",
+  decklists: "public/decklists-data.json",
+  draftRecords: "public/draft-records-data.json",
+  dreamcallers: "public/dreamcallers-v2-data.json",
+};
 
-  const cards = readJson("public/cards_v2-data.json");
-  const decklists = readJson("public/decklists-data.json");
-  const draftRecords = readJson("public/draft-records-data.json");
-  const dreamcallers = readJson("public/dreamcallers-v2-data.json");
+// Load the four bundled bake inputs from `public/`. Throws (rather than exiting)
+// with a clear remedy when an input is missing, so callers — including the test —
+// can surface it.
+export function loadBakeInputs(rootDir = ROOT) {
+  const out = {};
+  for (const [key, rel] of Object.entries(BAKE_INPUT_FILES)) {
+    const path = resolve(rootDir, rel);
+    if (!existsSync(path)) {
+      throw new Error(
+        `Missing bake input ${rel}. Run \`npm run setup-assets\` first to build the ` +
+          `public assets the tides4 bake reads.`,
+      );
+    }
+    out[key] = JSON.parse(readFileSync(path, "utf8"));
+  }
+  return out;
+}
 
+/**
+ * Pure core of the bake: turn the four inputs (+ the optional override layer and
+ * the carried-forward annotations) into the serializable `json` plus the richer
+ * `tides` array the markdown render needs. No file IO; routes progress/override
+ * messages through `logger` (default noop). Throws on bad inputs/overrides.
+ */
+export function buildTides4({
+  cards,
+  decklists,
+  draftRecords,
+  dreamcallers,
+  overrides = null,
+  priorAnnotations = new Map(),
+  logger = () => {},
+}) {
   const pickRecords = draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds }));
   const poolData = buildPoolData(cards, decklists, pickRecords);
   const corpus = buildSigSeedCorpus(poolData);
   if (!corpus || corpus.cards.length === 0) {
-    console.error("Empty pick-affinity corpus (no usable draft records).");
-    process.exit(1);
+    throw new Error("Empty pick-affinity corpus (no usable draft records).");
   }
   const nameOf = (id) => poolData.cardNameById?.get(id);
   const priorOf = (id) => corpus.prior.get(id) ?? 0;
@@ -715,7 +735,7 @@ function run() {
     cards.map((c) => [c.id, { subtype: c.subtype ?? "", text: c.renderedText ?? "" }]),
   );
   const detailOf = (id) => cardDetailById.get(id);
-  console.log(`Corpus: ${corpus.cards.length} cards from the draft records.`);
+  logger(`Corpus: ${corpus.cards.length} cards from the draft records.`);
 
   const tides = [];
 
@@ -796,8 +816,7 @@ function run() {
   // Manual override layer — applied after every tide is grown (so curated combos
   // survive each affinity re-bake) and before the per-Dreamcaller pools are mapped
   // (so the neutral-tail cosine ordering reflects the final card contents).
-  const overrides = readOverrides("data/tides4-overrides.jsonc");
-  applyOverrides(tides, overrides, nameOf, detailOf);
+  applyOverrides(tides, overrides, nameOf, detailOf, logger);
 
   // tidePoolByDreamcaller — starter + on-identity facets + broad neutral tail.
   //   * a SIGNATURED Dreamcaller's facets are the library facets whose anchor
@@ -852,7 +871,6 @@ function run() {
   // forward from the prior bake by stable tide id, so re-baking from fresh draft
   // records keeps the curated text. They describe a tide's mechanical identity; a
   // large content shift for a tide may warrant re-annotating it.
-  const priorAnnotations = readTideAnnotations(resolve(ROOT, outRel));
   for (const tide of tides) {
     const anno = priorAnnotations.get(tide.id);
     if (anno) Object.assign(tide, anno);
@@ -892,44 +910,100 @@ function run() {
     tidePoolByDreamcaller,
   };
 
-  writeFileSync(resolve(ROOT, outRel), serializeArtifact(json));
-  writeFileSync(
-    resolve(ROOT, docRel),
-    renderMarkdown({ ...json, tides }, dreamcallers) + "\n",
-  );
-
-  // Stats.
-  const distinct = new Set();
-  for (const t of tides) for (const c of t.cards) distinct.add(c.id);
-  const sigCount = tides.filter((t) => t.role === "signature").length;
-  const facCount = tides.filter((t) => t.role === "facet").length;
-  const neuCount = tides.filter((t) => t.role === "neutral").length;
   const sigFacetCounts = [...anchorsByDreamcaller.keys()].map(
     (dcId) => tidePoolByDreamcaller[dcId].facets.length,
   );
-  const meanFacets = sigFacetCounts.length
-    ? sigFacetCounts.reduce((s, x) => s + x, 0) / sigFacetCounts.length
+  const distinct = new Set();
+  for (const t of tides) for (const c of t.cards) distinct.add(c.id);
+  const stats = {
+    tideCount: tides.length,
+    sigCount: tides.filter((t) => t.role === "signature").length,
+    facCount: tides.filter((t) => t.role === "facet").length,
+    neuCount: tides.filter((t) => t.role === "neutral").length,
+    sigFacetCounts,
+    distinct: distinct.size,
+    corpusCards: corpus.cards.length,
+    poolCount: Object.keys(tidePoolByDreamcaller).length,
+    noSignal,
+  };
+
+  // `tides` (with the bake-only fields) is returned alongside `json` for the
+  // markdown render; `json` is what `serializeArtifact` writes.
+  return { json, tides, stats };
+}
+
+/**
+ * Produce the serialized `data/tides4.jsonc` text from the current `public/`
+ * inputs and override layer, carrying the annotations forward from
+ * `annotationsSource` (the committed artifact). This is exactly what `run()`
+ * writes, so the staleness guard compares the committed file against this.
+ */
+export function bakeArtifactText({
+  rootDir = ROOT,
+  annotationsSource = resolve(rootDir, "data/tides4.jsonc"),
+  logger = () => {},
+} = {}) {
+  const inputs = loadBakeInputs(rootDir);
+  const overrides = readOverrides("data/tides4-overrides.jsonc", rootDir);
+  const priorAnnotations = readTideAnnotations(annotationsSource);
+  const { json } = buildTides4({ ...inputs, overrides, priorAnnotations, logger });
+  return serializeArtifact(json);
+}
+
+// --- CLI ----------------------------------------------------------------------
+
+function run() {
+  const argv = process.argv.slice(2);
+  const outRel = str(argv, "--out", "data/tides4.jsonc");
+  const docRel = str(argv, "--doc", "docs/cards2/tides4_decklists.md");
+  TUNING.facetSize = num(argv, "--facet-size", TUNING.facetSize);
+  TUNING.facetBudget = num(argv, "--facet-budget", TUNING.facetBudget);
+  TUNING.neutralTideSize = num(argv, "--neutral-size", TUNING.neutralTideSize);
+
+  const inputs = loadBakeInputs(ROOT);
+  const overrides = readOverrides("data/tides4-overrides.jsonc", ROOT);
+  // Annotations carry forward from the file being rewritten.
+  const priorAnnotations = readTideAnnotations(resolve(ROOT, outRel));
+  const { json, tides, stats } = buildTides4({
+    ...inputs,
+    overrides,
+    priorAnnotations,
+    logger: (m) => console.log(m),
+  });
+
+  writeFileSync(resolve(ROOT, outRel), serializeArtifact(json));
+  writeFileSync(
+    resolve(ROOT, docRel),
+    renderMarkdown({ ...json, tides }, inputs.dreamcallers) + "\n",
+  );
+
+  const meanFacets = stats.sigFacetCounts.length
+    ? stats.sigFacetCounts.reduce((s, x) => s + x, 0) / stats.sigFacetCounts.length
     : 0;
   console.log(
-    `Tides: ${tides.length} (${sigCount} signature, ${facCount} facet, ${neuCount} neutral).`,
+    `Tides: ${stats.tideCount} (${stats.sigCount} signature, ${stats.facCount} facet, ${stats.neuCount} neutral).`,
   );
   console.log(
-    `Facets per signatured Dreamcaller: min ${Math.min(...sigFacetCounts)}, ` +
-      `mean ${meanFacets.toFixed(1)}, max ${Math.max(...sigFacetCounts)}.`,
+    `Facets per signatured Dreamcaller: min ${Math.min(...stats.sigFacetCounts)}, ` +
+      `mean ${meanFacets.toFixed(1)}, max ${Math.max(...stats.sigFacetCounts)}.`,
   );
   console.log(
-    `Coverage: ${distinct.size} distinct cards across all tides ` +
-      `(corpus has ${corpus.cards.length}).`,
+    `Coverage: ${stats.distinct} distinct cards across all tides ` +
+      `(corpus has ${stats.corpusCards}).`,
   );
   console.log(
-    `Tide pools: ${Object.keys(tidePoolByDreamcaller).length} of ${dreamcallers.length} Dreamcallers.`,
+    `Tide pools: ${stats.poolCount} of ${inputs.dreamcallers.length} Dreamcallers.`,
   );
-  if (noSignal.length > 0) {
+  if (stats.noSignal.length > 0) {
     console.warn(
-      `Signatured Dreamcallers with no corpus signature: ${noSignal.join(", ")}.`,
+      `Signatured Dreamcallers with no corpus signature: ${stats.noSignal.join(", ")}.`,
     );
   }
   console.log(`Wrote ${outRel} and ${docRel}.`);
 }
 
-run();
+// Run the bake only when invoked directly (`node scripts/bake-tides4.mjs`), not
+// when imported by the staleness guard or its test.
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
+  run();
+}
