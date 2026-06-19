@@ -386,6 +386,7 @@ function toDreamwellCardDefinition(card: DreamwellCard): DreamwellCardDefinition
     order: card.order,
     cardNumber: card.cardNumber,
     imageNumber: card.imageNumber ?? 0,
+    art: card.art,
   };
 }
 

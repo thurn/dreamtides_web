@@ -264,7 +264,7 @@ function clampNumber(value, min, max) {
   return Math.min(max, Math.max(min, value));
 }
 
-function validateArtCrop(field, rawValue) {
+export function validateArtCrop(field, rawValue) {
   if (rawValue === null || typeof rawValue !== "object" || Array.isArray(rawValue)) {
     return validationFailure(field, "Art must be an object with x, y, and scale.", rawValue);
   }

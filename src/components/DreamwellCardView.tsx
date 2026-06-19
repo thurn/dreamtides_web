@@ -1,6 +1,7 @@
 import {
   type CSSProperties,
   type ReactNode,
+  type SyntheticEvent,
   useEffect,
   useRef,
   useState,
@@ -10,6 +11,7 @@ import {
   cardIdenticonUri,
   hasAssignedImage,
 } from "../data/card-database";
+import type { ArtCrop } from "../types/cards";
 import { CardStatOrb } from "./CardStatOrb";
 import { renderRulesText } from "./RulesText";
 import { useCardTermPopover } from "./useCardTermPopover";
@@ -49,6 +51,96 @@ export interface DreamwellCardViewData {
   renderedText: string;
   energyAdded: number;
   imageNumber: number;
+  /**
+   * Curated pan/zoom crop framing the card art, authored through the Dreamwell
+   * editor's art-edit mode and stored as the inline `art` table in the dreamwell
+   * TOML. Absent on cards that have never been framed, in which case the art is
+   * shown at its default top-anchored full cover.
+   */
+  art?: ArtCrop;
+}
+
+/**
+ * The Dreamwell card's landscape frame is a 3:2 box; the art crop math resolves
+ * the source against it so a curated pan/zoom always keeps the frame covered.
+ */
+const DREAMWELL_FRAME_ASPECT = 3 / 2;
+
+/** Pan/zoom bounds for the Dreamwell art crop, matching the regular card editor:
+ *  `x`/`y` are normalized pan in -1..1 (0 = centered) and `scale` is a cover
+ *  zoom of at least 1 (1 keeps the frame exactly covered). */
+export const DREAMWELL_ART_OFFSET_MIN = -1;
+export const DREAMWELL_ART_OFFSET_MAX = 1;
+export const DREAMWELL_ART_SCALE_MIN = 1;
+export const DREAMWELL_ART_SCALE_MAX = 5;
+
+/** Centered, un-zoomed crop seeded when framing a card for the first time. */
+export const DEFAULT_DREAMWELL_ART_CROP: ArtCrop = { x: 0, y: 0, scale: 1 };
+
+function clampNumber(value: number, min: number, max: number): number {
+  return Math.min(max, Math.max(min, value));
+}
+
+/**
+ * Cover layout for a Dreamwell art crop against the 3:2 frame. The watermark
+ * strip is clipped off the source bottom, so the *usable* image is shorter (a
+ * wider effective aspect); it is sized to cover the frame at `scale`, and the
+ * full element (strip included) is grown back by the crop fraction so the clip
+ * removes exactly the strip below the visible window. Pan is expressed as a
+ * fraction of each axis's overscan, so any `x`/`y` in -1..1 keeps the frame
+ * covered. Returns element box size and top-left placement, all as fractions of
+ * the frame.
+ */
+function dreamwellCoverLayout(
+  art: ArtCrop,
+  imageAspect: number,
+): { boxW: number; boxH: number; visH: number; left: number; top: number } {
+  const usableAspect = imageAspect / (1 - ART_SOURCE_BOTTOM_CROP);
+  const ratio = usableAspect / DREAMWELL_FRAME_ASPECT;
+  const coverW = ratio >= 1 ? ratio : 1;
+  const coverH = ratio >= 1 ? 1 : 1 / ratio;
+  const visW = art.scale * coverW;
+  const visH = art.scale * coverH;
+  const boxW = visW;
+  const boxH = visH / (1 - ART_SOURCE_BOTTOM_CROP);
+  const overscanX = Math.max(0, boxW - 1);
+  const overscanY = Math.max(0, visH - 1);
+  const panX = clampNumber(art.x, -1, 1) * (overscanX / 2);
+  const panY = clampNumber(art.y, -1, 1) * (overscanY / 2);
+  return {
+    boxW,
+    boxH,
+    visH,
+    left: 0.5 - boxW / 2 + panX,
+    top: 0.5 - visH / 2 + panY,
+  };
+}
+
+/**
+ * Per-axis `art` offset delta that nudges the art by `cardFraction` of the card
+ * on each editor press, for a given source aspect and zoom. The offset is
+ * normalized to each axis's overscan, so a fixed delta would slide a wide source
+ * much further across than down; scaling by the overscan makes one press travel
+ * the same visible distance on both axes. An axis with no overscan reports 0
+ * (nothing to pan); steps are capped at the full range so a near-flush axis
+ * traverses in a single press.
+ */
+export function dreamwellArtPanStep(
+  imageAspect: number,
+  scale: number,
+  cardFraction: number,
+): { x: number; y: number } {
+  const usableAspect = imageAspect / (1 - ART_SOURCE_BOTTOM_CROP);
+  const ratio = usableAspect / DREAMWELL_FRAME_ASPECT;
+  const coverW = ratio >= 1 ? ratio : 1;
+  const coverH = ratio >= 1 ? 1 : 1 / ratio;
+  const boxW = scale * coverW;
+  const visH = scale * coverH;
+  const overscanX = boxW - 1;
+  const overscanY = visH - 1;
+  const x = overscanX > 0 ? Math.min(1, (2 * cardFraction) / overscanX) : 0;
+  const y = overscanY > 0 ? Math.min(1, (2 * cardFraction) / overscanY) : 0;
+  return { x, y };
 }
 
 /**
@@ -204,8 +296,12 @@ export function DreamwellCardView({
   // falls back to a deterministic identicon rather than a broken-image glyph.
   // The identicon is a self-contained data URI, so it never fails in turn.
   const [artErrored, setArtErrored] = useState(false);
+  // The source aspect drives the art crop's cover math (and is unknown until the
+  // image loads), so it is re-measured whenever the displayed image changes.
+  const [imageAspect, setImageAspect] = useState<number | null>(null);
   useEffect(() => {
     setArtErrored(false);
+    setImageAspect(null);
   }, [card.id, card.imageNumber]);
   const identiconUrl = cardIdenticonUri(card.id !== "" ? card.id : card.name);
   const usingAssignedArt = hasAssignedImage(card.imageNumber) && !artErrored;
@@ -241,17 +337,53 @@ export function DreamwellCardView({
   const blurPx = Math.max(2, (widthPx ?? 220) * ART_EXTENSION_BLUR_RATIO);
 
   // Shared placement for the crisp art and its blurred continuation, so the band
-  // is a pure defocus of the same pixels. The image box is grown taller by the
-  // watermark fraction and top-anchored, so the source's bottom strip extends
-  // past the card's bottom edge and is clipped (the card's `overflow: hidden`).
-  const artImgStyle: CSSProperties = {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    width: "100%",
-    height: `calc(100% / ${String(1 - ART_SOURCE_BOTTOM_CROP)})`,
-    objectFit: "cover",
-    objectPosition: "center top",
+  // is a pure defocus of the same pixels. Without a curated crop the image box is
+  // grown taller by the watermark fraction and top-anchored, so the source's
+  // bottom strip extends past the card's bottom edge and is clipped (the card's
+  // `overflow: hidden`). With a crop, the source is panned/zoomed to the curated
+  // framing once its aspect is known, clipping the watermark strip in image space
+  // so it stays hidden at any pan and zoom.
+  const artImgStyle: CSSProperties =
+    card.art !== undefined && imageAspect !== null
+      ? (() => {
+          const { boxW, boxH, left, top } = dreamwellCoverLayout(
+            card.art,
+            imageAspect,
+          );
+          return {
+            position: "absolute",
+            left: `${(left * 100).toFixed(4)}%`,
+            top: `${(top * 100).toFixed(4)}%`,
+            width: `${(boxW * 100).toFixed(4)}%`,
+            height: `${(boxH * 100).toFixed(4)}%`,
+            maxWidth: "none",
+            maxHeight: "none",
+            objectFit: "cover",
+            clipPath: `inset(0 0 ${(ART_SOURCE_BOTTOM_CROP * 100).toFixed(3)}% 0)`,
+          } satisfies CSSProperties;
+        })()
+      : {
+          position: "absolute",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: `calc(100% / ${String(1 - ART_SOURCE_BOTTOM_CROP)})`,
+          objectFit: "cover",
+          objectPosition: "center top",
+          // While a crop is set but the source aspect is still loading, apply the
+          // zoom so the first paint is already close to the curated framing.
+          ...(card.art !== undefined
+            ? { transform: `scale(${String(card.art.scale)})` }
+            : {}),
+        };
+
+  const handleArtLoad = (
+    event: SyntheticEvent<HTMLImageElement>,
+  ): void => {
+    const img = event.currentTarget;
+    if (img.naturalWidth > 0 && img.naturalHeight > 0) {
+      setImageAspect(img.naturalWidth / img.naturalHeight);
+    }
   };
 
   // The purple accent used on the regular card's Event frame, reused here so the
@@ -306,6 +438,7 @@ export function DreamwellCardView({
         aria-hidden="true"
         draggable={false}
         style={artImgStyle}
+        onLoad={handleArtLoad}
         onError={usingAssignedArt ? () => setArtErrored(true) : undefined}
       />
 
@@ -412,6 +545,9 @@ export function DreamwellCardView({
           fontFamily: '"Fira Sans Condensed", "Inter", sans-serif',
           fontSize: "2.9cqw",
           lineHeight: 1.2,
+          // Pin the alignment so the box never inherits centering from an editor
+          // wrapper (e.g. the art-edit mode's clickable `<button>`).
+          textAlign: "left",
           textShadow: "0 0.15cqw 0.15cqw rgba(0, 0, 0, 0.55)",
         }}
       >

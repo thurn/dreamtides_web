@@ -169,6 +169,9 @@ export interface DreamwellCardDefinition {
   order: number;
   cardNumber: number;
   imageNumber: number;
+  /** Curated art crop (pan/zoom) framing the source image, from the dreamwell
+   *  catalog's `art` table. Absent on cards that have never been framed. */
+  art?: ArtCrop;
 }
 
 export interface BattleEnemyDescriptor {

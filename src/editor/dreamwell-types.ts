@@ -1,8 +1,9 @@
 import type { DreamwellCardViewData } from "../components/DreamwellCardView";
+import type { ArtCrop } from "../types/cards";
 
 /**
  * Dreamwell fields edited inline by double-clicking the card (the name heading,
- * the rules box, the energy orb) or the deck-order caption beneath it.
+ * the rules box, the energy orb) or the tier caption beneath it.
  */
 export type EditableDreamwellField =
   | "name"
@@ -12,9 +13,12 @@ export type EditableDreamwellField =
 
 /**
  * All Dreamwell fields the editor can save: the inline-editable fields plus
- * `image-number`, which is set through the art-edit modal.
+ * `image-number` and the `art` crop, both set through the art-edit modal.
  */
-export type SavableDreamwellField = EditableDreamwellField | "image-number";
+export type SavableDreamwellField =
+  | EditableDreamwellField
+  | "image-number"
+  | "art";
 
 export type DreamwellSortField =
   | "sourceOrder"
@@ -43,6 +47,8 @@ export interface EditorDreamwellRecord {
   "energy-added": number;
   order: number;
   "image-number": number;
+  /** Curated pan/zoom crop framing the card art; absent until the card is framed. */
+  art?: ArtCrop;
   "card-number": number;
   sourceIndex: number;
   source: Record<string, unknown>;
@@ -106,5 +112,6 @@ export function dreamwellPreviewCard(
     renderedText: record["rendered-text"],
     energyAdded: record["energy-added"],
     imageNumber: record["image-number"],
+    art: record.art,
   };
 }

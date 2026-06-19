@@ -2,7 +2,7 @@ import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parse } from "smol-toml";
-import { patchTomlRecord } from "./card-editor-data.mjs";
+import { patchTomlRecord, validateArtCrop } from "./card-editor-data.mjs";
 import { transformDreamwell } from "./setup-assets.mjs";
 
 const ROOT = resolve(fileURLToPath(new URL("..", import.meta.url)));
@@ -19,10 +19,10 @@ export const MAX_DREAMWELL_ORDER = 4;
 
 /**
  * Dreamwell fields the editor can save: the card name, its rules text, the
- * `energy-added` value (the purple orb on the card), the deck `order` slot, and
- * the `image-number` selecting the card art. Every other field on a record
- * (`id`, `card-type`, `art-owned`, `card-number`) is identity or provenance and
- * is left untouched.
+ * `energy-added` value (the purple orb on the card), the deck `order` slot, the
+ * `image-number` selecting the card art, and the `art` crop (pan/zoom) framing
+ * that image. Every other field on a record (`id`, `card-type`, `art-owned`,
+ * `card-number`) is identity or provenance and is left untouched.
  */
 export const EDITABLE_DREAMWELL_FIELDS = new Set([
   "name",
@@ -30,6 +30,7 @@ export const EDITABLE_DREAMWELL_FIELDS = new Set([
   "energy-added",
   "order",
   "image-number",
+  "art",
 ]);
 
 function validationFailure(field, message, value) {
@@ -52,6 +53,30 @@ function readSourceDreamwell(rootDir, dreamwellTomlPath = DEFAULT_DREAMWELL_TOML
   return dreamwell;
 }
 
+/**
+ * Read an authored `art` table into the editor record's `{ x, y, scale }` crop,
+ * or `undefined` for a card that has never been cropped (the renderer then falls
+ * back to its default full-cover framing). Malformed tables are dropped rather
+ * than surfaced so a hand-edited record can never crash the editor load.
+ */
+function readArtCrop(art) {
+  if (art === null || typeof art !== "object" || Array.isArray(art)) {
+    return undefined;
+  }
+  const { x, y, scale } = art;
+  if (
+    typeof x !== "number" ||
+    typeof y !== "number" ||
+    typeof scale !== "number" ||
+    !Number.isFinite(x) ||
+    !Number.isFinite(y) ||
+    !Number.isFinite(scale)
+  ) {
+    return undefined;
+  }
+  return { x, y, scale };
+}
+
 function editorRecordFromDreamwell(dreamwell, index) {
   return {
     id: dreamwell.id,
@@ -62,6 +87,7 @@ function editorRecordFromDreamwell(dreamwell, index) {
     order: typeof dreamwell.order === "number" ? dreamwell.order : 0,
     "image-number":
       typeof dreamwell["image-number"] === "number" ? dreamwell["image-number"] : 0,
+    art: readArtCrop(dreamwell.art),
     "card-number":
       typeof dreamwell["card-number"] === "number" ? dreamwell["card-number"] : index + 1,
     sourceIndex: index,
@@ -130,6 +156,10 @@ export function validateDreamwellEdit(field, rawValue) {
     return validateWholeNumber(field, rawValue, { label: "Image number" });
   }
 
+  if (field === "art") {
+    return validateArtCrop(field, rawValue);
+  }
+
   return validationFailure(field, "This field is not editable.", rawValue);
 }
 
@@ -141,6 +171,9 @@ export function patchDreamwellToml(source, { dreamwellId, field, value }) {
     validateEdit: validateDreamwellEdit,
     field,
     value,
+    // The art crop is absent on cards that have never been framed, so it is
+    // appended to the record block on first save rather than replaced in place.
+    optionalFields: new Set(["art"]),
     notFoundNoun: "Dreamwell card",
   });
 }

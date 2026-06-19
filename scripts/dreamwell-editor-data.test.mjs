@@ -138,6 +138,50 @@ describe("validateDreamwellEdit", () => {
       message: "This field is not editable.",
     });
   });
+
+  it("accepts an art crop and clamps it to the editor's bounds", () => {
+    expect(
+      validateDreamwellEdit("art", { x: 0.25, y: -0.5, scale: 1.4 }),
+    ).toMatchObject({ ok: true, value: { x: 0.25, y: -0.5, scale: 1.4 } });
+
+    // Out-of-range pan/zoom is clamped rather than rejected.
+    expect(
+      validateDreamwellEdit("art", { x: 5, y: -9, scale: 0.2 }),
+    ).toMatchObject({ ok: true, value: { x: 1, y: -1, scale: 1 } });
+
+    expect(validateDreamwellEdit("art", { x: 0, y: 0 })).toMatchObject({
+      ok: false,
+    });
+  });
+});
+
+describe("patchDreamwellToml art crop", () => {
+  it("appends an art table on first save and replaces it thereafter", () => {
+    const firstSave = patchDreamwellToml(fixtureToml(), {
+      dreamwellId: FIRST_ID,
+      field: "art",
+      value: { x: 0.1, y: -0.2, scale: 1.3 },
+    }).source;
+    expect(parse(firstSave).dreamwell[0].art).toEqual({
+      x: 0.1,
+      y: -0.2,
+      scale: 1.3,
+    });
+
+    const secondSave = patchDreamwellToml(firstSave, {
+      dreamwellId: FIRST_ID,
+      field: "art",
+      value: { x: 0, y: 0.4, scale: 2 },
+    }).source;
+    expect(parse(secondSave).dreamwell[0].art).toEqual({
+      x: 0,
+      y: 0.4,
+      scale: 2,
+    });
+    // The second record is untouched and the art table is not duplicated.
+    expect(parse(secondSave).dreamwell[1].art).toBeUndefined();
+    expect(blockFor(secondSave, FIRST_ID).match(/^art = /gmu)).toHaveLength(1);
+  });
 });
 
 describe("refreshDreamwellDataJson", () => {

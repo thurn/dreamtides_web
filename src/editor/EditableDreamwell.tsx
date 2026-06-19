@@ -54,9 +54,9 @@ function wholeNumberDraft(value: EditableFieldValue): number | null {
  * One Dreamwell card in the editor grid. The card itself is the in-game
  * {@link DreamwellCardView}, with its name heading, rules box, and energy orb
  * wrapped in inline {@link EditableField} editors — double-click any of them to
- * edit in place, exactly like the card, dreamsign, and figment editors. The deck
- * slot is edited inline through the caption beneath the card; the art image is
- * set through the art-edit modal opened in art-edit mode.
+ * edit in place, exactly like the card, dreamsign, and figment editors. The tier
+ * is edited inline through the caption beneath the card; the art image and its
+ * pan/zoom crop are set through the art-edit modal opened in art-edit mode.
  */
 export default function EditableDreamwell({
   record,
@@ -188,7 +188,7 @@ export default function EditableDreamwell({
           color: "#8a948f",
         }}
       >
-        <span>Deck slot</span>
+        <span>Tier</span>
         <span
           style={{
             color: "#c9d3cf",
@@ -202,7 +202,7 @@ export default function EditableDreamwell({
             layout="inline"
           >
             <span
-              title="Double-click to change the deck slot (0-4)"
+              title="Double-click to change the tier (0-4)"
               style={{ cursor: "text" }}
             >
               {visibleOrder}

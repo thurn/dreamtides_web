@@ -1,3 +1,5 @@
+import type { ArtCrop } from "../types/cards";
+
 /**
  * The shared Dreamwell cards drawn one per turn during the Dreamwell phase
  * (docs/battle_rules/battle_rules.md). The catalog is generated from
@@ -22,6 +24,8 @@ export interface DreamwellCard {
   cardNumber: number;
   /** Art key for `/cards/<imageNumber>.webp`; 0/absent renders an identicon. */
   imageNumber?: number;
+  /** Curated pan/zoom crop framing the art; absent until the card is framed. */
+  art?: ArtCrop;
   cardType?: string;
   artOwned?: boolean;
 }

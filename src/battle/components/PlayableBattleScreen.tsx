@@ -416,6 +416,7 @@ function PlayableBattleScreenInner({
       renderedText: definition.renderedText,
       energyAdded: definition.energyAdded,
       imageNumber: definition.imageNumber,
+      art: definition.art,
     };
   }, [activeDreamwellCardIndex, battleInit.dreamwellDeck]);
   // The Dreamwell card is hidden during the opening round (turn 1): no card is

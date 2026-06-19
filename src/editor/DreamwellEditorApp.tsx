@@ -18,6 +18,7 @@ import {
   updateFieldDraft,
 } from "./save-state";
 import type { EditableFieldValue, EditableSaveState } from "./save-state";
+import type { ArtCrop } from "../types/cards";
 import {
   MAX_DREAMWELL_ORDER,
   type DreamwellDisplayState,
@@ -47,7 +48,7 @@ const DEFAULT_DISPLAY_STATE: DreamwellDisplayState = {
   artEditing: false,
   sort: "sourceOrder",
   dir: "asc",
-  size: "medium",
+  size: "large",
 };
 
 function errorMessageFor(error: unknown): string {
@@ -111,7 +112,7 @@ function validateFieldSave(
       ? { ok: true, value: numeric }
       : {
           ok: false,
-          message: `Deck slot must be a whole number from 0 to ${MAX_DREAMWELL_ORDER}.`,
+          message: `Tier must be a whole number from 0 to ${MAX_DREAMWELL_ORDER}.`,
         };
   }
 
@@ -196,9 +197,9 @@ function reorderToFrozenOrder(
 }
 
 const CARD_WIDTH: Record<DreamwellDisplayState["size"], string> = {
-  small: "180px",
-  medium: "240px",
-  large: "320px",
+  small: "240px",
+  medium: "320px",
+  large: "420px",
 };
 
 export default function DreamwellEditorApp({
@@ -216,6 +217,8 @@ export default function DreamwellEditorApp({
   const [artEditorId, setArtEditorId] = useState<string | null>(null);
   const [artSaveStatus, setArtSaveStatus] = useState<ArtSaveStatus>("idle");
   const [artSaveError, setArtSaveError] = useState<string | null>(null);
+  const [cropSaveStatus, setCropSaveStatus] = useState<ArtSaveStatus>("idle");
+  const [cropSaveError, setCropSaveError] = useState<string | null>(null);
 
   const activeTomlLabel = useMemo(() => {
     const param = editorTomlParam();
@@ -458,6 +461,27 @@ export default function DreamwellEditorApp({
     setArtEditorId(record.id);
     setArtSaveStatus("idle");
     setArtSaveError(null);
+    setCropSaveStatus("idle");
+    setCropSaveError(null);
+  }
+
+  function handleSaveArt(record: EditorDreamwellRecord, art: ArtCrop) {
+    setCropSaveStatus("saving");
+    setCropSaveError(null);
+    void apiClient
+      .saveEditorDreamwellField({
+        id: record.id,
+        field: "art",
+        value: art,
+      })
+      .then((response) => {
+        replaceConfirmed(response.dreamwell);
+        setCropSaveStatus("saved");
+      })
+      .catch((error: unknown) => {
+        setCropSaveStatus("error");
+        setCropSaveError(errorMessageFor(error));
+      });
   }
 
   function handleSaveImageNumber(record: EditorDreamwellRecord, imageNumber: number) {
@@ -520,7 +544,7 @@ export default function DreamwellEditorApp({
           {loadStatus.kind === "loaded" ? activeTomlLabel : "Loading..."}
         </span>
         <span style={{ color: "#6f7a76", fontSize: "0.76rem", marginLeft: "6px" }}>
-          Double-click the name, rules, energy orb, or deck slot to edit.
+          Double-click the name, rules, energy orb, or tier to edit.
         </span>
       </header>
 
@@ -627,11 +651,14 @@ export default function DreamwellEditorApp({
       {artEditorRecord !== null ? (
         <DreamwellArtEditor
           record={artEditorRecord}
-          saveStatus={artSaveStatus}
-          saveError={artSaveError}
+          imageNumberSaveStatus={artSaveStatus}
+          imageNumberSaveError={artSaveError}
+          cropSaveStatus={cropSaveStatus}
+          cropSaveError={cropSaveError}
           onSaveImageNumber={(imageNumber) =>
             handleSaveImageNumber(artEditorRecord, imageNumber)
           }
+          onSaveArt={(art) => handleSaveArt(artEditorRecord, art)}
           onClose={() => setArtEditorId(null)}
         />
       ) : null}
