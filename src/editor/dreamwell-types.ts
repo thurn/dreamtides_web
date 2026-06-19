@@ -1,12 +1,20 @@
 import type { DreamwellCardViewData } from "../components/DreamwellCardView";
 
-/** Dreamwell fields the editor can save. */
-export type SavableDreamwellField =
+/**
+ * Dreamwell fields edited inline by double-clicking the card (the name heading,
+ * the rules box, the energy orb) or the deck-order caption beneath it.
+ */
+export type EditableDreamwellField =
   | "name"
   | "rendered-text"
   | "energy-added"
-  | "order"
-  | "image-number";
+  | "order";
+
+/**
+ * All Dreamwell fields the editor can save: the inline-editable fields plus
+ * `image-number`, which is set through the art-edit modal.
+ */
+export type SavableDreamwellField = EditableDreamwellField | "image-number";
 
 export type DreamwellSortField =
   | "sourceOrder"
@@ -42,6 +50,11 @@ export interface EditorDreamwellRecord {
 
 export interface DreamwellDisplayState {
   searchText: string;
+  /**
+   * When on, clicking a card opens the art-edit modal (mirrors the figment
+   * editor's art-edit mode) instead of starting an inline text edit.
+   */
+  artEditing: boolean;
   sort: DreamwellSortField;
   dir: DreamwellSortDirection;
   size: DreamwellSize;

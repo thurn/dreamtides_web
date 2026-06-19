@@ -1,17 +1,30 @@
-import { useEffect, useMemo, useState, type CSSProperties } from "react";
-import { DreamwellCardView } from "../components/DreamwellCardView";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import {
   loadEditorDreamwell,
   saveEditorDreamwellField,
 } from "./dreamwell-editor-api";
-import DreamwellCardEditor from "./DreamwellCardEditor";
+import EditableDreamwell from "./EditableDreamwell";
+import DreamwellArtEditor, { type ArtSaveStatus } from "./DreamwellArtEditor";
 import {
-  dreamwellPreviewCard,
+  beginFieldEdit,
+  cancelFieldEdit,
+  completeFieldSave,
+  EMPTY_EDITOR_SAVE_STATE,
+  failFieldSave,
+  fieldSaveEntry,
+  rejectFieldEdit,
+  rejectSubmittedFieldSave,
+  startFieldSave,
+  updateFieldDraft,
+} from "./save-state";
+import type { EditableFieldValue, EditableSaveState } from "./save-state";
+import {
+  MAX_DREAMWELL_ORDER,
   type DreamwellDisplayState,
   type DreamwellEditorApiClient,
   type DreamwellSortField,
+  type EditableDreamwellField,
   type EditorDreamwellRecord,
-  type SavableDreamwellField,
 } from "./dreamwell-types";
 import { editorTomlParam } from "./editor-api";
 
@@ -31,6 +44,7 @@ export interface DreamwellEditorAppProps {
 
 const DEFAULT_DISPLAY_STATE: DreamwellDisplayState = {
   searchText: "",
+  artEditing: false,
   sort: "sourceOrder",
   dir: "asc",
   size: "medium",
@@ -42,6 +56,66 @@ function errorMessageFor(error: unknown): string {
 
 function isAbortError(error: unknown): boolean {
   return error instanceof DOMException && error.name === "AbortError";
+}
+
+function isServerValidationError(error: unknown): boolean {
+  return (
+    error !== null &&
+    typeof error === "object" &&
+    "code" in error &&
+    error.code === "INVALID_EDIT"
+  );
+}
+
+function confirmedFieldValue(
+  record: EditorDreamwellRecord,
+  field: EditableDreamwellField,
+): EditableFieldValue {
+  switch (field) {
+    case "name":
+      return record.name;
+    case "rendered-text":
+      return record["rendered-text"];
+    case "energy-added":
+      return record["energy-added"];
+    case "order":
+      return record.order;
+  }
+}
+
+function validateFieldSave(
+  field: EditableDreamwellField,
+  value: EditableFieldValue,
+): { ok: true; value: EditableFieldValue } | { ok: false; message: string } {
+  if (field === "name") {
+    const text = String(value).trim();
+    return text.length === 0
+      ? { ok: false, message: "Name cannot be blank." }
+      : { ok: true, value: text };
+  }
+
+  if (field === "rendered-text") {
+    return { ok: true, value: String(value) };
+  }
+
+  if (field === "energy-added") {
+    const numeric = Number(String(value).trim());
+    return Number.isInteger(numeric) && numeric >= 0
+      ? { ok: true, value: numeric }
+      : { ok: false, message: "Energy added must be a whole number of 0 or more." };
+  }
+
+  if (field === "order") {
+    const numeric = Number(String(value).trim());
+    return Number.isInteger(numeric) && numeric >= 0 && numeric <= MAX_DREAMWELL_ORDER
+      ? { ok: true, value: numeric }
+      : {
+          ok: false,
+          message: `Deck slot must be a whole number from 0 to ${MAX_DREAMWELL_ORDER}.`,
+        };
+  }
+
+  return { ok: false, message: "This field is not editable." };
 }
 
 function sortValue(
@@ -97,6 +171,30 @@ function filteredAndSorted(
     .map(({ record }) => record);
 }
 
+function anyFieldEditing(saveState: EditableSaveState): boolean {
+  return Object.values(saveState.fields).some(
+    (entry) => entry.status === "editing" || entry.status === "saving",
+  );
+}
+
+function reorderToFrozenOrder(
+  dreamwell: readonly EditorDreamwellRecord[],
+  frozenOrder: readonly string[],
+): EditorDreamwellRecord[] {
+  const rank = new Map(frozenOrder.map((id, index) => [id, index]));
+  const fallback = frozenOrder.length;
+  return dreamwell
+    .map((record, index) => ({ record, index }))
+    .sort((left, right) => {
+      const leftRank = rank.get(left.record.id) ?? fallback;
+      const rightRank = rank.get(right.record.id) ?? fallback;
+      return leftRank === rightRank
+        ? left.index - right.index
+        : leftRank - rightRank;
+    })
+    .map(({ record }) => record);
+}
+
 const CARD_WIDTH: Record<DreamwellDisplayState["size"], string> = {
   small: "180px",
   medium: "240px",
@@ -110,7 +208,14 @@ export default function DreamwellEditorApp({
     useState<DreamwellDisplayState>(DEFAULT_DISPLAY_STATE);
   const [loadStatus, setLoadStatus] = useState<LoadStatus>({ kind: "loading" });
   const [loadAttempt, setLoadAttempt] = useState(0);
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [saveState, setSaveState] = useState<EditableSaveState>(
+    EMPTY_EDITOR_SAVE_STATE,
+  );
+  const saveStateRef = useRef(saveState);
+
+  const [artEditorId, setArtEditorId] = useState<string | null>(null);
+  const [artSaveStatus, setArtSaveStatus] = useState<ArtSaveStatus>("idle");
+  const [artSaveError, setArtSaveError] = useState<string | null>(null);
 
   const activeTomlLabel = useMemo(() => {
     const param = editorTomlParam();
@@ -150,15 +255,101 @@ export default function DreamwellEditorApp({
 
   const loadedDreamwell =
     loadStatus.kind === "loaded" ? loadStatus.dreamwell : [];
-  const visible = useMemo(
+  const sortedVisible = useMemo(
     () => filteredAndSorted(loadedDreamwell, displayState),
     [loadedDreamwell, displayState],
   );
 
-  const selectedRecord =
-    selectedId === null
+  // Freeze the grid order while an inline edit is active so a sort key the user
+  // is editing (name, energy, order) does not reshuffle the card mid-edit.
+  const editing = anyFieldEditing(saveState);
+  const frozenOrderRef = useRef<string[]>([]);
+  if (!editing) {
+    frozenOrderRef.current = sortedVisible.map((record) => record.id);
+  }
+  const visible = editing
+    ? reorderToFrozenOrder(sortedVisible, frozenOrderRef.current)
+    : sortedVisible;
+
+  const artEditorRecord =
+    artEditorId === null
       ? null
-      : (loadedDreamwell.find((record) => record.id === selectedId) ?? null);
+      : (loadedDreamwell.find((record) => record.id === artEditorId) ?? null);
+
+  function setEditorSaveState(
+    updater: (current: EditableSaveState) => EditableSaveState,
+  ) {
+    const next = updater(saveStateRef.current);
+    saveStateRef.current = next;
+    setSaveState(next);
+  }
+
+  function handleFieldBeginEdit(
+    record: EditorDreamwellRecord,
+    field: EditableDreamwellField,
+    value: EditableFieldValue,
+  ) {
+    setEditorSaveState((current) => {
+      let next = current;
+      for (const entry of Object.values(current.fields)) {
+        if (
+          entry.status === "editing" &&
+          !(entry.cardId === record.id && entry.field === field)
+        ) {
+          next = cancelFieldEdit(
+            next,
+            { cardId: entry.cardId, field: entry.field },
+            entry.confirmedValue,
+          );
+        }
+      }
+      return beginFieldEdit(next, { cardId: record.id, field }, value);
+    });
+  }
+
+  function handleFieldDraftChange(
+    record: EditorDreamwellRecord,
+    field: EditableDreamwellField,
+    value: EditableFieldValue,
+  ) {
+    setEditorSaveState((current) =>
+      updateFieldDraft(
+        current,
+        { cardId: record.id, field },
+        value,
+        confirmedFieldValue(record, field),
+      ),
+    );
+  }
+
+  function handleFieldCancel(
+    record: EditorDreamwellRecord,
+    field: EditableDreamwellField,
+  ) {
+    setEditorSaveState((current) =>
+      cancelFieldEdit(
+        current,
+        { cardId: record.id, field },
+        confirmedFieldValue(record, field),
+      ),
+    );
+  }
+
+  function handleFieldCommit(
+    record: EditorDreamwellRecord,
+    field: EditableDreamwellField,
+    value: EditableFieldValue,
+  ) {
+    const validation = validateFieldSave(field, value);
+    if (
+      !validation.ok ||
+      String(validation.value) === String(confirmedFieldValue(record, field))
+    ) {
+      handleFieldCancel(record, field);
+      return;
+    }
+    handleFieldSave(record, field, value);
+  }
 
   function replaceConfirmed(next: EditorDreamwellRecord) {
     setLoadStatus((current) => {
@@ -174,17 +365,118 @@ export default function DreamwellEditorApp({
     });
   }
 
-  async function handleSave(
+  function handleFieldSave(
     record: EditorDreamwellRecord,
-    field: SavableDreamwellField,
-    value: string | number,
-  ): Promise<void> {
-    const response = await apiClient.saveEditorDreamwellField({
-      id: record.id,
-      field,
-      value,
+    field: EditableDreamwellField,
+    value: EditableFieldValue,
+  ) {
+    const target = { cardId: record.id, field };
+    const validation = validateFieldSave(field, value);
+
+    if (!validation.ok) {
+      setEditorSaveState((current) =>
+        rejectFieldEdit(
+          current,
+          target,
+          value,
+          confirmedFieldValue(record, field),
+          validation.message,
+        ),
+      );
+      return;
+    }
+
+    const serverValue = validation.value;
+    let clientRevision = 0;
+    setEditorSaveState((current) => {
+      const result = startFieldSave(
+        current,
+        target,
+        serverValue,
+        confirmedFieldValue(record, field),
+      );
+      clientRevision = result.clientRevision;
+      return result.state;
     });
-    replaceConfirmed(response.dreamwell);
+
+    void apiClient
+      .saveEditorDreamwellField({
+        id: record.id,
+        field,
+        value: serverValue,
+        clientRevision,
+      })
+      .then((response) => {
+        const responseRevision = response.clientRevision ?? clientRevision;
+        const currentEntry = fieldSaveEntry(saveStateRef.current, target);
+        if (
+          currentEntry === null ||
+          responseRevision < currentEntry.submittedRevision
+        ) {
+          return;
+        }
+        setEditorSaveState((current) =>
+          completeFieldSave(
+            current,
+            target,
+            responseRevision,
+            confirmedFieldValue(response.dreamwell, field),
+          ),
+        );
+        replaceConfirmed(response.dreamwell);
+      })
+      .catch((error: unknown) => {
+        const message = errorMessageFor(error);
+        const currentEntry = fieldSaveEntry(saveStateRef.current, target);
+        if (
+          currentEntry !== null &&
+          clientRevision >= currentEntry.submittedRevision
+        ) {
+          setEditorSaveState((current) => {
+            if (isServerValidationError(error)) {
+              return rejectSubmittedFieldSave(
+                current,
+                target,
+                clientRevision,
+                confirmedFieldValue(record, field),
+                message,
+              );
+            }
+            return failFieldSave(
+              current,
+              target,
+              clientRevision,
+              confirmedFieldValue(record, field),
+              message,
+            );
+          });
+        }
+      });
+  }
+
+  function openArtEditor(record: EditorDreamwellRecord) {
+    setArtEditorId(record.id);
+    setArtSaveStatus("idle");
+    setArtSaveError(null);
+  }
+
+  function handleSaveImageNumber(record: EditorDreamwellRecord, imageNumber: number) {
+    setArtSaveStatus("saving");
+    setArtSaveError(null);
+    void apiClient
+      .saveEditorDreamwellField({
+        id: record.id,
+        field: "image-number",
+        value: imageNumber,
+      })
+      .then((response) => {
+        replaceConfirmed(response.dreamwell);
+        setArtSaveStatus("saved");
+      })
+      .catch((error: unknown) => {
+        setArtSaveStatus("error");
+        setArtSaveError(errorMessageFor(error));
+      });
   }
 
   return (
@@ -195,6 +487,7 @@ export default function DreamwellEditorApp({
       data-editor-sort={displayState.sort}
       data-editor-dir={displayState.dir}
       data-editor-size={displayState.size}
+      data-editor-art-editing={String(displayState.artEditing)}
       style={{
         height: "100dvh",
         boxSizing: "border-box",
@@ -214,6 +507,7 @@ export default function DreamwellEditorApp({
           alignItems: "baseline",
           gap: "10px",
           flex: "0 0 auto",
+          flexWrap: "wrap",
         }}
       >
         <h1 style={{ margin: 0, fontSize: "1.05rem", fontWeight: 800, lineHeight: 1.1 }}>
@@ -224,6 +518,9 @@ export default function DreamwellEditorApp({
         </span>
         <span style={{ color: "#8edbd1", fontSize: "0.82rem", fontWeight: 600 }}>
           {loadStatus.kind === "loaded" ? activeTomlLabel : "Loading..."}
+        </span>
+        <span style={{ color: "#6f7a76", fontSize: "0.76rem", marginLeft: "6px" }}>
+          Double-click the name, rules, energy orb, or deck slot to edit.
         </span>
       </header>
 
@@ -268,14 +565,35 @@ export default function DreamwellEditorApp({
                   paddingBottom: "24px",
                 }}
               >
-                {visible.map((record) => (
-                  <DreamwellGridTile
-                    key={record.id}
-                    record={record}
-                    width={CARD_WIDTH[displayState.size]}
-                    onSelect={() => setSelectedId(record.id)}
-                  />
-                ))}
+                {visible.map((record) => {
+                  const entryFor = (field: EditableDreamwellField) =>
+                    fieldSaveEntry(saveState, { cardId: record.id, field });
+                  return (
+                    <div
+                      key={record.id}
+                      style={{
+                        width: CARD_WIDTH[displayState.size],
+                        flex: "0 0 auto",
+                      }}
+                    >
+                      <EditableDreamwell
+                        record={record}
+                        size={displayState.size}
+                        nameSaveEntry={entryFor("name")}
+                        rulesTextSaveEntry={entryFor("rendered-text")}
+                        energySaveEntry={entryFor("energy-added")}
+                        orderSaveEntry={entryFor("order")}
+                        artEditing={displayState.artEditing}
+                        onOpenArtEditor={openArtEditor}
+                        onFieldBeginEdit={handleFieldBeginEdit}
+                        onFieldDraftChange={handleFieldDraftChange}
+                        onFieldCancel={handleFieldCancel}
+                        onFieldSave={handleFieldSave}
+                        onFieldCommit={handleFieldCommit}
+                      />
+                    </div>
+                  );
+                })}
               </div>
             )}
           </>
@@ -306,58 +624,18 @@ export default function DreamwellEditorApp({
         ) : null}
       </section>
 
-      {selectedRecord !== null ? (
-        <DreamwellCardEditor
-          record={selectedRecord}
-          onSave={(field, value) => handleSave(selectedRecord, field, value)}
-          onClose={() => setSelectedId(null)}
+      {artEditorRecord !== null ? (
+        <DreamwellArtEditor
+          record={artEditorRecord}
+          saveStatus={artSaveStatus}
+          saveError={artSaveError}
+          onSaveImageNumber={(imageNumber) =>
+            handleSaveImageNumber(artEditorRecord, imageNumber)
+          }
+          onClose={() => setArtEditorId(null)}
         />
       ) : null}
     </main>
-  );
-}
-
-interface DreamwellGridTileProps {
-  record: EditorDreamwellRecord;
-  width: string;
-  onSelect: () => void;
-}
-
-function DreamwellGridTile({ record, width, onSelect }: DreamwellGridTileProps) {
-  return (
-    <div style={{ width, flex: "0 0 auto" }}>
-      <button
-        type="button"
-        data-dreamwell-tile={record.id}
-        aria-label={`Edit ${record.name}`}
-        onClick={onSelect}
-        style={{
-          display: "block",
-          width: "100%",
-          padding: 0,
-          border: "none",
-          background: "transparent",
-          cursor: "pointer",
-          borderRadius: "12px",
-        }}
-      >
-        <DreamwellCardView card={dreamwellPreviewCard(record)} />
-      </button>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          gap: "8px",
-          marginTop: "8px",
-          fontSize: "0.72rem",
-          color: "#8a948f",
-        }}
-      >
-        <span>slot {record.order}</span>
-        <span aria-hidden="true">·</span>
-        <span>+{record["energy-added"]} ●</span>
-      </div>
-    </div>
   );
 }
 
@@ -449,6 +727,21 @@ function DreamwellEditorToolbar({
           <option value="large">Large</option>
         </select>
       </label>
+      <button
+        type="button"
+        aria-pressed={displayState.artEditing}
+        onClick={() =>
+          onChange({ ...displayState, artEditing: !displayState.artEditing })
+        }
+        style={{
+          ...controlStyle,
+          cursor: "pointer",
+          background: displayState.artEditing ? "#1f635d" : controlStyle.background,
+          fontWeight: 700,
+        }}
+      >
+        {displayState.artEditing ? "Art edit: on" : "Art edit: off"}
+      </button>
       <span style={{ fontSize: "0.78rem", color: "#8a948f", marginLeft: "auto" }}>
         {visibleCount} / {totalCount}
       </span>

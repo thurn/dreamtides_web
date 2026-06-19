@@ -1,4 +1,10 @@
-import { type CSSProperties, useEffect, useRef, useState } from "react";
+import {
+  type CSSProperties,
+  type ReactNode,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import {
   cardImageUrl,
   cardIdenticonUri,
@@ -7,6 +13,21 @@ import {
 import { CardStatOrb } from "./CardStatOrb";
 import { renderRulesText } from "./RulesText";
 import { useCardTermPopover } from "./useCardTermPopover";
+
+/**
+ * Optional render overrides for the Dreamwell card's editable regions. Each slot
+ * receives the node the card would render by default and returns a replacement,
+ * letting the Dreamwell editor wrap the name, rules text, and energy orb in
+ * inline {@link import("../editor/EditableField").default} editors while leaving
+ * the in-battle card (which passes no slots) untouched. When a `rulesText` slot
+ * is supplied the frosted box is always rendered, so a card with no rules text
+ * still offers a target to start an inline edit.
+ */
+export interface DreamwellCardViewSlots {
+  name?: (defaultNode: ReactNode) => ReactNode;
+  rulesText?: (defaultNode: ReactNode) => ReactNode;
+  energy?: (defaultNode: ReactNode) => ReactNode;
+}
 
 /**
  * Upper bound for the energy digit's auto-shrink search, as a fraction of the
@@ -92,10 +113,12 @@ export function DreamwellCardView({
   card,
   className,
   style,
+  slots,
 }: {
   card: DreamwellCardViewData;
   className?: string;
   style?: CSSProperties;
+  slots?: DreamwellCardViewSlots;
 }) {
   const rootRef = useRef<HTMLDivElement | null>(null);
   const { triggerHandlers, popoverPortal } = useCardTermPopover({
@@ -184,7 +207,10 @@ export function DreamwellCardView({
     ? cardImageUrl(card.imageNumber)
     : identiconUrl;
 
-  const showRulesText = card.renderedText.trim() !== "";
+  // The editor (which supplies a `rulesText` slot) always shows the frosted box
+  // so an empty-rules card still offers a target to start an inline edit; the
+  // in-battle card shows it only when there is text.
+  const showRulesText = card.renderedText.trim() !== "" || slots?.rulesText != null;
 
   // Resolve the band geometry from the measured box top. The seam — where the
   // crisp art fully gives way to the blurred dark band — sits a fixed fraction
@@ -331,14 +357,19 @@ export function DreamwellCardView({
           }}
         />
         <div style={{ position: "relative" }}>
-          <CardStatOrb
-            variant="dreamwellEnergy"
-            value={String(card.energyAdded)}
-            sizeVar="9cqw"
-            numberSizeVar="6.4cqw"
-            numberCapPx={energyOrbCapPx}
-            ariaLabel={`${String(card.energyAdded)} energy added`}
-          />
+          {(() => {
+            const energyNode = (
+              <CardStatOrb
+                variant="dreamwellEnergy"
+                value={String(card.energyAdded)}
+                sizeVar="9cqw"
+                numberSizeVar="6.4cqw"
+                numberCapPx={energyOrbCapPx}
+                ariaLabel={`${String(card.energyAdded)} energy added`}
+              />
+            );
+            return slots?.energy ? slots.energy(energyNode) : energyNode;
+          })()}
         </div>
       </div>
 
@@ -378,9 +409,19 @@ export function DreamwellCardView({
             textShadow: "0 0.2cqw 0.35cqw rgba(0, 0, 0, 0.7)",
           }}
         >
-          {card.name}
+          {slots?.name ? slots.name(card.name) : card.name}
         </span>
-        {showRulesText ? renderRulesText(card.renderedText) : null}
+        {showRulesText
+          ? (() => {
+              const rulesNode =
+                card.renderedText.trim() !== ""
+                  ? renderRulesText(card.renderedText)
+                  : null;
+              return slots?.rulesText
+                ? slots.rulesText(rulesNode)
+                : rulesNode;
+            })()
+          : null}
       </div>
       {popoverPortal}
     </div>
