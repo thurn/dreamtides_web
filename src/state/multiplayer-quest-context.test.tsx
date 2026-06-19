@@ -1856,7 +1856,7 @@ describe("MultiplayerQuestProvider", () => {
             sites: [
               {
                 id: "site-1",
-                type: "DreamsignOffering",
+                type: "DreamsignRevelation",
                 isEnhanced: false,
                 isVisited: false,
               },
@@ -1950,7 +1950,7 @@ describe("MultiplayerQuestProvider", () => {
             sites: [
               {
                 id: "site-1",
-                type: "DreamsignOffering",
+                type: "DreamsignRevelation",
                 isEnhanced: false,
                 isVisited: false,
               },
@@ -3394,7 +3394,7 @@ describe("MultiplayerQuestProvider", () => {
     ]);
 
     captured[captured.length - 1]?.mutations.boostSiteAppearance(
-      "DreamsignOffering",
+      "DreamsignRevelation",
       25,
       3,
       "journey:boost_site",
@@ -3403,7 +3403,7 @@ describe("MultiplayerQuestProvider", () => {
     expect(boostRoom?.questState?.dreamscapeModifiers).toEqual([
       {
         kind: "boost_site_appearance",
-        siteType: "DreamsignOffering",
+        siteType: "DreamsignRevelation",
         percent: 25,
         dreamscapesRemaining: 3,
         source: "journey:boost_site",

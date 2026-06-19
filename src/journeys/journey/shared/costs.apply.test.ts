@@ -1201,23 +1201,6 @@ describe("Dreamsign cost apply (non-choice)", () => {
       },
     ]);
   });
-
-  it("remove_dreamsign_sites_from_next_dreamscapes records the route mutation", () => {
-    const t = getCost("remove_dreamsign_sites_from_next_dreamscapes");
-    const ctx = buildContext();
-    const { mut, calls } = createRecordingMutations();
-    t.apply({ dreamscapes: 3 }, ctx, mut, undefined);
-    expect(calls).toEqual([
-      {
-        method: "removeSiteTypeFromNextDreamscapes",
-        args: [
-          "DreamsignOffering",
-          3,
-          "dream_journey:remove_dreamsign_sites_from_next_dreamscapes",
-        ],
-      },
-    ]);
-  });
 });
 
 describe("Chosen dreamsign cost planning and apply", () => {

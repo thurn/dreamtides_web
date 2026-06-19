@@ -56,7 +56,7 @@ export interface QuestMutations {
   rejectDreamsignOffer: (siteId: string) => void;
   ensureEssenceSiteRuntime: (siteId: string, isEnhanced: boolean) => void;
   acceptEssenceSite: (siteId: string) => void;
-  ensureShopRuntime: (site: SiteState, specialtyOnly: boolean) => void;
+  ensureShopRuntime: (site: SiteState) => void;
   /**
    * Buys the shop slot at `slotIndex`. For a Dreamsign slot when the player
    * is at the 12-Dreamsign cap, `purgeIndex` selects an existing Dreamsign to
@@ -310,11 +310,11 @@ export interface QuestMutations {
    * Stack a dreamscape-window modifier that hides every site of `siteType`
    * for the next `dreamscapes` dreamscapes the player enters. The atlas
    * generator consumes the modifier during future site composition. Only
-   * `"Shop"` and `"DreamsignOffering"` map to a dreamscape-modifier kind;
-   * the type is narrowed here so unsupported site types fail at compile time.
+   * `"Shop"` maps to a dreamscape-modifier kind; the type is narrowed here so
+   * unsupported site types fail at compile time.
    */
   removeSiteTypeFromNextDreamscapes: (
-    siteType: "Shop" | "DreamsignOffering",
+    siteType: "Shop",
     dreamscapes: number,
     source: string,
   ) => void;

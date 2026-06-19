@@ -9,8 +9,6 @@ import { DreamscapeScreen } from "../screens/DreamscapeScreen";
 import { DraftSiteScreen } from "../screens/DraftSiteScreen";
 import { ShopScreen } from "../screens/ShopScreen";
 import { EssenceSiteScreen } from "../screens/EssenceSiteScreen";
-import { DreamsignOfferingScreen } from "../screens/DreamsignOfferingScreen";
-import { DreamsignDraftScreen } from "../screens/DreamsignDraftScreen";
 import { DreamsignRevelationScreen } from "../screens/DreamsignRevelationScreen";
 import { PurgeSiteScreen } from "../screens/PurgeSiteScreen";
 import { TransfigurationSiteScreen } from "../screens/TransfigurationSiteScreen";
@@ -156,20 +154,12 @@ function SiteScreen({
   let content: ReactNode;
   if (site.type === "Draft") {
     content = <DraftSiteScreen siteId={siteId} />;
-  } else if (
-    site.type === "Shop" ||
-    site.type === "SpecialtyShop" ||
-    site.type === "DreamsignMarket"
-  ) {
-    // The Specialty Shop and the Dreamsign Market share the regular Shop UI;
-    // ShopScreen detects the variant from `site.type`.
+  } else if (site.type === "Shop" || site.type === "DreamsignMarket") {
+    // The Dreamsign Market shares the regular Shop UI; ShopScreen detects the
+    // variant from `site.type`.
     content = <ShopScreen site={site} />;
   } else if (site.type === "Essence") {
     content = <EssenceSiteScreen site={site} />;
-  } else if (site.type === "DreamsignOffering") {
-    content = <DreamsignOfferingScreen site={site} />;
-  } else if (site.type === "DreamsignDraft") {
-    content = <DreamsignDraftScreen site={site} />;
   } else if (site.type === "DreamsignRevelation") {
     // The Dreamsign Revelation reveals several dreamsigns over the scene and
     // lets the player take one as an immersive, full-bleed offer.

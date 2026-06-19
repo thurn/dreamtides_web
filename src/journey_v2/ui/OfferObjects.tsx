@@ -296,12 +296,9 @@ function BeforeAfterPair({
 
 const SITE_LABELS: Partial<Record<SiteType, string>> = {
   Shop: "Shop",
-  SpecialtyShop: "Specialty Shop",
   Purge: "Purge Site",
   Essence: "Essence Site",
   Transfiguration: "Transfiguration",
-  DreamsignOffering: "Dreamsign Offering",
-  DreamsignDraft: "Dreamsign Draft",
   Duplication: "Duplication",
   Reward: "Reward Site",
   Battle: "Battle",
@@ -310,12 +307,9 @@ const SITE_LABELS: Partial<Record<SiteType, string>> = {
 
 const SITE_ICONS: Partial<Record<SiteType, string>> = {
   Shop: "🛒",
-  SpecialtyShop: "✨",
   Purge: "🔥",
   Essence: "💧",
   Transfiguration: "🜂",
-  DreamsignOffering: "🌙",
-  DreamsignDraft: "🌙",
   Duplication: "♾️",
   Reward: "🎁",
   Battle: "⚔️",

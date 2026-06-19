@@ -42,9 +42,6 @@ export type SiteType =
   | "Battle"
   | "Draft"
   | "Shop"
-  | "SpecialtyShop"
-  | "DreamsignOffering"
-  | "DreamsignDraft"
   | "Purge"
   | "Essence"
   | "Transfiguration"
@@ -141,7 +138,6 @@ export interface CardSourceDebugEntry {
 export type CardSourceDebugSurface =
   | "Draft"
   | "Shop"
-  | "SpecialtyShop"
   | "BattleReward"
   | "Reward";
 
@@ -425,11 +421,6 @@ export type BattleModifier =
 export type DreamscapeModifier =
   | {
       kind: "remove_shop_sites";
-      dreamscapesRemaining: number;
-      source: string;
-    }
-  | {
-      kind: "remove_dreamsign_sites";
       dreamscapesRemaining: number;
       source: string;
     }

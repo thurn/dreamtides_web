@@ -13,12 +13,9 @@ import type { MerchantArchetypeBuilder, MerchantOfferDraft } from "./types";
  */
 export const MERCHANT_PLACEABLE_SITE_TYPES: readonly SiteType[] = [
   "Shop",
-  "SpecialtyShop",
   "Purge",
   "Essence",
   "Transfiguration",
-  "DreamsignOffering",
-  "DreamsignDraft",
   "Duplication",
   "Reward",
 ] as const;
@@ -28,12 +25,9 @@ export const MERCHANT_PLACEABLE_SITE_TYPES: readonly SiteType[] = [
  */
 const SITE_TYPE_LABELS: Record<string, string> = {
   Shop: "Shop",
-  SpecialtyShop: "Specialty Shop",
   Purge: "Purge Site",
   Essence: "Essence Site",
   Transfiguration: "Transfiguration Site",
-  DreamsignOffering: "Dreamsign Offering",
-  DreamsignDraft: "Dreamsign Draft",
   Duplication: "Duplication Site",
   Reward: "Reward Site",
 };

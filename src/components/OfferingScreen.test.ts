@@ -41,8 +41,7 @@ describe("offering screen consumer guarantees", () => {
    * journey-side `chooser` overlays which mirror them.
    */
   const CONSUMER_FILES = [
-    "src/screens/DreamsignDraftScreen.tsx",
-    "src/screens/DreamsignOfferingScreen.tsx",
+    "src/screens/DreamsignPurgeOverlay.tsx",
     "src/screens/DraftSiteScreen.tsx",
   ] as const;
 

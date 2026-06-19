@@ -16,9 +16,9 @@
 //     underlying reducer's `TransfigurationType | null` signature.
 //   - Site-type narrowing:
 //     `JourneyMutations.removeSiteTypeFromNextDreamscapes` accepts any
-//     `SiteType`, while the underlying mutation only handles `"Shop"` and
-//     `"DreamsignOffering"`. The adapter narrows at the boundary, logging
-//     a `console.warn` and no-op for unsupported types.
+//     `SiteType`, while the underlying mutation only handles `"Shop"`. The
+//     adapter narrows at the boundary, logging a `console.warn` and no-op
+//     for unsupported types.
 //
 // No `cardDatabase` argument is needed: `addCardById` /
 // `addBaneCardById` / `pushTemporaryBaneGrant` all resolve their catalog
@@ -101,12 +101,12 @@ export function createJourneyMutations(
       mutations.replaceSiteType(from, to, source);
     },
     removeSiteTypeFromNextDreamscapes: (siteType, dreamscapes, source) => {
-      // The underlying `QuestMutations` method is narrowed to the only two
-      // site kinds whose hide-modifier semantics are defined. Other
-      // `SiteType` values reach the adapter through the wider
-      // `JourneyMutations` contract — log a warning and no-op rather than
-      // silently dropping the call.
-      if (siteType === "Shop" || siteType === "DreamsignOffering") {
+      // The underlying `QuestMutations` method is narrowed to the only site
+      // kind whose hide-modifier semantics are defined. Other `SiteType`
+      // values reach the adapter through the wider `JourneyMutations`
+      // contract — log a warning and no-op rather than silently dropping the
+      // call.
+      if (siteType === "Shop") {
         mutations.removeSiteTypeFromNextDreamscapes(
           siteType,
           dreamscapes,

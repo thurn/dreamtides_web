@@ -1,4 +1,4 @@
-import { DreamsignOfferingScreen } from "../screens/DreamsignOfferingScreen";
+import { DreamsignRevelationScreen } from "../screens/DreamsignRevelationScreen";
 import {
   createDefaultState,
   QuestContextProvider,
@@ -62,8 +62,8 @@ const demoTemplates: DreamsignTemplate[] = [
 ];
 
 const demoSite: SiteState = {
-  id: "demo-dreamsign-offering",
-  type: "DreamsignOffering",
+  id: "demo-dreamsign-revelation",
+  type: "DreamsignRevelation",
   isEnhanced: true,
   isVisited: false,
 };
@@ -206,7 +206,7 @@ export function HudDreamsignLayoutDemo() {
   return (
     <QuestContextProvider value={demoQuestContext}>
       <div className="min-h-screen bg-slate-950 text-slate-100">
-        <DreamsignOfferingScreen site={demoSite} />
+        <DreamsignRevelationScreen site={demoSite} />
         <HUD
           onOpenDeckViewer={noop}
           onOpenGlossary={noop}

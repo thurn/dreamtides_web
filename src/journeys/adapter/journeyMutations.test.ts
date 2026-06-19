@@ -189,7 +189,7 @@ describe("createJourneyMutations source-string convention", () => {
 });
 
 describe("createJourneyMutations removeSiteTypeFromNextDreamscapes narrowing", () => {
-  it("forwards Shop and DreamsignOffering to the underlying mutation", () => {
+  it("forwards Shop to the underlying mutation", () => {
     const { mutations, calls } = createRecordingQuestMutations();
     const adapter = createJourneyMutations(mutations);
 
@@ -198,20 +198,11 @@ describe("createJourneyMutations removeSiteTypeFromNextDreamscapes narrowing", (
       2,
       "dream_journey:hide_shops",
     );
-    adapter.removeSiteTypeFromNextDreamscapes(
-      "DreamsignOffering",
-      1,
-      "dream_journey:hide_dreamsigns",
-    );
 
     expect(calls).toEqual([
       {
         method: "removeSiteTypeFromNextDreamscapes",
         args: ["Shop", 2, "dream_journey:hide_shops"],
-      },
-      {
-        method: "removeSiteTypeFromNextDreamscapes",
-        args: ["DreamsignOffering", 1, "dream_journey:hide_dreamsigns"],
       },
     ]);
   });

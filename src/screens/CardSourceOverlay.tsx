@@ -47,7 +47,6 @@ function surfaceCopy(surface: CardSourceDebugState["surface"]): string {
     case "Draft":
       return "These draft cards come from your Dreamcaller's idf3 pool, grown from a starter deck the signature steered toward.";
     case "Shop":
-    case "SpecialtyShop":
       return "Shop cards are drawn from your Dreamcaller's idf3 pool, grown from a starter deck the signature steered toward.";
     case "BattleReward":
     case "Reward":
@@ -64,7 +63,6 @@ function seedSurfaceCopy(
     case "Draft":
       return `These draft cards come ${grown}`;
     case "Shop":
-    case "SpecialtyShop":
       return `Shop cards are drawn ${grown}`;
     case "BattleReward":
     case "Reward":
@@ -79,7 +77,6 @@ function tides4SurfaceCopy(surface: CardSourceDebugState["surface"]): string {
     case "Draft":
       return `These draft cards were ${dealt}`;
     case "Shop":
-    case "SpecialtyShop":
       return `Shop cards are ${dealt}`;
     case "BattleReward":
     case "Reward":

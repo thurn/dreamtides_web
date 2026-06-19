@@ -238,7 +238,7 @@ describe("completeBattleSiteVictory", () => {
     };
     const modifier = {
       kind: "boost_site_appearance" as const,
-      siteType: "SpecialtyShop" as const,
+      siteType: "Shop" as const,
       percent: 50,
       dreamscapesRemaining: 3,
       source: "test:boost",

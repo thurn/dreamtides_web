@@ -46,7 +46,6 @@ const EXCLUDED_COST_IDS = new Set([
   "remove_transfiguration_from_card",
   "remove_transfigurations_from_random_predicate",
   "remove_shop_sites_from_next_dreamscapes",
-  "remove_dreamsign_sites_from_next_dreamscapes",
 ]);
 
 const DREAMSIGN_REWARD_IDS = new Set([

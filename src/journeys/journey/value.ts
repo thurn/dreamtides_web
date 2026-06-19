@@ -957,19 +957,6 @@ export function valueRandomCardGain(input: {
   return roundToNearestFive(rawValue * durationMultiplier);
 }
 
-export function valueDreamsignDraft(input: {
-  choiceCount: number;
-}, context?: JourneyContext): number {
-  if (context && context.state.quest.dreamsignPoolIds.length === 0) {
-    return 0;
-  }
-
-  return roundToNearestFive(
-    DREAMSIGN_VALUE_CONSTANTS.draftBase +
-    choiceCurveValue(input.choiceCount, DREAMSIGN_VALUE_CONSTANTS.draftChoiceValues),
-  );
-}
-
 export function valueDreamsignOperation(
   family:
     | "gain"

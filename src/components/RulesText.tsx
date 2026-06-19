@@ -31,9 +31,8 @@ import {
  *     the card's hover-help panel (see `CardTermDefinitions`).
  *
  * Used by `CardDisplay`, `DreamcallerPopover`, and the dreamsign cards on
- * `DreamsignDraftScreen` / `DreamsignOfferingScreen`. Single source of
- * truth for rules-text rendering. New surfaces should call this rather
- * than duplicate the JSX.
+ * `DreamsignRevelationScreen`. Single source of truth for rules-text
+ * rendering. New surfaces should call this rather than duplicate the JSX.
  */
 
 /**

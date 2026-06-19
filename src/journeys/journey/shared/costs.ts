@@ -1259,25 +1259,6 @@ const removeShopSitesFromNextDreamscapes: Cost<RemoveShopSitesParams> = {
   },
 };
 
-type RemoveDsSitesParams = { dreamscapes: number };
-const removeDreamsignSitesFromNextDreamscapes: Cost<RemoveDsSitesParams> = {
-  id: "remove_dreamsign_sites_from_next_dreamscapes",
-  weight: MINOR_RANDOM_TRADE_COST_WEIGHT,
-  rollParams: (_ctx, draw) => ({ dreamscapes: drawInt(draw, "rm_ds:d", 1, 3) }),
-  cec: (p) => 40 * p.dreamscapes,
-  viable: () => true,
-  locked: () => false,
-  render: (p) =>
-    `Remove all dreamsign sites from the next ${p.dreamscapes} dreamscape${p.dreamscapes === 1 ? "" : "s"} you visit`,
-  apply: (p, _ctx, mut) => {
-    mut.removeSiteTypeFromNextDreamscapes(
-      "DreamsignOffering",
-      p.dreamscapes,
-      "dream_journey:remove_dreamsign_sites_from_next_dreamscapes",
-    );
-  },
-};
-
 type LoseMaxEssenceParams = { amount: number };
 const loseMaxEssence: Cost<LoseMaxEssenceParams> = {
   id: "lose_max_essence",
@@ -1669,7 +1650,6 @@ export const COSTS: readonly Cost[] = Object.freeze([
   removeTransfigurationsFromRandomPredicate,
   drawXPurgeChosen,
   removeShopSitesFromNextDreamscapes,
-  removeDreamsignSitesFromNextDreamscapes,
   loseMaxEssence,
   metaPay2Costs,
 ] as readonly Cost[]);

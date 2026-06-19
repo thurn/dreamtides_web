@@ -3337,11 +3337,11 @@ describe("Dreamsign reward apply (non-choice)", () => {
     const t = getReward("add_site_to_dreamscape");
     const ctx = buildContext();
     const { mut, calls } = createRecordingMutations();
-    t.apply({ siteType: "Specialty Shop" }, ctx, mut, undefined);
+    t.apply({ siteType: "Dream Augury" }, ctx, mut, undefined);
     expect(calls).toEqual([
       {
         method: "addSiteToDreamscape",
-        args: ["current", "SpecialtyShop", "dream_journey:add_site_to_dreamscape"],
+        args: ["current", "DreamAugury", "dream_journey:add_site_to_dreamscape"],
       },
     ]);
   });
@@ -3363,11 +3363,11 @@ describe("Dreamsign reward apply (non-choice)", () => {
     const t = getReward("add_site_to_next_dreamscape");
     const ctx = buildContext();
     const { mut, calls } = createRecordingMutations();
-    t.apply({ siteType: "Dreamsign Offering" }, ctx, mut, undefined);
+    t.apply({ siteType: "Dream Augury" }, ctx, mut, undefined);
     expect(calls).toEqual([
       {
         method: "addSiteToDreamscape",
-        args: ["next", "DreamsignOffering", "dream_journey:add_site_to_next_dreamscape"],
+        args: ["next", "DreamAugury", "dream_journey:add_site_to_next_dreamscape"],
       },
     ]);
   });
@@ -3390,7 +3390,7 @@ describe("Dreamsign reward apply (non-choice)", () => {
     const ctx = buildContext();
     const { mut, calls } = createRecordingMutations();
     t.apply(
-      { fromType: "Dreamsign Draft", toType: "Specialty Shop" },
+      { fromType: "Dream Augury", toType: "Essence" },
       ctx,
       mut,
       undefined,
@@ -3398,7 +3398,7 @@ describe("Dreamsign reward apply (non-choice)", () => {
     expect(calls).toEqual([
       {
         method: "replaceSiteType",
-        args: ["DreamsignDraft", "SpecialtyShop", "dream_journey:replace_site_type"],
+        args: ["DreamAugury", "Essence", "dream_journey:replace_site_type"],
       },
     ]);
   });
@@ -3420,11 +3420,11 @@ describe("Dreamsign reward apply (non-choice)", () => {
     const t = getReward("boost_site_appearance_chance");
     const ctx = buildContext();
     const { mut, calls } = createRecordingMutations();
-    t.apply({ siteType: "Dreamsign Draft", percent: 20, dreamscapes: 2 }, ctx, mut, undefined);
+    t.apply({ siteType: "Dream Augury", percent: 20, dreamscapes: 2 }, ctx, mut, undefined);
     expect(calls).toEqual([
       {
         method: "boostSiteAppearance",
-        args: ["DreamsignDraft", 20, 2, "dream_journey:boost_site_appearance_chance"],
+        args: ["DreamAugury", 20, 2, "dream_journey:boost_site_appearance_chance"],
       },
     ]);
   });

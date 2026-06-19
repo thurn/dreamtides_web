@@ -356,7 +356,7 @@ describe("ShopScreen", () => {
     });
   });
 
-  it("displays specialty shop card prices with the permanent shop essence discount applied", () => {
+  it("displays shop card prices with the permanent shop essence discount applied", () => {
     const state = {
       ...makeState([
         {
@@ -378,7 +378,7 @@ describe("ShopScreen", () => {
       <ShopScreen
         site={{
           id: "shop-1",
-          type: "SpecialtyShop",
+          type: "Shop",
           isEnhanced: false,
           isVisited: false,
         }}
@@ -386,7 +386,7 @@ describe("ShopScreen", () => {
     );
 
     const priceSpan = container.querySelector("[data-shop-price]");
-    expect(container.textContent).toContain("Specialty Shop");
+    expect(container.textContent).toContain("Card Shop");
     expect(priceSpan?.textContent).toBe("100");
 
     act(() => {

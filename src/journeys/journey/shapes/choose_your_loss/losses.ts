@@ -48,7 +48,6 @@ const COST_FAMILIES: Record<string, string> = {
   remove_transfigurations_from_random_predicate: "transfiguration",
   draw_X_purge_chosen: "deck",
   remove_shop_sites_from_next_dreamscapes: "route",
-  remove_dreamsign_sites_from_next_dreamscapes: "route",
   lose_max_essence: "resource",
 };
 

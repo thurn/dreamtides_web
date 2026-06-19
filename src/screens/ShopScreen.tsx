@@ -45,8 +45,8 @@ const SHOP_BUY_MS = 480;
  * Every visit exposes exactly one reroll. Triggering it refreshes all unsold
  * wares and disables the affordance for the rest of the visit; reroll state is
  * scoped per Shop site via `rerollCount` on the site runtime, so each Shop owns
- * its own fresh reroll. The Specialty Shop and the Dreamsign Market share this
- * surface, detecting their variant from `site.type`.
+ * its own fresh reroll. The Dreamsign Market shares this surface, detecting its
+ * variant from `site.type`.
  *
  * The composition mirrors the Purge surface: a frosted wallet HUD, a centered
  * row of card-sized offers plus a reroll tile, a de-emphasized "Leave Shop"
@@ -56,13 +56,8 @@ const SHOP_BUY_MS = 480;
 export function ShopScreen({ site }: ShopScreenProps) {
   const { state, mutations, cardDatabase } = useQuest();
   const { essence, deck } = state;
-  const isSpecialty = site.type === "SpecialtyShop";
   const isDreamsignMarket = site.type === "DreamsignMarket";
-  const shopName = isSpecialty
-    ? "Specialty Shop"
-    : isDreamsignMarket
-      ? "Dreamsign Market"
-      : "Card Shop";
+  const shopName = isDreamsignMarket ? "Dreamsign Market" : "Card Shop";
 
   const runtime = state.siteRuntime[site.id];
   const priceModifiers = useMemo<ShopPriceModifiers>(
@@ -139,9 +134,9 @@ export function ShopScreen({ site }: ShopScreenProps) {
 
   useEffect(() => {
     if (runtime === undefined) {
-      mutations.ensureShopRuntime(site, isSpecialty);
+      mutations.ensureShopRuntime(site);
     }
-  }, [isSpecialty, mutations, runtime, site]);
+  }, [mutations, runtime, site]);
 
   useEffect(() => {
     mutations.setCardSourceDebug(cardSourceDebugState, "shop_cards_shown");
@@ -287,8 +282,7 @@ export function ShopScreen({ site }: ShopScreenProps) {
         </div>
       </div>
 
-      {/* Resident guide (shared SiteGuide), docked lower-left in landscape. The
-          Specialty Shop has no resident guide, so SiteGuide renders nothing. */}
+      {/* Resident guide (shared SiteGuide), docked lower-left in landscape. */}
       <SiteGuide siteType={site.type} isEnhanced={site.isEnhanced} />
 
       <CardOverlay card={overlayCard} onClose={() => setOverlayCard(null)} />

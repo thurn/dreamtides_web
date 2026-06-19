@@ -10,7 +10,7 @@ import {
   DreamsignHoverCard,
 } from "../components/DreamsignHoverCard";
 import { HoverPopover } from "../components/HoverPopover";
-import { DreamsignPurgeOverlay } from "./DreamsignDraftScreen";
+import { DreamsignPurgeOverlay } from "./DreamsignPurgeOverlay";
 import "./dreamsign-revelation.css";
 
 /** Props for the DreamsignRevelationScreen component. */

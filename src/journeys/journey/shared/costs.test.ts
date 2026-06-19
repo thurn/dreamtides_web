@@ -122,7 +122,6 @@ const ALWAYS_VIABLE_ON_EMPTY: ReadonlySet<string> = new Set([
   "gain_random_cards_from_pool",
   "gain_additional_starters",
   "remove_shop_sites_from_next_dreamscapes",
-  "remove_dreamsign_sites_from_next_dreamscapes",
 ]);
 
 // Sub-cost ids known to decline on an empty context. The compound suite uses

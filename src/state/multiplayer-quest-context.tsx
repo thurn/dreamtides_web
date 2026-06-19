@@ -2055,7 +2055,7 @@ export function MultiplayerQuestProvider({
   }, []);
 
   const ensureShopRuntime = useCallback(
-    (site: SiteState, specialtyOnly: boolean) => {
+    (site: SiteState) => {
       const current = currentRef.current;
       // The Dreamsign Market is a dreamsign-only shop: no card slots, three
       // essence-priced Dreamsign slots, and the standard essence restock.
@@ -2089,9 +2089,6 @@ export function MultiplayerQuestProvider({
           dreamsignTemplates: current.questContent.dreamsignTemplates,
           dreamsignRegenerationPoolIds:
             current.state.resolvedPackage?.dreamsignPoolIds ?? [],
-          starterDecklistCardNumbers: specialtyOnly
-            ? (current.state.resolvedPackage?.starterDecklistCardNumbers ?? [])
-            : undefined,
           affiliationNumberWeights: affiliation?.weights,
           affiliationId: affiliation?.affiliationId,
           ...(dreamsignMarket ? { cardCount: 0, dreamsignCount: 3 } : {}),
@@ -2160,7 +2157,6 @@ export function MultiplayerQuestProvider({
                 source: "site_reveal",
                 summary: {
                   siteId: site.id,
-                  specialtyOnly,
                   slotCount: runtime.slots.length,
                 },
               }),
@@ -2372,10 +2368,6 @@ export function MultiplayerQuestProvider({
       dreamsignTemplates: current.questContent.dreamsignTemplates,
       dreamsignRegenerationPoolIds:
         current.state.resolvedPackage?.dreamsignPoolIds ?? [],
-      starterDecklistCardNumbers:
-        site.type === "SpecialtyShop"
-          ? (current.state.resolvedPackage?.starterDecklistCardNumbers ?? [])
-          : undefined,
       affiliationNumberWeights: affiliation?.weights,
       affiliationId: affiliation?.affiliationId,
       ...(dreamsignMarket ? { cardCount: 0, dreamsignCount: 3 } : {}),
@@ -4214,26 +4206,15 @@ export function MultiplayerQuestProvider({
   );
 
   const removeSiteTypeFromNextDreamscapes = useCallback(
-    (
-      siteType: "Shop" | "DreamsignOffering",
-      dreamscapes: number,
-      source: string,
-    ) => {
+    (_siteType: "Shop", dreamscapes: number, source: string) => {
       const current = currentRef.current;
       const now = new Date().toISOString();
       const actionId = crypto.randomUUID();
-      const modifier: DreamscapeModifier =
-        siteType === "Shop"
-          ? {
-              kind: "remove_shop_sites",
-              dreamscapesRemaining: dreamscapes,
-              source,
-            }
-          : {
-              kind: "remove_dreamsign_sites",
-              dreamscapesRemaining: dreamscapes,
-              source,
-            };
+      const modifier: DreamscapeModifier = {
+        kind: "remove_shop_sites",
+        dreamscapesRemaining: dreamscapes,
+        source,
+      };
 
       writeRoomTransaction({
         database: current.database,

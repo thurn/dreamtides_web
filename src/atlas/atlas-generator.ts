@@ -194,12 +194,6 @@ function removedSiteTypesFromModifiers(
 
     if (modifier.kind === "remove_shop_sites") {
       removedTypes.add("Shop");
-      removedTypes.add("SpecialtyShop");
-    }
-
-    if (modifier.kind === "remove_dreamsign_sites") {
-      removedTypes.add("DreamsignOffering");
-      removedTypes.add("DreamsignDraft");
     }
   }
 
@@ -1309,21 +1303,6 @@ const SITE_TYPE_META: Record<
     icon: "bxf bx-store-alt-2",
     name: "Card Shop",
     description: "Spend essence to buy cards.",
-  },
-  SpecialtyShop: {
-    icon: "bxf bx-store",
-    name: "Specialty Shop",
-    description: "A rare shop with a focused, themed inventory.",
-  },
-  DreamsignOffering: {
-    icon: "bxf bx-sparkles",
-    name: "Dreamsign Offering",
-    description: "Accept a dreamsign passive, or refuse for essence.",
-  },
-  DreamsignDraft: {
-    icon: "bxf bx-sparkles-alt",
-    name: "Dreamsign Draft",
-    description: "Choose one dreamsign from several offered options.",
   },
   Purge: {
     icon: "bxf bx-hot",
