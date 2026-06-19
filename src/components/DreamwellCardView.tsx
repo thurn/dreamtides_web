@@ -189,6 +189,19 @@ const ART_BAND_MIN_TOP_PCT = 50;
 const ART_BAND_MAX_TOP_PCT = 92;
 
 /**
+ * Default amount the art is lifted up the frame, as a card-*width* length
+ * (`cqw`). Lifting the art moves its content up so the lower part of the scene
+ * (otherwise hidden behind the panel) rises into view and the art's bottom edge
+ * ends near the text box top, leaving the area behind and below the box as the
+ * dark base. Exposed as the `--dreamwell-art-rise` CSS variable so it can be
+ * tuned without code (override it on the card or an ancestor). It is a width
+ * length so it scales with the card; `14.5cqw` is ~22% of the 3:2 card's height.
+ * Larger lifts the art higher (revealing more of its lower content, cropping more
+ * off the top); `0cqw` fills the frame full-bleed.
+ */
+const ART_RISE_DEFAULT_CQW = 14.5;
+
+/**
  * A Dreamwell card, rendered in landscape (3:2) but wearing the same chrome as a
  * regular {@link import("./CardView").CardView}: full-bleed art under a floating,
  * frosted panel. The Dreamwell energy orb (the energy flame in **purple**, white
@@ -344,6 +357,12 @@ export function DreamwellCardView({
   // `overflow: hidden`). With a crop, the source is panned/zoomed to the curated
   // framing once its aspect is known, clipping the watermark strip in image space
   // so it stays hidden at any pan and zoom.
+  // Lift the art up the frame by `--dreamwell-art-rise` so its lower content
+  // rises into view and its bottom edge ends near the text box top. Applied to
+  // both art layers (crisp and blurred) so they stay aligned; the watermark stays
+  // clipped in image space (`clipPath`) so lifting never reveals it. The fallback
+  // keeps the transform valid if a consumer unsets the variable.
+  const riseTranslate = `translateY(calc(-1 * var(--dreamwell-art-rise, ${String(ART_RISE_DEFAULT_CQW)}cqw)))`;
   const artImgStyle: CSSProperties =
     card.art !== undefined && imageAspect !== null
       ? (() => {
@@ -361,6 +380,7 @@ export function DreamwellCardView({
             maxHeight: "none",
             objectFit: "cover",
             clipPath: `inset(0 0 ${(ART_SOURCE_BOTTOM_CROP * 100).toFixed(3)}% 0)`,
+            transform: riseTranslate,
           } satisfies CSSProperties;
         })()
       : {
@@ -371,11 +391,16 @@ export function DreamwellCardView({
           height: `calc(100% / ${String(1 - ART_SOURCE_BOTTOM_CROP)})`,
           objectFit: "cover",
           objectPosition: "center top",
-          // While a crop is set but the source aspect is still loading, apply the
-          // zoom so the first paint is already close to the curated framing.
-          ...(card.art !== undefined
-            ? { transform: `scale(${String(card.art.scale)})` }
-            : {}),
+          // Clip the watermark strip in image space so the lift never brings it
+          // into view (the card's own `overflow: hidden` only clips it at the
+          // unlifted bottom edge).
+          clipPath: `inset(0 0 ${(ART_SOURCE_BOTTOM_CROP * 100).toFixed(3)}% 0)`,
+          // Lift the art, and — while a crop is set but the source aspect is still
+          // loading — apply the zoom so the first paint is close to the framing.
+          transform:
+            card.art !== undefined
+              ? `${riseTranslate} scale(${String(card.art.scale)})`
+              : riseTranslate,
         };
 
   const handleArtLoad = (event: SyntheticEvent<HTMLImageElement>): void => {
@@ -399,11 +424,15 @@ export function DreamwellCardView({
       className={className}
       style={
         {
-          // Art-underlap knob (card-height %): how far the crisp art slips under
-          // the text box's top before the dark fadeout. Defaults to the box's top
-          // corner-radius depth; override `--dreamwell-art-underlap` here or on an
-          // ancestor to tune it. `--dreamwell-box-top` is the measured box top the
-          // seam's `calc()` builds on.
+          // Art-rise knob: how far the art is lifted up the frame so its lower
+          // edge ends near the text box top. A card-width length (`cqw`);
+          // override `--dreamwell-art-rise` here or on an ancestor to tune it.
+          "--dreamwell-art-rise": `${String(ART_RISE_DEFAULT_CQW)}cqw`,
+          // Art-underlap knob (card-height %): how far the lifted art's crisp
+          // edge slips under the text box's top before the dark fadeout.
+          // Defaults to the box's top corner-radius depth; override
+          // `--dreamwell-art-underlap` here or on an ancestor. `--dreamwell-box-top`
+          // is the measured box top the seam's `calc()` builds on.
           "--dreamwell-art-underlap": `${String(ART_UNDERLAP_DEFAULT_PCT)}%`,
           "--dreamwell-box-top": boxTopCss,
           position: "relative",

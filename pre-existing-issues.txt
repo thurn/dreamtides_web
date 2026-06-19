@@ -1,3 +1,13 @@
 Pre-Existing Issues:
 
+- <DreamwellCardView> logs a React error-boundary warning on mount. On the
+  /dreamwell editor page the console logs once, at mount: "An error occurred in
+  the <DreamwellCardView> component. Consider adding an error boundary to your
+  tree to customize error handling behavior." It reproduces on a clean load with
+  the art-lift change reverted (so it is unrelated to that work) and does not
+  recur on later re-renders (e.g. toggling card size). All 35 cards still render
+  (two <img> layers each), so it is a non-fatal warning, not a render failure.
+  React collapses the underlying throw to "%s" so the cause is not surfaced; it
+  was not root-caused as part of this task.
+
 
