@@ -19,6 +19,13 @@ interface SiteGuideProps {
    * apart from fill visits; the presentation itself does not change.
    */
   isEnhanced?: boolean;
+  /**
+   * When set, the lower-left portrait is omitted and only the name + dialog
+   * bubble is shown. Used by the Dream Augury screen, where the guide's portrait
+   * is presented as the central figure, so the bubble alone labels the guide
+   * without showing a second copy of the portrait.
+   */
+  hidePortrait?: boolean;
 }
 
 /**
@@ -34,7 +41,11 @@ interface SiteGuideProps {
  * feature takes the full stage. Renders nothing when no guide tends the site
  * type (e.g. Draft, Essence, Dreamsign Draft).
  */
-export function SiteGuide({ siteType, isEnhanced = false }: SiteGuideProps) {
+export function SiteGuide({
+  siteType,
+  isEnhanced = false,
+  hidePortrait = false,
+}: SiteGuideProps) {
   const { questContent } = useQuest();
 
   const guide = useMemo(
@@ -71,7 +82,7 @@ export function SiteGuide({ siteType, isEnhanced = false }: SiteGuideProps) {
 
   return (
     <div
-      className={`site-guide${mounted ? " mounted" : ""}`}
+      className={`site-guide${mounted ? " mounted" : ""}${hidePortrait ? " bubble-only" : ""}`}
       data-site-guide=""
       data-guide-id={guide.id}
       data-guide-enhanced={isEnhanced ? "true" : "false"}
@@ -81,7 +92,7 @@ export function SiteGuide({ siteType, isEnhanced = false }: SiteGuideProps) {
         <span className="site-guide-name">{guide.name}</span>
         {guideLine !== null && <p>{`“${guideLine}”`}</p>}
       </div>
-      {!imageBroken && (
+      {!hidePortrait && !imageBroken && (
         <img
           className="site-guide-portrait"
           src={guidePortraitUrl(guide.id)}

@@ -78,11 +78,10 @@ export function DreamJourneyStage({
         position: "absolute",
         inset: 0,
         overflow: "hidden",
-        // Fill the full viewport with the same purple wash as the canvas so the
-        // letterbox area outside the scaled 1440x980 stage reads as one
-        // continuous dream, not black bars.
-        background:
-          "radial-gradient(140% 120% at 50% 30%, #241b42 0%, #130d29 52%, #0a0718 100%)",
+        // Transparent so the shared SiteSceneBackdrop — the dreamscape scene art
+        // under its semi-translucent dim overlay — shows through across the full
+        // viewport, matching every other dreamscape site screen.
+        background: "transparent",
       }}
       data-testid="dream-journey-stage"
     >
@@ -95,8 +94,9 @@ export function DreamJourneyStage({
           height: JOURNEY_DESIGN_HEIGHT,
           transform: `translate(-50%,-50%) scale(${String(scale)})`,
           transformOrigin: "center",
-          background:
-            "radial-gradient(125% 92% at 50% 33%, #241b42 0%, #130d29 46%, #080614 100%)",
+          // Transparent so the dreamscape backdrop reads through the offer
+          // composition; the offers and Aldric sit over the dimmed scene.
+          background: "transparent",
           overflow: "hidden",
         }}
         data-testid="dream-journey-canvas"
@@ -141,36 +141,22 @@ export function DreamJourneyStage({
           1 CONNECTED
         </div>
 
-        {/* Walk on — a quiet decline pinned to the bottom center, clear of the
-            offer columns and the top-right debug controls. */}
+        {/* Walk on — the shared de-emphasized text link every dreamscape site
+            uses, pinned to the bottom center clear of the offer columns. */}
         <button
           type="button"
           onClick={onWalkOn}
           data-testid="merchant-walk-away"
+          className="dj-walk"
           style={{
             position: "absolute",
             bottom: 30,
             left: "50%",
             transform: "translateX(-50%)",
             zIndex: 12,
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            fontSize: 15,
-            fontWeight: 700,
-            color: "#cfc8ef",
-            padding: "12px 26px",
-            borderRadius: 999,
-            background: "rgba(34,27,58,.78)",
-            border: "1px solid rgba(150,128,224,.45)",
-            boxShadow: "0 8px 24px rgba(0,0,0,.45)",
-            cursor: "pointer",
           }}
         >
           Walk on
-          <span aria-hidden="true" style={{ fontSize: 16, lineHeight: 1 }}>
-            ›
-          </span>
         </button>
 
         {debugControls !== undefined && (
@@ -211,7 +197,7 @@ export function DreamJourneyStage({
               WebkitTextFillColor: "transparent",
             }}
           >
-            Dream Journey
+            Augury
           </div>
           <div
             style={{
@@ -228,7 +214,7 @@ export function DreamJourneyStage({
           </div>
         </div>
 
-        {/* Merchant — static, soft-masked, feet at the button line */}
+        {/* Aldric, the Seer — static, soft-masked, feet at the button line */}
         <div
           style={{
             position: "absolute",
@@ -257,8 +243,8 @@ export function DreamJourneyStage({
             }}
           />
           <img
-            src="/dream-merchant.png"
-            alt="The Dream Merchant"
+            src="/dream-guides/aldric_the_seer.png"
+            alt="Aldric, the Seer"
             style={{
               height: 700,
               width: "auto",
@@ -270,37 +256,9 @@ export function DreamJourneyStage({
                 "radial-gradient(ellipse 50% 58% at 50% 44%, #000 40%, rgba(0,0,0,.55) 62%, transparent 80%)",
             }}
           />
-          <div
-            className="dj-anim-glow"
-            style={{
-              position: "absolute",
-              left: 118,
-              top: 148,
-              width: 120,
-              height: 120,
-              borderRadius: "50%",
-              background:
-                "radial-gradient(circle, rgba(140,110,255,.7), transparent 66%)",
-              animation: "dj-hand-glow 4.5s ease-in-out infinite",
-            }}
-          />
-          <div
-            className="dj-anim-glow"
-            style={{
-              position: "absolute",
-              right: 72,
-              top: 330,
-              width: 120,
-              height: 120,
-              borderRadius: "50%",
-              background:
-                "radial-gradient(circle, rgba(120,210,235,.55), transparent 66%)",
-              animation: "dj-hand-glow 5.2s ease-in-out infinite 1s",
-            }}
-          />
         </div>
 
-        {/* grounding floor shadow under the merchant's feet */}
+        {/* grounding floor shadow under Aldric's feet */}
         <div
           aria-hidden="true"
           style={{

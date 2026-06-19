@@ -94,6 +94,19 @@
   text-wrap: pretty;
 }
 
+/*
+ * Bubble-only mode (Dream Augury): the portrait is shown as the central figure,
+ * so the lower-left dock shows just the name + dialog bubble. Lift it off the
+ * bottom edge so the bubble reads as a deliberate caption rather than a stray
+ * element pinned to the floor.
+ */
+.site-guide.bubble-only {
+  bottom: 40px;
+}
+.site-guide.bubble-only .site-guide-bubble {
+  margin-bottom: 0;
+}
+
 /* Below 1200px there is no room beside the feature; the guide steps aside. */
 @media (max-width: 1199px) {
   .site-guide {

@@ -22,22 +22,13 @@ function WalkOnPill({ onClick }: { onClick: () => void }) {
       type="button"
       onClick={onClick}
       data-testid="merchant-walk-away"
+      className="dj-walk"
       style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 6,
-        fontSize: 13,
-        fontWeight: 600,
-        color: "#a39ec5",
         padding: "8px 14px",
-        borderRadius: 999,
-        background: "rgba(28,22,48,.5)",
-        border: "1px solid rgba(140,120,210,.24)",
-        cursor: "pointer",
+        fontSize: 15,
       }}
     >
       Walk on
-      <span aria-hidden="true">›</span>
     </button>
   );
 }
@@ -126,7 +117,9 @@ export function DreamJourneyMobile({
         position: "absolute",
         inset: 0,
         overflowY: "auto",
-        background: PAGE_BACKGROUND,
+        // Transparent so the shared dreamscape backdrop reads through, matching
+        // the desktop Augury composition and the other dreamscape sites.
+        background: "transparent",
         color: "#f3eeff",
         padding: "16px 16px 24px",
       }}
@@ -144,8 +137,8 @@ export function DreamJourneyMobile({
         }}
       >
         <img
-          src="/dream-merchant.png"
-          alt="The Dream Merchant"
+          src="/dream-guides/aldric_the_seer.png"
+          alt="Aldric, the Seer"
           style={{
             height: 220,
             width: "auto",
@@ -168,7 +161,7 @@ export function DreamJourneyMobile({
             WebkitTextFillColor: "transparent",
           }}
         >
-          Dream Journey
+          Augury
         </div>
         <div
           style={{

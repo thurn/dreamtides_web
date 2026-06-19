@@ -457,7 +457,11 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
 
   return (
     <>
-      <SiteGuide siteType="DreamAugury" isEnhanced={site.isEnhanced} />
+      <SiteGuide
+        siteType="DreamAugury"
+        isEnhanced={site.isEnhanced}
+        hidePortrait
+      />
       <DreamMerchantScreen
         // Reset the screen's local selection state whenever the encounter
         // changes (e.g. after a debug reroll regenerates the offers).

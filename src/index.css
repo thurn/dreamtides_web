@@ -291,6 +291,28 @@ button:disabled {
 }
 
 /*
+ * Augury "Walk on" — the shared de-emphasized decline link every dreamscape
+ * site uses: a quiet text link, not a filled pill, so the offers stay the
+ * focus. Matches the `.dup-walk` / `.pg-walk` footer links on the other sites.
+ */
+.dj-walk {
+  padding: 12px 22px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-size: 17px;
+  color: #94a3b8;
+  letter-spacing: 0.01em;
+  transition: color 0.14s ease;
+}
+.dj-walk:hover {
+  color: #e2e8f0;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/*
  * Rendered-card geometry knobs.
  *
  * The Dreamtides card is full-bleed: the illustration runs edge to edge and all
