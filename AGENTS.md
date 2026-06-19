@@ -33,6 +33,11 @@ exist.
 Please always identify cards by UUID, *never* by card name. A lot of our
 legacy algorithm code does this and it's a huge nightmare to support.
 
+# Generation
+
+You can run `scripts/regenerate-assets.sh` to update generated artifacts
+based on TOML data changes etc.
+
 # Draft Pools
 
 Unless otherwise specified, assume all draft questions are about the "tides4"
