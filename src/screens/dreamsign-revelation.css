@@ -2,7 +2,8 @@
  * Dreamsign Revelation site screen. Sigrún reveals several dreamsigns over the
  * dimmed dreamscape scene (supplied by the shared site scene backdrop) and the
  * player takes one or walks on. The composition flows responsively: a centered
- * offer row of glowing dreamsign cards, a de-emphasized "walk on" link, and
+ * offer row showing only each dreamsign's art above its Take button (the name
+ * and rules text live in the hover card), a de-emphasized "walk on" link, and
  * Sigrún with a speech bubble docked to the lower-left in landscape. All rules
  * are scoped under `.dreamsign-revelation`.
  */
@@ -69,127 +70,55 @@
   pointer-events: none;
 }
 
-/* ---- Dreamsign card ---- */
-.dreamsign-revelation .dsr-card {
-  position: relative;
-  width: 250px;
-  cursor: pointer;
-  padding: 18px 18px 20px;
-  border-radius: 18px;
-  background: rgba(20, 15, 33, 0.62);
-  border: 1px solid rgba(124, 58, 237, 0.22);
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
-  transition:
-    transform 0.15s ease,
-    box-shadow 0.15s ease,
-    border-color 0.15s ease;
-  outline: none;
-}
-.dreamsign-revelation .dsr-card:hover,
-.dreamsign-revelation .dsr-card:focus-visible {
-  transform: translateY(-9px);
-  border-color: rgba(168, 85, 247, 0.45);
-  box-shadow:
-    0 18px 40px rgba(0, 0, 0, 0.55),
-    0 0 34px rgba(168, 85, 247, 0.4);
-}
-.dreamsign-revelation .dsr-card.bane {
-  border-color: rgba(239, 68, 68, 0.5);
-}
-
-.dreamsign-revelation .dsr-aura {
-  position: absolute;
-  top: 14px;
-  left: 50%;
-  width: 200px;
-  height: 200px;
-  margin-left: -100px;
-  border-radius: 50%;
-  pointer-events: none;
-  opacity: 0.65;
-  filter: blur(15px);
-  background: conic-gradient(
-    from 0deg,
-    rgba(168, 85, 247, 0),
-    rgba(168, 85, 247, 0.5),
-    rgba(124, 77, 255, 0),
-    rgba(216, 180, 254, 0.45),
-    rgba(168, 85, 247, 0)
-  );
-  animation: dsr-auraspin 20s linear infinite;
-}
-.dreamsign-revelation .dsr-card.bane .dsr-aura {
-  background: conic-gradient(
-    from 0deg,
-    rgba(239, 68, 68, 0),
-    rgba(239, 68, 68, 0.5),
-    rgba(127, 29, 29, 0),
-    rgba(252, 165, 165, 0.4),
-    rgba(239, 68, 68, 0)
-  );
-}
-@keyframes dsr-auraspin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
+/* ---- Dreamsign art (the only revealed element; name and rules live in the
+ * hover card). The art wrapper is the hover trigger and lifts/glows on hover. */
 .dreamsign-revelation .dsr-art-wrap {
   position: relative;
-  height: 140px;
+  width: 240px;
+  height: 220px;
   display: grid;
   place-items: center;
+  cursor: pointer;
+  border-radius: 18px;
+  outline: none;
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease;
+}
+.dreamsign-revelation .dsr-art-wrap:hover,
+.dreamsign-revelation .dsr-art-wrap:focus-visible {
+  transform: translateY(-9px);
 }
 .dreamsign-revelation .dsr-art {
-  max-width: 86%;
-  max-height: 140px;
+  max-width: 100%;
+  max-height: 220px;
   object-fit: contain;
   filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.55));
-  transition: transform 0.25s ease;
+  transition:
+    transform 0.25s ease,
+    filter 0.25s ease;
 }
-.dreamsign-revelation .dsr-card:hover .dsr-art {
+.dreamsign-revelation .dsr-art-wrap:hover .dsr-art,
+.dreamsign-revelation .dsr-art-wrap:focus-visible .dsr-art {
   transform: scale(1.06) translateY(-2px);
+  filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.55))
+    drop-shadow(0 0 28px rgba(168, 85, 247, 0.55));
+}
+.dreamsign-revelation .dsr-art-wrap.bane:hover .dsr-art,
+.dreamsign-revelation .dsr-art-wrap.bane:focus-visible .dsr-art {
+  filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.55))
+    drop-shadow(0 0 28px rgba(239, 68, 68, 0.55));
 }
 .dreamsign-revelation .dsr-art-fallback {
   display: grid;
   place-items: center;
-  width: 96px;
-  height: 96px;
-  font-size: 2.4rem;
+  width: 120px;
+  height: 120px;
+  font-size: 3rem;
   color: #c084fc;
 }
-
-.dreamsign-revelation .dsr-meta {
-  position: relative;
-  text-align: center;
-  margin-top: 12px;
-}
-.dreamsign-revelation .dsr-kind {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 9.5px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #6b7280;
-}
-.dreamsign-revelation .dsr-kind.bane {
+.dreamsign-revelation .dsr-art-wrap.bane .dsr-art-fallback {
   color: #fca5a5;
-}
-.dreamsign-revelation .dsr-name {
-  font-family: "EB Garamond", Georgia, serif;
-  font-size: 24px;
-  line-height: 1.05;
-  color: #f6f6f5;
-  margin-top: 3px;
-}
-.dreamsign-revelation .dsr-rule {
-  font-family: "Fira Sans Condensed", "Inter", sans-serif;
-  font-size: 14px;
-  line-height: 1.36;
-  color: #94a3b8;
-  margin-top: 9px;
-  min-height: 56px;
-  text-wrap: pretty;
 }
 
 /* ---- Take button ---- */
@@ -285,9 +214,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .dreamsign-revelation .dsr-aura {
-    animation: none !important;
-  }
   .dreamsign-revelation .dsr-col {
     transition: none !important;
   }

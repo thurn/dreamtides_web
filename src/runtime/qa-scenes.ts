@@ -116,6 +116,11 @@ export const QA_SCENES: readonly QaScene[] = [
   siteScene("shop", "Shop", "Shop"),
   siteScene("dreamaugury", "Dream Augury", "DreamAugury"),
   siteScene("tempting", "Offer", "TemptingOffer"),
+  siteScene(
+    "dreamsign-revelation",
+    "Dreamsign Revelation",
+    "DreamsignRevelation",
+  ),
 ];
 
 /** Returns the QA scene for `id`, or null when `id` is not registered. */

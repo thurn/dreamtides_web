@@ -10,7 +10,6 @@ import {
   DreamsignHoverCard,
 } from "../components/DreamsignHoverCard";
 import { HoverPopover } from "../components/HoverPopover";
-import { RulesText } from "../components/RulesText";
 import { DreamsignPurgeOverlay } from "./DreamsignDraftScreen";
 import "./dreamsign-revelation.css";
 
@@ -177,7 +176,10 @@ function cardStateFor(
   return "dimmed";
 }
 
-/** A single revealed dreamsign: spinning aura, art, name, rule, and Take. */
+/**
+ * A single revealed dreamsign: only the art and a Take button. The name, kind,
+ * and full rule text live exclusively in the hover card (DreamsignHoverCard).
+ */
 function RevelationCard({
   dreamsign,
   index,
@@ -192,9 +194,6 @@ function RevelationCard({
   const [imageBroken, setImageBroken] = useState(false);
   const showImage = Boolean(dreamsign.imageName) && !imageBroken;
   const triggerId = dreamsign.id ?? dreamsign.name;
-  const take = () => {
-    if (state !== "fly") onTake(dreamsign, index);
-  };
 
   return (
     <div
@@ -217,42 +216,21 @@ function RevelationCard({
         )}
       >
         <div
-          className={`dsr-card${dreamsign.isBane ? " bane" : ""}`}
-          role="button"
-          tabIndex={0}
+          className={`dsr-art-wrap${dreamsign.isBane ? " bane" : ""}`}
           aria-label={`Dreamsign: ${dreamsign.name}`}
-          onClick={take}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" || event.key === " ") {
-              event.preventDefault();
-              take();
-            }
-          }}
         >
-          <div className="dsr-aura" aria-hidden="true" />
-          <div className="dsr-art-wrap">
-            {showImage ? (
-              <img
-                className="dsr-art"
-                src={dreamsignIconUrl(String(dreamsign.imageName))}
-                alt={dreamsign.imageAlt ?? dreamsign.name}
-                onError={() => setImageBroken(true)}
-              />
-            ) : (
-              <div className="dsr-art-fallback" aria-hidden="true">
-                ✦
-              </div>
-            )}
-          </div>
-          <div className="dsr-meta">
-            <div className={`dsr-kind${dreamsign.isBane ? " bane" : ""}`}>
-              {dreamsign.isBane ? "Dreamsign · Bane" : "Dreamsign"}
+          {showImage ? (
+            <img
+              className="dsr-art"
+              src={dreamsignIconUrl(String(dreamsign.imageName))}
+              alt={dreamsign.imageAlt ?? dreamsign.name}
+              onError={() => setImageBroken(true)}
+            />
+          ) : (
+            <div className="dsr-art-fallback" aria-hidden="true">
+              ✦
             </div>
-            <div className="dsr-name">{dreamsign.name}</div>
-            <div className="dsr-rule">
-              <RulesText text={dreamsign.effectDescription} />
-            </div>
-          </div>
+          )}
         </div>
       </HoverPopover>
 
