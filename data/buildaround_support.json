@@ -663,7 +663,7 @@
       ]
     },
     "4733876a-d6b1-48d2-b322-5f71aee9f3d6": {
-      "name": "Cinderfang",
+      "name": "Hope's Vanguard",
       "needs": [],
       "supports": [
         "survivors",
@@ -1122,7 +1122,7 @@
       ]
     },
     "9b9c2743-75b3-499d-b5fb-c3429c92d420": {
-      "name": "Driftcaller Sovereign",
+      "name": "Kindlehorn",
       "needs": [],
       "supports": [
         "spirit-animals",
@@ -1339,7 +1339,7 @@
       ]
     },
     "b8ecc46d-bd92-4826-a416-7ce177e69cbf": {
-      "name": "Emberwolf Triad",
+      "name": "Looming Oracle",
       "needs": [],
       "supports": [
         "spirit-animals",
@@ -1966,7 +1966,7 @@
       ]
     },
     "49641e8e-93a8-46cb-92a9-246b0fd57899": {
-      "name": "Harvester of Despair",
+      "name": "Corrupted Host",
       "needs": [
         {
           "theme": "abandon",
@@ -2350,7 +2350,7 @@
       ]
     },
     "f860e815-3ed9-463d-ac4d-ed8d2778f8ad": {
-      "name": "Lone Castaway",
+      "name": "Night Prowler",
       "needs": [],
       "supports": [
         "spirit-animals",
@@ -2460,7 +2460,7 @@
       ]
     },
     "f3985df4-0867-4fd6-8312-6b358dc26883": {
-      "name": "Marrow Drinker",
+      "name": "Flagbearer of Decay",
       "needs": [
         {
           "theme": "void",
@@ -2851,7 +2851,7 @@
       ]
     },
     "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005": {
-      "name": "Pathwalker",
+      "name": "Soulkindler",
       "needs": [
         {
           "theme": "events",
@@ -3710,7 +3710,7 @@
       ]
     },
     "16f4962d-2950-4360-8f55-bc47428480ef": {
-      "name": "Sorrow Watcher",
+      "name": "Duneguard Captain",
       "needs": [
         {
           "theme": "survivors",
@@ -3767,7 +3767,7 @@
       "supports": []
     },
     "2e8571c0-4faf-4e7a-a702-26952d2035ee": {
-      "name": "Soulreaver",
+      "name": "Watcher in the Ruins",
       "needs": [
         {
           "theme": "abandon",
@@ -4930,7 +4930,7 @@
       ]
     },
     "cd2d4eaf-6295-451d-aaa2-ea74188bac3b": {
-      "name": "Young Beastcaller",
+      "name": "Paleclaw Panther",
       "needs": [
         {
           "theme": "spirit-animals",

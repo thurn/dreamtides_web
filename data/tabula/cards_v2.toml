@@ -53,7 +53,7 @@ art-owned = false
 card-number = 3
 
 [[cards]]
-name = "Driftcaller Sovereign"
+name = "Kindlehorn"
 mtg-name = "Noble Hierarch"
 id = "9b9c2743-75b3-499d-b5fb-c3429c92d420"
 rendered-text = '''
@@ -67,11 +67,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 0
-tags = ["Elves", "Art Rework", "June19"]
-image-number = 447372529
+tags = ["Elves", "Art Rework", "June19", "Art OK"]
+image-number = 1196004046
 art-owned = false
 card-number = 4
-art = { x = -1, y = 1, scale = 1.17 }
+art = { x = -0.056, y = 1, scale = 1.67 }
 
 [[cards]]
 name = "Passage Through Oblivion"
@@ -402,24 +402,25 @@ card-number = 22
 art = { x = 0.147, y = -0.216, scale = 1.47 }
 
 [[cards]]
-name = "Pathwalker"
+name = "Soulkindler"
 mtg-name = "Life from the Loam"
 id = "4edf2d8d-61e4-4c3a-a388-4b52b2ebd005"
-rendered-text = """
-Abandon this character: Return an event from your void to your hand.
+rendered-text = '''
+Abandon this character: Return an character from your void to your hand.
 
-▸Dawn: If this card is in your void, erode 3."""
+▸Dawn: If this card is in your void, erode 3.'''
 energy-cost = 3
 card-type = "Character"
-subtype = "Survivor"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June19"]
-image-number = 561496501
+tags = ["Art Rework", "June19", "Art OK"]
+image-number = 512756368
 art-owned = false
 card-number = 23
+art = { x = 1, y = 0.266, scale = 1.27 }
 
 [[cards]]
 name = "Scrap Reclaimer"
@@ -695,7 +696,7 @@ rendered-text = "Take an extra turn after this one."
 energy-cost = 3
 card-type = "Event"
 subtype = ""
-rarity = ""
+rarity = "Legendary"
 is-fast = false
 is-interrupt = false
 spark = ""
@@ -1408,7 +1409,7 @@ rendered-text = "Draw 3 cards."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
-rarity = ""
+rarity = "Legendary"
 is-fast = true
 is-interrupt = true
 spark = ""
@@ -2067,7 +2068,7 @@ card-number = 111
 art = { x = 0.4, y = 0, scale = 1.17 }
 
 [[cards]]
-name = "Marrow Drinker"
+name = "Flagbearer of Decay"
 mtg-name = "Insidious Roots"
 id = "f3985df4-0867-4fd6-8312-6b358dc26883"
 rendered-text = "When a character card leaves your void, materialize a 2✦ shadow figment."
@@ -2078,10 +2079,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June19"]
-image-number = 2438838889
+tags = ["Art Rework", "June19", "Art OK"]
+image-number = 2197688373
 art-owned = false
 card-number = 112
+art = { x = -0.16, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Vigilant Howler"
@@ -2472,7 +2474,7 @@ card-number = 133
 art = { x = 0.448, y = 0.25, scale = 1.57 }
 
 [[cards]]
-name = "Sorrow Watcher"
+name = "Duneguard Captain"
 mtg-name = "Cryptbreaker"
 id = "16f4962d-2950-4360-8f55-bc47428480ef"
 rendered-text = """
@@ -2486,10 +2488,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Removal", "Figment Maker", "Art Rework", "June19"]
-image-number = 2299755787
+tags = ["Removal", "Figment Maker", "Art Rework", "June19", "Art OK"]
+image-number = 1639942840
 art-owned = false
 card-number = 134
+art = { x = 0.446, y = 1, scale = 1.37 }
 
 [[cards]]
 name = "Tidewreck Navigator"
@@ -2603,7 +2606,7 @@ art-owned = false
 card-number = 140
 
 [[cards]]
-name = "Emberwolf Triad"
+name = "Looming Oracle"
 mtg-name = "Ignoble Hierarch"
 id = "b8ecc46d-bd92-4826-a416-7ce177e69cbf"
 rendered-text = '''
@@ -2617,10 +2620,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Elves", "Art Rework", "June19"]
-image-number = 2293194523
+tags = ["Elves", "Art Rework", "June19", "Art OK"]
+image-number = 717263287
 art-owned = false
 card-number = 141
+art = { x = 0.136, y = 0.212, scale = 1.37 }
 
 [[cards]]
 name = "Haunted Betrayer"
@@ -4260,7 +4264,7 @@ card-number = 231
 art = { x = 0, y = 0.798, scale = 1.17 }
 
 [[cards]]
-name = "Young Beastcaller"
+name = "Paleclaw Panther"
 mtg-name = "Nissa, Resurgent Animist"
 id = "cd2d4eaf-6295-451d-aaa2-ea74188bac3b"
 rendered-text = "When you materialize a spirit animal, gain 1●. When you materialize your second spirit animal in a turn, draw a spirit animal."
@@ -4271,10 +4275,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "June19"]
+tags = ["Art Rework", "June19", "Art OK"]
 image-number = 1626794386
 art-owned = false
 card-number = 232
+art = { x = 0.168, y = 0, scale = 1.17 }
 
 [[cards]]
 name = "Standard Bearer"
@@ -4489,7 +4494,7 @@ Awakened
 energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
-rarity = ""
+rarity = "Legendary"
 is-fast = false
 is-interrupt = false
 spark = 1
@@ -5312,7 +5317,7 @@ rendered-text = "▸Materialized, Dawn: Gain 2●."
 energy-cost = 1
 card-type = "Character"
 subtype = "Spirit Animal"
-rarity = ""
+rarity = "Legendary"
 is-fast = false
 is-interrupt = false
 spark = 0
@@ -6434,7 +6439,7 @@ rendered-text = "≤2● cost characters cost you 0●."
 energy-cost = 4
 card-type = "Character"
 subtype = "Explorer"
-rarity = ""
+rarity = "Legendary"
 is-fast = false
 is-interrupt = false
 spark = 0
@@ -6466,7 +6471,7 @@ card-number = 350
 art = { x = -0.105, y = -0.654, scale = 1.57 }
 
 [[cards]]
-name = "Lone Castaway"
+name = "Night Prowler"
 mtg-name = "Mox Diamond"
 id = "f860e815-3ed9-463d-ac4d-ed8d2778f8ad"
 rendered-text = """
@@ -6480,10 +6485,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 0
-tags = ["Art Rework", "June19"]
-image-number = 581686483
+tags = ["Art Rework", "June19", "Art OK"]
+image-number = 1129012706
 art-owned = false
 card-number = 351
+art = { x = -0.042, y = 1, scale = 1.1 }
 
 [[cards]]
 name = "Tidecaller"
@@ -8295,7 +8301,7 @@ art-owned = false
 card-number = 448
 
 [[cards]]
-name = "Soulreaver"
+name = "Watcher in the Ruins"
 mtg-name = "Midnight Reaper"
 id = "2e8571c0-4faf-4e7a-a702-26952d2035ee"
 rendered-text = "When a non-figment ally is dissolved, draw a card."
@@ -8306,11 +8312,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "June19"]
-image-number = 1419437210
+tags = ["Art Rework", "June19", "Art OK"]
+image-number = 1347487814
 art-owned = false
 card-number = 449
-art = { x = 0.42, y = 1, scale = 1.17 }
+art = { x = -0.294, y = 1, scale = 1.16 }
 
 [[cards]]
 name = "Entropy Spike"
@@ -8338,7 +8344,7 @@ rendered-text = "Gain 3●."
 energy-cost = 0
 card-type = "Event"
 subtype = ""
-rarity = ""
+rarity = "Legendary"
 is-fast = false
 is-interrupt = false
 spark = ""
@@ -8653,7 +8659,7 @@ art-owned = false
 card-number = 468
 
 [[cards]]
-name = "Cinderfang"
+name = "Hope's Vanguard"
 mtg-name = "Relentless Dead"
 id = "4733876a-d6b1-48d2-b322-5f71aee9f3d6"
 rendered-text = "▸Dissolved: You may pay 1● to return this character to hand."
@@ -8664,14 +8670,14 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June19"]
-image-number = 2251144875
+tags = ["Art Rework", "June19", "Art OK"]
+image-number = 2123360834
 art-owned = false
 card-number = 469
-art = { x = 0.6, y = 0, scale = 1.17 }
+art = { x = 0.504, y = 1, scale = 1.11 }
 
 [[cards]]
-name = "Harvester of Despair"
+name = "Corrupted Host"
 mtg-name = "Carrion Feeder"
 id = "49641e8e-93a8-46cb-92a9-246b0fd57899"
 rendered-text = "Abandon another character: This character gains +1✦."
@@ -8682,10 +8688,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "June19"]
-image-number = 1557999812
+tags = ["Art Rework", "June19", "Art OK"]
+image-number = 2438838889
 art-owned = false
 card-number = 470
+art = { x = 0, y = -0.496, scale = 1.57 }
 
 [[cards]]
 name = "Bloodpact Berserker"
@@ -8695,7 +8702,7 @@ rendered-text = "▸Materialized, ▸Dawn: Gain 2●. The opponent gains 3⍟."
 energy-cost = 0
 card-type = "Character"
 subtype = "Warrior"
-rarity = ""
+rarity = "Legendary"
 is-fast = false
 is-interrupt = false
 spark = 0
@@ -8983,7 +8990,7 @@ Awakened
 energy-cost = 1
 card-type = "Character"
 subtype = "Visitor"
-rarity = ""
+rarity = "Legendary"
 is-fast = false
 is-interrupt = false
 spark = 0
