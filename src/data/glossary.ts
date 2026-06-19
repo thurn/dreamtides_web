@@ -130,7 +130,7 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
   },
   {
     term: "Erode",
-    definition: "Put cards from the top of a player's deck into their void.",
+    definition: "Put cards from the top of your deck into the void.",
     variants: ["eroded", "erodes"],
   },
   {
