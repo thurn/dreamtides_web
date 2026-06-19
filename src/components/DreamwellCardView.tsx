@@ -170,7 +170,7 @@ const ART_SOURCE_BOTTOM_CROP = 21 / 280;
  * box's `2cqw` radius is ~3% of the 3:2 card's height — so the art reaches just
  * to the end of that corner curve.
  */
-const ART_UNDERLAP_DEFAULT_PCT = 3;
+const ART_UNDERLAP_DEFAULT_PCT = 0;
 /**
  * Card-height % over which the fadeout ramps from clear (at the seam) to the
  * fully opaque dark base. Kept short so the band reaches solid black just below
@@ -312,7 +312,8 @@ export function DreamwellCardView({
   // The editor (which supplies a `rulesText` slot) always shows the frosted box
   // so an empty-rules card still offers a target to start an inline edit; the
   // in-battle card shows it only when there is text.
-  const showRulesText = card.renderedText.trim() !== "" || slots?.rulesText != null;
+  const showRulesText =
+    card.renderedText.trim() !== "" || slots?.rulesText != null;
 
   // Resolve the band geometry from the measured box top. The crisp art holds
   // down to a seam set `--dreamwell-art-underlap` below the box top; from the
@@ -377,9 +378,7 @@ export function DreamwellCardView({
             : {}),
         };
 
-  const handleArtLoad = (
-    event: SyntheticEvent<HTMLImageElement>,
-  ): void => {
+  const handleArtLoad = (event: SyntheticEvent<HTMLImageElement>): void => {
     const img = event.currentTarget;
     if (img.naturalWidth > 0 && img.naturalHeight > 0) {
       setImageAspect(img.naturalWidth / img.naturalHeight);
@@ -398,36 +397,42 @@ export function DreamwellCardView({
       ref={rootRef}
       data-dreamwell-card={card.id}
       className={className}
-      style={{
-        // Art-underlap knob (card-height %): how far the crisp art slips under
-        // the text box's top before the dark fadeout. Defaults to the box's top
-        // corner-radius depth; override `--dreamwell-art-underlap` here or on an
-        // ancestor to tune it. `--dreamwell-box-top` is the measured box top the
-        // seam's `calc()` builds on.
-        "--dreamwell-art-underlap": `${String(ART_UNDERLAP_DEFAULT_PCT)}%`,
-        "--dreamwell-box-top": boxTopCss,
-        position: "relative",
-        width: "100%",
-        aspectRatio: "3 / 2",
-        containerType: "inline-size",
-        // Circular corner of 3.6% of the card width, matching the regular card.
-        // Set in `%` (not `cqw`) so it resolves against the card's own box; the
-        // vertical 5.4% of height equals 3.6% of width on the 3:2 frame.
-        borderRadius: "3.6% / 5.4%",
-        overflow: "hidden",
-        // Plain drop shadow, matching the regular card's default (no colored
-        // outer ring); the card edge reads from the soft inner rim below.
-        boxShadow: "0 4px 14px rgba(0, 0, 0, 0.55)",
-        userSelect: "none",
-        ...style,
-      } as CSSProperties}
+      style={
+        {
+          // Art-underlap knob (card-height %): how far the crisp art slips under
+          // the text box's top before the dark fadeout. Defaults to the box's top
+          // corner-radius depth; override `--dreamwell-art-underlap` here or on an
+          // ancestor to tune it. `--dreamwell-box-top` is the measured box top the
+          // seam's `calc()` builds on.
+          "--dreamwell-art-underlap": `${String(ART_UNDERLAP_DEFAULT_PCT)}%`,
+          "--dreamwell-box-top": boxTopCss,
+          position: "relative",
+          width: "100%",
+          aspectRatio: "3 / 2",
+          containerType: "inline-size",
+          // Circular corner of 3.6% of the card width, matching the regular card.
+          // Set in `%` (not `cqw`) so it resolves against the card's own box; the
+          // vertical 5.4% of height equals 3.6% of width on the 3:2 frame.
+          borderRadius: "3.6% / 5.4%",
+          overflow: "hidden",
+          // Plain drop shadow, matching the regular card's default (no colored
+          // outer ring); the card edge reads from the soft inner rim below.
+          boxShadow: "0 4px 14px rgba(0, 0, 0, 0.55)",
+          userSelect: "none",
+          ...style,
+        } as CSSProperties
+      }
       {...triggerHandlers}
     >
       {/* Dark base behind the band, so any sliver the extended art does not
           reach matches the band rather than going neutral. */}
       <div
         aria-hidden="true"
-        style={{ position: "absolute", inset: 0, background: ART_BAND_COLOR_CSS }}
+        style={{
+          position: "absolute",
+          inset: 0,
+          background: ART_BAND_COLOR_CSS,
+        }}
       />
 
       {/* Crisp art covering the whole frame (watermark-clipped via the grown,
@@ -462,7 +467,13 @@ export function DreamwellCardView({
             filter: `blur(${blurPx.toFixed(2)}px) brightness(${String(ART_EXTENSION_BLUR_BRIGHTNESS)})`,
           }}
         >
-          <img src={artUrl} alt="" aria-hidden="true" draggable={false} style={artImgStyle} />
+          <img
+            src={artUrl}
+            alt=""
+            aria-hidden="true"
+            draggable={false}
+            style={artImgStyle}
+          />
         </div>
       </div>
 
@@ -572,9 +583,7 @@ export function DreamwellCardView({
                 card.renderedText.trim() !== ""
                   ? renderRulesText(card.renderedText)
                   : null;
-              return slots?.rulesText
-                ? slots.rulesText(rulesNode)
-                : rulesNode;
+              return slots?.rulesText ? slots.rulesText(rulesNode) : rulesNode;
             })()
           : null}
       </div>

@@ -30,6 +30,7 @@ card-type = "Dreamwell"
 image-number = 565499323
 art-owned = true
 card-number = 2
+art = { x = 1, y = 0, scale = 1 }
 
 [[dreamwell]]
 name = "Meteor Meadow"
