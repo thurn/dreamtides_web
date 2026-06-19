@@ -53,13 +53,13 @@ if (pathname === "/editor") {
   );
   renderStrict(<ImageViewerApp />);
 } else {
-  // The dev card/figment data hot-reload plugins (see vite.config.ts) emit
-  // targeted custom HMR events instead of a full reload, so that saving in the
-  // card or figment editor never reloads the editor page. The running
-  // battle/quest app opts in here: it reloads to pick up edited card or figment
-  // data (the catalog is re-fetched and rehydrated on load). The editor routes
-  // above never register these handlers, so an editor save leaves the page —
-  // and any open art editor — untouched.
+  // The dev card/figment/config data hot-reload plugins (see vite.config.ts)
+  // emit targeted custom HMR events instead of a full reload, so that saving in
+  // the card or figment editor never reloads the editor page. The running
+  // battle/quest app opts in here: it reloads to pick up edited card, figment,
+  // or Dream Atlas config data (the catalogs are re-fetched and rehydrated on
+  // load). The editor routes above never register these handlers, so an editor
+  // save leaves the page — and any open art editor — untouched.
   if (import.meta.hot) {
     const reloadForData = () => {
       window.location.reload();
@@ -67,6 +67,7 @@ if (pathname === "/editor") {
     import.meta.hot.on("card-data:changed", reloadForData);
     import.meta.hot.on("figment-data:changed", reloadForData);
     import.meta.hot.on("dreamwell-data:changed", reloadForData);
+    import.meta.hot.on("config-data:changed", reloadForData);
   }
 
   const [

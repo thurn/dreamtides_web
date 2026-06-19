@@ -12,6 +12,11 @@ import { createFigmentEditorApiMiddleware } from "./scripts/figment-editor-api.m
 import { refreshFigmentDataJson } from "./scripts/figment-editor-data.mjs";
 import { createDreamwellEditorApiMiddleware } from "./scripts/dreamwell-editor-api.mjs";
 import { refreshDreamwellDataJson } from "./scripts/dreamwell-editor-data.mjs";
+import {
+  generatedConfigDataWatchPaths,
+  regenerateConfigData,
+  SIMPLE_CONFIG_TOML_BASENAMES,
+} from "./scripts/config-data.mjs";
 import { createImageViewerApiMiddleware } from "./scripts/image-viewer-api.mjs";
 import { createCardImageApiMiddleware } from "./scripts/card-image-api.mjs";
 import { createSavedQuestsApiMiddleware } from "./scripts/saved-quests-api.mjs";
@@ -270,6 +275,102 @@ function dreamwellDataHotReloadPlugin(): Plugin {
           clearTimeout(pendingReload);
           pendingReload = null;
         }
+        watcher.close();
+      };
+
+      server.httpServer?.once("close", closeWatcher);
+      server.watcher.once("close", closeWatcher);
+    },
+  };
+}
+
+/**
+ * Dev-only Vite plugin that hot-reloads the simple Dream Atlas config TOMLs into
+ * a running battle/quest app when one is edited. The configs covered are the
+ * single-TOML-to-single-JSON catalogs registered in scripts/config-data.mjs
+ * (`dreamscapes.toml`, `dream_guides.toml`, `affiliations.toml`,
+ * `atlas_config.toml`, `apollyon_incarnations.toml`, `dreamsign_profiles.toml`).
+ *
+ * The dev watcher ignores `data/tabula/` (see `server.watch.ignored`), so a TOML
+ * save normally has no effect on the page. This plugin watches the directory
+ * directly with `fs.watch`, and on a change to one of the registered TOMLs it
+ * regenerates just that config's JSON via {@link regenerateConfigData} (the same
+ * TOML->JSON transform `setup-assets` uses, so no full asset rebuild is needed)
+ * and emits a `config-data:changed` custom HMR event. Only the battle/quest app
+ * reloads on that event (see src/main.tsx) and re-fetches the config on load;
+ * the editor pages register no handler, so a save never reloads them. The
+ * generated JSON paths are added to `server.watch.ignored`, so writing them does
+ * not also trigger Vite's own full-page reload. Rapid successive saves are
+ * debounced. `apply: "serve"` keeps this out of production builds.
+ */
+function configDataHotReloadPlugin(): Plugin {
+  const tomlDir = path.resolve(path.join(__dirname, "data", "tabula"));
+  const watchedBasenames = new Set(SIMPLE_CONFIG_TOML_BASENAMES);
+
+  return {
+    name: "config-data-hot-reload",
+    apply: "serve",
+    configureServer(server) {
+      const pendingReloads = new Map<string, ReturnType<typeof setTimeout>>();
+
+      const regenerateAndReload = (basename: string): void => {
+        try {
+          regenerateConfigData(basename, { rootDir: __dirname });
+          console.log(
+            `[config-data] ${basename} changed -> regenerated config JSON -> notifying running app`,
+          );
+          server.ws.send({ type: "custom", event: "config-data:changed" });
+        } catch (error) {
+          const message = error instanceof Error ? error.message : String(error);
+          console.error(`[config-data] hot reload failed: ${message}`);
+          server.ws.send({
+            type: "error",
+            err: {
+              message: `Failed to regenerate config data from ${basename}`,
+              stack: message,
+            },
+          });
+        }
+      };
+
+      const scheduleReload = (basename: string): void => {
+        const existing = pendingReloads.get(basename);
+        if (existing !== undefined) {
+          clearTimeout(existing);
+        }
+        pendingReloads.set(
+          basename,
+          setTimeout(() => {
+            pendingReloads.delete(basename);
+            regenerateAndReload(basename);
+          }, 150),
+        );
+      };
+
+      const watcher = fs.watch(
+        tomlDir,
+        { persistent: false },
+        (_eventType, filename) => {
+          if (filename === null) {
+            return;
+          }
+          const basename = filename.toString();
+          if (watchedBasenames.has(basename)) {
+            scheduleReload(basename);
+          }
+        },
+      );
+
+      let closed = false;
+      const closeWatcher = (): void => {
+        if (closed) {
+          return;
+        }
+        closed = true;
+        for (const timer of pendingReloads.values()) {
+          clearTimeout(timer);
+        }
+        pendingReloads.clear();
         watcher.close();
       };
 
@@ -555,6 +656,7 @@ export default defineConfig({
     cardImageApiPlugin(),
     savedQuestsApiPlugin(),
     cardDataHotReloadPlugin(),
+    configDataHotReloadPlugin(),
     generatedCardDataDriftPlugin(),
   ],
   test: {
@@ -617,6 +719,15 @@ export default defineConfig({
         // that closes the open card editor mid-edit.
         path.resolve(path.join(__dirname, "public", "dreamwell-data.json")),
         ...generatedCardDataWatchPaths,
+        // The simple Dream Atlas config catalogs (atlas_config, dreamscapes,
+        // dream_guides, affiliations, apollyon_incarnations, dreamsign_profiles)
+        // are regenerated under public/ on every matching TOML save by
+        // configDataHotReloadPlugin, which sends a targeted config-data:changed
+        // event; ignore the outputs so the write does not also trigger Vite's
+        // own full-page reload.
+        ...generatedConfigDataWatchPaths({ rootDir: __dirname }).map((p) =>
+          path.resolve(p),
+        ),
       ],
     },
   },
