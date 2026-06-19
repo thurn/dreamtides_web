@@ -286,35 +286,37 @@ art-owned = false
 card-number = 25
 
 [[dreamwell]]
-name = "Stillwater Mirror"
+name = "Ember Cavern"
 id = "eae99eb2-0fa8-4d12-b7b2-3f5387cb6d3a"
 rendered-text = "Reveal the opponent's hand."
 order = 1
 energy-added = 1
 card-type = "Dreamwell"
-image-number = 832308570
+image-number = 263151206
 art-owned = false
 card-number = 26
+art = { x = -1, y = 0.1, scale = 1.2 }
 
 [[dreamwell]]
-name = "The Brimming Well"
+name = "Broken Aqueduct"
 id = "a9c254c4-8448-40ea-bb1a-08c0ef8c7bdf"
 rendered-text = "The opponent gains 1 maximum ●."
 order = 3
 energy-added = 2
 card-type = "Dreamwell"
-image-number = 926233292
+image-number = 243607573
 art-owned = false
 card-number = 31
+art = { x = 0, y = 1, scale = 1 }
 
 [[dreamwell]]
-name = "Echo Cascade"
+name = "Echoing Boughs"
 id = "2ad68489-044a-40d1-9be6-e62497a4e1fd"
 rendered-text = "Rematerialize an ally."
 order = 3
 energy-added = 1
 card-type = "Dreamwell"
-image-number = 550123285
+image-number = 691496707
 art-owned = false
 card-number = 32
 
