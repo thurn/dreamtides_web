@@ -228,6 +228,24 @@ describe("validateCardEdit", () => {
     expect(validateCardEdit("spark", {}).ok).toBe(false);
   });
 
+  it("accepts the two card types and trims surrounding whitespace", () => {
+    expect(validateCardEdit("card-type", "Character")).toMatchObject({
+      ok: true,
+      value: "Character",
+    });
+    expect(validateCardEdit("card-type", "  Event ")).toMatchObject({
+      ok: true,
+      value: "Event",
+    });
+  });
+
+  it("rejects unknown or non-string card types", () => {
+    expect(validateCardEdit("card-type", "Sorcery").ok).toBe(false);
+    expect(validateCardEdit("card-type", "character").ok).toBe(false);
+    expect(validateCardEdit("card-type", null).ok).toBe(false);
+    expect(validateCardEdit("card-type", ["Event"]).ok).toBe(false);
+  });
+
   it("rejects empty card names after trimming surrounding input whitespace", () => {
     expect(validateCardEdit("name", "  Better Name  ")).toMatchObject({
       ok: true,
@@ -327,6 +345,22 @@ describe("patchRenderedCardsToml", () => {
 
     expect(parsed.cards[0].name).toBe("First Card");
     expect(parsed.cards[1].name).toBe("Renamed By UUID");
+  });
+
+  it("retypes a card between Character and Event in place", () => {
+    const source = fixtureToml();
+
+    const patched = patchRenderedCardsToml(source, {
+      cardId: FIRST_ID,
+      field: "card-type",
+      value: "Character",
+    });
+    const parsed = parse(patched.source);
+
+    expect(parsed.cards[0]["card-type"]).toBe("Character");
+    // Other fields on the retyped card are left untouched.
+    expect(parsed.cards[0].name).toBe("First Card");
+    expect(parsed.cards[1]["card-type"]).toBe("Character");
   });
 
   it("locates the target card by top-level UUID rather than id-looking rendered text", () => {

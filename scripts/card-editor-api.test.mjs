@@ -375,7 +375,31 @@ describe("createCardEditorApiMiddleware", () => {
     expect(readCardJson(rootDir)).toBe(originalCardJson);
   });
 
-  it("returns 400 for card-type edits and does not write files", async () => {
+  it("retypes a card and refreshes card-data.json", async () => {
+    const rootDir = writeFixtureRoot();
+    const origin = await startApi(rootDir);
+
+    const { response, body } = await requestJson(origin, `/api/editor/cards/${FIRST_ID}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: FIRST_ID,
+        field: "card-type",
+        value: "Character",
+      }),
+    });
+
+    expect(response.status).toBe(200);
+    expect(body.card).toMatchObject({
+      id: FIRST_ID,
+      cardType: "Character",
+    });
+    expect(readToml(rootDir)).toContain('card-type = "Character"');
+    const cards = JSON.parse(readCardJson(rootDir));
+    expect(cards[0].cardType).toBe("Character");
+  });
+
+  it("returns 400 for an unknown card type and does not write files", async () => {
     const rootDir = writeFixtureRoot();
     const originalToml = readToml(rootDir);
     const originalCardJson = readCardJson(rootDir);
@@ -387,7 +411,7 @@ describe("createCardEditorApiMiddleware", () => {
       body: JSON.stringify({
         id: FIRST_ID,
         field: "card-type",
-        value: "Character",
+        value: "Sorcery",
       }),
     });
 

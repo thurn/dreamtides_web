@@ -14,6 +14,7 @@ const CARD_JSON_PATH = join("public", "card-data.json");
 
 export const EDITABLE_CARD_FIELDS = new Set([
   "energy-cost",
+  "card-type",
   "subtype",
   "name",
   "spark",
@@ -23,6 +24,9 @@ export const EDITABLE_CARD_FIELDS = new Set([
   "art",
   "image-number",
 ]);
+
+/** The two card types a card may be retyped between in the editor. */
+export const CARD_TYPE_VALUES = ["Character", "Event"];
 
 /**
  * A "facet" is a card-level taxonomy stored as an inline string array on each
@@ -318,6 +322,17 @@ export function validateCardEdit(field, rawValue) {
 
   if (field === "image-number") {
     return validateImageNumber(field, rawValue);
+  }
+
+  if (field === "card-type") {
+    if (typeof rawValue !== "string" || !CARD_TYPE_VALUES.includes(rawValue.trim())) {
+      return validationFailure(
+        field,
+        `Card type must be one of: ${CARD_TYPE_VALUES.join(", ")}.`,
+        rawValue,
+      );
+    }
+    return validationSuccess(field, rawValue.trim());
   }
 
   if (field === "energy-cost") {
