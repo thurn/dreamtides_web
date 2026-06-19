@@ -309,8 +309,12 @@ const HEADER = `// data/tides4.jsonc — the committed tide decks the \`tides4\`
 // entry has \`starter\` (the always-joined signature tide, or null), \`facets\` (a
 // random subset is drawn each run) and \`neutral\` (the broad tail).
 //
-// To update: edit the tuning block in scripts/bake-tides4.mjs (or let new draft
-// records / signature changes flow in), then:
+// Curated card tweaks (designed combos that the affinity grow scatters, one-off
+// add/remove) live in data/tides4-overrides.jsonc and are re-applied on every bake.
+//
+// To update: edit the tuning block in scripts/bake-tides4.mjs or the curated tweaks
+// in data/tides4-overrides.jsonc (or let new draft records / signature changes flow
+// in), then:
 //   npm run bake-tides4       # rewrites this file + the markdown rendering
 //   npm run setup-assets      # copies it to public/tides4-data.json
 //   npm run pool-metrics -- --variant tides4   # measures it against sigseed`;
@@ -445,6 +449,242 @@ function renderMarkdown(json, dreamcallers) {
   return lines.join("\n");
 }
 
+// --- Manual override layer ----------------------------------------------------
+// The affinity grow has no notion of designed multi-card combos, so a combo's
+// halves scatter across tides independently. `data/tides4-overrides.jsonc` is the
+// curated layer applied AFTER every tide is grown (so it survives each re-bake):
+// declarative `comboPairings` keep a combo's two halves together or strip the
+// orphaned half, and imperative `tideCardOverrides` add/remove specific cards.
+
+// Strip `//` line comments and `/* */` block comments (and trailing commas) from a
+// JSONC document, respecting string literals, before JSON.parse. Tolerant of the
+// hand-authored override file's inline `// name` annotations after card UUIDs.
+function stripJsonc(text) {
+  let out = "";
+  let inStr = false;
+  let strCh = "";
+  let inLine = false;
+  let inBlock = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    const n = text[i + 1];
+    if (inLine) {
+      if (c === "\n") {
+        inLine = false;
+        out += c;
+      }
+      continue;
+    }
+    if (inBlock) {
+      if (c === "*" && n === "/") {
+        inBlock = false;
+        i++;
+      }
+      continue;
+    }
+    if (inStr) {
+      out += c;
+      if (c === "\\") {
+        out += n ?? "";
+        i++;
+        continue;
+      }
+      if (c === strCh) inStr = false;
+      continue;
+    }
+    if (c === '"' || c === "'") {
+      inStr = true;
+      strCh = c;
+      out += c;
+      continue;
+    }
+    if (c === "/" && n === "/") {
+      inLine = true;
+      i++;
+      continue;
+    }
+    if (c === "/" && n === "*") {
+      inBlock = true;
+      i++;
+      continue;
+    }
+    out += c;
+  }
+  return out.replace(/,(\s*[}\]])/g, "$1");
+}
+
+// Read the override document, or null when it is absent (the layer is optional).
+function readOverrides(rel) {
+  const path = resolve(ROOT, rel);
+  if (!existsSync(path)) return null;
+  try {
+    return JSON.parse(stripJsonc(readFileSync(path, "utf8")));
+  } catch (err) {
+    console.error(`Failed to parse ${rel}: ${err.message}`);
+    process.exit(1);
+  }
+}
+
+// Build a card entry for an injected card, resolving its current name/detail (same
+// shape as `growTideCards`). Bails if the UUID has no current name (a stale id).
+function makeCardEntry(id, copies, nameOf, detailOf) {
+  const name = nameOf(id);
+  if (name === undefined) {
+    console.error(`Override references unknown card UUID ${id} (no current name).`);
+    process.exit(1);
+  }
+  const detail = detailOf(id) ?? {};
+  const entry = { id, name };
+  if (detail.subtype) entry.subtype = detail.subtype;
+  entry.text = detail.text ?? "";
+  entry.copies = copies;
+  return entry;
+}
+
+function sortTideCards(tide) {
+  tide.cards.sort((a, b) => b.copies - a.copies || (a.id < b.id ? -1 : 1));
+}
+
+// Add a card to a tide (or raise its copies if already present). Returns true when
+// a new distinct card was introduced.
+function addCardToTide(tide, id, copies, nameOf, detailOf) {
+  const existing = tide.cards.find((c) => c.id === id);
+  if (existing) {
+    existing.copies = Math.max(existing.copies, copies);
+    return false;
+  }
+  tide.cards.push(makeCardEntry(id, copies, nameOf, detailOf));
+  return true;
+}
+
+function removeCardsFromTide(tide, idSet) {
+  const before = tide.cards.length;
+  tide.cards = tide.cards.filter((c) => !idSet.has(c.id));
+  return before - tide.cards.length;
+}
+
+// Apply the override layer in place over the grown tides. Deterministic; logs
+// every decision so a bake's curation is reconstructable from its output.
+function applyOverrides(tides, overrides, nameOf, detailOf) {
+  if (!overrides) {
+    console.log("[overrides] none (data/tides4-overrides.jsonc absent).");
+    return;
+  }
+  const tideById = new Map(tides.map((t) => [t.id, t]));
+
+  // Combo pairings: co-locate each combo's halves in exactly `targetTides` tides
+  // and strip the orphaned half everywhere else, so zero tides are a one-half
+  // "trap". Ranking and selection are fully deterministic (see the override file).
+  for (const pairing of overrides.comboPairings ?? []) {
+    const enablers = new Set(pairing.enablers ?? []);
+    const payoffs = new Set(pairing.payoffs ?? []);
+    const combo = new Set([...enablers, ...payoffs]);
+    const target = pairing.targetTides ?? 0;
+    const primaryEnabler = pairing.primaryEnabler ?? pairing.enablers?.[0];
+    const primaryPayoff = pairing.payoffs?.[0];
+    const addCopies = pairing.addCopies ?? 2;
+
+    const distinctIn = (tide, set) => {
+      let n = 0;
+      const seen = new Set();
+      for (const c of tide.cards) {
+        if (set.has(c.id) && !seen.has(c.id)) {
+          seen.add(c.id);
+          n++;
+        }
+      }
+      return n;
+    };
+    const copiesIn = (tide, set) =>
+      tide.cards.reduce((s, c) => (set.has(c.id) ? s + c.copies : s), 0);
+    const hasE = (t) => distinctIn(t, enablers) > 0;
+    const hasP = (t) => distinctIn(t, payoffs) > 0;
+
+    // Candidate homes = every tide holding either half. Rank: already-both first
+    // (least churn), then payoff richness, then payoff copies, then id.
+    const candidates = tides
+      .filter((t) => hasE(t) || hasP(t))
+      .map((t) => ({
+        t,
+        both: hasE(t) && hasP(t),
+        payoffDistinct: distinctIn(t, payoffs),
+        payoffCopies: copiesIn(t, payoffs),
+      }))
+      .sort(
+        (a, b) =>
+          Number(b.both) - Number(a.both) ||
+          b.payoffDistinct - a.payoffDistinct ||
+          b.payoffCopies - a.payoffCopies ||
+          (a.t.id < b.t.id ? -1 : 1),
+      );
+
+    const homes = candidates.slice(0, target).map((x) => x.t);
+    const homeIds = new Set(homes.map((t) => t.id));
+    if (candidates.length < target) {
+      console.warn(
+        `[overrides] combo "${pairing.name}": only ${candidates.length} candidate ` +
+          `tides hold a combo half; wanted ${target}. All become homes.`,
+      );
+    }
+
+    let enablerAdds = 0;
+    const promoted = [];
+    let strippedTides = 0;
+    let strippedCards = 0;
+    for (const t of homes) {
+      if (!hasE(t) && primaryEnabler) {
+        if (addCardToTide(t, primaryEnabler, addCopies, nameOf, detailOf)) {
+          enablerAdds++;
+          promoted.push(t.id);
+        }
+        sortTideCards(t);
+      }
+      // Rare: a home that held only an enabler would itself be a trap; seed a payoff.
+      if (!hasP(t) && primaryPayoff) {
+        if (addCardToTide(t, primaryPayoff, addCopies, nameOf, detailOf)) {
+          sortTideCards(t);
+        }
+      }
+    }
+    for (const t of tides) {
+      if (homeIds.has(t.id)) continue;
+      const removed = removeCardsFromTide(t, combo);
+      if (removed > 0) {
+        strippedTides++;
+        strippedCards += removed;
+      }
+    }
+
+    console.log(
+      `[overrides] combo "${pairing.name}": ${homes.length} home tide(s) ` +
+        `[${homes.map((t) => t.id).join(", ")}]; added enabler to ${enablerAdds} ` +
+        `[${promoted.join(", ") || "none"}]; stripped ${strippedCards} orphaned ` +
+        `card(s) from ${strippedTides} tide(s).`,
+    );
+  }
+
+  // Imperative per-tide tweaks (final word over the pairings above).
+  for (const [tideId, ops] of Object.entries(overrides.tideCardOverrides ?? {})) {
+    const tide = tideById.get(tideId);
+    if (!tide) {
+      console.error(
+        `[overrides] tideCardOverrides references unknown tide id ${tideId}.`,
+      );
+      process.exit(1);
+    }
+    let changed = false;
+    if (ops.remove?.length) {
+      const removed = removeCardsFromTide(tide, new Set(ops.remove));
+      if (removed > 0) changed = true;
+    }
+    for (const { id, copies } of ops.add ?? []) {
+      if (addCardToTide(tide, id, copies ?? 2, nameOf, detailOf)) changed = true;
+    }
+    if (changed) sortTideCards(tide);
+    console.log(`[overrides] tideCardOverrides applied to ${tideId}.`);
+  }
+}
+
 // --- Main ---------------------------------------------------------------------
 
 function run() {
@@ -552,6 +792,12 @@ function run() {
   });
   const neutralIds = neutralTides.map((t) => t.id);
   const allFacetIds = facetTides.map((t) => t.id);
+
+  // Manual override layer — applied after every tide is grown (so curated combos
+  // survive each affinity re-bake) and before the per-Dreamcaller pools are mapped
+  // (so the neutral-tail cosine ordering reflects the final card contents).
+  const overrides = readOverrides("data/tides4-overrides.jsonc");
+  applyOverrides(tides, overrides, nameOf, detailOf);
 
   // tidePoolByDreamcaller — starter + on-identity facets + broad neutral tail.
   //   * a SIGNATURED Dreamcaller's facets are the library facets whose anchor

@@ -1,0 +1,71 @@
+// data/tides4-overrides.jsonc — hand-authored manual tweaks layered on top of the
+// affinity-derived tides4 bake.
+//
+// The tides4 bake (`scripts/bake-tides4.mjs`) computes each tide's card list purely
+// from real draft co-pick affinity, so it has no notion of designed multi-card
+// combos: a combo's two halves land in tides independently, which scatters
+// "trap" tides that hold one half of a combo without the other. This file is the
+// deterministic override layer the bake applies AFTER growing every tide and
+// BEFORE writing the artifact, so curated tweaks survive every re-bake while the
+// affinity grow keeps flowing in fresh draft data.
+//
+// Cards are keyed by their stable cards_v2 UUID (names in `//` comments are
+// informational only). After editing, re-bake:
+//   npm run bake-tides4       # rewrites data/tides4.jsonc + the markdown rendering
+//   npm run setup-assets      # copies it to public/tides4-data.json
+//
+// Two override kinds, applied in this order (later wins):
+//   1. comboPairings   — declarative: keep a combo's halves together or strip them.
+//   2. tideCardOverrides — imperative: add/remove specific cards in a named tide.
+{
+  "version": 1,
+
+  // Declarative combo pairings. Each pairing names a set of `enablers` and a set of
+  // `payoffs` (both by UUID) that are designed to be drafted together. The bake
+  // guarantees the combo (at least one enabler AND at least one payoff) appears in
+  // exactly `targetTides` tides and NOWHERE apart — every other tide has both
+  // halves stripped out, so there are zero "trap" tides holding a lone half.
+  //
+  // How the bake resolves a pairing (fully deterministic):
+  //   * Candidate home tides = every tide that currently holds either half.
+  //   * Candidates are ranked: tides that already hold BOTH halves first (least
+  //     churn), then by how many distinct payoff cards they hold, then by total
+  //     payoff copies, then by tide id. The top `targetTides` become the combo
+  //     homes.
+  //   * Each home missing an enabler gets `primaryEnabler` added at `addCopies`
+  //     copies (and, in the rare case a home holds only an enabler, the first
+  //     payoff is added). Every non-home tide has all enabler and payoff cards
+  //     removed.
+  "comboPairings": [
+    {
+      "name": "reclaim-engine",
+      "description": "Anti-banish enablers ('cards you reclaim are not banished when they leave play') paired with Reclaim 0 payoffs, which loop for free once they stop being banished. Co-locate in 10 tides; strip every orphaned half.",
+      "enablers": [
+        "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
+        "9adbe3db-d872-4b75-92b5-d7f2798c22ce"  // Titan of Forgotten Echoes
+      ],
+      "payoffs": [
+        "d30bd488-f921-49cb-a44f-353c54cb6548", // Nightprowler Panther (Reclaim 0)
+        "fa7dadd8-c72f-42e7-b203-3d22aa36122f", // Torn Circuit Feeder (Reclaim 0)
+        "401fdd0a-356b-49c1-806d-d50617b084d2", // Enginespeaker (Reclaim 0)
+        "19aeffa6-fd1b-4b8f-bb0c-c35659521976", // Nocturne (Reclaim 0)
+        "2a828466-450a-4637-9c68-6b54522450c0"  // Rusted Monolith (Reclaim 0)
+      ],
+      // Co-locate the combo in this many tides; strip the orphaned half elsewhere.
+      "targetTides": 10,
+      // The enabler added to a home tide that holds payoffs but no enabler.
+      "primaryEnabler": "738a5af0-f848-4d48-bceb-9a43c9b11066", // Reclaimer of Lost Paths
+      // Copies to add when injecting a missing combo half (the runtime deals at
+      // most 2 copies of a card, so 2 maximises the odds it appears once drawn).
+      "addCopies": 2
+    }
+  ],
+
+  // Imperative per-tide card tweaks, applied after all combo pairings (final word).
+  // Keyed by stable tide id. `add` injects cards (id + copies); `remove` deletes
+  // cards by id. Use this escape hatch for one-off curation the affinity grow keeps
+  // getting wrong. Empty by default.
+  "tideCardOverrides": {
+    // "tide-sig-03": { "add": [{ "id": "<uuid>", "copies": 2 }], "remove": ["<uuid>"] }
+  }
+}
