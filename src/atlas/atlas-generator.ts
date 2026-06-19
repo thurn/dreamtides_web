@@ -1328,57 +1328,57 @@ const SITE_TYPE_META: Record<
   Purge: {
     icon: "bxf bx-hot",
     name: "Purge",
-    description: "Remove a card from your deck.",
+    description: "Remove cards from your deck.",
   },
   Essence: {
     icon: "bxf bx-diamond-alt",
     name: "Essence",
-    description: "Collect a pile of essence.",
+    description: "Collect a trove of essence.",
   },
   Transfiguration: {
     icon: "fa-solid fa-hammer",
     name: "Transfiguration",
-    description: "Badge a card with a colored transfiguration.",
+    description: "Modify and upgrade a card in your deck.",
   },
   Duplication: {
     icon: "bxf bx-copy",
     name: "Duplication",
-    description: "Make a copy of a card already in your deck.",
+    description: "Make a copy of a card in your deck.",
   },
   Reward: {
     icon: "bxf bx-treasure-chest",
     name: "Reward",
-    description: "Claim a card, dreamsign, or pile of essence.",
+    description: "Claim a reward.",
   },
   DreamAugury: {
     icon: "bxf bx-eye",
     name: "Dream Augury",
-    description: "Claim a reward foreseen by the dreamscape's seer.",
+    description: "Choose one of two foreseen rewards.",
   },
   DreamsignMarket: {
     icon: "bxf bx-pyramid",
     name: "Dreamsign Market",
-    description: "Buy a dreamsign from a rotating selection.",
+    description: "Purchase dreamsigns from a rotating selection.",
   },
   DreamsignRevelation: {
     icon: "bxf bx-meteor",
     name: "Dreamsign Revelation",
-    description: "Choose one dreamsign from several revealed options.",
+    description: "Receive a dreamsign.",
   },
   TemptingOffer: {
     icon: "bxf bx-law",
     name: "Offer",
-    description: "Take a risky deal for an outsized payoff.",
+    description: "Pay a cost for an outsized payoff.",
   },
   Gamble: {
     icon: "bxf bx-coin",
     name: "Gamble",
-    description: "Wager essence on an uncertain reward.",
+    description: "Take a risk for an uncertain reward.",
   },
   TemporalFork: {
     icon: "bxf bx-clock",
     name: "Temporal Fork",
-    description: "Defer a reward now to claim more of it later.",
+    description: "Gain a temporary bonus or future reward.",
   },
 };
 
