@@ -5,13 +5,17 @@ import type {
 } from "react";
 import { useEffect, useState } from "react";
 import { cardImageUrl } from "../../data/card-database";
-import type { CardData, FrozenCardData } from "../../types/cards";
+import { DEFAULT_ART_CROP } from "../../components/CardView";
+import type { ArtCrop, CardData, FrozenCardData } from "../../types/cards";
 import type { BattleCardInstance } from "../types";
 import { selectEffectiveSparkForInstance, selectFigmentCount } from "../state/figments";
 import { AutomationGearIcon } from "./AutomationGearIcon";
 
 export interface BattleCardVisualData {
   artUrl: string | null;
+  /** Curated art crop (pan/zoom) for the source image. Absent cards render with
+   *  the default centered crop. */
+  art?: ArtCrop;
   cost: number;
   isFast: boolean;
   figmentCount: number;
@@ -30,6 +34,7 @@ export function battleCardVisualFromInstance(
 ): BattleCardVisualData {
   return {
     artUrl: instance.definition.imageNumber > 0 ? cardImageUrl(instance.definition.imageNumber) : null,
+    art: instance.definition.art,
     cost: instance.definition.energyCost,
     figmentCount: selectFigmentCount(instance),
     effectiveSpark: instance.definition.battleCardKind === "character"
@@ -51,6 +56,7 @@ export function battleCardVisualFromReward(
 ): BattleCardVisualData {
   return {
     artUrl: card.artOwned ? cardImageUrl(card.imageNumber) : null,
+    art: card.art,
     cost: card.energyCost ?? 0,
     figmentCount: 1,
     effectiveSpark: card.cardType === "Character" ? Math.max(0, card.spark ?? 0) : 0,
@@ -225,6 +231,7 @@ function BattleCardArt({ data }: { data: BattleCardVisualData }) {
         src={data.artUrl ?? undefined}
         alt=""
         className="c-art-image"
+        style={battleArtImageStyle(data.art ?? DEFAULT_ART_CROP)}
         draggable={false}
         loading="lazy"
         onError={() => setShowFallback(true)}
@@ -232,6 +239,30 @@ function BattleCardArt({ data }: { data: BattleCardVisualData }) {
       <div className="c-art-overlay" />
     </>
   );
+}
+
+/**
+ * Inline CSS that applies a card's curated art crop (pan/zoom) to the battle
+ * card art image, so the framing matches the shared `CardView`. The image cover-
+ * fits the art box (`object-fit: cover` in CSS); `object-position` pans within
+ * the cover overscan and `transform: scale` adds the curated zoom around that
+ * same focal point, so panning and zooming stay anchored together.
+ *
+ * The crop's `x`/`y` are normalized to [-1, 1] with 0 centered, the same
+ * convention `CardView` resolves: a positive `x` reveals more of the image's
+ * left side, so it maps to a smaller `object-position` percentage (and likewise
+ * for `y`). The watermark strip is clipped off the source bottom in CSS; the
+ * crop `scale` (≥ the default 1.17) refills the clipped band.
+ */
+function battleArtImageStyle(crop: ArtCrop): CSSProperties {
+  const positionX = ((1 - crop.x) / 2) * 100;
+  const positionY = ((1 - crop.y) / 2) * 100;
+  const position = `${positionX.toFixed(3)}% ${positionY.toFixed(3)}%`;
+  return {
+    objectPosition: position,
+    transformOrigin: position,
+    transform: `scale(${String(crop.scale)})`,
+  };
 }
 
 function createArtStyle(name: string): CSSProperties {

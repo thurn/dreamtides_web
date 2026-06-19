@@ -6,6 +6,7 @@ import type {
   Dreamsign,
   TransfigurationType,
 } from "../types/quest";
+import type { ArtCrop } from "../types/cards";
 import type { BattleDebugEdit } from "./debug/commands";
 
 export const BACK_RANK_SLOT_IDS = ["B0", "B1", "B2", "B3", "B4"] as const;
@@ -142,6 +143,10 @@ export interface BattleDeckCardDefinition {
   reclaimCost: number | null;
   renderedText: string;
   imageNumber: number;
+  /** Curated art crop (pan/zoom) for the source image, sourced from the catalog
+   *  card's `art` table. Absent on synthetic definitions (figments, generated
+   *  copies); those fall back to the default crop. */
+  art?: ArtCrop;
   transfiguration: TransfigurationType | null;
   typeChange?: CardTypeChange | null;
   keywordModification?: CardKeywordModification | null;

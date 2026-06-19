@@ -19,6 +19,10 @@ export function createBaseBattleDeckCardDefinition(
     reclaimCost: card.reclaimCost ?? null,
     renderedText: card.renderedText,
     imageNumber: card.imageNumber,
+    // Only set `art` when the card has a curated crop: this definition is
+    // serialized into the shared battle state, and Firebase rejects an explicit
+    // `undefined` field. Cards with no crop fall back to the default at render.
+    ...(card.art ? { art: card.art } : {}),
     transfiguration: null,
     isBane: false,
   };

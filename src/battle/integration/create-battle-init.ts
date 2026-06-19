@@ -570,6 +570,11 @@ function normalizePlayerDeckCard(
     reclaimCost: effectiveCard.reclaimCost ?? null,
     renderedText: effectiveCard.renderedText,
     imageNumber: card.imageNumber,
+    // Curated art crop pairs with the printed `imageNumber`, so it is sourced
+    // from the base catalog card (a transfiguration can change cost/text but not
+    // the rendered image). Omitted when absent: this definition is serialized
+    // into the shared battle state, and Firebase rejects an explicit `undefined`.
+    ...(card.art ? { art: card.art } : {}),
     transfiguration: entry.transfiguration,
     ...(entry.typeChange == null ? {} : { typeChange: entry.typeChange }),
     ...(entry.keywordModification == null
