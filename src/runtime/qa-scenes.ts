@@ -113,6 +113,7 @@ export const QA_SCENES: readonly QaScene[] = [
     true,
   ),
   siteScene("duplication", "Duplication", "Duplication"),
+  siteScene("purge", "Purge", "Purge"),
   siteScene("shop", "Shop", "Shop"),
   siteScene("dreamaugury", "Dream Augury", "DreamAugury"),
   siteScene("tempting", "Offer", "TemptingOffer"),

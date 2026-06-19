@@ -18,7 +18,10 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  /* `safe center` keeps the stage centered when the deck fits, but falls back to
+   * top-aligned once the deck is tall enough to overflow — otherwise the first
+   * rows would be pushed above the scroll origin and become unreachable. */
+  justify-content: safe center;
   gap: 22px;
   padding: 40px 24px 104px;
   overflow: hidden auto;
