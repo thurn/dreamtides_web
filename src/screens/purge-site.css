@@ -40,6 +40,14 @@
   z-index: 8;
 }
 
+/* Drop the shared close button down so the red X lines up with the essence
+ * readouts and the purge commit button. The top bar centers its content on a
+ * taller bar than the 16px corner inset the close button defaults to, so without
+ * this nudge the X floats above the rest of the row. */
+.purge-site .site-close-btn {
+  top: 32px;
+}
+
 /* ---- Summary HUD bar — frosted, two readouts ---- */
 .purge-site .pg-summary {
   display: flex;
