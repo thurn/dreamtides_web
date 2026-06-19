@@ -1303,12 +1303,12 @@ const SITE_TYPE_META: Record<
   Draft: {
     icon: "bxf bx-rectangle-vertical",
     name: "Draft",
-    description: "Pick a card from a curated offer to add to your deck.",
+    description: "Pick 5 cards to add to your deck.",
   },
   Shop: {
     icon: "bxf bx-store-alt-2",
     name: "Card Shop",
-    description: "Spend essence to buy cards, dreamsigns, or rerolls.",
+    description: "Spend essence to buy cards.",
   },
   SpecialtyShop: {
     icon: "bxf bx-store",
