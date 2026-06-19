@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import type { Dreamsign, SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
-import { DreamGuideFrame } from "../components/DreamGuideFrame";
 import {
   DREAMSIGN_HOVER_DELAY_MS,
   DreamsignHoverCard,
@@ -127,7 +126,6 @@ export function DreamsignDraftScreen({ site }: DreamsignDraftScreenProps) {
       testId="dreamsign-draft-screen"
       className="dreamsign-draft-screen"
     >
-      <DreamGuideFrame site={site} />
       <OfferingScreenHeader
         title="Dreamsign Draft"
         subtitle="Choose one dreamsign or skip"

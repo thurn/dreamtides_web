@@ -11,60 +11,60 @@
 
 [[incarnations]]
 id = "howl_at_worlds_end"
-title = "Apollyon, the Howl at World's End"
-description = "Cheap spirits multiply, then rise as one devouring chorus."
+title = "Apollyon, the World's End"
+description = "Spirit Animals multiply, then rise as one devouring chorus."
 deck-type = "Spirit Animal Flood"
 
 [[incarnations]]
 id = "last_causality"
-title = "Apollyon, the Last Causality"
+title = "Apollyon, the End of Causality"
 description = "Each event births another, until consequence becomes catastrophe."
 deck-type = "Event Chain/Storm"
 
 [[incarnations]]
 id = "marshal_of_the_final_host"
-title = "Apollyon, Marshal of the Final Host"
-description = "Warriors gather behind sharpened ranks and strike before mercy."
+title = "Apollyon, the Doom of Humanity"
+description = "Warriors gather in ranks and strike before mercy."
 deck-type = "Warrior Support Aggro"
 
 [[incarnations]]
 id = "butcher_of_the_unfallen"
-title = "Apollyon, the Butcher of the Unfallen"
-description = "Every sacrifice feeds survivors who refuse to stay dead."
+title = "Apollyon, the Butcher"
+description = "Every sacrifice feeds the survivors."
 deck-type = "Abandon/Survivor Replenishment"
 
 [[incarnations]]
 id = "crawling_return"
-title = "Apollyon, the Crawling Return"
-description = "Small dead things return endlessly, profiting from every crossing."
+title = "Apollyon, the Last Word"
+description = "An ethereal host returns endlessly."
 deck-type = "Cheap-Character Recursion"
 
 [[incarnations]]
 id = "closed_grave"
-title = "Apollyon, the Closed Grave"
-description = "Free souls cycle through death, scoring value with each return."
+title = "Apollyon, the Broken Cycle"
+description = "Broken souls wind through Death's river."
 deck-type = "Reclaim Loop"
 
 [[incarnations]]
 id = "keeper_of_cast_off_names"
-title = "Apollyon, Keeper of Cast-Off Names"
-description = "Discarded cards become omens, then return sharper than before."
+title = "Apollyon, the Keeper of Names"
+description = "The discarded become omens."
 deck-type = "Discard/Reclaim"
 
 [[incarnations]]
 id = "sovereign_of_the_full_void"
-title = "Apollyon, Sovereign of the Full Void"
-description = "The void swells quickly, then empties itself into victory."
+title = "Apollyon, Sovereign of the Void"
+description = "The onrushing void swells to infinity."
 deck-type = "Void-Density Recursion"
 
 [[incarnations]]
 id = "the_unplaceable"
 title = "Apollyon, the Unplaceable"
-description = "Phasing outsiders slip past danger while disordering every defense."
+description = "Outsiders dissolve every defense."
 deck-type = "Outsider Tempo"
 
 [[incarnations]]
 id = "herald_of_the_roused_blade"
-title = "Apollyon, Herald of the Roused Blade"
-description = "Events awaken warriors into sudden, repeated bursts of violence."
+title = "Apollyon, the Herald of Revelation"
+description = "Warriors awaken into the final Rapture."
 deck-type = "Event/Awaken Warriors"

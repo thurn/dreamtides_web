@@ -11,8 +11,7 @@ import { RulesText } from "../components/RulesText";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
-import { guideForSiteType } from "../data/dreamscapes";
-import { guidePortraitUrl } from "../atlas/atlas-display";
+import { SiteGuide } from "../components/SiteGuide";
 import {
   effectiveDiscountPercent,
   effectivePrice,
@@ -55,7 +54,7 @@ const SHOP_BUY_MS = 480;
  * docked to the lower-left in landscape (see src/screens/shop-screen.css).
  */
 export function ShopScreen({ site }: ShopScreenProps) {
-  const { state, mutations, cardDatabase, questContent } = useQuest();
+  const { state, mutations, cardDatabase } = useQuest();
   const { essence, deck } = state;
   const isSpecialty = site.type === "SpecialtyShop";
   const isDreamsignMarket = site.type === "DreamsignMarket";
@@ -82,17 +81,6 @@ export function ShopScreen({ site }: ShopScreenProps) {
   const rerollCount = runtime?.kind === "shop" ? runtime.rerollCount : 0;
   const [overlayCard, setOverlayCard] = useState<CardData | null>(null);
 
-  // The resident guide for this site type, resolved from guide content so the
-  // name, portrait, and dialog stay data-driven (matching the Purge surface).
-  // Some shop variants (e.g. the Specialty Shop) have no resident guide.
-  const guide = useMemo(
-    () => guideForSiteType(questContent.guides, site.type),
-    [questContent.guides, site.type],
-  );
-  const guideLine = useMemo(() => {
-    if (guide === null || guide.dialog.length === 0) return null;
-    return guide.dialog[Math.floor(Math.random() * guide.dialog.length)];
-  }, [guide]);
 
   const currentRerollCost = useMemo(
     () => rerollCost(0, site.isEnhanced),
@@ -299,20 +287,9 @@ export function ShopScreen({ site }: ShopScreenProps) {
         </div>
       </div>
 
-      {/* Resident guide + speech bubble (docked lower-left in landscape) */}
-      {guide !== null && (
-        <div className="sh-guide" aria-hidden="true">
-          <div className="sh-bubble">
-            <span className="sh-bubble-mono">{guide.name}</span>
-            {guideLine !== null && <p>{`“${guideLine}”`}</p>}
-          </div>
-          <img
-            className="sh-guide-img"
-            src={guidePortraitUrl(guide.id)}
-            alt={guide.name}
-          />
-        </div>
-      )}
+      {/* Resident guide (shared SiteGuide), docked lower-left in landscape. The
+          Specialty Shop has no resident guide, so SiteGuide renders nothing. */}
+      <SiteGuide siteType={site.type} isEnhanced={site.isEnhanced} />
 
       <CardOverlay card={overlayCard} onClose={() => setOverlayCard(null)} />
     </div>

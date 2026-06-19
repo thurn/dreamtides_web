@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import type { SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { siteTypeName } from "../atlas/atlas-generator";
-import { DreamGuideFrame } from "../components/DreamGuideFrame";
+import { SiteGuide } from "../components/SiteGuide";
 import { logEvent } from "../logging";
 
 /** Props for the StubSiteScreen component. */
@@ -14,7 +14,7 @@ interface StubSiteScreenProps {
 /**
  * Placeholder screen for site types whose full mechanics arrive in a later
  * task (Tempting Offer, Gamble, Temporal Fork). It presents the site's Dream
- * Guide via {@link DreamGuideFrame}, frames the site by name, shows a short
+ * Guide via {@link SiteGuide}, frames the site by name, shows a short
  * "coming soon" body, and a Continue button that completes the site and returns
  * to the dreamscape so the player can keep traveling.
  */
@@ -48,7 +48,7 @@ export function StubSiteScreen({ site }: StubSiteScreenProps) {
       exit={{ opacity: 0, y: -20 }}
       transition={{ duration: 0.4 }}
     >
-      <DreamGuideFrame site={site} />
+      <SiteGuide siteType={site.type} isEnhanced={site.isEnhanced} />
       <h2 className="text-2xl font-bold md:text-3xl" style={{ color: "#a855f7" }}>
         {siteName}
       </h2>

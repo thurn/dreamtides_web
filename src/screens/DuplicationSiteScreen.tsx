@@ -5,8 +5,7 @@ import type { CardData } from "../types/cards";
 import { CardDisplay } from "../components/CardDisplay";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
-import { guideForSiteType } from "../data/dreamscapes";
-import { guidePortraitUrl } from "../atlas/atlas-display";
+import { SiteGuide } from "../components/SiteGuide";
 import "./duplication-site.css";
 
 /** Props for the DuplicationSiteScreen component. */
@@ -77,7 +76,7 @@ function buildCandidates(
  * card yields (1–4) is fixed per card and surfaced on its chip and in the HUD.
  */
 export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
-  const { state, mutations, cardDatabase, questContent } = useQuest();
+  const { state, mutations, cardDatabase } = useQuest();
   const { deck } = state;
   const runtime = state.siteRuntime[site.id];
   const cardChoiceRuntime =
@@ -86,17 +85,6 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
     runtime.choiceKind === "duplication"
       ? runtime
       : null;
-
-  // Deacon Holt tends every Duplication site; resolve him from guide content so
-  // his name, portrait, and dialog stay data-driven, matching the Purge screen.
-  const guide = useMemo(
-    () => guideForSiteType(questContent.guides, "Duplication"),
-    [questContent.guides],
-  );
-  const guideLine = useMemo(() => {
-    if (guide === null || guide.dialog.length === 0) return null;
-    return guide.dialog[Math.floor(Math.random() * guide.dialog.length)];
-  }, [guide]);
 
   useEffect(() => {
     if (runtime === undefined) {
@@ -335,20 +323,8 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
         <i className="bxf bx-layers" />
       </div>
 
-      {/* Deacon Holt + speech bubble (docked lower-left in landscape) */}
-      {guide !== null && (
-        <div className="dup-guide" aria-hidden="true">
-          <div className="dup-bubble">
-            <span className="dup-bubble-mono">{guide.name}</span>
-            {guideLine !== null && <p>{`“${guideLine}”`}</p>}
-          </div>
-          <img
-            className="dup-holt"
-            src={guidePortraitUrl(guide.id)}
-            alt={guide.name}
-          />
-        </div>
-      )}
+      {/* Deacon Holt (shared SiteGuide), docked lower-left in landscape. */}
+      <SiteGuide siteType="Duplication" isEnhanced={site.isEnhanced} />
     </div>
   );
 }

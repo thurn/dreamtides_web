@@ -108,7 +108,7 @@ dialog = [
   "Fortune favors the bold, traveler.",
   "No fee tonight. Big stakes, though.",
 ]
-home-specialty = "Gravok awlays offers you his highest rewards and best odds."
+home-specialty = "Gravok offers you his highest rewards and best odds."
 
 [[guides]]
 id = "layaway"

@@ -9,6 +9,7 @@ import {
   isRoomStale,
   pruneRoomActionLog,
   ROOM_PRESERVATION_WINDOW_MS,
+  type RoomSubscriptionSnapshot,
   runRoomTransaction,
   subscribeToRoom,
   writePresence,
@@ -443,6 +444,61 @@ describe("room service", () => {
         },
       },
     });
+  });
+
+  it("restores RTDB-stripped acceptedEntryIds on a card-choice site runtime", () => {
+    const listener = vi.fn<(snapshot: RoomSubscriptionSnapshot) => void>();
+    // A freshly entered Transfiguration/Duplication site writes a card-choice
+    // runtime whose `acceptedEntryIds` is empty until the player accepts. RTDB
+    // drops empty arrays, so the runtime round-trips back missing the field. The
+    // accept transaction reads `acceptedEntryIds.length`, so the normalizer must
+    // restore the empty array.
+    const strippedQuestState = {
+      essence: 200,
+      screen: { type: "site", siteId: "site-1" },
+      siteRuntime: {
+        "site-1": {
+          kind: "cardChoice",
+          choiceKind: "transfiguration",
+          entryIds: ["deck-1", "deck-2"],
+          transfigurationOffers: [
+            {
+              entryId: "deck-1",
+              type: "Empowered",
+              effectDescription: "An effect.",
+              previewCard: {},
+              effectDetails: {},
+            },
+          ],
+          // acceptedEntryIds intentionally missing — RTDB drops the empty array.
+        },
+      },
+    };
+    const room = {
+      ...createRoomRecord(timestamp),
+      questState: strippedQuestState,
+    };
+    firebaseMocks.onValue.mockImplementation(
+      (_entryRef, next: SnapshotListener) => {
+        next({ exists: () => true, val: () => room });
+        return vi.fn();
+      },
+    );
+
+    subscribeToRoom(database, "ab12", listener);
+
+    const calls = listener.mock.calls;
+    const snapshot = calls[calls.length - 1][0];
+    if (snapshot.status !== "ready" || snapshot.room.questState === null) {
+      throw new Error("expected a ready snapshot with quest state");
+    }
+    const runtime = snapshot.room.questState.siteRuntime["site-1"];
+    if (runtime.kind !== "cardChoice" || runtime.choiceKind !== "transfiguration") {
+      throw new Error("expected a transfiguration card-choice runtime");
+    }
+    expect(runtime.acceptedEntryIds).toEqual([]);
+    expect(runtime.entryIds).toEqual(["deck-1", "deck-2"]);
+    expect(runtime.transfigurationOffers).toHaveLength(1);
   });
 
   it("defaults hasSeenStartingDeckPopup to false when RTDB strips the field, and preserves true", () => {

@@ -290,7 +290,7 @@ describe("TransfigurationSiteScreen", () => {
       <TransfigurationSiteScreen site={makeSite()} />,
     );
 
-    expect(container.textContent).toContain("Preparing choices...");
+    expect(container.textContent).toContain("Heating the forge...");
     expect(mutations.ensureCardChoiceRuntime).not.toHaveBeenCalled();
 
     act(() => {
@@ -317,7 +317,7 @@ describe("TransfigurationSiteScreen", () => {
       <TransfigurationSiteScreen site={makeSite()} />,
     );
 
-    expect(container.textContent).toContain("Preparing choices...");
+    expect(container.textContent).toContain("Heating the forge...");
     expect(mutations.acceptTransfigurationChoice).not.toHaveBeenCalled();
 
     act(() => {
@@ -344,7 +344,7 @@ describe("TransfigurationSiteScreen", () => {
       <TransfigurationSiteScreen site={makeSite()} />,
     );
 
-    expect(container.textContent).toContain("Preparing choices...");
+    expect(container.textContent).toContain("Heating the forge...");
     expect(mutations.acceptTransfigurationChoice).not.toHaveBeenCalled();
 
     act(() => {

@@ -1,5 +1,5 @@
 import type { QuestContent } from "../data/quest-content";
-import type { QuestState } from "../types/quest";
+import type { QuestState, SiteState, SiteType } from "../types/quest";
 import { createQaQuestFoundation } from "./start-in-battle-state";
 
 /**
@@ -43,8 +43,80 @@ const ATLAS_SCENE: QaScene = {
   build: (questContent) => createQaQuestFoundation(questContent)?.state ?? null,
 };
 
+/**
+ * Builds a scene parked directly on a site screen of `siteType`. Most site
+ * screens are otherwise reachable only after winning the keeper battle and
+ * choosing the dreamscape whose resident guide tends that site type, so this
+ * retypes one of the starter dreamscape's non-battle sites to the target type
+ * and parks the run on it. The site's per-screen runtime (e.g. transfiguration
+ * offers) is created on entry by the screen itself, exactly as in normal play.
+ */
+function parkOnSite(
+  siteType: SiteType,
+  isEnhanced: boolean,
+): QaScene["build"] {
+  return (questContent) => {
+    const foundation = createQaQuestFoundation(questContent);
+    if (foundation === null) {
+      return null;
+    }
+
+    const node = foundation.starterNode;
+    const slot = node.sites.find((site) => site.type !== "Battle");
+    if (slot === undefined) {
+      return null;
+    }
+
+    const site: SiteState = { ...slot, type: siteType, isEnhanced };
+    const sites = node.sites.map((existing) =>
+      existing.id === site.id ? site : existing,
+    );
+    const nextNode = { ...node, sites };
+    const atlas = {
+      ...foundation.atlas,
+      nodes: { ...foundation.atlas.nodes, [node.id]: nextNode },
+    };
+
+    return {
+      ...foundation.state,
+      atlas,
+      currentDreamscape: node.id,
+      screen: { type: "site", siteId: site.id },
+      activeSiteId: site.id,
+    };
+  };
+}
+
+/** Registers a `?goto=` site scene for the given site type. */
+function siteScene(
+  id: string,
+  label: string,
+  siteType: SiteType,
+  isEnhanced = false,
+): QaScene {
+  return {
+    id,
+    label,
+    description: `The ${label} site screen, parked directly on the site for UI QA.`,
+    build: parkOnSite(siteType, isEnhanced),
+  };
+}
+
 /** All registered QA scenes, keyed by `id`. */
-export const QA_SCENES: readonly QaScene[] = [ATLAS_SCENE];
+export const QA_SCENES: readonly QaScene[] = [
+  ATLAS_SCENE,
+  siteScene("transfiguration", "Transfiguration", "Transfiguration"),
+  siteScene(
+    "transfiguration-enhanced",
+    "Transfiguration (Enhanced)",
+    "Transfiguration",
+    true,
+  ),
+  siteScene("duplication", "Duplication", "Duplication"),
+  siteScene("shop", "Shop", "Shop"),
+  siteScene("dreamaugury", "Dream Augury", "DreamAugury"),
+  siteScene("tempting", "Tempting Offer", "TemptingOffer"),
+];
 
 /** Returns the QA scene for `id`, or null when `id` is not registered. */
 export function findQaScene(id: string): QaScene | null {

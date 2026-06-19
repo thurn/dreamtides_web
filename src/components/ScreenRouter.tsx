@@ -43,7 +43,7 @@ import { logEvent } from "../logging";
 import type { Screen, SiteState } from "../types/quest";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { BattleSiteRoute } from "./BattleSiteRoute";
-import { DreamGuideFrame } from "./DreamGuideFrame";
+import { SiteGuide } from "./SiteGuide";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { SiteSceneBackdrop } from "./SiteSceneBackdrop";
 import type { ReactNode } from "react";
@@ -267,7 +267,7 @@ function DreamAugurySiteScreen({
 
   return (
     <>
-      <DreamGuideFrame site={site} />
+      <SiteGuide siteType="DreamAugury" isEnhanced={site.isEnhanced} />
       <JourneyScreen
         context={journeyContext}
         onClose={handleClose}
@@ -434,7 +434,7 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
         className="min-h-full bg-[#090b10] p-6 text-slate-100"
         data-testid="dream-merchant-v2-fallback"
       >
-        <DreamGuideFrame site={site} />
+        <SiteGuide siteType="DreamAugury" isEnhanced={site.isEnhanced} />
         <section className="mx-auto grid min-h-[70vh] max-w-2xl place-items-center text-center">
           <div className="grid gap-4">
             <h2 className="text-2xl font-bold">Dream Merchant</h2>
@@ -457,7 +457,7 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
 
   return (
     <>
-      <DreamGuideFrame site={site} />
+      <SiteGuide siteType="DreamAugury" isEnhanced={site.isEnhanced} />
       <DreamMerchantScreen
         // Reset the screen's local selection state whenever the encounter
         // changes (e.g. after a debug reroll regenerates the offers).

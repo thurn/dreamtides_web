@@ -314,7 +314,7 @@ function Preview({ resolved }: PreviewProps) {
           <div className="info-row">
             <i className="fa-solid fa-bolt row-ico danger" aria-hidden="true" />
             <div>
-              <div className="eyebrow">The Doom of Humanity</div>
+              <div className="eyebrow">Incarnation</div>
               <p className="row-text">
                 {bossIncarnation?.description ?? BOSS_DISPLAY.intro}
               </p>

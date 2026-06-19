@@ -353,6 +353,24 @@ function normalizeRewardDreamsign(
 function normalizeSiteRuntimeEntry(
   entry: SiteRuntimeState,
 ): SiteRuntimeState {
+  if (entry.kind === "cardChoice") {
+    // RTDB silently drops empty arrays, so a freshly created card-choice runtime
+    // (whose `acceptedEntryIds` is empty until the player accepts) round-trips
+    // back missing the field. Restore the array fields so the accept
+    // transactions can read `.length` / `.includes` without crashing.
+    const base = {
+      entryIds: entry.entryIds ?? [],
+      acceptedEntryIds: entry.acceptedEntryIds ?? [],
+    };
+    if (entry.choiceKind === "transfiguration") {
+      return {
+        ...entry,
+        ...base,
+        transfigurationOffers: entry.transfigurationOffers ?? [],
+      };
+    }
+    return { ...entry, ...base };
+  }
   if (entry.kind !== "reward") {
     return entry;
   }

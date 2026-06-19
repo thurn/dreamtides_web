@@ -1,16 +1,18 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { motion } from "framer-motion";
+import type { CSSProperties } from "react";
 import type { SiteState, DeckEntry } from "../types/quest";
 import type { CardData } from "../types/cards";
 import { CardDisplay } from "../components/CardDisplay";
-import { DreamGuideFrame } from "../components/DreamGuideFrame";
+import { SiteGuide } from "../components/SiteGuide";
 import { useQuest } from "../state/quest-context";
+import { logEvent } from "../logging";
 import {
   buildTransfigurationDisplay,
   TRANSFIGURATION_COLORS,
   transfigurationEffectDetails,
   type TransfigurationOffer,
 } from "../transfiguration/transfiguration-logic";
+import "./transfiguration-site.css";
 
 /** Props for the TransfigurationSiteScreen component. */
 interface TransfigurationSiteScreenProps {
@@ -55,7 +57,15 @@ function buildCandidates(
   return candidates;
 }
 
-/** Renders the Transfiguration site screen. */
+/**
+ * The Transfiguration site as an immersive, full-bleed scene. Durgan
+ * Forgehammer (the shared {@link SiteGuide}) offers to reforge a card over the
+ * dimmed dreamscape. The surface mirrors the Purge and Duplication screens: no
+ * heading (the guide's bubble carries the narration), a centered row of
+ * before -> after card pairs the player accepts one of, and a de-emphasized
+ * "walk on" footer link. When enhanced, the player first picks any
+ * untransfigured card from a deck grid and then reviews its single preview.
+ */
 export function TransfigurationSiteScreen({
   site,
 }: TransfigurationSiteScreenProps) {
@@ -64,9 +74,9 @@ export function TransfigurationSiteScreen({
   const runtime = state.siteRuntime[site.id];
   const cardChoiceRuntime =
     runtime !== undefined &&
-      runtime.kind === "cardChoice" &&
-      runtime.choiceKind === "transfiguration" &&
-      Array.isArray(runtime.transfigurationOffers)
+    runtime.kind === "cardChoice" &&
+    runtime.choiceKind === "transfiguration" &&
+    Array.isArray(runtime.transfigurationOffers)
       ? runtime
       : null;
 
@@ -76,15 +86,31 @@ export function TransfigurationSiteScreen({
     }
   }, [mutations, runtime, site.id]);
 
+  useEffect(() => {
+    // Log once per visit, on first mount.
+    logEvent("site_entered", {
+      siteType: site.type,
+      isEnhanced: site.isEnhanced,
+      deckSize: deck.length,
+    });
+  }, []);
+
+  // Entrance animation, mirroring the Purge/Duplication surfaces.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const id = window.setTimeout(() => setMounted(true), 20);
+    return () => window.clearTimeout(id);
+  }, []);
+
   const candidates = useMemo(
     () =>
       cardChoiceRuntime === null
         ? []
         : buildCandidates(
-          deck,
-          cardDatabase,
-          cardChoiceRuntime.transfigurationOffers,
-        ),
+            deck,
+            cardDatabase,
+            cardChoiceRuntime.transfigurationOffers,
+          ),
     [cardChoiceRuntime, cardDatabase, deck],
   );
   const acceptedEntryIds = useMemo(
@@ -92,7 +118,7 @@ export function TransfigurationSiteScreen({
     [cardChoiceRuntime],
   );
 
-  // Enhanced mode: pick from full deck
+  // Enhanced mode: pick from full deck.
   const [enhancedPickedEntry, setEnhancedPickedEntry] =
     useState<DeckEntry | null>(null);
   const [enhancedOffer, setEnhancedOffer] =
@@ -148,66 +174,49 @@ export function TransfigurationSiteScreen({
     mutations.completeSite(site.id, "transfiguration_skipped");
   }, [mutations, site.id]);
 
+  const guide = (
+    <SiteGuide siteType="Transfiguration" isEnhanced={site.isEnhanced} />
+  );
+
   if (cardChoiceRuntime === null) {
     return (
-      <div className="flex min-h-full items-center justify-center px-4 py-6">
-        <p className="text-lg opacity-60">Preparing choices...</p>
+      <div
+        className={`transfiguration-site${mounted ? " mounted" : ""}`}
+        data-testid="transfiguration-site-screen"
+      >
+        <p className="tf-status">Heating the forge...</p>
+        {guide}
       </div>
     );
   }
 
-  // Enhanced mode: full deck browser for picking
+  // Enhanced mode: full-deck browser for picking, then a single preview.
   if (site.isEnhanced) {
     return (
-      <motion.div
-        className="flex min-h-full flex-col items-center px-4 py-6 md:px-8 md:py-8"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -20 }}
-        transition={{ duration: 0.4 }}
+      <div
+        className={`transfiguration-site${mounted ? " mounted" : ""}`}
+        data-testid="transfiguration-site-screen"
       >
-        <DreamGuideFrame site={site} />
-        <div className="mb-6 text-center">
-          <h2
-            className="text-2xl font-bold tracking-wide md:text-3xl"
-            style={{ color: "#a855f7" }}
-          >
-            Transfiguration
-          </h2>
-          <span
-            className="mt-2 inline-block rounded-full px-3 py-1 text-sm font-bold"
-            style={{
-              background: "rgba(168, 85, 247, 0.15)",
-              color: "#c084fc",
-              border: "1px solid rgba(168, 85, 247, 0.3)",
-            }}
-          >
-            Enhanced -- Choose any card
+        <div className="tf-summary" data-transfiguration-enhanced="true">
+          <span className="tf-summary-star" aria-hidden="true">
+            {"⭐"}
           </span>
-          <p className="mt-2 text-sm opacity-60">
-            {enhancedPickedEntry
-              ? "Review the transfiguration preview below."
-              : "Pick any untransfigured card from your deck to transfigure."}
-          </p>
+          {enhancedPickedEntry
+            ? "Review the reforging below."
+            : "Enhanced — choose any card to reforge."}
         </div>
 
         {!enhancedPickedEntry && (
-          <div className="grid w-full max-w-5xl grid-cols-3 gap-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6">
-            {candidates.map((candidate, index) => {
-              return (
-                <motion.div
-                  key={candidate.entry.entryId}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.3, delay: index * 0.03 }}
-                >
-                  <CardDisplay
-                    card={candidate.card}
-                    onClick={() => handleEnhancedPick(candidate.entry)}
-                  />
-                </motion.div>
-              );
-            })}
+          <div className="tf-deck">
+            {candidates.map((candidate) => (
+              <div
+                key={candidate.entry.entryId}
+                className="tf-slot"
+                onClick={() => handleEnhancedPick(candidate.entry)}
+              >
+                <CardDisplay card={candidate.card} />
+              </div>
+            ))}
           </div>
         )}
 
@@ -222,180 +231,87 @@ export function TransfigurationSiteScreen({
         )}
 
         {enhancedAccepted && (
-          <motion.div
-            className="mt-4 text-center"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
-            <p className="text-lg font-bold" style={{ color: "#10b981" }}>
-              Transfiguration applied!
-            </p>
-          </motion.div>
+          <p className="tf-status" style={{ color: "#10b981" }}>
+            The card is reforged.
+          </p>
         )}
 
-        <button
-          className="mt-8 rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
-          style={{
-            background: "rgba(107, 114, 128, 0.2)",
-            border: "1px solid rgba(107, 114, 128, 0.4)",
-            color: "#9ca3af",
-          }}
-          onClick={handleClose}
-        >
-          Close
-        </button>
+        <div className="tf-foot">
+          <button type="button" className="tf-walk" onClick={handleClose}>
+            Walk on
+          </button>
+        </div>
 
-      </motion.div>
+        {guide}
+      </div>
     );
   }
 
-  // Normal mode: 3 random candidates
+  // Normal mode: a row of fixed candidate reforgings.
   return (
-    <motion.div
-      className="flex min-h-full flex-col items-center px-4 py-6 md:px-8 md:py-8"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.4 }}
+    <div
+      className={`transfiguration-site${mounted ? " mounted" : ""}`}
+      data-testid="transfiguration-site-screen"
     >
-      <DreamGuideFrame site={site} />
-      <div className="mb-6 text-center">
-        <h2
-          className="text-2xl font-bold tracking-wide md:text-3xl"
-          style={{ color: "#a855f7" }}
-        >
-          Transfiguration
-        </h2>
-        <p className="mt-2 text-sm opacity-60">
-          Apply a magical enhancement to one of these cards.
-        </p>
-      </div>
-
       {candidates.length === 0 ? (
-        <p className="mt-8 text-lg opacity-50">
-          No eligible cards found for transfiguration.
-        </p>
+        <p className="tf-status">No eligible cards to reforge.</p>
       ) : (
-        <div className="flex w-full max-w-5xl flex-col gap-6 md:flex-row md:justify-center">
+        <div className="tf-row">
           {candidates.map((candidate, index) => {
             const isAccepted = acceptedEntryIds.has(candidate.entry.entryId);
             const color = TRANSFIGURATION_COLORS[candidate.offer.type];
+            const preview = buildTransfigurationDisplay(
+              candidate.card,
+              candidate.offer.type,
+            );
             return (
-              <motion.div
+              <div
                 key={candidate.entry.entryId}
-                className="flex flex-col items-center gap-3 rounded-xl p-4"
-                style={{
-                  background: "rgba(15, 10, 24, 0.8)",
-                  border: `1px solid ${color}40`,
-                  boxShadow: `0 0 12px ${color}15`,
-                  flex: "1 1 0",
-                  maxWidth: "280px",
-                }}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.15 }}
+                className="tf-col"
+                style={
+                  { "--i": index, "--tf-accent": color } as CSSProperties
+                }
               >
-                {/* Original card */}
-                <div style={{ width: "100%" }}>
-                  <CardDisplay card={candidate.card} />
+                <span className="tf-type">{candidate.offer.type}</span>
+
+                <div className="tf-preview-card">
+                  <CardDisplay
+                    card={preview.card}
+                    selected={true}
+                    selectionColor={color}
+                    transfiguration={preview.display}
+                  />
                 </div>
 
-                {/* Arrow / becomes indicator */}
-                <div
-                  className="flex flex-col items-center gap-1 py-1"
-                  style={{ color }}
-                >
-                  <span className="text-2xl">{"\u2193"}</span>
-                  <span
-                    className="rounded-full px-3 py-0.5 text-xs font-bold uppercase tracking-wider"
-                    style={{
-                      background: `${color}20`,
-                      border: `1px solid ${color}40`,
-                    }}
-                  >
-                    {candidate.offer.type}
-                  </span>
-                  <span className="mt-1 text-xs opacity-80">
-                    {candidate.offer.description}
-                  </span>
-                </div>
+                <p className="tf-desc">{candidate.offer.description}</p>
 
-                {/* Preview card */}
-                <div
-                  style={{
-                    width: "100%",
-                    filter: `drop-shadow(0 0 6px ${color}40)`,
-                  }}
-                >
-                  {(() => {
-                    const preview = buildTransfigurationDisplay(
-                      candidate.card,
-                      candidate.offer.type,
-                    );
-                    return (
-                      <CardDisplay
-                        card={preview.card}
-                        selected={true}
-                        selectionColor={color}
-                        transfiguration={preview.display}
-                      />
-                    );
-                  })()}
-                </div>
-
-                {/* Accept button */}
                 {isAccepted ? (
-                  <div
-                    className="w-full rounded-lg px-4 py-2 text-center text-sm font-bold"
-                    style={{
-                      background: `${color}20`,
-                      color,
-                      border: `1px solid ${color}40`,
-                    }}
-                  >
-                    Applied!
-                  </div>
+                  <div className="tf-state applied">Reforged</div>
                 ) : acceptedEntryIds.size > 0 ? (
-                  <div
-                    className="w-full rounded-lg px-4 py-2 text-center text-sm font-bold opacity-40"
-                    style={{
-                      background: "#4b5563",
-                      color: "#9ca3af",
-                    }}
-                  >
-                    Unavailable
-                  </div>
+                  <div className="tf-state unavailable">Unavailable</div>
                 ) : (
                   <button
-                    className="w-full rounded-lg px-4 py-2 text-sm font-bold transition-opacity hover:opacity-90"
-                    style={{
-                      background: `linear-gradient(135deg, ${color} 0%, ${color}cc 100%)`,
-                      color: "#ffffff",
-                    }}
+                    type="button"
+                    className="tf-accept"
                     onClick={() => handleAccept(candidate)}
                   >
                     Accept {candidate.offer.type}
                   </button>
                 )}
-              </motion.div>
+              </div>
             );
           })}
         </div>
       )}
 
-      <button
-        className="mt-8 rounded-lg px-6 py-2.5 text-base font-medium transition-colors"
-        style={{
-          background: "rgba(107, 114, 128, 0.2)",
-          border: "1px solid rgba(107, 114, 128, 0.4)",
-          color: "#9ca3af",
-        }}
-        onClick={handleClose}
-      >
-        Close
-      </button>
+      <div className="tf-foot">
+        <button type="button" className="tf-walk" onClick={handleClose}>
+          Walk on
+        </button>
+      </div>
 
-    </motion.div>
+      {guide}
+    </div>
   );
 }
 
@@ -420,42 +336,24 @@ function EnhancedPreview({
   const preview = buildTransfigurationDisplay(card, offer.type);
 
   return (
-    <motion.div
-      className="flex flex-col items-center gap-4 rounded-xl p-6"
-      style={{
-        background: "rgba(15, 10, 24, 0.8)",
-        border: `1px solid ${color}40`,
-        boxShadow: `0 0 16px ${color}20`,
-        maxWidth: "320px",
-      }}
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.3 }}
+    <div
+      className="tf-preview"
+      style={{ "--tf-accent": color } as CSSProperties}
     >
-      <div style={{ width: "100%" }}>
+      <div className="tf-card">
         <CardDisplay card={card} />
       </div>
 
-      <div className="flex flex-col items-center gap-1" style={{ color }}>
-        <span className="text-2xl">{"\u2193"}</span>
-        <span
-          className="rounded-full px-3 py-0.5 text-xs font-bold uppercase tracking-wider"
-          style={{
-            background: `${color}20`,
-            border: `1px solid ${color}40`,
-          }}
-        >
-          {offer.type}
+      <div className="tf-arrow">
+        <span className="tf-arrow-glyph" aria-hidden="true">
+          {"↓"}
         </span>
-        <span className="mt-1 text-xs opacity-80">{offer.description}</span>
+        <span className="tf-type">{offer.type}</span>
       </div>
 
-      <div
-        style={{
-          width: "100%",
-          filter: `drop-shadow(0 0 6px ${color}40)`,
-        }}
-      >
+      <p className="tf-desc">{offer.description}</p>
+
+      <div className="tf-preview-card">
         <CardDisplay
           card={preview.card}
           selected={true}
@@ -464,29 +362,14 @@ function EnhancedPreview({
         />
       </div>
 
-      <div className="flex w-full gap-2">
-        <button
-          className="flex-1 rounded-lg px-4 py-2 text-sm font-bold transition-opacity hover:opacity-90"
-          style={{
-            background: `linear-gradient(135deg, ${color} 0%, ${color}cc 100%)`,
-            color: "#ffffff",
-          }}
-          onClick={onAccept}
-        >
+      <div className="tf-preview-actions">
+        <button type="button" className="tf-accept" onClick={onAccept}>
           Accept
         </button>
-        <button
-          className="flex-1 rounded-lg px-4 py-2 text-sm font-bold transition-opacity hover:opacity-90"
-          style={{
-            background: "rgba(107, 114, 128, 0.2)",
-            border: "1px solid rgba(107, 114, 128, 0.4)",
-            color: "#9ca3af",
-          }}
-          onClick={onReject}
-        >
+        <button type="button" className="tf-reject" onClick={onReject}>
           Reject
         </button>
       </div>
-    </motion.div>
+    </div>
   );
 }

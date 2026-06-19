@@ -6,8 +6,8 @@ import { EssenceGlyph, EssenceValue } from "../components/EssenceValue";
 import { RulesText } from "../components/RulesText";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
-import { guideForSiteType } from "../data/dreamscapes";
-import { guidePortraitUrl, dreamsignIconUrl } from "../atlas/atlas-display";
+import { dreamsignIconUrl } from "../atlas/atlas-display";
+import { SiteGuide } from "../components/SiteGuide";
 import {
   MAX_PURGE_PER_VISIT,
   maxAffordablePurgeCount,
@@ -45,19 +45,8 @@ const ESSENCE_COLOR = "var(--color-essence)";
  * and the resident guide with a speech bubble docked to the lower-left.
  */
 export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
-  const { state, mutations, cardDatabase, questContent } = useQuest();
+  const { state, mutations, cardDatabase } = useQuest();
   const { deck, essence, dreamsigns } = state;
-
-  // Master Takeshi tends every Purge site; resolve him from guide content so his
-  // name, portrait, and dialog stay data-driven, matching the Revelation.
-  const guide = useMemo(
-    () => guideForSiteType(questContent.guides, "Purge"),
-    [questContent.guides],
-  );
-  const guideLine = useMemo(() => {
-    if (guide === null || guide.dialog.length === 0) return null;
-    return guide.dialog[Math.floor(Math.random() * guide.dialog.length)];
-  }, [guide]);
 
   // Bane cards and bane Dreamsigns are removed for free. Bane cards live in the
   // deck and render inline with a free chip; bane Dreamsigns have no card art
@@ -454,20 +443,8 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
         </button>
       </div>
 
-      {/* Master Takeshi + speech bubble */}
-      {guide !== null && (
-        <div className="pg-guide" aria-hidden="true">
-          <div className="pg-bubble">
-            <span className="pg-bubble-mono">{guide.name}</span>
-            {guideLine !== null && <p>{`“${guideLine}”`}</p>}
-          </div>
-          <img
-            className="pg-takeshi"
-            src={guidePortraitUrl(guide.id)}
-            alt={guide.name}
-          />
-        </div>
-      )}
+      {/* Master Takeshi (shared SiteGuide), docked lower-left in landscape. */}
+      <SiteGuide siteType="Purge" isEnhanced={site.isEnhanced} />
     </div>
   );
 }
