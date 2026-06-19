@@ -321,18 +321,18 @@ art-owned = false
 card-number = 32
 
 [[dreamwell]]
-name = "The Crossroads"
+name = "Centennial Square"
 id = "af2ef62f-d31b-4544-a2b0-f5aab03c2d7c"
-rendered-text = "Choose one: draw a card or gain 2●"
+rendered-text = "Choose one: Draw a card or gain 2●."
 order = 4
 energy-added = 0
 card-type = "Dreamwell"
-image-number = 2027964669
+image-number = 1504647500
 art-owned = false
 card-number = 33
 
 [[dreamwell]]
-name = "Emberwake Flats"
+name = "Ancient Mine"
 id = "91deefd2-0400-4c78-ab9f-f6db864ff7e2"
 rendered-text = "Gain 2●. Discard a card."
 order = 1
