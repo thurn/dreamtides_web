@@ -1124,7 +1124,7 @@ art-owned = false
 card-number = 60
 
 [[cards]]
-name = "Cinderfang"
+name = "Nightprowler Panther"
 mtg-name = "Devoted Druid"
 id = "d30bd488-f921-49cb-a44f-353c54cb6548"
 rendered-text = """
@@ -1568,7 +1568,7 @@ name = "Torn Circuit Feeder"
 mtg-name = "Safehold Elite"
 id = "fa7dadd8-c72f-42e7-b203-3d22aa36122f"
 rendered-text = """
-When you reclaim this character, it gains -1✦.
+When you reclaim this character, it loses 1✦.
 
 Reclaim 0●"""
 energy-cost = 2
