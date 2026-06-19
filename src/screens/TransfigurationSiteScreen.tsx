@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
-import type { SiteState, DeckEntry } from "../types/quest";
+import type { SiteState, DeckEntry, TransfigurationType } from "../types/quest";
 import type { CardData } from "../types/cards";
 import { CardDisplay } from "../components/CardDisplay";
 import { SiteGuide } from "../components/SiteGuide";
@@ -10,8 +10,7 @@ import { logEvent } from "../logging";
 import {
   buildTransfigurationDisplay,
   TRANSFIGURATION_COLORS,
-  transfigurationEffectDetails,
-  type TransfigurationOffer,
+  TRANSFIGURATION_ICONS,
 } from "../transfiguration/transfiguration-logic";
 import "./transfiguration-site.css";
 
@@ -20,58 +19,94 @@ interface TransfigurationSiteScreenProps {
   site: SiteState;
 }
 
-/** A deck entry paired with its assigned transfiguration offer. */
+/** One pickable form offered for a card, carried straight from the runtime. */
+interface FormOffer {
+  type: TransfigurationType;
+  effectDescription: string;
+  effectDetails: Record<string, unknown>;
+}
+
+/** A deck entry paired with the forms the site offers for it. */
 interface TransfigurationCandidate {
   entry: DeckEntry;
   card: CardData;
-  offer: TransfigurationOffer;
+  forms: FormOffer[];
 }
 
-/** Builds transfiguration candidates from shared runtime entry ids. */
+/** How long the forge flash plays before the reforged card is committed. */
+const FORGE_FLASH_MS = 620;
+
+/** Card width (px) for the pick grid, per visit mode. */
+const STANDARD_CARD_WIDTH = 210;
+const HOME_CARD_WIDTH = 158;
+
+/**
+ * Groups the flat runtime offers (one row per form) back into per-card
+ * candidates, preserving the offered form order. Entries that are missing,
+ * already transfigured, or have no offered forms are skipped.
+ */
 function buildCandidates(
   deck: DeckEntry[],
   cardDatabase: Map<number, CardData>,
   offers: readonly {
     entryId: string;
-    type: TransfigurationOffer["type"];
+    type: TransfigurationType;
     effectDescription: string;
-    previewCard: CardData;
+    effectDetails: Record<string, unknown>;
   }[],
 ): TransfigurationCandidate[] {
   const deckByEntryId = new Map(deck.map((entry) => [entry.entryId, entry]));
-  const candidates: TransfigurationCandidate[] = [];
-  for (const runtimeOffer of offers) {
-    const entry = deckByEntryId.get(runtimeOffer.entryId);
+  const byEntryId = new Map<string, TransfigurationCandidate>();
+  const order: string[] = [];
+  for (const offer of offers) {
+    const entry = deckByEntryId.get(offer.entryId);
     if (entry === undefined || entry.transfiguration !== null) continue;
     const card = cardDatabase.get(entry.cardNumber);
     if (!card) continue;
-    candidates.push({
-      entry,
-      card,
-      offer: {
-        type: runtimeOffer.type,
-        description: runtimeOffer.effectDescription,
-        previewCard: runtimeOffer.previewCard,
-      },
+    let candidate = byEntryId.get(offer.entryId);
+    if (candidate === undefined) {
+      candidate = { entry, card, forms: [] };
+      byEntryId.set(offer.entryId, candidate);
+      order.push(offer.entryId);
+    }
+    candidate.forms.push({
+      type: offer.type,
+      effectDescription: offer.effectDescription,
+      effectDetails: offer.effectDetails,
     });
   }
-  return candidates;
+  return order
+    .map((entryId) => byEntryId.get(entryId))
+    .filter((candidate): candidate is TransfigurationCandidate =>
+      candidate !== undefined && candidate.forms.length > 0,
+    );
+}
+
+/** A deck card that already carries a transfiguration (shown dimmed at home). */
+interface ReforgedTile {
+  entryId: string;
+  card: CardData;
+  type: TransfigurationType;
 }
 
 /**
  * The Transfiguration site as an immersive, full-bleed scene. Durgan
- * Forgehammer (the shared {@link SiteGuide}) offers to reforge a card over the
- * dimmed dreamscape. The surface mirrors the Purge and Duplication screens: no
- * heading (the guide's bubble carries the narration), a centered row of
- * before -> after card pairs the player accepts one of, and a red close button
- * in the top-right corner to leave. When enhanced, the player first picks any
- * untransfigured card from a deck grid and then reviews its single preview.
+ * Forgehammer (the shared {@link SiteGuide}) reforges one of the player's cards
+ * over the dimmed dreamscape, in the deck-browser surface family shared with
+ * Purge and Duplication. The flow is two calm steps:
+ *
+ *  1. PICK — choose a card (a small drawn hand, or the whole deck at Durgan's
+ *     enhanced home forge, where already-reforged cards show dimmed).
+ *  2. FORGE — choose one of the card's eligible forms; the reforged card
+ *     previews live with the form's tint and emblem, then "Transfigure it"
+ *     commits it.
  */
 export function TransfigurationSiteScreen({
   site,
 }: TransfigurationSiteScreenProps) {
   const { state, mutations, cardDatabase } = useQuest();
   const { deck } = state;
+  const isHome = site.isEnhanced;
   const runtime = state.siteRuntime[site.id];
   const cardChoiceRuntime =
     runtime !== undefined &&
@@ -88,7 +123,7 @@ export function TransfigurationSiteScreen({
   }, [mutations, runtime, site.id]);
 
   useEffect(() => {
-    // Log once per visit, on first mount.
+    // Log once per visit, on first mount, for behaviour reconstruction.
     logEvent("site_entered", {
       siteType: site.type,
       isEnhanced: site.isEnhanced,
@@ -114,71 +149,116 @@ export function TransfigurationSiteScreen({
           ),
     [cardChoiceRuntime, cardDatabase, deck],
   );
-  const acceptedEntryIds = useMemo(
-    () => new Set(cardChoiceRuntime?.acceptedEntryIds ?? []),
-    [cardChoiceRuntime],
+
+  // At the home forge, deck cards already reforged on earlier visits show as
+  // dimmed, unpickable tiles alongside the eligible picks.
+  const reforgedTiles = useMemo<ReforgedTile[]>(() => {
+    if (!isHome) return [];
+    const tiles: ReforgedTile[] = [];
+    for (const entry of deck) {
+      if (entry.transfiguration === null) continue;
+      const card = cardDatabase.get(entry.cardNumber);
+      if (!card) continue;
+      tiles.push({
+        entryId: entry.entryId,
+        card,
+        type: entry.transfiguration,
+      });
+    }
+    return tiles;
+  }, [isHome, deck, cardDatabase]);
+
+  const alreadyAccepted =
+    (cardChoiceRuntime?.acceptedEntryIds.length ?? 0) > 0;
+
+  // Two-step flow: pick a card, then choose and forge a form.
+  const [pickedEntryId, setPickedEntryId] = useState<string | null>(null);
+  const [formType, setFormType] = useState<TransfigurationType | null>(null);
+  const [forging, setForging] = useState(false);
+
+  const picked = useMemo(
+    () => candidates.find((c) => c.entry.entryId === pickedEntryId) ?? null,
+    [candidates, pickedEntryId],
+  );
+  const activeForm = useMemo(
+    () => picked?.forms.find((f) => f.type === formType) ?? null,
+    [picked, formType],
   );
 
-  // Enhanced mode: pick from full deck.
-  const [enhancedPickedEntry, setEnhancedPickedEntry] =
-    useState<DeckEntry | null>(null);
-  const [enhancedOffer, setEnhancedOffer] =
-    useState<TransfigurationOffer | null>(null);
-  const [enhancedAccepted, setEnhancedAccepted] = useState(false);
-
-  const handleAccept = useCallback(
-    (candidate: TransfigurationCandidate) => {
-      if (acceptedEntryIds.size > 0) return;
-      mutations.acceptTransfigurationChoice(
-        site.id,
-        candidate.entry.entryId,
-        candidate.offer.type,
-        candidate.offer.description,
-        transfigurationEffectDetails(candidate.offer, candidate.card),
-      );
-    },
-    [mutations, acceptedEntryIds.size, site.id],
-  );
-
-  const handleEnhancedPick = useCallback(
-    (entry: DeckEntry) => {
-      const candidate = candidates.find(
-        (option) => option.entry.entryId === entry.entryId,
-      );
-      if (candidate === undefined) return;
-      setEnhancedPickedEntry(candidate.entry);
-      setEnhancedOffer(candidate.offer);
-    },
-    [candidates],
-  );
-
-  const handleEnhancedAccept = useCallback(() => {
-    if (!enhancedPickedEntry || !enhancedOffer) return;
-    const card = cardDatabase.get(enhancedPickedEntry.cardNumber);
-    if (!card) return;
-    mutations.acceptTransfigurationChoice(
-      site.id,
-      enhancedPickedEntry.entryId,
-      enhancedOffer.type,
-      enhancedOffer.description,
-      transfigurationEffectDetails(enhancedOffer, card),
-    );
-    setEnhancedAccepted(true);
-  }, [enhancedPickedEntry, enhancedOffer, mutations, cardDatabase, site.id]);
-
-  const handleEnhancedReject = useCallback(() => {
-    setEnhancedPickedEntry(null);
-    setEnhancedOffer(null);
+  const pick = useCallback((candidate: TransfigurationCandidate) => {
+    setPickedEntryId(candidate.entry.entryId);
+    // Preview the first eligible form immediately.
+    setFormType(candidate.forms[0]?.type ?? null);
   }, []);
 
+  const back = useCallback(() => {
+    if (forging) return;
+    setPickedEntryId(null);
+    setFormType(null);
+  }, [forging]);
+
+  const confirm = useCallback(() => {
+    if (picked === null || activeForm === null || forging || alreadyAccepted) {
+      return;
+    }
+    setForging(true);
+
+    logEvent("transfiguration_completed", {
+      siteId: site.id,
+      entryId: picked.entry.entryId,
+      cardNumber: picked.entry.cardNumber,
+      transfigurationType: activeForm.type,
+      effectDescription: activeForm.effectDescription,
+      effectDetails: activeForm.effectDetails,
+      offeredForms: picked.forms.map((f) => f.type),
+      isEnhanced: site.isEnhanced,
+      currentDreamscape: state.currentDreamscape,
+      completionLevel: state.completionLevel,
+    });
+
+    // Let the forge flash play, then commit; the mutation returns to the map.
+    window.setTimeout(() => {
+      mutations.acceptTransfigurationChoice(
+        site.id,
+        picked.entry.entryId,
+        activeForm.type,
+        activeForm.effectDescription,
+        activeForm.effectDetails,
+      );
+    }, FORGE_FLASH_MS);
+  }, [
+    picked,
+    activeForm,
+    forging,
+    alreadyAccepted,
+    mutations,
+    site.id,
+    site.isEnhanced,
+    state.currentDreamscape,
+    state.completionLevel,
+  ]);
+
   const handleClose = useCallback(() => {
+    if (forging) return;
+    logEvent("site_completed", {
+      siteType: "Transfiguration",
+      outcome: "skipped",
+    });
     mutations.completeSite(site.id, "transfiguration_skipped");
-  }, [mutations, site.id]);
+  }, [forging, mutations, site.id]);
+
+  const tint = activeForm
+    ? TRANSFIGURATION_COLORS[activeForm.type]
+    : "#a855f7";
 
   const guide = (
     <>
       <SiteGuide siteType="Transfiguration" isEnhanced={site.isEnhanced} />
-      <SiteCloseButton onClose={handleClose} testId="transfiguration-close" />
+      <SiteCloseButton
+        onClose={handleClose}
+        testId="transfiguration-close"
+        disabled={forging}
+      />
     </>
   );
 
@@ -194,174 +274,187 @@ export function TransfigurationSiteScreen({
     );
   }
 
-  // Enhanced mode: full-deck browser for picking, then a single preview.
-  if (site.isEnhanced) {
-    return (
-      <div
-        className={`transfiguration-site${mounted ? " mounted" : ""}`}
-        data-testid="transfiguration-site-screen"
-      >
-        <div className="tf-summary" data-transfiguration-enhanced="true">
-          <span className="tf-summary-star" aria-hidden="true">
-            {"⭐"}
-          </span>
-          {enhancedPickedEntry
-            ? "Review the reforging below."
-            : "Enhanced — choose any card to reforge."}
-        </div>
+  const inForge = picked !== null;
+  const cardWidth = isHome ? HOME_CARD_WIDTH : STANDARD_CARD_WIDTH;
 
-        {!enhancedPickedEntry && (
-          <div className="tf-deck">
-            {candidates.map((candidate) => (
-              <div
-                key={candidate.entry.entryId}
-                className="tf-slot"
-                onClick={() => handleEnhancedPick(candidate.entry)}
-              >
-                <CardDisplay card={candidate.card} />
-              </div>
-            ))}
-          </div>
-        )}
-
-        {enhancedPickedEntry && enhancedOffer && !enhancedAccepted && (
-          <EnhancedPreview
-            entry={enhancedPickedEntry}
-            offer={enhancedOffer}
-            cardDatabase={cardDatabase}
-            onAccept={handleEnhancedAccept}
-            onReject={handleEnhancedReject}
-          />
-        )}
-
-        {enhancedAccepted && (
-          <p className="tf-status" style={{ color: "#10b981" }}>
-            The card is reforged.
-          </p>
-        )}
-
-        {guide}
-      </div>
-    );
-  }
-
-  // Normal mode: a row of fixed candidate reforgings.
   return (
     <div
-      className={`transfiguration-site${mounted ? " mounted" : ""}`}
+      className={`transfiguration-site${mounted ? " mounted" : ""}${forging ? " forging" : ""}`}
+      style={{ "--tf-tint": tint } as CSSProperties}
       data-testid="transfiguration-site-screen"
     >
-      {candidates.length === 0 ? (
-        <p className="tf-status">No eligible cards to reforge.</p>
-      ) : (
-        <div className="tf-row">
-          {candidates.map((candidate, index) => {
-            const isAccepted = acceptedEntryIds.has(candidate.entry.entryId);
-            const color = TRANSFIGURATION_COLORS[candidate.offer.type];
-            const preview = buildTransfigurationDisplay(
-              candidate.card,
-              candidate.offer.type,
-            );
-            return (
-              <div
-                key={candidate.entry.entryId}
-                className="tf-col"
-                style={
-                  { "--i": index, "--tf-accent": color } as CSSProperties
-                }
-              >
-                <span className="tf-type">{candidate.offer.type}</span>
-
-                <div className="tf-preview-card">
-                  <CardDisplay
-                    card={preview.card}
-                    selected={true}
-                    selectionColor={color}
-                    transfiguration={preview.display}
-                  />
-                </div>
-
-                <p className="tf-desc">{candidate.offer.description}</p>
-
-                {isAccepted ? (
-                  <div className="tf-state applied">Reforged</div>
-                ) : acceptedEntryIds.size > 0 ? (
-                  <div className="tf-state unavailable">Unavailable</div>
-                ) : (
-                  <button
-                    type="button"
-                    className="tf-accept"
-                    onClick={() => handleAccept(candidate)}
-                  >
-                    Accept {candidate.offer.type}
-                  </button>
-                )}
-              </div>
-            );
-          })}
+      <div className="tf-stage">
+        <div className="tf-head">
+          <div className="tf-eyebrow">SITE · TRANSFIGURATION</div>
+          <div className="tf-sub">
+            {inForge
+              ? "Choose its new form."
+              : isHome
+                ? "Pick any card to reforge."
+                : "Choose a card to reforge."}
+          </div>
         </div>
-      )}
+
+        {!inForge ? (
+          candidates.length === 0 && reforgedTiles.length === 0 ? (
+            <p className="tf-status">No eligible cards to reforge.</p>
+          ) : (
+            <div
+              className={`tf-deck ${isHome ? "is-home" : "is-standard"}`}
+              style={{ "--tf-cardw": `${cardWidth}px` } as CSSProperties}
+            >
+              {candidates.map((candidate, index) => (
+                <div
+                  key={candidate.entry.entryId}
+                  className="tf-slot"
+                  style={{ "--i": index } as CSSProperties}
+                >
+                  <div
+                    className="tf-pick-card"
+                    role="button"
+                    tabIndex={0}
+                    aria-label={`Reforge ${candidate.card.name}`}
+                    data-transfiguration-entry={candidate.entry.entryId}
+                    onClick={() => pick(candidate)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        pick(candidate);
+                      }
+                    }}
+                  >
+                    <CardDisplay card={candidate.card} />
+                  </div>
+                </div>
+              ))}
+
+              {reforgedTiles.map((tile, index) => (
+                <div
+                  key={`done-${tile.entryId}`}
+                  className="tf-slot is-done"
+                  style={
+                    { "--i": candidates.length + index } as CSSProperties
+                  }
+                >
+                  <div
+                    className="tf-done-tag"
+                    style={
+                      {
+                        "--tf-tint": TRANSFIGURATION_COLORS[tile.type],
+                      } as CSSProperties
+                    }
+                  >
+                    <i
+                      className={`bxf ${TRANSFIGURATION_ICONS[tile.type]}`}
+                      aria-hidden="true"
+                    />
+                    Reforged
+                  </div>
+                  <div className="tf-pick-card is-done">
+                    <CardDisplay card={tile.card} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )
+        ) : (
+          <>
+            <div className="tf-forge">
+              <div className="tf-preview">
+                <ForgePreview card={picked.card} form={activeForm} />
+              </div>
+
+              <div className="tf-options">
+                {picked.forms.map((form) => {
+                  const active = form.type === formType;
+                  return (
+                    <button
+                      key={form.type}
+                      type="button"
+                      className={`tf-opt${active ? " active" : ""}`}
+                      style={
+                        {
+                          "--tf-otint": TRANSFIGURATION_COLORS[form.type],
+                        } as CSSProperties
+                      }
+                      aria-pressed={active}
+                      onClick={() => setFormType(form.type)}
+                    >
+                      <span className="tf-opt-ico">
+                        <i
+                          className={`bxf ${TRANSFIGURATION_ICONS[form.type]}`}
+                          aria-hidden="true"
+                        />
+                      </span>
+                      <span className="tf-opt-body">
+                        <span className="tf-opt-name">{form.type}</span>
+                        <span className="tf-opt-desc">
+                          {form.effectDescription}
+                        </span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div className="tf-foot">
+              <button type="button" className="tf-back" onClick={back}>
+                <i className="bx bx-chevron-left" aria-hidden="true" /> Back
+              </button>
+              <div className="tf-foot-spacer" />
+              <button
+                type="button"
+                className="tf-forge-btn"
+                data-testid="transfiguration-confirm"
+                disabled={activeForm === null || forging || alreadyAccepted}
+                onClick={confirm}
+              >
+                <i className="bxf bx-wrench" aria-hidden="true" />
+                {forging ? "Reforging..." : "Transfigure it"}
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* collection target, bottom-right — where the reforged card lands. */}
+      <div className="tf-tray" aria-hidden="true">
+        <i className="bxf bx-layers" />
+      </div>
 
       {guide}
     </div>
   );
 }
 
-/** Renders the enhanced mode preview for a single picked card. */
-function EnhancedPreview({
-  entry,
-  offer,
-  cardDatabase,
-  onAccept,
-  onReject,
+/** The reforged-card preview: the picked card painted with the chosen form. */
+function ForgePreview({
+  card,
+  form,
 }: {
-  entry: DeckEntry;
-  offer: TransfigurationOffer;
-  cardDatabase: Map<number, CardData>;
-  onAccept: () => void;
-  onReject: () => void;
+  card: CardData;
+  form: FormOffer | null;
 }) {
-  const card = cardDatabase.get(entry.cardNumber);
-  if (!card) return null;
-
-  const color = TRANSFIGURATION_COLORS[offer.type];
-  const preview = buildTransfigurationDisplay(card, offer.type);
+  const preview = useMemo(
+    () => (form ? buildTransfigurationDisplay(card, form.type) : null),
+    [card, form],
+  );
+  const color = form ? TRANSFIGURATION_COLORS[form.type] : "#a855f7";
 
   return (
-    <div
-      className="tf-preview"
-      style={{ "--tf-accent": color } as CSSProperties}
-    >
-      <div className="tf-card">
-        <CardDisplay card={card} />
-      </div>
-
-      <div className="tf-arrow">
-        <span className="tf-arrow-glyph" aria-hidden="true">
-          {"↓"}
-        </span>
-        <span className="tf-type">{offer.type}</span>
-      </div>
-
-      <p className="tf-desc">{offer.description}</p>
-
-      <div className="tf-preview-card">
+    <div className="tf-preview-card">
+      <div className="tf-flash" aria-hidden="true" />
+      {preview ? (
         <CardDisplay
           card={preview.card}
           selected={true}
           selectionColor={color}
           transfiguration={preview.display}
         />
-      </div>
-
-      <div className="tf-preview-actions">
-        <button type="button" className="tf-accept" onClick={onAccept}>
-          Accept
-        </button>
-        <button type="button" className="tf-reject" onClick={onReject}>
-          Reject
-        </button>
-      </div>
+      ) : (
+        <CardDisplay card={card} />
+      )}
     </div>
   );
 }

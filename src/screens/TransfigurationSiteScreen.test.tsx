@@ -37,17 +37,19 @@ vi.mock("../components/CardDisplay", () => ({
 }));
 
 vi.mock("../transfiguration/transfiguration-logic", () => ({
-  assignTransfiguration: (card: CardData) => ({
-    type: "Empowered",
-    description: "Empowered test effect",
-    previewCard: card,
-  }),
   TRANSFIGURATION_COLORS: {
     Empowered: "#10b981",
     Amplified: "#f59e0b",
     Kindled: "#ef4444",
     Inspired: "#3b82f6",
     Enduring: "#a16207",
+  },
+  TRANSFIGURATION_ICONS: {
+    Empowered: "bx-bolt",
+    Amplified: "bx-trending-up",
+    Kindled: "bx-flame",
+    Inspired: "bx-brain",
+    Enduring: "bx-infinite",
   },
   buildTransfigurationDisplay: (card: CardData, type: string) => ({
     card,
@@ -59,7 +61,6 @@ vi.mock("../transfiguration/transfiguration-logic", () => ({
       sparkChanged: false,
     },
   }),
-  transfigurationEffectDetails: () => ({ test: true }),
 }));
 
 function makeMutations(): QuestMutations {
@@ -251,23 +252,43 @@ function mount(element: ReactElement): { container: HTMLDivElement; root: Root }
   return { container, root };
 }
 
-function clickButton(container: HTMLElement, label: string): void {
-  const button = Array.from(container.querySelectorAll("button")).find(
-    (candidate) => candidate.textContent?.trim() === label,
+/**
+ * Picks the only candidate card, then confirms the forge and advances past the
+ * flash animation so the mutation commits. The pick lives on the card wrapper
+ * (not the mocked CardDisplay), so the wrapper carries the click.
+ */
+function pickFirstAndConfirm(container: HTMLElement): void {
+  const pick = container.querySelector<HTMLElement>(
+    "[data-transfiguration-entry]",
   );
-  if (button === undefined) {
-    throw new Error(`Missing button ${label}`);
+  if (pick === null) {
+    throw new Error("Missing transfiguration candidate");
   }
   act(() => {
-    button.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    pick.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  });
+
+  const confirm = container.querySelector<HTMLButtonElement>(
+    "[data-testid='transfiguration-confirm']",
+  );
+  if (confirm === null) {
+    throw new Error("Missing transfigure confirm button");
+  }
+  act(() => {
+    confirm.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  });
+  act(() => {
+    vi.runAllTimers();
   });
 }
 
 beforeEach(() => {
   vi.clearAllMocks();
+  vi.useFakeTimers();
 });
 
 afterEach(() => {
+  vi.useRealTimers();
   document.body.innerHTML = "";
 });
 
@@ -352,14 +373,14 @@ describe("TransfigurationSiteScreen", () => {
     });
   });
 
-  it("accepts a shared card choice through the composed mutation", () => {
+  it("accepts the chosen form through the composed mutation", () => {
     const mutations = makeMutations();
     setQuestContext(makeState(), mutations);
     const { container, root } = mount(
       <TransfigurationSiteScreen site={makeSite()} />,
     );
 
-    clickButton(container, "Accept Empowered");
+    pickFirstAndConfirm(container);
 
     expect(mutations.acceptTransfigurationChoice).toHaveBeenCalledWith(
       "site-1",

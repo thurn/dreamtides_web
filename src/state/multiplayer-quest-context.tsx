@@ -81,6 +81,7 @@ import {
 import { weightedSample } from "../draft/pool/rng";
 import {
   assignTransfiguration,
+  offeredTransfigurationForms,
   transfigurationEffectDetails,
 } from "../transfiguration/transfiguration-logic";
 import type { CardData } from "../types/cards";
@@ -610,17 +611,19 @@ function buildCardChoiceRuntime({
     if (card === undefined) {
       continue;
     }
-    const offer = assignTransfiguration(card, entry.transfiguration);
-    if (offer === null) {
-      continue;
+    // Offer every eligible form so the player chooses which one to forge. The
+    // offers are keyed by `entryId`, with one row per form; the screen groups
+    // them back into per-card form lists, and the accept mutation validates the
+    // chosen (entryId, type) pair against this list.
+    for (const offer of offeredTransfigurationForms(card, entry.transfiguration)) {
+      transfigurationOffers.push({
+        entryId,
+        type: offer.type,
+        effectDescription: offer.description,
+        effectDetails: transfigurationEffectDetails(offer, card),
+        previewCard: offer.previewCard,
+      });
     }
-    transfigurationOffers.push({
-      entryId,
-      type: offer.type,
-      effectDescription: offer.description,
-      effectDetails: transfigurationEffectDetails(offer, card),
-      previewCard: offer.previewCard,
-    });
   }
 
   return {
@@ -2593,12 +2596,13 @@ export function MultiplayerQuestProvider({
           if (entry === undefined || entry.transfiguration !== null) {
             return room;
           }
+          // Several forms may be offered for one entry; match the specific
+          // (entryId, type) the player chose, then validate its payload.
           const offered = runtime.transfigurationOffers.find(
-            (offer) => offer.entryId === entryId,
+            (offer) => offer.entryId === entryId && offer.type === type,
           );
           if (
             offered === undefined ||
-            offered.type !== type ||
             offered.effectDescription !== effectDescription ||
             !effectDetailsEqual(offered.effectDetails, effectDetails)
           ) {

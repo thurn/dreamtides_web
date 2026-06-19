@@ -1,10 +1,15 @@
 /*
- * Transfiguration site screen. Durgan Forgehammer (the shared SiteGuide) offers
- * to reforge a card over the dimmed dreamscape scene (supplied by the shared
- * site scene backdrop). The composition mirrors the Purge and Duplication
- * surfaces: an optional frosted summary pill, a centered row of before -> after
- * card pairs (or, when enhanced, a deck grid to pick any card), and a red close
- * button in the top-right corner to leave. All rules are scoped under
+ * Transfiguration site screen. Durgan Forgehammer (the shared SiteGuide) reforges
+ * one of the player's cards over the dimmed dreamscape scene (supplied by the
+ * shared site scene backdrop). The surface belongs to the deck-browser family
+ * shared with Purge and Duplication and runs in two calm steps:
+ *   1. PICK   — a header line, then a centered hand (or the full deck at the
+ *               home forge), with already-reforged cards shown dimmed.
+ *   2. FORGE  — the picked card previews live on the left while a column of
+ *               tinted form buttons on the right chooses its new shape; a footer
+ *               carries Back and the "Transfigure it" commit button.
+ * The active form recolors the surface through `--tf-tint`. A red close button
+ * sits in the top-right corner to leave. All rules are scoped under
  * `.transfiguration-site`.
  */
 .transfiguration-site {
@@ -15,205 +20,372 @@
   align-items: center;
   justify-content: center;
   gap: 24px;
-  padding: 40px 24px 96px;
-  overflow-y: auto;
+  padding: 40px 24px 104px;
+  overflow: hidden auto;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color: #e2e8f0;
   -webkit-font-smoothing: antialiased;
+  /* recolored per chosen form; violet until a form is active */
+  --tf-tint: #a855f7;
 }
 
-/* ---- Summary pill (enhanced marker / pick hint) ---- */
-.transfiguration-site .tf-summary {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 9px 18px;
-  border-radius: 999px;
-  background: rgba(20, 15, 33, 0.62);
-  border: 1px solid rgba(124, 58, 237, 0.28);
-  backdrop-filter: blur(10px);
-  font-size: 13px;
-  color: #c4b5fd;
-  z-index: 6;
-}
-.transfiguration-site .tf-summary .tf-summary-star {
-  color: #c084fc;
-}
-
-/* ---- Option row ---- */
-.transfiguration-site .tf-row {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  justify-content: center;
-  gap: 26px;
-  z-index: 6;
-}
-
-.transfiguration-site .tf-col {
+/* ---- Stage ---- */
+.transfiguration-site .tf-stage {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 12px;
-  width: 250px;
-  padding: 16px 16px 18px;
-  border-radius: 18px;
-  background: rgba(20, 15, 33, 0.62);
-  border: 1px solid var(--tf-accent, rgba(124, 58, 237, 0.22));
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  transform: translateY(26px);
-  transition:
-    opacity 0.5s ease,
-    transform 0.55s cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.transfiguration-site.mounted .tf-col {
-  opacity: 1;
-  transform: translateY(0);
-  transition-delay: calc(var(--i) * 95ms);
-}
-
-.transfiguration-site .tf-card {
+  gap: 22px;
   width: 100%;
+  max-width: 1120px;
+  z-index: 6;
 }
 
-/* ---- Becomes / arrow indicator ---- */
-.transfiguration-site .tf-arrow {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  color: var(--tf-accent);
+/* ---- Header line: eyebrow + instruction ---- */
+.transfiguration-site .tf-head {
+  text-align: center;
 }
-.transfiguration-site .tf-arrow-glyph {
-  font-size: 22px;
-  line-height: 1;
-}
-.transfiguration-site .tf-type {
-  padding: 2px 12px;
-  border-radius: 999px;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
+.transfiguration-site .tf-eyebrow {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+  letter-spacing: 0.26em;
   text-transform: uppercase;
-  background: color-mix(in srgb, var(--tf-accent) 18%, transparent);
-  border: 1px solid color-mix(in srgb, var(--tf-accent) 45%, transparent);
+  color: #c084fc;
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.6);
 }
-.transfiguration-site .tf-desc {
-  margin: 0;
-  font-family: "Fira Sans Condensed", "Inter", sans-serif;
-  font-size: 13px;
-  line-height: 1.34;
-  color: #94a3b8;
-  text-align: center;
-  text-wrap: pretty;
-  min-height: 36px;
-}
-.transfiguration-site .tf-preview-card {
-  width: 100%;
-  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--tf-accent) 40%, transparent));
+.transfiguration-site .tf-sub {
+  margin-top: 8px;
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.05;
+  color: rgba(245, 240, 255, 0.96);
+  text-shadow: 0 0 6px rgba(6, 4, 14, 0.85);
 }
 
-/* ---- Accept / state buttons ---- */
-.transfiguration-site .tf-accept {
-  width: 100%;
-  padding: 11px 0;
-  border: 0;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 700;
-  color: #fff;
-  background: linear-gradient(
-    135deg,
-    var(--tf-accent) 0%,
-    color-mix(in srgb, var(--tf-accent) 80%, #000) 100%
-  );
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
-  transition:
-    transform 0.12s ease,
-    filter 0.14s ease;
-}
-.transfiguration-site .tf-accept:hover {
-  filter: brightness(1.08);
-}
-.transfiguration-site .tf-accept:active {
-  transform: scale(0.97);
-}
-.transfiguration-site .tf-state {
-  width: 100%;
-  padding: 11px 0;
-  border-radius: 8px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 700;
-}
-.transfiguration-site .tf-state.applied {
-  background: color-mix(in srgb, var(--tf-accent) 20%, transparent);
-  border: 1px solid color-mix(in srgb, var(--tf-accent) 40%, transparent);
-  color: var(--tf-accent);
-}
-.transfiguration-site .tf-state.unavailable {
-  background: rgba(75, 85, 99, 0.25);
-  border: 1px solid rgba(107, 114, 128, 0.4);
-  color: #9ca3af;
-}
-
-/* ---- Enhanced deck picker ---- */
+/* ============================================================
+ * STEP 1 — PICK. A centered hand, or the full deck in a scroll grid.
+ * ============================================================ */
 .transfiguration-site .tf-deck {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
-  gap: 14px;
+  justify-content: center;
+  gap: 32px 24px;
   width: 100%;
-  max-width: 920px;
-  z-index: 6;
 }
-.transfiguration-site .tf-slot {
-  cursor: pointer;
-  transition: transform 0.15s ease;
+.transfiguration-site .tf-deck.is-standard {
+  grid-template-columns: repeat(auto-fit, var(--tf-cardw, 210px));
+  max-width: 980px;
 }
-.transfiguration-site .tf-slot:hover {
-  transform: translateY(-6px);
+.transfiguration-site .tf-deck.is-home {
+  grid-template-columns: repeat(auto-fill, var(--tf-cardw, 158px));
+  gap: 30px 22px;
+  max-height: 70vh;
+  overflow-y: auto;
+  padding: 6px 12px 14px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(168, 85, 247, 0.5) transparent;
+}
+.transfiguration-site .tf-deck.is-home::-webkit-scrollbar {
+  width: 9px;
+}
+.transfiguration-site .tf-deck.is-home::-webkit-scrollbar-thumb {
+  background: rgba(168, 85, 247, 0.42);
+  border-radius: 999px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
 }
 
-/* ---- Enhanced single preview ---- */
-.transfiguration-site .tf-preview {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 14px;
-  width: 280px;
-  padding: 18px;
-  border-radius: 18px;
-  background: rgba(20, 15, 33, 0.62);
-  border: 1px solid var(--tf-accent, rgba(124, 58, 237, 0.22));
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
-  z-index: 6;
+.transfiguration-site .tf-slot {
+  position: relative;
+  justify-self: center;
+  width: var(--tf-cardw, 210px);
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1),
+    filter 0.5s ease;
 }
-.transfiguration-site .tf-preview-actions {
+.transfiguration-site.mounted .tf-slot {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: calc(var(--i) * 38ms);
+}
+
+.transfiguration-site .tf-pick-card {
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  transition: transform 0.14s ease;
+}
+.transfiguration-site .tf-pick-card:hover,
+.transfiguration-site .tf-pick-card:focus-visible {
+  transform: translateY(-7px);
+}
+
+/* already-reforged cards at the home forge: dimmed and unpickable */
+.transfiguration-site .tf-slot.is-done {
+  opacity: 0.5;
+  filter: saturate(0.7);
+}
+.transfiguration-site.mounted .tf-slot.is-done {
+  opacity: 0.5;
+}
+.transfiguration-site .tf-pick-card.is-done {
+  cursor: default;
+}
+.transfiguration-site .tf-pick-card.is-done:hover {
+  transform: none;
+}
+.transfiguration-site .tf-done-tag {
+  position: absolute;
+  left: 50%;
+  top: -12px;
+  transform: translateX(-50%);
+  z-index: 5;
+  pointer-events: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 11px;
+  white-space: nowrap;
+  background: rgba(14, 9, 26, 0.92);
+  color: #d9c8ff;
+  border: 1px solid color-mix(in srgb, var(--tf-tint) 55%, transparent);
+}
+.transfiguration-site .tf-done-tag i {
+  font-size: 0.95em;
+  color: var(--tf-tint);
+}
+
+/* ============================================================
+ * STEP 2 — FORGE. Live preview on the left, form buttons on the right.
+ * ============================================================ */
+.transfiguration-site .tf-forge {
   display: flex;
-  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  gap: 52px;
+  flex-wrap: wrap;
   width: 100%;
 }
-.transfiguration-site .tf-preview-actions .tf-accept {
-  flex: 1;
+
+/* --- preview column --- */
+.transfiguration-site .tf-preview {
+  flex: 0 0 auto;
+  width: 280px;
 }
-.transfiguration-site .tf-reject {
-  flex: 1;
-  padding: 11px 0;
-  border: 1px solid rgba(107, 114, 128, 0.4);
-  border-radius: 8px;
+.transfiguration-site .tf-preview-card {
+  position: relative;
+  transition: transform 0.26s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.transfiguration-site.forging .tf-preview-card {
+  transform: scale(1.06);
+}
+
+/* the forge flash on confirm — a tinted bloom behind the card */
+.transfiguration-site .tf-flash {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(0.4);
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 5;
+  opacity: 0;
+  background: radial-gradient(
+    circle,
+    color-mix(in srgb, var(--tf-tint) 75%, transparent) 0%,
+    transparent 65%
+  );
+}
+.transfiguration-site.forging .tf-flash {
+  animation: tf-flash-anim 0.62s ease-out forwards;
+}
+@keyframes tf-flash-anim {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.4);
+  }
+  40% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.5);
+  }
+}
+
+/* --- options column: tinted icon + name + delta --- */
+.transfiguration-site .tf-options {
+  flex: 0 0 auto;
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.transfiguration-site .tf-opt {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 12px;
   cursor: pointer;
-  font-size: 14px;
-  font-weight: 700;
-  color: #9ca3af;
-  background: rgba(107, 114, 128, 0.2);
-  transition: filter 0.14s ease;
+  text-align: left;
+  color: inherit;
+  background: rgba(18, 13, 32, 0.62);
+  border: 1px solid rgba(124, 58, 237, 0.28);
+  backdrop-filter: blur(8px);
+  transition:
+    background 0.14s ease,
+    border-color 0.14s ease,
+    transform 0.12s ease,
+    box-shadow 0.16s ease;
 }
-.transfiguration-site .tf-reject:hover {
-  filter: brightness(1.12);
+.transfiguration-site .tf-opt:hover {
+  background: rgba(28, 20, 48, 0.72);
+  transform: translateX(2px);
+}
+.transfiguration-site .tf-opt.active {
+  background: linear-gradient(
+    100deg,
+    color-mix(in srgb, var(--tf-otint) 22%, rgba(20, 14, 34, 0.8)),
+    rgba(20, 14, 34, 0.66)
+  );
+  border-color: color-mix(in srgb, var(--tf-otint) 70%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--tf-otint) 45%, transparent),
+    0 8px 22px rgba(0, 0, 0, 0.45),
+    0 0 22px color-mix(in srgb, var(--tf-otint) 30%, transparent);
+}
+.transfiguration-site .tf-opt-ico {
+  flex: 0 0 auto;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  font-size: 21px;
+  color: #fff;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--tf-otint) 40%, #161020),
+    color-mix(in srgb, var(--tf-otint) 18%, #110b1c)
+  );
+  border: 1px solid color-mix(in srgb, var(--tf-otint) 60%, transparent);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12);
+}
+.transfiguration-site .tf-opt-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+.transfiguration-site .tf-opt-name {
+  font-weight: 700;
+  font-size: 16px;
+  color: #f3edff;
+}
+.transfiguration-site .tf-opt-desc {
+  font-size: 12px;
+  line-height: 1.25;
+  color: #94a3b8;
+  text-wrap: pretty;
+}
+
+/* ---- Footer ---- */
+.transfiguration-site .tf-foot {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: 680px;
+}
+.transfiguration-site .tf-foot-spacer {
+  flex: 1 1 auto;
+}
+.transfiguration-site .tf-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #94a3b8;
+  transition: color 0.14s ease;
+}
+.transfiguration-site .tf-back:hover {
+  color: #e2e8f0;
+}
+.transfiguration-site .tf-back i {
+  font-size: 1.05em;
+}
+.transfiguration-site .tf-forge-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 30px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 17px;
+  color: #fff;
+  border: 1px solid color-mix(in srgb, var(--tf-tint) 60%, transparent);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--tf-tint) 70%, #5a2ed0),
+    color-mix(in srgb, var(--tf-tint) 38%, #3a1c9a)
+  );
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.45),
+    0 0 24px color-mix(in srgb, var(--tf-tint) 34%, transparent),
+    inset 0 1px 0 rgba(255, 255, 255, 0.16);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.14s ease,
+    filter 0.14s ease,
+    opacity 0.14s ease;
+}
+.transfiguration-site .tf-forge-btn:hover:not(:disabled) {
+  filter: brightness(1.1);
+}
+.transfiguration-site .tf-forge-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+.transfiguration-site .tf-forge-btn:disabled {
+  opacity: 0.42;
+  cursor: not-allowed;
+  filter: none;
+}
+.transfiguration-site .tf-forge-btn i {
+  font-size: 1.05em;
+}
+
+/* collection target, bottom-right — the reforged card lands here on confirm */
+.transfiguration-site .tf-tray {
+  position: absolute;
+  right: 34px;
+  bottom: 30px;
+  z-index: 5;
+  width: 66px;
+  height: 66px;
+  border-radius: 16px;
+  border: 1px dashed rgba(168, 85, 247, 0.45);
+  background: rgba(14, 9, 26, 0.5);
+  display: grid;
+  place-items: center;
+  backdrop-filter: blur(6px);
+}
+.transfiguration-site .tf-tray i {
+  color: var(--tf-tint);
+  font-size: 24px;
+  opacity: 0.55;
 }
 
 /* ---- Status line (loading / empty) ---- */
@@ -234,8 +406,12 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .transfiguration-site .tf-col,
-  .transfiguration-site .tf-slot {
+  .transfiguration-site .tf-slot,
+  .transfiguration-site .tf-preview-card,
+  .transfiguration-site .tf-opt {
     transition: none !important;
+  }
+  .transfiguration-site.forging .tf-flash {
+    animation: none;
   }
 }

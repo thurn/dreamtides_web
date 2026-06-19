@@ -520,6 +520,27 @@ function buildOffer(
 }
 
 /**
+ * Every transfiguration form the Transfiguration site offers for a card: one
+ * full offer per eligible form, in the canonical {@link NON_PERFECTED_CHECKS}
+ * order. Perfected is intentionally excluded so the player's choice between the
+ * individual forms stays meaningful — Perfected (which folds in every other
+ * form) would otherwise dominate the list and make the choice moot. Returns an
+ * empty array when the card already carries a transfiguration or no form
+ * applies.
+ */
+export function offeredTransfigurationForms(
+  card: CardData,
+  existingTransfiguration: TransfigurationType | null,
+): TransfigurationOffer[] {
+  if (existingTransfiguration !== null) {
+    return [];
+  }
+  return eligibleNonPerfectedTransfigurations(card).map((type) =>
+    buildOffer(card, type),
+  );
+}
+
+/**
  * Assigns a random eligible transfiguration to a card and returns
  * the complete offer with pre-computed preview and description.
  * Returns null if the card already has a transfiguration or no types
