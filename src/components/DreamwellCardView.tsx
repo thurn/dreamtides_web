@@ -62,31 +62,28 @@ export interface DreamwellCardViewData {
 const ART_SOURCE_BOTTOM_CROP = 21 / 280;
 
 /**
- * Art-extension band tokens, ported from CardView's `ArtLayers`. The crisp art
- * holds down to a seam set just under the text box's top — at the end of the
- * box's top corner-radius curve — and below that seam a blurred, darkened copy of
- * the art feathers in while a dark tint grounds the card's bottom edge to
- * near-black, so the art reads crisply above and slightly under the box's top
- * corner, then fades to a dark base behind and below the box.
+ * Art-extension band tokens, ported from CardView's `ArtLayers`. Below a seam
+ * anchored just under the text box's first line, a blurred, darkened copy of the
+ * art feathers in and a dark tint grounds the card's bottom edge to near-black,
+ * so the art reads crisply above the box, slips a little way under its first
+ * line, then fades to a dark base behind and below the box.
  */
-/**
- * Default distance the crisp art slips under the box top before the dark
- * fadeout, in card-height %. Exposed as the `--dreamwell-art-underlap` CSS
- * variable so it can be tuned without touching code (override it on the card or
- * an ancestor). The default matches the text box's top corner-radius depth — the
- * box's `2cqw` radius is ~3% of the 3:2 card's height — so the art reaches just
- * to the end of that corner curve.
- */
-const ART_UNDERLAP_DEFAULT_PCT = 3;
-/** Card-height % over which the blurred continuation ramps in, starting at the seam. */
-const ART_EXTENSION_FEATHER_BELOW_PCT = 6;
+/** Card-height fraction the seam sits below the measured box top (its first text line). */
+const ART_SAFE_AREA_OVERLAP = 0.05;
+/** Card-height % over which the blurred continuation ramps in, ending at the seam.
+ *  Kept short so the crisp art reaches down to the box and only fades just under
+ *  its first line rather than darkening high above it. */
+const ART_EXTENSION_FEATHER_ABOVE_PCT = 6;
+/** Card-height % over which the dark tint ramps in, ending at the seam. */
+const ART_EXTENSION_TINT_ABOVE_PCT = 4;
 /** Blur radius of the continuation, as a fraction of the rendered card width. */
 const ART_EXTENSION_BLUR_RATIO = 0.06;
 /** Brightness multiplier on the blurred continuation so it never reads lighter than the art. */
 const ART_EXTENSION_BLUR_BRIGHTNESS = 0.6;
 /** Uniform near-black band color: the base behind the art and the tint gradient's color. */
 const ART_BAND_COLOR_CSS = "rgb(16, 16, 19)";
-/** Tint alpha at the bottom edge (nearly solid); zero at the seam so crisp art reaches it. */
+/** Tint alpha at the seam (lets the blurred art read through) and at the bottom edge (nearly solid). */
+const ART_EXTENSION_TINT_SEAM_ALPHA = 0.5;
 const ART_EXTENSION_TINT_EDGE_ALPHA = 0.92;
 /** Band top (card-height %) used until the box is measured; clamps on the measured value. */
 const ART_BAND_DEFAULT_TOP_PCT = 72;
@@ -216,24 +213,19 @@ export function DreamwellCardView({
   const showRulesText = card.renderedText.trim() !== "" || slots?.rulesText != null;
 
   // Resolve the band geometry from the measured box top. The seam — where the
-  // crisp art gives way to the blurred dark band — sits `--dreamwell-art-underlap`
-  // below the box top, so the art holds crisp down to just under the box's top
-  // corner before the blur and tint ramp in below it. The seam is built with
-  // `calc()` from CSS variables (`--dreamwell-box-top` carries the measured box
-  // top) so the underlap stays live-tunable from CSS.
+  // crisp art fully gives way to the blurred dark band — sits a fixed fraction
+  // below the box's first line; the blur and tint ramp up to it from above.
   const bandTopPct =
     boxTopFrac !== null ? boxTopFrac * 100 : ART_BAND_DEFAULT_TOP_PCT;
   const bandTop = Math.min(
     Math.max(bandTopPct, ART_BAND_MIN_TOP_PCT),
     ART_BAND_MAX_TOP_PCT,
   );
-  const boxTopCss = `${bandTop.toFixed(2)}%`;
-  // Fallbacks keep the seam valid even if a consumer unsets a variable: an
-  // invalid `calc()` would void the mask/gradient and blur the whole card.
-  const seamCss = `calc(var(--dreamwell-box-top, ${boxTopCss}) + var(--dreamwell-art-underlap, ${String(ART_UNDERLAP_DEFAULT_PCT)}%))`;
-  const featherEndCss = `calc(${seamCss} + ${String(ART_EXTENSION_FEATHER_BELOW_PCT)}%)`;
-  const featherMask = `linear-gradient(to bottom, rgba(0,0,0,0) ${seamCss}, rgba(0,0,0,1) ${featherEndCss}, rgba(0,0,0,1) 100%)`;
-  const tintGradient = `linear-gradient(to bottom, rgba(16,16,19,0) ${seamCss}, rgba(16,16,19,${String(ART_EXTENSION_TINT_EDGE_ALPHA)}) 100%)`;
+  const seamPct = Math.min(100, bandTop + ART_SAFE_AREA_OVERLAP * 100);
+  const featherStartPct = Math.max(0, seamPct - ART_EXTENSION_FEATHER_ABOVE_PCT);
+  const tintStartPct = Math.max(0, seamPct - ART_EXTENSION_TINT_ABOVE_PCT);
+  const featherMask = `linear-gradient(to bottom, rgba(0,0,0,0) ${featherStartPct.toFixed(2)}%, rgba(0,0,0,1) ${seamPct.toFixed(2)}%, rgba(0,0,0,1) 100%)`;
+  const tintGradient = `linear-gradient(to bottom, rgba(16,16,19,0) ${tintStartPct.toFixed(2)}%, rgba(16,16,19,${String(ART_EXTENSION_TINT_SEAM_ALPHA)}) ${seamPct.toFixed(2)}%, rgba(16,16,19,${String(ART_EXTENSION_TINT_EDGE_ALPHA)}) 100%)`;
   const blurPx = Math.max(2, (widthPx ?? 220) * ART_EXTENSION_BLUR_RATIO);
 
   // Shared placement for the crisp art and its blurred continuation, so the band
@@ -263,13 +255,6 @@ export function DreamwellCardView({
       data-dreamwell-card={card.id}
       className={className}
       style={{
-        // Art-underlap knob (card-height %): how far the crisp art slips under
-        // the text box's top before the dark fadeout. Defaults to the box's top
-        // corner-radius depth; override `--dreamwell-art-underlap` here or on an
-        // ancestor to tune it. `--dreamwell-box-top` is the measured box top the
-        // seam's `calc()` builds on.
-        "--dreamwell-art-underlap": `${String(ART_UNDERLAP_DEFAULT_PCT)}%`,
-        "--dreamwell-box-top": boxTopCss,
         position: "relative",
         width: "100%",
         aspectRatio: "3 / 2",
@@ -284,7 +269,7 @@ export function DreamwellCardView({
         boxShadow: "0 4px 14px rgba(0, 0, 0, 0.55)",
         userSelect: "none",
         ...style,
-      } as CSSProperties}
+      }}
       {...triggerHandlers}
     >
       {/* Dark base behind the band, so any sliver the extended art does not
