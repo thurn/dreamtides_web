@@ -7594,7 +7594,7 @@ art-owned = true
 card-number = 410
 
 [[cards]]
-name = "Cloudmantle Ray"
+name = "Amber Aurelia"
 mtg-name = "Birds of Paradise"
 id = "86fd585b-e9d0-4dc1-bce9-488014b9316d"
 rendered-text = '''
@@ -7609,10 +7609,10 @@ is-fast = false
 is-interrupt = false
 spark = 1
 tags = ["Elves"]
-image-number = 507270340
+image-number = 674166508
 art-owned = false
 card-number = 411
-art = { x = 0.627, y = 0.032, scale = 1.17 }
+art = { x = -0.385, y = 1, scale = 1.47 }
 
 [[cards]]
 name = "Crimson Pilgrimage"
@@ -7709,7 +7709,7 @@ card-number = 416
 art = { x = 0.084, y = 0.032, scale = 1.17 }
 
 [[cards]]
-name = "Skyborne Jellyfish"
+name = "Cloudmantle Ray"
 mtg-name = "Rofellos, Llanowar Emissary"
 id = "0f1ac858-a28a-489b-9dd4-4d28f8f1abf5"
 rendered-text = "▸Dawn: Gain 1● for each allied ≤2● cost character."
@@ -7721,10 +7721,10 @@ is-fast = false
 is-interrupt = false
 spark = 2
 tags = ["Spirit Lord"]
-image-number = 674166508
+image-number = 507270340
 art-owned = false
 card-number = 417
-art = { x = -0.513, y = 1, scale = 1.17 }
+art = { x = 0.741, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Wreckheap Lookout"
