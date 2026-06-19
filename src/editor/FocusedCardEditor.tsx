@@ -237,9 +237,9 @@ const overlayStyle: CSSProperties = {
 
 const panelStyle: CSSProperties = {
   display: "flex",
-  gap: "24px",
+  gap: "28px",
   alignItems: "stretch",
-  maxWidth: "720px",
+  maxWidth: "min(960px, 96vw)",
   width: "100%",
   maxHeight: "calc(100dvh - 48px)",
   padding: "20px",
@@ -723,7 +723,13 @@ export default function FocusedCardEditor({
       }}
     >
       <div style={panelStyle}>
-        <div style={{ flex: "0 0 260px", maxWidth: "260px", alignSelf: "flex-start" }}>
+        <div
+          style={{
+            flex: "0 0 auto",
+            width: "min(440px, 48vw)",
+            alignSelf: "flex-start",
+          }}
+        >
           {renderPreview({
             art,
             imageNumber: effectiveImageNumber,
