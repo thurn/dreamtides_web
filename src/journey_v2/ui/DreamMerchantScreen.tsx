@@ -16,6 +16,7 @@ import {
 import { DreamJourneyMobile } from "./DreamJourneyMobile";
 import { DreamJourneyStage } from "./DreamJourneyStage";
 import { OfferColumn } from "./OfferColumn";
+import { SiteCloseButton } from "../../components/SiteCloseButton";
 
 export interface DreamMerchantScreenProps {
   site: SiteState;
@@ -42,6 +43,10 @@ export interface DreamMerchantScreenProps {
   forcedArchetypeId?: string | null;
   context?: MerchantContext;
   questState?: QuestState;
+  /** The resident guide's name, shown as a caption beside the central figure. */
+  guideName?: string;
+  /** A short greeting line for the guide, shown under the name in the caption. */
+  guideLine?: string | null;
 }
 
 /** Below this viewport width the screen switches to the mobile overview flow. */
@@ -71,6 +76,8 @@ export function DreamMerchantScreen({
   forcedArchetypeId,
   context,
   questState,
+  guideName,
+  guideLine,
 }: DreamMerchantScreenProps) {
   const [forcePanelOpen, setForcePanelOpen] = useState(false);
   const [selectedChoices, setSelectedChoices] = useState<
@@ -206,7 +213,11 @@ export function DreamMerchantScreen({
           selectedChoices={selectedChoices}
           onSelectCandidate={selectCandidate}
           onAccept={acceptOffer}
-          onWalkOn={declineEncounter}
+        />
+        <SiteCloseButton
+          onClose={declineEncounter}
+          testId="merchant-walk-away"
+          label="Walk on"
         />
         {validationMessage !== null && (
           <div
@@ -244,7 +255,8 @@ export function DreamMerchantScreen({
     >
       <DreamJourneyStage
         subtitle={encounter.dialogue.line}
-        onWalkOn={declineEncounter}
+        guideName={guideName}
+        guideLine={guideLine}
         debugControls={debugControls}
         overlay={validationOverlay}
         leftColumn={
@@ -273,6 +285,11 @@ export function DreamMerchantScreen({
             />
           )
         }
+      />
+      <SiteCloseButton
+        onClose={declineEncounter}
+        testId="merchant-walk-away"
+        label="Walk on"
       />
     </div>
   );

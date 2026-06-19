@@ -10,34 +10,17 @@ interface DreamJourneyMobileProps {
   selectedChoices: ReadonlyMap<string, string>;
   onSelectCandidate: (offer: MerchantOffer, candidate: MerchantChoiceCandidate) => void;
   onAccept: (offer: MerchantOffer) => void;
-  onWalkOn: () => void;
 }
 
 const PAGE_BACKGROUND =
   "radial-gradient(125% 92% at 50% 20%, #241b42 0%, #130d29 46%, #080614 100%)";
 
-function WalkOnPill({ onClick }: { onClick: () => void }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      data-testid="merchant-walk-away"
-      className="dj-walk"
-      style={{
-        padding: "8px 14px",
-        fontSize: 15,
-      }}
-    >
-      Walk on
-    </button>
-  );
-}
-
 /**
  * Mobile uses an overview → detail flow with no tab controls. The overview
  * presides the Merchant over two stacked, tappable summary cards; tapping one
- * opens the full offer UI with a full-width accept. "Walk on" stays available
- * throughout, and a quiet "‹ Back" returns from a detail to the choice.
+ * opens the full offer UI with a full-width accept. The shared red close button
+ * (rendered by the screen) leaves the site from anywhere, and a quiet "‹ Back"
+ * returns from a detail to the choice.
  */
 export function DreamJourneyMobile({
   offers,
@@ -46,7 +29,6 @@ export function DreamJourneyMobile({
   selectedChoices,
   onSelectCandidate,
   onAccept,
-  onWalkOn,
 }: DreamJourneyMobileProps) {
   const [openOfferId, setOpenOfferId] = useState<string | null>(null);
   const openOffer = offers.find((offer) => offer.offerId === openOfferId);
@@ -95,7 +77,6 @@ export function DreamJourneyMobile({
           >
             <span aria-hidden="true">‹</span> Back
           </button>
-          <WalkOnPill onClick={onWalkOn} />
         </div>
         <OfferColumn
           offer={openOffer}
@@ -125,10 +106,6 @@ export function DreamJourneyMobile({
       }}
       data-testid="dream-journey-mobile-overview"
     >
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>
-        <WalkOnPill onClick={onWalkOn} />
-      </div>
-
       <div
         style={{
           display: "flex",

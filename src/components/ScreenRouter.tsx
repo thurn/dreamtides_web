@@ -42,6 +42,7 @@ import type { Screen, SiteState } from "../types/quest";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { BattleSiteRoute } from "./BattleSiteRoute";
 import { SiteGuide } from "./SiteGuide";
+import { guideForSiteType } from "../data/dreamscapes";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { SiteSceneBackdrop } from "./SiteSceneBackdrop";
 import type { ReactNode } from "react";
@@ -281,6 +282,27 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
     });
   }, [site.id, site.isEnhanced]);
 
+  // The resident guide (Aldric) is the central figure of this scene. Resolve his
+  // name + a greeting line so the merchant screen can caption him from inside the
+  // scaled composition rather than from a viewport-fixed corner dock.
+  const guide = useMemo(
+    () => guideForSiteType(questContent.guides, "DreamAugury"),
+    [questContent.guides],
+  );
+  const guideLine = useMemo(() => {
+    if (guide === null || guide.dialog.length === 0) return null;
+    return guide.dialog[Math.floor(Math.random() * guide.dialog.length)];
+  }, [guide]);
+
+  useEffect(() => {
+    if (guide === null) return;
+    logEvent("dream_guide_presented", {
+      guideId: guide.id,
+      siteType: "DreamAugury",
+      isEnhanced: site.isEnhanced,
+    });
+  }, [guide, site.isEnhanced]);
+
   const merchantContext = useMemo(
     () =>
       buildMerchantContext({
@@ -446,32 +468,27 @@ function DreamMerchantSiteScreen({ site }: { site: SiteState }) {
   }
 
   return (
-    <>
-      <SiteGuide
-        siteType="DreamAugury"
-        isEnhanced={site.isEnhanced}
-        hidePortrait
-      />
-      <DreamMerchantScreen
-        // Reset the screen's local selection state whenever the encounter
-        // changes (e.g. after a debug reroll regenerates the offers).
-        key={encounterResult.encounter.encounterSignature}
-        site={site}
-        context={merchantContext}
-        questState={state}
-        encounter={encounterResult.encounter}
-        onAcceptOffer={handleAcceptOffer}
-        onDecline={handleDecline}
-        onReroll={handleReroll}
-        onForceArchetype={
-          mutations.forceDreamAuguryArchetype === undefined
-            ? undefined
-            : handleForceArchetype
-        }
-        eligibleArchetypeIds={encounterResult.debug.eligibleArchetypeIds}
-        forcedArchetypeId={merchantContext.forcedArchetypeId ?? null}
-      />
-    </>
+    <DreamMerchantScreen
+      // Reset the screen's local selection state whenever the encounter
+      // changes (e.g. after a debug reroll regenerates the offers).
+      key={encounterResult.encounter.encounterSignature}
+      site={site}
+      context={merchantContext}
+      questState={state}
+      guideName={guide?.name}
+      guideLine={guideLine}
+      encounter={encounterResult.encounter}
+      onAcceptOffer={handleAcceptOffer}
+      onDecline={handleDecline}
+      onReroll={handleReroll}
+      onForceArchetype={
+        mutations.forceDreamAuguryArchetype === undefined
+          ? undefined
+          : handleForceArchetype
+      }
+      eligibleArchetypeIds={encounterResult.debug.eligibleArchetypeIds}
+      forcedArchetypeId={merchantContext.forcedArchetypeId ?? null}
+    />
   );
 }
 

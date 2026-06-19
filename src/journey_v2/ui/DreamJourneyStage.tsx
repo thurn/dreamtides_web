@@ -9,10 +9,17 @@ import {
 interface DreamJourneyStageProps {
   /** The Dream Merchant's per-pairing flavor line, shown under the title. */
   subtitle: string;
-  onWalkOn: () => void;
   leftColumn: ReactNode;
   rightColumn: ReactNode;
-  /** Debug-only controls (reroll / force) pinned below the Walk on pill. */
+  /**
+   * The resident guide's name, shown in the lower-left caption. Aldric is the
+   * central figure of this scene, so the caption labels him from within the
+   * scaled composition rather than from a viewport-fixed corner dock.
+   */
+  guideName?: string;
+  /** A short greeting line for the guide, shown under the name in the caption. */
+  guideLine?: string | null;
+  /** Debug-only controls (reroll / force) pinned to the top-right. */
   debugControls?: ReactNode;
   /** Extra content layered over the canvas (e.g. a validation toast). */
   overlay?: ReactNode;
@@ -43,9 +50,10 @@ const MOTES: readonly Mote[] = [
  */
 export function DreamJourneyStage({
   subtitle,
-  onWalkOn,
   leftColumn,
   rightColumn,
+  guideName,
+  guideLine,
   debugControls,
   overlay,
 }: DreamJourneyStageProps) {
@@ -141,23 +149,55 @@ export function DreamJourneyStage({
           1 CONNECTED
         </div>
 
-        {/* Walk on — the shared de-emphasized text link every dreamscape site
-            uses, pinned to the bottom center clear of the offer columns. */}
-        <button
-          type="button"
-          onClick={onWalkOn}
-          data-testid="merchant-walk-away"
-          className="dj-walk"
-          style={{
-            position: "absolute",
-            bottom: 30,
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 12,
-          }}
-        >
-          Walk on
-        </button>
+        {/* Guide caption — the resident guide's name + greeting, docked to the
+            lower-left of the scaled composition (below the left offer column,
+            clear of the bottom HUD). Aldric is the central figure, so the
+            caption labels him from inside the scene rather than from a
+            viewport-fixed corner that would drift off the composition. */}
+        {guideName !== undefined && (
+          <div
+            data-site-guide-caption=""
+            style={{
+              position: "absolute",
+              left: 54,
+              bottom: 26,
+              zIndex: 6,
+              maxWidth: 320,
+              padding: "14px 18px 16px",
+              borderRadius: "16px 16px 16px 4px",
+              background: "rgba(20,14,34,.82)",
+              border: "1px solid rgba(168,85,247,.45)",
+              backdropFilter: "blur(14px)",
+              boxShadow:
+                "0 14px 34px rgba(0,0,0,.5), 0 0 20px rgba(168,85,247,.15)",
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+                fontSize: 10,
+                letterSpacing: ".22em",
+                textTransform: "uppercase",
+                color: "#c084fc",
+              }}
+            >
+              {guideName}
+            </span>
+            {guideLine != null && guideLine !== "" && (
+              <p
+                style={{
+                  margin: "7px 0 0",
+                  fontSize: 16,
+                  fontWeight: 450,
+                  lineHeight: 1.42,
+                  color: "#f6f6f5",
+                }}
+              >
+                {`“${guideLine}”`}
+              </p>
+            )}
+          </div>
+        )}
 
         {debugControls !== undefined && (
           <div
