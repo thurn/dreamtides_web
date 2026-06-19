@@ -196,6 +196,28 @@ describe("generateSiteComposition", () => {
     }
   });
 
+  it("guarantees a Dream Augury in Layer II (0-indexed layer 1)", () => {
+    for (const dreamscape of NON_STARTER_DREAMSCAPES) {
+      for (const layer of NON_STARTER_LAYERS) {
+        let allHadAugury = true;
+        for (let i = 0; i < 30; i++) {
+          const sites = composeFor(dreamscape, layer);
+          const hasAugury = sites.some((s) => s.type === "DreamAugury");
+          if (layer === 1 && !hasAugury) {
+            allHadAugury = false;
+          }
+          // Augury, when present, is never duplicated.
+          expect(
+            sites.filter((s) => s.type === "DreamAugury").length,
+          ).toBeLessThanOrEqual(1);
+        }
+        if (layer === 1) {
+          expect(allHadAugury).toBe(true);
+        }
+      }
+    }
+  });
+
   it("keeps each non-Draft type to at most one and Draft to at most two", () => {
     for (const dreamscape of NON_STARTER_DREAMSCAPES) {
       for (const layer of NON_STARTER_LAYERS) {
@@ -554,6 +576,45 @@ describe("generateInitialAtlas structural invariants", () => {
       expect(siteA).toBeDefined();
       expect(siteB).toBeDefined();
       expect(siteA).not.toBe(siteB);
+    }
+  });
+
+  it("never assigns the same dreamscape twice within one layer", () => {
+    for (let iter = 0; iter < 60; iter++) {
+      const atlas = freshAtlas();
+      // Complete the starter (reveals layer 1 as the available frontier), then
+      // complete a layer-1 node, which fully reveals layer 3 — the layer where a
+      // same-layer duplicate was observed. Every revealed node in a layer must
+      // carry a distinct dreamscape.
+      const afterStart = advanceAtlas(
+        atlas,
+        atlas.startingNodeId,
+        1,
+        defaultContext(),
+        buildContext(),
+        { logEvents: false },
+      );
+      const firstChoice = afterStart.layers[1].find(
+        (id) => afterStart.nodes[id].state === "available",
+      );
+      expect(firstChoice).toBeDefined();
+      const afterLayer1 = advanceAtlas(
+        afterStart,
+        firstChoice ?? atlas.startingNodeId,
+        2,
+        defaultContext(),
+        buildContext(),
+        { logEvents: false },
+      );
+
+      for (const layerIds of afterLayer1.layers) {
+        const revealedDreamscapeIds = layerIds
+          .map((id) => afterLayer1.nodes[id].dreamscapeId)
+          .filter((id): id is string => id !== null && id !== undefined);
+        expect(new Set(revealedDreamscapeIds).size).toBe(
+          revealedDreamscapeIds.length,
+        );
+      }
     }
   });
 });

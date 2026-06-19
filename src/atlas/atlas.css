@@ -223,6 +223,24 @@
   width: 100%;
   height: 100%;
 }
+/* Fill the round frame's transparent centre with a solid grey disc so an
+   unrevealed node reads as a filled circle rather than an empty ring. */
+.dream-atlas .unrevealed-face::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 72%;
+  height: 72%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(closest-side, #4a4658, #322e40);
+  z-index: 0;
+}
+.dream-atlas .unrevealed-face .frame-img {
+  position: relative;
+  z-index: 1;
+}
 /* ---- Node badges ---- */
 .dream-atlas .site-badges {
   position: absolute;

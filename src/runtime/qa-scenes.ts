@@ -115,7 +115,7 @@ export const QA_SCENES: readonly QaScene[] = [
   siteScene("duplication", "Duplication", "Duplication"),
   siteScene("shop", "Shop", "Shop"),
   siteScene("dreamaugury", "Dream Augury", "DreamAugury"),
-  siteScene("tempting", "Tempting Offer", "TemptingOffer"),
+  siteScene("tempting", "Offer", "TemptingOffer"),
 ];
 
 /** Returns the QA scene for `id`, or null when `id` is not registered. */

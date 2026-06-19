@@ -6,9 +6,9 @@ import {
   useRef,
   useState,
 } from "react";
-import type { ReactNode } from "react";
 import { useQuest } from "../state/quest-context";
 import { AtlasNode, type AtlasNodeView } from "../components/AtlasNode";
+import { RulesText } from "../components/RulesText";
 import {
   regenerateAtlasForProgress,
   revealedAtlasSite,
@@ -202,28 +202,6 @@ function edgeKind(from: DreamscapeNode, to: DreamscapeNode): EdgeKind {
 }
 
 /* ----------------------------- Hover previews ----------------------------- */
-
-/** Splits dreamsign rules text on `[E]` markers, inserting the energy glyph. */
-function renderDreamsignRules(text: string): ReactNode[] {
-  const parts = text.split("[E]");
-  return parts.map((part, i) => (
-    <span key={i}>
-      {part}
-      {i < parts.length - 1 && (
-        <i
-          className="bxf bx-fire-alt"
-          aria-hidden="true"
-          style={{
-            color: "var(--dt-energy)",
-            fontSize: 16,
-            verticalAlign: -2,
-            margin: "0 1px",
-          }}
-        />
-      )}
-    </span>
-  ));
-}
 
 interface PreviewProps {
   resolved: ResolvedAtlasNode;
@@ -479,9 +457,9 @@ function DreamsignCard({ resolved }: DreamsignCardProps) {
       </div>
       <div className="dsc-body">
         <div className="dsc-name">{dreamsign.name}</div>
-        <p className="dsc-rules">
-          {renderDreamsignRules(dreamsign.effectDescription)}
-        </p>
+        <div className="dsc-rules">
+          <RulesText text={dreamsign.effectDescription} />
+        </div>
       </div>
     </div>
   );

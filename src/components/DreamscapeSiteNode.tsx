@@ -66,8 +66,12 @@ export function DreamscapeSiteNode({
 
   // Battle keepers loom a little larger than the wayside sites.
   const diameter = isBattle ? Math.round(size * 1.22) : size;
-  const dim = (anyHover && !hovered) || site.isVisited || isLocked;
-  const opacity = site.isVisited ? 0.42 : isLocked ? 0.55 : dim ? 0.5 : 1;
+  // A locked keeper stays at full opacity but is desaturated to a clear,
+  // readable "disabled" grey — the old translucent treatment washed out against
+  // the bright scene art and was hard to see.
+  const dim = (anyHover && !hovered) || site.isVisited;
+  const opacity = site.isVisited ? 0.42 : dim ? 0.5 : 1;
+  const lockedFilter = isLocked ? "grayscale(1) brightness(0.62)" : undefined;
 
   // Ring + border derive from the node's `#rrggbb` accent with alpha suffixes.
   const ring = hovered
@@ -87,6 +91,7 @@ export function DreamscapeSiteNode({
     marginTop: -diameter / 2,
     animationDelay: `${String(index * -1.37)}s`,
     opacity,
+    ...(lockedFilter !== undefined ? { filter: lockedFilter } : {}),
     zIndex: hovered ? 40 : 10,
     transform: hovered && isInteractive ? "scale(1.08)" : "scale(1)",
   };

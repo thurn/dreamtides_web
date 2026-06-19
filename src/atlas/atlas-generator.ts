@@ -264,6 +264,17 @@ function purgeMandatoryForLayer(layer: number): boolean {
 }
 
 /**
+ * Whether Dream Augury is a *mandatory* site for a dreamscape at the given
+ * 0-indexed atlas layer. An Augury is guaranteed somewhere in Layer II (0-indexed
+ * layer 1) so the player always meets the seer once early in the run; in other
+ * layers it can still appear through the random fill. The mandatory Augury is a
+ * plain fill-style site (not the enhanced signature site).
+ */
+function auguryMandatoryForLayer(layer: number): boolean {
+  return layer === 1;
+}
+
+/**
  * The base weighted fill pool for a dreamscape whose own enhanced site is
  * `homeSite`, at the given 0-indexed atlas layer. The fill draws from the other
  * dreamscapes' signature sites plus a generic Essence site. Transfiguration and
@@ -412,6 +423,12 @@ export function generateSiteComposition(
     usedTypes.add("Purge");
   }
 
+  // --- Mandatory: Dream Augury in Layer II. ---
+  if (auguryMandatoryForLayer(layer) && !usedTypes.has("DreamAugury")) {
+    preBattle.push(makeSite("DreamAugury", false));
+    usedTypes.add("DreamAugury");
+  }
+
   // --- Known-dreamsign carrier: one fill slot becomes a Dreamsign Reward. ---
   if (hasKnownDreamsign === true && !usedTypes.has("Reward")) {
     preBattle.push(makeSite("Reward", false));
@@ -467,6 +484,7 @@ export function generateSiteComposition(
       enhancedSiteType,
       draftCount,
       purgeMandatory: purgeMandatoryForLayer(layer),
+      auguryMandatory: auguryMandatoryForLayer(layer),
       hasKnownDreamsign: hasKnownDreamsign === true,
       fillWeights: fillDistribution,
       fillChosen: chosenFill,
@@ -639,12 +657,14 @@ function wireLayerConnections(
 /**
  * Draws a dreamscape for a node via a repeat-discouraged weighted draw with
  * rejection of ineligible dreamscapes. A draw is rejected when it would place a
- * dreamscape next to a connected copy of itself, or — for the two layer-1 nodes
- * directly out of the starter — when it matches the dreamscape already assigned
- * to the same-layer sibling, so the two choices out of Firstlight Meadow always
- * show different signature site icons (each dreamscape has a unique signature
- * site). After a bounded number of attempts the best candidate is accepted so
- * generation always terminates.
+ * dreamscape next to a connected copy of itself, or when it matches a dreamscape
+ * already assigned to any other node in the same layer. Nodes in a layer are the
+ * alternative choices the player picks between, so two of them sharing a
+ * dreamscape (and thus the same signature site icon) reads as a generation
+ * glitch; same-layer siblings are not necessarily connected, so they are
+ * excluded explicitly in addition to the connected neighbours. After a bounded
+ * number of attempts the best candidate is accepted so generation always
+ * terminates.
  */
 function drawDreamscapeForNode(
   state: AtlasState,
@@ -658,18 +678,17 @@ function drawDreamscapeForNode(
       .filter((id): id is string => id !== null && id !== undefined),
   );
 
-  // The two layer-1 nodes (the first choice out of the starter) are not
-  // connected to each other, so exclude an already-assigned same-layer sibling's
-  // dreamscape explicitly to guarantee the two opening choices differ.
-  if (node.layer === 1) {
-    for (const siblingId of state.atlas.layers[1]) {
-      if (siblingId === node.id) {
-        continue;
-      }
-      const siblingDreamscapeId = state.atlas.nodes[siblingId]?.dreamscapeId;
-      if (siblingDreamscapeId !== null && siblingDreamscapeId !== undefined) {
-        ineligibleDreamscapeIds.add(siblingDreamscapeId);
-      }
+  // No two nodes in the same layer may carry the same dreamscape. Same-layer
+  // siblings are not necessarily connected to one another, so exclude every
+  // already-assigned same-layer dreamscape explicitly, not just connected ones.
+  const sameLayerIds = state.atlas.layers[node.layer] ?? [];
+  for (const siblingId of sameLayerIds) {
+    if (siblingId === node.id) {
+      continue;
+    }
+    const siblingDreamscapeId = state.atlas.nodes[siblingId]?.dreamscapeId;
+    if (siblingDreamscapeId !== null && siblingDreamscapeId !== undefined) {
+      ineligibleDreamscapeIds.add(siblingDreamscapeId);
     }
   }
 
@@ -1373,7 +1392,7 @@ const SITE_TYPE_META: Record<
   },
   TemptingOffer: {
     icon: "bxf bx-law",
-    name: "Tempting Offer",
+    name: "Offer",
     description: "Take a risky deal for an outsized payoff.",
     enhancedDescription: "Enhanced offer: choose between two competing offers.",
   },

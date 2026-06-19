@@ -200,18 +200,23 @@ export function DreamscapeScreen() {
         </p>
       </div>
 
-      {models.map((model) => (
-        <DreamscapeSiteNode
-          key={model.site.id}
-          model={model}
-          size={NODE_SIZE}
-          motion
-          hovered={hoveredIndex === model.index}
-          anyHover={hoveredIndex !== null}
-          onHover={setHoveredIndex}
-          onSelect={handleSiteClick}
-        />
-      ))}
+      {/* Visited sites are cleared from the scene; only the sites still to do
+          remain placed. The seeded scatter keeps each remaining node's position
+          stable as siblings are completed. */}
+      {models
+        .filter((model) => !model.site.isVisited)
+        .map((model) => (
+          <DreamscapeSiteNode
+            key={model.site.id}
+            model={model}
+            size={NODE_SIZE}
+            motion
+            hovered={hoveredIndex === model.index}
+            anyHover={hoveredIndex !== null}
+            onHover={setHoveredIndex}
+            onSelect={handleSiteClick}
+          />
+        ))}
 
       {hoveredModel !== null && <DreamscapeSitePopover model={hoveredModel} />}
     </div>
