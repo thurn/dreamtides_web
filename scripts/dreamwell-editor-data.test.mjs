@@ -184,6 +184,41 @@ describe("patchDreamwellToml art crop", () => {
   });
 });
 
+describe("patchDreamwellToml image number", () => {
+  it("appends image-number on a record that has none", () => {
+    const imagelessToml = `[[dreamwell]]
+name = "Imageless Vista"
+id = "${FIRST_ID}"
+rendered-text = "(no ability)"
+order = 0
+energy-added = 2
+card-type = "Dreamwell"
+art-owned = true
+card-number = 1
+`;
+
+    const patched = patchDreamwellToml(imagelessToml, {
+      dreamwellId: FIRST_ID,
+      field: "image-number",
+      value: 450441286,
+    }).source;
+
+    expect(parse(patched).dreamwell[0]["image-number"]).toBe(450441286);
+  });
+
+  it("replaces an existing image-number without duplicating it", () => {
+    const patched = patchDreamwellToml(fixtureToml(), {
+      dreamwellId: FIRST_ID,
+      field: "image-number",
+      value: 450441286,
+    }).source;
+
+    expect(parse(patched).dreamwell[0]["image-number"]).toBe(450441286);
+    expect(parse(patched).dreamwell[1]["image-number"]).toBe(2421338077);
+    expect(blockFor(patched, FIRST_ID).match(/^image-number = /gmu)).toHaveLength(1);
+  });
+});
+
 describe("refreshDreamwellDataJson", () => {
   it("writes runtime Dreamwell JSON with camelCase keys from source TOML", () => {
     const rootDir = writeFixtureRoot();

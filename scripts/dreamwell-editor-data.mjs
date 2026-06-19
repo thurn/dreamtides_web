@@ -171,9 +171,11 @@ export function patchDreamwellToml(source, { dreamwellId, field, value }) {
     validateEdit: validateDreamwellEdit,
     field,
     value,
-    // The art crop is absent on cards that have never been framed, so it is
-    // appended to the record block on first save rather than replaced in place.
-    optionalFields: new Set(["art"]),
+    // The art crop is absent on cards that have never been framed, and
+    // `image-number` is absent on cards that have never been assigned art, so
+    // each is appended to the record block on first save rather than replaced
+    // in place.
+    optionalFields: new Set(["art", "image-number"]),
     notFoundNoun: "Dreamwell card",
   });
 }
