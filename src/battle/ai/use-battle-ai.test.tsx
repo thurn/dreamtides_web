@@ -194,11 +194,30 @@ function proposalEdits(): BattleDebugEdit[] {
 
 interface HookHandle {
   proposal: AiProposal | null;
+  thinking: boolean;
   approve: () => void;
   reject: () => void;
 }
 
 let latest: HookHandle | null = null;
+
+/**
+ * Flushes the hook's ASYNCHRONOUS planner — which yields to the event loop
+ * between beam rounds — until it reports it is no longer `thinking`, so the
+ * settled proposal can be asserted on. Bounded so a stuck plan fails the test
+ * rather than hanging.
+ */
+async function settleProposal(): Promise<void> {
+  for (let i = 0; i < 500; i += 1) {
+    if (latest !== null && !latest.thinking) {
+      return;
+    }
+    await act(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 0));
+    });
+  }
+  throw new Error("AI proposal did not settle");
+}
 
 function HookHarness({
   initialState,
@@ -233,6 +252,7 @@ function HookHarness({
   });
   latest = {
     proposal: handle.proposal,
+    thinking: handle.thinking,
     approve: handle.approve,
     reject: handle.reject,
   };
@@ -262,17 +282,19 @@ afterEach(() => {
 });
 
 describe("useBattleAi", () => {
-  it("computes a proposal on mount WITHOUT dispatching anything (safety contract)", () => {
+  it("computes a proposal WITHOUT dispatching anything (safety contract)", async () => {
     const dispatch = vi.fn();
     mount(<HookHarness initialState={makeEnemyTurnState()} dispatch={dispatch} />);
+    await settleProposal();
 
     expect(latest?.proposal).not.toBeNull();
     expect(dispatch).not.toHaveBeenCalled();
   });
 
-  it("approve() dispatches each of the proposal's commands in order", () => {
+  it("approve() dispatches each of the proposal's commands in order", async () => {
     const dispatch = vi.fn();
     mount(<HookHarness initialState={makeEnemyTurnState()} dispatch={dispatch} />);
+    await settleProposal();
 
     const proposal = latest?.proposal;
     expect(proposal).not.toBeNull();
@@ -292,9 +314,10 @@ describe("useBattleAi", () => {
     });
   });
 
-  it("attaches the action proposal's trace to the first dispatched command's aiChoices", () => {
+  it("attaches the action proposal's trace to the first dispatched command's aiChoices", async () => {
     const dispatch = vi.fn();
     mount(<HookHarness initialState={makeEnemyTurnState()} dispatch={dispatch} />);
+    await settleProposal();
 
     const proposal = latest?.proposal;
     expect(proposal?.kind).toBe("action");
@@ -314,9 +337,10 @@ describe("useBattleAi", () => {
     expect(firstCall.command.aiChoices?.[0]?.rationale).toBeTruthy();
   });
 
-  it("reject() dispatches nothing and changes the proposal", () => {
+  it("reject() dispatches nothing and changes the proposal", async () => {
     const dispatch = vi.fn();
     mount(<HookHarness initialState={makeEnemyTurnState()} dispatch={dispatch} />);
+    await settleProposal();
 
     const before = latest?.proposal;
     expect(before).not.toBeNull();
@@ -324,6 +348,7 @@ describe("useBattleAi", () => {
     act(() => {
       latest?.reject();
     });
+    await settleProposal();
 
     expect(dispatch).not.toHaveBeenCalled();
     const after = latest?.proposal;
@@ -333,7 +358,7 @@ describe("useBattleAi", () => {
     expect(after).not.toBe(before);
   });
 
-  it("ends its Day with an endPhase proposal once no play remains (automation on)", () => {
+  it("ends its Day with an endPhase proposal once no play remains (automation on)", async () => {
     // With basic automation resolving turn bookends, the AI steps Day → Dusk and
     // stops, handing the Dusk repositioning window to the human; approving it
     // dispatches a single same-side SET_BATTLE_FLOW into Dusk.
@@ -345,6 +370,7 @@ describe("useBattleAi", () => {
         basicAutomation={true}
       />,
     );
+    await settleProposal();
 
     expect(dispatch).not.toHaveBeenCalled();
     expect(latest?.proposal?.kind).toBe("endPhase");
@@ -353,7 +379,7 @@ describe("useBattleAi", () => {
     ]);
   });
 
-  it("holds no proposal past Day so the human drives the rest (automation on)", () => {
+  it("holds no proposal past Day so the human drives the rest (automation on)", async () => {
     // Once the AI sits at Dusk with no play, it proposes nothing: the human
     // repositions and advances Night/Challenge with the phase controls.
     const dispatch = vi.fn();
@@ -366,12 +392,13 @@ describe("useBattleAi", () => {
         basicAutomation={true}
       />,
     );
+    await settleProposal();
 
     expect(latest?.proposal).toBeNull();
     expect(dispatch).not.toHaveBeenCalled();
   });
 
-  it("bundles an endTurn proposal when no play remains and automation is off", () => {
+  it("bundles an endTurn proposal when no play remains and automation is off", async () => {
     const dispatch = vi.fn();
     mount(
       <HookHarness
@@ -380,12 +407,13 @@ describe("useBattleAi", () => {
         basicAutomation={false}
       />,
     );
+    await settleProposal();
 
     expect(dispatch).not.toHaveBeenCalled();
     expect(latest?.proposal?.kind).toBe("endTurn");
   });
 
-  it("produces no proposal and dispatches nothing when disabled", () => {
+  it("produces no proposal and dispatches nothing when disabled", async () => {
     const dispatch = vi.fn();
     mount(
       <HookHarness
@@ -394,12 +422,13 @@ describe("useBattleAi", () => {
         enabled={false}
       />,
     );
+    await settleProposal();
 
     expect(latest?.proposal).toBeNull();
     expect(dispatch).not.toHaveBeenCalled();
   });
 
-  it("produces no proposal and dispatches nothing when gated off by a shared room", () => {
+  it("produces no proposal and dispatches nothing when gated off by a shared room", async () => {
     // Mirror the screen: the multiplayer-coexistence gate is layered on top of
     // aiMode. With two clients connected to the room, `aiMayRunHere` is false,
     // so even though aiMode is true and it IS the AI's turn with a legal action,
@@ -415,12 +444,13 @@ describe("useBattleAi", () => {
         enabled={enabled}
       />,
     );
+    await settleProposal();
 
     expect(latest?.proposal).toBeNull();
     expect(dispatch).not.toHaveBeenCalled();
   });
 
-  it("still runs in single-player (sole connected client) with aiMode on", () => {
+  it("still runs in single-player (sole connected client) with aiMode on", async () => {
     // The single-player quest flow is a room with exactly one connected client.
     // The gate must NOT disable the AI there: with aiMode on and count 1, the
     // hook produces a proposal on the AI's turn.
@@ -435,28 +465,31 @@ describe("useBattleAi", () => {
         enabled={enabled}
       />,
     );
+    await settleProposal();
 
     expect(latest?.proposal).not.toBeNull();
     expect(dispatch).not.toHaveBeenCalled();
   });
 
-  it("produces no proposal when it is not the AI's turn", () => {
+  it("produces no proposal when it is not the AI's turn", async () => {
     const dispatch = vi.fn();
     const state = makeEnemyTurnState((mutable) => {
       mutable.activeSide = "player";
     });
     mount(<HookHarness initialState={state} dispatch={dispatch} />);
+    await settleProposal();
 
     expect(latest?.proposal).toBeNull();
     expect(dispatch).not.toHaveBeenCalled();
   });
 
-  it("produces no proposal when the battle already has a result", () => {
+  it("produces no proposal when the battle already has a result", async () => {
     const dispatch = vi.fn();
     const state = makeEnemyTurnState((mutable) => {
       mutable.result = "victory";
     });
     mount(<HookHarness initialState={state} dispatch={dispatch} />);
+    await settleProposal();
 
     expect(latest?.proposal).toBeNull();
     expect(dispatch).not.toHaveBeenCalled();
@@ -469,9 +502,9 @@ describe("useBattleAi", () => {
   // (enemy) challenger and the player's defender in front-rank F0, then inspects
   // the endTurn proposal's DEBUG_EDIT edits.
   describe("endTurn proposal — keyword-aware Challenge resolution", () => {
-    function endTurnEdits(
+    async function endTurnEdits(
       place: (mutable: BattleMutableState) => void,
-    ): BattleDebugEdit[] {
+    ): Promise<BattleDebugEdit[]> {
       const dispatch = vi.fn();
       // No playable action + automation off ⇒ the AI holds the all-in-one
       // endTurn proposal, whose edits carry the keyword-aware Challenge result.
@@ -483,15 +516,16 @@ describe("useBattleAi", () => {
           basicAutomation={false}
         />,
       );
+      await settleProposal();
       expect(latest?.proposal?.kind).toBe("endTurn");
       expect(dispatch).not.toHaveBeenCalled();
       return proposalEdits();
     }
 
-    it("scores a surviving defended Unstoppable challenger for the AI side", () => {
+    it("scores a surviving defended Unstoppable challenger for the AI side", async () => {
       // Keyword-blind: a defended challenger never scored. Keyword-aware: the
       // AI's surviving Unstoppable challenger scores its spark.
-      const edits = endTurnEdits((mutable) => {
+      const edits = await endTurnEdits((mutable) => {
         placeFrontRankCharacter(mutable, "enemy", "aiUnstoppable", 6, "Unstoppable");
         placeFrontRankCharacter(mutable, "player", "defender", 3, "");
       });
@@ -503,12 +537,12 @@ describe("useBattleAi", () => {
       });
     });
 
-    it("drags the AI winner down when the opposing loser is Vengeful", () => {
+    it("drags the AI winner down when the opposing loser is Vengeful", async () => {
       // Keyword-blind: only the 2-spark loser dissolved. Keyword-aware: the
       // Vengeful loser drags the AI's surviving 5-spark winner down too.
       let winner = "";
       let loser = "";
-      const edits = endTurnEdits((mutable) => {
+      const edits = await endTurnEdits((mutable) => {
         winner = placeFrontRankCharacter(mutable, "enemy", "aiWinner", 5, "");
         loser = placeFrontRankCharacter(mutable, "player", "vengefulLoser", 2, "Vengeful");
       });
@@ -525,12 +559,12 @@ describe("useBattleAi", () => {
       });
     });
 
-    it("lets an AI Preeminence character win a spark tie instead of trading", () => {
+    it("lets an AI Preeminence character win a spark tie instead of trading", async () => {
       // Keyword-blind: a 4v4 tie dissolved both. Keyword-aware: the AI's
       // Preeminence bearer survives; only the opposing defender dissolves.
       let champion = "";
       let defender = "";
-      const edits = endTurnEdits((mutable) => {
+      const edits = await endTurnEdits((mutable) => {
         champion = placeFrontRankCharacter(mutable, "enemy", "aiPreeminence", 4, "Preeminence");
         defender = placeFrontRankCharacter(mutable, "player", "defender", 4, "");
       });

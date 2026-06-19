@@ -212,7 +212,7 @@ function PlayableBattleScreenInner({
   // receives the SAME live `reducerState`/`dispatch` the rest of the screen
   // uses, so approved commands flow back as a new `reducerState` and the hook
   // re-plans.
-  const { proposal, approve, reject } = useBattleAi({
+  const { proposal, thinking: aiThinking, approve, reject } = useBattleAi({
     reducerState,
     dispatch,
     enabled: aiMode && aiMayRun,
@@ -221,11 +221,14 @@ function PlayableBattleScreenInner({
     basicAutomation: isBasicAutomationEnabled,
   });
 
-  // While the AI holds an un-approved proposal, the human drives only via the
-  // approve/reject icon controls in the phase cluster. Normal controls (phase
-  // arrows, hand, battlefield) return once no proposal is held — on the human's
-  // own turn, and during the AI's Dusk/Night/Challenge after its plays are done.
-  const canPlayerAct = !(aiMode && proposal !== null);
+  // While the AI holds an un-approved proposal — or is still computing one — the
+  // human drives only via the approve/reject icon controls in the phase cluster.
+  // Locking during `aiThinking` keeps the human from acting in the brief window
+  // while the planner (which now runs asynchronously, off the render path) is
+  // still deciding. Normal controls (phase arrows, hand, battlefield) return once
+  // no proposal is held and the AI is idle — on the human's own turn, and during
+  // the AI's Dusk/Night/Challenge after its plays are done.
+  const canPlayerAct = !(aiMode && (proposal !== null || aiThinking));
   const historyCount = reducerState.history.past.length;
   const futureCount = reducerState.history.future.length;
   const failureResult = selectFailureOverlayResult(reducerState.mutable.result);
@@ -1154,7 +1157,10 @@ function PlayableBattleScreenInner({
             result={reducerState.mutable.result}
             turnNumber={reducerState.mutable.turnNumber}
           />
-          <BattleAiProposalBanner proposal={aiMode ? proposal : null} />
+          <BattleAiProposalBanner
+            proposal={aiMode ? proposal : null}
+            thinking={aiMode && aiThinking}
+          />
           <div className="stage">
             <BattleDreamwellDisplay
               card={dreamwellDisplayCard}
@@ -1765,12 +1771,37 @@ function BattleStackZone({
  * A slim banner across the top of the battle stage describing the AI's held
  * proposal in plain language (the same description carried on {@link AiProposal}).
  * It surfaces what the AI wants to do while the human decides whether to approve
- * or reject via the phase-control icons. Renders nothing when no proposal is
- * held (the human's own turn, AI mode off, or the battle is over).
+ * or reject via the phase-control icons. While the planner is still computing the
+ * next move (`thinking`) it shows a "thinking" placeholder so the locked controls
+ * are explained. Renders nothing when the AI is idle with no proposal (the
+ * human's own turn, AI mode off, or the battle is over).
  */
-function BattleAiProposalBanner({ proposal }: { proposal: AiProposal | null }) {
+function BattleAiProposalBanner({
+  proposal,
+  thinking,
+}: {
+  proposal: AiProposal | null;
+  thinking: boolean;
+}) {
   if (proposal === null) {
-    return null;
+    if (!thinking) {
+      return null;
+    }
+    return (
+      <div
+        className="battle-ai-proposal-banner thinking"
+        data-battle-ai-proposal="thinking"
+        aria-live="polite"
+      >
+        <span className="battle-ai-proposal-banner-label">AI</span>
+        <span
+          className="battle-ai-proposal-banner-description"
+          data-battle-ai-proposal-description
+        >
+          Thinking…
+        </span>
+      </div>
+    );
   }
 
   return (

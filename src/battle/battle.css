@@ -1203,6 +1203,24 @@
   z-index: 5;
 }
 
+/* While the planner is still deciding, the banner shows a dimmed, pulsing
+   "Thinking…" placeholder so the locked controls are explained. */
+.battle-ai-proposal-banner.thinking .battle-ai-proposal-banner-description {
+  color: var(--text-dim);
+  font-style: italic;
+  animation: battle-ai-thinking-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes battle-ai-thinking-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
 .battle-ai-proposal-banner-label {
   font-size: 11px;
   letter-spacing: 0.08em;

@@ -295,6 +295,85 @@ function actionSortKey(action: PlanAction): string {
 }
 
 /**
+ * Safety cap on beam-search depth. The depth is already bounded by available
+ * energy and board space (each play spends energy and a back-rank slot, each
+ * reposition fills a front-rank slot), so the search terminates well before
+ * this; the cap is a belt-and-suspenders guard.
+ */
+const MAX_DEPTH = 16;
+
+/**
+ * Expands every partial plan in `beam` by one action and returns the next beam
+ * (the top-`beamWidth` expansions) together with the best complete plan seen so
+ * far (`best`, threaded in and updated). `done` is true when the whole beam was
+ * a dead end and the caller should stop.
+ *
+ * This is the single unit of beam-search work, shared verbatim by the
+ * synchronous {@link searchBestPlan} and the cooperative
+ * {@link searchBestPlanAsync} so both explore an identical tree and pick an
+ * identical action — the async variant only differs by yielding the main thread
+ * between rounds.
+ *
+ * Expansion is a real bounded beam, NOT greedy: a partial plan is expanded by
+ * EVERY legal next action, with no "strictly improving" gate. A momentarily
+ * neutral-or-worse setup play (e.g. dropping Nocturne Strummer into the back rank)
+ * is allowed to remain in the beam so a later step (repositioning Wildflower
+ * Colossus into a slot the Nocturne Strummer supports) can pay off within the
+ * same turn. A line that genuinely goes nowhere still loses to the root
+ * baseline, so the planner does not over-develop into losing positions.
+ */
+function expandBeamRound(
+  beam: BeamEntry[],
+  best: BeamEntry,
+  opts: PlannerOptions,
+): { beam: BeamEntry[]; best: BeamEntry; done: boolean } {
+  let nextBest = best;
+  const expansions: BeamEntry[] = [];
+
+  for (const entry of beam) {
+    const candidates = generateActions(entry.model);
+    // Deterministic candidate order.
+    candidates.sort((a, b) => actionSortKey(a).localeCompare(actionSortKey(b)));
+
+    // A branch with no legal action is a dead end: it contributes no expansions
+    // and simply drops out of the beam. Its own score was already folded into
+    // `best` when the node was created.
+    for (const action of candidates) {
+      const nextModel = cloneForwardModel(entry.model);
+      applyAction(nextModel, action);
+      const score = scorePlan(nextModel, opts);
+      // Keep EVERY legal expansion — non-improving steps included — so a later
+      // payoff in the same turn can still be discovered.
+      const child: BeamEntry = { model: nextModel, actions: [...entry.actions, action], score };
+      expansions.push(child);
+      // Track the best complete plan across the whole search. Tie-break on the
+      // plan's action path so identical inputs pick the same plan.
+      if (
+        score > nextBest.score ||
+        (score === nextBest.score && planSortKey(child).localeCompare(planSortKey(nextBest)) < 0)
+      ) {
+        nextBest = child;
+      }
+    }
+  }
+
+  // Whole beam exhausted (every branch was a dead end): nothing left to expand.
+  if (expansions.length === 0) {
+    return { beam, best: nextBest, done: true };
+  }
+
+  // Keep the top-K expansions, breaking ties deterministically by the plan's
+  // action path so identical inputs always retain the same beam.
+  expansions.sort((a, b) => {
+    if (b.score !== a.score) {
+      return b.score - a.score;
+    }
+    return planSortKey(a).localeCompare(planSortKey(b));
+  });
+  return { beam: expansions.slice(0, Math.max(1, opts.beamWidth)), best: nextBest, done: false };
+}
+
+/**
  * Runs the staged beam search and returns the best COMPLETE plan found (its
  * action list, possibly empty).
  *
@@ -303,22 +382,6 @@ function actionSortKey(action: PlanAction): string {
  * model score ({@link scorePlan}). The search therefore tracks the
  * highest-scoring node encountered anywhere in the tree (the root/END_TURN
  * baseline included) and returns its action list.
- *
- * Expansion is a real bounded beam, NOT greedy: a partial plan is expanded by
- * EVERY legal next action, with no "strictly improving" gate. A momentarily
- * neutral-or-worse setup play (e.g. dropping Nocturne Strummer into the back rank)
- * is allowed to remain in the beam so a later step (repositioning Wildflower
- * Colossus into a slot the Nocturne Strummer supports) can pay off within the
- * same turn.
- * A line that genuinely goes nowhere still loses to the root baseline, so the
- * planner does not over-develop into losing positions.
- *
- * Work is bounded by `beamWidth` (top-K kept each round), the {@link MAX_DEPTH}
- * safety cap, and the deadline guard. The per-node action set is bounded by
- * finite energy and board space: each play spends energy and a back-rank slot,
- * each reposition fills a front-rank slot, and draw events (Glimpse, Sign of Arrival)
- * only add cards a later node can play if it can still pay for them. Combined
- * with the MAX_DEPTH cap the search terminates well before the cap.
  */
 function searchBestPlan(rootModel: ForwardModel, opts: PlannerOptions): PlanAction[] {
   const rootScore = scorePlan(rootModel, opts);
@@ -335,58 +398,59 @@ function searchBestPlan(rootModel: ForwardModel, opts: PlannerOptions): PlanActi
 
   let beam: BeamEntry[] = [root];
 
-  // Each iteration extends every partial plan in the beam by one action. The
-  // depth is bounded by available energy/board space, so the loop always
-  // terminates; the explicit cap is a safety belt.
-  const MAX_DEPTH = 16;
   for (let depth = 0; depth < MAX_DEPTH; depth += 1) {
     if (deadlineApproached(opts)) {
       break;
     }
-
-    const expansions: BeamEntry[] = [];
-
-    for (const entry of beam) {
-      const candidates = generateActions(entry.model);
-      // Deterministic candidate order.
-      candidates.sort((a, b) => actionSortKey(a).localeCompare(actionSortKey(b)));
-
-      // A branch with no legal action is a dead end: it contributes no
-      // expansions and simply drops out of the beam. Its own score was already
-      // folded into `best` when the node was created.
-      for (const action of candidates) {
-        const nextModel = cloneForwardModel(entry.model);
-        applyAction(nextModel, action);
-        const score = scorePlan(nextModel, opts);
-        // Keep EVERY legal expansion — non-improving steps included — so a later
-        // payoff in the same turn can still be discovered.
-        const child: BeamEntry = { model: nextModel, actions: [...entry.actions, action], score };
-        expansions.push(child);
-        // Track the best complete plan across the whole search. Tie-break on the
-        // plan's action path so identical inputs pick the same plan.
-        if (
-          score > best.score ||
-          (score === best.score && planSortKey(child).localeCompare(planSortKey(best)) < 0)
-        ) {
-          best = child;
-        }
-      }
-    }
-
-    // Whole beam exhausted (every branch was a dead end): nothing left to expand.
-    if (expansions.length === 0) {
+    const round = expandBeamRound(beam, best, opts);
+    best = round.best;
+    if (round.done) {
       break;
     }
+    beam = round.beam;
+  }
 
-    // Keep the top-K expansions, breaking ties deterministically by the plan's
-    // action path so identical inputs always retain the same beam.
-    expansions.sort((a, b) => {
-      if (b.score !== a.score) {
-        return b.score - a.score;
-      }
-      return planSortKey(a).localeCompare(planSortKey(b));
-    });
-    beam = expansions.slice(0, Math.max(1, opts.beamWidth));
+  return best.actions;
+}
+
+/**
+ * Cooperative variant of {@link searchBestPlan}: it explores the IDENTICAL tree
+ * — same rounds, same beam, same tie-breaks — but `await`s `yieldFn` between
+ * beam rounds so the browser can paint a frame and process input mid-search.
+ * Keeping the AI's heavy planning off a single uninterrupted task is what keeps
+ * the battle UI responsive during the AI's turn. The chosen action matches
+ * {@link searchBestPlan} exactly; only the scheduling differs.
+ */
+async function searchBestPlanAsync(
+  rootModel: ForwardModel,
+  opts: PlannerOptions,
+  yieldFn: () => Promise<void>,
+): Promise<PlanAction[]> {
+  const rootScore = scorePlan(rootModel, opts);
+  const root: BeamEntry = { model: rootModel, actions: [], score: rootScore };
+  let best: BeamEntry = root;
+
+  if (deadlineApproached(opts)) {
+    return best.actions;
+  }
+
+  let beam: BeamEntry[] = [root];
+
+  for (let depth = 0; depth < MAX_DEPTH; depth += 1) {
+    // Yield before each round after the first so the main thread is released
+    // between rounds rather than blocked for the whole search.
+    if (depth > 0) {
+      await yieldFn();
+    }
+    if (deadlineApproached(opts)) {
+      break;
+    }
+    const round = expandBeamRound(beam, best, opts);
+    best = round.best;
+    if (round.done) {
+      break;
+    }
+    beam = round.beam;
   }
 
   return best.actions;
@@ -482,6 +546,28 @@ export function planNextAction(model: ForwardModel, opts: PlannerOptions): Plann
   }
 
   const plan = searchBestPlan(model, opts);
+  if (plan.length === 0) {
+    return endTurnAction();
+  }
+  return buildPlannedAction(model, plan[0], opts);
+}
+
+/**
+ * Cooperative variant of {@link planNextAction}: identical result, but the beam
+ * search yields to the event loop (`yieldFn`) between rounds so the AI's turn
+ * does not freeze the main thread. The hook drives the AI through this variant;
+ * the synchronous {@link planNextAction} remains for tests and any non-UI caller.
+ */
+export async function planNextActionAsync(
+  model: ForwardModel,
+  opts: PlannerOptions,
+  yieldFn: () => Promise<void>,
+): Promise<PlannedAction> {
+  if (deadlineApproached(opts)) {
+    return endTurnAction();
+  }
+
+  const plan = await searchBestPlanAsync(model, opts, yieldFn);
   if (plan.length === 0) {
     return endTurnAction();
   }

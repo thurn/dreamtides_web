@@ -1,7 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { forwardModelFromState, type ForwardModel } from "./forward-model";
 import { planDefense } from "./defense";
-import { planNextAction, type PlannedAction, type PlannerOptions } from "./planner";
+import { planNextActionAsync, type PlannedAction, type PlannerOptions } from "./planner";
 import { AI_DIFFICULTY_V1 } from "./difficulty";
 import { buildTrace } from "./trace";
 import { actionToCommands } from "./driver";
@@ -76,8 +76,39 @@ export interface UseBattleAiArgs {
 
 export interface UseBattleAiResult {
   proposal: AiProposal | null;
+  /**
+   * True while the planner is computing the next proposal off the render path.
+   * The AI's beam search is heavy enough to freeze the UI if run synchronously
+   * during render, so it runs asynchronously (yielding between beam rounds);
+   * this flag lets the screen keep its controls locked and show a "thinking"
+   * indicator until {@link proposal} settles.
+   */
+  thinking: boolean;
   approve: () => void;
   reject: () => void;
+}
+
+/**
+ * Yields control to the event loop as a MACROTASK so the browser can paint a
+ * frame and process input between beam rounds. A microtask (`Promise.resolve`)
+ * is NOT enough — the browser cannot paint between microtasks, so it would not
+ * relieve the freeze. `MessageChannel` is a macrotask without `setTimeout`'s
+ * ~4ms clamp, so it keeps the added planning latency minimal; `setTimeout` is
+ * the fallback where `MessageChannel` is unavailable.
+ */
+function yieldToEventLoop(): Promise<void> {
+  return new Promise((resolve) => {
+    if (typeof MessageChannel === "function") {
+      const channel = new MessageChannel();
+      channel.port1.onmessage = () => {
+        channel.port1.close();
+        resolve();
+      };
+      channel.port2.postMessage(undefined);
+      return;
+    }
+    setTimeout(resolve, 0);
+  });
 }
 
 /**
@@ -88,11 +119,13 @@ export interface UseBattleAiResult {
  * the hook, recomputing a proposal, and {@link UseBattleAiResult.reject} dispatch
  * NOTHING.
  *
- * The proposal is recomputed (via `useMemo`) whenever the live mutable state
- * changes (keyed by `reducerState.transitionId`) and whenever an action is
- * rejected (the exclusion set grows). When `approve()` dispatches, the resulting
- * state change re-runs the memo, which produces the next proposal — that is the
- * entire loop.
+ * The proposal is recomputed by an effect — ASYNCHRONOUSLY, off the render path,
+ * with the beam search yielding the main thread between rounds — whenever the
+ * live mutable state changes (keyed by `reducerState.transitionId`) and whenever
+ * an action is rejected (the exclusion set grows). While a plan is in flight the
+ * hook reports {@link UseBattleAiResult.thinking}. When `approve()` dispatches,
+ * the resulting state change re-runs the effect, which produces the next
+ * proposal — that is the entire loop.
  */
 export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
   const { reducerState, dispatch, enabled, aiSide, caps, basicAutomation } = args;
@@ -106,8 +139,8 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
 
   // Reset per-turn UI state (exclusions) when the AI turn changes (it is no
   // longer the AI's turn, or the turn number advanced). This runs during render
-  // via a ref guard so the reset is visible to the memo below without an extra
-  // commit.
+  // via a ref guard so the reset is visible to the planning effect below without
+  // an extra commit.
   const turnKey = `${mutable.activeSide}:${String(mutable.turnNumber)}`;
   const lastTurnKeyRef = useRef(turnKey);
   if (lastTurnKeyRef.current !== turnKey) {
@@ -127,13 +160,52 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
     mutable.result === null &&
     mutable.phase !== "dreamwell";
 
-  const proposal = useMemo<AiProposal | null>(() => {
+  // The proposal is computed ASYNCHRONOUSLY off the render path: the planner's
+  // beam search is heavy enough that running it synchronously during render
+  // freezes the whole tab for the AI's turn. The effect (re)plans whenever the
+  // live state changes — keyed by `reducerState.transitionId` plus the `mutable`
+  // reference and the exclusion set — and stores the result in state.
+  const [proposal, setProposal] = useState<AiProposal | null>(null);
+  const [thinking, setThinking] = useState(false);
+  // Monotonic token identifying the in-flight plan. Bumped whenever the inputs
+  // change or the hook unmounts, so a slower earlier plan that resolves late is
+  // dropped instead of overwriting a fresher proposal (or a stale plan being
+  // approvable against state that has already moved on).
+  const planTokenRef = useRef(0);
+
+  useEffect(() => {
     if (!isAiTurn) {
-      return null;
+      planTokenRef.current += 1;
+      setThinking(false);
+      setProposal(null);
+      return;
     }
-    // `reducerState.transitionId` keys live-state changes; `mutable` covers the
-    // initial state and any non-transition reference swap.
-    return computeProposal(mutable, aiSide, excludedKeys, caps, basicAutomation);
+
+    const token = (planTokenRef.current += 1);
+    // Clear the prior proposal up front: while replanning, the human must not be
+    // able to approve a plan computed against an earlier state.
+    setProposal(null);
+    setThinking(true);
+    void computeProposalAsync(
+      mutable,
+      aiSide,
+      excludedKeys,
+      caps,
+      basicAutomation,
+      yieldToEventLoop,
+    ).then((next) => {
+      if (planTokenRef.current !== token) {
+        return;
+      }
+      setProposal(next);
+      setThinking(false);
+    });
+
+    return () => {
+      // Invalidate this plan: its `.then` becomes a no-op, so it cannot set
+      // state after the inputs change or the component unmounts.
+      planTokenRef.current += 1;
+    };
   }, [
     isAiTurn,
     reducerState.transitionId,
@@ -184,7 +256,8 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
   }, [enabled, aiSide, mutable, caps, dispatch]);
 
   // ONLY this path dispatches. It applies the held proposal's commands in order;
-  // the resulting state change re-runs the memo to produce the next proposal.
+  // the resulting state change re-runs the planning effect to produce the next
+  // proposal.
   const approve = useCallback(() => {
     if (proposal === null) {
       return;
@@ -214,7 +287,7 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
     });
   }, [proposal]);
 
-  return { proposal, approve, reject };
+  return { proposal, thinking, approve, reject };
 }
 
 // --- Proposal computation --------------------------------------------------
@@ -232,16 +305,17 @@ export function useBattleAi(args: UseBattleAiArgs): UseBattleAiResult {
  * - With basic automation off, nothing else will resolve the turn, so the AI
  *   proposes the all-in-one `endTurn` (Challenge resolution + handoff).
  */
-function computeProposal(
+async function computeProposalAsync(
   mutable: BattleMutableState,
   aiSide: BattleSide,
   excludedKeys: ReadonlySet<string>,
   caps: BattleCapsInput | undefined,
   basicAutomation: boolean,
-): AiProposal | null {
+  yieldFn: () => Promise<void>,
+): Promise<AiProposal | null> {
   const model = forwardModelFromState(mutable, aiSide);
 
-  const action = planNonExcludedAction(model, mutable, excludedKeys);
+  const action = await planNonExcludedActionAsync(model, mutable, excludedKeys, yieldFn);
   if (action !== null && action.kind !== "END_TURN") {
     return buildActionProposal(mutable, action, aiSide);
   }
@@ -286,11 +360,12 @@ function buildEndPhaseProposal(
  * the planner advances to the next-best line, falling back to `null` (→ endTurn)
  * when every remaining option is excluded.
  */
-function planNonExcludedAction(
+async function planNonExcludedActionAsync(
   model: ForwardModel,
   mutable: BattleMutableState,
   excludedKeys: ReadonlySet<string>,
-): PlannedAction | null {
+  yieldFn: () => Promise<void>,
+): Promise<PlannedAction | null> {
   const opts = plannerOptions(aiHandSeed(model, mutable.turnNumber));
   let workingModel = model;
 
@@ -298,7 +373,7 @@ function planNonExcludedAction(
   // loop terminates after the hand/back rank is exhausted.
   const maxAttempts = model.aiHand.length + BATTLEFIELD_SLOT_COUNT + 1;
   for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
-    const action = planNextAction(workingModel, opts);
+    const action = await planNextActionAsync(workingModel, opts, yieldFn);
     if (action.kind === "END_TURN") {
       return action;
     }
