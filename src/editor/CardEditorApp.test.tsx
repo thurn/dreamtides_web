@@ -954,13 +954,13 @@ describe("CardEditorApp", () => {
     });
 
     const nameInput = container.querySelector<HTMLInputElement>(
-      '[data-editor-art-card-name-input="true"]',
+      '[data-editor-focused-field="name"]',
     );
     const imageNumberInput = container.querySelector<HTMLInputElement>(
-      '[data-editor-art-image-number-input="true"]',
+      '[data-editor-focused-image-number="true"]',
     );
     if (nameInput === null || imageNumberInput === null) {
-      throw new Error("Missing art editor inputs");
+      throw new Error("Missing focused editor inputs");
     }
 
     expect(
@@ -971,8 +971,8 @@ describe("CardEditorApp", () => {
 
     await act(async () => {
       setInputValue(nameInput, "Renamed Envoy");
-      nameInput.form?.dispatchEvent(
-        new Event("submit", { bubbles: true, cancelable: true }),
+      nameInput.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
       );
       await flushAsyncWork();
     });
@@ -983,7 +983,7 @@ describe("CardEditorApp", () => {
       value: "Renamed Envoy",
     });
     expect(
-      container.querySelector('[data-editor-art-card-name-status="true"]')?.textContent,
+      container.querySelector('[data-editor-focused-status="name"]')?.textContent,
     ).toContain("Saved");
     expect(container.querySelector("h2")?.textContent).toBe("Renamed Envoy");
 
@@ -1039,19 +1039,19 @@ describe("CardEditorApp", () => {
     });
 
     const imageNumberInput = container.querySelector<HTMLInputElement>(
-      '[data-editor-art-image-number-input="true"]',
+      '[data-editor-focused-image-number="true"]',
     );
     const panRightButton = container.querySelector<HTMLButtonElement>(
       '[aria-label="Pan right"]',
     );
     if (imageNumberInput === null || panRightButton === null) {
-      throw new Error("Missing art editor controls");
+      throw new Error("Missing focused editor controls");
     }
 
     act(() => {
       setInputValue(imageNumberInput, "99");
-      imageNumberInput.form?.dispatchEvent(
-        new Event("submit", { bubbles: true, cancelable: true }),
+      imageNumberInput.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
       );
       panRightButton.click();
     });

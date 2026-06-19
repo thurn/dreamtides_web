@@ -2,10 +2,14 @@ import type { ArtCrop, CardData, CardType, Rarity } from "../types/cards";
 
 export type EditableCardField =
   | "energy-cost"
+  | "card-type"
   | "subtype"
   | "name"
   | "spark"
   | "rendered-text";
+
+/** The card types a card may be retyped between in the focused editor. */
+export const CARD_TYPE_OPTIONS: readonly CardType[] = ["Character", "Event"];
 
 /**
  * Card fields the editor can save. Extends the inline-editable scalar fields

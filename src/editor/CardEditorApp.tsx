@@ -15,10 +15,11 @@ import {
 import CardEditorGrid from "./CardEditorGrid";
 import type { CardTagSaveState } from "./CardEditorGrid";
 import CardEditorToolbar from "./CardEditorToolbar";
-import ArtCropEditor from "./ArtCropEditor";
-import type { ArtSaveStatus } from "./ArtCropEditor";
+import FocusedCardEditor from "./FocusedCardEditor";
+import type { FocusedSaveStatus } from "./FocusedCardEditor";
 import ManageTagsModal from "./ManageTagsModal";
-import type { ArtCrop } from "../types/cards";
+import { CardView, DEFAULT_ART_CROP } from "../components/CardView";
+import type { ArtCrop, CardData } from "../types/cards";
 import {
   parseEditorDisplayState,
   replaceEditorDisplayStateInUrl,
@@ -36,13 +37,14 @@ import {
   updateFieldDraft,
 } from "./save-state";
 import type { EditableFieldValue, EditableSaveState } from "./save-state";
-import type {
-  EditableCardField,
-  EditorApiClient,
-  EditorCardRecord,
-  EditorDisplayState,
-  EditorSortField,
-  EditorTag,
+import {
+  CARD_TYPE_OPTIONS,
+  type EditableCardField,
+  type EditorApiClient,
+  type EditorCardRecord,
+  type EditorDisplayState,
+  type EditorSortField,
+  type EditorTag,
 } from "./types";
 
 const DEFAULT_EDITOR_API_CLIENT: EditorApiClient = {
@@ -335,6 +337,8 @@ function confirmedFieldValue(
   switch (field) {
     case "energy-cost":
       return card["energy-cost"];
+    case "card-type":
+      return card.cardType;
     case "name":
       return card.name;
     case "spark":
@@ -356,6 +360,12 @@ function validateFieldSave(
     return textValue.length === 0
       ? { ok: false, message: "Name cannot be blank." }
       : { ok: true, value: textValue };
+  }
+
+  if (field === "card-type") {
+    return CARD_TYPE_OPTIONS.includes(textValue as (typeof CARD_TYPE_OPTIONS)[number])
+      ? { ok: true, value: textValue }
+      : { ok: false, message: "Choose a valid card type." };
   }
 
   if (field === "subtype") {
@@ -386,6 +396,36 @@ function validateFieldSave(
   }
 
   return { ok: false, message: "This field is not editable." };
+}
+
+/**
+ * Overlay the focused editor's in-progress text drafts onto a card's preview so
+ * the framed card reflects edits live, before each field's save resolves. Only
+ * the directly renderable text facets are overlaid; numeric facets (cost / spark)
+ * and the art crop / image are previewed through their own live controls.
+ */
+function cardPreviewWithDrafts(
+  preview: CardData,
+  drafts: Record<string, EditableFieldValue>,
+): CardData {
+  const next: CardData = { ...preview };
+  const name = drafts.name;
+  if (typeof name === "string" && name.trim().length > 0) {
+    next.name = name;
+  }
+  const cardType = drafts["card-type"];
+  if (cardType === "Character" || cardType === "Event") {
+    next.cardType = cardType;
+  }
+  const subtype = drafts.subtype;
+  if (typeof subtype === "string") {
+    next.subtype = subtype;
+  }
+  const renderedText = drafts["rendered-text"];
+  if (typeof renderedText === "string") {
+    next.renderedText = renderedText;
+  }
+  return next;
 }
 
 export default function CardEditorApp({
@@ -425,13 +465,10 @@ export default function CardEditorApp({
     null,
   );
   const [artEditorCardId, setArtEditorCardId] = useState<string | null>(null);
-  const [artSaveStatus, setArtSaveStatus] = useState<ArtSaveStatus>("idle");
+  const [artSaveStatus, setArtSaveStatus] = useState<FocusedSaveStatus>("idle");
   const [artSaveError, setArtSaveError] = useState<string | null>(null);
-  const [cardNameSaveStatus, setCardNameSaveStatus] =
-    useState<ArtSaveStatus>("idle");
-  const [cardNameSaveError, setCardNameSaveError] = useState<string | null>(null);
   const [imageNumberSaveStatus, setImageNumberSaveStatus] =
-    useState<ArtSaveStatus>("idle");
+    useState<FocusedSaveStatus>("idle");
   const [imageNumberSaveError, setImageNumberSaveError] = useState<string | null>(
     null,
   );
@@ -703,24 +740,6 @@ export default function CardEditorApp({
     };
   }
 
-  function mergeConfirmedName(
-    currentCard: EditorCardRecord,
-    nextCard: EditorCardRecord,
-  ): EditorCardRecord {
-    return {
-      ...currentCard,
-      name: nextCard.name,
-      source: {
-        ...currentCard.source,
-        name: nextCard.source.name ?? nextCard.name,
-      },
-      preview: {
-        ...currentCard.preview,
-        name: nextCard.preview.name,
-      },
-    };
-  }
-
   function mergeConfirmedImageNumber(
     currentCard: EditorCardRecord,
     nextCard: EditorCardRecord,
@@ -969,8 +988,6 @@ export default function CardEditorApp({
     setArtEditorCardId(card.id);
     setArtSaveStatus("idle");
     setArtSaveError(null);
-    setCardNameSaveStatus("idle");
-    setCardNameSaveError(null);
     setImageNumberSaveStatus("idle");
     setImageNumberSaveError(null);
   }
@@ -979,8 +996,6 @@ export default function CardEditorApp({
     setArtEditorCardId(null);
     setArtSaveStatus("idle");
     setArtSaveError(null);
-    setCardNameSaveStatus("idle");
-    setCardNameSaveError(null);
     setImageNumberSaveStatus("idle");
     setImageNumberSaveError(null);
   }
@@ -998,22 +1013,6 @@ export default function CardEditorApp({
       .catch((error: unknown) => {
         setArtSaveStatus("error");
         setArtSaveError(errorMessageFor(error));
-      });
-  }
-
-  function handleCardNameSave(card: EditorCardRecord, name: string) {
-    setCardNameSaveStatus("saving");
-    setCardNameSaveError(null);
-
-    void apiClient
-      .saveEditorCardField({ id: card.id, field: "name", value: name })
-      .then((response) => {
-        replaceConfirmedCard(response.card, mergeConfirmedName);
-        setCardNameSaveStatus("saved");
-      })
-      .catch((error: unknown) => {
-        setCardNameSaveStatus("error");
-        setCardNameSaveError(errorMessageFor(error));
       });
   }
 
@@ -1202,19 +1201,132 @@ export default function CardEditorApp({
       </section>
 
       {artEditorCard !== null ? (
-        <ArtCropEditor
-          card={artEditorCard}
-          saveStatus={artSaveStatus}
-          saveError={artSaveError}
-          cardNameSaveStatus={cardNameSaveStatus}
-          cardNameSaveError={cardNameSaveError}
-          imageNumberSaveStatus={imageNumberSaveStatus}
-          imageNumberSaveError={imageNumberSaveError}
-          onSave={(art) => handleArtSave(artEditorCard, art)}
-          onSaveCardName={(name) => handleCardNameSave(artEditorCard, name)}
-          onSaveImageNumber={(imageNumber) =>
-            handleImageNumberSave(artEditorCard, imageNumber)
-          }
+        <FocusedCardEditor
+          title={artEditorCard.name}
+          fields={[
+            {
+              field: "name",
+              label: "Name",
+              kind: "text",
+              value: artEditorCard.name,
+              saveEntry: fieldSaveEntry(saveState, {
+                cardId: artEditorCard.id,
+                field: "name",
+              }),
+              onCommit: (value) =>
+                handleFieldCommit(artEditorCard, "name", value),
+            },
+            {
+              field: "card-type",
+              label: "Card type",
+              kind: "select",
+              options: CARD_TYPE_OPTIONS.map((type) => ({
+                value: type,
+                label: type,
+              })),
+              value: artEditorCard.cardType,
+              saveEntry: fieldSaveEntry(saveState, {
+                cardId: artEditorCard.id,
+                field: "card-type",
+              }),
+              onCommit: (value) =>
+                handleFieldCommit(artEditorCard, "card-type", value),
+            },
+            {
+              field: "energy-cost",
+              label: "Energy cost",
+              kind: "text",
+              value: artEditorCard["energy-cost"],
+              saveEntry: fieldSaveEntry(saveState, {
+                cardId: artEditorCard.id,
+                field: "energy-cost",
+              }),
+              onCommit: (value) =>
+                handleFieldCommit(artEditorCard, "energy-cost", value),
+            },
+            {
+              field: "spark",
+              label: "Spark",
+              kind: "text",
+              value: artEditorCard.spark,
+              saveEntry: fieldSaveEntry(saveState, {
+                cardId: artEditorCard.id,
+                field: "spark",
+              }),
+              onCommit: (value) =>
+                handleFieldCommit(artEditorCard, "spark", value),
+            },
+            {
+              field: "subtype",
+              label: "Subtype",
+              kind: "text",
+              value: artEditorCard.subtype,
+              saveEntry: fieldSaveEntry(saveState, {
+                cardId: artEditorCard.id,
+                field: "subtype",
+              }),
+              onCommit: (value) =>
+                handleFieldCommit(artEditorCard, "subtype", value),
+            },
+            {
+              field: "rendered-text",
+              label: "Rules text",
+              kind: "multiline",
+              value: artEditorCard["rendered-text"],
+              saveEntry: fieldSaveEntry(saveState, {
+                cardId: artEditorCard.id,
+                field: "rendered-text",
+              }),
+              onCommit: (value) =>
+                handleFieldCommit(artEditorCard, "rendered-text", value),
+            },
+          ]}
+          tagSections={[
+            {
+              noun: "tag",
+              values: artEditorCard.tags,
+              available: tags,
+              saving: tagSaveState[artEditorCard.id]?.saving ?? false,
+              error: tagSaveState[artEditorCard.id]?.error ?? null,
+              onAdd: (name) => handleAddCardTag(artEditorCard, name),
+              onRemove: (name) => handleRemoveCardTag(artEditorCard, name),
+              onOpenManage: () => setManageTagsOpen(true),
+            },
+            {
+              noun: "tide",
+              values: artEditorCard.tides,
+              available: tides,
+              saving: tideSaveState[artEditorCard.id]?.saving ?? false,
+              error: tideSaveState[artEditorCard.id]?.error ?? null,
+              onAdd: (name) => handleAddCardTide(artEditorCard, name),
+              onRemove: (name) => handleRemoveCardTide(artEditorCard, name),
+              onOpenManage: () => setManageTidesOpen(true),
+            },
+          ]}
+          art={{
+            model: { kind: "card" },
+            art: artEditorCard.preview.art ?? DEFAULT_ART_CROP,
+            imageNumber: artEditorCard.preview.imageNumber,
+            onSaveArt: (art) => handleArtSave(artEditorCard, art),
+            onSaveImageNumber: (imageNumber) =>
+              handleImageNumberSave(artEditorCard, imageNumber),
+            artStatus: artSaveStatus,
+            artError: artSaveError,
+            imageStatus: imageNumberSaveStatus,
+            imageError: imageNumberSaveError,
+          }}
+          renderPreview={(live) => (
+            <CardView
+              card={{
+                ...cardPreviewWithDrafts(artEditorCard.preview, live.fieldDrafts),
+                art: live.art,
+                imageNumber: live.imageNumber,
+              }}
+              large
+              suppressHoverHelp
+              onBoxTopFracChange={live.onBoxTopFracChange}
+            />
+          )}
           onClose={handleCloseArtEditor}
         />
       ) : null}
