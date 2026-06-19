@@ -4,7 +4,13 @@ import {
   saveEditorDreamwellField,
 } from "./dreamwell-editor-api";
 import EditableDreamwell from "./EditableDreamwell";
-import DreamwellArtEditor, { type ArtSaveStatus } from "./DreamwellArtEditor";
+import FocusedCardEditor from "./FocusedCardEditor";
+import type { FocusedSaveStatus } from "./FocusedCardEditor";
+import {
+  DreamwellCardView,
+  DEFAULT_DREAMWELL_ART_CROP,
+  type DreamwellCardViewData,
+} from "../components/DreamwellCardView";
 import {
   beginFieldEdit,
   cancelFieldEdit,
@@ -20,6 +26,7 @@ import {
 import type { EditableFieldValue, EditableSaveState } from "./save-state";
 import type { ArtCrop } from "../types/cards";
 import {
+  dreamwellPreviewCard,
   MAX_DREAMWELL_ORDER,
   type DreamwellDisplayState,
   type DreamwellEditorApiClient,
@@ -119,6 +126,27 @@ function validateFieldSave(
   return { ok: false, message: "This field is not editable." };
 }
 
+/**
+ * Overlay the focused editor's in-progress text drafts onto a Dreamwell card's
+ * preview so the framed card tracks edits live. Energy / tier preview through
+ * their own fields once committed; the art crop and image through live controls.
+ */
+function dreamwellPreviewWithDrafts(
+  preview: DreamwellCardViewData,
+  drafts: Record<string, EditableFieldValue>,
+): DreamwellCardViewData {
+  const next: DreamwellCardViewData = { ...preview };
+  const name = drafts.name;
+  if (typeof name === "string" && name.trim().length > 0) {
+    next.name = name;
+  }
+  const renderedText = drafts["rendered-text"];
+  if (typeof renderedText === "string") {
+    next.renderedText = renderedText;
+  }
+  return next;
+}
+
 function sortValue(
   record: EditorDreamwellRecord,
   sort: DreamwellSortField,
@@ -215,9 +243,9 @@ export default function DreamwellEditorApp({
   const saveStateRef = useRef(saveState);
 
   const [artEditorId, setArtEditorId] = useState<string | null>(null);
-  const [artSaveStatus, setArtSaveStatus] = useState<ArtSaveStatus>("idle");
+  const [artSaveStatus, setArtSaveStatus] = useState<FocusedSaveStatus>("idle");
   const [artSaveError, setArtSaveError] = useState<string | null>(null);
-  const [cropSaveStatus, setCropSaveStatus] = useState<ArtSaveStatus>("idle");
+  const [cropSaveStatus, setCropSaveStatus] = useState<FocusedSaveStatus>("idle");
   const [cropSaveError, setCropSaveError] = useState<string | null>(null);
 
   const activeTomlLabel = useMemo(() => {
@@ -649,16 +677,89 @@ export default function DreamwellEditorApp({
       </section>
 
       {artEditorRecord !== null ? (
-        <DreamwellArtEditor
-          record={artEditorRecord}
-          imageNumberSaveStatus={artSaveStatus}
-          imageNumberSaveError={artSaveError}
-          cropSaveStatus={cropSaveStatus}
-          cropSaveError={cropSaveError}
-          onSaveImageNumber={(imageNumber) =>
-            handleSaveImageNumber(artEditorRecord, imageNumber)
-          }
-          onSaveArt={(art) => handleSaveArt(artEditorRecord, art)}
+        <FocusedCardEditor
+          title={artEditorRecord.name}
+          fields={[
+            {
+              field: "name",
+              label: "Name",
+              kind: "text",
+              value: artEditorRecord.name,
+              saveEntry: fieldSaveEntry(saveState, {
+                cardId: artEditorRecord.id,
+                field: "name",
+              }),
+              onCommit: (value) =>
+                handleFieldCommit(artEditorRecord, "name", value),
+            },
+            {
+              field: "energy-added",
+              label: "Energy added",
+              kind: "text",
+              value: artEditorRecord["energy-added"],
+              saveEntry: fieldSaveEntry(saveState, {
+                cardId: artEditorRecord.id,
+                field: "energy-added",
+              }),
+              onCommit: (value) =>
+                handleFieldCommit(artEditorRecord, "energy-added", value),
+            },
+            {
+              field: "order",
+              label: "Tier",
+              kind: "select",
+              options: Array.from(
+                { length: MAX_DREAMWELL_ORDER + 1 },
+                (_unused, tier) => ({
+                  value: String(tier),
+                  label: String(tier),
+                }),
+              ),
+              value: artEditorRecord.order,
+              saveEntry: fieldSaveEntry(saveState, {
+                cardId: artEditorRecord.id,
+                field: "order",
+              }),
+              onCommit: (value) =>
+                handleFieldCommit(artEditorRecord, "order", value),
+            },
+            {
+              field: "rendered-text",
+              label: "Rules text",
+              kind: "multiline",
+              value: artEditorRecord["rendered-text"],
+              saveEntry: fieldSaveEntry(saveState, {
+                cardId: artEditorRecord.id,
+                field: "rendered-text",
+              }),
+              onCommit: (value) =>
+                handleFieldCommit(artEditorRecord, "rendered-text", value),
+            },
+          ]}
+          art={{
+            model: { kind: "dreamwell" },
+            art: artEditorRecord.art ?? DEFAULT_DREAMWELL_ART_CROP,
+            imageNumber: artEditorRecord["image-number"],
+            onSaveArt: (art) => handleSaveArt(artEditorRecord, art),
+            onSaveImageNumber: (imageNumber) =>
+              handleSaveImageNumber(artEditorRecord, imageNumber),
+            artStatus: cropSaveStatus,
+            artError: cropSaveError,
+            imageStatus: artSaveStatus,
+            imageError: artSaveError,
+          }}
+          renderPreview={(live) => (
+            <DreamwellCardView
+              card={{
+                ...dreamwellPreviewWithDrafts(
+                  dreamwellPreviewCard(artEditorRecord),
+                  live.fieldDrafts,
+                ),
+                art: live.art,
+                imageNumber: live.imageNumber,
+              }}
+            />
+          )}
           onClose={() => setArtEditorId(null)}
         />
       ) : null}

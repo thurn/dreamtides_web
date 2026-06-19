@@ -6,10 +6,12 @@ import {
   saveEditorFigmentField,
   saveEditorFigmentImageNumber,
 } from "./figment-editor-api";
-import ArtCropEditor from "./ArtCropEditor";
-import type { ArtSaveStatus } from "./ArtCropEditor";
+import FocusedCardEditor from "./FocusedCardEditor";
+import type { FocusedSaveStatus } from "./FocusedCardEditor";
 import EditableFigment from "./EditableFigment";
 import { figmentPreviewCard } from "./figment-types";
+import { CardView, DEFAULT_ART_CROP } from "../components/CardView";
+import type { CardData } from "../types/cards";
 import {
   beginFieldEdit,
   cancelFieldEdit,
@@ -121,6 +123,31 @@ function validateFieldSave(
   return { ok: false, message: "This field is not editable." };
 }
 
+/**
+ * Overlay the focused editor's in-progress text drafts onto a figment's preview
+ * so the framed card tracks edits live. Spark is previewed through its own field
+ * once committed; the art crop and image preview through their live controls.
+ */
+function figmentPreviewWithDrafts(
+  preview: CardData,
+  drafts: Record<string, EditableFieldValue>,
+): CardData {
+  const next: CardData = { ...preview };
+  const name = drafts.name;
+  if (typeof name === "string" && name.trim().length > 0) {
+    next.name = name;
+  }
+  const subtype = drafts.subtype;
+  if (typeof subtype === "string") {
+    next.subtype = subtype;
+  }
+  const renderedText = drafts["rendered-text"];
+  if (typeof renderedText === "string") {
+    next.renderedText = renderedText;
+  }
+  return next;
+}
+
 function sortValue(
   figment: EditorFigmentRecord,
   sort: FigmentSortField,
@@ -220,12 +247,10 @@ export default function FigmentEditorApp({
   const [artEditorFigmentId, setArtEditorFigmentId] = useState<string | null>(
     null,
   );
-  const [artSaveStatus, setArtSaveStatus] = useState<ArtSaveStatus>("idle");
+  const [artSaveStatus, setArtSaveStatus] = useState<FocusedSaveStatus>("idle");
   const [artSaveError, setArtSaveError] = useState<string | null>(null);
-  const [nameSaveStatus, setNameSaveStatus] = useState<ArtSaveStatus>("idle");
-  const [nameSaveError, setNameSaveError] = useState<string | null>(null);
   const [imageNumberSaveStatus, setImageNumberSaveStatus] =
-    useState<ArtSaveStatus>("idle");
+    useState<FocusedSaveStatus>("idle");
   const [imageNumberSaveError, setImageNumberSaveError] = useState<string | null>(
     null,
   );
@@ -476,21 +501,6 @@ export default function FigmentEditorApp({
       });
   }
 
-  function handleSaveFigmentName(figment: EditorFigmentRecord, name: string) {
-    setNameSaveStatus("saving");
-    setNameSaveError(null);
-    void apiClient
-      .saveEditorFigmentField({ id: figment.id, field: "name", value: name })
-      .then((response) => {
-        replaceConfirmedFigment(response.figment);
-        setNameSaveStatus("saved");
-      })
-      .catch((error: unknown) => {
-        setNameSaveStatus("error");
-        setNameSaveError(errorMessageFor(error));
-      });
-  }
-
   function handleSaveImageNumber(figment: EditorFigmentRecord, imageNumber: number) {
     setImageNumberSaveStatus("saving");
     setImageNumberSaveError(null);
@@ -510,8 +520,6 @@ export default function FigmentEditorApp({
     setArtEditorFigmentId(figment.id);
     setArtSaveStatus("idle");
     setArtSaveError(null);
-    setNameSaveStatus("idle");
-    setNameSaveError(null);
     setImageNumberSaveStatus("idle");
     setImageNumberSaveError(null);
   }
@@ -663,24 +671,86 @@ export default function FigmentEditorApp({
       </section>
 
       {artEditorFigment !== null ? (
-        <ArtCropEditor
-          figment
-          card={{
-            id: artEditorFigment.id,
-            name: artEditorFigment.name,
-            preview: figmentPreviewCard(artEditorFigment),
+        <FocusedCardEditor
+          title={artEditorFigment.name}
+          fields={[
+            {
+              field: "name",
+              label: "Name",
+              kind: "text",
+              value: artEditorFigment.name,
+              saveEntry: fieldSaveEntry(saveState, {
+                cardId: artEditorFigment.id,
+                field: "name",
+              }),
+              onCommit: (value) =>
+                handleFieldCommit(artEditorFigment, "name", value),
+            },
+            {
+              field: "subtype",
+              label: "Character type",
+              kind: "text",
+              value: artEditorFigment.subtype,
+              saveEntry: fieldSaveEntry(saveState, {
+                cardId: artEditorFigment.id,
+                field: "subtype",
+              }),
+              onCommit: (value) =>
+                handleFieldCommit(artEditorFigment, "subtype", value),
+            },
+            {
+              field: "spark",
+              label: "Spark",
+              kind: "text",
+              value: artEditorFigment.spark,
+              saveEntry: fieldSaveEntry(saveState, {
+                cardId: artEditorFigment.id,
+                field: "spark",
+              }),
+              onCommit: (value) =>
+                handleFieldCommit(artEditorFigment, "spark", value),
+            },
+            {
+              field: "rendered-text",
+              label: "Rules text",
+              kind: "multiline",
+              value: artEditorFigment["rendered-text"],
+              saveEntry: fieldSaveEntry(saveState, {
+                cardId: artEditorFigment.id,
+                field: "rendered-text",
+              }),
+              onCommit: (value) =>
+                handleFieldCommit(artEditorFigment, "rendered-text", value),
+            },
+          ]}
+          art={{
+            model: { kind: "card", figment: true },
+            art: artEditorFigment.art ?? DEFAULT_ART_CROP,
+            imageNumber: artEditorFigment["image-number"],
+            onSaveArt: (art) => handleSaveArt(artEditorFigment, art),
+            onSaveImageNumber: (imageNumber) =>
+              handleSaveImageNumber(artEditorFigment, imageNumber),
+            artStatus: artSaveStatus,
+            artError: artSaveError,
+            imageStatus: imageNumberSaveStatus,
+            imageError: imageNumberSaveError,
           }}
-          saveStatus={artSaveStatus}
-          saveError={artSaveError}
-          cardNameSaveStatus={nameSaveStatus}
-          cardNameSaveError={nameSaveError}
-          imageNumberSaveStatus={imageNumberSaveStatus}
-          imageNumberSaveError={imageNumberSaveError}
-          onSave={(art) => handleSaveArt(artEditorFigment, art)}
-          onSaveCardName={(name) => handleSaveFigmentName(artEditorFigment, name)}
-          onSaveImageNumber={(imageNumber) =>
-            handleSaveImageNumber(artEditorFigment, imageNumber)
-          }
+          renderPreview={(live) => (
+            <CardView
+              card={{
+                ...figmentPreviewWithDrafts(
+                  figmentPreviewCard(artEditorFigment),
+                  live.fieldDrafts,
+                ),
+                art: live.art,
+                imageNumber: live.imageNumber,
+              }}
+              large
+              figment
+              suppressHoverHelp
+              onBoxTopFracChange={live.onBoxTopFracChange}
+            />
+          )}
           onClose={() => setArtEditorFigmentId(null)}
         />
       ) : null}
