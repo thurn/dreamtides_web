@@ -1,8 +1,13 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   loadEditorDreamwell,
   saveEditorDreamwellField,
 } from "./dreamwell-editor-api";
+import DreamwellEditorToolbar from "./DreamwellEditorToolbar";
+import {
+  parseDreamwellDisplayState,
+  replaceDreamwellDisplayStateInUrl,
+} from "./dreamwell-editor-url-state";
 import EditableDreamwell from "./EditableDreamwell";
 import FocusedCardEditor from "./FocusedCardEditor";
 import type { FocusedSaveStatus } from "./FocusedCardEditor";
@@ -49,14 +54,6 @@ type LoadStatus =
 export interface DreamwellEditorAppProps {
   apiClient?: DreamwellEditorApiClient;
 }
-
-const DEFAULT_DISPLAY_STATE: DreamwellDisplayState = {
-  searchText: "",
-  artEditing: false,
-  sort: "sourceOrder",
-  dir: "asc",
-  size: "large",
-};
 
 function errorMessageFor(error: unknown): string {
   return error instanceof Error ? error.message : "Unable to load Dreamwell cards.";
@@ -233,8 +230,9 @@ const CARD_WIDTH: Record<DreamwellDisplayState["size"], string> = {
 export default function DreamwellEditorApp({
   apiClient = DEFAULT_DREAMWELL_API_CLIENT,
 }: DreamwellEditorAppProps) {
-  const [displayState, setDisplayState] =
-    useState<DreamwellDisplayState>(DEFAULT_DISPLAY_STATE);
+  const [displayState, setDisplayState] = useState<DreamwellDisplayState>(() =>
+    parseDreamwellDisplayState(window.location.search),
+  );
   const [loadStatus, setLoadStatus] = useState<LoadStatus>({ kind: "loading" });
   const [loadAttempt, setLoadAttempt] = useState(0);
   const [saveState, setSaveState] = useState<EditableSaveState>(
@@ -313,6 +311,11 @@ export default function DreamwellEditorApp({
     const next = updater(saveStateRef.current);
     saveStateRef.current = next;
     setSaveState(next);
+  }
+
+  function handleDisplayStateChange(nextState: DreamwellDisplayState) {
+    setDisplayState(nextState);
+    replaceDreamwellDisplayStateInUrl(nextState);
   }
 
   function handleFieldBeginEdit(
@@ -598,7 +601,7 @@ export default function DreamwellEditorApp({
               displayState={displayState}
               visibleCount={visible.length}
               totalCount={loadStatus.dreamwell.length}
-              onChange={setDisplayState}
+              onDisplayStateChange={handleDisplayStateChange}
             />
             {visible.length === 0 ? (
               <p role="status" style={{ margin: 0, color: "#c9d3cf" }}>
@@ -764,115 +767,5 @@ export default function DreamwellEditorApp({
         />
       ) : null}
     </main>
-  );
-}
-
-interface DreamwellEditorToolbarProps {
-  displayState: DreamwellDisplayState;
-  visibleCount: number;
-  totalCount: number;
-  onChange: (next: DreamwellDisplayState) => void;
-}
-
-function DreamwellEditorToolbar({
-  displayState,
-  visibleCount,
-  totalCount,
-  onChange,
-}: DreamwellEditorToolbarProps) {
-  const controlStyle: CSSProperties = {
-    background: "#1a2024",
-    color: "#f7f1df",
-    border: "1px solid rgba(247, 241, 223, 0.25)",
-    borderRadius: "6px",
-    padding: "6px 8px",
-    fontSize: "0.82rem",
-  };
-
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        alignItems: "center",
-        gap: "10px",
-        flex: "0 0 auto",
-      }}
-    >
-      <input
-        type="search"
-        placeholder="Search Dreamwell cards..."
-        value={displayState.searchText}
-        onChange={(event) =>
-          onChange({ ...displayState, searchText: event.target.value })
-        }
-        style={{ ...controlStyle, minWidth: "200px" }}
-      />
-      <label style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-        <span style={{ fontSize: "0.78rem", color: "#c9d3cf" }}>Sort</span>
-        <select
-          value={displayState.sort}
-          onChange={(event) =>
-            onChange({
-              ...displayState,
-              sort: event.target.value as DreamwellSortField,
-            })
-          }
-          style={controlStyle}
-        >
-          <option value="sourceOrder">Catalog order</option>
-          <option value="name">Name</option>
-          <option value="energyAdded">Energy added</option>
-          <option value="order">Deck order</option>
-        </select>
-      </label>
-      <button
-        type="button"
-        onClick={() =>
-          onChange({
-            ...displayState,
-            dir: displayState.dir === "asc" ? "desc" : "asc",
-          })
-        }
-        style={{ ...controlStyle, cursor: "pointer" }}
-      >
-        {displayState.dir === "asc" ? "Asc ↑" : "Desc ↓"}
-      </button>
-      <label style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-        <span style={{ fontSize: "0.78rem", color: "#c9d3cf" }}>Size</span>
-        <select
-          value={displayState.size}
-          onChange={(event) =>
-            onChange({
-              ...displayState,
-              size: event.target.value as DreamwellDisplayState["size"],
-            })
-          }
-          style={controlStyle}
-        >
-          <option value="small">Small</option>
-          <option value="medium">Medium</option>
-          <option value="large">Large</option>
-        </select>
-      </label>
-      <button
-        type="button"
-        aria-pressed={displayState.artEditing}
-        onClick={() =>
-          onChange({ ...displayState, artEditing: !displayState.artEditing })
-        }
-        style={{
-          ...controlStyle,
-          cursor: "pointer",
-          background: displayState.artEditing ? "#1f635d" : controlStyle.background,
-          fontWeight: 700,
-        }}
-      >
-        {displayState.artEditing ? "Edit mode: on" : "Edit mode: off"}
-      </button>
-      <span style={{ fontSize: "0.78rem", color: "#8a948f", marginLeft: "auto" }}>
-        {visibleCount} / {totalCount}
-      </span>
-    </div>
   );
 }
