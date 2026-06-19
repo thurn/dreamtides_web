@@ -263,24 +263,24 @@ art-owned = true
 card-number = 23
 
 [[dreamwell]]
-name = "Forest Trailhead"
+name = "Ringvale"
 id = "f61431f3-33bd-42ff-a229-b4013582e86e"
 rendered-text = "Discover a ≤2● cost card."
 order = 2
 energy-added = 1
 card-type = "Dreamwell"
-image-number = 384639405
+image-number = 2622590199
 art-owned = false
 card-number = 24
 
 [[dreamwell]]
-name = "Foxfire Thicket"
+name = "Nomad's Verge"
 id = "51caf26d-83bf-45a9-bc80-010d353277db"
 rendered-text = "Materialize a 1✦ ethereal figment."
 order = 1
 energy-added = 1
 card-type = "Dreamwell"
-image-number = 1972047656
+image-number = 2637215371
 art-owned = false
 card-number = 25
 

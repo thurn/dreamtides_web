@@ -10,6 +10,9 @@ Do not write tests which fail when I change my production TOML files
 or change things like default algorithm chocies. Assume all TOML
 game design data is subject to change at any time.
 
+If you encounter a pre-existing issue, please describe it in ./pre-existing-issues.txt
+and include this as part of your commit. 
+
 # Logging
 
 Quest logs live in logs/quest-log.jsonl
