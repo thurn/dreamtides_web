@@ -4561,7 +4561,7 @@ art = { x = 0.546, y = 0.608, scale = 1.17 }
 name = "Sunshadow Eagle"
 mtg-name = "Allosaurus Shepherd"
 id = "edb479be-68a5-45bc-bd19-2602156edb57"
-rendered-text = "5●, ☪: Each allied spirit animal's ✦ becomes 7."
+rendered-text = "5●, ☪: Each allied spirit animal's ✦ becomes 7 until end of turn."
 energy-cost = 2
 card-type = "Character"
 subtype = "Spirit Animal"
