@@ -340,9 +340,10 @@ energy-added = 1
 card-type = "Dreamwell"
 art-owned = false
 card-number = 37
+image-number = 450441286
 
 [[dreamwell]]
-name = "Sunlit Archive"
+name = "Azure Cascade"
 id = "8f5f2e26-44b5-447b-90d0-eaf22ab29fed"
 rendered-text = "Discover a character."
 order = 3
@@ -350,9 +351,10 @@ energy-added = 0
 card-type = "Dreamwell"
 art-owned = false
 card-number = 39
+image-number = 485518030
 
 [[dreamwell]]
-name = "Verdant Hollow"
+name = "Rusted Edifice"
 id = "a0fbcbd9-96ee-4392-add7-e1d436f99553"
 rendered-text = "Return an event from your void to your hand."
 order = 2
@@ -360,19 +362,21 @@ energy-added = 1
 card-type = "Dreamwell"
 art-owned = false
 card-number = 41
+image-number = 2251144879
 
 [[dreamwell]]
-name = "Wellspring Commons"
+name = "Overgrown Passage"
 id = "06e62e45-53f9-4264-9aa6-2575b445332a"
 rendered-text = "Each player draws until they have at least 3 cards in hand."
 order = 3
-energy-added = 1
+energy-added = 2
 card-type = "Dreamwell"
 art-owned = false
 card-number = 43
+image-number = 1282908316
 
 [[dreamwell]]
-name = "Twin Moons"
+name = "Sunset Pool"
 id = "120ec4c2-aa7b-48f4-be9f-f39820e565ca"
 rendered-text = "Draw a card. If it is a character, gain 1●."
 order = 3
@@ -380,6 +384,7 @@ energy-added = 1
 card-type = "Dreamwell"
 art-owned = false
 card-number = 44
+image-number = 2313906183
 
 [[dreamwell]]
 name = "Fortune's Wheel"
@@ -390,3 +395,5 @@ energy-added = 0
 card-type = "Dreamwell"
 art-owned = false
 card-number = 46
+image-number = 635276573
+art = { x = 0, y = -1, scale = 1 }
