@@ -203,6 +203,27 @@ function buildOffer(
   return weightedSample(entries, ctx.packSize);
 }
 
+/**
+ * Once a Legendary card is drafted, every Legendary card is banned from the
+ * rest of the run's pool: removed from both the remaining multiset and the
+ * fixed pool it is recreated from, so no later offer — this visit or a future
+ * draft site — can surface another Legendary. The just-drafted Legendary is
+ * already in the deck; dropping it from the pool here too keeps a pool
+ * recreation from re-offering it. Pool mode only: the deck-fit modes draw from
+ * a frozen pack sequence / fresh rolls and have no such multiset to prune.
+ */
+function removeLegendariesFromPool(
+  state: PoolDraftState,
+  cardDatabase: Map<number, CardData>,
+): void {
+  for (const key of Object.keys(state.draftPoolCopiesByCard)) {
+    if (cardDatabase.get(Number(key))?.rarity === "Legendary") {
+      delete state.draftPoolCopiesByCard[key];
+      delete state.remainingCopiesByCard[key];
+    }
+  }
+}
+
 function spendShownOffer(
   remainingCopiesByCard: Record<string, number>,
   offer: number[],
@@ -536,6 +557,12 @@ function processPlayerPickInternal(
 
   state.pickNumber += 1;
   state.sitePicksCompleted += 1;
+
+  // Drafting a Legendary bans every other Legendary from the rest of the pool
+  // before the next offer is built, so a player ends a run with at most one.
+  if (state.mode === "pool" && card?.rarity === "Legendary") {
+    removeLegendariesFromPool(state, cardDatabase);
+  }
 
   if (state.sitePicksCompleted >= SITE_PICKS) {
     state.currentOffer = [];

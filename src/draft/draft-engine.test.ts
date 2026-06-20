@@ -21,7 +21,10 @@ import {
   type Fresh20Deps,
 } from "./fresh20/fresh20-offer";
 
-function makeCard(cardNumber: number): CardData {
+function makeCard(
+  cardNumber: number,
+  overrides: Partial<CardData> = {},
+): CardData {
   return {
     name: `TestCard${String(cardNumber)}`,
     id: `test-${String(cardNumber)}`,
@@ -35,6 +38,7 @@ function makeCard(cardNumber: number): CardData {
     renderedText: "",
     imageNumber: cardNumber,
     artOwned: false,
+    ...overrides,
   };
 }
 
@@ -419,6 +423,96 @@ describe("fixed multiset offer generation", () => {
       "7": 1,
       "8": 1,
     });
+  });
+});
+
+describe("legendary exclusion", () => {
+  it("strips every Legendary from both pool maps when a Legendary is drafted", () => {
+    const cardDatabase = buildDB([
+      makeCard(1, { rarity: "Legendary" }),
+      makeCard(2, { rarity: "Legendary" }),
+      makeCard(3, { rarity: "Legendary" }),
+      makeCard(4),
+      makeCard(5),
+    ]);
+    const state = makeDraftState({
+      draftPoolCopiesByCard: { "1": 1, "2": 1, "3": 1, "4": 2, "5": 2 },
+      remainingCopiesByCard: { "2": 1, "3": 1, "4": 1, "5": 1 },
+      activeSiteId: "site-a",
+      currentOffer: [1, 4, 5, 2],
+      siteShownCardNumbers: [1, 4, 5, 2],
+      // Final pick of the visit, so no follow-up offer is revealed and the
+      // pool-pruning is observed in isolation.
+      sitePicksCompleted: SITE_PICKS - 1,
+    });
+
+    const isComplete = processPlayerPick(1, state, cardDatabase);
+
+    expect(isComplete).toBe(true);
+    // Legendaries 2 and 3 (and the just-drafted 1) are gone from the remaining
+    // multiset and from the fixed pool that recreation draws from.
+    expect(state.remainingCopiesByCard).toEqual({ "4": 1, "5": 1 });
+    expect(state.draftPoolCopiesByCard).toEqual({ "4": 2, "5": 2 });
+  });
+
+  it("leaves Legendaries in the pool when a non-Legendary is drafted", () => {
+    const cardDatabase = buildDB([
+      makeCard(1, { rarity: "Legendary" }),
+      makeCard(2),
+      makeCard(3),
+      makeCard(4),
+      makeCard(5),
+    ]);
+    const state = makeDraftState({
+      draftPoolCopiesByCard: { "1": 1, "2": 1, "3": 1, "4": 1, "5": 1 },
+      remainingCopiesByCard: { "1": 1, "3": 1, "4": 1, "5": 1 },
+      activeSiteId: "site-a",
+      currentOffer: [2, 3, 4, 5],
+      siteShownCardNumbers: [2, 3, 4, 5],
+      sitePicksCompleted: SITE_PICKS - 1,
+    });
+
+    processPlayerPick(2, state, cardDatabase);
+
+    // Picking the ordinary card 2 leaves the Legendary (1) available.
+    expect(state.remainingCopiesByCard["1"]).toBe(1);
+    expect(state.draftPoolCopiesByCard["1"]).toBe(1);
+  });
+
+  it("keeps Legendaries out of a later draft site once one is drafted", () => {
+    const cardDatabase = buildDB([
+      makeCard(1, { rarity: "Legendary" }),
+      makeCard(2, { rarity: "Legendary" }),
+      ...Array.from({ length: 8 }, (_, index) => makeCard(index + 3)),
+    ]);
+    const state = makeDraftState({
+      remainingCopiesByCard: Object.fromEntries(
+        Array.from({ length: 10 }, (_, index) => [String(index + 1), 1]),
+      ),
+    });
+
+    // rng 0 makes weightedSample take the lowest-numbered entries, so the first
+    // offer leads with the Legendaries (cards 1 and 2).
+    vi.spyOn(Math, "random").mockReturnValue(0);
+
+    enterDraftSite(state, "site-a", cardDatabase);
+    const offer = [...state.currentOffer];
+    const legendaryInOffer =
+      offer.find((n) => cardDatabase.get(n)?.rarity === "Legendary") ?? 0;
+    expect(cardDatabase.get(legendaryInOffer)?.rarity).toBe("Legendary");
+
+    processPlayerPick(legendaryInOffer, state, cardDatabase);
+
+    // The fixed recreation pool no longer holds any Legendary...
+    for (const key of Object.keys(state.draftPoolCopiesByCard)) {
+      expect(cardDatabase.get(Number(key))?.rarity).not.toBe("Legendary");
+    }
+    // ...so a brand-new visit (which resets the shown set and may recreate the
+    // multiset) can never surface a second Legendary.
+    enterDraftSite(state, "site-b", cardDatabase);
+    for (const cardNumber of state.currentOffer) {
+      expect(cardDatabase.get(cardNumber)?.rarity).not.toBe("Legendary");
+    }
   });
 });
 
