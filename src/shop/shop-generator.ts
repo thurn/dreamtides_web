@@ -6,6 +6,7 @@ import type { Dreamsign, RuntimeShopSlot } from "../types/quest";
 import { drawAndSpendUniqueCards } from "../draft/draft-engine";
 import { drawDreamsignOptions } from "../dreamsign/dreamsign-pool";
 import { logAffiliationDraw } from "../affiliations/affiliation-weights";
+import { logEvent } from "../logging";
 
 /** Fixed price for standard card items. */
 export const STANDARD_CARD_PRICE = 100;
@@ -218,6 +219,32 @@ export function replayShopDraftState(
 }
 
 /**
+ * Summarizes a draft state's remaining card supply for the shop reconstruction
+ * log. For a `pool` draft this is the distinct card count and the total copies
+ * still available to draw; other modes report only their `mode` (they draw from
+ * a frozen pack/replay sequence rather than a depleting multiset). Returns
+ * `{ mode: null }` when the run has no draft state at all. This is what
+ * distinguishes a genuinely exhausted pool from a missing card source when a
+ * shop renders empty.
+ */
+function summarizeDraftPool(
+  state: DraftState | null,
+): { mode: string | null; distinctRemaining?: number; copiesRemaining?: number } {
+  if (state === null) return { mode: null };
+  if (state.mode !== "pool") return { mode: state.mode };
+  const entries = Object.values(state.remainingCopiesByCard);
+  let distinctRemaining = 0;
+  let copiesRemaining = 0;
+  for (const copies of entries) {
+    if (copies > 0) {
+      distinctRemaining += 1;
+      copiesRemaining += copies;
+    }
+  }
+  return { mode: "pool", distinctRemaining, copiesRemaining };
+}
+
+/**
  * Generates shop inventory: 3 cards and 2 dreamsigns by default. Dreamsigns are
  * drawn from — and spent against — the run's shared Dreamsign pool. A regular
  * shop's card slots are drawn from — and spent against — the run draft
@@ -248,6 +275,17 @@ export function generateShopInventory(
     draftState === null ? null : structuredClone(draftState);
   const slots: ShopSlot[] = [];
 
+  // Reconstruction-log accounting for the card slots. `cardSource` records which
+  // supply the shop drew from; `drawnCardNumbers` is how many card numbers the
+  // draw yielded; `cardsMissingFromDatabase` counts draws silently dropped
+  // because the card number was absent from `cardDatabase`. Together they
+  // explain any shortfall between the requested `cardCount` and the card slots
+  // that actually appear.
+  const poolBefore = summarizeDraftPool(draftState);
+  let cardSource: "specialty" | "draft_multiset" | "none" = "none";
+  let drawnCardCount = 0;
+  let cardsMissingFromDatabase = 0;
+
   if (isSpecialty) {
     // --- Specialty card slots: drawn from the fixed starter decklist,
     // without touching the draft multiset. ---
@@ -257,9 +295,12 @@ export function generateShopInventory(
       [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
     }
     const drawnCardNumbers = shuffled.slice(0, cardCount);
+    cardSource = "specialty";
+    drawnCardCount = drawnCardNumbers.length;
     for (const cardNumber of drawnCardNumbers) {
       const card = cardDatabase.get(cardNumber);
       if (card === undefined) {
+        cardsMissingFromDatabase += 1;
         continue;
       }
       slots.push({
@@ -280,6 +321,8 @@ export function generateShopInventory(
       undefined,
       affiliationNumberWeights,
     );
+    cardSource = "draft_multiset";
+    drawnCardCount = drawnCardNumbers.length;
     if (affiliationNumberWeights !== undefined) {
       logAffiliationDraw({
         drawSite: "shop_stock",
@@ -291,6 +334,7 @@ export function generateShopInventory(
     for (const cardNumber of drawnCardNumbers) {
       const card = cardDatabase.get(cardNumber);
       if (card === undefined) {
+        cardsMissingFromDatabase += 1;
         continue;
       }
       slots.push({
@@ -303,6 +347,8 @@ export function generateShopInventory(
       });
     }
   }
+
+  const cardSlotCount = slots.length;
 
   // --- Dreamsign slots: drawn from the shared Dreamsign pool and spent. ---
   let remainingPool = [...remainingDreamsignPoolIds];
@@ -338,6 +384,30 @@ export function generateShopInventory(
     const discount = 30 + Math.floor(Math.random() * 7) * 10;
     slots[idx] = { ...slots[idx], discountPercent: discount };
   }
+
+  const dreamsignSlotCount = slots.length - cardSlotCount;
+
+  // Reconstruction log: one event per generated shop, enough to explain any
+  // empty or short shop after the fact. `cardSlotCount === 0` with a non-`none`
+  // `cardSource` is the empty-shop signature; cross-check `drawnCardCount`
+  // (pool exhausted vs. drew but filtered) and `cardsMissingFromDatabase`
+  // (drew valid numbers but the card database lacked them) against the
+  // requested `cardCount` to localize the cause.
+  logEvent("shop_inventory_generated", {
+    shopType: isSpecialty ? "specialty" : "regular",
+    affiliationId: affiliationId ?? null,
+    requestedCardCount: cardCount,
+    requestedDreamsignCount: dreamsignCount,
+    cardSource,
+    drawnCardCount,
+    cardsMissingFromDatabase,
+    cardSlotCount,
+    dreamsignSlotCount,
+    totalSlotCount: slots.length,
+    draftPoolBefore: poolBefore,
+    draftPoolAfter: summarizeDraftPool(nextDraftState),
+    remainingDreamsignPoolCount: remainingPool.length,
+  });
 
   return {
     slots,
