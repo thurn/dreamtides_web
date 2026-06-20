@@ -25,25 +25,39 @@
    * rest on short windows. */
   justify-content: safe center;
   gap: 22px;
-  padding: 30px 24px;
+  /* The bottom padding reserves room for the persistent quest HUD bar so the
+   * lower ware row never tucks underneath it. */
+  padding: 24px 24px 68px;
   overflow: hidden auto;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color: #e2e8f0;
   -webkit-font-smoothing: antialiased;
 }
 
-/* ---- Offers grid: card-sized wares, centered, wrapping ---- */
+/* ---- Offers grid: card-sized wares, centered in a single row ---- */
 .shop-site .sh-grid {
-  display: grid;
-  /* Five wares plus the reroll tile sit as two rows of three on a roomy stage,
-   * falling back to two columns or one as the viewport narrows. */
-  grid-template-columns: repeat(auto-fill, var(--sh-cardw, 168px));
+  /* Three tiles per row, so the six Card Shop wares (five wares plus the restock
+   * tile) read as two rows of three, and the Dreamsign Market's four tiles as a
+   * row of three plus the restock tile. Tile width is driven off the viewport
+   * height (`--sh-cardw`) so both rows — card art, buy buttons and all — always
+   * fit the viewport: the tiles shrink on short windows and reach full size on
+   * tall ones, and shrink further if the width gets tight. */
+  --sh-cardw: clamp(104px, 18vh, 168px);
+  display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  align-items: start;
-  gap: 22px 26px;
+  align-items: flex-start;
+  gap: 14px 18px;
   width: 100%;
-  max-width: 580px;
+  max-width: calc(var(--sh-cardw) * 3 + 18px * 2);
   z-index: 6;
+}
+/* The Dreamsign Market lays out only three Dreamsigns plus the restock tile, and
+ * a Dreamsign tile grows taller as it narrows (its rule text wraps), so a wrapped
+ * row would not fit a short window. Give the market a wide enough row to keep its
+ * four tiles together on a single line. */
+.shop-site[data-shop-variant="DreamsignMarket"] .sh-grid {
+  max-width: calc(var(--sh-cardw) * 4 + 18px * 3);
 }
 .shop-site .sh-slot {
   position: relative;
@@ -51,8 +65,9 @@
   flex-direction: column;
   align-items: center;
   gap: 14px;
-  width: var(--sh-cardw, 168px);
-  justify-self: center;
+  flex: 0 1 var(--sh-cardw, 168px);
+  max-width: var(--sh-cardw, 168px);
+  min-width: 0;
   transition:
     opacity 0.42s cubic-bezier(0.2, 0.7, 0.2, 1),
     transform 0.42s cubic-bezier(0.2, 0.7, 0.2, 1),
@@ -205,8 +220,9 @@
   flex-direction: column;
   align-items: center;
   gap: 14px;
-  width: var(--sh-cardw, 168px);
-  justify-self: center;
+  flex: 0 1 var(--sh-cardw, 168px);
+  max-width: var(--sh-cardw, 168px);
+  min-width: 0;
   transition:
     opacity 0.42s ease,
     transform 0.42s ease;

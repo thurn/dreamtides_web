@@ -28,9 +28,6 @@ interface ShopScreenProps {
   site: SiteState;
 }
 
-/** The width each ware slot occupies in the offers grid, in pixels. */
-const WARE_SLOT_WIDTH = 168;
-
 /**
  * How long a purchased ware plays its lift-and-fade before the buy mutation
  * commits and the slot settles into its acquired ghost.
@@ -202,10 +199,7 @@ export function ShopScreen({ site }: ShopScreenProps) {
       />
 
       {/* Offers grid: wares + a single-use restock tile */}
-      <div
-        className="sh-grid"
-        style={{ "--sh-cardw": `${WARE_SLOT_WIDTH}px` } as CSSProperties}
-      >
+      <div className="sh-grid">
         {slots.map((slot, index) => (
           <ShopSlotCard
             key={`shop-slot-${String(index)}`}
