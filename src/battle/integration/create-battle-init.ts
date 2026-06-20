@@ -378,7 +378,7 @@ export function buildDreamwellDeck(
 }
 
 function toDreamwellCardDefinition(card: DreamwellCard): DreamwellCardDefinition {
-  return {
+  const definition: DreamwellCardDefinition = {
     id: card.id,
     name: card.name,
     renderedText: card.renderedText,
@@ -386,8 +386,13 @@ function toDreamwellCardDefinition(card: DreamwellCard): DreamwellCardDefinition
     order: card.order,
     cardNumber: card.cardNumber,
     imageNumber: card.imageNumber ?? 0,
-    art: card.art,
   };
+  // Firebase rejects `undefined` property values, so only attach `art` when the
+  // card has actually been framed. Unframed cards omit the key entirely.
+  if (card.art !== undefined) {
+    definition.art = card.art;
+  }
+  return definition;
 }
 
 /**
