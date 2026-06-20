@@ -153,22 +153,42 @@ this turn.
 
 ## The Play Area
 
-Each player has a staggered play area with a **front rank** of 4 positions
-(`F0`–`F3`) and a **back rank** of 5 positions (`B0`–`B4`), for 9 total
-positions. A player can have at most 9 characters in play.
+Each player has a staggered play area split into a **front rank** and a **back
+rank**. Only front-rank characters participate in the Challenge phase; back-rank
+characters are safe but can still affect the front rank through abilities such as
+Support.
 
-Because the grid is staggered, a back-rank position sits behind one or two
-front-rank positions:
+The play area starts with **5 positions: 2 in the front rank and 3 in the back
+rank**. It is not a fixed grid — it grows and shrinks with the characters in
+play, and the back rank always holds one more position than the front rank.
+
+**Expansion:** Whenever every position in either rank becomes occupied, one
+position is added to the front rank and one to the back rank. For example,
+starting from the 2 front / 3 back layout, dragging two characters into the front
+rank fills it, so the play area expands to 3 front / 4 back. Filling the front
+rank again expands it to 4 front / 5 back, and so on. Because a character entering
+play goes to the back rank, filling the back rank expands both ranks the same way.
+
+**Contraction:** As characters leave play and a rank is no longer full, the ranks
+shrink back down by the same step — removing one front and one back position —
+but never below the starting 2 front / 3 back minimum. In effect, the play area is
+always the smallest size that still leaves at least one open position in each
+rank.
+
+**Staggered positions and Support:** Because the grid is staggered, each back-rank
+position sits behind one or two front-rank positions, and each front-rank position
+is backed by one or two back-rank positions. Numbering positions left to right
+from 0, back-rank position `Bi` sits behind front-rank positions `F(i-1)` and
+`Fi` wherever those exist. So in the starting layout:
 
 - `B0` supports `F0`
 - `B1` supports `F0` and `F1`
-- `B2` supports `F1` and `F2`
-- `B3` supports `F2` and `F3`
-- `B4` supports `F3`
+- `B2` supports `F1`
 
-Equivalently, `F0` is supported by `B0`/`B1`, `F1` by `B1`/`B2`, `F2` by
-`B2`/`B3`, and `F3` by `B3`/`B4`. A back-rank character with the Support keyword
-benefits the up-to-two front-rank characters in the positions it supports (see
+Equivalently, `F0` is supported by `B0`/`B1` and `F1` by `B1`/`B2`. The leftmost
+and rightmost back positions back a single front position; interior back positions
+back two. A back-rank character with the Support keyword benefits the up-to-two
+front-rank characters in the positions it supports (see
 [Support](#keywords-and-effects)).
 
 **Front rank and the back rank:** Only front-rank characters participate
@@ -177,17 +197,17 @@ characters are safe during the Challenge phase — they do not challenge, defend
 or score, though their abilities (such as Support) can still affect front-rank
 characters.
 
-**Repositioning:** Repositioning means moving a character between any of the 9
+**Repositioning:** Repositioning means moving a character between any two
 positions. Moving a character onto an occupied position swaps the two
 characters. The active player repositions during their Day phase; the opposing
 player repositions during the Dusk phase. An **exhausted character cannot be
 moved to the front rank** by either player.
 
 **Materializing:** A character entering play is placed in the back rank, in the
-exhausted state, and requires an open position. If all positions are full, no
-further characters can be materialized until a position is freed. (A figment
-materializing into an existing same-type stack joins that stack and does not
-require a new position; see [Figments](#figments).)
+exhausted state. If the back rank is full, it expands to make room, so a character
+can always be materialized. (A figment materializing into an existing same-type
+stack joins that stack and does not require a new position; see
+[Figments](#figments).)
 
 ## Turn Structure
 
@@ -223,7 +243,7 @@ and Ending run as automatic bookends.
    abilities, but may not reposition characters. The active player explicitly
    passes to end this phase. Effects during Night can change positions, which
    can change challenger and defender designations.
-7. **Challenge** — Each front-rank lane (`F0` through `F3`) is resolved in turn
+7. **Challenge** — Each front-rank lane is resolved in turn, left to right
    (see [Challengers, Defenders, and Scoring](#challengers-defenders-and-scoring)).
    No cards may be played during this phase, though triggered and static
    abilities still function and can modify spark.
@@ -253,10 +273,9 @@ character's controller's next turn, when it is cleared during the Dawn phase.
 
 Because an exhausted character cannot be moved to the front rank, exhausting a
 character keeps it from challenging or defending. As a convenience, when a front-rank character
-pays a ☪ cost it is automatically moved to an available back-rank position so
-that it does not remain a potential challenger or defender. If there is no
-available back-rank position (and no front-rank position to swap into), the
-character cannot pay the ☪ cost.
+pays a ☪ cost it is automatically moved to a back-rank position so
+that it does not remain a potential challenger or defender; the back rank expands
+if needed to make room.
 
 ## Challengers, Defenders, and Scoring
 
@@ -273,8 +292,8 @@ abilities reading "When an allied X scores ⍟" respond to. By contrast, a flat
 victory points to a player without any character scoring, and does not count as
 a character scoring.
 
-**Challenge phase resolution:** Each front-rank lane (`F0` through `F3`) is
-resolved in turn:
+**Challenge phase resolution:** Each front-rank lane is resolved in turn, left to
+right:
 
 - **Defended challenger:** Compare the spark of the challenger and its defender.
   The character with lower spark is dissolved. If both have equal spark, both are
@@ -394,8 +413,8 @@ banishing card leaves play, and banish until the next Day phase.
 **Materialize** — Put a character into play. This covers a character entering
 play from hand (played normally), from the void, from the deck, as a created
 figment, or returned "to play" by an effect. A materialized character enters the
-back rank exhausted (unless awakened) and requires an open position.
-Materializing fires the character's ▸Materialized trigger and any "When you
+back rank exhausted (unless awakened); the back rank expands if needed to make
+room. Materializing fires the character's ▸Materialized trigger and any "When you
 materialize" triggers. Putting a character directly into play (for example
 "return to play" or "materialize from your void") is not "playing" it: it costs
 no energy, does not use the stack, cannot be Prevented, and does not fire "when
@@ -609,9 +628,8 @@ set of **reserve** figments beneath it:
 - A stack **displays its total spark**, the sum of every figment's spark.
 - When a stack's last figment is removed, the stack **ceases to exist** and frees
   its position immediately.
-- The play-area cap is **9 positions**. A stack occupies one position regardless
-  of how many figments it holds, so stacking lets a player field more than 9
-  figments.
+- A stack occupies one position regardless of how many figments it holds, so a
+  tall stack lets a player field many figments without expanding the play area.
 - Materializing any figment fires "when you materialize" triggers, including a
   figment that joins an existing stack.
 
