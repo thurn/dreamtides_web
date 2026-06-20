@@ -470,11 +470,10 @@ describe("ShopScreen", () => {
     expect(artImg).not.toBeNull();
     expect(artImg?.getAttribute("alt")).toBe("A four-leaf clover");
 
-    // The art tile carries the shared boon styling.
-    const tile = container.querySelector<HTMLElement>(
-      '[data-testid="dreamsign-art-tile"]',
-    );
-    expect(tile?.dataset.isBane).toBe("false");
+    // A boon dreamsign tile carries no bane styling.
+    const tile = container.querySelector<HTMLElement>(".sh-sign");
+    expect(tile).not.toBeNull();
+    expect(tile?.classList.contains("is-bane")).toBe(false);
 
     act(() => {
       root.unmount();
@@ -513,14 +512,13 @@ describe("ShopScreen", () => {
     );
 
     // Bane dreamsigns still load the same artwork pipeline; the bane state
-    // is conveyed by the tile attribute and tint, not by an art swap.
+    // is conveyed by the tile's styling class and tint, not by an art swap.
     expect(
       container.querySelector('img[src="/dreamsigns/skull.png"]'),
     ).not.toBeNull();
-    const tile = container.querySelector<HTMLElement>(
-      '[data-testid="dreamsign-art-tile"]',
-    );
-    expect(tile?.dataset.isBane).toBe("true");
+    const tile = container.querySelector<HTMLElement>(".sh-sign");
+    expect(tile).not.toBeNull();
+    expect(tile?.classList.contains("is-bane")).toBe(true);
 
     act(() => {
       root.unmount();

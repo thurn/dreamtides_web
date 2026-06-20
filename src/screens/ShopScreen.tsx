@@ -1,13 +1,17 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import type { CardData } from "../types/cards";
-import type { SiteState } from "../types/quest";
+import type { Dreamsign, SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
-import { DreamsignArtTile } from "../components/DreamsignArtTile";
 import { EssenceValue } from "../components/EssenceValue";
 import { HoverZoomCard } from "../components/HoverZoomCard";
-import { RulesText } from "../components/RulesText";
+import { HoverPopover } from "../components/HoverPopover";
+import {
+  DREAMSIGN_HOVER_DELAY_MS,
+  DreamsignHoverCard,
+} from "../components/DreamsignHoverCard";
+import { dreamsignIconUrl } from "../atlas/atlas-display";
 import { SiteCloseButton } from "../components/SiteCloseButton";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
@@ -331,14 +335,7 @@ function ShopSlotCard({
     return (
       <div className={`sh-slot ${slotState}`} style={{ "--i": index } as CSSProperties}>
         <div className="sh-card">
-          <div className={`sh-sign${ds.isBane ? " is-bane" : ""}`}>
-            {ds.isBane && <span className="sh-sign-bane-tag">Bane</span>}
-            <DreamsignArtTile dreamsign={ds} sizePx={96} />
-            <div className="sh-sign-name">{ds.name}</div>
-            <div className="sh-sign-rule">
-              <RulesText text={ds.effectDescription} />
-            </div>
-          </div>
+          <ShopDreamsignArt dreamsign={ds} />
         </div>
         <BuyButton
           price={price}
@@ -416,4 +413,52 @@ function BuyButton({
 /** Sale caption shown under a discounted ware. */
 function ShopSaleText({ discountPercent }: { discountPercent: number }) {
   return <p className="sh-sale">Sale {String(discountPercent)}% Off</p>;
+}
+
+/**
+ * A Dreamsign ware shown the same way as the Dreamsign Revelation site: just the
+ * floating art in a card-shaped cell, with the name and full effect text living
+ * exclusively in the hover card. Hovering lifts and glows the art and opens the
+ * shared {@link DreamsignHoverCard} popover.
+ */
+function ShopDreamsignArt({ dreamsign }: { dreamsign: Dreamsign }) {
+  const [imageBroken, setImageBroken] = useState(false);
+  const showImage = Boolean(dreamsign.imageName) && !imageBroken;
+  return (
+    <HoverPopover
+      triggerAs="div"
+      className="sh-sign-hover"
+      delayMs={DREAMSIGN_HOVER_DELAY_MS}
+      maxWidthPx={null}
+      content={({ side, anchorRect }) => (
+        <DreamsignHoverCard
+          dreamsign={dreamsign}
+          popoverSide={side}
+          anchorRect={anchorRect}
+        />
+      )}
+    >
+      <div
+        className={`sh-sign${dreamsign.isBane ? " is-bane" : ""}`}
+        aria-label={
+          dreamsign.isBane
+            ? `Bane dreamsign: ${dreamsign.name}`
+            : `Dreamsign: ${dreamsign.name}`
+        }
+      >
+        {showImage ? (
+          <img
+            className="sh-sign-art"
+            src={dreamsignIconUrl(String(dreamsign.imageName))}
+            alt={dreamsign.imageAlt ?? dreamsign.name}
+            onError={() => setImageBroken(true)}
+          />
+        ) : (
+          <div className="sh-sign-fallback" aria-hidden="true">
+            {dreamsign.isBane ? "☠" : "✦"}
+          </div>
+        )}
+      </div>
+    </HoverPopover>
+  );
 }
