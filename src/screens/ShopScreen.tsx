@@ -8,6 +8,7 @@ import { DreamsignArtTile } from "../components/DreamsignArtTile";
 import { EssenceValue } from "../components/EssenceValue";
 import { HoverZoomCard } from "../components/HoverZoomCard";
 import { RulesText } from "../components/RulesText";
+import { SiteCloseButton } from "../components/SiteCloseButton";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
@@ -55,9 +56,7 @@ const SHOP_BUY_MS = 480;
  */
 export function ShopScreen({ site }: ShopScreenProps) {
   const { state, mutations, cardDatabase } = useQuest();
-  const { essence, deck } = state;
-  const isDreamsignMarket = site.type === "DreamsignMarket";
-  const shopName = isDreamsignMarket ? "Dreamsign Market" : "Card Shop";
+  const { essence } = state;
 
   const runtime = state.siteRuntime[site.id];
   const priceModifiers = useMemo<ShopPriceModifiers>(
@@ -117,20 +116,6 @@ export function ShopScreen({ site }: ShopScreenProps) {
 
   // Slots mid-purchase: the ware lifts and fades before the buy commits.
   const [buying, setBuying] = useState<Set<number>>(() => new Set());
-
-  // Deck tray bump whenever a purchase lands and the deck grows.
-  const [trayBump, setTrayBump] = useState(false);
-  const prevDeckSize = useRef(deck.length);
-  useEffect(() => {
-    if (deck.length > prevDeckSize.current) {
-      setTrayBump(true);
-      const id = setTimeout(() => setTrayBump(false), 450);
-      prevDeckSize.current = deck.length;
-      return () => clearTimeout(id);
-    }
-    prevDeckSize.current = deck.length;
-    return undefined;
-  }, [deck.length]);
 
   useEffect(() => {
     if (runtime === undefined) {
@@ -210,22 +195,13 @@ export function ShopScreen({ site }: ShopScreenProps) {
       data-testid="shop-screen"
       data-shop-variant={site.type}
     >
-      {/* Header: shop name + wallet */}
-      <div className="sh-hud">
-        <div className="sh-title">
-          <span className="sh-title-k">Wares</span>
-          <span className="sh-title-v">{shopName}</span>
-          {site.isEnhanced && <span className="sh-enh">Enhanced · Free Reroll</span>}
-        </div>
-        <div className={`sh-wallet${trayBump ? " flash" : ""}`}>
-          <span className="sh-wallet-k">Essence</span>
-          <span className="sh-wallet-v">
-            <EssenceValue amount={essence} color="inherit" />
-          </span>
-        </div>
-      </div>
+      <SiteCloseButton
+        onClose={handleLeave}
+        testId="shop-leave"
+        label="Leave shop"
+      />
 
-      {/* Offers grid: wares + a single-use reroll tile */}
+      {/* Offers grid: wares + a single-use restock tile */}
       <div
         className="sh-grid"
         style={{ "--sh-cardw": `${WARE_SLOT_WIDTH}px` } as CSSProperties}
@@ -246,7 +222,7 @@ export function ShopScreen({ site }: ShopScreenProps) {
           />
         ))}
 
-        {/* Reroll — the mock-up's "restock", sized as one more ware. */}
+        {/* Restock — a single-use refresh, sized as one more ware. */}
         <RerollTile
           state={mounted ? "show" : "enter"}
           cost={currentRerollCost}
@@ -254,32 +230,6 @@ export function ShopScreen({ site }: ShopScreenProps) {
           available={rerollAvailable}
           onClick={handleReroll}
         />
-      </div>
-
-      {/* Footer */}
-      <div className="sh-foot">
-        <button
-          type="button"
-          className="sh-leave"
-          data-testid="shop-leave"
-          onClick={handleLeave}
-        >
-          <i className="bxf bx-walk" aria-hidden="true" />
-          Leave Shop
-        </button>
-      </div>
-
-      {/* Deck tray — where purchases land */}
-      <div className={`sh-tray${trayBump ? " bump" : ""}`} aria-hidden="true">
-        <div className="sh-tray-stack">
-          <span />
-          <span />
-          <span />
-        </div>
-        <div>
-          <div className="sh-tray-k">Deck</div>
-          <div className="sh-tray-v">{deck.length}</div>
-        </div>
       </div>
 
       {/* Resident guide (shared SiteGuide), docked lower-left in landscape. */}
@@ -312,30 +262,32 @@ function RerollTile({ state, cost, used, available, onClick }: RerollTileProps) 
         <div className="sh-restock-ico">
           <i className="bxf bx-refresh" aria-hidden="true" />
         </div>
-        <div className="sh-restock-name">{used ? "Restocked" : "Reroll"}</div>
+        <div className="sh-restock-name">{used ? "Restocked" : "Restock"}</div>
         <div className="sh-restock-sub">
           {used ? "The shelves are set." : "Refresh the wares, once."}
         </div>
       </div>
       <button
         type="button"
-        className="sh-restock-btn"
+        className="sh-buy"
         data-shop-reroll-button=""
         data-shop-reroll-used={used ? "true" : "false"}
         disabled={!available}
         onClick={onClick}
       >
         {used ? (
-          <span>Reroll Used</span>
+          <span>Restocked</span>
         ) : cost === 0 ? (
-          <span>Reroll Shop (FREE)</span>
+          <>
+            <span className="sh-buy-label">Restock</span>
+            <span>Free</span>
+          </>
         ) : (
           <>
-            <span className="sh-buy-label">Reroll Shop</span>
+            <span className="sh-buy-label">Restock</span>
             <EssenceValue
               amount={cost}
               color="inherit"
-              className="sh-reroll-cost"
               data-shop-reroll-cost=""
             />
           </>

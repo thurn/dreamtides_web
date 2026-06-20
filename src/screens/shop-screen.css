@@ -2,11 +2,11 @@
  * Shop site screen. The resident guide — Tobias Tanglefur at a Card Shop,
  * Amunet at the Dreamsign Market — lays out wares over the dimmed dreamscape
  * scene (supplied by the shared site scene backdrop) so the player can spend
- * essence on cards and Dreamsigns. The composition mirrors the Purge surface:
- * a frosted wallet HUD, a centered row of card-sized offers (five wares plus a
- * single-use reroll tile), a de-emphasized "Leave Shop" link, a deck tray where
- * purchases land, and the guide with a speech bubble docked to the lower-left in
- * landscape. All rules are scoped under `.shop-site`.
+ * essence on cards and Dreamsigns. The surface is pared down to its essentials:
+ * a centered grid of card-sized offers, each with a buy button, plus a
+ * single-use restock tile, the resident guide with a speech bubble docked to
+ * the lower-left in landscape, and the shared red close button in the top-right
+ * corner. All rules are scoped under `.shop-site`.
  */
 
 /* Fixed full-viewport composition sitting above the shared scene backdrop (also
@@ -21,116 +21,15 @@
   align-items: center;
   /* `safe center` centers the stage when the viewport has room, but pins it to
    * the top (rather than clipping both ends) when the wares are taller than the
-   * viewport — so the wallet HUD stays visible and the page scrolls down to the
-   * Leave button on short windows. */
+   * viewport — so the first row stays visible and the page scrolls down to the
+   * rest on short windows. */
   justify-content: safe center;
   gap: 22px;
-  padding: 30px 24px 96px;
+  padding: 30px 24px;
   overflow: hidden auto;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color: #e2e8f0;
   -webkit-font-smoothing: antialiased;
-}
-
-/* ---- Header: shop name + wallet readout ---- */
-.shop-site .sh-hud {
-  display: flex;
-  align-items: stretch;
-  gap: 16px;
-  flex: 0 0 auto;
-  z-index: 6;
-}
-.shop-site .sh-title {
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  justify-content: center;
-  padding: 13px 24px;
-  border-radius: 14px;
-  background: rgba(16, 11, 28, 0.72);
-  border: 1px solid rgba(168, 85, 247, 0.45);
-  backdrop-filter: blur(14px);
-  box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.45),
-    0 0 20px rgba(168, 85, 247, 0.15);
-}
-.shop-site .sh-title-k {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 10px;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: #c084fc;
-}
-.shop-site .sh-title-v {
-  font-family: "EB Garamond", Georgia, serif;
-  font-size: 24px;
-  font-weight: 600;
-  line-height: 1;
-  color: #f6f6f5;
-}
-.shop-site .sh-enh {
-  margin-top: 2px;
-  align-self: flex-start;
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #c4f5d6;
-  padding: 3px 9px;
-  border-radius: 999px;
-  background: rgba(20, 44, 30, 0.7);
-  border: 1px solid rgba(74, 222, 128, 0.45);
-}
-
-/* wallet readout — frosted cell, lavender essence value */
-.shop-site .sh-wallet {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  justify-content: center;
-  padding: 13px 24px;
-  border-radius: 14px;
-  background: rgba(16, 11, 28, 0.72);
-  border: 1px solid rgba(168, 85, 247, 0.45);
-  backdrop-filter: blur(14px);
-  box-shadow:
-    0 12px 30px rgba(0, 0, 0, 0.45),
-    0 0 20px rgba(168, 85, 247, 0.15);
-}
-.shop-site .sh-wallet-k {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 10px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: #6b7280;
-}
-.shop-site .sh-wallet-v {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size: 26px;
-  font-weight: 700;
-  line-height: 1;
-  color: var(--color-essence);
-}
-.shop-site .sh-wallet.flash {
-  animation: sh-wallet-flash 0.5s ease;
-}
-@keyframes sh-wallet-flash {
-  0% {
-    box-shadow:
-      0 12px 30px rgba(0, 0, 0, 0.45),
-      0 0 0 2px rgba(216, 180, 254, 0);
-  }
-  40% {
-    box-shadow:
-      0 12px 30px rgba(0, 0, 0, 0.45),
-      0 0 0 2px rgba(216, 180, 254, 0.7),
-      0 0 26px rgba(216, 180, 254, 0.5);
-  }
-  100% {
-    box-shadow:
-      0 12px 30px rgba(0, 0, 0, 0.45),
-      0 0 0 2px rgba(216, 180, 254, 0);
-  }
 }
 
 /* ---- Offers grid: card-sized wares, centered, wrapping ---- */
@@ -372,49 +271,6 @@
   border-color: rgba(168, 85, 247, 0.2);
   opacity: 0.58;
 }
-.shop-site .sh-restock-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 9px;
-  width: 100%;
-  min-height: 46px;
-  padding: 0 14px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-weight: 700;
-  font-size: 16px;
-  color: #e2e8f0;
-  border: 1px solid rgba(168, 85, 247, 0.45);
-  background: rgba(26, 21, 37, 0.8);
-  box-shadow:
-    0 6px 16px rgba(0, 0, 0, 0.4),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-  transition:
-    transform 0.12s ease,
-    box-shadow 0.14s ease,
-    filter 0.14s ease,
-    opacity 0.14s ease;
-}
-.shop-site .sh-restock-btn:hover:not(:disabled) {
-  filter: brightness(1.15);
-  border-color: rgba(168, 85, 247, 0.7);
-  box-shadow:
-    0 8px 20px rgba(0, 0, 0, 0.5),
-    0 0 18px rgba(168, 85, 247, 0.24);
-}
-.shop-site .sh-restock-btn:active:not(:disabled) {
-  transform: scale(0.98);
-}
-.shop-site .sh-restock-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.42;
-  box-shadow: 0 5px 14px rgba(0, 0, 0, 0.4);
-}
-.shop-site .sh-restock-btn .sh-reroll-cost {
-  color: var(--color-essence);
-}
 
 /* ---- Purchased ghost slot ---- */
 .shop-site .sh-ghost {
@@ -434,118 +290,12 @@
   color: rgba(196, 132, 252, 0.55);
 }
 
-/* ---- Footer ---- */
-.shop-site .sh-foot {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  z-index: 6;
-}
-.shop-site .sh-leave {
-  display: inline-flex;
-  align-items: center;
-  gap: 9px;
-  padding: 12px 26px;
-  border-radius: 10px;
-  cursor: pointer;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-weight: 600;
-  font-size: 17px;
-  color: #94a3b8;
-  border: 1px solid rgba(148, 163, 184, 0.25);
-  background: rgba(20, 14, 34, 0.6);
-  backdrop-filter: blur(8px);
-  transition:
-    color 0.14s ease,
-    border-color 0.14s ease,
-    background 0.14s ease;
-}
-.shop-site .sh-leave:hover {
-  color: #e2e8f0;
-  border-color: rgba(168, 85, 247, 0.45);
-  background: rgba(28, 20, 44, 0.75);
-}
-.shop-site .sh-leave i {
-  font-size: 1.05em;
-}
-
 /* ---- Status line (runtime still opening) ---- */
 .shop-site .sh-status {
   font-size: 15px;
   color: rgba(226, 232, 240, 0.7);
   z-index: 6;
   text-align: center;
-}
-
-/* ---- Deck tray (where purchases land) ---- */
-.shop-site .sh-tray {
-  position: absolute;
-  right: 40px;
-  bottom: 34px;
-  z-index: 5;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 12px 18px;
-  border-radius: 12px;
-  background: rgba(16, 11, 28, 0.74);
-  border: 1px solid rgba(168, 85, 247, 0.45);
-  backdrop-filter: blur(12px);
-  box-shadow:
-    0 12px 28px rgba(0, 0, 0, 0.45),
-    0 0 20px rgba(168, 85, 247, 0.15);
-  pointer-events: none;
-}
-.shop-site .sh-tray-stack {
-  position: relative;
-  width: 40px;
-  height: 56px;
-  flex: 0 0 auto;
-}
-.shop-site .sh-tray-stack span {
-  position: absolute;
-  inset: 0;
-  border-radius: 5px;
-  background: linear-gradient(160deg, #2a2040, #14101f);
-  border: 1px solid rgba(168, 85, 247, 0.45);
-  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
-}
-.shop-site .sh-tray-stack span:nth-child(1) {
-  transform: rotate(-7deg) translate(-3px, 1px);
-}
-.shop-site .sh-tray-stack span:nth-child(2) {
-  transform: rotate(4deg) translate(3px, -1px);
-}
-.shop-site .sh-tray-stack span:nth-child(3) {
-  transform: rotate(-1deg);
-}
-.shop-site .sh-tray.bump .sh-tray-stack {
-  animation: sh-tray-bump 0.45s ease;
-}
-@keyframes sh-tray-bump {
-  0% {
-    transform: scale(1);
-  }
-  45% {
-    transform: scale(1.16);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-.shop-site .sh-tray-k {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: 10px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: #6b7280;
-}
-.shop-site .sh-tray-v {
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-size: 22px;
-  font-weight: 700;
-  line-height: 1;
-  color: #e2e8f0;
 }
 
 /* On wide viewports reserve the lower-left for the guide (the shared SiteGuide)
@@ -556,17 +306,11 @@
     padding-left: 312px;
   }
 }
-@media (max-width: 1199px) {
-  .shop-site .sh-tray {
-    display: none;
-  }
-}
 
 @media (prefers-reduced-motion: reduce) {
   .shop-site .sh-slot,
   .shop-site .sh-restock,
-  .shop-site .sh-restock-ico,
-  .shop-site .sh-tray-stack {
+  .shop-site .sh-restock-ico {
     transition: none !important;
     animation: none !important;
   }

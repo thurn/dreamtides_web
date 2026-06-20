@@ -386,7 +386,6 @@ describe("ShopScreen", () => {
     );
 
     const priceSpan = container.querySelector("[data-shop-price]");
-    expect(container.textContent).toContain("Card Shop");
     expect(priceSpan?.textContent).toBe("100");
 
     act(() => {
@@ -558,7 +557,7 @@ describe("ShopScreen", () => {
     expect(rerollButton).not.toBeNull();
     expect(rerollButton?.disabled).toBe(false);
     expect(rerollButton?.dataset.shopRerollUsed).toBe("false");
-    expect(rerollButton?.textContent).toContain("Reroll Shop");
+    expect(rerollButton?.textContent).toContain("Restock");
 
     // Rerolls are paid for in essence; the cost renders as an essence value.
     const costEl = rerollButton?.querySelector("[data-shop-reroll-cost]");
@@ -569,7 +568,7 @@ describe("ShopScreen", () => {
     });
   });
 
-  it("disables the reroll affordance and labels it 'Reroll Used' after the reroll has been used this visit", () => {
+  it("disables the reroll affordance and labels it 'Restocked' after the reroll has been used this visit", () => {
     const slots: RuntimeShopSlot[] = [
       {
         itemType: "card",
@@ -603,7 +602,7 @@ describe("ShopScreen", () => {
     expect(rerollButton).not.toBeNull();
     expect(rerollButton?.disabled).toBe(true);
     expect(rerollButton?.dataset.shopRerollUsed).toBe("true");
-    expect(rerollButton?.textContent).toBe("Reroll Used");
+    expect(rerollButton?.textContent).toBe("Restocked");
 
     act(() => {
       root.unmount();
@@ -733,7 +732,7 @@ describe("ShopScreen", () => {
     const rerollButton = container.querySelector<HTMLButtonElement>(
       "[data-shop-reroll-button]",
     );
-    expect(rerollButton?.textContent).toContain("FREE");
+    expect(rerollButton?.textContent).toContain("Free");
     expect(rerollButton?.disabled).toBe(false);
 
     act(() => {
