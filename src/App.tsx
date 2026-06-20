@@ -119,9 +119,11 @@ export function QuestApp({
   }, [runtimeConfig.gotoScene, state.dreamcaller, mutations]);
 
   // `?loadQuest=<name>`: fetch the named snapshot from the dev server and
-  // replace the room's quest state with it, then render the loaded run. Fires
-  // once per mount; a reload of the same URL re-applies the snapshot, which is
-  // the intended "resume this saved quest" behaviour.
+  // replace the room's quest state with it, then render the loaded run. Once
+  // the snapshot is applied, the `loadQuest` param is stripped from the URL so
+  // a later reload — including a Vite HMR full reload triggered by editing a
+  // file — keeps the in-session run instead of re-applying the snapshot and
+  // discarding progress.
   useEffect(() => {
     const questName = loadQuestName;
     if (questName === null || loadQuestFiredRef.current) {
@@ -148,6 +150,7 @@ export function QuestApp({
           screen: loaded.screen?.type ?? "unknown",
         });
         loadQuestState(loaded, "load_quest_url");
+        stripLoadQuestParam();
         setLoadQuestStatus("done");
       })
       .catch((error: unknown) => {
@@ -502,6 +505,24 @@ export function QuestApp({
       </ErrorBoundary>
     </div>
   );
+}
+
+/**
+ * Remove the `loadQuest` query param from the current URL without reloading the
+ * page. Called once the named snapshot has been applied so a later reload — for
+ * example a Vite HMR full reload after editing a file — keeps the in-session run
+ * rather than re-fetching the snapshot and discarding progress.
+ */
+function stripLoadQuestParam(): void {
+  if (typeof window === "undefined") {
+    return;
+  }
+  const url = new URL(window.location.href);
+  if (!url.searchParams.has("loadQuest")) {
+    return;
+  }
+  url.searchParams.delete("loadQuest");
+  window.history.replaceState(window.history.state, "", url.toString());
 }
 
 function isBattleSiteHudHidden(state: QuestState): boolean {
