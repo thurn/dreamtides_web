@@ -2152,10 +2152,15 @@ export function MultiplayerQuestProvider({
         };
         remainingDreamsignPool = generated.remainingDreamsignPoolIds;
         // Pool mode persists the spent multiset; the deck-fit modes keep their
-        // own draft state (the transient shop pool is discarded).
-        nextDraftState = isDeckFitDraft
-          ? current.state.draftState
-          : generated.draftState;
+        // own draft state (the transient shop pool is discarded). The Dreamsign
+        // Market draws no cards — it is generated with `draftState: null`, so the
+        // generator hands back a null draft state; writing that back would wipe
+        // the run's draft pool and leave every later Card Shop empty, so the
+        // market preserves the live draft state untouched.
+        nextDraftState =
+          isDeckFitDraft || dreamsignMarket
+            ? current.state.draftState
+            : generated.draftState;
       }
 
       const now = new Date().toISOString();
@@ -2433,9 +2438,13 @@ export function MultiplayerQuestProvider({
       affiliationId: affiliation?.affiliationId,
       ...(dreamsignMarket ? { cardCount: 0, dreamsignCount: 3 } : {}),
     });
-    const nextDraftState = isDeckFitDraft
-      ? current.state.draftState
-      : generated.draftState;
+    // The Dreamsign Market draws no cards (generated with `draftState: null`);
+    // preserving the live draft state here keeps a reroll from wiping the run's
+    // draft pool, just like the deck-fit modes.
+    const nextDraftState =
+      isDeckFitDraft || dreamsignMarket
+        ? current.state.draftState
+        : generated.draftState;
     const replacements = shopSlotsToRuntime(generated.slots);
     let replacementIndex = 0;
     const rerollCount = expectedRuntime.rerollCount + 1;

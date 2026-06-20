@@ -1680,6 +1680,52 @@ describe("MultiplayerQuestProvider", () => {
     randomSpy.mockRestore();
   });
 
+  it("generates a Dreamsign Market without nulling the run's draft state", () => {
+    // Regression: the Dreamsign Market draws no cards and is generated with a
+    // null draft state, so the generator hands back a null draft state. Writing
+    // that back used to wipe the run's draft pool, leaving every later Card Shop
+    // empty (cardSource "none"). The market must preserve the live draft state.
+    const captured: QuestContextValue[] = [];
+    const draftState: QuestState["draftState"] = {
+      mode: "pool",
+      draftPoolCopiesByCard: { "201": 1, "202": 1, "203": 1, "204": 1 },
+      remainingCopiesByCard: { "201": 1, "202": 1, "203": 1, "204": 1 },
+      currentOffer: [],
+      activeSiteId: null,
+      pickNumber: 5,
+      sitePicksCompleted: 0,
+    };
+    const site: SiteState = {
+      id: "site-1",
+      type: "DreamsignMarket",
+      isEnhanced: false,
+      isVisited: false,
+    };
+    const questState: QuestState = {
+      ...createDefaultState(),
+      remainingDreamsignPool: ["dreamsign-1", "dreamsign-2", "dreamsign-3"],
+      draftState,
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.ensureShopRuntime(site);
+    const nextRoom = latestRoomTransactionUpdater()?.(session.room);
+
+    // The market's runtime is created, but the run's draft pool is untouched —
+    // not collapsed to null — so a subsequent Card Shop can still draw cards.
+    expect(nextRoom?.questState?.siteRuntime["site-1"]?.kind).toBe("shop");
+    expect(nextRoom?.questState?.draftState).toEqual(draftState);
+  });
+
   it("rejects a second reroll within the same shop visit", () => {
     const captured: QuestContextValue[] = [];
     const site: SiteState = {
