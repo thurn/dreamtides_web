@@ -93,6 +93,7 @@ export function battleCardDisplayFromInstance(
     renderedText: instance.definition.renderedText,
     imageNumber: instance.definition.imageNumber,
     artOwned: instance.definition.imageNumber > 0,
+    art: instance.definition.art,
   };
 }
 
