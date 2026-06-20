@@ -4,6 +4,7 @@ import { mergeCardKeywordModification } from "../card-type-change";
 import { resetBattleCompletionBridge } from "../battle/integration/battle-completion-bridge";
 import type { QuestContent } from "../data/quest-content";
 import { logEvent, resetLog } from "../logging";
+import { findQuestStateInvariantViolations } from "./quest-state-invariants";
 import {
   runRoomTransaction,
   writeRoomUpdate,
@@ -113,6 +114,57 @@ function writeUpdate(
   });
 }
 
+/**
+ * Whether a detected quest-state invariant violation should throw (failing the
+ * write loudly) rather than only logging. Throwing in dev and test surfaces the
+ * bug at its source — the transaction that corrupted the state — instead of at
+ * the distant symptom. Production logs and survives, so a single bad write never
+ * takes down a live run.
+ */
+function shouldThrowOnInvariantViolation(): boolean {
+  try {
+    const env = (import.meta as { env?: { MODE?: string } }).env;
+    return env?.MODE !== "production";
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Guards a room transaction against illegal quest-state transitions (see
+ * `findQuestStateInvariantViolations`). Validates the updater's `prev -> next`
+ * result on every committed change, emits `quest_state_invariant_violated`, and
+ * — outside production — throws to abort the corrupting write. This is the
+ * systematic backstop for the whole class of "a write path persisted a cleared
+ * value into shared run state" bugs.
+ */
+function validateRoomTransitionInvariants(
+  prev: MultiplayerRoom | null,
+  next: MultiplayerRoom | null | undefined,
+): void {
+  if (prev === null || next === null || next === undefined || next === prev) {
+    return;
+  }
+  const violations = findQuestStateInvariantViolations(
+    prev.questState,
+    next.questState,
+  );
+  if (violations.length === 0) {
+    return;
+  }
+  logEvent("quest_state_invariant_violated", {
+    invariants: violations.map((violation) => violation.invariant),
+    details: violations.map((violation) => violation.detail),
+  });
+  if (shouldThrowOnInvariantViolation()) {
+    throw new Error(
+      `Quest state invariant violated: ${violations
+        .map((violation) => violation.invariant)
+        .join(", ")}`,
+    );
+  }
+}
+
 function writeRoomTransaction({
   database,
   roomId,
@@ -122,9 +174,18 @@ function writeRoomTransaction({
   roomId: string;
   updater: (room: MultiplayerRoom | null) => MultiplayerRoom | null | undefined;
 }): void {
-  void runRoomTransaction(database, roomId, updater).catch((error: unknown) => {
-    console.error("Failed to write multiplayer quest update", error);
-  });
+  const validatingUpdater = (
+    room: MultiplayerRoom | null,
+  ): MultiplayerRoom | null | undefined => {
+    const next = updater(room);
+    validateRoomTransitionInvariants(room, next);
+    return next;
+  };
+  void runRoomTransaction(database, roomId, validatingUpdater).catch(
+    (error: unknown) => {
+      console.error("Failed to write multiplayer quest update", error);
+    },
+  );
 }
 
 function writeQuestField<K extends keyof QuestState>({
@@ -2151,16 +2212,14 @@ export function MultiplayerQuestProvider({
           remainingDreamsignPoolIds: generated.remainingDreamsignPoolIds,
         };
         remainingDreamsignPool = generated.remainingDreamsignPoolIds;
-        // Pool mode persists the spent multiset; the deck-fit modes keep their
-        // own draft state (the transient shop pool is discarded). The Dreamsign
-        // Market draws no cards — it is generated with `draftState: null`, so the
-        // generator hands back a null draft state; writing that back would wipe
-        // the run's draft pool and leave every later Card Shop empty, so the
-        // market preserves the live draft state untouched.
-        nextDraftState =
-          isDeckFitDraft || dreamsignMarket
-            ? current.state.draftState
-            : generated.draftState;
+        // Pool mode persists the spent multiset. The deck-fit modes spend a
+        // transient shop pool we do not persist, so they keep the live draft
+        // state. Card-less shops (the Dreamsign Market) hand back no draft state
+        // (`generated.draftState` is `undefined`), so `?? current.state.draftState`
+        // keeps the run's draft pool intact rather than nulling it.
+        nextDraftState = isDeckFitDraft
+          ? current.state.draftState
+          : generated.draftState ?? current.state.draftState;
       }
 
       const now = new Date().toISOString();
@@ -2438,13 +2497,13 @@ export function MultiplayerQuestProvider({
       affiliationId: affiliation?.affiliationId,
       ...(dreamsignMarket ? { cardCount: 0, dreamsignCount: 3 } : {}),
     });
-    // The Dreamsign Market draws no cards (generated with `draftState: null`);
-    // preserving the live draft state here keeps a reroll from wiping the run's
-    // draft pool, just like the deck-fit modes.
-    const nextDraftState =
-      isDeckFitDraft || dreamsignMarket
-        ? current.state.draftState
-        : generated.draftState;
+    // Deck-fit modes keep the live draft state (the transient shop pool is not
+    // persisted); a card-less shop hands back no draft state
+    // (`generated.draftState` is `undefined`), so `?? current.state.draftState`
+    // keeps the run's draft pool intact rather than nulling it on a reroll.
+    const nextDraftState = isDeckFitDraft
+      ? current.state.draftState
+      : generated.draftState ?? current.state.draftState;
     const replacements = shopSlotsToRuntime(generated.slots);
     let replacementIndex = 0;
     const rerollCount = expectedRuntime.rerollCount + 1;

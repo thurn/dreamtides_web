@@ -91,8 +91,22 @@ export interface ShopInventoryResult {
   slots: ShopSlot[];
   remainingDreamsignPoolIds: string[];
   spentDreamsignPoolIds: string[];
-  /** The draft state after shop card slots were drawn and spent. */
-  draftState: DraftState | null;
+  /**
+   * The draft multiset after this shop drew its card slots from — and spent —
+   * it. Present ONLY for a regular pool-card shop that actually spent the run
+   * draft multiset. `undefined` means the shop did not touch the run's draft
+   * state at all — a Specialty Shop (draws from the fixed starter decklist), a
+   * card-less Dreamsign Market (`cardCount: 0`), or a run with no draft state —
+   * and the caller MUST keep its existing draft state rather than persist
+   * anything from the result.
+   *
+   * This deliberately does not reuse `null` for "untouched": a card-less shop
+   * is generated with `draftState: null`, and persisting that null back into the
+   * run state would wipe the draft pool and leave every later Card Shop empty.
+   * `undefined` ("I didn't touch it") is therefore distinct from a real spent
+   * state, so the write-back can never silently null the run's draft pool.
+   */
+  draftState?: DraftState;
 }
 
 /**
@@ -273,6 +287,11 @@ export function generateShopInventory(
 
   const nextDraftState =
     draftState === null ? null : structuredClone(draftState);
+  // The spent draft multiset to hand back, set ONLY when the regular pool-card
+  // branch below actually draws from and spends it. Left `undefined` for every
+  // card-less or fixed-list shop so the caller keeps its own draft state (see
+  // `ShopInventoryResult.draftState`).
+  let spentDraftState: DraftState | undefined = undefined;
   const slots: ShopSlot[] = [];
 
   // Reconstruction-log accounting for the card slots. `cardSource` records which
@@ -314,7 +333,10 @@ export function generateShopInventory(
     }
   } else if (nextDraftState !== null) {
     // --- Regular card slots: drawn from the draft multiset and spent, biased
-    // toward the dreamscape's affiliation when one is supplied. ---
+    // toward the dreamscape's affiliation when one is supplied. This is the
+    // only branch that spends the run draft multiset, so it is the only one
+    // that hands a draft state back to the caller. ---
+    spentDraftState = nextDraftState;
     const drawnCardNumbers = drawAndSpendUniqueCards(
       nextDraftState,
       cardCount,
@@ -413,6 +435,6 @@ export function generateShopInventory(
     slots,
     remainingDreamsignPoolIds: remainingPool,
     spentDreamsignPoolIds,
-    draftState: nextDraftState,
+    draftState: spentDraftState,
   };
 }

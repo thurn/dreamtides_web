@@ -263,7 +263,7 @@ describe("generateShopInventory", () => {
       .map((slot) => slot.card!.cardNumber);
     expect(drawnCardNumbers.length).toBeGreaterThan(0);
     // Spent cards were removed from the returned draft state.
-    const resultPoolState = result.draftState as PoolDraftState | null;
+    const resultPoolState = result.draftState as PoolDraftState | undefined;
     for (const cardNumber of drawnCardNumbers) {
       expect(
         resultPoolState?.remainingCopiesByCard[String(cardNumber)],
@@ -353,10 +353,10 @@ describe("generateShopInventory", () => {
     });
     // The original passed-in object is unchanged.
     expect(draftState.remainingCopiesByCard).toEqual(before);
-    // The returned draft state still has the full multiset.
-    expect(
-      (result.draftState as PoolDraftState | null)?.remainingCopiesByCard,
-    ).toEqual(before);
+    // A Specialty Shop never spends the run draft multiset, so it hands back no
+    // draft state: the caller keeps its own untouched, and nothing the shop
+    // returns can overwrite the run's draft pool.
+    expect(result.draftState).toBeUndefined();
   });
 
   it("prices Specialty Shop card slots at the specialty price", () => {
@@ -389,7 +389,7 @@ describe("generateShopInventory", () => {
     // The regular shop spends drawn cards from the draft multiset.
     expect(
       Object.keys(
-        (result.draftState as PoolDraftState | null)?.remainingCopiesByCard ??
+        (result.draftState as PoolDraftState | undefined)?.remainingCopiesByCard ??
           {},
       ).length,
     ).toBeLessThan(Object.keys(draftState.remainingCopiesByCard).length);
