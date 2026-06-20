@@ -8,6 +8,7 @@ import { BattleCardView, type BattleCardVisualData } from "./BattleCardView";
 const CARD_DATA: BattleCardVisualData = {
   artUrl: null,
   cost: 2,
+  counters: 0,
   isFast: false,
   figmentCount: 1,
   effectiveSpark: 3,

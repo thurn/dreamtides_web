@@ -17,6 +17,8 @@ export interface BattleCardVisualData {
    *  the default centered crop. */
   art?: ArtCrop;
   cost: number;
+  /** ⧗ counters stored on this card; 0 when the card holds none. */
+  counters: number;
   isFast: boolean;
   figmentCount: number;
   effectiveSpark: number;
@@ -36,6 +38,7 @@ export function battleCardVisualFromInstance(
     artUrl: instance.definition.imageNumber > 0 ? cardImageUrl(instance.definition.imageNumber) : null,
     art: instance.definition.art,
     cost: instance.definition.energyCost,
+    counters: instance.status.counters,
     figmentCount: selectFigmentCount(instance),
     effectiveSpark: instance.definition.battleCardKind === "character"
       ? selectEffectiveSparkForInstance(instance)
@@ -58,6 +61,7 @@ export function battleCardVisualFromReward(
     artUrl: card.artOwned ? cardImageUrl(card.imageNumber) : null,
     art: card.art,
     cost: card.energyCost ?? 0,
+    counters: 0,
     figmentCount: 1,
     effectiveSpark: card.cardType === "Character" ? Math.max(0, card.spark ?? 0) : 0,
     isFast: card.isFast,
@@ -201,6 +205,12 @@ export function BattleCardView({
       {!hidden && data.kind === "character" && data.figmentCount > 1 ? (
         <div className="c-figment-count" aria-label="figment count">
           {String(data.figmentCount)}
+        </div>
+      ) : null}
+      {!hidden && data.counters > 0 ? (
+        <div className="c-counters" aria-label={`${String(data.counters)} counters`}>
+          <span className="c-counters-glyph" aria-hidden="true">⧗</span>
+          {String(data.counters)}
         </div>
       ) : null}
       <div className="c-name">{hidden ? "?" : data.name}</div>

@@ -3364,7 +3364,6 @@ describe("MultiplayerQuestProvider", () => {
       0,
       null,
       null,
-      false,
     );
     const decayedRoom = latestRoomTransactionUpdater()?.(committedRoom);
     expect(decayedRoom?.questState?.battleModifiers).toEqual([]);

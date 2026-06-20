@@ -30,7 +30,6 @@ export interface CompleteBattleSiteVictoryInput {
   completionLevelAtBattleStart: number;
   atlasSnapshot: DreamAtlas;
   essenceReward: number;
-  isMiniboss: boolean;
   isFinalBoss: boolean;
   dreamscapeModifiers?: readonly DreamscapeModifier[];
   /**
@@ -61,7 +60,6 @@ export function completeBattleSiteVictory(
     completionLevelAtBattleStart,
     atlasSnapshot,
     essenceReward,
-    isMiniboss,
     isFinalBoss,
     dreamscapeModifiers = [],
     atlasBuildContext,
@@ -92,7 +90,7 @@ export function completeBattleSiteVictory(
     siteId,
   });
   mutations.markSiteVisited(siteId);
-  mutations.incrementCompletionLevel(essenceReward, null, null, isMiniboss);
+  mutations.incrementCompletionLevel(essenceReward, null, null);
   logEvent("battle_proto_completion_applied", {
     battleId,
     completionLevelAtBattleStart,
@@ -100,7 +98,6 @@ export function completeBattleSiteVictory(
     dreamscapeId,
     essenceReward,
     isFinalBoss,
-    isMiniboss,
     siteId,
   });
 

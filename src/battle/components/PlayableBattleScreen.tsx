@@ -668,7 +668,6 @@ function PlayableBattleScreenInner({
       completionLevelAtBattleStart: battleInit.completionLevelAtStart,
       atlasSnapshot: battleInit.atlasSnapshot,
       essenceReward: battleInit.essenceReward,
-      isMiniboss: battleInit.isMiniboss,
       isFinalBoss: battleInit.isFinalBoss,
       dreamscapeModifiers: questState.dreamscapeModifiers,
       atlasBuildContext: {
@@ -1507,6 +1506,7 @@ function PlayableBattleScreenInner({
             />
           </div>
           <BattleActionBar
+            dreamsigns={battleInit.dreamsignSummaries}
             futureCount={futureCount}
             historyCount={historyCount}
             isBasicAutomationEnabled={isBasicAutomationEnabled}

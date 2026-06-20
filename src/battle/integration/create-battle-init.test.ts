@@ -335,12 +335,8 @@ describe("createBattleInit", () => {
       expect(floored.essenceReward).toBe(0);
     });
 
-    it("flags miniboss at completion level 3 and final boss at completion level 6", () => {
+    it("flags final boss at completion level 6", () => {
       const baseState = makeBattleTestState();
-      const minibossInit = createBattleInit({
-        ...makeBaseInput(),
-        state: { ...baseState, completionLevel: 3 },
-      });
       const finalInit = createBattleInit({
         ...makeBaseInput(),
         state: { ...baseState, completionLevel: 6 },
@@ -350,11 +346,7 @@ describe("createBattleInit", () => {
         state: { ...baseState, completionLevel: 2 },
       });
 
-      expect(minibossInit.isMiniboss).toBe(true);
-      expect(minibossInit.isFinalBoss).toBe(false);
-      expect(finalInit.isMiniboss).toBe(false);
       expect(finalInit.isFinalBoss).toBe(true);
-      expect(ordinaryInit.isMiniboss).toBe(false);
       expect(ordinaryInit.isFinalBoss).toBe(false);
     });
   });

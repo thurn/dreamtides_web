@@ -163,7 +163,6 @@ export interface QuestMutations {
     essenceReward: number,
     rewardCardNumber: number | null,
     rewardCardName: string | null,
-    isMiniboss: boolean,
   ) => void;
   setScreen: (screen: Screen) => void;
   markSiteVisited: (siteId: string) => void;

@@ -199,6 +199,8 @@ export interface BattleDreamcallerSummary {
 export interface BattleDreamsignSummary {
   name: Dreamsign["name"];
   effectDescription: Dreamsign["effectDescription"];
+  imageName?: Dreamsign["imageName"];
+  imageAlt?: Dreamsign["imageAlt"];
   isBane: Dreamsign["isBane"];
 }
 
@@ -209,7 +211,6 @@ export interface BattleInit {
   siteId: string;
   dreamscapeId: string | null;
   completionLevelAtStart: number;
-  isMiniboss: boolean;
   isFinalBoss: boolean;
   essenceReward: number;
   openingHandSize: number;

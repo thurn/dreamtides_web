@@ -1,7 +1,9 @@
 import { useEffect } from "react";
-import type { BattleSide } from "../types";
+import { HudDreamsignRow } from "../../components/HudDreamsignRow";
+import type { BattleDreamsignSummary, BattleSide } from "../types";
 
 export function BattleActionBar({
+  dreamsigns = [],
   futureCount,
   hideDebugSection: _hideDebugSection = false,
   historyCount,
@@ -17,6 +19,7 @@ export function BattleActionBar({
   onToggleInspector: _onToggleInspector,
   onUndo,
 }: {
+  dreamsigns?: readonly BattleDreamsignSummary[];
   futureCount: number;
   hideDebugSection?: boolean;
   historyCount: number;
@@ -113,6 +116,11 @@ export function BattleActionBar({
         >
           <i className="bxf bx-cog" aria-hidden="true" />
         </button>
+        {dreamsigns.length > 0 ? (
+          <div className="actionbar-dreamsigns" data-battle-region="dreamsigns">
+            <HudDreamsignRow dreamsigns={dreamsigns} />
+          </div>
+        ) : null}
       </div>
     </section>
   );

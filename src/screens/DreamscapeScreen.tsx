@@ -23,10 +23,9 @@ const NODE_SIZE = 60;
 /** Default accent for an ordinary site node, as a `#rrggbb` hex. */
 const DEFAULT_ACCENT = "#a855f7";
 
-/** Battle label by completion level: final boss, miniboss, or a plain battle. */
+/** Battle label by completion level: final boss or a plain battle. */
 function battleLabel(completionLevel: number): string {
   if (completionLevel === 6) return "Final Boss";
-  if (completionLevel === 3) return "Miniboss";
   return "Battle";
 }
 

@@ -92,7 +92,6 @@ function makeInput(
       knownDreamsignCarrierIds: [],
     },
     essenceReward: 200,
-    isMiniboss: false,
     isFinalBoss: false,
     atlasBuildContext: TEST_ATLAS_BUILD_CONTEXT,
     mutations: makeMutations(),
@@ -140,7 +139,6 @@ describe("completeBattleSiteVictory", () => {
       200,
       null,
       null,
-      false,
     );
     expect(input.mutations.setScreen).not.toHaveBeenCalled();
     expect(mocks.advanceAtlas).not.toHaveBeenCalled();

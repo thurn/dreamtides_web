@@ -287,7 +287,6 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     siteId: site.id,
     dreamscapeId: state.currentDreamscape,
     completionLevelAtStart,
-    isMiniboss: completionLevelAtStart === 3,
     isFinalBoss: completionLevelAtStart === 6,
     essenceReward,
     openingHandSize: 5,
@@ -631,6 +630,8 @@ function freezeBattleDreamsignSummary(
   return Object.freeze({
     name: dreamsign.name,
     effectDescription: dreamsign.effectDescription,
+    imageName: dreamsign.imageName,
+    imageAlt: dreamsign.imageAlt,
     isBane: dreamsign.isBane,
   });
 }

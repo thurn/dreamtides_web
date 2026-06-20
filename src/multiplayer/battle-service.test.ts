@@ -53,7 +53,6 @@ function makeRawSnapshot(overrides: Record<string, unknown>) {
       siteId: "s",
       dreamscapeId: null,
       completionLevelAtStart: 0,
-      isMiniboss: false,
       isFinalBoss: false,
       essenceReward: 0,
       openingHandSize: 5,

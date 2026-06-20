@@ -1096,6 +1096,45 @@
   filter: grayscale(0.5) brightness(0.62);
 }
 
+/* Counter (⧗) badge: a tally in the card's bottom-right corner showing how many
+   ⧗ counters the card currently holds. Hidden when the card has zero counters. */
+.battle-card .c-counters {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 5px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: rgba(9, 6, 16, 0.86);
+  color: #fcd34d;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1px;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+  pointer-events: none;
+  z-index: 3;
+}
+
+.battle-card .c-counters .c-counters-glyph {
+  font-size: 11px;
+  opacity: 0.9;
+}
+
+.battle-card.hand-card .c-counters {
+  bottom: 6px;
+  right: 6px;
+  min-width: 26px;
+  height: 26px;
+  font-size: 14px;
+}
+
 .battle-card .c-name {
   padding: 0 7px 2px;
   font-family: system-ui, sans-serif;
@@ -1421,6 +1460,16 @@
   flex-wrap: wrap;
   gap: 6px;
   align-items: center;
+}
+
+/* Owned dreamsigns sit just past the automation gear, fenced off with a faint
+   divider so they read as a distinct cluster of hoverable thumbnails. */
+.actionbar .actionbar-dreamsigns {
+  display: flex;
+  align-items: center;
+  margin-left: 6px;
+  padding-left: 10px;
+  border-left: 1px solid var(--line);
 }
 
 @media (max-width: 640px) {

@@ -1425,7 +1425,6 @@ export function MultiplayerQuestProvider({
       essenceReward: number,
       rewardCardNumber: number | null,
       rewardCardName: string | null,
-      isMiniboss: boolean,
     ) => {
       const current = currentRef.current;
       const now = new Date().toISOString();
@@ -1484,7 +1483,6 @@ export function MultiplayerQuestProvider({
                   essenceReward,
                   rewardCardNumber,
                   rewardCardName,
-                  isMiniboss,
                   newLevel,
                 },
               }),
