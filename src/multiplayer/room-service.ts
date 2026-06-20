@@ -371,6 +371,17 @@ function normalizeSiteRuntimeEntry(
     }
     return { ...entry, ...base };
   }
+  if (entry.kind === "shop") {
+    // RTDB silently drops empty arrays, so a shop runtime whose `slots` or
+    // `remainingDreamsignPoolIds` was empty at write time round-trips back
+    // missing the field. Restore both so `ShopScreen`'s `.map` and the
+    // purchase/reroll transactions never read `.map`/`.length` on undefined.
+    return {
+      ...entry,
+      slots: entry.slots ?? [],
+      remainingDreamsignPoolIds: entry.remainingDreamsignPoolIds ?? [],
+    };
+  }
   if (entry.kind !== "reward") {
     return entry;
   }
