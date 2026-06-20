@@ -11,6 +11,7 @@ import {
 } from "firebase/database";
 import { pruneActionLog } from "./action-log";
 import { normalizeBattleStateSnapshot } from "./battle-normalize";
+import { stripUndefinedForRtdb } from "./rtdb-sanitize";
 import { presencePath, roomPath, type FirebaseUpdateMap } from "./room-paths";
 import {
   ACTION_LOG_LIMIT,
@@ -590,7 +591,7 @@ export async function createRoomEvictingStale(
       }
     }
 
-    await update(roomsRef, updateMap);
+    await update(roomsRef, stripUndefinedForRtdb(updateMap));
   });
 }
 
@@ -620,7 +621,9 @@ export async function writeRoomUpdate(
   roomId: string,
   updateMap: FirebaseUpdateMap,
 ): Promise<void> {
-  await enqueueRoomWrite(roomId, () => update(ref(database), updateMap));
+  await enqueueRoomWrite(roomId, () =>
+    update(ref(database), stripUndefinedForRtdb(updateMap)),
+  );
 }
 
 export async function pruneRoomActionLog(
@@ -652,7 +655,9 @@ export async function runRoomTransaction(
           ? null
           : normalizeRoomSnapshot(current as MultiplayerRoom);
       const next = updater(normalized);
-      return next === undefined ? current : next;
+      // RTDB rejects any returned tree containing `undefined`; strip it so a
+      // stray optional field never aborts the whole transaction.
+      return next === undefined ? current : stripUndefinedForRtdb(next);
     }),
   );
 }
