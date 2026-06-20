@@ -253,6 +253,44 @@ function currentAffiliationWeights(
   return { weights: resolved.weights, affiliationId: resolved.affiliation.id };
 }
 
+/**
+ * Reconstruction log for the card supply a shop is about to draw from, emitted
+ * just before {@link generateShopInventory} for a card-bearing (non-Dreamsign-
+ * Market) shop. Captures the *live* draft state before it collapses to the value
+ * handed to the generator, so an empty shop's cause is unambiguous: a genuinely
+ * `null` live `draftState` (`liveDraftMode: null`) versus a deck-fit draft whose
+ * package pool was empty (`liveDraftMode: "replay" | "fresh20"` with
+ * `packageDraftPoolSize: 0`), versus a healthy supply that drew normally. Pairs
+ * with `shop_inventory_generated` from the generator.
+ */
+function logShopCardSourceResolved(args: {
+  origin: "ensure" | "reroll";
+  siteId: string;
+  state: QuestState;
+  questContent: QuestContent;
+  isDeckFitDraft: boolean;
+  shopDraftStateNull: boolean;
+}): void {
+  const { origin, siteId, state, questContent, isDeckFitDraft, shopDraftStateNull } =
+    args;
+  logEvent("shop_card_source_resolved", {
+    origin,
+    siteId,
+    // The `?algo=` the run was built with (e.g. "tides4"). A pool-mode draft
+    // hides the algo behind `liveDraftMode: "pool"`, so log it explicitly: the
+    // pool variant drives which multiset the shop draws from.
+    algo: questContent.poolContext?.poolVariant ?? null,
+    draftMode: questContent.draftMode ?? "pool",
+    liveDraftMode: state.draftState?.mode ?? null,
+    isDeckFitDraft,
+    shopDraftStateNull,
+    packageDraftPoolSize: Object.keys(
+      state.resolvedPackage?.draftPoolCopiesByCard ?? {},
+    ).length,
+    hasResolvedPackage: state.resolvedPackage !== null,
+  });
+}
+
 function generatedDeckEntryId(clientId: string): string {
   return `deck-${clientId}-${crypto.randomUUID()}`;
 }
@@ -2081,6 +2119,16 @@ export function MultiplayerQuestProvider({
         const shopDraftState = isDeckFitDraft
           ? replayShopDraftState(current.state.resolvedPackage)
           : current.state.draftState;
+        if (!dreamsignMarket) {
+          logShopCardSourceResolved({
+            origin: "ensure",
+            siteId: site.id,
+            state: current.state,
+            questContent: current.questContent,
+            isDeckFitDraft,
+            shopDraftStateNull: shopDraftState === null,
+          });
+        }
         const affiliation = currentAffiliationWeights(
           current.state,
           current.questContent,
@@ -2364,6 +2412,16 @@ export function MultiplayerQuestProvider({
     // The Dreamsign Market is dreamsign-only; its reroll restocks the three
     // Dreamsign slots and never draws cards.
     const dreamsignMarket = site.type === "DreamsignMarket";
+    if (!dreamsignMarket) {
+      logShopCardSourceResolved({
+        origin: "reroll",
+        siteId: site.id,
+        state: current.state,
+        questContent: current.questContent,
+        isDeckFitDraft,
+        shopDraftStateNull: shopDraftState === null,
+      });
+    }
     const generated = generateShopInventory({
       cardDatabase: current.questContent.cardDatabase,
       draftState: dreamsignMarket ? null : shopDraftState,
