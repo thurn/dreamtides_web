@@ -41,6 +41,46 @@ import "../atlas/atlas.css";
 const STAGE_W = 1920;
 const STAGE_H = 1080;
 
+/** Screen-space padding kept clear above a hover card. */
+const PREVIEW_TOP_INSET = 12;
+/** Screen-space bottom padding used when the HUD bar is not in the DOM. */
+const PREVIEW_BOTTOM_INSET = 88;
+
+/**
+ * Clamp a hover card's stage-space `top` so its on-screen box stays fully
+ * visible: padded below the top edge and above the fixed bottom HUD bar. The
+ * atlas stage is uniformly scaled and letterboxed, so the desired stage Y is
+ * mapped into screen space through the live stage rect, clamped against the
+ * window and HUD bar, then mapped back to stage space. When the card is taller
+ * than the available band it is pinned to the top (its bottom may clip).
+ */
+function clampCardTop(
+  cardEl: HTMLElement,
+  desiredTop: number,
+  height: number,
+): number {
+  const stage = cardEl.closest(".stage");
+  if (stage === null) {
+    return Math.max(20, Math.min(desiredTop, STAGE_H - height - 20));
+  }
+  const rect = stage.getBoundingClientRect();
+  const scale = rect.height / STAGE_H;
+  if (scale <= 0) {
+    return Math.max(20, Math.min(desiredTop, STAGE_H - height - 20));
+  }
+  const hud = document.querySelector("[data-quest-bottom-hud]");
+  const bottomLimit =
+    hud !== null
+      ? hud.getBoundingClientRect().top
+      : window.innerHeight - PREVIEW_BOTTOM_INSET;
+  const minTop = (PREVIEW_TOP_INSET - rect.top) / scale;
+  const maxTop = (bottomLimit - rect.top) / scale - height;
+  if (maxTop < minTop) {
+    return minTop;
+  }
+  return Math.max(minTop, Math.min(desiredTop, maxTop));
+}
+
 /**
  * Stage-space rectangle the run graph is fitted into. Leaves room above for the
  * title block and layer numerals, and below for the persistent bottom HUD.
@@ -228,18 +268,32 @@ function Preview({ resolved }: PreviewProps) {
   );
 
   useLayoutEffect(() => {
-    const height = ref.current?.offsetHeight ?? 480;
-    const previewWidth = isUnrevealed ? 320 : 560;
-    const combinedWidth =
-      previewWidth + (resolved.dreamsign === null ? 0 : 14 + 308);
-    const gap = 92;
-    let left = view.left + gap;
-    if (left + combinedWidth > STAGE_W - 24) {
-      left = view.left - gap - previewWidth;
+    const el = ref.current;
+    if (el === null) {
+      return;
     }
-    let top = view.top - height / 2;
-    top = Math.max(20, Math.min(top, STAGE_H - height - 20));
-    setPos({ left, top, ready: true });
+    // Re-clamp whenever the card's measured height changes (e.g. web fonts
+    // load and the bonus text reflows to another line) so a card anchored to a
+    // low node never grows past the bottom edge of the stage.
+    const reposition = () => {
+      const height = el.offsetHeight;
+      const previewWidth = isUnrevealed ? 320 : 560;
+      const combinedWidth =
+        previewWidth + (resolved.dreamsign === null ? 0 : 14 + 308);
+      const gap = 92;
+      let left = view.left + gap;
+      if (left + combinedWidth > STAGE_W - 24) {
+        left = view.left - gap - previewWidth;
+      }
+      const top = clampCardTop(el, view.top - height / 2, height);
+      setPos({ left, top, ready: true });
+    };
+    reposition();
+    const observer = new ResizeObserver(reposition);
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+    };
   }, [isUnrevealed, resolved.dreamsign, view.left, view.top]);
 
   const style = {
@@ -410,25 +464,38 @@ function DreamsignCard({ resolved }: DreamsignCardProps) {
   );
 
   useLayoutEffect(() => {
-    const height = ref.current?.offsetHeight ?? 330;
-    const previewWidth =
-      view.node.state === "unrevealed" && !view.isBoss ? 320 : 560;
-    const signWidth = 308;
-    const gap = 92;
-    const innerGap = 14;
-    const combinedWidth = previewWidth + innerGap + signWidth;
-    let previewLeft = view.left + gap;
-    let left: number;
-    if (previewLeft + combinedWidth > STAGE_W - 24) {
-      previewLeft = view.left - gap - previewWidth;
-      left = previewLeft - innerGap - signWidth;
-    } else {
-      left = previewLeft + previewWidth + innerGap;
+    const el = ref.current;
+    if (el === null) {
+      return;
     }
-    left = Math.max(24, Math.min(left, STAGE_W - signWidth - 24));
-    let top = view.top - height / 2;
-    top = Math.max(20, Math.min(top, STAGE_H - height - 20));
-    setPos({ left, top, ready: true });
+    // Re-clamp on resize (font load / content reflow) so the dreamsign card
+    // stays fully on the stage when anchored to a low node.
+    const reposition = () => {
+      const height = el.offsetHeight;
+      const previewWidth =
+        view.node.state === "unrevealed" && !view.isBoss ? 320 : 560;
+      const signWidth = 308;
+      const gap = 92;
+      const innerGap = 14;
+      const combinedWidth = previewWidth + innerGap + signWidth;
+      let previewLeft = view.left + gap;
+      let left: number;
+      if (previewLeft + combinedWidth > STAGE_W - 24) {
+        previewLeft = view.left - gap - previewWidth;
+        left = previewLeft - innerGap - signWidth;
+      } else {
+        left = previewLeft + previewWidth + innerGap;
+      }
+      left = Math.max(24, Math.min(left, STAGE_W - signWidth - 24));
+      const top = clampCardTop(el, view.top - height / 2, height);
+      setPos({ left, top, ready: true });
+    };
+    reposition();
+    const observer = new ResizeObserver(reposition);
+    observer.observe(el);
+    return () => {
+      observer.disconnect();
+    };
   }, [view.isBoss, view.left, view.node.state, view.top]);
 
   if (dreamsign === null) {
