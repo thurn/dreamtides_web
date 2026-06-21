@@ -226,7 +226,7 @@ function buildSites(n, L, bossLayer){
 // ----------------------------------------------------------------------------
 // Hex geometry (flat-top axial), corridor routing via cube line-draw
 // ----------------------------------------------------------------------------
-const SIZE=24, STRIDE=3, LANE=2.0;
+const SIZE=24, STRIDE=4, LANE=2.8;
 const axPix=(q,r)=>({x:SIZE*1.5*q, y:SIZE*Math.sqrt(3)*(r+q/2)});
 const axCube=(q,r)=>({x:q, y:-q-r, z:r});
 const cubeAx=c=>({q:c.x, r:c.z});
@@ -278,7 +278,7 @@ function render(){
       for(const h of path){
         const k=h.q+","+h.r; if(nodeKey.has(k)) continue;
         const prev=corridor.get(k);
-        if(!prev || op>prev.opacity) corridor.set(k,{q:h.q,r:h.r,opacity:op,lit:lit||(prev&&prev.lit)});
+        if(!prev || op>prev.opacity) corridor.set(k,{q:h.q,r:h.r,opacity:op,lit:lit||(prev&&prev.lit),color:n.color});
       }
     }
   }
@@ -300,14 +300,16 @@ function render(){
       const k=q+","+r; if(occupied.has(k)) continue;
       const p=axPix(q,r), cx=p.x+ox, cy=p.y+oy;
       if(cx<2||cy<2||cx>W-2||cy>H-2) continue;
-      svg+=`<polygon class="hex" points="${hexPoly(cx,cy,SIZE*0.9)}" fill="var(--void)" stroke="var(--void-edge)" stroke-width="1" opacity="0.55"/>`;
+      svg+=`<polygon class="hex" points="${hexPoly(cx,cy,SIZE*0.92)}" fill="#100b22" stroke="#191333" stroke-width="1" opacity="0.5"/>`;
     }
   }
-  // corridors
+  // corridors — small stepping-stones tinted by their source node, so each
+  // path reads as a distinct traceable trail rather than a fused blob.
   for(const h of corridor.values()){
     const p=axPix(h.q,h.r), cx=p.x+ox, cy=p.y+oy;
-    const fill=h.lit?"var(--corridor-lit)":"var(--corridor)";
-    svg+=`<polygon class="hex" points="${hexPoly(cx,cy,SIZE*0.9)}" fill="${fill}" stroke="#5a4d9e" stroke-width="1" opacity="${h.opacity}"/>`;
+    const r = h.lit ? SIZE*0.50 : SIZE*0.40;
+    const filter = h.lit ? ' filter="url(#glow)"' : '';
+    svg+=`<polygon class="hex" points="${hexPoly(cx,cy,r)}" fill="${h.color}" stroke="#0b0716" stroke-width="1" opacity="${(h.lit?0.95:0.55)*h.opacity}"${filter}/>`;
   }
   // nodes
   for(const n of layers.flat()){
