@@ -345,7 +345,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Sunset Chronicler
 - 1× Torn Circuit Feeder
 - 1× Lord of Hidden Paths
-- 1× Shatterpoint Agent
+- 1× Scrap Reclaimer
 
 ## Vrakmoth signature — Awakened Dawn Chain
 
@@ -555,7 +555,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Ruin Scavenger
 - 1× Evacuation Enforcer
 - 1× Vessel of Echoes
-- 1× Ashen Avenger
+- 1× Memory Tracer
 - 1× Pinnacle Ascendant
 - 1× Scrapyard Custodian
 - 1× Flagbearer of Decay
@@ -565,7 +565,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Forgotten Sleeper
 - 1× Sunset Chronicler
 - 1× Break the Veil
-- 1× Shatterpoint Agent
+- 1× Scrap Reclaimer
 - 1× Immortal Reaper
 - 1× Skull Weaver
 
@@ -1420,7 +1420,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 2× Turquoise Aurelia
 - 2× Dawnprowler Panther
 - 2× Lord of Hidden Paths
-- 2× Shatterpoint Agent
+- 2× Scrap Reclaimer
 - 1× Radiant Trio
 - 1× Starlight Guide
 - 1× Nocturne
@@ -1449,7 +1449,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Lumineth
 - 1× Frostbound Defiant
 - 1× Kindlehorn
-- 1× Ashen Harbinger
+- 1× Shapeshifter Spirit
 - 1× Ambush Operative
 - 1× Verdant Pioneer
 - 1× Featherlight Summoner
@@ -1513,7 +1513,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 2× Luminous Ascent
 - 2× Dawnprowler Panther
 - 2× Lord of Hidden Paths
-- 2× Shatterpoint Agent
+- 2× Scrap Reclaimer
 - 2× Nexus Wayfinder
 - 1× Unleash Ruin
 - 1× Wistful Angler
@@ -1547,7 +1547,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 1× Amythest Aurelia
 - 1× Ruin Scavenger
 - 1× Overstory Explorer
-- 1× Ashen Avenger
+- 1× Memory Tracer
 - 1× Mother of Flames
 - 1× Sunset Chronicler
 - 1× Still Dreamer
@@ -1600,7 +1600,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 2× Luminous Ascent
 - 2× Dawnprowler Panther
 - 2× Lord of Hidden Paths
-- 2× Shatterpoint Agent
+- 2× Scrap Reclaimer
 - 2× Nexus Wayfinder
 - 1× Unleash Ruin
 - 1× Wistful Angler
@@ -1672,7 +1672,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 2× Luminous Ascent
 - 2× Dawnprowler Panther
 - 2× Lord of Hidden Paths
-- 2× Shatterpoint Agent
+- 2× Scrap Reclaimer
 - 2× Nexus Wayfinder
 - 1× Unleash Ruin
 - 1× Endless Projection
@@ -1707,7 +1707,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Paleclaw Panther
 - 1× Amythest Aurelia
 - 1× Ruin Scavenger
-- 1× Ashen Avenger
+- 1× Memory Tracer
 - 1× Mother of Flames
 - 1× Still Dreamer
 - 1× Heavenward Penitent
@@ -1787,7 +1787,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Voidsire
 - 1× Vault Infiltrator
 - 1× Epiphany Unfolded
-- 1× Ashen Harbinger
+- 1× Shapeshifter Spirit
 - 1× Dawnblade Wanderer
 - 1× Mirror Protocol
 - 1× Riftwalker
@@ -1881,7 +1881,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 1× Worldbreacher
 - 1× Voidsire
 - 1× Vault Infiltrator
-- 1× Ashen Harbinger
+- 1× Shapeshifter Spirit
 - 1× Riftwalker
 - 1× Seeker of the Radiant Wilds
 - 1× Infernal Cavalier
@@ -1972,7 +1972,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× Worldbreacher
 - 1× Voidsire
 - 1× Vault Infiltrator
-- 1× Ashen Harbinger
+- 1× Shapeshifter Spirit
 - 1× Mirror Protocol
 - 1× Riftwalker
 - 1× Grim Reclaimer
@@ -2087,7 +2087,7 @@ Tide-fac-02 is built almost entirely of characters (41 of 45 cards) and operates
 - 1× Deathwalker
 - 1× Carrion Shepherd
 - 1× Torn Circuit Feeder
-- 1× Shatterpoint Agent
+- 1× Scrap Reclaimer
 
 ## Lean: Flash of Power — Event Storm Ramp
 
@@ -2178,7 +2178,7 @@ Tide-fac-04 is built almost entirely around spirit animals, with 35 characters a
 - 1× Luminous Ascent
 - 1× Dawnprowler Panther
 - 1× Lord of Hidden Paths
-- 1× Shatterpoint Agent
+- 1× Scrap Reclaimer
 - 1× Nexus Wayfinder
 
 ## Lean: Celestial Reverie — Spirit Animal Flood
@@ -2196,7 +2196,7 @@ Tide-fac-05 is a character-heavy (37 of 45 copies) spirit animal swarm built aro
 - 2× Dreamvale Monarch
 - 2× Ghostlight Wolves
 - 2× Sunshadow Eagle
-- 2× Shatterpoint Agent
+- 2× Scrap Reclaimer
 - 1× Stoneborn Leviathan
 - 1× Luminwings
 - 1× Radiant Trio
@@ -2331,7 +2331,7 @@ Tide-fac-07 runs an even split of events and characters (22/23) built around two
 - 1× Dawnprowler Panther
 - 1× Sunset Chronicler
 - 1× Lord of Hidden Paths
-- 1× Shatterpoint Agent
+- 1× Scrap Reclaimer
 
 ## Lean: Paradox Enforcer — Spirit Animal Swarm
 
@@ -2518,14 +2518,14 @@ Tide-fac-11 is a character-dense deck (40 of 45 copies are characters) built aro
 - 1× Ruin Scavenger
 - 1× Veilseeker
 - 1× Dreamcatcher's Call
-- 1× Ashen Avenger
+- 1× Memory Tracer
 - 1× Dreamborne Leviathan
 - 1× Ruptured Dynamo
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
 - 1× Heavenward Penitent
 - 1× Clockwork Conductor
-- 1× Shatterpoint Agent
+- 1× Scrap Reclaimer
 
 ## Lean: Cloudmantle Ray — Dissolved Void Loop
 
@@ -2542,7 +2542,7 @@ Tide-fac-12 is built almost entirely of warriors (42 of 45 copies) and organizes
 - 2× Celestial Reverie
 - 2× Dreamcatcher's Call
 - 2× Sunshadow Eagle
-- 2× Shatterpoint Agent
+- 2× Scrap Reclaimer
 - 1× Stoneborn Leviathan
 - 1× Cloudmantle Ray
 - 1× Luminwings
@@ -2672,7 +2672,7 @@ Tide-fac-14 is an almost entirely character-based tide (39 of 45 copies) built a
 - 1× Turquoise Aurelia
 - 1× Dawnprowler Panther
 - 1× Lord of Hidden Paths
-- 1× Shatterpoint Agent
+- 1× Scrap Reclaimer
 - 1× Nexus Wayfinder
 
 ## Lean: Spellweaver — Figment Sacrifice Engine
@@ -2764,7 +2764,7 @@ Tide-fac-16 is almost entirely characters (43 of 45 copies), nearly all warriors
 - 1× Prism Caller
 - 1× Young Huntress
 - 1× Dream Garden Visitor
-- 1× Ashen Harbinger
+- 1× Shapeshifter Spirit
 - 1× Riftwalker
 - 1× Silent Observer
 - 1× Infernal Cavalier
@@ -3027,7 +3027,7 @@ Tide-fac-21 is a character-heavy spirit animal swarm built around stacking ✦ o
 - 1× Luminous Ascent
 - 1× Dawnprowler Panther
 - 1× Lord of Hidden Paths
-- 1× Shatterpoint Agent
+- 1× Scrap Reclaimer
 - 1× Nexus Wayfinder
 
 ## Lean: Lumin-Gate Seer — Spirit Animal Spark Pump
@@ -3075,7 +3075,7 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 1× Turquoise Aurelia
 - 1× Dawnprowler Panther
 - 1× Lord of Hidden Paths
-- 1× Shatterpoint Agent
+- 1× Scrap Reclaimer
 - 1× Nexus Wayfinder
 
 ## Lean: Impending Fury — Outsider Score Engine
@@ -3471,7 +3471,7 @@ Tide-fac-30 is built almost entirely around spirit animal characters (36 of 45 c
 - 1× Young Huntress
 - 1× Voidsire
 - 1× Dream Garden Visitor
-- 1× Ashen Harbinger
+- 1× Shapeshifter Spirit
 - 1× Mirror Protocol
 - 1× Riftwalker
 - 1× Silent Observer
@@ -3664,7 +3664,7 @@ This tide is built almost entirely from spirit animal characters (23 of 30 cards
 - 1× Turquoise Aurelia
 - 1× Dawnprowler Panther
 - 1× Lord of Hidden Paths
-- 1× Shatterpoint Agent
+- 1× Scrap Reclaimer
 
 ## Broad: Gloomantler / Dustborn Veteran — Energy Ramp Abandon
 
@@ -3879,11 +3879,11 @@ Tide-neu-08 is a character-dense deck (27 of 30 cards are characters) built almo
 - 1× Bloomweaver
 - 1× Ruin Scavenger
 - 1× Veilseeker
-- 1× Ashen Avenger
+- 1× Memory Tracer
 - 1× Ruptured Dynamo
 - 1× Heavenward Penitent
 - 1× Clockwork Conductor
-- 1× Shatterpoint Agent
+- 1× Scrap Reclaimer
 
 ## Broad: Nightmare Manifest / Dustborn Veteran — Abandon Toolkit
 
