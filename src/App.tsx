@@ -660,7 +660,8 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
       databaseMode={runtimeConfig.databaseMode}
       autoCreate={
         (runtimeConfig.loadQuestName ?? null) !== null ||
-        runtimeConfig.startInBattle
+        runtimeConfig.startInBattle ||
+        (runtimeConfig.gotoScene ?? null) !== null
       }
     >
       {(session) => (

@@ -20,8 +20,9 @@ interface MultiplayerRoomGateProps {
   /**
    * When true and no `gameId` is present, create and join a fresh room
    * automatically instead of showing the manual "Create Game" button. Used by
-   * boot flows that always need a room (`?loadQuest=`, `?startInBattle=`) so the
-   * player lands directly on the loaded run rather than a confusing create gate.
+   * boot flows that always need a room (`?loadQuest=`, `?startInBattle=`,
+   * `?goto=`) so the player lands directly on the loaded run or QA scene rather
+   * than a confusing create gate.
    */
   autoCreate?: boolean;
   children: (session: RoomSession) => ReactNode;
@@ -192,10 +193,10 @@ export function MultiplayerRoomGate({
     }
   }, [database]);
 
-  // Boot flows that always need a room (`?loadQuest=`, `?startInBattle=`) create
-  // one automatically when no `gameId` is present, skipping the manual "Create
-  // Game" gate. Fires once per mount; once it navigates to `?game=<id>` a reload
-  // resumes that room instead of creating another.
+  // Boot flows that always need a room (`?loadQuest=`, `?startInBattle=`,
+  // `?goto=`) create one automatically when no `gameId` is present, skipping the
+  // manual "Create Game" gate. Fires once per mount; once it navigates to
+  // `?game=<id>` a reload resumes that room instead of creating another.
   useEffect(() => {
     if (gameId !== null || !autoCreate || autoCreateFiredRef.current) {
       return;
