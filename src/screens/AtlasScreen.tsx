@@ -225,17 +225,28 @@ function resolveAtlasNodes(
 /** SVG edge styling derived from the two endpoints' lifecycle states. */
 type EdgeKind = "traveled" | "open" | "dim" | "locked";
 
-function edgeKind(from: DreamscapeNode, to: DreamscapeNode): EdgeKind {
+/**
+ * Picks an edge style from the endpoint states and how deep the edge sits
+ * relative to the layer the player is currently choosing into (`choiceLayer`,
+ * the layer of the `available` frontier; `null` once nothing is available).
+ *
+ * Every edge that *originates* at the current layer or earlier is drawn solid:
+ * it links nodes the player has already revealed and can reason about. Only
+ * edges reaching forward from a layer deeper than the current frontier are
+ * dotted, marking the speculative routes into still-locked territory.
+ */
+function edgeKind(
+  from: DreamscapeNode,
+  to: DreamscapeNode,
+  choiceLayer: number | null,
+): EdgeKind {
   if (from.state === "completed" && to.state === "completed") {
     return "traveled";
   }
   if (from.state === "completed" && to.state === "available") {
     return "open";
   }
-  if (from.state === "unrevealed" || to.state === "unrevealed") {
-    return "locked";
-  }
-  if (from.state === "revealedLocked" || to.state === "revealedLocked") {
+  if (choiceLayer !== null && from.layer > choiceLayer) {
     return "locked";
   }
   return "dim";
@@ -593,6 +604,14 @@ export function AtlasScreen() {
     [atlas, questContent],
   );
 
+  // The layer the player is currently choosing into (the `available` frontier).
+  const choiceLayer = useMemo(() => {
+    const available = Object.values(atlas.nodes).find(
+      (n) => n.state === "available",
+    );
+    return available?.layer ?? null;
+  }, [atlas.nodes]);
+
   // Forward edges, drawn from each node's `forwardIds`, styled by endpoint state.
   const edges = useMemo(() => {
     const list: Array<{
@@ -616,12 +635,12 @@ export function AtlasScreen() {
           y1: fromView.view.top,
           x2: toView.view.left,
           y2: toView.view.top,
-          kind: edgeKind(from, to),
+          kind: edgeKind(from, to, choiceLayer),
         });
       }
     }
     return list;
-  }, [atlas.nodes, resolved]);
+  }, [atlas.nodes, resolved, choiceLayer]);
 
   // Layer numerals: one watermark per layer, centred on that layer's column.
   const layerHeads = useMemo(() => {
@@ -634,14 +653,6 @@ export function AtlasScreen() {
     });
     return heads;
   }, [atlas.layers, resolved]);
-
-  // Subtitle: the layer the player is currently choosing into.
-  const choiceLayer = useMemo(() => {
-    const available = Object.values(atlas.nodes).find(
-      (n) => n.state === "available",
-    );
-    return available?.layer ?? null;
-  }, [atlas.nodes]);
 
   const handleNodeClick = useCallback(
     (nodeId: string) => {
