@@ -195,7 +195,7 @@
       ]
     },
     "db4618f6-121b-4c97-98d3-c29849c5824e": {
-      "name": "Ashen Avenger",
+      "name": "Memory Tracer",
       "needs": [
         {
           "theme": "reclaim",
@@ -3549,7 +3549,7 @@
       ]
     },
     "fcb830e5-85ff-48f3-be1e-46e102a5c8e8": {
-      "name": "Shatterpoint Agent",
+      "name": "Scrap Reclaimer",
       "needs": [],
       "supports": [
         "discard"

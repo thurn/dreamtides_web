@@ -3418,19 +3418,19 @@ art-owned = false
 card-number = 184
 
 [[cards]]
-name = "Shatterpoint Agent"
+name = "Scrap Reclaimer"
 mtg-name = "Formidable Speaker"
 id = "fcb830e5-85ff-48f3-be1e-46e102a5c8e8"
 rendered-text = "▸Materialized: You may discard a card to discover a character with cost greater than that card's cost."
 energy-cost = 3
 card-type = "Character"
-subtype = "Synth"
+subtype = "Tinkerer"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "July7", "Art Duplicate"]
-image-number = 2590831717
+tags = ["Art Rework", "July7", "Art Duplicate", "Art OK"]
+image-number = 2269064817
 art-owned = false
 card-number = 185
 
@@ -5495,19 +5495,19 @@ art-owned = false
 card-number = 298
 
 [[cards]]
-name = "Ashen Avenger"
+name = "Memory Tracer"
 mtg-name = "Six"
 id = "db4618f6-121b-4c97-98d3-c29849c5824e"
-rendered-text = "☪: A card in your void gains \"Reclaim – X●, Discard a card\" where X is its ● cost."
+rendered-text = "☪: A card in your void gains reclaim."
 energy-cost = 3
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Child"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "July17", "Art Duplicate"]
-image-number = 1798514896
+tags = ["Art OK"]
+image-number = 2033123267
 art-owned = true
 card-number = 299
 
