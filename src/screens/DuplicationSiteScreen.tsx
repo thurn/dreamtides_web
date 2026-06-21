@@ -209,37 +209,58 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
       className={`duplication-site${mounted ? " mounted" : ""}`}
       data-testid="duplication-site-screen"
     >
-      {/* Summary HUD */}
-      <div className="dup-summary">
-        <div className="dup-cell">
-          <span className="dup-cell-k">Deck after</span>
-          <span className="dup-cell-v">
-            {deckAfter}
-            <span className="unit">/ {deck.length}</span>
-          </span>
-        </div>
-        <div className="dup-cell is-copies">
-          <span className="dup-cell-k">Copies added</span>
-          <span className="dup-cell-v">
-            {hasPick ? (
-              `×${String(copyCount)}`
-            ) : (
-              <span className="dup-cell-note">Pick a card</span>
-            )}
-          </span>
-        </div>
-        {site.isEnhanced && (
-          <div className="dup-cell is-enhanced" data-duplication-enhanced="true">
-            <span className="dup-cell-k">Enhanced</span>
-            <span className="dup-cell-v">Any card</span>
+      {/* Top bar: summary readouts pinned left, the duplicate commit button
+          pinned right so the way to confirm is always visible above the
+          scrolling deck. */}
+      <div className="dup-topbar">
+        <div className="dup-summary">
+          <div className="dup-cell">
+            <span className="dup-cell-k">Deck after</span>
+            <span className="dup-cell-v">
+              {deckAfter}
+              <span className="unit">/ {deck.length}</span>
+            </span>
           </div>
-        )}
+          <div className="dup-cell is-copies">
+            <span className="dup-cell-k">Copies added</span>
+            <span className="dup-cell-v">
+              {hasPick ? (
+                `×${String(copyCount)}`
+              ) : (
+                <span className="dup-cell-note">Pick a card</span>
+              )}
+            </span>
+          </div>
+          {site.isEnhanced && (
+            <div className="dup-cell is-enhanced" data-duplication-enhanced="true">
+              <span className="dup-cell-k">Enhanced</span>
+              <span className="dup-cell-v">Any card</span>
+            </div>
+          )}
+        </div>
+
+        <button
+          type="button"
+          className="dup-dupe-btn"
+          data-testid="duplication-confirm"
+          disabled={!hasPick || copying || duplicated}
+          onClick={handleConfirm}
+        >
+          <i className="bxf bx-copy" aria-hidden="true" />
+          Duplicate this card
+          {hasPick && (
+            <span className="dup-dupe-count">{`×${String(copyCount)}`}</span>
+          )}
+        </button>
       </div>
 
-      {/* Deck grid — one selectable card per candidate. */}
+      {/* Scrollable deck area — one selectable card per candidate. The scroll is
+          contained below the fixed top bar so the first row never slips above
+          the top edge. */}
       {candidates.length === 0 ? (
         <p className="dup-status">No cards available.</p>
       ) : (
+        <div className="dup-scroll">
         <div
           className="dup-deck"
           style={{ "--dup-cardw": `${CARD_SLOT_WIDTH}px` } as CSSProperties}
@@ -293,24 +314,8 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
             );
           })}
         </div>
+        </div>
       )}
-
-      {/* Footer */}
-      <div className="dup-foot">
-        <button
-          type="button"
-          className="dup-dupe-btn"
-          data-testid="duplication-confirm"
-          disabled={!hasPick || copying || duplicated}
-          onClick={handleConfirm}
-        >
-          <i className="bxf bx-copy" aria-hidden="true" />
-          Duplicate this card
-          {hasPick && (
-            <span className="dup-dupe-count">{`×${String(copyCount)}`}</span>
-          )}
-        </button>
-      </div>
 
       {/* collection target, bottom-right — where the copy lands on confirm */}
       <div className="dup-tray" aria-hidden="true">

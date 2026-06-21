@@ -19,24 +19,44 @@
   inset: 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 22px;
-  padding: 40px 24px 104px;
-  overflow: hidden auto;
+  /* A fixed top bar (summary readouts + duplicate button) over a scrolling deck
+   * region. The deck scrolls inside `.dup-scroll`, not the whole screen, so the
+   * top row of cards always starts below the bar and never slips off the top. */
+  overflow: hidden;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   color: #e2e8f0;
   -webkit-font-smoothing: antialiased;
 }
 .duplication-site.is-status {
+  align-items: center;
+  justify-content: center;
   padding: 40px 24px;
+}
+
+/* ---- Top bar: summary readouts left, duplicate button right ---- */
+.duplication-site .dup-topbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  /* Extra right padding reserves the top-right corner for the close button so
+   * the duplicate commit button never slides under it. */
+  padding: 18px 74px 18px 20px;
+  z-index: 8;
+}
+
+/* Drop the shared close button down so the red X lines up with the summary
+ * readouts and the duplicate commit button. */
+.duplication-site .site-close-btn {
+  top: 32px;
 }
 
 /* ---- Summary HUD bar — frosted, two readouts ---- */
 .duplication-site .dup-summary {
   display: flex;
   align-items: stretch;
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   border-radius: 14px;
   background: rgba(16, 11, 28, 0.72);
   border: 1px solid rgba(168, 85, 247, 0.45);
@@ -94,6 +114,17 @@
   color: #94a3b8;
 }
 
+/* ---- Scrolling deck region (below the fixed top bar) ---- */
+.duplication-site .dup-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  overflow-y: auto;
+  /* Generous chip headroom up top so a selected card's copy chip is not clipped
+   * by the scroll edge; bottom room clears the tray. */
+  padding: 26px 24px 104px;
+}
+
 /* ---- Deck grid ---- */
 .duplication-site .dup-deck {
   display: grid;
@@ -102,6 +133,7 @@
   gap: 34px 24px;
   width: 100%;
   max-width: 1120px;
+  margin: 0 auto;
   z-index: 6;
 }
 .duplication-site .dup-slot {
@@ -229,14 +261,9 @@
   transform: translateY(-0.04em);
 }
 
-/* ---- Footer ---- */
-.duplication-site .dup-foot {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  z-index: 6;
-}
+/* ---- Duplicate commit button (top bar, right) ---- */
 .duplication-site .dup-dupe-btn {
+  flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -317,7 +344,7 @@
  * shifting the stage to his right so the two never overlap. On narrower
  * viewports the guide hides itself and the stage takes the full width. */
 @media (min-width: 1200px) {
-  .duplication-site {
+  .duplication-site .dup-scroll {
     padding-left: 312px;
   }
 }
