@@ -301,6 +301,23 @@ function SideEditor({
           </button>
           <button
             type="button"
+            data-battle-action={`debug-shuffle-deck-${side}`}
+            className="chip"
+            disabled={sideState.deck.length < 2}
+            onClick={() => onCommand({
+              id: "DEBUG_EDIT",
+              edit: {
+                kind: "REORDER_DECK",
+                side,
+                order: shuffleDeckOrder(sideState.deck),
+              },
+              sourceSurface: "inspector",
+            })}
+          >
+            Shuffle
+          </button>
+          <button
+            type="button"
             className="chip"
             onClick={() => onOpenZone(side, "deck")}
           >
@@ -373,6 +390,21 @@ function SideEditor({
       </div>
     </div>
   );
+}
+
+/**
+ * Returns a Fisher–Yates shuffle of the deck order. Debug-only, so it draws
+ * from `Math.random` rather than the seeded battle RNG; the resulting
+ * permutation is handed to a `REORDER_DECK` edit, which validates it against the
+ * live deck and emits the deck-reordered log event.
+ */
+function shuffleDeckOrder(deck: readonly string[]): string[] {
+  const order = [...deck];
+  for (let index = order.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(Math.random() * (index + 1));
+    [order[index], order[swapIndex]] = [order[swapIndex], order[index]];
+  }
+  return order;
 }
 
 function NumericRow({

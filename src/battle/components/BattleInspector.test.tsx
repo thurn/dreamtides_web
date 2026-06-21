@@ -115,6 +115,72 @@ describe("BattleInspector", () => {
     });
   });
 
+  it("shuffles the deck into a permutation from the deck tools", () => {
+    const { battleInit, state } = createFixture();
+    const deck = state.sides.player.deck;
+    // The shuffle control only makes sense for a deck the player can reorder;
+    // the live initial state seeds more than one card, so the button is enabled.
+    expect(deck.length).toBeGreaterThan(1);
+
+    const onCommand = vi.fn();
+    const container = document.createElement("div");
+    document.body.append(container);
+    const root = createRoot(container);
+
+    act(() => {
+      root.render(
+        <BattleInspector
+          battleInit={battleInit}
+          canPlayerAct
+          futureCount={1}
+          historyCount={2}
+          isDesktopLayout
+          isOpponentHandRevealed={false}
+          isOpen
+          lastTransition={null}
+          state={state}
+          onClose={() => undefined}
+          onOpen={() => undefined}
+          onCommand={onCommand}
+          onDreamwellDraw={() => undefined}
+          onErode={() => undefined}
+          onOpenFigmentCreator={() => undefined}
+          onOpenPoolViewer={() => undefined}
+          onOpenForesee={() => undefined}
+          onOpenZone={() => undefined}
+          onResetBattle={() => undefined}
+          onRedo={() => undefined}
+          onToggleOpponentHand={() => undefined}
+          onUndo={() => undefined}
+        />,
+      );
+    });
+
+    const shuffleButton = container.querySelector<HTMLButtonElement>(
+      '[data-battle-action="debug-shuffle-deck-player"]',
+    );
+    expect(shuffleButton?.disabled).toBe(false);
+
+    act(() => {
+      shuffleButton?.click();
+    });
+
+    const command = onCommand.mock.calls[0]?.[0];
+    expect(command).toMatchObject({
+      id: "DEBUG_EDIT",
+      edit: { kind: "REORDER_DECK", side: "player" },
+      sourceSurface: "inspector",
+    });
+    // The dispatched order must be a permutation of the live deck: same length
+    // and same multiset of card ids, so REORDER_DECK accepts it.
+    const order: string[] = command.edit.order;
+    expect([...order].sort()).toEqual([...deck].sort());
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("runs Dreamwell + draw and erode from the debug rail", () => {
     const { container, onDreamwellDraw, onErode, root } = mount();
 
