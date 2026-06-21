@@ -77,7 +77,9 @@
     <div id="detail"></div>
     <div class="card">
       <div class="legend">
-        <div><span class="swatch" style="background:#4b3f86"></span><b>Lit corridor</b> — a carved, walkable path</div>
+        <div><span class="swatch" style="background:#d8d0f2"></span><b>Node</b> — a dreamscape (light tile, bordered)</div>
+        <div><span class="swatch" style="background:#6b5fa6"></span><b>Lit corridor</b> — a walkable path now</div>
+        <div><span class="swatch" style="background:#3c3464"></span><b>Corridor</b> — a path leading onward</div>
         <div><span class="swatch" style="background:#14102a"></span><b>Void</b> — impassable (keeps the DAG honest)</div>
         <div style="margin-top:6px"><b>○ available</b> · pulsing ring, you may travel here</div>
         <div><b>✓ completed</b> · cleared</div>
@@ -303,26 +305,29 @@ function render(){
       svg+=`<polygon class="hex" points="${hexPoly(cx,cy,SIZE*0.92)}" fill="#100b22" stroke="#191333" stroke-width="1" opacity="0.5"/>`;
     }
   }
-  // corridors — full-size floor tiles tinted by their source node. Same hex
-  // size as everything else; distinguished from nodes by being flat fills
-  // (no thick border / glyph) and from void by their source colour.
+  // corridors — full-size floor tiles in a single muted tone. Distinguished
+  // from nodes by being flat fills (no thick border / glyph) and from void by
+  // being lighter. Lit (walkable-now) corridors read brighter.
   for(const h of corridor.values()){
     const p=axPix(h.q,h.r), cx=p.x+ox, cy=p.y+oy;
-    svg+=`<polygon class="hex" points="${hexPoly(cx,cy,SIZE*0.92)}" fill="${h.color}" stroke="#0b0716" stroke-width="1.5" opacity="${(h.lit?0.82:0.42)*h.opacity}"/>`;
+    const fill = h.lit ? "#6b5fa6" : "#3c3464";
+    svg+=`<polygon class="hex" points="${hexPoly(cx,cy,SIZE*0.92)}" fill="${fill}" stroke="#0b0716" stroke-width="1.5" opacity="${(h.lit?0.9:0.55)*h.opacity}"/>`;
   }
   // nodes
   for(const n of layers.flat()){
     const p=axPix(n.q,n.r), cx=p.x+ox, cy=p.y+oy;
     const s=n.state, fog = s==="unrevealed";
-    let fill = fog? "#2d2040" : n.color;
-    let op = s==="forgone"?0.3 : s==="revealedLocked"?0.78 : 1;
-    let stroke = s==="available"? "#fff" : s==="completed"? "#ffe9a8" : fog? "#3a2f5e" : "#0b0716";
-    let sw = s==="available"?4 : s==="completed"?3.5 : fog?1.5 : 3;
+    // Monochrome: nodes are light tiles, fog nodes dark. Role/state via
+    // lightness, border weight, glyph and glow — no hue.
+    let fill = fog? "#241d3c" : n.dreamId==="__boss"? "#9990bc" : "#d8d0f2";
+    let op = s==="forgone"?0.3 : s==="revealedLocked"?0.82 : 1;
+    let stroke = s==="available"? "#ffffff" : s==="completed"? "#cfc6f0" : fog? "#332a52" : "#1a1430";
+    let sw = s==="available"?4 : s==="completed"?3.5 : fog?1.5 : 2.5;
     const filter = (s==="available"||n.dreamId==="__boss") ? ' filter="url(#glow)"' : '';
     svg+=`<polygon class="hex node-hex" data-id="${n.id}" points="${hexPoly(cx,cy,SIZE*0.92)}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" opacity="${op}"${filter}/>`;
-    // marker glyph
+    // marker glyph (dark on light tiles, light on fog tiles)
     let g = fog? "?" : n.dreamId==="__boss"? "💀" : n.current? "🏠" : s==="completed"? "✓" : s==="revealedLocked"? "🔒" : "";
-    if(g) svg+=`<text class="glyphs" x="${cx}" y="${cy+5}" pointer-events="none">${g}</text>`;
+    if(g) svg+=`<text class="glyphs" x="${cx}" y="${cy+5}" fill="${fog?'#9a8fc4':'#241b40'}" pointer-events="none">${g}</text>`;
     // tiny site-count pip for revealed non-boss
     if(!fog && n.dreamId!=="__boss" && !n.current){
       svg+=`<text class="nlabel" x="${cx}" y="${cy+SIZE+13}">${n.name.split(" ")[0]}</text>`;
@@ -332,7 +337,7 @@ function render(){
   svg+=`<style>@keyframes pulse{0%{opacity:.9}50%{opacity:.35}100%{opacity:.9}}</style>`;
   for(const n of layers.flat()){ if(n.state!=="available") continue;
     const p=axPix(n.q,n.r), cx=p.x+ox, cy=p.y+oy;
-    svg+=`<polygon points="${hexPoly(cx,cy,SIZE*1.32)}" fill="none" stroke="${n.color}" stroke-width="2" style="animation:pulse 1.6s infinite"/>`;
+    svg+=`<polygon points="${hexPoly(cx,cy,SIZE*1.32)}" fill="none" stroke="#ffffff" stroke-width="2" style="animation:pulse 1.6s infinite"/>`;
   }
   svg+=`</svg>`;
   document.getElementById("board").innerHTML=svg;
@@ -354,7 +359,7 @@ function showDetail(n){
   const sites=n.sites.map(s=>`<li class="${s.enhanced?'enh':''}"><span class="g">${SITE_GLYPH[s.type]||"•"}</span>${s.type}${s.enhanced?" · enhanced":""}${s.boss?" · Apollyon":""}</li>`).join("");
   document.getElementById("detail").innerHTML=
     `<div class="card">
-       <span class="tag" style="background:${n.color}">${isBoss?"Boss":stateName}</span>
+       <span class="tag" style="background:#b9b0dc">${isBoss?"Boss":stateName}</span>
        <h2>${n.name}</h2>
        <div class="layerline">Layer ${n.layer} · index ${n.idx} · ${n.forward.length} forward · ${n.backward.length} back</div>
        <ul class="sites">${sites}</ul>
