@@ -31,41 +31,61 @@ export function detectMissingFonts(
   return fonts.filter((font) => !isAvailable(font.family));
 }
 
-// Glyphs and base fonts used for the width-comparison probe. The string mixes
-// wide and narrow characters so a fallback substitution produces a measurably
-// different width.
-const PROBE_TEXT = "WMili 0123456789 mmmmmmmmmmlli";
-const PROBE_SIZE = "72px";
-const BASE_FONTS = ["monospace", "serif", "sans-serif"];
+// Some browsers report the @font-face family name with surrounding quotes
+// (e.g. '"EB Garamond"'); normalise so it compares equal to our bare name.
+function normalizeFamily(family: string): string {
+  return family.replace(/^["']|["']$/g, "");
+}
 
 /**
- * Detects whether a webfont actually loaded by measuring rendered text width.
+ * Whether an `@font-face` for this family is registered with the document at
+ * all. Google Fonts delivers each family via `@font-face` rules in the
+ * stylesheet linked from index.html. When that stylesheet is blocked,
+ * throttled, or offline, no FontFace is registered — which is precisely the
+ * "CDN unreachable" case the warning exists to surface.
+ */
+function isFontFamilyDeclared(family: string): boolean {
+  for (const face of document.fonts) {
+    if (normalizeFamily(face.family) === family) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Detects whether a required webfont actually loaded.
  *
- * `document.fonts.check()` is unreliable here: it returns true for families
- * that were never declared (nothing to load means "ready"), so it cannot
- * distinguish a present font from a silent fallback. Instead we measure the
- * probe string rendered with each generic base font, then again with the
- * target family stacked in front of that base. If the target loaded, it
- * overrides the base and the width differs; if it is missing, the text falls
- * back to the base and the widths match. Comparing against several bases
- * avoids false negatives when the target happens to share metrics with one.
+ * Reads the browser's own FontFaceSet state rather than rendering a probe to a
+ * canvas. An earlier canvas width-comparison approach produced false positives
+ * in Safari: a `<canvas>` that is not attached to the DOM does not reliably
+ * render `@font-face` webfonts there, so the probe measured the fallback width
+ * and reported correctly-loaded fonts as missing.
+ *
+ * The two cases the warning must distinguish:
+ *   - The family has no registered face (stylesheet failed to load) → missing.
+ *   - The family is registered → trust `document.fonts.check()`, which reports
+ *     the real load state. `check()` alone is insufficient because it returns
+ *     true for families that were never declared; gating it on the
+ *     declared-check above closes that gap.
  */
 export function isFontAvailable(family: string): boolean {
-  const canvas = document.createElement("canvas");
-  const ctx = canvas.getContext("2d");
-  if (!ctx) {
-    // No canvas context means we cannot probe; assume present rather than
-    // raising a spurious warning.
+  if (typeof document === "undefined" || !("fonts" in document)) {
+    // Outside a browser there is nothing to probe; assume present.
     return true;
   }
 
-  return BASE_FONTS.some((base) => {
-    ctx.font = `${PROBE_SIZE} ${base}`;
-    const baseWidth = ctx.measureText(PROBE_TEXT).width;
-    ctx.font = `${PROBE_SIZE} "${family}", ${base}`;
-    const targetWidth = ctx.measureText(PROBE_TEXT).width;
-    return targetWidth !== baseWidth;
-  });
+  if (!isFontFamilyDeclared(family)) {
+    return false;
+  }
+
+  try {
+    return document.fonts.check(`1em "${family}"`);
+  } catch {
+    // If the check API throws, prefer a silent assume-present over a spurious
+    // warning.
+    return true;
+  }
 }
 
 const WARNING_ELEMENT_ID = "font-load-warning";
@@ -157,7 +177,14 @@ export async function verifyFonts(): Promise<void> {
     // Ignore: if the font loading API rejects we still attempt the probe.
   }
 
-  const missing = detectMissingFonts(isFontAvailable);
+  // Re-check a few times before warning. Safari can resolve `fonts.ready`
+  // while a face is still flipping to its loaded state, which would otherwise
+  // surface a one-frame false positive on startup.
+  let missing = detectMissingFonts(isFontAvailable);
+  for (let attempt = 0; attempt < 3 && missing.length > 0; attempt++) {
+    await new Promise((resolve) => setTimeout(resolve, 150));
+    missing = detectMissingFonts(isFontAvailable);
+  }
   if (missing.length === 0) {
     return;
   }
