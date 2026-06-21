@@ -1,0 +1,25 @@
+Pre-existing issue: tides4 artifact is stale
+============================================
+
+Test: scripts/check-tides4.test.ts
+  > tides4 artifact freshness
+  > data/tides4.jsonc is up to date with `npm run bake-tides4`
+
+Status: FAILS on a clean checkout of master, independent of this change.
+
+Detail:
+  Running `bash scripts/regenerate-assets.sh` (or `npm run bake-tides4`)
+  regenerates data/tides4.jsonc (and data/affinity_corpus.jsonc,
+  data/merchant_corpus.json) with content that differs from what is currently
+  committed. The freshness test consequently reports the committed artifact as
+  out of date with the bake script.
+
+  This is unrelated to the Transfiguration site change in this branch, which
+  only touches src/screens/TransfigurationSiteScreen.tsx, its test, and
+  src/screens/transfiguration-site.css. The failure reproduces with those
+  source edits applied and the data/ files left at their committed master state.
+
+Suggested fix (out of scope here):
+  Re-bake the artifacts and commit the result:
+    npm run bake-tides4
+  then review and commit the regenerated data/ files.

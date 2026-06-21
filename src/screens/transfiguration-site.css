@@ -396,6 +396,15 @@
   z-index: 6;
 }
 
+/* Empty forge: the status line plus the only way back to the map. */
+.transfiguration-site .tf-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  z-index: 6;
+}
+
 /* On wide viewports, reserve the lower-left for Durgan (the shared SiteGuide) by
  * shifting the stage to his right so the two never overlap. On narrower
  * viewports the guide hides itself and the stage takes the full width. */

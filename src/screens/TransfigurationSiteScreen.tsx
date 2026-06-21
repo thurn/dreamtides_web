@@ -237,6 +237,18 @@ export function TransfigurationSiteScreen({
     state.completionLevel,
   ]);
 
+  // When the forge has nothing to reforge there is no card to pick and no form
+  // to commit, so this is the one path that still needs an explicit way back to
+  // the map.
+  const leaveEmptyForge = useCallback(() => {
+    if (forging) return;
+    logEvent("site_completed", {
+      siteType: "Transfiguration",
+      outcome: "no_candidates",
+    });
+    mutations.completeSite(site.id, "transfiguration_no_candidates");
+  }, [forging, mutations, site.id]);
+
   const tint = activeForm
     ? TRANSFIGURATION_COLORS[activeForm.type]
     : "#a855f7";
@@ -280,7 +292,19 @@ export function TransfigurationSiteScreen({
 
         {!inForge ? (
           candidates.length === 0 && reforgedTiles.length === 0 ? (
-            <p className="tf-status">No eligible cards to reforge.</p>
+            <div className="tf-empty">
+              <p className="tf-status">No eligible cards to reforge.</p>
+              <button
+                type="button"
+                className="tf-forge-btn"
+                data-testid="transfiguration-leave-empty"
+                onClick={leaveEmptyForge}
+                disabled={forging}
+              >
+                <i className="bx bx-door-open" aria-hidden="true" />
+                Leave the forge
+              </button>
+            </div>
           ) : (
             <div
               className={`tf-deck ${isHome ? "is-home" : "is-standard"}`}

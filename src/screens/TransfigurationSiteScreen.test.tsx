@@ -397,4 +397,46 @@ describe("TransfigurationSiteScreen", () => {
       root.unmount();
     });
   });
+
+  it("offers a leave button that completes the site when nothing is eligible", () => {
+    const mutations = makeMutations();
+    // The only deck card is already reforged, so there is nothing left to pick
+    // and (at a non-home forge) no dimmed reforged tiles either.
+    setQuestContext(
+      makeState({
+        deck: [
+          {
+            entryId: "deck-1",
+            cardNumber: 101,
+            transfiguration: "Empowered",
+            isBane: false,
+          },
+        ],
+      }),
+      mutations,
+    );
+    const { container, root } = mount(
+      <TransfigurationSiteScreen site={makeSite()} />,
+    );
+
+    expect(container.textContent).toContain("No eligible cards to reforge.");
+    const leave = container.querySelector<HTMLButtonElement>(
+      "[data-testid='transfiguration-leave-empty']",
+    );
+    if (leave === null) {
+      throw new Error("Missing leave-empty button");
+    }
+    act(() => {
+      leave.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
+
+    expect(mutations.completeSite).toHaveBeenCalledWith(
+      "site-1",
+      "transfiguration_no_candidates",
+    );
+
+    act(() => {
+      root.unmount();
+    });
+  });
 });
