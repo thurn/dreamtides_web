@@ -345,6 +345,10 @@ export function HoverZoomCard({
       className={className}
       style={{ position: "relative", ...style }}
       onMouseEnter={handleEnter}
+      // Pressing the card to begin a drag snaps it back to its real size at
+      // once, so the player drags the card's actual footprint rather than
+      // aiming through the enlarged copy floating above it.
+      onMouseDown={collapse}
       data-testid={dataTestId}
       data-hover-zoomed={zoom !== null ? "true" : undefined}
     >
