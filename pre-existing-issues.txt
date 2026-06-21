@@ -14,10 +14,9 @@ Detail:
   committed. The freshness test consequently reports the committed artifact as
   out of date with the bake script.
 
-  This is unrelated to the Transfiguration site change in this branch, which
-  only touches src/screens/TransfigurationSiteScreen.tsx, its test, and
-  src/screens/transfiguration-site.css. The failure reproduces with those
-  source edits applied and the data/ files left at their committed master state.
+  This is unrelated to the `/editor` -> `/cards` routing change in this branch,
+  which only touches src/main.tsx. The failure reproduces on a clean checkout of
+  master with no source edits applied, so it predates this change.
 
 Suggested fix (out of scope here):
   Re-bake the artifacts and commit the result:

@@ -25,7 +25,17 @@ function renderStrict(children: ReactNode) {
 
 const pathname = window.location.pathname.replace(/\/+$/, "");
 
-if (pathname === "/editor") {
+if (pathname === "/editor" || pathname === "/cards") {
+  // `/cards` is the canonical card editor URL. `/editor` is a legacy alias that
+  // redirects to `/cards` (rewriting the address bar in place, no reload) while
+  // still rendering the editor so existing `/editor` links keep working.
+  if (pathname === "/editor") {
+    window.history.replaceState(
+      null,
+      "",
+      "/cards" + window.location.search + window.location.hash,
+    );
+  }
   renderStrict(<CardEditorApp />);
 } else if (pathname === "/dreamsigns") {
   const { default: DreamsignEditorApp } = await import(
