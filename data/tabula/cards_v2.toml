@@ -3429,7 +3429,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "July7", "Art Duplicate", "Art OK"]
+tags = ["Art Rework", "July7", "Art OK"]
 image-number = 2269064817
 art-owned = false
 card-number = 185
@@ -6991,22 +6991,22 @@ card-number = 378
 art = { x = 0.159, y = 0.141, scale = 1.47 }
 
 [[cards]]
-name = "Ashen Harbinger"
+name = "Shapeshifter Spirit"
 mtg-name = "Walking Ballista"
 id = "9d51dca1-28d7-4e8e-bc13-c5b665d6db72"
 rendered-text = "This character has all character types."
 energy-cost = "X"
 card-type = "Character"
-subtype = "Ancient"
+subtype = "X"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = "X"
-tags = ["Art Rework", "July8", "Art Duplicate"]
-image-number = 682942723
+tags = ["Art Rework", "July8"]
+image-number = 289214153
 art-owned = false
 card-number = 379
-art = { x = 0.7, y = 0.8, scale = 1.17 }
+art = { x = 0.7, y = 1, scale = 1.17 }
 
 [[cards]]
 name = "Duskwall Delver"
