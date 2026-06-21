@@ -5,7 +5,7 @@ import {
   selectFigmentSparkContext,
 } from "../state/figments";
 import { supportedDeploySlots } from "../engine/support";
-import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
+import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS, createEmptySlotRecord } from "../types";
 import type {
   BattleCardInstance,
   BattleMutableState,
@@ -135,25 +135,16 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
   const opponentSide = opposingSide(aiSide);
   const opponent = state.sides[opponentSide];
 
-  const aiFrontRank: Record<FrontRankSlotId, AiCard | null> = {
-    F0: null,
-    F1: null,
-    F2: null,
-    F3: null,
-  };
+  const aiFrontRank: Record<FrontRankSlotId, AiCard | null> =
+    createEmptySlotRecord(FRONT_RANK_SLOT_IDS);
   for (const slotId of FRONT_RANK_SLOT_IDS) {
     const id = ai.frontRank[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
     aiFrontRank[slotId] = instance === undefined ? null : projectAiCard(instance);
   }
 
-  const aiBackRank: Record<BackRankSlotId, AiCard | null> = {
-    B0: null,
-    B1: null,
-    B2: null,
-    B3: null,
-    B4: null,
-  };
+  const aiBackRank: Record<BackRankSlotId, AiCard | null> =
+    createEmptySlotRecord(BACK_RANK_SLOT_IDS);
   for (const slotId of BACK_RANK_SLOT_IDS) {
     const id = ai.backRank[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
@@ -268,6 +259,17 @@ function cloneAiCardOrNull(card: AiCard | null): AiCard | null {
   return card === null ? null : cloneAiCard(card);
 }
 
+function cloneSlotRecord<K extends string>(
+  source: Record<K, AiCard | null>,
+  slotIds: readonly K[],
+): Record<K, AiCard | null> {
+  const record = createEmptySlotRecord(slotIds) as Record<K, AiCard | null>;
+  for (const slotId of slotIds) {
+    record[slotId] = cloneAiCardOrNull(source[slotId]);
+  }
+  return record;
+}
+
 /**
  * Structural copy deep enough that mutating a clone's zones, individual
  * {@link AiCard} objects, slot assignments, or opponent bodies never affects
@@ -283,19 +285,8 @@ export function cloneForwardModel(model: ForwardModel): ForwardModel {
     aiHand: model.aiHand.map(cloneAiCard),
     aiDeck: model.aiDeck.map(cloneAiCard),
     aiVoid: model.aiVoid.map(cloneAiCard),
-    aiFrontRank: {
-      F0: cloneAiCardOrNull(model.aiFrontRank.F0),
-      F1: cloneAiCardOrNull(model.aiFrontRank.F1),
-      F2: cloneAiCardOrNull(model.aiFrontRank.F2),
-      F3: cloneAiCardOrNull(model.aiFrontRank.F3),
-    },
-    aiBackRank: {
-      B0: cloneAiCardOrNull(model.aiBackRank.B0),
-      B1: cloneAiCardOrNull(model.aiBackRank.B1),
-      B2: cloneAiCardOrNull(model.aiBackRank.B2),
-      B3: cloneAiCardOrNull(model.aiBackRank.B3),
-      B4: cloneAiCardOrNull(model.aiBackRank.B4),
-    },
+    aiFrontRank: cloneSlotRecord(model.aiFrontRank, FRONT_RANK_SLOT_IDS),
+    aiBackRank: cloneSlotRecord(model.aiBackRank, BACK_RANK_SLOT_IDS),
     opponentBodies: model.opponentBodies.map((body) => ({ ...body })),
     opponentHandCount: model.opponentHandCount,
     opponentVoidCount: model.opponentVoidCount,

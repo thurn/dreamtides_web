@@ -5,7 +5,9 @@ import {
   selectEffectiveSpark,
   selectEffectiveSparkOrZero,
   selectFailureOverlayResult,
+  selectPlayAreaSize,
 } from "./selectors";
+import type { BattleMutableState } from "../types";
 import {
   makeBattleTestCardDatabase,
   makeBattleTestDreamcallers,
@@ -83,6 +85,71 @@ describe("selectFailureOverlayResult", () => {
   it("returns null for the non-failure results so the overlay stays hidden", () => {
     expect(selectFailureOverlayResult(null)).toBeNull();
     expect(selectFailureOverlayResult("victory")).toBeNull();
+  });
+});
+
+describe("selectPlayAreaSize", () => {
+  function emptyBattleState(): BattleMutableState {
+    return createInitialBattleState(
+      createBattleInit({
+        battleEntryKey: "site-7::2::dreamscape-2",
+        site: makeBattleTestSite(),
+        state: makeBattleTestState(),
+        cardDatabase: makeBattleTestCardDatabase(),
+        dreamcallers: makeBattleTestDreamcallers(),
+      }),
+    );
+  }
+
+  it("starts at the 2 front / 3 back minimum on an empty board", () => {
+    expect(selectPlayAreaSize(emptyBattleState())).toEqual({ frontSize: 2, backSize: 3 });
+  });
+
+  it("expands one front + one back slot each time the front rank fills", () => {
+    const state = emptyBattleState();
+    // Filling the 2-slot front rank expands it to 3 front / 4 back.
+    state.sides.player.frontRank.F0 = "c0";
+    state.sides.player.frontRank.F1 = "c1";
+    expect(selectPlayAreaSize(state)).toEqual({ frontSize: 3, backSize: 4 });
+    // Filling the new front slot expands again to 4 front / 5 back.
+    state.sides.player.frontRank.F2 = "c2";
+    expect(selectPlayAreaSize(state)).toEqual({ frontSize: 4, backSize: 5 });
+  });
+
+  it("expands when the back rank fills (the back rank is one wider than the front)", () => {
+    const state = emptyBattleState();
+    state.sides.player.backRank.B0 = "b0";
+    state.sides.player.backRank.B1 = "b1";
+    state.sides.player.backRank.B2 = "b2";
+    expect(selectPlayAreaSize(state)).toEqual({ frontSize: 3, backSize: 4 });
+  });
+
+  it("contracts back toward the 2 front / 3 back minimum as characters leave", () => {
+    const state = emptyBattleState();
+    state.sides.player.frontRank.F0 = "c0";
+    state.sides.player.frontRank.F1 = "c1";
+    state.sides.player.frontRank.F2 = "c2";
+    expect(selectPlayAreaSize(state)).toEqual({ frontSize: 4, backSize: 5 });
+    state.sides.player.frontRank.F2 = null;
+    state.sides.player.frontRank.F1 = null;
+    expect(selectPlayAreaSize(state)).toEqual({ frontSize: 2, backSize: 3 });
+  });
+
+  it("keeps a sparse high-index occupant within range without forcing extra width", () => {
+    const state = emptyBattleState();
+    // A lone occupant at the edge of the starting back rank (B2) still fits the
+    // minimum 3-back layout; the front rank stays at its 2-slot minimum.
+    state.sides.player.backRank.B2 = "b2";
+    expect(selectPlayAreaSize(state)).toEqual({ frontSize: 2, backSize: 3 });
+  });
+
+  it("uses the wider of the two sides so paired challenge lanes are never hidden", () => {
+    const state = emptyBattleState();
+    state.sides.player.frontRank.F0 = "p0";
+    state.sides.player.frontRank.F1 = "p1";
+    state.sides.player.frontRank.F2 = "p2";
+    // Enemy board is empty, but the rendered width follows the busier side.
+    expect(selectPlayAreaSize(state)).toEqual({ frontSize: 4, backSize: 5 });
   });
 });
 

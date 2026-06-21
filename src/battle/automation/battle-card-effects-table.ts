@@ -1,12 +1,11 @@
 import type { BattleDebugEdit } from "../debug/commands";
 import type {
-  BackRankSlotId,
   BattleCardInstance,
   BattleMutableState,
   BattleSide,
-  FrontRankSlotId,
 } from "../types";
 import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
+import { supportedDeploySlots } from "../engine/support";
 import type { EffectStep, StepContext } from "./effect-step";
 import {
   addGainedSparkEdits,
@@ -573,20 +572,6 @@ export function battleCardAutomationStatus(cardId: string): "auto" | "none" {
 // ---------------------------------------------------------------------------
 
 /**
- * Back-rank → front-rank Support geometry (rules §Support). A back-rank
- * Supporter in a given slot benefits the up-to-two front-rank occupants of the
- * slots listed here:
- * `B0→[F0]`, `B1→[F0,F1]`, `B2→[F1,F2]`, `B3→[F2,F3]`, `B4→[F3]`.
- */
-export const SUPPORT_ADJACENCY: Record<BackRankSlotId, FrontRankSlotId[]> = {
-  B0: ["F0"],
-  B1: ["F0", "F1"],
-  B2: ["F1", "F2"],
-  B3: ["F2", "F3"],
-  B4: ["F3"],
-};
-
-/**
  * Computes the `SET_CARD_STATIC_SPARK_BONUS` edits needed to bring every
  * in-play instance's `staticSparkBonus` to its correct Support total. "In-play"
  * means front- and back-rank occupants of both sides; hand/void/deck instances
@@ -633,7 +618,7 @@ export function planSupportRecompute(
           continue;
         }
         const support = script.support;
-        for (const frontSlot of SUPPORT_ADJACENCY[backSlot]) {
+        for (const frontSlot of supportedDeploySlots(backSlot)) {
           const allyId = state.sides[side].frontRank[frontSlot];
           if (allyId === null) continue;
           const ally = state.cardInstances[allyId];

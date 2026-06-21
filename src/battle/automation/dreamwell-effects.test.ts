@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
 import type { BackRankSlotId, BattleMutableState, BattleSide, FrontRankSlotId } from "../types";
+import { emptyBackRankSlots, emptyFrontRankSlots } from "../test-support";
 import {
   alliesInPlay,
   charactersInVoid,
@@ -42,12 +42,8 @@ function makeSide(
     hand: overrides.hand ?? [],
     void: overrides.void ?? [],
     banished: [],
-    backRank:
-      overrides.backRank ??
-      (Object.fromEntries(BACK_RANK_SLOT_IDS.map((s) => [s, null])) as Record<BackRankSlotId, string | null>),
-    frontRank:
-      overrides.frontRank ??
-      (Object.fromEntries(FRONT_RANK_SLOT_IDS.map((s) => [s, null])) as Record<FrontRankSlotId, string | null>),
+    backRank: overrides.backRank ?? emptyBackRankSlots(),
+    frontRank: overrides.frontRank ?? emptyFrontRankSlots(),
     fatigueCount: 0,
     dreamwellCardIndex: null,
     dreamwellDrawnTurn: null,
@@ -299,8 +295,8 @@ describe("eventsInVoid", () => {
 describe("enemyCharactersInPlay", () => {
   it("returns occupants from the opponent's front and back ranks", () => {
     const state = makeState({
-      enemyBackRank: { B0: "c1", B1: null, B2: null, B3: null, B4: null },
-      enemyFrontRank: { F0: "c2", F1: null, F2: null, F3: null },
+      enemyBackRank: { ...emptyBackRankSlots(), B0: "c1" },
+      enemyFrontRank: { ...emptyFrontRankSlots(), F0: "c2" },
       cardInstances: {
         c1: makeCharacter("c1", "enemy", 2),
         c2: makeCharacter("c2", "enemy", 2),
@@ -314,8 +310,8 @@ describe("enemyCharactersInPlay", () => {
 
   it("does not return the calling side's own characters", () => {
     const state = makeState({
-      playerBackRank: { B0: "mine", B1: null, B2: null, B3: null, B4: null },
-      enemyBackRank: { B0: "theirs", B1: null, B2: null, B3: null, B4: null },
+      playerBackRank: { ...emptyBackRankSlots(), B0: "mine" },
+      enemyBackRank: { ...emptyBackRankSlots(), B0: "theirs" },
       cardInstances: {
         mine: makeCharacter("mine", "player", 2),
         theirs: makeCharacter("theirs", "enemy", 2),
@@ -339,7 +335,7 @@ describe("enemyCharactersInPlay", () => {
 
   it("works symmetrically when side is enemy", () => {
     const state = makeState({
-      playerFrontRank: { F0: "c1", F1: null, F2: null, F3: null },
+      playerFrontRank: { ...emptyFrontRankSlots(), F0: "c1" },
       cardInstances: {
         c1: makeCharacter("c1", "player", 2),
       },
@@ -355,8 +351,8 @@ describe("enemyCharactersInPlay", () => {
 describe("alliesInPlay", () => {
   it("returns the side's own front and back rank occupants", () => {
     const state = makeState({
-      playerBackRank: { B0: "c1", B1: null, B2: null, B3: null, B4: null },
-      playerFrontRank: { F0: "c2", F1: null, F2: null, F3: null },
+      playerBackRank: { ...emptyBackRankSlots(), B0: "c1" },
+      playerFrontRank: { ...emptyFrontRankSlots(), F0: "c2" },
       cardInstances: {
         c1: makeCharacter("c1", "player", 2),
         c2: makeCharacter("c2", "player", 2),
@@ -370,8 +366,8 @@ describe("alliesInPlay", () => {
 
   it("does not return the opponent's characters", () => {
     const state = makeState({
-      playerBackRank: { B0: "mine", B1: null, B2: null, B3: null, B4: null },
-      enemyBackRank: { B0: "theirs", B1: null, B2: null, B3: null, B4: null },
+      playerBackRank: { ...emptyBackRankSlots(), B0: "mine" },
+      enemyBackRank: { ...emptyBackRankSlots(), B0: "theirs" },
       cardInstances: {
         mine: makeCharacter("mine", "player", 2),
         theirs: makeCharacter("theirs", "enemy", 2),
@@ -664,7 +660,7 @@ describe("Eternal Horizon builder", () => {
     const ally1 = makeCharacter("ally1", "player", 2);
     const ally2 = { ...makeCharacter("ally2", "player", 3), sparkDelta: 3 };
     const state = makeState({
-      playerBackRank: { B0: "ally1", B1: "ally2", B2: null, B3: null, B4: null },
+      playerBackRank: { ...emptyBackRankSlots(), B0: "ally1", B1: "ally2" },
       cardInstances: { ally1, ally2 },
     });
     const build = getFirstEditsBuild("a57f1276-3fb6-4527-b538-953fbace35cf");
@@ -697,7 +693,7 @@ describe("property test: all DREAMWELL_EFFECTS scripts run without error", () =>
   const richState: BattleMutableState = makeState({
     playerHand: [HAND_CARD_ID],
     playerVoid: [P_VOID_CHAR_ID],
-    playerBackRank: { B0: ALLY_ID, B1: null, B2: null, B3: null, B4: null },
+    playerBackRank: { ...emptyBackRankSlots(), B0: ALLY_ID },
     enemyHand: [],
     enemyVoid: [E_VOID_CHAR_ID],
     // leave enemy back rank open so Celestial Gateway can place there
@@ -813,8 +809,8 @@ describe("Silent Winter (9954cede) — banish enemy character", () => {
 
   it("candidates = opponent's in-play characters only", () => {
     const state = makeState({
-      enemyBackRank: { B0: "ec1", B1: null, B2: null, B3: null, B4: null },
-      playerBackRank: { B0: "pc1", B1: null, B2: null, B3: null, B4: null },
+      enemyBackRank: { ...emptyBackRankSlots(), B0: "ec1" },
+      playerBackRank: { ...emptyBackRankSlots(), B0: "pc1" },
       cardInstances: {
         ec1: makeCharacter("ec1", "enemy", 2),
         pc1: makeCharacter("pc1", "player", 2),
@@ -829,7 +825,7 @@ describe("Silent Winter (9954cede) — banish enemy character", () => {
 
   it("resolve → MOVE_CARD_TO_ZONE to banished on OPPONENT side", () => {
     const state = makeState({
-      enemyBackRank: { B0: "ec1", B1: null, B2: null, B3: null, B4: null },
+      enemyBackRank: { ...emptyBackRankSlots(), B0: "ec1" },
       cardInstances: { ec1: makeCharacter("ec1", "enemy", 2) },
     });
     const prompt = getFirstPromptStep(UUID);
@@ -941,7 +937,7 @@ describe("The Bastion (20be0fdd) — confirm → abandon ally → draw 2", () =>
 
   it("onYes pick resolve → ABANDON edit", () => {
     const state = makeState({
-      playerBackRank: { B0: "ally1", B1: null, B2: null, B3: null, B4: null },
+      playerBackRank: { ...emptyBackRankSlots(), B0: "ally1" },
       cardInstances: { ally1: makeCharacter("ally1", "player", 2) },
     });
     const prompt = getFirstPromptStep(UUID);
@@ -1064,10 +1060,10 @@ describe("property test: all prompt scripts run without error on rich fixture", 
     playerHand: [HAND_CARD_ID],
     playerVoid: [P_VOID_CHAR_ID, P_VOID_EVENT_ID],
     playerDeck: ["deck-top-1", "deck-top-2", "deck-top-3"],
-    playerBackRank: { B0: ALLY_ID, B1: null, B2: null, B3: null, B4: null },
+    playerBackRank: { ...emptyBackRankSlots(), B0: ALLY_ID },
     enemyHand: [],
     enemyVoid: [E_VOID_CHAR_ID],
-    enemyBackRank: { B0: ENEMY_CHAR_ID, B1: null, B2: null, B3: null, B4: null },
+    enemyBackRank: { ...emptyBackRankSlots(), B0: ENEMY_CHAR_ID },
     cardInstances: {
       [HAND_CARD_ID]: makeCharacter(HAND_CARD_ID, "player", 2),
       [ALLY_ID]: makeCharacter(ALLY_ID, "player", 2),

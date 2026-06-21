@@ -137,9 +137,11 @@ describe("BattlefieldGrid", () => {
     const { container, root, state } = mount("frontRank");
     const deployedCardId = state.sides.player.frontRank.F0;
 
+    // The play area is dynamic; with one front occupant it renders the 2-slot
+    // minimum front rank (F0, F1). Slots beyond the active size are not rendered.
     expect(container.querySelector('[data-battle-region="player-frontRank-row"]')).not.toBeNull();
     expect(container.querySelector('[data-slot-id="player-frontRank-F0"]')).not.toBeNull();
-    expect(container.querySelector('[data-slot-id="player-frontRank-F3"]')).not.toBeNull();
+    expect(container.querySelector('[data-slot-id="player-frontRank-F1"]')).not.toBeNull();
     expect(
       container.querySelector('[data-slot-id="player-frontRank-F0"] [data-battle-card-id]')?.textContent,
     ).toContain(state.cardInstances[deployedCardId!]?.definition.name ?? "");
@@ -157,8 +159,10 @@ describe("BattlefieldGrid", () => {
 
   it("routes occupied clicks to onCardClick and empty clicks to onSlotClick", () => {
     const { cardClicks, container, root, slotClicks } = mount("backRank");
+    // With B1 occupied the back rank renders its 3-slot minimum (B0, B1, B2);
+    // B2 is an empty rendered slot.
     const occupied = container.querySelector<HTMLElement>('[data-slot-id="player-backRank-B1"]');
-    const empty = container.querySelector<HTMLElement>('[data-slot-id="player-backRank-B4"]');
+    const empty = container.querySelector<HTMLElement>('[data-slot-id="player-backRank-B2"]');
 
     if (occupied === null || empty === null) {
       throw new Error("expected reserve slots");
@@ -171,7 +175,7 @@ describe("BattlefieldGrid", () => {
 
     expect(cardClicks).toHaveBeenCalledTimes(1);
     expect(slotClicks).toHaveBeenCalledWith(
-      { side: "player", zone: "backRank", slotId: "B4" },
+      { side: "player", zone: "backRank", slotId: "B2" },
       false,
     );
 

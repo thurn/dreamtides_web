@@ -15,6 +15,7 @@ import type {
   BattleReducerState,
   BattleSide,
 } from "../types";
+import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
 
 vi.mock("../../logging", () => ({
   logEvent: vi.fn(),
@@ -33,8 +34,8 @@ function makeEmptySide(): BattleMutableState["sides"]["player"] {
     hand: [],
     void: [],
     banished: [],
-    backRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
-    frontRank: { F0: null, F1: null, F2: null, F3: null },
+    backRank: emptyBackRankSlots(),
+    frontRank: emptyFrontRankSlots(),
     fatigueCount: 0,
     dreamwellCardIndex: null,
     dreamwellDrawnTurn: null,

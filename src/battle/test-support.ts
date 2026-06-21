@@ -1,6 +1,23 @@
 import type { CardData } from "../types/cards";
 import type { DreamcallerContent, ResolvedDreamcallerPackage } from "../types/content";
 import type { DeckEntry, Dreamcaller, Dreamsign, QuestState, SiteState } from "../types/quest";
+import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS, createEmptySlotRecord } from "./types";
+import type { BackRankSlotId, FrontRankSlotId } from "./types";
+
+/**
+ * Full front-rank slot record with every slot `null`, for building battle test
+ * states. The `Record<…, null>` return is assignable to both the `string | null`
+ * (BattleMutableState) and `AiCard | null` (forward model) slot shapes; override
+ * individual slots by spreading, e.g. `{ ...emptyFrontRankSlots(), F0: card }`.
+ */
+export function emptyFrontRankSlots(): Record<FrontRankSlotId, null> {
+  return createEmptySlotRecord(FRONT_RANK_SLOT_IDS);
+}
+
+/** Full back-rank slot record with every slot `null`; see {@link emptyFrontRankSlots}. */
+export function emptyBackRankSlots(): Record<BackRankSlotId, null> {
+  return createEmptySlotRecord(BACK_RANK_SLOT_IDS);
+}
 
 export function makeBattleTestSite(): SiteState {
   return {

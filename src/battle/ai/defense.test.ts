@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { planDefense } from "./defense";
 import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
+import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
 
 function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId">): AiCard {
   return {
@@ -35,8 +36,8 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
     aiHand: [],
     aiDeck: [],
     aiVoid: [],
-    aiFrontRank: { F0: null, F1: null, F2: null, F3: null },
-    aiBackRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
+    aiFrontRank: emptyFrontRankSlots(),
+    aiBackRank: emptyBackRankSlots(),
     opponentBodies: [],
     opponentHandCount: 0,
     opponentVoidCount: 0,
@@ -50,11 +51,8 @@ describe("planDefense", () => {
   it("returns no moves when the opponent has no front-rank challengers", () => {
     const model = makeModel({
       aiBackRank: {
+        ...emptyBackRankSlots(),
         B0: makeCard({ battleCardId: "blocker", basePrintedSpark: 5 }),
-        B1: null,
-        B2: null,
-        B3: null,
-        B4: null,
       },
       opponentBodies: [makeBody({ battleCardId: "back", rank: "back", slot: "B0" })],
     });
@@ -64,11 +62,8 @@ describe("planDefense", () => {
   it("blocks a challenger in its own lane with a favorable body that survives", () => {
     const model = makeModel({
       aiBackRank: {
+        ...emptyBackRankSlots(),
         B0: makeCard({ battleCardId: "wolf", basePrintedSpark: 4 }),
-        B1: null,
-        B2: null,
-        B3: null,
-        B4: null,
       },
       opponentBodies: [makeBody({ battleCardId: "atk", slot: "F2", effectiveSpark: 3 })],
     });
@@ -84,11 +79,9 @@ describe("planDefense", () => {
   it("prefers the smallest body that still beats the challenger", () => {
     const model = makeModel({
       aiBackRank: {
+        ...emptyBackRankSlots(),
         B0: makeCard({ battleCardId: "huge", basePrintedSpark: 9 }),
         B1: makeCard({ battleCardId: "just-enough", basePrintedSpark: 4 }),
-        B2: null,
-        B3: null,
-        B4: null,
       },
       opponentBodies: [makeBody({ battleCardId: "atk", slot: "F0", effectiveSpark: 3 })],
     });
@@ -101,11 +94,8 @@ describe("planDefense", () => {
   it("does not move a still-exhausted reserve body up to block", () => {
     const model = makeModel({
       aiBackRank: {
+        ...emptyBackRankSlots(),
         B0: makeCard({ battleCardId: "exhausted", basePrintedSpark: 6, canChallengeThisTurn: false }),
-        B1: null,
-        B2: null,
-        B3: null,
-        B4: null,
       },
       opponentBodies: [makeBody({ battleCardId: "atk", slot: "F0", effectiveSpark: 3 })],
     });
@@ -115,17 +105,12 @@ describe("planDefense", () => {
   it("skips a lane already defended by a deployed body", () => {
     const model = makeModel({
       aiFrontRank: {
+        ...emptyFrontRankSlots(),
         F0: makeCard({ battleCardId: "onguard", basePrintedSpark: 2 }),
-        F1: null,
-        F2: null,
-        F3: null,
       },
       aiBackRank: {
+        ...emptyBackRankSlots(),
         B0: makeCard({ battleCardId: "backRank", basePrintedSpark: 5 }),
-        B1: null,
-        B2: null,
-        B3: null,
-        B4: null,
       },
       opponentBodies: [makeBody({ battleCardId: "atk", slot: "F0", effectiveSpark: 3 })],
     });
@@ -137,11 +122,9 @@ describe("planDefense", () => {
       aiScore: 0,
       playerScore: 5,
       aiBackRank: {
+        ...emptyBackRankSlots(),
         B0: makeCard({ battleCardId: "small", basePrintedSpark: 1 }),
         B1: makeCard({ battleCardId: "medium", basePrintedSpark: 2 }),
-        B2: null,
-        B3: null,
-        B4: null,
       },
       opponentBodies: [makeBody({ battleCardId: "atk", slot: "F1", effectiveSpark: 6 })],
     });
@@ -157,11 +140,8 @@ describe("planDefense", () => {
       aiScore: 20,
       playerScore: 0,
       aiBackRank: {
+        ...emptyBackRankSlots(),
         B0: makeCard({ battleCardId: "precious", basePrintedSpark: 5 }),
-        B1: null,
-        B2: null,
-        B3: null,
-        B4: null,
       },
       // Challenger outsparks the only blocker, and the hit is far from lethal.
       opponentBodies: [makeBody({ battleCardId: "atk", slot: "F0", effectiveSpark: 8 })],
@@ -172,11 +152,9 @@ describe("planDefense", () => {
   it("assigns the strongest blockers to the biggest threats first", () => {
     const model = makeModel({
       aiBackRank: {
+        ...emptyBackRankSlots(),
         B0: makeCard({ battleCardId: "b3", basePrintedSpark: 3 }),
         B1: makeCard({ battleCardId: "b5", basePrintedSpark: 5 }),
-        B2: null,
-        B3: null,
-        B4: null,
       },
       opponentBodies: [
         makeBody({ battleCardId: "small", slot: "F0", effectiveSpark: 2 }),

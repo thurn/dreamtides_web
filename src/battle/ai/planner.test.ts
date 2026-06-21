@@ -3,15 +3,17 @@ import { planNextAction, type PlannerOptions } from "./planner";
 import { starterCardModels } from "./cards/index";
 import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
 import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
+import type { FrontRankSlotId } from "../types";
+import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
 
 // --- Fixture helpers -------------------------------------------------------
 
 function emptyFrontRank(): ForwardModel["aiFrontRank"] {
-  return { F0: null, F1: null, F2: null, F3: null };
+  return emptyFrontRankSlots();
 }
 
 function emptyBackRank(): ForwardModel["aiBackRank"] {
-  return { B0: null, B1: null, B2: null, B3: null, B4: null };
+  return emptyBackRankSlots();
 }
 
 function baseModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
@@ -123,7 +125,10 @@ describe("planNextAction", () => {
     });
 
     it("never returns a MOVE_CARD into an occupied slot", () => {
-      // A reserve challenger plus a full deployed rank: no legal move target.
+      // A ready reserve challenger behind a rank of weaker deployed cards. Under
+      // the dynamic play area the front rank expands, so moving the reserve up is
+      // a legal play — but any MOVE_CARD must target an EMPTY slot, never one of
+      // the occupied F0–F3 positions.
       const ready = makeCard({
         cardNumber: 512,
         name: "Marked Direwolf",
@@ -134,6 +139,7 @@ describe("planNextAction", () => {
         aiEnergy: 0,
         aiBackRank: { ...emptyBackRank(), B0: ready },
         aiFrontRank: {
+          ...emptyFrontRankSlots(),
           F0: makeCard({ basePrintedSpark: 1 }),
           F1: makeCard({ basePrintedSpark: 1 }),
           F2: makeCard({ basePrintedSpark: 1 }),
@@ -141,7 +147,11 @@ describe("planNextAction", () => {
         },
       });
       const action = planNextAction(model, defaultOptions());
-      expect(action.kind).not.toBe("MOVE_CARD");
+      if (action.kind === "MOVE_CARD") {
+        const toSlot = action.toSlot as FrontRankSlotId | undefined;
+        expect(toSlot).toBeDefined();
+        expect(model.aiFrontRank[toSlot as FrontRankSlotId]).toBeNull();
+      }
     });
 
     it("a returned character PLAY_CARD carries a concrete empty reserve slot", () => {

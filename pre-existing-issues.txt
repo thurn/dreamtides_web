@@ -11,3 +11,12 @@ Pre-Existing Issues:
   was not root-caused as part of this task.
 
 
+
+- scripts/check-tides4.test.ts fails on a clean tree (verified by stashing all
+  local changes and running the test on master at 1feb046e). The tides4 baked
+  artifact (data/tides4.jsonc) is stale relative to the current card data /
+  overrides, so checkTides4() reports ok=false. This is unrelated to the dynamic
+  play-area work; it stems from card/override edits that postdate the last
+  `npm run bake-tides`-style regeneration. Re-baking the tides4 artifact would
+  clear it. Left untouched per the policy of not fixing TOML/data-staleness in
+  unrelated changes.

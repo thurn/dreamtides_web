@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { ringwatcher } from "./ringwatcher";
 import type { AiCard, ForwardModel } from "../forward-model";
+import { emptyFrontRankSlots, emptyBackRankSlots } from "../../test-support";
 
 function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">): AiCard {
   return {
@@ -23,8 +24,8 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
     aiHand: [],
     aiDeck: [],
     aiVoid: [],
-    aiFrontRank: { F0: null, F1: null, F2: null, F3: null },
-    aiBackRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
+    aiFrontRank: emptyFrontRankSlots(),
+    aiBackRank: emptyBackRankSlots(),
     opponentBodies: [],
     opponentHandCount: 0,
     opponentVoidCount: 0,

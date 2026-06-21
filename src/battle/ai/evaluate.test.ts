@@ -1,13 +1,14 @@
 import { describe, expect, it } from "vitest";
 import { evaluate } from "./evaluate";
 import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
+import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
 
 function emptyFrontRank(): ForwardModel["aiFrontRank"] {
-  return { F0: null, F1: null, F2: null, F3: null };
+  return emptyFrontRankSlots();
 }
 
 function emptyBackRank(): ForwardModel["aiBackRank"] {
-  return { B0: null, B1: null, B2: null, B3: null, B4: null };
+  return emptyBackRankSlots();
 }
 
 function baseModel(overrides: Partial<ForwardModel> = {}): ForwardModel {

@@ -11,6 +11,7 @@ import type {
   FrontRankSlotId,
   BackRankSlotId,
 } from "../types";
+import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
 
 function makeEmptySide(): BattleMutableState["sides"]["player"] {
   return {
@@ -22,8 +23,8 @@ function makeEmptySide(): BattleMutableState["sides"]["player"] {
     hand: [],
     void: [],
     banished: [],
-    backRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
-    frontRank: { F0: null, F1: null, F2: null, F3: null },
+    backRank: emptyBackRankSlots(),
+    frontRank: emptyFrontRankSlots(),
     fatigueCount: 0,
     dreamwellCardIndex: null,
     dreamwellDrawnTurn: null,
@@ -443,8 +444,8 @@ describe("effectiveSpark", () => {
       aiHand: [],
       aiDeck: [],
       aiVoid: [],
-      aiFrontRank: { F0: null, F1: null, F2: null, F3: null },
-      aiBackRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
+      aiFrontRank: emptyFrontRankSlots(),
+      aiBackRank: emptyBackRankSlots(),
       opponentBodies: [],
       opponentHandCount: 0,
       opponentVoidCount: 0,

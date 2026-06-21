@@ -1,44 +1,44 @@
 /**
- * Support-adjacency map for the battle battlefield.
+ * Support-adjacency geometry for the staggered battlefield (rules §Support).
  *
- * Rules (battle_rules.md §B): each reserve slot (back rank B0–B4) supports the
- * front-rank deploy slots that are adjacent to it:
- *   B0 → F0
- *   B1 → F0, F1
- *   B2 → F1, F2
- *   B3 → F2, F3
- *   B4 → F3
- *
- * Code ids: back-rank slots are B0–B4, front-rank slots are F0–F3.
+ * The grid is staggered with the back rank one slot wider than the front rank,
+ * so each back-rank slot sits behind the (up to two) front-rank slots adjacent
+ * to it. Numbering slots left to right from 0, back-rank `Bi` supports front-rank
+ * `F(i-1)` and `Fi` wherever those exist; inversely, front-rank `Fj` is supported
+ * by `Bj` and `B(j+1)`. At the starting layout (front F0–F1, back B0–B2) this is
+ * `B0→[F0]`, `B1→[F0,F1]`, `B2→[F1]`. The same formula generalizes to any size
+ * the play area expands to, clipped at the slot universe's edges.
  */
 
+import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
 import type { FrontRankSlotId, BackRankSlotId } from "../types";
 
-const SUPPORTED_DEPLOY_SLOTS: Readonly<Record<BackRankSlotId, readonly FrontRankSlotId[]>> = Object.freeze({
-  B0: Object.freeze(["F0"]) as readonly FrontRankSlotId[],
-  B1: Object.freeze(["F0", "F1"]) as readonly FrontRankSlotId[],
-  B2: Object.freeze(["F1", "F2"]) as readonly FrontRankSlotId[],
-  B3: Object.freeze(["F2", "F3"]) as readonly FrontRankSlotId[],
-  B4: Object.freeze(["F3"]) as readonly FrontRankSlotId[],
-});
-
-const SUPPORTING_RESERVE_SLOTS: Readonly<Record<FrontRankSlotId, readonly BackRankSlotId[]>> = Object.freeze({
-  F0: Object.freeze(["B0", "B1"]) as readonly BackRankSlotId[],
-  F1: Object.freeze(["B1", "B2"]) as readonly BackRankSlotId[],
-  F2: Object.freeze(["B2", "B3"]) as readonly BackRankSlotId[],
-  F3: Object.freeze(["B3", "B4"]) as readonly BackRankSlotId[],
-});
-
 /**
- * Returns the deploy slots (front rank) that the given reserve slot supports.
+ * Returns the deploy slots (front rank) that the given reserve slot supports:
+ * `Bi` supports `F(i-1)` and `Fi`, clipped to valid front-rank indices.
  */
 export function supportedDeploySlots(reserve: BackRankSlotId): FrontRankSlotId[] {
-  return [...SUPPORTED_DEPLOY_SLOTS[reserve]];
+  const i = BACK_RANK_SLOT_IDS.indexOf(reserve);
+  const result: FrontRankSlotId[] = [];
+  for (const j of [i - 1, i]) {
+    if (j >= 0 && j < FRONT_RANK_SLOT_IDS.length) {
+      result.push(FRONT_RANK_SLOT_IDS[j]);
+    }
+  }
+  return result;
 }
 
 /**
- * Returns the reserve slots (back rank) that support the given deploy slot.
+ * Returns the reserve slots (back rank) that support the given deploy slot:
+ * `Fj` is supported by `Bj` and `B(j+1)`, clipped to valid back-rank indices.
  */
 export function supportingReserveSlots(deploy: FrontRankSlotId): BackRankSlotId[] {
-  return [...SUPPORTING_RESERVE_SLOTS[deploy]];
+  const j = FRONT_RANK_SLOT_IDS.indexOf(deploy);
+  const result: BackRankSlotId[] = [];
+  for (const i of [j, j + 1]) {
+    if (i >= 0 && i < BACK_RANK_SLOT_IDS.length) {
+      result.push(BACK_RANK_SLOT_IDS[i]);
+    }
+  }
+  return result;
 }

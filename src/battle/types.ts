@@ -9,13 +9,39 @@ import type {
 import type { ArtCrop } from "../types/cards";
 import type { BattleDebugEdit } from "./debug/commands";
 
-export const BACK_RANK_SLOT_IDS = ["B0", "B1", "B2", "B3", "B4"] as const;
-export const FRONT_RANK_SLOT_IDS = ["F0", "F1", "F2", "F3"] as const;
+// The play area is a dynamic, staggered grid that starts at 2 front / 3 back and
+// expands (one front + one back slot whenever a rank fills) and contracts back
+// toward that minimum (rules §The Play Area). The back rank always holds one more
+// slot than the front rank. These arrays define the engine's slot universe: a
+// generous fixed ceiling that real games never exhaust (figment stacks share a
+// slot). How many of these slots are *active* — shown and droppable — at any
+// moment is derived from occupancy by `selectPlayAreaSize`, not stored as state.
+export const BACK_RANK_SLOT_IDS = [
+  "B0", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "B12",
+] as const;
+export const FRONT_RANK_SLOT_IDS = [
+  "F0", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11",
+] as const;
 
 export type BattleSide = "player" | "enemy";
 export type BackRankSlotId = (typeof BACK_RANK_SLOT_IDS)[number];
 export type FrontRankSlotId = (typeof FRONT_RANK_SLOT_IDS)[number];
 export type BattlefieldSlotId = BackRankSlotId | FrontRankSlotId;
+
+/**
+ * Builds a full slot Record with every slot initialized to `null`. Used by the
+ * empty-rank factories and the AI forward model so the slot universe is defined
+ * in exactly one place (the const arrays above); enlarging those arrays needs no
+ * change here. The returned `Record<K, null>` is assignable to the wider
+ * `Record<K, string | null>` / `Record<K, AiCard | null>` shapes callers declare.
+ */
+export function createEmptySlotRecord<K extends string>(slotIds: readonly K[]): Record<K, null> {
+  const record = {} as Record<K, null>;
+  for (const slotId of slotIds) {
+    record[slotId] = null;
+  }
+  return record;
+}
 export type BattleZoneId = "deck" | "hand" | "void" | "banished" | "backRank" | "frontRank" | "stack";
 export type BattlefieldZone = "backRank" | "frontRank";
 export type BrowseableZone = "deck" | "hand" | "void" | "banished";

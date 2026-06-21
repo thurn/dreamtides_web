@@ -1,3 +1,8 @@
+import {
+  BACK_RANK_SLOT_IDS,
+  FRONT_RANK_SLOT_IDS,
+  createEmptySlotRecord,
+} from "../types";
 import type {
   BattleCardInstance,
   BattleCardProvenance,
@@ -220,13 +225,11 @@ function createInitialSideState(
 }
 
 function createEmptyBackRank(): Record<BackRankSlotId, string | null> {
-  // bug-036: literal object is type-safe without the unsound `as Record<...>`
-  // cast; the compiler proves all five keys exist.
-  return { B0: null, B1: null, B2: null, B3: null, B4: null };
+  return createEmptySlotRecord(BACK_RANK_SLOT_IDS);
 }
 
 function createEmptyFrontRank(): Record<FrontRankSlotId, string | null> {
-  return { F0: null, F1: null, F2: null, F3: null };
+  return createEmptySlotRecord(FRONT_RANK_SLOT_IDS);
 }
 
 export function formatBattleCardId(ordinal: number): string {

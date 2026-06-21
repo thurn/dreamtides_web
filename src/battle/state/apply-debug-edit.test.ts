@@ -383,9 +383,10 @@ describe("SET_CARD_STATUS ☪ auto-retreat", () => {
     const frontCardId = state.mutable.sides.player.hand[0];
     state = moveCard(state, frontCardId, { side: "player", zone: "frontRank", slotId: "F0" });
 
-    // Fill every back-rank slot so there is no open position to retreat into.
-    // Draw into the hand first when it has run dry so each of the five slots
-    // (B0..B4) is occupied; the front card already consumed one hand card.
+    // The play area expands as the back rank fills, so a retreat only fails at the
+    // slot universe's ceiling: fill every back-rank slot so there is no open
+    // position to retreat into. Draw into the hand first when it has run dry so
+    // each slot is occupied; the front card already consumed one hand card.
     const backCardIds: string[] = [];
     for (let index = 0; index < BACK_RANK_SLOT_IDS.length; index += 1) {
       if (state.mutable.sides.player.hand.length === 0) {
@@ -400,7 +401,7 @@ describe("SET_CARD_STATUS ☪ auto-retreat", () => {
       });
     }
 
-    // Sanity-check the setup: all five back-rank slots are occupied.
+    // Sanity-check the setup: every back-rank slot is occupied.
     for (const slotId of BACK_RANK_SLOT_IDS) {
       expect(state.mutable.sides.player.backRank[slotId]).not.toBeNull();
     }

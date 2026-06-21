@@ -7,7 +7,8 @@ import type {
   FrontRankSlotId,
 } from "../types";
 import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
-import { planSupportRecompute, SUPPORT_ADJACENCY } from "./battle-card-effects-table";
+import { planSupportRecompute } from "./battle-card-effects-table";
+import { supportedDeploySlots } from "../engine/support";
 
 // ---------------------------------------------------------------------------
 // Registered support UUIDs (from BATTLE_CARD_EFFECTS).
@@ -93,15 +94,14 @@ function makeState(sides: Partial<Record<BattleSide, SideSpec>>): BattleMutableS
 // Geometry adjacency sanity (guards against table edits drifting from rules).
 // ---------------------------------------------------------------------------
 
-describe("SUPPORT_ADJACENCY", () => {
-  it("maps each back slot to its supported front slots", () => {
-    expect(SUPPORT_ADJACENCY).toEqual({
-      B0: ["F0"],
-      B1: ["F0", "F1"],
-      B2: ["F1", "F2"],
-      B3: ["F2", "F3"],
-      B4: ["F3"],
-    });
+describe("supportedDeploySlots", () => {
+  it("maps each back slot to its adjacent front slots (Bi backs F(i-1), Fi)", () => {
+    // Starting-layout edges and interior.
+    expect(supportedDeploySlots("B0")).toEqual(["F0"]);
+    expect(supportedDeploySlots("B1")).toEqual(["F0", "F1"]);
+    expect(supportedDeploySlots("B2")).toEqual(["F1", "F2"]);
+    // The same staggered geometry holds at an expanded size.
+    expect(supportedDeploySlots("B5")).toEqual(["F4", "F5"]);
   });
 });
 

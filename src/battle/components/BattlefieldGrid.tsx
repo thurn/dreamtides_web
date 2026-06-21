@@ -1,4 +1,4 @@
-import type { MouseEvent as ReactMouseEvent } from "react";
+import type { CSSProperties, MouseEvent as ReactMouseEvent } from "react";
 import type { MouseEvent as ReactPointerMouseEvent } from "react";
 
 import { BattleCardView, battleCardVisualFromInstance } from "./BattleCardView";
@@ -6,7 +6,9 @@ import { battleCardAutomationStatus } from "../automation/battle-card-effects-ta
 import {
   selectBattleCardLocation,
   selectBattlefieldSlotOccupant,
+  selectPlayAreaSize,
 } from "../state/selectors";
+import { supportedDeploySlots, supportingReserveSlots } from "../engine/support";
 import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
 import type {
   BattleFieldSlotAddress,
@@ -17,21 +19,6 @@ import type {
   FrontRankSlotId,
   BackRankSlotId,
 } from "../types";
-
-const SUPPORT_BY_DEPLOY: Record<FrontRankSlotId, readonly BackRankSlotId[]> = {
-  F0: ["B0", "B1"],
-  F1: ["B1", "B2"],
-  F2: ["B2", "B3"],
-  F3: ["B3", "B4"],
-};
-
-const SUPPORT_BY_RESERVE: Record<BackRankSlotId, readonly FrontRankSlotId[]> = {
-  B0: ["F0"],
-  B1: ["F0", "F1"],
-  B2: ["F1", "F2"],
-  B3: ["F2", "F3"],
-  B4: ["F3"],
-};
 
 export function BattlefieldGrid({
   canInteract,
@@ -74,12 +61,25 @@ export function BattlefieldGrid({
   state: BattleMutableState;
   zone: BattlefieldZone;
 }) {
-  const slotIds = zone === "backRank" ? BACK_RANK_SLOT_IDS : FRONT_RANK_SLOT_IDS;
+  // The play area is dynamic: only the currently-active slots are rendered and
+  // droppable (rules §The Play Area). `backSize` is always `frontSize + 1`, and
+  // both ranks share the back-rank width so the staggered front rank stays
+  // centered under the back rank at any size (see battle.css).
+  const { frontSize, backSize } = selectPlayAreaSize(state);
+  const visibleCount = zone === "backRank" ? backSize : frontSize;
+  const slotIds = (zone === "backRank" ? BACK_RANK_SLOT_IDS : FRONT_RANK_SLOT_IDS).slice(
+    0,
+    visibleCount,
+  );
+  const slotsStyle = {
+    "--cols": visibleCount,
+    "--row-cols": backSize,
+  } as CSSProperties;
   const supportHighlights = computeSupportHighlights(selectionAnchor, side);
 
   return (
     <section data-battle-region={`${side}-${zone}-row`} className={`row ${side} ${zone}`}>
-      <div className={`slots ${zone}`}>
+      <div className={`slots ${zone}`} style={slotsStyle}>
         {slotIds.map((slotId) => {
           const target: BattleFieldSlotAddress = { side, zone, slotId };
           const battleCardId = selectBattlefieldSlotOccupant(state, target);
@@ -208,8 +208,12 @@ function computeSupportHighlights(
   }
 
   if (selectionAnchor.zone === "frontRank") {
-    return new Set<BattlefieldSlotId>(SUPPORT_BY_DEPLOY[selectionAnchor.slotId as FrontRankSlotId]);
+    return new Set<BattlefieldSlotId>(
+      supportingReserveSlots(selectionAnchor.slotId as FrontRankSlotId),
+    );
   }
 
-  return new Set<BattlefieldSlotId>(SUPPORT_BY_RESERVE[selectionAnchor.slotId as BackRankSlotId]);
+  return new Set<BattlefieldSlotId>(
+    supportedDeploySlots(selectionAnchor.slotId as BackRankSlotId),
+  );
 }

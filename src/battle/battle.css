@@ -431,15 +431,20 @@
   gap: var(--slot-gap);
   justify-content: start;
   position: relative;
-  width: var(--battlefield-row-width);
+  /* Both ranks span the back-rank width so the narrower front rank stays
+     centered. `--row-cols` is the back-rank slot count; the dynamic play area
+     sets it (and `--cols`, this rank's count) per render — see BattlefieldGrid. */
+  width: calc(
+    var(--card-w) * var(--row-cols, 5) + var(--slot-gap) * (var(--row-cols, 5) - 1)
+  );
 }
 
 .slots.backRank {
-  grid-template-columns: repeat(5, var(--card-w));
+  grid-template-columns: repeat(var(--cols, 5), var(--card-w));
 }
 
 .slots.frontRank {
-  grid-template-columns: repeat(4, var(--card-w));
+  grid-template-columns: repeat(var(--cols, 4), var(--card-w));
   padding-left: calc((var(--card-w) + var(--slot-gap)) / 2);
 }
 

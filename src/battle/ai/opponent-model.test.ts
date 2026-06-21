@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 
 import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
 import { scoreAgainstOpponent } from "./opponent-model";
+import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
 
 // --- Fixtures -------------------------------------------------------------
 
@@ -38,8 +39,8 @@ function emptyModel(): ForwardModel {
     aiHand: [],
     aiDeck: [],
     aiVoid: [],
-    aiFrontRank: { F0: null, F1: null, F2: null, F3: null },
-    aiBackRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
+    aiFrontRank: emptyFrontRankSlots(),
+    aiBackRank: emptyBackRankSlots(),
     opponentBodies: [],
     opponentHandCount: 0,
     opponentVoidCount: 0,

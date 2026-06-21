@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { planHandoff } from "./handoff";
+import { emptyBackRankSlots, emptyFrontRankSlots } from "../test-support";
 import type { BattleMutableState } from "../types";
 
 function makeEmptySide(): BattleMutableState["sides"]["player"] {
@@ -12,8 +13,8 @@ function makeEmptySide(): BattleMutableState["sides"]["player"] {
     hand: [],
     void: [],
     banished: [],
-    backRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
-    frontRank: { F0: null, F1: null, F2: null, F3: null },
+    backRank: emptyBackRankSlots(),
+    frontRank: emptyFrontRankSlots(),
     fatigueCount: 0,
     dreamwellCardIndex: null,
     dreamwellDrawnTurn: null,

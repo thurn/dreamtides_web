@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { worldsAwait } from "./worlds-await";
 import type { AiCard, ForwardModel } from "../forward-model";
+import { emptyFrontRankSlots, emptyBackRankSlots } from "../../test-support";
 
 function makeCard(overrides: Partial<AiCard> & Pick<AiCard, "battleCardId" | "cardNumber">): AiCard {
   return {
@@ -23,8 +24,8 @@ function makeModel(overrides: Partial<ForwardModel> = {}): ForwardModel {
     aiHand: [],
     aiDeck: [],
     aiVoid: [],
-    aiFrontRank: { F0: null, F1: null, F2: null, F3: null },
-    aiBackRank: { B0: null, B1: null, B2: null, B3: null, B4: null },
+    aiFrontRank: emptyFrontRankSlots(),
+    aiBackRank: emptyBackRankSlots(),
     opponentBodies: [],
     opponentHandCount: 0,
     opponentVoidCount: 0,
@@ -43,7 +44,7 @@ describe("Worlds Await (#519)", () => {
     const ally = makeCard({ battleCardId: "ally", cardNumber: 512, basePrintedSpark: 4 });
     const model = makeModel({
       aiEnergy: 0,
-      aiFrontRank: { F0: ally, F1: null, F2: null, F3: null },
+      aiFrontRank: { ...emptyFrontRankSlots(), F0: ally },
     });
     expect(worldsAwait.canPlay(model, self)).toBe(false);
   });
@@ -53,7 +54,7 @@ describe("Worlds Await (#519)", () => {
     const ally = makeCard({ battleCardId: "ally", cardNumber: 512, basePrintedSpark: 4 });
     const model = makeModel({
       aiEnergy: 1,
-      aiBackRank: { B0: ally, B1: null, B2: null, B3: null, B4: null },
+      aiBackRank: { ...emptyBackRankSlots(), B0: ally },
     });
     expect(worldsAwait.canPlay(model, self)).toBe(true);
   });
@@ -65,7 +66,7 @@ describe("Worlds Await (#519)", () => {
     const model = makeModel({
       aiEnergy: 2,
       aiHand: [self],
-      aiFrontRank: { F0: small, F1: big, F2: null, F3: null },
+      aiFrontRank: { ...emptyFrontRankSlots(), F0: small, F1: big },
     });
 
     const targets = worldsAwait.chooseTargets(model, self);
@@ -84,7 +85,7 @@ describe("Worlds Await (#519)", () => {
     const model = makeModel({
       aiEnergy: 2,
       aiHand: [self],
-      aiBackRank: { B0: null, B1: ally, B2: null, B3: null, B4: null },
+      aiBackRank: { ...emptyBackRankSlots(), B1: ally },
     });
 
     const targets = worldsAwait.chooseTargets(model, self);

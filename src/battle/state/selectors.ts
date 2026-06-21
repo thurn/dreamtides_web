@@ -305,6 +305,64 @@ export function selectIsOpponentHandCardHidden(
   return !instance.isRevealedToPlayer;
 }
 
+/** Minimum front-rank width — the play area never contracts below 2 front / 3 back. */
+const MIN_FRONT_RANK_SLOTS = 2;
+
+/**
+ * Smallest front-rank width that fits `side`'s current occupants while leaving at
+ * least one open slot in each rank (rules §The Play Area, expansion/contraction).
+ * Back-rank width is always `frontSize + 1`, so a back-rank occupant at index `i`
+ * (or a full back rank) forces `frontSize ≥ i` (resp. `≥ backCount`).
+ */
+function selectSideFrontRankRequirement(state: BattleMutableState, side: BattleSide): number {
+  const { frontRank, backRank } = state.sides[side];
+  let frontCount = 0;
+  let maxFrontIndex = -1;
+  FRONT_RANK_SLOT_IDS.forEach((slotId, index) => {
+    if (frontRank[slotId] !== null) {
+      frontCount += 1;
+      maxFrontIndex = index;
+    }
+  });
+  let backCount = 0;
+  let maxBackIndex = -1;
+  BACK_RANK_SLOT_IDS.forEach((slotId, index) => {
+    if (backRank[slotId] !== null) {
+      backCount += 1;
+      maxBackIndex = index;
+    }
+  });
+  return Math.max(
+    MIN_FRONT_RANK_SLOTS,
+    maxFrontIndex + 1,
+    maxBackIndex,
+    frontCount + 1,
+    backCount,
+  );
+}
+
+/**
+ * The active play-area dimensions: how many front/back slots are currently shown
+ * and usable. Derived purely from occupancy (no stored state), so expansion and
+ * contraction follow automatically as characters enter and leave play. The front
+ * width is the max across both sides so that vertically-paired challenge lanes
+ * (challenge.ts resolves the same `slotId` across sides) are never hidden on one
+ * side. `backSize` is always `frontSize + 1`.
+ */
+export function selectPlayAreaSize(state: BattleMutableState): {
+  frontSize: number;
+  backSize: number;
+} {
+  const frontSize = Math.min(
+    FRONT_RANK_SLOT_IDS.length,
+    Math.max(
+      selectSideFrontRankRequirement(state, "player"),
+      selectSideFrontRankRequirement(state, "enemy"),
+    ),
+  );
+  return { frontSize, backSize: frontSize + 1 };
+}
+
 export function selectDefaultCharacterPlaySlot(
   state: BattleMutableState,
   side: BattleSide,

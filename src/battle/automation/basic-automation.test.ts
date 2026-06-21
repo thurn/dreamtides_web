@@ -9,8 +9,8 @@ import type {
   BattleSideMutableState,
   FrontRankSlotId,
 } from "../types";
-import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
 import { createDefaultBattleCardStatus } from "../state/create-initial-state";
+import { emptyBackRankSlots, emptyFrontRankSlots } from "../test-support";
 import { planBasicAutomationCommands } from "./basic-automation";
 
 const CAPS = { maxEnergyCap: 10, scoreToWin: 25, dreamwellDeck: [] };
@@ -82,8 +82,8 @@ function emptySide(overrides: Partial<BattleSideMutableState> = {}): BattleSideM
     hand: [],
     void: [],
     banished: [],
-    backRank: Object.fromEntries(BACK_RANK_SLOT_IDS.map((slot) => [slot, null])) as BattleSideMutableState["backRank"],
-    frontRank: Object.fromEntries(FRONT_RANK_SLOT_IDS.map((slot) => [slot, null])) as BattleSideMutableState["frontRank"],
+    backRank: emptyBackRankSlots(),
+    frontRank: emptyFrontRankSlots(),
     fatigueCount: 0,
     dreamwellCardIndex: null,
     dreamwellDrawnTurn: null,
@@ -124,9 +124,9 @@ function edits(commands: BattleCommand[]): BattleDebugEdit[] {
 
 function frontRankSlots(slot: FrontRankSlotId, battleCardId: string | null): Record<FrontRankSlotId, string | null> {
   return {
-    ...Object.fromEntries(FRONT_RANK_SLOT_IDS.map((id) => [id, null])),
+    ...emptyFrontRankSlots(),
     [slot]: battleCardId,
-  } as Record<FrontRankSlotId, string | null>;
+  };
 }
 
 describe("planBasicAutomationCommands — playing cards", () => {
@@ -226,7 +226,7 @@ describe("planBasicAutomationCommands — playing cards", () => {
 
   it("does not spend energy when moving a card already on the battlefield", () => {
     const state = makeState({
-      player: { currentEnergy: 5, backRank: { B0: "c1", B1: null, B2: null, B3: null, B4: null } },
+      player: { currentEnergy: 5, backRank: { ...emptyBackRankSlots(), B0: "c1" } },
       instances: [makeInstance("c1", { owner: "player", energyCost: 3 })],
     });
     const reposition: BattleCommand = {
@@ -374,13 +374,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
       enemy: {
         deck: ["d-enemy"],
         frontRank: frontRankSlots("F0", "e-front"),
-        backRank: {
-          B0: "e-back",
-          B1: null,
-          B2: null,
-          B3: null,
-          B4: null,
-        },
+        backRank: { ...emptyBackRankSlots(), B0: "e-back" },
       },
       instances: [incomingFront, incomingBack, outgoingFront],
     });
@@ -470,13 +464,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
       player: {
         hand: ["p-eph", "p-keep"],
         frontRank: frontRankSlots("F0", "p-off"),
-        backRank: {
-          B0: "p-stay",
-          B1: null,
-          B2: null,
-          B3: null,
-          B4: null,
-        },
+        backRank: { ...emptyBackRankSlots(), B0: "p-stay" },
       },
       enemy: { deck: ["d-enemy"] },
       instances: [ephemeral, offering, normalHand, normalPlay],
