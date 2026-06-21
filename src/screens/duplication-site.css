@@ -33,23 +33,20 @@
   padding: 40px 24px;
 }
 
-/* ---- Top bar: summary readouts left, duplicate button right ---- */
+/* ---- Top bar: Enhanced badge left, duplicate button right ---- */
 .duplication-site .dup-topbar {
   flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  /* Extra right padding reserves the top-right corner for the close button so
-   * the duplicate commit button never slides under it. */
-  padding: 18px 74px 18px 20px;
+  /* Fixed bar height so the duplicate button's vertical center matches the
+   * shared close button (top: 16px, height: 42px → center at 37px) regardless
+   * of whether the Enhanced badge is present. Right padding reserves the
+   * top-right corner for the close button so the button never slides under it. */
+  min-height: 74px;
+  padding: 0 74px 0 20px;
   z-index: 8;
-}
-
-/* Drop the shared close button down so the red X lines up with the summary
- * readouts and the duplicate commit button. */
-.duplication-site .site-close-btn {
-  top: 32px;
 }
 
 /* ---- Summary HUD bar — frosted Enhanced badge ---- */
