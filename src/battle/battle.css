@@ -1073,15 +1073,17 @@
   pointer-events: none;
 }
 
-/* Exhausted (☪) marker: a moon badge in the card's top-right corner, paired
-   with a dimming wash, that persists until the side's next Dawn clears the
-   exhausted status. */
+/* Exhausted (☪) marker: a moon badge centered over the card art, paired with a
+   dimming wash, that persists until the side's next Dawn clears the exhausted
+   status. Centering it over the art keeps it clear of the spark badge in the
+   top-right corner. */
 .battle-card .c-exhausted {
   position: absolute;
-  top: 3px;
-  right: 3px;
-  width: 22px;
-  height: 22px;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
   border-radius: 999px;
   border: 1px solid rgba(255, 255, 255, 0.55);
   background: rgba(9, 6, 16, 0.82);
@@ -1089,7 +1091,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-size: 14px;
+  font-size: 18px;
   line-height: 1;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);

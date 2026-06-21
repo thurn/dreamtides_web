@@ -199,10 +199,10 @@ export function BattleCardView({
       </div>
       <div className="c-art">
         {hidden ? null : <BattleCardArt data={data} />}
+        {!hidden && exhausted ? (
+          <div className="c-exhausted" aria-label="exhausted">☪</div>
+        ) : null}
       </div>
-      {!hidden && exhausted ? (
-        <div className="c-exhausted" aria-label="exhausted">☪</div>
-      ) : null}
       {!hidden && data.kind === "character" && data.figmentCount > 1 ? (
         <div className="c-figment-count" aria-label="figment count">
           {String(data.figmentCount)}
