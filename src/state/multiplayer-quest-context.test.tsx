@@ -2291,6 +2291,118 @@ describe("MultiplayerQuestProvider", () => {
     expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
   });
 
+  it("charges the offer's essence cost when a transfiguration is accepted", () => {
+    const captured: QuestContextValue[] = [];
+    const previewCard = makeCard(101);
+    const questState: QuestState = {
+      ...createDefaultState(),
+      essence: 200,
+      deck: [
+        {
+          entryId: "deck-1",
+          cardNumber: 101,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+      siteRuntime: {
+        "site-1": {
+          kind: "cardChoice",
+          choiceKind: "transfiguration",
+          entryIds: ["deck-1"],
+          acceptedEntryIds: [],
+          transfigurationOffers: [
+            {
+              entryId: "deck-1",
+              type: "Empowered",
+              effectDescription: "Energy cost: 1 -> 0",
+              effectDetails: { energyCost: { from: 1, to: 0 } },
+              previewCard: { ...previewCard, energyCost: 0 },
+              essenceCost: 50,
+            },
+          ],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.acceptTransfigurationChoice(
+      "site-1",
+      "deck-1",
+      "Empowered",
+      "Energy cost: 1 -> 0",
+      { energyCost: { from: 1, to: 0 } },
+    );
+
+    const next = latestRoomTransactionUpdater()?.(session.room);
+    expect(next?.questState?.essence).toBe(150);
+    expect(next?.questState?.deck[0]?.transfiguration).toBe("Empowered");
+  });
+
+  it("rejects a transfiguration the player cannot afford", () => {
+    const captured: QuestContextValue[] = [];
+    const previewCard = makeCard(101);
+    const questState: QuestState = {
+      ...createDefaultState(),
+      essence: 40,
+      deck: [
+        {
+          entryId: "deck-1",
+          cardNumber: 101,
+          transfiguration: null,
+          isBane: false,
+        },
+      ],
+      siteRuntime: {
+        "site-1": {
+          kind: "cardChoice",
+          choiceKind: "transfiguration",
+          entryIds: ["deck-1"],
+          acceptedEntryIds: [],
+          transfigurationOffers: [
+            {
+              entryId: "deck-1",
+              type: "Empowered",
+              effectDescription: "Energy cost: 1 -> 0",
+              effectDetails: { energyCost: { from: 1, to: 0 } },
+              previewCard: { ...previewCard, energyCost: 0 },
+              essenceCost: 80,
+            },
+          ],
+        },
+      },
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.acceptTransfigurationChoice(
+      "site-1",
+      "deck-1",
+      "Empowered",
+      "Energy cost: 1 -> 0",
+      { energyCost: { from: 1, to: 0 } },
+    );
+
+    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+  });
+
   it("rejects transfiguration card-choice acceptance with malformed effect details", () => {
     const captured: QuestContextValue[] = [];
     const previewCard = makeCard(101);
@@ -2317,6 +2429,7 @@ describe("MultiplayerQuestProvider", () => {
               effectDescription: "Energy cost: 1 -> 0",
               effectDetails: { energyCost: { from: 1, to: 0 } },
               previewCard: { ...previewCard, energyCost: 0 },
+              essenceCost: 0,
             },
           ],
         },
@@ -2456,6 +2569,7 @@ describe("MultiplayerQuestProvider", () => {
               effectDescription: "Energy cost: 1 -> 0",
               effectDetails: { energyCost: { from: 1, to: 0 } },
               previewCard: { ...previewCard, energyCost: 0 },
+              essenceCost: 0,
             },
           ],
         },

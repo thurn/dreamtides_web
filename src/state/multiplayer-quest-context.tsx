@@ -85,6 +85,7 @@ import {
   offeredTransfigurationForms,
   transfigurationEffectDetails,
 } from "../transfiguration/transfiguration-logic";
+import { transfigurationEssenceCost } from "../transfiguration/transfiguration-pricing";
 import type { CardData } from "../types/cards";
 import {
   resolveMerchantDecline,
@@ -638,7 +639,8 @@ function effectDetailsEqual(
 }
 
 function buildCardChoiceRuntime({
-  siteId: _siteId,
+  siteId,
+  seed,
   deck,
   cardDatabase,
   kind,
@@ -646,6 +648,7 @@ function buildCardChoiceRuntime({
   affiliation,
 }: {
   siteId: string;
+  seed: string;
   deck: readonly DeckEntry[];
   cardDatabase: Map<number, CardData>;
   kind: "transfiguration" | "duplication";
@@ -713,6 +716,13 @@ function buildCardChoiceRuntime({
         effectDescription: offer.description,
         effectDetails: transfigurationEffectDetails(offer, card),
         previewCard: offer.previewCard,
+        essenceCost: transfigurationEssenceCost(
+          seed,
+          siteId,
+          entryId,
+          card,
+          offer.type,
+        ),
       });
     }
   }
@@ -2602,6 +2612,7 @@ export function MultiplayerQuestProvider({
         current.state.siteRuntime[siteId] === undefined
           ? buildCardChoiceRuntime({
               siteId,
+              seed: current.state.seed,
               deck: current.state.deck,
               cardDatabase: current.questContent.cardDatabase,
               kind,
@@ -2724,10 +2735,22 @@ export function MultiplayerQuestProvider({
           ) {
             return room;
           }
+          // The player must be able to pay the quoted cost; the cost is read
+          // from the stored offer (authoritative) rather than from the client.
+          const cost = offered.essenceCost;
+          const essenceBefore = room.questState.essence;
+          if (essenceBefore < cost) {
+            return room;
+          }
+          const essenceAfter = clampEssence(
+            essenceBefore - cost,
+            room.questState.essenceCap,
+          );
 
           const next = completeSiteAndReturnToDreamscape(
             {
               ...room.questState,
+              essence: essenceAfter,
               deck: room.questState.deck.map((candidate) =>
                 candidate.entryId === entryId
                   ? { ...candidate, transfiguration: offered.type }
@@ -2764,6 +2787,9 @@ export function MultiplayerQuestProvider({
                   transfigurationType: offered.type,
                   effectDescription: offered.effectDescription,
                   effectDetails: offered.effectDetails,
+                  essenceCost: cost,
+                  essenceBefore,
+                  essenceAfter,
                 },
               }),
             },

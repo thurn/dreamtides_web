@@ -296,6 +296,35 @@
   color: #94a3b8;
   text-wrap: pretty;
 }
+.transfiguration-site .tf-opt-cost {
+  flex: 0 0 auto;
+  margin-left: auto;
+  padding-left: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-essence);
+  white-space: nowrap;
+}
+.transfiguration-site .tf-opt-free {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: #6ee7b7;
+}
+/* Unaffordable forms read greyed and are not clickable, but still show their
+   price so the player knows what they are short. */
+.transfiguration-site .tf-opt.unaffordable {
+  cursor: not-allowed;
+  opacity: 0.42;
+}
+.transfiguration-site .tf-opt.unaffordable:hover {
+  background: rgba(18, 13, 32, 0.62);
+  transform: none;
+}
+.transfiguration-site .tf-opt.unaffordable .tf-opt-cost {
+  color: #f87171;
+}
 
 /* ---- Footer ---- */
 .transfiguration-site .tf-foot {
@@ -325,6 +354,20 @@
 }
 .transfiguration-site .tf-back i {
   font-size: 1.05em;
+}
+.transfiguration-site .tf-wallet {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.transfiguration-site .tf-wallet-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #94a3b8;
 }
 .transfiguration-site .tf-forge-btn {
   display: inline-flex;

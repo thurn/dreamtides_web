@@ -287,6 +287,7 @@ describe("DuplicationSiteScreen", () => {
                 effectDescription: "Empowered test effect",
                 effectDetails: { test: true },
                 previewCard,
+                essenceCost: 0,
               },
             ],
           },

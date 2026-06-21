@@ -3,6 +3,7 @@ import type { CSSProperties } from "react";
 import type { SiteState, DeckEntry, TransfigurationType } from "../types/quest";
 import type { CardData } from "../types/cards";
 import { CardDisplay } from "../components/CardDisplay";
+import { EssenceValue } from "../components/EssenceValue";
 import { SiteGuide } from "../components/SiteGuide";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
@@ -23,6 +24,7 @@ interface FormOffer {
   type: TransfigurationType;
   effectDescription: string;
   effectDetails: Record<string, unknown>;
+  essenceCost: number;
 }
 
 /** A deck entry paired with the forms the site offers for it. */
@@ -52,6 +54,7 @@ function buildCandidates(
     type: TransfigurationType;
     effectDescription: string;
     effectDetails: Record<string, unknown>;
+    essenceCost: number;
   }[],
 ): TransfigurationCandidate[] {
   const deckByEntryId = new Map(deck.map((entry) => [entry.entryId, entry]));
@@ -72,6 +75,7 @@ function buildCandidates(
       type: offer.type,
       effectDescription: offer.effectDescription,
       effectDetails: offer.effectDetails,
+      essenceCost: offer.essenceCost,
     });
   }
   return order
@@ -104,7 +108,7 @@ export function TransfigurationSiteScreen({
   site,
 }: TransfigurationSiteScreenProps) {
   const { state, mutations, cardDatabase } = useQuest();
-  const { deck } = state;
+  const { deck, essence } = state;
   const isHome = site.isEnhanced;
   const runtime = state.siteRuntime[site.id];
   const cardChoiceRuntime =
@@ -183,12 +187,23 @@ export function TransfigurationSiteScreen({
     () => picked?.forms.find((f) => f.type === formType) ?? null,
     [picked, formType],
   );
+  const activeAffordable =
+    activeForm !== null && activeForm.essenceCost <= essence;
 
-  const pick = useCallback((candidate: TransfigurationCandidate) => {
-    setPickedEntryId(candidate.entry.entryId);
-    // Preview the first eligible form immediately.
-    setFormType(candidate.forms[0]?.type ?? null);
-  }, []);
+  const pick = useCallback(
+    (candidate: TransfigurationCandidate) => {
+      setPickedEntryId(candidate.entry.entryId);
+      // Preview the first form the player can afford; fall back to the first
+      // form so the preview still shows something when none are affordable.
+      const firstAffordable = candidate.forms.find(
+        (form) => form.essenceCost <= essence,
+      );
+      setFormType(
+        (firstAffordable ?? candidate.forms[0])?.type ?? null,
+      );
+    },
+    [essence],
+  );
 
   const back = useCallback(() => {
     if (forging) return;
@@ -197,7 +212,13 @@ export function TransfigurationSiteScreen({
   }, [forging]);
 
   const confirm = useCallback(() => {
-    if (picked === null || activeForm === null || forging || alreadyAccepted) {
+    if (
+      picked === null ||
+      activeForm === null ||
+      forging ||
+      alreadyAccepted ||
+      activeForm.essenceCost > essence
+    ) {
       return;
     }
     setForging(true);
@@ -209,6 +230,9 @@ export function TransfigurationSiteScreen({
       transfigurationType: activeForm.type,
       effectDescription: activeForm.effectDescription,
       effectDetails: activeForm.effectDetails,
+      essenceCost: activeForm.essenceCost,
+      essenceBefore: essence,
+      essenceAfter: Math.max(0, essence - activeForm.essenceCost),
       offeredForms: picked.forms.map((f) => f.type),
       isEnhanced: site.isEnhanced,
       currentDreamscape: state.currentDreamscape,
@@ -228,6 +252,7 @@ export function TransfigurationSiteScreen({
   }, [
     picked,
     activeForm,
+    essence,
     forging,
     alreadyAccepted,
     mutations,
@@ -374,17 +399,19 @@ export function TransfigurationSiteScreen({
               <div className="tf-options">
                 {picked.forms.map((form) => {
                   const active = form.type === formType;
+                  const affordable = form.essenceCost <= essence;
                   return (
                     <button
                       key={form.type}
                       type="button"
-                      className={`tf-opt${active ? " active" : ""}`}
+                      className={`tf-opt${active ? " active" : ""}${affordable ? "" : " unaffordable"}`}
                       style={
                         {
                           "--tf-otint": TRANSFIGURATION_COLORS[form.type],
                         } as CSSProperties
                       }
                       aria-pressed={active}
+                      disabled={!affordable}
                       onClick={() => setFormType(form.type)}
                     >
                       <span className="tf-opt-ico">
@@ -399,6 +426,16 @@ export function TransfigurationSiteScreen({
                           {form.effectDescription}
                         </span>
                       </span>
+                      <span className="tf-opt-cost">
+                        {form.essenceCost === 0 ? (
+                          <span className="tf-opt-free">Free</span>
+                        ) : (
+                          <EssenceValue
+                            amount={form.essenceCost}
+                            color="inherit"
+                          />
+                        )}
+                      </span>
                     </button>
                   );
                 })}
@@ -409,16 +446,37 @@ export function TransfigurationSiteScreen({
               <button type="button" className="tf-back" onClick={back}>
                 <i className="bx bx-chevron-left" aria-hidden="true" /> Back
               </button>
+              <div className="tf-wallet" data-testid="transfiguration-wallet">
+                <span className="tf-wallet-label">Essence</span>
+                <EssenceValue amount={essence} />
+              </div>
               <div className="tf-foot-spacer" />
               <button
                 type="button"
                 className="tf-forge-btn"
                 data-testid="transfiguration-confirm"
-                disabled={activeForm === null || forging || alreadyAccepted}
+                disabled={
+                  activeForm === null ||
+                  forging ||
+                  alreadyAccepted ||
+                  !activeAffordable
+                }
                 onClick={confirm}
               >
                 <i className="bxf bx-wrench" aria-hidden="true" />
-                {forging ? "Reforging..." : "Transfigure it"}
+                {forging
+                  ? "Reforging..."
+                  : activeForm !== null && !activeAffordable
+                    ? "Not enough essence"
+                    : activeForm !== null && activeForm.essenceCost > 0
+                      ? "Transfigure it · "
+                      : "Transfigure it"}
+                {!forging &&
+                activeAffordable &&
+                activeForm !== null &&
+                activeForm.essenceCost > 0 ? (
+                  <EssenceValue amount={activeForm.essenceCost} color="inherit" />
+                ) : null}
               </button>
             </div>
           </>

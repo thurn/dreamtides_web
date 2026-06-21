@@ -176,6 +176,7 @@ function makeState(overrides: Partial<QuestState> = {}): QuestState {
               imageNumber: 101,
               artOwned: false,
             },
+            essenceCost: 0,
           },
         ],
       },

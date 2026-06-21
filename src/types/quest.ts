@@ -321,6 +321,13 @@ export interface CardChoiceTransfigurationOffer {
   effectDescription: string;
   effectDetails: Record<string, unknown>;
   previewCard: CardData;
+  /**
+   * Essence the player pays to forge this form, quoted once when the site
+   * runtime is built and stable for the whole visit. A multiple of 10 in
+   * `[0, 100]`, scaled to the magnitude of the change with a little seeded
+   * randomness (see `transfigurationEssenceCost`).
+   */
+  essenceCost: number;
 }
 
 export type CardChoiceSiteRuntime = {
