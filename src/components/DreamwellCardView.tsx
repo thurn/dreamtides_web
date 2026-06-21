@@ -232,9 +232,14 @@ export function DreamwellCardView({
   slots?: DreamwellCardViewSlots;
 }) {
   const rootRef = useRef<HTMLDivElement | null>(null);
+  // `DreamwellCardView` renders on editor routes that are not wrapped in an
+  // error boundary, so a `card` whose `renderedText` is missing (malformed or
+  // stale data) would otherwise take down the whole route with an uncaught
+  // throw. Normalize the field once so every consumer below sees a string.
+  const renderedText = card.renderedText ?? "";
   const { triggerHandlers, popoverPortal } = useCardTermPopover({
     anchorRef: rootRef,
-    text: card.renderedText,
+    text: renderedText,
     enabled: true,
   });
 
@@ -326,7 +331,7 @@ export function DreamwellCardView({
   // so an empty-rules card still offers a target to start an inline edit; the
   // in-battle card shows it only when there is text.
   const showRulesText =
-    card.renderedText.trim() !== "" || slots?.rulesText != null;
+    renderedText.trim() !== "" || slots?.rulesText != null;
 
   // Resolve the band geometry from the measured box top. The crisp art holds
   // down to a seam set `--dreamwell-art-underlap` below the box top; from the
@@ -609,8 +614,8 @@ export function DreamwellCardView({
         {showRulesText
           ? (() => {
               const rulesNode =
-                card.renderedText.trim() !== ""
-                  ? renderRulesText(card.renderedText)
+                renderedText.trim() !== ""
+                  ? renderRulesText(renderedText)
                   : null;
               return slots?.rulesText ? slots.rulesText(rulesNode) : rulesNode;
             })()
