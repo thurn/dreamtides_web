@@ -4,7 +4,6 @@ import type { SiteState, DeckEntry, TransfigurationType } from "../types/quest";
 import type { CardData } from "../types/cards";
 import { CardDisplay } from "../components/CardDisplay";
 import { SiteGuide } from "../components/SiteGuide";
-import { SiteCloseButton } from "../components/SiteCloseButton";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import {
@@ -238,28 +237,12 @@ export function TransfigurationSiteScreen({
     state.completionLevel,
   ]);
 
-  const handleClose = useCallback(() => {
-    if (forging) return;
-    logEvent("site_completed", {
-      siteType: "Transfiguration",
-      outcome: "skipped",
-    });
-    mutations.completeSite(site.id, "transfiguration_skipped");
-  }, [forging, mutations, site.id]);
-
   const tint = activeForm
     ? TRANSFIGURATION_COLORS[activeForm.type]
     : "#a855f7";
 
   const guide = (
-    <>
-      <SiteGuide siteType="Transfiguration" isEnhanced={site.isEnhanced} />
-      <SiteCloseButton
-        onClose={handleClose}
-        testId="transfiguration-close"
-        disabled={forging}
-      />
-    </>
+    <SiteGuide siteType="Transfiguration" isEnhanced={site.isEnhanced} />
   );
 
   if (cardChoiceRuntime === null) {
