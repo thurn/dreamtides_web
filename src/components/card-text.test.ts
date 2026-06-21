@@ -412,9 +412,9 @@ describe("formatTypeLine", () => {
     expect(formatTypeLine(card)).toBe("Event");
   });
 
-  it("shows card type alone when subtype is *", () => {
+  it("shows subtype when subtype is *", () => {
     const card = makeCard({ cardType: "Character", subtype: "*" });
-    expect(formatTypeLine(card)).toBe("");
+    expect(formatTypeLine(card)).toBe("*");
   });
 
   it("shows subtype alone for Character cards", () => {

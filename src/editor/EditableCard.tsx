@@ -408,7 +408,7 @@ export default function EditableCard({
     ),
     typeLineContent: (context, defaultNode) => {
       const subtype = context.card.subtype.trim();
-      const hasSubtype = subtype !== "" && subtype !== "*";
+      const hasSubtype = subtype !== "";
       const editingSubtype = subtypeSaveEntry?.status === "editing";
       // Keep the subtype field mounted while a save is in flight or just
       // settled so its floating status badge has a home even when the saved

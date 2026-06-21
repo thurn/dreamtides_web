@@ -745,10 +745,7 @@ describe("CardEditorApp", () => {
     });
   });
 
-  it.each([
-    { cardId: "character-blank-subtype", initialSubtype: "" },
-    { cardId: "character-hidden-subtype", initialSubtype: "*" },
-  ])(
+  it.each([{ cardId: "character-blank-subtype", initialSubtype: "" }])(
     "renders no subtype affordance for blank Character subtype '$initialSubtype'",
     async ({ cardId, initialSubtype }) => {
       const { container, root } = mount(

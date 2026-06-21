@@ -137,7 +137,7 @@ export default function EditableFigment({
     ),
     typeLineContent: (context, defaultNode) => {
       const subtype = context.card.subtype.trim();
-      const hasSubtype = subtype !== "" && subtype !== "*";
+      const hasSubtype = subtype !== "";
       const editingSubtype = subtypeSaveEntry?.status === "editing";
       const subtypeActive =
         subtypeSaveEntry !== null && subtypeSaveEntry.status !== "idle";

@@ -306,7 +306,7 @@ function hueForName(name: string): number {
 }
 
 function normalizeSubtype(subtype: string, kind: "character" | "event"): string {
-  if (subtype === "" || subtype === "*") {
+  if (subtype === "") {
     return kind === "event" ? "EVENT" : "";
   }
 

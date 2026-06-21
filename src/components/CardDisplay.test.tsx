@@ -167,7 +167,7 @@ describe("CardDisplay", () => {
         card={makeCard({
           cardType: "Character",
           isFast: false,
-          subtype: "*",
+          subtype: "",
         })}
         slots={{
           typeLineContent: () => (
@@ -605,15 +605,15 @@ describe("CardDisplay", () => {
   });
 
   it("renders the fast bolt before the name even when the type line is empty", () => {
-    // `formatTypeLine` returns "" for a Character with subtype "*". The bolt
-    // rides on the name, so it must still render as the fast indicator.
+    // `formatTypeLine` returns "" for a Character with an empty subtype. The
+    // bolt rides on the name, so it must still render as the fast indicator.
     const { container, root } = mount(
       <CardDisplay
         card={makeCard({
           name: "Test Card",
           isFast: true,
           cardType: "Character",
-          subtype: "*",
+          subtype: "",
         })}
       />,
     );
