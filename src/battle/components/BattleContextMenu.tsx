@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import type {
   BattleCommand,
   BattleDebugZoneDestination,
@@ -42,12 +43,23 @@ export function BattleContextMenu({
 }) {
   const card = state.cardInstances[battleCardId];
   const location = selectBattleCardLocation(state, battleCardId);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const [pos, setPos] = useState<{ left: number; top: number } | null>(null);
 
   useEffect(() => {
     function handleMouseDown(): void {
       onClose();
     }
-    function handleScroll(): void {
+    function handleScroll(event: Event): void {
+      // Scrolling inside the menu (or one of its flyout submenus) must not
+      // dismiss it; only an outside-the-menu scroll closes the menu.
+      const target = event.target;
+      if (
+        target instanceof Element
+        && target.closest("[data-battle-context-menu], .ctx-submenu") !== null
+      ) {
+        return;
+      }
       onClose();
     }
     function handleKeyDown(event: KeyboardEvent): void {
@@ -466,19 +478,45 @@ export function BattleContextMenu({
     }
   }, [battleCardId, card, location, onCommand, onOpenNoteEditor, sourceSurface, state]);
 
+  // Clamp the menu to the viewport using its real rendered size. Running in a
+  // layout effect (before paint) measures the menu at its initial position and
+  // repositions it so the whole menu stays on-screen, with no visible flash.
+  useLayoutEffect(() => {
+    const element = menuRef.current;
+    if (element === null) {
+      return;
+    }
+    const rect = element.getBoundingClientRect();
+    const margin = 8;
+    const clampedLeft = Math.max(
+      margin,
+      Math.min(x, window.innerWidth - rect.width - margin),
+    );
+    const clampedTop = Math.max(
+      margin,
+      Math.min(y, window.innerHeight - rect.height - margin),
+    );
+    setPos((previous) =>
+      previous !== null && previous.left === clampedLeft && previous.top === clampedTop
+        ? previous
+        : { left: clampedLeft, top: clampedTop });
+  }, [x, y, items]);
+
   if (card === undefined || location === null) {
     return null;
   }
 
-  const menuHeight = Math.min(items.length * 28 + 64, 600);
-  const left = Math.min(x, window.innerWidth - 248);
-  const top = Math.min(y, window.innerHeight - menuHeight - 8);
+  // First-paint fallback before the layout effect measures the real size; keeps
+  // the menu on-screen even on the initial frame.
+  const left = pos?.left ?? Math.max(8, Math.min(x, window.innerWidth - 248 - 8));
+  const top = pos?.top ?? Math.max(8, Math.min(y, window.innerHeight - 8));
   const locationLabel = location.zone === "backRank" || location.zone === "frontRank"
     ? `${formatSideLabel(location.side)} · ${formatZoneLabel(location.zone)} ${location.slotId}`
     : `${formatSideLabel(location.side)} · ${formatZoneLabel(location.zone)}`;
 
   return (
     <div
+      ref={menuRef}
       data-battle-context-menu=""
       className="ctx-menu"
       style={{ left, top }}
@@ -572,40 +610,117 @@ function ContextSubmenu({
   onClose: () => void;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const anchorRef = useRef<HTMLDivElement>(null);
+  const submenuRef = useRef<HTMLDivElement>(null);
+  const closeTimer = useRef<number | null>(null);
+  const [pos, setPos] = useState<{ left: number; top: number } | null>(null);
+
+  function open(): void {
+    if (closeTimer.current !== null) {
+      window.clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+    setIsOpen(true);
+  }
+
+  function scheduleClose(): void {
+    if (closeTimer.current !== null) {
+      window.clearTimeout(closeTimer.current);
+    }
+    // A short grace period lets the pointer travel from the anchor item to the
+    // flyout (rendered in a body portal) without the submenu closing underneath.
+    closeTimer.current = window.setTimeout(() => {
+      setIsOpen(false);
+      closeTimer.current = null;
+    }, 120);
+  }
+
+  useEffect(() => {
+    return () => {
+      if (closeTimer.current !== null) {
+        window.clearTimeout(closeTimer.current);
+      }
+    };
+  }, []);
+
+  // Position the flyout next to its anchor, flipping to the left side when it
+  // would overflow the right edge and clamping vertically to the viewport. Runs
+  // before paint so the submenu never appears off-screen.
+  useLayoutEffect(() => {
+    if (!isOpen) {
+      setPos(null);
+      return;
+    }
+    const anchor = anchorRef.current;
+    const flyout = submenuRef.current;
+    if (anchor === null || flyout === null) {
+      return;
+    }
+    const anchorRect = anchor.getBoundingClientRect();
+    const flyoutRect = flyout.getBoundingClientRect();
+    const margin = 8;
+    let left = anchorRect.right;
+    if (left + flyoutRect.width > window.innerWidth - margin) {
+      left = anchorRect.left - flyoutRect.width;
+    }
+    left = Math.max(margin, Math.min(left, window.innerWidth - flyoutRect.width - margin));
+    const top = Math.max(
+      margin,
+      Math.min(anchorRect.top, window.innerHeight - flyoutRect.height - margin),
+    );
+    setPos((previous) =>
+      previous !== null && previous.left === left && previous.top === top
+        ? previous
+        : { left, top });
+  }, [isOpen]);
 
   return (
     <div
+      ref={anchorRef}
       className="ctx-item has-submenu"
-      onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
+      onMouseEnter={open}
+      onMouseLeave={scheduleClose}
     >
       <span>{item.label}</span>
       <span className="ctx-caret">›</span>
-      {isOpen ? (
-        <div className="ctx-submenu">
-          {item.submenu.map((submenuItem, index) => {
-            if ("divider" in submenuItem) {
-              return <div key={`submenu-divider-${String(index)}`} className="ctx-divider" />;
-            }
-            if ("submenu" in submenuItem) {
-              return null;
-            }
-            return (
-              <div
-                key={submenuItem.label}
-                className="ctx-item"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  submenuItem.action();
-                  onClose();
-                }}
-              >
-                {submenuItem.label}
-              </div>
-            );
-          })}
-        </div>
-      ) : null}
+      {isOpen
+        ? createPortal(
+          <div
+            ref={submenuRef}
+            className="ctx-submenu"
+            style={pos === null
+              ? { position: "fixed", left: 0, top: 0, visibility: "hidden" }
+              : { position: "fixed", left: pos.left, top: pos.top }}
+            onMouseEnter={open}
+            onMouseLeave={scheduleClose}
+            onMouseDown={(event) => event.stopPropagation()}
+            onContextMenu={(event) => event.preventDefault()}
+          >
+            {item.submenu.map((submenuItem, index) => {
+              if ("divider" in submenuItem) {
+                return <div key={`submenu-divider-${String(index)}`} className="ctx-divider" />;
+              }
+              if ("submenu" in submenuItem) {
+                return null;
+              }
+              return (
+                <div
+                  key={submenuItem.label}
+                  className="ctx-item"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    submenuItem.action();
+                    onClose();
+                  }}
+                >
+                  {submenuItem.label}
+                </div>
+              );
+            })}
+          </div>,
+          document.body,
+        )
+        : null}
     </div>
   );
 }

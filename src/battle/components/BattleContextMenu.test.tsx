@@ -82,9 +82,13 @@ function mount(
   return { container, onCommand, root };
 }
 
-/** Hovers a submenu trigger by its label so its child items render. */
-function openSubmenu(container: HTMLElement, label: string): void {
-  const trigger = [...container.querySelectorAll(".ctx-item.has-submenu")].find(
+/**
+ * Hovers a submenu trigger by its label so its child items render. Submenu
+ * flyouts are portaled to `document.body`, so queries span the whole document
+ * rather than the menu's own container.
+ */
+function openSubmenu(_container: HTMLElement, label: string): void {
+  const trigger = [...document.querySelectorAll(".ctx-item.has-submenu")].find(
     (node) => node.querySelector("span")?.textContent === label,
   );
   if (trigger === undefined) {
@@ -97,9 +101,9 @@ function openSubmenu(container: HTMLElement, label: string): void {
   });
 }
 
-/** Clicks a leaf ctx-item by exact label text. */
-function clickItem(container: HTMLElement, label: string): void {
-  const item = [...container.querySelectorAll(".ctx-item")].find(
+/** Clicks a leaf ctx-item by exact label text, including portaled submenus. */
+function clickItem(_container: HTMLElement, label: string): void {
+  const item = [...document.querySelectorAll(".ctx-item")].find(
     (node) => node.textContent === label,
   );
   if (item === undefined) {
@@ -149,11 +153,11 @@ describe("BattleContextMenu status toggles", () => {
     const { container, root } = mount(state, battleCardId);
 
     openSubmenu(container, "Status");
-    expect(container.textContent).toContain("Exhaust ☪");
-    expect(container.textContent).toContain("Mark Reclaimed");
-    expect(container.textContent).toContain("Mark Offering");
-    expect(container.textContent).toContain("Mark Ephemeral");
-    expect(container.textContent).toContain("Grant Unstoppable");
+    expect(document.body.textContent).toContain("Exhaust ☪");
+    expect(document.body.textContent).toContain("Mark Reclaimed");
+    expect(document.body.textContent).toContain("Mark Offering");
+    expect(document.body.textContent).toContain("Mark Ephemeral");
+    expect(document.body.textContent).toContain("Grant Unstoppable");
 
     act(() => {
       root.unmount();
@@ -186,7 +190,7 @@ describe("BattleContextMenu status toggles", () => {
     const { container, onCommand, root } = mount(state, battleCardId);
 
     openSubmenu(container, "Status");
-    expect(container.textContent).toContain("Awaken");
+    expect(document.body.textContent).toContain("Awaken");
     clickItem(container, "Awaken");
 
     expect(onCommand).toHaveBeenCalledWith({
@@ -233,9 +237,9 @@ describe("BattleContextMenu status toggles", () => {
     if (eventCardId === undefined) {
       throw new Error("expected a player event card in hand");
     }
-    const { container, root } = mount(state, eventCardId);
+    const { root } = mount(state, eventCardId);
 
-    expect(container.textContent).not.toContain("Status");
+    expect(document.body.textContent).not.toContain("Status");
 
     act(() => {
       root.unmount();
@@ -248,9 +252,9 @@ describe("BattleContextMenu counters tool", () => {
     const state = createState();
     const battleCardId = placeCharacter(state, "backRank", "B0");
     state.cardInstances[battleCardId].status.counters = 2;
-    const { container, root } = mount(state, battleCardId);
+    const { root } = mount(state, battleCardId);
 
-    expect(container.textContent).toContain("Counters ⧗ (2)");
+    expect(document.body.textContent).toContain("Counters ⧗ (2)");
 
     act(() => {
       root.unmount();
@@ -325,9 +329,9 @@ describe("BattleContextMenu counters tool", () => {
     if (eventCardId === undefined) {
       throw new Error("expected a player event card in hand");
     }
-    const { container, root } = mount(state, eventCardId);
+    const { root } = mount(state, eventCardId);
 
-    expect(container.textContent).not.toContain("Counters");
+    expect(document.body.textContent).not.toContain("Counters");
 
     act(() => {
       root.unmount();
@@ -380,10 +384,10 @@ describe("BattleContextMenu abandon / rematerialize tools", () => {
     if (handCharacterId === undefined) {
       throw new Error("expected a player character in hand");
     }
-    const { container, root } = mount(state, handCharacterId);
+    const { root } = mount(state, handCharacterId);
 
-    expect(container.textContent).not.toContain("Abandon");
-    expect(container.textContent).not.toContain("Rematerialize");
+    expect(document.body.textContent).not.toContain("Abandon");
+    expect(document.body.textContent).not.toContain("Rematerialize");
 
     act(() => {
       root.unmount();

@@ -2256,13 +2256,15 @@
 .ctx-menu {
   position: fixed;
   width: 240px;
+  max-height: calc(100vh - 16px);
   border-radius: 8px;
   background: rgba(10, 6, 18, 0.98);
   border: 1px solid var(--line-strong);
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(10px);
   z-index: 60;
-  overflow: visible;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .ctx-header {
@@ -2320,10 +2322,10 @@
 }
 
 .ctx-submenu {
-  position: absolute;
-  top: 0;
-  left: 100%;
+  position: fixed;
   width: 220px;
+  max-height: calc(100vh - 16px);
+  overflow-y: auto;
   border-radius: 8px;
   background: rgba(10, 6, 18, 0.98);
   border: 1px solid var(--line-strong);
