@@ -76,8 +76,9 @@ other than `http://localhost:5173` (for example `npm run dev -- --port 5174`) so
 QA does not kill the developer's own server already running on the default port.
 To QA screens that are otherwise reachable only by playing battles forward (for
 example the Dream Atlas boss preview), append `?goto=<scene>` to the dev URL (e.g.
-`http://localhost:5174/?goto=atlas`) to boot straight onto that screen; the
-registered scenes live in `src/runtime/qa-scenes.ts`.
+`http://localhost:5174/?goto=atlas`) to boot straight onto that screen. The
+registered scenes and the full `?goto=` mechanics are documented in
+`docs/quest_prototype/qa_scenes.md` (source of truth: `src/runtime/qa-scenes.ts`).
 When tearing down the QA server, kill only the process you started — capture its
 PID at launch, or match its exact port (`pkill -f "vite --port 5174"`). Never run
 a broad `pkill -f vite` (or `pkill -f "firebase|vite|emulator"`): it matches

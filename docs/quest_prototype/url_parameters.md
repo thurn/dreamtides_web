@@ -219,6 +219,22 @@ Example:
 http://localhost:5173/?game=quest42
 ```
 
+## `goto`
+
+Jumps a fresh room straight onto a developer QA scene on boot, parsed into
+`runtimeConfig.gotoScene`. The value is trimmed; empty or absent is treated as no
+scene. When set with no `?game=` room id, the app auto-creates a room and parks
+it on the scene, skipping the manual "Create Game" gate.
+
+The registered scene ids and full mechanics are documented in
+`docs/quest_prototype/qa_scenes.md`; the source of truth is `QA_SCENES` in
+`src/runtime/qa-scenes.ts`.
+
+```
+http://localhost:5173/?goto=atlas
+http://localhost:5173/?goto=duplication-enhanced
+```
+
 ## `identicons`
 
 When set to exactly `1`, every card renders its generated identicon art in
@@ -265,6 +281,7 @@ http://localhost:5173/                          # default
 http://localhost:5173/?seed=42                  # fixed seed
 http://localhost:5173/?startInBattle=1          # boot straight into battle
 http://localhost:5173/?game=quest42             # parsed multiplayer room id
+http://localhost:5173/?goto=atlas               # jump straight to a QA scene
 http://localhost:5173/?realtime=1               # use cloud Firebase RTDB
 http://localhost:5173/?identicons=1             # force identicon art for cards
 http://localhost:5173/editor?identicons=1       # same, in the card editor
