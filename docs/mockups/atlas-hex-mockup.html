@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dream Atlas — Hex Corridor Mockup</title>
+<style>
+  :root {
+    --bg: #0b0716;
+    --void: #14102a;
+    --void-edge: #1d1838;
+    --corridor: #2c2550;
+    --corridor-lit: #4b3f86;
+    --panel: #161029;
+    --ink: #e9e3ff;
+    --muted: #9a8fc4;
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0; height: 100%;
+    background: radial-gradient(1200px 800px at 30% 20%, #1a1336 0%, var(--bg) 70%);
+    color: var(--ink);
+    font-family: "Inter", "Segoe UI", system-ui, sans-serif;
+  }
+  .wrap { display: flex; height: 100vh; }
+  .stage { flex: 1; min-width: 0; position: relative; overflow: auto; }
+  svg { display: block; }
+  .side {
+    width: 320px; flex: none; background: var(--panel);
+    border-left: 1px solid #2a2247; padding: 18px 20px; overflow-y: auto;
+  }
+  h1 { font-size: 17px; margin: 0 0 2px; letter-spacing: .3px; }
+  .sub { color: var(--muted); font-size: 12px; margin-bottom: 16px; line-height: 1.5; }
+  .btn {
+    display: inline-block; cursor: pointer; border: 1px solid #3a3170;
+    background: #221a45; color: var(--ink); padding: 7px 12px; border-radius: 7px;
+    font-size: 12px; margin-bottom: 16px;
+  }
+  .btn:hover { background: #2c2257; }
+  .card {
+    background: #1d1638; border: 1px solid #2c2350; border-radius: 10px;
+    padding: 14px; margin-bottom: 14px;
+  }
+  .card h2 { font-size: 15px; margin: 0 0 4px; }
+  .tag {
+    display: inline-block; font-size: 10px; text-transform: uppercase;
+    letter-spacing: .6px; padding: 2px 7px; border-radius: 20px; margin-right: 6px;
+    color: #0b0716; font-weight: 600;
+  }
+  .layerline { color: var(--muted); font-size: 11px; margin: 2px 0 10px; }
+  .sites { list-style: none; margin: 0; padding: 0; }
+  .sites li {
+    display: flex; align-items: center; gap: 8px; font-size: 12px;
+    padding: 4px 0; border-top: 1px solid #241d44;
+  }
+  .sites li .g { font-size: 15px; width: 20px; text-align: center; }
+  .sites li.enh { color: #ffd98a; }
+  .legend { font-size: 11px; color: var(--muted); line-height: 1.7; }
+  .legend b { color: var(--ink); font-weight: 600; }
+  .swatch { display:inline-block; width:11px; height:11px; border-radius:3px; vertical-align:middle; margin-right:6px; }
+  .hint { font-size: 11px; color: var(--muted); margin-top: 12px; font-style: italic; }
+  .hex { transition: opacity .15s, transform .1s; }
+  .node-hex { cursor: pointer; }
+  .node-hex:hover { filter: brightness(1.25); }
+  .nlabel { font-size: 10px; fill: #fff; font-weight: 700; pointer-events: none; text-anchor: middle; }
+  .glyphs { font-size: 13px; pointer-events: none; text-anchor: middle; }
+  text { user-select: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="stage"><div id="board"></div></div>
+  <div class="side">
+    <h1>Dream Atlas — Hex Corridors</h1>
+    <div class="sub">A real generated atlas (7 layers, monotonic-backbone + non-crossing edges) rendered as a hex board. Edges become walkable <b>corridors</b> of lit hexes; everything else is impassable void.</div>
+    <span class="btn" id="regen">↻ Regenerate atlas</span>
+    <div id="detail"></div>
+    <div class="card">
+      <div class="legend">
+        <div><span class="swatch" style="background:#4b3f86"></span><b>Lit corridor</b> — a carved, walkable path</div>
+        <div><span class="swatch" style="background:#14102a"></span><b>Void</b> — impassable (keeps the DAG honest)</div>
+        <div style="margin-top:6px"><b>○ available</b> · pulsing ring, you may travel here</div>
+        <div><b>✓ completed</b> · cleared</div>
+        <div><b>🔒 revealed-locked</b> · seen ahead, not yet reachable</div>
+        <div><b>? unrevealed</b> · under dream-fog</div>
+        <div><b>💀 boss</b> · layer 6, always revealed</div>
+      </div>
+      <div class="hint">Hover a dreamscape hex for its sites. Corridors fade into fog where they lead to unrevealed nodes — the reveal-2-ahead mechanic, made visible.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ----------------------------------------------------------------------------
+// Real Dream Atlas data (mirrors data/tabula/atlas_config.toml + dreamscapes.toml)
+// ----------------------------------------------------------------------------
+const LAYER_SPECS = [
+  {min:1,max:1},{min:2,max:2},{min:3,max:3},
+  {min:3,max:4},{min:3,max:5},{min:3,max:5},{min:1,max:1},
+];
+const CONNECTION_AVERAGE = 2.0;
+const REPEAT_DISCOURAGE = 2.0;
+
+// Real ACCENT_COLORS palette from src/atlas/atlas-generator.ts
+const ACCENT_COLORS = ["#34d399","#c084fc","#f87171","#38bdf8","#a78bfa","#2dd4bf","#fb923c","#22d3ee","#f472b6","#facc15"];
+
+// Real dreamscape ids/names from data/tabula/dreamscapes.toml
+const DREAMSCAPES = [
+  {id:"firstlight_meadow",   name:"Firstlight Meadow"},
+  {id:"tumbleleaf_village",  name:"Tumbleleaf Village"},
+  {id:"pharaohs_gate",       name:"Pharaoh's Gate"},
+  {id:"winterwake_fjords",   name:"Winterwake Fjords"},
+  {id:"frostforge",          name:"Frostforge"},
+  {id:"hopes_end",           name:"Hope's End"},
+  {id:"tsukiren",            name:"Tsukiren"},
+  {id:"wilderveil",          name:"Wilderveil"},
+  {id:"rust_expanse",        name:"The Rust Expanse"},
+  {id:"farpoint_station",    name:"Farpoint Station"},
+  {id:"grid_city",           name:"Grid City"},
+];
+
+const SITE_GLYPH = {
+  Battle:"⚔️", Draft:"🃏", Shop:"🏪", Purge:"🔥", Essence:"✨",
+  Transfiguration:"🦋", Duplication:"⧉", Reward:"🎁", DreamAugury:"🔮",
+  DreamsignMarket:"🜍", DreamsignRevelation:"🌟", TemptingOffer:"💎",
+  Gamble:"🎲", TemporalFork:"⏳",
+};
+
+// Real fnv1aHash → deterministic accent colour (matches production output).
+function fnv1aHash(value){
+  let hash = 2166136261;
+  for (const ch of value){ hash ^= ch.charCodeAt(0); hash = Math.imul(hash,16777619) >>> 0; }
+  return hash;
+}
+function accentColorForDreamscape(id){ return ACCENT_COLORS[fnv1aHash(id) % ACCENT_COLORS.length]; }
+
+const ri = (a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const edgesCross=(a,b,c,d)=> (a<c&&b>d)||(a>c&&b<d);
+
+// ----------------------------------------------------------------------------
+// Atlas generation (mirrors atlas-generator.ts: widths, backbone + extra edges)
+// ----------------------------------------------------------------------------
+function generateAtlas(){
+  const layers=[];
+  for(let L=0;L<LAYER_SPECS.length;L++){
+    const w = ri(LAYER_SPECS[L].min, LAYER_SPECS[L].max);
+    const row=[];
+    for(let i=0;i<w;i++) row.push({id:`d${L}-${i}`, layer:L, idx:i, width:w, forward:[], backward:[]});
+    layers.push(row);
+  }
+  // Wire adjacent layers: monotonic backbone (every node gets fwd+bwd, no cross)
+  for(let L=0;L<layers.length-1;L++){
+    const a=layers[L], b=layers[L+1];
+    const edges=new Set();
+    const addEdge=(i,j)=>{
+      const k=i+"-"+j;
+      if(edges.has(k)) return false;
+      for(const e of edges){ const [ci,cj]=e.split("-").map(Number); if(edgesCross(i,j,ci,cj)) return false; }
+      edges.add(k); return true;
+    };
+    // backbone: each source to a proportional target, each target from a proportional source
+    for(let i=0;i<a.length;i++) addEdge(i, b.length===1?0:Math.round(i*(b.length-1)/Math.max(1,a.length-1)));
+    for(let j=0;j<b.length;j++) addEdge(a.length===1?0:Math.round(j*(a.length-1)/Math.max(1,b.length-1)), j);
+    // extra non-crossing edges toward connection-average
+    const target = Math.round(a.length*CONNECTION_AVERAGE);
+    let attempts = a.length*b.length*2;
+    while(edges.size<target && attempts-->0) addEdge(ri(0,a.length-1), ri(0,b.length-1));
+    for(const e of edges){ const [i,j]=e.split("-").map(Number); a[i].forward.push(b[j].id); b[j].backward.push(a[i].id); }
+  }
+  // Assign dreamscapes (layer 0 = Firstlight Meadow starter; layer 6 = boss).
+  const weights=new Map(DREAMSCAPES.map(d=>[d.id,1]));
+  const all={};
+  layers.flat().forEach(n=>all[n.id]=n);
+  for(let L=0;L<layers.length;L++){
+    for(const n of layers[L]){
+      if(L===0){ n.dreamId="firstlight_meadow"; n.name="Firstlight Meadow"; }
+      else if(L===layers.length-1){ n.dreamId="__boss"; n.name="Apollyon"; }
+      else {
+        const used=new Set(layers[L].filter(x=>x.dreamId).map(x=>x.dreamId));
+        n.backward.forEach(id=>used.add(all[id].dreamId));
+        const pool=DREAMSCAPES.filter(d=>!used.has(d.id) && d.id!=="firstlight_meadow");
+        const cand=pool.length?pool:DREAMSCAPES;
+        let total=cand.reduce((s,d)=>s+weights.get(d.id),0), roll=Math.random()*total, pick=cand[0];
+        for(const d of cand){ roll-=weights.get(d.id); if(roll<=0){pick=d;break;} }
+        n.dreamId=pick.id; n.name=pick.name;
+        weights.set(pick.id, weights.get(pick.id)/REPEAT_DISCOURAGE);
+      }
+      n.color = n.dreamId==="__boss" ? "#b13a4a" : accentColorForDreamscape(n.dreamId);
+      n.sites = buildSites(n, L, layers.length-1);
+    }
+  }
+  // States: starter completed (current), layer1 available, layer2 + boss + 1 bonus revealed-locked, rest fog.
+  layers.flat().forEach(n=>n.state="unrevealed");
+  layers[0][0].state="completed"; layers[0][0].current=true;
+  layers[1].forEach(n=>n.state="available");
+  if(layers[2]) layers[2].forEach(n=>n.state="revealedLocked");
+  layers[layers.length-1][0].state="revealedLocked"; // boss always revealed
+  const bonusLayer = layers[4]||layers[3];
+  if(bonusLayer) bonusLayer[ri(0,bonusLayer.length-1)].state="revealedLocked"; // bonus reveal
+  return {layers, all};
+}
+
+function buildSites(n, L, bossLayer){
+  if(n.dreamId==="__boss") return [{type:"Battle", enhanced:false, boss:true}];
+  const sites=[];
+  const have=new Set();
+  const add=(type,enhanced)=>{ if(type!=="Draft"&&have.has(type)) return; have.add(type); sites.push({type,enhanced:!!enhanced}); };
+  const enh = ["Transfiguration","Shop","Essence","DreamAugury","Duplication"][fnv1aHash(n.dreamId)%5];
+  if(L>0) add(enh, true);
+  const drafts = L<=1?2 : L<=3?1 : 0;
+  for(let i=0;i<drafts;i++) add("Draft");
+  if(L>=1 && L<=2 && Math.random()<0.6) add("Purge");
+  if(L===1) add("DreamAugury");
+  // weighted fill
+  const fillTypes=["Shop","Essence","Gamble","TemptingOffer","Transfiguration","Duplication","TemporalFork","DreamsignMarket"];
+  const fill = Math.max(0, ri(2,4)-sites.length);
+  for(let i=0;i<fill;i++){
+    const opts=fillTypes.filter(t=>!have.has(t));
+    if(!opts.length) break;
+    add(opts[ri(0,opts.length-1)]);
+  }
+  add("Battle");
+  return sites;
+}
+
+// ----------------------------------------------------------------------------
+// Hex geometry (flat-top axial), corridor routing via cube line-draw
+// ----------------------------------------------------------------------------
+const SIZE=24, STRIDE=3, LANE=2.0;
+const axPix=(q,r)=>({x:SIZE*1.5*q, y:SIZE*Math.sqrt(3)*(r+q/2)});
+const axCube=(q,r)=>({x:q, y:-q-r, z:r});
+const cubeAx=c=>({q:c.x, r:c.z});
+function cubeRound(c){
+  let rx=Math.round(c.x), ry=Math.round(c.y), rz=Math.round(c.z);
+  const dx=Math.abs(rx-c.x), dy=Math.abs(ry-c.y), dz=Math.abs(rz-c.z);
+  if(dx>dy&&dx>dz) rx=-ry-rz; else if(dy>dz) ry=-rx-rz; else rz=-rx-ry;
+  return {x:rx,y:ry,z:rz};
+}
+const cubeDist=(a,b)=>(Math.abs(a.x-b.x)+Math.abs(a.y-b.y)+Math.abs(a.z-b.z))/2;
+function hexLine(aQR,bQR){
+  const a=axCube(aQR.q,aQR.r), b=axCube(bQR.q,bQR.r);
+  const N=Math.max(1,cubeDist(a,b)); const out=[];
+  for(let i=0;i<=N;i++){ const t=i/N;
+    out.push(cubeAx(cubeRound({x:a.x+(b.x-a.x)*t, y:a.y+(b.y-a.y)*t, z:a.z+(b.z-a.z)*t}))); }
+  return out;
+}
+function hexPoly(cx,cy,s){
+  let p="";
+  for(let i=0;i<6;i++){ const a=Math.PI/180*(60*i); p+=`${(cx+s*Math.cos(a)).toFixed(1)},${(cy+s*Math.sin(a)).toFixed(1)} `; }
+  return p.trim();
+}
+
+// ----------------------------------------------------------------------------
+// Render
+// ----------------------------------------------------------------------------
+let ATLAS;
+function render(){
+  ATLAS = generateAtlas();
+  const {layers, all} = ATLAS;
+  // assign axial coords to nodes
+  for(const row of layers) for(const n of row){
+    n.q = n.layer*STRIDE;
+    const lane = (n.idx - (n.width-1)/2)*LANE;
+    n.r = Math.round(lane - n.q/2);
+  }
+  // build corridor hex set (between connected nodes), excluding node hexes
+  const nodeKey=new Set(layers.flat().map(n=>n.q+","+n.r));
+  const corridor=new Map(); // key -> {opacity, lit}
+  for(const n of layers.flat()){
+    for(const fid of n.forward){
+      const m=all[fid];
+      const path=hexLine({q:n.q,r:n.r},{q:m.q,r:m.r});
+      const revealed = s=> s!=="unrevealed";
+      const bothSeen = revealed(n.state)&&revealed(m.state);
+      const oneFog   = revealed(n.state)!==revealed(m.state);
+      const op = bothSeen?1 : oneFog?0.45 : 0.12;
+      const lit = bothSeen && (n.state==="completed"||n.state==="available") && (m.state==="available"||m.state==="revealedLocked"||m.state==="completed");
+      for(const h of path){
+        const k=h.q+","+h.r; if(nodeKey.has(k)) continue;
+        const prev=corridor.get(k);
+        if(!prev || op>prev.opacity) corridor.set(k,{q:h.q,r:h.r,opacity:op,lit:lit||(prev&&prev.lit)});
+      }
+    }
+  }
+  // bounds
+  const pts=[...layers.flat().map(n=>axPix(n.q,n.r)), ...[...corridor.values()].map(h=>axPix(h.q,h.r))];
+  let minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9;
+  for(const p of pts){ minX=Math.min(minX,p.x); minY=Math.min(minY,p.y); maxX=Math.max(maxX,p.x); maxY=Math.max(maxY,p.y); }
+  const pad=SIZE*3, ox=-minX+pad, oy=-minY+pad;
+  const W=maxX-minX+pad*2, H=maxY-minY+pad*2;
+
+  let svg=`<svg width="${W.toFixed(0)}" height="${H.toFixed(0)}" viewBox="0 0 ${W.toFixed(0)} ${H.toFixed(0)}">`;
+  svg+=`<defs><filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+    <feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
+
+  // background void field across the bounding region
+  const occupied=new Set([...nodeKey, ...corridor.keys()]);
+  for(let q=-1;q<=layers.length*STRIDE;q++){
+    for(let r=-34;r<=14;r++){
+      const k=q+","+r; if(occupied.has(k)) continue;
+      const p=axPix(q,r), cx=p.x+ox, cy=p.y+oy;
+      if(cx<2||cy<2||cx>W-2||cy>H-2) continue;
+      svg+=`<polygon class="hex" points="${hexPoly(cx,cy,SIZE*0.9)}" fill="var(--void)" stroke="var(--void-edge)" stroke-width="1" opacity="0.55"/>`;
+    }
+  }
+  // corridors
+  for(const h of corridor.values()){
+    const p=axPix(h.q,h.r), cx=p.x+ox, cy=p.y+oy;
+    const fill=h.lit?"var(--corridor-lit)":"var(--corridor)";
+    svg+=`<polygon class="hex" points="${hexPoly(cx,cy,SIZE*0.9)}" fill="${fill}" stroke="#5a4d9e" stroke-width="1" opacity="${h.opacity}"/>`;
+  }
+  // nodes
+  for(const n of layers.flat()){
+    const p=axPix(n.q,n.r), cx=p.x+ox, cy=p.y+oy;
+    const s=n.state, fog = s==="unrevealed";
+    let fill = fog? "#2d2040" : n.color;
+    let op = s==="forgone"?0.3 : s==="revealedLocked"?0.7 : 1;
+    let stroke = s==="available"? "#fff" : s==="completed"? "#ffe9a8" : "#0b0716";
+    let sw = s==="available"?3 : 2;
+    const filter = (s==="available"||n.dreamId==="__boss") ? ' filter="url(#glow)"' : '';
+    svg+=`<polygon class="hex node-hex" data-id="${n.id}" points="${hexPoly(cx,cy,SIZE*1.02)}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" opacity="${op}"${filter}/>`;
+    // marker glyph
+    let g = fog? "?" : n.dreamId==="__boss"? "💀" : n.current? "🏠" : s==="completed"? "✓" : s==="revealedLocked"? "🔒" : "";
+    if(g) svg+=`<text class="glyphs" x="${cx}" y="${cy+5}" pointer-events="none">${g}</text>`;
+    // tiny site-count pip for revealed non-boss
+    if(!fog && n.dreamId!=="__boss" && !n.current){
+      svg+=`<text class="nlabel" x="${cx}" y="${cy+SIZE+13}">${n.name.split(" ")[0]}</text>`;
+    }
+  }
+  // available pulse
+  svg+=`<style>@keyframes pulse{0%{opacity:.9}50%{opacity:.35}100%{opacity:.9}}</style>`;
+  for(const n of layers.flat()){ if(n.state!=="available") continue;
+    const p=axPix(n.q,n.r), cx=p.x+ox, cy=p.y+oy;
+    svg+=`<polygon points="${hexPoly(cx,cy,SIZE*1.32)}" fill="none" stroke="${n.color}" stroke-width="2" style="animation:pulse 1.6s infinite"/>`;
+  }
+  svg+=`</svg>`;
+  document.getElementById("board").innerHTML=svg;
+  document.querySelectorAll(".node-hex").forEach(el=>{
+    el.addEventListener("mouseenter",()=>showDetail(ATLAS.all[el.dataset.id]));
+  });
+  showDetail(layers[1][0]); // default detail
+}
+
+function showDetail(n){
+  const stateName={completed:"Completed",available:"Available",revealedLocked:"Revealed (locked)",unrevealed:"Unrevealed",forgone:"Forgone"}[n.state];
+  if(n.state==="unrevealed"){
+    document.getElementById("detail").innerHTML=
+      `<div class="card"><h2>Unrevealed dreamscape</h2><div class="layerline">Layer ${n.layer} · hidden under dream-fog</div>
+       <div class="legend">Its dreamscape and sites are drawn lazily the moment it is revealed (reveal-2-ahead). Route toward it to find out.</div></div>`;
+    return;
+  }
+  const isBoss=n.dreamId==="__boss";
+  const sites=n.sites.map(s=>`<li class="${s.enhanced?'enh':''}"><span class="g">${SITE_GLYPH[s.type]||"•"}</span>${s.type}${s.enhanced?" · enhanced":""}${s.boss?" · Apollyon":""}</li>`).join("");
+  document.getElementById("detail").innerHTML=
+    `<div class="card">
+       <span class="tag" style="background:${n.color}">${isBoss?"Boss":stateName}</span>
+       <h2>${n.name}</h2>
+       <div class="layerline">Layer ${n.layer} · index ${n.idx} · ${n.forward.length} forward · ${n.backward.length} back</div>
+       <ul class="sites">${sites}</ul>
+     </div>`;
+}
+
+document.getElementById("regen").addEventListener("click", render);
+render();
+</script>
+</body>
+</html>
