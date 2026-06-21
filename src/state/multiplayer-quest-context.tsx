@@ -2504,11 +2504,15 @@ export function MultiplayerQuestProvider({
     const nextDraftState = isDeckFitDraft
       ? current.state.draftState
       : generated.draftState ?? current.state.draftState;
+    // A restock fully refills the stall: every slot — including ones the player
+    // already bought — is replaced with a freshly generated, unpurchased item,
+    // so the player is offered a complete new set of choices rather than only
+    // the slots that were still unsold. The generator produces one replacement
+    // per original slot (5 cards or 3 dreamsigns), so the indices line up.
     const replacements = shopSlotsToRuntime(generated.slots);
     let replacementIndex = 0;
     const rerollCount = expectedRuntime.rerollCount + 1;
     const slots = expectedRuntime.slots.map((candidate) => {
-      if (candidate.purchased) return candidate;
       const replacement = replacements[replacementIndex];
       replacementIndex += 1;
       return replacement ?? candidate;

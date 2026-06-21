@@ -1590,7 +1590,7 @@ describe("MultiplayerQuestProvider", () => {
     expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
   });
 
-  it("rerolls shared shop slots while preserving purchased slots", () => {
+  it("rerolls shared shop slots, refilling every slot including purchased ones", () => {
     const captured: QuestContextValue[] = [];
     const randomSpy = vi.spyOn(Math, "random").mockReturnValue(0.99);
     const site: SiteState = {
@@ -1603,6 +1603,17 @@ describe("MultiplayerQuestProvider", () => {
       ...createDefaultState(),
       essence: 200,
       remainingDreamsignPool: [],
+      // A live draft pool so the reroll can draw fresh card slots to refill the
+      // stall with.
+      draftState: {
+        mode: "pool",
+        draftPoolCopiesByCard: { "101": 2, "102": 2, "103": 2 },
+        remainingCopiesByCard: { "101": 2, "102": 2, "103": 2 },
+        currentOffer: [],
+        activeSiteId: null,
+        pickNumber: 5,
+        sitePicksCompleted: 0,
+      },
       siteRuntime: {
         "site-1": {
           kind: "shop",
@@ -1656,14 +1667,13 @@ describe("MultiplayerQuestProvider", () => {
     expect(nextRoom?.questState?.essence).toBe(150);
     expect(runtime?.kind).toBe("shop");
     expect(runtime?.kind === "shop" ? runtime.rerollCount : null).toBe(1);
-    // Purchased slots are preserved verbatim.
-    expect(runtime?.kind === "shop" ? runtime.slots[0] : null).toEqual({
-      itemType: "card",
-      cardNumber: 101,
-      basePrice: 100,
-      discountPercent: 0,
-      purchased: true,
-    });
+    // A restock fully refills the stall: every slot — including the one the
+    // player already bought — is replaced with a fresh, unpurchased item, so the
+    // previously purchased slot is no longer sold out.
+    const rerolledSlots = runtime?.kind === "shop" ? runtime.slots : [];
+    expect(rerolledSlots).toHaveLength(2);
+    expect(rerolledSlots.every((slot) => slot.purchased === false)).toBe(true);
+    expect(rerolledSlots[0]?.itemType).toBe("card");
     expect(nextRoom?.actionLog?.["action-1"]).toEqual({
       timestamp: nextRoom?.metadata.updatedAt,
       actorId: "client-1",
