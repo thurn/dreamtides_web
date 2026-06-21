@@ -303,24 +303,23 @@ function render(){
       svg+=`<polygon class="hex" points="${hexPoly(cx,cy,SIZE*0.92)}" fill="#100b22" stroke="#191333" stroke-width="1" opacity="0.5"/>`;
     }
   }
-  // corridors — small stepping-stones tinted by their source node, so each
-  // path reads as a distinct traceable trail rather than a fused blob.
+  // corridors — full-size floor tiles tinted by their source node. Same hex
+  // size as everything else; distinguished from nodes by being flat fills
+  // (no thick border / glyph) and from void by their source colour.
   for(const h of corridor.values()){
     const p=axPix(h.q,h.r), cx=p.x+ox, cy=p.y+oy;
-    const r = h.lit ? SIZE*0.50 : SIZE*0.40;
-    const filter = h.lit ? ' filter="url(#glow)"' : '';
-    svg+=`<polygon class="hex" points="${hexPoly(cx,cy,r)}" fill="${h.color}" stroke="#0b0716" stroke-width="1" opacity="${(h.lit?0.95:0.55)*h.opacity}"${filter}/>`;
+    svg+=`<polygon class="hex" points="${hexPoly(cx,cy,SIZE*0.92)}" fill="${h.color}" stroke="#0b0716" stroke-width="1.5" opacity="${(h.lit?0.82:0.42)*h.opacity}"/>`;
   }
   // nodes
   for(const n of layers.flat()){
     const p=axPix(n.q,n.r), cx=p.x+ox, cy=p.y+oy;
     const s=n.state, fog = s==="unrevealed";
     let fill = fog? "#2d2040" : n.color;
-    let op = s==="forgone"?0.3 : s==="revealedLocked"?0.7 : 1;
-    let stroke = s==="available"? "#fff" : s==="completed"? "#ffe9a8" : "#0b0716";
-    let sw = s==="available"?3 : 2;
+    let op = s==="forgone"?0.3 : s==="revealedLocked"?0.78 : 1;
+    let stroke = s==="available"? "#fff" : s==="completed"? "#ffe9a8" : fog? "#3a2f5e" : "#0b0716";
+    let sw = s==="available"?4 : s==="completed"?3.5 : fog?1.5 : 3;
     const filter = (s==="available"||n.dreamId==="__boss") ? ' filter="url(#glow)"' : '';
-    svg+=`<polygon class="hex node-hex" data-id="${n.id}" points="${hexPoly(cx,cy,SIZE*1.02)}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" opacity="${op}"${filter}/>`;
+    svg+=`<polygon class="hex node-hex" data-id="${n.id}" points="${hexPoly(cx,cy,SIZE*0.92)}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" opacity="${op}"${filter}/>`;
     // marker glyph
     let g = fog? "?" : n.dreamId==="__boss"? "💀" : n.current? "🏠" : s==="completed"? "✓" : s==="revealedLocked"? "🔒" : "";
     if(g) svg+=`<text class="glyphs" x="${cx}" y="${cy+5}" pointer-events="none">${g}</text>`;
