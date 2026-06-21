@@ -52,7 +52,7 @@
   top: 32px;
 }
 
-/* ---- Summary HUD bar — frosted, two readouts ---- */
+/* ---- Summary HUD bar — frosted Enhanced badge ---- */
 .duplication-site .dup-summary {
   display: flex;
   align-items: stretch;
@@ -96,22 +96,9 @@
   align-items: baseline;
   gap: 6px;
 }
-.duplication-site .dup-cell-v .unit {
-  font-size: 13px;
-  font-weight: 500;
-  color: #94a3b8;
-}
-.duplication-site .dup-cell.is-copies .dup-cell-v {
-  color: #c084fc;
-}
 .duplication-site .dup-cell.is-enhanced .dup-cell-v {
   color: #c084fc;
   font-size: 15px;
-}
-.duplication-site .dup-cell-note {
-  font-size: 13px;
-  font-weight: 500;
-  color: #94a3b8;
 }
 
 /* ---- Scrolling deck region (below the fixed top bar) ---- */
@@ -215,52 +202,6 @@
   cursor: pointer;
 }
 
-/* copy-count chip floats above each card; selection brightens it */
-.duplication-site .dup-chip {
-  position: absolute;
-  left: 50%;
-  top: -13px;
-  transform: translate(-50%, 0) scale(0.92);
-  z-index: 6;
-  pointer-events: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 13px;
-  border-radius: 999px;
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-weight: 700;
-  font-size: 14px;
-  line-height: 1;
-  white-space: nowrap;
-  background: linear-gradient(180deg, rgba(46, 22, 72, 0.92), rgba(30, 14, 52, 0.92));
-  border: 1px solid rgba(168, 85, 247, 0.4);
-  color: #d9c2ff;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45);
-  opacity: 0.78;
-  transition:
-    opacity 0.16s ease,
-    transform 0.16s ease,
-    box-shadow 0.16s ease,
-    border-color 0.16s ease;
-}
-.duplication-site .dup-slot.selected .dup-chip {
-  opacity: 1;
-  transform: translate(-50%, 0) scale(1);
-  border-color: rgba(168, 85, 247, 0.7);
-  color: #ecdcff;
-  box-shadow:
-    0 6px 16px rgba(0, 0, 0, 0.5),
-    0 0 16px rgba(168, 85, 247, 0.4);
-}
-.duplication-site .dup-slot.dimmed .dup-chip {
-  opacity: 0.4;
-}
-.duplication-site .dup-chip i {
-  font-size: 0.92em;
-  transform: translateY(-0.04em);
-}
-
 /* ---- Duplicate commit button (top bar, right) ---- */
 .duplication-site .dup-dupe-btn {
   flex: 0 0 auto;
@@ -305,11 +246,6 @@
 .duplication-site .dup-dupe-btn i {
   font-size: 1.05em;
 }
-.duplication-site .dup-dupe-count {
-  opacity: 0.9;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-}
 
 /* collection target, bottom-right — the copy lands here on confirm */
 .duplication-site .dup-tray {
@@ -351,7 +287,6 @@
 
 @media (prefers-reduced-motion: reduce) {
   .duplication-site .dup-slot,
-  .duplication-site .dup-chip,
   .duplication-site .dup-ghost {
     transition: none !important;
   }

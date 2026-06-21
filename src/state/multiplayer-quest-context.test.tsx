@@ -2387,7 +2387,7 @@ describe("MultiplayerQuestProvider", () => {
     expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
   });
 
-  it("rejects duplication card-choice acceptance with an excessive copy count", () => {
+  it("adds exactly one copy of the chosen card on duplication acceptance", () => {
     const captured: QuestContextValue[] = [];
     const questState: QuestState = {
       ...createDefaultState(),
@@ -2422,10 +2422,12 @@ describe("MultiplayerQuestProvider", () => {
     captured[captured.length - 1]?.mutations.acceptDuplicationChoice(
       "site-1",
       "deck-1",
-      99,
     );
 
-    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+    const next = latestRoomTransactionUpdater()?.(session.room);
+    const deck = next?.questState?.deck ?? [];
+    expect(deck).toHaveLength(2);
+    expect(deck[1]?.cardNumber).toBe(101);
   });
 
   it("rejects duplication card-choice acceptance for a transfiguration runtime", () => {
@@ -2473,7 +2475,6 @@ describe("MultiplayerQuestProvider", () => {
     captured[captured.length - 1]?.mutations.acceptDuplicationChoice(
       "site-1",
       "deck-1",
-      1,
     );
 
     expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);

@@ -80,11 +80,7 @@ export interface QuestMutations {
     effectDescription: string,
     effectDetails: Record<string, unknown>,
   ) => void;
-  acceptDuplicationChoice: (
-    siteId: string,
-    entryId: string,
-    copyCount: number,
-  ) => void;
+  acceptDuplicationChoice: (siteId: string, entryId: string) => void;
   /**
    * Marks a Dream Augury site as completed and returns to the dreamscape.
    * The augury screen is responsible for any narrative interaction; the

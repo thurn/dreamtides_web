@@ -14,11 +14,10 @@ interface DuplicationSiteScreenProps {
   site: SiteState;
 }
 
-/** A deck entry paired with a deterministic copy count for duplication. */
+/** A deck entry eligible to be duplicated. */
 interface DuplicationCandidate {
   entry: DeckEntry;
   card: CardData;
-  copyCount: number;
 }
 
 /** How long the copy "lifts away" before the mutation returns to the map. */
@@ -29,24 +28,10 @@ const CARD_SLOT_WIDTH = 168;
 
 const ACCENT_COLOR = "#c084fc";
 
-/**
- * The number of copies a given deck entry yields at a given site, derived
- * deterministically so the offer is stable across re-renders and matches the
- * count the `acceptDuplicationChoice` mutation will commit.
- */
-export function duplicationCopyCount(siteId: string, entryId: string): number {
-  let hash = 0;
-  for (const char of `${siteId}:${entryId}`) {
-    hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
-  }
-  return (hash % 4) + 1;
-}
-
 /** Builds duplication candidates from the shared runtime's entry ids. */
 function buildCandidates(
   deck: DeckEntry[],
   cardDatabase: Map<number, CardData>,
-  siteId: string,
   entryIds: readonly string[],
 ): DuplicationCandidate[] {
   const deckByEntryId = new Map(deck.map((entry) => [entry.entryId, entry]));
@@ -56,8 +41,7 @@ function buildCandidates(
     if (entry === undefined) continue;
     const card = cardDatabase.get(entry.cardNumber);
     if (!card) continue;
-    const copyCount = duplicationCopyCount(siteId, entryId);
-    candidates.push({ entry, card, copyCount });
+    candidates.push({ entry, card });
   }
   return candidates;
 }
@@ -74,8 +58,8 @@ function buildCandidates(
  * landscape. At an
  * enhanced site (Hope's End, Holt's home) the runtime surfaces the entire deck
  * to choose from; otherwise it surfaces a small random hand. Either way the
- * interaction is the same: select one card, then confirm. The copy count each
- * card yields (1–4) is fixed per card and surfaced on its chip and in the HUD.
+ * interaction is the same: select one card, then confirm to add one copy of it
+ * to the deck.
  */
 export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
   const { state, mutations, cardDatabase } = useQuest();
@@ -98,13 +82,8 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
     () =>
       cardChoiceRuntime === null
         ? []
-        : buildCandidates(
-            deck,
-            cardDatabase,
-            site.id,
-            cardChoiceRuntime.entryIds ?? [],
-          ),
-    [cardChoiceRuntime, cardDatabase, deck, site.id],
+        : buildCandidates(deck, cardDatabase, cardChoiceRuntime.entryIds ?? []),
+    [cardChoiceRuntime, cardDatabase, deck],
   );
 
   // A choice already committed this visit (e.g. a re-render before the return
@@ -147,24 +126,24 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
 
   const handleConfirm = useCallback(() => {
     if (picked === null || copying || duplicated) return;
-    const { entry, copyCount } = picked;
+    const { entry } = picked;
     setCopying(true);
 
     logEvent("duplication_completed", {
       siteId: site.id,
       entryId: entry.entryId,
       cardNumber: entry.cardNumber,
-      copyCount,
+      copyCount: 1,
       isEnhanced: site.isEnhanced,
       deckSizeBefore: deck.length,
-      deckSizeAfter: deck.length + copyCount,
+      deckSizeAfter: deck.length + 1,
       currentDreamscape: state.currentDreamscape,
       completionLevel: state.completionLevel,
     });
 
     // Let the copy lift away, then commit; the mutation returns to the map.
     window.setTimeout(() => {
-      mutations.acceptDuplicationChoice(site.id, entry.entryId, copyCount);
+      mutations.acceptDuplicationChoice(site.id, entry.entryId);
     }, DUPLICATE_LIFT_MS);
   }, [
     picked,
@@ -196,9 +175,6 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
   }
 
   const hasPick = picked !== null;
-  const copyCount = picked?.copyCount ?? 0;
-  const deckAfter = deck.length + copyCount;
-
   const slotState = (selected: boolean): string => {
     if (copying && selected) return "copying";
     return mounted ? "show" : "enter";
@@ -209,28 +185,10 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
       className={`duplication-site${mounted ? " mounted" : ""}`}
       data-testid="duplication-site-screen"
     >
-      {/* Top bar: summary readouts pinned left, the duplicate commit button
-          pinned right so the way to confirm is always visible above the
-          scrolling deck. */}
+      {/* Top bar: the duplicate commit button pinned right so the way to
+          confirm is always visible above the scrolling deck. */}
       <div className="dup-topbar">
         <div className="dup-summary">
-          <div className="dup-cell">
-            <span className="dup-cell-k">Deck after</span>
-            <span className="dup-cell-v">
-              {deckAfter}
-              <span className="unit">/ {deck.length}</span>
-            </span>
-          </div>
-          <div className="dup-cell is-copies">
-            <span className="dup-cell-k">Copies added</span>
-            <span className="dup-cell-v">
-              {hasPick ? (
-                `×${String(copyCount)}`
-              ) : (
-                <span className="dup-cell-note">Pick a card</span>
-              )}
-            </span>
-          </div>
           {site.isEnhanced && (
             <div className="dup-cell is-enhanced" data-duplication-enhanced="true">
               <span className="dup-cell-k">Enhanced</span>
@@ -248,9 +206,6 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
         >
           <i className="bxf bx-copy" aria-hidden="true" />
           Duplicate this card
-          {hasPick && (
-            <span className="dup-dupe-count">{`×${String(copyCount)}`}</span>
-          )}
         </button>
       </div>
 
@@ -277,12 +232,6 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
                 data-duplication-entry={entryId}
                 data-duplication-selected={selected ? "true" : "false"}
               >
-                {/* copy-count chip, brightened when this card is chosen */}
-                <div className="dup-chip">
-                  <i className="bxf bx-copy" aria-hidden="true" />
-                  {`×${String(candidate.copyCount)}`}
-                </div>
-
                 <div className="dup-card-wrap">
                   {/* ghost copy slides out behind the chosen card */}
                   <div className="dup-ghost" aria-hidden="true">
@@ -294,7 +243,7 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
                     role="button"
                     tabIndex={0}
                     aria-pressed={selected}
-                    aria-label={`Duplicate ${candidate.card.name} (${String(candidate.copyCount)} ${candidate.copyCount === 1 ? "copy" : "copies"})`}
+                    aria-label={`Duplicate ${candidate.card.name}`}
                     onClick={() => toggle(entryId)}
                     onKeyDown={(event) => {
                       if (event.key === "Enter" || event.key === " ") {

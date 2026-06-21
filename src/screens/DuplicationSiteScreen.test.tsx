@@ -9,10 +9,7 @@ import type { QuestMutations } from "../state/quest-context";
 import type { CardData } from "../types/cards";
 import type { QuestState, SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
-import {
-  DuplicationSiteScreen,
-  duplicationCopyCount,
-} from "./DuplicationSiteScreen";
+import { DuplicationSiteScreen } from "./DuplicationSiteScreen";
 
 vi.mock("framer-motion", () => ({
   motion: {
@@ -344,7 +341,6 @@ describe("DuplicationSiteScreen", () => {
     expect(mutations.acceptDuplicationChoice).toHaveBeenCalledWith(
       "site-1",
       "deck-1",
-      duplicationCopyCount("site-1", "deck-1"),
     );
     expect(mutations.addCard).not.toHaveBeenCalled();
     expect(mutations.markSiteVisited).not.toHaveBeenCalled();

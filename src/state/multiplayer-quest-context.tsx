@@ -630,14 +630,6 @@ function selectCardChoiceEntryIds({
   return entryIds;
 }
 
-function duplicationCopyCount(siteId: string, entryId: string): number {
-  let hash = 0;
-  for (const char of `${siteId}:${entryId}`) {
-    hash = (hash * 31 + char.charCodeAt(0)) >>> 0;
-  }
-  return (hash % 4) + 1;
-}
-
 function effectDetailsEqual(
   left: Record<string, unknown>,
   right: Record<string, unknown>,
@@ -2783,7 +2775,7 @@ export function MultiplayerQuestProvider({
   );
 
   const acceptDuplicationChoice = useCallback(
-    (siteId: string, entryId: string, copyCount: number) => {
+    (siteId: string, entryId: string) => {
       const current = currentRef.current;
       const now = new Date().toISOString();
       const actionId = crypto.randomUUID();
@@ -2795,7 +2787,7 @@ export function MultiplayerQuestProvider({
           if (room === null || room.questState === null) {
             return room ?? undefined;
           }
-          if (room.questState.visitedSites.includes(siteId) || copyCount < 1) {
+          if (room.questState.visitedSites.includes(siteId)) {
             return room;
           }
           const runtime = room.questState.siteRuntime[siteId];
@@ -2814,23 +2806,17 @@ export function MultiplayerQuestProvider({
           if (entry === undefined) {
             return room;
           }
-          const expectedCopyCount = duplicationCopyCount(siteId, entryId);
-          if (copyCount !== expectedCopyCount) {
-            return room;
-          }
 
-          let deck = room.questState.deck;
-          for (let index = 0; index < expectedCopyCount; index += 1) {
-            deck = [
-              ...deck,
-              {
-                entryId: nextDeckEntryId(deck),
-                cardNumber: entry.cardNumber,
-                transfiguration: null,
-                isBane: false,
-              },
-            ];
-          }
+          // Duplication always commits exactly one copy of the chosen card.
+          const deck = [
+            ...room.questState.deck,
+            {
+              entryId: nextDeckEntryId(room.questState.deck),
+              cardNumber: entry.cardNumber,
+              transfiguration: null,
+              isBane: false,
+            },
+          ];
 
           const next = completeSiteAndReturnToDreamscape(
             {
@@ -2865,7 +2851,7 @@ export function MultiplayerQuestProvider({
                   siteId,
                   entryId,
                   cardNumber: entry.cardNumber,
-                  copyCount: expectedCopyCount,
+                  copyCount: 1,
                 },
               }),
             },
