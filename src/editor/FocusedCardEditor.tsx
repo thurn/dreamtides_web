@@ -236,6 +236,7 @@ const overlayStyle: CSSProperties = {
 };
 
 const panelStyle: CSSProperties = {
+  position: "relative",
   display: "flex",
   gap: "28px",
   alignItems: "stretch",
@@ -681,6 +682,22 @@ export default function FocusedCardEditor({
     onClose();
   }, [flushArt, onClose]);
 
+  // Close on Escape from anywhere in the document, so the editor dismisses
+  // whether or not focus currently sits inside the dialog. Nested popups (the
+  // tag dropdown) intercept Escape in the capture phase and stop propagation,
+  // so this only fires when no inner control is consuming the key.
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        handleClose();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [handleClose]);
+
   const panStep = panStepFor(model, imageAspect, art.scale);
 
   const imageStatusText =
@@ -716,13 +733,33 @@ export default function FocusedCardEditor({
           handleClose();
         }
       }}
-      onKeyDown={(event) => {
-        if (event.key === "Escape") {
-          handleClose();
-        }
-      }}
     >
       <div style={panelStyle}>
+        <button
+          type="button"
+          aria-label="Close editor"
+          onClick={handleClose}
+          style={{
+            position: "absolute",
+            top: "8px",
+            right: "8px",
+            width: "34px",
+            height: "34px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            border: "none",
+            borderRadius: "8px",
+            background: "transparent",
+            color: "#c9d3cf",
+            fontSize: "1.8rem",
+            lineHeight: 1,
+            cursor: "pointer",
+            zIndex: 1,
+          }}
+        >
+          ×
+        </button>
         <div
           style={{
             flex: "0 0 auto",
@@ -754,24 +791,10 @@ export default function FocusedCardEditor({
               alignItems: "baseline",
               justifyContent: "space-between",
               gap: "12px",
+              paddingRight: "32px",
             }}
           >
             <h2 style={{ margin: 0, fontSize: "1rem", fontWeight: 800 }}>{title}</h2>
-            <button
-              type="button"
-              aria-label="Close editor"
-              onClick={handleClose}
-              style={{
-                border: "none",
-                background: "transparent",
-                color: "#c9d3cf",
-                fontSize: "1.3rem",
-                lineHeight: 1,
-                cursor: "pointer",
-              }}
-            >
-              ×
-            </button>
           </div>
 
           {fields.map((field) => (

@@ -109,15 +109,18 @@ export default function CardTagEditor({
     };
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
+        // Consume Escape in the capture phase so dismissing the open dropdown
+        // does not also bubble up and close a surrounding focused editor.
+        event.stopPropagation();
         setOpen(false);
       }
     };
 
     document.addEventListener("mousedown", handlePointerDown);
-    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown, true);
     return () => {
       document.removeEventListener("mousedown", handlePointerDown);
-      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("keydown", handleKeyDown, true);
     };
   }, [open]);
 

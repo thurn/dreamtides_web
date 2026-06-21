@@ -3379,4 +3379,87 @@ describe("CardEditorApp", () => {
       });
     },
   );
+
+  function openFocusedEditor(container: HTMLElement): HTMLElement {
+    const cardButton = container.querySelector<HTMLElement>(
+      '[data-editor-card-id="card-id-1"] [role="button"]',
+    );
+    if (cardButton === null) {
+      throw new Error("Missing art-edit card button");
+    }
+    act(() => {
+      cardButton.click();
+    });
+    const editor = document.querySelector<HTMLElement>(
+      '[data-editor-focused-editor="true"]',
+    );
+    if (editor === null) {
+      throw new Error("Focused editor did not open");
+    }
+    return editor;
+  }
+
+  it("closes the focused editor on Escape even when focus is outside the dialog", async () => {
+    window.history.pushState(null, "", "/editor?artedit=1");
+    const { container, root } = await mountLoadedApp([
+      makeEditorCard({ id: "card-id-1" }),
+    ]);
+
+    openFocusedEditor(container);
+
+    // Focus sits on the document body, not inside the dialog. A document-level
+    // listener is what makes Escape close the editor regardless of focus.
+    act(() => {
+      pressKey(document.body, "Escape");
+    });
+
+    expect(
+      document.querySelector('[data-editor-focused-editor="true"]'),
+    ).toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("dismisses the tag dropdown with Escape without closing the focused editor", async () => {
+    window.history.pushState(null, "", "/editor?artedit=1&tagedit=1");
+    const { container, root } = await mountLoadedApp([
+      makeEditorCard({ id: "card-id-1" }),
+    ]);
+
+    const editor = openFocusedEditor(container);
+
+    const addTag = Array.from(
+      editor.querySelectorAll<HTMLButtonElement>(
+        'button[aria-haspopup="listbox"]',
+      ),
+    ).find((button) => button.textContent?.trim() === "+Tag");
+    if (addTag === undefined) {
+      throw new Error("Missing +Tag button");
+    }
+    act(() => {
+      addTag.click();
+    });
+
+    const search = editor.querySelector<HTMLInputElement>(
+      'input[type="search"]',
+    );
+    expect(search).not.toBeNull();
+
+    act(() => {
+      pressKey(search as HTMLInputElement, "Escape");
+    });
+
+    // The dropdown closes, but the editor stays open: the dropdown intercepts
+    // Escape in the capture phase and stops it from reaching the editor.
+    expect(editor.querySelector('input[type="search"]')).toBeNull();
+    expect(
+      document.querySelector('[data-editor-focused-editor="true"]'),
+    ).not.toBeNull();
+
+    act(() => {
+      root.unmount();
+    });
+  });
 });
