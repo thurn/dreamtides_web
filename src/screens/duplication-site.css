@@ -104,20 +104,27 @@
   min-height: 0;
   width: 100%;
   overflow-y: auto;
-  /* Generous chip headroom up top so a selected card's copy chip is not clipped
-   * by the scroll edge; bottom room clears the tray. */
+  /* Center the deck in the available space. `margin: auto` on the grid (below)
+   * centers it both ways when the cards fit; when the deck overflows (e.g. an
+   * enhanced site's full deck) the auto margins collapse to 0, so it aligns to
+   * the top and stays fully scrollable rather than clipping. */
+  display: flex;
+  flex-direction: column;
+  /* Headroom up top, bottom room clears the tray. */
   padding: 26px 24px 104px;
 }
 
 /* ---- Deck grid ---- */
 .duplication-site .dup-deck {
   display: grid;
-  grid-template-columns: repeat(auto-fill, var(--dup-cardw, 168px));
+  /* `auto-fit` collapses the empty trailing tracks so a small hand of cards
+   * centers as a block instead of biasing toward the left. */
+  grid-template-columns: repeat(auto-fit, var(--dup-cardw, 168px));
   justify-content: center;
   gap: 34px 24px;
   width: 100%;
   max-width: 1120px;
-  margin: 0 auto;
+  margin: auto;
   z-index: 6;
 }
 .duplication-site .dup-slot {
