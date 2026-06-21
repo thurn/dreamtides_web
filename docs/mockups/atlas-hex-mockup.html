@@ -71,9 +71,12 @@
 <div class="wrap">
   <div class="stage"><div id="board"></div></div>
   <div class="side">
-    <h1>Dream Atlas — Hex Corridors</h1>
-    <div class="sub">A real generated atlas (7 layers, monotonic-backbone + non-crossing edges) rendered as a hex board. Edges become walkable <b>corridors</b> of lit hexes; everything else is impassable void.</div>
+    <h1>Dream Atlas — Tile Corridors</h1>
+    <div class="sub">A real generated atlas (7 layers, monotonic-backbone + non-crossing edges) rendered on a tile board. Edges become walkable <b>corridors</b> of tiles; everything else is impassable void. Switch the tiling between hex and diamond — same atlas, different shape.</div>
     <span class="btn" id="regen">↻ Regenerate atlas</span>
+    <div style="margin:-6px 0 16px"><span style="font-size:11px;color:var(--muted);margin-right:8px">Tile:</span>
+      <span class="btn shape-btn" data-shape="hex" style="margin:0 4px 0 0">Hex</span>
+      <span class="btn shape-btn" data-shape="diamond" style="margin:0">Diamond</span></div>
     <div id="detail"></div>
     <div class="card">
       <div class="legend">
@@ -226,12 +229,19 @@ function buildSites(n, L, bossLayer){
 }
 
 // ----------------------------------------------------------------------------
-// Hex geometry (flat-top axial), corridor routing via cube line-draw
+// Geometry — the atlas (layered DAG + corridors + void) is shape-agnostic. A
+// shape just needs: place a node, map a cell to pixels, draw a line of cells
+// (corridor routing), and emit a polygon. Two tilings are provided: flat-top
+// hex (axial coords, cube line-draw) and point-top diamond (rotated-square
+// lattice, staircase line-draw).
 // ----------------------------------------------------------------------------
-const SIZE=24, STRIDE=4, LANE=2.8;
-const axPix=(q,r)=>({x:SIZE*1.5*q, y:SIZE*Math.sqrt(3)*(r+q/2)});
+const SIZE=24;
+let SHAPE="hex";
+
+// ---- flat-top hex (axial a=q, b=r) ----
+const HSTRIDE=4, HLANE=2.8;
+const hexPix=(a,b)=>({x:SIZE*1.5*a, y:SIZE*Math.sqrt(3)*(b+a/2)});
 const axCube=(q,r)=>({x:q, y:-q-r, z:r});
-const cubeAx=c=>({q:c.x, r:c.z});
 function cubeRound(c){
   let rx=Math.round(c.x), ry=Math.round(c.y), rz=Math.round(c.z);
   const dx=Math.abs(rx-c.x), dy=Math.abs(ry-c.y), dz=Math.abs(rz-c.z);
@@ -239,11 +249,12 @@ function cubeRound(c){
   return {x:rx,y:ry,z:rz};
 }
 const cubeDist=(a,b)=>(Math.abs(a.x-b.x)+Math.abs(a.y-b.y)+Math.abs(a.z-b.z))/2;
-function hexLine(aQR,bQR){
-  const a=axCube(aQR.q,aQR.r), b=axCube(bQR.q,bQR.r);
+function hexLine(A,B){
+  const a=axCube(A.a,A.b), b=axCube(B.a,B.b);
   const N=Math.max(1,cubeDist(a,b)); const out=[];
   for(let i=0;i<=N;i++){ const t=i/N;
-    out.push(cubeAx(cubeRound({x:a.x+(b.x-a.x)*t, y:a.y+(b.y-a.y)*t, z:a.z+(b.z-a.z)*t}))); }
+    const c=cubeRound({x:a.x+(b.x-a.x)*t, y:a.y+(b.y-a.y)*t, z:a.z+(b.z-a.z)*t});
+    out.push({a:c.x, b:c.z}); }
   return out;
 }
 function hexPoly(cx,cy,s){
@@ -252,42 +263,79 @@ function hexPoly(cx,cy,s){
   return p.trim();
 }
 
+// ---- point-top diamond (rotated-square lattice, a=u, b=v) ----
+// center = ((u-v)*DW, (u+v)*DH); the 4 edge-neighbours are (u±1,v) and (u,v±1),
+// i.e. the screen diagonals NE/NW/SE/SW.
+const DSTRIDE=6, DLANE=4, DW=SIZE*1.02, DH=SIZE*1.18;
+const diaPix=(a,b)=>({x:(a-b)*DW, y:(a+b)*DH});
+function diaLine(A,B){
+  let u=A.a, v=A.b; const out=[{a:u,b:v}];
+  while(u!==B.a || v!==B.b){
+    const du=B.a-u, dv=B.b-v;
+    if(du!==0 && (Math.abs(du)>=Math.abs(dv) || dv===0)) u+=Math.sign(du);
+    else v+=Math.sign(dv);
+    out.push({a:u,b:v});
+  }
+  return out;
+}
+function diaPoly(cx,cy,frac){
+  const w=DW*frac, h=DH*frac;
+  return `${cx},${(cy-h).toFixed(1)} ${(cx+w).toFixed(1)},${cy} ${cx},${(cy+h).toFixed(1)} ${(cx-w).toFixed(1)},${cy}`;
+}
+
+const GEO={
+  hex:{
+    place(layer,idx,width){ const a=layer*HSTRIDE; const lane=(idx-(width-1)/2)*HLANE; return {a, b:Math.round(lane-a/2)}; },
+    pix:hexPix, line:hexLine,
+    poly:(cx,cy,frac)=>hexPoly(cx,cy,SIZE*frac),
+    ring:(cx,cy)=>hexPoly(cx,cy,SIZE*1.32),
+    labelDY:SIZE+13,
+  },
+  diamond:{
+    place(layer,idx,width){ const step=layer*DSTRIDE; const lane=(idx-(width-1)/2)*DLANE; const u=Math.round((lane+step)/2); return {a:u, b:u-step}; },
+    pix:diaPix, line:diaLine,
+    poly:(cx,cy,frac)=>diaPoly(cx,cy,frac),
+    ring:(cx,cy)=>diaPoly(cx,cy,1.36),
+    labelDY:DH+15,
+  },
+};
+
 // ----------------------------------------------------------------------------
 // Render
 // ----------------------------------------------------------------------------
 let ATLAS;
+function regenerate(){ ATLAS = generateAtlas(); render(); }
+
 function render(){
-  ATLAS = generateAtlas();
   const {layers, all} = ATLAS;
-  // assign axial coords to nodes
-  for(const row of layers) for(const n of row){
-    n.q = n.layer*STRIDE;
-    const lane = (n.idx - (n.width-1)/2)*LANE;
-    n.r = Math.round(lane - n.q/2);
-  }
-  // build corridor hex set (between connected nodes), excluding node hexes
-  const nodeKey=new Set(layers.flat().map(n=>n.q+","+n.r));
-  const corridor=new Map(); // key -> {opacity, lit}
+  const G = GEO[SHAPE];
+  // assign lattice cells to nodes for the active shape
+  for(const row of layers) for(const n of row){ const c=G.place(n.layer,n.idx,n.width); n.a=c.a; n.b=c.b; }
+  // build corridor cell set (between connected nodes), excluding node cells
+  const nodeKey=new Set(layers.flat().map(n=>n.a+","+n.b));
+  const corridor=new Map(); // key -> {a,b,opacity,lit}
   for(const n of layers.flat()){
     for(const fid of n.forward){
       const m=all[fid];
-      const path=hexLine({q:n.q,r:n.r},{q:m.q,r:m.r});
+      const path=G.line({a:n.a,b:n.b},{a:m.a,b:m.b});
       const revealed = s=> s!=="unrevealed";
       const bothSeen = revealed(n.state)&&revealed(m.state);
       const oneFog   = revealed(n.state)!==revealed(m.state);
       const op = bothSeen?1 : oneFog?0.45 : 0.12;
       const lit = bothSeen && (n.state==="completed"||n.state==="available") && (m.state==="available"||m.state==="revealedLocked"||m.state==="completed");
       for(const h of path){
-        const k=h.q+","+h.r; if(nodeKey.has(k)) continue;
+        const k=h.a+","+h.b; if(nodeKey.has(k)) continue;
         const prev=corridor.get(k);
-        if(!prev || op>prev.opacity) corridor.set(k,{q:h.q,r:h.r,opacity:op,lit:lit||(prev&&prev.lit),color:n.color});
+        if(!prev || op>prev.opacity) corridor.set(k,{a:h.a,b:h.b,opacity:op,lit:lit||(prev&&prev.lit)});
       }
     }
   }
-  // bounds
-  const pts=[...layers.flat().map(n=>axPix(n.q,n.r)), ...[...corridor.values()].map(h=>axPix(h.q,h.r))];
-  let minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9;
-  for(const p of pts){ minX=Math.min(minX,p.x); minY=Math.min(minY,p.y); maxX=Math.max(maxX,p.x); maxY=Math.max(maxY,p.y); }
+  // bounds (pixels) + cell-coord ranges (for the void field)
+  const cells=[...layers.flat().map(n=>({a:n.a,b:n.b})), ...corridor.values()];
+  let minX=1e9,minY=1e9,maxX=-1e9,maxY=-1e9, aMin=1e9,aMax=-1e9,bMin=1e9,bMax=-1e9;
+  for(const c of cells){ const p=G.pix(c.a,c.b);
+    minX=Math.min(minX,p.x); minY=Math.min(minY,p.y); maxX=Math.max(maxX,p.x); maxY=Math.max(maxY,p.y);
+    aMin=Math.min(aMin,c.a); aMax=Math.max(aMax,c.a); bMin=Math.min(bMin,c.b); bMax=Math.max(bMax,c.b); }
   const pad=SIZE*3, ox=-minX+pad, oy=-minY+pad;
   const W=maxX-minX+pad*2, H=maxY-minY+pad*2;
 
@@ -295,27 +343,27 @@ function render(){
   svg+=`<defs><filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
     <feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>`;
 
-  // background void field across the bounding region
+  // background void field across the cell-coord region, clipped to the viewport
   const occupied=new Set([...nodeKey, ...corridor.keys()]);
-  for(let q=-1;q<=layers.length*STRIDE;q++){
-    for(let r=-34;r<=14;r++){
-      const k=q+","+r; if(occupied.has(k)) continue;
-      const p=axPix(q,r), cx=p.x+ox, cy=p.y+oy;
+  for(let a=aMin-4;a<=aMax+4;a++){
+    for(let b=bMin-4;b<=bMax+4;b++){
+      const k=a+","+b; if(occupied.has(k)) continue;
+      const p=G.pix(a,b), cx=p.x+ox, cy=p.y+oy;
       if(cx<2||cy<2||cx>W-2||cy>H-2) continue;
-      svg+=`<polygon class="hex" points="${hexPoly(cx,cy,SIZE*0.92)}" fill="#100b22" stroke="#191333" stroke-width="1" opacity="0.5"/>`;
+      svg+=`<polygon class="hex" points="${G.poly(cx,cy,0.92)}" fill="#100b22" stroke="#191333" stroke-width="1" opacity="0.5"/>`;
     }
   }
   // corridors — full-size floor tiles in a single muted tone. Distinguished
   // from nodes by being flat fills (no thick border / glyph) and from void by
   // being lighter. Lit (walkable-now) corridors read brighter.
   for(const h of corridor.values()){
-    const p=axPix(h.q,h.r), cx=p.x+ox, cy=p.y+oy;
+    const p=G.pix(h.a,h.b), cx=p.x+ox, cy=p.y+oy;
     const fill = h.lit ? "#6b5fa6" : "#3c3464";
-    svg+=`<polygon class="hex" points="${hexPoly(cx,cy,SIZE*0.92)}" fill="${fill}" stroke="#0b0716" stroke-width="1.5" opacity="${(h.lit?0.9:0.55)*h.opacity}"/>`;
+    svg+=`<polygon class="hex" points="${G.poly(cx,cy,0.92)}" fill="${fill}" stroke="#0b0716" stroke-width="1.5" opacity="${(h.lit?0.9:0.55)*h.opacity}"/>`;
   }
   // nodes
   for(const n of layers.flat()){
-    const p=axPix(n.q,n.r), cx=p.x+ox, cy=p.y+oy;
+    const p=G.pix(n.a,n.b), cx=p.x+ox, cy=p.y+oy;
     const s=n.state, fog = s==="unrevealed";
     // Monochrome: nodes are light tiles, fog nodes dark. Role/state via
     // lightness, border weight, glyph and glow — no hue.
@@ -324,20 +372,20 @@ function render(){
     let stroke = s==="available"? "#ffffff" : s==="completed"? "#cfc6f0" : fog? "#332a52" : "#1a1430";
     let sw = s==="available"?4 : s==="completed"?3.5 : fog?1.5 : 2.5;
     const filter = (s==="available"||n.dreamId==="__boss") ? ' filter="url(#glow)"' : '';
-    svg+=`<polygon class="hex node-hex" data-id="${n.id}" points="${hexPoly(cx,cy,SIZE*0.92)}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" opacity="${op}"${filter}/>`;
+    svg+=`<polygon class="hex node-hex" data-id="${n.id}" points="${G.poly(cx,cy,0.92)}" fill="${fill}" stroke="${stroke}" stroke-width="${sw}" opacity="${op}"${filter}/>`;
     // marker glyph (dark on light tiles, light on fog tiles)
     let g = fog? "?" : n.dreamId==="__boss"? "💀" : n.current? "🏠" : s==="completed"? "✓" : s==="revealedLocked"? "🔒" : "";
     if(g) svg+=`<text class="glyphs" x="${cx}" y="${cy+5}" fill="${fog?'#9a8fc4':'#241b40'}" pointer-events="none">${g}</text>`;
-    // tiny site-count pip for revealed non-boss
+    // tiny dreamscape label for revealed non-boss
     if(!fog && n.dreamId!=="__boss" && !n.current){
-      svg+=`<text class="nlabel" x="${cx}" y="${cy+SIZE+13}">${n.name.split(" ")[0]}</text>`;
+      svg+=`<text class="nlabel" x="${cx}" y="${cy+G.labelDY}">${n.name.split(" ")[0]}</text>`;
     }
   }
-  // available pulse
+  // available pulse ring
   svg+=`<style>@keyframes pulse{0%{opacity:.9}50%{opacity:.35}100%{opacity:.9}}</style>`;
   for(const n of layers.flat()){ if(n.state!=="available") continue;
-    const p=axPix(n.q,n.r), cx=p.x+ox, cy=p.y+oy;
-    svg+=`<polygon points="${hexPoly(cx,cy,SIZE*1.32)}" fill="none" stroke="#ffffff" stroke-width="2" style="animation:pulse 1.6s infinite"/>`;
+    const p=G.pix(n.a,n.b), cx=p.x+ox, cy=p.y+oy;
+    svg+=`<polygon points="${G.ring(cx,cy)}" fill="none" stroke="#ffffff" stroke-width="2" style="animation:pulse 1.6s infinite"/>`;
   }
   svg+=`</svg>`;
   document.getElementById("board").innerHTML=svg;
@@ -366,8 +414,11 @@ function showDetail(n){
      </div>`;
 }
 
-document.getElementById("regen").addEventListener("click", render);
-render();
+document.getElementById("regen").addEventListener("click", regenerate);
+function markShape(){ document.querySelectorAll(".shape-btn").forEach(b=>b.style.background = b.dataset.shape===SHAPE ? "#3a2f70" : "#221a45"); }
+document.querySelectorAll(".shape-btn").forEach(b=>b.addEventListener("click",()=>{ SHAPE=b.dataset.shape; markShape(); render(); }));
+markShape();
+regenerate();
 </script>
 </body>
 </html>
