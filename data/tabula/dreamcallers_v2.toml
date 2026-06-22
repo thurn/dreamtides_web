@@ -205,7 +205,7 @@ name = "Vaela"
 title = "Ember Among Remnants"
 id = "60BD584B-5BC8-4EE7-8A98-CBB304EB71AB"
 image-number = "0028"
-rendered-text = "Once per turn, when a card leaves your void, a card in your void gains reclaim until end of turn."
+rendered-text = "When a card leaves your void, a random card in your void gains reclaim."
 signature-cards = [
   "4e1c0192-2649-489f-aad3-75ff2887c0a7", # Twilight Reclaimer
   "4733876a-d6b1-48d2-b322-5f71aee9f3d6", # Cinderfang

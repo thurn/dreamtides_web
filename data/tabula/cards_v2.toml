@@ -2855,7 +2855,7 @@ card-number = 153
 name = "Wreckborn"
 mtg-name = "Anax, Hardened in the Forge"
 id = "6d6ce556-60df-486f-b2d8-5df168a6f75e"
-rendered-text = "When a non-figment ally is dissolved, materialize a 1✦ ember figment. When an ember figment is dissolved, this character gains +1✦."
+rendered-text = "When a non-figment ally is dissolved, materialize a 1✦ ember figment with awakened. When an ember figment is dissolved, this character gains +1✦."
 energy-cost = 3
 card-type = "Character"
 subtype = "Visitor"
@@ -3528,7 +3528,7 @@ id = "ecf77f27-df0f-47c4-99c2-48d7fa46a137"
 rendered-text = """
 ▸Materialized: Gain 1⍟.
 
-Abandon a spirit animal: Materialize this character from your void."""
+Abandon a non-figment character: Materialize this character from your void."""
 energy-cost = 1
 card-type = "Character"
 subtype = "Synth"
