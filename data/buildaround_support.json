@@ -277,7 +277,7 @@
       ]
     },
     "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40": {
-      "name": "Emberwatch Veteran",
+      "name": "Emberwatch Rescuer",
       "needs": [],
       "supports": [
         "survivors",
@@ -3184,7 +3184,7 @@
       ]
     },
     "f46490a5-7030-4ade-93e9-bedb5813f590": {
-      "name": "Rooftop Prophet",
+      "name": "Barren Path Wanderer",
       "needs": [
         {
           "theme": "void",
@@ -4740,7 +4740,7 @@
       ]
     },
     "0269e363-5567-47a4-80cd-8ebc061fe7e1": {
-      "name": "Wasteland Tamer",
+      "name": "Silent Avenger",
       "needs": [],
       "supports": [
         "survivors",

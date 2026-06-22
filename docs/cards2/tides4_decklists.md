@@ -85,13 +85,13 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 2× Deathwalker
 - 2× Skull Weaver
 - 1× Ashfront Lieutenant
-- 1× Wasteland Tamer
+- 1× Silent Avenger
 - 1× Herald of the Last Light
 - 1× Fathomless Maw
 - 1× Dreaming Groves
 - 1× Wreckheap Lookout
 - 1× Riftwalker
-- 1× Emberwatch Veteran
+- 1× Emberwatch Rescuer
 - 1× Cinderblade Legionnaire
 - 1× The Thinning
 - 1× Angel of the Eclipse
@@ -187,12 +187,12 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 2× Carrion Shepherd
 - 2× Skull Weaver
 - 1× Ashfront Lieutenant
-- 1× Wasteland Tamer
+- 1× Silent Avenger
 - 1× Herald of the Last Light
 - 1× Fathomless Maw
 - 1× Wreckheap Lookout
 - 1× Riftwalker
-- 1× Emberwatch Veteran
+- 1× Emberwatch Rescuer
 - 1× Cinderblade Legionnaire
 - 1× Angel of the Eclipse
 - 1× Immolate and Rise
@@ -372,7 +372,7 @@ Tide-sig-04 is a character-heavy deck (86 of 110 copies are characters) built ar
 - 1× Stargazer Adrift
 - 1× Duneguard Captain
 - 1× Unquenched
-- 1× Emberwatch Veteran
+- 1× Emberwatch Rescuer
 - 1× Echo Architect
 - 1× Call of the Lost
 - 1× Volcanic Channeler
@@ -479,7 +479,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 2× Kindred Sparks
 - 2× Wasteland Arbitrator
 - 1× Ashfront Lieutenant
-- 1× Wasteland Tamer
+- 1× Silent Avenger
 - 1× Nightmare Manifest
 - 1× Herald of the Last Light
 - 1× Ridge Vortex Explorer
@@ -492,7 +492,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Unquenched
 - 1× Wreckheap Lookout
 - 1× Riftwalker
-- 1× Emberwatch Veteran
+- 1× Emberwatch Rescuer
 - 1× Hope's Vanguard
 - 1× Cinderblade Legionnaire
 - 1× Volcanic Channeler
@@ -608,7 +608,7 @@ Tide-sig-06 is a heavily character-weighted deck (84 of 110 copies are character
 - 1× Woodland Apparition
 - 1× Stargazer Adrift
 - 1× Duneguard Captain
-- 1× Emberwatch Veteran
+- 1× Emberwatch Rescuer
 - 1× Searcher in the Mists
 - 1× Hope's Vanguard
 - 1× Architect of Memory
@@ -667,7 +667,7 @@ Tide-sig-06 is a heavily character-weighted deck (84 of 110 copies are character
 
 ## Kael Voss signature — Survivor Token Reclaim
 
-`tide-sig-07` — signature tide, 91 distinct cards, 108 copies, Kael Voss's signature
+`tide-sig-07` — signature tide, 93 distinct cards, 108 copies, Kael Voss's signature
 
 *A survivor-tribal engine that continuously replaces dissolved non-figments with survivor figments, draws cards off the growing board, and loops key pieces from the void to threaten an unstoppable finisher — distinguishing itself from the nearest sibling (Vaela) by building board mass and void depth rather than converting each sacrifice into immediate energy or spark.*
 
@@ -675,10 +675,9 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 
 - 2× Dustborn Veteran
 - 2× Duneguard Captain
-- 2× Emberwatch Veteran
+- 2× Emberwatch Rescuer
 - 2× Searcher in the Mists
 - 2× Tidewreck Navigator
-- 2× Silent Avenger
 - 2× Graywatch
 - 2× Paradox Enforcer
 - 2× Veil of the Wastes
@@ -686,13 +685,12 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 2× Duskwall Delver
 - 2× Fargazer
 - 2× Kindred Sparks
-- 2× Exiles of the Last Light
 - 2× Wasteland Arbitrator
 - 2× The Rising God
 - 2× Carrion Shepherd
 - 1× Unleashed Destruction
 - 1× Ashfront Lieutenant
-- 1× Wasteland Tamer
+- 1× Silent Avenger
 - 1× Nightmare Manifest
 - 1× Herald of the Last Light
 - 1× Ridge Vortex Explorer
@@ -708,15 +706,17 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
 - 1× Sorrowful Prince
+- 1× Silent Avenger
 - 1× Immolate and Rise
 - 1× Soulkindler
 - 1× Hope's Vanguard
 - 1× Corrupted Host
 - 1× Specter of Silent Snow
-- 1× Collateral Damage
 - 1× Twilight Reclaimer
 - 1× Ferryman's Tithe
 - 1× Curio Dealer
+- 1× Oblivion Guide
+- 1× Aurora Confluence
 - 1× Ashen Remnant
 - 1× Whisper of the Past
 - 1× Salvage Engine
@@ -730,7 +730,6 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Shatter the Frail
 - 1× Pyrestone Avatar
 - 1× Stolen Genesis
-- 1× Saltless Mariner
 - 1× Resilient Wanderer
 - 1× Cinderheart
 - 1× Gleamharvester
@@ -740,11 +739,15 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Emberwatch Veteran
 - 1× Ash Harbinger
 - 1× Pyrokinetic Surge
+- 1× Pattern Seeker
 - 1× Dawnrunner
 - 1× Defiant Holdout
 - 1× Silent Gatherer
+- 1× Torchbearer of the Abyss
+- 1× Exiles of the Last Light
 - 1× Dreadweaver
 - 1× Lurking Dread
+- 1× Shadowprowler
 - 1× Harrowing Officiant
 - 1× Shadowcaller
 - 1× Avatar of Cosmic Reckoning
@@ -758,10 +761,9 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Scrapyard Custodian
 - 1× Shadowpaw
 - 1× Flagbearer of Decay
-- 1× Obliterator of Worlds
-- 1× Standoff
 - 1× Deathwalker
 - 1× Forgotten Sleeper
+- 1× Wandering Archivist
 - 1× Break the Veil
 - 1× Skull Weaver
 
@@ -777,7 +779,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 2× Dustborn Veteran
 - 2× Stargazer Adrift
 - 2× Duneguard Captain
-- 2× Emberwatch Veteran
+- 2× Emberwatch Rescuer
 - 2× Searcher in the Mists
 - 2× Volcanic Channeler
 - 2× Tidewreck Navigator
@@ -800,7 +802,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 2× Deathwalker
 - 2× Skull Weaver
 - 1× Unleashed Destruction
-- 1× Wasteland Tamer
+- 1× Silent Avenger
 - 1× Herald of the Last Light
 - 1× Ridge Vortex Explorer
 - 1× Unleash Ruin
@@ -2008,7 +2010,7 @@ Tide-fac-01 is an almost entirely character-based (40 of 45 copies) midrange eng
 - 1× Stargazer Adrift
 - 1× Duneguard Captain
 - 1× Wreckheap Lookout
-- 1× Emberwatch Veteran
+- 1× Emberwatch Rescuer
 - 1× Searcher in the Mists
 - 1× Cinderblade Legionnaire
 - 1× Volcanic Channeler
@@ -2350,7 +2352,7 @@ Tide-fac-08 is an 80% character tide built almost entirely around spirit animals
 - 1× Dustborn Veteran
 - 1× Duneguard Captain
 - 1× Unquenched
-- 1× Emberwatch Veteran
+- 1× Emberwatch Rescuer
 - 1× Hope's Vanguard
 - 1× Tidewreck Navigator
 - 1× Immolate and Rise
@@ -2448,7 +2450,7 @@ Tide-fac-10 is built around an event-volume engine anchored by two copies each o
 - 1× Herald of the Last Light
 - 1× Dustborn Veteran
 - 1× Duneguard Captain
-- 1× Emberwatch Veteran
+- 1× Emberwatch Rescuer
 - 1× Volcanic Channeler
 - 1× Scuttled Fortune
 - 1× Ashborn Necromancer
@@ -2587,7 +2589,7 @@ Tide-fac-13 is a character-heavy spirit animal tribal deck (35 of 45 copies are 
 - 1× Stargazer Adrift
 - 1× Duneguard Captain
 - 1× Wreckheap Lookout
-- 1× Emberwatch Veteran
+- 1× Emberwatch Rescuer
 - 1× Searcher in the Mists
 - 1× Cinderblade Legionnaire
 - 1× Volcanic Channeler
@@ -3195,7 +3197,7 @@ This tide is built around a dense curve of inexpensive survivors whose arrival a
 - 1× Stargazer Adrift
 - 1× Duneguard Captain
 - 1× Wreckheap Lookout
-- 1× Emberwatch Veteran
+- 1× Emberwatch Rescuer
 - 1× Searcher in the Mists
 - 1× Scuttled Fortune
 - 1× Rusted Monolith
@@ -3243,7 +3245,7 @@ Tide-fac-26 is a character-heavy survivor tide built around the abandon trigger 
 - 1× Dustborn Veteran
 - 1× Stargazer Adrift
 - 1× Duneguard Captain
-- 1× Emberwatch Veteran
+- 1× Emberwatch Rescuer
 - 1× Cinderblade Legionnaire
 - 1× Volcanic Channeler
 - 1× Scuttled Fortune
@@ -3287,7 +3289,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 
 - 2× Reclaimer of Lost Paths
 - 2× Kindred Sparks
-- 1× Wasteland Tamer
+- 1× Silent Avenger
 - 1× Nightmare Manifest
 - 1× Herald of the Last Light
 - 1× Unleash Ruin
@@ -3295,7 +3297,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Stargazer Adrift
 - 1× Duneguard Captain
 - 1× Wreckheap Lookout
-- 1× Emberwatch Veteran
+- 1× Emberwatch Rescuer
 - 1× Searcher in the Mists
 - 1× Volcanic Channeler
 - 1× Scuttled Fortune
@@ -3504,7 +3506,7 @@ Tide-fac-31 is almost entirely characters (41 of 45 cards), built around a dense
 - 1× Herald of the Last Light
 - 1× Duneguard Captain
 - 1× Wreckheap Lookout
-- 1× Emberwatch Veteran
+- 1× Emberwatch Rescuer
 - 1× Searcher in the Mists
 - 1× Cinderblade Legionnaire
 - 1× Scuttled Fortune
