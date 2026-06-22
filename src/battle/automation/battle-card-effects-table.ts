@@ -331,13 +331,14 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
     steps: [{ kind: "edits", build: (ctx) => gainScoreEdits(ctx.side, 1) }],
   },
 
-  // Scrapyard Custodian — "▸Materialized: Gain 1⍟.\n\nAbandon a spirit animal:
-  // Materialize this character from your void." The script automates only the
-  // ▸Materialized score gain; the activated ability is resolved manually.
+  // Scrapyard Custodian — "▸Materialized: Gain 1⍟.\n\nAbandon a non-figment
+  // character: Materialize this character from your void." The script automates
+  // only the ▸Materialized score gain; the activated ability is resolved
+  // manually.
   "ecf77f27-df0f-47c4-99c2-48d7fa46a137": {
     id: "ecf77f27-df0f-47c4-99c2-48d7fa46a137",
     trigger: "materialized",
-    textHash: "756fa549",
+    textHash: "ec209b35",
     steps: [{ kind: "edits", build: (ctx) => gainScoreEdits(ctx.side, 1) }],
   },
 
