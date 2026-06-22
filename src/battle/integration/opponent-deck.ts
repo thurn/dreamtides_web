@@ -360,7 +360,7 @@ export function buildOpponentDeck(args: {
  * cards, copies, total size, top card numbers), so a battle's opponent can be
  * reconstructed from `logs/quest-log.jsonl` filtered by `gameId`.
  */
-export function logOpponentDeckConstructed(args: {
+export interface OpponentDeckLogArgs {
   battleEntryKey: string;
   opponentDreamcaller: DreamcallerContent | null;
   poolVariant: string;
@@ -371,7 +371,9 @@ export function logOpponentDeckConstructed(args: {
   dreamsigns: readonly DreamsignTemplate[];
   build: OpponentDeckBuild | null;
   fallbackDeckSize: number;
-}): void {
+}
+
+export function logOpponentDeckConstructed(args: OpponentDeckLogArgs): void {
   const {
     battleEntryKey,
     opponentDreamcaller,

@@ -291,7 +291,7 @@ describe("ensureBattleSession", () => {
       return Promise.resolve(undefined);
     });
 
-    await ensureBattleSession({
+    const committed = await ensureBattleSession({
       database: {} as Database,
       roomId: "room-1",
       init: fakeInit,
@@ -301,6 +301,9 @@ describe("ensureBattleSession", () => {
       actionId: "init-1",
     });
 
+    // The winning client is told it committed, so it (and only it) logs the
+    // opponent deck.
+    expect(committed).toBe(true);
     expect(captured).toMatchObject({
       battleState: {
         init: fakeInit,
@@ -343,7 +346,7 @@ describe("ensureBattleSession", () => {
       return Promise.resolve(undefined);
     });
 
-    await ensureBattleSession({
+    const committed = await ensureBattleSession({
       database: {} as Database,
       roomId: "room-1",
       init: fakeInit,
@@ -352,6 +355,10 @@ describe("ensureBattleSession", () => {
       now: "2026-05-09T01:02:03.000Z",
       actionId: "init-1",
     });
+
+    // A client that lost the race (slot already had an init) is told it did not
+    // commit, so it must not log a second opponent deck for the battle.
+    expect(committed).toBe(false);
 
     // The init transaction must not write a new action-log entry when an init
     // already exists, and must preserve the prior commandSerial rather than

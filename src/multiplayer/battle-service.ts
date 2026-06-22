@@ -33,16 +33,34 @@ export interface EnsureBattleSessionInput {
   actionId?: string;
 }
 
+/**
+ * Ensures the room has a committed battle. Returns `true` only when THIS call
+ * is the one that wrote the init (its transaction won the race), and `false`
+ * when the slot was already populated by another client or the room was
+ * missing. Callers gate once-per-battle side effects — notably the
+ * `opponent_deck_constructed` reconstruction log — on a `true` result so the
+ * room records exactly one opponent deck even when several clients
+ * speculatively compute an init.
+ */
 export async function ensureBattleSession(
   input: EnsureBattleSessionInput,
-): Promise<void> {
+): Promise<boolean> {
   const now = input.now ?? new Date().toISOString();
   const actionId = input.actionId ?? crypto.randomUUID();
+  // Set on every updater invocation; the final invocation reflects the
+  // committed outcome, so the value after the transaction resolves is
+  // authoritative even when Firebase retries the updater.
+  let committedInit = false;
   await runRoomTransaction(input.database, input.roomId, (room) => {
-    if (room === null) return undefined;
+    if (room === null) {
+      committedInit = false;
+      return undefined;
+    }
     if (room.battleState !== null && room.battleState.init !== undefined) {
+      committedInit = false;
       return room;
     }
+    committedInit = true;
     return {
       ...room,
       battleState: {
@@ -68,6 +86,7 @@ export async function ensureBattleSession(
       },
     };
   });
+  return committedInit;
 }
 
 export interface ApplyBattleCommandInput {

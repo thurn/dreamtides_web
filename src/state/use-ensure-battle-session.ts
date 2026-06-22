@@ -3,6 +3,10 @@ import type { Database } from "firebase/database";
 import { ensureBattleSession } from "../multiplayer/battle-service";
 import type { SharedBattleState } from "../multiplayer/battle-types";
 import { createBattleInit } from "../battle/integration/create-battle-init";
+import {
+  logOpponentDeckConstructed,
+  type OpponentDeckLogArgs,
+} from "../battle/integration/opponent-deck";
 import { createInitialBattleState } from "../battle/state/create-initial-state";
 import type { CardData } from "../types/cards";
 import type {
@@ -74,6 +78,11 @@ export function useEnsureBattleSession(input: {
     }
     inFlightKey.current = input.battleEntryKey;
 
+    // Captured rather than logged inline: this client computes an init
+    // speculatively, but only the client whose init wins the
+    // `ensureBattleSession` transaction should record the opponent deck, so the
+    // room holds exactly one `opponent_deck_constructed` per battle.
+    let opponentDeckLogArgs: OpponentDeckLogArgs | null = null;
     const init = createBattleInit({
       battleEntryKey: input.battleEntryKey,
       site: input.site,
@@ -87,6 +96,9 @@ export function useEnsureBattleSession(input: {
       poolContext: input.poolContext,
       seedOverride: input.seedOverride,
       aiMode: input.aiMode,
+      onOpponentDeckConstructed: (args) => {
+        opponentDeckLogArgs = args;
+      },
     });
     const initial = createInitialBattleState(init);
 
@@ -96,10 +108,16 @@ export function useEnsureBattleSession(input: {
       init,
       initialMutable: initial,
       actorId: input.clientId,
-    }).catch((error: unknown) => {
-      console.error("Failed to ensure battle session", error);
-      inFlightKey.current = null;
-    });
+    })
+      .then((committedInit) => {
+        if (committedInit && opponentDeckLogArgs !== null) {
+          logOpponentDeckConstructed(opponentDeckLogArgs);
+        }
+      })
+      .catch((error: unknown) => {
+        console.error("Failed to ensure battle session", error);
+        inFlightKey.current = null;
+      });
   }, [
     input.aiMode,
     input.battleEntryKey,

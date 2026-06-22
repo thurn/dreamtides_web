@@ -22,6 +22,7 @@ import {
   resolveRunLayerCount,
   selectOpponentDreamcaller,
   type OpponentDeckBuild,
+  type OpponentDeckLogArgs,
 } from "./opponent-deck";
 import type {
   BattleDeckCardDefinition,
@@ -121,6 +122,15 @@ export interface CreateBattleInitInput {
    * `?ai=1` runtime mode that pits the player against the battle AI opponent.
    */
   aiMode?: boolean;
+  /**
+   * Hook for the `opponent_deck_constructed` reconstruction log. When omitted,
+   * {@link createBattleInit} logs the event inline at construction time. The
+   * multiplayer ensure path passes a capture callback instead and defers the
+   * log until its init actually wins the `ensureBattleSession` transaction, so
+   * the room records exactly one opponent deck per battle rather than one per
+   * client that speculatively computed an init.
+   */
+  onOpponentDeckConstructed?: (args: OpponentDeckLogArgs) => void;
 }
 
 function applyBattleRewardModifiers(
@@ -242,7 +252,7 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     streams.enemyDeckOrder,
     aiMode,
   ).map(freezeBattleDeckCardDefinition);
-  logOpponentDeckConstructed({
+  const opponentDeckLogArgs: OpponentDeckLogArgs = {
     battleEntryKey,
     opponentDreamcaller,
     poolVariant: aiMode
@@ -255,7 +265,15 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     dreamsigns: opponentDreamsigns,
     build: opponentBuild,
     fallbackDeckSize: enemyDeckDefinition.length,
-  });
+  };
+  // Defer the reconstruction log to the caller when it wants to gate logging on
+  // the committed init (multiplayer ensure path); otherwise log inline so
+  // single-call sites and tests still record the event.
+  if (input.onOpponentDeckConstructed) {
+    input.onOpponentDeckConstructed(opponentDeckLogArgs);
+  } else {
+    logOpponentDeckConstructed(opponentDeckLogArgs);
+  }
   const dreamwellDeck = buildDreamwellDeck(
     input.dreamwellCards ?? [],
     streams.dreamwellDeck,
