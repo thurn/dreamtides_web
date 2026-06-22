@@ -52,6 +52,7 @@ function mount(): {
         historyCount={2}
         isDesktopLayout
         isOpponentHandRevealed={false}
+        isPlayerHandHidden={false}
         isOpen
         lastTransition={null}
         state={state}
@@ -67,6 +68,7 @@ function mount(): {
         onResetBattle={() => undefined}
         onRedo={() => undefined}
         onToggleOpponentHand={onToggleOpponentHand}
+        onTogglePlayerHand={() => undefined}
         onUndo={() => undefined}
       />,
     );
@@ -137,6 +139,7 @@ describe("BattleInspector", () => {
           historyCount={2}
           isDesktopLayout
           isOpponentHandRevealed={false}
+          isPlayerHandHidden={false}
           isOpen
           lastTransition={null}
           state={state}
@@ -152,6 +155,7 @@ describe("BattleInspector", () => {
           onResetBattle={() => undefined}
           onRedo={() => undefined}
           onToggleOpponentHand={() => undefined}
+          onTogglePlayerHand={() => undefined}
           onUndo={() => undefined}
         />,
       );

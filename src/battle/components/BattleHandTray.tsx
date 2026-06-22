@@ -30,10 +30,18 @@ export function BattleHandTray({
   pendingDragCardId = null,
   pendingDragSourceSurface = null,
   compact = false,
+  side = "player",
   isBasicAutomationEnabled = false,
 }: {
   canInteract: boolean;
   compact?: boolean;
+  /**
+   * Which side's cards this tray is showing. Defaults to "player". The debug
+   * "hide player hand" mode renders the enemy hand through this same tray with
+   * `side="opponent"` so it gets the full-size, hover-to-enlarge treatment the
+   * player hand normally has.
+   */
+  side?: "player" | "opponent";
   isBasicAutomationEnabled?: boolean;
   currentEnergy: number;
   hand: string[];
@@ -61,8 +69,8 @@ export function BattleHandTray({
 
   return (
     <section
-      data-battle-region="player-hand-tray"
-      data-battle-zone-drop-target={isDropTarget ? "player:hand" : undefined}
+      data-battle-region={side === "opponent" ? "opponent-hand-tray" : "player-hand-tray"}
+      data-battle-zone-drop-target={isDropTarget ? `${side === "opponent" ? "enemy" : "player"}:hand` : undefined}
       className={`hand-row ${compact ? "compact" : ""} ${isDropTarget ? "drop-target" : ""}`}
       onDragOver={(event) => {
         if (isDropTarget) {
@@ -79,7 +87,7 @@ export function BattleHandTray({
     >
       {compact ? (
         <div className="hand-row-label">
-          <span>Your hand</span>
+          <span>{side === "opponent" ? "Enemy hand" : "Your hand"}</span>
           <strong>{String(hand.length)}</strong>
         </div>
       ) : null}
@@ -97,7 +105,7 @@ export function BattleHandTray({
               battleCardId={battleCardId}
               instance={instance}
               selected={isSelected}
-              side="player"
+              side={side}
               compact={compact}
               draggable={canInteract}
               showAutomationGear={
@@ -198,12 +206,13 @@ export function BattleHandCard({
       onMouseMove={onMouseMove}
       onMouseLeave={onMouseLeave}
     >
-      {/* Cards in the player's hand grow in place on hover so their rules text
+      {/* Cards in a full-size hand grow in place on hover so their rules text
           is comfortably legible, with the term glossary shown beside the
-          enlarged card. Opponent / revealed (compact) hands stay small and opt
-          out. */}
+          enlarged card. Compact (revealed) hands stay small and opt out. This
+          applies to the enemy hand too when it is rendered full size by the
+          debug "hide player hand" mode. */}
       <HoverZoomCard
-        enabled={!compact && side === "player"}
+        enabled={!compact}
         logSurface="battle_hand"
         glossaryText={displayCard.renderedText}
         className="h-full w-full"

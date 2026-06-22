@@ -171,6 +171,10 @@ function PlayableBattleScreenInner({
   const [isInspectorDrawerOpen, setIsInspectorDrawerOpen] = useState(readIsDesktopInspectorLayout());
   const [isBattleLogOpen, setIsBattleLogOpen] = useState(false);
   const [isOpponentHandRevealed, setIsOpponentHandRevealed] = useState(false);
+  // Debug "hide player hand" mode: hides your own hand and renders the enemy
+  // hand full size (with hover-to-enlarge) in its place, to simulate the local
+  // view of a multiplayer game where you see only the opponent's hand.
+  const [isPlayerHandHidden, setIsPlayerHandHidden] = useState(false);
   const [openZoneBrowser, setOpenZoneBrowser] = useState<ZoneBrowserState>(null);
   const [pendingDrag, setPendingDrag] = useState<PendingDragState>(null);
   const [hoverPreview, setHoverPreview] = useState<HoverPreviewState>(null);
@@ -945,6 +949,7 @@ function PlayableBattleScreenInner({
       className="battle-shell"
       data-battle-inspector-open={isInspectorDrawerOpen ? "true" : "false"}
       data-battle-opponent-hand-revealed={isOpponentHandRevealed ? "true" : "false"}
+      data-battle-player-hand-hidden={isPlayerHandHidden ? "true" : "false"}
     >
       {openZoneBrowser !== null ? (
         <BattleZoneBrowser
@@ -1172,7 +1177,7 @@ function PlayableBattleScreenInner({
               automationStatus={dreamwellDisplayCard ? dreamwellAutomationStatus(dreamwellDisplayCard.id) : "none"}
               automationEnabled={isBasicAutomationEnabled}
             />
-            {isOpponentHandRevealed ? (
+            {isOpponentHandRevealed && !isPlayerHandHidden ? (
               <div className="opponent-hand-zone">
                 <BattleOpponentHandTray
                   canInteract={canPlayerAct}
@@ -1485,28 +1490,53 @@ function PlayableBattleScreenInner({
               </div>
             </div>
           </div>
-          <div className={isOpponentHandRevealed ? "player-hand-zone compact" : "player-hand-zone"}>
-            <BattleHandTray
-              canInteract={canPlayerAct}
-              compact={isOpponentHandRevealed}
-              isBasicAutomationEnabled={isBasicAutomationEnabled}
-              currentEnergy={reducerState.mutable.sides.player.currentEnergy}
-              hand={reducerState.mutable.sides.player.hand}
-              onHandCardAction={handleCommand}
-              openingHandSize={battleInit.openingHandSize}
-              playerDrawSkipsTurnOne={battleInit.playerDrawSkipsTurnOne}
-              selectedCardId={null}
-              state={reducerState.mutable}
-              onCardClick={handleHandCardClick}
-              onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "hand-tray")}
-              onCardDoubleClick={handleHandCardDoubleClick}
-              onCardDragStart={handleCardDragStart}
-              onCardDragEnd={handleCardDragEnd}
-              onCardDropToHand={(sourceSurface) => handleZoneDrop("player", "hand", sourceSurface)}
-              pendingDragCardId={pendingDragCardId}
-              pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
-              isCardPlayable={undefined}
-            />
+          <div className={isOpponentHandRevealed && !isPlayerHandHidden ? "player-hand-zone compact" : "player-hand-zone"}>
+            {isPlayerHandHidden ? (
+              <BattleHandTray
+                canInteract={canPlayerAct}
+                side="opponent"
+                compact={false}
+                isBasicAutomationEnabled={isBasicAutomationEnabled}
+                currentEnergy={reducerState.mutable.sides.enemy.currentEnergy}
+                hand={reducerState.mutable.sides.enemy.hand}
+                onHandCardAction={handleCommand}
+                openingHandSize={battleInit.openingHandSize}
+                playerDrawSkipsTurnOne={battleInit.playerDrawSkipsTurnOne}
+                selectedCardId={null}
+                state={reducerState.mutable}
+                onCardClick={handleHandCardClick}
+                onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "opponent-hand-tray")}
+                onCardDoubleClick={handleHandCardDoubleClick}
+                onCardDragStart={handleCardDragStart}
+                onCardDragEnd={handleCardDragEnd}
+                onCardDropToHand={(sourceSurface) => handleZoneDrop("enemy", "hand", sourceSurface)}
+                pendingDragCardId={pendingDragCardId}
+                pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
+                isCardPlayable={undefined}
+              />
+            ) : (
+              <BattleHandTray
+                canInteract={canPlayerAct}
+                compact={isOpponentHandRevealed}
+                isBasicAutomationEnabled={isBasicAutomationEnabled}
+                currentEnergy={reducerState.mutable.sides.player.currentEnergy}
+                hand={reducerState.mutable.sides.player.hand}
+                onHandCardAction={handleCommand}
+                openingHandSize={battleInit.openingHandSize}
+                playerDrawSkipsTurnOne={battleInit.playerDrawSkipsTurnOne}
+                selectedCardId={null}
+                state={reducerState.mutable}
+                onCardClick={handleHandCardClick}
+                onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "hand-tray")}
+                onCardDoubleClick={handleHandCardDoubleClick}
+                onCardDragStart={handleCardDragStart}
+                onCardDragEnd={handleCardDragEnd}
+                onCardDropToHand={(sourceSurface) => handleZoneDrop("player", "hand", sourceSurface)}
+                pendingDragCardId={pendingDragCardId}
+                pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
+                isCardPlayable={undefined}
+              />
+            )}
           </div>
           <BattleActionBar
             dreamsigns={battleInit.dreamsignSummaries}
@@ -1533,6 +1563,7 @@ function PlayableBattleScreenInner({
           historyCount={historyCount}
           isDesktopLayout={isDesktopInspectorLayout}
           isOpponentHandRevealed={isOpponentHandRevealed}
+          isPlayerHandHidden={isPlayerHandHidden}
           isOpen={isInspectorDrawerOpen}
           lastTransition={reducerState.lastTransition}
           state={reducerState.mutable}
@@ -1552,6 +1583,7 @@ function PlayableBattleScreenInner({
           onResetBattle={handleResetBattle}
           onRedo={() => dispatch({ type: "REDO" })}
           onToggleOpponentHand={() => setIsOpponentHandRevealed((value) => !value)}
+          onTogglePlayerHand={() => setIsPlayerHandHidden((value) => !value)}
           onUndo={() => dispatch({ type: "UNDO" })}
         />
       </div>

@@ -21,6 +21,7 @@ export function BattleInspector({
   historyCount,
   isDesktopLayout: _isDesktopLayout,
   isOpponentHandRevealed,
+  isPlayerHandHidden,
   isOpen,
   lastTransition,
   state,
@@ -36,6 +37,7 @@ export function BattleInspector({
   onResetBattle,
   onRedo,
   onToggleOpponentHand,
+  onTogglePlayerHand,
   onUndo,
 }: {
   /** When true, render the debug-only "AI Reasoning" section. */
@@ -48,6 +50,7 @@ export function BattleInspector({
   historyCount: number;
   isDesktopLayout: boolean;
   isOpponentHandRevealed: boolean;
+  isPlayerHandHidden: boolean;
   isOpen: boolean;
   lastTransition: BattleReducerTransition | null;
   state: BattleMutableState;
@@ -63,6 +66,7 @@ export function BattleInspector({
   onResetBattle?: () => void;
   onRedo?: () => void;
   onToggleOpponentHand: () => void;
+  onTogglePlayerHand: () => void;
   onUndo?: () => void;
 }) {
   const playerDiscardCommand = useMemo(
@@ -125,6 +129,14 @@ export function BattleInspector({
                   onClick={onToggleOpponentHand}
                 >
                   {isOpponentHandRevealed ? "Hide enemy hand" : "Show enemy hand"}
+                </button>
+                <button
+                  type="button"
+                  data-battle-action="toggle-player-hand"
+                  className={`chip ${isPlayerHandHidden ? "active" : ""}`}
+                  onClick={onTogglePlayerHand}
+                >
+                  {isPlayerHandHidden ? "Show player hand" : "Hide player hand"}
                 </button>
               </div>
             </div>
