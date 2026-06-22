@@ -39,7 +39,8 @@ legacy algorithm code does this and it's a huge nightmare to support.
 # Generation
 
 You can run `scripts/regenerate-assets.sh` to update generated artifacts
-based on TOML data changes etc.
+based on TOML data changes etc. Run this script after creating a new worktree
+and include its output with your commit.
 
 # Draft Pools
 
