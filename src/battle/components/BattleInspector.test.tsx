@@ -12,6 +12,7 @@ import {
   makeBattleTestState,
 } from "../test-support";
 import { BattleInspector } from "./BattleInspector";
+import type { BattleCommand } from "../debug/commands";
 
 function createFixture() {
   const battleInit = createBattleInit({
@@ -165,15 +166,18 @@ describe("BattleInspector", () => {
       shuffleButton?.click();
     });
 
-    const command = onCommand.mock.calls[0]?.[0];
+    const command = onCommand.mock.calls[0]?.[0] as BattleCommand | undefined;
     expect(command).toMatchObject({
       id: "DEBUG_EDIT",
       edit: { kind: "REORDER_DECK", side: "player" },
       sourceSurface: "inspector",
     });
+    if (command?.id !== "DEBUG_EDIT" || command.edit.kind !== "REORDER_DECK") {
+      throw new Error("expected a REORDER_DECK debug edit command");
+    }
     // The dispatched order must be a permutation of the live deck: same length
     // and same multiset of card ids, so REORDER_DECK accepts it.
-    const order: string[] = command.edit.order;
+    const order: readonly string[] = command.edit.order;
     expect([...order].sort()).toEqual([...deck].sort());
 
     act(() => {
