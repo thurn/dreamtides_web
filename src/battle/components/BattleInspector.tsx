@@ -125,7 +125,7 @@ export function BattleInspector({
                 <button
                   type="button"
                   data-battle-action="toggle-opponent-hand"
-                  className={`chip ${isOpponentHandRevealed ? "active" : ""}`}
+                  className="chip"
                   onClick={onToggleOpponentHand}
                 >
                   {isOpponentHandRevealed ? "Hide enemy hand" : "Show enemy hand"}
@@ -133,7 +133,7 @@ export function BattleInspector({
                 <button
                   type="button"
                   data-battle-action="toggle-player-hand"
-                  className={`chip ${isPlayerHandHidden ? "active" : ""}`}
+                  className="chip"
                   onClick={onTogglePlayerHand}
                 >
                   {isPlayerHandHidden ? "Show player hand" : "Hide player hand"}

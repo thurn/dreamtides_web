@@ -1177,7 +1177,7 @@ function PlayableBattleScreenInner({
               automationStatus={dreamwellDisplayCard ? dreamwellAutomationStatus(dreamwellDisplayCard.id) : "none"}
               automationEnabled={isBasicAutomationEnabled}
             />
-            {isOpponentHandRevealed && !isPlayerHandHidden ? (
+            {isOpponentHandRevealed ? (
               <div className="opponent-hand-zone">
                 <BattleOpponentHandTray
                   canInteract={canPlayerAct}
