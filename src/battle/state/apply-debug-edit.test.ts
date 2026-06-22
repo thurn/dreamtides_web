@@ -772,12 +772,13 @@ describe("DRAW_DREAMWELL_CARD edit", () => {
     state: BattleReducerState,
     side: "player" | "enemy",
     turnNumber: number,
+    additional = false,
   ): BattleReducerState {
     return battleControllerReducer(state, {
       type: "APPLY_COMMAND",
       command: {
         id: "DEBUG_EDIT",
-        edit: { kind: "DRAW_DREAMWELL_CARD", side, turnNumber },
+        edit: { kind: "DRAW_DREAMWELL_CARD", side, turnNumber, additional },
       },
     });
   }
@@ -802,6 +803,32 @@ describe("DRAW_DREAMWELL_CARD edit", () => {
     // Both sides drew from the one shared sequence: player got index 0, enemy 1.
     expect(state.mutable.sides.player.dreamwellCardIndex).toBe(0);
     expect(state.mutable.sides.enemy.dreamwellCardIndex).toBe(1);
+    expect(state.mutable.dreamwellDeckIndex).toBe(2);
+  });
+
+  it("is idempotent per (side, turn): a duplicate mandatory reveal does not advance the deck", () => {
+    let state = drawDreamwell(createBattle(), "player", 1);
+    expect(state.mutable.sides.player.dreamwellCardIndex).toBe(0);
+    expect(state.mutable.dreamwellDeckIndex).toBe(1);
+
+    // A second mandatory reveal for the same (side, turn) — the coop/remount
+    // race — must be a no-op rather than galloping the shared index to 2.
+    const before = state;
+    state = drawDreamwell(state, "player", 1);
+    expect(state.mutable.dreamwellDeckIndex).toBe(1);
+    expect(state.mutable.sides.player.dreamwellCardIndex).toBe(0);
+    // The controller leaves the reducer state reference untouched on a no-op, so
+    // the coop room transaction skips the write entirely.
+    expect(state).toBe(before);
+  });
+
+  it("additional draws bypass the per-turn guard and consume the next card", () => {
+    let state = drawDreamwell(createBattle(), "player", 1);
+    expect(state.mutable.dreamwellDeckIndex).toBe(1);
+
+    // Lily Lake: the player draws an additional Dreamwell card this turn.
+    state = drawDreamwell(state, "player", 1, true);
+    expect(state.mutable.sides.player.dreamwellCardIndex).toBe(1);
     expect(state.mutable.dreamwellDeckIndex).toBe(2);
   });
 

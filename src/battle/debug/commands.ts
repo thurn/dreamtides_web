@@ -102,12 +102,21 @@ export type BattleDebugEdit =
   | {
     // Reveals `side`'s next Dreamwell card: advances the shared
     // `dreamwellDeckIndex`, points the side's `dreamwellCardIndex` at the drawn
-    // card, and stamps `dreamwellDrawnTurn` with the active turn so the reveal
-    // fires once per turn (rules §The Dreamwell and Energy). The energy the card
-    // adds to maximum ● is folded in by basic automation, not by this edit.
+    // card, and stamps `dreamwellDrawnTurn` with the active turn (rules §The
+    // Dreamwell and Energy). The energy the card adds to maximum ● is folded in
+    // by basic automation, not by this edit.
+    //
+    // The mandatory per-turn reveal is idempotent per `(side, turnNumber)`: it
+    // no-ops when the side has already drawn for `turnNumber`. The per-turn
+    // reveal effect runs on every connected client (and can re-fire on a
+    // remount), so without this guard the shared deck index advances once per
+    // dispatch instead of once per turn. `additional: true` is the explicit
+    // "draw an additional Dreamwell card" path (Lily Lake): it bypasses the
+    // guard and always consumes the next card from the shared deck.
     kind: "DRAW_DREAMWELL_CARD";
     side: BattleSide;
     turnNumber: number;
+    additional?: boolean;
   }
   | {
     // Moves the top `count` cards of `side`'s deck to its void (rules §Erode).

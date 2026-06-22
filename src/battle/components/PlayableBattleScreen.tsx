@@ -333,7 +333,9 @@ function PlayableBattleScreenInner({
   // Dreamwell-draw rail tool: on demand, reveal an additional Dreamwell card for
   // a side and (under basic automation) apply its energy. The shared draw index
   // advances, so this is the manual hook for effects such as Lily Lake ("Draw an
-  // additional Dreamwell card").
+  // additional Dreamwell card"). `additional: true` opts out of the per-turn
+  // reveal's idempotency guard so a deliberate extra draw always consumes the
+  // next card even though the side already drew its mandatory card this turn.
   const runDreamwellDraw = useCallback((side: BattleSide): void => {
     logDreamwellReveal(side, reducerState.mutable.turnNumber, "status-strip");
     handleCommand({
@@ -342,6 +344,7 @@ function PlayableBattleScreenInner({
         kind: "DRAW_DREAMWELL_CARD",
         side,
         turnNumber: reducerState.mutable.turnNumber,
+        additional: true,
       },
       sourceSurface: "status-strip",
     });

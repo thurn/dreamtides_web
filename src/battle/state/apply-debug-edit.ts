@@ -246,7 +246,7 @@ export function applyDebugEdit(
     case "DRAW_CARD":
       return drawCardToHand(state, edit.side);
     case "DRAW_DREAMWELL_CARD":
-      return drawDreamwellCard(state, edit.side, edit.turnNumber);
+      return drawDreamwellCard(state, edit.side, edit.turnNumber, edit.additional ?? false);
     case "ERODE":
       return erodeDeck(state, edit.side, edit.count);
     case "DISCARD_CARD":
@@ -1597,6 +1597,17 @@ function drawCardToHand(
  * edit a pure reveal. The card definition is read from `BattleInit.dreamwellDeck`
  * at the recorded index by the display and automation layers.
  *
+ * The mandatory per-turn reveal is idempotent: when `side` has already drawn for
+ * `turnNumber` (`dreamwellDrawnTurn === turnNumber`) and this is not an explicit
+ * additional draw, it returns the original state unchanged so the shared deck
+ * index advances exactly once per turn. The per-turn reveal effect runs on every
+ * connected client and can re-fire on a remount, so a relative `+1` advance
+ * would otherwise gallop the index forward once per dispatch (the coop +2/draw
+ * bug). Returning the same `state` reference makes the controller — and the coop
+ * room transaction — treat the duplicate as a no-op. `additional` is the
+ * "draw an additional Dreamwell card" path (Lily Lake): it skips the guard and
+ * always consumes the next card.
+ *
  * The reveal is logged deck-aware (with `order`/name/`energyAdded`) at the
  * dispatch sites via `battle_proto_dreamwell_card_revealed`; this pure reducer
  * step does not log, because under basic automation it is the first of an
@@ -1607,10 +1618,17 @@ function drawDreamwellCard(
   state: BattleMutableState,
   side: BattleSide,
   turnNumber: number,
+  additional: boolean,
 ): {
   state: BattleMutableState;
   transition: BattleTransitionData;
 } {
+  if (!additional && state.sides[side].dreamwellDrawnTurn === turnNumber) {
+    return {
+      state,
+      transition: createEmptyTransitionData(),
+    };
+  }
   const nextState = cloneBattleMutableState(state);
   const drawIndex = nextState.dreamwellDeckIndex;
   nextState.sides[side].dreamwellCardIndex = drawIndex;
