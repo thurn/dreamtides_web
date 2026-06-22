@@ -1909,9 +1909,9 @@ function BattlePhaseFloatControls({
     const approveLabel = proposal.kind === "action"
       ? "Approve AI play"
       : "Approve — pass phase";
-    // Reuse the three-column phase-control grid so the approve button lands at
-    // the exact position and size of the "next-major" phase-advance button (the
-    // third/rightmost cell), with reject in the second cell. Both stay purple to
+    // Reuse the two-column phase-control grid so the approve button lands at
+    // the exact position and size of the "next" phase-advance button (the
+    // second/rightmost cell), with reject in the first cell. Both stay purple to
     // match the phase buttons.
     return (
       <div className="phase-float-actions" aria-label="AI proposal controls">
@@ -1919,7 +1919,7 @@ function BattlePhaseFloatControls({
           <button
             type="button"
             className="phase-float-button reject"
-            style={{ gridColumn: 2 }}
+            style={{ gridColumn: 1 }}
             data-battle-ai-proposal-reject
             aria-label="Reject AI play"
             title="Reject AI play"
@@ -1931,7 +1931,7 @@ function BattlePhaseFloatControls({
         <button
           type="button"
           className="phase-float-button approve"
-          style={{ gridColumn: 3 }}
+          style={{ gridColumn: 2 }}
           data-battle-ai-proposal-approve
           aria-label={approveLabel}
           title={`${approveLabel} (${proposal.description})`}
@@ -1945,7 +1945,6 @@ function BattlePhaseFloatControls({
 
   const previousTarget = computePhaseControlTarget(state, "previous");
   const nextTarget = computePhaseControlTarget(state, "next");
-  const nextMajorTarget = computePhaseControlTarget(state, "next-major");
 
   return (
     <div className="phase-float-actions" aria-label="Phase controls">
@@ -1971,24 +1970,13 @@ function BattlePhaseFloatControls({
       >
         <i className="bx bx-arrow-right" aria-hidden="true" />
       </button>
-      <button
-        type="button"
-        className="phase-float-button"
-        data-battle-phase-control="next-major"
-        data-preview={nextMajorTarget.preview}
-        aria-label={nextMajorTarget.preview}
-        title={nextMajorTarget.preview}
-        onClick={() => onSetBattleFlow(nextMajorTarget)}
-      >
-        <i className="bx bx-skip-next" aria-hidden="true" />
-      </button>
     </div>
   );
 }
 
 function computePhaseControlTarget(
   state: BattleMutableState,
-  control: "previous" | "next" | "next-major",
+  control: "previous" | "next",
 ): BattleFlowTarget {
   const currentPhase = normalizePhaseForControls(state.phase);
   const currentIndex = PHASE_CONTROL_SEQUENCE.indexOf(currentPhase);
@@ -1997,20 +1985,8 @@ function computePhaseControlTarget(
       const index = currentIndex - 1;
       return { didWrap: index < 0, nextIndex: index };
     }
-    if (control === "next") {
-      const index = currentIndex + 1;
-      return { didWrap: index >= PHASE_CONTROL_SEQUENCE.length, nextIndex: index };
-    }
-    const nextDayOrNight = PHASE_CONTROL_SEQUENCE.findIndex(
-      (phase, index) => index > currentIndex && (phase === "day" || phase === "night"),
-    );
-    if (nextDayOrNight >= 0) {
-      return { didWrap: false, nextIndex: nextDayOrNight };
-    }
-    return {
-      didWrap: true,
-      nextIndex: PHASE_CONTROL_SEQUENCE.findIndex((phase) => phase === "day"),
-    };
+    const index = currentIndex + 1;
+    return { didWrap: index >= PHASE_CONTROL_SEQUENCE.length, nextIndex: index };
   })();
   const normalizedNextIndex = (nextIndex + PHASE_CONTROL_SEQUENCE.length) % PHASE_CONTROL_SEQUENCE.length;
   // A forward control that flips into the next turn always lands on that turn's

@@ -1229,12 +1229,12 @@
   flex: 0 0 auto;
   margin-top: auto;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 6px;
 }
 
 /* While the AI holds a proposal, the cluster shows its approve/reject icon
-   controls. Flex (not the 3-column phase-arrow grid) so one or two buttons fill
+   controls. Flex (not the 2-column phase-arrow grid) so one or two buttons fill
    the row. */
 .battle-ai-proposal-banner {
   display: flex;
@@ -1302,7 +1302,7 @@
 /* The approve/reject AI-proposal buttons reuse the base purple phase-button
    styling (no green/red treatment) so they read as the same control family as
    the phase-advance arrows, and the approve button sits exactly where the
-   "next-major" arrow does. They carry a native `title` tooltip; suppress the
+   "next" arrow does. They carry a native `title` tooltip; suppress the
    data-preview bubble used by the phase arrows. */
 .phase-float-button.approve::after,
 .phase-float-button.reject::after {
