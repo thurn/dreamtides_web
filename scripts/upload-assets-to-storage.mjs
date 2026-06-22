@@ -23,7 +23,7 @@
  */
 
 import { execFileSync } from "node:child_process";
-import { existsSync, mkdtempSync, rmSync, cpSync } from "node:fs";
+import { existsSync, mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { resolve, join } from "node:path";
 
@@ -75,8 +75,8 @@ function main() {
   preflight();
 
   // Stage real files before upload: `public/<dir>` entries are symlinks into
-  // ~/Documents (and the image cache), so copy with `dereference` to materialize
-  // the actual bytes for gcloud.
+  // ~/Documents (and the image cache), and `gcloud storage rsync` skips
+  // symlinks. `cp -RL` follows them so the staged tree holds the actual bytes.
   const staging = mkdtempSync(join(tmpdir(), "quest-assets-"));
   try {
     const present = [];
@@ -89,7 +89,7 @@ function main() {
         continue;
       }
       console.log(`staging ${dir}...`);
-      cpSync(src, join(staging, dir), { recursive: true, dereference: true });
+      execFileSync("cp", ["-RL", src, join(staging, dir)], { stdio: "inherit" });
       present.push(dir);
     }
     if (present.length === 0) {
