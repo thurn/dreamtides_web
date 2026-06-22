@@ -56,7 +56,6 @@ import { BattleHandTray } from "./BattleHandTray";
 import { BattleInspector } from "./BattleInspector";
 import { BattleCardNoteEditor } from "./BattleCardNoteEditor";
 import { BattleLogDrawer } from "./BattleLogDrawer";
-import { BattleOpponentHandTray } from "./BattleOpponentHandTray";
 import { BattleResultOverlay } from "./BattleResultOverlay";
 import { BattleRewardSurface } from "./BattleRewardSurface";
 import { BattleSideSummaryPopover } from "./BattleSideSummaryPopover";
@@ -1169,6 +1168,32 @@ function PlayableBattleScreenInner({
             proposal={aiMode ? proposal : null}
             thinking={aiMode && aiThinking}
           />
+          {isOpponentHandRevealed ? (
+            <div className="opponent-hand-zone">
+              <BattleHandTray
+                canInteract={canPlayerAct}
+                side="opponent"
+                compact={false}
+                isBasicAutomationEnabled={isBasicAutomationEnabled}
+                currentEnergy={reducerState.mutable.sides.enemy.currentEnergy}
+                hand={reducerState.mutable.sides.enemy.hand}
+                onHandCardAction={handleCommand}
+                openingHandSize={battleInit.openingHandSize}
+                playerDrawSkipsTurnOne={battleInit.playerDrawSkipsTurnOne}
+                selectedCardId={null}
+                state={reducerState.mutable}
+                onCardClick={handleHandCardClick}
+                onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "opponent-hand-tray")}
+                onCardDoubleClick={handleHandCardDoubleClick}
+                onCardDragStart={handleCardDragStart}
+                onCardDragEnd={handleCardDragEnd}
+                onCardDropToHand={(sourceSurface) => handleZoneDrop("enemy", "hand", sourceSurface)}
+                pendingDragCardId={pendingDragCardId}
+                pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
+                isCardPlayable={undefined}
+              />
+            </div>
+          ) : null}
           <div className="stage">
             <BattleDreamwellDisplay
               card={dreamwellDisplayCard}
@@ -1177,28 +1202,6 @@ function PlayableBattleScreenInner({
               automationStatus={dreamwellDisplayCard ? dreamwellAutomationStatus(dreamwellDisplayCard.id) : "none"}
               automationEnabled={isBasicAutomationEnabled}
             />
-            {isOpponentHandRevealed ? (
-              <div className="opponent-hand-zone">
-                <BattleOpponentHandTray
-                  canInteract={canPlayerAct}
-                  currentEnergy={reducerState.mutable.sides.enemy.currentEnergy}
-                  hand={reducerState.mutable.sides.enemy.hand}
-                  isCardPlayable={undefined}
-                  selectedCardId={null}
-                  state={reducerState.mutable}
-                  onCardClick={handleHandCardClick}
-                  onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "opponent-hand-tray")}
-                  onCardDragStart={handleCardDragStart}
-                  onCardDragEnd={handleCardDragEnd}
-                  onCardDropToHand={(sourceSurface) => handleZoneDrop("enemy", "hand", sourceSurface)}
-                  onCardHoverStart={handleBattlefieldCardHoverStart}
-                  onCardHoverMove={handleBattlefieldCardHoverMove}
-                  onCardHoverEnd={handleBattlefieldCardHoverEnd}
-                  pendingDragCardId={pendingDragCardId}
-                  pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
-                />
-              </div>
-            ) : null}
             <div className="battlefield-zone-layout">
               <BattleStackZone
                 state={reducerState.mutable}
@@ -1490,34 +1493,11 @@ function PlayableBattleScreenInner({
               </div>
             </div>
           </div>
-          <div className={isOpponentHandRevealed && !isPlayerHandHidden ? "player-hand-zone compact" : "player-hand-zone"}>
-            {isPlayerHandHidden ? (
+          {isPlayerHandHidden ? null : (
+            <div className="player-hand-zone">
               <BattleHandTray
                 canInteract={canPlayerAct}
-                side="opponent"
                 compact={false}
-                isBasicAutomationEnabled={isBasicAutomationEnabled}
-                currentEnergy={reducerState.mutable.sides.enemy.currentEnergy}
-                hand={reducerState.mutable.sides.enemy.hand}
-                onHandCardAction={handleCommand}
-                openingHandSize={battleInit.openingHandSize}
-                playerDrawSkipsTurnOne={battleInit.playerDrawSkipsTurnOne}
-                selectedCardId={null}
-                state={reducerState.mutable}
-                onCardClick={handleHandCardClick}
-                onCardContextMenu={(battleCardId, event) => handleCardContextMenu(battleCardId, event, "opponent-hand-tray")}
-                onCardDoubleClick={handleHandCardDoubleClick}
-                onCardDragStart={handleCardDragStart}
-                onCardDragEnd={handleCardDragEnd}
-                onCardDropToHand={(sourceSurface) => handleZoneDrop("enemy", "hand", sourceSurface)}
-                pendingDragCardId={pendingDragCardId}
-                pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
-                isCardPlayable={undefined}
-              />
-            ) : (
-              <BattleHandTray
-                canInteract={canPlayerAct}
-                compact={isOpponentHandRevealed}
                 isBasicAutomationEnabled={isBasicAutomationEnabled}
                 currentEnergy={reducerState.mutable.sides.player.currentEnergy}
                 hand={reducerState.mutable.sides.player.hand}
@@ -1536,8 +1516,8 @@ function PlayableBattleScreenInner({
                 pendingDragSourceSurface={pendingDrag?.sourceSurface ?? null}
                 isCardPlayable={undefined}
               />
-            )}
-          </div>
+            </div>
+          )}
           <BattleActionBar
             dreamsigns={battleInit.dreamsignSummaries}
             futureCount={futureCount}

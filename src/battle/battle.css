@@ -1376,8 +1376,7 @@
   align-items: center;
 }
 
-.hand-row-label,
-.opponent-hand-tray-label {
+.hand-row-label {
   flex: 0 0 auto;
   width: 84px;
   display: flex;
@@ -1389,8 +1388,7 @@
   letter-spacing: 0.06em;
 }
 
-.hand-row-label strong,
-.opponent-hand-tray-label strong {
+.hand-row-label strong {
   color: var(--text);
   font-size: 16px;
   line-height: 1;
@@ -1412,36 +1410,20 @@
   padding-inline: 0;
 }
 
+/* The revealed enemy hand mirrors the player hand: a large card band, but
+   anchored to the top of the screen with its cards aligned to the top edge. */
 .opponent-hand-zone {
-  flex: 0 0 var(--opponent-hand-zone-height, calc(var(--revealed-hand-card-h) + 28px));
+  flex: 0 0 var(--player-hand-zone-height, 276px);
   min-height: 0;
   overflow: hidden;
+  position: relative;
 }
 
-.opponent-hand-tray {
+.opponent-hand-zone .hand-row {
   height: 100%;
-  margin: 0;
-  padding: 6px 10px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  border: 1px solid rgba(248, 113, 113, 0.22);
-  border-radius: 8px;
-  background: rgba(69, 10, 10, 0.2);
-}
-
-.opponent-hand-tray.drop-target {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-  box-shadow: inset 0 0 0 1px var(--accent-edge);
-}
-
-.opponent-hand-cards {
-  min-width: 0;
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding-block: 2px;
+  align-items: flex-start;
+  border-top: none;
+  border-bottom: 1px solid var(--line);
 }
 
 .battle-card.revealed-hand-card {
