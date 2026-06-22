@@ -1411,12 +1411,18 @@
 }
 
 /* The revealed enemy hand mirrors the player hand: a large card band, but
-   anchored to the top of the screen with its cards aligned to the top edge. */
+   anchored to the top of the screen with its cards aligned to the top edge.
+   When the player hand is also on screen, both hands shrink to the compact
+   band so the battlefield between them keeps its space. */
 .opponent-hand-zone {
   flex: 0 0 var(--player-hand-zone-height, 276px);
   min-height: 0;
   overflow: hidden;
   position: relative;
+}
+
+.opponent-hand-zone.compact {
+  flex-basis: var(--player-hand-zone-compact-height, calc(var(--revealed-hand-card-h) + 28px));
 }
 
 .opponent-hand-zone .hand-row {

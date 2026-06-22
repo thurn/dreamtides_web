@@ -1169,11 +1169,11 @@ function PlayableBattleScreenInner({
             thinking={aiMode && aiThinking}
           />
           {isOpponentHandRevealed ? (
-            <div className="opponent-hand-zone">
+            <div className={isPlayerHandHidden ? "opponent-hand-zone" : "opponent-hand-zone compact"}>
               <BattleHandTray
                 canInteract={canPlayerAct}
                 side="opponent"
-                compact={false}
+                compact={!isPlayerHandHidden}
                 isBasicAutomationEnabled={isBasicAutomationEnabled}
                 currentEnergy={reducerState.mutable.sides.enemy.currentEnergy}
                 hand={reducerState.mutable.sides.enemy.hand}
@@ -1494,10 +1494,10 @@ function PlayableBattleScreenInner({
             </div>
           </div>
           {isPlayerHandHidden ? null : (
-            <div className="player-hand-zone">
+            <div className={isOpponentHandRevealed ? "player-hand-zone compact" : "player-hand-zone"}>
               <BattleHandTray
                 canInteract={canPlayerAct}
-                compact={false}
+                compact={isOpponentHandRevealed}
                 isBasicAutomationEnabled={isBasicAutomationEnabled}
                 currentEnergy={reducerState.mutable.sides.player.currentEnergy}
                 hand={reducerState.mutable.sides.player.hand}
