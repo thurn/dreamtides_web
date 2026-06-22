@@ -109,11 +109,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June22"]
-image-number = 1721490835
+tags = ["Art Rework", "June22", "Art OK"]
+image-number = 2218612335
 art-owned = false
 card-number = 6
-art = { x = -0.084, y = -0.152, scale = 2.27 }
+art = { x = -0.129, y = 0.897, scale = 1.07 }
 
 [[cards]]
 name = "Wheel of the Heavens"
@@ -2253,7 +2253,7 @@ art-owned = false
 card-number = 121
 
 [[cards]]
-name = "Ashwalker"
+name = "Emberwatch Veteran"
 mtg-name = "Undead Butler"
 id = "1cfc72e9-b75c-4d55-8bcf-54bb301d7e40"
 rendered-text = """
@@ -2267,10 +2267,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Self-Mill", "Art Rework", "June22"]
-image-number = 726444844
+tags = ["Self-Mill", "Art Rework", "June22", "Art OK"]
+image-number = 2258761879
 art-owned = false
 card-number = 122
+art = { x = 0, y = 0, scale = 1.27 }
 
 [[cards]]
 name = "Frost Visionary"
