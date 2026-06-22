@@ -329,6 +329,18 @@ describe("createBattleInit opponent invariants", () => {
     );
   });
 
+  it("never runs duplicate cards: the enemy deck is a singleton set at every completion level", () => {
+    const layerCount = 7;
+    for (let level = 0; level < layerCount; level += 1) {
+      const init = createBattleInit(
+        makeInput({ state: { ...makeInput().state, completionLevel: level } }),
+      );
+      const numbers = init.enemyDeckDefinition.map((c) => c.cardNumber);
+      // No card number appears twice: distinct count equals total deck length.
+      expect(new Set(numbers).size).toBe(numbers.length);
+    }
+  });
+
   it("drafts a coherent deck: an alpha-seeded opponent fields mostly alpha cards", () => {
     const db = makeBattleTestCardDatabase();
     const alphaNumbers = new Set(ALPHA_CARDS);

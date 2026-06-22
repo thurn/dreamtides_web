@@ -541,7 +541,7 @@ function finalizeEnemyDeck(
     );
   }
 
-  const padded = padEnemyDeck(chosen);
+  const padded = padEnemyDeck(chosen, cardDatabase, rng);
 
   return rng
     .shuffle(padded.map(createBaseBattleDeckCardDefinition))
@@ -549,19 +549,43 @@ function finalizeEnemyDeck(
 }
 
 /**
- * Pads a chosen enemy card list up to `MIN_BATTLE_DECK_SIZE` by repeating
- * whole-list copies (mirroring {@link padBattleDeck}). A list at or above the
- * threshold, or an empty list, is returned unchanged.
+ * Builds the final enemy deck from a chosen card list: deduplicated so the
+ * enemy never runs duplicate cards, and topped up to `MIN_BATTLE_DECK_SIZE`
+ * with distinct draftable cards not already present (rather than repeating
+ * existing cards) when the chosen list is short. A deduplicated list already at
+ * or above the threshold is returned as-is.
  */
-function padEnemyDeck(cards: readonly CardData[]): CardData[] {
-  if (cards.length === 0 || cards.length >= MIN_BATTLE_DECK_SIZE) {
-    return [...cards];
+function padEnemyDeck(
+  cards: readonly CardData[],
+  cardDatabase: ReadonlyMap<number, CardData>,
+  rng: BattleRng,
+): CardData[] {
+  const seen = new Set<number>();
+  const deck: CardData[] = [];
+  for (const card of cards) {
+    if (seen.has(card.cardNumber)) continue;
+    seen.add(card.cardNumber);
+    deck.push(card);
   }
-  const padded = [...cards];
-  while (padded.length < MIN_BATTLE_DECK_SIZE) {
-    padded.push(...cards);
+  if (deck.length >= MIN_BATTLE_DECK_SIZE) {
+    return deck;
   }
-  return padded;
+  // Top up with distinct draftable cards the deck does not already hold, so the
+  // padded deck stays free of duplicates.
+  const filler = rng.shuffle(
+    Array.from(cardDatabase.values()).filter(
+      (card) =>
+        !card.isStarter &&
+        card.energyCost !== null &&
+        !seen.has(card.cardNumber),
+    ),
+  );
+  for (const card of filler) {
+    if (deck.length >= MIN_BATTLE_DECK_SIZE) break;
+    seen.add(card.cardNumber);
+    deck.push(card);
+  }
+  return deck;
 }
 
 function cloneBattleDeckCardDefinition(

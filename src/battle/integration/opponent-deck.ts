@@ -59,20 +59,16 @@ import type { BattleRng } from "../random";
 export const DEFAULT_RUN_LAYER_COUNT = 7;
 
 /**
- * Minimum and maximum number of distinct (deduplicated) cards the final opponent
- * deck holds, after post-draft removals and before per-card copies and padding.
- * The count scales linearly with run progress between these bounds so a layer-0
- * opponent fields the smallest legal deck and the final boss fields the largest.
+ * Minimum and maximum number of distinct cards the opponent drafts for the final
+ * deck, after post-draft removals. Every card in the deck is a singleton — the
+ * deck is exactly these distinct cards, with no duplicate copies. The count
+ * scales linearly with run progress between these bounds so a layer-0 opponent
+ * fields the smallest deck and the final boss fields the largest. When the
+ * drafted count is below the battle deck minimum the deck is topped up with
+ * distinct draftable cards (never repeats) so it still has no duplicates.
  */
 const MIN_OPPONENT_DISTINCT_CARDS = 14;
 const MAX_OPPONENT_DISTINCT_CARDS = 30;
-
-/**
- * Number of whole-deck copies the opponent runs of each chosen card grows from
- * one (early run) toward this cap (late run), so later decks are not only wider
- * but denser with their best cards.
- */
-const MAX_OPPONENT_COPIES_PER_CARD = 2;
 
 /**
  * Post-draft removals: after the draft the opponent prunes its least-coherent
@@ -176,20 +172,6 @@ export function opponentDistinctCardCount(
   const fraction = progressFraction(completionLevel, layerCount);
   const span = MAX_OPPONENT_DISTINCT_CARDS - MIN_OPPONENT_DISTINCT_CARDS;
   return MIN_OPPONENT_DISTINCT_CARDS + Math.round(span * fraction);
-}
-
-/**
- * How many copies of each chosen card the opponent runs at `completionLevel`,
- * scaling from one (early) up to {@link MAX_OPPONENT_COPIES_PER_CARD} (late) so
- * later decks are denser with their best cards. Monotonically non-decreasing in
- * `completionLevel`.
- */
-function opponentCopiesPerCard(
-  completionLevel: number,
-  layerCount: number,
-): number {
-  const fraction = progressFraction(completionLevel, layerCount);
-  return 1 + Math.round((MAX_OPPONENT_COPIES_PER_CARD - 1) * fraction);
 }
 
 /**
@@ -426,14 +408,13 @@ export interface OpponentDraftCandidateSummary {
  * affiliation fit) for `opponent_deck_constructed` logging. */
 export interface OpponentDeckBuild {
   /**
-   * The chosen distinct cards expanded to per-card copies (each card repeated
-   * `copiesPerCard` times). The caller shuffles and pads these into the enemy
-   * draw order.
+   * The chosen deck: the distinct cards (post-removal), one copy of each, with
+   * no duplicates. The caller shuffles these into the enemy draw order.
    */
   cards: CardData[];
-  /** The final distinct cards (post-removal), in pick order. */
+  /** The final distinct cards (post-removal), in pick order. Identical contents
+   * to {@link cards}; retained as a named view of the singleton card set. */
   distinctCards: CardData[];
-  copiesPerCard: number;
   /** The affiliation the deck was steered toward, or `null` in a neutral
    * dreamscape (or when the affiliation could not be scored). */
   targetAffiliationId: string | null;
@@ -542,7 +523,6 @@ export function buildOpponentDeck(args: {
   const removalCount = opponentRemovalCount(completionLevel, layerCount);
   const pickBudget = opponentPickBudget(completionLevel, layerCount);
   const temperature = opponentDraftTemperature(completionLevel, layerCount);
-  const copiesPerCard = opponentCopiesPerCard(completionLevel, layerCount);
 
   interface Candidate {
     distinct: number[];
@@ -608,15 +588,12 @@ export function buildOpponentDeck(args: {
     return null;
   }
 
-  const cards: CardData[] = [];
-  for (const card of distinctCards) {
-    for (let copy = 0; copy < copiesPerCard; copy += 1) cards.push(card);
-  }
+  // The deck is exactly the distinct cards, one copy each — no duplicates.
+  const cards: CardData[] = [...distinctCards];
 
   return {
     cards,
     distinctCards,
-    copiesPerCard,
     targetAffiliationId: affiliationCtx === null ? null : affiliation?.id ?? null,
     candidateCount: OPPONENT_BEST_OF_N,
     winningDraftIndex: winningIndex,
@@ -707,7 +684,6 @@ export function logOpponentDeckConstructed(args: OpponentDeckLogArgs): void {
     dreamsignIds: dreamsigns.map((dreamsign) => dreamsign.id),
     builtFromSimulation: build !== null,
     distinctCardCount: build?.distinctCards.length ?? 0,
-    copiesPerCard: build?.copiesPerCard ?? 0,
     deckSize: build?.cards.length ?? fallbackDeckSize,
     topCardNumbers,
     // Coherent-draft reconstruction.

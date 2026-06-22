@@ -116,7 +116,7 @@ For a reader new to this system:
 - Power proxy. A corpus-grounded, label-free stand-in for deck strength used only
   to check that later opponents are not weaker than earlier ones. It is computed
   from quantities already available without external judgment — for example deck
-  size after removals, mean copy count, and mean candidate fit of the kept cards.
+  size after removals and mean candidate fit of the kept cards.
   It is a monotonicity check, not a balance model.
 
 ## Problem and Context
@@ -265,10 +265,10 @@ above the random baseline. Monotonicity in completion level is a property of the
 derived curves, verified over the generated population by the harness rather than
 asserted per individual seed.
 
-### Difficulty: pick budget, removals, and copies
+### Difficulty: pick budget and removals
 
 Opponent strength scales with completion level by emulating the player's power
-curve rather than inventing a separate one. Three levers move together:
+curve rather than inventing a separate one. Two levers move together:
 
 - Pick budget. The number of simulated picks grows with completion level, so
   later opponents draft larger card pools to build from. This mirrors the player
@@ -278,10 +278,12 @@ curve rather than inventing a separate one. Three levers move together:
   deck. Removal count grows with completion level. This mirrors the player
   purging weak cards and has a double benefit: it raises both power and coherence
   at once, because the cards cut are precisely the off-theme orphans that make a
-  deck feel random. The final deck size is the pick budget minus removals,
-  expanded by copies.
-- Copies. The number of copies of each kept card grows from one early to a small
-  cap late, so later decks are denser with their best cards.
+  deck feel random. The final deck size is the pick budget minus removals.
+
+The deck is a singleton set: each kept card appears exactly once, with no
+duplicate copies, matching how a drafted player deck reads. When the drafted
+distinct count is below the battle deck minimum the deck is topped up with
+distinct draftable cards rather than repeats, so it stays free of duplicates.
 
 The pick-budget and removal curves should be derived from the player's own
 progression constants at the equivalent point in the run, so opponent and player
@@ -335,7 +337,7 @@ removals, and final deck.
 The `opponent_deck_constructed` log event is retained and enriched so a deck's
 construction and its measured coherence can be reconstructed from
 `logs/quest-log.jsonl` filtered by game. In addition to the existing fields
-(opponent Dreamcaller, completion level, layer count, deck size, copies, top
+(opponent Dreamcaller, completion level, layer count, deck size, top
 card numbers), the event records: the target affiliation, if any; the number of
 candidate drafts run and the index of the winning draft; the winning deck's
 coherence score and affiliation fit, and the same two scores for the runners-up
@@ -367,8 +369,8 @@ used for AI self-play mode and for missing-corpus situations is preserved.
   given the opponent Dreamcaller, the completion level, the run layer count, the
   battle seed, the resolved fit model, the card universe, and the target
   affiliation context (null in a neutral dreamscape). It runs best-of-N drafts
-  internally and returns the winning deck's chosen distinct cards, the per-card
-  copy count, the expanded deck, and a construction trace (the candidate-draft
+  internally and returns the winning deck's chosen distinct cards (the singleton
+  deck) and a construction trace (the candidate-draft
   scores, the winning pick sequence, removals, coherence score, and affiliation
   fit) for logging. It returns a null/empty result only when no usable corpus
   or fit model is available, so the caller applies the existing fallback deck.
