@@ -104,7 +104,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Hope's Vanguard
 - 1× Conjured Zenith
 - 1× Collateral Damage
-- 1× Radiant Convergence
+- 1× Price of Redemption
 - 1× Twilight Reclaimer
 - 1× Ferryman's Tithe
 - 1× Ashen Remnant
@@ -113,7 +113,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Maelstrom Denial
 - 1× Peak Plunder
 - 1× The Dread Sovereign
-- 1× Cradle of Storms
+- 1× First Encounter
 - 1× Wake the Fallen
 - 1× Apocalypse
 - 1× Shatter the Frail
@@ -168,7 +168,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 2× Veil of the Wastes
 - 2× Hope's Vanguard
 - 2× Corrupted Host
-- 2× Radiant Convergence
+- 2× Price of Redemption
 - 2× Twilight Reclaimer
 - 2× Entropy Spike
 - 2× Reclaimer of Lost Paths
@@ -281,7 +281,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Flamboyant Flamingo
 - 1× Corrupted Host
 - 1× Collateral Damage
-- 1× Radiant Convergence
+- 1× Price of Redemption
 - 1× Twilight Reclaimer
 - 1× Eternal Stag
 - 1× Ferryman's Tithe
@@ -336,7 +336,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Sunshadow Eagle
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
-- 1× Luminous Ascent
+- 1× Quiet Reflection
 - 1× Dawnprowler Panther
 - 1× Flagbearer of Decay
 - 1× Obliterator of Worlds
@@ -398,7 +398,7 @@ Tide-sig-04 is a character-heavy deck (86 of 110 copies are characters) built ar
 - 1× Hope's Vanguard
 - 1× Corrupted Host
 - 1× The Ringleader
-- 1× Radiant Convergence
+- 1× Price of Redemption
 - 1× Twilight Reclaimer
 - 1× Ferryman's Tithe
 - 1× Oblivion Guide
@@ -473,7 +473,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 2× Graywatch
 - 2× Paradox Enforcer
 - 2× Veil of the Wastes
-- 2× Radiant Convergence
+- 2× Price of Redemption
 - 2× Fargazer
 - 2× Kindred Sparks
 - 2× Wasteland Arbitrator
@@ -582,7 +582,7 @@ Tide-sig-06 is a heavily character-weighted deck (84 of 110 copies are character
 - 2× Paradox Enforcer
 - 2× Veil of the Wastes
 - 2× Soulkindler
-- 2× Radiant Convergence
+- 2× Price of Redemption
 - 2× Oblivion Guide
 - 2× Aurora Confluence
 - 2× Part the Veil
@@ -680,7 +680,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 2× Graywatch
 - 2× Paradox Enforcer
 - 2× Veil of the Wastes
-- 2× Radiant Convergence
+- 2× Price of Redemption
 - 2× Duskwall Delver
 - 2× Fargazer
 - 2× Kindred Sparks
@@ -788,7 +788,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 2× Enginespeaker
 - 2× Veil of the Wastes
 - 2× Corrupted Host
-- 2× Radiant Convergence
+- 2× Price of Redemption
 - 2× Entropy Spike
 - 2× Reclaimer of Lost Paths
 - 2× Fargazer
@@ -842,7 +842,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Ash Harbinger
 - 1× Pyrokinetic Surge
 - 1× Dawnrunner
-- 1× Immolate
+- 1× Final Gambit
 - 1× Kindlehorn
 - 1× Defiant Holdout
 - 1× Silent Gatherer
@@ -1465,7 +1465,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Nightprowler Panther
 - 1× Mother of Flames
 - 1× Containment Specialist
-- 1× Luminous Ascent
+- 1× Quiet Reflection
 - 1× Heavenward Penitent
 - 1× Torn Circuit Feeder
 - 1× Nexus Wayfinder
@@ -1509,7 +1509,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 2× Sunshadow Eagle
 - 2× Blood Moon Triad
 - 2× Turquoise Aurelia
-- 2× Luminous Ascent
+- 2× Quiet Reflection
 - 2× Dawnprowler Panther
 - 2× Lord of Hidden Paths
 - 2× Scrap Reclaimer
@@ -1596,7 +1596,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 2× Sunshadow Eagle
 - 2× Blood Moon Triad
 - 2× Turquoise Aurelia
-- 2× Luminous Ascent
+- 2× Quiet Reflection
 - 2× Dawnprowler Panther
 - 2× Lord of Hidden Paths
 - 2× Scrap Reclaimer
@@ -1668,7 +1668,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 2× Sunshadow Eagle
 - 2× Blood Moon Triad
 - 2× Turquoise Aurelia
-- 2× Luminous Ascent
+- 2× Quiet Reflection
 - 2× Dawnprowler Panther
 - 2× Lord of Hidden Paths
 - 2× Scrap Reclaimer
@@ -1764,7 +1764,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Seeker for the Way
 - 1× Clifftop Marksman
 - 1× Aspiring Guardian
-- 1× Cradle of Storms
+- 1× First Encounter
 - 1× Wake the Fallen
 - 1× Forsworn Champion
 - 1× Cloaked Sentinel
@@ -1863,7 +1863,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 1× Seeker for the Way
 - 1× Clifftop Marksman
 - 1× Aspiring Guardian
-- 1× Cradle of Storms
+- 1× First Encounter
 - 1× Wake the Fallen
 - 1× Forsworn Champion
 - 1× Eclipse Herald
@@ -1958,7 +1958,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× Bloomweaver
 - 1× Aspiring Guardian
 - 1× Dragonward
-- 1× Cradle of Storms
+- 1× First Encounter
 - 1× Wake the Fallen
 - 1× Eclipse Herald
 - 1× Shatterpoint Agent
@@ -2020,7 +2020,7 @@ Tide-fac-01 is an almost entirely character-based (40 of 45 copies) midrange eng
 - 1× Veil of the Wastes
 - 1× Corrupted Host
 - 1× Collateral Damage
-- 1× Radiant Convergence
+- 1× Price of Redemption
 - 1× Ashen Remnant
 - 1× The Dread Sovereign
 - 1× Entropy Spike
@@ -2068,7 +2068,7 @@ Tide-fac-02 is built almost entirely of characters (41 of 45 cards) and operates
 - 1× Watcher in the Ruins
 - 1× Veil of the Wastes
 - 1× Duskreaper
-- 1× Radiant Convergence
+- 1× Price of Redemption
 - 1× Ferryman's Tithe
 - 1× Ashen Remnant
 - 1× The Dread Sovereign
@@ -2174,7 +2174,7 @@ Tide-fac-04 is built almost entirely around spirit animals, with 35 characters a
 - 1× Sunshadow Eagle
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
-- 1× Luminous Ascent
+- 1× Quiet Reflection
 - 1× Dawnprowler Panther
 - 1× Lord of Hidden Paths
 - 1× Scrap Reclaimer
@@ -2221,7 +2221,7 @@ Tide-fac-05 is a character-heavy (37 of 45 copies) spirit animal swarm built aro
 - 1× Dreamborne Leviathan
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
-- 1× Luminous Ascent
+- 1× Quiet Reflection
 - 1× Dawnprowler Panther
 - 1× Lord of Hidden Paths
 - 1× Nexus Wayfinder
@@ -2326,7 +2326,7 @@ Tide-fac-07 runs an even split of events and characters (22/23) built around two
 - 1× Dreamborne Leviathan
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
-- 1× Luminous Ascent
+- 1× Quiet Reflection
 - 1× Dawnprowler Panther
 - 1× Sunset Chronicler
 - 1× Lord of Hidden Paths
@@ -2343,7 +2343,7 @@ Tide-fac-08 is an 80% character tide built almost entirely around spirit animals
 - 2× Searcher in the Mists
 - 2× Graywatch
 - 2× Veil of the Wastes
-- 2× Radiant Convergence
+- 2× Price of Redemption
 - 2× Fargazer
 - 2× The Rising God
 - 2× Evacuation Enforcer
@@ -2567,7 +2567,7 @@ Tide-fac-12 is built almost entirely of warriors (42 of 45 copies) and organizes
 - 1× Dreamborne Leviathan
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
-- 1× Luminous Ascent
+- 1× Quiet Reflection
 - 1× Dawnprowler Panther
 - 1× Lord of Hidden Paths
 - 1× Nexus Wayfinder
@@ -2602,7 +2602,7 @@ Tide-fac-13 is a character-heavy spirit animal tribal deck (35 of 45 copies are 
 - 1× Hope's Vanguard
 - 1× Corrupted Host
 - 1× Collateral Damage
-- 1× Radiant Convergence
+- 1× Price of Redemption
 - 1× Twilight Reclaimer
 - 1× Entropy Spike
 - 1× Stolen Genesis
@@ -2858,7 +2858,7 @@ Tide-fac-18 is built around two interlocking halves: an energy ramp package and 
 - 1× Hope's Vanguard
 - 1× Corrupted Host
 - 1× Collateral Damage
-- 1× Radiant Convergence
+- 1× Price of Redemption
 - 1× Twilight Reclaimer
 - 1× Ferryman's Tithe
 - 1× Peak Plunder
@@ -3023,7 +3023,7 @@ Tide-fac-21 is a character-heavy spirit animal swarm built around stacking ✦ o
 - 1× Sunshadow Eagle
 - 1× Blood Moon Triad
 - 1× Turquoise Aurelia
-- 1× Luminous Ascent
+- 1× Quiet Reflection
 - 1× Dawnprowler Panther
 - 1× Lord of Hidden Paths
 - 1× Scrap Reclaimer
@@ -3209,7 +3209,7 @@ This tide is built around a dense curve of inexpensive survivors whose arrival a
 - 1× Hope's Vanguard
 - 1× Corrupted Host
 - 1× Collateral Damage
-- 1× Radiant Convergence
+- 1× Price of Redemption
 - 1× Twilight Reclaimer
 - 1× Entropy Spike
 - 1× Stolen Genesis
@@ -3257,7 +3257,7 @@ Tide-fac-26 is a character-heavy survivor tide built around the abandon trigger 
 - 1× Veil of the Wastes
 - 1× Hope's Vanguard
 - 1× Corrupted Host
-- 1× Radiant Convergence
+- 1× Price of Redemption
 - 1× Twilight Reclaimer
 - 1× Ferryman's Tithe
 - 1× Maelstrom Denial
@@ -3312,7 +3312,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Hope's Vanguard
 - 1× Corrupted Host
 - 1× Specter of Silent Snow
-- 1× Radiant Convergence
+- 1× Price of Redemption
 - 1× Twilight Reclaimer
 - 1× Entropy Spike
 - 1× Duskwall Delver
@@ -3459,7 +3459,7 @@ Tide-fac-30 is built almost entirely around spirit animal characters (36 of 45 c
 - 1× Dragonward
 - 1× Bloomweaver
 - 1× Blood Reaver
-- 1× Cradle of Storms
+- 1× First Encounter
 - 1× Assault Leader
 - 1× Forsworn Champion
 - 1× Eclipse Herald
@@ -3517,7 +3517,7 @@ Tide-fac-31 is almost entirely characters (41 of 45 cards), built around a dense
 - 1× Veil of the Wastes
 - 1× Hope's Vanguard
 - 1× Corrupted Host
-- 1× Radiant Convergence
+- 1× Price of Redemption
 - 1× Twilight Reclaimer
 - 1× Maelstrom Denial
 - 1× Entropy Spike
@@ -3564,7 +3564,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Unbroken
 - 1× Call of Calamity
 - 1× Soulkindler
-- 1× Radiant Convergence
+- 1× Price of Redemption
 - 1× Oblivion Guide
 - 1× Aurora Confluence
 - 1× Verdant Wayfarer
@@ -3687,7 +3687,7 @@ Tide-neu-03 is a character-heavy (24 of 30 cards) deck built around two interloc
 - 1× Silent Avenger
 - 1× Veil of the Wastes
 - 1× Corrupted Host
-- 1× Radiant Convergence
+- 1× Price of Redemption
 - 1× Revenant of the Lost
 - 1× Entropy Spike
 - 1× Lunar Hart
@@ -3765,7 +3765,7 @@ tide-neu-05 is an almost entirely character-based deck (27 of 30 cards) built ar
 - 1× Veil of the Wastes
 - 1× The Ringleader
 - 1× Collateral Damage
-- 1× Radiant Convergence
+- 1× Price of Redemption
 - 1× Molten Duel
 - 1× Entropy Spike
 - 1× Derelict Voyage
@@ -3906,7 +3906,7 @@ Tide-neu-09 is a character-heavy neutral tide (25 characters, 5 events, all at 1
 - 1× Silent Avenger
 - 1× Veil of the Wastes
 - 1× Corrupted Host
-- 1× Radiant Convergence
+- 1× Price of Redemption
 - 1× Ferryman's Tithe
 - 1× Entropy Spike
 - 1× Duskwall Delver
@@ -3914,7 +3914,7 @@ Tide-neu-09 is a character-heavy neutral tide (25 characters, 5 events, all at 1
 - 1× Cinderheart
 - 1× Dawnrunner
 - 1× Kindred Sparks
-- 1× Immolate
+- 1× Final Gambit
 - 1× Defiant Holdout
 - 1× Exiles of the Last Light
 - 1× Dreadweaver
@@ -3942,7 +3942,7 @@ Tide-neu-10 is built almost entirely from warriors, with its central engine driv
 - 1× Dragonward
 - 1× Aspiring Guardian
 - 1× Blood Reaver
-- 1× Cradle of Storms
+- 1× First Encounter
 - 1× Wake the Fallen
 - 1× Forsworn Champion
 - 1× Company Commander

@@ -123,7 +123,7 @@ card-number = 10
 [[dreamwell]]
 name = "Firmament Mirror"
 id = "14dec460-3ec6-40c1-978f-67e70cb0b227"
-rendered-text = "A card in your void gains reclaim until end of turn."
+rendered-text = "A chosen card in your void gains reclaim until end of turn."
 order = 2
 energy-added = 1
 card-type = "Dreamwell"
@@ -357,7 +357,7 @@ image-number = 485518030
 name = "Rusted Edifice"
 id = "a0fbcbd9-96ee-4392-add7-e1d436f99553"
 rendered-text = "Return an event from your void to your hand."
-order = 2
+order = 3
 energy-added = 1
 card-type = "Dreamwell"
 art-owned = false
