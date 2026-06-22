@@ -7,6 +7,8 @@ import type {
 } from "../../types/content";
 import type { BattleModifier, QuestState, SiteState } from "../../types/quest";
 import type { RunPoolContext } from "../../data/quest-content";
+import type { DraftRecord } from "../../data/cards-v2-database";
+import type { FitModel } from "../../draft/replay/fit-model";
 import { DEFAULT_POOL_VARIANT } from "../../draft/pool/types";
 import { applyDeckEntryCardModification } from "../../card-type-change";
 import { applyTransfigurationToCard } from "../../transfiguration/transfiguration-logic";
@@ -107,14 +109,23 @@ export interface CreateBattleInitInput {
   dreamsignTemplates?: readonly DreamsignTemplate[];
   /**
    * The run's pool context (decklist corpus + name index, plus the selected
-   * `poolVariant`). Used to build the enemy deck from the run's pool strategy —
-   * by default the `idf3` strategy, which yields a real-decklist pool matching
-   * the enemy Dreamcaller's signature. Optional: when absent (or when
-   * the resolved decklist is empty, as non-`idf3` strategies produce no starter
-   * deck) the enemy deck falls back to a sample of draftable cards from the card
-   * database.
+   * `poolVariant`). Used to resolve the dreamscape affiliation's probe affinities
+   * for opponent construction. Optional: when absent the opponent deck is built
+   * without affiliation steering (neutral).
    */
   poolContext?: RunPoolContext;
+  /**
+   * The corpus-trained deck-fit model, shared across battles in a session. Drives
+   * the opponent's coherent draft. Optional: when absent the enemy deck falls
+   * back to a sample of draftable cards from the card database.
+   */
+  fitModel?: FitModel;
+  /**
+   * The adapted draft-record corpus. Supplies the real pack structures the
+   * opponent's coherent draft picks from. Optional: when empty the enemy deck
+   * falls back to a sample of draftable cards from the card database.
+   */
+  draftRecords?: readonly DraftRecord[];
   seedOverride?: number | null;
   /**
    * When true, the enemy deck is built from the AI Starter deck
@@ -238,13 +249,14 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     ? null
     : buildOpponentDeck({
         opponentDreamcaller,
+        fitModel: input.fitModel,
+        draftRecords: input.draftRecords ?? [],
         poolContext: input.poolContext,
         cardDatabase,
         affiliation: battleAffiliation,
         completionLevel: completionLevelAtStart,
         layerCount,
         poolSeed,
-        rng: streams.enemyDeckOrder,
       });
   const enemyDeckDefinition = finalizeEnemyDeck(
     opponentBuild,

@@ -1,10 +1,19 @@
 // Opponent deck + descriptor construction for the Battle site (quests doc
-// "Battle"). Each battle has an assigned opponent Dreamcaller whose deck is
-// built by emulating the player's own journey: a simulated quest is run with
-// that Dreamcaller's tides up to the equivalent point in the run, biased toward
-// the dreamscape's affiliation, so the decks the player faces grow stronger as
-// the run progresses. Opponents carry no dreamsigns in the early battles; from
-// the run midpoint onward each opponent brings a single dreamsign.
+// "Battle"; design `docs/cards2/opponent_deck_coherent_draft_design.md`). Each
+// battle has an assigned opponent Dreamcaller whose deck is built by simulating a
+// coherent draft: at each pick the opponent takes the card that best FITS the
+// deck drafted so far, where "fit" is learned entirely from the corpus of real
+// human draft records (`docs/draft_records_adapted/`). Difficulty scales with the
+// run by giving stronger opponents a larger pick budget, more post-draft removals,
+// and a lower exploration temperature, mirroring how a player's deck tightens.
+// Opponents carry no dreamsigns in the early battles; from the run midpoint onward
+// each opponent brings a single dreamsign.
+//
+// In an affiliated dreamscape the deck must also belong to that affiliation: the
+// draft seed widens to the affiliation probe, pack composition is biased toward
+// affiliated cards, and best-of-N draft selection keeps the draft that best
+// matches the affiliation while staying coherent. In a neutral dreamscape there
+// is no affiliation target and selection optimizes coherence alone.
 //
 // This module is the single source of opponent construction. `create-battle-init`
 // calls into it to assemble the enemy descriptor (dreamcaller + dreamsigns) and
@@ -20,12 +29,24 @@ import type {
 } from "../../types/content";
 import type { DreamscapeNode } from "../../types/quest";
 import type { RunPoolContext } from "../../data/quest-content";
-import { generatePoolFromData } from "../../draft/pool/generate";
-import { DEFAULT_POOL_VARIANT } from "../../draft/pool/types";
+import type { DraftRecord } from "../../data/cards-v2-database";
 import {
-  opponentAffiliationBias,
+  buildAffiliationWeightContext,
   resolveNodeAffiliation,
+  scoreDeckAffiliationFit,
+  type AffiliationWeightContext,
 } from "../../affiliations/affiliation-weights";
+import type { FitModel } from "../../draft/replay/fit-model";
+import { buildPackSequence } from "../../draft/replay/draft-records";
+import {
+  createSeededRng,
+  simulateCoherentDraft,
+  type DraftPickTrace,
+} from "./coherent-draft";
+import {
+  scoreDeckCoherence,
+  type DeckCoherenceScore,
+} from "./coherence";
 import { logEvent } from "../../logging";
 import type { BattleRng } from "../random";
 
@@ -38,10 +59,10 @@ import type { BattleRng } from "../random";
 export const DEFAULT_RUN_LAYER_COUNT = 7;
 
 /**
- * Minimum and maximum number of distinct (deduplicated) cards the opponent deck
- * draws from the simulated pool, before per-card copies and padding. The count
- * scales linearly with run progress between these bounds so a layer-0 opponent
- * fields the smallest legal deck and the final boss fields the largest.
+ * Minimum and maximum number of distinct (deduplicated) cards the final opponent
+ * deck holds, after post-draft removals and before per-card copies and padding.
+ * The count scales linearly with run progress between these bounds so a layer-0
+ * opponent fields the smallest legal deck and the final boss fields the largest.
  */
 const MIN_OPPONENT_DISTINCT_CARDS = 14;
 const MAX_OPPONENT_DISTINCT_CARDS = 30;
@@ -52,6 +73,53 @@ const MAX_OPPONENT_DISTINCT_CARDS = 30;
  * but denser with their best cards.
  */
 const MAX_OPPONENT_COPIES_PER_CARD = 2;
+
+/**
+ * Post-draft removals: after the draft the opponent prunes its least-coherent
+ * cards (lowest co-occurrence with the rest of the deck). The count grows with
+ * run progress, mirroring the player purging weak cards — this raises both power
+ * and coherence at once because the cut cards are the off-theme orphans. The
+ * pick budget is the target distinct count plus removals, so a later opponent
+ * drafts a larger pool and prunes harder.
+ */
+const MIN_OPPONENT_REMOVALS = 2;
+const MAX_OPPONENT_REMOVALS = 8;
+
+/**
+ * Exploration temperature for the simulated draft, by run progress. Early
+ * opponents draft with more exploration (looser, weaker decks); later opponents
+ * draft closer to greedy (tighter, stronger decks). The early temperature is
+ * chosen high enough for per-seed variety yet low enough that coherence stays
+ * well above the random baseline. Decreasing in completion level, so deck
+ * tightness is monotonic in run progress.
+ */
+const EARLY_DRAFT_TEMPERATURE = 0.45;
+const LATE_DRAFT_TEMPERATURE = 0.12;
+
+/**
+ * Number of independent seeded drafts run per battle. The winner is the draft
+ * with the best combined coherence + affiliation-fit objective. Kept small: a
+ * handful of drafts is enough to make affiliation fit reliable while staying
+ * cheap against the cached fit model.
+ */
+const OPPONENT_BEST_OF_N = 4;
+
+/**
+ * Weight on affiliation fit relative to coherence in best-of-N draft selection,
+ * applied only in an affiliated dreamscape. Coherence keeps the winner from
+ * being a pile of high-affinity but unsynergistic cards; this term tilts the
+ * choice toward the draft that landed on the affiliation.
+ */
+const AFFILIATION_OBJECTIVE_WEIGHT = 1;
+
+/**
+ * How many real corpus records' pack structures the simulated draft draws its
+ * packs from. A seeded subset (rather than the full corpus) bounds per-battle
+ * cost while still offering far more distinct candidates than any single draft
+ * consumes. Reusing real packs keeps pack composition unbiased beyond the corpus
+ * play-rate, exactly as the cards the fit model learned from.
+ */
+const OPPONENT_PACK_SOURCE_RECORDS = 48;
 
 /**
  * The run length for `state.atlas`: the number of layers, which is the number of
@@ -125,6 +193,53 @@ function opponentCopiesPerCard(
 }
 
 /**
+ * The number of post-draft removals at `completionLevel`, scaling linearly with
+ * run progress between {@link MIN_OPPONENT_REMOVALS} and
+ * {@link MAX_OPPONENT_REMOVALS}. Monotonically non-decreasing in
+ * `completionLevel`.
+ */
+export function opponentRemovalCount(
+  completionLevel: number,
+  layerCount: number,
+): number {
+  const fraction = progressFraction(completionLevel, layerCount);
+  const span = MAX_OPPONENT_REMOVALS - MIN_OPPONENT_REMOVALS;
+  return MIN_OPPONENT_REMOVALS + Math.round(span * fraction);
+}
+
+/**
+ * The number of simulated picks at `completionLevel`: the final distinct target
+ * plus the removal count, so the draft over-drafts and prunes back to the target.
+ * Monotonically non-decreasing in `completionLevel` because both terms are.
+ */
+export function opponentPickBudget(
+  completionLevel: number,
+  layerCount: number,
+): number {
+  return (
+    opponentDistinctCardCount(completionLevel, layerCount) +
+    opponentRemovalCount(completionLevel, layerCount)
+  );
+}
+
+/**
+ * The exploration temperature for the draft at `completionLevel`, interpolating
+ * from {@link EARLY_DRAFT_TEMPERATURE} down to {@link LATE_DRAFT_TEMPERATURE} as
+ * the run progresses. Monotonically non-increasing in `completionLevel`, so
+ * later opponents draft tighter, stronger decks.
+ */
+export function opponentDraftTemperature(
+  completionLevel: number,
+  layerCount: number,
+): number {
+  const fraction = progressFraction(completionLevel, layerCount);
+  return (
+    EARLY_DRAFT_TEMPERATURE -
+    (EARLY_DRAFT_TEMPERATURE - LATE_DRAFT_TEMPERATURE) * fraction
+  );
+}
+
+/**
  * Deterministically selects the opponent Dreamcaller for a battle from the run's
  * `dreamcallers`. The choice is pinned to the battle seed so it is reproducible
  * per battle entry, and the player's own Dreamcaller is excluded when another
@@ -179,186 +294,351 @@ export function resolveBattleAffiliation(
   return resolveNodeAffiliation(node, dreamscapes, affiliations);
 }
 
-/** A card paired with its selection weight for deterministic weighted draws. */
-interface WeightedCandidate {
-  card: CardData;
-  weight: number;
+/** A salt mixed into the per-candidate-draft seed so best-of-N drafts draw from
+ * independent streams while staying a pure function of `poolSeed`. */
+const DRAFT_SEED_SALT = 0x9e3779b1;
+
+/** Translate a Dreamcaller's signature card UUIDs to card numbers via the
+ * database, dropping any that do not resolve. */
+function signatureCardNumbers(
+  opponentDreamcaller: DreamcallerContent | null,
+  idToNumber: ReadonlyMap<string, number>,
+): number[] {
+  const out: number[] = [];
+  for (const uuid of opponentDreamcaller?.signatureCards ?? []) {
+    const num = idToNumber.get(uuid);
+    if (num !== undefined) out.push(num);
+  }
+  return out;
 }
 
-/**
- * Draws `count` distinct cards from `candidates` without replacement, weighted by
- * each candidate's `weight`, using the seeded battle RNG so the draw is
- * reproducible per battle. A higher weight (an affiliation-leaning card) is more
- * likely to be drawn, but every candidate keeps a positive weight so any card the
- * simulated pool produced can still appear (the affiliation "any card can still
- * appear" rule carried into the opponent build).
- */
-function weightedSampleWithoutReplacement(
-  candidates: readonly WeightedCandidate[],
-  count: number,
-  rng: BattleRng,
-): CardData[] {
-  const remaining = candidates.map((candidate) => ({ ...candidate }));
-  const chosen: CardData[] = [];
-  const target = Math.min(count, remaining.length);
+/** Build the candidate pack pool from a seeded subset of corpus records. Each
+ * record contributes its real pack structures (in card-number space), so the
+ * draft picks from the exact packs that produced the corpus decks. */
+function buildPackSource(
+  draftRecords: readonly DraftRecord[],
+  nameIndex: ReadonlyMap<string, number>,
+  seed: number,
+): number[][] {
+  if (draftRecords.length === 0) return [];
+  const rng = createSeededRng(seed ^ 0x51ed270b);
+  const indices = draftRecords.map((_, i) => i);
+  // Seeded partial shuffle: pick the first OPPONENT_PACK_SOURCE_RECORDS records.
+  const take = Math.min(OPPONENT_PACK_SOURCE_RECORDS, indices.length);
+  for (let i = 0; i < take; i += 1) {
+    const j = i + Math.floor(rng() * (indices.length - i));
+    const tmp = indices[i];
+    indices[i] = indices[j];
+    indices[j] = tmp;
+  }
+  const packs: number[][] = [];
+  for (let i = 0; i < take; i += 1) {
+    for (const pack of buildPackSequence(draftRecords[indices[i]], nameIndex)) {
+      if (pack.length > 0) packs.push(pack);
+    }
+  }
+  return packs;
+}
 
-  while (chosen.length < target && remaining.length > 0) {
-    let totalWeight = 0;
-    for (const candidate of remaining) {
-      totalWeight += candidate.weight;
+/** Per-pack selection weight biasing pack composition toward the affiliation:
+ * `1 + biasStrength * meanAffinity` over the pack's cards. Every pack keeps a
+ * weight of at least 1, so no pack is excluded. Returns `undefined` when there is
+ * no affiliation context (an unbiased draw). */
+function affiliationPackWeights(
+  packs: readonly (readonly number[])[],
+  ctx: AffiliationWeightContext | null,
+  biasStrength: number,
+  numberToName: ReadonlyMap<number, string>,
+): number[] | undefined {
+  if (ctx === null) return undefined;
+  const strength = Math.max(0, biasStrength);
+  return packs.map((pack) => {
+    if (pack.length === 0) return 1;
+    let sum = 0;
+    for (const card of pack) {
+      const name = numberToName.get(card);
+      sum += name === undefined ? 0 : ctx.affinityByName.get(name) ?? 0;
     }
-    if (totalWeight <= 0) {
-      // Degenerate weights: fall back to a uniform pick so the draw still fills.
-      const index = rng.nextInt(remaining.length);
-      chosen.push(remaining[index].card);
-      remaining.splice(index, 1);
-      continue;
-    }
-    let roll = rng.nextFloat() * totalWeight;
-    let pickedIndex = remaining.length - 1;
-    for (let index = 0; index < remaining.length; index += 1) {
-      roll -= remaining[index].weight;
-      if (roll <= 0) {
-        pickedIndex = index;
-        break;
+    return 1 + strength * (sum / pack.length);
+  });
+}
+
+/** Mean co-occurrence cohesion of `card` with the rest of the deck, read from
+ * the model's normalized co-occurrence lookup. Low cohesion marks an off-theme
+ * orphan — the card a coherence-raising prune cuts first. */
+function cardCohesion(
+  card: number,
+  rest: readonly number[],
+  fitModel: FitModel,
+): number {
+  if (rest.length === 0) return 0;
+  const name = fitModel.numberToName.get(card);
+  if (name === undefined) return 0;
+  let sum = 0;
+  for (const other of rest) {
+    const otherName = fitModel.numberToName.get(other);
+    if (otherName === undefined) continue;
+    sum += fitModel.coocNorm.get(otherName)?.get(name) ?? 0;
+  }
+  return sum / rest.length;
+}
+
+/** Prune `picked` down to `target` distinct cards by iteratively removing the
+ * least-cohesive card (lowest mean co-occurrence with the rest). Returns the kept
+ * cards and the cards removed, in removal order. */
+function pruneToTarget(
+  picked: readonly number[],
+  target: number,
+  fitModel: FitModel,
+): { kept: number[]; removed: number[] } {
+  const kept = [...picked];
+  const removed: number[] = [];
+  while (kept.length > target) {
+    let worstIdx = 0;
+    let worstScore = Infinity;
+    for (let i = 0; i < kept.length; i += 1) {
+      const rest = kept.filter((_, j) => j !== i);
+      const score = cardCohesion(kept[i], rest, fitModel);
+      // Lowest cohesion wins removal; tie-break by higher card number for a
+      // deterministic, reproducible cut.
+      if (score < worstScore || (score === worstScore && kept[i] > kept[worstIdx])) {
+        worstScore = score;
+        worstIdx = i;
       }
     }
-    chosen.push(remaining[pickedIndex].card);
-    remaining.splice(pickedIndex, 1);
+    removed.push(kept[worstIdx]);
+    kept.splice(worstIdx, 1);
   }
-
-  return chosen;
+  return { kept, removed };
 }
 
-/** Result of an opponent deck build: the chosen cards plus a reconstruction summary. */
+/** A best-of-N candidate draft's measured objective, retained for the trace so
+ * the selection can be second-guessed from the log. */
+export interface OpponentDraftCandidateSummary {
+  draftIndex: number;
+  coherence: number;
+  affiliationFit: number;
+  combined: number;
+}
+
+/** Result of an opponent deck build: the chosen cards plus a full reconstruction
+ * trace (best-of-N scores, winning pick sequence, removals, coherence,
+ * affiliation fit) for `opponent_deck_constructed` logging. */
 export interface OpponentDeckBuild {
   /**
    * The chosen distinct cards expanded to per-card copies (each card repeated
-   * `copiesPerCard` times). Ordering is the weighted draw order, copies grouped.
-   * The caller shuffles and pads these into the enemy draw order.
+   * `copiesPerCard` times). The caller shuffles and pads these into the enemy
+   * draw order.
    */
   cards: CardData[];
-  /** The distinct cards chosen before copy expansion, in draw order. */
+  /** The final distinct cards (post-removal), in pick order. */
   distinctCards: CardData[];
   copiesPerCard: number;
+  /** The affiliation the deck was steered toward, or `null` in a neutral
+   * dreamscape (or when the affiliation could not be scored). */
+  targetAffiliationId: string | null;
+  /** Number of candidate drafts run (best-of-N). */
+  candidateCount: number;
+  /** Index of the winning candidate draft. */
+  winningDraftIndex: number;
+  /** The winning deck's coherence score and its components. */
+  coherence: DeckCoherenceScore;
+  /** The winning deck's affiliation fit (0 in a neutral dreamscape). */
+  affiliationFit: number;
+  /** The objective scores of every candidate draft (winner included). */
+  candidateSummaries: OpponentDraftCandidateSummary[];
+  /** The pick budget used (picks before removals). */
+  pickBudget: number;
+  /** The number of post-draft removals applied. */
+  removalCount: number;
+  /** The winning draft's per-pick trace. */
+  pickTrace: DraftPickTrace[];
+  /** The card numbers removed in the post-draft prune, in removal order. */
+  removedCardNumbers: number[];
 }
 
 /**
- * Builds the opponent battle deck by emulating the opponent Dreamcaller's journey:
- * a pool is simulated with that Dreamcaller's signature/tides up to the run's pool
- * strategy (`poolContext.poolVariant`, default {@link DEFAULT_POOL_VARIANT} =
- * `tides4`), exactly as the player's own draft pool is built. The simulated pool's
- * cards are resolved to {@link CardData}, biased toward the dreamscape affiliation
- * via {@link opponentAffiliationBias}, then a progress-scaled number of distinct
- * cards is drawn (weighted by the bias) and expanded to a progress-scaled copy
- * count — so later-layer decks are both wider and denser, and lean toward the
- * affiliation when one is present.
+ * Builds the opponent battle deck by simulating a coherent draft for the opponent
+ * Dreamcaller. Best-of-N seeded drafts are run; each over-drafts to a pick budget,
+ * prunes its least-coherent cards back to the target distinct count, and is scored
+ * for coherence (resemblance to real corpus decks) and — in an affiliated
+ * dreamscape — affiliation fit against the dreamscape's probe. The draft with the
+ * best combined objective wins, and its distinct cards are expanded to a
+ * progress-scaled copy count.
  *
- * Returns `null` when no usable pool can be produced (no `poolContext`, or the
- * simulated pool resolves to no cards in the database), so the caller can apply
- * its existing fallback deck.
+ * The deck is steered toward the opponent Dreamcaller's signature cards (folded
+ * into the draft seed) and, in an affiliated dreamscape, toward the affiliation
+ * (probe cards added to the seed and pack composition biased toward affiliated
+ * cards). Pure and deterministic in `poolSeed`.
+ *
+ * Returns `null` when the corpus or fit model is unavailable (no `fitModel`, no
+ * draft records, or no usable packs), so the caller can apply its fallback deck.
  */
 export function buildOpponentDeck(args: {
   opponentDreamcaller: DreamcallerContent | null;
+  fitModel: FitModel | undefined;
+  draftRecords: readonly DraftRecord[];
   poolContext: RunPoolContext | undefined;
   cardDatabase: ReadonlyMap<number, CardData>;
   affiliation: AffiliationContent | null;
   completionLevel: number;
   layerCount: number;
   poolSeed: number;
-  rng: BattleRng;
 }): OpponentDeckBuild | null {
   const {
     opponentDreamcaller,
+    fitModel,
+    draftRecords,
     poolContext,
     cardDatabase,
     affiliation,
     completionLevel,
     layerCount,
     poolSeed,
-    rng,
   } = args;
 
-  if (poolContext === undefined) {
+  if (fitModel === undefined || draftRecords.length === 0) {
     return null;
   }
 
-  const pool = generatePoolFromData(
-    poolContext.poolData,
-    poolSeed,
-    /* seedArchetypes */ undefined,
-    poolContext.poolVariant ?? DEFAULT_POOL_VARIANT,
-    /* themeArchetypes */ undefined,
-    /* targetSize */ undefined,
-    opponentDreamcaller?.signatureCards ?? [],
-    opponentDreamcaller?.id,
-  );
-
-  // Prefer the curated anchor starter decklist when the variant produces one
-  // (idf3): for those variants the Dreamcaller's signature steers the anchor
-  // deck, not the full corpus `counts`. Variants whose steered pool *is* the
-  // `counts` map (tides4, the production default, which sets no `starterDeck`)
-  // fall through to `counts`.
-  const starterDeck = pool.starterDeck ?? [];
-  const poolNames =
-    starterDeck.length > 0 ? [...starterDeck] : [...pool.counts.keys()];
-
-  const poolCards: CardData[] = [];
-  for (const name of poolNames) {
-    const cardNumber = poolContext.nameIndex.get(name);
-    if (cardNumber === undefined) {
-      continue;
-    }
-    const card = cardDatabase.get(cardNumber);
-    if (card === undefined) {
-      continue;
-    }
-    poolCards.push(card);
-  }
-
-  if (poolCards.length === 0) {
+  const packs = buildPackSource(draftRecords, fitModel.nameIndex, poolSeed);
+  if (packs.length === 0) {
     return null;
   }
 
-  // Apply the affiliation bias to the candidate cards (Task 4 hook). With no
-  // affiliation every candidate keeps weight 1, so the draw is unbiased.
-  const weighted: WeightedCandidate[] =
-    affiliation === null
-      ? poolCards.map((card) => ({ card, weight: 1 }))
-      : opponentAffiliationBias(
-          poolCards,
-          affiliation,
+  // Card UUID -> card number, for translating Dreamcaller signature cards.
+  const idToNumber = new Map<string, number>();
+  for (const card of cardDatabase.values()) idToNumber.set(card.id, card.cardNumber);
+
+  // Affiliation context (probe affinities) for an affiliated dreamscape; null in
+  // a neutral dreamscape or when the affiliation cannot be scored.
+  const affiliationCtx =
+    affiliation !== null && poolContext !== undefined
+      ? buildAffiliationWeightContext(
           poolContext.poolData,
           cardDatabase,
-        );
+          affiliation,
+        )
+      : null;
 
-  const distinctCount = Math.min(
-    opponentDistinctCardCount(completionLevel, layerCount),
-    weighted.length,
+  // Seed cards: Dreamcaller signatures, plus the affiliation probe in an
+  // affiliated dreamscape, so the first picks are pulled toward both.
+  const seeds = signatureCardNumbers(opponentDreamcaller, idToNumber);
+  if (affiliationCtx !== null) {
+    for (const name of affiliationCtx.signatureWeightedNames) {
+      const num = affiliationCtx.numberByName.get(name);
+      if (num !== undefined) seeds.push(num);
+    }
+  }
+
+  const packWeights = affiliationPackWeights(
+    packs,
+    affiliationCtx,
+    affiliation?.opponentBiasStrength ?? 0,
+    fitModel.numberToName,
   );
-  const distinctCards = weightedSampleWithoutReplacement(
-    weighted,
-    distinctCount,
-    rng,
-  );
+
+  const targetDistinct = opponentDistinctCardCount(completionLevel, layerCount);
+  const removalCount = opponentRemovalCount(completionLevel, layerCount);
+  const pickBudget = opponentPickBudget(completionLevel, layerCount);
+  const temperature = opponentDraftTemperature(completionLevel, layerCount);
   const copiesPerCard = opponentCopiesPerCard(completionLevel, layerCount);
+
+  interface Candidate {
+    distinct: number[];
+    removed: number[];
+    trace: DraftPickTrace[];
+    coherence: DeckCoherenceScore;
+    affiliationFit: number;
+    combined: number;
+  }
+
+  const candidateSummaries: OpponentDraftCandidateSummary[] = [];
+  let winner: Candidate | null = null;
+  let winningIndex = 0;
+
+  for (let n = 0; n < OPPONENT_BEST_OF_N; n += 1) {
+    const rng = createSeededRng((poolSeed ^ (DRAFT_SEED_SALT * (n + 1))) >>> 0);
+    const draft = simulateCoherentDraft({
+      fitModel,
+      packs,
+      signatureCardNumbers: seeds,
+      pickBudget,
+      temperature,
+      packWeights,
+      rng,
+    });
+    const { kept, removed } = pruneToTarget(
+      draft.pickedCardNumbers,
+      targetDistinct,
+      fitModel,
+    );
+    const coherence = scoreDeckCoherence(kept, fitModel);
+    const affiliationFit =
+      affiliationCtx === null
+        ? 0
+        : scoreDeckAffiliationFit(kept, affiliationCtx);
+    const combined =
+      coherence.score +
+      (affiliationCtx === null ? 0 : AFFILIATION_OBJECTIVE_WEIGHT * affiliationFit);
+
+    candidateSummaries.push({
+      draftIndex: n,
+      coherence: coherence.score,
+      affiliationFit,
+      combined,
+    });
+
+    if (winner === null || combined > winner.combined) {
+      winner = { distinct: kept, removed, trace: draft.trace, coherence, affiliationFit, combined };
+      winningIndex = n;
+    }
+  }
+
+  if (winner === null) {
+    return null;
+  }
+
+  const distinctCards: CardData[] = [];
+  for (const num of winner.distinct) {
+    const card = cardDatabase.get(num);
+    if (card !== undefined) distinctCards.push(card);
+  }
+  if (distinctCards.length === 0) {
+    return null;
+  }
 
   const cards: CardData[] = [];
   for (const card of distinctCards) {
-    for (let copy = 0; copy < copiesPerCard; copy += 1) {
-      cards.push(card);
-    }
+    for (let copy = 0; copy < copiesPerCard; copy += 1) cards.push(card);
   }
 
-  return { cards, distinctCards, copiesPerCard };
+  return {
+    cards,
+    distinctCards,
+    copiesPerCard,
+    targetAffiliationId: affiliationCtx === null ? null : affiliation?.id ?? null,
+    candidateCount: OPPONENT_BEST_OF_N,
+    winningDraftIndex: winningIndex,
+    coherence: winner.coherence,
+    affiliationFit: winner.affiliationFit,
+    candidateSummaries,
+    pickBudget,
+    removalCount,
+    pickTrace: winner.trace,
+    removedCardNumbers: winner.removed,
+  };
 }
 
 /**
- * Reconstruction logging for one opponent deck (spec §8). Captures the opponent
- * Dreamcaller, the simulated pool strategy + seed + depth, the resolved
- * affiliation, the dreamsign carried (if any), and a decklist summary (distinct
- * cards, copies, total size, top card numbers), so a battle's opponent can be
- * reconstructed from `logs/quest-log.jsonl` filtered by `gameId`.
+ * Reconstruction logging for one opponent deck. Captures the opponent
+ * Dreamcaller, the draft seed + run depth, the resolved affiliation, the dreamsign
+ * carried (if any), and the full coherent-draft trace — best-of-N candidate
+ * scores and the winning index, the winning deck's coherence and affiliation fit,
+ * the pick budget and removal count, the winning per-pick trace (pack candidates,
+ * chosen card, fit, rank), and the cards removed in the post-draft prune — so a
+ * battle's opponent and the decision process that built it can be reconstructed
+ * from `logs/quest-log.jsonl` filtered by `gameId`.
  */
 export interface OpponentDeckLogArgs {
   battleEntryKey: string;
@@ -371,6 +651,11 @@ export interface OpponentDeckLogArgs {
   dreamsigns: readonly DreamsignTemplate[];
   build: OpponentDeckBuild | null;
   fallbackDeckSize: number;
+}
+
+/** Round a score for compact, stable log output. */
+function round4(value: number): number {
+  return Number(value.toFixed(4));
 }
 
 export function logOpponentDeckConstructed(args: OpponentDeckLogArgs): void {
@@ -391,6 +676,22 @@ export function logOpponentDeckConstructed(args: OpponentDeckLogArgs): void {
     .slice(0, 12)
     .map((card) => card.cardNumber);
 
+  // Compact per-pick trace: card numbers and scores only, not full card data.
+  const pickTrace = (build?.pickTrace ?? []).map((pick) => ({
+    pick: pick.pickIndex,
+    chosen: pick.chosenCardNumber,
+    fit: round4(pick.chosenFit),
+    rank: pick.chosenRank,
+    candidates: pick.packCandidateNumbers,
+  }));
+
+  const candidateSummaries = (build?.candidateSummaries ?? []).map((c) => ({
+    draftIndex: c.draftIndex,
+    coherence: round4(c.coherence),
+    affiliationFit: round4(c.affiliationFit),
+    combined: round4(c.combined),
+  }));
+
   logEvent("opponent_deck_constructed", {
     battleEntryKey,
     opponentDreamcallerId: opponentDreamcaller?.id ?? null,
@@ -402,11 +703,30 @@ export function logOpponentDeckConstructed(args: OpponentDeckLogArgs): void {
     midpointCompletionLevel: runMidpointCompletionLevel(layerCount),
     carriesDreamsign: opponentCarriesDreamsign(completionLevel, layerCount),
     affiliationId: affiliation?.id ?? null,
+    targetAffiliationId: build?.targetAffiliationId ?? null,
     dreamsignIds: dreamsigns.map((dreamsign) => dreamsign.id),
     builtFromSimulation: build !== null,
     distinctCardCount: build?.distinctCards.length ?? 0,
     copiesPerCard: build?.copiesPerCard ?? 0,
     deckSize: build?.cards.length ?? fallbackDeckSize,
     topCardNumbers,
+    // Coherent-draft reconstruction.
+    pickBudget: build?.pickBudget ?? 0,
+    removalCount: build?.removalCount ?? 0,
+    candidateCount: build?.candidateCount ?? 0,
+    winningDraftIndex: build?.winningDraftIndex ?? 0,
+    coherenceScore: build === null ? null : round4(build.coherence.score),
+    coherenceComponents:
+      build === null
+        ? null
+        : {
+            nearestNeighbor: round4(build.coherence.nearestNeighbor),
+            meanPairwiseCooccur: round4(build.coherence.meanPairwiseCooccur),
+            selfConsistency: round4(build.coherence.selfConsistency),
+          },
+    affiliationFit: build === null ? null : round4(build.affiliationFit),
+    candidateSummaries,
+    removedCardNumbers: build?.removedCardNumbers ?? [],
+    pickTrace,
   });
 }

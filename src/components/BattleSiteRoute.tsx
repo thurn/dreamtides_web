@@ -54,6 +54,8 @@ export function BattleSiteRoute({
     dreamwellCards: questContent.dreamwellCards,
     dreamsignTemplates: questContent.dreamsignTemplates,
     poolContext: questContent.poolContext,
+    fitModel: questContent.fitModel,
+    draftRecords: questContent.draftRecords,
     seedOverride: runtimeConfig.seedOverride,
     aiMode: runtimeConfig.aiMode,
   });

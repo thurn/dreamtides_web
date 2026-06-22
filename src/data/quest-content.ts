@@ -647,12 +647,6 @@ export async function loadQuestContent(
   // fit model.
   const usesFitModel =
     draftMode === "replay" || draftMode === "fresh20" || journeyVariant === "v2";
-  // The pick-data pool variants grow their pool from the same record corpus, so
-  // they need the records fetched in pool mode too. Without the records each
-  // builds an empty corpus and `growPoolFromCorpus` silently falls back to the
-  // random color-pool generator — an unfocused pool that is not the variant the
-  // run asked for.
-  const poolNeedsRecords = POOL_VARIANTS_NEEDING_RECORDS.has(poolVariant);
   // The `embedded` variant grows from the committed affinity corpus instead of
   // the records, so it fetches `/affinity-corpus-data.json` rather than the
   // 19 MB record bundle; other pool modes skip it.
@@ -700,12 +694,12 @@ export async function loadQuestContent(
     loadDreamwellCards(),
     loadDreamsignTemplates(),
     loadDecklists(),
-    // Fetch the draft records corpus when a deck-fit mode or a pick-data pool
-    // variant needs it; other pool modes skip it so the default load path incurs
-    // no extra network cost.
-    usesFitModel || poolNeedsRecords
-      ? loadDraftRecords()
-      : Promise.resolve([] as DraftRecord[]),
+    // The draft-record corpus is always fetched: beyond the deck-fit modes and
+    // the pick-data pool variants, every run needs it to build coherent opponent
+    // decks (the corpus supplies both the fit model and the draft's pack
+    // structures). A failed fetch degrades to an empty corpus, which makes
+    // opponent construction fall back to a sampled deck rather than erroring.
+    loadDraftRecords().catch(() => [] as DraftRecord[]),
     // Fetch the committed corpus only for the variants that grow from it.
     poolNeedsCorpus
       ? loadAffinityCorpus()
@@ -790,39 +784,19 @@ export async function loadQuestContent(
     poolVariant,
   };
 
-  if (usesFitModel) {
-    // Live fit corpus = all record mainboards (no per-record leave-one-out).
-    // Live play does not teacher-force the deck along the replayed record's pick
-    // path, so the self-neighbour leak the offline eval guards against does not
-    // occur here; the eval's leave-one-out exists only to produce an honest
-    // offline metric.
-    const fitModel =
-      draftRecords.length > 0
-        ? buildFitModel(
-            draftRecords.map((r) => r.mainboard),
-            nameIndex,
-          )
-        : undefined;
-
-    return {
-      cardDatabase,
-      dreamcallers,
-      dreamwellCards,
-      dreamsignTemplates,
-      dreamscapes,
-      affiliations,
-      guides,
-      atlasConfig,
-      apollyonIncarnations,
-      poolContext,
-      draftMode,
-      draftRecords,
-      fitModel,
-      fresh20PackSize,
-      merchantCorpus,
-      dreamsignProfiles,
-    };
-  }
+  // Live fit corpus = all record mainboards (no per-record leave-one-out). Live
+  // play does not teacher-force the deck along the replayed record's pick path,
+  // so the self-neighbour leak the offline eval guards against does not occur
+  // here; the eval's leave-one-out exists only to produce an honest offline
+  // metric. The model is built once here and reused across every battle in the
+  // session (it backs the deck-fit draft modes AND opponent deck construction).
+  const fitModel =
+    draftRecords.length > 0
+      ? buildFitModel(
+          draftRecords.map((r) => r.mainboard),
+          nameIndex,
+        )
+      : undefined;
 
   return {
     cardDatabase,
@@ -836,6 +810,9 @@ export async function loadQuestContent(
     apollyonIncarnations,
     poolContext,
     draftMode,
+    draftRecords,
+    fitModel,
+    ...(usesFitModel ? { fresh20PackSize } : {}),
     merchantCorpus,
     dreamsignProfiles,
   };

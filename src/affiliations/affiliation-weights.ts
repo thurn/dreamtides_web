@@ -300,6 +300,40 @@ export function resolveNodeAffiliationWeights(
 }
 
 /**
+ * A deck's affiliation fit: the mean affinity of its distinct cards to the
+ * affiliation probe, in [0,1]. Cards absent from the corpus (or off-faction)
+ * carry affinity 0 and pull the mean down, so a deck that genuinely belongs to
+ * the affiliation scores high while a tight archetype from the wrong faction
+ * scores low. Pure: the same deck and context always yield the same number.
+ * Used by opponent construction's best-of-N selection and by the coherence
+ * validation harness so both report the same affiliation-fit measure.
+ *
+ * @param deckCardNumbers The deck's card numbers (duplicates are collapsed).
+ * @param ctx The affiliation weight context from
+ *   {@link buildAffiliationWeightContext}.
+ */
+export function scoreDeckAffiliationFit(
+  deckCardNumbers: readonly number[],
+  ctx: AffiliationWeightContext,
+): number {
+  const nameByNumber = new Map<number, string>();
+  for (const [name, num] of ctx.numberByName) {
+    if (!nameByNumber.has(num)) nameByNumber.set(num, name);
+  }
+  const distinct = new Set<number>();
+  let sum = 0;
+  let count = 0;
+  for (const num of deckCardNumbers) {
+    if (distinct.has(num)) continue;
+    distinct.add(num);
+    const name = nameByNumber.get(num);
+    sum += name === undefined ? 0 : ctx.affinityByName.get(name) ?? 0;
+    count += 1;
+  }
+  return count === 0 ? 0 : sum / count;
+}
+
+/**
  * Opponent-deck bias hook for Task 9. Given candidate cards for a generated
  * opponent deck and the dreamscape's affiliation, returns the same candidate list
  * paired with a positive multiplicative weight per candidate, biased toward the

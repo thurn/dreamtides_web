@@ -17,6 +17,8 @@ import type {
 } from "../types/content";
 import type { DreamwellCard } from "../data/dreamwell-database";
 import type { RunPoolContext } from "../data/quest-content";
+import type { DraftRecord } from "../data/cards-v2-database";
+import type { FitModel } from "../draft/replay/fit-model";
 import type { QuestState, SiteState } from "../types/quest";
 
 /**
@@ -74,6 +76,10 @@ export function useEnsureBattleSession(input: {
   dreamwellCards: readonly DreamwellCard[];
   dreamsignTemplates?: readonly DreamsignTemplate[];
   poolContext?: RunPoolContext;
+  /** The corpus-trained fit model that drives the opponent's coherent draft. */
+  fitModel?: FitModel;
+  /** The adapted draft-record corpus supplying the opponent draft's packs. */
+  draftRecords?: readonly DraftRecord[];
   seedOverride: number | null;
   aiMode?: boolean;
 }): void {
@@ -110,6 +116,8 @@ export function useEnsureBattleSession(input: {
       dreamwellCards: input.dreamwellCards,
       dreamsignTemplates: input.dreamsignTemplates,
       poolContext: input.poolContext,
+      fitModel: input.fitModel,
+      draftRecords: input.draftRecords,
       seedOverride: input.seedOverride,
       aiMode: input.aiMode,
       onOpponentDeckConstructed: (args) => {
@@ -148,6 +156,8 @@ export function useEnsureBattleSession(input: {
     input.dreamwellCards,
     input.dreamsignTemplates,
     input.poolContext,
+    input.fitModel,
+    input.draftRecords,
     input.questState,
     input.roomId,
     input.seedOverride,
