@@ -601,6 +601,12 @@ function GlobalBattleState({
         <span className="lbl">Stack</span>
         <span className="val">{String((state.stack ?? []).length)}</span>
       </div>
+      <div className="row-ctl">
+        <span className="lbl">Dreamwell order</span>
+        <span className="val">
+          {String(battleInit.dreamwellDeck[state.dreamwellDeckIndex]?.order ?? "—")}
+        </span>
+      </div>
     </div>
   );
 }
