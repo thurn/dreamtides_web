@@ -149,6 +149,7 @@ function PlayableBattleScreenInner({
     roomId,
     clientId,
     connectedCount,
+    isPrimaryClient,
     remoteCommandEpoch,
   } = useMultiplayerBattle();
   if (maybeBattleState === null || maybeReducerState === null) {
@@ -352,11 +353,16 @@ function PlayableBattleScreenInner({
   // automation so the card is always shown — while the energy it grants is
   // folded in by the automation expansion of `DRAW_DREAMWELL_CARD`.
   //
-  // A ref keyed by the active (side, turn) ensures the reveal dispatches at most
-  // once per Dreamwell phase, mirroring the AI defensive auto-block. The ref
-  // guard (rather than reading `dreamwellDrawnTurn` back from state) is
-  // essential: with automation on the reveal expands into several commands, and
-  // a state-derived guard can re-enter before that batch commits, looping.
+  // The reveal is a once-per-turn AUTHORITY action, not a player gesture: it must
+  // be dispatched by exactly one client. Both sides draw from one shared
+  // `dreamwellDeckIndex`, so in a shared room every connected client running this
+  // effect would dispatch its own `DRAW_DREAMWELL_CARD` and the index would
+  // advance once per client (e.g. +2 with two clients), galloping through the
+  // `order` bands. Gate on `isPrimaryClient` — the same single-authority signal
+  // that owns battle init — so only one client reveals and the others receive it
+  // via the synced state. (Single-player has one primary client, so it is
+  // unaffected.) The per-(side, turn) ref still guards that one client against
+  // re-dispatching within the phase.
   const activeSide = reducerState.mutable.activeSide;
   const activePhase = reducerState.mutable.phase;
   const activeTurnNumber = reducerState.mutable.turnNumber;
@@ -364,6 +370,9 @@ function PlayableBattleScreenInner({
   const lastDreamwellRevealKeyRef = useRef<string | null>(null);
   useEffect(() => {
     if (battleResult !== null || activePhase !== "dreamwell") {
+      return;
+    }
+    if (!isPrimaryClient) {
       return;
     }
     const revealKey = `${activeSide}:${String(activeTurnNumber)}`;
@@ -383,6 +392,7 @@ function PlayableBattleScreenInner({
     });
   }, [
     handleCommand,
+    isPrimaryClient,
     logDreamwellReveal,
     activeSide,
     activePhase,
