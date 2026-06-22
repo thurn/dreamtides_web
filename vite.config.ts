@@ -640,8 +640,56 @@ export function generatedCardDataDriftPlugin(): Plugin {
   };
 }
 
+/**
+ * Build-time guard that fails a production build when any required Firebase
+ * config env var is empty. The deployed app defaults to the realtime database
+ * (see `parseDatabaseMode` in src/runtime/runtime-config.ts), which reads these
+ * values at runtime. `.env` is gitignored, so a build from a checkout, worktree,
+ * or CI runner that lacks it would otherwise silently ship a config-less bundle
+ * that throws "Missing Firebase config" in production. Failing the build here
+ * turns that into an immediate, obvious error before anything is deployed.
+ *
+ * `apply: "build"` scopes it to `vite build`; the dev server and tests skip it,
+ * and it only enforces in production builds (not a `--mode development` build).
+ */
+function firebaseConfigGuardPlugin(): Plugin {
+  const requiredKeys = [
+    "VITE_FIREBASE_API_KEY",
+    "VITE_FIREBASE_AUTH_DOMAIN",
+    "VITE_FIREBASE_DATABASE_URL",
+    "VITE_FIREBASE_PROJECT_ID",
+    "VITE_FIREBASE_APP_ID",
+  ];
+
+  return {
+    name: "firebase-config-guard",
+    apply: "build",
+    configResolved(resolved) {
+      if (!resolved.isProduction) {
+        return;
+      }
+
+      const missing = requiredKeys.filter((key) => {
+        const value = resolved.env[key];
+        return typeof value !== "string" || value.trim() === "";
+      });
+
+      if (missing.length > 0) {
+        throw new Error(
+          `Production build is missing required Firebase config env vars: ` +
+            `${missing.join(", ")}. These are read from .env, which is ` +
+            `gitignored, so a fresh checkout/worktree/CI runner will not have ` +
+            `them. Populate .env before building or deploying (see AGENTS.md ` +
+            `"Deploy").`,
+        );
+      }
+    },
+  };
+}
+
 export default defineConfig({
   plugins: [
+    firebaseConfigGuardPlugin(),
     react(),
     tailwindcss(),
     questLogPlugin(),

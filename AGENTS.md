@@ -94,7 +94,7 @@ tested viewport sizes.
 
 # Deploy
 
-Deploy the prototype to production with `npm run build && firebase deploy --only hosting`.
+Deploy the prototype to production with `npm run build && firebase deploy --only hosting`; the production build needs a populated `.env` (gitignored) with the `VITE_FIREBASE_*` config, and the build fails fast if those vars are missing.
 
 # Documentation style
 
