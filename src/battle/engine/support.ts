@@ -10,19 +10,19 @@
  * the play area expands to, clipped at the slot universe's edges.
  */
 
-import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
+import { backRankSlotId, frontRankSlotId, slotIndex } from "../types";
 import type { FrontRankSlotId, BackRankSlotId } from "../types";
 
 /**
  * Returns the deploy slots (front rank) that the given reserve slot supports:
- * `Bi` supports `F(i-1)` and `Fi`, clipped to valid front-rank indices.
+ * `Bi` supports `F(i-1)` and `Fi`, for any non-negative front-rank index.
  */
 export function supportedDeploySlots(reserve: BackRankSlotId): FrontRankSlotId[] {
-  const i = BACK_RANK_SLOT_IDS.indexOf(reserve);
+  const i = slotIndex(reserve);
   const result: FrontRankSlotId[] = [];
   for (const j of [i - 1, i]) {
-    if (j >= 0 && j < FRONT_RANK_SLOT_IDS.length) {
-      result.push(FRONT_RANK_SLOT_IDS[j]);
+    if (j >= 0) {
+      result.push(frontRankSlotId(j));
     }
   }
   return result;
@@ -30,14 +30,14 @@ export function supportedDeploySlots(reserve: BackRankSlotId): FrontRankSlotId[]
 
 /**
  * Returns the reserve slots (back rank) that support the given deploy slot:
- * `Fj` is supported by `Bj` and `B(j+1)`, clipped to valid back-rank indices.
+ * `Fj` is supported by `Bj` and `B(j+1)`, for any non-negative back-rank index.
  */
 export function supportingReserveSlots(deploy: FrontRankSlotId): BackRankSlotId[] {
-  const j = FRONT_RANK_SLOT_IDS.indexOf(deploy);
+  const j = slotIndex(deploy);
   const result: BackRankSlotId[] = [];
   for (const i of [j, j + 1]) {
-    if (i >= 0 && i < BACK_RANK_SLOT_IDS.length) {
-      result.push(BACK_RANK_SLOT_IDS[i]);
+    if (i >= 0) {
+      result.push(backRankSlotId(i));
     }
   }
   return result;

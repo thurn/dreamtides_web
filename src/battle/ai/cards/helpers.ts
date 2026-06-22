@@ -1,5 +1,5 @@
-import { BACK_RANK_SLOT_IDS } from "../../types";
-import type { ForwardModel, AiCard } from "../forward-model";
+import { backRankSlotId } from "../../types";
+import { firstEmptyModelSlot, type ForwardModel, type AiCard } from "../forward-model";
 
 /**
  * Removes `self` (matched by `battleCardId`) from `model.aiHand`. Returns the
@@ -16,13 +16,10 @@ export function removeFromHand(model: ForwardModel, self: AiCard): AiCard | null
 
 /**
  * Returns whether a character can be played now: the AI can afford its energy
- * cost and at least one back-rank slot is free to receive it.
+ * cost. The back rank grows without bound, so it always has room to receive it.
  */
 export function characterCanPlay(model: ForwardModel, self: AiCard): boolean {
-  if (model.aiEnergy < self.energyCost) {
-    return false;
-  }
-  return BACK_RANK_SLOT_IDS.some((slot) => model.aiBackRank[slot] === null);
+  return model.aiEnergy >= self.energyCost;
 }
 
 /**
@@ -30,20 +27,15 @@ export function characterCanPlay(model: ForwardModel, self: AiCard): boolean {
  * hand, and places it into the first empty back-rank slot with
  * `canChallengeThisTurn = false` (a character cannot challenge the turn it is
  * played — see `battle_ai.md` §"The Planner"). The placed card is the instance
- * pulled from hand when present, falling back to `self`. If every back-rank slot
- * is occupied the card is dropped after paying its cost (the planner only
- * proposes a character play when a back-rank slot is free).
+ * pulled from hand when present, falling back to `self`. The back rank grows on
+ * demand, so the card always lands in a slot.
  */
 export function playCharacterToBackRank(model: ForwardModel, self: AiCard): void {
   model.aiEnergy -= self.energyCost;
   const card = removeFromHand(model, self) ?? self;
   card.canChallengeThisTurn = false;
-  for (const slot of BACK_RANK_SLOT_IDS) {
-    if (model.aiBackRank[slot] === null) {
-      model.aiBackRank[slot] = card;
-      return;
-    }
-  }
+  const slot = firstEmptyModelSlot(model.aiBackRank, backRankSlotId);
+  model.aiBackRank[slot] = card;
 }
 
 /**

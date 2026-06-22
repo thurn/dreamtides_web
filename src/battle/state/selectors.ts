@@ -12,7 +12,14 @@ import type {
   FrontRankSlotId,
   BackRankSlotId,
 } from "../types";
-import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
+import {
+  MIN_FRONT_RANK_SLOTS,
+  backRankSlotId,
+  isBackRankSlotId,
+  isFrontRankSlotId,
+  rankSlotIds,
+  slotIndex,
+} from "../types";
 import {
   selectEffectiveSparkForInstance,
   selectFigmentSparkContext,
@@ -77,7 +84,7 @@ export function selectKindleTargetBattleCardId(
     return preferredBattleCardId;
   }
 
-  for (const slotId of FRONT_RANK_SLOT_IDS) {
+  for (const slotId of rankSlotIds(state.sides[side].frontRank)) {
     const battleCardId = state.sides[side].frontRank[slotId];
 
     if (battleCardId !== null) {
@@ -85,7 +92,7 @@ export function selectKindleTargetBattleCardId(
     }
   }
 
-  for (const slotId of BACK_RANK_SLOT_IDS) {
+  for (const slotId of rankSlotIds(state.sides[side].backRank)) {
     const battleCardId = state.sides[side].backRank[slotId];
 
     if (battleCardId !== null) {
@@ -305,33 +312,31 @@ export function selectIsOpponentHandCardHidden(
   return !instance.isRevealedToPlayer;
 }
 
-/** Minimum front-rank width — the play area never contracts below 2 front / 3 back. */
-const MIN_FRONT_RANK_SLOTS = 2;
-
 /**
  * Smallest front-rank width that fits `side`'s current occupants while leaving at
  * least one open slot in each rank (rules §The Play Area, expansion/contraction).
  * Back-rank width is always `frontSize + 1`, so a back-rank occupant at index `i`
- * (or a full back rank) forces `frontSize ≥ i` (resp. `≥ backCount`).
+ * (or a full back rank) forces `frontSize ≥ i` (resp. `≥ backCount`). The width
+ * grows without bound as characters enter play.
  */
 function selectSideFrontRankRequirement(state: BattleMutableState, side: BattleSide): number {
   const { frontRank, backRank } = state.sides[side];
   let frontCount = 0;
   let maxFrontIndex = -1;
-  FRONT_RANK_SLOT_IDS.forEach((slotId, index) => {
+  for (const slotId of rankSlotIds(frontRank)) {
     if (frontRank[slotId] !== null) {
       frontCount += 1;
-      maxFrontIndex = index;
+      maxFrontIndex = Math.max(maxFrontIndex, slotIndex(slotId));
     }
-  });
+  }
   let backCount = 0;
   let maxBackIndex = -1;
-  BACK_RANK_SLOT_IDS.forEach((slotId, index) => {
+  for (const slotId of rankSlotIds(backRank)) {
     if (backRank[slotId] !== null) {
       backCount += 1;
-      maxBackIndex = index;
+      maxBackIndex = Math.max(maxBackIndex, slotIndex(slotId));
     }
-  });
+  }
   return Math.max(
     MIN_FRONT_RANK_SLOTS,
     maxFrontIndex + 1,
@@ -344,21 +349,18 @@ function selectSideFrontRankRequirement(state: BattleMutableState, side: BattleS
 /**
  * The active play-area dimensions: how many front/back slots are currently shown
  * and usable. Derived purely from occupancy (no stored state), so expansion and
- * contraction follow automatically as characters enter and leave play. The front
- * width is the max across both sides so that vertically-paired challenge lanes
- * (challenge.ts resolves the same `slotId` across sides) are never hidden on one
- * side. `backSize` is always `frontSize + 1`.
+ * contraction follow automatically as characters enter and leave play, with no
+ * upper bound. The front width is the max across both sides so that
+ * vertically-paired challenge lanes (challenge.ts resolves the same `slotId`
+ * across sides) are never hidden on one side. `backSize` is always `frontSize + 1`.
  */
 export function selectPlayAreaSize(state: BattleMutableState): {
   frontSize: number;
   backSize: number;
 } {
-  const frontSize = Math.min(
-    FRONT_RANK_SLOT_IDS.length,
-    Math.max(
-      selectSideFrontRankRequirement(state, "player"),
-      selectSideFrontRankRequirement(state, "enemy"),
-    ),
+  const frontSize = Math.max(
+    selectSideFrontRankRequirement(state, "player"),
+    selectSideFrontRankRequirement(state, "enemy"),
   );
   return { frontSize, backSize: frontSize + 1 };
 }
@@ -367,30 +369,21 @@ export function selectDefaultCharacterPlaySlot(
   state: BattleMutableState,
   side: BattleSide,
 ): BattleFieldSlotAddress | null {
-  for (const slotId of BACK_RANK_SLOT_IDS) {
-    if (state.sides[side].backRank[slotId] === null) {
-      return {
-        side,
-        zone: "backRank",
-        slotId,
-      };
+  const { backRank } = state.sides[side];
+
+  for (const slotId of rankSlotIds(backRank)) {
+    if (backRank[slotId] === null) {
+      return { side, zone: "backRank", slotId };
     }
   }
 
-  // Spec E-16: player card play must never be blocked. When the reserve is
-  // full, fall back to the leftmost empty deployed slot so the character can
-  // still enter play.
-  for (const slotId of FRONT_RANK_SLOT_IDS) {
-    if (state.sides[side].frontRank[slotId] === null) {
-      return {
-        side,
-        zone: "frontRank",
-        slotId,
-      };
-    }
-  }
-
-  return null;
+  // Every materialized reserve slot is full: grow the back rank rather than
+  // blocking the play. Spec E-16: player card play must never be blocked.
+  return {
+    side,
+    zone: "backRank",
+    slotId: backRankSlotId(rankSlotIds(backRank).length),
+  };
 }
 
 export function selectBattlefieldSlotOccupant(
@@ -402,20 +395,20 @@ export function selectBattlefieldSlotOccupant(
   }
 
   if (target.zone === "backRank") {
-    return state.sides[target.side].backRank[target.slotId as BackRankSlotId];
+    return state.sides[target.side].backRank[target.slotId as BackRankSlotId] ?? null;
   }
 
-  return state.sides[target.side].frontRank[target.slotId as FrontRankSlotId];
+  return state.sides[target.side].frontRank[target.slotId as FrontRankSlotId] ?? null;
 }
 
 export function isBattleFieldSlotAddressValid(
   target: BattleFieldSlotAddress,
 ): target is BattleFieldSlotAddress {
   if (target.zone === "backRank") {
-    return BACK_RANK_SLOT_IDS.includes(target.slotId as BackRankSlotId);
+    return isBackRankSlotId(target.slotId);
   }
 
-  return FRONT_RANK_SLOT_IDS.includes(target.slotId as FrontRankSlotId);
+  return isFrontRankSlotId(target.slotId);
 }
 
 function selectOccupiedBattlefieldSlot(
@@ -425,7 +418,7 @@ function selectOccupiedBattlefieldSlot(
   battleCardId: string,
 ): BattleFieldCardLocation | null {
   if (zone === "backRank") {
-    for (const slotId of BACK_RANK_SLOT_IDS) {
+    for (const slotId of rankSlotIds(state.sides[side].backRank)) {
       const occupant = state.sides[side].backRank[slotId];
 
       if (occupant === battleCardId) {
@@ -440,7 +433,7 @@ function selectOccupiedBattlefieldSlot(
     return null;
   }
 
-  for (const slotId of FRONT_RANK_SLOT_IDS) {
+  for (const slotId of rankSlotIds(state.sides[side].frontRank)) {
     const occupant = state.sides[side].frontRank[slotId];
 
     if (occupant === battleCardId) {

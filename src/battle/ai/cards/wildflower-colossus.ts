@@ -1,5 +1,5 @@
 import { supportingReserveSlots } from "../../engine/support";
-import { FRONT_RANK_SLOT_IDS } from "../../types";
+import { rankSlotIds } from "../../types";
 import type { ForwardModel, AiCard } from "../forward-model";
 import type { StarterCardModel } from "./index";
 import { characterCanPlay, playCharacterToBackRank } from "./helpers";
@@ -22,14 +22,14 @@ export const wildflowerColossus: StarterCardModel = {
     playCharacterToBackRank(model, self);
   },
   selfStaticSpark(model: ForwardModel, self: AiCard): number {
-    const deploySlot = FRONT_RANK_SLOT_IDS.find(
+    const deploySlot = rankSlotIds(model.aiFrontRank).find(
       (slot) => model.aiFrontRank[slot]?.battleCardId === self.battleCardId,
     );
     if (deploySlot === undefined) {
       return 0;
     }
     const supporters = supportingReserveSlots(deploySlot).filter(
-      (reserveSlot) => model.aiBackRank[reserveSlot] !== null,
+      (reserveSlot) => (model.aiBackRank[reserveSlot] ?? null) !== null,
     ).length;
     return 2 * supporters;
   },

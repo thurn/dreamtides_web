@@ -1,5 +1,5 @@
 import { supportedDeploySlots } from "../../engine/support";
-import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../../types";
+import { rankSlotIds } from "../../types";
 import type { ForwardModel } from "../forward-model";
 import { starterCardModels } from "./index";
 
@@ -36,7 +36,7 @@ export function buildSupportContribution(model: ForwardModel): Map<string, numbe
   };
 
   // Support: back-rank cards buffing the front allies they cover.
-  for (const backRankSlot of BACK_RANK_SLOT_IDS) {
+  for (const backRankSlot of rankSlotIds(model.aiBackRank)) {
     const backRankCard = model.aiBackRank[backRankSlot];
     if (backRankCard === null) {
       continue;
@@ -47,7 +47,7 @@ export function buildSupportContribution(model: ForwardModel): Map<string, numbe
       continue;
     }
     for (const frontRankSlot of supportedDeploySlots(backRankSlot)) {
-      const frontRankCard = model.aiFrontRank[frontRankSlot];
+      const frontRankCard = model.aiFrontRank[frontRankSlot] ?? null;
       if (frontRankCard !== null) {
         add(frontRankCard.battleCardId, bonus);
       }
@@ -55,7 +55,7 @@ export function buildSupportContribution(model: ForwardModel): Map<string, numbe
   }
 
   // Self-static: front-rank cards buffing themselves.
-  for (const frontRankSlot of FRONT_RANK_SLOT_IDS) {
+  for (const frontRankSlot of rankSlotIds(model.aiFrontRank)) {
     const frontRankCard = model.aiFrontRank[frontRankSlot];
     if (frontRankCard === null) {
       continue;

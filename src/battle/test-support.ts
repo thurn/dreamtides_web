@@ -1,22 +1,28 @@
 import type { CardData } from "../types/cards";
 import type { DreamcallerContent, ResolvedDreamcallerPackage } from "../types/content";
 import type { DeckEntry, Dreamcaller, Dreamsign, QuestState, SiteState } from "../types/quest";
-import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS, createEmptySlotRecord } from "./types";
+import { backRankSlotIds, createEmptySlotRecord, frontRankSlotIds } from "./types";
 import type { BackRankSlotId, FrontRankSlotId } from "./types";
 
+/** A generous materialized window for test ranks. The play area grows without
+ *  bound at runtime; tests build an explicit window and override slots by id. */
+const TEST_FRONT_RANK_WINDOW = 12;
+const TEST_BACK_RANK_WINDOW = TEST_FRONT_RANK_WINDOW + 1;
+
 /**
- * Full front-rank slot record with every slot `null`, for building battle test
- * states. The `Record<…, null>` return is assignable to both the `string | null`
- * (BattleMutableState) and `AiCard | null` (forward model) slot shapes; override
- * individual slots by spreading, e.g. `{ ...emptyFrontRankSlots(), F0: card }`.
+ * Front-rank slot record with every slot `null` across the test window, for
+ * building battle test states. The `Record<…, null>` return is assignable to both
+ * the `string | null` (BattleMutableState) and `AiCard | null` (forward model)
+ * slot shapes; override individual slots by spreading, e.g.
+ * `{ ...emptyFrontRankSlots(), F0: card }`.
  */
 export function emptyFrontRankSlots(): Record<FrontRankSlotId, null> {
-  return createEmptySlotRecord(FRONT_RANK_SLOT_IDS);
+  return createEmptySlotRecord(frontRankSlotIds(TEST_FRONT_RANK_WINDOW));
 }
 
-/** Full back-rank slot record with every slot `null`; see {@link emptyFrontRankSlots}. */
+/** Back-rank slot record with every slot `null`; see {@link emptyFrontRankSlots}. */
 export function emptyBackRankSlots(): Record<BackRankSlotId, null> {
-  return createEmptySlotRecord(BACK_RANK_SLOT_IDS);
+  return createEmptySlotRecord(backRankSlotIds(TEST_BACK_RANK_WINDOW));
 }
 
 export function makeBattleTestSite(): SiteState {

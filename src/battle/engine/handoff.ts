@@ -1,6 +1,6 @@
 import type { BattleDebugEdit } from "../debug/commands";
 import type { BattleMutableState, BattleResult, BattleSide } from "../types";
-import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
+import { rankSlotIds } from "../types";
 
 export interface HandoffInput {
   state: BattleMutableState;
@@ -48,10 +48,10 @@ export function endingBanishEdits(
   for (const battleCardId of sideState.hand) {
     appendBanishEdit(state, side, battleCardId, "ephemeral", edits);
   }
-  for (const slotId of BACK_RANK_SLOT_IDS) {
+  for (const slotId of rankSlotIds(sideState.backRank)) {
     appendBanishEdit(state, side, sideState.backRank[slotId], "offering", edits);
   }
-  for (const slotId of FRONT_RANK_SLOT_IDS) {
+  for (const slotId of rankSlotIds(sideState.frontRank)) {
     appendBanishEdit(state, side, sideState.frontRank[slotId], "offering", edits);
   }
 
@@ -92,10 +92,10 @@ export function dawnClearEdits(
   const edits: BattleDebugEdit[] = [];
   const sideState = state.sides[side];
 
-  for (const slotId of BACK_RANK_SLOT_IDS) {
+  for (const slotId of rankSlotIds(sideState.backRank)) {
     appendExhaustClearEdit(state, sideState.backRank[slotId], edits);
   }
-  for (const slotId of FRONT_RANK_SLOT_IDS) {
+  for (const slotId of rankSlotIds(sideState.frontRank)) {
     appendExhaustClearEdit(state, sideState.frontRank[slotId], edits);
   }
 

@@ -1,6 +1,6 @@
 import type { BattleDebugEdit } from "../debug/commands";
 import type { BattleMutableState, BattleSide } from "../types";
-import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
+import { rankSlotIds } from "../types";
 
 // ---------------------------------------------------------------------------
 // Core types
@@ -199,11 +199,11 @@ export function topOfDeck(
 /** Collects all non-null occupants from both rank zones for `side`. */
 function ranksOccupants(state: BattleMutableState, side: BattleSide): string[] {
   const result: string[] = [];
-  for (const slotId of BACK_RANK_SLOT_IDS) {
+  for (const slotId of rankSlotIds(state.sides[side].backRank)) {
     const id = state.sides[side].backRank[slotId];
     if (id !== null) result.push(id);
   }
-  for (const slotId of FRONT_RANK_SLOT_IDS) {
+  for (const slotId of rankSlotIds(state.sides[side].frontRank)) {
     const id = state.sides[side].frontRank[slotId];
     if (id !== null) result.push(id);
   }

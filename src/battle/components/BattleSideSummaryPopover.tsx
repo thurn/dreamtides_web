@@ -5,7 +5,7 @@ import type {
   BattleMutableState,
   BattleSide,
 } from "../types";
-import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
+import { rankSlotIds } from "../types";
 import { DreamcallerPortrait } from "../../components/DreamcallerPortrait";
 import { RulesText } from "../../components/RulesText";
 
@@ -37,8 +37,12 @@ export function BattleSideSummaryPopover({
 }) {
   const popoverRef = useRef<HTMLDivElement | null>(null);
   const sideState = state.sides[side];
-  const backRankCount = BACK_RANK_SLOT_IDS.filter((slotId) => sideState.backRank[slotId] !== null).length;
-  const frontRankCount = FRONT_RANK_SLOT_IDS.filter((slotId) => sideState.frontRank[slotId] !== null).length;
+  const backRankCount = rankSlotIds(sideState.backRank).filter(
+    (slotId) => sideState.backRank[slotId] !== null,
+  ).length;
+  const frontRankCount = rankSlotIds(sideState.frontRank).filter(
+    (slotId) => sideState.frontRank[slotId] !== null,
+  ).length;
   const showDreamcallerSummary = dreamcaller !== null;
 
   useEffect(() => {

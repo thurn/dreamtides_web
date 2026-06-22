@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { planNextAction, type PlannerOptions } from "./planner";
 import { starterCardModels } from "./cards/index";
 import type { AiCard, AiOpponentBody, ForwardModel } from "./forward-model";
-import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
+import { isBackRankSlotId, isFrontRankSlotId, rankSlotIds } from "../types";
 import type { FrontRankSlotId } from "../types";
 import { emptyFrontRankSlots, emptyBackRankSlots } from "../test-support";
 
@@ -173,7 +173,7 @@ describe("planNextAction", () => {
       expect(action.kind).toBe("PLAY_CARD");
       expect(action.self?.cardNumber).toBe(510);
       expect(action.toSlot).toBeDefined();
-      expect(BACK_RANK_SLOT_IDS).toContain(action.toSlot);
+      expect(isBackRankSlotId(action.toSlot ?? "")).toBe(true);
       // The named slot is empty in the source model.
       expect(model.aiBackRank[action.toSlot as "B0"]).toBeNull();
     });
@@ -193,7 +193,7 @@ describe("planNextAction", () => {
       const action = planNextAction(model, defaultOptions());
       expect(action.kind).toBe("MOVE_CARD");
       expect(action.toSlot).toBeDefined();
-      expect(FRONT_RANK_SLOT_IDS).toContain(action.toSlot);
+      expect(isFrontRankSlotId(action.toSlot ?? "")).toBe(true);
       // Destination is empty in the source model.
       expect(model.aiFrontRank[action.toSlot as "F0"]).toBeNull();
       expect(action.self?.battleCardId).toBe(ready.battleCardId);
@@ -228,7 +228,7 @@ describe("planNextAction", () => {
           const toSlot = action.toSlot as "F0";
           expect(model.aiFrontRank[toSlot]).toBeNull();
           // Apply the move on the live model.
-          for (const slot of BACK_RANK_SLOT_IDS) {
+          for (const slot of rankSlotIds(model.aiBackRank)) {
             if (model.aiBackRank[slot]?.battleCardId === self.battleCardId) {
               model.aiBackRank[slot] = null;
             }

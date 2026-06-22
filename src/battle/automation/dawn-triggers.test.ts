@@ -6,7 +6,7 @@ import type {
   BattleSide,
   FrontRankSlotId,
 } from "../types";
-import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
+import { backRankSlotIds, createEmptySlotRecord, frontRankSlotIds } from "../types";
 import type { BattleCardEffectScript } from "./battle-card-effects-table";
 import {
   BATTLE_CARD_EFFECTS,
@@ -48,17 +48,11 @@ function makeInstance(spec: InstanceSpec): BattleCardInstance {
 }
 
 function emptyBackRank(): Record<BackRankSlotId, string | null> {
-  return Object.fromEntries(BACK_RANK_SLOT_IDS.map((s) => [s, null])) as Record<
-    BackRankSlotId,
-    string | null
-  >;
+  return createEmptySlotRecord(backRankSlotIds(13));
 }
 
 function emptyFrontRank(): Record<FrontRankSlotId, string | null> {
-  return Object.fromEntries(FRONT_RANK_SLOT_IDS.map((s) => [s, null])) as Record<
-    FrontRankSlotId,
-    string | null
-  >;
+  return createEmptySlotRecord(frontRankSlotIds(12));
 }
 
 function makeState(sides: Partial<Record<BattleSide, SideSpec>>): BattleMutableState {

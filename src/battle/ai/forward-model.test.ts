@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { cloneForwardModel, effectiveSpark, forwardModelFromState } from "./forward-model";
 import type { ForwardModel } from "./forward-model";
 import { allocateBattleCardInstance } from "../state/create-initial-state";
-import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
+import { rankSlotIds } from "../types";
 import type {
   BattleCardProvenance,
   BattleDeckCardDefinition,
@@ -178,14 +178,14 @@ describe("forwardModelFromState", () => {
 
     const model = forwardModelFromState(state, ai);
 
-    for (const slot of FRONT_RANK_SLOT_IDS) {
+    for (const slot of rankSlotIds(model.aiFrontRank)) {
       if (slot === "F1") {
         expect(model.aiFrontRank[slot]?.cardNumber).toBe(201);
       } else {
         expect(model.aiFrontRank[slot]).toBeNull();
       }
     }
-    for (const slot of BACK_RANK_SLOT_IDS) {
+    for (const slot of rankSlotIds(model.aiBackRank)) {
       if (slot === "B3") {
         expect(model.aiBackRank[slot]?.cardNumber).toBe(202);
       } else {

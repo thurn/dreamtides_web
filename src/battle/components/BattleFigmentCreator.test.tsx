@@ -254,6 +254,55 @@ describe("BattleFigmentCreator", () => {
     });
   });
 
+  it("grows the reserve and keeps submit enabled when every materialized slot is full", () => {
+    vi.spyOn(Date, "now").mockReturnValue(888);
+    const state = buildBattleState();
+    const occupantId = Object.values(state.cardInstances)
+      .find((instance) => instance.owner === "player")?.battleCardId;
+    if (occupantId === undefined) {
+      throw new Error("expected at least one player-owned card in test state");
+    }
+    // Fill every materialized reserve slot so the only open target is one past
+    // the current window — a freshly grown slot that does not yet exist as a key.
+    const filled = Object.keys(state.sides.player.backRank);
+    for (const slotId of filled) {
+      state.sides.player.backRank[slotId as keyof typeof state.sides.player.backRank] = occupantId;
+    }
+    const grownSlotId = `B${filled.length}`;
+
+    const { root, submits } = mount({ state });
+
+    // The default target is the grown slot, and submit stays enabled: a slot past
+    // the materialized range is empty, not occupied.
+    expect(
+      document.querySelector<HTMLInputElement>(
+        `input[name="battle-figment-slot"][value="${grownSlotId}"]`,
+      )?.checked,
+    ).toBe(true);
+    const submitButton = document.querySelector<HTMLButtonElement>(
+      '[data-battle-figment-action="submit"]',
+    );
+    expect(submitButton?.disabled).toBe(false);
+    act(() => {
+      submitButton?.click();
+    });
+
+    expect(submits).toHaveLength(1);
+    const edit = submits[0];
+    if (edit.kind !== "CREATE_FIGMENT") {
+      throw new Error("expected CREATE_FIGMENT edit");
+    }
+    expect(edit.destination).toEqual({
+      side: "player",
+      zone: "backRank",
+      slotId: grownSlotId,
+    });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
   it("emits CREATE_FIGMENT with the expected payload on submit", () => {
     vi.spyOn(Date, "now").mockReturnValue(555);
     const { root, submits, closes } = mount();

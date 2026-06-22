@@ -1,6 +1,9 @@
 import {
-  FRONT_RANK_SLOT_IDS,
-  BACK_RANK_SLOT_IDS,
+  MIN_BACK_RANK_SLOTS,
+  MIN_FRONT_RANK_SLOTS,
+  backRankSlotIds,
+  densifyRank,
+  frontRankSlotIds,
   type BattleCardInstance,
   type BattleHistory,
   type BattleHistoryEntry,
@@ -19,7 +22,7 @@ import type {
 
 function defaultBackRankSlots(): Record<BackRankSlotId, string | null> {
   const slots = {} as Record<BackRankSlotId, string | null>;
-  for (const id of BACK_RANK_SLOT_IDS) {
+  for (const id of backRankSlotIds(MIN_BACK_RANK_SLOTS)) {
     slots[id] = null;
   }
   return slots;
@@ -27,7 +30,7 @@ function defaultBackRankSlots(): Record<BackRankSlotId, string | null> {
 
 function defaultFrontRankSlots(): Record<FrontRankSlotId, string | null> {
   const slots = {} as Record<FrontRankSlotId, string | null>;
-  for (const id of FRONT_RANK_SLOT_IDS) {
+  for (const id of frontRankSlotIds(MIN_FRONT_RANK_SLOTS)) {
     slots[id] = null;
   }
   return slots;
@@ -45,8 +48,17 @@ function normalizeSide(
     hand: raw?.hand ?? [],
     void: raw?.void ?? [],
     banished: raw?.banished ?? [],
-    backRank: { ...defaultBackRankSlots(), ...(raw?.backRank ?? {}) },
-    frontRank: { ...defaultFrontRankSlots(), ...(raw?.frontRank ?? {}) },
+    // RTDB strips `null` values on write, so a round-tripped rank can arrive
+    // with interior empty slots missing. Merge the minimum window, keep every
+    // grown slot, then densify so the contiguous lane positions are restored.
+    backRank: densifyRank(
+      { ...defaultBackRankSlots(), ...(raw?.backRank ?? {}) },
+      "B",
+    ),
+    frontRank: densifyRank(
+      { ...defaultFrontRankSlots(), ...(raw?.frontRank ?? {}) },
+      "F",
+    ),
     fatigueCount: raw?.fatigueCount ?? 0,
     dreamwellCardIndex: raw?.dreamwellCardIndex ?? null,
     dreamwellDrawnTurn: raw?.dreamwellDrawnTurn ?? null,

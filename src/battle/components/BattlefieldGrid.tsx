@@ -9,7 +9,7 @@ import {
   selectPlayAreaSize,
 } from "../state/selectors";
 import { supportedDeploySlots, supportingReserveSlots } from "../engine/support";
-import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
+import { backRankSlotIds, frontRankSlotIds } from "../types";
 import type {
   BattleFieldSlotAddress,
   BattleMutableState,
@@ -67,10 +67,9 @@ export function BattlefieldGrid({
   // centered under the back rank at any size (see battle.css).
   const { frontSize, backSize } = selectPlayAreaSize(state);
   const visibleCount = zone === "backRank" ? backSize : frontSize;
-  const slotIds = (zone === "backRank" ? BACK_RANK_SLOT_IDS : FRONT_RANK_SLOT_IDS).slice(
-    0,
-    visibleCount,
-  );
+  const slotIds = zone === "backRank"
+    ? backRankSlotIds(visibleCount)
+    : frontRankSlotIds(visibleCount);
   const slotsStyle = {
     "--cols": visibleCount,
     "--row-cols": backSize,

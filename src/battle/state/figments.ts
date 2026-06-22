@@ -4,7 +4,7 @@ import type {
   BattleMutableState,
   BattleSide,
 } from "../types";
-import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
+import { rankSlotIds } from "../types";
 
 export function isFigmentInstance(instance: BattleCardInstance | undefined | null): instance is BattleCardInstance {
   return instance?.provenance.kind === "generated-figment";
@@ -84,10 +84,10 @@ export function countAlliedWarriors(
 ): number {
   let count = 0;
   const sideState = state.sides[side];
-  for (const slotId of BACK_RANK_SLOT_IDS) {
+  for (const slotId of rankSlotIds(sideState.backRank)) {
     count += warriorContribution(state, sideState.backRank[slotId]);
   }
-  for (const slotId of FRONT_RANK_SLOT_IDS) {
+  for (const slotId of rankSlotIds(sideState.frontRank)) {
     count += warriorContribution(state, sideState.frontRank[slotId]);
   }
   return count;
@@ -212,7 +212,7 @@ export function findBattlefieldFigmentStack(
 ): { battleCardId: string; location: BattleFieldSlotAddress } | null {
   const normalizedSubtype = normalizeFigmentSubtype(subtype);
 
-  for (const slotId of BACK_RANK_SLOT_IDS) {
+  for (const slotId of rankSlotIds(state.sides[side].backRank)) {
     const battleCardId = state.sides[side].backRank[slotId];
     const instance = battleCardId === null ? null : state.cardInstances[battleCardId];
     if (
@@ -228,7 +228,7 @@ export function findBattlefieldFigmentStack(
     }
   }
 
-  for (const slotId of FRONT_RANK_SLOT_IDS) {
+  for (const slotId of rankSlotIds(state.sides[side].frontRank)) {
     const battleCardId = state.sides[side].frontRank[slotId];
     const instance = battleCardId === null ? null : state.cardInstances[battleCardId];
     if (

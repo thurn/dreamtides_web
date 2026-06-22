@@ -1,7 +1,9 @@
 import {
-  BACK_RANK_SLOT_IDS,
-  FRONT_RANK_SLOT_IDS,
+  MIN_BACK_RANK_SLOTS,
+  MIN_FRONT_RANK_SLOTS,
+  backRankSlotIds,
   createEmptySlotRecord,
+  frontRankSlotIds,
 } from "../types";
 import type {
   BattleCardInstance,
@@ -225,11 +227,11 @@ function createInitialSideState(
 }
 
 function createEmptyBackRank(): Record<BackRankSlotId, string | null> {
-  return createEmptySlotRecord(BACK_RANK_SLOT_IDS);
+  return createEmptySlotRecord(backRankSlotIds(MIN_BACK_RANK_SLOTS));
 }
 
 function createEmptyFrontRank(): Record<FrontRankSlotId, string | null> {
-  return createEmptySlotRecord(FRONT_RANK_SLOT_IDS);
+  return createEmptySlotRecord(frontRankSlotIds(MIN_FRONT_RANK_SLOTS));
 }
 
 export function formatBattleCardId(ordinal: number): string {

@@ -3,10 +3,16 @@ import type { AiTargetChoice } from "./cards/index";
 import { CHARACTER_CARD_NUMBERS } from "./cards/card-numbers";
 import { evaluate } from "./evaluate";
 import { scoreAgainstOpponent, type OpponentMode } from "./opponent-model";
-import { cloneForwardModel, type AiCard, type ForwardModel } from "./forward-model";
 import {
-  FRONT_RANK_SLOT_IDS,
-  BACK_RANK_SLOT_IDS,
+  cloneForwardModel,
+  firstEmptyModelSlot,
+  type AiCard,
+  type ForwardModel,
+} from "./forward-model";
+import {
+  backRankSlotId,
+  frontRankSlotId,
+  rankSlotIds,
   type BattleAiChoiceTrace,
   type BattleAiDecisionStage,
   type BattlefieldSlotId,
@@ -94,7 +100,7 @@ interface BeamEntry {
  * cheaper static {@link evaluate} is enough.
  */
 function hasCommittedChallenger(model: ForwardModel): boolean {
-  for (const slot of FRONT_RANK_SLOT_IDS) {
+  for (const slot of rankSlotIds(model.aiFrontRank)) {
     const card = model.aiFrontRank[slot];
     if (card !== null && card.canChallengeThisTurn) {
       return true;
@@ -138,51 +144,44 @@ function applyAction(model: ForwardModel, action: PlanAction): void {
   if (fromSlot === null || toSlot === null) {
     return;
   }
-  const card = model.aiBackRank[fromSlot];
+  const card = model.aiBackRank[fromSlot] ?? null;
   if (card === null || card.battleCardId !== action.card.battleCardId) {
     // The card moved/changed in the clone; locate it by id across the back rank.
     let found: BackRankSlotId | null = null;
-    for (const slot of BACK_RANK_SLOT_IDS) {
+    for (const slot of rankSlotIds(model.aiBackRank)) {
       if (model.aiBackRank[slot]?.battleCardId === action.card.battleCardId) {
         found = slot;
         break;
       }
     }
-    if (found === null || model.aiFrontRank[toSlot] !== null) {
+    if (found === null || (model.aiFrontRank[toSlot] ?? null) !== null) {
       return;
     }
     model.aiFrontRank[toSlot] = model.aiBackRank[found];
     model.aiBackRank[found] = null;
     return;
   }
-  if (model.aiFrontRank[toSlot] !== null) {
+  if ((model.aiFrontRank[toSlot] ?? null) !== null) {
     return;
   }
   model.aiFrontRank[toSlot] = card;
   model.aiBackRank[fromSlot] = null;
 }
 
-function firstEmptyFrontRankSlot(model: ForwardModel): FrontRankSlotId | null {
-  for (const slot of FRONT_RANK_SLOT_IDS) {
-    if (model.aiFrontRank[slot] === null) {
-      return slot;
-    }
-  }
-  return null;
+/** The first empty front-rank slot, or a fresh slot when every one is occupied
+ *  (the front rank grows without bound). */
+function firstEmptyFrontRankSlot(model: ForwardModel): FrontRankSlotId {
+  return firstEmptyModelSlot(model.aiFrontRank, frontRankSlotId);
 }
 
 /**
- * The back-rank slot a character play lands in: the first empty slot, matching
- * {@link playCharacterToBackRank}. Recording it on the action lets the driver
- * emit the body's `MOVE_CARD_TO_ZONE` to a concrete back-rank destination.
+ * The back-rank slot a character play lands in: the first empty slot (or a fresh
+ * one when the rank is full), matching {@link playCharacterToBackRank}. Recording
+ * it on the action lets the driver emit the body's `MOVE_CARD_TO_ZONE` to a
+ * concrete back-rank destination.
  */
-function firstEmptyBackRankSlot(model: ForwardModel): BackRankSlotId | null {
-  for (const slot of BACK_RANK_SLOT_IDS) {
-    if (model.aiBackRank[slot] === null) {
-      return slot;
-    }
-  }
-  return null;
+function firstEmptyBackRankSlot(model: ForwardModel): BackRankSlotId {
+  return firstEmptyModelSlot(model.aiBackRank, backRankSlotId);
 }
 
 /**
@@ -228,22 +227,20 @@ function generateActions(model: ForwardModel): PlanAction[] {
   // scoring, so enumerating all of them only multiplies the branching factor
   // without changing value.
   const targetFrontRankSlot = firstEmptyFrontRankSlot(model);
-  if (targetFrontRankSlot !== null) {
-    for (const backRankSlot of BACK_RANK_SLOT_IDS) {
-      const card = model.aiBackRank[backRankSlot];
-      if (card === null || !card.canChallengeThisTurn) {
-        continue;
-      }
-      actions.push({
-        stage: "reposition",
-        kind: "MOVE_CARD",
-        card,
-        targets: null,
-        toSlot: targetFrontRankSlot,
-        sourceHandIndex: null,
-        sourceSlotId: backRankSlot,
-      });
+  for (const backRankSlot of rankSlotIds(model.aiBackRank)) {
+    const card = model.aiBackRank[backRankSlot];
+    if (card === null || !card.canChallengeThisTurn) {
+      continue;
     }
+    actions.push({
+      stage: "reposition",
+      kind: "MOVE_CARD",
+      card,
+      targets: null,
+      toSlot: targetFrontRankSlot,
+      sourceHandIndex: null,
+      sourceSlotId: backRankSlot,
+    });
   }
 
   // Stage 3: nonCharacter — play each legal event where it scores best.

@@ -1,7 +1,7 @@
 import type { BattleCommand } from "../debug/commands";
 import type { BattleDebugZoneDestination } from "../debug/commands";
 import { selectDefaultCharacterPlaySlot } from "../state/selectors";
-import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
+import { backRankSlotId, frontRankSlotId, rankSlotIds } from "../types";
 import type {
   BattleCommandSourceSurface,
   BattleMutableState,
@@ -50,9 +50,6 @@ export function createMoveCardToRowCommand(
   sourceSurface: BattleCommandSourceSurface,
 ): MoveZoneDebugCommand | null {
   const target = findFirstOpenBattlefieldSlot(state, side, zone);
-  if (target === null) {
-    return null;
-  }
 
   return {
     id: "DEBUG_EDIT",
@@ -139,21 +136,24 @@ function findFirstOpenBattlefieldSlot(
   state: BattleMutableState,
   side: BattleSide,
   zone: BattlefieldZone,
-): BattleFieldSlotAddress | null {
+): BattleFieldSlotAddress {
   if (zone === "backRank") {
-    for (const slotId of BACK_RANK_SLOT_IDS) {
-      if (state.sides[side].backRank[slotId] === null) {
+    const rank = state.sides[side].backRank;
+    for (const slotId of rankSlotIds(rank)) {
+      if (rank[slotId] === null) {
         return { side, zone, slotId };
       }
     }
-    return null;
+    return { side, zone, slotId: backRankSlotId(rankSlotIds(rank).length) };
   }
 
-  for (const slotId of FRONT_RANK_SLOT_IDS) {
-    if (state.sides[side].frontRank[slotId] === null) {
+  const rank = state.sides[side].frontRank;
+  for (const slotId of rankSlotIds(rank)) {
+    if (rank[slotId] === null) {
       return { side, zone, slotId };
     }
   }
-
-  return null;
+  // Every materialized slot is occupied: grow the rank rather than blocking the
+  // move (the play area has no upper bound).
+  return { side, zone, slotId: frontRankSlotId(rankSlotIds(rank).length) };
 }

@@ -13,7 +13,7 @@ import type {
   BattleSide,
   FrontRankSlotId,
 } from "../types";
-import { FRONT_RANK_SLOT_IDS } from "../types";
+import { frontRankSlotIds, rankSlotIds, slotIndex } from "../types";
 
 /**
  * The unified, keyword-aware Challenge resolver (rules §Challengers, Defenders,
@@ -143,6 +143,17 @@ export function hasCombatKeyword(
  * resolution). Lanes `F0`→`F3` are resolved in order. Pure: it never mutates
  * `state`.
  */
+/** One past the highest occupied front-rank index, or 0 when the rank is empty. */
+function occupiedFrontRankWidth(frontRank: Record<FrontRankSlotId, string | null>): number {
+  let width = 0;
+  for (const slotId of rankSlotIds(frontRank)) {
+    if (frontRank[slotId] !== null) {
+      width = Math.max(width, slotIndex(slotId) + 1);
+    }
+  }
+  return width;
+}
+
 export function resolveChallenge(input: ChallengeInput): ChallengeResolution {
   const { state, activeSide } = input;
   const supportContribution = input.supportContribution;
@@ -153,7 +164,14 @@ export function resolveChallenge(input: ChallengeInput): ChallengeResolution {
   let activeScored = 0;
   let opposingScored = 0;
 
-  for (const slotId of FRONT_RANK_SLOT_IDS) {
+  // Lanes pair the same front-rank index across both sides and span every
+  // occupied lane (the front rank grows without bound). Empty-vs-empty lanes
+  // beyond the last occupant contribute nothing, so they are not resolved.
+  const laneCount = Math.max(
+    occupiedFrontRankWidth(state.sides[activeSide].frontRank),
+    occupiedFrontRankWidth(state.sides[opposingSide].frontRank),
+  );
+  for (const slotId of frontRankSlotIds(laneCount)) {
     const lane = resolveLane({
       state,
       slotId,
@@ -214,8 +232,8 @@ function resolveLane(params: {
     dissolved,
   } = params;
 
-  const challengerId = state.sides[activeSide].frontRank[slotId];
-  const defenderId = state.sides[opposingSide].frontRank[slotId];
+  const challengerId = state.sides[activeSide].frontRank[slotId] ?? null;
+  const defenderId = state.sides[opposingSide].frontRank[slotId] ?? null;
   const challenger =
     challengerId === null ? null : state.cardInstances[challengerId] ?? null;
   const defender =

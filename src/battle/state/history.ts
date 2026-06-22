@@ -143,15 +143,25 @@ function areBattleSideStatesEqual(
   if (!areStringArraysEqual(left.hand, right.hand)) return false;
   if (!areStringArraysEqual(left.void, right.void)) return false;
   if (!areStringArraysEqual(left.banished, right.banished)) return false;
-  for (const slotId of Object.keys(left.backRank)) {
-    if (left.backRank[slotId as keyof typeof left.backRank] !==
-      right.backRank[slotId as keyof typeof right.backRank]) {
-      return false;
-    }
-  }
-  for (const slotId of Object.keys(left.frontRank)) {
-    if (left.frontRank[slotId as keyof typeof left.frontRank] !==
-      right.frontRank[slotId as keyof typeof right.frontRank]) {
+  if (!areRankRecordsEqual(left.backRank, right.backRank)) return false;
+  if (!areRankRecordsEqual(left.frontRank, right.frontRank)) return false;
+  return true;
+}
+
+/**
+ * Compares two rank records by occupant. The ranks grow independently, so their
+ * materialized key sets can differ even when the boards are identical (a vacated
+ * trailing slot vs. one that was never materialized); an absent slot and a `null`
+ * slot are both empty. Iterating the union of keys keeps the comparison symmetric.
+ */
+function areRankRecordsEqual<K extends string>(
+  left: Record<K, string | null>,
+  right: Record<K, string | null>,
+): boolean {
+  const slotIds = new Set<string>([...Object.keys(left), ...Object.keys(right)]);
+  for (const slotId of slotIds) {
+    const key = slotId as K;
+    if ((left[key] ?? null) !== (right[key] ?? null)) {
       return false;
     }
   }

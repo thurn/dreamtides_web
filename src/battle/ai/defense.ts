@@ -1,4 +1,4 @@
-import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
+import { isFrontRankSlotId, rankSlotIds } from "../types";
 import type { FrontRankSlotId, BackRankSlotId } from "../types";
 import type { AiCard, ForwardModel } from "./forward-model";
 import type { PlannedAction } from "./planner";
@@ -35,8 +35,6 @@ interface Challenger {
   spark: number;
 }
 
-const FRONT_RANK_SLOT_SET = new Set<string>(FRONT_RANK_SLOT_IDS);
-
 /**
  * Plans the AI's defensive repositions against the opponent's committed
  * challengers, returning one `MOVE_CARD` action per lane the AI chooses to
@@ -48,7 +46,7 @@ const FRONT_RANK_SLOT_SET = new Set<string>(FRONT_RANK_SLOT_IDS);
  */
 export function planDefense(model: ForwardModel, opts: DefenseOptions): PlannedAction[] {
   const challengers: Challenger[] = model.opponentBodies
-    .filter((body) => body.rank === "front" && FRONT_RANK_SLOT_SET.has(body.slot))
+    .filter((body) => body.rank === "front" && isFrontRankSlotId(body.slot))
     .map((body) => ({ slot: body.slot as FrontRankSlotId, spark: body.effectiveSpark }))
     .sort((a, b) => b.spark - a.spark);
   if (challengers.length === 0) {
@@ -56,7 +54,7 @@ export function planDefense(model: ForwardModel, opts: DefenseOptions): PlannedA
   }
 
   const available: BackRankBody[] = [];
-  for (const slot of BACK_RANK_SLOT_IDS) {
+  for (const slot of rankSlotIds(model.aiBackRank)) {
     const card = model.aiBackRank[slot];
     if (card !== null && card.canChallengeThisTurn) {
       available.push({ slot, card, spark: bodySpark(card) });
@@ -70,7 +68,7 @@ export function planDefense(model: ForwardModel, opts: DefenseOptions): PlannedA
   const usedBackRank = new Set<BackRankSlotId>();
   for (const challenger of challengers) {
     // A body already sitting opposite the challenger is already defending it.
-    if (model.aiFrontRank[challenger.slot] !== null) {
+    if ((model.aiFrontRank[challenger.slot] ?? null) !== null) {
       continue;
     }
     const blocker = chooseBlocker(available, usedBackRank, challenger.spark, model, opts);

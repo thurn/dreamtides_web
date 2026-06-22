@@ -1,4 +1,4 @@
-import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../../types";
+import { rankSlotIds } from "../../types";
 import type { ForwardModel, AiCard } from "../forward-model";
 import type { AiTargetChoice, StarterCardModel } from "./index";
 import { playEvent } from "./helpers";
@@ -8,13 +8,13 @@ const WILDFLOWER_COLOSSUS = 515;
 /** Every AI ally on the board, deployed cards first (preferred challengers). */
 function friendlyAllies(model: ForwardModel): AiCard[] {
   const allies: AiCard[] = [];
-  for (const slot of FRONT_RANK_SLOT_IDS) {
+  for (const slot of rankSlotIds(model.aiFrontRank)) {
     const card = model.aiFrontRank[slot];
     if (card !== null) {
       allies.push(card);
     }
   }
-  for (const slot of BACK_RANK_SLOT_IDS) {
+  for (const slot of rankSlotIds(model.aiBackRank)) {
     const card = model.aiBackRank[slot];
     if (card !== null) {
       allies.push(card);

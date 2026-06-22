@@ -27,7 +27,11 @@ import type {
   BattleSide,
   BattleTransitionData,
 } from "../types";
-import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
+import {
+  backRankSlotId,
+  ensureContiguousRankSlots,
+  rankSlotIds,
+} from "../types";
 import {
   allocateBattleCardInstance,
   allocateBattleStackEntryId,
@@ -881,14 +885,8 @@ function setCardStatus(
   if (isExhausting) {
     const location = selectBattleCardLocation(nextState, battleCardId);
     if (location !== null && location.zone === "frontRank") {
+      // The reserve has no upper bound, so a retreat always finds a slot.
       const retreatSlot = selectFirstOpenBackRankSlot(nextState, location.side);
-      if (retreatSlot === null) {
-        // No open back-rank position to retreat into: reject the exhaust whole.
-        return {
-          state,
-          transition: createEmptyTransitionData(),
-        };
-      }
       removeBattleCardFromLocation(nextState, location);
       setBattlefieldSlotOccupant(nextState, retreatSlot, battleCardId);
     }
@@ -949,19 +947,22 @@ function setCounters(
 }
 
 /**
- * Returns the first open back-rank slot address on `side`, scanning B0…B4 in
- * order, or null when every back-rank position is occupied.
+ * Returns the first open back-rank slot address on `side`, scanning materialized
+ * reserve slots left to right. When every materialized reserve is occupied it
+ * grows the back rank with a fresh slot rather than blocking the play, so the
+ * reserve has no upper bound.
  */
 function selectFirstOpenBackRankSlot(
   state: BattleMutableState,
   side: BattleSide,
-): BattleFieldSlotAddress | null {
-  for (const slotId of BACK_RANK_SLOT_IDS) {
-    if (state.sides[side].backRank[slotId] === null) {
+): BattleFieldSlotAddress {
+  const { backRank } = state.sides[side];
+  for (const slotId of rankSlotIds(backRank)) {
+    if (backRank[slotId] === null) {
       return { side, zone: "backRank", slotId };
     }
   }
-  return null;
+  return { side, zone: "backRank", slotId: backRankSlotId(rankSlotIds(backRank).length) };
 }
 
 function createCardCopy(
@@ -2027,11 +2028,17 @@ function setBattlefieldSlotOccupant(
   battleCardId: string | null,
 ): void {
   if (target.zone === "backRank") {
-    state.sides[target.side].backRank[target.slotId as (typeof BACK_RANK_SLOT_IDS)[number]] = battleCardId;
+    const backRank = state.sides[target.side].backRank;
+    const slotId = target.slotId as keyof typeof backRank;
+    ensureContiguousRankSlots(backRank, slotId);
+    backRank[slotId] = battleCardId;
     return;
   }
 
-  state.sides[target.side].frontRank[target.slotId as (typeof FRONT_RANK_SLOT_IDS)[number]] = battleCardId;
+  const frontRank = state.sides[target.side].frontRank;
+  const slotId = target.slotId as keyof typeof frontRank;
+  ensureContiguousRankSlots(frontRank, slotId);
+  frontRank[slotId] = battleCardId;
 }
 
 // `createEmptyTransitionData` imported from ../engine/result (bug-015).

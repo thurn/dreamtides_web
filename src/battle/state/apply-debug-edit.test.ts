@@ -9,7 +9,6 @@ import {
 import { createDebugEditHistoryMetadata } from "../debug/commands";
 import type { BattleDebugZoneDestination } from "../debug/commands";
 import type { BattleFieldSlotAddress } from "../types";
-import { BACK_RANK_SLOT_IDS } from "../types";
 import {
   battleControllerReducer,
   createBattleControllerState,
@@ -378,41 +377,38 @@ describe("SET_CARD_STATUS ☪ auto-retreat", () => {
     expect(result.mutable.cardInstances[cardId].status.isExhausted).toBe(true);
   });
 
-  it("rejects the exhaust when the back rank is full (no open slot to retreat into)", () => {
+  it("grows the back rank to retreat into when every materialized reserve is full", () => {
     let state = createBattle();
     const frontCardId = state.mutable.sides.player.hand[0];
     state = moveCard(state, frontCardId, { side: "player", zone: "frontRank", slotId: "F0" });
 
-    // The play area expands as the back rank fills, so a retreat only fails at the
-    // slot universe's ceiling: fill every back-rank slot so there is no open
-    // position to retreat into. Draw into the hand first when it has run dry so
-    // each slot is occupied; the front card already consumed one hand card.
-    const backCardIds: string[] = [];
-    for (let index = 0; index < BACK_RANK_SLOT_IDS.length; index += 1) {
+    // Occupy more reserve slots than the play area starts with so the retreat has
+    // to grow the rank. Draw into the hand first when it has run dry; the front
+    // card already consumed one hand card.
+    const FILLED_RESERVES = 13;
+    for (let index = 0; index < FILLED_RESERVES; index += 1) {
       if (state.mutable.sides.player.hand.length === 0) {
         state = drawCard(state, "player");
       }
       const handCardId = state.mutable.sides.player.hand[0];
-      backCardIds.push(handCardId);
       state = moveCard(state, handCardId, {
         side: "player",
         zone: "backRank",
-        slotId: BACK_RANK_SLOT_IDS[index],
+        slotId: `B${index}`,
       });
-    }
-
-    // Sanity-check the setup: every back-rank slot is occupied.
-    for (const slotId of BACK_RANK_SLOT_IDS) {
-      expect(state.mutable.sides.player.backRank[slotId]).not.toBeNull();
     }
 
     const result = setCardStatus(state, frontCardId, { isExhausted: true });
 
-    // The exhaust is rejected as a whole: the body stays in the front rank and
-    // un-exhausted.
-    expect(result.mutable).toBe(state.mutable);
-    expect(result.mutable.sides.player.frontRank.F0).toBe(frontCardId);
-    expect(result.mutable.cardInstances[frontCardId].status.isExhausted).toBe(false);
+    // The reserve has no upper bound, so the exhaust succeeds: the body leaves the
+    // front rank and retreats into a freshly grown reserve slot, exhausted.
+    expect(result.mutable).not.toBe(state.mutable);
+    expect(result.mutable.sides.player.frontRank.F0).toBeNull();
+    expect(result.mutable.cardInstances[frontCardId].status.isExhausted).toBe(true);
+    const retreatSlot = Object.entries(result.mutable.sides.player.backRank).find(
+      ([, occupant]) => occupant === frontCardId,
+    );
+    expect(retreatSlot).toBeDefined();
   });
 
   it("does not retreat a back-rank character when it is exhausted", () => {

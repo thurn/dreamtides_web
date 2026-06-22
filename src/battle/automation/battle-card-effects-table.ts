@@ -4,7 +4,7 @@ import type {
   BattleMutableState,
   BattleSide,
 } from "../types";
-import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
+import { rankSlotIds } from "../types";
 import { supportedDeploySlots } from "../engine/support";
 import type { EffectStep, StepContext } from "./effect-step";
 import {
@@ -582,7 +582,7 @@ export function battleCardAutomationStatus(cardId: string): "auto" | "none" {
  * prior bonus. Only back-rank Supporters with a registered `"support"` script
  * grant spark, and only to the front-rank occupants of the slots they support
  * that pass the script's optional `applies` predicate. Iteration follows
- * `BACK_RANK_SLOT_IDS`/`FRONT_RANK_SLOT_IDS` order for deterministic output.
+ * back-rank-then-front-rank slot order (left to right) for deterministic output.
  */
 export function planSupportRecompute(
   state: BattleMutableState,
@@ -594,11 +594,11 @@ export function planSupportRecompute(
   // 1. Default every in-play instance to a target of 0.
   const targets = new Map<string, number>();
   for (const side of sides) {
-    for (const slotId of BACK_RANK_SLOT_IDS) {
+    for (const slotId of rankSlotIds(state.sides[side].backRank)) {
       const id = state.sides[side].backRank[slotId];
       if (id !== null) targets.set(id, 0);
     }
-    for (const slotId of FRONT_RANK_SLOT_IDS) {
+    for (const slotId of rankSlotIds(state.sides[side].frontRank)) {
       const id = state.sides[side].frontRank[slotId];
       if (id !== null) targets.set(id, 0);
     }
@@ -608,7 +608,7 @@ export function planSupportRecompute(
   if (enabled) {
     for (const side of sides) {
       const ctx: StepContext = { side, state, random: Math.random, nowMs };
-      for (const backSlot of BACK_RANK_SLOT_IDS) {
+      for (const backSlot of rankSlotIds(state.sides[side].backRank)) {
         const supporterId = state.sides[side].backRank[backSlot];
         if (supporterId === null) continue;
         const supporter = state.cardInstances[supporterId];
@@ -633,11 +633,11 @@ export function planSupportRecompute(
   // 3. Emit an edit for every instance whose current bonus differs from target.
   const edits: BattleDebugEdit[] = [];
   for (const side of sides) {
-    for (const slotId of BACK_RANK_SLOT_IDS) {
+    for (const slotId of rankSlotIds(state.sides[side].backRank)) {
       const id = state.sides[side].backRank[slotId];
       if (id !== null) pushIfChanged(edits, state, id, targets.get(id) ?? 0);
     }
-    for (const slotId of FRONT_RANK_SLOT_IDS) {
+    for (const slotId of rankSlotIds(state.sides[side].frontRank)) {
       const id = state.sides[side].frontRank[slotId];
       if (id !== null) pushIfChanged(edits, state, id, targets.get(id) ?? 0);
     }

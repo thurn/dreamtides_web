@@ -1,7 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import type { BattleDebugEdit, BattleDebugZoneDestination } from "../debug/commands";
 import type { BattleMutableState, BattleSide, FrontRankSlotId, BackRankSlotId } from "../types";
-import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../types";
+import {
+  backRankSlotId,
+  backRankSlotIds,
+  frontRankSlotId,
+  frontRankSlotIds,
+  isBackRankSlotId,
+  isFrontRankSlotId,
+  rankSlotIds,
+} from "../types";
+import { selectPlayAreaSize } from "../state/selectors";
 import {
   FIGMENT_CATALOG_ENTRIES,
   figmentCatalogEntries,
@@ -336,7 +345,10 @@ export function BattleFigmentCreator({
               Slot
             </legend>
             <div className="flex flex-wrap gap-3 text-sm text-slate-200">
-              {(zone === "backRank" ? BACK_RANK_SLOT_IDS : FRONT_RANK_SLOT_IDS).map(
+              {(zone === "backRank"
+                ? backRankSlotIds(selectPlayAreaSize(state).backSize + 1)
+                : frontRankSlotIds(selectPlayAreaSize(state).frontSize + 1)
+              ).map(
                 (option) => (
                   <label key={option} className="flex items-center gap-2">
                     <input
@@ -467,11 +479,11 @@ function formatZoneLabel(zone: FigmentZone): string {
 }
 
 function isReserveSlot(value: FigmentBattlefieldSlotId): value is BackRankSlotId {
-  return (BACK_RANK_SLOT_IDS as readonly string[]).includes(value);
+  return isBackRankSlotId(value);
 }
 
 function isDeploySlot(value: FigmentBattlefieldSlotId): value is FrontRankSlotId {
-  return (FRONT_RANK_SLOT_IDS as readonly string[]).includes(value);
+  return isFrontRankSlotId(value);
 }
 
 function isBattlefieldSlotOccupied(
@@ -481,12 +493,14 @@ function isBattlefieldSlotOccupied(
   slot: FigmentBattlefieldSlotId,
 ): boolean {
   // bug-114: peek into the live battlefield to gate the submit button against
-  // occupied target slots. Non-battlefield zones are never occupied.
+  // occupied target slots. Non-battlefield zones are never occupied. A slot id
+  // past the materialized range (a freshly grown slot) reads `undefined`, which
+  // is empty — coerce so growth targets are not mistaken for occupied.
   if (zone === "backRank" && isReserveSlot(slot)) {
-    return state.sides[side].backRank[slot] !== null;
+    return (state.sides[side].backRank[slot] ?? null) !== null;
   }
   if (zone === "frontRank" && isDeploySlot(slot)) {
-    return state.sides[side].frontRank[slot] !== null;
+    return (state.sides[side].frontRank[slot] ?? null) !== null;
   }
   return false;
 }
@@ -495,14 +509,18 @@ function findFirstOpenReserveSlot(
   state: BattleMutableState,
   side: BattleSide,
 ): BackRankSlotId | null {
-  return BACK_RANK_SLOT_IDS.find((slotId) => state.sides[side].backRank[slotId] === null) ?? null;
+  const backRank = state.sides[side].backRank;
+  const open = rankSlotIds(backRank).find((slotId) => backRank[slotId] === null);
+  return open ?? backRankSlotId(rankSlotIds(backRank).length);
 }
 
 function findFirstOpenDeploySlot(
   state: BattleMutableState,
   side: BattleSide,
 ): FrontRankSlotId | null {
-  return FRONT_RANK_SLOT_IDS.find((slotId) => state.sides[side].frontRank[slotId] === null) ?? null;
+  const frontRank = state.sides[side].frontRank;
+  const open = rankSlotIds(frontRank).find((slotId) => frontRank[slotId] === null);
+  return open ?? frontRankSlotId(rankSlotIds(frontRank).length);
 }
 
 function canStackIntoBattlefieldSlot(
@@ -529,10 +547,10 @@ function selectBattlefieldSlotOccupant(
   slot: FigmentBattlefieldSlotId,
 ): string | null {
   if (zone === "backRank" && isReserveSlot(slot)) {
-    return state.sides[side].backRank[slot];
+    return state.sides[side].backRank[slot] ?? null;
   }
   if (zone === "frontRank" && isDeploySlot(slot)) {
-    return state.sides[side].frontRank[slot];
+    return state.sides[side].frontRank[slot] ?? null;
   }
   return null;
 }

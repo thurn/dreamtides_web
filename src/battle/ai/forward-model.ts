@@ -5,7 +5,15 @@ import {
   selectFigmentSparkContext,
 } from "../state/figments";
 import { supportedDeploySlots } from "../engine/support";
-import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS, createEmptySlotRecord } from "../types";
+import {
+  MIN_BACK_RANK_SLOTS,
+  MIN_FRONT_RANK_SLOTS,
+  backRankSlotIds,
+  createEmptySlotRecord,
+  frontRankSlotIds,
+  rankSlotIds,
+  slotIndex,
+} from "../types";
 import type {
   BattleCardInstance,
   BattleMutableState,
@@ -130,29 +138,68 @@ function projectZone(
  * `aiSide`. The AI's own zones are projected with full identity; the opposing
  * side is reduced to abstract bodies plus hand/void counts.
  */
+/**
+ * The number of slots to materialize for an AI model rank: enough to cover the
+ * highest occupied position plus one spare empty slot, never below `min`.
+ */
+function modelRankWindow(rank: Record<string, string | null>, min: number): number {
+  let occupiedWidth = 0;
+  for (const slotId of rankSlotIds(rank)) {
+    if (rank[slotId] !== null) {
+      occupiedWidth = Math.max(occupiedWidth, slotIndex(slotId) + 1);
+    }
+  }
+  return Math.max(min, occupiedWidth + 1);
+}
+
+/**
+ * The first empty slot in an AI model rank, growing the rank with a fresh slot
+ * when every materialized slot is occupied. The rank therefore never caps the
+ * number of bodies the planner can deploy.
+ */
+export function firstEmptyModelSlot<K extends string>(
+  rank: Record<K, AiCard | null>,
+  makeId: (index: number) => K,
+): K {
+  const slotIds = rankSlotIds(rank);
+  for (const slotId of slotIds) {
+    if (rank[slotId] === null) {
+      return slotId;
+    }
+  }
+  const fresh = makeId(slotIds.length);
+  rank[fresh] = null;
+  return fresh;
+}
+
 export function forwardModelFromState(state: BattleMutableState, aiSide: BattleSide): ForwardModel {
   const ai = state.sides[aiSide];
   const opponentSide = opposingSide(aiSide);
   const opponent = state.sides[opponentSide];
 
-  const aiFrontRank: Record<FrontRankSlotId, AiCard | null> =
-    createEmptySlotRecord(FRONT_RANK_SLOT_IDS);
-  for (const slotId of FRONT_RANK_SLOT_IDS) {
-    const id = ai.frontRank[slotId];
+  // The model mirrors each rank's occupants and carries one spare empty slot so
+  // the planner always has somewhere to deploy; planner helpers grow further on
+  // demand, so the AI's board is never capped.
+  const aiFrontRank: Record<FrontRankSlotId, AiCard | null> = createEmptySlotRecord(
+    frontRankSlotIds(modelRankWindow(ai.frontRank, MIN_FRONT_RANK_SLOTS)),
+  );
+  for (const slotId of rankSlotIds(aiFrontRank)) {
+    const id = ai.frontRank[slotId] ?? null;
     const instance = id === null ? undefined : state.cardInstances[id];
     aiFrontRank[slotId] = instance === undefined ? null : projectAiCard(instance);
   }
 
-  const aiBackRank: Record<BackRankSlotId, AiCard | null> =
-    createEmptySlotRecord(BACK_RANK_SLOT_IDS);
-  for (const slotId of BACK_RANK_SLOT_IDS) {
-    const id = ai.backRank[slotId];
+  const aiBackRank: Record<BackRankSlotId, AiCard | null> = createEmptySlotRecord(
+    backRankSlotIds(modelRankWindow(ai.backRank, MIN_BACK_RANK_SLOTS)),
+  );
+  for (const slotId of rankSlotIds(aiBackRank)) {
+    const id = ai.backRank[slotId] ?? null;
     const instance = id === null ? undefined : state.cardInstances[id];
     aiBackRank[slotId] = instance === undefined ? null : projectAiCard(instance);
   }
 
   const opponentBodies: AiOpponentBody[] = [];
-  for (const slotId of FRONT_RANK_SLOT_IDS) {
+  for (const slotId of rankSlotIds(opponent.frontRank)) {
     const id = opponent.frontRank[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
     if (instance !== undefined) {
@@ -169,7 +216,7 @@ export function forwardModelFromState(state: BattleMutableState, aiSide: BattleS
       });
     }
   }
-  for (const slotId of BACK_RANK_SLOT_IDS) {
+  for (const slotId of rankSlotIds(opponent.backRank)) {
     const id = opponent.backRank[slotId];
     const instance = id === null ? undefined : state.cardInstances[id];
     if (instance !== undefined) {
@@ -234,7 +281,7 @@ export function effectiveSpark(
   const base = card.basePrintedSpark * card.figmentCount + card.sparkDelta;
 
   let supportBonus = 0;
-  for (const backRankSlot of BACK_RANK_SLOT_IDS) {
+  for (const backRankSlot of rankSlotIds(model.aiBackRank)) {
     const backRankCard = model.aiBackRank[backRankSlot];
     if (backRankCard === null) {
       continue;
@@ -261,10 +308,9 @@ function cloneAiCardOrNull(card: AiCard | null): AiCard | null {
 
 function cloneSlotRecord<K extends string>(
   source: Record<K, AiCard | null>,
-  slotIds: readonly K[],
 ): Record<K, AiCard | null> {
-  const record = createEmptySlotRecord(slotIds) as Record<K, AiCard | null>;
-  for (const slotId of slotIds) {
+  const record = {} as Record<K, AiCard | null>;
+  for (const slotId of rankSlotIds(source)) {
     record[slotId] = cloneAiCardOrNull(source[slotId]);
   }
   return record;
@@ -285,8 +331,8 @@ export function cloneForwardModel(model: ForwardModel): ForwardModel {
     aiHand: model.aiHand.map(cloneAiCard),
     aiDeck: model.aiDeck.map(cloneAiCard),
     aiVoid: model.aiVoid.map(cloneAiCard),
-    aiFrontRank: cloneSlotRecord(model.aiFrontRank, FRONT_RANK_SLOT_IDS),
-    aiBackRank: cloneSlotRecord(model.aiBackRank, BACK_RANK_SLOT_IDS),
+    aiFrontRank: cloneSlotRecord(model.aiFrontRank),
+    aiBackRank: cloneSlotRecord(model.aiBackRank),
     opponentBodies: model.opponentBodies.map((body) => ({ ...body })),
     opponentHandCount: model.opponentHandCount,
     opponentVoidCount: model.opponentVoidCount,

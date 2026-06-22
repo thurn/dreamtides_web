@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { createBattleLogBaseFields, logEvent } from "../../logging";
 import type { BattleDebugEdit } from "../debug/commands";
 import type { BattleCardInstance, BattleMutableState, BattleSide } from "../types";
-import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
+import { rankSlotIds } from "../types";
 import type { EffectPrompt, EffectStep, StepContext } from "./effect-step";
 import { alliesInPlay } from "./effect-step";
 import {
@@ -89,11 +89,11 @@ export function materializedScriptEdits(
 export function inPlayInstanceIds(state: BattleMutableState): string[] {
   const ids: string[] = [];
   for (const side of ["player", "enemy"] as const) {
-    for (const slotId of BACK_RANK_SLOT_IDS) {
+    for (const slotId of rankSlotIds(state.sides[side].backRank)) {
       const id = state.sides[side].backRank[slotId];
       if (id !== null) ids.push(id);
     }
-    for (const slotId of FRONT_RANK_SLOT_IDS) {
+    for (const slotId of rankSlotIds(state.sides[side].frontRank)) {
       const id = state.sides[side].frontRank[slotId];
       if (id !== null) ids.push(id);
     }
@@ -577,11 +577,11 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
 function supportShapeKey(state: BattleMutableState): string {
   const parts: string[] = [];
   for (const side of ["player", "enemy"] as const) {
-    for (const slotId of BACK_RANK_SLOT_IDS) {
+    for (const slotId of rankSlotIds(state.sides[side].backRank)) {
       const id = state.sides[side].backRank[slotId];
       parts.push(`b:${side}:${slotId}:${id ?? ""}:${slotBonus(state, id)}`);
     }
-    for (const slotId of FRONT_RANK_SLOT_IDS) {
+    for (const slotId of rankSlotIds(state.sides[side].frontRank)) {
       const id = state.sides[side].frontRank[slotId];
       parts.push(`f:${side}:${slotId}:${id ?? ""}:${slotBonus(state, id)}`);
     }

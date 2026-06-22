@@ -9,7 +9,7 @@ import type {
   BattleSideMutableState,
   FrontRankSlotId,
 } from "../types";
-import { BACK_RANK_SLOT_IDS, FRONT_RANK_SLOT_IDS } from "../types";
+import { backRankSlotIds, createEmptySlotRecord, frontRankSlotIds } from "../types";
 import {
   hasCombatKeyword,
   resolveChallenge,
@@ -86,12 +86,8 @@ function emptySide(overrides: Partial<BattleSideMutableState> = {}): BattleSideM
     hand: [],
     void: [],
     banished: [],
-    backRank: Object.fromEntries(
-      BACK_RANK_SLOT_IDS.map((slot) => [slot, null]),
-    ) as BattleSideMutableState["backRank"],
-    frontRank: Object.fromEntries(
-      FRONT_RANK_SLOT_IDS.map((slot) => [slot, null]),
-    ) as BattleSideMutableState["frontRank"],
+    backRank: createEmptySlotRecord(backRankSlotIds(13)),
+    frontRank: createEmptySlotRecord(frontRankSlotIds(12)),
     fatigueCount: 0,
     dreamwellCardIndex: null,
     dreamwellDrawnTurn: null,
@@ -103,11 +99,9 @@ function frontRank(
   entries: Partial<Record<FrontRankSlotId, string | null>>,
 ): Record<FrontRankSlotId, string | null> {
   return {
-    ...(Object.fromEntries(
-      FRONT_RANK_SLOT_IDS.map((id) => [id, null]),
-    ) as Record<FrontRankSlotId, string | null>),
+    ...createEmptySlotRecord(frontRankSlotIds(12)),
     ...entries,
-  };
+  } as Record<FrontRankSlotId, string | null>;
 }
 
 function makeState(options: {
@@ -528,7 +522,9 @@ describe("resolveChallenge — multiple lanes", () => {
     const resolution = resolveChallenge({ state, activeSide: "player" });
     expect(resolution.playerScoreDelta).toBe(3);
     expect(dissolvedIds(resolution).sort()).toEqual(["e1", "p2"]);
-    expect(resolution.lanes).toHaveLength(FRONT_RANK_SLOT_IDS.length);
+    // Lanes span every occupied lane (F0–F2 here); the play area grows without
+    // bound, so empty trailing lanes beyond the last occupant are not resolved.
+    expect(resolution.lanes).toHaveLength(3);
     expect(resolution.lanes[0].scoreDelta).toBe(3);
   });
 });

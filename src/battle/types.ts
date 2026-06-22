@@ -9,31 +9,114 @@ import type {
 import type { ArtCrop } from "../types/cards";
 import type { BattleDebugEdit } from "./debug/commands";
 
+export type BattleSide = "player" | "enemy";
+
 // The play area is a dynamic, staggered grid that starts at 2 front / 3 back and
 // expands (one front + one back slot whenever a rank fills) and contracts back
 // toward that minimum (rules §The Play Area). The back rank always holds one more
-// slot than the front rank. These arrays define the engine's slot universe: a
-// generous fixed ceiling that real games never exhaust (figment stacks share a
-// slot). How many of these slots are *active* — shown and droppable — at any
-// moment is derived from occupancy by `selectPlayAreaSize`, not stored as state.
-export const BACK_RANK_SLOT_IDS = [
-  "B0", "B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B10", "B11", "B12",
-] as const;
-export const FRONT_RANK_SLOT_IDS = [
-  "F0", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "F11",
-] as const;
-
-export type BattleSide = "player" | "enemy";
-export type BackRankSlotId = (typeof BACK_RANK_SLOT_IDS)[number];
-export type FrontRankSlotId = (typeof FRONT_RANK_SLOT_IDS)[number];
+// slot than the front rank. Slots are addressed by id (`B<n>` / `F<n>`) and grow
+// without bound: a rank is a sparse map whose materialized slots expand on demand
+// as characters enter play. How many of these slots are *active* — shown and
+// droppable — at any moment is derived from occupancy by `selectPlayAreaSize`,
+// not stored as state.
+export type BackRankSlotId = `B${number}`;
+export type FrontRankSlotId = `F${number}`;
 export type BattlefieldSlotId = BackRankSlotId | FrontRankSlotId;
 
+/** Minimum front-rank width; the back rank always holds one more (rules §The
+ *  Play Area). The play area never contracts below 2 front / 3 back. */
+export const MIN_FRONT_RANK_SLOTS = 2;
+export const MIN_BACK_RANK_SLOTS = MIN_FRONT_RANK_SLOTS + 1;
+
+/** The id of the back-rank reserve slot at `index` (0-based, left to right). */
+export function backRankSlotId(index: number): BackRankSlotId {
+  return `B${index}`;
+}
+
+/** The id of the front-rank deploy slot at `index` (0-based, left to right). */
+export function frontRankSlotId(index: number): FrontRankSlotId {
+  return `F${index}`;
+}
+
+/** The first `count` back-rank slot ids, in left-to-right order. */
+export function backRankSlotIds(count: number): BackRankSlotId[] {
+  return Array.from({ length: Math.max(0, count) }, (_unused, index) => backRankSlotId(index));
+}
+
+/** The first `count` front-rank slot ids, in left-to-right order. */
+export function frontRankSlotIds(count: number): FrontRankSlotId[] {
+  return Array.from({ length: Math.max(0, count) }, (_unused, index) => frontRankSlotId(index));
+}
+
+/** Parses the 0-based positional index out of a slot id (`"B3" → 3`). */
+export function slotIndex(slotId: string): number {
+  return Number.parseInt(slotId.slice(1), 10);
+}
+
+export function isBackRankSlotId(value: string): value is BackRankSlotId {
+  return /^B\d+$/.test(value);
+}
+
+export function isFrontRankSlotId(value: string): value is FrontRankSlotId {
+  return /^F\d+$/.test(value);
+}
+
 /**
- * Builds a full slot Record with every slot initialized to `null`. Used by the
- * empty-rank factories and the AI forward model so the slot universe is defined
- * in exactly one place (the const arrays above); enlarging those arrays needs no
- * change here. The returned `Record<K, null>` is assignable to the wider
- * `Record<K, string | null>` / `Record<K, AiCard | null>` shapes callers declare.
+ * The slot ids currently materialized in a rank record, in left-to-right
+ * positional order. Iterating this (rather than a fixed universe) is how every
+ * scan of a rank's occupants stays correct as the rank grows without bound.
+ */
+export function rankSlotIds<K extends string, V>(rank: Record<K, V>): K[] {
+  return (Object.keys(rank) as K[]).sort((left, right) => slotIndex(left) - slotIndex(right));
+}
+
+/**
+ * Ensures `rank` holds every contiguous slot from index 0 up to and including
+ * `slotId`'s index, filling any gap with `null`. Materializing the run keeps
+ * empty interior positions present so their lane identity (and the staggered
+ * support geometry) survives a character leaving the middle of a rank.
+ */
+export function ensureContiguousRankSlots<K extends string>(
+  rank: Record<K, string | null>,
+  slotId: K,
+): void {
+  const prefix = slotId.slice(0, 1);
+  const index = slotIndex(slotId);
+  for (let i = 0; i <= index; i += 1) {
+    const id = `${prefix}${i}` as K;
+    if (!(id in rank)) {
+      rank[id] = null;
+    }
+  }
+}
+
+/**
+ * Fills any gap in `rank` from index 0 up to its highest materialized slot with
+ * `null`, returning the same record. Restores the contiguous lane positions
+ * after a transport (e.g. RTDB) drops `null`-valued interior slots.
+ */
+export function densifyRank<K extends string>(
+  rank: Record<K, string | null>,
+  prefix: "B" | "F",
+): Record<K, string | null> {
+  let maxIndex = -1;
+  for (const slotId of Object.keys(rank)) {
+    maxIndex = Math.max(maxIndex, slotIndex(slotId));
+  }
+  for (let i = 0; i <= maxIndex; i += 1) {
+    const id = `${prefix}${i}` as K;
+    if (!(id in rank)) {
+      rank[id] = null;
+    }
+  }
+  return rank;
+}
+
+/**
+ * Builds a slot Record with every slot in `slotIds` initialized to `null`. Used
+ * by the empty-rank factories and the AI forward model. The returned
+ * `Record<K, null>` is assignable to the wider `Record<K, string | null>` /
+ * `Record<K, AiCard | null>` shapes callers declare.
  */
 export function createEmptySlotRecord<K extends string>(slotIds: readonly K[]): Record<K, null> {
   const record = {} as Record<K, null>;

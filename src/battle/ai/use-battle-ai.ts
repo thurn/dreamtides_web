@@ -10,8 +10,6 @@ import { resolveChallenge } from "../engine/challenge";
 import { planHandoff } from "../engine/handoff";
 import type { BattleCommand, BattleDebugEdit } from "../debug/commands";
 import {
-  FRONT_RANK_SLOT_IDS,
-  BACK_RANK_SLOT_IDS,
   type BattleAiChoiceTrace,
   type BattleMutableState,
   type BattleReducerState,
@@ -370,8 +368,11 @@ async function planNonExcludedActionAsync(
   let workingModel = model;
 
   // Bounded retry: each iteration removes one excluded card and re-plans, so the
-  // loop terminates after the hand/back rank is exhausted.
-  const maxAttempts = model.aiHand.length + BATTLEFIELD_SLOT_COUNT + 1;
+  // loop terminates after the hand/board is exhausted. The board size is read
+  // from the model's current ranks since the play area grows without bound.
+  const battlefieldSlotCount =
+    Object.keys(model.aiBackRank).length + Object.keys(model.aiFrontRank).length;
+  const maxAttempts = model.aiHand.length + battlefieldSlotCount + 1;
   for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
     const action = await planNextActionAsync(workingModel, opts, yieldFn);
     if (action.kind === "END_TURN") {
@@ -390,8 +391,6 @@ async function planNonExcludedActionAsync(
   }
   return null;
 }
-
-const BATTLEFIELD_SLOT_COUNT = BACK_RANK_SLOT_IDS.length + FRONT_RANK_SLOT_IDS.length;
 
 /**
  * Returns a clone of `model` with the card identified by `battleCardId` removed

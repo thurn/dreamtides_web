@@ -2,7 +2,7 @@ import { buildSupportContribution } from "./cards/support-contribution";
 // Namespace import so the bounded-sampling test can spy on `evaluate`.
 import * as evaluateModule from "./evaluate";
 import { cloneForwardModel, type ForwardModel } from "./forward-model";
-import { FRONT_RANK_SLOT_IDS, type FrontRankSlotId } from "../types";
+import { rankSlotIds, type FrontRankSlotId } from "../types";
 
 /**
  * Abstract opponent-response model. Given a {@link ForwardModel} projection
@@ -121,7 +121,7 @@ function createRng(seed: number): () => number {
 function buildChallengers(model: ForwardModel): Challenger[] {
   const support = buildSupportContribution(model);
   const challengers: Challenger[] = [];
-  for (const slot of FRONT_RANK_SLOT_IDS) {
+  for (const slot of rankSlotIds(model.aiFrontRank)) {
     const card = model.aiFrontRank[slot];
     if (card === null || !card.canChallengeThisTurn) {
       continue;

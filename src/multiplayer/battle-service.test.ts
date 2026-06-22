@@ -1,6 +1,11 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { runTransaction } from "firebase/database";
-import { FRONT_RANK_SLOT_IDS, BACK_RANK_SLOT_IDS } from "../battle/types";
+import {
+  MIN_BACK_RANK_SLOTS,
+  MIN_FRONT_RANK_SLOTS,
+  backRankSlotIds,
+  frontRankSlotIds,
+} from "../battle/types";
 import {
   applyBattleCommandToRoom,
   applyBattleHistoryNavToRoom,
@@ -129,11 +134,13 @@ describe("normalizeBattleStateSnapshot", () => {
     expect(reducer.lastTransition).toBeNull();
     expect(reducer.mutable.cardInstances).toEqual({});
 
-    for (const id of BACK_RANK_SLOT_IDS) {
+    // A normalized empty side materializes the minimum play-area window, every
+    // slot null; the rank grows from here without bound.
+    for (const id of backRankSlotIds(MIN_BACK_RANK_SLOTS)) {
       expect(reducer.mutable.sides.player.backRank[id]).toBeNull();
       expect(reducer.mutable.sides.enemy.backRank[id]).toBeNull();
     }
-    for (const id of FRONT_RANK_SLOT_IDS) {
+    for (const id of frontRankSlotIds(MIN_FRONT_RANK_SLOTS)) {
       expect(reducer.mutable.sides.player.frontRank[id]).toBeNull();
       expect(reducer.mutable.sides.enemy.frontRank[id]).toBeNull();
     }
