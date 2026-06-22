@@ -3941,7 +3941,7 @@ art-owned = false
 card-number = 213
 
 [[cards]]
-name = "Seaside Requiem"
+name = "Abandon Constraints"
 mtg-name = "Demand Answers"
 id = "7ea13d02-9d97-492e-9edb-f326eb3b4d1c"
 rendered-text = "To play this card, abandon a character or discard a card. Draw 2 cards."
@@ -3952,10 +3952,11 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "June23"]
-image-number = 626542574
+tags = ["Art Rework", "June23", "Art OK"]
+image-number = 465449525
 art-owned = false
 card-number = 214
+art = { x = 0, y = -0.104, scale = 1 }
 
 [[cards]]
 name = "Ridgecutter"
@@ -6104,7 +6105,7 @@ card-number = 330
 art = { x = 0.779, y = 0.574, scale = 1.47 }
 
 [[cards]]
-name = "Maelstrom Denial"
+name = "Desperation"
 mtg-name = "Bone Shards"
 id = "625fe37e-8059-481c-99fd-109fd02ceedd"
 rendered-text = "To play this event, abandon a character or discard a card. Dissolve an enemy."
@@ -6115,8 +6116,8 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Removal", "Art Rework", "June23"]
-image-number = 1042405558
+tags = ["Removal", "Art Rework", "June23", "Art OK"]
+image-number = 1470059006
 art-owned = false
 card-number = 331
 
@@ -6423,7 +6424,7 @@ card-number = 347
 art = { x = -0.294, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Shadow Reflection"
+name = "Warrior's Path"
 mtg-name = "Nettlecyst"
 id = "ca37f80e-8474-4d40-b793-7a900f6ca467"
 rendered-text = "Give an ally +1✦ for each allied warrior."
@@ -6434,10 +6435,11 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "June23"]
-image-number = 695511784
+tags = ["Art Rework", "June23", "Art OK"]
+image-number = 2427491217
 art-owned = false
 card-number = 348
+art = { x = -0.353, y = 0.805, scale = 1.17 }
 
 [[cards]]
 name = "Nexus Wayfinder"

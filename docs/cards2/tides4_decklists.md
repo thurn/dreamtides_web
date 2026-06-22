@@ -110,7 +110,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Ashen Remnant
 - 1× Whisper of the Past
 - 1× Call to the Unknown
-- 1× Maelstrom Denial
+- 1× Desperation
 - 1× Peak Plunder
 - 1× The Dread Sovereign
 - 1× First Encounter
@@ -209,7 +209,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× Ashen Remnant
 - 1× Whisper of the Past
 - 1× Call to the Unknown
-- 1× Maelstrom Denial
+- 1× Desperation
 - 1× Peak Plunder
 - 1× The Dread Sovereign
 - 1× Apocalypse
@@ -288,7 +288,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Curio Dealer
 - 1× Ashen Remnant
 - 1× Vigilant Howler
-- 1× Maelstrom Denial
+- 1× Desperation
 - 1× The Dread Sovereign
 - 1× Embersummoner
 - 1× Dawnhorn Elder
@@ -407,7 +407,7 @@ Tide-sig-04 is a character-heavy deck (86 of 110 copies are characters) built ar
 - 1× Whisper of the Past
 - 1× Pathfinder Adrift
 - 1× Molten Duel
-- 1× Maelstrom Denial
+- 1× Desperation
 - 1× The Dread Sovereign
 - 1× Entropy Spike
 - 1× Derelict Voyage
@@ -419,7 +419,7 @@ Tide-sig-04 is a character-heavy deck (86 of 110 copies are characters) built ar
 - 1× Stolen Genesis
 - 1× Twice-Lit Portal
 - 1× Duskwall Delver
-- 1× Seaside Requiem
+- 1× Abandon Constraints
 - 1× Fargazer
 - 1× Cinderheart
 - 1× Minstrel of Falling Light
@@ -515,7 +515,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Aurora Confluence
 - 1× Ashen Remnant
 - 1× Whisper of the Past
-- 1× Maelstrom Denial
+- 1× Desperation
 - 1× Peak Plunder
 - 1× The Dread Sovereign
 - 1× Part the Veil
@@ -623,7 +623,7 @@ Tide-sig-06 is a heavily character-weighted deck (84 of 110 copies are character
 - 1× Whisper of the Past
 - 1× Salvage Engine
 - 1× Seeker for the Way
-- 1× Maelstrom Denial
+- 1× Desperation
 - 1× Peak Plunder
 - 1× Entropy Spike
 - 1× Clockwork Salvager
@@ -632,7 +632,7 @@ Tide-sig-06 is a heavily character-weighted deck (84 of 110 copies are character
 - 1× Fleeting Reunion
 - 1× Twice-Lit Portal
 - 1× Duskwall Delver
-- 1× Seaside Requiem
+- 1× Abandon Constraints
 - 1× Fargazer
 - 1× Minstrel of Falling Light
 - 1× Gleamharvester
@@ -719,7 +719,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Ashen Remnant
 - 1× Whisper of the Past
 - 1× Salvage Engine
-- 1× Maelstrom Denial
+- 1× Desperation
 - 1× Peak Plunder
 - 1× The Dread Sovereign
 - 1× Part the Veil
@@ -825,7 +825,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Ferryman's Tithe
 - 1× Ashen Remnant
 - 1× Whisper of the Past
-- 1× Maelstrom Denial
+- 1× Desperation
 - 1× Peak Plunder
 - 1× The Dread Sovereign
 - 1× Part the Veil
@@ -930,7 +930,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Shatter the Frail
 - 1× Crumbling Covenant
 - 1× Twice-Lit Portal
-- 1× Seaside Requiem
+- 1× Abandon Constraints
 - 1× Collapse Protocol
 - 1× Resilient Wanderer
 - 1× Echoes of the Journey
@@ -1141,7 +1141,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Momentum of the Fallen
 - 1× Terminus
 - 1× Derelict Voyage
-- 1× Seaside Requiem
+- 1× Abandon Constraints
 - 1× Frontline Martyr
 - 1× Genesis Burst
 - 1× Ecliptic Vantage
@@ -1232,14 +1232,14 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Shadowbinder
 - 1× Pathfinder Adrift
 - 1× Sunset Chapel Rest
-- 1× Maelstrom Denial
+- 1× Desperation
 - 1× Archive of the Forgotten
 - 1× The Devourer
 - 1× Verdant Wayfarer
 - 1× Fleeting Reunion
 - 1× Pyrestone Avatar
 - 1× Canopy of Stars
-- 1× Seaside Requiem
+- 1× Abandon Constraints
 - 1× Saltless Mariner
 - 1× Gleamharvester
 - 1× Eruption
@@ -1293,7 +1293,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 2× Weight of Memory
 - 2× The Ringleader
 - 2× Twice-Lit Portal
-- 2× Seaside Requiem
+- 2× Abandon Constraints
 - 2× Starcatcher
 - 2× Iconoclast
 - 2× Arc Gate Opening
@@ -1457,7 +1457,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Melodist of the Finale
 - 1× Selfless Rescuer
 - 1× Shattering Gambit
-- 1× Shadow Reflection
+- 1× Warrior's Path
 - 1× Paleclaw Panther
 - 1× Amythest Aurelia
 - 1× Ruin Scavenger
@@ -1738,7 +1738,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 2× Revered Prince
 - 2× Wolfbond Chieftain
 - 2× Battlefield Medic
-- 2× Shadow Reflection
+- 2× Warrior's Path
 - 2× Echo Technician
 - 2× Aftermath Bloom
 - 2× Tethered Hollow
@@ -1837,7 +1837,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 2× Wolfbond Chieftain
 - 2× Flamestride Rider
 - 2× Battlefield Medic
-- 2× Shadow Reflection
+- 2× Warrior's Path
 - 2× Echo Technician
 - 2× Aftermath Bloom
 - 2× Tethered Hollow
@@ -1930,7 +1930,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 2× Revered Prince
 - 2× Wolfbond Chieftain
 - 2× Battlefield Medic
-- 2× Shadow Reflection
+- 2× Warrior's Path
 - 2× Echo Technician
 - 2× Aftermath Bloom
 - 2× Tethered Hollow
@@ -2721,7 +2721,7 @@ This tide is almost entirely warriors (43 of 45 cards) built around a tight loop
 - 1× Battlefield Medic
 - 1× Lightningborn
 - 1× Assault Trooper
-- 1× Shadow Reflection
+- 1× Warrior's Path
 - 1× Echo Technician
 - 1× Aftermath Bloom
 - 1× Tethered Hollow
@@ -2770,7 +2770,7 @@ Tide-fac-16 is almost entirely characters (43 of 45 copies), nearly all warriors
 - 1× Revered Prince
 - 1× Wolfbond Chieftain
 - 1× Battlefield Medic
-- 1× Shadow Reflection
+- 1× Warrior's Path
 - 1× Echo Technician
 - 1× Aftermath Bloom
 - 1× Tethered Hollow
@@ -2810,7 +2810,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Derelict Voyage
 - 1× Canopy of Stars
 - 1× Twice-Lit Portal
-- 1× Seaside Requiem
+- 1× Abandon Constraints
 - 1× Minstrel of Falling Light
 - 1× Duskshore Virtuoso
 - 1× Desperation
@@ -2926,7 +2926,7 @@ Tide-fac-19 is a character-heavy facet (32 characters, 13 events) built around a
 - 1× Flamestride Rider
 - 1× Battlefield Medic
 - 1× Assault Trooper
-- 1× Shadow Reflection
+- 1× Warrior's Path
 - 1× Echo Technician
 - 1× Aftermath Bloom
 - 1× Tethered Hollow
@@ -3260,7 +3260,7 @@ Tide-fac-26 is a character-heavy survivor tide built around the abandon trigger 
 - 1× Price of Redemption
 - 1× Twilight Reclaimer
 - 1× Ferryman's Tithe
-- 1× Maelstrom Denial
+- 1× Desperation
 - 1× Entropy Spike
 - 1× Stolen Genesis
 - 1× Duskwall Delver
@@ -3360,7 +3360,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Verdant Wayfarer
 - 1× Pyrestone Avatar
 - 1× Twice-Lit Portal
-- 1× Seaside Requiem
+- 1× Abandon Constraints
 - 1× Saltless Mariner
 - 1× Minstrel of Falling Light
 - 1× Gleamharvester
@@ -3416,7 +3416,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Pyrestone Avatar
 - 1× Canopy of Stars
 - 1× Twice-Lit Portal
-- 1× Seaside Requiem
+- 1× Abandon Constraints
 - 1× Minstrel of Falling Light
 - 1× Desperation
 - 1× Starcatcher
@@ -3481,7 +3481,7 @@ Tide-fac-30 is built almost entirely around spirit animal characters (36 of 45 c
 - 1× Wolfbond Chieftain
 - 1× Battlefield Medic
 - 1× Assault Trooper
-- 1× Shadow Reflection
+- 1× Warrior's Path
 - 1× Echo Technician
 - 1× Aftermath Bloom
 - 1× Tethered Hollow
@@ -3519,7 +3519,7 @@ Tide-fac-31 is almost entirely characters (41 of 45 cards), built around a dense
 - 1× Corrupted Host
 - 1× Price of Redemption
 - 1× Twilight Reclaimer
-- 1× Maelstrom Denial
+- 1× Desperation
 - 1× Entropy Spike
 - 1× Stolen Genesis
 - 1× Duskwall Delver
@@ -3569,7 +3569,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Aurora Confluence
 - 1× Verdant Wayfarer
 - 1× Pyrestone Avatar
-- 1× Seaside Requiem
+- 1× Abandon Constraints
 - 1× Minstrel of Falling Light
 - 1× Gleamharvester
 - 1× Urban Cipher
@@ -3736,7 +3736,7 @@ Tide-neu-04 is built almost entirely of warriors (28 of 30 cards are characters,
 - 1× Wolfbond Chieftain
 - 1× Battlefield Medic
 - 1× Assault Trooper
-- 1× Shadow Reflection
+- 1× Warrior's Path
 - 1× Echo Technician
 - 1× Aftermath Bloom
 - 1× Tethered Hollow
@@ -3798,7 +3798,7 @@ Tide-neu-06 is a character-dense discard engine built around accumulating a larg
 - 1× Oblivion Guide
 - 1× Verdant Wayfarer
 - 1× Pyrestone Avatar
-- 1× Seaside Requiem
+- 1× Abandon Constraints
 - 1× Gleamharvester
 - 1× Urban Cipher
 - 1× Desperation
@@ -3956,7 +3956,7 @@ Tide-neu-10 is built almost entirely from warriors, with its central engine driv
 - 1× Wolfbond Chieftain
 - 1× Battlefield Medic
 - 1× Assault Trooper
-- 1× Shadow Reflection
+- 1× Warrior's Path
 - 1× Tethered Hollow
 - 1× Ethereal Trailblazer
 - 1× Tranquil Duelist
@@ -4029,7 +4029,7 @@ Tide-neu-12 is a character-heavy deck (26 of 30 cards are characters) built arou
 - 1× Shattering Gambit
 - 1× Battlefield Medic
 - 1× Assault Trooper
-- 1× Shadow Reflection
+- 1× Warrior's Path
 - 1× Echo Technician
 - 1× Ethereal Trailblazer
 - 1× Oathbound Pair

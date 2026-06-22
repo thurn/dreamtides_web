@@ -2442,7 +2442,7 @@
       ]
     },
     "625fe37e-8059-481c-99fd-109fd02ceedd": {
-      "name": "Maelstrom Denial",
+      "name": "Desperation",
       "needs": [],
       "supports": [
         "events",
@@ -3376,7 +3376,7 @@
       ]
     },
     "7ea13d02-9d97-492e-9edb-f326eb3b4d1c": {
-      "name": "Seaside Requiem",
+      "name": "Abandon Constraints",
       "needs": [],
       "supports": [
         "events",
@@ -3445,7 +3445,7 @@
       "supports": []
     },
     "ca37f80e-8474-4d40-b793-7a900f6ca467": {
-      "name": "Shadow Reflection",
+      "name": "Warrior's Path",
       "needs": [
         {
           "theme": "warriors",
