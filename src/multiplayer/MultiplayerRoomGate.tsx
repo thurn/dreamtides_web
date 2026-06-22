@@ -13,6 +13,11 @@ import {
 } from "./room-service";
 import { ACTION_LOG_LIMIT, type MultiplayerRoom, type RoomSession } from "./room-types";
 
+// How long to wait for the first room snapshot before treating the database as
+// unreachable. Firebase emits its initial value within a couple of seconds on a
+// healthy connection, so this is generous headroom for slow networks.
+const ROOM_LOAD_TIMEOUT_MS = 15_000;
+
 interface MultiplayerRoomGateProps {
   database: Database;
   gameId: string | null;
@@ -117,7 +122,26 @@ export function MultiplayerRoomGate({
 
     setGateState({ status: "loading", roomId: activeRoomId });
 
-    return subscribeToRoom(database, activeRoomId, (snapshot) => {
+    // Firebase `onValue` never fires success *or* error when it cannot reach the
+    // database at all (e.g. a deployed page pointed at a local emulator it can't
+    // reach, or a dead network). Without a deadline the gate spins on
+    // "Loading..." forever, so surface an error if the first snapshot has not
+    // arrived in time.
+    let resolved = false;
+    const timeoutId = setTimeout(() => {
+      if (resolved) {
+        return;
+      }
+      setGateState({
+        status: "error",
+        message: `Could not reach the game database to load "${activeRoomId}". Check your connection and reload.`,
+      });
+    }, ROOM_LOAD_TIMEOUT_MS);
+
+    const unsubscribe = subscribeToRoom(database, activeRoomId, (snapshot) => {
+      resolved = true;
+      clearTimeout(timeoutId);
+
       if (snapshot.status === "ready") {
         setGateState({ status: "ready", roomId: activeRoomId, room: snapshot.room });
         return;
@@ -130,6 +154,11 @@ export function MultiplayerRoomGate({
 
       setGateState({ status: "error", message: snapshot.message });
     });
+
+    return () => {
+      clearTimeout(timeoutId);
+      unsubscribe();
+    };
   }, [activeRoomId, database]);
 
   useEffect(() => {

@@ -127,7 +127,20 @@ function parsePackSize(rawPackSize: string | null): number | undefined {
 }
 
 function parseDatabaseMode(rawRealtime: string | null): DatabaseMode {
-  return rawRealtime === "1" ? "realtime" : "emulator";
+  // `?realtime=1` forces the production realtime database; `?realtime=0` forces
+  // the local emulator (useful for testing a production build against a local
+  // emulator). With the param absent or unrecognised, default by build mode:
+  // production builds (the deployed `web.app` host) talk to the realtime
+  // database, dev builds talk to the local emulator. Defaulting deployed builds
+  // to the emulator made them try to reach `http://127.0.0.1:9000`, which a
+  // remote browser blocks as insecure content, hanging the join flow forever.
+  if (rawRealtime === "1") {
+    return "realtime";
+  }
+  if (rawRealtime === "0") {
+    return "emulator";
+  }
+  return import.meta.env.PROD ? "realtime" : "emulator";
 }
 
 function parseLoadQuestName(rawName: string | null): string | null {
