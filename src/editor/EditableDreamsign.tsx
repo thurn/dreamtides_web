@@ -4,6 +4,7 @@ import { RulesText } from "../components/RulesText";
 import CardTagEditor from "./CardTagEditor";
 import EditableField from "./EditableField";
 import { readableTextColor, tagColor } from "./tag-color";
+import { assetUrl } from "../runtime/asset-url";
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
 import type {
   EditableDreamsignField,
@@ -214,7 +215,7 @@ export default function EditableDreamsign({
       <div style={artFrameStyle}>
         {dreamsign.imageName !== "" ? (
           <img
-            src={`/dreamsigns/${dreamsign.imageName}`}
+            src={assetUrl(`/dreamsigns/${dreamsign.imageName}`)}
             alt={dreamsign.imageAlt}
             style={{
               display: "block",

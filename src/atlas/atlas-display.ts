@@ -1,4 +1,5 @@
 import type { SiteType } from "../types/quest";
+import { assetUrl } from "../runtime/asset-url";
 import { siteTypeIcon } from "./atlas-generator";
 
 /**
@@ -17,26 +18,26 @@ import { siteTypeIcon } from "./atlas-generator";
 
 /** Rectangular scene art for a dreamscape, shown in the hover-preview header. */
 export function dreamscapeSceneUrl(dreamscapeId: string): string {
-  return `/dreamscapes/${dreamscapeId}.png`;
+  return assetUrl(`/dreamscapes/${dreamscapeId}.png`);
 }
 
 /** Circular node icon for a dreamscape, shown inside the atlas node frame. */
 export function dreamscapeIconUrl(dreamscapeId: string): string {
-  return `/dreamscape-icons/${dreamscapeId}.png`;
+  return assetUrl(`/dreamscape-icons/${dreamscapeId}.png`);
 }
 
 /** Character render of a Dream Guide, shown standing over the preview seam. */
 export function guidePortraitUrl(guideId: string): string {
-  return `/dream-guides/${guideId}.png`;
+  return assetUrl(`/dream-guides/${guideId}.png`);
 }
 
 /** A dreamsign's icon art (its `imageName`), shown on the badge and sign card. */
 export function dreamsignIconUrl(imageName: string): string {
-  return `/dreamsigns/${imageName}`;
+  return assetUrl(`/dreamsigns/${imageName}`);
 }
 
 /** Ornate round frame used as the face of an unrevealed atlas node. */
-export const ROUND_FRAME_URL = "/atlas/Round_frame_main.png";
+export const ROUND_FRAME_URL = assetUrl("/atlas/Round_frame_main.png");
 
 /** Boxicons class used for the "Card Affiliation" row in the preview card. */
 export const AFFILIATION_ROW_ICON_CLASS = "bxf bx-rectangle-vertical";
@@ -64,9 +65,9 @@ export const BOSS_DISPLAY = {
   place: "Limbo",
   name: "Apollyon",
   title: "Apollyon, the Doom of Humanity",
-  sceneUrl: "/dreamscapes/limbo.png",
-  iconUrl: "/dreamscape-icons/limbo.png",
-  figureUrl: "/dream-guides/apollyon.png",
+  sceneUrl: assetUrl("/dreamscapes/limbo.png"),
+  iconUrl: assetUrl("/dreamscape-icons/limbo.png"),
+  figureUrl: assetUrl("/dream-guides/apollyon.png"),
   intro:
     "A Dreamcaller of annihilating power — his own deck, dreamsigns, and abilities bend the dream toward ruin.",
 } as const;

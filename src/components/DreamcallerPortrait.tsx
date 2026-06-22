@@ -1,4 +1,5 @@
 import { useState, type CSSProperties } from "react";
+import { assetUrl } from "../runtime/asset-url";
 
 interface DreamcallerVisual {
   imageNumber: string;
@@ -98,7 +99,7 @@ function fallbackStyle(
 }
 
 export function dreamcallerImageSrc(imageNumber: string): string {
-  return `/dreamcallers/${imageNumber}.png`;
+  return assetUrl(`/dreamcallers/${imageNumber}.png`);
 }
 
 export function DreamcallerPortrait({

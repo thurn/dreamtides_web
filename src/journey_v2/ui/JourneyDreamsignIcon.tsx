@@ -6,6 +6,7 @@ import {
 import { DreamsignHoverCard } from "../../components/DreamsignHoverCard";
 import type { Dreamsign } from "../../types/quest";
 import type { JourneyDreamsignObject } from "./offerPresentation";
+import { assetUrl } from "../../runtime/asset-url";
 
 interface JourneyDreamsignIconProps {
   object: JourneyDreamsignObject;
@@ -107,7 +108,7 @@ export function JourneyDreamsignIcon({
         />
         {object.dreamsignTemplate.imageName ? (
           <img
-            src={`/dreamsigns/${String(object.dreamsignTemplate.imageName)}`}
+            src={assetUrl(`/dreamsigns/${String(object.dreamsignTemplate.imageName)}`)}
             alt={object.dreamsignTemplate.imageAlt ?? object.displayName}
             style={{
               position: "relative",

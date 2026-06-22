@@ -2,6 +2,7 @@ import { useState, type CSSProperties } from "react";
 import { HoverPopover } from "./HoverPopover";
 import { DreamsignHoverCard } from "./DreamsignHoverCard";
 import type { Dreamsign } from "../types/quest";
+import { assetUrl } from "../runtime/asset-url";
 
 /**
  * Shared dreamsign artwork tile.
@@ -86,7 +87,7 @@ export function DreamsignArtTile({
       >
         {showImage ? (
           <img
-            src={`/dreamsigns/${String(dreamsign.imageName)}`}
+            src={assetUrl(`/dreamsigns/${String(dreamsign.imageName)}`)}
             alt={imgAlt}
             className="h-full w-full object-cover"
             onError={() => {

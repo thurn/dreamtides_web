@@ -4,7 +4,15 @@
     "ignore": [
       "firebase.json",
       "**/.*",
-      "**/node_modules/**"
+      "**/node_modules/**",
+      "cards/**",
+      "dreamcallers/**",
+      "dreamsigns/**",
+      "journeys/**",
+      "dreamscapes/**",
+      "dreamscape-icons/**",
+      "dream-guides/**",
+      "atlas/**"
     ],
     "rewrites": [
       {

@@ -1,10 +1,11 @@
 import { createAvatar } from "@dicebear/core";
 import { identicon } from "@dicebear/collection";
 import type { CardData } from "../types/cards";
+import { assetUrl } from "../runtime/asset-url";
 
-/** Returns the URL path for a card's image, keyed by its image number. */
+/** Returns the URL for a card's image, keyed by its image number. */
 export function cardImageUrl(imageNumber: number): string {
-  return `/cards/${String(imageNumber)}.webp`;
+  return assetUrl(`/cards/${String(imageNumber)}.webp`);
 }
 
 /**

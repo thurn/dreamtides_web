@@ -3,6 +3,7 @@ import { DreamsignHoverCard } from "./DreamsignHoverCard";
 import { HoverPopover } from "./HoverPopover";
 import { RulesText } from "./RulesText";
 import type { Dreamsign } from "../types/quest";
+import { assetUrl } from "../runtime/asset-url";
 
 /**
  * Compact HUD row of dreamsign thumbnails — one square per owned dreamsign.
@@ -109,7 +110,7 @@ function HudDreamsignIcon({ dreamsign }: { dreamsign: Dreamsign }) {
       >
         {showImage ? (
           <img
-            src={`/dreamsigns/${String(dreamsign.imageName)}`}
+            src={assetUrl(`/dreamsigns/${String(dreamsign.imageName)}`)}
             alt={imgAlt}
             className="h-full w-full object-cover"
             onError={() => {

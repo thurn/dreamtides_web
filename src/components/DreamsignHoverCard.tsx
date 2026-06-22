@@ -5,6 +5,7 @@ import { definitionSideForCardHover } from "./CardHoverPreview";
 import { extractGlossaryTerms } from "../data/glossary-terms";
 import type { PopoverPlacementSide } from "./hover-popover-placement";
 import type { Dreamsign } from "../types/quest";
+import { assetUrl } from "../runtime/asset-url";
 
 /**
  * Floating popover that renders a full Dreamsign: large art, name, optional
@@ -77,7 +78,7 @@ export function DreamsignHoverCard({
     >
       {showImage && (
         <img
-          src={`/dreamsigns/${String(dreamsign.imageName)}`}
+          src={assetUrl(`/dreamsigns/${String(dreamsign.imageName)}`)}
           alt={dreamsign.imageAlt ?? dreamsign.name}
           className="object-contain"
           style={{

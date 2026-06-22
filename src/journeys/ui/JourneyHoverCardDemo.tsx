@@ -14,6 +14,7 @@
 import { useState } from "react";
 
 import { JourneyOptionCircle } from "./JourneyOptionCircle";
+import { assetUrl } from "../../runtime/asset-url";
 
 interface DemoCase {
   readonly dreamName: string;
@@ -57,7 +58,7 @@ export function JourneyHoverCardDemo() {
           return (
             <JourneyOptionCircle
               key={key}
-              imageUrl={`/journeys/${String(101 + index)}.jpg`}
+              imageUrl={assetUrl(`/journeys/${String(101 + index)}.jpg`)}
               dreamName={demo.dreamName}
               text={demo.text}
               locked={false}

@@ -2,6 +2,7 @@ import { useState } from "react";
 import type { MerchantChoiceCandidate, MerchantContext, MerchantOffer } from "../types";
 import { JOURNEY_ACCENTS } from "./journeyTheme";
 import { OfferColumn } from "./OfferColumn";
+import { assetUrl } from "../../runtime/asset-url";
 
 interface DreamJourneyMobileProps {
   offers: readonly MerchantOffer[];
@@ -114,7 +115,7 @@ export function DreamJourneyMobile({
         }}
       >
         <img
-          src="/dream-guides/aldric_the_seer.png"
+          src={assetUrl("/dream-guides/aldric_the_seer.png")}
           alt="Aldric, the Seer"
           style={{
             height: 220,

@@ -2,6 +2,7 @@ import { useState, type CSSProperties, type ReactNode } from "react";
 import { motion } from "framer-motion";
 import type { Dreamsign } from "../types/quest";
 import { RulesText } from "./RulesText";
+import { assetUrl } from "../runtime/asset-url";
 
 /**
  * Shared visual primitives for "pick one of N offered options" surfaces.
@@ -351,7 +352,7 @@ export function OfferingDreamsignBody({
       {showImage ? (
         <img
           data-offering-dreamsign-art=""
-          src={`/dreamsigns/${String(dreamsign.imageName)}`}
+          src={assetUrl(`/dreamsigns/${String(dreamsign.imageName)}`)}
           alt={dreamsign.imageAlt ?? dreamsign.name}
           className="h-24 w-24 object-contain"
           style={{

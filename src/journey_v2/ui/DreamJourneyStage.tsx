@@ -5,6 +5,7 @@ import {
   JOURNEY_DESIGN_WIDTH,
   JOURNEY_TITLE_GRADIENT,
 } from "./journeyTheme";
+import { assetUrl } from "../../runtime/asset-url";
 
 interface DreamJourneyStageProps {
   /** The Dream Merchant's per-pairing flavor line, shown under the title. */
@@ -283,7 +284,7 @@ export function DreamJourneyStage({
             }}
           />
           <img
-            src="/dream-guides/aldric_the_seer.png"
+            src={assetUrl("/dream-guides/aldric_the_seer.png")}
             alt="Aldric, the Seer"
             style={{
               height: 700,

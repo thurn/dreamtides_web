@@ -74,6 +74,7 @@ import type {
 } from "../journey/manifest";
 import type { DrawContext } from "../util/rng";
 import { advanceTree, initializeTree } from "../util/tree";
+import { assetUrl } from "../../runtime/asset-url";
 
 import { CloseButton } from "./CloseButton";
 import { JourneyOptionCircle } from "./JourneyOptionCircle";
@@ -420,7 +421,7 @@ function JourneyScreenInner({
   }, [onExplanationChange]);
 
   const dreamArt = useMemo(
-    () => assignDreamArt(manifest, { extensionMap }),
+    () => assignDreamArt(manifest, { extensionMap, urlPrefix: assetUrl("/journeys/") }),
     [manifest, extensionMap],
   );
   const assignmentByLabel = useMemo(
