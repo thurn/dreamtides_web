@@ -25,4 +25,16 @@ describe("createBaseBattleDeckCardDefinition", () => {
     const definition = createBaseBattleDeckCardDefinition(card);
     expect(definition.cardId).toBe(card.id);
   });
+
+  it("carries multi-cost orb labels so the in-hand card renders every cost orb", () => {
+    const card: CardData = { ...makeSampleCard(), energyCost: 2, energyCosts: ["2", "X"] };
+    const definition = createBaseBattleDeckCardDefinition(card);
+    expect(definition.energyCosts).toEqual(["2", "X"]);
+  });
+
+  it("omits energyCosts entirely for a single-cost card (Firebase rejects explicit undefined)", () => {
+    const card = makeSampleCard();
+    const definition = createBaseBattleDeckCardDefinition(card);
+    expect("energyCosts" in definition).toBe(false);
+  });
 });

@@ -13,6 +13,11 @@ export function createBaseBattleDeckCardDefinition(
     subtype: card.subtype,
     energyCost: card.energyCost ?? 0,
     printedEnergyCost: card.energyCost,
+    // Carry multi-cost orb labels through only when present: this definition is
+    // serialized into the shared battle state, and Firebase rejects an explicit
+    // `undefined` field. Single-cost cards omit it and fall back to the orb
+    // derived from `printedEnergyCost`.
+    ...(card.energyCosts ? { energyCosts: card.energyCosts } : {}),
     printedSpark: card.spark ?? 0,
     isFast: card.isFast,
     timing: card.isFast ? "fast" : "standard",

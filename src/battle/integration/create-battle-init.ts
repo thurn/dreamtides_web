@@ -599,6 +599,11 @@ function normalizePlayerDeckCard(
     subtype: effectiveCard.subtype,
     energyCost: effectiveCard.energyCost ?? 0,
     printedEnergyCost: effectiveCard.energyCost,
+    // Carry multi-cost orb labels through only when present (Firebase rejects an
+    // explicit `undefined` in the serialized battle state). A transfiguration
+    // that changes the energy cost clears this on the source `CardData`, so the
+    // recomputed single orb is shown instead of stale multi-cost orbs.
+    ...(effectiveCard.energyCosts ? { energyCosts: effectiveCard.energyCosts } : {}),
     printedSpark: effectiveCard.spark ?? 0,
     isFast: effectiveCard.isFast,
     timing: effectiveCard.isFast ? "fast" : "standard",

@@ -246,6 +246,14 @@ export interface BattleDeckCardDefinition {
   subtype: string;
   energyCost: number;
   printedEnergyCost: number | null;
+  /**
+   * Ordered orb labels for a card that has more than one printed energy cost
+   * (a comma-separated TOML `energy-cost` such as `"2,X"` yielding
+   * `["2", "X"]`), carried through from the catalog `CardData.energyCosts` so
+   * the in-hand surface renders one orb per label. Absent on the common
+   * single-cost card, where the single orb is derived from `printedEnergyCost`.
+   */
+  energyCosts?: string[];
   printedSpark: number;
   isFast: boolean;
   timing?: BattleCardTiming;

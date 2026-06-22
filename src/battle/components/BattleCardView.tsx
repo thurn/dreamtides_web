@@ -86,6 +86,12 @@ export function battleCardDisplayFromInstance(
     subtype: instance.definition.subtype,
     isStarter: false,
     energyCost: instance.definition.printedEnergyCost,
+    // Multi-cost cards (e.g. a `"2,X"` printed cost) carry their orb labels so
+    // `CardView` renders one orb per segment; absent on single-cost cards, which
+    // fall back to the single `energyCost` orb.
+    ...(instance.definition.energyCosts
+      ? { energyCosts: instance.definition.energyCosts }
+      : {}),
     spark: instance.definition.battleCardKind === "character"
       ? selectEffectiveSparkForInstance(instance)
       : null,

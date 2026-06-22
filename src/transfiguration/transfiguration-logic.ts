@@ -319,8 +319,12 @@ function applyStatStep(
     if (card.energyCost === null || card.energyCost <= 0) {
       return { card, energyChanged: false, sparkChanged: false };
     }
+    // Halving the cost recomputes a single energy value, so drop any printed
+    // multi-cost orb labels: leaving them would make the display ignore the
+    // halved cost and render the stale pre-Empowered orbs.
+    const { energyCosts: _energyCosts, ...rest } = card;
     return {
-      card: { ...card, energyCost: Math.floor(card.energyCost / 2) },
+      card: { ...rest, energyCost: Math.floor(card.energyCost / 2) },
       energyChanged: true,
       sparkChanged: false,
     };
