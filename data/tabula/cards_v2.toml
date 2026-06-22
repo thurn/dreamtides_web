@@ -1382,7 +1382,7 @@ art-owned = false
 card-number = 74
 
 [[cards]]
-name = "Thronebound Arbiter"
+name = "Abyssal Deputy"
 mtg-name = "Ingenious Infiltrator"
 id = "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb"
 rendered-text = '''
@@ -1396,8 +1396,8 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = 2
-tags = ["Ninja", "Art Rework", "June22"]
-image-number = 428216263
+tags = ["Ninja", "Art Rework", "June22", "Art OK"]
+image-number = 2212744819
 art-owned = false
 card-number = 75
 
@@ -2216,7 +2216,7 @@ card-number = 119
 art = { x = -0.378, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Wreckland Maverick"
+name = "Wreckborn"
 mtg-name = "Tidehollow Sculler"
 id = "ea118471-164b-4d7f-bb02-044c862ed07e"
 rendered-text = "▸Materialized: Banish a chosen character from the opponent's hand until this character leaves play."
@@ -2227,10 +2227,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Tidehollow Sculler", "Art Rework", "June22"]
-image-number = 515170279
+tags = ["Tidehollow Sculler", "Art Rework", "June22", "Art OK"]
+image-number = 608687435
 art-owned = false
 card-number = 120
+art = { x = -0.544, y = 1, scale = 1.07 }
 
 [[cards]]
 name = "Fangbound"
@@ -2344,7 +2345,7 @@ art-owned = false
 card-number = 126
 
 [[cards]]
-name = "Driftrider"
+name = "Paradox Corps Enforcer"
 mtg-name = "Yuriko, the Tiger's Shadow"
 id = "954e8d50-d494-4fb2-b4c7-74979083b774"
 rendered-text = '''
@@ -2358,8 +2359,8 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = 2
-tags = ["Ninja", "Art Rework", "June22"]
-image-number = 309018680
+tags = ["Ninja", "Art Rework", "June22", "Art OK"]
+image-number = 1726923523
 art-owned = false
 card-number = 127
 
@@ -3775,7 +3776,7 @@ art-owned = false
 card-number = 204
 
 [[cards]]
-name = "Deathwalker"
+name = "Vigil Keeper"
 mtg-name = "Undead Augur"
 id = "f68774ce-0e94-489f-90a5-68e03a549ff6"
 rendered-text = "When an allied survivor is dissolved, draw a card."
@@ -3786,10 +3787,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June22"]
-image-number = 712713349
+tags = ["Art Rework", "June22", "Art OK"]
+image-number = 1044240499
 art-owned = false
 card-number = 205
+art = { x = 0.096, y = -0.06, scale = 1.37 }
 
 [[cards]]
 name = "Sanctum Approach"
@@ -5223,7 +5225,7 @@ card-number = 283
 art = { x = 0.168, y = 0, scale = 1.17 }
 
 [[cards]]
-name = "Northlight Maestro"
+name = "Consumed Berserker"
 mtg-name = "Ninja of the Deep Hours"
 id = "071bcab4-ed02-48a0-93dc-8fd0f36611c8"
 rendered-text = '''
@@ -5237,10 +5239,11 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = 2
-tags = ["Ninja", "Art Rework", "June22"]
-image-number = 519475501
+tags = ["Ninja", "Art Rework", "June22", "Art OK"]
+image-number = 2433164311
 art-owned = false
 card-number = 284
+art = { x = 0, y = 1, scale = 1.1 }
 
 [[cards]]
 name = "Data Pulse"
@@ -7817,8 +7820,8 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Figment Maker", "Art Rework", "June22", "Art Duplicate"]
-image-number = 2123360834
+tags = ["Figment Maker", "Art Rework", "June22", "Art Duplicate", "Art OK"]
+image-number = 1387670426
 art-owned = false
 card-number = 422
 

@@ -890,7 +890,7 @@
       ]
     },
     "f68774ce-0e94-489f-90a5-68e03a549ff6": {
-      "name": "Deathwalker",
+      "name": "Vigil Keeper",
       "needs": [
         {
           "theme": "survivors",
@@ -1130,7 +1130,7 @@
       ]
     },
     "954e8d50-d494-4fb2-b4c7-74979083b774": {
-      "name": "Driftrider",
+      "name": "Paradox Corps Enforcer",
       "needs": [
         {
           "theme": "outsiders",
@@ -2703,7 +2703,7 @@
       ]
     },
     "071bcab4-ed02-48a0-93dc-8fd0f36611c8": {
-      "name": "Northlight Maestro",
+      "name": "Consumed Berserker",
       "needs": [],
       "supports": [
         "outsiders"
@@ -4279,7 +4279,7 @@
       "supports": []
     },
     "cebcd591-dbd6-40b1-813d-f7f01e1b7fdb": {
-      "name": "Thronebound Arbiter",
+      "name": "Abyssal Deputy",
       "needs": [
         {
           "theme": "outsiders",
@@ -4922,7 +4922,7 @@
       ]
     },
     "ea118471-164b-4d7f-bb02-044c862ed07e": {
-      "name": "Wreckland Maverick",
+      "name": "Wreckborn",
       "needs": [],
       "supports": [
         "survivors",
