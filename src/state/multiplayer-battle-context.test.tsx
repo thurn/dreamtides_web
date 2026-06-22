@@ -346,6 +346,58 @@ describe("useMultiplayerBattle", () => {
     expect(value.reducerState!.lastActivity!.metadata).toBe(stubMetadata);
   });
 
+  it("bumps remoteCommandEpoch when a partner command advances the room serial", () => {
+    const fakeBattleState = makeFakeBattleState();
+    const captured: MultiplayerBattleValue[] = [];
+    const renderWith = (battleState: SharedBattleState): ReactNode => (
+      <MultiplayerBattleProvider
+        database={{} as Database}
+        roomId="room-coop"
+        clientId="client-a"
+        connectedCount={2}
+        battleState={battleState}
+      >
+        <CaptureValue onValue={(value) => captured.push(value)} />
+      </MultiplayerBattleProvider>
+    );
+
+    const { root } = mount(renderWith(fakeBattleState));
+    expect(captured[captured.length - 1]?.remoteCommandEpoch).toBe(0);
+
+    // A partner's command lands in the room: same battle, serial ahead of ours.
+    const advanced: SharedBattleState = {
+      init: fakeBattleState.init,
+      reducer: { ...fakeBattleState.reducer, commandSerial: 1 },
+    };
+    act(() => {
+      root.render(renderWith(advanced));
+    });
+    expect(captured[captured.length - 1]?.remoteCommandEpoch).toBe(1);
+  });
+
+  it("does not bump remoteCommandEpoch when the same room snapshot re-renders", () => {
+    const fakeBattleState = makeFakeBattleState();
+    const captured: MultiplayerBattleValue[] = [];
+    const element = (
+      <MultiplayerBattleProvider
+        database={{} as Database}
+        roomId="room-coop"
+        clientId="client-a"
+        connectedCount={2}
+        battleState={fakeBattleState}
+      >
+        <CaptureValue onValue={(value) => captured.push(value)} />
+      </MultiplayerBattleProvider>
+    );
+    const { root } = mount(element);
+    expect(captured[captured.length - 1]?.remoteCommandEpoch).toBe(0);
+
+    act(() => {
+      root.render(element);
+    });
+    expect(captured[captured.length - 1]?.remoteCommandEpoch).toBe(0);
+  });
+
   it("leaves reducerState.lastActivity null when lastActivityKind is null", () => {
     const fakeBattleState = makeFakeBattleState();
     expect(fakeBattleState.reducer.lastActivityKind).toBeNull();

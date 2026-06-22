@@ -21,6 +21,14 @@ export interface BattleEffectRunnerArgs {
   enabled: boolean; // isBasicAutomationEnabled
   state: BattleMutableState; // reducerState.mutable (live, per-render)
   dispatchEdit: (edit: BattleDebugEdit) => void; // bypasses planBasicAutomationCommands
+  /**
+   * A monotonic counter that increments whenever a coop partner advances the
+   * shared battle (see `remoteCommandEpoch` in the multiplayer context). When it
+   * changes while a prompt is open, the partner has resolved that choice on
+   * their client, so we tear down the active run and pending queue and dismiss
+   * the overlay. Stays constant (and so is inert) in single-player.
+   */
+  cancelPromptSignal: number;
 }
 
 export interface BattleEffectRunnerResult {
@@ -207,6 +215,7 @@ const BATTLE_EFFECT_LOG = {
   started: "battle_proto_battle_effect_started",
   step: "battle_proto_battle_step",
   promptResolved: "battle_proto_battle_prompt_resolved",
+  promptDismissedByPartner: "battle_proto_battle_prompt_dismissed_by_partner",
   resolved: "battle_proto_battle_effect_resolved",
   supportChanged: "battle_proto_battle_support_changed",
 } as const;
@@ -268,7 +277,7 @@ function extractEditTarget(edit: BattleDebugEdit): string | null {
  * Dawn scripts are deferred to the post-dawn scan above.
  */
 export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffectRunnerResult {
-  const { enabled, state, dispatchEdit } = args;
+  const { enabled, state, dispatchEdit, cancelPromptSignal } = args;
 
   // The in-play ids observed on the previous render. `null` until the first
   // observation, which seeds the set WITHOUT firing (so characters already in
@@ -308,6 +317,10 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
   // disabling automation mid-turn then re-enabling the SAME turn does not
   // re-fire the scan (the key stays set), avoiding a double-fire.
   const processedInteractiveDawnRef = useRef<Set<string>>(new Set());
+
+  // Last observed `cancelPromptSignal`, so the coop-dismiss effect fires only on
+  // an actual change (a partner command) rather than on its initial mount value.
+  const lastCancelSignalRef = useRef(cancelPromptSignal);
 
   const inPlayIds = inPlayInstanceIds(state);
   // A stable, order-independent key so the materialized effect re-runs only when
@@ -533,6 +546,33 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
     },
     [run, activePrompt, state, dispatchEdit],
   );
+
+  // ---------------------------------------------------------------------------
+  // Coop dismiss — partner resolved this prompt on their client
+  // ---------------------------------------------------------------------------
+  // When `cancelPromptSignal` changes our coop partner advanced the shared
+  // battle. Their resolution edits — and the rest of the paused run's queue,
+  // which they walk — sync to us as commands, so we just tear down the active
+  // run AND the pending queue (mirroring the abort teardown) and clear the
+  // overlay; the not-yet-started pending runs are dropped so they cannot replay
+  // out of context now that the partner is driving. Guarded on an open prompt so
+  // unrelated partner moves do not disturb an in-progress run.
+  useEffect(() => {
+    if (cancelPromptSignal === lastCancelSignalRef.current) return;
+    lastCancelSignalRef.current = cancelPromptSignal;
+    if (activePrompt === null) return;
+    logBattleEffect(state, BATTLE_EFFECT_LOG.promptDismissedByPartner, {
+      cardId: run?.cardId ?? null,
+      battleCardId: run?.battleCardId ?? null,
+      trigger: run?.trigger ?? null,
+      promptKind: activePrompt.kind,
+    });
+    setRun(null);
+    setActivePrompt(null);
+    pausedRef.current = null;
+    processedQueueRef.current = null;
+    pendingRef.current = [];
+  }, [cancelPromptSignal, activePrompt, run, state]);
 
   // ---------------------------------------------------------------------------
   // Support — idempotent recompute of staticSparkBonus

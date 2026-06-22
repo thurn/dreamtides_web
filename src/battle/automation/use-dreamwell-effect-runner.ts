@@ -20,6 +20,14 @@ export interface DreamwellRunnerArgs {
   state: BattleMutableState;               // reducerState.mutable (live, per-render)
   dreamwellDeck: readonly DreamwellCardDefinition[];
   dispatchEdit: (edit: BattleDebugEdit) => void; // bypasses planBasicAutomationCommands
+  /**
+   * A monotonic counter that increments whenever a coop partner advances the
+   * shared battle (see `remoteCommandEpoch` in the multiplayer context). When it
+   * changes while a prompt is open, the partner has resolved that choice on
+   * their client, so we tear down our local run and dismiss the overlay. Stays
+   * constant (and so is inert) in single-player.
+   */
+  cancelPromptSignal: number;
 }
 
 export interface DreamwellRunnerResult {
@@ -46,6 +54,7 @@ const DREAMWELL_LOG = {
   started: "battle_proto_dreamwell_effect_started",
   step: "battle_proto_dreamwell_step",
   promptResolved: "battle_proto_dreamwell_prompt_resolved",
+  promptDismissedByPartner: "battle_proto_dreamwell_prompt_dismissed_by_partner",
   resolved: "battle_proto_dreamwell_effect_resolved",
 } as const;
 
@@ -66,7 +75,7 @@ function logDreamwell(
 // ---------------------------------------------------------------------------
 
 export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRunnerResult {
-  const { enabled, state, dreamwellDeck, dispatchEdit } = args;
+  const { enabled, state, dreamwellDeck, dispatchEdit, cancelPromptSignal } = args;
 
   // Internal runner state: the active card run (null when idle).
   const [run, setRun] = useState<{
@@ -91,6 +100,10 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
 
   // Re-render guard: skip advance if the queue reference has not changed.
   const processedQueueRef = useRef<EffectStep[] | null>(null);
+
+  // Last observed `cancelPromptSignal`, so the coop-dismiss effect fires only on
+  // an actual change (a partner command) rather than on its initial mount value.
+  const lastCancelSignalRef = useRef(cancelPromptSignal);
 
   // ---------------------------------------------------------------------------
   // Start effect — fires when the dreamwell reveal for this (side, turn) lands
@@ -268,6 +281,30 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
     },
     [run, activePrompt, state, dispatchEdit],
   );
+
+  // ---------------------------------------------------------------------------
+  // Coop dismiss — partner resolved this prompt on their client
+  // ---------------------------------------------------------------------------
+  // When `cancelPromptSignal` changes our coop partner advanced the shared
+  // battle. Their resolution edits sync to us as commands, so the only thing
+  // left to do locally is tear down the run that is paused on the open prompt
+  // and clear the overlay — mirroring the abort teardown. Guarded on an open
+  // prompt so unrelated partner moves do not disturb an in-progress run.
+  useEffect(() => {
+    if (cancelPromptSignal === lastCancelSignalRef.current) return;
+    lastCancelSignalRef.current = cancelPromptSignal;
+    if (activePrompt === null) return;
+    logDreamwell(state, DREAMWELL_LOG.promptDismissedByPartner, {
+      dreamwellCardId: run?.cardId ?? null,
+      promptKind: activePrompt.kind,
+    });
+    setRun(null);
+    setActivePrompt(null);
+    pausedRef.current = null;
+    processedQueueRef.current = null;
+    // `lastRunKeyRef` deliberately stays set: the partner handled this (side,
+    // turn) Dreamwell prompt, so it must not replay locally.
+  }, [cancelPromptSignal, activePrompt, run, state]);
 
   // The full Dreamwell card behind the open run, looked up by id so the prompt
   // modal can re-render it as context (the on-board display is hidden behind the

@@ -35,6 +35,16 @@ export interface MultiplayerBattleValue {
   battleState: SharedBattleState | null;
   reducerState: BattleReducerState | null;
   dispatch: (action: BattleControllerAction) => void;
+  /**
+   * A monotonic counter bumped every time a REMOTE actor (our coop partner)
+   * advances the shared battle past our local command serial. Coop UI watches
+   * this to dismiss choices the partner already resolved — most importantly an
+   * open automation prompt (e.g. "Choose a card to discard"), which is purely
+   * local runner state and would otherwise stay on screen forever after the
+   * partner picks. It never bumps for our own optimistic writes (those keep the
+   * room serial in lockstep with ours) nor in single-player (no remote actor).
+   */
+  remoteCommandEpoch: number;
 }
 
 export const MultiplayerBattleContext =
@@ -88,6 +98,11 @@ export function MultiplayerBattleProvider({
   // several dispatches within one render tick.
   const [local, setLocal] = useState<LocalBattleState | null>(null);
   const localRef = useRef<LocalBattleState | null>(null);
+
+  // Bumped whenever a remote partner command advances the SAME battle past our
+  // local serial (see the reconciliation effect below). Exposed so coop UI can
+  // dismiss prompts the partner resolved.
+  const [remoteCommandEpoch, setRemoteCommandEpoch] = useState(0);
   const commitLocal = useCallback((next: LocalBattleState | null) => {
     localRef.current = next;
     setLocal(next);
@@ -112,12 +127,18 @@ export function MultiplayerBattleProvider({
       return;
     }
     const current = localRef.current;
-    if (
-      current === null ||
-      current.battleId !== battleState.init.battleId ||
-      battleState.reducer.commandSerial > current.serial
-    ) {
+    if (current === null || current.battleId !== battleState.init.battleId) {
+      // Fresh or changed battle — reseed without treating it as a partner move.
       commitLocal(seedLocalFromShared(battleState));
+      return;
+    }
+    if (battleState.reducer.commandSerial > current.serial) {
+      // The room ran AHEAD of us on the same battle: a remote command our coop
+      // partner applied (our own writes keep the room serial in lockstep, so the
+      // strict `>` is uniquely a partner move). Reseed to their state and bump
+      // the epoch so any prompt we have open can dismiss itself.
+      commitLocal(seedLocalFromShared(battleState));
+      setRemoteCommandEpoch((epoch) => epoch + 1);
     }
   }, [battleState, commitLocal]);
 
@@ -203,8 +224,18 @@ export function MultiplayerBattleProvider({
       battleState,
       reducerState,
       dispatch,
+      remoteCommandEpoch,
     }),
-    [database, roomId, clientId, connectedCount, battleState, reducerState, dispatch],
+    [
+      database,
+      roomId,
+      clientId,
+      connectedCount,
+      battleState,
+      reducerState,
+      dispatch,
+      remoteCommandEpoch,
+    ],
   );
 
   return (

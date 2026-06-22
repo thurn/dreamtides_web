@@ -149,6 +149,7 @@ function PlayableBattleScreenInner({
     roomId,
     clientId,
     connectedCount,
+    remoteCommandEpoch,
   } = useMultiplayerBattle();
   if (maybeBattleState === null || maybeReducerState === null) {
     throw new Error(
@@ -282,6 +283,7 @@ function PlayableBattleScreenInner({
     state: reducerState.mutable,
     dreamwellDeck: battleInit.dreamwellDeck,
     dispatchEdit: dispatchAutomationEdit,
+    cancelPromptSignal: remoteCommandEpoch,
   });
 
   // Resolves the persistent-board battle triggers: ▸Materialized (walked through
@@ -291,6 +293,7 @@ function PlayableBattleScreenInner({
     enabled: isBasicAutomationEnabled,
     state: reducerState.mutable,
     dispatchEdit: dispatchAutomationEdit,
+    cancelPromptSignal: remoteCommandEpoch,
   });
 
   // Dreamwell-draw rail tool: on demand, reveal an additional Dreamwell card for
