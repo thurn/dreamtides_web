@@ -92,6 +92,10 @@ and controls are fully visible, layout spacing is stable, elements are free of
 clipping or overlap, and the resulting screen is visually coherent at the
 tested viewport sizes.
 
+# Deploy
+
+Deploy the prototype to production with `npm run build && firebase deploy --only hosting`.
+
 # Documentation style
 
 Do not describe what the system *no longer* does. Documentation should describe
