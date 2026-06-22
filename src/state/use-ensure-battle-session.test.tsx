@@ -54,13 +54,19 @@ function makeFakeBattleState(): SharedBattleState {
 interface HostProps {
   battleState: SharedBattleState | null;
   battleEntryKey: string;
+  isPrimaryClient?: boolean;
 }
 
-function Host({ battleState, battleEntryKey }: HostProps): ReactNode {
+function Host({
+  battleState,
+  battleEntryKey,
+  isPrimaryClient,
+}: HostProps): ReactNode {
   useEnsureBattleSession({
     database: {} as Database,
     roomId: "room-1",
     clientId: "client-a",
+    isPrimaryClient,
     battleState,
     battleEntryKey,
     site: makeBattleTestSite(),
@@ -150,6 +156,38 @@ describe("useEnsureBattleSession", () => {
       expect(battleService.ensureBattleSession).toHaveBeenCalledTimes(1);
     },
   );
+
+  it("does not initialize when this client is not the room's primary", () => {
+    mount({
+      battleState: null,
+      battleEntryKey: "site-7::3::dreamscape-2",
+      isPrimaryClient: false,
+    });
+    expect(battleService.ensureBattleSession).not.toHaveBeenCalled();
+  });
+
+  it("initializes once a non-primary client becomes primary", () => {
+    const root = mount({
+      battleState: null,
+      battleEntryKey: "site-7::3::dreamscape-2",
+      isPrimaryClient: false,
+    });
+    // Non-primary: no init while another client is the authority.
+    expect(battleService.ensureBattleSession).not.toHaveBeenCalled();
+
+    // The prior primary disconnected; this client is now primary and the slot
+    // is still null, so it must take over and initialize the battle.
+    act(() => {
+      root.render(
+        <Host
+          battleState={null}
+          battleEntryKey="site-7::3::dreamscape-2"
+          isPrimaryClient={true}
+        />,
+      );
+    });
+    expect(battleService.ensureBattleSession).toHaveBeenCalledTimes(1);
+  });
 
   it("fires for a new battleEntryKey even after a previous successful ensure", () => {
     const fake = makeFakeBattleState();

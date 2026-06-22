@@ -672,6 +672,36 @@ export function connectedClientCount(room: MultiplayerRoom): number {
     .length;
 }
 
+/**
+ * Whether `clientId` is the room's primary client — the single client
+ * authorized to perform once-per-room authoritative work (currently the battle
+ * init in {@link useEnsureBattleSession}). The room model has no host/owner
+ * field, so "primary" is derived deterministically from presence: the
+ * lexicographically smallest connected `clientId`. Because every client sees
+ * the same synced `presence`, they all agree on the same primary.
+ *
+ * The caller's own `clientId` is always treated as a candidate even when its
+ * presence write has not yet synced, so a client never defers to a set that
+ * excludes itself. When no presence is known (the not-yet-synced or
+ * single-client case) the sole candidate is `clientId`, so it is primary —
+ * mirroring the presence-unknown-means-act-locally rule the battle AI uses
+ * (see `aiMayRunHere`). The server-side `ensureBattleSession` transaction
+ * remains the final guard against any residual race during presence
+ * convergence.
+ */
+export function isPrimaryClient(
+  room: MultiplayerRoom,
+  clientId: string,
+): boolean {
+  const connected = Object.entries(room.presence ?? {})
+    .filter(([, entry]) => entry.connected)
+    .map(([id]) => id);
+  const candidates = connected.includes(clientId)
+    ? connected
+    : [...connected, clientId];
+  return candidates.every((id) => clientId <= id);
+}
+
 export async function writePresence(
   database: Database,
   roomId: string,

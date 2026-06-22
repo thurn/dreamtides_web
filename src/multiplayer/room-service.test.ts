@@ -6,6 +6,7 @@ import {
   createRoom,
   createRoomEvictingStale,
   createRoomRecord,
+  isPrimaryClient,
   isRoomStale,
   pruneRoomActionLog,
   ROOM_PRESERVATION_WINDOW_MS,
@@ -1369,5 +1370,51 @@ describe("room service", () => {
       "room-b:update:run",
       "room-a:transaction:commit",
     ]);
+  });
+});
+
+describe("isPrimaryClient", () => {
+  function roomWithPresence(
+    connectedIds: readonly string[],
+    disconnectedIds: readonly string[] = [],
+  ): MultiplayerRoom {
+    const room = createRoomRecord(timestamp);
+    const presence: Record<string, { connected: boolean; lastSeenAt: string }> =
+      {};
+    for (const id of connectedIds) {
+      presence[id] = { connected: true, lastSeenAt: timestamp };
+    }
+    for (const id of disconnectedIds) {
+      presence[id] = { connected: false, lastSeenAt: timestamp };
+    }
+    return { ...room, presence };
+  }
+
+  it("treats a sole client as primary even with no presence written yet", () => {
+    expect(isPrimaryClient(roomWithPresence([]), "client-z")).toBe(true);
+  });
+
+  it("makes the lexicographically smallest connected client primary", () => {
+    const room = roomWithPresence(["client-b", "client-a", "client-c"]);
+    expect(isPrimaryClient(room, "client-a")).toBe(true);
+    expect(isPrimaryClient(room, "client-b")).toBe(false);
+    expect(isPrimaryClient(room, "client-c")).toBe(false);
+  });
+
+  it("ignores disconnected clients when choosing the primary", () => {
+    // A lower-id but disconnected client must not block the connected one.
+    const room = roomWithPresence(["client-m"], ["client-a"]);
+    expect(isPrimaryClient(room, "client-m")).toBe(true);
+  });
+
+  it("counts the caller as a candidate even when its presence is unsynced", () => {
+    // The caller is lower than the only synced client, so it is primary despite
+    // not yet appearing in the presence map.
+    const room = roomWithPresence(["client-x"]);
+    expect(isPrimaryClient(room, "client-a")).toBe(true);
+    // And it correctly defers when a synced client outranks it.
+    expect(isPrimaryClient(roomWithPresence(["client-a"]), "client-x")).toBe(
+      false,
+    );
   });
 });

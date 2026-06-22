@@ -42,6 +42,16 @@ export function useEnsureBattleSession(input: {
   database: Database;
   roomId: string;
   clientId: string;
+  /**
+   * Whether this client is the room's primary client. Only the primary computes
+   * and commits the battle init; non-primary clients wait for the synced
+   * `battleState`. This is what makes a battle initialize once, from a single
+   * authority, instead of every connected client speculatively building its own
+   * init (which can diverge — e.g. the opponent deck depends on the local
+   * client's `aiMode`). Defaults to `true` so single-client and test callers
+   * still initialize.
+   */
+  isPrimaryClient?: boolean;
   battleState: SharedBattleState | null;
   battleEntryKey: string;
   site: SiteState;
@@ -71,6 +81,12 @@ export function useEnsureBattleSession(input: {
 
   useEffect(() => {
     if (input.battleState !== null) {
+      return;
+    }
+    // Only the room's primary client builds the battle; everyone else waits for
+    // the synced `battleState`. The latch below is left untouched so a client
+    // that LATER becomes primary (the prior primary disconnected) still fires.
+    if (input.isPrimaryClient === false) {
       return;
     }
     if (inFlightKey.current === input.battleEntryKey) {
@@ -120,6 +136,7 @@ export function useEnsureBattleSession(input: {
       });
   }, [
     input.aiMode,
+    input.isPrimaryClient,
     input.battleEntryKey,
     input.battleState,
     input.affiliations,

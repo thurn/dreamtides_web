@@ -32,6 +32,14 @@ export interface MultiplayerBattleValue {
    * exactly one client).
    */
   connectedCount: number;
+  /**
+   * Whether this client is the room's primary client — the single client
+   * authorized to compute and commit the battle init. Non-primary clients wait
+   * for the synced `battleState` instead of building their own, so a battle is
+   * initialized once, by one authority, rather than raced across every
+   * connected client. Derived from presence (see {@link isPrimaryClient}).
+   */
+  isPrimaryClient: boolean;
   battleState: SharedBattleState | null;
   reducerState: BattleReducerState | null;
   dispatch: (action: BattleControllerAction) => void;
@@ -81,6 +89,7 @@ export function MultiplayerBattleProvider({
   roomId,
   clientId,
   connectedCount,
+  isPrimaryClient = true,
   battleState,
 }: {
   children: ReactNode;
@@ -88,6 +97,8 @@ export function MultiplayerBattleProvider({
   roomId: string;
   clientId: string;
   connectedCount: number;
+  /** Defaults to `true` (single-client / test default); see the context field. */
+  isPrimaryClient?: boolean;
   battleState: SharedBattleState | null;
 }) {
   const stateRef = useRef({ database, roomId, clientId });
@@ -221,6 +232,7 @@ export function MultiplayerBattleProvider({
       roomId,
       clientId,
       connectedCount,
+      isPrimaryClient,
       battleState,
       reducerState,
       dispatch,
@@ -231,6 +243,7 @@ export function MultiplayerBattleProvider({
       roomId,
       clientId,
       connectedCount,
+      isPrimaryClient,
       battleState,
       reducerState,
       dispatch,

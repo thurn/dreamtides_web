@@ -12,7 +12,7 @@ import {
 } from "./data/quest-content";
 import { getFirebaseDatabase } from "./firebase/app-config";
 import { MultiplayerRoomGate } from "./multiplayer/MultiplayerRoomGate";
-import { connectedClientCount } from "./multiplayer/room-service";
+import { connectedClientCount, isPrimaryClient } from "./multiplayer/room-service";
 import { useQuest } from "./state/quest-context";
 import { MultiplayerQuestProvider } from "./state/multiplayer-quest-context";
 import { MultiplayerBattleProvider } from "./state/multiplayer-battle-context";
@@ -675,6 +675,7 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
             roomId={session.roomId}
             clientId={session.clientId}
             connectedCount={connectedClientCount(session.room)}
+            isPrimaryClient={isPrimaryClient(session.room, session.clientId)}
             battleState={session.room.battleState}
           >
             <QuestApp
