@@ -11,6 +11,7 @@ import type { CardData } from "../../types/cards";
 import {
   createBattleLogBaseFields,
   logBattleCommandApplied,
+  logEvent,
   logEventOnce,
 } from "../../logging";
 import { useQuest } from "../../state/quest-context";
@@ -299,11 +300,41 @@ function PlayableBattleScreenInner({
     cancelPromptSignal: remoteCommandEpoch,
   });
 
+  // Deck-aware companion to the reducer's `battle_proto_dreamwell_card_drawn`:
+  // logs which card a reveal is about to draw, with the detail the reducer cannot
+  // see (`order`, name, `energyAdded`). Read just before dispatch so
+  // `dreamwellDeckIndex` is the pre-draw position the card is taken from, and
+  // `sourceSurface` distinguishes the core per-turn reveal (`auto-system`) from a
+  // manual extra draw such as Lily Lake (`status-strip`). Pairing this with the
+  // reducer event by (side, turn) shows the intended order vs. the actual applied
+  // index, exposing any over-advance of the shared deck index.
+  const logDreamwellReveal = useCallback(
+    (side: BattleSide, turnNumber: number, sourceSurface: BattleCommandSourceSurface): void => {
+      const drawIndex = reducerState.mutable.dreamwellDeckIndex;
+      const card = battleInit.dreamwellDeck[drawIndex];
+      logEvent("battle_proto_dreamwell_card_revealed", {
+        ...createBattleLogBaseFields(reducerState.mutable, {
+          sourceSurface,
+          selectedCardId: null,
+        }),
+        side,
+        drawTurnNumber: turnNumber,
+        dreamwellDeckIndex: drawIndex,
+        dreamwellCardId: card?.id ?? null,
+        dreamwellCardName: card?.name ?? null,
+        cardOrder: card?.order ?? null,
+        energyAdded: card?.energyAdded ?? null,
+      });
+    },
+    [reducerState.mutable, battleInit.dreamwellDeck],
+  );
+
   // Dreamwell-draw rail tool: on demand, reveal an additional Dreamwell card for
   // a side and (under basic automation) apply its energy. The shared draw index
   // advances, so this is the manual hook for effects such as Lily Lake ("Draw an
   // additional Dreamwell card").
   const runDreamwellDraw = useCallback((side: BattleSide): void => {
+    logDreamwellReveal(side, reducerState.mutable.turnNumber, "status-strip");
     handleCommand({
       id: "DEBUG_EDIT",
       edit: {
@@ -313,7 +344,7 @@ function PlayableBattleScreenInner({
       },
       sourceSurface: "status-strip",
     });
-  }, [handleCommand, reducerState.mutable.turnNumber]);
+  }, [handleCommand, logDreamwellReveal, reducerState.mutable.turnNumber]);
 
   // Dreamwell reveal: whenever the active side rests on its Dreamwell phase
   // without having drawn this turn's Dreamwell card yet, reveal it (rules §The
@@ -340,6 +371,7 @@ function PlayableBattleScreenInner({
       return;
     }
     lastDreamwellRevealKeyRef.current = revealKey;
+    logDreamwellReveal(activeSide, activeTurnNumber, "auto-system");
     handleCommand({
       id: "DEBUG_EDIT",
       edit: {
@@ -351,6 +383,7 @@ function PlayableBattleScreenInner({
     });
   }, [
     handleCommand,
+    logDreamwellReveal,
     activeSide,
     activePhase,
     activeTurnNumber,
@@ -1458,6 +1491,7 @@ function PlayableBattleScreenInner({
                       // reveal even though automation is off.
                       const dreamwellCard =
                         battleInit.dreamwellDeck[reducerState.mutable.dreamwellDeckIndex];
+                      logDreamwellReveal("enemy", target.turnNumber, "phase-controls");
                       handleCommand({
                         id: "DEBUG_EDIT",
                         edit: {

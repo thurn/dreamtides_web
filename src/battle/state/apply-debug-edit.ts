@@ -1596,6 +1596,12 @@ function drawCardToHand(
  * basic automation (which reads the drawn card's `energyAdded`), keeping this
  * edit a pure reveal. The card definition is read from `BattleInit.dreamwellDeck`
  * at the recorded index by the display and automation layers.
+ *
+ * The reveal is logged deck-aware (with `order`/name/`energyAdded`) at the
+ * dispatch sites via `battle_proto_dreamwell_card_revealed`; this pure reducer
+ * step does not log, because under basic automation it is the first of an
+ * expanded command batch (reveal then energy edits) and only the batch's final
+ * transition is emitted, so a log here would be shadowed.
  */
 function drawDreamwellCard(
   state: BattleMutableState,
