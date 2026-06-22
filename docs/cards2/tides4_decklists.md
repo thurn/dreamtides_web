@@ -425,7 +425,7 @@ Tide-sig-04 is a character-heavy deck (86 of 110 copies are characters) built ar
 - 1× Minstrel of Falling Light
 - 1× Gleamharvester
 - 1× Urban Cipher
-- 1× Desperation
+- 1× Seek Answers
 - 1× Starcatcher
 - 1× Ash Harbinger
 - 1× Somber Flockmaster
@@ -638,7 +638,7 @@ Tide-sig-06 is a heavily character-weighted deck (84 of 110 copies are character
 - 1× Gleamharvester
 - 1× Eruption
 - 1× Together Against the Tide
-- 1× Desperation
+- 1× Seek Answers
 - 1× Emberwatch Veteran
 - 1× Pyrokinetic Surge
 - 1× Forsaken Skyline
@@ -1148,7 +1148,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Echoes of the Journey
 - 1× Minstrel of Falling Light
 - 1× Duskshore Virtuoso
-- 1× Desperation
+- 1× Seek Answers
 - 1× Somber Flockmaster
 - 1× Forsaken Skyline
 - 1× Barrage Specialist
@@ -1245,7 +1245,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Eruption
 - 1× Urban Cipher
 - 1× Duskshore Virtuoso
-- 1× Desperation
+- 1× Seek Answers
 - 1× Starcatcher
 - 1× Ash Harbinger
 - 1× Somber Flockmaster
@@ -1350,7 +1350,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Eruption
 - 1× Urban Cipher
 - 1× Duskshore Virtuoso
-- 1× Desperation
+- 1× Seek Answers
 - 1× Ash Harbinger
 - 1× Somber Flockmaster
 - 1× Ashlight Caller
@@ -1722,7 +1722,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 
 - 2× Harbor Warden
 - 2× The Deathsworn
-- 2× Sundown Ronin
+- 2× Sun Clan Lieutenant
 - 2× Gilded Catalyst
 - 2× Burning Revenant
 - 2× Cinderblade Legionnaire
@@ -1818,7 +1818,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 
 - 2× Harbor Warden
 - 2× The Deathsworn
-- 2× Sundown Ronin
+- 2× Sun Clan Lieutenant
 - 2× Burning Revenant
 - 2× Cinderblade Legionnaire
 - 2× Skyflame Commander
@@ -1909,7 +1909,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copies are characters) built around a self-sustaining loop of sacrifice, energy generation, and void recursion. The central engine runs on abandoning warriors for immediate value: Blood Reaver pays out 2● per abandoned warrior, Blight Weaver2 bursts 3● on materialization, Wolfbond Chieftain and Crescendo Channeler convert a board full of warriors into ongoing energy, and Aftermath Bloom lets you abandon a warrior to discover and immediately materialize one with higher cost — a sacrifice-powered upgrade ladder. Abandoned and dissolved warriors flow back from the void through Burning Revenant (which returns a cheaper warrior to hand whenever any allied warrior is dissolved), Cinderblade Legionnaire and Starbound Striker (which return warriors from void on their own dissolution), and Dream Garden Visitor (which lets you replay a warrior from the void each turn). The tide also carries a persistent spark-amplification layer — Assault Leader grants every allied warrior +1✦ each dawn, Skyflame Commander's support scales with warrior count, and Colossal Convergence converts a sacrificed character's full ✦ into a boost for another ally — so the abandon engine feeds both energy and board power simultaneously. Compared to the nearest sibling tide-sig-18, which adds interrupt events (counterspells and conditional dissolves) and relies more on card draw off lifecycle triggers, this tide has strictly higher sacrifice-for-energy density (2x copies of Blood Reaver, Blight Weaver2, and Crescendo Channeler) and uses abandonment primarily as fuel rather than disruption; compared to tide-sig-19, which runs Prism Caller and Tranquil Duelist to stack ✦ on individual invested characters, this tide spreads its payoffs across the full warrior count and treats every warrior as a renewable energy resource.
 
 - 2× Harbor Warden
-- 2× Sundown Ronin
+- 2× Sun Clan Lieutenant
 - 2× Burning Revenant
 - 2× Cinderblade Legionnaire
 - 2× Pathfinder
@@ -2416,7 +2416,7 @@ Tide-fac-09 is almost entirely characters (39 of 45 copies), built around a tigh
 - 1× Twice-Lit Portal
 - 1× Minstrel of Falling Light
 - 1× Duskshore Virtuoso
-- 1× Desperation
+- 1× Seek Answers
 - 1× Somber Flockmaster
 - 1× Ashlight Caller
 - 1× Forsaken Skyline
@@ -2685,7 +2685,7 @@ This tide is almost entirely warriors (43 of 45 cards) built around a tight loop
 - 2× Ethereal Trailblazer
 - 1× Harbor Warden
 - 1× The Deathsworn
-- 1× Sundown Ronin
+- 1× Sun Clan Lieutenant
 - 1× Reforged Automaton
 - 1× Gilded Catalyst
 - 1× Spellweaver
@@ -2741,7 +2741,7 @@ Tide-fac-16 is almost entirely characters (43 of 45 copies), nearly all warriors
 - 2× Ethereal Trailblazer
 - 1× Harbor Warden
 - 1× The Deathsworn
-- 1× Sundown Ronin
+- 1× Sun Clan Lieutenant
 - 1× Gilded Catalyst
 - 1× Spellweaver
 - 1× Burning Revenant
@@ -2813,7 +2813,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Abandon Constraints
 - 1× Minstrel of Falling Light
 - 1× Duskshore Virtuoso
-- 1× Desperation
+- 1× Seek Answers
 - 1× Starcatcher
 - 1× Ashlight Caller
 - 1× Cloudback Courier
@@ -2895,7 +2895,7 @@ Tide-fac-19 is a character-heavy facet (32 characters, 13 events) built around a
 - 1× Inferno's Herald
 - 1× Harbor Warden
 - 1× The Deathsworn
-- 1× Sundown Ronin
+- 1× Sun Clan Lieutenant
 - 1× Gilded Catalyst
 - 1× Burning Revenant
 - 1× Haunted Betrayer
@@ -2966,7 +2966,7 @@ Tide-fac-20 is an event-heavy combo tide (34 events, 11 characters) built around
 - 1× Twice-Lit Portal
 - 1× Echoes of the Journey
 - 1× Minstrel of Falling Light
-- 1× Desperation
+- 1× Seek Answers
 - 1× Spiral Offering
 - 1× Gateweaver
 - 1× Dreadwood Emissary
@@ -3418,7 +3418,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Twice-Lit Portal
 - 1× Abandon Constraints
 - 1× Minstrel of Falling Light
-- 1× Desperation
+- 1× Seek Answers
 - 1× Starcatcher
 - 1× Ashlight Caller
 - 1× Pattern Seeker
@@ -3448,7 +3448,7 @@ Tide-fac-30 is built almost entirely around spirit animal characters (36 of 45 c
 - 1× Inferno's Herald
 - 1× Harbor Warden
 - 1× The Deathsworn
-- 1× Sundown Ronin
+- 1× Sun Clan Lieutenant
 - 1× Gilded Catalyst
 - 1× Spellweaver
 - 1× Cinderblade Legionnaire
@@ -3573,7 +3573,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Minstrel of Falling Light
 - 1× Gleamharvester
 - 1× Urban Cipher
-- 1× Desperation
+- 1× Seek Answers
 - 1× Pattern Seeker
 - 1× Forsaken Skyline
 - 1× Silent Gatherer
@@ -3715,7 +3715,7 @@ Tide-neu-04 is built almost entirely of warriors (28 of 30 cards are characters,
 - 2× Blood Reaver
 - 1× Harbor Warden
 - 1× The Deathsworn
-- 1× Sundown Ronin
+- 1× Sun Clan Lieutenant
 - 1× Spellweaver
 - 1× Burning Revenant
 - 1× Haunted Betrayer
@@ -3801,7 +3801,7 @@ Tide-neu-06 is a character-dense discard engine built around accumulating a larg
 - 1× Abandon Constraints
 - 1× Gleamharvester
 - 1× Urban Cipher
-- 1× Desperation
+- 1× Seek Answers
 - 1× Ash Harbinger
 - 1× Pattern Seeker
 - 1× Torchbearer of the Abyss

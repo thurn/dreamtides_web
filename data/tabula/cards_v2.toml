@@ -844,7 +844,7 @@ id = "44ae8838-4714-43a5-a7bd-e9f806f35ca9"
 rendered-text = """
 Unstoppable.
 
-▸Materialized: Return another ally to hand."""
+▸Materialized: Return an ally to hand."""
 energy-cost = 2
 card-type = "Character"
 subtype = "Explorer"
@@ -2011,7 +2011,7 @@ card-number = 108
 art = { x = 0, y = -0.346, scale = 1.57 }
 
 [[cards]]
-name = "Sundown Ronin"
+name = "Sun Clan Lieutenant"
 mtg-name = "Lodestone Golem"
 id = "243a15d3-a4eb-415c-b106-86d4a2b7ec6a"
 rendered-text = "Warriors cost you 1● less."
@@ -6945,7 +6945,7 @@ art-owned = true
 card-number = 375
 
 [[cards]]
-name = "The Grand Heist"
+name = "Plunge into the Abyss"
 mtg-name = "Oust"
 id = "8904714c-38a9-491f-92ce-5cb5ece26ab1"
 rendered-text = "Put an enemy on top of the opponent's deck."
@@ -6956,10 +6956,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "June23"]
-image-number = 316023032
+tags = ["Art Rework", "June23", "Art OK"]
+image-number = 2681394203
 art-owned = false
 card-number = 376
+art = { x = 0, y = 0, scale = 1.47 }
 
 [[cards]]
 name = "Eclipse Herald"
@@ -9349,7 +9350,7 @@ art-owned = false
 card-number = 504
 
 [[cards]]
-name = "Desperation"
+name = "Seek Answers"
 mtg-name = "Gamble"
 id = "8f69312f-4bec-4671-99da-e752ec6d4cbc"
 rendered-text = """
@@ -9363,10 +9364,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "June23"]
-image-number = 1470059006
+tags = ["Art Rework", "June23", "Art OK"]
+image-number = 1798514902
 art-owned = false
 card-number = 505
+art = { x = -0.21, y = 0.242, scale = 1.17 }
 
 [[cards]]
 name = "Rootspring Summons"

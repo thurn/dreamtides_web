@@ -949,7 +949,7 @@
       ]
     },
     "8f69312f-4bec-4671-99da-e752ec6d4cbc": {
-      "name": "Desperation",
+      "name": "Seek Answers",
       "needs": [
         {
           "theme": "discard",
@@ -4084,7 +4084,7 @@
       ]
     },
     "243a15d3-a4eb-415c-b106-86d4a2b7ec6a": {
-      "name": "Sundown Ronin",
+      "name": "Sun Clan Lieutenant",
       "needs": [
         {
           "theme": "warriors",
@@ -4217,7 +4217,7 @@
       ]
     },
     "8904714c-38a9-491f-92ce-5cb5ece26ab1": {
-      "name": "The Grand Heist",
+      "name": "Plunge into the Abyss",
       "needs": [],
       "supports": [
         "events"
