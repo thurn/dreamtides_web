@@ -3,6 +3,8 @@ import { makeBattleTestCardDatabase, makeBattleTestDreamcallers, makeBattleTestS
 import { createBattleInit, type CreateBattleInitInput } from "./create-battle-init";
 import { deriveBattleSeed } from "../random";
 import { buildNameIndex } from "../../data/cards-v2-database";
+import type { DraftRecord } from "../../data/cards-v2-database";
+import { buildFitModel, type FitModel } from "../../draft/replay/fit-model";
 import { buildPoolData } from "../../draft/pool/pool-data";
 import type { RunPoolContext } from "../../data/quest-content";
 import type { CardData } from "../../types/cards";
@@ -53,6 +55,8 @@ function makePackageCard(
  */
 function makeSteeredPoolContext(): {
   poolContext: RunPoolContext;
+  fitModel: FitModel;
+  draftRecords: DraftRecord[];
   decklistA: string[];
   decklistB: string[];
 } {
@@ -63,10 +67,10 @@ function makeSteeredPoolContext(): {
     if (card === undefined) throw new Error(`missing test card #${String(n)}`);
     return card.name;
   };
-  // Decklist A: the "alpha pool" range (1000..1019). Decklist B: the "beta pool"
-  // range (1100..1119). Disjoint card sets so a steered draw is distinguishable.
-  const decklistA = Array.from({ length: 20 }, (_, i) => byNumber(1000 + i));
-  const decklistB = Array.from({ length: 20 }, (_, i) => byNumber(1100 + i));
+  // Decklist A: the "alpha pool" range (1000..1023). Decklist B: the "beta pool"
+  // range (1100..1123). Disjoint card sets so a steered draw is distinguishable.
+  const decklistA = Array.from({ length: 24 }, (_, i) => byNumber(1000 + i));
+  const decklistB = Array.from({ length: 24 }, (_, i) => byNumber(1100 + i));
 
   const poolCards: PoolCard[] = Array.from(cardDatabase.values()).map((card) => ({
     name: card.name,
@@ -77,11 +81,48 @@ function makeSteeredPoolContext(): {
     poolData,
     nameIndex,
     allDreamsignPoolIds: [],
-    // These tests assert idf3's signature-card steering of the enemy deck, so
-    // pin the variant rather than inheriting the records-driven default.
     poolVariant: "idf3",
   };
-  return { poolContext, decklistA, decklistB };
+
+  // A synthetic corpus: coherent A and B decks (so the fit model learns each
+  // faction's cards co-occur) plus mixed packs (so the coherent draft has both
+  // factions to discriminate among). A signature steering toward A should yield
+  // an A-dominated deck.
+  const records: DraftRecord[] = [];
+  const addFaction = (
+    faction: string,
+    cards: readonly string[],
+    other: readonly string[],
+  ): void => {
+    for (let r = 0; r < 24; r += 1) {
+      const mainboard = cards.slice(r % 6, (r % 6) + 18);
+      const packs: string[][] = [];
+      for (let p = 0; p < 30; p += 1) {
+        const pack: string[] = [];
+        for (let k = 0; k < 6; k += 1) pack.push(cards[(p * 3 + k) % cards.length]);
+        for (let k = 0; k < 4; k += 1) pack.push(other[(p * 2 + k) % other.length]);
+        packs.push(pack);
+      }
+      records.push({
+        id: `${faction}-${String(r)}`,
+        draftId: `${faction}-${String(r)}`,
+        sourceFile: "test",
+        mainboard,
+        packs,
+        picks: [],
+        packIds: [],
+        pickIds: [],
+      });
+    }
+  };
+  addFaction("a", decklistA, decklistB);
+  addFaction("b", decklistB, decklistA);
+  const fitModel = buildFitModel(
+    records.map((r) => r.mainboard),
+    nameIndex,
+  );
+
+  return { poolContext, fitModel, draftRecords: records, decklistA, decklistB };
 }
 
 /**
@@ -665,7 +706,8 @@ describe("createBattleInit", () => {
     });
 
     it("steers the enemy deck toward the signed decklist for fixed battle seeds", () => {
-      const { poolContext, decklistA, decklistB } = makeSteeredPoolContext();
+      const { poolContext, fitModel, draftRecords, decklistA, decklistB } =
+        makeSteeredPoolContext();
       const decklistANumbers = new Set(
         decklistA.map((name) => poolContext.nameIndex.get(name)),
       );
@@ -677,6 +719,8 @@ describe("createBattleInit", () => {
         const init = createBattleInit({
           ...makeBaseInput(),
           poolContext,
+          fitModel,
+          draftRecords,
           dreamcallers: makeSignatureDreamcallers(decklistA),
           seedOverride,
         });
@@ -684,16 +728,18 @@ describe("createBattleInit", () => {
         const deckNumbers = init.enemyDeckDefinition.map((c) => c.cardNumber);
         const fromA = deckNumbers.filter((n) => decklistANumbers.has(n)).length;
         const fromB = deckNumbers.filter((n) => decklistBNumbers.has(n)).length;
-        // The deck steered toward A draws far more of A's cards than B's. The
-        // two decklists are disjoint card ranges, so this is a clean signal.
+        // The coherent draft steered toward A draws far more of A's cards than
+        // B's. The two decklists are disjoint card ranges, so this is a clean
+        // signal that signature seeding shaped the deck.
         expect(fromA).toBeGreaterThan(fromB);
         expect(fromA).toBeGreaterThan(0);
-        // Every chosen card belongs to the steered decklist (modulo padding):
-        // the resolved set is a subset of decklist A.
+        // The deck is A-dominated: the large majority of its distinct cards come
+        // from the steered decklist.
         const uniqueChosen = new Set(deckNumbers);
-        for (const n of uniqueChosen) {
-          expect(decklistANumbers.has(n)).toBe(true);
-        }
+        const uniqueA = [...uniqueChosen].filter((n) =>
+          decklistANumbers.has(n),
+        ).length;
+        expect(uniqueA).toBeGreaterThan(uniqueChosen.size / 2);
       }
     });
 

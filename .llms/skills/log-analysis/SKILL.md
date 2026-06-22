@@ -152,6 +152,51 @@ So "Why did the merchant offer me a Synth draft?" →
 subtype) → `trace.candidates` shows which Synth cards scored highest and made the
 band.
 
+## Phase 2.5: Opponent (battle) deck questions
+
+"Why did this battle's opponent run *Card X*?" / "Why is this opponent deck so
+strong/coherent?" The opponent deck is built by a simulated **coherent draft**:
+best-of-N seeded drafts, each picking the card that best fits the deck so far
+(corpus-trained fit model), pruned of its least-coherent cards, then scored for
+coherence (and, in an affiliated dreamscape, affiliation fit). One event records
+the whole decision process.
+
+### `opponent_deck_constructed`
+
+Filter to the game and battle (`battleEntryKey`). Key fields:
+
+- `opponentDreamcallerId`, `completionLevel`, `layerCount`,
+  `midpointCompletionLevel`, `carriesDreamsign`, `dreamsignIds` — who the
+  opponent is and the run depth that scaled it.
+- `poolSeed` — the seed the whole construction is a pure function of; re-running
+  with it reproduces the deck exactly.
+- `pickBudget`, `removalCount`, `copiesPerCard`, `distinctCardCount`, `deckSize`
+  — the difficulty levers at this completion level (all grow with the run).
+- `candidateCount`, `winningDraftIndex`, `candidateSummaries` — the best-of-N
+  selection. Each summary has `coherence`, `affiliationFit`, `combined`; the
+  winner is the highest `combined`. Second-guess the choice by reading the
+  runners-up.
+- `coherenceScore` + `coherenceComponents` (`nearestNeighbor`,
+  `meanPairwiseCooccur`, `selfConsistency`) — how coherent the final deck is.
+  Compare against the harness baselines (`npm run opponent-coherence-metric`).
+- `targetAffiliationId`, `affiliationFit` — the affiliation the deck was steered
+  toward (null in a neutral dreamscape) and how well it landed.
+- `pickTrace` — the winning draft's per-pick decisions: each entry is
+  `{pick, chosen, fit, rank, candidates}` (the chosen card, its fit score, its
+  rank in the pack, and the pack candidates). This answers "why card X": find the
+  pick that took it and read its `fit`/`rank`, or confirm it was never offered.
+- `removedCardNumbers` — the cards the post-draft prune cut as least-coherent.
+
+So "Why did this opponent run *Card X*?" → find the `pickTrace` entry whose
+`chosen` is X (it won its pick at the logged `fit`/`rank`), and confirm X is not
+in `removedCardNumbers`. "Why this opponent and not another draft?" →
+`candidateSummaries` shows the winning draft beat the others on `combined`.
+
+`builtFromSimulation: false` means the fallback deck was used (no fit model /
+corpus available, or AI self-play); the coherent-draft fields are absent. A line
+that carries only the older summary fields (no `pickTrace`/`coherenceScore`)
+predates this construction — reconstruct only what those fields allow.
+
 ## Phase 3: Answer
 
 Structure the answer as a reconstruction, not an assertion:

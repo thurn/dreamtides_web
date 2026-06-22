@@ -3,9 +3,7 @@ import {
   buildReplayDraftState,
   hashStringToSeed,
   loadQuestContent,
-  poolVariantNeedsRecords,
 } from "./quest-content";
-import { DEFAULT_POOL_VARIANT } from "../draft/pool";
 import type { CardData } from "../types/cards";
 import type { DraftRecord } from "./cards-v2-database";
 import type { DreamcallerContent } from "../types/content";
@@ -234,12 +232,10 @@ describe("loadQuestContent", () => {
     expect(fetchedPaths).toContain("/draft-records-data.json");
   });
 
-  it("wires the draft-record fetch to the default pool variant's needs", async () => {
-    // The no-argument load path uses DEFAULT_POOL_VARIANT. Whatever that default
-    // is, the records must be fetched exactly when that variant grows its pool
-    // from them — a record-driven default that skipped the fetch would throw the
-    // moment a Dreamcaller is picked. Deriving the expectation from
-    // `poolVariantNeedsRecords` keeps this green when the default changes.
+  it("always fetches the draft-record corpus for the default pool variant", async () => {
+    // Every run needs the record corpus regardless of pool variant: it builds the
+    // shared fit model and supplies the pack structures coherent opponent decks
+    // draft from. The no-argument load path (DEFAULT_POOL_VARIANT) fetches it.
     const cards = [makeCard(1), makeCard(2), makeCard(3)];
     const dreamcallers = [
       {
@@ -263,14 +259,12 @@ describe("loadQuestContent", () => {
     await loadQuestContent();
 
     const fetchedPaths = vi.mocked(fetch).mock.calls.map((c) => c[0] as string);
-    expect(fetchedPaths.includes("/draft-records-data.json")).toBe(
-      poolVariantNeedsRecords(DEFAULT_POOL_VARIANT),
-    );
+    expect(fetchedPaths).toContain("/draft-records-data.json");
   });
 
-  it("skips the draft-record corpus for a pool variant that does not use records", async () => {
-    // idf3 builds its pool from decklist similarity, not the draft records, so
-    // the default load path skips the records fetch to stay cost-free.
+  it("fetches the draft-record corpus even for a pool variant that builds from decklists", async () => {
+    // idf3 builds its pool from decklist similarity, not the draft records, but
+    // the records are still fetched so opponent decks have a fit model and packs.
     const cards = [makeCard(1), makeCard(2), makeCard(3)];
     const dreamcallers = [
       {
@@ -293,7 +287,7 @@ describe("loadQuestContent", () => {
     await loadQuestContent("idf3");
 
     const fetchedPaths = vi.mocked(fetch).mock.calls.map((c) => c[0] as string);
-    expect(fetchedPaths).not.toContain("/draft-records-data.json");
+    expect(fetchedPaths).toContain("/draft-records-data.json");
   });
 
   it("loads draft records and builds a fit model for v2 pool mode", async () => {
@@ -330,10 +324,9 @@ describe("loadQuestContent", () => {
     expect(content.fresh20PackSize).toBeUndefined();
   });
 
-  it("fetches the committed embedding (not the records) for the embedded variant", async () => {
-    // The `embedded` variant grows from `/affinity-corpus-data.json`, so it
-    // fetches the embedding in place of the 19 MB record bundle. The corpus is
-    // reconstructed and threaded onto poolData.affinityCorpus.
+  it("fetches the committed embedding for the embedded variant", async () => {
+    // The `embedded` variant grows its pool from `/affinity-corpus-data.json`.
+    // The corpus is reconstructed and threaded onto poolData.affinityCorpus.
     const cards = [makeCard(1), makeCard(2)];
     const dreamcallers = [
       {
@@ -357,7 +350,6 @@ describe("loadQuestContent", () => {
 
     const fetchedPaths = vi.mocked(fetch).mock.calls.map((c) => c[0] as string);
     expect(fetchedPaths).toContain("/affinity-corpus-data.json");
-    expect(fetchedPaths).not.toContain("/draft-records-data.json");
     expect(content.poolContext!.poolData.affinityCorpus).toBeDefined();
     expect(content.poolContext!.poolData.affinityCorpus!.cards).toEqual([
       "card-1",
