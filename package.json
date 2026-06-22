@@ -26,6 +26,7 @@
     "simulate-pools": "node scripts/simulate-dreamcaller-pools.mjs",
     "pool-metrics": "node scripts/pool-metrics.mjs",
     "draft-replay-metric": "node scripts/draft-replay-experiment.mjs",
+    "opponent-coherence-metric": "node scripts/opponent-coherence-experiment.mjs",
     "bake-affinity-corpus": "node scripts/bake-affinity-corpus.mjs",
     "affinity-corpus-parity": "node scripts/affinity-corpus-parity.mjs",
     "bake-merchant-corpus": "node scripts/bake-merchant-corpus.mjs",
