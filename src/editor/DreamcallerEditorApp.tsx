@@ -19,7 +19,9 @@ import DreamcallerEditorToolbar from "./DreamcallerEditorToolbar";
 import DreamcallerDetailView from "./DreamcallerDetailView";
 import TidePoolModal from "./TidePoolModal";
 import { loadQuestContent, type QuestContent } from "../data/quest-content";
+import { loadTides4Decks } from "../data/cards-v2-database";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
+import type { Tides4DecksJson } from "../draft/pool/tides4-io";
 import {
   beginFieldEdit,
   cancelFieldEdit,
@@ -241,6 +243,8 @@ export default function DreamcallerEditorApp({
   );
   const [questContent, setQuestContent] = useState<QuestContent | null>(null);
   const [questContentError, setQuestContentError] = useState<string | null>(null);
+  const [tideDecks, setTideDecks] = useState<Tides4DecksJson | null>(null);
+  const [tideDecksError, setTideDecksError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -297,6 +301,38 @@ export default function DreamcallerEditorApp({
       cancelled = true;
     };
   }, [detailId, questContent, questContentError]);
+
+  // Clicking a Tide on the detail screen reveals that tide's decklist. Resolve
+  // the cards from the committed `tides4` artifact (the same source the editor's
+  // tide pools and the draft pool builder use), loaded lazily the first time a
+  // detail screen opens so the editor's normal load path is unaffected.
+  useEffect(() => {
+    if (detailId === null || tideDecks !== null || tideDecksError !== null) {
+      return;
+    }
+    let cancelled = false;
+    loadTides4Decks()
+      .then((loaded) => {
+        if (cancelled) {
+          return;
+        }
+        if (loaded === null) {
+          setTideDecksError(
+            "Tide decklists are unavailable: the tides4 artifact (/tides4-data.json) is missing.",
+          );
+        } else {
+          setTideDecks(loaded);
+        }
+      })
+      .catch((error: unknown) => {
+        if (!cancelled) {
+          setTideDecksError(errorMessageFor(error));
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [detailId, tideDecks, tideDecksError]);
 
   // Keep the detail screen in sync with browser history navigation so Back and
   // Forward open and close the overlay to match the `detail` query parameter.
@@ -683,6 +719,8 @@ export default function DreamcallerEditorApp({
           tides={tides}
           questContent={questContent}
           questContentError={questContentError}
+          tideDecks={tideDecks}
+          tideDecksError={tideDecksError}
           onClose={handleCloseDetail}
         />
       ) : null}

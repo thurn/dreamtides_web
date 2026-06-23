@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import { CardView } from "../components/CardView";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
@@ -6,6 +6,8 @@ import { RulesText } from "../components/RulesText";
 import { SIZE_PRESETS } from "../components/card-size";
 import type { CardData } from "../types/cards";
 import type { QuestContent } from "../data/quest-content";
+import type { Tides4DeckJson, Tides4DecksJson } from "../draft/pool/tides4-io";
+import { resolveTideDeck, type TideDeckResolution } from "./tide-deck-resolution";
 import { TIDE_DOT_COLOR } from "./TidePoolModal";
 import type {
   EditorDreamcallerRecord,
@@ -21,6 +23,13 @@ export interface DreamcallerDetailViewProps {
    */
   questContent: QuestContent | null;
   questContentError: string | null;
+  /**
+   * The committed `tides4` artifact backing the tide decklists shown when a Tide
+   * is clicked. `null` while it is still loading; an error string when the load
+   * failed.
+   */
+  tideDecks: Tides4DecksJson | null;
+  tideDecksError: string | null;
   onClose: () => void;
 }
 
@@ -104,10 +113,26 @@ function resolveTides(
   });
 }
 
-function TideChip({ tide }: { tide: ResolvedTide }) {
+function TideChip({
+  tide,
+  selected,
+  onSelect,
+}: {
+  tide: ResolvedTide;
+  selected: boolean;
+  onSelect: (id: string) => void;
+}) {
   return (
-    <span
-      title={tide.known ? tide.label : `${tide.label} (unknown tide id)`}
+    <button
+      type="button"
+      data-tide-chip={tide.id}
+      aria-pressed={selected}
+      title={
+        tide.known
+          ? `Show the cards in ${tide.label}`
+          : `${tide.label} (unknown tide id)`
+      }
+      onClick={() => onSelect(tide.id)}
       style={{
         display: "inline-flex",
         alignItems: "center",
@@ -115,10 +140,12 @@ function TideChip({ tide }: { tide: ResolvedTide }) {
         padding: "5px 11px",
         borderRadius: "999px",
         border: `1px solid ${tide.color}`,
-        background: "rgba(255, 255, 255, 0.05)",
+        background: selected ? tide.color : "rgba(255, 255, 255, 0.05)",
+        boxShadow: selected ? `0 0 0 2px ${tide.color}55` : "none",
         fontSize: "0.8rem",
         fontWeight: 700,
-        color: tide.known ? "#eef4f1" : "#cbd5f5",
+        color: selected ? "#0b1220" : tide.known ? "#eef4f1" : "#cbd5f5",
+        cursor: "pointer",
       }}
     >
       <span
@@ -127,12 +154,12 @@ function TideChip({ tide }: { tide: ResolvedTide }) {
           width: "9px",
           height: "9px",
           borderRadius: "50%",
-          background: tide.color,
+          background: selected ? "#0b1220" : tide.color,
           boxShadow: "0 0 0 1px rgba(0, 0, 0, 0.35)",
         }}
       />
       {tide.label}
-    </span>
+    </button>
   );
 }
 
@@ -140,10 +167,14 @@ function TideGroup({
   title,
   tides,
   emptyLabel,
+  selectedTideId,
+  onSelectTide,
 }: {
   title: string;
   tides: ResolvedTide[];
   emptyLabel: string;
+  selectedTideId: string | null;
+  onSelectTide: (id: string) => void;
 }) {
   return (
     <div>
@@ -157,9 +188,154 @@ function TideGroup({
       ) : (
         <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
           {tides.map((tide) => (
-            <TideChip key={tide.id} tide={tide} />
+            <TideChip
+              key={tide.id}
+              tide={tide}
+              selected={tide.id === selectedTideId}
+              onSelect={onSelectTide}
+            />
           ))}
         </div>
+      )}
+    </div>
+  );
+}
+
+function TideCardPanel({
+  label,
+  color,
+  loading,
+  error,
+  resolution,
+  onClear,
+}: {
+  label: string;
+  color: string;
+  loading: boolean;
+  error: string | null;
+  resolution: TideDeckResolution | null;
+  onClear: () => void;
+}) {
+  return (
+    <div
+      data-tide-card-panel=""
+      style={{
+        marginTop: 4,
+        border: `1px solid ${color}66`,
+        borderRadius: 12,
+        background: "rgba(255, 255, 255, 0.03)",
+        padding: "14px 16px 16px",
+      }}
+    >
+      <div
+        style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}
+      >
+        <span
+          aria-hidden="true"
+          style={{
+            width: 11,
+            height: 11,
+            borderRadius: "50%",
+            background: color,
+            boxShadow: "0 0 0 1px rgba(0, 0, 0, 0.35)",
+            flexShrink: 0,
+          }}
+        />
+        <h3
+          style={{ margin: 0, fontSize: "0.95rem", fontWeight: 800, color: "#fff7e0" }}
+        >
+          {label}
+        </h3>
+        {resolution !== null && resolution.found ? (
+          <span style={{ color: "#94a3b8", fontSize: "0.78rem", fontWeight: 600 }}>
+            {resolution.cards.length} card{resolution.cards.length === 1 ? "" : "s"}
+            {resolution.totalCopies !== resolution.cards.length
+              ? ` · ${String(resolution.totalCopies)} copies`
+              : ""}
+          </span>
+        ) : null}
+        <button
+          type="button"
+          data-tide-card-panel-close=""
+          onClick={onClear}
+          style={{
+            marginLeft: "auto",
+            border: "1px solid rgba(247, 241, 223, 0.28)",
+            background: "transparent",
+            color: "#d9e1dd",
+            borderRadius: 6,
+            padding: "5px 12px",
+            fontWeight: 700,
+            fontSize: "0.78rem",
+            cursor: "pointer",
+          }}
+        >
+          Hide
+        </button>
+      </div>
+
+      {error !== null ? (
+        <p style={{ margin: 0, color: "#fecaca", fontSize: "0.85rem" }}>{error}</p>
+      ) : loading ? (
+        <p style={{ margin: 0, color: "#94a3b8", fontSize: "0.85rem" }}>
+          Loading tide cards…
+        </p>
+      ) : resolution === null || !resolution.found ? (
+        <p style={{ margin: 0, color: "#94a3b8", fontSize: "0.85rem" }}>
+          No decklist found for this tide.
+        </p>
+      ) : resolution.cards.length === 0 && resolution.unresolved.length === 0 ? (
+        <p style={{ margin: 0, color: "#94a3b8", fontSize: "0.85rem" }}>
+          This tide has no cards.
+        </p>
+      ) : (
+        <>
+          {/* Tile the tide's cards at the same draft-offer width the signature
+              grid uses; the inline-size container resolves the cards'
+              `100cqw`-based width against the grid, not the viewport. */}
+          <div style={{ containerType: "inline-size" }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: SIZE_PRESETS.large.columns,
+                gap: SIZE_PRESETS.large.gap,
+              }}
+            >
+              {resolution.cards.map(({ card, copies }, index) => (
+                <div
+                  key={`${card.id}:${String(index)}`}
+                  style={{ position: "relative" }}
+                >
+                  <CardView card={card} large />
+                  {copies > 1 ? (
+                    <div
+                      data-tide-card-copies=""
+                      style={{
+                        position: "absolute",
+                        top: 6,
+                        right: 6,
+                        borderRadius: 999,
+                        border: "1px solid rgba(148, 219, 209, 0.6)",
+                        background: "rgba(8, 13, 26, 0.92)",
+                        color: "#8edbd1",
+                        padding: "1px 8px",
+                        fontSize: "0.72rem",
+                        fontWeight: 800,
+                      }}
+                    >
+                      ×{copies}
+                    </div>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+          </div>
+          {resolution.unresolved.length > 0 ? (
+            <p style={{ margin: "12px 0 0", color: "#64748b", fontSize: "0.78rem" }}>
+              No card found for: {resolution.unresolved.join(", ")}
+            </p>
+          ) : null}
+        </>
       )}
     </div>
   );
@@ -170,6 +346,8 @@ export default function DreamcallerDetailView({
   tides,
   questContent,
   questContentError,
+  tideDecks,
+  tideDecksError,
   onClose,
 }: DreamcallerDetailViewProps) {
   // Close on Escape so the detail screen behaves like the editor's other
@@ -238,6 +416,62 @@ export default function DreamcallerDetailView({
     }
     return { cards, unresolved };
   }, [questContent, dreamcaller.id]);
+
+  // Which Tide (if any) the viewer has clicked to reveal its decklist.
+  const [selectedTideId, setSelectedTideId] = useState<string | null>(null);
+
+  // Drop the open tide selection whenever the screen switches Dreamcallers so a
+  // stale id (one not in the new Dreamcaller's pool) never lingers.
+  useEffect(() => {
+    setSelectedTideId(null);
+  }, [dreamcaller.id]);
+
+  // The tide decklists key cards by their stable cards_v2 UUID; the card
+  // database is keyed by card number, so index it by lowercased UUID to resolve
+  // a tide's `{ id, copies }` entries to renderable cards.
+  const cardsByUuid = useMemo(() => {
+    const byId = new Map<string, CardData>();
+    if (questContent !== null) {
+      for (const card of questContent.cardDatabase.values()) {
+        byId.set(card.id.toLowerCase(), card);
+      }
+    }
+    return byId;
+  }, [questContent]);
+
+  const deckById = useMemo(() => {
+    const byId = new Map<string, Tides4DeckJson>();
+    if (tideDecks !== null) {
+      for (const deck of tideDecks.tides) {
+        byId.set(deck.id, deck);
+      }
+    }
+    return byId;
+  }, [tideDecks]);
+
+  const selectedTideResolution = useMemo<TideDeckResolution | null>(
+    () =>
+      selectedTideId === null
+        ? null
+        : resolveTideDeck(deckById.get(selectedTideId), cardsByUuid),
+    [selectedTideId, deckById, cardsByUuid],
+  );
+
+  const selectedTideMeta =
+    selectedTideId === null ? null : (tideById.get(selectedTideId) ?? null);
+  const selectedTideLabel =
+    selectedTideMeta !== null ? tideOptionLabel(selectedTideMeta) : (selectedTideId ?? "");
+  const selectedTideColor =
+    selectedTideMeta !== null ? TIDE_DOT_COLOR[selectedTideMeta.color] : "#94a3b8";
+  // The decklist needs both the card database (for renderable cards) and the
+  // tides4 artifact (for the tide -> card mapping); we are loading until both
+  // arrive, and only surface an error once a selection actually needs them.
+  const tideCardsLoading = questContent === null || tideDecks === null;
+  const tideCardsError = tideDecksError ?? questContentError;
+
+  function handleSelectTide(id: string) {
+    setSelectedTideId((current) => (current === id ? null : id));
+  }
 
   const hasAnyTide =
     starterTides.length + facetTides.length + neutralTides.length > 0;
@@ -379,21 +613,40 @@ export default function DreamcallerDetailView({
           <h2 style={sectionTitleStyle}>Tides</h2>
           {hasAnyTide ? (
             <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+              <p style={{ margin: 0, color: "#64748b", fontSize: "0.78rem" }}>
+                Click a Tide to see the cards in its deck.
+              </p>
               <TideGroup
                 title="Starter"
                 tides={starterTides}
                 emptyLabel="No starter tide."
+                selectedTideId={selectedTideId}
+                onSelectTide={handleSelectTide}
               />
               <TideGroup
                 title="Facets"
                 tides={facetTides}
                 emptyLabel="No facet tides."
+                selectedTideId={selectedTideId}
+                onSelectTide={handleSelectTide}
               />
               <TideGroup
                 title="Neutral"
                 tides={neutralTides}
                 emptyLabel="No neutral tides."
+                selectedTideId={selectedTideId}
+                onSelectTide={handleSelectTide}
               />
+              {selectedTideId !== null ? (
+                <TideCardPanel
+                  label={selectedTideLabel}
+                  color={selectedTideColor}
+                  loading={tideCardsLoading}
+                  error={tideCardsError}
+                  resolution={selectedTideResolution}
+                  onClear={() => setSelectedTideId(null)}
+                />
+              ) : null}
             </div>
           ) : (
             <p style={{ margin: 0, color: "#94a3b8", fontSize: "0.85rem" }}>
