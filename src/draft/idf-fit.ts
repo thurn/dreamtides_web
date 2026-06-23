@@ -1,7 +1,14 @@
 // Shared IDF fit and affinity module for corpus-based deck scoring.
 //
-// Operates on raw `Set<string>` decks keyed by OPAQUE string tokens (callers
-// pass lowercased UUIDs; this module never inspects, parses, or resolves them).
+// Operates on raw `Set<string>` decks keyed by OPAQUE string tokens. This
+// module treats keys as opaque and never inspects, parses, or resolves them;
+// callers are responsible for any normalization (e.g. lowercasing UUIDs)
+// before passing decks in.
+//
+// Two scoring entry points: `signatureFit` sums idf (the /sigdecks ranking
+// metric), while `computeAffinity` uses the standard idf² cosine via
+// `idfCosine`. Choose based on which metric the caller needs.
+//
 // Reuses `idfCosine`, `IdfDeck`, and `IdfCorpus` from variant-idf.ts so the
 // scoring arithmetic is consistent with the rest of the draft pipeline.
 //
@@ -32,8 +39,7 @@ export function buildIdfStats(
     }
   }
 
-  // idf(c) = ln(N / df(c)). A card in every deck gets ln(1) = 0.
-  // Guard against df=0 (impossible given the loop above, but defensive).
+  // idf(c) = ln(N / df(c)). A card counted into df was seen in ≥1 deck, so df ≥ 1.
   const idf = new Map<string, number>();
   for (const [card, d] of df) {
     idf.set(card, Math.log(N / d));
