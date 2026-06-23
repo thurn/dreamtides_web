@@ -40,6 +40,8 @@
     "bake-tides3": "node scripts/bake-tides3.mjs",
     "bake-tides4": "node scripts/bake-tides4.mjs",
     "check-tides4": "node scripts/check-tides4.mjs",
+    "bake-tides5": "node scripts/bake-tides5.mjs",
+    "check-tides5": "node scripts/check-tides5.mjs",
     "tides-similarity": "node scripts/tides-similarity-experiment.mjs",
     "bake-draft-records": "node scripts/rebuild-adapted-draft-records.mjs"
   },

@@ -1,32 +1,36 @@
-# Tides, tides2, tides3, and tides4 draft-pool algorithms
+# Tides, tides2, tides3, tides4, and tides5 draft-pool algorithms
 
-Four draft-pool algorithms build a Dreamcaller's draft pool by combining a small
-number of preconstructed decks called **tides**. All four are selectable with
+Five draft-pool algorithms build a Dreamcaller's draft pool by combining a small
+number of preconstructed decks called **tides**. All five are selectable with
 the `?algo=` URL parameter (`?algo=tides`, `?algo=tides2`, `?algo=tides3`,
-`?algo=tides4`) and exist side by side so they can be compared directly:
+`?algo=tides4`, `?algo=tides5`) and exist side by side so they can be compared
+directly:
 
-| | `tides` | `tides2` | `tides3` | `tides4` |
-| --- | --- | --- | --- | --- |
-| Mirrors | `idf3` | `idf3`, sharpened | `sigseed` (its centre) | `sigseed` (its *variety*) |
-| Pool size | 200 | 200 | 150 | 150 |
-| Tide decks | `data/tides.jsonc` (32, ~160 copies each) | `data/tides2.jsonc` (32, ~70 copies each) | `data/tides3.jsonc` (32: 20 signature ~150, 12 neutral ~30) | `data/tides4.jsonc` (64: 20 signature ~110, 32 facet ~45, 12 neutral ~30) |
-| Relationships | none | `data/tides2_relationships.jsonc` | baked into the same file | baked into the same file |
-| Lead/core | one of the Dreamcaller's *favored* tides | drawn from the Dreamcaller's curated *tide pool* | the Dreamcaller's own *signature tide* (a random signature archetype for a neutral) | the Dreamcaller's *signature tide* always joined as the core |
-| Fill tides | drawn uniformly at random | the lead's curated *allied tides* | the *broad* tides (forced only for a signatured lead) | a *random subset* of the Dreamcaller's *facet* tides, then broad tides |
-| Bake | `npm run bake-tides` | `npm run bake-tides2` + `npm run seed-tide-relationships` | `npm run bake-tides3` | `npm run bake-tides4` |
-| Runtime module | `src/draft/pool/variant-tides.ts` | `src/draft/pool/variant-tides2.ts` | `src/draft/pool/variant-tides3.ts` | `src/draft/pool/variant-tides4.ts` |
-| Rendered decklists | `docs/cards2/tide_decklists.md` | `docs/cards2/tides2_decklists.md` | `docs/cards2/tides3_decklists.md` | `docs/cards2/tides4_decklists.md` |
+| | `tides` | `tides2` | `tides3` | `tides4` | `tides5` |
+| --- | --- | --- | --- | --- | --- |
+| Mirrors | `idf3` | `idf3`, sharpened | `sigseed` (its centre) | `sigseed` (its *variety*) | `tides4`, known-good corpus |
+| Pool size | 200 | 200 | 150 | 150 | 150 |
+| Tide decks | `data/tides.jsonc` (32, ~160 copies each) | `data/tides2.jsonc` (32, ~70 copies each) | `data/tides3.jsonc` (32: 20 signature ~150, 12 neutral ~30) | `data/tides4.jsonc` (64: 20 signature ~110, 32 facet ~45, 12 neutral ~30) | `data/tides5.jsonc` (64: 20 signature ~110, 32 facet ~45, 12 neutral ~30) |
+| Corpus | decklist co-occurrence | decklist co-occurrence | every usable draft seat | every usable draft seat | only the known-good decklists |
+| Relationships | none | `data/tides2_relationships.jsonc` | baked into the same file | baked into the same file | baked into the same file |
+| Lead/core | one of the Dreamcaller's *favored* tides | drawn from the Dreamcaller's curated *tide pool* | the Dreamcaller's own *signature tide* (a random signature archetype for a neutral) | the Dreamcaller's *signature tide* always joined as the core | the Dreamcaller's *signature tide* always joined as the core |
+| Fill tides | drawn uniformly at random | the lead's curated *allied tides* | the *broad* tides (forced only for a signatured lead) | a *random subset* of the Dreamcaller's *facet* tides, then broad tides | a *random subset* of the Dreamcaller's *facet* tides, then broad tides |
+| Bake | `npm run bake-tides` | `npm run bake-tides2` + `npm run seed-tide-relationships` | `npm run bake-tides3` | `npm run bake-tides4` | `npm run bake-tides5` |
+| Runtime module | `src/draft/pool/variant-tides.ts` | `src/draft/pool/variant-tides2.ts` | `src/draft/pool/variant-tides3.ts` | `src/draft/pool/variant-tides4.ts` | `src/draft/pool/variant-tides5.ts` |
+| Rendered decklists | `docs/cards2/tide_decklists.md` | `docs/cards2/tides2_decklists.md` | `docs/cards2/tides3_decklists.md` | `docs/cards2/tides4_decklists.md` | `docs/cards2/tides5_decklists.md` |
 
 Each algorithm has two halves: an **offline construction** step that bakes the
 committed tide lists from real draft data, and a **runtime** step that combines
-those lists into one pool. This document covers both halves for all four. The
+those lists into one pool. This document covers both halves for all five. The
 first three sections describe the shared decklist-corpus foundation and the two
 algorithms built on it (`tides`, `tides2`); section 4 covers `tides3` and section
 5 covers `tides4`, both of which rest on a different foundation — the
 pick-affinity corpus `sigseed` grows from — and are best read together. `tides3`
 and `tides4` mirror `sigseed` from two complementary angles: `tides3` reproduces
 the deterministic *centre* of a Dreamcaller's `sigseed` pools, while `tides4`
-reproduces their run-to-run *variety*.
+reproduces their run-to-run *variety*. `tides5` is the exact `tides4` algorithm
+grown from a curated corpus — only the known-good decklists — and is described in
+section 5.6.
 
 ## 1. Shared foundations
 
@@ -634,6 +638,42 @@ Two player-facing surfaces read it:
   construction story — signature tide → random theme-tide draw → broad fill →
   deal — and, for each card on the draft screen, names its source tide, the tide's
   role, and why that tide was part of the run.
+
+### 5.6 The known-good corpus (`tides5`)
+
+`tides5` is the same algorithm as `tides4` — the same three kinds of tide, the
+same per-Dreamcaller pools, and the **same runtime combine** (the two variants
+share `combineTidesPool` in `src/draft/pool/variant-tides4.ts` verbatim). It
+differs in exactly one thing: the corpus the signature, facet, and neutral tides
+are grown from.
+
+`tides4` grows from every usable draft seat (the bundled
+`public/draft-records-data.json`). `tides5` grows from **only the known-good
+decklists** catalogued in `docs/known_good_decklists.json` — a hand-vetted set of
+real drafted decks (nonland mainboard ≤ 30, sideboard ≥ 6, sealed pools excluded),
+identified by `(draftId, seat)`. The bake (`scripts/bake-tides5.mjs`) keeps only
+those seats' pick records and discards every other draft seat before building the
+pick-affinity corpus (the availability-corrected play-rate prior and the shrunk
+excess-lift synergy that `sigseed`/`pickfit` use). The generator that turns that
+corpus into tides is shared verbatim with `tides4` (`buildTides4`), so any
+difference between a `tides4` and a `tides5` pool is attributable purely to the
+known-good corpus restriction.
+
+The bake reuses the canonical draft-record reader (`buildDraftRecords`), so a
+known-good seat that also survives in the `tides4` corpus produces a byte-identical
+record. It relaxes only the reader's "exactly 30 trimmed picks" rule (passing
+`requireFullPicks: false`), so the known-good seats that come from non-standard
+drafts — five packs of nine, a single oversized pack — are kept as well, each
+contributing its high-signal early picks (pack 1–3, pickInPack ≤ 10). The corpus
+weights every counted pick equally regardless of its in-pack position, so a short
+seat's observations stay valid.
+
+The artifact (`data/tides5.jsonc`, rendered as `docs/cards2/tides5_decklists.md`)
+carries the same schema as `tides4` and reuses its validator. Curated card tweaks
+live in `data/tides5-overrides.jsonc`, and a staleness guard
+(`scripts/check-tides5.mjs`, also run by `npm test`) re-bakes from source and
+fails if the committed artifact drifts. Build it with `npm run bake-tides5`
+(then `npm run setup-assets` to serve it as `/tides5-data.json`).
 
 ## 6. Artifacts, scripts, and served assets
 

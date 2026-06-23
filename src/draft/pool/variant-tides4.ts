@@ -96,6 +96,25 @@ export function generateTides4(
       "no tide decks are bundled (data/tides4.jsonc, served as /tides4-data.json)",
     );
   }
+  return combineTidesPool(rng, poolData, data, dreamcallerId, "tides4");
+}
+
+/**
+ * The shared runtime core both `tides4` and `tides5` use to combine the tide decks
+ * in `data` into one pool. The two variants differ only in WHICH committed
+ * artifact feeds this — their corpora are baked from different draft data
+ * (`tides4` from every usable seat, `tides5` from only the known-good decklists) —
+ * while the tide selection, the one shuffle, the deal, and the provenance below
+ * are identical. `label` tags the generated pool's `selected` list with the
+ * variant id that produced it.
+ */
+export function combineTidesPool(
+  rng: () => number,
+  poolData: PoolData,
+  data: Tides4DecksJson,
+  dreamcallerId: string | undefined,
+  label: string,
+): VariantResult {
   const dealSize = TIDES4.dealSize;
 
   // Tide selection. Join the starter (when present), draw a random subset of the
@@ -298,7 +317,7 @@ export function generateTides4(
   // record the algorithm and the tide ids the pool was dealt from.
   return {
     C: new Set(),
-    selected: ["tides4", ...deckIds],
+    selected: [label, ...deckIds],
     counts,
     tides4Provenance,
   };

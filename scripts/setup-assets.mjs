@@ -264,10 +264,24 @@ export function transformCard(card) {
  *   can key on ids and stay correct when two cards share a name). `packs[i]`/
  *   `picks[i]` are the i-th trimmed pick's cards as current display names, and
  *   `packIds[i]`/`pickIds[i]` are the matching stable UUIDs, index-for-index.
- *   All four pick arrays have length 30.
+ *   With the default options all four pick arrays have length 30.
+ *
+ * Options (all optional, defaults preserve the canonical behaviour):
+ *   * `seatFilter` — a `Set` of `"<draftId>#<seat>"` keys; when given, only seats
+ *     whose key is in the set are kept (every other seat is skipped before any
+ *     work). Used by the `tides5` bake to restrict the corpus to the known-good
+ *     decklists in `docs/known_good_decklists.json`.
+ *   * `requireFullPicks` (default true) — when true, a seat is dropped unless it
+ *     trims to exactly 30 picks (the standard 3×15 / first-three-packs layout).
+ *     When false, a seat is kept with whatever pack-1-3 / pickInPack≤10 picks it
+ *     has (≥1), so non-standard layouts — 5 packs of 9, a single big pack — still
+ *     contribute their high-signal early picks. The corpus the pick-data variants
+ *     build weights every pick equally regardless of its in-pack position, so a
+ *     short seat's observations stay valid.
  */
-export function buildDraftRecords(dir, cardMaps) {
+export function buildDraftRecords(dir, cardMaps, opts = {}) {
   const { nameToId, idToName } = cardMaps;
+  const { seatFilter = null, requireFullPicks = true } = opts;
   let droppedNames = 0;
   let skippedIncomplete = 0;
 
@@ -305,6 +319,10 @@ export function buildDraftRecords(dir, cardMaps) {
     for (const seatData of raw.seats) {
       const { seat, mainboard: rawMainboard, picks: rawPicks } = seatData;
 
+      // When a seat filter is supplied, keep only the requested (draftId, seat)
+      // seats — the rest are skipped before any resolution work.
+      if (seatFilter !== null && !seatFilter.has(`${draftId}#${seat}`)) continue;
+
       // Skip seats without a non-empty mainboard or a picks array.
       if (!Array.isArray(rawMainboard) || rawMainboard.length === 0) continue;
       if (!Array.isArray(rawPicks)) continue;
@@ -317,7 +335,10 @@ export function buildDraftRecords(dir, cardMaps) {
         .filter((p) => p.pack >= 1 && p.pack <= 3 && p.pickInPack <= 10)
         .sort((a, b) => a.pickNumber - b.pickNumber);
 
-      if (trimmed.length !== 30) {
+      // The standard bundle demands exactly 30 trimmed picks (a uniform record
+      // for the replay draft mode); a relaxed caller keeps any seat with at least
+      // one trimmed pick, so non-standard pack layouts still contribute.
+      if (requireFullPicks ? trimmed.length !== 30 : trimmed.length === 0) {
         skippedIncomplete++;
         continue;
       }
@@ -937,6 +958,24 @@ export function setupAssets({
     console.log(
       "No data/tides4.jsonc found; the `tides4` pool variant will be " +
         "unavailable until `npm run bake-tides4` is run.",
+    );
+  }
+
+  // The committed `tides5` artifact — the same kind of signature/facet/neutral
+  // tides + per-Dreamcaller tide pools as `tides4`, but baked only from the
+  // known-good decklists. Baked by `npm run bake-tides5`, committed as JSONC with
+  // a provenance header.
+  const tides5SourcePath = join(DATA_DIR, "tides5.jsonc");
+  const tides5JsonPath = join(publicDir, "tides5-data.json");
+  if (existsSync(tides5SourcePath)) {
+    const tides5Jsonc = readFileSync(tides5SourcePath, "utf8");
+    const served = JSON.stringify(JSON.parse(stripJsonComments(tides5Jsonc)));
+    writeFileSync(tides5JsonPath, served + "\n");
+    console.log("Copied tides5.jsonc to tides5-data.json (comments stripped)");
+  } else {
+    console.log(
+      "No data/tides5.jsonc found; the `tides5` pool variant will be " +
+        "unavailable until `npm run bake-tides5` is run.",
     );
   }
 

@@ -129,6 +129,13 @@ provides:
   from a random signature subset, so a Dreamcaller yields a cloud of distinct,
   on-identity pools rather than one fixed pool. Requires the baked artifact
   (`npm run bake-tides4`); see section 5 of `docs/cards2/tides_algorithms.md`.
+- `algo=tides5` — the exact `tides4` algorithm (same signature / facet / neutral
+  tides, same runtime combine), grown from a curated corpus: only the known-good
+  decklists in `docs/known_good_decklists.json` feed the pick-affinity statistics,
+  and every other draft seat is discarded. Combines the preconstructed tides in
+  `data/tides5.jsonc` (rendered as `docs/cards2/tides5_decklists.md`). Requires the
+  baked artifact (`npm run bake-tides5`); see section 5.6 of
+  `docs/cards2/tides_algorithms.md`.
 
 Most of these are described in `docs/cards2/draft_pool_algorithms.md`. Any value
 not registered (including empty or absent) falls back to `DEFAULT_POOL_VARIANT`,

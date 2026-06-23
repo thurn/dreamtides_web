@@ -91,13 +91,27 @@ const TUNING = {
   neutralSeedPriorFloor: 0.25,
 };
 
+// The five deck colors, in the canonical order the runtime schema validates
+// against (see TIDES4_COLORS in tides4-io.ts).
+const DEFAULT_TIDE_COLORS = ["purple", "green", "yellow", "blue", "orange"];
+
+// A deterministic default deck color for a tide, spread across the five colors by
+// a stable hash of the tide id. This is only a FLOOR so a freshly-baked artifact
+// validates (the runtime schema requires a color); a hand-authored `color`
+// annotation always overrides it, so a curator's deliberate colors win.
+function defaultTideColor(id) {
+  let h = 0;
+  for (let i = 0; i < id.length; i += 1) h = (h * 31 + id.charCodeAt(i)) >>> 0;
+  return DEFAULT_TIDE_COLORS[h % DEFAULT_TIDE_COLORS.length];
+}
+
 /**
  * Read the hand-authored identity annotations (shortName/summary/description)
  * from a previously baked tides4 artifact, keyed by stable tide id. Returns an
  * empty map when the file is absent (a first bake). The artifact is JSONC: the
  * `//` header comments are stripped before parsing.
  */
-function readTideAnnotations(outPath) {
+export function readTideAnnotations(outPath) {
   const map = new Map();
   if (!existsSync(outPath)) return map;
   const body = readFileSync(outPath, "utf8").replace(/^\s*\/\/.*$/gm, "");
@@ -308,7 +322,7 @@ const HEADER = `// data/tides4.jsonc — the committed tide decks the \`tides4\`
 //   npm run setup-assets      # copies it to public/tides4-data.json
 //   npm run pool-metrics -- --variant tides4   # measures it against sigseed`;
 
-function serializeArtifact(json) {
+export function serializeArtifact(json, header = HEADER) {
   const tideLines = json.tides.map((tide, t) => {
     const cards = tide.cards.map(
       (c, i) =>
@@ -347,7 +361,7 @@ function serializeArtifact(json) {
   );
   return (
     [
-      HEADER,
+      header,
       "{",
       `  "version": ${json.version},`,
       `  "tides": [`,
@@ -503,7 +517,7 @@ function stripJsonc(text) {
 }
 
 // Read the override document, or null when it is absent (the layer is optional).
-function readOverrides(rel, rootDir = ROOT) {
+export function readOverrides(rel, rootDir = ROOT) {
   const path = resolve(rootDir, rel);
   if (!existsSync(path)) return null;
   try {
@@ -867,10 +881,20 @@ export function buildTides4({
     }
   }
 
-  // Hand-authored identity annotations (shortName/summary/description) are carried
-  // forward from the prior bake by stable tide id, so re-baking from fresh draft
-  // records keeps the curated text. They describe a tide's mechanical identity; a
-  // large content shift for a tide may warrant re-annotating it.
+  // Color floor: every tide gets a deterministic default deck color so the artifact
+  // is valid from its very first bake (the runtime schema requires every tide to
+  // carry one of the five deck colors). The hand-authored `color` annotation,
+  // carried forward below by stable tide id, OVERRIDES this — so curated colors
+  // always win and a fully-annotated artifact (every tide already has a hand color,
+  // e.g. data/tides4.jsonc) is left byte-identical by this floor.
+  for (const tide of tides) {
+    tide.color = defaultTideColor(tide.id);
+  }
+
+  // Hand-authored identity annotations (shortName/summary/description/color) are
+  // carried forward from the prior bake by stable tide id, so re-baking from fresh
+  // draft records keeps the curated text. They describe a tide's mechanical
+  // identity; a large content shift for a tide may warrant re-annotating it.
   for (const tide of tides) {
     const anno = priorAnnotations.get(tide.id);
     if (anno) Object.assign(tide, anno);

@@ -59,6 +59,13 @@ export type {
   Tides4DreamcallerPool,
   Tides4Role,
 } from "./tides4-io.ts";
+export { validateTides5Decks } from "./tides5-io.ts";
+export type {
+  Tides5DeckJson,
+  Tides5DecksJson,
+  Tides5DreamcallerPool,
+  Tides5Role,
+} from "./tides5-io.ts";
 export { DEFAULT_POOL_VARIANT } from "./types.ts";
 export {
   POOL_STRATEGIES,

@@ -5,6 +5,7 @@ import type { TideDecksJson } from "./tides-io.ts";
 import type { TideRelationshipsJson } from "./tide-relationships-io.ts";
 import type { Tides3DecksJson } from "./tides3-io.ts";
 import type { Tides4DecksJson, Tides4Role } from "./tides4-io.ts";
+import type { Tides5DecksJson } from "./tides5-io.ts";
 
 // `color_pool` is the original color-identity algorithm. `diverse` is an
 // experimental variant tuned to spread cards and archetypes more evenly across
@@ -34,7 +35,8 @@ export type PoolVariant =
   | "tides"
   | "tides2"
   | "tides3"
-  | "tides4";
+  | "tides4"
+  | "tides5";
 // The quest prototype and the draft test harness use this when `?algo=` is
 // absent. An unrecognised `?algo=` value is a hard error, not a fall-through to
 // this default.
@@ -164,6 +166,14 @@ export interface PoolData {
    * is `tides4`; every other variant ignores it.
    */
   tides4Decks?: Tides4DecksJson;
+  /**
+   * The committed `tides5` artifact the `tides5` variant combines into pools
+   * (`data/tides5.jsonc`, served as `/tides5-data.json`): the same kind of
+   * signature, facet, and neutral tides plus per-Dreamcaller tide pools as
+   * `tides4`, but baked only from the known-good decklists. Set only when the
+   * run's variant is `tides5`; every other variant ignores it.
+   */
+  tides5Decks?: Tides5DecksJson;
   /**
    * Current display name -> stable cards_v2 UUID, built from the card records in
    * {@link buildPoolData} when they carry an `id`. The `seed` variant reads it to

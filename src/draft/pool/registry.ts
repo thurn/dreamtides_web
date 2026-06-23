@@ -30,6 +30,7 @@ import { tidesStrategy } from "./variant-tides.ts";
 import { tides2Strategy } from "./variant-tides2.ts";
 import { tides3Strategy } from "./variant-tides3.ts";
 import { tides4Strategy } from "./variant-tides4.ts";
+import { tides5Strategy } from "./variant-tides5.ts";
 
 /** Every registered strategy, keyed by the `?algo=` id that selects it. */
 export const POOL_STRATEGIES: Record<PoolVariant, PoolStrategy> = {
@@ -53,6 +54,7 @@ export const POOL_STRATEGIES: Record<PoolVariant, PoolStrategy> = {
   tides2: tides2Strategy,
   tides3: tides3Strategy,
   tides4: tides4Strategy,
+  tides5: tides5Strategy,
 };
 
 /**

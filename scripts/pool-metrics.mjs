@@ -111,6 +111,7 @@ import {
   validateTideRelationships,
   validateTides3Decks,
   validateTides4Decks,
+  validateTides5Decks,
 } from "../src/draft/pool/index.ts";
 import { stripJsonComments, supportEntryByName } from "./lib/card-refs.mjs";
 
@@ -844,6 +845,13 @@ function loadContext(argv) {
   const tides4Path = resolve(ROOT, "data/tides4.jsonc");
   if (existsSync(tides4Path)) {
     poolData.tides4Decks = validateTides4Decks(readJsonc("data/tides4.jsonc"));
+  }
+  // The `tides5` variant combines its own committed tide decks (same shape as
+  // `tides4`, baked only from the known-good decklists); load them (when present)
+  // so it runs under `--compare`/`--variant tides5`.
+  const tides5Path = resolve(ROOT, "data/tides5.jsonc");
+  if (existsSync(tides5Path)) {
+    poolData.tides5Decks = validateTides5Decks(readJsonc("data/tides5.jsonc"));
   }
   return { dreamcallers, meta, poolData, decklists };
 }
