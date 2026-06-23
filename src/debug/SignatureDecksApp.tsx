@@ -32,6 +32,12 @@ import { DreamcallerPopover } from "../components/DreamcallerPopover";
  * entirely — those are sprawling draft piles rather than focused decks, and
  * they correlate with a Dreamcaller only by holding more of everything.
  *
+ * Two selection modes, toggled in the header and mirrored to `?mode=`:
+ * `match` (default) picks the single closest deck to the signature, while
+ * `typical` picks the most representative deck among those that fit — the one
+ * most central to the cluster of signature-fitting decks. See
+ * {@link SelectionMode}.
+ *
  * Everything is derived live in the browser from the same quest content the
  * battle integration loads, so the result tracks the current card names and
  * the current signature lists with no precomputed artifact to go stale.
@@ -46,6 +52,25 @@ const MUTED = "#94a3b8";
 const FAINT = "#64748b";
 const ACCENT = "#a78bfa";
 
+/**
+ * How the winning deck is chosen:
+ * - `match`: the single deck with the highest cosine similarity to the
+ *   signature vector. A pointwise nearest-neighbour to the query; it can land
+ *   on an idiosyncratic outlier that happens to align with the signature.
+ * - `typical`: among the decks that fit the signature, the most central /
+ *   representative one — the deck with the highest fit-weighted similarity to
+ *   the other signature-fitting decks. Rewards "the common way this signature
+ *   gets built" and is robust to one-off outliers, at the cost of some literal
+ *   fit.
+ */
+type SelectionMode = "match" | "typical";
+
+const SELECTION_MODES: SelectionMode[] = ["match", "typical"];
+
+/** Deck–deck cosine at or above this counts as "similar" for the neighbour
+ * count surfaced in the UI. */
+const SIMILAR_THRESHOLD = 0.45;
+
 interface SignatureDeck {
   dreamcaller: DreamcallerContent;
   /** Lowercased signature card display names resolved from the UUIDs. */
@@ -53,13 +78,19 @@ interface SignatureDeck {
   /** The winning deck's mainboard, resolved to renderable cards. */
   cards: CardData[];
   matchedNames: string[];
-  score: number;
+  /** Cosine similarity between the signature vector and the chosen deck. */
+  cosine: number;
+  /** How many other pool decks are similar (deck–deck cosine ≥ threshold). */
+  neighbors: number;
   sourceFile: string;
   seatName: string;
 }
 
 /** Build the per-Dreamcaller signature deck assignment from quest content. */
-function computeSignatureDecks(content: QuestContent): SignatureDeck[] {
+function computeSignatureDecks(
+  content: QuestContent,
+  mode: SelectionMode,
+): SignatureDeck[] {
   // `signatureCards` arrives as current card display names (the bundle resolves
   // the TOML UUIDs to names), matching how draft-record mainboards are keyed, so
   // matching is name-on-name. `byName` resolves those names to renderable cards.
@@ -98,12 +129,22 @@ function computeSignatureDecks(content: QuestContent): SignatureDeck[] {
   // contain any given signature card, so a raw overlap sum mechanically favours
   // large decks. The norm cancels that out so the score measures correlation,
   // not deck size.
-  const deckNorm = new Map<(typeof recordSets)[number]["record"], number>();
-  for (const { record, nameSet } of recordSets) {
+  const deckNorm = new Map<Set<string>, number>();
+  for (const { nameSet } of recordSets) {
     let sumSq = 0;
     for (const n of nameSet) sumSq += idf(n) ** 2;
-    deckNorm.set(record, Math.sqrt(sumSq) || 1);
+    deckNorm.set(nameSet, Math.sqrt(sumSq) || 1);
   }
+
+  // Cosine similarity between two decks in IDF-vector space: Σ idf² over shared
+  // cards, normalized by both deck norms. Iterating the smaller set keeps the
+  // O(pool²) `typical`-mode pass affordable.
+  const deckCosine = (a: Set<string>, b: Set<string>): number => {
+    const [small, big] = a.size <= b.size ? [a, b] : [b, a];
+    let dot = 0;
+    for (const n of small) if (big.has(n)) dot += idf(n) ** 2;
+    return dot / ((deckNorm.get(a) ?? 1) * (deckNorm.get(b) ?? 1));
+  };
 
   const result: SignatureDeck[] = [];
 
@@ -123,29 +164,55 @@ function computeSignatureDecks(content: QuestContent): SignatureDeck[] {
     const queryNorm =
       Math.sqrt(signatureNames.reduce((a, s) => a + s.idf ** 2, 0)) || 1;
 
-    let best: {
-      record: (typeof recordSets)[number]["record"];
-      matched: string[];
-      score: number;
-    } | null = null;
-
+    // Candidate decks: every deck containing at least one signature card, with
+    // its cosine fit to the signature vector.
+    const candidates = [];
     for (const { record, nameSet } of recordSets) {
       const matched = signatureNames.filter((s) => nameSet.has(s.name));
       if (matched.length === 0) continue;
-      // Cosine similarity between the signature vector and the deck vector:
-      // Σ idf over matched cards, normalized by both vectors' norms.
       const dot = matched.reduce((a, s) => a + s.idf, 0);
-      const score = dot / ((deckNorm.get(record) ?? 1) * queryNorm);
-      if (
-        best === null ||
-        score > best.score ||
-        (score === best.score && matched.length > best.matched.length)
-      ) {
-        best = { record, matched: matched.map((m) => m.name), score };
+      const fit = dot / ((deckNorm.get(nameSet) ?? 1) * queryNorm);
+      candidates.push({
+        record,
+        nameSet,
+        matched: matched.map((m) => m.name),
+        fit,
+      });
+    }
+    if (candidates.length === 0) continue;
+
+    let best = candidates[0];
+    if (mode === "match") {
+      // Highest cosine fit to the signature; ties → more distinct matches.
+      for (const c of candidates) {
+        if (
+          c.fit > best.fit ||
+          (c.fit === best.fit && c.matched.length > best.matched.length)
+        ) {
+          best = c;
+        }
+      }
+    } else {
+      // Most representative: maximize fit-weighted similarity to the other
+      // signature-fitting decks (centrality of the fitting region). Ties → the
+      // candidate with the higher raw fit.
+      let bestScore = -Infinity;
+      for (const x of candidates) {
+        let centrality = 0;
+        for (const y of candidates) centrality += y.fit * deckCosine(x.nameSet, y.nameSet);
+        if (centrality > bestScore || (centrality === bestScore && x.fit > best.fit)) {
+          bestScore = centrality;
+          best = x;
+        }
       }
     }
 
-    if (best === null) continue;
+    // Count how many other pool decks are similar to the chosen deck.
+    let neighbors = 0;
+    for (const { nameSet } of recordSets) {
+      if (nameSet === best.nameSet) continue;
+      if (deckCosine(best.nameSet, nameSet) >= SIMILAR_THRESHOLD) neighbors++;
+    }
 
     const cards = best.record.mainboard
       .map((n) => byName.get(n.toLowerCase()))
@@ -156,7 +223,8 @@ function computeSignatureDecks(content: QuestContent): SignatureDeck[] {
       signatureNames,
       cards,
       matchedNames: best.matched,
-      score: best.score,
+      cosine: best.fit,
+      neighbors,
       sourceFile: best.record.sourceFile,
       seatName: best.record.id,
     });
@@ -229,7 +297,8 @@ function DeckSection({ deck }: { deck: SignatureDeck }) {
             <div style={{ fontSize: 12, color: MUTED }}>
               {deck.cards.length}-card mainboard · matched{" "}
               {deck.matchedNames.length}/{deck.signatureNames.length} signature
-              cards · cosine {deck.score.toFixed(3)}
+              cards · cosine {deck.cosine.toFixed(3)} · {deck.neighbors} similar
+              {deck.neighbors === 1 ? " deck" : " decks"} in pool
             </div>
           </div>
         </HoverPopover>
@@ -306,9 +375,17 @@ function DeckSection({ deck }: { deck: SignatureDeck }) {
   );
 }
 
+function parseMode(search: string): SelectionMode {
+  const raw = new URLSearchParams(search).get("mode");
+  return raw === "typical" ? "typical" : "match";
+}
+
 export default function SignatureDecksApp() {
   const [content, setContent] = useState<QuestContent | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
+  const [mode, setMode] = useState<SelectionMode>(() =>
+    parseMode(window.location.search),
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -326,9 +403,22 @@ export default function SignatureDecksApp() {
     };
   }, []);
 
+  // Keep the address bar in sync so the chosen mode is a shareable link.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (mode === "match") params.delete("mode");
+    else params.set("mode", mode);
+    const query = params.toString();
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${query ? `?${query}` : ""}`,
+    );
+  }, [mode]);
+
   const decks = useMemo(
-    () => (content === null ? [] : computeSignatureDecks(content)),
-    [content],
+    () => (content === null ? [] : computeSignatureDecks(content, mode)),
+    [content, mode],
   );
 
   return (
@@ -345,15 +435,67 @@ export default function SignatureDecksApp() {
     >
       {/* Preload portrait art so the thumbnails do not pop in one by one. */}
       <div style={{ maxWidth: 1280, margin: "0 auto" }}>
-        <div style={{ marginBottom: 16 }}>
-          <div style={{ fontSize: 20, fontWeight: 600, color: "#f8fafc" }}>
-            Signature decks
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            gap: 16,
+            marginBottom: 16,
+          }}
+        >
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 20, fontWeight: 600, color: "#f8fafc" }}>
+              Signature decks
+            </div>
+            <div style={{ fontSize: 12, color: MUTED }}>
+              {mode === "match"
+                ? "The single draft deck most strongly correlated with each signature-carrying Dreamcaller (IDF cosine similarity; decks over 28 cards excluded)."
+                : "The most typical / representative draft deck for each signature-carrying Dreamcaller — the deck most central to the cluster of signature-fitting decks, rather than the single closest match."}{" "}
+              Hover a card to enlarge it, or a Dreamcaller for its ability.
+            </div>
           </div>
-          <div style={{ fontSize: 12, color: MUTED }}>
-            The real draft deck most strongly correlated with each
-            signature-carrying Dreamcaller (IDF cosine similarity, normalized
-            for deck size; decks over 28 cards excluded). Hover any card to
-            enlarge it.
+
+          {/* Selection-mode toggle, mirrored to ?mode= in the URL. */}
+          <div
+            style={{
+              display: "flex",
+              flexShrink: 0,
+              background: INSET_BG,
+              border: BORDER,
+              borderRadius: 8,
+              padding: 3,
+              gap: 3,
+            }}
+          >
+            {SELECTION_MODES.map((m) => {
+              const active = mode === m;
+              return (
+                <button
+                  key={m}
+                  onClick={() => {
+                    setMode(m);
+                  }}
+                  title={
+                    m === "match"
+                      ? "Closest single deck to the signature"
+                      : "Most representative deck among those that fit the signature"
+                  }
+                  style={{
+                    background: active ? ACCENT : "transparent",
+                    color: active ? "#0b1020" : MUTED,
+                    border: "none",
+                    borderRadius: 6,
+                    padding: "6px 12px",
+                    fontSize: 12,
+                    fontWeight: active ? 700 : 500,
+                    cursor: "pointer",
+                  }}
+                >
+                  {m === "match" ? "Best match" : "Most typical"}
+                </button>
+              );
+            })}
           </div>
         </div>
 
