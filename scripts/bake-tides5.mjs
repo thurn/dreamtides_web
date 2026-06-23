@@ -405,7 +405,7 @@ function run() {
       `(corpus has ${stats.corpusCards}).`,
   );
   console.log(
-    `Tide pools: ${stats.poolCount} of ${inputs.dreamcallers.length} Dreamcallers.`,
+    `Tide pools: ${stats.poolCount} of ${dreamcallers.length} Dreamcallers.`,
   );
   if (stats.noSignal.length > 0) {
     console.warn(
