@@ -91,29 +91,63 @@ All document frequencies, per-card IDF, and per-deck norms are computed over thi
 **497-deck known-good set** — not the broader 993-seat corpus. Identity is always
 by lowercased cards_v2 **UUID**, never by name (24 cards share a display name).
 
-## The fit metric (unified IDF cosine)
+## The fit metrics
 
-Reuse the IDF-cosine `fit` `/sigdecks` uses. For a query card set `Q` (a set of
-UUIDs, each weighted by its IDF over the known-good corpus) and a deck `D`:
+Both fits are built from the same IDF machinery over the known-good corpus, but
+they answer different questions, so they use two related formulas.
+
+### Signature fit — "does the deck contain the signature cards?"
+
+The direct IDF-cosine `fit` `/sigdecks` uses. For a query card set `Q` (UUIDs,
+each weighted by its IDF over the known-good corpus) and a deck `D`:
 
 ```
 fit(Q, D) = ( Σ idf(c) over c in Q present in D ) / ( ‖D‖ · ‖Q‖ )
 ```
 
-Both selection fits are this same metric with different query sets — the design
-deliberately drops the separate per-card affinity-weights path so there is one fit
-implementation:
+`signatureFit(D) = fit(dreamcaller.signatureCardIds, D)`. A Dreamcaller's
+signature is a literal set of its defining cards, so "contains those cards" is the
+right question.
 
-- `signatureFit(D)` = `fit(dreamcaller.signatureCardIds, D)`
-- `affiliationFit(D)` = `fit(affiliation.signatureCards, D)`
+### Affiliation fit — "is the deck shaped like the affiliation's theme?"
+
+A small curated probe is too coarse for a thematic affiliation: e.g. 53 cards
+reference Figments but the `figments` `signatureCards` probe lists only 4, so a
+direct cosine scores **375 of 497 decks at exactly 0**. Instead, reuse the
+**affinity** mechanism that already backs live affiliation steering
+(`computeAffinityByName` in
+[src/affiliations/affiliation-weights.ts](../../src/affiliations/affiliation-weights.ts)),
+computed **UUID-keyed over the known-good corpus**:
+
+1. Treat the affiliation's `signatureCards` as a synthetic probe deck.
+2. For each corpus deck, compute its IDF-cosine to the probe.
+3. Each card's **affinity** = the max probe-cosine over the corpus decks that
+   contain it, normalized to `[0, 1]`. A card that lives in decks shaped like the
+   probe scores high even if it is not itself a probe card — so every
+   figment-maker, not only the 4, reads as affiliated.
+4. `affiliationFit(D)` = the **mean affinity of `D`'s cards** (size-invariant, in
+   `[0, 1]`). The aggregator is tunable (mean, IDF-weighted mean, or mean of the
+   top-M affinities).
+
+Keeping both fits on a comparable `[0, 1]`-ish scale makes the `combined` blend
+below well-behaved. Affiliation no longer gates candidacy (it only adjusts
+ranking), and because affinity covers the whole pool it gives a usable signal for
+every deck — including for signature-less Dreamcallers, who rank on affiliation
+fit alone.
 
 ### Targeted cleanup
 
-Extract the IDF-corpus + cosine `fit` logic currently duplicated inside
-`SignatureDecksApp.tsx` into a shared module (e.g.
-`src/draft/replay/idf-fit.ts` or similar) consumed by both `/sigdecks` and the new
-algorithm, so there is a single implementation. This is in-scope because the new
-algorithm needs the same logic and the duplication would otherwise grow.
+Extract into shared modules, each with a single implementation consumed by
+`/sigdecks`, the live affiliation steering, and the new algorithm:
+
+- the IDF-corpus + cosine `fit` logic currently duplicated inside
+  `SignatureDecksApp.tsx`;
+- the affinity computation currently in `affiliation-weights.ts` — generalize it
+  from name-keyed to a generic key type so it can run UUID-keyed over the
+  known-good corpus.
+
+This is in-scope because the new algorithm needs both and the duplication would
+otherwise grow.
 
 ## Stage A — base deck selection
 
@@ -266,6 +300,7 @@ to?" — yes.
 | Constant | Default | Effect |
 | --- | --- | --- |
 | `AFFILIATION_WEIGHT` (λ) | 0.25 | Weight of affiliation fit relative to signature fit in `combined`. |
+| `AFFILIATION_AGGREGATOR` | mean | How a deck's per-card affinities collapse to one `affiliationFit` (mean / IDF-weighted mean / mean of top-M). |
 | `TOP_K` | 8 | Size of the strong-fit window the seed samples from. |
 | `STARTER_DILUTION` | `[10, 5, 0, 0, 0, 0, 0]` | Cards swapped for Starters, indexed by layer. |
 | `LEGENDARY_ALLOWED_FROM_LAYER` | 5 | First layer at which Legendaries are kept. |
