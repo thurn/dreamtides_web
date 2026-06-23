@@ -8,6 +8,12 @@ import {
   parseDreamcallerDisplayState,
   replaceDreamcallerDisplayStateInUrl,
 } from "./dreamcaller-editor-url-state";
+import {
+  isPushedDetailHistoryEntry,
+  parseDetailIdFromUrl,
+  pushDetailIdInUrl,
+  replaceDetailIdInUrl,
+} from "./dreamcaller-detail-url-state";
 import DreamcallerEditorGrid from "./DreamcallerEditorGrid";
 import DreamcallerEditorToolbar from "./DreamcallerEditorToolbar";
 import DreamcallerDetailView from "./DreamcallerDetailView";
@@ -230,7 +236,9 @@ export default function DreamcallerEditorApp({
   const [tideModalId, setTideModalId] = useState<string | null>(null);
   const [tideSaveState, setTideSaveState] = useState<Record<string, boolean>>({});
   const [tideSaveError, setTideSaveError] = useState<string | null>(null);
-  const [detailId, setDetailId] = useState<string | null>(null);
+  const [detailId, setDetailId] = useState<string | null>(() =>
+    parseDetailIdFromUrl(window.location.search),
+  );
   const [questContent, setQuestContent] = useState<QuestContent | null>(null);
   const [questContentError, setQuestContentError] = useState<string | null>(null);
 
@@ -290,6 +298,18 @@ export default function DreamcallerEditorApp({
     };
   }, [detailId, questContent, questContentError]);
 
+  // Keep the detail screen in sync with browser history navigation so Back and
+  // Forward open and close the overlay to match the `detail` query parameter.
+  useEffect(() => {
+    function handlePopState() {
+      setDetailId(parseDetailIdFromUrl(window.location.search));
+    }
+    window.addEventListener("popstate", handlePopState);
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, []);
+
   const loadedDreamcallers = loadStatus.kind === "loaded" ? loadStatus.dreamcallers : [];
   const tides = loadStatus.kind === "loaded" ? loadStatus.tides : [];
   const sortedVisibleDreamcallers = useMemo(
@@ -319,6 +339,24 @@ export default function DreamcallerEditorApp({
   function handleDisplayStateChange(nextState: DreamcallerDisplayState) {
     setDisplayState(nextState);
     replaceDreamcallerDisplayStateInUrl(nextState);
+  }
+
+  function handleOpenDetail(dreamcaller: EditorDreamcallerRecord) {
+    setDetailId(dreamcaller.id);
+    pushDetailIdInUrl(dreamcaller.id);
+  }
+
+  function handleCloseDetail() {
+    // Prefer stepping back over the entry we pushed when opening the screen so
+    // the originating list URL (filters and all) is restored exactly. When the
+    // detail screen was reached directly (e.g. a shared link), there is no such
+    // entry, so strip the parameter in place instead of leaving the page.
+    if (isPushedDetailHistoryEntry()) {
+      window.history.back();
+    } else {
+      setDetailId(null);
+      replaceDetailIdInUrl(null);
+    }
   }
 
   function setEditorSaveState(updater: (current: EditableSaveState) => EditableSaveState) {
@@ -594,9 +632,7 @@ export default function DreamcallerEditorApp({
                   setTideSaveError(null);
                   setTideModalId(dreamcaller.id);
                 }}
-                onViewDetail={(dreamcaller) => {
-                  setDetailId(dreamcaller.id);
-                }}
+                onViewDetail={handleOpenDetail}
               />
             )}
           </div>
@@ -647,7 +683,7 @@ export default function DreamcallerEditorApp({
           tides={tides}
           questContent={questContent}
           questContentError={questContentError}
-          onClose={() => setDetailId(null)}
+          onClose={handleCloseDetail}
         />
       ) : null}
     </main>
