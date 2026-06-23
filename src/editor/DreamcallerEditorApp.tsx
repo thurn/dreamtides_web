@@ -10,7 +10,10 @@ import {
 } from "./dreamcaller-editor-url-state";
 import DreamcallerEditorGrid from "./DreamcallerEditorGrid";
 import DreamcallerEditorToolbar from "./DreamcallerEditorToolbar";
+import DreamcallerDetailView from "./DreamcallerDetailView";
 import TidePoolModal from "./TidePoolModal";
+import { loadQuestContent, type QuestContent } from "../data/quest-content";
+import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import {
   beginFieldEdit,
   cancelFieldEdit,
@@ -227,6 +230,9 @@ export default function DreamcallerEditorApp({
   const [tideModalId, setTideModalId] = useState<string | null>(null);
   const [tideSaveState, setTideSaveState] = useState<Record<string, boolean>>({});
   const [tideSaveError, setTideSaveError] = useState<string | null>(null);
+  const [detailId, setDetailId] = useState<string | null>(null);
+  const [questContent, setQuestContent] = useState<QuestContent | null>(null);
+  const [questContentError, setQuestContentError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -260,6 +266,30 @@ export default function DreamcallerEditorApp({
     };
   }, [apiClient, loadAttempt]);
 
+  // The detail screen resolves each Dreamcaller's signature cards from the same
+  // quest content the battle integration loads. Fetch it lazily the first time
+  // a detail screen is opened so the editor's normal load path is unaffected.
+  useEffect(() => {
+    if (detailId === null || questContent !== null || questContentError !== null) {
+      return;
+    }
+    let cancelled = false;
+    loadQuestContent(DEFAULT_POOL_VARIANT)
+      .then((loaded) => {
+        if (!cancelled) {
+          setQuestContent(loaded);
+        }
+      })
+      .catch((error: unknown) => {
+        if (!cancelled) {
+          setQuestContentError(errorMessageFor(error));
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [detailId, questContent, questContentError]);
+
   const loadedDreamcallers = loadStatus.kind === "loaded" ? loadStatus.dreamcallers : [];
   const tides = loadStatus.kind === "loaded" ? loadStatus.tides : [];
   const sortedVisibleDreamcallers = useMemo(
@@ -280,6 +310,11 @@ export default function DreamcallerEditorApp({
     tideModalId === null
       ? null
       : (loadedDreamcallers.find((dreamcaller) => dreamcaller.id === tideModalId) ?? null);
+
+  const detailDreamcaller =
+    detailId === null
+      ? null
+      : (loadedDreamcallers.find((dreamcaller) => dreamcaller.id === detailId) ?? null);
 
   function handleDisplayStateChange(nextState: DreamcallerDisplayState) {
     setDisplayState(nextState);
@@ -559,6 +594,9 @@ export default function DreamcallerEditorApp({
                   setTideSaveError(null);
                   setTideModalId(dreamcaller.id);
                 }}
+                onViewDetail={(dreamcaller) => {
+                  setDetailId(dreamcaller.id);
+                }}
               />
             )}
           </div>
@@ -600,6 +638,16 @@ export default function DreamcallerEditorApp({
               setTideSaveError(null);
             }
           }}
+        />
+      ) : null}
+
+      {detailDreamcaller !== null ? (
+        <DreamcallerDetailView
+          dreamcaller={detailDreamcaller}
+          tides={tides}
+          questContent={questContent}
+          questContentError={questContentError}
+          onClose={() => setDetailId(null)}
         />
       ) : null}
     </main>

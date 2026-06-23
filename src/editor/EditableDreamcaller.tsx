@@ -45,6 +45,7 @@ export interface EditableDreamcallerProps {
     value: EditableFieldValue,
   ) => void;
   onEditTides: (dreamcaller: EditorDreamcallerRecord) => void;
+  onViewDetail: (dreamcaller: EditorDreamcallerRecord) => void;
 }
 
 const tileStyle: CSSProperties = {
@@ -122,6 +123,7 @@ export default function EditableDreamcaller({
   onFieldSave,
   onFieldCommit,
   onEditTides,
+  onViewDetail,
 }: EditableDreamcallerProps) {
   const tileRef = useRef<HTMLElement | null>(null);
   const tideById = new Map(tides.map((tide) => [tide.id, tide]));
@@ -141,15 +143,31 @@ export default function EditableDreamcaller({
   return (
     <article ref={tileRef} data-editor-dreamcaller-id={dreamcaller.id} style={tileStyle}>
       <div style={{ padding: "10px 10px 0" }}>
-        <DreamcallerPortrait
-          dreamcaller={{
-            imageNumber: dreamcaller.imageNumber,
-            name: dreamcaller.name,
-            title: dreamcaller.title,
+        <button
+          type="button"
+          data-view-detail={dreamcaller.id}
+          title={`View ${dreamcaller.name} details`}
+          aria-label={`View ${dreamcaller.name} details`}
+          onClick={() => onViewDetail(dreamcaller)}
+          style={{
+            display: "block",
+            width: "100%",
+            padding: 0,
+            border: "none",
+            background: "transparent",
+            cursor: "zoom-in",
           }}
-          variant="panel"
-          style={{ width: "100%" }}
-        />
+        >
+          <DreamcallerPortrait
+            dreamcaller={{
+              imageNumber: dreamcaller.imageNumber,
+              name: dreamcaller.name,
+              title: dreamcaller.title,
+            }}
+            variant="panel"
+            style={{ width: "100%" }}
+          />
+        </button>
       </div>
 
       <div style={bodyStyle}>

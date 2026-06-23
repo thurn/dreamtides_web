@@ -40,6 +40,7 @@ export interface DreamcallerEditorGridProps {
     value: EditableFieldValue,
   ) => void;
   onEditTides: (dreamcaller: EditorDreamcallerRecord) => void;
+  onViewDetail: (dreamcaller: EditorDreamcallerRecord) => void;
 }
 
 export default function DreamcallerEditorGrid({
@@ -54,6 +55,7 @@ export default function DreamcallerEditorGrid({
   onFieldSave,
   onFieldCommit,
   onEditTides,
+  onViewDetail,
 }: DreamcallerEditorGridProps) {
   return (
     <CardBrowserGrid
@@ -91,6 +93,7 @@ export default function DreamcallerEditorGrid({
           onFieldSave={onFieldSave}
           onFieldCommit={onFieldCommit}
           onEditTides={onEditTides}
+          onViewDetail={onViewDetail}
         />
       )}
     />
