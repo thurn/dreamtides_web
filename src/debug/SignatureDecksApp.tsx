@@ -17,11 +17,15 @@ import {
  * (`docs/draft_records_adapted`, bundled as `/draft-records-data.json`) most
  * strongly correlated with that Dreamcaller and renders the whole mainboard.
  *
- * Correlation metric: IDF-weighted signature overlap. Each signature card a
- * deck shares contributes `ln(N / df)`, where `df` is the number of mainboards
- * containing that card across the corpus — so sharing a *rare* signature card
- * weighs more than sharing a common one (the same idea `idf3` pool steering
- * uses). The deck with the highest total wins; ties break toward more distinct
+ * Correlation metric: IDF cosine similarity. Each card is weighted by its
+ * inverse document frequency `ln(N / df)` (`df` = number of corpus mainboards
+ * containing it), so sharing a *rare* signature card weighs more than sharing a
+ * common one (the same idea `idf3` pool steering uses). The score is the cosine
+ * between the signature vector and the deck vector — the IDF overlap normalized
+ * by both vectors' norms. Normalizing by the deck norm is what keeps the metric
+ * scale-invariant: a raw overlap sum favours large decks (more slots to contain
+ * any given signature card), whereas the cosine measures correlation, not size.
+ * The deck with the highest cosine wins; ties break toward more distinct
  * signature cards matched.
  *
  * Everything is derived live in the browser from the same quest content the
@@ -77,6 +81,19 @@ function computeSignatureDecks(content: QuestContent): SignatureDeck[] {
   }
   const idf = (name: string) => Math.log(N / (df.get(name) ?? 1));
 
+  // Each deck's L2 norm in IDF-vector space, sqrt(Σ idf² over its distinct
+  // cards). Dividing the raw overlap by this norm turns the score into a cosine
+  // similarity, which is scale-invariant: a bigger deck has more slots to
+  // contain any given signature card, so a raw overlap sum mechanically favours
+  // large decks. The norm cancels that out so the score measures correlation,
+  // not deck size.
+  const deckNorm = new Map<(typeof recordSets)[number]["record"], number>();
+  for (const { record, nameSet } of recordSets) {
+    let sumSq = 0;
+    for (const n of nameSet) sumSq += idf(n) ** 2;
+    deckNorm.set(record, Math.sqrt(sumSq) || 1);
+  }
+
   const result: SignatureDeck[] = [];
 
   for (const dc of content.dreamcallers) {
@@ -89,6 +106,12 @@ function computeSignatureDecks(content: QuestContent): SignatureDeck[] {
       df: df.get(n.toLowerCase()) ?? 0,
     }));
 
+    // Signature-vector norm. Constant across decks for this Dreamcaller, so it
+    // does not affect the ranking, but including it makes the reported cosine a
+    // true [0, 1] value comparable across Dreamcallers.
+    const queryNorm =
+      Math.sqrt(signatureNames.reduce((a, s) => a + s.idf ** 2, 0)) || 1;
+
     let best: {
       record: (typeof recordSets)[number]["record"];
       matched: string[];
@@ -98,7 +121,10 @@ function computeSignatureDecks(content: QuestContent): SignatureDeck[] {
     for (const { record, nameSet } of recordSets) {
       const matched = signatureNames.filter((s) => nameSet.has(s.name));
       if (matched.length === 0) continue;
-      const score = matched.reduce((a, s) => a + s.idf, 0);
+      // Cosine similarity between the signature vector and the deck vector:
+      // Σ idf over matched cards, normalized by both vectors' norms.
+      const dot = matched.reduce((a, s) => a + s.idf, 0);
+      const score = dot / ((deckNorm.get(record) ?? 1) * queryNorm);
       if (
         best === null ||
         score > best.score ||
@@ -173,7 +199,7 @@ function DeckSection({ deck }: { deck: SignatureDeck }) {
           <div style={{ fontSize: 12, color: MUTED }}>
             {deck.cards.length}-card mainboard · matched{" "}
             {deck.matchedNames.length}/{deck.signatureNames.length} signature
-            cards · IDF score {deck.score.toFixed(2)}
+            cards · cosine {deck.score.toFixed(3)}
           </div>
         </div>
         <div
@@ -294,8 +320,8 @@ export default function SignatureDecksApp() {
           </div>
           <div style={{ fontSize: 12, color: MUTED }}>
             The real draft deck most strongly correlated with each
-            signature-carrying Dreamcaller (IDF-weighted signature overlap).
-            Hover any card to enlarge it.
+            signature-carrying Dreamcaller (IDF cosine similarity, normalized
+            for deck size). Hover any card to enlarge it.
           </div>
         </div>
 
