@@ -20,6 +20,7 @@ import {
 import { createBattleRngStreams, deriveBattleSeed } from "../battle/random";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import { CardView } from "../components/CardView";
+import { HoverZoomCard } from "../components/HoverZoomCard";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
 import { dreamsignIconUrl } from "../atlas/atlas-display";
 import {
@@ -668,11 +669,19 @@ export default function OpponentDebugApp() {
                     }}
                   >
                     {deckCards.map((card, index) => (
-                      <CardView
+                      // Mirror the quest deck viewer: hovering a tile grows the
+                      // card in place (portaled above the grid, escaping the
+                      // scroll clip) until its rules text is legible, with the
+                      // glossary definitions shown alongside. The in-grid card
+                      // suppresses its own term popover so the enlarged read is
+                      // the one carrying hover-help.
+                      <HoverZoomCard
                         key={`${card.id}:${String(index)}`}
-                        card={card}
-                        suppressHoverHelp
-                      />
+                        logSurface="opponent_debug"
+                        glossaryText={card.renderedText}
+                      >
+                        <CardView card={card} suppressHoverHelp />
+                      </HoverZoomCard>
                     ))}
                   </div>
                 )}
