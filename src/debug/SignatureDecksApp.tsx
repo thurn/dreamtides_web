@@ -1,4 +1,12 @@
-import { useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
+import { createPortal } from "react-dom";
 import type { CardData } from "../types/cards";
 import type { DreamcallerContent } from "../types/content";
 import { loadQuestContent, type QuestContent } from "../data/quest-content";
@@ -11,6 +19,9 @@ import {
 } from "../components/DreamcallerPortrait";
 import { HoverPopover } from "../components/HoverPopover";
 import { DreamcallerPopover } from "../components/DreamcallerPopover";
+import { extractGlossaryTerms } from "../data/glossary-terms";
+import { GlossaryDefinitionCard } from "../components/GlossaryDefinitionCard";
+import { logEvent } from "../logging";
 
 /**
  * `/sigdecks` — a temporary visualization tool. For each Dreamcaller that
@@ -51,6 +62,62 @@ const TEXT = "#e2e8f0";
 const MUTED = "#94a3b8";
 const FAINT = "#64748b";
 const ACCENT = "#a78bfa";
+
+/** Viewport width (px) at or below which the layout switches to its compact
+ * mobile form: a fixed 3-column card grid plus long-press preview instead of
+ * the desktop hover-zoom. */
+const MOBILE_MAX_WIDTH_PX = 640;
+
+/** Fixed number of card columns in the compact mobile grid. */
+const MOBILE_GRID_COLUMNS = 3;
+
+/** Press duration (ms) that promotes a touch to a card preview. */
+const LONG_PRESS_MS = 350;
+
+/** Touch travel (px) past which a press is treated as a scroll, not a hold. */
+const LONG_PRESS_MOVE_TOLERANCE_PX = 12;
+
+interface Viewport {
+  /** True on a narrow viewport — drives the 3-column compact grid. */
+  isMobile: boolean;
+  /** True when the primary pointer is coarse (touch), so hover-zoom is off and
+   * long-press preview is on. */
+  isTouch: boolean;
+}
+
+/**
+ * Tracks whether the layout should use its compact mobile form and whether the
+ * device is touch-primary. Recomputes on resize and on changes to the
+ * `(pointer: coarse)` media query.
+ */
+function useViewport(): Viewport {
+  const read = (): Viewport => {
+    if (typeof window === "undefined") {
+      return { isMobile: false, isTouch: false };
+    }
+    return {
+      isMobile: window.innerWidth <= MOBILE_MAX_WIDTH_PX,
+      isTouch: window.matchMedia("(pointer: coarse)").matches,
+    };
+  };
+  const [viewport, setViewport] = useState<Viewport>(read);
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return undefined;
+    }
+    const update = () => {
+      setViewport(read());
+    };
+    window.addEventListener("resize", update);
+    const coarse = window.matchMedia("(pointer: coarse)");
+    coarse.addEventListener("change", update);
+    return () => {
+      window.removeEventListener("resize", update);
+      coarse.removeEventListener("change", update);
+    };
+  }, []);
+  return viewport;
+}
 
 /**
  * How the winning deck is chosen:
@@ -248,22 +315,178 @@ function computeSignatureDecks(
   return result;
 }
 
-function DeckSection({ deck }: { deck: SignatureDeck }) {
+/**
+ * Wraps a card tile so that a touch long-press fires `onLongPress` (used to
+ * open the fullscreen preview). Only touch pointers arm the hold: mouse and pen
+ * fall through untouched so the desktop hover-zoom keeps working. The hold is
+ * cancelled if the finger travels far enough to read as a scroll, so dragging
+ * the page never opens a preview.
+ */
+function LongPressCard({
+  onLongPress,
+  children,
+}: {
+  onLongPress: () => void;
+  children: ReactNode;
+}) {
+  const timer = useRef<number | null>(null);
+  const origin = useRef<{ x: number; y: number } | null>(null);
+
+  const clear = useCallback(() => {
+    if (timer.current !== null) {
+      window.clearTimeout(timer.current);
+      timer.current = null;
+    }
+    origin.current = null;
+  }, []);
+
+  useEffect(() => clear, [clear]);
+
+  return (
+    <div
+      onPointerDown={(event) => {
+        if (event.pointerType !== "touch") {
+          return;
+        }
+        origin.current = { x: event.clientX, y: event.clientY };
+        clear();
+        timer.current = window.setTimeout(() => {
+          timer.current = null;
+          origin.current = null;
+          onLongPress();
+        }, LONG_PRESS_MS);
+      }}
+      onPointerMove={(event) => {
+        const start = origin.current;
+        if (start === null || timer.current === null) {
+          return;
+        }
+        if (
+          Math.abs(event.clientX - start.x) > LONG_PRESS_MOVE_TOLERANCE_PX ||
+          Math.abs(event.clientY - start.y) > LONG_PRESS_MOVE_TOLERANCE_PX
+        ) {
+          clear();
+        }
+      }}
+      onPointerUp={clear}
+      onPointerCancel={clear}
+      onContextMenu={(event) => {
+        // Suppress the iOS/Android long-press callout so the preview is the
+        // only thing the hold produces.
+        event.preventDefault();
+      }}
+      style={{
+        touchAction: "pan-y",
+        WebkitTouchCallout: "none",
+        WebkitUserSelect: "none",
+        userSelect: "none",
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+/**
+ * Fullscreen card preview shown after a long-press on touch. Renders the card
+ * at a comfortably legible width with its glossary definitions stacked beneath,
+ * over a dimming backdrop. Tapping anywhere or pressing Escape dismisses it.
+ */
+function CardLightbox({
+  card,
+  onClose,
+}: {
+  card: CardData;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  const terms = extractGlossaryTerms(card.renderedText ?? "");
+
+  if (typeof document === "undefined") {
+    return null;
+  }
+
+  return createPortal(
+    <div
+      role="dialog"
+      aria-modal="true"
+      onPointerDown={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 1000,
+        background: "rgba(3, 7, 18, 0.88)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 12,
+        padding: 16,
+        overflowY: "auto",
+        WebkitOverflowScrolling: "touch",
+      }}
+    >
+      <div style={{ width: "min(86vw, 360px)", flexShrink: 0 }}>
+        <CardView card={card} large suppressHoverHelp />
+      </div>
+      {terms.length > 0 && (
+        <div
+          style={{
+            width: "min(86vw, 360px)",
+            display: "flex",
+            flexDirection: "column",
+            gap: 6,
+          }}
+        >
+          {terms.map((entry) => (
+            <GlossaryDefinitionCard key={entry.term} entry={entry} />
+          ))}
+        </div>
+      )}
+      <div style={{ fontSize: 12, color: MUTED, paddingBottom: 8 }}>
+        Tap anywhere to close
+      </div>
+    </div>,
+    document.body,
+  );
+}
+
+function DeckSection({
+  deck,
+  viewport,
+  onPreview,
+}: {
+  deck: SignatureDeck;
+  viewport: Viewport;
+  onPreview: (card: CardData) => void;
+}) {
   const dc = deck.dreamcaller;
   const matched = deck.matchedIds;
+  const { isMobile, isTouch } = viewport;
   return (
     <section
       style={{
         background: PANEL_BG,
         border: BORDER,
         borderRadius: 10,
-        padding: 16,
-        marginBottom: 20,
+        padding: isMobile ? 10 : 16,
+        marginBottom: isMobile ? 14 : 20,
       }}
     >
       <div
         style={{
           display: "flex",
+          flexWrap: isMobile ? "wrap" : "nowrap",
           gap: 14,
           alignItems: "center",
           marginBottom: 14,
@@ -318,8 +541,9 @@ function DeckSection({ deck }: { deck: SignatureDeck }) {
             fontSize: 10,
             color: FAINT,
             fontFamily: "monospace",
-            textAlign: "right",
-            maxWidth: 260,
+            textAlign: isMobile ? "left" : "right",
+            maxWidth: isMobile ? "100%" : 260,
+            width: isMobile ? "100%" : undefined,
             wordBreak: "break-all",
           }}
         >
@@ -365,21 +589,31 @@ function DeckSection({ deck }: { deck: SignatureDeck }) {
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(auto-fill, minmax(198px, 1fr))",
-          gap: 12,
+          gridTemplateColumns: isMobile
+            ? `repeat(${String(MOBILE_GRID_COLUMNS)}, 1fr)`
+            : "repeat(auto-fill, minmax(198px, 1fr))",
+          gap: isMobile ? 6 : 12,
         }}
       >
         {deck.cards.map((card, index) => (
-          // Same hover behaviour as the /opponent deck viewer: hovering a tile
-          // grows the card in place (portaled above the grid) until its rules
-          // text is legible, with glossary definitions shown alongside.
-          <HoverZoomCard
+          // Desktop (mouse): hovering a tile grows the card in place (portaled
+          // above the grid) until its rules text is legible, with glossary
+          // definitions alongside. Touch: hover-zoom is disabled and a
+          // long-press opens the fullscreen preview instead.
+          <LongPressCard
             key={`${card.id}:${String(index)}`}
-            logSurface="sigdecks"
-            glossaryText={card.renderedText}
+            onLongPress={() => {
+              onPreview(card);
+            }}
           >
-            <CardView card={card} suppressHoverHelp />
-          </HoverZoomCard>
+            <HoverZoomCard
+              enabled={!isTouch}
+              logSurface="sigdecks"
+              glossaryText={card.renderedText}
+            >
+              <CardView card={card} suppressHoverHelp />
+            </HoverZoomCard>
+          </LongPressCard>
         ))}
       </div>
     </section>
@@ -397,6 +631,16 @@ export default function SignatureDecksApp() {
   const [mode, setMode] = useState<SelectionMode>(() =>
     parseMode(window.location.search),
   );
+  const viewport = useViewport();
+  const [preview, setPreview] = useState<CardData | null>(null);
+
+  const openPreview = useCallback((card: CardData) => {
+    setPreview(card);
+    logEvent("card_long_press_preview", {
+      surface: "sigdecks",
+      cardId: card.id,
+    });
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
@@ -440,7 +684,7 @@ export default function SignatureDecksApp() {
         color: TEXT,
         fontFamily:
           'system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-        padding: 20,
+        padding: viewport.isMobile ? 12 : 20,
         boxSizing: "border-box",
       }}
     >
@@ -449,6 +693,7 @@ export default function SignatureDecksApp() {
         <div
           style={{
             display: "flex",
+            flexWrap: "wrap",
             alignItems: "flex-start",
             justifyContent: "space-between",
             gap: 16,
@@ -463,7 +708,9 @@ export default function SignatureDecksApp() {
               {mode === "match"
                 ? "The single draft deck most strongly correlated with each signature-carrying Dreamcaller (IDF cosine similarity; decks over 28 cards excluded)."
                 : "The most typical / representative draft deck for each signature-carrying Dreamcaller — the deck most central to the cluster of signature-fitting decks, rather than the single closest match."}{" "}
-              Hover a card to enlarge it, or a Dreamcaller for its ability.
+              {viewport.isTouch
+                ? "Long-press a card to enlarge it."
+                : "Hover a card to enlarge it, or a Dreamcaller for its ability."}
             </div>
           </div>
 
@@ -539,7 +786,12 @@ export default function SignatureDecksApp() {
         )}
 
         {decks.map((deck) => (
-          <DeckSection key={deck.dreamcaller.id} deck={deck} />
+          <DeckSection
+            key={deck.dreamcaller.id}
+            deck={deck}
+            viewport={viewport}
+            onPreview={openPreview}
+          />
         ))}
 
         {/* hidden preloads */}
@@ -553,6 +805,15 @@ export default function SignatureDecksApp() {
           ))}
         </div>
       </div>
+
+      {preview !== null && (
+        <CardLightbox
+          card={preview}
+          onClose={() => {
+            setPreview(null);
+          }}
+        />
+      )}
     </div>
   );
 }
