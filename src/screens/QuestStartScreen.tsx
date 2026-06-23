@@ -164,8 +164,17 @@ export function QuestStartScreen() {
           );
           // A `tides4` run shows the dealt tides in place of the signature
           // cards, so suppress the signature-card list whenever tides exist.
+          // Pair each display name with its index-aligned stable id so React
+          // keys and data attributes stay unique even when two signature cards
+          // share a display name.
+          const signatureCardIds = dreamcaller.signatureCardIds ?? [];
           const signatureCards =
-            tides.length > 0 ? [] : (dreamcaller.signatureCards ?? []);
+            tides.length > 0
+              ? []
+              : (dreamcaller.signatureCards ?? []).map((name, sigIndex) => ({
+                  name,
+                  id: signatureCardIds[sigIndex] ?? `${name}-${String(sigIndex)}`,
+                }));
           return (
             <motion.div
               key={dreamcaller.name}
@@ -300,11 +309,11 @@ export function QuestStartScreen() {
                     </HoverPopover>
                   </span>
                   <div className="flex w-full flex-col gap-2">
-                    {signatureCards.map((cardName) => (
+                    {signatureCards.map((signatureCard) => (
                       <span
-                        key={`${dreamcaller.id}-${cardName}`}
+                        key={`${dreamcaller.id}-${signatureCard.id}`}
                         className="relative"
-                        data-dreamcaller-signature-card={`${dreamcaller.id}:${cardName}`}
+                        data-dreamcaller-signature-card={`${dreamcaller.id}:${signatureCard.id}`}
                       >
                         <span
                           className="inline-flex min-h-8 w-full items-center justify-start gap-1.5 px-1 py-1 text-xs font-medium"
@@ -313,10 +322,10 @@ export function QuestStartScreen() {
                           <i
                             aria-hidden="true"
                             className="bxf bx-star text-sm leading-none"
-                            data-dreamcaller-signature-card-icon={`${dreamcaller.id}:${cardName}`}
+                            data-dreamcaller-signature-card-icon={`${dreamcaller.id}:${signatureCard.id}`}
                             style={{ color: accentColor }}
                           />
-                          <span>{cardName}</span>
+                          <span>{signatureCard.name}</span>
                         </span>
                       </span>
                     ))}

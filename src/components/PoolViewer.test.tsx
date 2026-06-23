@@ -63,12 +63,18 @@ const draftState: DraftState = {
   sitePicksCompleted: 0,
 };
 
+// Resolve a signature card name to its fixture id, mirroring how the runtime
+// bundle carries id-aligned signatures. Derived from the live card fixtures so
+// the mapping survives renames in the fixture data.
+const idByName = new Map(cards.map((card) => [card.name, card.id]));
+
 function makeResolvedPackage(
   overrides: Partial<{
     starterDecklistCardNumbers: number[];
     signatureCards: string[];
   }> = {},
 ): ResolvedDreamcallerPackage {
+  const signatureCards = overrides.signatureCards ?? ["Alpha Seer", "Quick Spark"];
   return {
     dreamcaller: {
       id: "dc-test",
@@ -77,7 +83,11 @@ function makeResolvedPackage(
       renderedText: "",
       imageNumber: "1",
       startingEssence: 250,
-      signatureCards: overrides.signatureCards ?? ["Alpha Seer", "Quick Spark"],
+      signatureCards,
+      // Index-aligned ids; an unknown name maps to a non-resolving placeholder.
+      signatureCardIds: signatureCards.map(
+        (name) => idByName.get(name) ?? `missing-${name}`,
+      ),
     },
     draftPoolCopiesByCard: {},
     dreamsignPoolIds: [],
@@ -106,18 +116,20 @@ const replayRecord: DraftRecord = {
   draftId: "draft-1",
   sourceFile: "draft-1-records.json",
   // Mainboard with a doubled "Alpha Seer" so the deck grid shows an x2 badge.
+  // `mainboardIds` carries the stable ids the viewer resolves on; "Unknown
+  // Relic" has no matching card so its id does not resolve and it is dropped.
   mainboard: ["Alpha Seer", "Alpha Seer", "Beta Guard", "Unknown Relic"],
-  mainboardIds: ["Alpha Seer", "Alpha Seer", "Beta Guard", "Unknown Relic"],
+  mainboardIds: ["card-1", "card-1", "card-2", "missing-unknown-relic"],
   packs: [
     ["Alpha Seer", "Beta Guard"],
     ["Null Rain", "Quick Spark"],
   ],
   picks: [["Alpha Seer"], ["Quick Spark"]],
   packIds: [
-    ["Alpha Seer", "Beta Guard"],
-    ["Null Rain", "Quick Spark"],
+    ["card-1", "card-2"],
+    ["card-3", "card-4"],
   ],
-  pickIds: [["Alpha Seer"], ["Quick Spark"]],
+  pickIds: [["card-1"], ["card-4"]],
 };
 
 function mount(element: ReactElement): {
@@ -688,6 +700,51 @@ describe("PoolViewer", () => {
         ?.click();
     });
     expect(logEvent).toHaveBeenCalledWith("card_preview", { cardNumber: 2 });
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("resolves a name-collision mainboard to the correct card by id, not name", () => {
+    // Two distinct cards sharing a display name (different ids / card numbers) —
+    // the cards_v2 collision case. The record's mainboard names both as "Twin
+    // Aspect", but its id-aligned mainboardIds point only at #91, so an id-keyed
+    // resolution must show #91 and never #90.
+    const collisionDb = new Map<number, CardData>([
+      [90, { ...makeCard(90, "Twin Aspect", "Character", 2, "Mystic"), id: "card-90" }],
+      [91, { ...makeCard(91, "Twin Aspect", "Event", 3, ""), id: "card-91" }],
+    ]);
+    const collisionRecord: DraftRecord = {
+      id: "seat-collision",
+      draftId: "draft-collision",
+      sourceFile: "draft-collision.json",
+      mainboard: ["Twin Aspect"],
+      mainboardIds: ["card-91"],
+      packs: [["Twin Aspect"]],
+      picks: [["Twin Aspect"]],
+      packIds: [["card-91"]],
+      pickIds: [["card-91"]],
+    };
+
+    const { container, root } = mount(
+      <PoolViewer
+        cardDatabase={collisionDb}
+        draftState={replayDraftState}
+        resolvedPackage={makeResolvedPackage({ signatureCards: [] })}
+        poolVariant={null}
+        replayRecord={collisionRecord}
+        seedProvenance={null}
+        tides4Provenance={null}
+        isOpen
+        onClose={vi.fn()}
+      />,
+    );
+
+    // The record deck (default replay source) resolves the mainboard id to #91,
+    // the colliding twin the name alone could not have disambiguated.
+    expect(container.querySelector('[data-pool-card-number="91"]')).not.toBeNull();
+    expect(container.querySelector('[data-pool-card-number="90"]')).toBeNull();
 
     act(() => {
       root.unmount();

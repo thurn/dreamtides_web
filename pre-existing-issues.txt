@@ -1,0 +1,57 @@
+Name-based card identity in the idf3 / replay / affiliation pool engine
+=======================================================================
+
+Context: 24 distinct cards_v2 cards share a display name with another distinct
+card (different UUIDs, different rendered text and rules). AGENTS.md requires
+identifying cards by stable UUID, never by name. The draft-record bundle now
+carries id-aligned fields (`mainboardIds`, `packIds`, `pickIds`,
+`signatureCardIds`) so consumers can key on ids.
+
+Migrated to UUID identity in this change:
+  - src/components/PoolViewer.tsx  — record deck, signature cards, and the
+    replay pick history now resolve render targets by id (`mainboardIds`,
+    `signatureCardIds`, `packIds`/`pickIds`) via a lowercased id index.
+  - src/battle/integration/opponent-deck.ts — opponent draft signature seeds
+    now read `signatureCardIds` (the name-valued `signatureCards` never matched
+    the id-keyed lookup, so signature seeding was silently a no-op).
+  - src/screens/QuestStartScreen.tsx — signature-card React keys / data
+    attributes now key on the id (names are still the displayed text).
+
+Deliberately NOT migrated (documented here): the name-keyed pool/replay engine.
+These modules identify cards by display name throughout — IDF document
+frequencies, IDF-cosine, co-occurrence, and the per-card affinity probe are all
+computed in card-NAME space:
+
+  - src/draft/pool/variant-idf.ts        (IDF corpus + idfCosine)
+  - src/draft/pool/variant-idf3.ts       (signature-name probe vs name-keyed idf)
+  - src/draft/pool/variant-idf4.ts
+  - src/draft/pool/variant-embedded.ts
+  - src/draft/pool/variant-sigseed.ts
+  - src/draft/replay/fit-model.ts        (whole model in card-name space)
+  - src/draft/replay/draft-records.ts    (resolveCardNames / selectReplayRecordIndex
+                                          / buildPackSequence via nameIndex)
+  - src/affiliations/affiliation-weights.ts (resolves signature UUIDs to names,
+                                          then scores in the name-keyed corpus)
+  - src/data/quest-content.ts            (buildFitModel(records.map(r => r.mainboard),
+                                          nameIndex); generateDreamcallerPool and
+                                          buildReplayDraftState pass
+                                          dreamcaller.signatureCards as names)
+
+Rationale for deferring:
+  - The whole engine speaks card-name keys; the name fields (`mainboard`,
+    `signatureCards`, `packs`, `picks`) are intentionally kept populated for it.
+  - A correct migration must move the engine to UUID keys AND change its offline
+    tuning mirror, scripts/draft-replay-experiment.mjs, in lockstep (that script
+    is the source of DEFAULT_FIT_TUNING and must reproduce the runtime math).
+    AGENTS.md calls this out; doing half of it would silently desync the metric.
+  - Impact is bounded and non-visual: a same-name collision blends the two
+    cards' document-frequency / affinity, slightly perturbing steering weights.
+    It never renders the wrong card to the player (the rendering paths are now
+    id-based). The pick corpus that feeds the pickfit/pickcohere/picksig
+    affinity grower is ALREADY id-keyed (quest-content feeds it r.packIds /
+    r.pickIds), so only the idf-cosine / fit-model family remains name-keyed.
+
+Suggested follow-up: introduce an id-keyed IDF corpus + fit model (key documents
+and co-occurrence on lowercased card UUIDs, resolving display text from the id
+only for the provenance summaries), and port scripts/draft-replay-experiment.mjs
+to the same key space, validating recall@4 is unchanged before/after.

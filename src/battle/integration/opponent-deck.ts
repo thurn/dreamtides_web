@@ -281,14 +281,16 @@ export function resolveBattleAffiliation(
 const DRAFT_SEED_SALT = 0x9e3779b1;
 
 /** Translate a Dreamcaller's signature card UUIDs to card numbers via the
- * database, dropping any that do not resolve. */
+ * database, dropping any that do not resolve. Reads the id-aligned
+ * `signatureCardIds` (the name-valued `signatureCards` cannot distinguish two
+ * cards that share a display name); ids are lowercased to match `idToNumber`. */
 function signatureCardNumbers(
   opponentDreamcaller: DreamcallerContent | null,
   idToNumber: ReadonlyMap<string, number>,
 ): number[] {
   const out: number[] = [];
-  for (const uuid of opponentDreamcaller?.signatureCards ?? []) {
-    const num = idToNumber.get(uuid);
+  for (const uuid of opponentDreamcaller?.signatureCardIds ?? []) {
+    const num = idToNumber.get(uuid.toLowerCase());
     if (num !== undefined) out.push(num);
   }
   return out;
@@ -487,9 +489,11 @@ export function buildOpponentDeck(args: {
     return null;
   }
 
-  // Card UUID -> card number, for translating Dreamcaller signature cards.
+  // Card UUID (lowercased) -> card number, for translating Dreamcaller
+  // signature card ids.
   const idToNumber = new Map<string, number>();
-  for (const card of cardDatabase.values()) idToNumber.set(card.id, card.cardNumber);
+  for (const card of cardDatabase.values())
+    idToNumber.set(card.id.toLowerCase(), card.cardNumber);
 
   // Affiliation context (probe affinities) for an affiliated dreamscape; null in
   // a neutral dreamscape or when the affiliation cannot be scored.

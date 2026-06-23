@@ -237,16 +237,16 @@ export function PoolViewer({
   // replay draft came from it.
   const isReplay = draftState?.mode === "replay" && replayRecord !== null;
 
-  // Resolve card NAMES (how draft records store cards) to the CardData the grid
-  // renders. First occurrence of a name wins, matching the rest of the viewer.
-  const cardsByName = useMemo(() => {
-    const byName = new Map<string, CardData>();
+  // Resolve cards by stable cards_v2 UUID (lowercased). Draft records and
+  // Dreamcaller signatures carry id-aligned arrays alongside their display
+  // names; keying on the id keeps the viewer correct when two distinct cards
+  // share a name.
+  const cardsById = useMemo(() => {
+    const byId = new Map<string, CardData>();
     for (const card of cardDatabase.values()) {
-      if (!byName.has(card.name)) {
-        byName.set(card.name, card);
-      }
+      byId.set(card.id.toLowerCase(), card);
     }
-    return byName;
+    return byId;
   }, [cardDatabase]);
 
   const idf3Entries = useMemo<PoolCardEntry[]>(
@@ -261,17 +261,17 @@ export function PoolViewer({
   const signatureEntries = useMemo<PoolCardEntry[]>(
     () =>
       buildSignatureEntries(
-        resolvedPackage?.dreamcaller.signatureCards ?? [],
-        cardDatabase,
+        resolvedPackage?.dreamcaller.signatureCardIds ?? [],
+        cardsById,
       ),
-    [cardDatabase, resolvedPackage],
+    [cardsById, resolvedPackage],
   );
 
   // The deck the original drafter eventually built, resolved from the record's
-  // mainboard. Copies are counted so a doubled card shows an "x2" badge.
+  // mainboard ids. Copies are counted so a doubled card shows an "x2" badge.
   const deckEntries = useMemo<PoolCardEntry[]>(
-    () => buildDeckEntries(replayRecord?.mainboard ?? [], cardsByName),
-    [cardsByName, replayRecord],
+    () => buildDeckEntries(replayRecord?.mainboardIds ?? [], cardsById),
+    [cardsById, replayRecord],
   );
 
   // The run's tides, in join order. Present only for the `tides4` variant.
@@ -658,7 +658,7 @@ export function PoolViewer({
                 replayRecord !== null && replayRecord.packs.length > 0 ? (
                   <ReplayPickHistory
                     record={replayRecord}
-                    cardsByName={cardsByName}
+                    cardsById={cardsById}
                     onCardClick={setOverlayCard}
                   />
                 ) : (
@@ -743,11 +743,11 @@ export function PoolViewer({
  */
 function ReplayPickHistory({
   record,
-  cardsByName,
+  cardsById,
   onCardClick,
 }: {
   record: DraftRecord;
-  cardsByName: ReadonlyMap<string, CardData>;
+  cardsById: ReadonlyMap<string, CardData>;
   onCardClick: (card: CardData) => void;
 }) {
   return (
@@ -770,8 +770,17 @@ function ReplayPickHistory({
         }
       </p>
       {record.packs.map((pack, index) => {
-        const picks = record.picks[index] ?? [];
-        const pickedNames = new Set(picks);
+        const packIds = record.packIds[index] ?? [];
+        const pickIds = record.pickIds[index] ?? [];
+        const pickedIds = new Set(pickIds.map((id) => id.toLowerCase()));
+        // Display the chosen cards by their resolved current name (correct even
+        // when two cards share a name), falling back to the record's stored name.
+        const pickLabels = pickIds.map(
+          (id, pickIndex) =>
+            cardsById.get(id.toLowerCase())?.name ??
+            record.picks[index]?.[pickIndex] ??
+            id,
+        );
         return (
           <div
             key={index}
@@ -802,18 +811,24 @@ function ReplayPickHistory({
                 {`Pick ${String(index + 1)}`}
               </span>
               <span style={{ fontSize: "0.72rem", color: "#9fb0ac" }}>
-                {picks.length > 0
-                  ? `chose ${picks.join(", ")}`
+                {pickLabels.length > 0
+                  ? `chose ${pickLabels.join(", ")}`
                   : "no pick recorded"}
               </span>
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: "4px" }}>
               {pack.map((name, cardIndex) => {
-                const picked = pickedNames.has(name);
-                const card = cardsByName.get(name);
+                const id = packIds[cardIndex];
+                const card =
+                  id !== undefined ? cardsById.get(id.toLowerCase()) : undefined;
+                const picked =
+                  id !== undefined && pickedIds.has(id.toLowerCase());
+                // Prefer the resolved card's current name so a name collision
+                // shows the actual offered card; fall back to the stored name.
+                const label = card?.name ?? name;
                 return (
                   <button
-                    key={`${name}-${String(cardIndex)}`}
+                    key={`${id ?? name}-${String(cardIndex)}`}
                     type="button"
                     data-pool-pick-card={picked ? "picked" : "offered"}
                     onClick={
@@ -835,7 +850,7 @@ function ReplayPickHistory({
                       cursor: card !== undefined ? "pointer" : "default",
                     }}
                   >
-                    {name}
+                    {label}
                   </button>
                 );
               })}
@@ -893,19 +908,19 @@ function buildEntriesFromCardNumbers(
 
 /**
  * Resolve a replay record's mainboard (the deck the original drafter eventually
- * built) from card names into pool entries, deduping on first occurrence and
- * counting copies so doubled cards carry an "x2" badge. Names with no matching
- * card in the current set are skipped.
+ * built) from its stable card ids into pool entries, deduping on first
+ * occurrence and counting copies so doubled cards carry an "x2" badge. Ids with
+ * no matching card in the current set are skipped.
  */
 function buildDeckEntries(
-  mainboard: readonly string[],
-  cardsByName: ReadonlyMap<string, CardData>,
+  mainboardIds: readonly string[],
+  cardsById: ReadonlyMap<string, CardData>,
 ): PoolCardEntry[] {
   const order: number[] = [];
   const copiesByNumber = new Map<number, number>();
   const cardByNumber = new Map<number, CardData>();
-  for (const name of mainboard) {
-    const card = cardsByName.get(name);
+  for (const id of mainboardIds) {
+    const card = cardsById.get(id.toLowerCase());
     if (card === undefined) {
       continue;
     }
@@ -927,24 +942,17 @@ function buildDeckEntries(
 }
 
 /**
- * Resolve a Dreamcaller's signature card names against the card database by
- * name, preserving authoring order and skipping names with no matching card.
+ * Resolve a Dreamcaller's signature card ids against the card database by stable
+ * UUID, preserving authoring order and skipping ids with no matching card.
  * Signature cards are metadata, so entries carry no copy badge.
  */
 function buildSignatureEntries(
-  signatureCards: readonly string[],
-  cardDatabase: ReadonlyMap<number, CardData>,
+  signatureCardIds: readonly string[],
+  cardsById: ReadonlyMap<string, CardData>,
 ): PoolCardEntry[] {
-  const cardsByName = new Map<string, CardData>();
-  for (const card of cardDatabase.values()) {
-    if (!cardsByName.has(card.name)) {
-      cardsByName.set(card.name, card);
-    }
-  }
-
   const entries: PoolCardEntry[] = [];
-  for (const name of signatureCards) {
-    const card = cardsByName.get(name);
+  for (const id of signatureCardIds) {
+    const card = cardsById.get(id.toLowerCase());
     if (card === undefined) {
       continue;
     }

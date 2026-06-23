@@ -139,11 +139,19 @@ function makePoolContext(db: Map<number, CardData>): RunPoolContext {
 
 /**
  * A single-Dreamcaller set steered by the given signature cards, so the opponent
- * descriptor and deck are deterministic.
+ * descriptor and deck are deterministic. Mirrors the runtime bundle: the steering
+ * cards are kept as display names in `signatureCards`, and the id-aligned
+ * `signatureCardIds` (resolved from `db` when supplied) is what the opponent
+ * builder actually seeds on. When `db` is omitted the ids are empty, so the
+ * draft is steered only by corpus coherence (and any affiliation).
  */
 function makeDreamcallers(
   signatureCards: readonly string[],
+  db?: ReadonlyMap<number, CardData>,
 ): DreamcallerContent[] {
+  const idByName = new Map(
+    db === undefined ? [] : [...db.values()].map((card) => [card.name, card.id]),
+  );
   return [
     {
       id: "opp-dc",
@@ -153,6 +161,9 @@ function makeDreamcallers(
       imageNumber: "001",
       startingEssence: 250,
       signatureCards: [...signatureCards],
+      signatureCardIds: signatureCards
+        .map((name) => idByName.get(name))
+        .filter((id): id is string => id !== undefined),
     },
   ];
 }
@@ -233,7 +244,7 @@ function makeInput(
     site: baseState.atlas.nodes["dreamscape-2"].sites[0],
     state,
     cardDatabase: db,
-    dreamcallers: makeDreamcallers(alpha),
+    dreamcallers: makeDreamcallers(alpha, db),
     poolContext: makePoolContext(db),
     fitModel,
     draftRecords,

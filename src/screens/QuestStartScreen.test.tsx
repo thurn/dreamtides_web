@@ -104,6 +104,7 @@ const OFFERED_DREAMCALLERS: readonly DreamcallerContent[] = [
     imageNumber: "0009",
     startingEssence: 230,
     signatureCards: ["Lantern Seer", "Banner Captain", "Verdant Sprout"],
+    signatureCardIds: ["sig-1-0", "sig-1-1", "sig-1-2"],
   },
   {
     id: "caller-2",
@@ -113,6 +114,7 @@ const OFFERED_DREAMCALLERS: readonly DreamcallerContent[] = [
     imageNumber: "0010",
     startingEssence: 250,
     signatureCards: ["Ember Scout", "Charging Host", "Quick Striker"],
+    signatureCardIds: ["sig-2-0", "sig-2-1", "sig-2-2"],
   },
   {
     id: "caller-3",
@@ -122,15 +124,17 @@ const OFFERED_DREAMCALLERS: readonly DreamcallerContent[] = [
     imageNumber: "0011",
     startingEssence: 285,
     signatureCards: ["Void Revenant", "Crowned Spark", "Endless Procession"],
+    signatureCardIds: ["sig-3-0", "sig-3-1", "sig-3-2"],
   },
 ] as const;
 
 let currentMutations: QuestMutations;
 
 const SIGNATURE_CARDS = OFFERED_DREAMCALLERS.flatMap((dreamcaller) =>
-  (dreamcaller.signatureCards ?? []).map((name) => ({
+  (dreamcaller.signatureCards ?? []).map((name, index) => ({
     dreamcallerId: dreamcaller.id,
     name,
+    id: (dreamcaller.signatureCardIds ?? [])[index],
   })),
 );
 
@@ -314,7 +318,7 @@ describe("QuestStartScreen", () => {
         container.querySelectorAll("[data-dreamcaller-signature-card]"),
       ).map((card) => card.getAttribute("data-dreamcaller-signature-card")),
     ).toEqual(
-      SIGNATURE_CARDS.map((card) => `${card.dreamcallerId}:${card.name}`),
+      SIGNATURE_CARDS.map((card) => `${card.dreamcallerId}:${card.id}`),
     );
 
     for (const dreamcaller of OFFERED_DREAMCALLERS) {
@@ -337,7 +341,7 @@ describe("QuestStartScreen", () => {
     for (const card of SIGNATURE_CARDS) {
       expect(container.textContent).toContain(card.name);
       const row = container.querySelector(
-        `[data-dreamcaller-signature-card="${card.dreamcallerId}:${card.name}"]`,
+        `[data-dreamcaller-signature-card="${card.dreamcallerId}:${card.id}"]`,
       );
       const visibleRow = row?.firstElementChild;
       expect(visibleRow).not.toBeNull();
@@ -345,7 +349,7 @@ describe("QuestStartScreen", () => {
         "rgb(255, 255, 255)",
       );
       const icon = container.querySelector(
-        `[data-dreamcaller-signature-card-icon="${card.dreamcallerId}:${card.name}"]`,
+        `[data-dreamcaller-signature-card-icon="${card.dreamcallerId}:${card.id}"]`,
       );
       expect(icon?.className).toContain("bx-star");
     }
