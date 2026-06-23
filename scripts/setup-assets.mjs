@@ -372,6 +372,49 @@ export function buildDraftRecords(dir, cardMaps, opts = {}) {
 }
 
 /**
+ * Build the known-good decklists corpus artifact from the manifest at
+ * `docs/known_good_decklists.json`. Each entry in the manifest identifies a
+ * specific (draftId, seat) pair that has been curated as a high-quality
+ * example deck; this function resolves those seats from the adapted draft
+ * records and projects them to the slim `{ id, draftId, seat, name,
+ * mainboardIds }` shape consumed by the corpus opponent-deck algorithm.
+ *
+ * `requireFullPicks: false` is intentional — many curated decklists come from
+ * drafts that did not use a standard 3×15 pack layout, so the standard 30-pick
+ * trim would drop them. The corpus only needs the mainboard, not the pack
+ * sequence, so relaxed trimming is correct here.
+ *
+ * @param {string} manifestPath - path to `docs/known_good_decklists.json`
+ * @param {string} draftRecordsAdaptedDir - path to `docs/draft_records_adapted/`
+ * @param {{ idToName: Map<string,string>, nameToId: Map<string,string> }} cardMaps
+ * @returns {Array<{ id: string, draftId: string, seat: number, name: string, mainboardIds: string[] }>}
+ */
+export function buildKnownGoodDecklists(manifestPath, draftRecordsAdaptedDir, cardMaps) {
+  const parsed = JSON.parse(readFileSync(manifestPath, "utf8"));
+  const decklists = parsed.decklists;
+
+  const seatFilter = new Set(decklists.map((d) => `${d.draftId}#${d.seat}`));
+  const nameByKey = new Map(decklists.map((d) => [`${d.draftId}#${d.seat}`, d.name]));
+
+  const records = buildDraftRecords(draftRecordsAdaptedDir, cardMaps, {
+    seatFilter,
+    requireFullPicks: false,
+  });
+
+  return records.map((record) => {
+    const { id } = record;
+    const seat = Number(id.split("#")[1]);
+    return {
+      id,
+      draftId: record.draftId,
+      seat,
+      name: nameByKey.get(id) ?? "",
+      mainboardIds: record.mainboardIds.map((x) => x.toLowerCase()),
+    };
+  });
+}
+
+/**
  * Build id<->name lookup maps from the parsed cards_v2 records. The `id` UUID is
  * the stable key every card-reference system uses; the maps resolve a reference
  * back to the current display name (and let a tolerant reader accept a bare name).
@@ -868,6 +911,15 @@ export function setupAssets({
   const draftRecords = buildDraftRecords(draftRecordsAdaptedDir, cardMaps);
   writeFileSync(draftRecordsJsonPath, JSON.stringify(draftRecords) + "\n");
   console.log(`Wrote ${draftRecords.length} draft-record seats to draft-records-data.json`);
+
+  console.log("Bundling known-good decklists corpus...");
+  const knownGoodDecklists = buildKnownGoodDecklists(
+    join(ROOT, "docs", "known_good_decklists.json"),
+    draftRecordsAdaptedDir,
+    cardMaps,
+  );
+  writeFileSync(join(publicDir, "known-good-decklists-data.json"), JSON.stringify(knownGoodDecklists) + "\n");
+  console.log(`Wrote ${knownGoodDecklists.length} known-good decklists to known-good-decklists-data.json`);
 
   // The committed affinity corpus the `embedded` pool variant grows from. It is an
   // authored/baked artifact (run `npm run bake-affinity-corpus` to regenerate it

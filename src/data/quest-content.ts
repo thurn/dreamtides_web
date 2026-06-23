@@ -28,6 +28,7 @@ import {
   loadCardsV2Database,
   loadDecklists,
   loadDraftRecords,
+  loadKnownGoodDecklists,
   loadTideDecks,
   loadTides2Decks,
   loadTides2Relationships,
@@ -36,7 +37,9 @@ import {
   loadTides5Decks,
   resolvePool,
   type DraftRecord,
+  type KnownGoodDecklist,
 } from "./cards-v2-database";
+export type { KnownGoodDecklist } from "./cards-v2-database";
 import { loadDreamcallersV2 } from "./dreamcallers-v2-database";
 import { loadDreamwellCards, type DreamwellCard } from "./dreamwell-database";
 import {
@@ -108,6 +111,13 @@ export interface QuestContent {
   draftMode?: "pool" | "replay" | "fresh20";
   /** The full adapted draft-record corpus when the run needs record-backed ranking. */
   draftRecords?: DraftRecord[];
+  /**
+   * The curated known-good decklists corpus loaded from
+   * `public/known-good-decklists-data.json`, used by the corpus opponent-deck
+   * algorithm to select and tune decks for AI opponents. Always fetched; degrades
+   * to an empty array if the artifact is absent.
+   */
+  knownGoodDecklists?: readonly KnownGoodDecklist[];
   /**
    * The live deck-fit model built from all record mainboards when the run uses
    * record-backed recommendations or draft ranking.
@@ -694,6 +704,7 @@ export async function loadQuestContent(
     dreamsignTemplates,
     decklists,
     draftRecords,
+    knownGoodDecklists,
     affinityCorpus,
     tideDecks,
     tides2Decks,
@@ -719,6 +730,10 @@ export async function loadQuestContent(
     // structures). A failed fetch degrades to an empty corpus, which makes
     // opponent construction fall back to a sampled deck rather than erroring.
     loadDraftRecords().catch(() => [] as DraftRecord[]),
+    // The known-good decklists corpus is always fetched so the corpus opponent-deck
+    // algorithm has curated decks available on every path. A failed fetch degrades
+    // to an empty array, which makes opponent construction fall back gracefully.
+    loadKnownGoodDecklists().catch(() => [] as KnownGoodDecklist[]),
     // Fetch the committed corpus only for the variants that grow from it.
     poolNeedsCorpus
       ? loadAffinityCorpus()
@@ -836,6 +851,7 @@ export async function loadQuestContent(
     poolContext,
     draftMode,
     draftRecords,
+    knownGoodDecklists,
     fitModel,
     ...(usesFitModel ? { fresh20PackSize } : {}),
     merchantCorpus,

@@ -87,6 +87,34 @@ export async function loadDraftRecords(): Promise<DraftRecord[]> {
 }
 
 /**
+ * A curated human-seat entry from the known-good decklists corpus, bundled by
+ * `scripts/setup-assets.mjs` for the corpus opponent-deck algorithm. Each entry
+ * represents a high-quality example deck drawn from the adapted Cube Cobra draft
+ * corpus and curated in `docs/known_good_decklists.json`. Only `mainboardIds` is
+ * used for algorithmic work — `name` is display-only metadata.
+ */
+export interface KnownGoodDecklist {
+  id: string;        // `${draftId}#${seat}`
+  draftId: string;
+  seat: number;
+  name: string;       // display-only
+  mainboardIds: string[];  // stable cards_v2 UUIDs (lowercased)
+}
+
+/**
+ * Fetch the bundled known-good decklists corpus (`docs/known_good_decklists.json`
+ * projected through the adapted draft records, written to
+ * `/known-good-decklists-data.json` by `scripts/setup-assets.mjs`) used by the
+ * corpus opponent-deck algorithm. Returns an empty array if the bundle is missing
+ * so the harness still loads.
+ */
+export async function loadKnownGoodDecklists(): Promise<KnownGoodDecklist[]> {
+  const response = await fetch("/known-good-decklists-data.json");
+  if (!response.ok) return [];
+  return (await response.json()) as KnownGoodDecklist[];
+}
+
+/**
  * Fetch the committed affinity corpus (`data/affinity_corpus.jsonc`, copied to
  * `/affinity-corpus-data.json` by `scripts/setup-assets.mjs`) and reconstruct the
  * {@link AffinityCorpus} the `embedded` pool variant grows from. Returns `null`
