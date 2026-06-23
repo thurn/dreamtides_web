@@ -70,6 +70,13 @@ if (pathname === "/editor" || pathname === "/cards") {
     "./debug/OpponentDebugApp"
   );
   renderStrict(<OpponentDebugApp />);
+} else if (pathname === "/sigdecks") {
+  // Temporary visualization: the real draft deck most strongly correlated with
+  // each signature-carrying Dreamcaller. See `src/debug/SignatureDecksApp`.
+  const { default: SignatureDecksApp } = await import(
+    "./debug/SignatureDecksApp"
+  );
+  renderStrict(<SignatureDecksApp />);
 } else {
   // The dev card/figment/config data hot-reload plugins (see vite.config.ts)
   // emit targeted custom HMR events instead of a full reload, so that saving in
