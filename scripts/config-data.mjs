@@ -67,6 +67,12 @@ export const SIMPLE_CONFIGS = [
     arrayKey: "dreamsigns",
     transform: transformDreamsignProfile,
   },
+  {
+    tomlFile: "dreamsign_signatures.toml",
+    jsonFile: "dreamsign-signatures-data.json",
+    arrayKey: "dreamsigns",
+    transform: transformDreamsignProfile,
+  },
 ];
 
 const CONFIG_BY_TOML = new Map(

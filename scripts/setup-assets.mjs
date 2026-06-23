@@ -829,6 +829,7 @@ export function setupAssets({
   dreamwellTomlPath = join(DATA_DIR, "tabula", "dreamwell.toml"),
   dreamsignTomlPath = join(DATA_DIR, "tabula", "dreamsigns.toml"),
   dreamsignProfilesTomlPath = join(DATA_DIR, "tabula", "dreamsign_profiles.toml"),
+  dreamsignSignaturesTomlPath = join(DATA_DIR, "tabula", "dreamsign_signatures.toml"),
   dreamscapesTomlPath = join(DATA_DIR, "tabula", "dreamscapes.toml"),
   dreamGuidesTomlPath = join(DATA_DIR, "tabula", "dream_guides.toml"),
   affiliationsTomlPath = join(DATA_DIR, "tabula", "affiliations.toml"),
@@ -868,6 +869,7 @@ export function setupAssets({
   const dreamwellJsonPath = join(publicDir, "dreamwell-data.json");
   const dreamsignJsonPath = join(publicDir, "dreamsign-data.json");
   const dreamsignProfilesJsonPath = join(publicDir, "dreamsign-profiles-data.json");
+  const dreamsignSignaturesJsonPath = join(publicDir, "dreamsign-signatures-data.json");
   const dreamscapesJsonPath = join(publicDir, "dreamscapes-data.json");
   const dreamGuidesJsonPath = join(publicDir, "dream-guides-data.json");
   const affiliationsJsonPath = join(publicDir, "affiliations-data.json");
@@ -1148,6 +1150,35 @@ export function setupAssets({
   );
   console.log(
     `Wrote ${jsonDreamsignProfiles.length} dreamsign profiles to dreamsign-profiles-data.json`,
+  );
+
+  // Dreamsign signatures: the neutral/tailored classification artifact. Each
+  // dreamsign is either neutral (works in any deck) or tailored (has a curated
+  // set of signature card ids). Validate all signature-card-ids against the card
+  // database so a dangling UUID fails the build loudly.
+  console.log("Parsing dreamsign_signatures.toml...");
+  const dreamsignSignaturesTomlContent = readFileSync(dreamsignSignaturesTomlPath, "utf8");
+  const parsedDreamsignSignatures = parse(dreamsignSignaturesTomlContent);
+  const allDreamsignSignatures = parsedDreamsignSignatures.dreamsigns;
+
+  if (!Array.isArray(allDreamsignSignatures)) {
+    throw new Error("Expected [[dreamsigns]] array in dreamsign_signatures.toml");
+  }
+
+  const jsonDreamsignSignatures = allDreamsignSignatures.map(transformDreamsignProfile);
+  for (const entry of jsonDreamsignSignatures) {
+    validateCardIds(
+      entry.signatureCardIds ?? [],
+      cardMaps.idToName,
+      `dreamsign_signatures.toml (${entry.id})`,
+    );
+  }
+  writeFileSync(
+    dreamsignSignaturesJsonPath,
+    JSON.stringify(jsonDreamsignSignatures, null, 2) + "\n",
+  );
+  console.log(
+    `Wrote ${jsonDreamsignSignatures.length} dreamsign signatures to dreamsign-signatures-data.json`,
   );
 
   // Dreamscapes: the themed Dream Atlas regions. Parse the TOML and write the

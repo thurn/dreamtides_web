@@ -1,6 +1,7 @@
 import { loadDreamsignTemplates } from "./dreamsigns";
 import { loadMerchantCorpus, type MerchantCorpus } from "./merchant-corpus";
 import { loadDreamsignProfiles, type DreamsignProfile } from "./dreamsign-profiles";
+import { loadDreamsignSignatures, type DreamsignSignature } from "./dreamsign-signatures";
 import { logEvent } from "../logging";
 import {
   DEFAULT_STARTING_ESSENCE,
@@ -40,6 +41,7 @@ import {
   type KnownGoodDecklist,
 } from "./cards-v2-database";
 export type { KnownGoodDecklist } from "./cards-v2-database";
+export type { DreamsignSignature } from "./dreamsign-signatures";
 import { loadDreamcallersV2 } from "./dreamcallers-v2-database";
 import { loadDreamwellCards, type DreamwellCard } from "./dreamwell-database";
 import {
@@ -138,6 +140,13 @@ export interface QuestContent {
    * is treated as featureless quality 2 by the merchant signal layer.
    */
   dreamsignProfiles?: ReadonlyMap<string, DreamsignProfile>;
+  /**
+   * Dreamsign signature classification keyed by dreamsign UUID, loaded from
+   * `public/dreamsign-signatures-data.json`. Each entry is either neutral
+   * (works in any deck) or tailored (carries a curated set of signature card
+   * ids that characterise a deck wanting that dreamsign).
+   */
+  dreamsignSignatures?: ReadonlyMap<string, DreamsignSignature>;
 }
 
 /**
@@ -713,6 +722,7 @@ export async function loadQuestContent(
     tides5Decks,
     merchantCorpus,
     dreamsignProfiles,
+    dreamsignSignatures,
     dreamscapes,
     affiliations,
     guides,
@@ -753,6 +763,9 @@ export async function loadQuestContent(
     loadMerchantCorpus().catch(() => undefined as MerchantCorpus | undefined),
     loadDreamsignProfiles().catch(
       () => undefined as ReadonlyMap<string, DreamsignProfile> | undefined,
+    ),
+    loadDreamsignSignatures().catch(
+      () => undefined as ReadonlyMap<string, DreamsignSignature> | undefined,
     ),
     // Dreamscape definitions and Atlas generation tuning are small and always
     // loaded so the 7-layer Atlas generator can assign and tune nodes.
@@ -856,6 +869,7 @@ export async function loadQuestContent(
     ...(usesFitModel ? { fresh20PackSize } : {}),
     merchantCorpus,
     dreamsignProfiles,
+    dreamsignSignatures,
   };
 }
 
