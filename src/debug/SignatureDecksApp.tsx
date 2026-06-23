@@ -71,13 +71,22 @@ const SELECTION_MODES: SelectionMode[] = ["match", "typical"];
  * count surfaced in the UI. */
 const SIMILAR_THRESHOLD = 0.45;
 
+interface SignatureCard {
+  /** Stable cards_v2 UUID (lowercased). */
+  id: string;
+  /** Current display name, resolved from the id. */
+  name: string;
+  idf: number;
+  df: number;
+}
+
 interface SignatureDeck {
   dreamcaller: DreamcallerContent;
-  /** Lowercased signature card display names resolved from the UUIDs. */
-  signatureNames: { name: string; idf: number; df: number }[];
+  signatureCards: SignatureCard[];
   /** The winning deck's mainboard, resolved to renderable cards. */
   cards: CardData[];
-  matchedNames: string[];
+  /** UUIDs of the signature cards the chosen deck contains. */
+  matchedIds: Set<string>;
   /** Cosine similarity between the signature vector and the chosen deck. */
   cosine: number;
   /** How many other pool decks are similar (deck–deck cosine ≥ threshold). */
@@ -86,17 +95,22 @@ interface SignatureDeck {
   seatName: string;
 }
 
-/** Build the per-Dreamcaller signature deck assignment from quest content. */
+/**
+ * Build the per-Dreamcaller signature deck assignment from quest content.
+ *
+ * Everything keys on stable cards_v2 UUIDs, never display names: 24 cards share
+ * a name with another distinct card, so name matching would conflate them (and
+ * render the wrong card). The draft records carry `mainboardIds` and the
+ * Dreamcallers carry `signatureCardIds` for exactly this reason.
+ */
 function computeSignatureDecks(
   content: QuestContent,
   mode: SelectionMode,
 ): SignatureDeck[] {
-  // `signatureCards` arrives as current card display names (the bundle resolves
-  // the TOML UUIDs to names), matching how draft-record mainboards are keyed, so
-  // matching is name-on-name. `byName` resolves those names to renderable cards.
-  const byName = new Map<string, CardData>();
+  // Resolve a UUID to its card record (for rendering and signature names).
+  const byId = new Map<string, CardData>();
   for (const card of content.cardDatabase.values()) {
-    byName.set(card.name.toLowerCase(), card);
+    byId.set(card.id.toLowerCase(), card);
   }
 
   // Oversized mainboards (large draft piles rather than focused decks) are
@@ -105,23 +119,23 @@ function computeSignatureDecks(
   // weird outlier as a "signature deck". Keep only decks at or below this size.
   const MAX_DECK_SIZE = 28;
   const records = (content.draftRecords ?? []).filter(
-    (r) => r.mainboard.length <= MAX_DECK_SIZE,
+    (r) => r.mainboardIds.length <= MAX_DECK_SIZE,
   );
   const N = records.length;
 
-  // Per-record lowercased mainboard name sets (deduped) and the raw ordered
-  // mainboard, computed once and reused across every Dreamcaller.
+  // Per-record deduped mainboard UUID sets, computed once and reused across
+  // every Dreamcaller.
   const recordSets = records.map((r) => ({
     record: r,
-    nameSet: new Set(r.mainboard.map((n) => n.toLowerCase())),
+    idSet: new Set(r.mainboardIds.map((id) => id.toLowerCase())),
   }));
 
-  // Document frequency by card name across the corpus.
+  // Document frequency by card UUID across the corpus.
   const df = new Map<string, number>();
-  for (const { nameSet } of recordSets) {
-    for (const n of nameSet) df.set(n, (df.get(n) ?? 0) + 1);
+  for (const { idSet } of recordSets) {
+    for (const id of idSet) df.set(id, (df.get(id) ?? 0) + 1);
   }
-  const idf = (name: string) => Math.log(N / (df.get(name) ?? 1));
+  const idf = (id: string) => Math.log(N / (df.get(id) ?? 1));
 
   // Each deck's L2 norm in IDF-vector space, sqrt(Σ idf² over its distinct
   // cards). Dividing the raw overlap by this norm turns the score into a cosine
@@ -130,10 +144,10 @@ function computeSignatureDecks(
   // large decks. The norm cancels that out so the score measures correlation,
   // not deck size.
   const deckNorm = new Map<Set<string>, number>();
-  for (const { nameSet } of recordSets) {
+  for (const { idSet } of recordSets) {
     let sumSq = 0;
-    for (const n of nameSet) sumSq += idf(n) ** 2;
-    deckNorm.set(nameSet, Math.sqrt(sumSq) || 1);
+    for (const id of idSet) sumSq += idf(id) ** 2;
+    deckNorm.set(idSet, Math.sqrt(sumSq) || 1);
   }
 
   // Cosine similarity between two decks in IDF-vector space: Σ idf² over shared
@@ -142,40 +156,41 @@ function computeSignatureDecks(
   const deckCosine = (a: Set<string>, b: Set<string>): number => {
     const [small, big] = a.size <= b.size ? [a, b] : [b, a];
     let dot = 0;
-    for (const n of small) if (big.has(n)) dot += idf(n) ** 2;
+    for (const id of small) if (big.has(id)) dot += idf(id) ** 2;
     return dot / ((deckNorm.get(a) ?? 1) * (deckNorm.get(b) ?? 1));
   };
 
   const result: SignatureDeck[] = [];
 
   for (const dc of content.dreamcallers) {
-    const sig = dc.signatureCards ?? [];
-    if (sig.length === 0) continue;
+    const sigIds = (dc.signatureCardIds ?? []).map((id) => id.toLowerCase());
+    if (sigIds.length === 0) continue;
 
-    const signatureNames = sig.map((n) => ({
-      name: n.toLowerCase(),
-      idf: idf(n.toLowerCase()),
-      df: df.get(n.toLowerCase()) ?? 0,
+    const signatureCards: SignatureCard[] = sigIds.map((id) => ({
+      id,
+      name: byId.get(id)?.name ?? id,
+      idf: idf(id),
+      df: df.get(id) ?? 0,
     }));
 
     // Signature-vector norm. Constant across decks for this Dreamcaller, so it
     // does not affect the ranking, but including it makes the reported cosine a
     // true [0, 1] value comparable across Dreamcallers.
     const queryNorm =
-      Math.sqrt(signatureNames.reduce((a, s) => a + s.idf ** 2, 0)) || 1;
+      Math.sqrt(signatureCards.reduce((a, s) => a + s.idf ** 2, 0)) || 1;
 
     // Candidate decks: every deck containing at least one signature card, with
     // its cosine fit to the signature vector.
     const candidates = [];
-    for (const { record, nameSet } of recordSets) {
-      const matched = signatureNames.filter((s) => nameSet.has(s.name));
+    for (const { record, idSet } of recordSets) {
+      const matched = signatureCards.filter((s) => idSet.has(s.id));
       if (matched.length === 0) continue;
       const dot = matched.reduce((a, s) => a + s.idf, 0);
-      const fit = dot / ((deckNorm.get(nameSet) ?? 1) * queryNorm);
+      const fit = dot / ((deckNorm.get(idSet) ?? 1) * queryNorm);
       candidates.push({
         record,
-        nameSet,
-        matched: matched.map((m) => m.name),
+        idSet,
+        matchedIds: new Set(matched.map((m) => m.id)),
         fit,
       });
     }
@@ -187,7 +202,7 @@ function computeSignatureDecks(
       for (const c of candidates) {
         if (
           c.fit > best.fit ||
-          (c.fit === best.fit && c.matched.length > best.matched.length)
+          (c.fit === best.fit && c.matchedIds.size > best.matchedIds.size)
         ) {
           best = c;
         }
@@ -199,7 +214,7 @@ function computeSignatureDecks(
       let bestScore = -Infinity;
       for (const x of candidates) {
         let centrality = 0;
-        for (const y of candidates) centrality += y.fit * deckCosine(x.nameSet, y.nameSet);
+        for (const y of candidates) centrality += y.fit * deckCosine(x.idSet, y.idSet);
         if (centrality > bestScore || (centrality === bestScore && x.fit > best.fit)) {
           bestScore = centrality;
           best = x;
@@ -209,20 +224,20 @@ function computeSignatureDecks(
 
     // Count how many other pool decks are similar to the chosen deck.
     let neighbors = 0;
-    for (const { nameSet } of recordSets) {
-      if (nameSet === best.nameSet) continue;
-      if (deckCosine(best.nameSet, nameSet) >= SIMILAR_THRESHOLD) neighbors++;
+    for (const { idSet } of recordSets) {
+      if (idSet === best.idSet) continue;
+      if (deckCosine(best.idSet, idSet) >= SIMILAR_THRESHOLD) neighbors++;
     }
 
-    const cards = best.record.mainboard
-      .map((n) => byName.get(n.toLowerCase()))
+    const cards = best.record.mainboardIds
+      .map((id) => byId.get(id.toLowerCase()))
       .filter((c): c is CardData => c != null);
 
     result.push({
       dreamcaller: dc,
-      signatureNames,
+      signatureCards,
       cards,
-      matchedNames: best.matched,
+      matchedIds: best.matchedIds,
       cosine: best.fit,
       neighbors,
       sourceFile: best.record.sourceFile,
@@ -233,13 +248,9 @@ function computeSignatureDecks(
   return result;
 }
 
-function titleCase(name: string): string {
-  return name.replace(/\b\w/g, (c) => c.toUpperCase());
-}
-
 function DeckSection({ deck }: { deck: SignatureDeck }) {
   const dc = deck.dreamcaller;
-  const matched = new Set(deck.matchedNames);
+  const matched = deck.matchedIds;
   return (
     <section
       style={{
@@ -295,9 +306,9 @@ function DeckSection({ deck }: { deck: SignatureDeck }) {
               {dc.title}
             </div>
             <div style={{ fontSize: 12, color: MUTED }}>
-              {deck.cards.length}-card mainboard · matched{" "}
-              {deck.matchedNames.length}/{deck.signatureNames.length} signature
-              cards · cosine {deck.cosine.toFixed(3)} · {deck.neighbors} similar
+              {deck.cards.length}-card mainboard · matched {matched.size}/
+              {deck.signatureCards.length} signature cards · cosine{" "}
+              {deck.cosine.toFixed(3)} · {deck.neighbors} similar
               {deck.neighbors === 1 ? " deck" : " decks"} in pool
             </div>
           </div>
@@ -327,12 +338,12 @@ function DeckSection({ deck }: { deck: SignatureDeck }) {
           marginBottom: 14,
         }}
       >
-        {deck.signatureNames.map((s) => {
-          const hit = matched.has(s.name);
+        {deck.signatureCards.map((s) => {
+          const hit = matched.has(s.id);
           return (
             <span
-              key={s.name}
-              title={`in ${String(s.df)} decks · idf ${s.idf.toFixed(2)}`}
+              key={s.id}
+              title={`${s.id} · in ${String(s.df)} decks · idf ${s.idf.toFixed(2)}`}
               style={{
                 fontSize: 11,
                 padding: "3px 8px",
@@ -345,7 +356,7 @@ function DeckSection({ deck }: { deck: SignatureDeck }) {
               }}
             >
               {hit ? "★ " : "○ "}
-              {titleCase(s.name)}
+              {s.name}
             </span>
           );
         })}

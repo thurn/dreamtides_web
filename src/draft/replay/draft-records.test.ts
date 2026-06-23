@@ -73,6 +73,7 @@ function makeRec(id: string, packs: string[][]): DraftRecord {
     draftId: `draft-${id}`,
     sourceFile: `draft-${id}-records.json`,
     mainboard: packs.flat(),
+    mainboardIds: packs.flat(),
     packs,
     picks: packs.map(() => []),
     packIds: packs,
@@ -195,6 +196,7 @@ describe("buildPackSequence", () => {
       draftId: "draft-1",
       sourceFile: "draft-1-records.json",
       mainboard: ["a", "b"],
+      mainboardIds: ["a", "b"],
       packs: [
         ["a", "b", "ghost"], // ghost dropped
         ["c", "c", "d"], // c deduped
@@ -225,6 +227,7 @@ describe("buildPackSequence", () => {
       draftId: "draft-2",
       sourceFile: "draft-2-records.json",
       mainboard: [],
+      mainboardIds: [],
       packs: [["known"], ["unknown1", "unknown2"], ["known", "unknown1"]],
       picks: [[], [], []],
       packIds: [["known"], ["unknown1", "unknown2"], ["known", "unknown1"]],

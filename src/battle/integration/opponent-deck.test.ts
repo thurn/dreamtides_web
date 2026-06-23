@@ -99,6 +99,7 @@ function makeCorpus(db: Map<number, CardData>): {
         draftId: `${faction}-${String(r)}`,
         sourceFile: "test",
         mainboard,
+        mainboardIds: mainboard,
         packs,
         picks: [],
         packIds: [],

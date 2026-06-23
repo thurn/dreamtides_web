@@ -65,6 +65,7 @@ export interface DraftRecord {
   draftId: string;
   sourceFile: string;  // adapted-record JSON filename this seat came from
   mainboard: string[];
+  mainboardIds: string[];  // stable cards_v2 UUIDs aligned to `mainboard`
   packs: string[][];  // 30 trimmed packs of current card names (raw order)
   picks: string[][];  // human picks aligned to packs (each 0..3 names)
   packIds: string[][];  // stable cards_v2 UUIDs aligned to `packs`

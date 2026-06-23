@@ -210,6 +210,7 @@ function makeReplayRecord(): DraftRecord {
     draftId: "draft-0",
     sourceFile: "draft-0-records.json",
     mainboard: corpus[0],
+    mainboardIds: corpus[0],
     packs,
     picks,
     packIds: packs,

@@ -108,6 +108,7 @@ function makeSteeredPoolContext(): {
         draftId: `${faction}-${String(r)}`,
         sourceFile: "test",
         mainboard,
+        mainboardIds: mainboard,
         packs,
         picks: [],
         packIds: [],

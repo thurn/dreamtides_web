@@ -26,6 +26,11 @@ export interface DreamcallerContent {
    * V2 migration; absent for v1 records.
    */
   signatureCards?: string[];
+  /**
+   * Stable cards_v2 UUIDs for {@link signatureCards}, index-aligned. Lets a
+   * consumer distinguish two cards that share a display name.
+   */
+  signatureCardIds?: string[];
 }
 
 export interface DreamsignTemplate {

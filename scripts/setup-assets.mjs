@@ -258,10 +258,13 @@ export function transformCard(card) {
  * just refreshes the display name from `idToName`.
  *
  * Returns one entry per surviving seat:
- *   `{ id, draftId, sourceFile, mainboard, packs, picks, packIds, pickIds }`.
- *   `packs[i]`/`picks[i]` are the i-th trimmed pick's cards as CURRENT display
- *   names (resolved from the id), and `packIds[i]`/`pickIds[i]` are the matching
- *   stable UUIDs, index-for-index. All four pick arrays have length 30.
+ *   `{ id, draftId, sourceFile, mainboard, mainboardIds, packs, picks, packIds,
+ *   pickIds }`. `mainboard` is the seat's kept cards as CURRENT display names and
+ *   `mainboardIds` is the matching stable UUIDs, index-for-index (so a consumer
+ *   can key on ids and stay correct when two cards share a name). `packs[i]`/
+ *   `picks[i]` are the i-th trimmed pick's cards as current display names, and
+ *   `packIds[i]`/`pickIds[i]` are the matching stable UUIDs, index-for-index.
+ *   All four pick arrays have length 30.
  */
 export function buildDraftRecords(dir, cardMaps) {
   const { nameToId, idToName } = cardMaps;
@@ -319,7 +322,7 @@ export function buildDraftRecords(dir, cardMaps) {
         continue;
       }
 
-      const mainboard = resolve(rawMainboard).names;
+      const resolvedMainboard = resolve(rawMainboard);
       const resolvedPacks = trimmed.map((p) => resolve(p.packCards));
       const resolvedPicks = trimmed.map((p) => resolve(p.pick));
 
@@ -327,7 +330,8 @@ export function buildDraftRecords(dir, cardMaps) {
         id: `${draftId}#${seat}`,
         draftId,
         sourceFile: filename,
-        mainboard,
+        mainboard: resolvedMainboard.names,
+        mainboardIds: resolvedMainboard.ids,
         packs: resolvedPacks.map((r) => r.names),
         picks: resolvedPicks.map((r) => r.names),
         packIds: resolvedPacks.map((r) => r.ids),
@@ -970,15 +974,19 @@ export function setupAssets({
   // idf3_signature_design.md`). Resolve them to the current card names here so
   // the runtime bundle and the name-based pool engine see names, and so a
   // dangling signature UUID fails the build. Renaming a card in cards_v2.toml
-  // therefore needs no edit to dreamcallers_v2.toml.
+  // therefore needs no edit to dreamcallers_v2.toml. The resolved UUIDs are also
+  // emitted as `signatureCardIds` (index-aligned with `signatureCards`) so
+  // consumers that must distinguish two cards sharing a name can key on the id.
   const jsonDreamcallersV2 = allDreamcallersV2.map((dreamcaller) => {
     const archetypes = DREAMCALLER_ARCHETYPES[dreamcaller.name];
     if (archetypes) dreamcaller["draft-archetypes"] = archetypes;
     const transformed = transformDreamcaller(dreamcaller);
     if (Array.isArray(transformed.signatureCards)) {
-      transformed.signatureCards = transformed.signatureCards.map(
-        (ref) => resolveToken(ref, cardMaps).name,
+      const resolved = transformed.signatureCards.map((ref) =>
+        resolveToken(ref, cardMaps),
       );
+      transformed.signatureCards = resolved.map((r) => r.name);
+      transformed.signatureCardIds = resolved.map((r) => r.id);
     }
     return transformed;
   });

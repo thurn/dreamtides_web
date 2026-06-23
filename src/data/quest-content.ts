@@ -741,6 +741,7 @@ export async function loadQuestContent(
     imageNumber: dc.imageNumber,
     startingEssence: dc.startingEssence || DEFAULT_STARTING_ESSENCE,
     signatureCards: [...(dc.signatureCards ?? [])],
+    signatureCardIds: [...(dc.signatureCardIds ?? [])],
   }));
 
   // Build the name index once; reused by both poolContext and (in replay mode)

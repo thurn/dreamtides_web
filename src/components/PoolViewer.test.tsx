@@ -107,6 +107,7 @@ const replayRecord: DraftRecord = {
   sourceFile: "draft-1-records.json",
   // Mainboard with a doubled "Alpha Seer" so the deck grid shows an x2 badge.
   mainboard: ["Alpha Seer", "Alpha Seer", "Beta Guard", "Unknown Relic"],
+  mainboardIds: ["Alpha Seer", "Alpha Seer", "Beta Guard", "Unknown Relic"],
   packs: [
     ["Alpha Seer", "Beta Guard"],
     ["Null Rain", "Quick Spark"],

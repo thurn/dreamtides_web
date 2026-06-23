@@ -39,6 +39,12 @@ export interface DraftDreamcaller {
    * signature, which then get the diversity-only draw.
    */
   signatureCards?: readonly string[];
+  /**
+   * Stable cards_v2 UUIDs for {@link signatureCards}, index-aligned. Lets a
+   * consumer distinguish two cards that share a display name (matching by name
+   * is ambiguous; matching by id is exact).
+   */
+  signatureCardIds?: readonly string[];
 }
 
 /**
@@ -125,6 +131,7 @@ export async function loadDreamcallersV2(): Promise<DraftDreamcaller[]> {
   for (const dc of dreamcallers) {
     dc.themeArchetypes = DREAMCALLER_THEMES[dc.name] ?? [];
     dc.signatureCards = dc.signatureCards ?? [];
+    dc.signatureCardIds = dc.signatureCardIds ?? [];
   }
   return dreamcallers;
 }
