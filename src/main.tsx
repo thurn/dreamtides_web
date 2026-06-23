@@ -62,6 +62,14 @@ if (pathname === "/editor" || pathname === "/cards") {
     "./image_viewer/ImageViewerApp"
   );
   renderStrict(<ImageViewerApp />);
+} else if (pathname === "/opponent") {
+  // Standalone opponent-generation debugging tool: simulate the pre-battle
+  // opponent build (Dreamcaller, dreamsigns, deck) for any run position and
+  // dreamscape, and re-roll the same parameters. See `src/debug/OpponentDebugApp`.
+  const { default: OpponentDebugApp } = await import(
+    "./debug/OpponentDebugApp"
+  );
+  renderStrict(<OpponentDebugApp />);
 } else {
   // The dev card/figment/config data hot-reload plugins (see vite.config.ts)
   // emit targeted custom HMR events instead of a full reload, so that saving in
