@@ -22,6 +22,8 @@ import { DreamcallerPopover } from "../components/DreamcallerPopover";
 import { extractGlossaryTerms } from "../data/glossary-terms";
 import { GlossaryDefinitionCard } from "../components/GlossaryDefinitionCard";
 import { logEvent } from "../logging";
+import { buildIdfStats, signatureFit } from "../draft/idf-fit.ts";
+import { idfCosine } from "../draft/pool/variant-idf.ts";
 
 /**
  * `/sigdecks` — a temporary visualization tool. For each Dreamcaller that
@@ -130,7 +132,7 @@ function useViewport(): Viewport {
  *   gets built" and is robust to one-off outliers, at the cost of some literal
  *   fit.
  */
-type SelectionMode = "match" | "typical";
+export type SelectionMode = "match" | "typical";
 
 const SELECTION_MODES: SelectionMode[] = ["match", "typical"];
 
@@ -147,7 +149,7 @@ interface SignatureCard {
   df: number;
 }
 
-interface SignatureDeck {
+export interface SignatureDeck {
   dreamcaller: DreamcallerContent;
   signatureCards: SignatureCard[];
   /** The winning deck's mainboard, resolved to renderable cards. */
@@ -170,7 +172,7 @@ interface SignatureDeck {
  * render the wrong card). The draft records carry `mainboardIds` and the
  * Dreamcallers carry `signatureCardIds` for exactly this reason.
  */
-function computeSignatureDecks(
+export function computeSignatureDecks(
   content: QuestContent,
   mode: SelectionMode,
 ): SignatureDeck[] {
@@ -188,7 +190,6 @@ function computeSignatureDecks(
   const records = (content.draftRecords ?? []).filter(
     (r) => r.mainboardIds.length <= MAX_DECK_SIZE,
   );
-  const N = records.length;
 
   // Per-record deduped mainboard UUID sets, computed once and reused across
   // every Dreamcaller.
@@ -197,35 +198,17 @@ function computeSignatureDecks(
     idSet: new Set(r.mainboardIds.map((id) => id.toLowerCase())),
   }));
 
-  // Document frequency by card UUID across the corpus.
+  // Build the IDF corpus once from all filtered record sets.  corpus.decks[i]
+  // corresponds to recordSets[i] BY INDEX so they stay zipped.
+  const corpus = buildIdfStats(recordSets.map((r) => r.idSet));
+  const idfOf = (id: string): number => corpus.idf.get(id) ?? 0;
+
+  // Document frequency by card UUID across the corpus — kept for the
+  // SignatureCard display (the `df` tooltip on each signature chip).
   const df = new Map<string, number>();
   for (const { idSet } of recordSets) {
     for (const id of idSet) df.set(id, (df.get(id) ?? 0) + 1);
   }
-  const idf = (id: string) => Math.log(N / (df.get(id) ?? 1));
-
-  // Each deck's L2 norm in IDF-vector space, sqrt(Σ idf² over its distinct
-  // cards). Dividing the raw overlap by this norm turns the score into a cosine
-  // similarity, which is scale-invariant: a bigger deck has more slots to
-  // contain any given signature card, so a raw overlap sum mechanically favours
-  // large decks. The norm cancels that out so the score measures correlation,
-  // not deck size.
-  const deckNorm = new Map<Set<string>, number>();
-  for (const { idSet } of recordSets) {
-    let sumSq = 0;
-    for (const id of idSet) sumSq += idf(id) ** 2;
-    deckNorm.set(idSet, Math.sqrt(sumSq) || 1);
-  }
-
-  // Cosine similarity between two decks in IDF-vector space: Σ idf² over shared
-  // cards, normalized by both deck norms. Iterating the smaller set keeps the
-  // O(pool²) `typical`-mode pass affordable.
-  const deckCosine = (a: Set<string>, b: Set<string>): number => {
-    const [small, big] = a.size <= b.size ? [a, b] : [b, a];
-    let dot = 0;
-    for (const id of small) if (big.has(id)) dot += idf(id) ** 2;
-    return dot / ((deckNorm.get(a) ?? 1) * (deckNorm.get(b) ?? 1));
-  };
 
   const result: SignatureDeck[] = [];
 
@@ -236,28 +219,24 @@ function computeSignatureDecks(
     const signatureCards: SignatureCard[] = sigIds.map((id) => ({
       id,
       name: byId.get(id)?.name ?? id,
-      idf: idf(id),
+      idf: idfOf(id),
       df: df.get(id) ?? 0,
     }));
 
-    // Signature-vector norm. Constant across decks for this Dreamcaller, so it
-    // does not affect the ranking, but including it makes the reported cosine a
-    // true [0, 1] value comparable across Dreamcallers.
-    const queryNorm =
-      Math.sqrt(signatureCards.reduce((a, s) => a + s.idf ** 2, 0)) || 1;
-
     // Candidate decks: every deck containing at least one signature card, with
-    // its cosine fit to the signature vector.
+    // its cosine fit to the signature vector (via shared signatureFit).
+    const sigIdSet = new Set(sigIds);
     const candidates = [];
-    for (const { record, idSet } of recordSets) {
-      const matched = signatureCards.filter((s) => idSet.has(s.id));
+    for (let i = 0; i < recordSets.length; i++) {
+      const { record, idSet } = recordSets[i];
+      const matched = sigIds.filter((id) => idSet.has(id));
       if (matched.length === 0) continue;
-      const dot = matched.reduce((a, s) => a + s.idf, 0);
-      const fit = dot / ((deckNorm.get(idSet) ?? 1) * queryNorm);
+      const fit = signatureFit(sigIdSet, corpus.decks[i], corpus);
       candidates.push({
         record,
         idSet,
-        matchedIds: new Set(matched.map((m) => m.id)),
+        deckIdx: i,
+        matchedIds: new Set(matched),
         fit,
       });
     }
@@ -281,7 +260,9 @@ function computeSignatureDecks(
       let bestScore = -Infinity;
       for (const x of candidates) {
         let centrality = 0;
-        for (const y of candidates) centrality += y.fit * deckCosine(x.idSet, y.idSet);
+        for (const y of candidates) {
+          centrality += y.fit * idfCosine(corpus.decks[x.deckIdx], corpus.decks[y.deckIdx], idfOf);
+        }
         if (centrality > bestScore || (centrality === bestScore && x.fit > best.fit)) {
           bestScore = centrality;
           best = x;
@@ -289,11 +270,14 @@ function computeSignatureDecks(
       }
     }
 
-    // Count how many other pool decks are similar to the chosen deck.
+    // Count how many other pool decks are similar to the chosen deck via
+    // deck–deck idf cosine.
     let neighbors = 0;
-    for (const { idSet } of recordSets) {
-      if (idSet === best.idSet) continue;
-      if (deckCosine(best.idSet, idSet) >= SIMILAR_THRESHOLD) neighbors++;
+    for (let i = 0; i < recordSets.length; i++) {
+      if (recordSets[i].idSet === best.idSet) continue;
+      if (idfCosine(corpus.decks[best.deckIdx], corpus.decks[i], idfOf) >= SIMILAR_THRESHOLD) {
+        neighbors++;
+      }
     }
 
     const cards = best.record.mainboardIds
