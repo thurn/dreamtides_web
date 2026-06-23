@@ -675,6 +675,21 @@ live in `data/tides5-overrides.jsonc`, and a staleness guard
 fails if the committed artifact drifts. Build it with `npm run bake-tides5`
 (then `npm run setup-assets` to serve it as `/tides5-data.json`).
 
+**Player-facing labels.** Each tide carries hand-authored identity annotations —
+`displayName`, `displayDescription`, `shortName`, `summary`, `description`, and
+`color` — that the tide-select screen, Pool Viewer, and "Why Cards" surfaces show.
+Because a `tides5` tide *is* a `tides4` tide grown from a different corpus, these
+are **inherited from `data/tides4.jsonc` by tide name** rather than re-authored: a
+signature tide matches by its `"<Dreamcaller> signature"` name, a facet tide by its
+`"Lean: <anchor card>"` name — the same Dreamcaller signature or single-card lean
+carries the same label in both. Tide *ids* deliberately are not used for this,
+because a facet's id depends on the per-corpus play-rate ranking, so the same id
+names a different lean in each bake. A tide with no `tides4` name-match (a broad
+neutral whose top cards differ, or a facet whose anchor only the known-good corpus
+surfaced) keeps its baked name and a deterministic `color`; the player-facing UI
+falls back to the tide name for it. To relabel a `tides5` tide, edit the matching
+`tides4` tide and re-bake both.
+
 ## 6. Artifacts, scripts, and served assets
 
 | Artifact | Produced by | Served as (gitignored) | Read at runtime by |

@@ -38,12 +38,24 @@ import { parse } from "smol-toml";
 import {
   buildTides4,
   readOverrides,
-  readTideAnnotations,
   serializeArtifact,
 } from "./bake-tides4.mjs";
 import { buildCardMaps, buildDraftRecords } from "./setup-assets.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+
+// The hand-authored identity annotations a tide can carry. `tides5` inherits these
+// from `tides4` by tide NAME (see `inheritTides4Annotations`); `color` is the one
+// the runtime schema requires, so it always ends up set (a deterministic floor in
+// the shared bake covers any tide with no `tides4` match).
+const ANNOTATION_KEYS = [
+  "shortName",
+  "displayName",
+  "displayDescription",
+  "summary",
+  "description",
+  "color",
+];
 
 const ARTIFACT_REL = "data/tides5.jsonc";
 const DOC_REL = "docs/cards2/tides5_decklists.md";
@@ -76,13 +88,16 @@ const HEADER = `// data/tides5.jsonc — the committed tide decks the \`tides5\`
 // random signature subset.
 //
 // Cards are keyed by stable cards_v2 UUID; \`name\` fields are informational,
-// refreshed at bake time. Each tide may also carry hand-authored identity
-// annotations — \`shortName\` (a 1-3 word mechanical label), \`displayName\` (a
-// narrative, thematic name) and \`displayDescription\` (a 10-20 word player-facing
-// blurb) for the player-facing tide screens, \`summary\` (one sentence),
-// \`description\` (one paragraph), and \`color\` (one of the five deck colors:
-// purple, green, yellow, blue, orange) — which a re-bake preserves by stable tide
-// id.
+// refreshed at bake time. Each tide also carries identity annotations —
+// \`shortName\` (a 1-3 word mechanical label), \`displayName\` (a narrative, thematic
+// name) and \`displayDescription\` (a 10-20 word player-facing blurb) for the
+// player-facing tide screens, \`summary\` (one sentence), \`description\` (one
+// paragraph), and \`color\` (one of the five deck colors: purple, green, yellow,
+// blue, orange). Because a tides5 tide IS a tides4 tide grown from a different
+// corpus, these are INHERITED from data/tides4.jsonc by matching tide NAME (a
+// signature tide by its Dreamcaller, a facet tide by its lean's anchor card): the
+// same Dreamcaller signature or the same single-card lean carries the same label
+// in both. To re-label a tides5 tide, edit the matching tides4 tide, then re-bake.
 // \`tidePoolByDreamcaller\` is keyed by Dreamcaller UUID; each
 // entry has \`starter\` (the always-joined signature tide, or null), \`facets\` (a
 // random subset is drawn each run) and \`neutral\` (the broad tail).
@@ -263,25 +278,96 @@ function renderMarkdown(json, dreamcallers) {
   return lines.join("\n");
 }
 
+// --- Annotation inheritance ---------------------------------------------------
+// A tides5 tide IS a tides4 tide grown from the known-good corpus, so it inherits
+// tides4's player-facing identity annotations by matching tide NAME — the bridge
+// that survives the fact that tide IDS do NOT line up between the two bakes (a
+// facet's id depends on the per-corpus play-rate ranking, so `tide-fac-07` is a
+// different lean in each, while the NAME `"Lean: <anchor>"` names the same lean in
+// both). Signature tides match by their `"<Dreamcaller> signature"` name, facet
+// tides by their `"Lean: <anchor card>"` name. A tide with no tides4 name-match
+// (e.g. a broad neutral whose top cards differ) keeps its baked name and the
+// shared bake's deterministic `color` floor, and the player-facing UI falls back
+// to the tide name for it.
+
+// Read data/tides4.jsonc and index its hand-authored annotations by tide NAME.
+function readTides4AnnotationsByName(rootDir) {
+  const path = resolve(rootDir, "data/tides4.jsonc");
+  const map = new Map();
+  if (!existsSync(path)) return map;
+  let parsed;
+  try {
+    parsed = JSON.parse(readFileSync(path, "utf8").replace(/^\s*\/\/.*$/gm, ""));
+  } catch {
+    return map;
+  }
+  for (const tide of parsed.tides ?? []) {
+    if (!tide || typeof tide.name !== "string" || map.has(tide.name)) continue;
+    const anno = {};
+    for (const key of ANNOTATION_KEYS) {
+      if (typeof tide[key] === "string" && tide[key] !== "") anno[key] = tide[key];
+    }
+    if (Object.keys(anno).length > 0) map.set(tide.name, anno);
+  }
+  return map;
+}
+
+// Apply the inherited annotations to each tide in `tideList` (matched by name),
+// overriding the shared bake's `color` floor where tides4 has a curated color.
+// Returns the count of tides that inherited at least one field.
+function inheritTides4Annotations(tideList, byName) {
+  let inherited = 0;
+  for (const tide of tideList) {
+    const anno = byName.get(tide.name);
+    if (!anno) continue;
+    for (const key of ANNOTATION_KEYS) {
+      if (anno[key] !== undefined) tide[key] = anno[key];
+    }
+    inherited += 1;
+  }
+  return inherited;
+}
+
 // --- Reusable build API -------------------------------------------------------
 // `run()` (the CLI bake) and `scripts/lib/tides5-check.mjs` (the staleness guard)
 // share this so the guard re-bakes through the EXACT generator, never a copy.
 
 /**
- * Produce the serialized `data/tides5.jsonc` text from the current inputs and
- * override layer, carrying the annotations forward from `annotationsSource` (the
- * committed artifact). This is exactly what `run()` writes, so the staleness guard
- * compares the committed file against this.
+ * The pure core of the tides5 bake: build the known-good-restricted tides through
+ * the shared `tides4` generator (with NO carried-forward annotations of its own),
+ * then inherit `tides4`'s player-facing annotations by tide name. Returns the
+ * serializable `json`, the richer `tides` (for the markdown render), the `stats`,
+ * and the `dreamcallers`.
  */
-export function bakeTides5ArtifactText({
-  rootDir = ROOT,
-  annotationsSource = resolve(rootDir, ARTIFACT_REL),
-  logger = () => {},
-} = {}) {
+function buildTides5(rootDir, logger = () => {}) {
   const inputs = loadTides5Inputs(rootDir, logger);
   const overrides = readOverrides(OVERRIDES_REL, rootDir);
-  const priorAnnotations = readTideAnnotations(annotationsSource);
-  const { json } = buildTides4({ ...inputs, overrides, priorAnnotations, logger });
+  const { json, tides, stats } = buildTides4({
+    ...inputs,
+    overrides,
+    priorAnnotations: new Map(),
+    logger,
+  });
+  const t4ByName = readTides4AnnotationsByName(rootDir);
+  // Apply to both the serialized `json.tides` (written to the artifact) and the
+  // richer `tides` (rendered to the markdown) — they are parallel by name.
+  const inherited = inheritTides4Annotations(json.tides, t4ByName);
+  inheritTides4Annotations(tides, t4ByName);
+  logger(
+    `Annotations: inherited ${inherited}/${json.tides.length} tide labels from ` +
+      `tides4 by name.`,
+  );
+  return { json, tides, stats, dreamcallers: inputs.dreamcallers };
+}
+
+/**
+ * Produce the serialized `data/tides5.jsonc` text from the current inputs, the
+ * override layer, and the annotations inherited from `data/tides4.jsonc`. This is
+ * exactly what `run()` writes, so the staleness guard compares the committed file
+ * against this.
+ */
+export function bakeTides5ArtifactText({ rootDir = ROOT, logger = () => {} } = {}) {
+  const { json } = buildTides5(rootDir, logger);
   return serializeArtifact(json, HEADER);
 }
 
@@ -292,21 +378,14 @@ function run() {
   const outRel = str(argv, "--out", ARTIFACT_REL);
   const docRel = str(argv, "--doc", DOC_REL);
 
-  const inputs = loadTides5Inputs(ROOT, (m) => console.log(m));
-  const overrides = readOverrides(OVERRIDES_REL, ROOT);
-  // Annotations carry forward from the file being rewritten.
-  const priorAnnotations = readTideAnnotations(resolve(ROOT, outRel));
-  const { json, tides, stats } = buildTides4({
-    ...inputs,
-    overrides,
-    priorAnnotations,
-    logger: (m) => console.log(m),
-  });
+  const { json, tides, stats, dreamcallers } = buildTides5(ROOT, (m) =>
+    console.log(m),
+  );
 
   writeFileSync(resolve(ROOT, outRel), serializeArtifact(json, HEADER));
   writeFileSync(
     resolve(ROOT, docRel),
-    renderMarkdown({ ...json, tides }, inputs.dreamcallers) + "\n",
+    renderMarkdown({ ...json, tides }, dreamcallers) + "\n",
   );
 
   const meanFacets = stats.sigFacetCounts.length

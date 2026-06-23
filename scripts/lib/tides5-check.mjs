@@ -3,15 +3,15 @@
 // It re-runs the REAL bake (`buildTides4` via `bakeTides5ArtifactText`, imported
 // from scripts/bake-tides5.mjs — not a reimplementation) over the current inputs:
 // the public/ card + Dreamcaller bundles, the known-good decklists, the adapted
-// draft records, and the tides5 override layer, carrying the committed file's own
-// annotations forward, then compares that to the committed file byte-for-byte.
+// draft records, the tides5 override layer, and the tides4 artifact it inherits
+// its tide annotations from, then compares that to the committed file
+// byte-for-byte.
 //
-// Because the expected text reuses the committed annotations, the comparison is
-// blind to the one kind of hand-edit the bake sanctions — the per-tide annotation
-// fields (shortName / displayName / displayDescription / summary / description /
-// color). Any OTHER difference means the generated card contents are stale (a bake
-// input changed without a re-bake) or were hand-edited (which the bake would
-// overwrite). Both are reported with an actionable remedy.
+// data/tides5.jsonc is a PURELY GENERATED file — its card lists come from the
+// known-good draft corpus and its identity annotations are inherited from
+// data/tides4.jsonc by tide name, so every byte is reproducible. Any difference
+// means a bake input changed without a re-bake, or the artifact was hand-edited
+// (which the bake overwrites). Both are reported with an actionable remedy.
 //
 // Consumed by `scripts/check-tides5.mjs` (CLI gate) and
 // `scripts/check-tides5.test.ts` (the `npm test` blocker).
@@ -80,7 +80,7 @@ export function checkTides5({ rootDir = ROOT } = {}) {
     );
   }
   const committed = readFileSync(artifactPath, "utf8");
-  const expected = bakeTides5ArtifactText({ rootDir, annotationsSource: artifactPath });
+  const expected = bakeTides5ArtifactText({ rootDir });
   if (committed === expected) return { ok: true };
 
   const committedSel = tideSelections(committed);
@@ -151,8 +151,9 @@ export function formatStaleMessage(result) {
   lines.push("  FIX 1 — you changed a bake INPUT and just need to regenerate:");
   lines.push("────────────────────────────────────────────────────────────────────────");
   lines.push("Inputs are data/tabula/cards_v2.toml, data/tabula/dreamcallers_v2.toml,");
-  lines.push("docs/draft_records_adapted/, docs/known_good_decklists.json, and");
-  lines.push("data/tides5-overrides.jsonc. After editing any of them, regenerate and");
+  lines.push("docs/draft_records_adapted/, docs/known_good_decklists.json,");
+  lines.push("data/tides5-overrides.jsonc, and data/tides4.jsonc (the tide labels are");
+  lines.push("inherited from it by name). After editing any of them, regenerate and");
   lines.push("re-stage:");
   lines.push("");
   lines.push("    npm run setup-assets   # rebuild public/ inputs from source");
@@ -177,9 +178,10 @@ export function formatStaleMessage(result) {
   lines.push("file, run FIX 1's commands to regenerate.");
   lines.push("");
   lines.push("NOTE: the per-tide annotation fields — shortName, displayName,");
-  lines.push("displayDescription, summary, description, color — ARE safe to hand-edit in");
-  lines.push("data/tides5.jsonc; a re-bake preserves them by tide id and this check");
-  lines.push("ignores them.");
+  lines.push("displayDescription, summary, description, color — are NOT hand-edited in");
+  lines.push("data/tides5.jsonc; they are inherited from data/tides4.jsonc by tide name");
+  lines.push("(a signature tide by its Dreamcaller, a facet tide by its lean's anchor).");
+  lines.push("To relabel a tides5 tide, edit the matching tides4 tide and re-bake both.");
   lines.push("════════════════════════════════════════════════════════════════════════");
   lines.push("");
   return lines.join("\n");
