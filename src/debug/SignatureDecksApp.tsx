@@ -9,6 +9,8 @@ import {
   DreamcallerPortrait,
   dreamcallerImageSrc,
 } from "../components/DreamcallerPortrait";
+import { HoverPopover } from "../components/HoverPopover";
+import { DreamcallerPopover } from "../components/DreamcallerPopover";
 
 /**
  * `/sigdecks` — a temporary visualization tool. For each Dreamcaller that
@@ -188,29 +190,49 @@ function DeckSection({ deck }: { deck: SignatureDeck }) {
           marginBottom: 14,
         }}
       >
-        <div style={{ width: 64, height: 64, flexShrink: 0 }}>
-          <DreamcallerPortrait
-            dreamcaller={{
-              imageNumber: dc.imageNumber,
-              name: dc.name,
-              title: dc.title,
-            }}
-            variant="thumb"
-          />
-        </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 19, fontWeight: 600, color: "#f8fafc" }}>
-            {dc.name}
+        {/* Hovering the portrait or the name/title reveals a card showing the
+            Dreamcaller's ability. The popover self-sizes (280px), so the
+            max-width cap is disabled; it portals to the body and is
+            viewport-aware. */}
+        <HoverPopover
+          triggerAs="div"
+          placement="top"
+          delayMs={200}
+          maxWidthPx={null}
+          content={<DreamcallerPopover dreamcaller={dc} />}
+          style={{
+            display: "flex",
+            gap: 14,
+            alignItems: "center",
+            flex: 1,
+            minWidth: 0,
+            cursor: "help",
+          }}
+        >
+          <div style={{ width: 64, height: 64, flexShrink: 0 }}>
+            <DreamcallerPortrait
+              dreamcaller={{
+                imageNumber: dc.imageNumber,
+                name: dc.name,
+                title: dc.title,
+              }}
+              variant="thumb"
+            />
           </div>
-          <div style={{ fontSize: 13, color: ACCENT, marginBottom: 4 }}>
-            {dc.title}
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontSize: 19, fontWeight: 600, color: "#f8fafc" }}>
+              {dc.name}
+            </div>
+            <div style={{ fontSize: 13, color: ACCENT, marginBottom: 4 }}>
+              {dc.title}
+            </div>
+            <div style={{ fontSize: 12, color: MUTED }}>
+              {deck.cards.length}-card mainboard · matched{" "}
+              {deck.matchedNames.length}/{deck.signatureNames.length} signature
+              cards · cosine {deck.score.toFixed(3)}
+            </div>
           </div>
-          <div style={{ fontSize: 12, color: MUTED }}>
-            {deck.cards.length}-card mainboard · matched{" "}
-            {deck.matchedNames.length}/{deck.signatureNames.length} signature
-            cards · cosine {deck.score.toFixed(3)}
-          </div>
-        </div>
+        </HoverPopover>
         <div
           style={{
             fontSize: 10,
