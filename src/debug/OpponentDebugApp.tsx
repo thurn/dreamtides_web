@@ -22,6 +22,11 @@ import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import { CardView } from "../components/CardView";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
 import { dreamsignIconUrl } from "../atlas/atlas-display";
+import {
+  opponentDebugSearch,
+  opponentGenerationId,
+  parseOpponentDebugParams,
+} from "./opponent-debug-url";
 
 /**
  * `/opponent` debugging tool. Simulates the pre-battle opponent build the
@@ -44,6 +49,8 @@ function deriveEnemyPoolSeed(seed: number): number {
 }
 
 interface OpponentGeneration {
+  /** The shareable id for this generation; identical to the logged battleEntryKey. */
+  generationId: string;
   dreamcaller: DreamcallerContent | null;
   dreamsigns: DreamsignTemplate[];
   affiliation: AffiliationContent | null;
@@ -65,9 +72,13 @@ function generateOpponent(
   nonce: number,
 ): OpponentGeneration {
   const layerCount = DEFAULT_RUN_LAYER_COUNT;
-  const battleEntryKey = `opponent-debug:${dreamscapeId ?? "neutral"}:${String(
+  // The generation id IS the logged battleEntryKey, so the id a user shares
+  // (in the URL or verbally) greps the `opponent_deck_constructed` log directly.
+  const battleEntryKey = opponentGenerationId({
     completionLevel,
-  )}:${String(nonce)}`;
+    dreamscapeId,
+    nonce,
+  });
   const seed = deriveBattleSeed(`opponent-debug-seed:${battleEntryKey}`);
   const streams = createBattleRngStreams(seed);
 
@@ -124,6 +135,7 @@ function generateOpponent(
   });
 
   return {
+    generationId: battleEntryKey,
     dreamcaller,
     dreamsigns,
     affiliation,
@@ -172,11 +184,32 @@ function StatTile({ label, value }: { label: string; value: string }) {
 }
 
 export default function OpponentDebugApp() {
+  // The URL query is the source of truth for the generation parameters, so any
+  // generation is shareable and reproducible: load `/opponent?gen=<id>` (or the
+  // discrete `?layer=&dreamscape=&n=` form) to reconstruct exactly what someone
+  // else saw.
+  const initialParams = parseOpponentDebugParams(window.location.search);
   const [content, setContent] = useState<QuestContent | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [completionLevel, setCompletionLevel] = useState(3);
-  const [dreamscapeId, setDreamscapeId] = useState<string | null>(null);
-  const [nonce, setNonce] = useState(0);
+  const [completionLevel, setCompletionLevel] = useState(
+    initialParams.completionLevel,
+  );
+  const [dreamscapeId, setDreamscapeId] = useState<string | null>(
+    initialParams.dreamscapeId,
+  );
+  const [nonce, setNonce] = useState(initialParams.nonce);
+  const [copied, setCopied] = useState(false);
+
+  // Keep the address bar in sync with the current parameters (no history spam:
+  // replaceState, not pushState) so the URL is always a shareable debug link.
+  useEffect(() => {
+    const search = opponentDebugSearch({ completionLevel, dreamscapeId, nonce });
+    window.history.replaceState(
+      null,
+      "",
+      `${window.location.pathname}${search}`,
+    );
+  }, [completionLevel, dreamscapeId, nonce]);
 
   useEffect(() => {
     let cancelled = false;
@@ -194,10 +227,30 @@ export default function OpponentDebugApp() {
     };
   }, []);
 
+  // A dreamscape id from the URL might not exist in the loaded catalog (stale
+  // link, typo). Once content is in hand, drop an unknown id back to neutral so
+  // the selector and the shareable URL stay consistent with what was generated.
+  useEffect(() => {
+    if (content === null || dreamscapeId === null) return;
+    if (!content.dreamscapes.some((d) => d.id === dreamscapeId)) {
+      setDreamscapeId(null);
+    }
+  }, [content, dreamscapeId]);
+
   const generation = useMemo(() => {
     if (content === null) return null;
     return generateOpponent(content, completionLevel, dreamscapeId, nonce);
   }, [content, completionLevel, dreamscapeId, nonce]);
+
+  const copyGenerationId = (id: string) => {
+    const done = () => {
+      setCopied(true);
+      window.setTimeout(() => {
+        setCopied(false);
+      }, 1500);
+    };
+    void navigator.clipboard?.writeText(id).then(done, done);
+  };
 
   const dreamscapeOptions = useMemo(() => {
     if (content === null) return [] as DreamscapeContent[];
@@ -351,16 +404,61 @@ export default function OpponentDebugApp() {
               <div
                 style={{
                   marginLeft: "auto",
-                  fontSize: 11,
-                  color: FAINT,
-                  fontFamily: "monospace",
-                  alignSelf: "center",
-                  lineHeight: 1.6,
-                  textAlign: "right",
+                  alignSelf: "stretch",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 4,
+                  minWidth: 280,
                 }}
               >
-                <div>seed {generation.seed}</div>
-                <div>poolSeed {generation.poolSeed}</div>
+                <span style={labelStyle}>Generation ID (shareable / logged)</span>
+                <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                  <code
+                    title="Identical to the battleEntryKey in the opponent_deck_constructed log entry"
+                    style={{
+                      flex: 1,
+                      background: INSET_BG,
+                      border: "0.5px solid rgba(255,255,255,0.18)",
+                      borderRadius: 6,
+                      padding: "7px 9px",
+                      fontSize: 12,
+                      fontFamily: "monospace",
+                      color: "#cbd5e1",
+                      overflowX: "auto",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {generation.generationId}
+                  </code>
+                  <button
+                    onClick={() => {
+                      copyGenerationId(generation.generationId);
+                    }}
+                    title="Copy generation ID"
+                    style={{
+                      background: INSET_BG,
+                      color: TEXT,
+                      border: "0.5px solid rgba(255,255,255,0.18)",
+                      borderRadius: 6,
+                      padding: "7px 10px",
+                      fontSize: 12,
+                      cursor: "pointer",
+                      whiteSpace: "nowrap",
+                    }}
+                  >
+                    {copied ? "✓ Copied" : "Copy"}
+                  </button>
+                </div>
+                <div
+                  style={{
+                    fontSize: 11,
+                    color: FAINT,
+                    fontFamily: "monospace",
+                    textAlign: "right",
+                  }}
+                >
+                  seed {generation.seed} · poolSeed {generation.poolSeed}
+                </div>
               </div>
             </div>
 
