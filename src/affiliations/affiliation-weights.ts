@@ -32,12 +32,8 @@ import type { CardData } from "../types/cards.ts";
 import type { DreamscapeNode } from "../types/quest.ts";
 import { logEvent } from "../logging.ts";
 import type { PoolData } from "../draft/pool/types.ts";
-import {
-  type IdfCorpus,
-  type IdfDeck,
-  idfCorpus,
-  idfCosine,
-} from "../draft/pool/variant-idf.ts";
+import { type IdfCorpus, idfCorpus } from "../draft/pool/variant-idf.ts";
+import { computeAffinity } from "../draft/idf-fit.ts";
 
 /**
  * The smallest multiplier any card receives. Unaffiliated cards keep their base
@@ -72,48 +68,22 @@ export interface AffiliationWeightContext {
 // literal signature card. Affinities are normalized to [0,1] by the max observed
 // so the strongest card is 1; cards absent from the corpus are simply omitted
 // (callers treat a missing card as affinity 0).
-function computeAffinityByName(
+export function computeAffinityByName(
   corpus: IdfCorpus,
   signatureNames: readonly string[],
 ): { affinityByName: Map<string, number>; signatureWeightedNames: string[] } {
-  const idfOf = (c: string): number => corpus.idf.get(c) ?? 0;
-
+  // Filter to signature names with idf > 0; these form the probe and are
+  // returned so callers can report which signature cards carried IDF weight.
   const probeCards = new Set<string>();
   for (const name of signatureNames) {
-    if (idfOf(name) > 0) probeCards.add(name);
+    if ((corpus.idf.get(name) ?? 0) > 0) probeCards.add(name);
   }
   const signatureWeightedNames = [...probeCards];
 
-  const affinityByName = new Map<string, number>();
-  if (probeCards.size === 0) {
-    // No usable probe: every card is equally (un)affiliated. Returning an empty
-    // map makes every multiplier fall back to the floor, a clean no-op draw.
-    return { affinityByName, signatureWeightedNames };
-  }
-
-  let psq = 0;
-  for (const c of probeCards) psq += idfOf(c) ** 2;
-  const probe: IdfDeck = { cards: probeCards, norm: Math.sqrt(psq) || 1 };
-
-  // Per-deck cosine to the probe, computed once.
-  const deckSim = corpus.decks.map((d) => idfCosine(probe, d, idfOf));
-
-  // raw(card) = max over decks holding it of that deck's cosine to the probe.
-  const raw = new Map<string, number>();
-  for (let i = 0; i < corpus.decks.length; i++) {
-    const sim = deckSim[i];
-    if (sim <= 0) continue;
-    for (const c of corpus.decks[i].cards) {
-      const prev = raw.get(c) ?? 0;
-      if (sim > prev) raw.set(c, sim);
-    }
-  }
-
-  let max = 0;
-  for (const v of raw.values()) if (v > max) max = v;
-  if (max > 0) {
-    for (const [c, v] of raw) affinityByName.set(c, v / max);
-  }
+  // Delegate the cosine/max/normalize core to the shared module.
+  // computeAffinity handles the empty-probe case (returns empty map) and is
+  // behavior-identical to the former inline block.
+  const affinityByName = computeAffinity(corpus, probeCards);
   return { affinityByName, signatureWeightedNames };
 }
 

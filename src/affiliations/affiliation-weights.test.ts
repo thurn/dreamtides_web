@@ -14,11 +14,13 @@ import type { CardData } from "../types/cards.ts";
 import { buildPoolData } from "../draft/pool/pool-data.ts";
 import type { PoolData } from "../draft/pool/types.ts";
 import { weightedSample } from "../draft/pool/rng.ts";
+import { buildIdfStats } from "../draft/idf-fit.ts";
 import {
   AFFILIATION_MIN_MULTIPLIER,
   affiliationWeight,
   buildAffiliationNumberWeights,
   buildAffiliationWeightContext,
+  computeAffinityByName,
   opponentAffiliationBias,
   reweightCandidates,
 } from "./affiliation-weights.ts";
@@ -269,5 +271,136 @@ describe("affiliation reweighting weight contract", () => {
     expect(
       biased.some((b) => b.weight > AFFILIATION_MIN_MULTIPLIER),
     ).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Characterization tests for computeAffinityByName — synthetic corpus, no
+// live TOML data. These pin the relative-ordering and range invariants so the
+// delegation refactor cannot silently change behavior.
+// ---------------------------------------------------------------------------
+describe("computeAffinityByName – characterization (synthetic corpus)", () => {
+  // Build a minimal synthetic corpus where behavior is predictable:
+  //   deck A  = {alpha, beta, gamma}        <- probe-like deck
+  //   deck B  = {alpha, beta, delta}        <- also probe-like
+  //   deck C  = {zeta, eta, theta}          <- unrelated deck
+  //   deck D  = {alpha, beta, gamma, zeta, eta, theta}  <- mixed
+  //   deck E  = {alpha, beta, gamma, delta, zeta, eta, theta}  <- mixed
+  //
+  // All five decks appear in the corpus so no card has idf=0 (ubiquitous).
+  // "omega" appears in every deck → idf=0 → must be excluded from signatureWeightedNames.
+
+  function buildSyntheticCorpus() {
+    const deckA = new Set(["alpha", "beta", "gamma", "omega"]);
+    const deckB = new Set(["alpha", "beta", "delta", "omega"]);
+    const deckC = new Set(["zeta", "eta", "theta", "omega"]);
+    const deckD = new Set(["alpha", "beta", "gamma", "zeta", "eta", "theta", "omega"]);
+    const deckE = new Set([
+      "alpha",
+      "beta",
+      "gamma",
+      "delta",
+      "zeta",
+      "eta",
+      "theta",
+      "omega",
+    ]);
+    return buildIdfStats([deckA, deckB, deckC, deckD, deckE]);
+  }
+
+  it("affinities are in [0,1] and the strongest affiliated card scores exactly 1", () => {
+    const corpus = buildSyntheticCorpus();
+    const { affinityByName } = computeAffinityByName(corpus, [
+      "alpha",
+      "beta",
+      "gamma",
+    ]);
+    expect(affinityByName.size).toBeGreaterThan(0);
+    let max = 0;
+    for (const v of affinityByName.values()) {
+      expect(v).toBeGreaterThanOrEqual(0);
+      expect(v).toBeLessThanOrEqual(1);
+      if (v > max) max = v;
+    }
+    expect(max).toBeCloseTo(1, 10);
+  });
+
+  it("probe-aligned cards score higher than unrelated cards", () => {
+    const corpus = buildSyntheticCorpus();
+    // Probe: alpha, beta, gamma — the signature of deck A / B.
+    const { affinityByName } = computeAffinityByName(corpus, [
+      "alpha",
+      "beta",
+      "gamma",
+    ]);
+
+    // alpha and beta appear in probe-like decks and mixed decks → high affinity.
+    // zeta, eta, theta only appear in the unrelated deck C and mixed decks → lower.
+    const alphaAffinity = affinityByName.get("alpha") ?? 0;
+    const zetaAffinity = affinityByName.get("zeta") ?? 0;
+    expect(alphaAffinity).toBeGreaterThan(zetaAffinity);
+  });
+
+  it("signatureWeightedNames contains exactly the probe cards with idf > 0", () => {
+    const corpus = buildSyntheticCorpus();
+    // "omega" is in every deck → idf = ln(5/5) = 0 → must be excluded.
+    // alpha, beta are in some decks → idf > 0 → must be included.
+    const { signatureWeightedNames } = computeAffinityByName(corpus, [
+      "alpha",
+      "beta",
+      "omega",
+    ]);
+    expect(signatureWeightedNames).toContain("alpha");
+    expect(signatureWeightedNames).toContain("beta");
+    expect(signatureWeightedNames).not.toContain("omega");
+    expect(signatureWeightedNames.length).toBe(2);
+  });
+
+  it("idf=0 ubiquitous card excluded from signatureWeightedNames even when sole signature", () => {
+    const corpus = buildSyntheticCorpus();
+    // Probe is only "omega" which has idf=0 → treated as empty probe.
+    const { affinityByName, signatureWeightedNames } = computeAffinityByName(
+      corpus,
+      ["omega"],
+    );
+    expect(signatureWeightedNames).toHaveLength(0);
+    expect(affinityByName.size).toBe(0);
+  });
+
+  it("empty probe returns empty affinityByName and empty signatureWeightedNames", () => {
+    const corpus = buildSyntheticCorpus();
+    const { affinityByName, signatureWeightedNames } = computeAffinityByName(
+      corpus,
+      [],
+    );
+    expect(affinityByName.size).toBe(0);
+    expect(signatureWeightedNames).toHaveLength(0);
+  });
+
+  it("probe with unknown names (not in corpus) returns empty results", () => {
+    const corpus = buildSyntheticCorpus();
+    // "nonexistent" has no idf entry at all → idf=0 → treated as empty probe.
+    const { affinityByName, signatureWeightedNames } = computeAffinityByName(
+      corpus,
+      ["nonexistent"],
+    );
+    expect(affinityByName.size).toBe(0);
+    expect(signatureWeightedNames).toHaveLength(0);
+  });
+
+  it("relative ordering is stable: more-probe-like card outscores less-probe-like", () => {
+    const corpus = buildSyntheticCorpus();
+    // Probe: alpha, beta, gamma.
+    // gamma only appears in decks A, D, E — all probe-overlapping.
+    // delta appears in decks B, E — some probe-overlapping, but deck B is also probe-like.
+    // zeta appears in decks C, D, E — C is unrelated, so delta should still score > zeta.
+    const { affinityByName } = computeAffinityByName(corpus, [
+      "alpha",
+      "beta",
+      "gamma",
+    ]);
+    const gammaAff = affinityByName.get("gamma") ?? 0;
+    const zetaAff = affinityByName.get("zeta") ?? 0;
+    expect(gammaAff).toBeGreaterThan(zetaAff);
   });
 });
