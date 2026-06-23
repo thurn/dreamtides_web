@@ -453,7 +453,7 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("renders a Legendary card with a gold rarity frame ring and shimmer overlay", () => {
+  it("renders a Legendary card with a shimmer overlay and no rarity frame ring", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ rarity: "Legendary" })} />,
     );
@@ -462,8 +462,8 @@ describe("CardDisplay", () => {
     if (!cardRoot) {
       throw new Error("Missing card root");
     }
-    // Frame ring: gold-tinted outer box-shadow.
-    expect(cardRoot.style.boxShadow.toLowerCase()).toContain("#f5c542");
+    // No gold-tinted outer box-shadow ring is drawn for the rarity.
+    expect(cardRoot.style.boxShadow.toLowerCase()).not.toContain("#f5c542");
     // CSS hook for the keyframe animation lives on the root and the overlay.
     expect(cardRoot.className.includes("card-rarity-legendary")).toBe(true);
     expect(cardRoot.getAttribute("data-rarity")).toBe("Legendary");
@@ -482,7 +482,7 @@ describe("CardDisplay", () => {
     });
   });
 
-  it("keeps the gold rarity ring on a Legendary character card", () => {
+  it("draws no gold rarity ring on a Legendary character card", () => {
     const { container, root } = mount(
       <CardDisplay card={makeCard({ rarity: "Legendary", cardType: "Character" })} />,
     );
@@ -491,8 +491,8 @@ describe("CardDisplay", () => {
     if (!cardRoot) {
       throw new Error("Missing card root");
     }
-    // The gold rarity ring composes with the neutral character chrome.
-    expect(cardRoot.style.boxShadow.toLowerCase()).toContain("#f5c542");
+    // The Legendary treatment leaves the neutral character chrome unringed.
+    expect(cardRoot.style.boxShadow.toLowerCase()).not.toContain("#f5c542");
     expect(cardRoot.getAttribute("data-card-type")).toBe("Character");
 
     act(() => {

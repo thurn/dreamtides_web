@@ -108,8 +108,7 @@ button:disabled {
 /*
  * Legendary card frame shimmer.
  *
- * The card's main border is set inline in `CardDisplay` per-rarity. This
- * keyframe layer adds a slow diagonal gold sweep over the card so a
+ * This keyframe layer adds a slow diagonal gold sweep over the card so a
  * legendary in a draft offer reads as a small event without being noisy.
  * The animation is paused (and a static highlight gradient stays in
  * place) when the user requests reduced motion, satisfying the

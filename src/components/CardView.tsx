@@ -566,24 +566,17 @@ const RULES_FONT_RATIO = 0.042;
 const RULES_MIN_FONT_FRACTION = 0.5;
 
 /**
- * Visual treatment for a rarity bucket. A rarity adds an outer accent ring
- * stacked as a spread-only `box-shadow` so it composes with the rounded
- * corners, plus an optional shimmer overlay controlled via a CSS class in
- * `index.css`. The shimmer keyframes honor `prefers-reduced-motion`.
+ * Visual treatment for a rarity bucket. A rarity adds a shimmer overlay
+ * controlled via a CSS class in `index.css`. The shimmer keyframes honor
+ * `prefers-reduced-motion`.
  */
 interface RarityStyle {
-  outlineColor: string;
-  glowColor: string;
-  outlineWidthPx: number;
   cssClass: string | null;
 }
 
 const RARITY_STYLES: Readonly<Record<Rarity, RarityStyle | null>> = {
   Starter: null,
   Legendary: {
-    outlineColor: "#f5c542",
-    glowColor: "rgba(245, 197, 66, 0.55)",
-    outlineWidthPx: 2,
     cssClass: "card-rarity-legendary",
   },
   Special: null,
@@ -878,18 +871,13 @@ export function CardView({
   const energyOrbCapPx = widthPx * ENERGY_ORB_RATIO;
   const sparkOrbCapPx = widthPx * SPARK_ORB_RATIO;
 
-  // Selection / rarity rings, stacked as box-shadows so they compose with the
-  // rounded corners.
+  // Selection ring, stacked as box-shadows so it composes with the rounded
+  // corners.
   const shadowLayers: string[] = ["0 4px 14px rgba(0, 0, 0, 0.55)"];
   if (selected) {
     shadowLayers.unshift(
       `0 0 0 3px ${selectionColor}`,
       `0 0 12px ${selectionColor}`,
-    );
-  } else if (rarityStyle !== null) {
-    shadowLayers.unshift(
-      `0 0 0 ${String(rarityStyle.outlineWidthPx)}px ${rarityStyle.outlineColor}`,
-      `0 0 22px ${rarityStyle.glowColor}`,
     );
   }
 
