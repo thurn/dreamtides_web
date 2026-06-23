@@ -12,6 +12,22 @@
 
 ---
 
+## ⚠️ UUID identity is non-negotiable — read this first
+
+**Every new module, function, artifact, test, and log field in this plan keys card identity on the lowercased cards_v2 UUID — never the display name, and never the card number.** This is a correctness requirement, not a style preference: **24 cards share a display name with a distinct card**, so any name-keyed lookup, count, comparison, dedup, or map silently conflates them and corrupts the IDF / fit / affinity / co-occurrence math and renders the wrong card.
+
+Hard rules for all code written in this plan:
+
+- The **only** identity key is the lowercased UUID. Build every `Map`/`Set` on UUIDs. Lowercase every UUID at the boundary (catalog ids, manifest ids, adapted-record ids, all signature lists) so casing never splits one card into two.
+- Card **names and card numbers may appear only as human-readable decoration** in the UI and in log fields — never as a lookup key, a comparison, or a dedup key. If a name or a number is used to *find* or *equate* a card anywhere in new code, that is a bug to fix, not ship.
+- `src/draft/idf-fit.ts` and `src/draft/deck-cooccurrence.ts` are generic over `string` so the *pre-existing* name-keyed affiliation caller can keep compiling — but **at every new call site in this feature the `string` is a lowercased UUID.** Never pass names into them from any new code.
+- The legacy **name-keyed systems are not used for identity by this feature**: `src/draft/replay/fit-model.ts`, `src/battle/integration/coherence.ts`, `src/affiliations/affiliation-weights.ts`, and the `idfCorpus(poolData)` (name) path of `variant-idf.ts`. The new algorithm builds its **own UUID-keyed** corpus, IDF, affinity, and co-occurrence over the known-good decklists' `mainboardIds`. Do not reach into the name-keyed `FitModel` for the corpus algorithm.
+- UUID sources to key on: deck `mainboardIds`, dreamcaller `signatureCardIds`, affiliation `signatureCards`, dreamsign `signatureCardIds`, and `CardData.id`. Resolve a UUID to its `CardData` through a `Map<lowercaseUuid, CardData>` built from `cardDatabase.values()` — never via name.
+
+**Guardrail:** Task 1 includes a **name-collision test** — a fixture with two distinct UUIDs sharing one display name must be treated as two separate cards by the corpus, fit, affinity, and co-occurrence. Tasks 7–8 re-assert this at the selection/tuning level. If any of these tests would pass under a name-keyed implementation, the test is too weak — strengthen it.
+
+---
+
 ## Key facts the implementer must not re-derive
 
 - **Identity is always the lowercased cards_v2 UUID, never the card name** (24 cards share a display name). All new corpus/fit/synergy code keys on UUID.
@@ -62,6 +78,7 @@ Specify these tests (bug class in parentheses):
 - `computeAffinity`: every returned value is in `[0, 1]`, the strongest card is exactly 1, a card that appears only in decks with zero probe-cosine is absent from the map (**catches missing normalization and the "cards absent from corpus → affinity 0" contract**).
 - `computeAffinity`: a non-probe card that co-occurs heavily with probe cards scores well above a non-probe card that never co-occurs with them (**catches the "shaped like the probe, not literally in the probe" property — the whole point of affinity vs direct cosine**).
 - `meanAffinity`: equals the mean of the deck cards' affinities, treating missing cards as 0 (**catches dropping missing cards from the denominator, which would inflate focused-deck scores**).
+- **Name-collision guardrail (the load-bearing UUID test):** build the fixture so two *distinct* UUIDs share an identical display name and appear in different decks. Assert `buildIdfStats` counts them as two separate cards (each gets its own df/idf), `signatureFit` matches only the UUID actually in the probe, and `computeAffinity` scores them independently (**catches any accidental name-keying — the exact bug the UUID mandate exists to prevent**). This fixture is reused by Tasks 7–8.
 
 - [ ] **Step 2: Run the tests to verify they fail**
 
@@ -104,6 +121,8 @@ export function meanAffinity(
 ```
 
 Bodies: `buildIdfStats` mirrors `SignatureDecksApp.tsx:200-218` (df map → idf closure → per-deck `{cards, norm}`). `signatureFit` mirrors `SignatureDecksApp.tsx:244-262`. `computeAffinity` mirrors `affiliation-weights.ts:75-118` (`computeAffinityByName`'s core: build probe `IdfDeck`, `idfCosine` per deck, per-card max, normalize by global max), but generic on the key. `meanAffinity` mirrors `scoreDeckAffiliationFit` (`affiliation-weights.ts:315-334`).
+
+Treat every `string` key as an **opaque token**: never split, parse, lowercase-vary, or resolve it to a name inside this module. The module has no knowledge of names; identity correctness depends only on callers passing lowercased UUIDs (which Tasks 3, 5, 7, 8 do).
 
 - [ ] **Step 4: Run the tests to verify they pass**
 
@@ -198,10 +217,12 @@ git commit -m "refactor(sigdecks): use shared idf-fit module"
 
 ---
 
-## Task 4: Refactor affiliation affinity onto `computeAffinity`
+## Task 4: Refactor affiliation affinity onto `computeAffinity` (OPTIONAL cleanup)
 
 **Files:**
 - Modify: `src/affiliations/affiliation-weights.ts:75-118` (`computeAffinityByName`)
+
+> **Optional — the corpus feature does not depend on this task, and it is the ONE place in the codebase where the shared `computeAffinity` is called with NAME keys (the pre-existing, name-keyed affiliation *draft-steering* system, which is separate from the new opponent algorithm).** Doing it satisfies the spec's "single implementation" cleanup; skipping it leaves the legacy name path untouched. Either way it introduces **zero** names into the new feature — the new algorithm's `affiliationFit` is computed by Task 7 over the **UUID** corpus with `affiliation.signatureCards` (UUIDs) as the probe, never through this function. If you defer this, proceed to Task 5.
 
 DRY cleanup: `computeAffinityByName` keeps its name-keyed signature and the `signatureWeightedNames` return, but delegates the max-cosine/normalize core to `computeAffinity`. This touches live affiliation steering, so guard it first.
 
@@ -243,6 +264,8 @@ Read `docs/known_good_decklists.json`; build `seatFilter = new Set(decklists.map
 ```
 
 Write to `public/known-good-decklists-data.json` with the same `JSON.stringify(value) + "\n"` style as the `draftRecords` write. Log the count (expect ~497).
+
+The `name` field is **display-only**. The join key and all card identity are `draftId#seat` and `mainboardIds` (lowercased UUIDs). Do not emit a name-keyed mainboard field — downstream code keys on `mainboardIds` exclusively.
 
 - [ ] **Step 2: Add the QuestContent type + field**
 
@@ -413,6 +436,7 @@ Constants at the top of the module (tunable; do not pin them in tests): `AFFILIA
 - **Signature-primary:** with affiliation absent, the selected deck is the highest-`signatureFit` candidate within sampling; raising one deck's `affiliationFit` alone never overtakes a much higher `signatureFit` deck given λ=0.25 (**catches mis-weighting the blend / swapping the primary axis**).
 - **Signature-less fallback:** a Dreamcaller with empty `signatureCardIds` selects from decks ranked by `affiliationFit` (candidate set = all decks) (**catches an empty-candidate crash and the wrong fallback axis**).
 - **Neutral dreamscape:** with `affiliation = null`, `affiliationFit` is 0 and selection uses `signatureFit` only (**catches a divide-by-zero / NaN from an absent probe**).
+- **UUID identity (reuse the Task 1 name-collision fixture):** include in the corpus two distinct cards that share a display name, one of them a Dreamcaller signature card. Assert the candidate set, `signatureFit`, and selection key on the UUID — only the deck holding the *signature* UUID is treated as a candidate; the same-named non-signature card never inflates a deck's fit (**catches Stage A collapsing colliding names — the bug the whole UUID mandate guards against**).
 
 Run: `npx vitest run src/battle/integration/corpus-opponent-deck.test.ts`
 Expected: FAIL.
@@ -471,7 +495,7 @@ Set `finalCards` to the tuned deck.
 
 - [ ] **Step 4: Add logging**
 
-Emit a `corpus_opponent_deck_constructed` event via `logEvent` (`src/logging.ts`) capturing: source id/name/file, `signatureFit`/`affiliationFit`/`combined`, `candidateCount`, the top-K ids+scores, `poolSeed`, `completionLevel`/`layerCount`, the modification arrays as card numbers (legendaries removed/replaced, cards cut, starters added), the assigned dreamsign id+fit, and `abilityActive`. Mirror the field-rounding style of the existing `opponent_deck_constructed` log. Add one test asserting the event is emitted with the selected `source.id` and the layer-correct modification counts (bug class: provenance not reconstructable from logs — the AGENTS.md logging requirement).
+Emit a `corpus_opponent_deck_constructed` event via `logEvent` (`src/logging.ts`) capturing: source id/file (the `draftId#seat` id) and display name, `signatureFit`/`affiliationFit`/`combined`, `candidateCount`, the top-K ids+scores, `poolSeed`, `completionLevel`/`layerCount`, the modification arrays **identified by UUID** (legendaries removed/replaced, cards cut, starters added — a decorative `name` alongside each UUID is fine, but the UUID is the identity), the assigned dreamsign id+fit, and `abilityActive`. Mirror the field-rounding style of the existing `opponent_deck_constructed` log. Add one test asserting the event is emitted with the selected `source.id` and the layer-correct modification counts (bug class: provenance not reconstructable from logs — the AGENTS.md logging requirement).
 
 - [ ] **Step 5: Run to verify pass**
 
@@ -648,3 +672,4 @@ git commit -m "chore(opponents): regenerate assets + verification for corpus alg
 
 - **Spec coverage:** known-good corpus (T5) ✓; unified IDF/affinity fit (T1, T3, T4) ✓; co-occurrence "least synergistic" (T2) ✓; Stage A selection incl. λ/top-K/edge cases (T7) ✓; Stage B layer table incl. legendary replacement + dreamsign fallback (T8) ✓; dreamsign neutral/tailored + signature artifact via subagents (T6) ✓; logging (T8) ✓; `/opponent` registry + `?algo=` + provenance (T9–T11) ✓; debug-view-only scope (no live-battle wiring) ✓; resolved-vs-nonland fidelity is left as the spec's flagged item — surfaced in T5 Step 3 assertions (counts/UUID resolution) rather than silently trimmed; revisit only if QA shows oversized decks distort the view.
 - **Test discipline:** no test pins a tunable constant or a TOML value; the dreamsign artifact test (T6) and the known-good test (T5) assert structural/grounding invariants that survive data edits; selection/tuning tests assert determinism, schedule, and ordering invariants, not specific cards.
+- **UUID identity:** every new module/artifact/log/test keys on the lowercased UUID; names and card numbers are decoration only. The name-collision guardrail (T1, re-asserted in T7) fails any name-keyed regression. The only `string`-generic call with name keys is the optional legacy affiliation cleanup (T4), which is outside the new feature's identity path. No new code reaches into the name-keyed `FitModel`/`coherence`/`affiliation-weights` for identity.
