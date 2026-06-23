@@ -104,7 +104,8 @@ export function computeAffinity(
 ): Map<string, number> {
   const idfOf = (c: string): number => corpus.idf.get(c) ?? 0;
 
-  // Filter the probe to only cards with idf > 0 (same as computeAffinityByName).
+  // Filter the probe to only cards with idf > 0, so computeAffinity is
+  // self-contained for callers that pass an unfiltered probe.
   const probeCards = new Set<string>();
   for (const card of probe) {
     if (idfOf(card) > 0) probeCards.add(card);
