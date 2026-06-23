@@ -200,15 +200,18 @@ export function computeSignatureDecks(
 
   // Build the IDF corpus once from all filtered record sets.  corpus.decks[i]
   // corresponds to recordSets[i] BY INDEX so they stay zipped.
+  // buildIdfStats populates corpus.df (document frequency) so we don't
+  // need a separate pass.
   const corpus = buildIdfStats(recordSets.map((r) => r.idSet));
   const idfOf = (id: string): number => corpus.idf.get(id) ?? 0;
 
-  // Document frequency by card UUID across the corpus — kept for the
-  // SignatureCard display (the `df` tooltip on each signature chip).
-  const df = new Map<string, number>();
-  for (const { idSet } of recordSets) {
-    for (const id of idSet) df.set(id, (df.get(id) ?? 0) + 1);
-  }
+  // Display helper: a signature card absent from every corpus deck has df=0
+  // and no entry in corpus.idf, but its "ideal" idf weight is ln(N/1)=ln(N)
+  // (it would be maximally rare). Show that ceiling rather than 0 so the
+  // tooltip conveys that the card is simply not in the corpus.
+  const N = corpus.decks.length;
+  const idfForDisplay = (id: string): number =>
+    corpus.idf.get(id) ?? Math.log(N || 1);
 
   const result: SignatureDeck[] = [];
 
@@ -219,8 +222,8 @@ export function computeSignatureDecks(
     const signatureCards: SignatureCard[] = sigIds.map((id) => ({
       id,
       name: byId.get(id)?.name ?? id,
-      idf: idfOf(id),
-      df: df.get(id) ?? 0,
+      idf: idfForDisplay(id),
+      df: corpus.df?.get(id) ?? 0,
     }));
 
     // Candidate decks: every deck containing at least one signature card, with

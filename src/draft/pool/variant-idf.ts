@@ -65,6 +65,10 @@ export interface IdfDeck {
 export interface IdfCorpus {
   decks: IdfDeck[];
   idf: Map<string, number>;
+  /** Document frequency by card key: how many corpus decks contain each card.
+   * Populated by {@link buildIdfStats}; optional so other IdfCorpus constructors
+   * need not provide it. */
+  df?: ReadonlyMap<string, number>;
 }
 const idfCorpusCache = new WeakMap<PoolData, IdfCorpus | null>();
 export function idfCorpus(poolData: PoolData): IdfCorpus | null {

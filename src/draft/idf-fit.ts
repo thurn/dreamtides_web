@@ -25,6 +25,10 @@ export type { IdfCorpus, IdfDeck };
  * Build an IDF corpus from raw decks of opaque string keys (UUIDs or names).
  * N = decks.length; idf(c) = ln(N / df(c)); each deck's norm = sqrt(Σ idf²).
  * No rare/staple cutoff (matches the /sigdecks corpus, not the pool variant).
+ *
+ * The returned corpus includes `df` (document frequency: how many corpus decks
+ * contain each card key) so callers can display or inspect raw counts without
+ * recomputing them.
  */
 export function buildIdfStats(
   decks: ReadonlyArray<ReadonlySet<string>>,
@@ -56,7 +60,7 @@ export function buildIdfStats(
     return { cards: new Set(deck), norm: Math.sqrt(sumSq) || 1 };
   });
 
-  return { decks: idfDecks, idf };
+  return { decks: idfDecks, idf, df };
 }
 
 /**
