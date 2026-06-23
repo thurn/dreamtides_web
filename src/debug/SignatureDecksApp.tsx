@@ -26,7 +26,9 @@ import {
  * scale-invariant: a raw overlap sum favours large decks (more slots to contain
  * any given signature card), whereas the cosine measures correlation, not size.
  * The deck with the highest cosine wins; ties break toward more distinct
- * signature cards matched.
+ * signature cards matched. Mainboards larger than 28 cards are excluded
+ * entirely — those are sprawling draft piles rather than focused decks, and
+ * they correlate with a Dreamcaller only by holding more of everything.
  *
  * Everything is derived live in the browser from the same quest content the
  * battle integration loads, so the result tracks the current card names and
@@ -64,7 +66,14 @@ function computeSignatureDecks(content: QuestContent): SignatureDeck[] {
     byName.set(card.name.toLowerCase(), card);
   }
 
-  const records = content.draftRecords ?? [];
+  // Oversized mainboards (large draft piles rather than focused decks) are
+  // excluded from consideration: a deck with many cards correlates with a
+  // Dreamcaller only by virtue of holding more of everything, which makes it a
+  // weird outlier as a "signature deck". Keep only decks at or below this size.
+  const MAX_DECK_SIZE = 28;
+  const records = (content.draftRecords ?? []).filter(
+    (r) => r.mainboard.length <= MAX_DECK_SIZE,
+  );
   const N = records.length;
 
   // Per-record lowercased mainboard name sets (deduped) and the raw ordered
@@ -321,7 +330,8 @@ export default function SignatureDecksApp() {
           <div style={{ fontSize: 12, color: MUTED }}>
             The real draft deck most strongly correlated with each
             signature-carrying Dreamcaller (IDF cosine similarity, normalized
-            for deck size). Hover any card to enlarge it.
+            for deck size; decks over 28 cards excluded). Hover any card to
+            enlarge it.
           </div>
         </div>
 
