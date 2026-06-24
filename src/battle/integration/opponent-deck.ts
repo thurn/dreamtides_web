@@ -227,19 +227,38 @@ export function opponentDraftTemperature(
  * per battle entry, and the player's own Dreamcaller is excluded when another
  * candidate exists (the player should face a different rival each battle). Returns
  * `null` only when there are no Dreamcallers at all.
+ *
+ * When `eligibleDreamcallerIds` is supplied and non-empty the candidate pool is
+ * first narrowed to that set — the resident Dreamcallers of a dreamscape, so the
+ * opponent faced in a dreamscape is one of its own residents. The ids are matched
+ * case-insensitively. An empty or absent list (e.g. the starter dreamscape, which
+ * has no residents) imposes no restriction and the full roster is used. If the
+ * restriction would empty the pool it is ignored, so a non-empty roster always
+ * yields a Dreamcaller.
  */
 export function selectOpponentDreamcaller(
   dreamcallers: readonly DreamcallerContent[],
   playerDreamcallerId: string | null,
   rng: BattleRng,
+  eligibleDreamcallerIds?: readonly string[] | null,
 ): DreamcallerContent | null {
   if (dreamcallers.length === 0) {
     return null;
   }
-  const candidates = dreamcallers.filter(
+  let roster = dreamcallers;
+  if (eligibleDreamcallerIds != null && eligibleDreamcallerIds.length > 0) {
+    const eligible = new Set(
+      eligibleDreamcallerIds.map((id) => id.toLowerCase()),
+    );
+    const resident = dreamcallers.filter((dreamcaller) =>
+      eligible.has(dreamcaller.id.toLowerCase()),
+    );
+    if (resident.length > 0) roster = resident;
+  }
+  const candidates = roster.filter(
     (dreamcaller) => dreamcaller.id !== playerDreamcallerId,
   );
-  const pool = candidates.length > 0 ? candidates : dreamcallers;
+  const pool = candidates.length > 0 ? candidates : roster;
   return pool[rng.nextInt(pool.length)];
 }
 

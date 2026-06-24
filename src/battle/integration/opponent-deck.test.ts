@@ -13,6 +13,7 @@ import {
   opponentPickBudget,
   opponentRemovalCount,
   runMidpointCompletionLevel,
+  selectOpponentDreamcaller,
 } from "./opponent-deck";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
 import { buildNameIndex } from "../../data/cards-v2-database";
@@ -332,6 +333,50 @@ describe("buildOpponentDreamsigns", () => {
         expect(signs).toHaveLength(1);
       }
     }
+  });
+});
+
+describe("selectOpponentDreamcaller dreamscape restriction", () => {
+  // Synthetic roster: ids deliberately mixed-case so the eligibility match is
+  // exercised case-insensitively (Dreamcaller ids are UUIDs in production).
+  const roster: DreamcallerContent[] = ["Aaa", "Bbb", "Ccc", "Ddd"].map(
+    (id) => ({
+      id,
+      name: `Dreamcaller ${id}`,
+      title: "",
+      renderedText: "",
+      imageNumber: "001",
+      startingEssence: 250,
+      signatureCards: [],
+      signatureCardIds: [],
+    }),
+  );
+
+  function pickedIdsAcrossSeeds(
+    eligible: readonly string[] | null | undefined,
+  ): Set<string> {
+    const picked = new Set<string>();
+    for (let seed = 0; seed < 200; seed += 1) {
+      const rng = createBattleRngStreams(seed).enemyDescriptor;
+      const choice = selectOpponentDreamcaller(roster, null, rng, eligible);
+      if (choice !== null) picked.add(choice.id);
+    }
+    return picked;
+  }
+
+  it("only ever returns Dreamcallers in the eligibility list (matched case-insensitively)", () => {
+    const picked = pickedIdsAcrossSeeds(["aaa", "ccc"]);
+    expect([...picked].sort()).toEqual(["Aaa", "Ccc"]);
+  });
+
+  it("draws from the full roster when the eligibility list is empty or absent", () => {
+    expect(pickedIdsAcrossSeeds([]).size).toBe(roster.length);
+    expect(pickedIdsAcrossSeeds(null).size).toBe(roster.length);
+    expect(pickedIdsAcrossSeeds(undefined).size).toBe(roster.length);
+  });
+
+  it("falls back to the full roster when no eligible Dreamcaller is resident", () => {
+    expect(pickedIdsAcrossSeeds(["not-a-resident"]).size).toBe(roster.length);
   });
 });
 

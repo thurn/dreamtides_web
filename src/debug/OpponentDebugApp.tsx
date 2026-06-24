@@ -15,6 +15,7 @@ import {
   selectOpponentDreamcaller,
 } from "../battle/integration/opponent-deck";
 import { createBattleRngStreams, deriveBattleSeed } from "../battle/random";
+import { logEvent } from "../logging";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import { CardView } from "../components/CardView";
 import { HoverZoomCard } from "../components/HoverZoomCard";
@@ -77,12 +78,14 @@ function generateOpponent(
   completionLevel: number,
   dreamscapeId: string | null,
   nonce: number,
+  algo: string,
 ): OpponentGeneration {
   const layerCount = DEFAULT_RUN_LAYER_COUNT;
   // The generation id IS the logged battleEntryKey, so the id a user shares
   // (in the URL or verbally) greps the `opponent_deck_constructed` log directly.
-  // The id is algorithm-independent — it identifies the seeded generation, not
-  // the algorithm the deck is viewed through — so the algo field is irrelevant.
+  // The id identifies the seeded generation; the algo (also carried in the URL)
+  // determines which Dreamcaller roster the seed draws from, so reproducing a
+  // share requires both the id and the `?algo=` value.
   const battleEntryKey = opponentGenerationId({
     completionLevel,
     dreamscapeId,
@@ -92,12 +95,27 @@ function generateOpponent(
   const seed = deriveBattleSeed(`opponent-debug-seed:${battleEntryKey}`);
   const streams = createBattleRngStreams(seed);
 
+  const dreamscape =
+    dreamscapeId === null
+      ? null
+      : content.dreamscapes.find((d) => d.id === dreamscapeId) ?? null;
+
+  // The corpus algorithm fields the dreamscape's RESIDENT Dreamcallers (and the
+  // known-good decks associated with them); other algorithms draw from the full
+  // roster. The starter / neutral dreamscape has no residents, so the list is
+  // empty and no restriction applies. `nextInt` consumes exactly one RNG draw
+  // regardless of the pool size, so narrowing the pool leaves the subsequent
+  // dreamsign draw stable.
+  const eligibleDreamcallerIds =
+    algo === "corpus" ? dreamscape?.dreamcallerIds ?? null : null;
+
   // Mirror createBattleInit's order of RNG consumption on the enemyDescriptor
   // stream: select the opponent Dreamcaller first, then its dreamsigns.
   const dreamcaller = selectOpponentDreamcaller(
     content.dreamcallers,
     null,
     streams.enemyDescriptor,
+    eligibleDreamcallerIds,
   );
   const dreamsigns = buildOpponentDreamsigns(
     completionLevel,
@@ -106,10 +124,22 @@ function generateOpponent(
     streams.enemyDescriptor,
   );
 
-  const dreamscape =
-    dreamscapeId === null
-      ? null
-      : content.dreamscapes.find((d) => d.id === dreamscapeId) ?? null;
+  if (algo === "corpus") {
+    // Reconstruction record for the dreamscape-restricted Dreamcaller pick: the
+    // resident pool the seed drew from and the Dreamcaller it landed on, so a
+    // corpus generation can be replayed from `logs/quest-log.jsonl`.
+    logEvent("corpus_opponent_dreamcaller_selected", {
+      battleEntryKey,
+      dreamscapeId,
+      completionLevel,
+      restrictedToDreamscapeResidents:
+        eligibleDreamcallerIds != null && eligibleDreamcallerIds.length > 0,
+      eligibleDreamcallerIds: eligibleDreamcallerIds ?? [],
+      selectedDreamcallerId: dreamcaller?.id ?? null,
+      selectedDreamcallerName: dreamcaller?.name ?? null,
+    });
+  }
+
   const affiliation =
     dreamscape?.affiliationId == null
       ? null
@@ -232,8 +262,14 @@ export default function OpponentDebugApp() {
 
   const generation = useMemo(() => {
     if (content === null) return null;
-    return generateOpponent(content, completionLevel, dreamscapeId, nonce);
-  }, [content, completionLevel, dreamscapeId, nonce]);
+    return generateOpponent(
+      content,
+      completionLevel,
+      dreamscapeId,
+      nonce,
+      algoId,
+    );
+  }, [content, completionLevel, dreamscapeId, nonce, algoId]);
 
   // The selected algorithm turns the run context into the rendered view (deck,
   // stat tiles, dreamsign labels, ability, provenance). Re-runs when the algo
