@@ -1,13 +1,22 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
-import type { KnownGoodDecklist } from "../../data/quest-content";
+import type {
+  DreamsignSignature,
+  KnownGoodDecklist,
+} from "../../data/quest-content";
 import type {
   AffiliationContent,
   DreamcallerContent,
+  DreamsignTemplate,
 } from "../../types/content";
 import type { CardData } from "../../types/cards";
+import { getLogEntries, resetLog } from "../../logging";
+import { STARTER_CARD_NUMBERS } from "../../data/starter-cards";
 
-import { buildCorpusOpponentDeck } from "./corpus-opponent-deck";
+import {
+  STAGE_B_LAYER_SPEC,
+  buildCorpusOpponentDeck,
+} from "./corpus-opponent-deck";
 
 // ---------------------------------------------------------------------------
 // Synthetic fixtures
@@ -17,14 +26,20 @@ import { buildCorpusOpponentDeck } from "./corpus-opponent-deck";
 // algorithm keys on the UUID, never on the name.
 // ---------------------------------------------------------------------------
 
-function makeCard(uuid: string, cardNumber: number, name: string): CardData {
+function makeCard(
+  uuid: string,
+  cardNumber: number,
+  name: string,
+  rarity?: CardData["rarity"],
+): CardData {
   return {
     id: uuid,
     cardNumber,
     name,
     cardType: "Character",
     subtype: "",
-    isStarter: false,
+    isStarter: rarity === "Starter",
+    rarity,
     energyCost: 1,
     spark: 1,
   } as CardData;
@@ -305,7 +320,7 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
     }
   });
 
-  it("sets selection-only return invariants (finalCards = baseCards, empty mods, dreamsign null, abilityActive true)", () => {
+  it("preserves the Stage A selection fields (baseCards = selected deck's distinct cards)", () => {
     const decks = [makeDecklist("d1", [C.a.id, C.b.id, C.c.id])];
     const result = buildCorpusOpponentDeck({
       ...baseArgs,
@@ -316,13 +331,12 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
       poolSeed: 0,
     });
     expect(result).not.toBeNull();
-    expect(result!.finalCards).toEqual(result!.baseCards);
-    expect(result!.modifications.legendariesRemoved).toEqual([]);
-    expect(result!.modifications.legendaryReplacements).toEqual([]);
-    expect(result!.modifications.cardsCut).toEqual([]);
-    expect(result!.modifications.startersAdded).toEqual([]);
-    expect(result!.dreamsign).toBeNull();
-    expect(result!.abilityActive).toBe(true);
+    // The selection axis is unaffected by Stage B tuning: baseCards still holds
+    // the selected deck's distinct cards in order, and the source/topK reflect
+    // the single candidate.
+    expect(result!.baseCards.map((c) => c.id)).toEqual([C.a.id, C.b.id, C.c.id]);
+    expect(result!.source.id).toBe("d1");
+    expect(result!.topK.map((t) => t.id)).toEqual(["d1"]);
   });
 
   it("dedups baseCards by UUID and resolves cards via the database", () => {
@@ -402,5 +416,401 @@ describe("buildCorpusOpponentDeck Stage A (selection)", () => {
       poolSeed: 0,
     })!;
     expect(selected.signatureFit).toBeGreaterThan(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Stage B (layer tuning) fixtures + tests
+//
+// Tests are driven off STAGE_B_LAYER_SPEC (the exported schedule descriptor)
+// rather than hardcoding constants/counts: we assert the SCHEDULE shape,
+// ordering, determinism, and size preservation, not specific TOML values.
+// ---------------------------------------------------------------------------
+
+/** Ten Starter cards resolved from the production STARTER_CARD_NUMBERS. */
+const STARTERS: CardData[] = STARTER_CARD_NUMBERS.map((num, i) =>
+  makeCard(
+    `5000${i}000-0000-0000-0000-0000000005${String(10 + i).padStart(2, "0")}`,
+    num,
+    `Starter ${String(num)}`,
+    "Starter",
+  ),
+);
+
+/** Two Legendary cards (rarity "Legendary"). */
+const LEG = {
+  l1: makeCard("aaaa1111-0000-0000-0000-0000000000l1", 201, "Leg One", "Legendary"),
+  l2: makeCard("aaaa2222-0000-0000-0000-0000000000l2", 202, "Leg Two", "Legendary"),
+};
+
+/**
+ * Twelve ordinary (non-starter, non-legendary) cards. The supporting corpus
+ * below arranges a clear synergy gradient: the "core" cards (n00..n05) co-occur
+ * in many decks (high synergy), while the "fringe" cards (n06..n11) appear in
+ * isolated decks (low synergy, the first to be cut).
+ */
+const N: CardData[] = Array.from({ length: 12 }, (_, i) =>
+  makeCard(
+    `bbbb${String(i).padStart(4, "0")}-0000-0000-0000-00000000n${String(i).padStart(3, "0")}`,
+    300 + i,
+    `Normal ${String(i)}`,
+  ),
+);
+
+/**
+ * A signature card. The Dreamcaller keys on this UUID; both candidate decks
+ * carry it, so the candidate window is exactly those two decks — this gives
+ * Stage B's legendary-replacement step a pool of non-deck cards to draw from
+ * (the other window deck's cards). Both candidate decks share the same
+ * structural shape, so the layer invariants hold regardless of which the
+ * seeded sampler picks.
+ */
+const SIG = makeCard("c5161111-0000-0000-0000-0000000005ig", 400, "Sig Card");
+
+/**
+ * Replacement-pool ordinary cards: live in the SECOND candidate deck only, so
+ * after legendary suppression they are available as non-legendary, non-deck
+ * replacements regardless of which candidate deck was selected.
+ */
+const R: CardData[] = Array.from({ length: 4 }, (_, i) =>
+  makeCard(
+    `cccc${String(i).padStart(4, "0")}-0000-0000-0000-00000000r${String(i).padStart(3, "0")}`,
+    420 + i,
+    `Repl ${String(i)}`,
+  ),
+);
+
+const STAGE_B_DB = cardDb([...STARTERS, LEG.l1, LEG.l2, ...N, SIG, ...R]);
+
+/**
+ * The target deck: the signature card, both legendaries, and all twelve
+ * ordinary cards.
+ */
+const STAGE_B_DECK_IDS = [
+  SIG.id,
+  LEG.l1.id,
+  LEG.l2.id,
+  ...N.map((c) => c.id),
+];
+
+// Supporting corpus decks shape co-occurrence. The "core" cluster (n00..n05 +
+// the legendaries) appears together in many decks → high synergy. The "fringe"
+// cards (n06..n11) appear in isolated decks → low synergy, cut first. The
+// second candidate deck (`target2`) also carries SIG so it joins the window and
+// supplies the R cards as legendary replacements; it shares target's core/
+// fringe shape so the synergy gradient is the same whichever is selected.
+const STAGE_B_DECKS: KnownGoodDecklist[] = [
+  makeDecklist("target", STAGE_B_DECK_IDS, "Target Deck"),
+  makeDecklist(
+    "target2",
+    [SIG.id, LEG.l1.id, LEG.l2.id, ...N.map((c) => c.id), ...R.map((c) => c.id)],
+    "Target Deck 2",
+  ),
+  makeDecklist("core1", [LEG.l1.id, N[0].id, N[1].id, N[2].id, N[3].id]),
+  makeDecklist("core2", [LEG.l1.id, N[0].id, N[1].id, N[2].id, N[4].id]),
+  makeDecklist("core3", [LEG.l2.id, N[0].id, N[1].id, N[3].id, N[5].id]),
+  makeDecklist("core4", [LEG.l2.id, N[1].id, N[2].id, N[4].id, N[5].id]),
+  makeDecklist("core5", [N[0].id, N[2].id, N[3].id, N[4].id, N[5].id]),
+  makeDecklist("fringe1", [N[6].id, STARTERS[0].id]),
+  makeDecklist("fringe2", [N[7].id, STARTERS[1].id]),
+  makeDecklist("fringe3", [N[8].id]),
+  makeDecklist("fringe4", [N[9].id]),
+  makeDecklist("fringe5", [N[10].id]),
+  makeDecklist("fringe6", [N[11].id]),
+];
+
+// Dreamcaller signature is the SIG card carried by the two candidate decks.
+const STAGE_B_DC = makeDreamcaller("dcB", [SIG.id]);
+
+// Synthetic dreamsigns: two tailored (one overlapping the deck strongly, one
+// weakly) and one neutral.
+const DS_STRONG = "ds-strong-0000-0000-0000-000000000001";
+const DS_WEAK = "ds-weak-0000-0000-0000-0000000000002";
+const DS_NEUTRAL = "ds-neutral-0000-0000-0000-00000000003";
+
+const STAGE_B_SIGNATURES: ReadonlyMap<string, DreamsignSignature> = new Map([
+  [
+    DS_STRONG,
+    {
+      id: DS_STRONG,
+      category: "tailored",
+      // Overlaps several core (high-idf-ish) cards in the deck.
+      signatureCardIds: [N[0].id, N[1].id, N[2].id],
+    },
+  ],
+  [
+    DS_WEAK,
+    {
+      id: DS_WEAK,
+      category: "tailored",
+      // Overlaps just one fringe card in the deck.
+      signatureCardIds: [N[11].id],
+    },
+  ],
+  [
+    DS_NEUTRAL,
+    { id: DS_NEUTRAL, category: "neutral", signatureCardIds: [] },
+  ],
+]);
+
+const STAGE_B_TEMPLATES: DreamsignTemplate[] = [
+  {
+    id: DS_STRONG,
+    name: "Strong Sign",
+    effectDescription: "",
+  },
+  {
+    id: DS_WEAK,
+    name: "Weak Sign",
+    effectDescription: "",
+  },
+  {
+    id: DS_NEUTRAL,
+    name: "Neutral Sign",
+    effectDescription: "",
+  },
+];
+
+function buildAtLayer(
+  completionLevel: number,
+  overrides: Partial<{
+    dreamsignSignatures: ReadonlyMap<string, DreamsignSignature> | undefined;
+    dreamsignTemplates: DreamsignTemplate[];
+    poolSeed: number;
+  }> = {},
+) {
+  // `?? ` would swallow an explicit `undefined` override (which several tests
+  // pass deliberately), so detect presence via the `in` operator.
+  const dreamsignSignatures =
+    "dreamsignSignatures" in overrides
+      ? overrides.dreamsignSignatures
+      : STAGE_B_SIGNATURES;
+  return buildCorpusOpponentDeck({
+    opponentDreamcaller: STAGE_B_DC,
+    knownGoodDecklists: STAGE_B_DECKS,
+    affiliation: null,
+    cardDatabase: STAGE_B_DB,
+    dreamsignSignatures,
+    dreamsignTemplates: overrides.dreamsignTemplates ?? STAGE_B_TEMPLATES,
+    completionLevel,
+    layerCount: STAGE_B_LAYER_SPEC.length,
+    poolSeed: overrides.poolSeed ?? 7,
+  })!;
+}
+
+const STARTER_NUMBER_SET = new Set<number>(STARTER_CARD_NUMBERS);
+
+function isStarter(card: CardData): boolean {
+  return STARTER_NUMBER_SET.has(card.cardNumber);
+}
+function isLegendary(card: CardData): boolean {
+  return card.rarity === "Legendary";
+}
+
+describe("buildCorpusOpponentDeck Stage B (layer tuning)", () => {
+  it("exposes a non-trivial layer spec", () => {
+    expect(STAGE_B_LAYER_SPEC.length).toBeGreaterThan(1);
+    // Each entry describes the four modifications for its layer.
+    for (const layer of STAGE_B_LAYER_SPEC) {
+      expect(typeof layer.abilityActive).toBe("boolean");
+      expect(typeof layer.legendaryAllowed).toBe("boolean");
+      expect(typeof layer.startersAdded).toBe("number");
+      expect(typeof layer.dreamsignAssigned).toBe("boolean");
+    }
+  });
+
+  it("preserves deck size at every scheduled layer", () => {
+    for (let layer = 0; layer < STAGE_B_LAYER_SPEC.length; layer += 1) {
+      const result = buildAtLayer(layer);
+      expect(result.finalCards.length).toBe(result.baseCards.length);
+    }
+  });
+
+  it("applies the ability flag per the schedule at every layer", () => {
+    for (let layer = 0; layer < STAGE_B_LAYER_SPEC.length; layer += 1) {
+      const result = buildAtLayer(layer);
+      expect(result.abilityActive).toBe(STAGE_B_LAYER_SPEC[layer].abilityActive);
+    }
+  });
+
+  it("suppresses legendaries until the schedule allows them, then retains", () => {
+    for (let layer = 0; layer < STAGE_B_LAYER_SPEC.length; layer += 1) {
+      const result = buildAtLayer(layer);
+      const finalLegendaries = result.finalCards.filter(isLegendary);
+      const baseLegendaries = result.baseCards.filter(isLegendary);
+      if (STAGE_B_LAYER_SPEC[layer].legendaryAllowed) {
+        // Boundary: legendaries that were in the base deck are retained.
+        expect(finalLegendaries.length).toBe(baseLegendaries.length);
+        expect(result.modifications.legendariesRemoved).toHaveLength(0);
+      } else {
+        // No legendary survives in the final deck.
+        expect(finalLegendaries).toHaveLength(0);
+        // Every base legendary was recorded as removed.
+        expect(result.modifications.legendariesRemoved.map((c) => c.id).sort()).toEqual(
+          baseLegendaries.map((c) => c.id).sort(),
+        );
+        // Replacements are non-legendary and not already used.
+        for (const rep of result.modifications.legendaryReplacements) {
+          expect(isLegendary(rep)).toBe(false);
+        }
+      }
+    }
+  });
+
+  it("adds the scheduled number of starters per layer (and zero when scheduled)", () => {
+    for (let layer = 0; layer < STAGE_B_LAYER_SPEC.length; layer += 1) {
+      const result = buildAtLayer(layer);
+      const expected = STAGE_B_LAYER_SPEC[layer].startersAdded;
+      const added = result.modifications.startersAdded;
+      // Every "added starter" is in fact a Starter card by NUMBER.
+      for (const s of added) expect(isStarter(s)).toBe(true);
+      expect(added.length).toBe(expected);
+      // The final deck contains those starters.
+      const finalIds = new Set(result.finalCards.map((c) => c.id));
+      for (const s of added) expect(finalIds.has(s.id)).toBe(true);
+    }
+  });
+
+  it("never cuts a starter, and cardsCut are the least-synergistic non-starters", () => {
+    // Use a layer that performs a starter dilution cut.
+    const layerWithCut = STAGE_B_LAYER_SPEC.findIndex(
+      (l) => l.startersAdded > 0 && l.startersAdded < 10,
+    );
+    expect(layerWithCut).toBeGreaterThanOrEqual(0);
+    const result = buildAtLayer(layerWithCut);
+    for (const cut of result.modifications.cardsCut) {
+      expect(isStarter(cut)).toBe(false);
+    }
+    // No starter id appears among cut cards.
+    const cutIds = new Set(result.modifications.cardsCut.map((c) => c.id));
+    for (const s of STARTERS) expect(cutIds.has(s.id)).toBe(false);
+    // The cut cards must be lower-synergy than the retained ordinary cards:
+    // the fringe cards (n06..n11) are designed to be the least-synergistic, so
+    // any cut at a small N takes from the fringe, never the tightly-clustered
+    // core cards (n00..n05).
+    const coreIds = new Set([N[0].id, N[1].id, N[2].id, N[3].id, N[4].id, N[5].id]);
+    for (const cut of result.modifications.cardsCut) {
+      expect(coreIds.has(cut.id)).toBe(false);
+    }
+  });
+
+  it("assigns no dreamsign below the scheduled start layer", () => {
+    for (let layer = 0; layer < STAGE_B_LAYER_SPEC.length; layer += 1) {
+      if (STAGE_B_LAYER_SPEC[layer].dreamsignAssigned) continue;
+      const result = buildAtLayer(layer);
+      expect(result.dreamsign).toBeNull();
+    }
+  });
+
+  it("assigns the best-fitting tailored dreamsign from the scheduled start layer", () => {
+    const startLayer = STAGE_B_LAYER_SPEC.findIndex((l) => l.dreamsignAssigned);
+    expect(startLayer).toBeGreaterThanOrEqual(0);
+    const result = buildAtLayer(startLayer);
+    expect(result.dreamsign).not.toBeNull();
+    // The strongly-overlapping tailored dreamsign wins over the weak one.
+    expect(result.dreamsign!.id).toBe(DS_STRONG);
+    expect(result.dreamsign!.fit).toBeGreaterThan(0);
+    expect(result.dreamsign!.name).toBe("Strong Sign");
+  });
+
+  it("falls back to a neutral dreamsign when no tailored sign overlaps", () => {
+    const startLayer = STAGE_B_LAYER_SPEC.findIndex((l) => l.dreamsignAssigned);
+    // No tailored sign overlaps: only a neutral signature, and only the neutral
+    // template is offered, so the neutral fallback is unambiguous.
+    const onlyNeutral = new Map<string, DreamsignSignature>([
+      [DS_NEUTRAL, { id: DS_NEUTRAL, category: "neutral", signatureCardIds: [] }],
+    ]);
+    const result = buildAtLayer(startLayer, {
+      dreamsignSignatures: onlyNeutral,
+      dreamsignTemplates: [
+        { id: DS_NEUTRAL, name: "Neutral Sign", effectDescription: "" },
+      ],
+    });
+    expect(result.dreamsign).not.toBeNull();
+    expect(result.dreamsign!.id).toBe(DS_NEUTRAL);
+  });
+
+  it("falls back to a neutral dreamsign when dreamsignSignatures is undefined", () => {
+    const startLayer = STAGE_B_LAYER_SPEC.findIndex((l) => l.dreamsignAssigned);
+    // With no signature map, every template counts as neutral; offer just the
+    // neutral template so the fallback selection is unambiguous.
+    const result = buildAtLayer(startLayer, {
+      dreamsignSignatures: undefined,
+      dreamsignTemplates: [
+        { id: DS_NEUTRAL, name: "Neutral Sign", effectDescription: "" },
+      ],
+    });
+    expect(result.dreamsign).not.toBeNull();
+    expect(result.dreamsign!.id).toBe(DS_NEUTRAL);
+  });
+
+  it("is deterministic for identical args across all layers", () => {
+    for (let layer = 0; layer < STAGE_B_LAYER_SPEC.length; layer += 1) {
+      const a = buildAtLayer(layer);
+      const b = buildAtLayer(layer);
+      expect(a.finalCards.map((c) => c.id)).toEqual(b.finalCards.map((c) => c.id));
+      expect(a.dreamsign?.id ?? null).toBe(b.dreamsign?.id ?? null);
+      expect(a.modifications.cardsCut.map((c) => c.id)).toEqual(
+        b.modifications.cardsCut.map((c) => c.id),
+      );
+      expect(a.modifications.startersAdded.map((c) => c.id)).toEqual(
+        b.modifications.startersAdded.map((c) => c.id),
+      );
+    }
+  });
+});
+
+describe("buildCorpusOpponentDeck Stage B logging", () => {
+  beforeEach(() => {
+    resetLog();
+  });
+
+  it("emits a corpus_opponent_deck_constructed event with UUID-keyed provenance", () => {
+    const startLayer = STAGE_B_LAYER_SPEC.findIndex((l) => l.dreamsignAssigned);
+    const result = buildAtLayer(startLayer);
+    const entry = getLogEntries().find(
+      (e) => e.event === "corpus_opponent_deck_constructed",
+    );
+    expect(entry).toBeDefined();
+    // Source identity is the selected deck.
+    expect(entry!.sourceId).toBe(result.source.id);
+    expect(entry!.completionLevel).toBe(startLayer);
+    expect(entry!.abilityActive).toBe(result.abilityActive);
+
+    // Modification arrays are keyed by UUID and match the build's counts.
+    const log = entry as Record<string, unknown>;
+    const cardsCut = log.cardsCut as { id: string }[];
+    const startersAdded = log.startersAdded as { id: string }[];
+    const legendariesRemoved = log.legendariesRemoved as { id: string }[];
+    const legendaryReplacements = log.legendaryReplacements as { id: string }[];
+    expect(cardsCut.map((c) => c.id)).toEqual(
+      result.modifications.cardsCut.map((c) => c.id),
+    );
+    expect(startersAdded.map((c) => c.id)).toEqual(
+      result.modifications.startersAdded.map((c) => c.id),
+    );
+    expect(legendariesRemoved.map((c) => c.id)).toEqual(
+      result.modifications.legendariesRemoved.map((c) => c.id),
+    );
+    expect(legendaryReplacements.map((c) => c.id)).toEqual(
+      result.modifications.legendaryReplacements.map((c) => c.id),
+    );
+    // Dreamsign provenance.
+    const dreamsign = log.dreamsign as { id: string } | null;
+    expect(dreamsign?.id ?? null).toBe(result.dreamsign?.id ?? null);
+  });
+
+  it("logs layer-correct modification counts at layer 0", () => {
+    resetLog();
+    buildAtLayer(0);
+    const entry = getLogEntries().find(
+      (e) => e.event === "corpus_opponent_deck_constructed",
+    ) as Record<string, unknown>;
+    expect(entry).toBeDefined();
+    expect((entry.startersAdded as unknown[]).length).toBe(
+      STAGE_B_LAYER_SPEC[0].startersAdded,
+    );
+    expect(entry.abilityActive).toBe(STAGE_B_LAYER_SPEC[0].abilityActive);
+    expect(entry.dreamsign).toBeNull();
   });
 });

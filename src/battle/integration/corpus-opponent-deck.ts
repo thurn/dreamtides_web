@@ -1,33 +1,38 @@
-// Corpus opponent-deck algorithm, Stage A: deck SELECTION.
+// Corpus opponent-deck algorithm: deck SELECTION (Stage A) + layer TUNING
+// (Stage B).
 //
-// Picks a single known-good decklist from the corpus to base an opponent deck
-// on. Selection blends two signals: how well a deck matches the opponent
-// Dreamcaller's SIGNATURE cards (the primary axis) and how well it matches the
-// dreamscape AFFILIATION's signature cards (a smaller secondary nudge,
-// weighted by `AFFILIATION_WEIGHT`). A seeded sample over the top-ranked
+// Stage A picks a single known-good decklist from the corpus to base an
+// opponent deck on. Selection blends two signals: how well a deck matches the
+// opponent Dreamcaller's SIGNATURE cards (the primary axis) and how well it
+// matches the dreamscape AFFILIATION's signature cards (a smaller secondary
+// nudge, weighted by `AFFILIATION_WEIGHT`). A seeded sample over the top-ranked
 // window keeps the same `poolSeed` deterministic while giving variety across
 // seeds.
+//
+// Stage B then tunes the selected base deck to the opponent's completion level
+// (`layer`), running a fixed deterministic pipeline IN ORDER: legendary
+// suppression/replacement, starter dilution (cut least-synergistic non-starter
+// cards, add Starters), dreamsign assignment, and ability activation. The
+// per-layer schedule is `STAGE_B_LAYER_SPEC`, derived from the module
+// constants below.
 //
 // Identity is ALWAYS the lowercased cards_v2 UUID — never the display name.
 // Twenty-four cards share a display name, so every Map/Set is keyed on the
 // lowercased UUID and names are treated as display-only. Card numbers are
 // display-only too; this module resolves CardData records out of the card
-// database keyed by card number, but candidacy, fit, and selection are all
-// computed on UUIDs.
-//
-// Stage B (a later task) fills layer tuning: legendary removal/replacement,
-// card cuts, starter additions, dreamsign selection, and ability activation.
-// This Stage A build leaves those slots in their selection-only state
-// (`finalCards = baseCards`, empty modifications, `dreamsign = null`,
-// `abilityActive = true`). The Stage B arguments are part of the signature so
-// Stage B does not have to change it; Stage A ignores them.
+// database keyed by card number, but candidacy, fit, selection, cuts, and
+// replacements are all computed on UUIDs.
 
+import { STARTER_CARD_NUMBERS } from "../../data/starter-cards.ts";
+import { buildCooccurrence, synergyAscending } from "../../draft/deck-cooccurrence.ts";
 import {
   buildIdfStats,
   computeAffinity,
   meanAffinity,
   signatureFit,
 } from "../../draft/idf-fit.ts";
+import type { IdfCorpus, IdfDeck } from "../../draft/idf-fit.ts";
+import { logEvent } from "../../logging.ts";
 import { createBattleRng } from "../random.ts";
 
 import type { KnownGoodDecklist, DreamsignSignature } from "../../data/quest-content.ts";
@@ -53,6 +58,72 @@ const AFFILIATION_WEIGHT = 0.25;
  * Tunable — do NOT pin this value in tests.
  */
 const TOP_K = 8;
+
+// ---------------------------------------------------------------------------
+// Stage B layer-schedule constants (all tunable; do NOT pin in tests).
+//
+// `layer` is the opponent's `completionLevel` (0-indexed). The schedule
+// descriptor `STAGE_B_LAYER_SPEC` is DERIVED from these constants so tests can
+// drive off the schedule shape without hardcoding individual values.
+// ---------------------------------------------------------------------------
+
+/** From this layer on, the opponent Dreamcaller's ability is active. */
+const ABILITY_ACTIVE_FROM_LAYER = 1;
+
+/** From this layer on, Legendary cards in the base deck are retained. */
+const LEGENDARY_ALLOWED_FROM_LAYER = 5;
+
+/** From this layer on, the opponent carries exactly one dreamsign. */
+const DREAMSIGN_FROM_LAYER = 3;
+
+/**
+ * Number of Starters folded into the deck (replacing the least-synergistic
+ * non-starter cards) at each early layer, indexed by `layer`. Layers past the
+ * array length add zero Starters.
+ */
+const STARTER_DILUTION: readonly number[] = [10, 5];
+
+/** Number of Starters scheduled to be added at a given layer (0 when absent). */
+function starterDilutionAt(layer: number): number {
+  return STARTER_DILUTION[layer] ?? 0;
+}
+
+/**
+ * One layer's tuning schedule. Derived from the constants above and exposed so
+ * tests assert the SCHEDULE (ordering, monotonicity, size preservation)
+ * without pinning specific constant values.
+ */
+export interface StageBLayerSpec {
+  layer: number;
+  abilityActive: boolean;
+  legendaryAllowed: boolean;
+  startersAdded: number;
+  dreamsignAssigned: boolean;
+}
+
+/**
+ * The Stage B per-layer schedule, one entry per layer up to the highest layer
+ * any constant references. Index by `completionLevel`.
+ */
+export const STAGE_B_LAYER_SPEC: readonly StageBLayerSpec[] = (() => {
+  const highest = Math.max(
+    ABILITY_ACTIVE_FROM_LAYER,
+    LEGENDARY_ALLOWED_FROM_LAYER,
+    DREAMSIGN_FROM_LAYER,
+    STARTER_DILUTION.length - 1,
+  );
+  const spec: StageBLayerSpec[] = [];
+  for (let layer = 0; layer <= highest; layer += 1) {
+    spec.push({
+      layer,
+      abilityActive: layer >= ABILITY_ACTIVE_FROM_LAYER,
+      legendaryAllowed: layer >= LEGENDARY_ALLOWED_FROM_LAYER,
+      startersAdded: starterDilutionAt(layer),
+      dreamsignAssigned: layer >= DREAMSIGN_FROM_LAYER,
+    });
+  }
+  return spec;
+})();
 
 export interface CorpusOpponentDeckBuild {
   source: { id: string; name: string; sourceFile?: string };
@@ -81,6 +152,11 @@ function lc(value: string): string {
 /** Finite-or-zero guard so empty probes never leak NaN/Infinity downstream. */
 function finiteOrZero(value: number): number {
   return Number.isFinite(value) ? value : 0;
+}
+
+/** Round a score for compact, stable log output (mirrors opponent-deck.ts). */
+function round4(value: number): number {
+  return Number(value.toFixed(4));
 }
 
 /** One candidate deck with its index into the corpus and its scores. */
@@ -117,10 +193,12 @@ export function buildCorpusOpponentDeck(args: {
     knownGoodDecklists,
     affiliation,
     cardDatabase,
+    dreamsignSignatures,
+    dreamsignTemplates,
+    completionLevel,
+    layerCount,
     poolSeed,
   } = args;
-  // Stage A ignores: dreamsignSignatures, dreamsignTemplates, completionLevel,
-  // layerCount. They drive Stage B.
 
   if (knownGoodDecklists.length === 0) return null;
 
@@ -185,8 +263,7 @@ export function buildCorpusOpponentDeck(args: {
   }
 
   // Rank by combined DESC; deterministic tie-break by higher `id` string so
-  // ties resolve identically across runs (matching the codebase's
-  // string-localeCompare deterministic tie-break convention).
+  // ties resolve identically across runs for reproducibility.
   const ranked = [...candidates].sort((a, b) => {
     if (b.combined !== a.combined) return b.combined - a.combined;
     return b.id.localeCompare(a.id);
@@ -218,6 +295,253 @@ export function buildCorpusOpponentDeck(args: {
     if (card !== undefined) baseCards.push(card);
   }
 
+  // -------------------------------------------------------------------------
+  // Stage B: layer tuning. Run a fixed deterministic pipeline on the base deck
+  // IN ORDER: legendary suppression/replacement, starter dilution, dreamsign
+  // assignment, ability activation. All identity is by lowercased UUID.
+  // -------------------------------------------------------------------------
+  const layer = completionLevel;
+  // Dedicated RNG stream for Stage B tie-breaks, independent of Stage A
+  // sampling, so Stage A variety and Stage B determinism are stable separately.
+  const stageBRng = createBattleRng(poolSeed, "enemyDeckOrder");
+
+  // Corpus co-occurrence over the known-good decks (UUID-keyed, directional).
+  const cooc = buildCooccurrence(deckSets);
+
+  // Starter lookup, resolved from the Starter card NUMBERS via the database.
+  const startersByNumber = new Map<number, CardData>();
+  for (const card of cardDatabase.values()) {
+    if (STARTER_CARD_NUMBERS.includes(card.cardNumber)) {
+      startersByNumber.set(card.cardNumber, card);
+    }
+  }
+  const starterUuids = new Set<string>();
+  for (const card of startersByNumber.values()) starterUuids.add(lc(card.id));
+  const isStarterCard = (card: CardData): boolean =>
+    starterUuids.has(lc(card.id));
+  const isLegendaryCard = (card: CardData): boolean =>
+    card.rarity === "Legendary";
+
+  // Working deck: an ordered list of CardData keyed by UUID.
+  let deck: CardData[] = [...baseCards];
+  const uuidOf = (card: CardData): string => lc(card.id);
+  const deckUuidSet = (): Set<string> => new Set(deck.map(uuidOf));
+
+  const legendariesRemoved: CardData[] = [];
+  const legendaryReplacements: CardData[] = [];
+  const cardsCut: CardData[] = [];
+  const startersAdded: CardData[] = [];
+
+  // Step 1 — Legendary suppression. Below the allowed layer, remove every
+  // Legendary card and REPLACE each to preserve size. The replacement is the
+  // highest mean-co-occurrence non-legendary card to the CURRENT deck, drawn
+  // from the union of the TOP-K window decks' card UUIDs that are not already
+  // in the deck, not legendary, and not already used as a replacement.
+  const legendaryAllowed = layer >= LEGENDARY_ALLOWED_FROM_LAYER;
+  if (!legendaryAllowed) {
+    // Candidate pool: union of the TOP-K window decks' card UUIDs.
+    const windowPool = new Set<string>();
+    for (const member of window) {
+      for (const rawId of knownGoodDecklists[member.index].mainboardIds) {
+        windowPool.add(lc(rawId));
+      }
+    }
+
+    const usedReplacements = new Set<string>();
+    const legendaries = deck.filter(isLegendaryCard);
+    for (const legendary of legendaries) {
+      // Remove the legendary from the working deck.
+      deck = deck.filter((c) => uuidOf(c) !== uuidOf(legendary));
+      legendariesRemoved.push(legendary);
+
+      // Find the best non-legendary replacement by mean co-occurrence to the
+      // CURRENT deck.
+      const currentUuids = deck.map(uuidOf);
+      const candidatesForReplace: { uuid: string; mean: number }[] = [];
+      const inDeck = deckUuidSet();
+      for (const cand of windowPool) {
+        if (inDeck.has(cand)) continue;
+        if (usedReplacements.has(cand)) continue;
+        const card = byUuid.get(cand);
+        if (card === undefined) continue;
+        if (isLegendaryCard(card)) continue;
+        candidatesForReplace.push({
+          uuid: cand,
+          mean: meanCooc(cand, currentUuids, cooc),
+        });
+      }
+      if (candidatesForReplace.length === 0) continue; // guard: drop, no replace
+
+      // Highest mean co-occurrence wins; seeded tie-break for determinism.
+      const best = pickBest(
+        candidatesForReplace,
+        (c) => c.mean,
+        (c) => c.uuid,
+        stageBRng,
+      );
+      const replacement = byUuid.get(best.uuid);
+      if (replacement !== undefined) {
+        deck.push(replacement);
+        legendaryReplacements.push(replacement);
+        usedReplacements.add(best.uuid);
+      }
+    }
+  }
+
+  // Build an IdfDeck view of the (post-legendary) deck for fit scoring.
+  const tunedIdfDeck = (): IdfDeck => makeIdfDeck(deckUuidSet(), corpus);
+
+  // Step 2 — Starter dilution. Cut the N least-synergistic NON-starter cards
+  // and add N Starters, preserving size. At layer 0 add ALL 10 starters;
+  // otherwise add the N Starters with highest signatureFit to the tuned deck.
+  const starterCount = starterDilutionAt(layer);
+  if (starterCount > 0) {
+    // Cut the N least-synergistic non-starter cards.
+    const ascending = synergyAscending(deck.map(uuidOf), cooc);
+    const cutUuids: string[] = [];
+    for (const uuid of ascending) {
+      if (cutUuids.length >= starterCount) break;
+      const card = byUuid.get(uuid);
+      if (card === undefined) continue;
+      if (isStarterCard(card)) continue; // never cut a starter
+      cutUuids.push(uuid);
+    }
+    const cutSet = new Set(cutUuids);
+    for (const uuid of cutUuids) {
+      const card = byUuid.get(uuid);
+      if (card !== undefined) cardsCut.push(card);
+    }
+    deck = deck.filter((c) => !cutSet.has(uuidOf(c)));
+
+    // Choose the Starters to add. Layer 0: all of them. Otherwise: the
+    // highest-signatureFit starters (seeded tie-break), not already in deck.
+    const inDeck = deckUuidSet();
+    const idfDeckForFit = tunedIdfDeck();
+    const availableStarters = [...startersByNumber.values()].filter(
+      (s) => !inDeck.has(uuidOf(s)),
+    );
+    let chosenStarters: CardData[];
+    if (layer === 0) {
+      // Add all starters (their order does not matter for size preservation).
+      chosenStarters = [...startersByNumber.values()];
+    } else {
+      const scoredStarters = availableStarters.map((s) => ({
+        card: s,
+        fit: finiteOrZero(
+          signatureFit(new Set([uuidOf(s)]), idfDeckForFit, corpus),
+        ),
+      }));
+      chosenStarters = pickTopN(
+        scoredStarters,
+        starterCount,
+        (s) => s.fit,
+        (s) => uuidOf(s.card),
+        stageBRng,
+      ).map((s) => s.card);
+    }
+    for (const s of chosenStarters) {
+      // Avoid duplicating a starter already in the deck.
+      if (!deckUuidSet().has(uuidOf(s))) {
+        deck.push(s);
+        startersAdded.push(s);
+      }
+    }
+  }
+
+  // Step 3 — Dreamsign assignment. From DREAMSIGN_FROM_LAYER on, assign exactly
+  // one dreamsign: the highest-fit tailored dreamsign whose signatures overlap
+  // the tuned deck (fit > 0), else a seeded neutral dreamsign.
+  let dreamsign: { id: string; name: string; fit: number } | null = null;
+  if (layer >= DREAMSIGN_FROM_LAYER) {
+    const templateName = new Map<string, string>();
+    for (const tpl of dreamsignTemplates) templateName.set(lc(tpl.id), tpl.name);
+    const nameFor = (id: string): string => templateName.get(lc(id)) ?? id;
+
+    const idfDeckForFit = tunedIdfDeck();
+
+    // Best-fitting tailored dreamsign (fit > 0).
+    let bestTailored:
+      | { id: string; fit: number }
+      | null = null;
+    if (dreamsignSignatures !== undefined) {
+      const tailoredScored: { id: string; fit: number }[] = [];
+      for (const sig of dreamsignSignatures.values()) {
+        if (sig.category !== "tailored") continue;
+        const probe = new Set(sig.signatureCardIds.map(lc));
+        if (probe.size === 0) continue;
+        const fit = finiteOrZero(signatureFit(probe, idfDeckForFit, corpus));
+        if (fit > 0) tailoredScored.push({ id: lc(sig.id), fit });
+      }
+      if (tailoredScored.length > 0) {
+        const best = pickBest(
+          tailoredScored,
+          (t) => t.fit,
+          (t) => t.id,
+          stageBRng,
+        );
+        bestTailored = best;
+      }
+    }
+
+    if (bestTailored !== null) {
+      dreamsign = {
+        id: bestTailored.id,
+        name: nameFor(bestTailored.id),
+        fit: bestTailored.fit,
+      };
+    } else {
+      // Fall back to a seeded neutral dreamsign: a template whose signature is
+      // neutral or absent from `dreamsignSignatures`.
+      const neutralIds: string[] = [];
+      for (const tpl of dreamsignTemplates) {
+        const id = lc(tpl.id);
+        const sig = dreamsignSignatures?.get(id);
+        if (sig === undefined || sig.category === "neutral") {
+          neutralIds.push(id);
+        }
+      }
+      if (neutralIds.length > 0) {
+        const sorted = [...neutralIds].sort((a, b) => a.localeCompare(b));
+        const chosen = sorted[stageBRng.nextInt(sorted.length)];
+        dreamsign = { id: chosen, name: nameFor(chosen), fit: 0 };
+      }
+    }
+  }
+
+  // Step 4 — Ability flag.
+  const abilityActive = layer >= ABILITY_ACTIVE_FROM_LAYER;
+
+  const finalCards = deck;
+
+  // Provenance logging (UUID-keyed) so a battle's opponent deck and the layer
+  // tuning that built it can be reconstructed from `logs/quest-log.jsonl`.
+  const cardSummary = (card: CardData): { id: string; name: string } => ({
+    id: lc(card.id),
+    name: card.name,
+  });
+  logEvent("corpus_opponent_deck_constructed", {
+    sourceId: picked.id,
+    sourceName: picked.name,
+    signatureFit: round4(picked.signatureFit),
+    affiliationFit: round4(picked.affiliationFit),
+    combined: round4(picked.combined),
+    candidateCount: candidates.length,
+    topK: topK.map((t) => ({ id: t.id, combined: round4(t.combined) })),
+    poolSeed,
+    completionLevel,
+    layerCount,
+    legendariesRemoved: legendariesRemoved.map(cardSummary),
+    legendaryReplacements: legendaryReplacements.map(cardSummary),
+    cardsCut: cardsCut.map(cardSummary),
+    startersAdded: startersAdded.map(cardSummary),
+    dreamsign:
+      dreamsign === null
+        ? null
+        : { id: dreamsign.id, name: dreamsign.name, fit: round4(dreamsign.fit) },
+    abilityActive,
+    finalCardIds: finalCards.map(uuidOf),
+  });
+
   return {
     source: { id: picked.id, name: picked.name, sourceFile: picked.id },
     signatureFit: picked.signatureFit,
@@ -226,16 +550,93 @@ export function buildCorpusOpponentDeck(args: {
     candidateCount: candidates.length,
     topK,
     baseCards,
-    finalCards: baseCards,
+    finalCards,
     modifications: {
-      legendariesRemoved: [],
-      legendaryReplacements: [],
-      cardsCut: [],
-      startersAdded: [],
+      legendariesRemoved,
+      legendaryReplacements,
+      cardsCut,
+      startersAdded,
     },
-    dreamsign: null,
-    abilityActive: true,
+    dreamsign,
+    abilityActive,
   };
+}
+
+/** Mean co-occurrence of `candidate` to the current `deck` (other→candidate). */
+function meanCooc(
+  candidate: string,
+  deck: readonly string[],
+  cooc: ReadonlyMap<string, ReadonlyMap<string, number>>,
+): number {
+  if (deck.length === 0) return 0;
+  let sum = 0;
+  for (const d of deck) {
+    sum += cooc.get(d)?.get(candidate) ?? 0;
+  }
+  return sum / deck.length;
+}
+
+/** Build an IdfDeck view from a set of UUIDs (norm = sqrt(Σ idf²) || 1). */
+function makeIdfDeck(cards: Set<string>, corpus: IdfCorpus): IdfDeck {
+  let sumSq = 0;
+  for (const c of cards) {
+    const w = corpus.idf.get(c) ?? 0;
+    sumSq += w * w;
+  }
+  return { cards, norm: Math.sqrt(sumSq) || 1 };
+}
+
+/**
+ * Pick the highest-scoring item, breaking ties with a seeded shuffle over the
+ * tied group for deterministic-but-varied selection. `keyOf` is used only to
+ * stabilize the tied group ordering before shuffling.
+ */
+function pickBest<T>(
+  items: readonly T[],
+  scoreOf: (item: T) => number,
+  keyOf: (item: T) => string,
+  rng: { nextInt: (n: number) => number },
+): T {
+  return pickTopN(items, 1, scoreOf, keyOf, rng)[0];
+}
+
+/**
+ * Select the top-`n` items by score (descending), breaking score ties with a
+ * seeded shuffle of the tied group so selection is deterministic for a fixed
+ * seed yet varies across seeds.
+ */
+function pickTopN<T>(
+  items: readonly T[],
+  n: number,
+  scoreOf: (item: T) => number,
+  keyOf: (item: T) => string,
+  rng: { nextInt: (n: number) => number },
+): T[] {
+  // Group by score; within a group, stabilize by key then seeded-shuffle.
+  const sorted = [...items].sort((a, b) => {
+    const sa = scoreOf(a);
+    const sb = scoreOf(b);
+    if (sb !== sa) return sb - sa;
+    return keyOf(a).localeCompare(keyOf(b));
+  });
+  // Seeded shuffle WITHIN equal-score runs so ties resolve deterministically
+  // for a fixed seed but vary across seeds.
+  const result: T[] = [];
+  let i = 0;
+  while (i < sorted.length) {
+    let j = i + 1;
+    while (j < sorted.length && scoreOf(sorted[j]) === scoreOf(sorted[i])) j += 1;
+    const group = sorted.slice(i, j);
+    if (group.length > 1) {
+      for (let k = group.length - 1; k > 0; k -= 1) {
+        const swap = rng.nextInt(k + 1);
+        [group[k], group[swap]] = [group[swap], group[k]];
+      }
+    }
+    result.push(...group);
+    i = j;
+  }
+  return result.slice(0, n);
 }
 
 /** Whether `deck` shares at least one UUID with `probe`. */
