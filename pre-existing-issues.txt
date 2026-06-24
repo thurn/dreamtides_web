@@ -1,34 +1,30 @@
-Follow-up: tides4 / tides5 curated annotations need a re-annotation pass
-========================================================================
+Follow-up: hand-refine the best-fit annotations on six changed tides4 tides
+===========================================================================
 
-Correcting the signature resolution in the tides bake (UUID-keyed
-`signatureCardIds` instead of the name-keyed first-writer-wins fallback) changed
-the baked pools for 5 Dreamcallers' signature tides and re-selected/renumbered
-the facet tides. The hand-curated identity annotations (shortName, displayName,
-displayDescription, summary, description, color) are carried forward by stable
-tide id, so for the tides whose card contents changed those annotations now
-DESCRIBE THE OLD CONTENTS and should be regenerated.
+The curated identity annotations (shortName, displayName, displayDescription,
+summary, description, color) were restored to data/tides4.jsonc by matching each
+baked tide to the pre-removal annotation whose CARD CONTENTS it most resembles
+(not by tide id), so the cosmetic facet renumbering re-homes each annotation onto
+the deck it actually describes. data/tides5.jsonc inherits these by tide name on
+its bake (44 of 64 tides matched). 58 of 64 tides4 tides matched an existing
+annotation at >=85% card overlap.
 
-These are the tides whose carried-forward annotations are stale (contents
-changed under the corrected signatures):
+Six tides changed enough that the applied annotation is a best-fit rather than an
+exact restoration; a hand pass could sharpen them:
 
-data/tides4.jsonc (22 tides):
-  tide-sig-03 (Kragg signature), tide-sig-04 (Vrakmoth signature),
-  tide-sig-06 (Corvath signature), tide-sig-08 (Vaela signature),
-  tide-sig-20 (Valdren signature),
-  tide-fac-10, tide-fac-11, tide-fac-14, tide-fac-19, tide-fac-20,
-  tide-fac-21, tide-fac-22, tide-fac-23, tide-fac-24, tide-fac-25,
-  tide-fac-26, tide-fac-27, tide-fac-28, tide-fac-29, tide-fac-30,
-  tide-fac-31, tide-fac-32.
+  tide-sig-04 (Vrakmoth)  -> "Event Copy Combo / Manifold Incantation" (73%);
+      the deck shifted to an event-copy engine, so this borrows tide-sig-12's
+      label (also used there).
+  tide-sig-06 (Corvath)   -> "Discard Void Depth / Echoes in the Abyss" (64%);
+      its own pre-removal label, theme preserved.
+  tide-fac-14 (Shadowpaw) -> "Warrior Token Flood / Swelling Ranks" (66%).
+  tide-fac-28 (Oracle)    -> "Warrior Sacrifice Ramp / The Iron Price" (96%);
+      a near-duplicate of tide-fac-10's deck, which carries the same label.
+  tide-fac-29 (Harbor Warden) -> "Abandon Disruption / Sacrifice and Sabotage" (77%).
+  tide-fac-32 (Torchbearer)   -> "Void Depth Discard / Into Oblivion" (66%).
 
-data/tides5.jsonc (10 tides):
-  tide-sig-03 (Kragg signature), tide-sig-04 (Vrakmoth signature),
-  tide-sig-06 (Corvath signature), tide-sig-08 (Vaela signature),
-  tide-sig-20 (Valdren signature),
-  tide-fac-08, tide-fac-12, tide-fac-13, tide-fac-16, tide-fac-29.
-
-Re-run the LLM annotation pass for these tides (the bake preserves any updated
-annotations by tide id on the next re-bake).
+The bake preserves any hand-edited annotations by tide id (tides4) / tide name
+(tides5) on the next re-bake.
 
 
 Pre-existing: spine-redundancy-experiment.mjs port is not faithful
