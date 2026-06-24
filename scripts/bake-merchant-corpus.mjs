@@ -451,13 +451,10 @@ export function computeMerchantCorpus({
   const pickRecords = records.map((r) => ({ packs: r.packIds, picks: r.pickIds }));
   const quality = fitNormalizedQuality(pickRecords);
 
-  // Mainboards as UUID arrays (duplicates preserved). `buildDraftRecords`
-  // resolves mainboards to current display names; map back through nameToId.
-  const mainboards = records.map((r) =>
-    r.mainboard
-      .map((name) => cardMaps.nameToId.get(name))
-      .filter((id) => id !== undefined),
-  );
+  // Mainboards as UUID arrays (duplicates preserved). Use the stable UUIDs
+  // that `buildDraftRecords` already resolved, rather than round-tripping
+  // through display names (which would merge colliding-name cards).
+  const mainboards = records.map((r) => r.mainboardIds);
   const { df, multiplicity } = computeMultiplicityAndDf(mainboards);
 
   const { adjacency, idf } = buildClusterGraph(mainboards);
