@@ -65,6 +65,8 @@ const POOL_TARGET_SIZE = 200;
 function loadContext(argv) {
   const cards = readJson("public/cards_v2-data.json");
   const decklists = readJson("public/decklists-data.json");
+  // The IDF-cosine variants (idf/idf2/idf3/idf4) score on the id-keyed corpus.
+  const decklistIds = readJson("public/decklist-ids-data.json");
   const draftRecords = readJson("public/draft-records-data.json");
   let dreamcallers = readJson("public/dreamcallers-v2-data.json");
 
@@ -83,7 +85,7 @@ function loadContext(argv) {
     Array.isArray(draftRecords) && draftRecords.length
       ? draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds }))
       : undefined;
-  const poolData = buildPoolData(cards, decklists, pickRecords);
+  const poolData = buildPoolData(cards, decklists, pickRecords, decklistIds);
   if (existsSync(resolve(ROOT, "data/tides.jsonc"))) {
     poolData.tideDecks = validateTideDecks(readJsonc("data/tides.jsonc"));
   }
@@ -115,7 +117,8 @@ function generateCounts(ctx, variant, dc, seed, poolSize) {
     variant,
     undefined,
     poolSize,
-    dc.signatureCards ?? [],
+    // IDF-cosine and pick-affinity variants steer on stable card UUIDs.
+    (dc.signatureCardIds ?? []).map((s) => s.toLowerCase()),
     dc.id,
   );
   return pool.counts;

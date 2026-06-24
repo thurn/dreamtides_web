@@ -183,3 +183,36 @@ export function readAdaptedRecordDecklists(dir, { idToName, nameToId }) {
   }
   return decks;
 }
+
+/**
+ * Read every adapted draft record (`*.jsonc`) in `dir` and return one decklist
+ * per seat that has a non-empty mainboard, exactly like
+ * {@link readAdaptedRecordDecklists}, but keyed on each card's stable cards_v2
+ * UUID (lowercased) rather than its current display name. This is the
+ * rename-proof, collision-proof corpus the IDF-cosine pool engine and its
+ * affiliations score on: two distinct cards that happen to share a display name
+ * stay distinct here because they carry different UUIDs. The same seat-filtering
+ * and resolution rules apply — a token that resolves to no known card is
+ * dropped, and a seat with an empty (or fully unresolved) mainboard is skipped.
+ */
+export function readAdaptedRecordDecklistIds(dir, { idToName, nameToId }) {
+  const decks = [];
+  for (const filename of readdirSync(dir)
+    .filter((f) => f.endsWith(".jsonc"))
+    .sort()) {
+    const raw = JSON.parse(
+      stripJsonComments(readFileSync(join(dir, filename), "utf8")),
+    );
+    if (!Array.isArray(raw.seats)) continue;
+    for (const seat of raw.seats) {
+      if (!Array.isArray(seat.mainboard)) continue;
+      const ids = [];
+      for (const token of seat.mainboard) {
+        const id = CARD_ID_RE.test(token) ? token : nameToId.get(token);
+        if (id !== undefined && idToName.has(id)) ids.push(id.toLowerCase());
+      }
+      if (ids.length > 0) decks.push(ids);
+    }
+  }
+  return decks;
+}

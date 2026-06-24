@@ -38,13 +38,17 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 import { buildPoolData, generatePoolFromData } from "../src/draft/pool/index.ts";
+import { resolveCountsToNames } from "../src/draft/pool/variant-idf.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));
 
 const cards = readJson("public/cards_v2-data.json");
 const decklistsData = readJson("public/decklists-data.json");
-const poolData = buildPoolData(cards, decklistsData);
+// The idf engine keys its corpus on card ids; feed `decklistIds` and re-port from
+// it so this mirror stays bit-for-bit with `generatePoolFromData('idf')`.
+const decklistIdsData = readJson("public/decklist-ids-data.json");
+const poolData = buildPoolData(cards, decklistsData, undefined, decklistIdsData);
 
 // --- IDF tuning, copied verbatim from the IDF block in color-pool.ts ----------
 const IDF = {
@@ -72,7 +76,7 @@ function makeRng(seed) {
 
 // === Re-ported IDF corpus (mirrors idfCorpus in color-pool.ts) ===============
 function buildCorpus() {
-  const source = poolData.decklists;
+  const source = poolData.decklistIds ?? poolData.decklists;
   const filtered = source
     .map((d) => new Set(d))
     .filter((s) => s.size >= IDF.minDeckSize && s.size <= IDF.maxDeckSize);
@@ -255,7 +259,10 @@ const poolKey = (counts) =>
 let oracleOk = true;
 for (const seed of ORACLE_SEEDS) {
   const oracle = generatePoolFromData(poolData, seed, undefined, "idf");
-  if (poolKey(oracle.counts) !== poolKey(buildPoolUniform(seed))) oracleOk = false;
+  // The engine resolves its id-keyed pool to display names on the way out; resolve
+  // the mirror's id-keyed pool the same way so the comparison is apples-to-apples.
+  const mirror = resolveCountsToNames(buildPoolUniform(seed), poolData.cardNameById);
+  if (poolKey(oracle.counts) !== poolKey(mirror)) oracleOk = false;
 }
 console.log(`Oracle reproduction at beta=0: ${oracleOk ? "PASS (bit-for-bit)" : "FAIL"}  over ${ORACLE_SEEDS.length} seeds\n`);
 

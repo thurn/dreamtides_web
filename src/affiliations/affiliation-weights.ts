@@ -18,11 +18,12 @@
 // selection weight (multiplier 1) while affiliated cards receive a multiplier above 1,
 // so every card stays selectable and affiliated cards simply appear more often.
 //
-// The IDF corpus is keyed by card NAME (the decklists are name arrays), while
-// affiliation `signatureCards` and the draw sites both speak card UUIDs / card
-// numbers. The helpers here translate between the two via the card database so
-// the draw sites can multiply a `cardNumber -> multiplier` map straight into
-// their existing per-card weights.
+// The IDF corpus is keyed by stable card UUID (the `decklistIds` source), and the
+// affiliation `signatureCards` are themselves UUIDs, so the probe and the scoring
+// stay in one key space — two distinct cards that share a display name stay
+// distinct. The draw sites speak card numbers, so the helpers here translate the
+// id-keyed affinity into a `cardNumber -> multiplier` map (via the card database)
+// that a sampler can multiply straight into its existing per-card weights.
 
 import type {
   AffiliationContent,
@@ -45,18 +46,18 @@ export const AFFILIATION_MIN_MULTIPLIER = 1;
 /**
  * A reusable affiliation reweighting context built once per dreamscape draw. It
  * caches the run's IDF corpus, the per-card affinity to the affiliation probe,
- * and the card-name <-> card-number maps the draw sites need. Build it with
+ * and the card-id <-> card-number maps the draw sites need. Build it with
  * {@link buildAffiliationWeightContext} and hand the same context to every draw
  * inside one dreamscape so the corpus and probe are computed once.
  */
 export interface AffiliationWeightContext {
   affiliation: AffiliationContent;
-  /** Card name -> affinity (0..1) to the affiliation probe. */
-  affinityByName: Map<string, number>;
-  /** Card name -> card number, for translating a name affinity to a number. */
-  numberByName: Map<string, number>;
-  /** The signature card names that carried IDF weight in the corpus. */
-  signatureWeightedNames: string[];
+  /** Card UUID (lowercased) -> affinity (0..1) to the affiliation probe. */
+  affinityById: Map<string, number>;
+  /** Card UUID (lowercased) -> card number, for translating an id affinity to a number. */
+  numberById: Map<string, number>;
+  /** The signature card UUIDs (lowercased) that carried IDF weight in the corpus. */
+  signatureWeightedIds: string[];
 }
 
 // Computes each corpus card's affinity (0..1) to the affiliation probe. The probe
@@ -67,24 +68,25 @@ export interface AffiliationWeightContext {
 // that lives in decks shaped like the probe scores high whether or not it is a
 // literal signature card. Affinities are normalized to [0,1] by the max observed
 // so the strongest card is 1; cards absent from the corpus are simply omitted
-// (callers treat a missing card as affinity 0).
-export function computeAffinityByName(
+// (callers treat a missing card as affinity 0). Keys are card UUIDs (the corpus's
+// key space).
+export function computeAffinityById(
   corpus: IdfCorpus,
-  signatureNames: readonly string[],
-): { affinityByName: Map<string, number>; signatureWeightedNames: string[] } {
-  // Filter to signature names with idf > 0; these form the probe and are
-  // returned so callers can report which signature cards carried IDF weight.
+  signatureIds: readonly string[],
+): { affinityById: Map<string, number>; signatureWeightedIds: string[] } {
+  // Filter to signature ids with idf > 0; these form the probe and are returned
+  // so callers can report which signature cards carried IDF weight.
   const probeCards = new Set<string>();
-  for (const name of signatureNames) {
-    if ((corpus.idf.get(name) ?? 0) > 0) probeCards.add(name);
+  for (const id of signatureIds) {
+    if ((corpus.idf.get(id) ?? 0) > 0) probeCards.add(id);
   }
-  const signatureWeightedNames = [...probeCards];
+  const signatureWeightedIds = [...probeCards];
 
   // Delegate the cosine/max/normalize core to the shared module.
   // computeAffinity handles the empty-probe case (returns empty map) and is
-  // behavior-identical to the former inline block.
-  const affinityByName = computeAffinity(corpus, probeCards);
-  return { affinityByName, signatureWeightedNames };
+  // key-agnostic, so it scores in the corpus's UUID key space directly.
+  const affinityById = computeAffinity(corpus, probeCards);
+  return { affinityById, signatureWeightedIds };
 }
 
 /**
@@ -103,46 +105,46 @@ export function buildAffiliationWeightContext(
   const corpus = idfCorpus(poolData);
   if (!corpus) return null;
 
-  // Translate signature UUIDs -> current card names via the card database.
-  const nameById = new Map<string, string>();
-  const numberByName = new Map<string, number>();
+  // Card UUID (lowercased) -> card number, the draw-site translation. Ids are
+  // unique, so unlike a name index there is no collision to resolve.
+  const numberById = new Map<string, number>();
   for (const card of cardDatabase.values()) {
-    nameById.set(card.id, card.name);
-    numberByName.set(card.name, card.cardNumber);
-  }
-  const signatureNames: string[] = [];
-  for (const uuid of affiliation.signatureCards) {
-    const name = nameById.get(uuid);
-    if (name !== undefined) signatureNames.push(name);
+    numberById.set(card.id.toLowerCase(), card.cardNumber);
   }
 
-  const { affinityByName, signatureWeightedNames } = computeAffinityByName(
-    corpus,
-    signatureNames,
+  // The affiliation's signature cards ARE UUIDs; score them directly against the
+  // id-keyed corpus (lowercased to match the corpus key space).
+  const signatureIds = affiliation.signatureCards.map((uuid) =>
+    uuid.toLowerCase(),
   );
-  if (signatureWeightedNames.length === 0) return null;
+
+  const { affinityById, signatureWeightedIds } = computeAffinityById(
+    corpus,
+    signatureIds,
+  );
+  if (signatureWeightedIds.length === 0) return null;
 
   return {
     affiliation,
-    affinityByName,
-    numberByName,
-    signatureWeightedNames,
+    affinityById,
+    numberById,
+    signatureWeightedIds,
   };
 }
 
 /**
- * The multiplicative selection weight for one card given an affiliation context.
- * Always a positive finite number `>= AFFILIATION_MIN_MULTIPLIER`: a card with
- * affinity 0 (or absent from the corpus) gets the floor, a signature-like card
+ * The multiplicative selection weight for one card (by UUID) given an affiliation
+ * context. Always a positive finite number `>= AFFILIATION_MIN_MULTIPLIER`: a card
+ * with affinity 0 (or absent from the corpus) gets the floor, a signature-like card
  * gets up to `affiliation.weightStrength`. The map is
  * `floor + (weightStrength - floor) * affinity`, so the multiplier rises linearly
  * with affinity and a `weightStrength` of 1 is a clean no-op (every card 1).
  */
 export function affiliationWeight(
-  cardName: string,
+  cardId: string,
   ctx: AffiliationWeightContext,
 ): number {
-  const affinity = ctx.affinityByName.get(cardName) ?? 0;
+  const affinity = ctx.affinityById.get(cardId.toLowerCase()) ?? 0;
   const strength = Math.max(
     AFFILIATION_MIN_MULTIPLIER,
     ctx.affiliation.weightStrength,
@@ -157,36 +159,36 @@ export function affiliationWeight(
 }
 
 /**
- * Per-card multiplier for a list of candidate card names. Every candidate is a
+ * Per-card multiplier for a list of candidate card UUIDs. Every candidate is a
  * key in the returned map with a strictly positive weight, so applying these
  * weights to a candidate list keeps every candidate selectable.
  */
 export function reweightCandidates(
-  cardNames: readonly string[],
+  cardIds: readonly string[],
   ctx: AffiliationWeightContext,
 ): Map<string, number> {
   const out = new Map<string, number>();
-  for (const name of cardNames) out.set(name, affiliationWeight(name, ctx));
+  for (const id of cardIds) out.set(id, affiliationWeight(id, ctx));
   return out;
 }
 
 /**
- * The draw-site multiplier map: `cardNumber -> multiplier` for every card in the
- * database, so a sampler that works in card-number space can multiply the
- * affiliation weight straight into its existing per-card weights. Only cards with
- * affinity above the floor are stored; a missing card means "use 1" at the draw
- * site, which keeps the map small (one entry per affiliated card rather than per
- * card in the catalog).
+ * The draw-site multiplier map: `cardNumber -> multiplier` for every affiliated
+ * card, so a sampler that works in card-number space can multiply the affiliation
+ * weight straight into its existing per-card weights. Only cards with affinity
+ * above the floor are stored; a missing card means "use 1" at the draw site, which
+ * keeps the map small (one entry per affiliated card rather than per card in the
+ * catalog).
  */
 export function buildAffiliationNumberWeights(
   ctx: AffiliationWeightContext,
 ): Map<number, number> {
   const out = new Map<number, number>();
-  for (const [name, affinity] of ctx.affinityByName) {
+  for (const [id, affinity] of ctx.affinityById) {
     if (affinity <= 0) continue;
-    const cardNumber = ctx.numberByName.get(name);
+    const cardNumber = ctx.numberById.get(id);
     if (cardNumber === undefined) continue;
-    out.set(cardNumber, affiliationWeight(name, ctx));
+    out.set(cardNumber, affiliationWeight(id, ctx));
   }
   return out;
 }
@@ -286,9 +288,11 @@ export function scoreDeckAffiliationFit(
   deckCardNumbers: readonly number[],
   ctx: AffiliationWeightContext,
 ): number {
-  const nameByNumber = new Map<number, string>();
-  for (const [name, num] of ctx.numberByName) {
-    if (!nameByNumber.has(num)) nameByNumber.set(num, name);
+  // Card number -> UUID, the inverse of the context's id->number map, so a deck
+  // expressed in card numbers can be scored against the id-keyed affinity.
+  const idByNumber = new Map<number, string>();
+  for (const [id, num] of ctx.numberById) {
+    if (!idByNumber.has(num)) idByNumber.set(num, id);
   }
   const distinct = new Set<number>();
   let sum = 0;
@@ -296,8 +300,8 @@ export function scoreDeckAffiliationFit(
   for (const num of deckCardNumbers) {
     if (distinct.has(num)) continue;
     distinct.add(num);
-    const name = nameByNumber.get(num);
-    sum += name === undefined ? 0 : ctx.affinityByName.get(name) ?? 0;
+    const id = idByNumber.get(num);
+    sum += id === undefined ? 0 : ctx.affinityById.get(id) ?? 0;
     count += 1;
   }
   return count === 0 ? 0 : sum / count;
@@ -331,6 +335,6 @@ export function opponentAffiliationBias(
   }
   return deckCandidates.map((card) => ({
     card,
-    weight: affiliationWeight(card.name, ctx),
+    weight: affiliationWeight(card.id, ctx),
   }));
 }

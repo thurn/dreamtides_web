@@ -20,7 +20,7 @@ import {
   affiliationWeight,
   buildAffiliationNumberWeights,
   buildAffiliationWeightContext,
-  computeAffinityByName,
+  computeAffinityById,
   opponentAffiliationBias,
   reweightCandidates,
 } from "./affiliation-weights.ts";
@@ -30,9 +30,12 @@ function readPublicJson<T>(filename: string): T {
   return JSON.parse(readFileSync(join(PUBLIC_DIR, filename), "utf8")) as T;
 }
 
-// Live fixtures, loaded once.
+// Live fixtures, loaded once. The IDF pool engine and affiliation reweighting
+// score on the id-keyed decklist corpus, so feed `decklist-ids-data.json` (the
+// UUID corpus) — the affiliation signatures are themselves UUIDs.
 const CARDS = readPublicJson<CardData[]>("cards_v2-data.json");
 const DECKLISTS = readPublicJson<string[][]>("decklists-data.json");
+const DECKLIST_IDS = readPublicJson<string[][]>("decklist-ids-data.json");
 const AFFILIATIONS = readPublicJson<AffiliationContent[]>(
   "affiliations-data.json",
 );
@@ -40,7 +43,7 @@ const AFFILIATIONS = readPublicJson<AffiliationContent[]>(
 const CARD_DATABASE = new Map<number, CardData>(
   CARDS.map((card) => [card.cardNumber, card]),
 );
-const POOL_DATA: PoolData = buildPoolData(CARDS, DECKLISTS);
+const POOL_DATA: PoolData = buildPoolData(CARDS, DECKLISTS, undefined, DECKLIST_IDS);
 
 // Pick the first affiliation that the live corpus can actually score, so the
 // suite never depends on a specific affiliation id surviving a data edit.
@@ -110,7 +113,7 @@ describe("affiliation reweighting weight contract", () => {
   it("returns a positive finite weight for every card", () => {
     const { ctx } = firstScorableAffiliation();
     for (const card of CARDS) {
-      const weight = affiliationWeight(card.name, ctx);
+      const weight = affiliationWeight(card.id, ctx);
       expect(Number.isFinite(weight)).toBe(true);
       expect(weight).toBeGreaterThan(0);
     }
@@ -119,38 +122,36 @@ describe("affiliation reweighting weight contract", () => {
   it("weights signature-set cards strictly above an average unrelated card", () => {
     const { affiliation, ctx } = firstScorableAffiliation();
 
-    // Resolve the affiliation's signature UUIDs to live card names.
-    const nameById = new Map(CARDS.map((c) => [c.id, c.name]));
-    const signatureNames = affiliation.signatureCards
-      .map((uuid) => nameById.get(uuid))
-      .filter((n): n is string => n !== undefined);
-    expect(signatureNames.length).toBeGreaterThan(0);
+    // The affiliation's signature cards are UUIDs — the same key space the
+    // affinity is scored in — so weight them directly.
+    const signatureIds = affiliation.signatureCards;
+    expect(signatureIds.length).toBeGreaterThan(0);
 
     // The mean signature weight must beat the mean weight across the catalog.
     const signatureMean =
-      signatureNames.reduce((s, n) => s + affiliationWeight(n, ctx), 0) /
-      signatureNames.length;
+      signatureIds.reduce((s, id) => s + affiliationWeight(id, ctx), 0) /
+      signatureIds.length;
     const catalogMean =
-      CARDS.reduce((s, c) => s + affiliationWeight(c.name, ctx), 0) /
+      CARDS.reduce((s, c) => s + affiliationWeight(c.id, ctx), 0) /
       CARDS.length;
     expect(signatureMean).toBeGreaterThan(catalogMean);
 
     // The single most affiliated card must beat the floor (so the bias is real).
     const maxWeight = Math.max(
-      ...CARDS.map((c) => affiliationWeight(c.name, ctx)),
+      ...CARDS.map((c) => affiliationWeight(c.id, ctx)),
     );
     expect(maxWeight).toBeGreaterThan(AFFILIATION_MIN_MULTIPLIER);
   });
 
   it("never removes membership: every candidate keeps a positive weight", () => {
     const { ctx } = firstScorableAffiliation();
-    // The IDF / draft machinery works in card-NAME space, where same-named cards
-    // collapse to one term, so reweight the distinct candidate names.
-    const candidateNames = [...new Set(CARDS.map((c) => c.name))];
-    const weights = reweightCandidates(candidateNames, ctx);
-    expect(weights.size).toBe(candidateNames.length);
-    for (const name of candidateNames) {
-      const w = weights.get(name);
+    // The IDF / draft machinery works in card-UUID space, where two distinct
+    // cards stay distinct, so reweight the distinct candidate UUIDs.
+    const candidateIds = [...new Set(CARDS.map((c) => c.id.toLowerCase()))];
+    const weights = reweightCandidates(candidateIds, ctx);
+    expect(weights.size).toBe(candidateIds.length);
+    for (const id of candidateIds) {
+      const w = weights.get(id);
       expect(w).toBeDefined();
       expect(w as number).toBeGreaterThan(0);
     }
@@ -275,11 +276,11 @@ describe("affiliation reweighting weight contract", () => {
 });
 
 // ---------------------------------------------------------------------------
-// Characterization tests for computeAffinityByName — synthetic corpus, no
+// Characterization tests for computeAffinityById — synthetic corpus, no
 // live TOML data. These pin the relative-ordering and range invariants so the
 // delegation refactor cannot silently change behavior.
 // ---------------------------------------------------------------------------
-describe("computeAffinityByName – characterization (synthetic corpus)", () => {
+describe("computeAffinityById – characterization (synthetic corpus)", () => {
   // Build a minimal synthetic corpus where behavior is predictable:
   //   deck A  = {alpha, beta, gamma}        <- probe-like deck
   //   deck B  = {alpha, beta, delta}        <- also probe-like
@@ -288,7 +289,7 @@ describe("computeAffinityByName – characterization (synthetic corpus)", () => 
   //   deck E  = {alpha, beta, gamma, delta, zeta, eta, theta}  <- mixed
   //
   // All five decks appear in the corpus so no card has idf=0 (ubiquitous).
-  // "omega" appears in every deck → idf=0 → must be excluded from signatureWeightedNames.
+  // "omega" appears in every deck → idf=0 → must be excluded from signatureWeightedIds.
 
   function buildSyntheticCorpus() {
     const deckA = new Set(["alpha", "beta", "gamma", "omega"]);
@@ -310,14 +311,14 @@ describe("computeAffinityByName – characterization (synthetic corpus)", () => 
 
   it("affinities are in [0,1] and the strongest affiliated card scores exactly 1", () => {
     const corpus = buildSyntheticCorpus();
-    const { affinityByName } = computeAffinityByName(corpus, [
+    const { affinityById } = computeAffinityById(corpus, [
       "alpha",
       "beta",
       "gamma",
     ]);
-    expect(affinityByName.size).toBeGreaterThan(0);
+    expect(affinityById.size).toBeGreaterThan(0);
     let max = 0;
-    for (const v of affinityByName.values()) {
+    for (const v of affinityById.values()) {
       expect(v).toBeGreaterThanOrEqual(0);
       expect(v).toBeLessThanOrEqual(1);
       if (v > max) max = v;
@@ -328,7 +329,7 @@ describe("computeAffinityByName – characterization (synthetic corpus)", () => 
   it("probe-aligned cards score higher than unrelated cards", () => {
     const corpus = buildSyntheticCorpus();
     // Probe: alpha, beta, gamma — the signature of deck A / B.
-    const { affinityByName } = computeAffinityByName(corpus, [
+    const { affinityById } = computeAffinityById(corpus, [
       "alpha",
       "beta",
       "gamma",
@@ -336,56 +337,56 @@ describe("computeAffinityByName – characterization (synthetic corpus)", () => 
 
     // alpha and beta appear in probe-like decks and mixed decks → high affinity.
     // zeta, eta, theta only appear in the unrelated deck C and mixed decks → lower.
-    const alphaAffinity = affinityByName.get("alpha") ?? 0;
-    const zetaAffinity = affinityByName.get("zeta") ?? 0;
+    const alphaAffinity = affinityById.get("alpha") ?? 0;
+    const zetaAffinity = affinityById.get("zeta") ?? 0;
     expect(alphaAffinity).toBeGreaterThan(zetaAffinity);
   });
 
-  it("signatureWeightedNames contains exactly the probe cards with idf > 0", () => {
+  it("signatureWeightedIds contains exactly the probe cards with idf > 0", () => {
     const corpus = buildSyntheticCorpus();
     // "omega" is in every deck → idf = ln(5/5) = 0 → must be excluded.
     // alpha, beta are in some decks → idf > 0 → must be included.
-    const { signatureWeightedNames } = computeAffinityByName(corpus, [
+    const { signatureWeightedIds } = computeAffinityById(corpus, [
       "alpha",
       "beta",
       "omega",
     ]);
-    expect(signatureWeightedNames).toContain("alpha");
-    expect(signatureWeightedNames).toContain("beta");
-    expect(signatureWeightedNames).not.toContain("omega");
-    expect(signatureWeightedNames.length).toBe(2);
+    expect(signatureWeightedIds).toContain("alpha");
+    expect(signatureWeightedIds).toContain("beta");
+    expect(signatureWeightedIds).not.toContain("omega");
+    expect(signatureWeightedIds.length).toBe(2);
   });
 
-  it("idf=0 ubiquitous card excluded from signatureWeightedNames even when sole signature", () => {
+  it("idf=0 ubiquitous card excluded from signatureWeightedIds even when sole signature", () => {
     const corpus = buildSyntheticCorpus();
     // Probe is only "omega" which has idf=0 → treated as empty probe.
-    const { affinityByName, signatureWeightedNames } = computeAffinityByName(
+    const { affinityById, signatureWeightedIds } = computeAffinityById(
       corpus,
       ["omega"],
     );
-    expect(signatureWeightedNames).toHaveLength(0);
-    expect(affinityByName.size).toBe(0);
+    expect(signatureWeightedIds).toHaveLength(0);
+    expect(affinityById.size).toBe(0);
   });
 
-  it("empty probe returns empty affinityByName and empty signatureWeightedNames", () => {
+  it("empty probe returns empty affinityById and empty signatureWeightedIds", () => {
     const corpus = buildSyntheticCorpus();
-    const { affinityByName, signatureWeightedNames } = computeAffinityByName(
+    const { affinityById, signatureWeightedIds } = computeAffinityById(
       corpus,
       [],
     );
-    expect(affinityByName.size).toBe(0);
-    expect(signatureWeightedNames).toHaveLength(0);
+    expect(affinityById.size).toBe(0);
+    expect(signatureWeightedIds).toHaveLength(0);
   });
 
   it("probe with unknown names (not in corpus) returns empty results", () => {
     const corpus = buildSyntheticCorpus();
     // "nonexistent" has no idf entry at all → idf=0 → treated as empty probe.
-    const { affinityByName, signatureWeightedNames } = computeAffinityByName(
+    const { affinityById, signatureWeightedIds } = computeAffinityById(
       corpus,
       ["nonexistent"],
     );
-    expect(affinityByName.size).toBe(0);
-    expect(signatureWeightedNames).toHaveLength(0);
+    expect(affinityById.size).toBe(0);
+    expect(signatureWeightedIds).toHaveLength(0);
   });
 
   it("relative ordering is stable: more-probe-like card outscores less-probe-like", () => {
@@ -394,13 +395,13 @@ describe("computeAffinityByName – characterization (synthetic corpus)", () => 
     // gamma only appears in decks A, D, E — all probe-overlapping.
     // delta appears in decks B, E — some probe-overlapping, but deck B is also probe-like.
     // zeta appears in decks C, D, E — C is unrelated, so delta should still score > zeta.
-    const { affinityByName } = computeAffinityByName(corpus, [
+    const { affinityById } = computeAffinityById(corpus, [
       "alpha",
       "beta",
       "gamma",
     ]);
-    const gammaAff = affinityByName.get("gamma") ?? 0;
-    const zetaAff = affinityByName.get("zeta") ?? 0;
+    const gammaAff = affinityById.get("gamma") ?? 0;
+    const zetaAff = affinityById.get("zeta") ?? 0;
     expect(gammaAff).toBeGreaterThan(zetaAff);
   });
 });

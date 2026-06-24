@@ -21,6 +21,7 @@ import {
   idfCorpus,
   idfCosine,
   growIdfPool,
+  resolveCountsToNames,
 } from "./variant-idf.ts";
 
 interface Idf2Tuning {
@@ -109,7 +110,11 @@ export function generateIdf2(
   }
 
   const { counts } = growIdfPool(decks, (c) => idf.get(c) ?? 0, startIdx, targetSize);
-  return { C: new Set(), selected: ["idf2", `deck#${String(startIdx)}`], counts };
+  return {
+    C: new Set(),
+    selected: ["idf2", `deck#${String(startIdx)}`],
+    counts: resolveCountsToNames(counts, poolData.cardNameById),
+  };
 }
 
 /** Strategy adapter for the `idf2` algorithm. */

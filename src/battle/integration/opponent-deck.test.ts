@@ -128,10 +128,23 @@ function makePoolContext(db: Map<number, CardData>): RunPoolContext {
   const nameIndex = buildNameIndex(db);
   const alpha = ALPHA_CARDS.map((n) => nameOf(db, n));
   const beta = BETA_CARDS.map((n) => nameOf(db, n));
+  const idOf = (n: number): string => {
+    const card = db.get(n);
+    if (card === undefined) throw new Error(`missing test card #${String(n)}`);
+    return card.id.toLowerCase();
+  };
+  const alphaIds = ALPHA_CARDS.map(idOf);
+  const betaIds = BETA_CARDS.map(idOf);
   const poolCards: PoolCard[] = Array.from(db.values()).map((card) => ({
     name: card.name,
+    id: card.id,
   }));
-  const poolData = buildPoolData(poolCards, [alpha, beta]);
+  // The IDF pool engine and affiliation reweighting score on the id-keyed corpus,
+  // so feed the decklists as card-id arrays (the affiliation signatures are UUIDs).
+  const poolData = buildPoolData(poolCards, [alpha, beta], undefined, [
+    alphaIds,
+    betaIds,
+  ]);
   return {
     poolData,
     nameIndex,

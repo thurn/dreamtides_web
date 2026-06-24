@@ -18,6 +18,11 @@ const SIZE = Number(process.argv[3] ?? 200);
 
 const cards = readJson("public/cards_v2-data.json");
 const decklists = readJson("public/decklists-data.json");
+// The idf3 engine scores on the id-keyed corpus; `decklistIds` is index-aligned
+// to `decklists` (same seats), so a deck dropped by self-adequacy index drops from
+// both. Self-adequacy stays scored on the name corpus (scorePool is name-keyed),
+// but the engine is fed the id corpus so this mirror matches production.
+const decklistIds = readJson("public/decklist-ids-data.json");
 const dreamcallers = readJson("public/dreamcallers-v2-data.json");
 const meta = readJson("data/buildaround_support.json");
 
@@ -36,13 +41,13 @@ const withPayoff = scored.filter((x) => x.a !== null).sort((a, b) => a.a - b.a);
 console.log(`Corpus: ${decklists.length} decks, ${withPayoff.length} carry a scored payoff.`);
 console.log(`Their self-adequacy: worst ${(withPayoff[0].a * 100).toFixed(0)}, median ${(withPayoff[Math.floor(withPayoff.length / 2)].a * 100).toFixed(0)}, best ${(withPayoff.at(-1).a * 100).toFixed(0)}\n`);
 
-function runMetric(keptDecklists) {
-  const poolData = buildPoolData(cards, keptDecklists);
+function runMetric(keptDecklists, keptDecklistIds) {
+  const poolData = buildPoolData(cards, keptDecklists, undefined, keptDecklistIds);
   const all = [];
   const byTheme = new Map();
   for (const dc of dreamcallers)
     for (let s = 0; s < SEEDS; s++) {
-      const pool = generatePoolFromData(poolData, s >>> 0, undefined, "idf3", undefined, SIZE, dc.signatureCards ?? []);
+      const pool = generatePoolFromData(poolData, s >>> 0, undefined, "idf3", undefined, SIZE, dc.signatureCardIds ?? []);
       for (const i of scorePool(pool.counts, meta, TIER_TARGET, SHORT)) {
         all.push(i.adequacy);
         if (!byTheme.has(i.theme)) byTheme.set(i.theme, []);
@@ -58,7 +63,8 @@ for (const frac of [0, 0.1, 0.2, 0.3, 0.4, 0.5]) {
   const dropCount = Math.round(frac * withPayoff.length);
   const dropSet = new Set(withPayoff.slice(0, dropCount).map((x) => x.i));
   const kept = decklists.filter((_, i) => !dropSet.has(i));
-  const r = runMetric(kept);
+  const keptIds = decklistIds.filter((_, i) => !dropSet.has(i));
+  const r = runMetric(kept, keptIds);
   console.log(`drop ${String(Math.round(frac * 100)).padStart(2)}%  (${kept.length}/${decklists.length} decks)  headline ${r.headline.toFixed(1)}`);
   console.log(`        ${r.themes}`);
 }

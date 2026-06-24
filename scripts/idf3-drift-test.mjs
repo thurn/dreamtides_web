@@ -17,16 +17,19 @@ const SEEDS = Number(process.argv[2] ?? 60);
 
 const cards = readJson("public/cards_v2-data.json");
 const decklists = readJson("public/decklists-data.json");
+// The idf engine scores on the id-keyed corpus; feed it so this mirror exercises
+// the same path production does (same key space, same signature steering).
+const decklistIds = readJson("public/decklist-ids-data.json");
 const dreamcallers = readJson("public/dreamcallers-v2-data.json");
 const meta = readJson("data/buildaround_support.json");
-const poolData = buildPoolData(cards, decklists);
+const poolData = buildPoolData(cards, decklists, undefined, decklistIds);
 
 console.log("(1) target-size sweep (does a tighter pool score higher?)");
 for (const size of [120, 150, 180, 200, 240]) {
   const all = [];
   for (const dc of dreamcallers)
     for (let s = 0; s < SEEDS; s++) {
-      const pool = generatePoolFromData(poolData, s >>> 0, undefined, "idf3", undefined, size, dc.signatureCards ?? []);
+      const pool = generatePoolFromData(poolData, s >>> 0, undefined, "idf3", undefined, size, dc.signatureCardIds ?? []);
       for (const i of scorePool(pool.counts, meta, TIER_TARGET, SHORT)) all.push(i.adequacy);
     }
   console.log(`   size=${String(size).padStart(3)}  headline ${(mean(all) * 100).toFixed(1)}  (${all.length} instances)`);
@@ -38,7 +41,7 @@ for (const T of [0.0, 0.15, 0.25, 0.35, 0.45]) {
   let kept = 0, dropped = 0;
   for (const dc of dreamcallers)
     for (let s = 0; s < SEEDS; s++) {
-      const pool = generatePoolFromData(poolData, s >>> 0, undefined, "idf3", undefined, 200, dc.signatureCards ?? []);
+      const pool = generatePoolFromData(poolData, s >>> 0, undefined, "idf3", undefined, 200, dc.signatureCardIds ?? []);
       const prov = pool.idf3Provenance?.cardProvenanceByName ?? {};
       for (const i of scorePool(pool.counts, meta, TIER_TARGET, SHORT)) {
         const p = prov[i.payoff];

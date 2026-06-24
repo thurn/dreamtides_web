@@ -10,6 +10,7 @@ import { DREAMCALLER_ARCHETYPES } from "../src/data/dreamcallers-v2-database.ts"
 import {
   CARD_ID_RE,
   readAdaptedRecordDecklists,
+  readAdaptedRecordDecklistIds,
   resolveToken,
   stripJsonComments,
 } from "./lib/card-refs.mjs";
@@ -863,6 +864,7 @@ export function setupAssets({
   const cardJsonPath = join(publicDir, "card-data.json");
   const cardV2JsonPath = join(publicDir, "cards_v2-data.json");
   const decklistsJsonPath = join(publicDir, "decklists-data.json");
+  const decklistIdsJsonPath = join(publicDir, "decklist-ids-data.json");
   const draftRecordsAdaptedDir = join(ROOT, "docs", "draft_records_adapted");
   const draftRecordsJsonPath = join(publicDir, "draft-records-data.json");
   const dreamcallerV2JsonPath = join(publicDir, "dreamcallers-v2-data.json");
@@ -904,6 +906,18 @@ export function setupAssets({
   const decklists = readAdaptedRecordDecklists(draftRecordsAdaptedDir, cardMaps);
   writeFileSync(decklistsJsonPath, JSON.stringify(decklists) + "\n");
   console.log(`Wrote ${decklists.length} decklists to decklists-data.json`);
+
+  // The same per-seat decklists, but keyed on each card's stable cards_v2 UUID
+  // (lowercased) instead of its current display name. The IDF-cosine pool engine
+  // (`idf`/`idf2`/`idf3`/`idf4`) and the affiliation reweighting score on this
+  // id-keyed corpus so two distinct cards that share a display name stay distinct
+  // (24 cards_v2 cards share a name with another). Bundled alongside the name
+  // corpus, which the `decklists` variant and the human-readable tooling still
+  // read. Built from the SAME seats (every non-empty mainboard), so the two
+  // corpora line up index-for-index.
+  const decklistIds = readAdaptedRecordDecklistIds(draftRecordsAdaptedDir, cardMaps);
+  writeFileSync(decklistIdsJsonPath, JSON.stringify(decklistIds) + "\n");
+  console.log(`Wrote ${decklistIds.length} id-keyed decklists to decklist-ids-data.json`);
 
   // Adapted draft records bundled for the record-replay draft mode and the
   // pick-data pool variants. Each JSON file in `docs/draft_records_adapted` is

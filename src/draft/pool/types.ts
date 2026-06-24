@@ -107,6 +107,19 @@ export interface PoolData {
    */
   decklists?: readonly (readonly string[])[];
   /**
+   * The same per-seat decklists as {@link decklists}, but keyed on each card's
+   * stable cards_v2 UUID (lowercased) instead of its current display name. The
+   * IDF-cosine pool engine (`idf`/`idf2`/`idf3`/`idf4`) and the affiliation
+   * reweighting build their corpus from this id-keyed source so two distinct
+   * cards that share a display name stay distinct in document-frequency and
+   * affinity scoring (24 cards_v2 cards share a name with another). The engine
+   * resolves these UUIDs back to display names through {@link cardNameById} for
+   * its name-keyed outputs (the pool counts and the idf3 provenance summary).
+   * Falls back to {@link decklists} when absent (synthetic / test corpora keyed
+   * by opaque strings), so a corpus with no UUID source still scores correctly.
+   */
+  decklistIds?: readonly (readonly string[])[];
+  /**
    * Real draft pick trajectories drawn from the adapted draft records
    * (`docs/draft_records_adapted`) used by the `pickfit` variant, which grows a
    * pool from an availability-corrected pick-rate prior and a behavioural synergy

@@ -30,6 +30,7 @@ import {
   type IdfDeck,
   growCoherentPool,
   idfCosine,
+  resolveCountsToNames,
 } from "./variant-idf.ts";
 import { IDF2, idf2Corpus } from "./variant-idf2.ts";
 
@@ -65,7 +66,9 @@ const IDF4_SIG = {
 
 // The support metadata shape this variant reads from buildaround_support.json.
 // It is keyed by each card's stable id UUID and carries the current card name in
-// `name`; this variant works in card-name space, so it indexes entries by name.
+// `name`. This variant scores the id-keyed decklist corpus, so it indexes entries
+// by their UUID key (lowercased) — the same key space the corpus uses — which
+// keeps two distinct cards that share a display name distinct.
 interface SupportEntry {
   name: string;
   needs?: { theme: string; tier: number }[];
@@ -75,8 +78,8 @@ interface SupportMeta {
   cards: Record<string, SupportEntry>;
 }
 const META = supportMeta as SupportMeta;
-const SUPPORT_BY_NAME = new Map<string, SupportEntry>(
-  Object.values(META.cards).map((entry) => [entry.name, entry]),
+const SUPPORT_BY_ID = new Map<string, SupportEntry>(
+  Object.entries(META.cards).map(([id, entry]) => [id.toLowerCase(), entry]),
 );
 
 // Self-adequacy of one raw decklist: treat it as a pool (copies capped at 2) and,
@@ -86,8 +89,9 @@ const SUPPORT_BY_NAME = new Map<string, SupportEntry>(
 // EXCLUDING the payoff's own copies) / poolSize. The deck's self-adequacy is the
 // mean adequacy over its payoff instances. Returns null when the deck carries no
 // scored payoff at all — those decks have no payoff risk and are never "worst".
-// Mirrors `scorePool` in the experiment script and `selfAdequacy` in
-// `scripts/idf3-prune-corpus.mjs`.
+// The deck is keyed by card UUID (the id-keyed corpus), so payoffs and supports
+// are looked up in `SUPPORT_BY_ID`. Mirrors `scorePool` in the experiment script
+// and `selfAdequacy` in `scripts/idf3-prune-corpus.mjs`.
 function deckSelfAdequacy(deck: readonly string[]): number | null {
   const counts = new Map<string, number>();
   for (const c of deck) counts.set(c, Math.min(2, (counts.get(c) ?? 0) + 1));
@@ -98,8 +102,8 @@ function deckSelfAdequacy(deck: readonly string[]): number | null {
 
   // Support copies available per theme across the whole deck-pool.
   const supportCopies = new Map<string, number>();
-  for (const [name, copies] of counts) {
-    const entry = SUPPORT_BY_NAME.get(name);
+  for (const [id, copies] of counts) {
+    const entry = SUPPORT_BY_ID.get(id);
     if (!entry) continue;
     for (const theme of entry.supports ?? []) {
       supportCopies.set(theme, (supportCopies.get(theme) ?? 0) + copies);
@@ -107,8 +111,8 @@ function deckSelfAdequacy(deck: readonly string[]): number | null {
   }
 
   const adequacies: number[] = [];
-  for (const [name, copies] of counts) {
-    const entry = SUPPORT_BY_NAME.get(name);
+  for (const [id, copies] of counts) {
+    const entry = SUPPORT_BY_ID.get(id);
     if (!entry || !(entry.needs ?? []).length) continue;
     for (const need of entry.needs ?? []) {
       const target = TIER_TARGET[need.tier];
@@ -154,10 +158,18 @@ function prunedPoolFor(poolData: PoolData): PrunedPool {
   const cached = prunedCache.get(poolData);
   if (cached !== undefined) return cached;
   let result: PrunedPool = { prunedPoolData: null };
-  const source = poolData.decklists;
+  // Prune the same corpus `idfCorpus` will read: the id-keyed `decklistIds` when
+  // present, else the name-keyed `decklists` for synthetic / test PoolData. The
+  // pruned list is written back onto the field it came from so the downstream
+  // `idf2Corpus(prunedPoolData)` builds from the pruned corpus.
+  const source = poolData.decklistIds ?? poolData.decklists;
   if (source && source.length > 0) {
     const kept = prunedDecklists(source);
-    result = { prunedPoolData: { ...poolData, decklists: kept } };
+    result = {
+      prunedPoolData: poolData.decklistIds
+        ? { ...poolData, decklistIds: kept }
+        : { ...poolData, decklists: kept },
+    };
   }
   prunedCache.set(poolData, result);
   return result;
@@ -241,11 +253,14 @@ export function generateIdf4(
   // The request's `_targetSize` is deliberately ignored.
   const counts = growCoherentPool(decks, idfOf, startIdx, IDF4_POOL_SIZE);
 
+  // The grown pool and starter are keyed by the corpus's UUIDs; resolve them back
+  // onto current display names for the downstream name-keyed pool resolver.
+  const nameOf = (key: string): string => poolData.cardNameById?.get(key) ?? key;
   return {
     C: new Set(),
     selected: ["idf4", `deck#${String(startIdx)}`],
-    counts,
-    starterDeck: [...decks[startIdx].cards],
+    counts: resolveCountsToNames(counts, poolData.cardNameById),
+    starterDeck: [...decks[startIdx].cards].map(nameOf),
   };
 }
 

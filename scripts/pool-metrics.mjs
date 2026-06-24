@@ -782,6 +782,10 @@ function resolveMetric(argv) {
 function loadContext(argv) {
   const cards = readJson("public/cards_v2-data.json");
   const decklists = readJson("public/decklists-data.json");
+  // The IDF-cosine variants score on the id-keyed corpus; feed it so the metric
+  // reflects the same pools production builds. The grown pools come back keyed by
+  // display name, so the name-keyed metric here reads them directly.
+  const decklistIds = readJson("public/decklist-ids-data.json");
   const draftRecords = readJson("public/draft-records-data.json");
   let dreamcallers = readJson("public/dreamcallers-v2-data.json");
   const meta = readJson("data/buildaround_support.json");
@@ -803,7 +807,7 @@ function loadContext(argv) {
     Array.isArray(draftRecords) && draftRecords.length
       ? draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds }))
       : undefined;
-  const poolData = buildPoolData(cards, decklists, pickRecords);
+  const poolData = buildPoolData(cards, decklists, pickRecords, decklistIds);
   // The `embedded` variant grows from the committed affinity corpus rather than
   // the records; load it (when baked) so it runs under `--compare`/`--variant
   // embedded`. Every other variant ignores `affinityCorpus`.
@@ -864,7 +868,9 @@ function loadContext(argv) {
  */
 function* simulateRealDrafts(ctx, { seeds, variant, poolSize }) {
   for (const dc of ctx.dreamcallers) {
-    const signature = dc.signatureCards ?? [];
+    // The IDF-cosine and pick-affinity variants steer on stable card UUIDs (the
+    // same id space production passes), lowercased to match the corpus keys.
+    const signature = (dc.signatureCardIds ?? []).map((s) => s.toLowerCase());
     for (let seed = 0; seed < seeds; seed++) {
       const pool = generatePoolFromData(
         ctx.poolData,

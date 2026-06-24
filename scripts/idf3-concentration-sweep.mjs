@@ -7,7 +7,11 @@ import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 import { buildPoolData } from "../src/draft/pool/index.ts";
 import { idf2Corpus, IDF2 } from "../src/draft/pool/variant-idf2.ts";
-import { idfCosine, growIdfPool } from "../src/draft/pool/variant-idf.ts";
+import {
+  idfCosine,
+  growIdfPool,
+  resolveCountsToNames,
+} from "../src/draft/pool/variant-idf.ts";
 import { scorePool, TIER_TARGET } from "./pool-metrics.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -20,9 +24,13 @@ const POOL = 200;
 
 const cards = readJson("public/cards_v2-data.json");
 const decklists = readJson("public/decklists-data.json");
+// idf scores on the id-keyed corpus; the grown pool is resolved to names for the
+// name-keyed metric (`scorePool`).
+const decklistIds = readJson("public/decklist-ids-data.json");
 const dreamcallers = readJson("public/dreamcallers-v2-data.json");
 const meta = readJson("data/buildaround_support.json");
-const poolData = buildPoolData(cards, decklists);
+const poolData = buildPoolData(cards, decklists, undefined, decklistIds);
+const toNames = (counts) => resolveCountsToNames(counts, poolData.cardNameById);
 
 const corpus = idf2Corpus(poolData);
 const { base, twinCount } = corpus;
@@ -81,8 +89,8 @@ function score(t) {
   const byTheme = new Map();
   for (const dc of dreamcallers) {
     for (let s = 0; s < SEEDS; s++) {
-      const counts = poolCounts(mulberry(s), dc.signatureCards ?? [], t);
-      for (const inst of scorePool(counts, meta, TIER_TARGET, SHORT)) {
+      const counts = poolCounts(mulberry(s), dc.signatureCardIds ?? [], t);
+      for (const inst of scorePool(toNames(counts), meta, TIER_TARGET, SHORT)) {
         all.push(inst.adequacy);
         if (!byTheme.has(inst.theme)) byTheme.set(inst.theme, []);
         byTheme.get(inst.theme).push(inst.adequacy);

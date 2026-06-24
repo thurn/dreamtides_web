@@ -36,6 +36,15 @@ exist.
 Please always identify cards by UUID, *never* by card name. A lot of our
 legacy algorithm code does this and it's a huge nightmare to support.
 
+This is not stylistic: dozens of distinct cards share a display name with
+another card (different UUIDs, different rules), so any map, corpus, set,
+dedup key, similarity score, or lookup keyed on a name silently merges those
+cards — corrupting algorithm output and, at a render or selection site,
+surfacing the wrong card. Key every data structure, corpus, and lookup on the
+UUID and resolve the display name only at the final render boundary; treat any
+new `Map<cardName, …>`, name-keyed array, or `card.name ===` comparison as a
+bug to fix before you commit, not a shortcut to take.
+
 # Generation
 
 You can run `scripts/regenerate-assets.sh` to update generated artifacts

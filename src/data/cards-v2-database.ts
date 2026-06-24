@@ -54,6 +54,21 @@ export async function loadDecklists(): Promise<string[][]> {
 }
 
 /**
+ * Fetch the id-keyed real decklists (the same per-seat mainboards as
+ * {@link loadDecklists}, but each inner array is the cards' stable cards_v2
+ * UUIDs, lowercased, written to `/decklist-ids-data.json` by
+ * `scripts/setup-assets.mjs`). The IDF-cosine pool engine (`idf`/`idf2`/`idf3`/
+ * `idf4`) and the affiliation reweighting score on this corpus so two distinct
+ * cards that share a display name stay distinct. Returns an empty array if the
+ * bundle is missing so the harness still loads.
+ */
+export async function loadDecklistIds(): Promise<string[][]> {
+  const response = await fetch("/decklist-ids-data.json");
+  if (!response.ok) return [];
+  return (await response.json()) as string[][];
+}
+
+/**
  * A single human-seat entry from the adapted Cube Cobra draft corpus, bundled
  * by `scripts/setup-assets.mjs` for the record-replay draft mode. `packs` and
  * `picks` are aligned arrays of length 30 (10 picks per pack × 3 packs); their

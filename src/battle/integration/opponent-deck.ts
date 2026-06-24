@@ -332,7 +332,7 @@ function affiliationPackWeights(
   packs: readonly (readonly number[])[],
   ctx: AffiliationWeightContext | null,
   biasStrength: number,
-  numberToName: ReadonlyMap<number, string>,
+  numberToId: ReadonlyMap<number, string>,
 ): number[] | undefined {
   if (ctx === null) return undefined;
   const strength = Math.max(0, biasStrength);
@@ -340,8 +340,8 @@ function affiliationPackWeights(
     if (pack.length === 0) return 1;
     let sum = 0;
     for (const card of pack) {
-      const name = numberToName.get(card);
-      sum += name === undefined ? 0 : ctx.affinityByName.get(name) ?? 0;
+      const id = numberToId.get(card);
+      sum += id === undefined ? 0 : ctx.affinityById.get(id) ?? 0;
     }
     return 1 + strength * (sum / pack.length);
   });
@@ -495,12 +495,11 @@ export function buildOpponentDeck(args: {
   for (const card of cardDatabase.values())
     idToNumber.set(card.id.toLowerCase(), card.cardNumber);
 
-  // Card number -> display name, for bridging pack cards to the affiliation
-  // probe's name-keyed affinity map (the affiliation corpus is keyed by card
-  // name, distinct from the fit model's id space).
-  const nameByNumber = new Map<number, string>();
+  // Card number -> card UUID (lowercased), for bridging pack cards to the
+  // affiliation probe's id-keyed affinity map.
+  const numberToId = new Map<number, string>();
   for (const card of cardDatabase.values())
-    nameByNumber.set(card.cardNumber, card.name);
+    numberToId.set(card.cardNumber, card.id.toLowerCase());
 
   // Affiliation context (probe affinities) for an affiliated dreamscape; null in
   // a neutral dreamscape or when the affiliation cannot be scored.
@@ -517,8 +516,8 @@ export function buildOpponentDeck(args: {
   // affiliated dreamscape, so the first picks are pulled toward both.
   const seeds = signatureCardNumbers(opponentDreamcaller, idToNumber);
   if (affiliationCtx !== null) {
-    for (const name of affiliationCtx.signatureWeightedNames) {
-      const num = affiliationCtx.numberByName.get(name);
+    for (const id of affiliationCtx.signatureWeightedIds) {
+      const num = affiliationCtx.numberById.get(id);
       if (num !== undefined) seeds.push(num);
     }
   }
@@ -527,7 +526,7 @@ export function buildOpponentDeck(args: {
     packs,
     affiliationCtx,
     affiliation?.opponentBiasStrength ?? 0,
-    nameByNumber,
+    numberToId,
   );
 
   const targetDistinct = opponentDistinctCardCount(completionLevel, layerCount);

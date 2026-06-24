@@ -32,13 +32,17 @@ import { parse } from 'smol-toml';
 import {
   corpusLineToken,
   loadCardMaps,
-  readAdaptedRecordDecklists,
+  readAdaptedRecordDecklistIds,
   resolveToken,
 } from './lib/card-refs.mjs';
 
 const REPO_ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 // Corpus files reference cards by their stable id UUID; resolve to current names.
 const CARD_MAPS = loadCardMaps(join(REPO_ROOT, 'data', 'tabula', 'cards_v2.toml'));
+// This tool scores IDF-cosine on card ids (the same key space as the in-app idf
+// engine), so two distinct cards that share a display name stay distinct. Card
+// keys are resolved to current display names only for the human-readable report.
+const nameOf = (id) => CARD_MAPS.idToName.get(id) ?? id;
 
 const FLAGS = {
   target: {
@@ -155,33 +159,33 @@ function parseDeck(path) {
   const seen = new Set();
   for (const line of readFileSync(path, 'utf8').split('\n')) {
     const token = corpusLineToken(line);
-    if (token) seen.add(resolveToken(token, CARD_MAPS).name);
+    if (token) seen.add(resolveToken(token, CARD_MAPS).id.toLowerCase());
   }
   return { set: seen };
 }
 
-// Map card name -> its rules text from cards_v2.toml, collapsed to a single line
+// Map card id -> its rules text from cards_v2.toml, collapsed to a single line
 // (rendered-text is often a multi-line TOML string). Cards with no rules text
 // map to ''.
 function loadRulesText() {
   const tomlPath = join(REPO_ROOT, 'data', 'tabula', 'cards_v2.toml');
   const parsed = parse(readFileSync(tomlPath, 'utf8'));
-  const byName = new Map();
+  const byId = new Map();
   for (const card of parsed.cards ?? []) {
     const text = (card['rendered-text'] ?? '').replace(/\s+/g, ' ').trim();
-    byName.set(card.name, text);
+    if (typeof card.id === 'string') byId.set(card.id.toLowerCase(), text);
   }
-  return byName;
+  return byId;
 }
 
 // The corpus is every seat's mainboard in the adapted draft records, one deck
 // each, keyed by a synthetic `deck-NNNN` label for the report. As with the input,
-// a deck is the set of its distinct card names.
+// a deck is the set of its distinct card ids.
 function loadCorpus(dir) {
   const decks = new Map(); // label -> { set }
-  const lists = readAdaptedRecordDecklists(dir, CARD_MAPS);
-  lists.forEach((names, index) => {
-    const set = new Set(names);
+  const lists = readAdaptedRecordDecklistIds(dir, CARD_MAPS);
+  lists.forEach((ids, index) => {
+    const set = new Set(ids);
     if (set.size > 0) {
       decks.set(`deck-${String(index).padStart(4, '0')}`, { set });
     }
@@ -269,7 +273,7 @@ function main() {
     const drivers = shared
       .sort((x, y) => (weight.get(y) ?? 0) - (weight.get(x) ?? 0))
       .slice(0, 5)
-      .map((c) => `${c} (df=${df.get(c)})`);
+      .map((c) => `${nameOf(c)} (df=${df.get(c)})`);
     console.log(
       `  ${sim.toFixed(4)}  ${file}  [${shared.length} shared]  driven by: ${drivers.join(', ')}`,
     );
@@ -327,10 +331,10 @@ function main() {
   );
   console.log(`\n=== POOL ===`);
   for (const [card, copies] of [...finalPool.entries()].sort(
-    (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]),
+    (a, b) => b[1] - a[1] || nameOf(a[0]).localeCompare(nameOf(b[0])),
   )) {
     const text = rulesText.get(card) ?? '';
-    console.log(`${copies}  ${card}${text ? `  ${text}` : ''}`);
+    console.log(`${copies}  ${nameOf(card)}${text ? `  ${text}` : ''}`);
   }
 }
 

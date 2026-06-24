@@ -19,6 +19,16 @@ import type { Tides4DecksJson } from "../draft/pool/tides4-io.ts";
 const STARTER_NAME_A = "Starter Alpha";
 const STARTER_NAME_B = "Starter Beta";
 
+// The id-keyed pool engine scores on stable card UUIDs, so every test card carries
+// a deterministic lowercase id and the corpus is fed as id arrays. The provenance
+// summary resolves those ids back onto display names through `cardNameById`.
+function idForName(name: string): string {
+  if (name === STARTER_NAME_A) return "starter-a";
+  if (name === STARTER_NAME_B) return "starter-b";
+  const m = /^Card (\d+)$/.exec(name);
+  return m ? `card-${m[1]}` : name.toLowerCase();
+}
+
 function makeContext(): RunPoolContext {
   const names: string[] = [];
   for (let i = 0; i < 38; i += 1) {
@@ -36,17 +46,22 @@ function makeContext(): RunPoolContext {
   nameIndex.set(STARTER_NAME_A, 510);
   nameIndex.set(STARTER_NAME_B, 511);
 
-  const cards: PoolCard[] = names.map((name) => ({ name }));
+  const cards: PoolCard[] = names.map((name) => ({
+    name,
+    id: idForName(name),
+  }));
 
-  // Several ~20-card decklists (idf corpus requires 16-34 cards per deck).
+  // Several ~20-card decklists (idf corpus requires 16-34 cards per deck), keyed
+  // by card id to match the production corpus.
   const decklists: string[][] = [
     [...names.slice(0, 18), STARTER_NAME_A, STARTER_NAME_B],
     names.slice(0, 20),
     names.slice(10, 30),
     names.slice(18, 38),
   ];
+  const decklistIds = decklists.map((deck) => deck.map(idForName));
 
-  const poolData = buildPoolData(cards, decklists);
+  const poolData = buildPoolData(cards, decklists, undefined, decklistIds);
 
   return {
     poolData,
@@ -62,7 +77,7 @@ function makeContext(): RunPoolContext {
 function makeDreamcaller(
   overrides: Partial<DreamcallerContent> = {},
 ): DreamcallerContent {
-  return {
+  const base: DreamcallerContent = {
     id: "dc-test",
     name: "Test Dreamcaller",
     title: "The Tester",
@@ -72,6 +87,14 @@ function makeDreamcaller(
     // Point clearly at the first deck (which includes the starter names).
     signatureCards: ["Card 0", "Card 1", "Card 2"],
     ...overrides,
+  };
+  // idf3 steers on the id-aligned signature; derive it from the (possibly
+  // overridden) signature names unless an explicit id list was supplied.
+  return {
+    ...base,
+    signatureCardIds:
+      overrides.signatureCardIds ??
+      (base.signatureCards ?? []).map(idForName),
   };
 }
 

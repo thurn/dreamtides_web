@@ -8,7 +8,11 @@ import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 import { buildPoolData } from "../src/draft/pool/index.ts";
 import { idf2Corpus } from "../src/draft/pool/variant-idf2.ts";
-import { idfCosine, growIdfPool } from "../src/draft/pool/variant-idf.ts";
+import {
+  idfCosine,
+  growIdfPool,
+  resolveCountsToNames,
+} from "../src/draft/pool/variant-idf.ts";
 import { scorePool, TIER_TARGET } from "./pool-metrics.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -19,9 +23,14 @@ const SEEDS = Number(process.argv[2] ?? 60);
 
 const cards = readJson("public/cards_v2-data.json");
 const decklists = readJson("public/decklists-data.json");
+// The idf engine keys its corpus on card ids; feed `decklistIds` so this mirror's
+// reimplemented corpus matches production. The grown pool comes out id-keyed and
+// is resolved to names (the metric, `scorePool`, looks payoffs up by name).
+const decklistIds = readJson("public/decklist-ids-data.json");
 const dreamcallers = readJson("public/dreamcallers-v2-data.json");
 const meta = readJson("data/buildaround_support.json");
-const poolData = buildPoolData(cards, decklists);
+const poolData = buildPoolData(cards, decklists, undefined, decklistIds);
+const toNames = (counts) => resolveCountsToNames(counts, poolData.cardNameById);
 const { base, twinCount } = idf2Corpus(poolData);
 const { decks, idf } = base;
 const idfOf = (c) => idf.get(c) ?? 0;
@@ -86,9 +95,9 @@ function scoreAll(grow, draw) {
   for (const dc of dreamcallers) {
     const ad = [];
     for (let s = 0; s < SEEDS; s++) {
-      const start = (draw ?? starterIdx)(mulberry(s), dc.signatureCards ?? []);
+      const start = (draw ?? starterIdx)(mulberry(s), dc.signatureCardIds ?? []);
       const counts = grow(start);
-      for (const i of scorePool(counts, meta, TIER_TARGET, SHORT)) {
+      for (const i of scorePool(toNames(counts), meta, TIER_TARGET, SHORT)) {
         all.push(i.adequacy); ad.push(i.adequacy);
         if (!byTheme.has(i.theme)) byTheme.set(i.theme, []);
         byTheme.get(i.theme).push(i.adequacy);

@@ -39,7 +39,12 @@ import {
   type PoolData,
   type VariantResult,
 } from "./types.ts";
-import { type IdfDeck, idfCosine, growIdfPool } from "./variant-idf.ts";
+import {
+  type IdfDeck,
+  idfCosine,
+  growIdfPool,
+  resolveCountsToNames,
+} from "./variant-idf.ts";
 import { IDF2, idf2Corpus } from "./variant-idf2.ts";
 
 // Number of highest-IDF-weight card names kept to characterise a deck on the
@@ -88,6 +93,14 @@ const IDF3: Idf3Tuning = {
 // starter weight. Falls back to `default` when no usable decklists exist, and to
 // the plain `idf2` diversity draw when the signature is empty or carries no IDF
 // weight (which falls straight out of the formula).
+//
+// `signatureCards` are the Dreamcaller's signature card UUIDs in production
+// (matching the id-keyed corpus); a synthetic / test corpus keyed by opaque
+// strings passes those same strings. The probe, anchors, growth, and per-card
+// provenance all run in the corpus's key space (UUIDs in production); the
+// provenance summary then resolves every key back to its current display name
+// through `poolData.cardNameById` so the "Why Cards" surface reads card names,
+// not UUIDs.
 export function generateIdf3(
   rng: () => number,
   poolData: PoolData,
@@ -174,45 +187,60 @@ export function generateIdf3(
   // that holds it. Walking `includedDecks` in growth order (starter first, then
   // nearest-to-farthest neighbours) and recording the first deck that holds each
   // card yields, for every card, the closest-to-starter deck it came from — the
-  // "distance from the starting point" the debug surface reports.
+  // "distance from the starting point" the debug surface reports. The probe,
+  // growth, and this attribution all run in the corpus's UUID key space; the
+  // display fields are resolved to current card names via `nameOf` at the end.
+  const nameOf = (key: string): string => poolData.cardNameById?.get(key) ?? key;
   const signatureSet = new Set(signatureCards ?? []);
-  const cappedCopies = (name: string): number => Math.min(2, counts.get(name) ?? 0);
-  const cardProvenanceByName: Record<string, Idf3PoolCardProvenance> = {};
+  const cappedCopies = (key: string): number => Math.min(2, counts.get(key) ?? 0);
+  // Keyed by corpus key (UUID) while building, so growth-order dedup stays exact;
+  // resolved to a name-keyed record below.
+  const provenanceByKey: Record<string, Idf3PoolCardProvenance> = {};
   const contributedByRank = new Array<number>(includedDecks.length).fill(0);
   for (let rank = 0; rank < includedDecks.length; rank += 1) {
     const { deckIndex, similarityToStarter } = includedDecks[rank];
-    for (const name of decks[deckIndex].cards) {
-      if (!counts.has(name)) continue;
-      if (cardProvenanceByName[name] !== undefined) continue;
-      cardProvenanceByName[name] = {
-        isSignature: signatureSet.has(name),
+    for (const key of decks[deckIndex].cards) {
+      if (!counts.has(key)) continue;
+      if (provenanceByKey[key] !== undefined) continue;
+      provenanceByKey[key] = {
+        isSignature: signatureSet.has(key),
         inStarterDeck: rank === 0,
-        copies: cappedCopies(name),
+        copies: cappedCopies(key),
         sourceRank: rank,
         sourceSimilarity: similarityToStarter,
       };
       contributedByRank[rank] += 1;
     }
   }
+  // Resolve provenance keys to display names. Two distinct UUIDs that share a
+  // name collapse to one entry; the nearest-source (earliest in growth order)
+  // wins, matching the name-keyed pool the resolver downstream produces.
+  const cardProvenanceByName: Record<string, Idf3PoolCardProvenance> = {};
+  for (const [key, entry] of Object.entries(provenanceByKey)) {
+    const name = nameOf(key);
+    if (cardProvenanceByName[name] === undefined) cardProvenanceByName[name] = entry;
+  }
 
   const sourceDecks: Idf3PoolSourceDeck[] = includedDecks.map((d, rank) => ({
     rank,
     similarityToStarter: d.similarityToStarter,
-    distinctiveCardNames: topDistinctiveCards(decks[d.deckIndex], idfOf),
+    distinctiveCardNames: topDistinctiveCards(decks[d.deckIndex], idfOf).map(nameOf),
     contributedCardCount: contributedByRank[rank],
   }));
 
   const idf3Provenance: Idf3PoolProvenance = {
-    signatureCardNames: [...(signatureCards ?? [])],
-    signatureWeightedNames: [...probeCards],
-    signatureDroppedNames: (signatureCards ?? []).filter(
-      (c) => !probeCards.has(c),
-    ),
+    signatureCardNames: (signatureCards ?? []).map(nameOf),
+    signatureWeightedNames: [...probeCards].map(nameOf),
+    signatureDroppedNames: (signatureCards ?? [])
+      .filter((c) => !probeCards.has(c))
+      .map(nameOf),
     anchors: anchorScored.map((a) => ({
       similarityToSignature: a.s,
-      distinctiveCardNames: topDistinctiveCards(decks[a.i], idfOf),
+      distinctiveCardNames: topDistinctiveCards(decks[a.i], idfOf).map(nameOf),
     })),
-    starterDistinctiveCardNames: topDistinctiveCards(decks[startIdx], idfOf),
+    starterDistinctiveCardNames: topDistinctiveCards(decks[startIdx], idfOf).map(
+      nameOf,
+    ),
     starterCardCount: decks[startIdx].cards.size,
     sourceDecks,
     cardProvenanceByName,
@@ -221,8 +249,8 @@ export function generateIdf3(
   return {
     C: new Set(),
     selected: ["idf3", `deck#${String(startIdx)}`],
-    counts,
-    starterDeck: [...decks[startIdx].cards],
+    counts: resolveCountsToNames(counts, poolData.cardNameById),
+    starterDeck: [...decks[startIdx].cards].map(nameOf),
     idf3Provenance,
   };
 }

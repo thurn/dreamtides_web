@@ -29,6 +29,7 @@ import {
   loadAffinityCorpus,
   loadCardsV2Database,
   loadDecklists,
+  loadDecklistIds,
   loadDraftRecords,
   loadKnownGoodDecklists,
   loadTideDecks,
@@ -321,6 +322,12 @@ export function hashStringToSeed(input: string): number {
  * same pool. The signature-card steering and the provenance summary apply only
  * to the `idf3` strategy; other strategies ignore the signature and produce no
  * provenance.
+ *
+ * The signature is passed as stable card UUIDs (lowercased), not display names:
+ * the IDF-cosine engine (`idf3`/`idf4`) keys its corpus on UUIDs, and the
+ * pick-affinity variants (`sigseed`/`picksig`/`seed`/`pickfit`) resolve UUIDs
+ * onto their UUID corpus directly — so the steering never goes through the lossy
+ * name→id lookup that would conflate two distinct cards sharing a display name.
  */
 function generateDreamcallerPool(
   dreamcaller: DreamcallerContent,
@@ -334,7 +341,7 @@ function generateDreamcallerPool(
     ctx.poolVariant ?? DEFAULT_POOL_VARIANT,
     undefined,
     POOL_TARGET_SIZE,
-    dreamcaller.signatureCards ?? [],
+    (dreamcaller.signatureCardIds ?? []).map((id) => id.toLowerCase()),
     dreamcaller.id,
   );
 }
@@ -713,6 +720,7 @@ export async function loadQuestContent(
     dreamwellCards,
     dreamsignTemplates,
     decklists,
+    decklistIds,
     draftRecords,
     knownGoodDecklists,
     affinityCorpus,
@@ -735,6 +743,11 @@ export async function loadQuestContent(
     loadDreamwellCards(),
     loadDreamsignTemplates(),
     loadDecklists(),
+    // The id-keyed decklist corpus the IDF-cosine pool engine and affiliation
+    // reweighting score on. A failed fetch degrades to an empty array, which
+    // makes those variants fall back to the name corpus (or the `default`
+    // algorithm when neither is present).
+    loadDecklistIds().catch(() => [] as string[][]),
     // The draft-record corpus is always fetched: beyond the deck-fit modes and
     // the pick-data pool variants, every run needs it to build coherent opponent
     // decks (the corpus supplies both the fit model and the draft's pack
@@ -809,6 +822,9 @@ export async function loadQuestContent(
     // The pick-data variants key on stable card ids, so feed them the
     // records' id arrays.
     draftRecords.map((r) => ({ packs: r.packIds, picks: r.pickIds })),
+    // The IDF-cosine pool engine and affiliation reweighting score on the
+    // id-keyed decklist corpus so same-name cards stay distinct.
+    decklistIds,
   );
   // The `embedded` variant reads its corpus from here; every other variant
   // ignores it, so this never changes any other variant's pools.

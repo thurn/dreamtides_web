@@ -12,7 +12,11 @@ import { fileURLToPath } from "node:url";
 import { dirname, resolve } from "node:path";
 import { buildPoolData } from "../src/draft/pool/index.ts";
 import { idf2Corpus } from "../src/draft/pool/variant-idf2.ts";
-import { idfCosine, growIdfPool } from "../src/draft/pool/variant-idf.ts";
+import {
+  idfCosine,
+  growIdfPool,
+  resolveCountsToNames,
+} from "../src/draft/pool/variant-idf.ts";
 import { scorePool, TIER_TARGET } from "./pool-metrics.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -23,6 +27,10 @@ const SEEDS = Number(process.argv[2] ?? 60);
 
 const cards = readJson("public/cards_v2-data.json");
 const decklists = readJson("public/decklists-data.json");
+// The idf engine keys its corpus on card ids; `decklistIds` is index-aligned to
+// `decklists`. Self-adequacy pruning stays scored on the name corpus (scorePool is
+// name-keyed) but indexes both, and the corpus handed to the engine is id-keyed.
+const decklistIds = readJson("public/decklist-ids-data.json");
 const dreamcallers = readJson("public/dreamcallers-v2-data.json");
 const meta = readJson("data/buildaround_support.json");
 
@@ -32,6 +40,7 @@ function mulberry(seed) {
 }
 
 // Rank payoff-carrying decklists by self-adequacy (worst first) and drop frac.
+// Returns the kept name + id corpora (index-aligned).
 function prunedDecklists(frac) {
   const self = (d) => {
     const c = new Map();
@@ -41,12 +50,16 @@ function prunedDecklists(frac) {
   };
   const scored = decklists.map((d, i) => ({ i, a: self(d) })).filter((x) => x.a !== null).sort((a, b) => a.a - b.a);
   const drop = new Set(scored.slice(0, Math.round(frac * scored.length)).map((x) => x.i));
-  return decklists.filter((_, i) => !drop.has(i));
+  return {
+    names: decklists.filter((_, i) => !drop.has(i)),
+    ids: decklistIds.filter((_, i) => !drop.has(i)),
+  };
 }
 
 // Build a corpus closure (decks, idfOf, starter draw, coherent grow) for a corpus.
-function makeCorpus(decklistsSubset) {
-  const poolData = buildPoolData(cards, decklistsSubset);
+function makeCorpus({ names, ids }) {
+  const poolData = buildPoolData(cards, names, undefined, ids);
+  const toNames = (counts) => resolveCountsToNames(counts, poolData.cardNameById);
   const { base, twinCount } = idf2Corpus(poolData);
   const { decks, idf } = base;
   const idfOf = (c) => idf.get(c) ?? 0;
@@ -89,21 +102,21 @@ function makeCorpus(decklistsSubset) {
     return counts;
   };
 
-  return { decks, idfOf, starterIdx, coherentGrow };
+  return { decks, idfOf, starterIdx, coherentGrow, toNames };
 }
 
 function evaluate({ pruneFrac, size, coherent }) {
   const corpus = makeCorpus(prunedDecklists(pruneFrac));
-  const { decks, idfOf, starterIdx, coherentGrow } = corpus;
+  const { decks, idfOf, starterIdx, coherentGrow, toNames } = corpus;
   const all = [];
   const byTheme = new Map();
   const byDc = new Map();
   for (const dc of dreamcallers) {
     const ad = [];
     for (let s = 0; s < SEEDS; s++) {
-      const start = starterIdx(mulberry(s), dc.signatureCards ?? []);
+      const start = starterIdx(mulberry(s), dc.signatureCardIds ?? []);
       const counts = coherent ? coherentGrow(start, size) : growIdfPool(decks, idfOf, start, size).counts;
-      for (const i of scorePool(counts, meta, TIER_TARGET, SHORT)) {
+      for (const i of scorePool(toNames(counts), meta, TIER_TARGET, SHORT)) {
         all.push(i.adequacy); ad.push(i.adequacy);
         if (!byTheme.has(i.theme)) byTheme.set(i.theme, []);
         byTheme.get(i.theme).push(i.adequacy);

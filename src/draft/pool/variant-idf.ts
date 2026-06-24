@@ -7,6 +7,14 @@
 // "similar" mean "shares distinctive cards" rather than "shares popular cards":
 // a card in nearly every deck gets ~0 weight. The corpus, cosine, and growth
 // helpers here are shared with the `idf2` variant.
+//
+// The corpus is keyed on each card's stable cards_v2 UUID (the `decklistIds`
+// source), never its display name, so two distinct cards that share a name stay
+// distinct in document-frequency and similarity scoring. The grown pool's copy
+// counts therefore come out keyed by UUID; {@link resolveCountsToNames} maps them
+// back onto current display names at the variant boundary, since the downstream
+// pool resolver works in name space. A synthetic corpus with no UUID source
+// (tests) falls back to `decklists` and its keys are treated as opaque strings.
 
 import type { PoolStrategy } from "./strategy.ts";
 import { missingPoolData, type PoolData, type VariantResult } from "./types.ts";
@@ -75,7 +83,9 @@ export function idfCorpus(poolData: PoolData): IdfCorpus | null {
   const cached = idfCorpusCache.get(poolData);
   if (cached !== undefined) return cached;
   let corpus: IdfCorpus | null = null;
-  const source = poolData.decklists;
+  // Prefer the id-keyed corpus so same-name cards stay distinct; fall back to the
+  // name corpus for synthetic / test PoolData that carries no UUID source.
+  const source = poolData.decklistIds ?? poolData.decklists;
   if (source && source.length > 0) {
     const filtered = source
       .map((d) => new Set(d))
@@ -121,6 +131,27 @@ export function idfCosine(
   let dot = 0;
   for (const c of small.cards) if (large.cards.has(c)) dot += idfOf(c) ** 2;
   return dot / (a.norm * b.norm);
+}
+
+// Map a grown pool's copy counts (keyed by the corpus's UUID keys) back onto
+// current display names for the downstream name-keyed pool resolver. Two distinct
+// UUIDs that resolve to the same display name are merged, their merged count
+// capped at `IDF.cap` (the per-card copy cap), so the collapsed name never claims
+// more copies than the 2-copy rule allows. When `cardNameById` is absent (a
+// synthetic / test corpus whose keys are already opaque display strings) the
+// counts are returned unchanged, so name-keyed corpora keep working. Shared by
+// every IDF variant (`idf`/`idf2`/`idf3`/`idf4`) at its return boundary.
+export function resolveCountsToNames(
+  counts: Map<string, number>,
+  cardNameById: ReadonlyMap<string, string> | undefined,
+): Map<string, number> {
+  if (!cardNameById) return counts;
+  const out = new Map<string, number>();
+  for (const [key, n] of counts) {
+    const name = cardNameById.get(key) ?? key;
+    out.set(name, Math.min(IDF.cap, (out.get(name) ?? 0) + n));
+  }
+  return out;
 }
 
 /** One decklist folded into a grown pool, in growth order. */
@@ -290,8 +321,13 @@ export function generateIdf(
   // No color identity: deriving one would read the color metadata, and this
   // variant consumes nothing but the decklists. The identity string is left
   // empty; the labels record only that this is `idf` and which corpus decklist
-  // started the pool.
-  return { C: new Set(), selected: ["idf", `deck#${String(startIdx)}`], counts };
+  // started the pool. The grown pool is keyed by the corpus's UUIDs, so resolve
+  // it back onto display names for the downstream name-keyed resolver.
+  return {
+    C: new Set(),
+    selected: ["idf", `deck#${String(startIdx)}`],
+    counts: resolveCountsToNames(counts, poolData.cardNameById),
+  };
 }
 
 /** Strategy adapter for the `idf` algorithm. */
