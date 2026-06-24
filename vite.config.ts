@@ -8,6 +8,7 @@ import type { Plugin, ViteDevServer } from "vite";
 import { createCardEditorApiMiddleware } from "./scripts/card-editor-api.mjs";
 import { createDreamsignEditorApiMiddleware } from "./scripts/dreamsign-editor-api.mjs";
 import { createDreamcallerEditorApiMiddleware } from "./scripts/dreamcaller-editor-api.mjs";
+import { createDreamscapeEditorApiMiddleware } from "./scripts/dreamscape-editor-api.mjs";
 import { createFigmentEditorApiMiddleware } from "./scripts/figment-editor-api.mjs";
 import { refreshFigmentDataJson } from "./scripts/figment-editor-data.mjs";
 import { createDreamwellEditorApiMiddleware } from "./scripts/dreamwell-editor-api.mjs";
@@ -86,6 +87,17 @@ function dreamcallerEditorApiPlugin(): Plugin {
     apply: "serve",
     configureServer(server) {
       server.middlewares.use(createDreamcallerEditorApiMiddleware({ rootDir: __dirname }));
+    },
+  };
+}
+
+/** Vite plugin that serves local dreamscape editor read/write endpoints. */
+function dreamscapeEditorApiPlugin(): Plugin {
+  return {
+    name: "dreamscape-editor-api",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(createDreamscapeEditorApiMiddleware({ rootDir: __dirname }));
     },
   };
 }
@@ -696,6 +708,7 @@ export default defineConfig({
     cardEditorApiPlugin(),
     dreamsignEditorApiPlugin(),
     dreamcallerEditorApiPlugin(),
+    dreamscapeEditorApiPlugin(),
     figmentEditorApiPlugin(),
     figmentDataHotReloadPlugin(),
     dreamwellEditorApiPlugin(),
