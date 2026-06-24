@@ -80,6 +80,17 @@ export interface Tides4DeckJson {
   /** A one-paragraph description of the tide's structure, engine, and contrasts. */
   description?: string;
   /**
+   * Machine-checkable archetype the tide's label is built around: its dominant
+   * tribe (a subtype, or `"events"`) and the mechanics it expresses. The
+   * annotation consistency gate (scripts/check-tide-annotations.mjs) validates
+   * these against the actual card list so a label that drifts off its deck fails
+   * loudly. Preserved across bakes by stable id; ignored by the runtime.
+   */
+  claims?: {
+    tribe?: string;
+    mechanics?: string[];
+  };
+  /**
    * The deck color this tide's mechanical identity belongs to. Every tide is
    * annotated with one; preserved across bakes by stable id. A tide without a
    * valid color is rejected by {@link validateTides4Decks}.

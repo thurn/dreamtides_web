@@ -134,6 +134,10 @@ export function readTideAnnotations(outPath) {
     ]) {
       if (typeof tide[key] === "string" && tide[key] !== "") anno[key] = tide[key];
     }
+    // `claims` ({ tribe, mechanics }) anchors a tide's label to its archetype for
+    // the annotation consistency gate; preserved across bakes by tide id like the
+    // text annotations.
+    if (tide.claims && typeof tide.claims === "object") anno.claims = tide.claims;
     if (Object.keys(anno).length > 0) map.set(tide.id, anno);
   }
   return map;
@@ -305,9 +309,11 @@ const HEADER = `// data/tides4.jsonc — the committed tide decks the \`tides4\`
 // annotations — \`shortName\` (a 1-3 word mechanical label), \`displayName\` (a
 // narrative, thematic name) and \`displayDescription\` (a 10-20 word player-facing
 // blurb) for the player-facing tide screens, \`summary\` (one sentence),
-// \`description\` (one paragraph), and \`color\` (one of the five deck colors:
-// purple, green, yellow, blue, orange) — which a re-bake preserves by stable tide
-// id.
+// \`description\` (one paragraph), \`color\` (one of the five deck colors:
+// purple, green, yellow, blue, orange), and \`claims\` (\`{ tribe, mechanics }\`,
+// the archetype the label is built around) — which a re-bake preserves by stable
+// tide id. The annotation consistency gate (npm run check-tide-annotations)
+// validates \`claims\` against the deck so a label that drifts off its cards fails.
 // \`tidePoolByDreamcaller\` is keyed by Dreamcaller UUID; each
 // entry has \`starter\` (the always-joined signature tide, or null), \`facets\` (a
 // random subset is drawn each run) and \`neutral\` (the broad tail).
@@ -321,6 +327,20 @@ const HEADER = `// data/tides4.jsonc — the committed tide decks the \`tides4\`
 //   npm run bake-tides4       # rewrites this file + the markdown rendering
 //   npm run setup-assets      # copies it to public/tides4-data.json
 //   npm run pool-metrics -- --variant tides4   # measures it against sigseed`;
+
+// Canonical one-line serialization of a tide's `claims` annotation, e.g.
+// `      "claims": {"tribe": "Survivor", "mechanics": ["abandon","figment"]},`.
+// Tribe then mechanics, so any authored key order round-trips identically.
+function serializeClaims(claims) {
+  const parts = [];
+  if (typeof claims.tribe === "string") {
+    parts.push(`"tribe": ${JSON.stringify(claims.tribe)}`);
+  }
+  if (Array.isArray(claims.mechanics)) {
+    parts.push(`"mechanics": ${JSON.stringify(claims.mechanics)}`);
+  }
+  return `      "claims": {${parts.join(", ")}},`;
+}
 
 export function serializeArtifact(json, header = HEADER) {
   const tideLines = json.tides.map((tide, t) => {
@@ -342,6 +362,12 @@ export function serializeArtifact(json, header = HEADER) {
       if (typeof tide[key] === "string" && tide[key] !== "") {
         anno.push(`      ${JSON.stringify(key)}: ${JSON.stringify(tide[key])},`);
       }
+    }
+    // `claims` ({ tribe, mechanics }) is emitted after the text annotations in a
+    // canonical one-line form (tribe then mechanics) so it round-trips byte-for-byte
+    // regardless of authored key order.
+    if (tide.claims && typeof tide.claims === "object") {
+      anno.push(serializeClaims(tide.claims));
     }
     // Provenance UUIDs (preserved across bakes): a signature tide carries the
     // `dreamcallerId` it belongs to, and a facet/neutral tide carries the
@@ -934,6 +960,7 @@ export function buildTides4({
         summary,
         description,
         color,
+        claims,
         role,
         dreamcallerId,
         leanCardId,
@@ -948,6 +975,7 @@ export function buildTides4({
       if (summary !== undefined) out.summary = summary;
       if (description !== undefined) out.description = description;
       if (color !== undefined) out.color = color;
+      if (claims !== undefined) out.claims = claims;
       out.role = role;
       // Provenance UUIDs: a signature tide names its Dreamcaller, a facet/neutral
       // tide names the card it is themed around. Both are stable cards_v2/

@@ -3766,7 +3766,7 @@ tide-neu-05 is an almost entirely character-based deck (27 of 30 cards) built ar
 - 1× Carrion Shepherd
 - 1× Skull Weaver
 
-## Broad: Part the Veil / Grotto Seer — Void Depth Discard
+## Broad: Part the Veil / Grotto Seer — Broad Discard Engine
 
 `tide-neu-06` — neutral tide, 27 distinct cards, 30 copies
 
