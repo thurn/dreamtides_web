@@ -1,5 +1,5 @@
-Follow-up: hand-refine the best-fit annotations on six changed tides4 tides
-===========================================================================
+Follow-up: hand-refine the best-fit annotations on five changed tides4 tides
+============================================================================
 
 The curated identity annotations (shortName, displayName, displayDescription,
 summary, description, color) were restored to data/tides4.jsonc by matching each
@@ -9,12 +9,9 @@ the deck it actually describes. data/tides5.jsonc inherits these by tide name on
 its bake (44 of 64 tides matched). 58 of 64 tides4 tides matched an existing
 annotation at >=85% card overlap.
 
-Six tides changed enough that the applied annotation is a best-fit rather than an
+Five tides changed enough that the applied annotation is a best-fit rather than an
 exact restoration; a hand pass could sharpen them:
 
-  tide-sig-04 (Vrakmoth)  -> "Event Copy Combo / Manifold Incantation" (73%);
-      the deck shifted to an event-copy engine, so this borrows tide-sig-12's
-      label (also used there).
   tide-sig-06 (Corvath)   -> "Discard Void Depth / Echoes in the Abyss" (64%);
       its own pre-removal label, theme preserved.
   tide-fac-14 (Shadowpaw) -> "Warrior Token Flood / Swelling Ranks" (66%).
