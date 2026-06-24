@@ -1,0 +1,85 @@
+Remaining name-based card identity (after the IDF-cosine engine migration)
+==========================================================================
+
+Context: the IDF-cosine pool engine (idf/idf2/idf3/idf4) and the affiliation
+reweighting were migrated to key on stable cards_v2 UUIDs (the
+`decklist-ids-data.json` corpus, bundled by setup-assets). The items below are
+the name-keyed card-identity sites that remain, deliberately left out of that
+scope. AGENTS.md requires keying every corpus/map/lookup on the UUID and
+resolving the display name only at the final render boundary; 24 distinct
+cards_v2 cards share a display name with another card, so a name key silently
+merges them.
+
+
+Issue 1 — the `decklists` pool variant still keys on display name
+-----------------------------------------------------------------
+src/draft/pool/variant-decklists.ts builds its own IDF corpus (`deckCorpus`)
+from `poolData.decklists` (name arrays) and keys df / idf / cosine / the grown
+pool on names. This is the same class of bug the idf/idf2/idf3/idf4 migration
+fixed, but the `decklists` variant was outside that change.
+
+Files:
+  - src/draft/pool/variant-decklists.ts — `deckCorpus` reads
+    `poolData.decklists`; switch it to `poolData.decklistIds ?? poolData.decklists`
+    (already bundled) and resolve the grown counts back to display names at the
+    return boundary via `resolveCountsToNames` (src/draft/pool/variant-idf.ts),
+    exactly as the idf variants now do.
+  - Lockstep mirror (AGENTS.md): scripts/spine-redundancy-experiment.mjs is a
+    line-for-line re-port of the `decklists` internals and reads
+    `public/decklists-data.json`; move it to the id corpus in the SAME change so
+    its tuned constants do not silently desync.
+
+Note: the `decklists` variant is not the default (tides4 is) and is not used by
+any production pool path today, so impact is bounded; this is a consistency /
+correctness cleanup.
+
+
+Issue 2 — the pool engine's OUTPUT boundary collapses same-name cards
+---------------------------------------------------------------------
+The idf engine now scores internally on UUIDs, but it resolves back to display
+names at its return boundary (`VariantResult.counts`, the idf3 provenance), and
+everything downstream of the variant is name-keyed:
+  - generate.ts caps and returns `counts: Map<cardName, number>`.
+  - src/data/quest-content.ts resolves the pool against `ctx.nameIndex`
+    (cardName -> cardNumber) in `resolvePool`, and keys the idf3 provenance
+    summary (`buildDreamcallerProvenance`) on names via the same index.
+  - The idf3 provenance public shape (`Idf3PoolProvenance.cardProvenanceByName`,
+    src/draft/pool/types.ts; `Idf3ProvenanceSummary` in src/types/content.ts)
+    and the "Why Cards" surface are name-keyed.
+
+Consequence: when two distinct UUIDs that share a display name both land in one
+pool, they collapse to a single card at this final resolution step (the name
+index maps the shared name to one card number). The SCORING that builds the pool
+is now correct; only the last name->cardNumber hop loses the distinction.
+
+Fix (larger follow-up): push UUID-keyed counts through `resolvePool` using an id
+index (id -> cardNumber, e.g. `buildIdIndex`) instead of `nameIndex`, and re-key
+the idf3 provenance (`cardProvenanceByName` -> `...ById`) and the "Why Cards"
+surface on UUIDs, resolving the display name only at render. This touches
+generate.ts, quest-content.ts, src/types/content.ts, the provenance types in
+src/draft/pool/types.ts, and the UI that reads the provenance, plus their tests.
+
+
+Issue 3 — pool-metrics.mjs analytical helpers key on display name
+-----------------------------------------------------------------
+Two metrics in scripts/pool-metrics.mjs (separate from the idf engine, which now
+feeds them the id corpus) still identify cards by name:
+  - `dominantSignatureTheme(dc.signatureCards, meta)` (called at ~line 907 and
+    ~226) looks each signature card up by name via `supportEntryByName`.
+  - `computeDreamcaller` / `archetypeSupportSet(ctx.decklists, sig, ...)` (~line
+    1486) learns a Dreamcaller's archetype-support set from the NAME decklist
+    corpus with name signatures.
+
+Fix: key both on UUIDs — pass `dc.signatureCardIds`, index buildaround_support
+by its UUID key, and learn the archetype-support set from
+`public/decklist-ids-data.json` — resolving names only for display. `scorePool`
+itself is fine: it scores the engine's name-resolved pool output, which is the
+pool the player actually receives.
+
+
+Not audited
+-----------
+Only the pool-construction and affiliation subsystems were reviewed. Other areas
+(card rendering, merchant offers, battle automation, journey signals, etc.) were
+not surveyed for name-keyed card identity and may carry their own
+`Map<cardName, ...>` / name-keyed `Set` / `card.name ===` lookups.
