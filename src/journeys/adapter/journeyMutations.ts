@@ -123,8 +123,8 @@ export function createJourneyMutations(
     pushBattleRewardModifier: (kind, amount, battles, source) => {
       mutations.pushBattleRewardModifier(kind, amount, battles, source);
     },
-    pushTemporaryBaneGrant: (baneName, count, battles, source) => {
-      mutations.pushTemporaryBaneGrant(baneName, count, battles, source);
+    pushTemporaryBaneGrant: (baneCardId, baneName, count, battles, source) => {
+      mutations.pushTemporaryBaneGrant(baneCardId, baneName, count, battles, source);
     },
 
     // ---- Shop modifiers ------------------------------------------------

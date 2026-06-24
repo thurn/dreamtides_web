@@ -270,12 +270,15 @@ export interface QuestMutations {
     source: string,
   ) => void;
   /**
-   * Add `count` bane cards by name to the deck immediately and stack a
+   * Add `count` bane cards to the deck immediately and stack a
    * `temporary_bane_grant` modifier that removes the added entries when its
-   * `battlesRemaining` counter reaches zero. The bane's catalog cardNumber
-   * is resolved via `questContent.cardDatabase`; an unknown name no-ops.
+   * `battlesRemaining` counter reaches zero. The bane's catalog entry is
+   * resolved via `questContent.cardDatabase` using `baneCardId` (UUID);
+   * `baneName` is a display/log label only and is not used for catalog lookup.
+   * An unresolvable `baneCardId` no-ops with a console warning.
    */
   pushTemporaryBaneGrant: (
+    baneCardId: string,
     baneName: string,
     count: number,
     battles: number,

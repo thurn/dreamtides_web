@@ -3463,6 +3463,7 @@ describe("MultiplayerQuestProvider", () => {
     ]);
 
     captured[captured.length - 1]?.mutations.pushTemporaryBaneGrant(
+      "card-501",
       "Nightmare",
       1,
       1,

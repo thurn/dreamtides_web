@@ -107,8 +107,7 @@ function rollIntInclusive(min: number, max: number): number {
 // Resolve a bane name to its catalog cardId by scanning the content bundle.
 // Bane cards are identified by `name === baneName` because `CardContent` does
 // not carry an `isBane` flag — the per-deck-entry `isBane` boolean is set by
-// `addBaneCardById` at the QuestMutations layer. This mirrors
-// `pushTemporaryBaneGrant`'s name-based catalog scan in `quest-context.tsx`.
+// `addBaneCardById` at the QuestMutations layer.
 // Returns `undefined` when no card with that name is present; the bane apply
 // bodies log a warn and skip the missing iteration.
 function resolveBaneCardId(ctx: JourneyContext, baneName: string): string | undefined {
@@ -1013,16 +1012,26 @@ const gainNamedBanes: Cost<GainNamedBanesParams> = {
   },
 };
 
-type GainNamedBanesXBattlesParams = { baneName: string; count: number; battles: number };
+type GainNamedBanesXBattlesParams = {
+  baneName: string;
+  baneCardId: string;
+  count: number;
+  battles: number;
+};
 const gainNamedBanesForXBattles: Cost<GainNamedBanesXBattlesParams> = {
   id: "gain_named_banes_for_X_battles",
   weight: BANE_GAIN_RANDOM_TRADE_COST_WEIGHT,
   rollParams: (ctx, draw) => {
     const pool = availableBaneNames(ctx);
+    const baneName = pool.length > 0
+      ? pickFromList(draw, "gain_named_banes_t:b", pool)
+      : BANE_NAMES[0];
+    // Resolve the card UUID at rollParams time so the apply step carries the
+    // UUID forward; this avoids a name-keyed catalog lookup at grant time.
+    const baneCardId = resolveBaneCardId(ctx, baneName) ?? "";
     return {
-      baneName: pool.length > 0
-        ? pickFromList(draw, "gain_named_banes_t:b", pool)
-        : BANE_NAMES[0],
+      baneName,
+      baneCardId,
       count: drawInt(draw, "gain_named_banes_t:n", 1, 2),
       battles: drawInt(draw, "gain_named_banes_t:t", 1, 3),
     };
@@ -1033,9 +1042,11 @@ const gainNamedBanesForXBattles: Cost<GainNamedBanesXBattlesParams> = {
   render: (p) =>
     `Gain ${p.count} ${quoteName(p.baneName)} for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
   apply: (p, _ctx, mut) => {
-    // The underlying mutation looks up the bane card by name AND records the
-    // battle-window modifier in one reducer; the apply layer is a passthrough.
+    // Pass the UUID resolved at rollParams time; `pushTemporaryBaneGrant` uses
+    // it to key the catalog lookup. `baneName` is forwarded as a display/log
+    // label only and is never used to identify the card.
     mut.pushTemporaryBaneGrant(
+      p.baneCardId,
       p.baneName,
       p.count,
       p.battles,

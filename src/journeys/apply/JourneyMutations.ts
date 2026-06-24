@@ -119,8 +119,11 @@ export interface JourneyMutations {
   ): void;
 
   /** Stack a "gain N <bane> for the next M battles" modifier. The bane is
-   *  added to the deck immediately; the modifier records when to remove it. */
+   *  added to the deck immediately; the modifier records when to remove it.
+   *  `baneCardId` is the catalog UUID used to identify the card; `baneName` is
+   *  a display/log label only and is not used for catalog lookup. */
   pushTemporaryBaneGrant(
+    baneCardId: string,
     baneName: string,
     count: number,
     battles: number,

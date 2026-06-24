@@ -436,17 +436,6 @@ function resolveCardById(
   return null;
 }
 
-function resolveCardByName(
-  cardDatabase: Map<number, CardData>,
-  cardName: string,
-): CardData | null {
-  for (const candidate of cardDatabase.values()) {
-    if (candidate.name === cardName) {
-      return candidate;
-    }
-  }
-  return null;
-}
 
 function dreamsignMatches(left: Dreamsign, right: Dreamsign): boolean {
   if (left.id !== undefined && right.id !== undefined) {
@@ -4128,15 +4117,15 @@ export function MultiplayerQuestProvider({
   );
 
   const pushTemporaryBaneGrant = useCallback(
-    (baneName: string, count: number, battles: number, source: string) => {
+    (baneCardId: string, baneName: string, count: number, battles: number, source: string) => {
       const current = currentRef.current;
-      const card = resolveCardByName(
+      const card = resolveCardById(
         current.questContent.cardDatabase,
-        baneName,
+        baneCardId,
       );
       if (card === null || count <= 0) {
         console.warn(
-          `[multiplayer-quest-context] pushTemporaryBaneGrant: unknown bane '${baneName}' or non-positive count ${String(count)}`,
+          `[multiplayer-quest-context] pushTemporaryBaneGrant: unknown bane card id '${baneCardId}' (name: '${baneName}') or non-positive count ${String(count)}`,
         );
         return;
       }

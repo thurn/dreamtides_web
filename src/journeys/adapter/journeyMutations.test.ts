@@ -94,7 +94,7 @@ describe("createJourneyMutations passthrough", () => {
     adapter.addSiteToDreamscape("next", "Shop", "dream_journey:add_site");
     adapter.replaceSiteType("Battle", "Essence", "dream_journey:replace_site");
     adapter.pushBattleRewardModifier("flat", 5, 3, "dream_journey:reward_red");
-    adapter.pushTemporaryBaneGrant("Despair", 1, 3, "dream_journey:temp_bane");
+    adapter.pushTemporaryBaneGrant("bane-card-despair-42", "Despair", 1, 3, "dream_journey:temp_bane");
     adapter.grantFreeShopRerolls(2, "dream_journey:free_rerolls");
     adapter.applyShopEssenceDiscount(20, "dream_journey:shop_disc");
     adapter.grantShopOmenDiscounts(3, "dream_journey:omen_disc");
@@ -121,7 +121,7 @@ describe("createJourneyMutations passthrough", () => {
       { method: "addSiteToDreamscape", args: ["next", "Shop", "dream_journey:add_site"] },
       { method: "replaceSiteType", args: ["Battle", "Essence", "dream_journey:replace_site"] },
       { method: "pushBattleRewardModifier", args: ["flat", 5, 3, "dream_journey:reward_red"] },
-      { method: "pushTemporaryBaneGrant", args: ["Despair", 1, 3, "dream_journey:temp_bane"] },
+      { method: "pushTemporaryBaneGrant", args: ["bane-card-despair-42", "Despair", 1, 3, "dream_journey:temp_bane"] },
       { method: "grantFreeShopRerolls", args: [2, "dream_journey:free_rerolls"] },
       { method: "applyShopEssenceDiscount", args: [20, "dream_journey:shop_disc"] },
       // grantShopOmenDiscounts is a no-op in the single-currency economy.

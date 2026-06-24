@@ -396,13 +396,16 @@ describe("Bane cost apply", () => {
     // bane cards at the apply layer; the underlying mutation handles the
     // card-addition AND modifier-recording in a single reducer.
     const t = getCost("gain_named_banes_for_X_battles");
-    const ctx = buildContext({ cards: baneCardFixture() });
+    const cards = baneCardFixture();
+    const ctx = buildContext({ cards });
     const { mut, calls } = createRecordingMutations();
-    t.apply({ baneName: "Despair", count: 1, battles: 3 }, ctx, mut, undefined);
+    // Resolve the expected UUID for "Despair" from the fixture.
+    const despairId = cards.find((c) => c.name === "Despair")?.id ?? "";
+    t.apply({ baneName: "Despair", baneCardId: despairId, count: 1, battles: 3 }, ctx, mut, undefined);
     expect(calls).toEqual([
       {
         method: "pushTemporaryBaneGrant",
-        args: ["Despair", 1, 3, "dream_journey:gain_named_banes_for_X_battles"],
+        args: [despairId, "Despair", 1, 3, "dream_journey:gain_named_banes_for_X_battles"],
       },
     ]);
   });
@@ -479,10 +482,13 @@ describe("Bane cost apply", () => {
       };
       const params = t.rollParams(ctx, draw) as {
         baneName: string;
+        baneCardId: string;
         count: number;
         battles: number;
       };
       expect(params.baneName).toBe("Nightmare");
+      // The UUID must be resolved at rollParams time and forwarded to the mutation.
+      expect(params.baneCardId).toBe("nightmare-card");
 
       const { mut, calls } = createRecordingMutations();
       t.apply(params, ctx, mut, undefined);
@@ -490,6 +496,7 @@ describe("Bane cost apply", () => {
         {
           method: "pushTemporaryBaneGrant",
           args: [
+            "nightmare-card",
             "Nightmare",
             params.count,
             params.battles,
