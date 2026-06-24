@@ -309,7 +309,7 @@ function balanceClusters(sim, clusters, k, minMembers) {
 
 // --- Tide construction --------------------------------------------------------
 
-function buildClusterTide(cluster, decks, idfOf, tuning) {
+function buildClusterTide(cluster, decks, idfOf, tuning, nameOf) {
   const members = cluster.members.map((i) => decks[i]);
   const freq = new Map();
   for (const d of members) {
@@ -318,7 +318,8 @@ function buildClusterTide(cluster, decks, idfOf, tuning) {
     }
   }
   const minFreq = members.length >= tuning.minClusterFreqAt ? tuning.minClusterFreq : 1;
-  const score = (name, f) => f * idfOf(name) ** tuning.idfRankWeight;
+  // `key` is now a UUID (the corpus is UUID-keyed).
+  const score = (key, f) => f * idfOf(key) ** tuning.idfRankWeight;
   const ranked = [...freq.entries()]
     .filter(([, f]) => f >= minFreq)
     .sort(
@@ -330,18 +331,21 @@ function buildClusterTide(cluster, decks, idfOf, tuning) {
 
   const cards = [];
   let total = 0;
-  for (const [name, f] of ranked) {
+  for (const [key, f] of ranked) {
     if (total >= tuning.tideSize) break;
     const copies = f / members.length >= tuning.doubleShare ? 2 : 1;
-    cards.push({ name, copies });
+    cards.push({ id: key, copies });
     total += copies;
   }
 
+  // Name the tide from its medoid's highest-IDF cards — resolve UUIDs to display
+  // names so the tide label is human-readable.
   const medoid = decks[cluster.medoid];
   const name = [...medoid.cards]
     .filter((c) => idfOf(c) > 0)
     .sort((a, b) => idfOf(b) - idfOf(a) || (a < b ? -1 : 1))
     .slice(0, tuning.nameCards)
+    .map((c) => nameOf(c) ?? c)
     .join(" / ");
   return { name, cards, memberCount: members.length };
 }
@@ -349,16 +353,18 @@ function buildClusterTide(cluster, decks, idfOf, tuning) {
 // IDF-cosine of a Dreamcaller's signature probe against a tide's card multiset
 // (copies weight the tide vector). This is the same similarity `idf3` scores
 // its anchor decks with, applied to tide decks instead of corpus decks.
-function probeTideCosine(probeNames, tide, idfOf) {
+// `probeIds` is a Set of UUIDs (the corpus's key space); `tide.cards` are keyed
+// by `id` (UUID) so the dot-product stays in UUID space.
+function probeTideCosine(probeIds, tide, idfOf) {
   let probeSq = 0;
-  for (const c of probeNames) probeSq += idfOf(c) ** 2;
+  for (const c of probeIds) probeSq += idfOf(c) ** 2;
   const probeNorm = Math.sqrt(probeSq);
   let tideSq = 0;
   let dot = 0;
-  for (const { name, copies } of tide.cards) {
-    const w = idfOf(name) * copies;
+  for (const { id, copies } of tide.cards) {
+    const w = idfOf(id) * copies;
     tideSq += w * w;
-    if (probeNames.has(name)) dot += idfOf(name) ** 2 * copies;
+    if (probeIds.has(id)) dot += idfOf(id) ** 2 * copies;
   }
   const tideNorm = Math.sqrt(tideSq);
   if (probeNorm === 0 || tideNorm === 0) return 0;
@@ -560,21 +566,22 @@ function run() {
 
   const cards = readJson("public/cards_v2-data.json");
   const decklists = readJson("public/decklists-data.json");
+  const decklistIds = readJson("public/decklist-ids-data.json");
   const dreamcallers = readJson("public/dreamcallers-v2-data.json");
 
-  const idByName = new Map();
-  for (const card of cards) {
-    if (card.id && !idByName.has(card.name)) idByName.set(card.name, card.id);
-  }
-
-  const poolData = buildPoolData(cards, decklists);
+  // Pass decklistIds as the 4th arg so idfCorpus keys the IDF table and decks
+  // on card UUIDs rather than display names. Display names are resolved only at
+  // the final render boundary via poolData.cardNameById / cardIdByName.
+  const poolData = buildPoolData(cards, decklists, undefined, decklistIds);
   const corpus = idfCorpus(poolData);
   if (!corpus) {
-    console.error("No usable decklists in public/decklists-data.json.");
+    console.error("No usable decklists in public/decklist-ids-data.json.");
     process.exit(1);
   }
   const { decks, idf } = corpus;
   const idfOf = (c) => idf.get(c) ?? 0;
+  // Resolve a corpus UUID key to its current display name for human-readable fields.
+  const nameOf = (id) => poolData.cardNameById?.get(id) ?? id;
   console.log(`Corpus: ${decks.length} filtered decklists, ${idf.size} distinct cards.`);
 
   // Archetype tides from deterministic k-medoids clusters, balanced so the
@@ -586,17 +593,20 @@ function run() {
     TUNING.clusters,
     TUNING.minClusterMembers,
   );
-  const namedTides = clusters
-    .map((cluster) => buildClusterTide(cluster, decks, idfOf, TUNING))
+  // buildClusterTide now returns cards keyed by UUID ({ id, copies }); the
+  // tide's display name is resolved from the medoid's top-IDF UUIDs.
+  const clusteredTides = clusters
+    .map((cluster) => buildClusterTide(cluster, decks, idfOf, TUNING, nameOf))
     .filter((t) => t.cards.length > 0);
 
-  // Resolve names to UUIDs, dropping (with a warning) any unresolvable card.
+  // Turn each UUID-keyed card into the serialized { id, name, copies } shape,
+  // dropping cards whose UUID resolves to no current display name (stale keys).
   const dropped = new Set();
   const toJsonCards = (cardList) =>
-    cardList.flatMap(({ name, copies }) => {
-      const id = idByName.get(name);
-      if (!id) {
-        dropped.add(name);
+    cardList.flatMap(({ id, copies }) => {
+      const name = poolData.cardNameById?.get(id);
+      if (!name) {
+        dropped.add(id);
         return [];
       }
       return [{ id, name, copies }];
@@ -604,27 +614,39 @@ function run() {
 
   const tideStats = new Map();
   const tides = [];
-  namedTides.forEach((tide, i) => {
+  clusteredTides.forEach((tide, i) => {
     const id = `tide-${String(i + 1).padStart(2, "0")}`;
     tides.push({ id, name: tide.name, cards: toJsonCards(tide.cards) });
     tideStats.set(id, { memberCount: tide.memberCount });
   });
 
   // Favored tides per signatured Dreamcaller, by signature-probe cosine.
+  // Resolve the Dreamcaller's signature card names to UUIDs so the probe
+  // operates entirely in UUID space (matching the UUID-keyed IDF corpus).
   const archetypeTides = tides;
   const favoredTidesByDreamcaller = {};
   const noSignal = [];
   for (const dc of dreamcallers) {
     const signature = dc.signatureCards ?? [];
-    const probeNames = new Set(signature.filter((c) => idfOf(c) > 0));
-    const droppedSig = signature.filter((c) => !probeNames.has(c));
+    // Resolve display names → UUIDs; keep only those with a non-zero IDF weight.
+    const probeIds = new Set(
+      signature
+        .map((name) => poolData.cardIdByName?.get(name))
+        .filter((id) => id !== undefined && idfOf(id) > 0),
+    );
+    const droppedSig = signature.filter(
+      (name) => {
+        const id = poolData.cardIdByName?.get(name);
+        return id === undefined || idfOf(id) === 0;
+      },
+    );
     if (droppedSig.length > 0) {
       console.warn(
         `Signature cards with no corpus IDF weight for ${dc.name}: ` +
           `${droppedSig.join(", ")}.`,
       );
     }
-    if (probeNames.size === 0) {
+    if (probeIds.size === 0) {
       if (signature.length > 0) noSignal.push(dc.name);
       continue;
     }
@@ -632,7 +654,7 @@ function run() {
       .map((tide) => ({
         tide,
         score: probeTideCosine(
-          probeNames,
+          probeIds,
           { cards: tide.cards },
           idfOf,
         ),
@@ -659,7 +681,7 @@ function run() {
 
   // Stats.
   const distinctPooled = new Set();
-  for (const t of tides) for (const c of t.cards) distinctPooled.add(c.name);
+  for (const t of tides) for (const c of t.cards) distinctPooled.add(c.id);
   const weighted = [...idf.entries()].filter(([, w]) => w > 0).length;
   const sizes = tides.map(
     (t) => `${t.id}:${String(t.cards.reduce((s, c) => s + c.copies, 0))}`,
@@ -679,7 +701,7 @@ function run() {
   }
   if (dropped.size > 0) {
     console.warn(
-      `Dropped ${dropped.size} card names with no cards_v2 UUID: ` +
+      `Dropped ${dropped.size} card UUIDs with no current display name: ` +
         `${[...dropped].join(", ")}.`,
     );
   }

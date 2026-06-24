@@ -304,18 +304,20 @@ function chooseAllies(tideById, vectors, tides, leadId, supportById, tuning) {
 
 // --- Dreamcaller tide pools --------------------------------------------------
 
-// IDF-cosine of a signature probe (card names) against a tide's card multiset
-// (copies weight the tide vector) — the same probe bake-tides uses for favored.
-function probeTideCosine(probeNames, tide, idfOf) {
+// IDF-cosine of a signature probe against a tide's card multiset (copies weight
+// the tide vector) — the same probe bake-tides uses for favored. `probeIds` is
+// a Set of UUIDs (the corpus's key space); `tide.cards` are keyed by `id`
+// (UUID from the baked tides2.jsonc) so the dot-product stays in UUID space.
+function probeTideCosine(probeIds, tide, idfOf) {
   let probeSq = 0;
-  for (const c of probeNames) probeSq += idfOf(c) ** 2;
+  for (const c of probeIds) probeSq += idfOf(c) ** 2;
   const probeNorm = Math.sqrt(probeSq);
   let tideSq = 0;
   let dot = 0;
-  for (const { name, copies } of tide.cards) {
-    const w = idfOf(name) * copies;
+  for (const { id, copies } of tide.cards) {
+    const w = idfOf(id) * copies;
     tideSq += w * w;
-    if (probeNames.has(name)) dot += idfOf(name) ** 2 * copies;
+    if (probeIds.has(id)) dot += idfOf(id) ** 2 * copies;
   }
   const tideNorm = Math.sqrt(tideSq);
   if (probeNorm === 0 || tideNorm === 0) return 0;
@@ -463,6 +465,7 @@ function run() {
 
   const cards = readJson("public/cards_v2-data.json");
   const decklists = readJson("public/decklists-data.json");
+  const decklistIds = readJson("public/decklist-ids-data.json");
   const dreamcallers = readJson("public/dreamcallers-v2-data.json");
   const tideData = readJsonc(tidesRel);
   const buildaround = readJson("data/buildaround_support.json");
@@ -471,10 +474,12 @@ function run() {
   const tideById = new Map(tides.map((t) => [t.id, t]));
   const supportById = new Map(Object.entries(buildaround.cards ?? {}));
 
-  const poolData = buildPoolData(cards, decklists);
+  // Pass decklistIds as the 4th arg so idfCorpus keys the IDF table and decks
+  // on card UUIDs rather than display names, matching the UUID-keyed tide cards.
+  const poolData = buildPoolData(cards, decklists, undefined, decklistIds);
   const corpus = idfCorpus(poolData);
   if (!corpus) {
-    console.error("No usable decklists in public/decklists-data.json.");
+    console.error("No usable decklists in public/decklist-ids-data.json.");
     process.exit(1);
   }
   const idfOf = (c) => corpus.idf.get(c) ?? 0;
@@ -507,10 +512,16 @@ function run() {
   let neutralCount = 0;
   for (const dc of dreamcallers) {
     const signature = dc.signatureCards ?? [];
-    const probeNames = new Set(signature.filter((c) => idfOf(c) > 0));
-    if (probeNames.size > 0) {
+    // Resolve display names → UUIDs so the probe operates in UUID space
+    // (matching the UUID-keyed IDF corpus). Keep only cards with IDF weight.
+    const probeIds = new Set(
+      signature
+        .map((name) => poolData.cardIdByName?.get(name))
+        .filter((id) => id !== undefined && idfOf(id) > 0),
+    );
+    if (probeIds.size > 0) {
       const scored = tides
-        .map((tide) => ({ id: tide.id, score: probeTideCosine(probeNames, tide, idfOf) }))
+        .map((tide) => ({ id: tide.id, score: probeTideCosine(probeIds, tide, idfOf) }))
         .filter((x) => x.score > 0)
         .sort((a, b) => b.score - a.score || (a.id < b.id ? -1 : 1))
         .slice(0, tuning.poolWidthSignatured);

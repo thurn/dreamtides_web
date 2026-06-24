@@ -12,1610 +12,2515 @@ together with `data/tides2.jsonc`; the relationship tables at the end are
 appended by `npm run seed-tide-relationships` from
 `data/tides2_relationships.jsonc`.
 
-## Driftcaller Sovereign / Dawnhorn Elder
+## Fading Farewell / Ferryman's Tithe
 
-`tide-01` — 56 distinct cards, 70 copies, distilled from 15 real decks
+`tide-01` — 142 distinct cards, 160 copies, distilled from 40 real decks
 
-- 2× Defiant Holdout
-- 2× Harvester of Despair
-- 2× Carrion Shepherd
-- 2× Enginespeaker
-- 2× Fargazer
-- 2× Searcher in the Mists
-- 2× Kindred Sparks
-- 2× Sylvan Matriarch
-- 2× Nightmare Manifest
+- 2× Exiles of the Last Light
 - 2× Skull Weaver
-- 2× Stolen Genesis
-- 1× Graywatch
-- 1× Sorrow Watcher
-- 1× Tidewreck Navigator
-- 1× Shadowcaller
-- 1× Dustborn Veteran
-- 1× Rusted Monolith
+- 2× Rusted Monolith
+- 2× Saltless Mariner
+- 2× Obliterator of Worlds
+- 2× Duskreaper
+- 2× Enginespeaker
+- 2× Kindred Sparks
+- 2× Volcanic Channeler
+- 2× Nocturne
 - 2× Stargazer Adrift
-- 1× Riftwalker
-- 1× Ashwalker
-- 2× Infernal Ascendant
-- 1× Silent Avenger
-- 1× Wreckheap Survivor
-- 1× Exiles of the Last Light
-- 2× Dune Reaper
-- 1× Fractured Vessel
-- 1× Entropy Spike
-- 1× Together Against the Tide
-- 1× Torn Circuit Feeder
-- 1× Ferryman's Tithe
-- 1× Herald of the Last Light
-- 1× Vertiginous Leap
-- 1× Warfield Stalwart
-- 1× Collateral Damage
-- 1× Dawnhorn Elder
-- 1× Volcanic Channeler
 - 1× Dreadweaver
-- 1× Paradox Enforcer
-- 1× Titan of Forgotten Echoes
-- 1× Dawnrunner
-- 1× Duskwall Delver
-- 1× Door to Possibility
-- 1× Scrapyard Custodian
-- 1× Moonlit Voyage
-- 1× Curio Dealer
-- 1× Maelstrom Denial
-- 1× Collapse Protocol
-- 1× The Thinning
-- 1× Obliterator of Worlds
-- 1× Saltless Mariner
-- 1× Standoff
-- 1× Return to Nowhere
-- 1× Wasteland Arbitrator
-- 1× Embersummoner
-- 1× Shardwoven Tyrant
-- 1× Ashborn Necromancer
-
-## Gleam Below / Blightmaw
-
-`tide-02` — 50 distinct cards, 55 copies, distilled from 9 real decks
-
-- 2× Weight of Memory
-- 2× Unleashed Destruction
-- 1× Lanternwood Scout
-- 2× Soulbinder
-- 1× Dreamscatter
-- 1× Echoes of Eternity
-- 1× Ripple of Defiance
-- 2× Dragonward
-- 1× Fading Farewell
-- 1× Vaultbreaker
-- 1× Ochre Prospector
-- 1× Through the Rift
-- 2× Young Huntress
-- 1× Crumbling Covenant
-- 1× Heroic Rescue
-- 1× Wasteland Holdout
-- 1× The Ringleader
-- 1× Angel of the Eclipse
-- 1× Archive of the Forgotten
-- 1× Forsaken Skyline
-- 1× Wreckborn
-- 1× Emberwatch Veteran
-- 1× Pit Descender
-- 1× Vessel of Echoes
-- 1× Blight Weaver2
-- 1× Spent Courier
-- 1× Frontline Martyr
-- 1× Ossuary Overlord
-- 1× Derelict Voyage
-- 1× Crucible Warlord
-- 1× Scorched Reckoning
-- 1× Urban Desperado
-- 1× Verdant Pioneer
-- 1× Ruptured Dynamo
-- 1× The Forsaker
-- 1× Grounded
-- 1× Molten Duel
-- 1× Conduit of Ashes
-- 1× Inferno's Herald
-- 1× Call of the Lost
-- 1× Desperation
-- 1× Shadow March
-- 1× The Grand Heist
-- 1× Reclaimer of Lost Paths
-- 1× Maelstrom Denial
-- 1× Standard Bearer
-- 1× Wake the Fallen
-- 1× Lumin-Gate Seer
-- 1× Infernal Ascendant
+- 2× Avatar of Cosmic Reckoning
+- 2× Call to the Unknown
+- 2× Dustborn Veteran
+- 2× Titan of Forgotten Echoes
+- 2× Silent Avenger
+- 1× Fathomless Maw
+- 1× Kindlehorn
+- 1× Stolen Genesis
+- 2× Corrupted Host
+- 1× Defiant Holdout
+- 1× Vigil Keeper
+- 1× Cinderheart
+- 1× Dragonward
+- 1× Wreckheap Lookout
+- 1× Torn Circuit Feeder
+- 1× Ashen Remnant
+- 1× The Dread Sovereign
+- 2× Infernal Ascendant
 - 1× Dune Reaper
+- 1× Lanternwood Scout
+- 1× Reclaimer of Lost Paths
+- 1× Collateral Damage
+- 1× Sylvan Matriarch
+- 1× Fading Farewell
+- 1× Twilight Suppressor
+- 1× Duskwall Delver
+- 1× Ashborn Necromancer
+- 1× Entropy Spike
+- 1× Watcher in the Ruins
+- 1× Soulbinder
+- 1× Emberwatch Rescuer
+- 1× Herald of the Last Light
+- 1× Grim Reclaimer
+- 1× The Thinning
+- 1× Collapse Protocol
+- 1× Scuttled Fortune
+- 1× Vertiginous Leap
+- 1× Shattering Gambit
+- 1× Carrion Shepherd
+- 1× Secrets of the Deep
+- 1× Shardwoven Tyrant
+- 1× Embersummoner
+- 1× Cinderblade Legionnaire
+- 1× Voidshield Guardian
+- 1× Dawnrunner
+- 1× Silent Avenger
+- 1× Rite of Summoning
+- 1× Nightmare Manifest
+- 1× Ferryman's Tithe
+- 1× Lurking Dread
+- 1× Momentum's Edge
+- 1× Door to Possibility
+- 1× Shadowbinder
+- 1× Riftwalker
+- 1× Warfield Stalwart
+- 1× Whisper of the Past
+- 1× Shatter the Frail
+- 1× Break the Veil
+- 1× Dreaming Groves
+- 1× Unleash Ruin
+- 1× Mirrorlight Architect
+- 1× Aspiring Guardian
+- 1× Eclipse Herald
+- 1× Shapeshifter Spirit
+- 1× Containment Specialist
+- 1× Angel of the Eclipse
+- 1× Specter of Silent Snow
+- 1× Borrowed Minutes
+- 1× Ash Sower
+- 1× Bloodpact Berserker
+- 1× Hope's Vanguard
+- 1× Twilight Reclaimer
+- 1× Verdant Pioneer
+- 1× Urban Desperado
+- 1× Final Gambit
+- 1× Seer of the Fallen
+- 1× Roots of Rebirth
+- 1× Immolate and Rise
+- 1× Peak Plunder
+- 1× Curio Dealer
+- 1× Desperation
+- 1× Lightningborn
+- 1× Veil Shatter
+- 1× Pyrokinetic Surge
+- 1× Molten Duel
+- 1× Scrapyard Custodian
+- 1× Grounded
+- 1× Vaultbreaker
+- 1× Voidcaller
+- 1× The Calling Night
+- 1× Immortal Reaper
+- 1× Fractured Vessel
+- 1× Prism Caller
+- 1× Infernal Cavalier
+- 1× Wreckborn
+- 1× Shadowcaller
+- 1× Conjured Zenith
+- 1× Dreadcall Warden
+- 1× Unleashed Destruction
+- 1× Burning Revenant
+- 1× Burning Pursuit
+- 1× Veil Crosser
+- 1× Barren Path Wanderer
+- 1× Sunset Chronicler
+- 1× Tidecaller
+- 1× Part the Veil
+- 1× Grotto Seer
+- 1× Prophet of the Consumed
+- 1× The Ringleader
+- 1× Plunge into the Abyss
+- 1× Shadow March
+- 1× Blood Reaver
+- 1× Moonlit Voyage
+- 1× The Deathsworn
+- 1× Driftcaller Sovereign
+- 1× Nightprowler Panther
+- 1× First Encounter
+- 1× Wake the Fallen
+- 1× Seek Answers
+- 1× Wreckborn
+- 1× Pattern Seeker
+- 1× Shadowprowler
+- 1× Gloomantler
+- 1× Woodland Apparition
+- 1× Revenant of the Lost
+- 1× Forsworn Champion
+- 1× Dreadmount Sovereign
+- 1× Guiding Light
+- 1× Evacuation Enforcer
+- 1× Standoff
+
+## Gleam Below / Canopy Lookout
+
+`tide-02` — 34 distinct cards, 45 copies, distilled from 7 real decks
+
+- 2× Dreamscatter
+- 2× Echoes of Eternity
+- 2× Unleashed Destruction
+- 2× Forsaken Skyline
+- 2× Derelict Voyage
+- 2× Heroic Rescue
+- 2× Soulbinder
+- 1× Wasteland Holdout
+- 1× Toll of Passage
+- 1× Emberwatch Veteran
+- 1× Vessel of Echoes
+- 1× Lanternwood Scout
+- 2× Dragonward
+- 1× Pit Descender
+- 2× First Encounter
+- 2× Wake the Fallen
+- 1× Ripple of Defiance
+- 2× Desperation
+- 1× Fell Swoop
+- 1× Frontline Martyr
+- 1× Headtaker Wurm
+- 1× Barrage Specialist
+- 1× Scorched Reckoning
+- 1× Weight of Memory
+- 1× Crumbling Covenant
+- 1× Molten Duel
+- 1× The Forsaker
+- 1× Ruptured Dynamo
+- 1× The Ringleader
+- 1× Glimpse of Infinity
+- 1× Angel of the Eclipse
+- 1× Call of the Lost
+- 1× Seek Answers
+- 1× Young Huntress
 
 ## Surge of Fury / Genesis Burst
 
-`tide-03` — 55 distinct cards, 70 copies, distilled from 36 real decks
+`tide-03` — 145 distinct cards, 160 copies, distilled from 39 real decks
 
 - 2× From the Barrow
+- 2× Ashlight Caller
 - 2× Flash of Power
 - 2× Canopy of Stars
-- 2× Cascading Detonation
 - 2× Cascade of Reflections
-- 2× Iconoclast
-- 2× Starcatcher
-- 1× Surge of Fury
+- 2× Cascading Detonation
 - 2× Echoes of the Journey
+- 2× Genesis Burst
+- 2× Starcatcher
+- 2× Iconoclast
 - 2× Arc Gate Opening
-- 1× Genesis Burst
-- 2× Hatching Ground
-- 2× Echo Architect
-- 1× Dreamscatter
-- 1× Echoes of Eternity
-- 1× Archive of the Forgotten
-- 2× Ridgecutter
-- 1× Nebula's Wake
 - 2× Call of the Lost
-- 1× Sanctum Awakened
-- 1× Path to Redemption
-- 1× Inverted Reflection
-- 1× Broadcast Array
-- 1× Duskshore Virtuoso
-- 1× The Waking Titan
-- 2× Starfall Communion
-- 2× Desperation
+- 2× Echo Architect
+- 2× Hatching Ground
+- 1× Surge of Fury
+- 1× Archive of the Forgotten
+- 1× Nebula's Wake
 - 1× Reunion
-- 1× Weblight Waif
+- 2× Ridgecutter
+- 1× Path to Redemption
+- 1× Wheel of the Heavens
 - 1× Across the Void
 - 1× Data Pulse
-- 1× Harvest the Forgotten
-- 1× Wheel of the Heavens
+- 1× Broadcast Array
+- 1× Inverted Reflection
+- 1× Crimson Pilgrimage
+- 1× The Waking Titan
+- 1× Duskshore Virtuoso
 - 1× Fell Swoop
-- 1× The Ringleader
+- 1× Barrage Specialist
+- 1× Spiral Offering
+- 1× Starfall Communion
+- 1× Twice-Lit Portal
 - 1× Sunset Chapel Rest
 - 1× Call of Calamity
-- 1× Spiral Offering
-- 1× Crimson Pilgrimage
-- 1× A New Adventure
-- 1× Miraculous Arrival
-- 1× Sunken Radiance
-- 1× Twice-Lit Portal
-- 1× Starfall
+- 1× Harvest the Forgotten
+- 1× Dreamscatter
+- 1× Echoes of Eternity
+- 1× Seek Answers
+- 1× Abandon Constraints
+- 1× Sanctum Awakened
 - 1× Knowledge Restored
-- 1× Gateweaver
-- 1× Sanctum Approach
-- 1× Ancient Descent
-- 1× Burst of Obliteration
-- 1× Seaside Requiem
+- 1× Sunken Radiance
 - 1× Return to Nowhere
-- 1× Terminus
-- 1× Headtaker Wurm
-- 1× Somber Flockmaster
+- 1× Ancient Descent
 - 1× Fell the Mighty
-
-## Rootspring Summons / Toll of Passage
-
-`tide-04` — 35 distinct cards, 70 copies, distilled from 2 real decks
-
-- 2× Forsaken Skyline
-- 2× Cascading Detonation
-- 2× Derelict Voyage
-- 2× Echo Architect
-- 2× Rootspring Summons
-- 2× Call of the Lost
-- 2× Intermezzo Balladeer
-- 2× Soulbinder
-- 2× Toll of Passage
-- 2× Archive of the Forgotten
-- 2× Momentum of the Fallen
-- 2× Crimson Pilgrimage
-- 2× Dreamscatter
-- 2× Echoes of Eternity
-- 2× Fell Swoop
-- 2× Pit Descender
-- 2× Cascade of Reflections
-- 2× Inverted Reflection
-- 2× Sunken Radiance
-- 2× Fragments of Vision
-- 2× Harvest the Forgotten
-- 2× Headtaker Wurm
-- 2× Spiral Offering
-- 2× Arc Gate Opening
-- 2× Starshot Gunner
-- 2× Fangbound
-- 2× Gateway Defender
-- 2× Scorched Reckoning
-- 2× Ripple Through Reality
-- 2× Unleashed Destruction
-- 2× Blood Moon Ronin
-- 2× Fern Treader
-- 2× Fell the Mighty
-- 2× Seaside Requiem
-- 2× Hatching Ground
-
-## Simulacra / Twilight Troubadour
-
-`tide-05` — 31 distinct cards, 62 copies, distilled from 1 real decks
-
-- 2× Simulacra
-- 2× Twilight Troubadour
-- 2× Keeper of the Lightpath
-- 2× Data Pulse
-- 2× Nebula's Wake
-- 2× Rootbound Witness
-- 2× Skies of Change
-- 2× Inverted Reflection
-- 2× Key to the Moment
-- 2× Cascading Detonation
-- 2× Fangbound
-- 2× Miraculous Arrival
-- 2× Pulse of Sacrifice
-- 2× Crumbling Covenant
-- 2× Ripple Through Reality
-- 2× Signal Resonant
-- 2× Echo Architect
-- 2× Knowledge Restored
-- 2× Unleash Ruin
-- 2× Virtuoso of Harmony
-- 2× Seaside Requiem
-- 2× Specter of Silent Snow
-- 2× Starfall
-- 2× Call of the Lost
-- 2× Door to Possibility
-- 2× Moonlit Voyage
-- 2× Dreaming Groves
-- 2× Together Against the Tide
-- 2× Pyrokinetic Surge
-- 2× Luminous Ascent
-- 2× Shadowbinder
-
-## Aurora Confluence / Dreadcall Warden2
-
-`tide-06` — 20 distinct cards, 40 copies, distilled from 4 real decks
-
-- 2× Crimson Pilgrimage
-- 2× Return to Nowhere
-- 2× Call of the Lost
-- 2× Architect of Memory
-- 2× Oracle of Shifting Skies
-- 2× Aurora Confluence
-- 2× Seaside Requiem
-- 2× Eruption
-- 2× Genesis Burst
-- 2× Twice-Lit Portal
-- 2× Ancient Descent
-- 2× Echoes of the Journey
-- 2× Rootbound Witness
-- 2× Skies of Change
-- 2× Cascade of Reflections
-- 2× Canopy of Stars
-- 2× Pulse of Sacrifice
-- 2× Knowledge Restored
-- 2× Fell the Mighty
-- 2× Defiant Parry
-
-## Astral Angler / Salvage Engine
-
-`tide-07` — 50 distinct cards, 70 copies, distilled from 35 real decks
-
-- 2× Steel Abomination
-- 2× Ashen Avenger
-- 2× Wistful Angler
-- 2× Ferryman of the Falls
-- 2× Starsea Traveler
-- 1× Astral Angler
-- 1× Wreckage Prowler
-- 2× Keeper of Forgotten Light
-- 2× Pathwalker
-- 2× Scrap Reclaimer
-- 2× Rooftop Prophet
-- 2× Veil Crosser
-- 2× Light of Emergence
-- 2× Wraith of Twisting Shadows
-- 2× Heavenward Penitent
-- 2× Ruptured Dynamo
-- 2× The Forsaker
-- 2× Virtuoso of Harmony
-- 2× Bloomweaver
-- 2× Clockwork Conductor
-- 1× Duneveil Vanguard
-- 2× Carrion Lord
-- 2× Wondrous Clearing
-- 1× Depthwalker
-- 1× Selfless Rescuer
-- 1× Forsaken Pact
-- 1× Veilseeker
-- 1× Ridge Vortex Explorer
-- 1× Abomination of Memory
-- 1× Dusk Duelist
-- 1× Petal-Seer
-- 1× Summons of the Bonded
-- 1× Beacon of Tomorrow
-- 1× Crumbling Behemoth
-- 1× Specter of Silent Snow
-- 1× Winterbough Monk
-- 1× Radiant Trio
-- 1× Cloudmantle Ray
-- 1× Shatterpoint Agent
+- 1× Gilded Catalyst
+- 1× Scorched Reckoning
+- 1× A New Adventure
+- 1× Weblight Waif
+- 1× The Ringleader
+- 1× Gateweaver
+- 1× Fragments of Vision
+- 1× Miraculous Arrival
+- 1× Starfall
+- 1× Intermezzo Balladeer
+- 1× Minstrel of Falling Light
+- 1× Key Sifter
+- 1× Abolish
+- 1× Headtaker Wurm
+- 1× Terminus
+- 1× Architect of Memory
+- 1× Oracle of Shifting Skies
+- 1× Pulse of Sacrifice
+- 1× Twilight Troubadour
+- 1× Ecliptic Vantage
+- 1× Simulacra
+- 1× Echoing Denial
+- 1× Sanctum Approach
+- 1× Clockwork Prodigy
+- 1× Ripple of Defiance
+- 1× Ripple Through Reality
+- 1× Frontline Martyr
+- 1× Annular Recall
+- 1× Fractured Veil
+- 1× Aurora Confluence
+- 1× Haunted Betrayer
+- 1× Flamestride Rider
+- 1× Cosmonaut of Tides
+- 1× Dreadwood Emissary
+- 1× Fury of the Clan
+- 1× Glimpse of Infinity
+- 1× Gleam Below
+- 1× Weight of Memory
+- 1× Somber Flockmaster
+- 1× Door to Possibility
+- 1× Glimmerwood Scout
+- 1× Wreckborn
+- 1× The Power Within
+- 1× Guiding Light
+- 1× Unleashed Destruction
+- 1× Null Sphere
+- 1× Burst of Obliteration
+- 1× Keeper of the Lightpath
+- 1× Shadowbinder
+- 1× Desolation's Edge
+- 1× Moonlit Voyage
+- 1× Gearwright
+- 1× Shadow Soloist
+- 1× Moonlit Dancer
+- 1× Driftcaller Sovereign
+- 1× Derelict Voyage
+- 1× Fangbound
+- 1× Eruption
+- 1× Verdant Wayfarer
+- 1× Urban Cipher
+- 1× Threadbreaker
+- 1× Blood Moon Ronin
+- 1× Epiphany Unfolded
+- 1× Forsaken Skyline
+- 1× Molten Duel
+- 1× Soulbinder
+- 1× The Devourer
+- 1× Defiant Parry
+- 1× Dragonward
+- 1× Abyssal Deputy
+- 1× Bloodpact Berserker
+- 1× Riftwalker
+- 1× Night Raid Commando
+- 1× Advance Gunner
+- 1× Crumbling Covenant
+- 1× Spirit of Smoldering Echoes
+- 1× Manufactured Abomination
+- 1× Pactbound Challenger
+- 1× Toll of Passage
+- 1× Pallid Arbiter
+- 1× Cragfall
 - 1× Fleeting Reunion
+- 1× Skies of Change
+- 1× Sundown Surfer
+- 1× Break the Sequence
+- 1× Woodland Apparition
+- 1× Consumed Marksman
+- 1× The Calling Night
+- 1× Key to the Moment
+- 1× Ethereal Courser
+- 1× Planetgazer
+- 1× Rite of Summoning
+- 1× Eternal Sentry
+- 1× Lurking Dread
+- 1× Dream Garden Visitor
+- 1× Revered Prince
+- 1× Vertiginous Leap
+- 1× Echo Technician
+- 1× Soulkindler
+
+## Torchbearer of the Abyss / Seeker for the Way
+
+`tide-04` — 44 distinct cards, 88 copies, distilled from 2 real decks
+
+- 2× Frontline Martyr
+- 2× Fragments of Vision
+- 2× Pulse of Sacrifice
+- 2× A New Adventure
+- 2× Path to Redemption
+- 2× Terminus
+- 2× Hatching Ground
+- 2× Torchbearer of the Abyss
+- 2× Seeker of the Radiant Wilds
+- 2× Rift Pilgrim
+- 2× Advance Gunner
+- 2× Impending Fury
+- 2× Sage of the Prelude
+- 2× Last Beacon
+- 2× Seeker for the Way
+- 2× Reunion
+- 2× Broadcast Array
+- 2× Echoing Denial
+- 2× Ancient Descent
+- 2× Clockwork Prodigy
+- 2× Clockwork Salvager
+- 2× Gloomantler
+- 2× Gilded Catalyst
+- 2× Revenant of the Lost
+- 2× Canopy of Stars
+- 2× Inverted Reflection
+- 2× Call of Calamity
+- 2× Harvest the Forgotten
+- 2× Wheel of the Heavens
+- 2× Barrage Specialist
+- 2× Rite of Summoning
+- 2× Flash of Power
+- 2× Fangbound
+- 2× From the Barrow
+- 2× Ashlight Caller
+- 2× Signal Resonant
+- 2× Glimmerwood Scout
+- 2× Lunar Hart
+- 2× Stolen Genesis
+- 2× Cinderblade Legionnaire
+- 2× Desperation
+- 2× Dreaming Groves
+- 2× Titan of Forgotten Echoes
+- 2× Nightprowler Panther
+
+## Salvage Engine / Astral Angler
+
+`tide-05` — 138 distinct cards, 160 copies, distilled from 29 real decks
+
+- 2× Keeper of Forgotten Light
+- 2× The Forsaker
+- 2× Ruptured Dynamo
+- 2× Soulkindler
+- 2× Scrap Reclaimer
+- 2× Wraith of Twisting Shadows
+- 2× Light of Emergence
+- 2× Astral Angler
+- 2× Wreckage Prowler
+- 2× Ferryman of the Falls
+- 2× Steel Abomination
+- 2× Forsaken Pact
+- 2× Wistful Angler
+- 2× Memory Tracer
+- 2× Heavenward Penitent
+- 1× Duneveil Vanguard
+- 2× Virtuoso of Harmony
+- 2× Veil Crosser
+- 2× Barren Path Wanderer
+- 2× Selfless Rescuer
+- 2× Wondrous Clearing
+- 1× Starsea Traveler
+- 1× Clockwork Conductor
+- 2× Carrion Lord
+- 2× Bloomweaver
+- 1× Depthwalker
+- 1× Ridge Vortex Explorer
 - 1× Ruin Scavenger
-- 1× Emberwolf Triad
-- 1× Frostbound Defiant
-- 1× Verdant Pilgrim
+- 1× Abomination of Memory
+- 1× Fleeting Reunion
+- 1× Grounded
 - 1× Paradox Enforcer
 - 1× Call of Calamity
-- 1× Young Beastcaller
 - 1× Eruption
+- 1× Overstory Explorer
+- 1× Skies of Change
+- 1× Sundown Surfer
+- 1× Scrap Reclaimer
+- 1× Frostbound Defiant
+- 1× Looming Oracle
+- 1× Ashfront Lieutenant
+- 1× Flagbearer of Decay
+- 1× Paleclaw Panther
+- 1× Beacon of Tomorrow
+- 1× Crumbling Behemoth
+- 1× Borrowed Minutes
+- 1× Dusk Duelist
+- 1× Winterbough Monk
+- 1× Radiant Trio
+- 1× Sky Voyager
+- 1× Voidcaller
+- 1× Veilseeker
+- 1× Empyreal Light
+- 1× Amber Aurelia
+- 1× Salvage Engine
+- 1× Summons of the Bonded
+- 1× Petal-Seer
+- 1× Augur Crow
+- 1× Shadow March
+- 1× Phantom Flotilla
+- 1× Nightmare
+- 1× Lumineth
+- 1× Sunken Radiance
+- 1× Seek Answers
+- 1× Ambush Operative
+- 1× Fathomless Maw
+- 1× Kindlehorn
 - 1× Mother of Flames
+- 1× Shard Wielder
+- 1× A New Adventure
+- 1× Conjured Zenith
+- 1× Sylvan Matriarch
+- 1× Quiet Reflection
+- 1× Passage Through Oblivion
+- 1× Pactbound Challenger
+- 1× Dreamvale Monarch
+- 1× Unleash Ruin
+- 1× Fell the Mighty
+- 1× Ethereal Courser
+- 1× Infernal Rest
+- 1× Unquenched
+- 1× Soulkindler
+- 1× Pyrestone Avatar
+- 1× Pinnacle Ascendant
+- 1× Inferno's Herald
+- 1× The Ringleader
+- 1× Spirit of the Greenwood
+- 1× Moment Rewound
+- 1× Specter of Silent Snow
+- 1× Dragonward
 - 1× Doorlight Foundling
-
-## Borrowed Minutes / Blight Weaver2
-
-`tide-08` — 29 distinct cards, 58 copies, distilled from 2 real decks
-
-- 2× Borrowed Minutes
-- 2× Blight Weaver2
-- 2× Fractured Veil
-- 2× Ashfront Lieutenant
-- 2× Looming Oracle
-- 2× Marrow Drinker
-- 2× A New Adventure
-- 2× Ambush Operative
-- 2× Crucible Warlord
-- 2× Lithic Severance
-- 2× Reforged Automaton
-- 2× Pathwalker
-- 2× Scrap Reclaimer
-- 2× Ruptured Dynamo
-- 2× The Forsaker
-- 2× Infernal Rest
-- 2× Unleash Ruin
-- 2× Virtuoso of Harmony
-- 2× Grounded
-- 2× Conduit of Ashes
-- 2× Inferno's Herald
-- 2× Shadow March
-- 2× Intermezzo Balladeer
-- 2× Ruin Scavenger
-- 2× Wake the Fallen
-- 2× Luminous Ascent
-- 2× Moment Rewound
-- 2× Shadowbinder
-- 2× Spirit of the Greenwood
-
-## Harborwarden / Hope's Vanguard
-
-`tide-09` — 35 distinct cards, 70 copies, distilled from 2 real decks
-
-- 2× Emberwatch Veteran
-- 2× Vessel of Echoes
-- 2× Pathwalker
-- 2× Scrap Reclaimer
-- 2× Harborwarden
-- 2× Lone Castaway
-- 2× Paradox Enforcer
-- 2× Hope's Vanguard
-- 2× Kindred Sparks
-- 2× Nebula's Wake
-- 2× Salvage Engine
-- 2× Graywatch
-- 2× Shatter the Frail
-- 2× Whisper of the Past
-- 2× Charnel Seraph
-- 2× Ferryman's Tithe
-- 2× Wasteland Tamer
-- 2× Ashen Avenger
-- 2× Collateral Damage
-- 2× Wistful Angler
-- 2× Carrion Shepherd
-- 2× Forsaken Pact
-- 2× Shadowcaller
-- 2× Clockwork Conductor
-- 2× Duskwall Delver
-- 2× Ashwalker
-- 2× Wreckheap Survivor
-- 2× Bloodpact Berserker
-- 2× Skyborne Jellyfish
-- 2× Abomination of Memory
-- 2× Sunshadow Eagle
-- 2× Evacuation Enforcer
-- 2× Pyrokinetic Surge
-- 2× Celestial Reverie
-- 2× Sylvan Matriarch
+- 1× Nightprowler Panther
+- 1× Somber Flockmaster
+- 1× First Encounter
+- 1× Wake the Fallen
+- 1× Curio Dealer
+- 1× Together Against the Tide
+- 1× Shadowpaw
+- 1× Torn Circuit Feeder
+- 1× Fractured Veil
+- 1× Breach Artist
+- 1× Flamboyant Flamingo
+- 1× Haunted Betrayer
+- 1× Vaultbreaker
+- 1× Celestial Reverie
+- 1× Looming Oracle
+- 1× Lithic Severance
+- 1× Oathbound Pair
+- 1× Soulbinder
+- 1× Spirit Bond
+- 1× Reforged Automaton
+- 1× Celestial Lookout
+- 1× Dune Reaper
+- 1× Shadowcaller
+- 1× Heroic Rescue
+- 1× Collateral Damage
+- 1× Ridgecutter
+- 1× Shattering Gambit
+- 1× Nightmare Manifest
+- 1× Dreamcatcher's Call
+- 1× Burst of Obliteration
+- 1× Frost Visionary
+- 1× Sunset Chronicler
+- 1× Amythest Aurelia
+- 1× Starfall Communion
+- 1× Lunar Hart
+- 1× Moonlit Voyage
+- 1× Driftcaller Sovereign
+- 1× Call of the Lost
+- 1× Door to Possibility
+- 1× Sunshadow Eagle
+- 1× Endless Projection
+- 1× Shadowbinder
+- 1× Roots of Rebirth
+- 1× Cinderheart
+- 1× Veil Shatter
+- 1× Dreaming Groves
+- 1× Epiphany Unfolded
 
 ## Desolation's Edge / Tidecaller
 
-`tide-10` — 56 distinct cards, 70 copies, distilled from 17 real decks
+`tide-06` — 105 distinct cards, 116 copies, distilled from 15 real decks
 
 - 2× Infernal Cavalier
-- 2× Iron Executor
-- 2× Ossuary Overlord
 - 2× Emberfang
-- 1× Tidecaller
+- 2× Bloomweaver
+- 2× Cloaked Sentinel
 - 2× Blood Reaver
-- 2× Prism Caller
+- 1× Tidecaller
+- 2× Cinderblade Legionnaire
 - 2× Gilded Catalyst
+- 1× Desolation's Edge
+- 2× Starbound Striker
+- 1× Forsworn Champion
+- 1× Dreadmount Sovereign
+- 2× Shadowbinder
+- 1× Fading Farewell
+- 1× Reforged Automaton
+- 1× Prism Caller
+- 1× Pit Descender
+- 1× Vault Infiltrator
 - 1× Chronicle Reclaimer
 - 1× Radiants' Captain
-- 2× Vault Infiltrator
-- 2× Starbound Striker
+- 2× Lightningborn
+- 1× Pactbound Challenger
+- 1× Warrior's Path
 - 1× Wired Duelist
-- 1× Colossal Convergence
-- 1× Forsworn Champion
-- 2× Shadow Reflection
-- 1× Liminal Dreamer
-- 1× Battlefield Medic
-- 1× Reforged Automaton
-- 1× Skyflame Commander
-- 2× Shadow March
-- 1× Burning Revenant
-- 1× Pit Descender
 - 2× Young Huntress
-- 1× Fading Farewell
-- 1× Aspiring Guardian
-- 1× Junkfield Renegade
-- 1× Gateway Defender
-- 1× Assault Leader
+- 1× Shadow March
 - 1× Clifftop Marksman
-- 1× Lightningborn
-- 1× Standard Bearer
-- 2× Cinderblade Legionnaire
-- 2× Shadowbinder
-- 1× Fern Treader
-- 1× Wake the Fallen
-- 1× Mirror Protocol
+- 1× Assault Leader
+- 1× Gateway Defender
+- 1× Liminal Dreamer
+- 1× Skyflame Commander
+- 1× Battlefield Medic
 - 1× The Deathsworn
+- 1× Burning Revenant
+- 1× Mirror Protocol
+- 1× Gilded Catalyst
 - 1× Spirit Field Reclaimer
-- 1× Blade of Oblivion
-- 1× Ride of the Vanguard
+- 1× Barrage Specialist
+- 1× Flamestride Rider
 - 1× Aftermath Bloom
-- 1× Grim Reclaimer
-- 1× Voidsire
-- 1× Tethered Hollow
-- 1× Desolation's Edge
-- 1× Gearwright
-- 1× Moonlit Dancer
-- 1× Shadow Soloist
+- 1× Standard Bearer
 - 1× Assault Trooper
-- 1× Ordained Collapse
-- 1× Seeker for the Way
+- 1× Glimmerwood Scout
+- 1× Lanternhearted
+- 1× Shared Revelation
 - 1× Mirrorlight Architect
-- 1× Worldbreacher
+- 1× Gearwright
+- 1× Shadow Soloist
+- 1× Moonlit Dancer
+- 1× Ordained Collapse
+- 1× Cosmic Puppeteer
+- 1× Aspiring Guardian
+- 1× Angel of the Eclipse
 - 1× Lunar Hart
-- 1× Lanternwood Scout
+- 1× Worldbreacher
+- 1× Blade of Unity
+- 1× Vanguard Charger
+- 1× First Encounter
+- 1× Wake the Fallen
+- 1× Avatar of Cosmic Reckoning
+- 1× Momentum of the Fallen
+- 1× Clockwork Salvager
+- 1× Company Commander
+- 1× Gloomantler
+- 1× Revenant of the Lost
+- 1× Inspiring Templar
+- 1× Infernal Ascendant
+- 1× Intermezzo Balladeer
+- 1× Consumed Berserker
+- 1× Through the Rift
+- 1× Lithic Severance
+- 1× Riftwalker
+- 1× Forge Inheritor
+- 1× Immortal Reaper
+- 1× Dreadcall Warden
+- 1× Ash Sower
+- 1× Voidsire
+- 1× Grim Reclaimer
+- 1× Sun Clan Lieutenant
+- 1× Weight of Memory
+- 1× Seedling Sage
+- 1× Heroic Rescue
+- 1× Dream Garden Visitor
+- 1× Revered Prince
+- 1× Echo Technician
+- 1× Twilight Suppressor
+- 1× Burning Pursuit
+- 1× Blood Moon Ronin
+- 1× Wolfbond Chieftain
+- 1× Infernal Rest
+- 1× Final Gambit
+- 1× Inferno's Herald
+- 1× Glimpse of Infinity
+- 1× Dragonward
+- 1× Driftcaller Sovereign
+- 1× Tranquil Duelist
+- 1× Door to Possibility
+- 1× Sundown Surfer
+- 1× Veil Shatter
+- 1× Epiphany Unfolded
+- 1× Titan of Forgotten Echoes
+- 1× Volcanic Channeler
+- 1× Eclipse Herald
+- 1× Shapeshifter Spirit
+- 1× Containment Specialist
 
 ## Torchbearer of the Abyss / Keeper of the Lightpath
 
-`tide-11` — 61 distinct cards, 70 copies, distilled from 16 real decks
+`tide-07` — 117 distinct cards, 126 copies, distilled from 16 real decks
 
-- 2× Oblivion Guide
-- 2× Pinnacle Ascendant
-- 2× Pyrestone Avatar
 - 2× Sorrowful Prince
-- 2× Soulkindler
+- 2× Oblivion Guide
 - 2× Unquenched
+- 2× Soulkindler
+- 2× Pyrestone Avatar
+- 2× Pinnacle Ascendant
 - 2× Rubble Diviner
 - 2× Wandering Archivist
 - 2× Unleashed Destruction
 - 1× Unbroken
-- 1× Gateweaver
-- 1× Harborwarden
-- 1× Rootbound Witness
 - 1× Skies of Change
-- 1× Duneveil Vanguard
+- 1× Sundown Surfer
+- 1× Woodland Apparition
+- 1× Gateweaver
 - 1× Pattern Seeker
 - 1× Shadowprowler
-- 1× Woodland Apparition
-- 1× Sunken Radiance
-- 1× Weblight Waif
-- 1× Silent Gatherer
 - 1× Burst of Obliteration
-- 1× Spiral Offering
+- 1× Duneveil Vanguard
+- 1× Silent Gatherer
+- 1× Keeper of the Lightpath
+- 1× Shadowbinder
 - 1× Shadowpaw
+- 1× Sunken Radiance
 - 1× Angel of the Eclipse
-- 1× Grotto Seer
+- 1× Spiral Offering
+- 1× Cloudback Courier
+- 1× Thornwood Delver
 - 1× Part the Veil
-- 1× Eruption
+- 1× Grotto Seer
 - 1× Somber Flockmaster
-- 1× Wreckborn
+- 1× Abandon Constraints
 - 1× The Devourer
 - 1× The Ringleader
-- 1× Torchbearer of the Abyss
-- 1× Desperation
-- 1× Cinderheart
-- 1× Shadowbinder
-- 1× Liminal Dreamer
-- 1× Obliterator of Worlds
-- 1× Saltless Mariner
-- 1× Keeper of the Lightpath
-- 1× Soulbinder
-- 1× Wake the Fallen
-- 1× Evacuation Enforcer
-- 1× Break the Veil
-- 1× Gearwright
-- 1× Moonlit Dancer
-- 1× Shadow Soloist
-- 1× Shared Revelation
-- 1× Harrowing Officiant
-- 1× Gleamharvester
-- 1× Pyre Challenger
-- 1× Shoreline Penitent
-- 1× Thornwood Delver
-- 1× Hallowed Stag
-- 1× Seer of the Fallen
 - 1× Fury of the Clan
+- 1× Ash Harbinger
+- 1× Forgotten Sleeper
+- 1× First Encounter
+- 1× Wake the Fallen
+- 1× Torchbearer of the Abyss
+- 1× Immortal Reaper
+- 1× Cinderheart
+- 1× Weblight Waif
+- 1× Evacuation Enforcer
+- 1× Derelict Voyage
+- 1× Twilight Troubadour
+- 1× Simulacra
+- 1× Liminal Dreamer
+- 1× Saltless Mariner
+- 1× Obliterator of Worlds
+- 1× Harrowing Officiant
 - 1× Riftwalker
-- 1× Seaside Requiem
-- 1× Cosmonaut of Tides
-- 1× Twice-Lit Portal
-- 1× Forsaken Skyline
-
-## Augur Crow / Blazepath Traveler
-
-`tide-12` — 56 distinct cards, 70 copies, distilled from 16 real decks
-
-- 2× Blazepath Traveler
-- 2× Lumen Rover
-- 2× Cloaked Sentinel
-- 2× Urban Desperado
-- 2× Verdant Pioneer
-- 2× Glimmerwood Scout
-- 2× Frost Visionary
-- 2× Gatebound Warden
-- 2× Starlight Guide
-- 2× Nocturne
-- 2× Oathbound Pair
-- 2× Featherlight Summoner
-- 2× Clifftop Marksman
-- 1× Wreckland Maverick
-- 1× Conjured Zenith
-- 1× Ride of the Vanguard
-- 1× Warfield Stalwart
-- 1× The Grand Heist
+- 1× Echo Architect
+- 1× Gleamharvester
+- 1× Shoreline Penitent
+- 1× Ambersting
+- 1× Break the Veil
+- 1× Seer of the Fallen
+- 1× Eruption
+- 1× Glimpse of Infinity
 - 1× Moonlit Voyage
-- 1× Borrowed Minutes
-- 1× Passage Through Oblivion
-- 1× Reclaimer of Lost Paths
-- 2× Call to the Unknown
-- 1× Mirrorlight Architect
-- 1× Infernal Rest
-- 1× Pilgrim of Old Stones
-- 1× Duskreaper
-- 1× Tranquil Duelist
-- 1× Sundown Surfer
-- 1× Bladefall
-- 1× Nightmare
-- 1× Phantom Flotilla
-- 1× Nightmare Manifest
-- 1× Epiphany Unfolded
-- 1× Ambush Operative
-- 1× Crucible Warlord
-- 1× Lithic Severance
-- 1× Assault Leader
-- 1× Shattering Gambit
-- 1× Duskmount
-- 1× Wasteland Holdout
-- 1× Prophet of the Consumed
-- 1× Grounded
-- 1× Cragfall
-- 1× Veilpiercer
-- 1× Apocalypse
-- 1× The Deathsworn
-- 1× Ashen Remnant
-- 1× The Dread Sovereign
-- 1× Augur Crow
-- 1× Light of Emergence
-- 1× Roots of Rebirth
-- 1× Wraith of Twisting Shadows
-- 1× Together Against the Tide
-- 1× Emberfang
-- 1× Iron Executor
-
-## Shared Revelation / Dreadcall Warden2
-
-`tide-13` — 54 distinct cards, 70 copies, distilled from 25 real decks
-
-- 2× Thronebound Arbiter
-- 2× Driftrider
-- 2× Dreadcall Warden2
-- 2× Last Beacon
-- 2× Planetgazer
-- 2× Northlight Maestro
-- 2× Vanishing Inquisitor
-- 2× Breach Artist
-- 2× Eternal Sentry
-- 2× Keeper of the Tides
-- 2× Signal Resonant
-- 2× Standoff
-- 2× Riftwalker
+- 1× Twice-Lit Portal
+- 1× Data Pulse
 - 1× Salvage Engine
-- 1× Clockwork Prodigy
-- 1× Echoing Denial
-- 2× Null Sphere
-- 1× Resilient Wanderer
-- 1× Headtaker Wurm
-- 1× Apocalypse
-- 1× Cosmic Puppeteer
-- 1× The Power Within
-- 1× Threadbreaker
-- 2× Dreaming Groves
-- 1× Lurking Dread
-- 1× Duskshore Virtuoso
-- 1× Secrets of the Deep
-- 1× The Waking Titan
-- 1× Seeker of the Radiant Wilds
-- 1× Ancient Descent
+- 1× Call of the Lost
+- 1× Seek Answers
+- 1× Door to Possibility
+- 1× Graywatch
 - 1× Pilgrim of Old Stones
-- 1× Crumbling Covenant
+- 1× The Power Within
+- 1× Fathomless Maw
+- 1× Desperation
+- 1× Kindlehorn
+- 1× Whisper of the Past
+- 1× Shatter the Frail
+- 1× Guiding Light
 - 1× Pyrokinetic Surge
 - 1× Pathfinder Adrift
-- 1× Toll of Passage
+- 1× Consumed Marksman
+- 1× Wasteland Arbitrator
+- 1× Flamestride Rider
+- 1× Arc Gate Opening
+- 1× Key to the Moment
+- 1× Cascading Detonation
+- 1× Rusted Monolith
+- 1× Soulbinder
+- 1× Ash Sower
+- 1× Hope's Vanguard
+- 1× Twilight Reclaimer
+- 1× Featherlight Summoner
+- 1× Immolate and Rise
+- 1× Gateway Defender
+- 1× Peak Plunder
+- 1× Heroic Rescue
+- 1× Corrupted Host
+- 1× Glimmerwood Scout
+- 1× Starcatcher
+- 1× Iconoclast
+- 1× The Rising God
+- 1× Ripple Through Reality
+- 1× Twilight Suppressor
+- 1× Ferryman of the Falls
+- 1× Molten Duel
+- 1× Virtuoso of Harmony
+- 1× Starsea Traveler
+- 1× Aspiring Guardian
+- 1× Specter of Silent Snow
+- 1× Hatching Ground
+- 1× Starbound Striker
+- 1× Shadowbinder
+- 1× Searcher in the Mists
+- 1× Fargazer
 - 1× Together Against the Tide
-- 1× Fragments of Vision
-- 1× Dreadwood Emissary
+- 1× Dreaming Groves
+- 1× Ruin Scavenger
+- 1× Paradox Enforcer
+- 1× Dune Reaper
+- 1× Kindred Sparks
+
+## Shared Revelation / Impending Fury
+
+`tide-08` — 147 distinct cards, 160 copies, distilled from 32 real decks
+
+- 2× Abyssal Deputy
+- 2× Consumed Berserker
+- 2× Paradox Corps Enforcer
+- 2× Impending Fury
+- 2× Last Beacon
+- 2× Vanishing Inquisitor
+- 2× Planetgazer
+- 2× Keeper of the Tides
+- 2× Breach Artist
+- 2× Eternal Sentry
+- 2× Signal Resonant
+- 1× Echoing Denial
+- 1× Clockwork Prodigy
 - 2× Cinderblade Legionnaire
-- 1× Cragfall
+- 1× Salvage Engine
+- 2× Standoff
+- 1× Riftwalker
+- 1× Apocalypse
+- 1× Resilient Wanderer
+- 1× Threadbreaker
+- 1× Cosmic Puppeteer
+- 1× Secrets of the Deep
+- 1× Rift Pilgrim
+- 1× Headtaker Wurm
+- 1× The Thinning
+- 1× Pilgrim of Old Stones
+- 1× Collapse Protocol
+- 1× The Power Within
+- 1× Null Sphere
+- 1× Lurking Dread
+- 1× Seeker of the Radiant Wilds
+- 1× Dreaming Groves
+- 1× Fragments of Vision
 - 1× Ferryman's Tithe
+- 1× Crumbling Covenant
+- 1× Abolish
+- 1× The Waking Titan
+- 1× Duskshore Virtuoso
+- 1× Cragfall
+- 1× Pyrokinetic Surge
+- 1× Ancient Descent
+- 1× Sunset Chapel Rest
+- 1× Moonlit Voyage
+- 1× Wreckheap Lookout
 - 1× Vertiginous Leap
+- 1× Shared Revelation
+- 1× Knowledge Restored
+- 1× Pathfinder Adrift
+- 1× Burning Pursuit
+- 1× Together Against the Tide
+- 1× Toll of Passage
+- 1× Dreadwood Emissary
+- 1× Moment Rewound
 - 1× Defiant Parry
 - 1× Clifftop Marksman
-- 1× Moonlit Voyage
 - 1× Break the Sequence
-- 1× Collapse Protocol
-- 1× The Thinning
+- 1× Gloomantler
+- 1× Revenant of the Lost
+- 1× Break the Veil
 - 1× Ecliptic Vantage
-- 1× Rift Pilgrim
-- 1× Fractured Veil
-- 1× Shared Revelation
-- 1× Abolish
+- 1× Relentless Pursuer
+- 1× Mirrorlight Architect
 - 1× Sanctum Awakened
-
-## Rootspring Summons / Surge of Fury
-
-`tide-14` — 60 distinct cards, 70 copies, distilled from 20 real decks
-
-- 2× Nomad of Endless Paths
-- 2× Soulflame Predator
-- 2× Veilpiercer
-- 2× Duskmount
-- 1× Abyssal Enforcer
-- 1× Vortex Claimant
-- 2× Ethereal Courser
-- 2× Gatebound Warden
-- 2× Starlight Guide
-- 2× Still Dreamer
-- 1× Rootspring Summons
-- 1× Forgotten Factory Titan
+- 1× Lunar Hart
+- 1× Borrowed Minutes
+- 1× Spirit of Smoldering Echoes
+- 1× Manufactured Abomination
+- 1× Barrage Specialist
+- 1× Cosmonaut of Tides
+- 1× Entropy Spike
+- 1× Immolate and Rise
+- 1× Peak Plunder
+- 1× Emberwatch Veteran
+- 1× Vessel of Echoes
+- 1× Desperation
+- 1× Ripple Through Reality
+- 1× Ridgecutter
+- 1× Carrion Shepherd
+- 1× Young Huntress
+- 1× Epiphany Unfolded
+- 1× Forsaken Skyline
 - 1× Sanctum Approach
-- 2× Frost Visionary
-- 1× Ambush Operative
-- 1× Crucible Warlord
-- 1× Blazepath Traveler
-- 1× Lumen Rover
+- 1× Momentum of the Fallen
+- 1× Ripple of Defiance
+- 1× Dawnrunner
+- 1× Final Gambit
+- 1× Whisper of the Past
+- 1× Shatter the Frail
 - 1× Guiding Light
-- 1× Cloudmantle Ray
-- 1× Headtaker Wurm
-- 1× Passage Through Oblivion
-- 1× Celestial Lookout
-- 1× Keeper of the Tides
-- 1× Break the Sequence
-- 2× Nexus Wayfinder
+- 1× Silent Observer
+- 1× Fractured Veil
+- 1× Barrage Specialist
+- 1× Driftcaller Sovereign
+- 1× Wasteland Arbitrator
+- 1× Grim Pursuer
+- 1× Vortex Claimant
+- 1× Night Prowler
+- 1× The Calling Night
+- 1× Sundown Surfer
+- 1× Ash Sower
+- 1× Silent Avenger
+- 1× Rite of Summoning
+- 1× Hope's Vanguard
+- 1× Twilight Reclaimer
+- 1× Vigil Keeper
+- 1× Liminal Dreamer
+- 1× Annular Recall
+- 1× Tidecaller
+- 1× Spellweaver
+- 1× Seeker for the Way
+- 1× Starfall
+- 1× Gateweaver
+- 1× Unbroken
+- 1× Broadcast Array
+- 1× Return to Nowhere
+- 1× Bloodpact Berserker
+- 1× Avatar of Cosmic Reckoning
+- 1× Crimson Pilgrimage
+- 1× Shatterpoint Agent
+- 1× Scrapyard Custodian
+- 1× Searcher in the Mists
+- 1× Fargazer
+- 1× Silent Gatherer
+- 1× Call of Calamity
+- 1× Harvest the Forgotten
+- 1× Wheel of the Heavens
+- 1× Voidshield Guardian
+- 1× Immortal Reaper
+- 1× Architect of Memory
+- 1× Bloomweaver
+- 1× Spiral Offering
+- 1× Miraculous Arrival
+- 1× Oracle of Shifting Skies
+- 1× Pulse of Sacrifice
+- 1× Duneguard Captain
+- 1× Tidewreck Navigator
+- 1× Fangbound
+- 1× Scorched Reckoning
+- 1× Gateway Defender
+- 1× Shard Wielder
+- 1× Glimmerwood Scout
+- 1× The Rising God
+- 1× Silent Avenger
+- 1× Nightmare Manifest
+- 1× Unleashed Destruction
+- 1× Duskreaper
+- 1× Duskwall Delver
+
+## Conjured Zenith / Passage Through Oblivion
+
+`tide-09` — 110 distinct cards, 125 copies, distilled from 17 real decks
+
+- 2× Starlight Guide
+- 2× Gatebound Warden
+- 2× Lumen Rover
+- 2× Blazepath Traveler
+- 2× Passage Through Oblivion
+- 2× Frost Visionary
+- 2× Glimmerwood Scout
+- 2× Cloaked Sentinel
+- 2× Looming Oracle
+- 2× Ambush Operative
+- 1× Conjured Zenith
+- 1× Duskmount
+- 2× Verdant Pioneer
+- 2× Urban Desperado
+- 2× Reclaimer of Lost Paths
+- 2× Oathbound Pair
+- 1× Bladefall
+- 1× Shard Wielder
 - 1× Rift Pilgrim
-- 1× Null Sphere
+- 1× Relentless Pursuer
+- 2× Nocturne
+- 1× Clifftop Marksman
+- 1× Featherlight Summoner
+- 1× Prophet of the Consumed
+- 1× Abyssal Enforcer
+- 1× Veil Shatter
+- 1× Vertiginous Leap
+- 1× Soulflame Predator
+- 1× Nomad of Endless Paths
+- 1× Torn Circuit Feeder
+- 1× Titan of Forgotten Echoes
+- 1× Infernal Rest
+- 1× Voidshield Guardian
+- 1× Radiant Trio
+- 1× Nightmare Manifest
+- 1× Celestial Lookout
+- 1× Wreckborn
+- 1× Heroic Rescue
+- 1× Ruin Scavenger
+- 1× Field Reverent
+- 1× Boundless Wanderer
+- 1× Shattering Gambit
+- 1× Sage of the Prelude
+- 1× Veilpiercer
+- 1× Grounded
+- 1× Plunge into the Abyss
+- 1× Cragfall
+- 1× Blade of Unity
+- 1× Vanguard Charger
+- 1× Wraith of Twisting Shadows
+- 1× Light of Emergence
+- 1× Endless Projection
+- 1× Roots of Rebirth
+- 1× Sundown Surfer
+- 1× Break the Sequence
+- 1× Scrapyard Custodian
+- 1× Together Against the Tide
+- 1× Whisper of the Past
+- 1× Shatter the Frail
+- 1× Augur Crow
+- 1× Saltless Mariner
+- 1× Obliterator of Worlds
+- 1× Ashborn Necromancer
+- 1× Abolish
+- 1× Vanishing Inquisitor
+- 1× Voidcaller
+- 1× Kindlehorn
+- 1× Lithic Severance
+- 1× Dune Reaper
+- 1× Immolate and Rise
+- 1× Peak Plunder
+- 1× Forgotten Factory Titan
+- 1× Nightprowler Panther
+- 1× Duskreaper
+- 1× Stargazer Adrift
+- 1× Eclipse Herald
+- 1× Shapeshifter Spirit
+- 1× Containment Specialist
+- 1× Fell the Mighty
+- 1× Dawnrunner
+- 1× Amythest Aurelia
+- 1× Defiant Parry
+- 1× Glimpse of Infinity
+- 1× Moonlit Voyage
+- 1× Wondrous Clearing
+- 1× Infernal Ascendant
+- 1× Scrap Reclaimer
+- 1× First Encounter
+- 1× Wake the Fallen
+- 1× Stolen Genesis
+- 1× Bloodpact Berserker
+- 1× Entropy Spike
+- 1× Avatar of Cosmic Reckoning
+- 1× Curio Dealer
+- 1× Pyrokinetic Surge
+- 1× Flamboyant Flamingo
+- 1× Epiphany Unfolded
+- 1× Rusted Monolith
+- 1× Enginespeaker
+- 1× Beacon of Tomorrow
+- 1× Crumbling Behemoth
+- 1× Nexus Wayfinder
+- 1× Call to the Unknown
+- 1× Lumineth
+- 1× Corrupted Host
+- 1× Silent Avenger
+- 1× Spirit of the Greenwood
+- 1× Moment Rewound
+- 1× Ashen Remnant
+- 1× The Dread Sovereign
+
+## Gearwright / Shadow Soloist
+
+`tide-10` — 31 distinct cards, 40 copies, distilled from 7 real decks
+
+- 2× Gearwright
+- 2× Shadow Soloist
+- 2× Moonlit Dancer
+- 2× Rootspring Summons
+- 2× Wasteland Holdout
+- 2× Gateweaver
+- 2× Sanctum Approach
+- 1× Weblight Waif
+- 2× Fell the Mighty
+- 1× Eruption
+- 1× Dreadwood Emissary
+- 2× Fury of the Clan
+- 1× Somber Flockmaster
+- 1× Return to Nowhere
+- 1× Crimson Pilgrimage
+- 1× Ancient Descent
+- 1× Chronicle Reclaimer
+- 1× Radiants' Captain
+- 1× Fell Swoop
+- 1× The Devourer
+- 1× Frontline Martyr
+- 1× Consumed Marksman
+- 1× Dream Garden Visitor
+- 1× Revered Prince
+- 1× Echo Technician
+- 1× Ripple Through Reality
+- 1× Field Reverent
+- 1× Boundless Wanderer
+- 1× Blood Moon Ronin
+- 1× Defiant Parry
+- 1× Veil Shatter
+
+## Kindlehorn / Paleclaw Panther
+
+`tide-11` — 117 distinct cards, 134 copies, distilled from 23 real decks
+
+- 2× Dawnhorn Elder
+- 2× Mother of Flames
+- 2× Beacon of Tomorrow
+- 2× Crumbling Behemoth
+- 2× Spirit of the Greenwood
+- 2× Sunshadow Eagle
+- 2× Petal-Seer
+- 2× Blazing Emberwing
+- 2× Spiritbound Alpha
+- 2× Dreamborne Leviathan
+- 1× Paleclaw Panther
+- 2× Lord of Hidden Paths
+- 2× Spirit Bond
+- 1× Doorlight Foundling
+- 1× Stoneborn Leviathan
+- 1× Moonbound Wolf
+- 2× Vigilant Howler
+- 2× Blood Moon Triad
+- 2× Ebonwing
+- 1× Empyreal Light
+- 1× Kindlehorn
+- 2× Emerald Guardian
+- 2× Nightprowler Panther
+- 1× Shadowpaw
+- 1× Wondrous Clearing
+- 1× Celestial Reverie
+- 1× Ambersting
+- 1× Amber Aurelia
+- 1× Carrion Lord
+- 1× Unleash Ruin
+- 1× Sage of the Prelude
+- 1× Steel Abomination
+- 1× Dawnprowler Panther
+- 1× Winterbough Monk
+- 1× Dreamcatcher's Call
+- 1× Veilseeker
+- 1× Dreamvale Monarch
+- 1× Endless Projection
+- 1× Turquoise Aurelia
+- 1× Abomination of Memory
+- 1× Lumineth
+- 1× Ethereal Courser
+- 1× Lanternhearted
+- 1× Amythest Aurelia
+- 1× Prophet of the Consumed
+- 1× Sky Voyager
+- 1× Voidcaller
+- 1× Curio Dealer
+- 1× Harrowing Officiant
+- 1× Scrap Reclaimer
+- 1× Ashen Remnant
+- 1× The Dread Sovereign
+- 1× Flamboyant Flamingo
+- 1× Eclipse Herald
+- 1× Shapeshifter Spirit
+- 1× Containment Specialist
+- 1× Luminwings
+- 1× Depthwalker
+- 1× Ethereal Courser
+- 1× Heavenward Penitent
+- 1× Sylvan Matriarch
+- 1× Nexus Wayfinder
+- 1× Overstory Explorer
+- 1× Roots of Rebirth
+- 1× Cloudmantle Ray
+- 1× Celestial Lookout
+- 1× Ruin Scavenger
+- 1× Mirrorlight Architect
+- 1× Field Reverent
+- 1× Boundless Wanderer
+- 1× Quiet Reflection
+- 1× Sunset Chronicler
 - 1× Cindermarch
 - 1× Conduit of Resonance
-- 1× Looming Oracle
-- 1× Scorched Crusader
-- 1× Starshot Gunner
-- 1× Sage of the Prelude
-- 1× Toll of Passage
-- 1× Melodist of the Finale
-- 1× Dreadwood Emissary
-- 1× Call to the Unknown
-- 1× Prophet of the Consumed
+- 1× Dusk Duelist
+- 1× Bloodpact Berserker
+- 1× Lumin-Gate Seer
 - 1× Standard Bearer
-- 1× Lumineth
-- 1× Moment Rewound
-- 1× Cragfall
-- 1× Intermezzo Balladeer
-- 1× Threadbreaker
-- 1× Infernal Rest
-- 1× Undying Fang
-- 1× Doorlight Foundling
-- 1× Echoes of the Journey
-- 1× Ripple of Defiance
-- 1× Fractured Veil
-- 1× Vanishing Inquisitor
-- 1× Defiant Parry
-- 1× Bloomweaver
-- 1× A New Adventure
-- 1× Across the Void
-- 1× Driftcaller Sovereign
-- 1× Through the Rift
-- 1× Featherlight Summoner
-- 1× Urban Desperado
-
-## Seeker of the Radiant Wilds / Forsaken Skyline
-
-`tide-15` — 51 distinct cards, 70 copies, distilled from 32 real decks
-
-- 2× Sorrow Watcher
-- 2× Tidewreck Navigator
-- 2× Deathwalker
-- 2× Wreckheap Survivor
-- 2× Duskwall Delver
-- 2× Cinderfang
-- 2× Twilight Reclaimer
-- 2× Ashwalker
-- 2× The Rising God
-- 2× Dustborn Veteran
-- 2× Defiant Holdout
-- 2× Dreadweaver
-- 2× Kindred Sparks
-- 2× Obliterator of Worlds
-- 2× Saltless Mariner
-- 2× Exiles of the Last Light
-- 2× Cinderheart
-- 1× Soulreaver
-- 1× Wasteland Arbitrator
-- 1× Scuttled Fortune
-- 1× Dawnrunner
-- 1× Shadowcaller
-- 1× Shatter the Frail
-- 1× Whisper of the Past
-- 2× Nightmare Manifest
-- 1× Entropy Spike
-- 1× Volcanic Channeler
-- 1× Enginespeaker
-- 2× Stargazer Adrift
-- 1× Fargazer
-- 1× Maelstrom Denial
-- 1× Searcher in the Mists
-- 1× Paradox Enforcer
-- 1× Wasteland Tamer
-- 1× Silent Avenger
-- 1× Burning Pursuit
-- 1× Ashborn Necromancer
-- 1× Ashfront Lieutenant
-- 1× Marrow Drinker
-- 1× Wreckborn
-- 1× Ferryman's Tithe
+- 1× Radiant Trio
+- 1× Momentum of the Fallen
+- 1× Frostbound Defiant
+- 1× Looming Oracle
+- 1× Augur Crow
+- 1× Assault Trooper
+- 1× Arc Gate Opening
+- 1× Forge Inheritor
+- 1× Key to the Moment
 - 1× Herald of the Last Light
-- 1× Signal Resonant
-- 1× Graywatch
-- 1× Avatar of Cosmic Reckoning
-- 1× Skull Weaver
-- 1× Unleash Ruin
-- 1× Veil of the Wastes
-- 1× Harvester of Despair
-- 1× Ruin Scavenger
+- 1× Still Dreamer
+- 1× Silent Avenger
+- 1× Packcaller of Shadows
+- 1× Immolate and Rise
+- 1× Peak Plunder
+- 1× Crumbling Covenant
+- 1× Momentum's Edge
+- 1× Forsaken Pact
+- 1× Break the Veil
+- 1× Starsea Traveler
+- 1× Frost Visionary
+- 1× Veil Crosser
+- 1× Barren Path Wanderer
+- 1× Inferno's Herald
+- 1× Plunge into the Abyss
 - 1× Specter of Silent Snow
+- 1× Selfless Rescuer
+- 1× Wraith of Twisting Shadows
+- 1× Light of Emergence
+- 1× Stolen Genesis
+- 1× Veil Shatter
+- 1× Eternal Stag
+- 1× Ghostlight Wolves
+- 1× Torn Circuit Feeder
+- 1× Epiphany Unfolded
+- 1× Nocturne
+- 1× Paradox Enforcer
+- 1× Dreadcall Warden
+- 1× Final Gambit
+
+## Rootspring Summons / Grim Pursuer
+
+`tide-12` — 134 distinct cards, 145 copies, distilled from 25 real decks
+
+- 2× Still Dreamer
+- 2× Soulflame Predator
+- 2× Nomad of Endless Paths
+- 2× Ethereal Courser
+- 2× Forgotten Factory Titan
+- 2× Nexus Wayfinder
+- 2× Cindermarch
+- 2× Conduit of Resonance
+- 2× Melodist of the Finale
+- 1× Grim Pursuer
+- 1× Vortex Claimant
+- 2× Intermezzo Balladeer
+- 1× Voidcaller
+- 2× Call to the Unknown
+- 1× Frost Visionary
+- 1× Duskmount
+- 1× Packcaller of Shadows
+- 1× Celestial Lookout
+- 1× Veilpiercer
+- 1× Abyssal Enforcer
+- 1× Rootspring Summons
+- 1× Amber Aurelia
+- 1× Through the Rift
+- 1× Terminus
+- 1× Doorlight Foundling
+- 1× Sanctum Approach
+- 1× Starlight Guide
+- 1× Gatebound Warden
+- 1× Frostbound Defiant
+- 1× Guiding Light
+- 1× Looming Oracle
+- 1× Quiet Reflection
+- 1× Standard Bearer
+- 1× Dreamvale Monarch
+- 1× Luminwings
+- 1× Headtaker Wurm
+- 1× Looming Oracle
+- 1× Key to the Moment
+- 1× Infernal Rest
+- 1× Amythest Aurelia
+- 1× A New Adventure
+- 1× Turquoise Aurelia
+- 1× Ripple of Defiance
+- 1× Scrap Reclaimer
+- 1× Lanternhearted
+- 1× Voidshield Guardian
+- 1× Kindlehorn
+- 1× Emerald Guardian
+- 1× Lumin-Gate Seer
+- 1× Verdant Pioneer
+- 1× Urban Desperado
+- 1× Toll of Passage
+- 1× Sage of the Prelude
+- 1× Prophet of the Consumed
+- 1× Endless Projection
+- 1× Cloudmantle Ray
+- 1× Veil Shatter
+- 1× Cragfall
+- 1× Shattering Gambit
+- 1× Nightprowler Panther
+- 1× Null Sphere
+- 1× Echoes of the Journey
+- 1× Beacon of Tomorrow
+- 1× Spirit Bond
+- 1× Ebonwing
+- 1× Crumbling Behemoth
+- 1× Defiant Parry
+- 1× Lumineth
+- 1× Abolish
+- 1× Ambush Operative
+- 1× Overstory Explorer
+- 1× Blood Moon Triad
+- 1× Across the Void
+- 1× Dreamcatcher's Call
+- 1× Passage Through Oblivion
+- 1× Ambersting
+- 1× Ethereal Courser
+- 1× Emberwatch Veteran
+- 1× Dreadwood Emissary
+- 1× Vessel of Echoes
+- 1× Grounded
+- 1× Moment Rewound
+- 1× Lumen Rover
+- 1× Keeper of the Tides
+- 1× Blazepath Traveler
+- 1× Hatching Ground
+- 1× Data Pulse
+- 1× Eclipse Herald
+- 1× Shapeshifter Spirit
+- 1× Containment Specialist
+- 1× Break the Sequence
+- 1× Momentum of the Fallen
+- 1× Cascade of Reflections
+- 1× Abomination of Memory
+- 1× Bloomweaver
+- 1× Augur Crow
+- 1× Eternal Stag
+- 1× Ghostlight Wolves
+- 1× Assault Trooper
+- 1× Celestial Reverie
+- 1× Lithic Severance
+- 1× Dawnblade Wanderer
+- 1× Paleclaw Panther
+- 1× Miraculous Arrival
+- 1× Dawnprowler Panther
+- 1× Scuttled Fortune
+- 1× Sky Voyager
+- 1× Voidcaller
+- 1× Path to Redemption
+- 1× Echo Architect
+- 1× Forsaken Pact
+- 1× Blood Moon Ronin
+- 1× Pactbound Challenger
+- 1× Plunge into the Abyss
+- 1× Glimpse of Infinity
+- 1× Dragonward
+- 1× Lunar Hart
+- 1× Wondrous Clearing
+- 1× Radiant Trio
+- 1× Blazing Emberwing
+- 1× Entropy Spike
+- 1× Curio Dealer
+- 1× Vigilant Howler
+- 1× Spiritbound Alpha
+- 1× Lightningborn
+- 1× Dreamborne Leviathan
+- 1× Dreaming Groves
+- 1× Shadowpaw
+- 1× Dustborn Veteran
+- 1× Flamboyant Flamingo
+- 1× Epiphany Unfolded
+- 1× Corrupted Host
+- 1× Spirit of the Greenwood
+- 1× Momentum's Edge
+
+## Rootspring Summons / Advance Gunner
+
+`tide-13` — 146 distinct cards, 160 copies, distilled from 25 real decks
+
+- 2× Pathfinder
+- 2× Speaker for the Forgotten
+- 2× Crescendo Channeler
+- 2× Dream Garden Visitor
+- 2× Revered Prince
+- 2× Echo Technician
+- 2× Starbound Striker
+- 2× Voidsire
+- 2× Grim Reclaimer
+- 1× Pit Descender
+- 1× Worldbreacher
+- 1× Shatterpoint Agent
+- 1× Haunted Betrayer
+- 2× Aspiring Guardian
+- 2× Wolfbond Chieftain
+- 1× Ethereal Trailblazer
+- 1× Cinderblade Legionnaire
+- 1× Canopy Lookout
+- 1× Sun Clan Lieutenant
+- 1× Blood Reaver
+- 1× Harbor Warden
+- 1× Dragonward
+- 1× Spellweaver
+- 1× Aftermath Bloom
+- 1× Burning Revenant
+- 1× Forge Inheritor
+- 1× Night Raid Commando
+- 1× Prism Caller
+- 1× Tethered Hollow
+- 1× Inferno's Herald
+- 1× Seedling Sage
+- 1× Vault Infiltrator
+- 1× Forsworn Champion
+- 1× Dreadmount Sovereign
+- 1× Consumed Marksman
+- 1× Wired Duelist
+- 1× Flamestride Rider
+- 2× Eclipse Herald
+- 2× Shapeshifter Spirit
+- 2× Containment Specialist
+- 1× Warrior's Path
+- 1× Riftwalker
+- 1× Prophet of the Consumed
+- 1× Reforged Automaton
+- 1× Featherlight Summoner
+- 1× Infernal Cavalier
+- 1× The Deathsworn
+- 1× Bloodpact Berserker
+- 1× Rootspring Summons
+- 1× Skyflame Commander
+- 1× Battlefield Medic
+- 1× Sundown Surfer
+- 1× Invoker of Myths
+- 1× Melodist of the Finale
+- 1× Seeker of the Radiant Wilds
+- 1× Inspiring Templar
+- 1× Silent Observer
+- 1× Twilight Troubadour
+- 1× Simulacra
+- 1× Lanternhearted
+- 1× Fury of the Clan
+- 1× Key to the Moment
+- 1× Dreadcall Warden
+- 1× Shadow March
+- 1× Bloomweaver
+- 1× Tranquil Duelist
+- 1× Gilded Catalyst
+- 1× Vengeance Taker
+- 1× Final Gambit
+- 1× Tidecaller
+- 1× Abyssal Enforcer
+- 1× Shard Wielder
+- 1× Seeker for the Way
+- 1× Knowledge Restored
+- 1× Null Sphere
+- 1× Pactbound Challenger
+- 1× Young Huntress
+- 1× Blade of Unity
+- 1× Mirror Protocol
+- 1× Vanguard Charger
+- 1× Clockwork Salvager
+- 1× Ripple of Defiance
+- 1× Gloomantler
+- 1× Revenant of the Lost
+- 1× Frontline Martyr
+- 1× Guiding Light
+- 1× Pathfinder Adrift
+- 1× Relentless Pursuer
+- 1× Vaultbreaker
+- 1× Sanctum Awakened
+- 1× Pulse of Sacrifice
+- 1× Assault Leader
+- 1× Desolation's Edge
+- 1× Advance Gunner
+- 1× Crumbling Covenant
+- 1× Liminal Dreamer
+- 1× Assault Trooper
+- 1× Ripple Through Reality
+- 1× Duskmount
+- 1× Annular Recall
+- 1× Shattering Gambit
+- 1× Gearwright
+- 1× Shadow Soloist
+- 1× Moonlit Dancer
+- 1× Blood Moon Ronin
+- 1× Frostbound Defiant
+- 1× Cosmic Puppeteer
+- 1× Dreadwood Emissary
+- 1× Lanternwood Scout
+- 1× Reclaimer of Lost Paths
+- 1× Plunge into the Abyss
+- 1× Cloaked Sentinel
+- 1× Genesis Burst
+- 1× Driftcaller Sovereign
+- 1× Skies of Change
+- 1× Sundown Surfer
+- 1× First Encounter
+- 1× Wake the Fallen
+- 1× Shadowbinder
+- 1× Emberfang
+- 1× Break the Sequence
+- 1× Chronicle Reclaimer
+- 1× Radiants' Captain
+- 1× Pattern Seeker
+- 1× Shadowprowler
+- 1× Lightningborn
+- 1× Spirit Field Reclaimer
+- 1× Bladefall
+- 1× Fading Farewell
+- 1× Infernal Ascendant
+- 1× Intermezzo Balladeer
+- 1× Wheel of the Heavens
+- 1× Voidshield Guardian
+- 1× Abolish
+- 1× Through the Rift
+- 1× Dawnblade Wanderer
+- 1× Oathbound Pair
+- 1× Planetgazer
+- 1× Spiral Offering
+- 1× Gateway Defender
+- 1× Forgotten Factory Titan
+- 1× Glimmerwood Scout
+- 1× Ridgecutter
+- 1× Twilight Suppressor
+- 1× Molten Duel
+- 1× Frost Visionary
+
+## The Deathsworn / Scrapyard Custodian
+
+`tide-14` — 106 distinct cards, 117 copies, distilled from 15 real decks
+
+- 2× Ashfront Lieutenant
+- 2× Shardwoven Tyrant
+- 2× Embersummoner
+- 2× Flagbearer of Decay
+- 2× Scrapyard Custodian
+- 2× Veil of the Wastes
+- 2× Price of Redemption
+- 2× Desperation
+- 2× Carrion Shepherd
+- 1× Hope's Vanguard
+- 1× The Rising God
+- 1× Fractured Vessel
+- 1× Unleash Ruin
+- 2× Pyrokinetic Surge
+- 1× Silent Gatherer
+- 2× Exiles of the Last Light
+- 1× Defiant Holdout
+- 1× Scuttled Fortune
+- 1× Cinderblade Legionnaire
+- 1× Burning Pursuit
+- 1× Paradox Enforcer
+- 1× Volcanic Channeler
+- 1× Skull Weaver
+- 1× Winterbough Monk
+- 1× Lumineth
+- 1× Forge Inheritor
+- 1× Silent Avenger
+- 1× Warfield Stalwart
+- 1× Hope's Vanguard
+- 1× Twilight Reclaimer
+- 1× Ferryman's Tithe
+- 1× Collateral Damage
+- 1× Harrowing Officiant
+- 1× Veilseeker
+- 1× Ordained Collapse
+- 1× Ferryman of the Falls
+- 1× Veil Crosser
+- 1× Barren Path Wanderer
+- 1× Seer of the Fallen
+- 1× Moonlit Voyage
+- 1× Entropy Spike
+- 1× Graywatch
+- 1× Searcher in the Mists
+- 1× Fargazer
+- 1× Cinderheart
+- 1× Whisper of the Past
+- 1× Shatter the Frail
+- 1× Dustborn Veteran
+- 1× Relentless Pursuer
+- 1× Vaultbreaker
+- 1× Ashborn Necromancer
+- 1× Voidshield Guardian
+- 1× Voidcaller
+- 1× Overstory Explorer
+- 1× Immortal Reaper
+- 1× Enginespeaker
+- 1× Sylvan Matriarch
+- 1× Silent Avenger
+- 1× Rite of Summoning
+- 1× Immolate and Rise
+- 1× Sky Voyager
+- 1× Voidcaller
+- 1× Peak Plunder
+- 1× Dreadweaver
+- 1× Signal Resonant
+- 1× Stoneborn Leviathan
+- 1× Riftwalker
+- 1× Moonbound Wolf
+- 1× Nightmare Manifest
+- 1× Ashen Remnant
+- 1× The Dread Sovereign
+- 1× Duskreaper
+- 1× Ambersting
+- 1× Amber Aurelia
+- 1× Stargazer Adrift
+- 1× Depthwalker
+- 1× Virtuoso of Harmony
+- 1× Starsea Traveler
+- 1× Final Gambit
+- 1× Inferno's Herald
+- 1× Glimpse of Infinity
+- 1× Shadow March
+- 1× Watcher in the Ruins
+- 1× Dusk Duelist
+- 1× Wondrous Clearing
+- 1× Stolen Genesis
+- 1× Endless Projection
+- 1× Radiant Trio
+- 1× Avatar of Cosmic Reckoning
+- 1× Fathomless Maw
+- 1× Curio Dealer
+- 1× Together Against the Tide
+- 1× Carrion Lord
+- 1× Kindlehorn
+- 1× Dreaming Groves
+- 1× Evacuation Enforcer
+- 1× Lord of Hidden Paths
+- 1× Standoff
+- 1× Flamboyant Flamingo
+- 1× Titan of Forgotten Echoes
+- 1× Ruin Scavenger
+- 1× Rusted Monolith
+- 1× Dune Reaper
+- 1× Corrupted Host
+- 1× Kindred Sparks
+- 1× Infernal Ascendant
 
 ## Mother of Flames / Dawnprowler Panther
 
-`tide-16` — 46 distinct cards, 70 copies, distilled from 36 real decks
+`tide-15` — 130 distinct cards, 160 copies, distilled from 39 real decks
 
-- 2× Moonbound Wolf
-- 2× Mystic Runefish
-- 2× Verdant Pilgrim
-- 2× Dreamborne Leviathan
-- 2× Spiritbound Alpha
-- 2× Ebonwing
-- 2× Stoneborn Eternal
 - 2× Eternal Stag
 - 2× Ghostlight Wolves
-- 2× Dawnprowler Panther
-- 2× Blazing Emberwing
+- 2× Spiritbound Alpha
+- 2× Dreamborne Leviathan
+- 2× Stoneborn Leviathan
+- 2× Moonbound Wolf
+- 2× Cloudmantle Ray
 - 2× Sunshadow Eagle
-- 2× Dusk Duelist
+- 2× Empyreal Light
+- 2× Dawnprowler Panther
+- 2× Vigilant Howler
+- 2× Blood Moon Triad
+- 2× Flamboyant Flamingo
+- 2× Mother of Flames
 - 2× Lord of Hidden Paths
-- 1× Mother of Flames
-- 2× Celestial Reverie
-- 2× Spirit Bond
-- 2× Skyborne Jellyfish
-- 2× Dreamcatcher's Call
+- 2× Ethereal Courser
 - 2× Lumin-Gate Seer
-- 2× Mountainwatch Alpha
-- 2× Starrunner
+- 2× Celestial Reverie
+- 2× Blazing Emberwing
+- 2× Ebonwing
+- 2× Spirit Bond
+- 2× Dusk Duelist
+- 2× Dreamcatcher's Call
 - 2× Roots of Rebirth
-- 2× Abomination of Memory
-- 2× Spirit of the Greenwood
+- 2× Turquoise Aurelia
+- 1× Luminwings
+- 2× Sylvan Matriarch
 - 1× Selfless Rescuer
+- 2× Emerald Guardian
+- 2× Dreamvale Monarch
+- 1× Field Reverent
+- 1× Boundless Wanderer
+- 2× Spirit of the Greenwood
+- 1× Dawnhorn Elder
+- 1× Abomination of Memory
+- 1× Shadowpaw
 - 1× Beacon of Tomorrow
 - 1× Crumbling Behemoth
-- 1× Petal-Seer
-- 1× Blazebound Sentinel
-- 1× Carrion Lord
-- 1× Emerald Guardian
-- 1× Worldsong Behemoth
-- 1× Dawnhorn Elder
-- 1× Ashen Remnant
-- 1× The Dread Sovereign
-- 1× Sunset Chronicler
-- 1× Veilseeker
-- 1× Melodist of the Finale
-- 1× Sylvan Matriarch
-- 1× Lumineth
-- 1× Undying Fang
-- 1× Driftcaller Sovereign
-- 1× Dreamvale Monarch
+- 1× Quiet Reflection
+- 2× Scrap Reclaimer
+- 1× Packcaller of Shadows
+- 1× Nightprowler Panther
 - 1× Sky Voyager
 - 1× Voidcaller
-
-## Mirrorlight Architect / Nebula's Wake
-
-`tide-17` — 23 distinct cards, 46 copies, distilled from 1 real decks
-
-- 2× Mirrorlight Architect
-- 2× Nebula's Wake
-- 2× Spent Courier
-- 2× The Calling Night
-- 2× Arc Gate Opening
-- 2× Mother of Flames
-- 2× Herald of the Last Light
-- 2× Immolate and Rise
-- 2× Peak Plunder
-- 2× Wasteland Tamer
-- 2× Dawnhorn Elder
-- 2× Harrowing Officiant
-- 2× Unleash Ruin
-- 2× Specter of Silent Snow
-- 2× Blazing Emberwing
-- 2× Bloodpact Berserker
-- 2× Endless Projection
-- 2× Together Against the Tide
-- 2× Mountainwatch Alpha
-- 2× Ebonwing
-- 2× Call to the Unknown
-- 2× Ashen Remnant
-- 2× The Dread Sovereign
-
-## Fathomscourge / Smoldering Ancient
-
-`tide-18` — 45 distinct cards, 56 copies, distilled from 7 real decks
-
-- 2× Fathomscourge
-- 2× Smoldering Ancient
-- 2× Pyre Challenger
-- 2× Thornwood Delver
-- 2× Fell the Mighty
-- 2× Spent Courier
-- 1× Simulacra
-- 1× Twilight Troubadour
-- 1× Weblight Waif
-- 2× Burst of Obliteration
-- 2× Angel of the Eclipse
-- 1× Dreaming Obelisk
-- 1× Urban Cipher
-- 1× Verdant Wayfarer
-- 2× Tranquil Duelist
-- 1× Emberfang
-- 1× Blight Weaver2
-- 1× Colossal Convergence
-- 1× Forsworn Champion
-- 1× Junkfield Renegade
-- 1× Forge Inheritor
-- 1× Infernal Cavalier
-- 1× Featherlight Summoner
-- 1× Assault Leader
-- 1× Weight of Memory
-- 1× Burning Revenant
-- 1× Shadow Reflection
-- 1× Dragonward
-- 1× Seaside Requiem
-- 1× Molten Duel
-- 1× Starfall Communion
-- 2× Infernal Ascendant
-- 1× Moonlit Voyage
-- 1× Cinderheart
-- 1× Fathomless Maw
-- 1× Kindlehorn
-- 1× Epiphany Unfolded
-- 1× Young Huntress
-- 2× Cinderblade Legionnaire
-- 1× Evacuation Enforcer
-- 1× Ashen Harbinger
-- 1× Eclipse Herald
-- 1× Gleamshield Knight
-- 1× Shadowbinder
-- 1× Barrage Specialist
-
-## Seeker of the Radiant Wilds / Rift Pilgrim
-
-`tide-19` — 59 distinct cards, 70 copies, distilled from 10 real decks
-
-- 2× Pulse of Sacrifice
-- 2× Blade of Oblivion
-- 2× Fragments of Vision
-- 2× Reunion
-- 2× Clockwork Prodigy
-- 2× Echoing Denial
-- 2× Ripple of Defiance
-- 1× Rift Pilgrim
-- 2× Wheel of the Heavens
-- 2× From the Barrow
-- 2× Path to Redemption
-- 1× Data Pulse
-- 2× Hatching Ground
-- 1× Frontline Martyr
-- 1× Seeker of the Radiant Wilds
-- 1× Lone Castaway
-- 1× A New Adventure
-- 1× Fangbound
-- 1× Flash of Power
-- 1× Miraculous Arrival
-- 1× Rite of Summoning
-- 1× Marrow Mimic
-- 1× Vortex Claimant
-- 1× Sunset Chapel Rest
-- 1× Blood Moon Ronin
-- 1× Terminus
-- 1× Dreadcall Warden2
-- 1× Last Beacon
-- 1× Lunar Hart
-- 1× Archive of the Forgotten
-- 1× Broadcast Array
-- 1× Keeper of the Tides
-- 1× Scrapyard Custodian
-- 1× Ancient Descent
-- 1× Bloomweaver
-- 1× Inverted Reflection
-- 1× Wasteland Arbitrator
-- 1× Intermezzo Balladeer
-- 1× Crescendo Channeler
-- 1× Forge-Twin
-- 1× Speaker for the Forgotten
-- 1× Abolish
-- 1× Call of Calamity
-- 1× Canopy of Stars
-- 1× Harvest the Forgotten
-- 1× Headtaker Wurm
-- 1× Arc Gate Opening
+- 1× Ambersting
+- 1× Nexus Wayfinder
+- 1× Frostbound Defiant
+- 1× Looming Oracle
+- 1× Cloaked Sentinel
+- 1× Melodist of the Finale
+- 1× Ashen Remnant
+- 1× The Dread Sovereign
+- 1× Radiant Trio
+- 1× Carrion Lord
+- 1× Prophet of the Consumed
+- 1× Torn Circuit Feeder
+- 1× Cindermarch
+- 1× Conduit of Resonance
+- 1× Curio Dealer
+- 1× Lumineth
+- 1× Amber Aurelia
+- 1× Forsaken Pact
+- 1× Sunset Chronicler
 - 1× Grim Reclaimer
-- 1× Voidsire
-- 1× Across the Void
-- 1× Infernal Cavalier
-- 1× Revenant of the Lost
+- 1× Nocturne
+- 1× Momentum's Edge
+- 1× Amythest Aurelia
+- 1× Dawnblade Wanderer
+- 1× Paleclaw Panther
+- 1× Winterbough Monk
+- 1× Celestial Lookout
+- 1× Harrowing Officiant
+- 1× Doorlight Foundling
+- 1× Ruin Scavenger
+- 1× Terminus
+- 1× Petal-Seer
+- 1× Augur Crow
+- 1× Shardwoven Tyrant
+- 1× Embersummoner
+- 1× Vaultbreaker
+- 1× Night Prowler
+- 1× Voidcaller
+- 1× Kindlehorn
+- 1× Overstory Explorer
+- 1× Forge Inheritor
+- 1× Bloomweaver
+- 1× Fangbound
+- 1× Gateway Defender
+- 1× Glimmerwood Scout
+- 1× Veilseeker
+- 1× Mirrorlight Architect
+- 1× Burst of Obliteration
+- 1× The Forsaker
+- 1× Ruptured Dynamo
+- 1× Sage of the Prelude
+- 1× Abyssal Enforcer
+- 1× Pallid Arbiter
+- 1× Lumen Rover
+- 1× Soulflame Predator
+- 1× Nomad of Endless Paths
+- 1× Blazepath Traveler
+- 1× Fleeting Reunion
+- 1× Endless Projection
+- 1× Standard Bearer
+- 1× Duneveil Vanguard
+- 1× Phantom Flotilla
+- 1× Nightmare
+- 1× Bladefall
+- 1× Call of Calamity
+- 1× Infernal Ascendant
+- 1× Lithic Severance
+- 1× The Calling Night
+- 1× Dreadcall Warden
+- 1× Ash Sower
+- 1× Seedling Sage
 - 1× Signal Resonant
-- 1× Dread Arbiter
-- 1× Echo Architect
-- 1× Knowledge Restored
-- 1× Starfall Communion
-- 1× Call of the Lost
-- 1× Door to Possibility
+- 1× Pactbound Challenger
+- 1× Virtuoso of Harmony
+- 1× Starsea Traveler
+- 1× Heavenward Penitent
+- 1× Final Gambit
+- 1× Grounded
+- 1× Glimpse of Infinity
+- 1× Dragonward
+- 1× Barrage Specialist
+- 1× Tranquil Duelist
+- 1× Wraith of Twisting Shadows
+- 1× Light of Emergence
+- 1× Assault Trooper
+- 1× Intermezzo Balladeer
+
+## Lanternhearted / Silent Observer
+
+`tide-16` — 26 distinct cards, 52 copies, distilled from 4 real decks
+
+- 2× Cloudmantle Ray
+- 2× Lanternhearted
+- 2× Field Reverent
+- 2× Boundless Wanderer
+- 2× Blood Moon Triad
+- 2× Shadowpaw
+- 2× Lord of Hidden Paths
+- 2× Fangbound
+- 2× Sky Voyager
+- 2× Voidcaller
+- 2× Dreamcatcher's Call
+- 2× Ethereal Courser
+- 2× Sunset Chronicler
+- 2× Petal-Seer
+- 2× Amythest Aurelia
+- 2× Melodist of the Finale
+- 2× Tranquil Duelist
+- 2× Blazing Emberwing
+- 2× Eternal Stag
+- 2× Ghostlight Wolves
+- 2× Flamboyant Flamingo
+- 2× Ethereal Courser
+- 2× Spirit Bond
+- 2× Lumineth
+- 2× Spirit of the Greenwood
+- 2× Scrap Reclaimer
+
+## Gleam Below / Ecliptic Vantage
+
+`tide-17` — 27 distinct cards, 54 copies, distilled from 1 real decks
+
+- 2× Gleam Below
+- 2× Ecliptic Vantage
+- 2× Prophet of the Consumed
+- 2× Echoing Denial
+- 2× Clockwork Prodigy
+- 2× Pathfinder Adrift
+- 2× Inverted Reflection
+- 2× Sanctum Awakened
+- 2× Kindlehorn
+- 2× Miraculous Arrival
+- 2× Dawnprowler Panther
+- 2× Wistful Angler
+- 2× Memory Tracer
+- 2× Luminwings
+- 2× Ethereal Courser
+- 2× Heavenward Penitent
+- 2× Defiant Parry
+- 2× Glimpse of Infinity
+- 2× Dusk Duelist
+- 2× Winterbough Monk
+- 2× Abomination of Memory
+- 2× Eternal Stag
+- 2× Shadowpaw
+- 2× Ghostlight Wolves
+- 2× Epiphany Unfolded
+- 2× Ebonwing
+- 2× Sylvan Matriarch
+
+## Prophet of the Consumed / Reunion
+
+`tide-18` — 44 distinct cards, 88 copies, distilled from 2 real decks
+
+- 2× Prophet of the Consumed
+- 2× Amber Aurelia
+- 2× Melodist of the Finale
+- 2× Roots of Rebirth
+- 2× Turquoise Aurelia
+- 2× Cloudmantle Ray
+- 2× Shadowpaw
+- 2× Celestial Reverie
+- 2× Ethereal Courser
+- 2× Spirit Bond
+- 2× Sage of the Prelude
+- 2× Lumen Rover
+- 2× Reunion
+- 2× Blazepath Traveler
+- 2× Lumin-Gate Seer
+- 2× Crimson Pilgrimage
+- 2× Sunken Radiance
+- 2× Through the Rift
+- 2× Fragments of Vision
+- 2× Lithic Severance
+- 2× Ambush Operative
+- 2× Miraculous Arrival
+- 2× Still Dreamer
+- 2× Starcatcher
+- 2× Iconoclast
+- 2× Ripple Through Reality
+- 2× Field Reverent
+- 2× Boundless Wanderer
+- 2× Luminwings
+- 2× Terminus
+- 2× Cindermarch
+- 2× Conduit of Resonance
+- 2× Winterbough Monk
+- 2× Sunshadow Eagle
+- 2× Vigilant Howler
+- 2× Eternal Stag
+- 2× Ghostlight Wolves
+- 2× Epiphany Unfolded
+- 2× Intermezzo Balladeer
+- 2× Emerald Guardian
+- 2× Nexus Wayfinder
+- 2× Dreamvale Monarch
+- 2× Lumineth
+- 2× Nightprowler Panther
+
+## Doorlight Foundling / Soulflame Predator
+
+`tide-19` — 45 distinct cards, 90 copies, distilled from 2 real decks
+
+- 2× Frostbound Defiant
+- 2× Looming Oracle
+- 2× Cindermarch
+- 2× Conduit of Resonance
+- 2× Melodist of the Finale
+- 2× Blazing Emberwing
+- 2× Dreadcall Warden
+- 2× Emerald Guardian
+- 2× Doorlight Foundling
+- 2× Soulflame Predator
+- 2× Nomad of Endless Paths
+- 2× Nightprowler Panther
+- 2× Break the Sequence
+- 2× Through the Rift
+- 2× Looming Oracle
+- 2× Lithic Severance
+- 2× Riftwalker
+- 2× Reforged Automaton
+- 2× Verdant Pioneer
+- 2× Urban Desperado
+- 2× Forgotten Factory Titan
+- 2× Ambersting
+- 2× Forsaken Pact
+- 2× Pactbound Challenger
+- 2× Frost Visionary
+- 2× Infernal Rest
+- 2× Grounded
+- 2× Selfless Rescuer
+- 2× Barrage Specialist
+- 2× Radiant Trio
+- 2× Roots of Rebirth
+- 2× Curio Dealer
+- 2× Carrion Lord
+- 2× Blood Moon Triad
+- 2× Lord of Hidden Paths
+- 2× Flamboyant Flamingo
+- 2× Titan of Forgotten Echoes
+- 2× Intermezzo Balladeer
+- 2× Celestial Reverie
+- 2× Ethereal Courser
+- 2× Dreamvale Monarch
+- 2× Lumineth
+- 2× Spirit of the Greenwood
+- 2× Lumin-Gate Seer
+- 2× Scrap Reclaimer
 
 ## Gleamharvester / Shoreline Penitent
 
-`tide-20` — 56 distinct cards, 70 copies, distilled from 21 real decks
+`tide-20` — 131 distinct cards, 149 copies, distilled from 20 real decks
 
+- 2× Verdant Wayfarer
+- 2× Urban Cipher
+- 2× Torchbearer of the Abyss
 - 2× Gleamharvester
 - 2× Shoreline Penitent
-- 2× Urban Cipher
-- 2× Verdant Wayfarer
-- 2× Torchbearer of the Abyss
-- 2× Grotto Seer
-- 2× Part the Veil
 - 2× Pattern Seeker
 - 2× Shadowprowler
-- 2× Silent Gatherer
+- 2× Part the Veil
+- 2× Grotto Seer
 - 2× Architect of Memory
 - 2× Oracle of Shifting Skies
 - 2× Unbroken
+- 2× Silent Gatherer
 - 2× Evacuation Enforcer
-- 1× Harborwarden
-- 1× Flagbearer of Decay
-- 1× Woodland Apparition
-- 1× Seeker for the Way
-- 1× Oblivion Guide
-- 1× Sorrowful Prince
-- 1× Weight of Memory
 - 1× Aurora Confluence
-- 1× Harrowing Officiant
+- 2× Clockwork Salvager
 - 1× Forsaken Skyline
-- 1× Seaside Requiem
-- 1× Chronicle Reclaimer
-- 1× Radiants' Captain
-- 1× Ridge Vortex Explorer
-- 1× The Devourer
-- 1× Twice-Lit Portal
-- 1× Eternal Sentry
-- 1× Starfall Communion
-- 1× Gateweaver
-- 1× Key Sifter
-- 1× Minstrel of Falling Light
+- 2× Abandon Constraints
+- 1× Woodland Apparition
+- 2× Weight of Memory
+- 1× Sorrowful Prince
+- 1× Oblivion Guide
+- 1× Seeker for the Way
 - 1× Rubble Diviner
 - 1× Wandering Archivist
-- 1× Lurking Dread
-- 1× Blade of Oblivion
-- 1× Sunken Radiance
+- 1× Ridge Vortex Explorer
+- 1× Chronicle Reclaimer
+- 1× Radiants' Captain
+- 2× Starfall Communion
+- 1× Harrowing Officiant
+- 1× The Devourer
+- 1× Pulse of Sacrifice
+- 1× Eternal Sentry
+- 1× Twice-Lit Portal
+- 1× Gateweaver
+- 1× Fleeting Reunion
+- 1× Minstrel of Falling Light
+- 1× Key Sifter
+- 1× Gilded Catalyst
 - 1× Fell the Mighty
-- 1× Secrets of the Deep
-- 1× Shadowpaw
+- 1× Sunken Radiance
+- 1× Cascading Detonation
 - 1× Derelict Voyage
 - 1× Resilient Wanderer
-- 1× Pulse of Sacrifice
 - 1× Cosmonaut of Tides
-- 1× Hope's Vanguard
+- 1× Lurking Dread
+- 1× A New Adventure
 - 1× Echo Architect
-- 1× Fleeting Reunion
-- 1× Pyrokinetic Surge
-- 1× Veil of the Wastes
-- 1× Crimson Pilgrimage
-- 1× Rootbound Witness
 - 1× Skies of Change
+- 1× Sundown Surfer
+- 1× Molten Duel
+- 1× Crimson Pilgrimage
+- 1× Canopy of Stars
 - 1× Fury of the Clan
+- 1× Ash Harbinger
+- 1× Forgotten Sleeper
+- 1× Pathfinder Adrift
+- 1× Secrets of the Deep
+- 1× Harvest the Forgotten
+- 1× The Calling Night
+- 1× Across the Void
+- 1× Ecliptic Vantage
+- 1× Scorched Reckoning
+- 1× Veil of the Wastes
+- 1× Price of Redemption
+- 1× Liminal Dreamer
+- 1× Starcatcher
+- 1× Iconoclast
+- 1× Paradox Enforcer
+- 1× Unleashed Destruction
+- 1× Burst of Obliteration
+- 1× Apocalypse
+- 1× Eruption
+- 1× Unquenched
+- 1× Hope's Vanguard
+- 1× Soulkindler
+- 1× Pyrestone Avatar
+- 1× Prophet of the Consumed
+- 1× Emberwatch Veteran
+- 1× Vessel of Echoes
+- 1× Pinnacle Ascendant
+- 1× The Ringleader
+- 1× Defiant Parry
+- 1× Starfall
+- 1× Worldbreacher
+- 1× Driftcaller Sovereign
+- 1× Dreamscatter
+- 1× Somber Flockmaster
+- 1× Echoes of Eternity
+- 1× Return to Nowhere
+- 1× Seek Answers
+- 1× The Thinning
+- 1× Sanctum Approach
+- 1× Wreckborn
+- 1× Collapse Protocol
+- 1× Ripple of Defiance
+- 1× Fell Swoop
+- 1× Augur Crow
+- 1× Dreaming Groves
+- 1× Pyrokinetic Surge
+- 1× Fractured Veil
+- 1× Breach Artist
+- 1× Consumed Marksman
+- 1× Inverted Reflection
+- 1× Call of Calamity
+- 1× Wasteland Arbitrator
+- 1× Vaultbreaker
+- 1× Sanctum Awakened
+- 1× Vanishing Inquisitor
+- 1× Paradox Corps Enforcer
+- 1× Arc Gate Opening
+- 1× Dreadcall Warden
+- 1× Spiral Offering
+- 1× Rite of Summoning
+- 1× Clifftop Marksman
+- 1× Flash of Power
+- 1× Shadowcaller
+- 1× Heroic Rescue
+- 1× Null Sphere
+- 1× Blood Moon Ronin
+- 1× Break the Veil
+- 1× Virtuoso of Harmony
+- 1× Infernal Rest
+- 1× Glimpse of Infinity
+- 1× Door to Possibility
+- 1× Together Against the Tide
+- 1× Lightningborn
+- 1× Saltless Mariner
+- 1× Epiphany Unfolded
+- 1× Obliterator of Worlds
+- 1× Soulbinder
 
 ## Gleam Below / Annular Recall
 
-`tide-21` — 56 distinct cards, 70 copies, distilled from 13 real decks
+`tide-21` — 48 distinct cards, 65 copies, distilled from 10 real decks
 
-- 2× Manufactured Abomination
 - 2× Spirit of Smoldering Echoes
+- 2× Manufactured Abomination
+- 2× The Waking Titan
+- 2× Duskshore Virtuoso
 - 2× Annular Recall
 - 2× Gleam Below
-- 2× Duskshore Virtuoso
-- 2× The Waking Titan
 - 2× Somber Flockmaster
-- 2× Ripple Through Reality
-- 2× Derelict Voyage
-- 2× Fractured Veil
-- 1× Toll of Passage
 - 2× Harvest the Forgotten
-- 2× Defiant Parry
+- 2× Derelict Voyage
 - 2× Sunset Chapel Rest
-- 1× Dreamscatter
-- 1× Echoes of Eternity
-- 1× Pilgrim of Old Stones
-- 1× The Devourer
-- 1× Woodland Apparition
-- 1× Inverted Reflection
-- 1× Pathfinder Adrift
-- 1× Return to Nowhere
+- 2× Dreamscatter
+- 2× Echoes of Eternity
+- 2× Ripple Through Reality
+- 2× Fractured Veil
+- 2× Defiant Parry
+- 1× Toll of Passage
 - 2× Moment Rewound
-- 1× Dreadwood Emissary
-- 1× The Ringleader
-- 1× Abolish
+- 1× Pilgrim of Old Stones
+- 1× Woodland Apparition
+- 1× The Devourer
+- 2× The Ringleader
+- 1× Pathfinder Adrift
+- 1× Inverted Reflection
 - 1× Fragments of Vision
 - 1× Miraculous Arrival
-- 1× Seedling Sage
-- 1× Keeper of the Lightpath
-- 1× Knowledge Restored
-- 1× Blood Moon Ronin
-- 1× Pyre Challenger
-- 1× Thornwood Delver
-- 1× Null Sphere
 - 1× Ridgecutter
-- 1× Fury of the Clan
-- 1× Gateweaver
-- 1× Keeper of the Tides
-- 1× Momentum of the Fallen
-- 1× Nebula's Wake
-- 1× The Power Within
+- 1× Blood Moon Ronin
+- 1× Dreadwood Emissary
 - 1× Moonlit Voyage
-- 1× Break the Sequence
-- 1× Crimson Pilgrimage
-- 1× Dreaming Groves
-- 1× Apocalypse Vigilante
+- 1× Keeper of the Tides
+- 1× Nebula's Wake
+- 1× Momentum of the Fallen
 - 1× Pattern Seeker
 - 1× Shadowprowler
-- 1× Driftrider
+- 1× Dreaming Groves
 - 1× Secrets of the Deep
+- 1× Abolish
+- 1× Paradox Corps Enforcer
+- 1× Riftwalker
 - 1× The Calling Night
-- 1× Wheel of the Heavens
-- 1× Forge Inheritor
-- 1× Starshot Gunner
 - 1× Rite of Summoning
-
-## Company Commander / Emberfang
-
-`tide-22` — 54 distinct cards, 70 copies, distilled from 35 real decks
-
-- 2× Inspiring Templar
-- 2× Sundown Ronin
-- 2× Tethered Hollow
-- 2× Company Commander
-- 2× Battlefield Medic
-- 2× Skyflame Commander
-- 2× Dream Garden Visitor
-- 2× Echo Technician
-- 2× Revered Prince
-- 1× Dreadmount Sovereign
-- 1× Sigil Analyst
-- 1× Vault Infiltrator
-- 2× Shadow Reflection
-- 2× Wolfbond Chieftain
-- 1× Emberfang
-- 2× Ashen Harbinger
-- 2× Eclipse Herald
-- 2× Gleamshield Knight
-- 2× Sundown Surfer
-- 1× Pallid Arbiter
-- 1× Worldbreacher
-- 1× Gilded Catalyst
-- 1× Reforged Automaton
-- 1× Assault Leader
-- 1× Aftermath Bloom
-- 1× Spirit Field Reclaimer
-- 1× Ride of the Vanguard
-- 1× Silent Observer
-- 1× Aspiring Guardian
-- 1× Burning Revenant
-- 1× Dread Arbiter
-- 1× Mirror Protocol
-- 1× The Deathsworn
-- 1× Grim Reclaimer
-- 1× Voidsire
-- 1× Charnel Seraph
-- 1× Dawnblade Wanderer
-- 1× Liminal Dreamer
-- 2× Barrage Specialist
-- 1× Crucible Warlord
-- 1× Apocalypse Vigilante
-- 1× Tidecaller
-- 1× Blood Reaver
-- 1× Wired Duelist
-- 1× Inferno's Herald
-- 1× Spellweaver
-- 1× Rootspring Summons
-- 1× Void Pilgrim
-- 1× Assault Trooper
-- 1× Dreaming Obelisk
-- 1× Ossuary Overlord
-- 1× Veil Shatter
-- 1× Ochre Prospector
-- 1× Ethereal Trailblazer
-
-## Wasteland Holdout / Apocalypse Vigilante
-
-`tide-23` — 34 distinct cards, 68 copies, distilled from 5 real decks
-
-- 2× Glimmerwood Scout
-- 2× Shadow Reflection
-- 2× Company Commander
-- 2× Charnel Seraph
-- 2× Oathbound Pair
-- 2× Featherlight Summoner
-- 2× Assault Leader
-- 2× Shattering Gambit
-- 2× Wasteland Holdout
-- 2× Sundown Surfer
-- 2× Lightningborn
-- 2× Apocalypse Vigilante
-- 2× Iron Executor
-- 2× Spirit Field Reclaimer
-- 2× Silent Observer
-- 2× Gilded Catalyst
-- 2× Tethered Hollow
-- 2× Battlefield Medic
-- 2× Gatebound Warden
-- 2× Skyflame Commander
-- 2× Starlight Guide
-- 2× Urban Desperado
-- 2× Verdant Pioneer
-- 2× Voidshield Guardian
-- 2× Clifftop Marksman
-- 2× Grounded
-- 2× Lunar Hart
-- 2× Inferno's Herald
-- 2× The Grand Heist
-- 2× Tranquil Duelist
-- 2× Ashen Harbinger
-- 2× Eclipse Herald
-- 2× Gleamshield Knight
-- 2× Barrage Specialist
-
-## Doorlight Foundling / Emberwolf Triad
-
-`tide-24` — 53 distinct cards, 70 copies, distilled from 23 real decks
-
-- 2× Cindermarch
-- 2× Conduit of Resonance
-- 2× Ethereal Courser
-- 2× Forgotten Factory Titan
-- 2× Emberwolf Triad
-- 2× Frostbound Defiant
-- 2× Melodist of the Finale
-- 2× Still Dreamer
-- 2× Nexus Wayfinder
-- 2× Packcaller of Shadows
-- 2× Luminous Ascent
-- 2× Celestial Reverie
-- 1× Looming Oracle
-- 1× Doorlight Foundling
-- 2× Lumin-Gate Seer
-- 1× Starchaser
-- 2× Emerald Guardian
-- 2× Intermezzo Balladeer
-- 1× Key to the Moment
-- 1× Through the Rift
-- 2× Dreamvale Monarch
-- 1× Frost Visionary
-- 1× Urban Desperado
-- 1× Verdant Pioneer
-- 1× Spirit Bond
-- 2× Starrunner
-- 1× Fern Treader
-- 1× Terminus
-- 1× Nomad of Endless Paths
-- 1× Soulflame Predator
-- 1× Blazing Emberwing
-- 1× Endless Projection
-- 1× Blazebound Sentinel
-- 1× Call to the Unknown
-- 1× Hallowed Stag
-- 1× Sunshadow Eagle
-- 1× Shatterpoint Agent
-- 1× Ebonwing
-- 1× Scorched Crusader
-- 1× Sage of the Prelude
-- 1× Celestial Lookout
-- 1× Sky Voyager
-- 1× Voidcaller
-- 1× Roots of Rebirth
-- 1× Prophet of the Consumed
-- 1× Abyssal Enforcer
-- 1× Augur Crow
-- 1× Beacon of Tomorrow
-- 1× Crumbling Behemoth
-- 1× Silent Observer
-- 1× Wondrous Clearing
-- 1× Curio Dealer
-- 1× Moment Rewound
-
-## Lone Castaway / Ironclad Marksman
-
-`tide-25` — 55 distinct cards, 70 copies, distilled from 14 real decks
-
-- 2× Mirror Protocol
-- 2× Flamestride Rider
-- 2× Invoker of Myths
-- 2× Prism Caller
-- 2× Blood Reaver
-- 2× Spellweaver
-- 2× Sundown Ronin
-- 2× Nineborn Specter
-- 2× Junkfield Renegade
-- 2× Grim Reclaimer
-- 2× Voidsire
-- 2× Wake the Fallen
-- 2× Lightningborn
-- 1× Lone Castaway
-- 1× Wired Duelist
-- 2× Wolfbond Chieftain
-- 1× Colossal Convergence
-- 1× Forsworn Champion
-- 1× Starshot Gunner
-- 1× Through the Rift
-- 1× Ironclad Marksman
-- 1× Battlefield Medic
 - 1× Seedling Sage
-- 1× Skyflame Commander
-- 1× Burning Revenant
-- 1× Cragfall
-- 1× Pit Descender
-- 2× Assault Trooper
-- 1× Spirit Field Reclaimer
-- 1× Starbound Striker
-- 1× Shadow March
-- 1× The Grand Heist
-- 1× Tethered Hollow
-- 1× Dream Garden Visitor
-- 1× Echo Technician
-- 1× Revered Prince
-- 1× Aspiring Guardian
-- 1× Grounded
-- 1× Inferno's Herald
-- 1× Dreaming Obelisk
-- 1× Shadowbinder
-- 1× Tranquil Duelist
-- 1× Bloodpact Berserker
-- 1× Sundown Surfer
-- 1× Apocalypse Vigilante
-- 1× Guiding Light
-- 1× Inspiring Templar
-- 1× Iron Executor
-- 1× Dreadmount Sovereign
-- 1× Ride of the Vanguard
-- 1× Sigil Analyst
-- 1× Young Huntress
-- 1× Frontline Martyr
-- 1× Key to the Moment
-- 1× Evacuation Enforcer
+- 1× Knowledge Restored
+- 1× Null Sphere
+- 1× Burning Pursuit
+- 1× Fury of the Clan
+- 1× Driftcaller Sovereign
+- 1× Standoff
 
-## Wreckland Maverick / Conjured Zenith
+## Graywatch / Wasteland Arbitrator
 
-`tide-26` — 48 distinct cards, 70 copies, distilled from 8 real decks
+`tide-22` — 141 distinct cards, 160 copies, distilled from 39 real decks
 
-- 2× Wreckland Maverick
-- 2× Conjured Zenith
-- 2× Void Pilgrim
-- 2× Gatebound Warden
-- 2× Starlight Guide
-- 2× Voidshield Guardian
-- 2× Reclaimer of Lost Paths
-- 2× Revenant of the Lost
-- 2× The Grand Heist
-- 2× Looming Oracle
-- 2× Bladefall
-- 2× Oathbound Pair
-- 2× Burning Pursuit
-- 2× Dreadweaver
-- 2× Heroic Rescue
-- 2× Veil of the Wastes
-- 1× Ironclad Marksman
+- 2× Duneguard Captain
+- 2× Tidewreck Navigator
+- 2× Shadowcaller
+- 2× Emberwatch Rescuer
+- 2× Searcher in the Mists
+- 2× Fargazer
+- 2× Duskwall Delver
+- 2× Vigil Keeper
+- 2× Dustborn Veteran
+- 2× Watcher in the Ruins
+- 2× Kindred Sparks
+- 2× Defiant Holdout
+- 2× Wreckheap Lookout
+- 1× Graywatch
+- 1× The Rising God
 - 2× Dawnrunner
-- 2× Riftwalker
-- 2× Grounded
-- 1× Cosmic Puppeteer
+- 2× Corrupted Host
+- 1× Hope's Vanguard
+- 1× Twilight Reclaimer
+- 1× Wasteland Arbitrator
+- 2× Entropy Spike
+- 1× Scuttled Fortune
+- 1× Veil of the Wastes
+- 1× Price of Redemption
+- 1× Dreadweaver
+- 2× Paradox Enforcer
+- 2× Nightmare Manifest
+- 2× Stargazer Adrift
+- 1× Carrion Shepherd
+- 1× Seer of the Fallen
+- 1× Herald of the Last Light
+- 1× Silent Avenger
+- 1× Volcanic Channeler
+- 1× Ferryman's Tithe
+- 1× Ashborn Necromancer
+- 1× Enginespeaker
+- 1× Starfall
+- 1× Silent Avenger
+- 1× Exiles of the Last Light
+- 1× Stolen Genesis
 - 1× Emberwatch Veteran
 - 1× Vessel of Echoes
-- 2× Entropy Spike
-- 1× Apocalypse Vigilante
-- 1× Shatter the Frail
-- 1× Whisper of the Past
-- 1× Cloaked Sentinel
-- 2× Wake the Fallen
-- 1× Secrets of the Deep
-- 1× Scorched Crusader
-- 2× Enginespeaker
-- 1× Nightmare
-- 1× Phantom Flotilla
-- 1× Ambush Operative
-- 1× Deathwalker
-- 1× Herald of the Last Light
-- 1× Lithic Severance
-- 1× Vertiginous Leap
-- 1× Shattering Gambit
-- 1× Duskreaper
-- 1× Ashwalker
-- 1× Shadow March
-- 1× Wreckheap Survivor
-- 1× Defiant Holdout
-- 1× Dreaming Groves
-- 1× Radiant Trio
-- 1× Ruin Scavenger
-
-## Scrapyard Custodian / The Deathsworn
-
-`tide-27` — 61 distinct cards, 70 copies, distilled from 12 real decks
-
-- 2× Embersummoner
-- 2× Shardwoven Tyrant
-- 2× Ashfront Lieutenant
-- 2× Marrow Drinker
-- 2× Scrapyard Custodian
-- 2× Veil of the Wastes
-- 1× Hope's Vanguard
-- 2× Maelstrom Denial
-- 1× Ferryman's Tithe
-- 1× Scuttled Fortune
-- 1× Carrion Shepherd
-- 1× The Rising God
-- 1× Hallowed Stag
-- 2× Pyrokinetic Surge
-- 2× Paradox Enforcer
-- 1× Graywatch
-- 1× Silent Gatherer
-- 1× Fractured Vessel
-- 1× Curio Dealer
-- 1× Forge Inheritor
-- 1× Sky Voyager
-- 1× Veilseeker
-- 1× Voidcaller
-- 1× Ridge Vortex Explorer
-- 1× Burning Pursuit
-- 1× Harrowing Officiant
-- 1× Titan of Forgotten Echoes
-- 1× Unleash Ruin
-- 1× Exiles of the Last Light
-- 1× Lumineth
-- 1× Dusk Duelist
-- 1× Apocalypse
-- 1× Stolen Genesis
-- 1× Blazepath Traveler
-- 1× Lumen Rover
-- 1× Ashborn Necromancer
-- 1× Skull Weaver
-- 1× Overstory Explorer
-- 1× Scorched Crusader
-- 1× Cinderfang
-- 1× Herald of the Last Light
-- 1× Twilight Reclaimer
-- 1× Voidshield Guardian
-- 1× Wasteland Tamer
-- 1× Silent Avenger
+- 1× Together Against the Tide
 - 1× Collateral Damage
+- 1× Burning Pursuit
+- 1× Avatar of Cosmic Reckoning
+- 1× Cinderheart
+- 1× Skull Weaver
+- 1× Whisper of the Past
+- 1× Shatter the Frail
+- 1× Immolate and Rise
+- 1× Peak Plunder
 - 1× Signal Resonant
-- 1× Cinderblade Legionnaire
-- 1× Path to Redemption
-- 1× Cloudmantle Ray
-- 1× Ferryman of the Falls
-- 1× Dune Reaper
-- 1× Rooftop Prophet
-- 1× Starsea Traveler
-- 1× Veil Crosser
+- 1× Hope's Vanguard
+- 1× The Calling Night
+- 1× Desperation
+- 1× Fractured Vessel
+- 1× Standoff
+- 1× Wreckborn
+- 1× Specter of Silent Snow
+- 1× Saltless Mariner
+- 1× Obliterator of Worlds
 - 1× Ashen Remnant
 - 1× The Dread Sovereign
-- 1× Shattering Gambit
-- 1× Virtuoso of Harmony
-- 1× Dawnrunner
-- 1× Moonbound Wolf
-
-## Young Beastcaller / Mother of Flames
-
-`tide-28` — 44 distinct cards, 70 copies, distilled from 34 real decks
-
-- 2× Boundless Wanderer
-- 2× Field Reverent
-- 2× Eternal Stag
-- 2× Ghostlight Wolves
-- 2× Mountainwatch Alpha
-- 2× Dreamborne Leviathan
-- 2× Spiritbound Alpha
-- 2× Undying Fang
-- 2× Lord of Hidden Paths
-- 2× Skyborne Jellyfish
-- 2× Blazebound Sentinel
-- 2× Worldsong Behemoth
-- 2× Spirit Bond
-- 1× Dawnhorn Elder
-- 2× Emerald Guardian
-- 2× Dreamvale Monarch
-- 2× Sylvan Matriarch
-- 2× Spirit of the Greenwood
-- 2× Blazing Emberwing
-- 2× Mystic Runefish
-- 1× Young Beastcaller
-- 2× Sunshadow Eagle
-- 1× Dawnprowler Panther
-- 2× Beacon of Tomorrow
-- 2× Crumbling Behemoth
-- 1× Stoneborn Eternal
-- 2× Ethereal Trailblazer
-- 1× Sage of the Prelude
-- 1× Mother of Flames
-- 1× Sky Voyager
-- 1× Voidcaller
-- 2× Lumin-Gate Seer
-- 2× Shatterpoint Agent
-- 2× Dreamcatcher's Call
-- 1× Nexus Wayfinder
-- 1× Hallowed Stag
-- 1× Celestial Reverie
-- 1× Momentum's Edge
-- 1× Verdant Pilgrim
-- 1× Prophet of the Consumed
-- 1× Endless Projection
-- 1× Ebonwing
-- 1× Moonbound Wolf
-- 1× Dawnblade Wanderer
-
-## Desolation's Edge / Wreckland Maverick
-
-`tide-29` — 55 distinct cards, 70 copies, distilled from 22 real decks
-
-- 2× Crescendo Channeler
-- 2× Forge-Twin
-- 2× Speaker for the Forgotten
-- 2× Dreadmount Sovereign
-- 2× Sigil Analyst
-- 2× Starbound Striker
-- 2× Burning Revenant
-- 1× Desolation's Edge
-- 2× Grim Reclaimer
-- 2× Voidsire
-- 1× Flamestride Rider
-- 1× Invoker of Myths
-- 1× Blightmaw
-- 1× Vault Infiltrator
-- 1× Dream Garden Visitor
-- 1× Echo Technician
-- 1× Revered Prince
-- 1× Wired Duelist
-- 2× Tranquil Duelist
-- 1× Fern Treader
-- 1× Shadow Reflection
-- 1× Prism Caller
-- 1× Aspiring Guardian
-- 1× Gilded Catalyst
-- 1× Infernal Cavalier
-- 1× Nineborn Specter
-- 1× Dread Arbiter
-- 2× Ashen Harbinger
-- 2× Eclipse Herald
-- 2× Gleamshield Knight
-- 1× Colossal Convergence
-- 1× Forsworn Champion
-- 1× Infernal Rest
-- 1× Starshot Gunner
-- 1× Tethered Hollow
-- 1× Reforged Automaton
-- 1× Assault Leader
-- 1× Revenant of the Lost
-- 2× Cinderblade Legionnaire
-- 1× Seeker of the Radiant Wilds
-- 1× Ride of the Vanguard
-- 1× Young Huntress
-- 1× Wolfbond Chieftain
-- 2× Infernal Ascendant
-- 1× Lanternhearted
-- 1× Key to the Moment
-- 1× Blood Reaver
-- 1× Inferno's Herald
-- 1× Ossuary Overlord
-- 1× Ordained Collapse
-- 1× Tidecaller
-- 1× Ambush Operative
-- 1× Clifftop Marksman
-- 1× Standard Bearer
-- 1× Dreaming Obelisk
-
-## Blightmaw / Wasteland Holdout
-
-`tide-30` — 63 distinct cards, 70 copies, distilled from 15 real decks
-
-- 2× Torn Circuit Feeder
-- 2× Endless Projection
-- 2× Reclaimer of Lost Paths
-- 2× Titan of Forgotten Echoes
-- 1× Scorched Crusader
-- 1× Nightmare
-- 1× Phantom Flotilla
-- 2× Curio Dealer
-- 2× Lumineth
-- 1× Starchaser
-- 2× Nocturne
-- 1× Overstory Explorer
-- 1× Driftcaller Sovereign
-- 1× Lithic Severance
-- 1× Light of Emergence
-- 1× Wraith of Twisting Shadows
-- 1× Blood Moon Ronin
-- 1× Radiant Trio
-- 1× Sunset Chronicler
-- 1× Luminous Ascent
-- 1× Beacon of Tomorrow
-- 1× Crumbling Behemoth
-- 1× Melodist of the Finale
-- 1× The Grand Heist
-- 1× Call to the Unknown
-- 1× Looming Oracle
-- 1× Standard Bearer
-- 1× Shadowbinder
-- 1× Oathbound Pair
-- 1× Momentum's Edge
-- 1× Ambush Operative
-- 1× Urban Desperado
-- 1× Verdant Pioneer
-- 1× Voidshield Guardian
-- 1× Rusted Monolith
-- 1× Blightmaw
-- 1× Emerald Guardian
-- 1× Unleash Ruin
-- 1× Wolfbond Chieftain
-- 1× Borrowed Minutes
-- 1× Seer of the Fallen
-- 1× Duskreaper
-- 1× Twice-Lit Portal
-- 1× Moment Rewound
-- 1× Cragfall
-- 1× Starrunner
-- 1× Chronicle Reclaimer
-- 1× Momentum of the Fallen
-- 1× Radiants' Captain
-- 1× Roots of Rebirth
-- 1× Veil Shatter
-- 1× Company Commander
-- 1× Fractured Veil
+- 1× Dune Reaper
+- 1× Evacuation Enforcer
+- 1× Final Gambit
+- 1× Rite of Summoning
+- 1× Salvage Engine
 - 1× Infernal Ascendant
-- 1× Crescendo Channeler
-- 1× Embersummoner
-- 1× Forge-Twin
+- 1× Harrowing Officiant
+- 1× Vertiginous Leap
+- 1× Scrapyard Custodian
+- 1× Fathomless Maw
+- 1× Kindlehorn
+- 1× Break the Veil
+- 1× Sunset Chronicler
+- 1× Wreckborn
+- 1× Ashfront Lieutenant
+- 1× Flagbearer of Decay
+- 1× Conjured Zenith
+- 1× Angel of the Eclipse
+- 1× Door to Possibility
+- 1× Apocalypse
+- 1× Soulkindler
+- 1× Twilight Suppressor
+- 1× Scrap Reclaimer
+- 1× Pyrokinetic Surge
+- 1× Momentum's Edge
+- 1× Duskreaper
+- 1× Ruin Scavenger
+- 1× Veil Crosser
+- 1× Barren Path Wanderer
+- 1× Rusted Monolith
+- 1× Dreadcall Warden
+- 1× Moonlit Voyage
+- 1× Ash Harbinger
+- 1× Forgotten Sleeper
+- 1× Secrets of the Deep
 - 1× Shardwoven Tyrant
-- 1× Speaker for the Forgotten
-- 1× Ashborn Necromancer
+- 1× Embersummoner
+- 1× Bloodpact Berserker
+- 1× Cinderblade Legionnaire
+- 1× Curio Dealer
+- 1× Eternal Sentry
+- 1× Fangbound
+- 1× Wistful Angler
+- 1× Memory Tracer
+- 1× Riftwalker
+- 1× Wasteland Holdout
+- 1× Ferryman of the Falls
+- 1× Unleash Ruin
+- 1× Resilient Wanderer
+- 1× Unquenched
+- 1× Soulkindler
+- 1× Pyrestone Avatar
+- 1× Pinnacle Ascendant
+- 1× Unbroken
+- 1× Seek Answers
+- 1× Shadowbinder
+- 1× The Thinning
+- 1× Collapse Protocol
+- 1× Sunken Radiance
+- 1× Lithic Severance
+- 1× Ash Sower
+- 1× Lumineth
+- 1× Scorched Reckoning
+- 1× Weight of Memory
+- 1× Lurking Dread
+- 1× Heroic Rescue
+- 1× Field Reverent
+- 1× Boundless Wanderer
+- 1× Unleashed Destruction
+- 1× Ambersting
+- 1× Forsaken Pact
+- 1× Depthwalker
+- 1× Reclaimer of Lost Paths
+- 1× Dragonward
+- 1× Lunar Hart
+- 1× Roots of Rebirth
+- 1× Dreaming Groves
+
+## Summons of the Bonded / Ash Harbinger
+
+`tide-23` — 57 distinct cards, 114 copies, distilled from 2 real decks
+
+- 2× Graywatch
+- 2× Lurking Dread
+- 2× Harrowing Officiant
+- 2× Summons of the Bonded
+- 2× Ash Harbinger
+- 2× Forgotten Sleeper
+- 2× Searcher in the Mists
+- 2× Fargazer
+- 2× Evacuation Enforcer
+- 2× Paradox Enforcer
+- 2× Dreadcall Warden
+- 2× Gleamharvester
+- 2× Shoreline Penitent
+- 2× Dreamvale Monarch
+- 2× Hope's Vanguard
+- 2× Seeker for the Way
+- 2× Salvage Engine
+- 2× Fleeting Reunion
+- 2× Rubble Diviner
+- 2× Wandering Archivist
+- 2× Scrapyard Custodian
+- 2× Gloomantler
+- 2× Woodland Apparition
+- 2× Revenant of the Lost
+- 2× Silent Gatherer
+- 2× Wired Duelist
+- 2× Ashfront Lieutenant
+- 2× Flagbearer of Decay
+- 2× Silent Avenger
+- 2× Derelict Voyage
+- 2× Dawnhorn Elder
+- 2× The Rising God
+- 2× Veilseeker
+- 2× Unleash Ruin
+- 2× Depthwalker
+- 2× Ethereal Courser
+- 2× Sunset Chronicler
+- 2× Reclaimer of Lost Paths
+- 2× Seek Answers
+- 2× Entropy Spike
+- 2× Turquoise Aurelia
+- 2× Curio Dealer
+- 2× Desperation
+- 2× Spiritbound Alpha
+- 2× Dreamborne Leviathan
+- 2× Blood Moon Triad
+- 2× Shadowpaw
+- 2× Pyrokinetic Surge
+- 2× Flamboyant Flamingo
+- 2× Ruin Scavenger
+- 2× Rusted Monolith
+- 2× Spirit Bond
+- 2× Exiles of the Last Light
+- 2× Momentum's Edge
+- 2× Stargazer Adrift
+- 2× Final Gambit
+- 2× Infernal Ascendant
+
+## Ruthless Conquerer / Railgun Reinforcer
+
+`tide-24` — 31 distinct cards, 62 copies, distilled from 1 real decks
+
+- 2× Ruthless Conquerer
+- 2× Railgun Reinforcer
+- 2× Keeper of the Lightpath
+- 2× Shadowbinder
+- 2× Cloudback Courier
+- 2× Thornwood Delver
+- 2× Verdant Wayfarer
+- 2× Urban Cipher
+- 2× Rubble Diviner
+- 2× Wandering Archivist
+- 2× Secrets of the Deep
+- 2× Wasteland Arbitrator
+- 2× Vaultbreaker
+- 2× Silent Avenger
+- 2× Weight of Memory
+- 2× Immolate and Rise
+- 2× Peak Plunder
+- 2× Collateral Damage
+- 2× Twilight Suppressor
+- 2× Emberwatch Rescuer
+- 2× Moonlit Voyage
+- 2× Stolen Genesis
+- 2× Entropy Spike
+- 2× Fathomless Maw
+- 2× Cinderblade Legionnaire
+- 2× Cinderheart
+- 2× Kindlehorn
+- 2× Evacuation Enforcer
+- 2× Epiphany Unfolded
+- 2× Ashborn Necromancer
+- 2× Silent Avenger
+
+## Grim Pursuer / Vortex Claimant
+
+`tide-25` — 33 distinct cards, 66 copies, distilled from 1 real decks
+
+- 2× Grim Pursuer
+- 2× Vortex Claimant
+- 2× Warfield Stalwart
+- 2× Wreckborn
+- 2× Emberwatch Veteran
+- 2× Vessel of Echoes
+- 2× Return to Nowhere
+- 2× Clockwork Salvager
+- 2× Duneguard Captain
+- 2× Tidewreck Navigator
+- 2× Sky Voyager
+- 2× Voidcaller
+- 2× Gateway Defender
+- 2× Wistful Angler
+- 2× Collateral Damage
+- 2× Skyflame Commander
+- 2× Battlefield Medic
+- 2× Memory Tracer
+- 2× Clockwork Conductor
+- 2× Knowledge Restored
+- 2× Carrion Shepherd
+- 2× Inferno's Herald
+- 2× Wreckheap Lookout
+- 2× Tranquil Duelist
+- 2× Sundown Surfer
+- 2× Defiant Holdout
+- 2× Dustborn Veteran
+- 2× Standoff
+- 2× Torn Circuit Feeder
+- 2× Rusted Monolith
+- 2× Volcanic Channeler
+- 2× Sylvan Matriarch
+- 2× Infernal Ascendant
+
+## Emberfang / Company Commander
+
+`tide-26` — 147 distinct cards, 160 copies, distilled from 33 real decks
+
+- 2× Company Commander
+- 2× Sun Clan Lieutenant
+- 2× Spirit Field Reclaimer
+- 2× Assault Leader
+- 1× Emberfang
+- 1× Inspiring Templar
+- 2× Warrior's Path
+- 2× Tethered Hollow
+- 1× Ethereal Trailblazer
+- 1× Pallid Arbiter
+- 2× Skyflame Commander
+- 2× Battlefield Medic
+- 1× Gilded Catalyst
+- 2× Eclipse Herald
+- 2× Shapeshifter Spirit
+- 2× Containment Specialist
+- 2× Barrage Specialist
+- 2× Sundown Surfer
+- 1× Harbor Warden
+- 1× Dragonward
+- 1× Dream Garden Visitor
+- 1× Revered Prince
+- 1× Echo Technician
+- 1× Ash Sower
+- 1× Silent Observer
+- 1× Oathbound Pair
+- 1× Reforged Automaton
+- 1× Burning Revenant
+- 1× Vengeance Taker
+- 1× Featherlight Summoner
+- 1× Vault Infiltrator
+- 1× Inferno's Herald
+- 1× Cloaked Sentinel
+- 1× Bloomweaver
+- 1× Wolfbond Chieftain
 - 1× Shatterpoint Agent
-- 1× Enginespeaker
-- 1× A New Adventure
+- 1× Invoker of Myths
+- 1× Melodist of the Finale
+- 1× Clifftop Marksman
+- 1× Veil Shatter
+- 1× Liminal Dreamer
+- 1× Glimmerwood Scout
+- 1× Glimmerwood Scout
+- 1× Cinderblade Legionnaire
+- 1× Dawnblade Wanderer
+- 1× Lightningborn
+- 1× Blade of Unity
+- 1× Vanguard Charger
+- 1× Assault Trooper
+- 1× Forsworn Champion
+- 1× Dreadmount Sovereign
+- 1× Tidecaller
+- 1× Lithic Severance
+- 1× Forge Inheritor
+- 1× Key to the Moment
+- 1× Immortal Reaper
+- 1× Spellweaver
+- 1× Aspiring Guardian
+- 1× Blood Reaver
+- 1× Prism Caller
+- 1× Infernal Cavalier
+- 1× The Deathsworn
+- 1× Starbound Striker
+- 1× Tranquil Duelist
+- 1× Shard Wielder
+- 1× Mirror Protocol
+- 1× Aftermath Bloom
+- 1× Night Raid Commando
+- 1× Bladefall
+- 1× Consumed Marksman
+- 1× Grim Reclaimer
+- 1× Advance Gunner
+- 1× Relentless Pursuer
+- 1× Plunge into the Abyss
+- 1× Voidshield Guardian
+- 1× Riftwalker
+- 1× Lunar Hart
+- 1× Ordained Collapse
+- 1× Wasteland Holdout
+- 1× Voidsire
+- 1× Grim Reclaimer
+- 1× Fangbound
+- 1× Cloudback Courier
+- 1× Thornwood Delver
+- 1× Standard Bearer
+- 1× Lumen Rover
+- 1× Worldbreacher
+- 1× Blazepath Traveler
+- 1× Twilight Suppressor
+- 1× Shattering Gambit
+- 1× Momentum's Edge
+- 1× Pactbound Challenger
+- 1× Young Huntress
+- 1× Break the Sequence
+- 1× Clockwork Salvager
+- 1× Pilgrim of Old Stones
+- 1× The Power Within
+- 1× Starlight Guide
+- 1× Gatebound Warden
+- 1× Grounded
+- 1× Haunted Betrayer
+- 1× Shadowbinder
+- 1× Miraculous Arrival
+- 1× Fractured Vessel
+- 1× Warfield Stalwart
+- 1× Pulse of Sacrifice
+- 1× Standoff
+- 1× Twilight Troubadour
+- 1× Simulacra
+- 1× Wreckborn
+- 1× Scorched Reckoning
+- 1× Gateway Defender
+- 1× Epiphany Unfolded
+- 1× Clockwork Conductor
+- 1× Field Reverent
+- 1× Boundless Wanderer
+- 1× Blood Moon Ronin
+- 1× Frostbound Defiant
+- 1× Resilient Wanderer
+- 1× Abyssal Enforcer
+- 1× Infernal Rest
+- 1× Prophet of the Consumed
+- 1× Moment Rewound
+- 1× Glimpse of Infinity
+- 1× Cragfall
+- 1× Cloaked Sentinel
+- 1× Driftcaller Sovereign
+- 1× First Encounter
+- 1× Wake the Fallen
+- 1× Bloodpact Berserker
+- 1× Sanctum Approach
+- 1× Gloomantler
+- 1× Gilded Catalyst
+- 1× Revenant of the Lost
+- 1× Duneveil Vanguard
+- 1× Phantom Flotilla
+- 1× Pathfinder Adrift
+- 1× Nightmare
+- 1× Wired Duelist
+- 1× Inverted Reflection
+- 1× Pathfinder
+- 1× Speaker for the Forgotten
+- 1× Crescendo Channeler
+- 1× Dreadcall Warden
+- 1× Architect of Memory
+- 1× Across the Void
+- 1× Oracle of Shifting Skies
 
-## Summons of the Bonded / Ironclad Marksman
+## Summons of the Bonded / Frostbound Defiant
 
-`tide-31` — 56 distinct cards, 70 copies, distilled from 12 real decks
+`tide-27` — 70 distinct cards, 91 copies, distilled from 11 real decks
 
 - 2× Clockwork Conductor
 - 2× Keeper of Forgotten Light
@@ -1623,180 +2528,400 @@ appended by `npm run seed-tide-relationships` from
 - 2× Wreckage Prowler
 - 2× Forsaken Pact
 - 2× Ferryman of the Falls
-- 2× Fathomless Maw
-- 2× Kindlehorn
-- 2× Virtuoso of Harmony
-- 2× Young Beastcaller
+- 2× Paleclaw Panther
 - 2× Selfless Rescuer
 - 2× Veilseeker
-- 1× Augur Crow
-- 2× Bloomweaver
-- 2× Heavenward Penitent
-- 1× Starsea Traveler
-- 1× Summons of the Bonded
-- 1× Specter of Silent Snow
-- 1× Emberwolf Triad
-- 1× Frostbound Defiant
-- 1× Winterbough Monk
-- 1× Wondrous Clearing
-- 1× Steel Abomination
-- 1× Abomination of Memory
-- 1× Soulbinder
-- 1× Ruptured Dynamo
-- 1× The Forsaker
-- 1× Petal-Seer
-- 1× Rooftop Prophet
-- 1× Veil Crosser
-- 1× Sunset Chronicler
-- 1× Unleash Ruin
-- 1× Ironclad Marksman
-- 1× Burst of Obliteration
-- 1× Eruption
-- 1× Starfall Communion
-- 1× Dreamcatcher's Call
-- 1× Shadow March
-- 1× Fleeting Reunion
-- 1× Immolate
-- 1× Fell Swoop
-- 1× Light of Emergence
-- 1× Wraith of Twisting Shadows
-- 1× Duneveil Vanguard
-- 1× Ashborn Necromancer
-- 1× Paradox Enforcer
-- 1× Overstory Explorer
-- 1× Driftcaller Sovereign
-- 1× Wasteland Tamer
-- 1× Ashen Avenger
-- 1× Pathwalker
-- 1× Scrap Reclaimer
-- 1× Wistful Angler
-- 1× Twilight Suppressor
-- 1× Depthwalker
-- 1× Heroic Rescue
-
-## Seer of the Fallen / Derelict Voyage
-
-`tide-32` — 46 distinct cards, 70 copies, distilled from 34 real decks
-
-- 2× Dustborn Veteran
-- 2× Avatar of Cosmic Reckoning
-- 2× Volcanic Channeler
-- 2× Soulreaver
-- 2× Immolate and Rise
-- 2× Peak Plunder
-- 2× Skull Weaver
-- 2× Collateral Damage
-- 2× Stargazer Adrift
-- 2× Duskreaper
 - 2× Fathomless Maw
 - 2× Kindlehorn
-- 2× Exiles of the Last Light
-- 2× Rusted Monolith
-- 2× Kindred Sparks
-- 1× Seer of the Fallen
-- 2× Silent Avenger
-- 2× Cinderheart
-- 2× Entropy Spike
-- 2× Harvester of Despair
-- 2× Enginespeaker
-- 2× Defiant Holdout
-- 1× Dreadweaver
-- 1× Deathwalker
+- 2× Bloomweaver
+- 2× Augur Crow
+- 2× Virtuoso of Harmony
+- 2× Heavenward Penitent
+- 2× Starsea Traveler
+- 1× Summons of the Bonded
+- 2× Specter of Silent Snow
+- 2× Winterbough Monk
+- 2× Wondrous Clearing
+- 1× Steel Abomination
+- 2× Soulbinder
+- 1× Unleash Ruin
+- 1× Burst of Obliteration
+- 1× The Forsaker
+- 1× Ruptured Dynamo
+- 1× Frostbound Defiant
+- 1× Eruption
+- 1× Petal-Seer
+- 1× Shadow March
+- 2× Dreamcatcher's Call
+- 1× Fleeting Reunion
+- 1× Wraith of Twisting Shadows
+- 1× Light of Emergence
+- 1× Abomination of Memory
+- 1× Fell Swoop
+- 1× Frostbound Defiant
+- 1× Looming Oracle
+- 1× Duneveil Vanguard
+- 1× Kindlehorn
+- 1× Overstory Explorer
+- 1× Silent Avenger
+- 1× Heroic Rescue
+- 1× Wistful Angler
+- 1× Memory Tracer
+- 1× Riftwalker
+- 1× Soulkindler
+- 1× Scrap Reclaimer
+- 1× Luminwings
+- 1× Depthwalker
+- 1× Veil Crosser
+- 1× Barren Path Wanderer
+- 1× Sunset Chronicler
+- 1× Dawnrunner
+- 1× Final Gambit
+- 1× The Ringleader
+- 1× Glimpse of Infinity
+- 1× Starfall Communion
+- 1× Driftcaller Sovereign
+- 1× First Encounter
+- 1× Wake the Fallen
+- 1× Radiant Trio
+- 1× Carrion Lord
+- 1× Shadowpaw
+- 1× Ashborn Necromancer
+- 1× Paradox Enforcer
+- 1× Dune Reaper
+- 1× Ashen Remnant
+- 1× The Dread Sovereign
+- 1× Nightprowler Panther
+
+## Whisper of the Past / Shatter the Frail
+
+`tide-28` — 56 distinct cards, 71 copies, distilled from 10 real decks
+
+- 2× Virtuoso of Harmony
+- 2× Starsea Traveler
+- 2× Clockwork Conductor
+- 2× Bloomweaver
+- 2× Veil Crosser
+- 2× Barren Path Wanderer
+- 2× Petal-Seer
+- 2× Wistful Angler
+- 2× Veilseeker
+- 2× Memory Tracer
+- 2× Soulkindler
+- 2× Scrap Reclaimer
+- 2× Specter of Silent Snow
+- 2× Dusk Duelist
+- 2× Depthwalker
+- 1× Ferryman of the Falls
+- 1× Unleash Ruin
+- 1× Heavenward Penitent
+- 1× Carrion Lord
+- 1× Whisper of the Past
+- 1× Shatter the Frail
+- 1× Shadowpaw
+- 1× Steel Abomination
+- 1× Beacon of Tomorrow
+- 1× Crumbling Behemoth
+- 1× Packcaller of Shadows
+- 1× Sky Voyager
+- 1× Voidcaller
+- 1× Ferryman's Tithe
+- 1× Harrowing Officiant
+- 1× Amber Aurelia
+- 1× Frost Visionary
+- 1× Sunset Chronicler
+- 1× Starfall Communion
+- 1× Winterbough Monk
+- 1× Wondrous Clearing
+- 1× Door to Possibility
+- 1× Radiant Trio
+- 1× Fathomless Maw
+- 1× Searcher in the Mists
+- 1× Vigilant Howler
+- 1× Fargazer
+- 1× Abomination of Memory
+- 1× Kindlehorn
+- 1× Lord of Hidden Paths
+- 1× Pyrokinetic Surge
+- 1× Assault Trooper
+- 1× Nocturne
+- 1× Ashborn Necromancer
+- 1× Dreadcall Warden
+- 1× Volcanic Channeler
+- 1× Quiet Reflection
+- 1× Nightmare Manifest
+- 1× Ashen Remnant
+- 1× The Dread Sovereign
+- 1× Scrap Reclaimer
+
+## Ecliptic Vantage / Fleeting Reunion
+
+`tide-29` — 29 distinct cards, 40 copies, distilled from 6 real decks
+
+- 2× Fading Farewell
+- 2× Verdant Pioneer
+- 2× Urban Desperado
+- 2× Through the Rift
+- 2× Assault Trooper
+- 2× Soulbinder
+- 2× Plunge into the Abyss
+- 2× Tranquil Duelist
+- 1× Fleeting Reunion
+- 1× Wreckborn
+- 2× Torn Circuit Feeder
+- 2× Scrap Reclaimer
+- 1× Lithic Severance
+- 1× Still Dreamer
+- 1× Crumbling Covenant
+- 1× Forgotten Factory Titan
+- 2× Momentum's Edge
+- 1× Terminus
+- 1× Frost Visionary
+- 1× Reclaimer of Lost Paths
+- 1× Call of the Lost
+- 1× Shadowbinder
+- 1× Young Huntress
+- 1× Epiphany Unfolded
+- 1× Enginespeaker
+- 1× Ethereal Courser
+- 1× Quiet Reflection
+- 1× Nexus Wayfinder
+- 1× Lumin-Gate Seer
+
+## Twice-Lit Portal / Chronicle Reclaimer
+
+`tide-30` — 64 distinct cards, 80 copies, distilled from 10 real decks
+
+- 2× Amythest Aurelia
+- 2× Looming Oracle
+- 2× Pathfinder
+- 2× Speaker for the Forgotten
+- 2× Crescendo Channeler
+- 2× Wraith of Twisting Shadows
+- 2× Light of Emergence
+- 2× Celestial Lookout
+- 2× Endless Projection
+- 2× Shadowbinder
+- 2× Heroic Rescue
+- 2× Moment Rewound
+- 2× Blood Moon Ronin
+- 1× Chronicle Reclaimer
+- 1× Momentum of the Fallen
+- 1× Radiants' Captain
+- 2× Emerald Guardian
+- 2× Quiet Reflection
+- 1× Fractured Veil
+- 2× Lumineth
+- 1× Night Prowler
+- 1× Wolfbond Chieftain
+- 1× Heavenward Penitent
+- 1× Plunge into the Abyss
+- 1× Twice-Lit Portal
+- 1× Standard Bearer
+- 1× Company Commander
+- 1× Silent Observer
+- 1× Phantom Flotilla
+- 1× Nightmare
+- 1× Wired Duelist
+- 1× Through the Rift
+- 1× Voidcaller
+- 1× Ambush Operative
+- 1× Overstory Explorer
+- 1× Key to the Moment
+- 1× Skull Weaver
+- 1× Miraculous Arrival
+- 1× Dreamvale Monarch
+- 1× Call to the Unknown
+- 1× Wistful Angler
+- 1× Memory Tracer
+- 1× Knowledge Restored
+- 1× Pactbound Challenger
+- 1× Sunset Chronicler
+- 1× Reclaimer of Lost Paths
+- 1× Barrage Specialist
+- 1× Starbound Striker
+- 1× Infernal Ascendant
+- 1× First Encounter
+- 1× Wake the Fallen
+- 1× Radiant Trio
+- 1× Blazing Emberwing
+- 1× Roots of Rebirth
+- 1× Vigilant Howler
+- 1× Young Huntress
+- 1× Epiphany Unfolded
+- 1× Ruin Scavenger
+- 1× Nocturne
+- 1× Beacon of Tomorrow
+- 1× Crumbling Behemoth
+- 1× Nexus Wayfinder
+- 1× Dune Reaper
+- 1× Spirit of the Greenwood
+
+## Spellweaver / Prophet of the Consumed
+
+`tide-31` — 115 distinct cards, 134 copies, distilled from 20 real decks
+
+- 2× Invoker of Myths
+- 2× Melodist of the Finale
+- 2× Voidsire
+- 2× Grim Reclaimer
+- 2× Mirror Protocol
+- 2× Vengeance Taker
+- 2× Prism Caller
+- 1× Frostbound Defiant
+- 2× Seedling Sage
+- 2× Wired Duelist
+- 1× Prophet of the Consumed
+- 2× Tranquil Duelist
+- 1× Blade of Unity
+- 1× Vanguard Charger
+- 2× Tethered Hollow
+- 1× Forsworn Champion
+- 1× Dreadmount Sovereign
+- 2× Skyflame Commander
+- 2× Battlefield Medic
+- 2× Young Huntress
+- 1× Harbor Warden
+- 1× Dragonward
+- 1× Flamestride Rider
+- 2× First Encounter
+- 2× Wake the Fallen
+- 2× Wolfbond Chieftain
+- 2× Lightningborn
+- 1× Gateway Defender
+- 1× Vault Infiltrator
+- 2× Blood Reaver
+- 1× Cinderblade Legionnaire
+- 1× Burning Revenant
+- 1× Ruthless Conquerer
+- 1× Railgun Reinforcer
+- 1× Assault Leader
+- 1× Barrage Specialist
+- 1× Sun Clan Lieutenant
+- 1× Inspiring Templar
+- 1× Warrior's Path
+- 1× Advance Gunner
+- 1× Aspiring Guardian
+- 1× Riftwalker
+- 1× Shadow March
+- 1× Wasteland Holdout
+- 1× Spellweaver
+- 1× Cragfall
+- 1× Assault Trooper
+- 1× Company Commander
+- 1× Angel of the Eclipse
+- 1× Phantom Flotilla
+- 1× Nightmare
+- 1× Starbound Striker
+- 1× Ethereal Trailblazer
+- 1× Bloodpact Berserker
+- 1× Through the Rift
+- 1× Ambush Operative
+- 1× Immortal Reaper
+- 1× Sundown Surfer
+- 1× Gilded Catalyst
+- 1× Clifftop Marksman
+- 1× Featherlight Summoner
+- 1× Infernal Cavalier
+- 1× Twilight Troubadour
+- 1× Simulacra
+- 1× Canopy Lookout
+- 1× Molten Duel
+- 1× Cloudback Courier
+- 1× Thornwood Delver
+- 1× Seeker for the Way
+- 1× Lanternwood Scout
+- 1× Plunge into the Abyss
+- 1× Lunar Hart
+- 1× Stolen Genesis
+- 1× Standard Bearer
+- 1× Shadowbinder
+- 1× Pilgrim of Old Stones
+- 1× Gloomantler
+- 1× Revenant of the Lost
+- 1× Frontline Martyr
+- 1× Evacuation Enforcer
+- 1× Spirit Field Reclaimer
+- 1× Bladefall
+- 1× Infernal Ascendant
+- 1× Pathfinder
+- 1× Speaker for the Forgotten
+- 1× Crescendo Channeler
+- 1× Dawnblade Wanderer
+- 1× Forge Inheritor
+- 1× Reforged Automaton
+- 1× Still Dreamer
+- 1× Celestial Lookout
+- 1× Scorched Reckoning
+- 1× Shard Wielder
+- 1× Forgotten Factory Titan
+- 1× Glimmerwood Scout
+- 1× Field Reverent
+- 1× Boundless Wanderer
+- 1× Momentum's Edge
+- 1× Blood Moon Ronin
+- 1× Infernal Rest
+- 1× Abandon Constraints
+- 1× Inferno's Herald
+- 1× Cindermarch
+- 1× Conduit of Resonance
+- 1× Grounded
+- 1× Glimpse of Infinity
+- 1× Driftcaller Sovereign
+- 1× Fathomless Maw
+- 1× Kindlehorn
+- 1× Veil Shatter
+- 1× Epiphany Unfolded
+- 1× Intermezzo Balladeer
+- 1× Dreadcall Warden
+- 1× Call to the Unknown
+- 1× Dune Reaper
+
+## Grim Reclaimer / Sage of the Prelude
+
+`tide-32` — 41 distinct cards, 57 copies, distilled from 7 real decks
+
+- 2× Melodist of the Finale
+- 2× Endless Projection
+- 2× Terminus
+- 2× Kindlehorn
+- 2× Standard Bearer
+- 1× Grim Reclaimer
+- 2× Titan of Forgotten Echoes
+- 2× Sunset Chronicler
+- 1× Sage of the Prelude
+- 2× Angel of the Eclipse
+- 1× Reunion
+- 2× Wondrous Clearing
+- 2× Lumin-Gate Seer
+- 2× Radiant Trio
+- 2× Torn Circuit Feeder
+- 1× Fading Farewell
+- 2× Emerald Guardian
+- 1× Across the Void
+- 1× Packcaller of Shadows
 - 2× Ashen Remnant
 - 2× The Dread Sovereign
-- 1× Herald of the Last Light
-- 1× Ashborn Necromancer
-- 1× Dragonward
-- 1× Scuttled Fortune
-- 2× Infernal Ascendant
-- 1× Dawnrunner
-- 1× Duskwall Delver
-- 1× Nocturne
-- 1× Obliterator of Worlds
-- 1× Saltless Mariner
-- 1× Carrion Shepherd
-- 1× Shadowcaller
+- 1× Luminwings
+- 1× Burst of Obliteration
 - 1× Reclaimer of Lost Paths
-- 1× Titan of Forgotten Echoes
-- 1× Immolate
-- 1× Specter of Silent Snow
-- 1× Starfall
-- 1× Soulbinder
-- 1× Call to the Unknown
-- 1× Wreckheap Survivor
+- 1× Grounded
+- 1× Amythest Aurelia
+- 1× Hatching Ground
+- 2× Infernal Ascendant
+- 1× Turquoise Aurelia
+- 1× Young Huntress
+- 1× Ruin Scavenger
+- 1× Nocturne
+- 1× Rusted Monolith
+- 1× Ethereal Courser
+- 1× Nexus Wayfinder
+- 1× Dreamvale Monarch
+- 1× Spirit of the Greenwood
+- 1× Momentum's Edge
+- 1× Nightprowler Panther
+- 1× Dreamcatcher's Call
+- 1× Scrap Reclaimer
 
 <!-- relationships appended by seed-tide-relationships -->
 
-## Allied tides
-
-| Tide | Allied tides (best first) |
-| --- | --- |
-| tide-01 — Driftcaller Sovereign / Dawnhorn Elder | tide-15 (Seeker of the Radiant Wilds / Forsaken Skyline); tide-32 (Seer of the Fallen / Derelict Voyage); tide-27 (Scrapyard Custodian / The Deathsworn); tide-26 (Wreckland Maverick / Conjured Zenith); tide-30 (Blightmaw / Wasteland Holdout); tide-18 (Fathomscourge / Smoldering Ancient) |
-| tide-02 — Gleam Below / Blightmaw | tide-18 (Fathomscourge / Smoldering Ancient); tide-10 (Desolation's Edge / Tidecaller); tide-11 (Torchbearer of the Abyss / Keeper of the Lightpath); tide-26 (Wreckland Maverick / Conjured Zenith); tide-03 (Surge of Fury / Genesis Burst); tide-30 (Blightmaw / Wasteland Holdout) |
-| tide-03 — Surge of Fury / Genesis Burst | tide-04 (Rootspring Summons / Toll of Passage); tide-06 (Aurora Confluence / Dreadcall Warden2); tide-05 (Simulacra / Twilight Troubadour); tide-11 (Torchbearer of the Abyss / Keeper of the Lightpath); tide-20 (Gleamharvester / Shoreline Penitent); tide-18 (Fathomscourge / Smoldering Ancient) |
-| tide-04 — Rootspring Summons / Toll of Passage | tide-03 (Surge of Fury / Genesis Burst); tide-05 (Simulacra / Twilight Troubadour); tide-06 (Aurora Confluence / Dreadcall Warden2); tide-11 (Torchbearer of the Abyss / Keeper of the Lightpath); tide-20 (Gleamharvester / Shoreline Penitent); tide-18 (Fathomscourge / Smoldering Ancient) |
-| tide-05 — Simulacra / Twilight Troubadour | tide-06 (Aurora Confluence / Dreadcall Warden2); tide-03 (Surge of Fury / Genesis Burst); tide-04 (Rootspring Summons / Toll of Passage); tide-20 (Gleamharvester / Shoreline Penitent); tide-18 (Fathomscourge / Smoldering Ancient); tide-11 (Torchbearer of the Abyss / Keeper of the Lightpath) |
-| tide-06 — Aurora Confluence / Dreadcall Warden2 | tide-03 (Surge of Fury / Genesis Burst); tide-20 (Gleamharvester / Shoreline Penitent); tide-05 (Simulacra / Twilight Troubadour); tide-04 (Rootspring Summons / Toll of Passage); tide-11 (Torchbearer of the Abyss / Keeper of the Lightpath); tide-18 (Fathomscourge / Smoldering Ancient) |
-| tide-07 — Astral Angler / Salvage Engine | tide-31 (Summons of the Bonded / Ironclad Marksman); tide-09 (Harborwarden / Hope's Vanguard); tide-27 (Scrapyard Custodian / The Deathsworn); tide-15 (Seeker of the Radiant Wilds / Forsaken Skyline); tide-16 (Mother of Flames / Dawnprowler Panther); tide-17 (Mirrorlight Architect / Nebula's Wake) |
-| tide-08 — Borrowed Minutes / Blight Weaver2 | tide-30 (Blightmaw / Wasteland Holdout); tide-26 (Wreckland Maverick / Conjured Zenith); tide-27 (Scrapyard Custodian / The Deathsworn); tide-10 (Desolation's Edge / Tidecaller); tide-12 (Augur Crow / Blazepath Traveler); tide-15 (Seeker of the Radiant Wilds / Forsaken Skyline) |
-| tide-09 — Harborwarden / Hope's Vanguard | tide-27 (Scrapyard Custodian / The Deathsworn); tide-16 (Mother of Flames / Dawnprowler Panther); tide-15 (Seeker of the Radiant Wilds / Forsaken Skyline); tide-01 (Driftcaller Sovereign / Dawnhorn Elder); tide-32 (Seer of the Fallen / Derelict Voyage); tide-17 (Mirrorlight Architect / Nebula's Wake) |
-| tide-10 — Desolation's Edge / Tidecaller | tide-29 (Desolation's Edge / Wreckland Maverick); tide-25 (Lone Castaway / Ironclad Marksman); tide-22 (Company Commander / Emberfang); tide-23 (Wasteland Holdout / Apocalypse Vigilante); tide-11 (Torchbearer of the Abyss / Keeper of the Lightpath); tide-30 (Blightmaw / Wasteland Holdout) |
-| tide-11 — Torchbearer of the Abyss / Keeper of the Lightpath | tide-20 (Gleamharvester / Shoreline Penitent); tide-18 (Fathomscourge / Smoldering Ancient); tide-04 (Rootspring Summons / Toll of Passage); tide-06 (Aurora Confluence / Dreadcall Warden2); tide-03 (Surge of Fury / Genesis Burst); tide-05 (Simulacra / Twilight Troubadour) |
-| tide-12 — Augur Crow / Blazepath Traveler | tide-26 (Wreckland Maverick / Conjured Zenith); tide-30 (Blightmaw / Wasteland Holdout); tide-32 (Seer of the Fallen / Derelict Voyage); tide-23 (Wasteland Holdout / Apocalypse Vigilante); tide-10 (Desolation's Edge / Tidecaller); tide-18 (Fathomscourge / Smoldering Ancient) |
-| tide-13 — Shared Revelation / Dreadcall Warden2 | tide-05 (Simulacra / Twilight Troubadour); tide-01 (Driftcaller Sovereign / Dawnhorn Elder); tide-26 (Wreckland Maverick / Conjured Zenith); tide-03 (Surge of Fury / Genesis Burst); tide-11 (Torchbearer of the Abyss / Keeper of the Lightpath); tide-15 (Seeker of the Radiant Wilds / Forsaken Skyline) |
-| tide-14 — Rootspring Summons / Surge of Fury | tide-06 (Aurora Confluence / Dreadcall Warden2); tide-04 (Rootspring Summons / Toll of Passage); tide-28 (Young Beastcaller / Mother of Flames); tide-24 (Doorlight Foundling / Emberwolf Triad); tide-03 (Surge of Fury / Genesis Burst); tide-30 (Blightmaw / Wasteland Holdout) |
-| tide-15 — Seeker of the Radiant Wilds / Forsaken Skyline | tide-01 (Driftcaller Sovereign / Dawnhorn Elder); tide-32 (Seer of the Fallen / Derelict Voyage); tide-27 (Scrapyard Custodian / The Deathsworn); tide-09 (Harborwarden / Hope's Vanguard); tide-30 (Blightmaw / Wasteland Holdout); tide-17 (Mirrorlight Architect / Nebula's Wake) |
-| tide-16 — Mother of Flames / Dawnprowler Panther | tide-17 (Mirrorlight Architect / Nebula's Wake); tide-07 (Astral Angler / Salvage Engine); tide-31 (Summons of the Bonded / Ironclad Marksman); tide-32 (Seer of the Fallen / Derelict Voyage); tide-01 (Driftcaller Sovereign / Dawnhorn Elder); tide-03 (Surge of Fury / Genesis Burst) |
-| tide-17 — Mirrorlight Architect / Nebula's Wake | tide-32 (Seer of the Fallen / Derelict Voyage); tide-16 (Mother of Flames / Dawnprowler Panther); tide-27 (Scrapyard Custodian / The Deathsworn); tide-09 (Harborwarden / Hope's Vanguard); tide-15 (Seeker of the Radiant Wilds / Forsaken Skyline); tide-01 (Driftcaller Sovereign / Dawnhorn Elder) |
-| tide-18 — Fathomscourge / Smoldering Ancient | tide-29 (Desolation's Edge / Wreckland Maverick); tide-10 (Desolation's Edge / Tidecaller); tide-22 (Company Commander / Emberfang); tide-11 (Torchbearer of the Abyss / Keeper of the Lightpath); tide-32 (Seer of the Fallen / Derelict Voyage); tide-03 (Surge of Fury / Genesis Burst) |
-| tide-19 — Seeker of the Radiant Wilds / Rift Pilgrim | tide-03 (Surge of Fury / Genesis Burst); tide-04 (Rootspring Summons / Toll of Passage); tide-13 (Shared Revelation / Dreadcall Warden2); tide-06 (Aurora Confluence / Dreadcall Warden2); tide-05 (Simulacra / Twilight Troubadour); tide-29 (Desolation's Edge / Wreckland Maverick) |
-| tide-20 — Gleamharvester / Shoreline Penitent | tide-11 (Torchbearer of the Abyss / Keeper of the Lightpath); tide-06 (Aurora Confluence / Dreadcall Warden2); tide-18 (Fathomscourge / Smoldering Ancient); tide-04 (Rootspring Summons / Toll of Passage); tide-05 (Simulacra / Twilight Troubadour); tide-03 (Surge of Fury / Genesis Burst) |
-| tide-21 — Gleam Below / Annular Recall | tide-03 (Surge of Fury / Genesis Burst); tide-01 (Driftcaller Sovereign / Dawnhorn Elder); tide-05 (Simulacra / Twilight Troubadour); tide-13 (Shared Revelation / Dreadcall Warden2); tide-04 (Rootspring Summons / Toll of Passage); tide-20 (Gleamharvester / Shoreline Penitent) |
-| tide-22 — Company Commander / Emberfang | tide-29 (Desolation's Edge / Wreckland Maverick); tide-23 (Wasteland Holdout / Apocalypse Vigilante); tide-25 (Lone Castaway / Ironclad Marksman); tide-10 (Desolation's Edge / Tidecaller); tide-30 (Blightmaw / Wasteland Holdout); tide-26 (Wreckland Maverick / Conjured Zenith) |
-| tide-23 — Wasteland Holdout / Apocalypse Vigilante | tide-22 (Company Commander / Emberfang); tide-12 (Augur Crow / Blazepath Traveler); tide-29 (Desolation's Edge / Wreckland Maverick); tide-26 (Wreckland Maverick / Conjured Zenith); tide-25 (Lone Castaway / Ironclad Marksman); tide-30 (Blightmaw / Wasteland Holdout) |
-| tide-24 — Doorlight Foundling / Emberwolf Triad | tide-30 (Blightmaw / Wasteland Holdout); tide-12 (Augur Crow / Blazepath Traveler); tide-17 (Mirrorlight Architect / Nebula's Wake); tide-05 (Simulacra / Twilight Troubadour); tide-04 (Rootspring Summons / Toll of Passage); tide-09 (Harborwarden / Hope's Vanguard) |
-| tide-25 — Lone Castaway / Ironclad Marksman | tide-22 (Company Commander / Emberfang); tide-29 (Desolation's Edge / Wreckland Maverick); tide-10 (Desolation's Edge / Tidecaller); tide-23 (Wasteland Holdout / Apocalypse Vigilante); tide-26 (Wreckland Maverick / Conjured Zenith); tide-30 (Blightmaw / Wasteland Holdout) |
-| tide-26 — Wreckland Maverick / Conjured Zenith | tide-12 (Augur Crow / Blazepath Traveler); tide-15 (Seeker of the Radiant Wilds / Forsaken Skyline); tide-23 (Wasteland Holdout / Apocalypse Vigilante); tide-30 (Blightmaw / Wasteland Holdout); tide-32 (Seer of the Fallen / Derelict Voyage); tide-01 (Driftcaller Sovereign / Dawnhorn Elder) |
-| tide-27 — Scrapyard Custodian / The Deathsworn | tide-01 (Driftcaller Sovereign / Dawnhorn Elder); tide-15 (Seeker of the Radiant Wilds / Forsaken Skyline); tide-09 (Harborwarden / Hope's Vanguard); tide-32 (Seer of the Fallen / Derelict Voyage); tide-17 (Mirrorlight Architect / Nebula's Wake); tide-16 (Mother of Flames / Dawnprowler Panther) |
-| tide-28 — Young Beastcaller / Mother of Flames | tide-16 (Mother of Flames / Dawnprowler Panther); tide-30 (Blightmaw / Wasteland Holdout); tide-09 (Harborwarden / Hope's Vanguard); tide-01 (Driftcaller Sovereign / Dawnhorn Elder); tide-22 (Company Commander / Emberfang); tide-17 (Mirrorlight Architect / Nebula's Wake) |
-| tide-29 — Desolation's Edge / Wreckland Maverick | tide-22 (Company Commander / Emberfang); tide-10 (Desolation's Edge / Tidecaller); tide-25 (Lone Castaway / Ironclad Marksman); tide-30 (Blightmaw / Wasteland Holdout); tide-12 (Augur Crow / Blazepath Traveler); tide-01 (Driftcaller Sovereign / Dawnhorn Elder) |
-| tide-30 — Blightmaw / Wasteland Holdout | tide-12 (Augur Crow / Blazepath Traveler); tide-26 (Wreckland Maverick / Conjured Zenith); tide-27 (Scrapyard Custodian / The Deathsworn); tide-32 (Seer of the Fallen / Derelict Voyage); tide-01 (Driftcaller Sovereign / Dawnhorn Elder); tide-29 (Desolation's Edge / Wreckland Maverick) |
-| tide-31 — Summons of the Bonded / Ironclad Marksman | tide-16 (Mother of Flames / Dawnprowler Panther); tide-07 (Astral Angler / Salvage Engine); tide-24 (Doorlight Foundling / Emberwolf Triad); tide-17 (Mirrorlight Architect / Nebula's Wake); tide-11 (Torchbearer of the Abyss / Keeper of the Lightpath); tide-03 (Surge of Fury / Genesis Burst) |
-| tide-32 — Seer of the Fallen / Derelict Voyage | tide-15 (Seeker of the Radiant Wilds / Forsaken Skyline); tide-01 (Driftcaller Sovereign / Dawnhorn Elder); tide-26 (Wreckland Maverick / Conjured Zenith); tide-27 (Scrapyard Custodian / The Deathsworn); tide-30 (Blightmaw / Wasteland Holdout); tide-18 (Fathomscourge / Smoldering Ancient) |
-
-## Tide pools by Dreamcaller
-
-| Dreamcaller | Tide pool (lead drawn from) |
-| --- | --- |
-| Drusus Calvus | Driftcaller Sovereign / Dawnhorn Elder; Rootspring Summons / Toll of Passage; Wasteland Holdout / Apocalypse Vigilante; Astral Angler / Salvage Engine; Mirrorlight Architect / Nebula's Wake; Doorlight Foundling / Emberwolf Triad; Shared Revelation / Dreadcall Warden2; Gleamharvester / Shoreline Penitent; Fathomscourge / Smoldering Ancient; Borrowed Minutes / Blight Weaver2 |
-| Threxan | Gleam Below / Blightmaw; Shared Revelation / Dreadcall Warden2; Young Beastcaller / Mother of Flames; Seeker of the Radiant Wilds / Forsaken Skyline; Aurora Confluence / Dreadcall Warden2; Company Commander / Emberfang; Summons of the Bonded / Ironclad Marksman; Blightmaw / Wasteland Holdout; Mirrorlight Architect / Nebula's Wake; Torchbearer of the Abyss / Keeper of the Lightpath |
-| Vethran | Surge of Fury / Genesis Burst; Desolation's Edge / Tidecaller; Seeker of the Radiant Wilds / Forsaken Skyline; Mother of Flames / Dawnprowler Panther; Shared Revelation / Dreadcall Warden2; Gleamharvester / Shoreline Penitent; Augur Crow / Blazepath Traveler; Summons of the Bonded / Ironclad Marksman; Borrowed Minutes / Blight Weaver2; Mirrorlight Architect / Nebula's Wake |
-| Seld Rakor | Rootspring Summons / Toll of Passage; Driftcaller Sovereign / Dawnhorn Elder; Wasteland Holdout / Apocalypse Vigilante; Astral Angler / Salvage Engine; Mirrorlight Architect / Nebula's Wake; Doorlight Foundling / Emberwolf Triad; Shared Revelation / Dreadcall Warden2; Gleamharvester / Shoreline Penitent; Fathomscourge / Smoldering Ancient; Borrowed Minutes / Blight Weaver2 |
-| Ossian | Simulacra / Twilight Troubadour; Rootspring Summons / Surge of Fury; Company Commander / Emberfang; Seer of the Fallen / Derelict Voyage; Mother of Flames / Dawnprowler Panther; Gleam Below / Blightmaw; Gleamharvester / Shoreline Penitent; Summons of the Bonded / Ironclad Marksman; Shared Revelation / Dreadcall Warden2; Blightmaw / Wasteland Holdout |
-| Kaleth | Aurora Confluence / Dreadcall Warden2; Borrowed Minutes / Blight Weaver2; Seer of the Fallen / Derelict Voyage; Young Beastcaller / Mother of Flames; Shared Revelation / Dreadcall Warden2; Company Commander / Emberfang; Augur Crow / Blazepath Traveler; Torchbearer of the Abyss / Keeper of the Lightpath; Harborwarden / Hope's Vanguard; Fathomscourge / Smoldering Ancient |
-| Calloway Flint | Astral Angler / Salvage Engine; Rootspring Summons / Toll of Passage; Wasteland Holdout / Apocalypse Vigilante; Driftcaller Sovereign / Dawnhorn Elder; Mirrorlight Architect / Nebula's Wake; Doorlight Foundling / Emberwolf Triad; Shared Revelation / Dreadcall Warden2; Gleamharvester / Shoreline Penitent; Fathomscourge / Smoldering Ancient; Borrowed Minutes / Blight Weaver2 |
-| Senemhet | Borrowed Minutes / Blight Weaver2; Driftcaller Sovereign / Dawnhorn Elder; Gleamharvester / Shoreline Penitent; Mother of Flames / Dawnprowler Panther; Company Commander / Emberfang; Seeker of the Radiant Wilds / Rift Pilgrim; Augur Crow / Blazepath Traveler; Summons of the Bonded / Ironclad Marksman; Fathomscourge / Smoldering Ancient; Gleam Below / Annular Recall |
-| Karev Soltis | Harborwarden / Hope's Vanguard; Rootspring Summons / Toll of Passage; Augur Crow / Blazepath Traveler; Shared Revelation / Dreadcall Warden2; Company Commander / Emberfang; Young Beastcaller / Mother of Flames; Borrowed Minutes / Blight Weaver2; Gleamharvester / Shoreline Penitent; Seer of the Fallen / Derelict Voyage; Fathomscourge / Smoldering Ancient |
-| Tessa | Desolation's Edge / Tidecaller; Driftcaller Sovereign / Dawnhorn Elder; Astral Angler / Salvage Engine; Surge of Fury / Genesis Burst; Mirrorlight Architect / Nebula's Wake; Rootspring Summons / Surge of Fury; Gleamharvester / Shoreline Penitent; Young Beastcaller / Mother of Flames; Shared Revelation / Dreadcall Warden2; Blightmaw / Wasteland Holdout |
-| Serenath Veyl | Torchbearer of the Abyss / Keeper of the Lightpath; Augur Crow / Blazepath Traveler; Seeker of the Radiant Wilds / Rift Pilgrim; Young Beastcaller / Mother of Flames; Summons of the Bonded / Ironclad Marksman; Driftcaller Sovereign / Dawnhorn Elder; Company Commander / Emberfang; Aurora Confluence / Dreadcall Warden2; Borrowed Minutes / Blight Weaver2; Mirrorlight Architect / Nebula's Wake |
-| Korrax | Augur Crow / Blazepath Traveler; Surge of Fury / Genesis Burst; Young Beastcaller / Mother of Flames; Seeker of the Radiant Wilds / Forsaken Skyline; Summons of the Bonded / Ironclad Marksman; Shared Revelation / Dreadcall Warden2; Company Commander / Emberfang; Gleamharvester / Shoreline Penitent; Gleam Below / Blightmaw; Mirrorlight Architect / Nebula's Wake |
-| Kell Tarn | Driftcaller Sovereign / Dawnhorn Elder; Augur Crow / Blazepath Traveler; Wreckland Maverick / Conjured Zenith; Seer of the Fallen / Derelict Voyage; Shared Revelation / Dreadcall Warden2; Blightmaw / Wasteland Holdout; Scrapyard Custodian / The Deathsworn; Seeker of the Radiant Wilds / Forsaken Skyline |
-| Caedryn | Seer of the Fallen / Derelict Voyage; Seeker of the Radiant Wilds / Forsaken Skyline; Driftcaller Sovereign / Dawnhorn Elder; Harborwarden / Hope's Vanguard; Wreckland Maverick / Conjured Zenith; Scrapyard Custodian / The Deathsworn; Blightmaw / Wasteland Holdout; Shared Revelation / Dreadcall Warden2 |
-| Kragg | Scrapyard Custodian / The Deathsworn; Blightmaw / Wasteland Holdout; Driftcaller Sovereign / Dawnhorn Elder; Mother of Flames / Dawnprowler Panther; Summons of the Bonded / Ironclad Marksman; Seer of the Fallen / Derelict Voyage |
-| Vrakmoth | Torchbearer of the Abyss / Keeper of the Lightpath; Gleamharvester / Shoreline Penitent; Aurora Confluence / Dreadcall Warden2; Simulacra / Twilight Troubadour; Gleam Below / Annular Recall; Gleam Below / Blightmaw; Seeker of the Radiant Wilds / Forsaken Skyline; Desolation's Edge / Tidecaller |
-| Seraveth | Scrapyard Custodian / The Deathsworn; Seeker of the Radiant Wilds / Forsaken Skyline; Borrowed Minutes / Blight Weaver2; Harborwarden / Hope's Vanguard; Astral Angler / Salvage Engine; Gleamharvester / Shoreline Penitent; Driftcaller Sovereign / Dawnhorn Elder; Blightmaw / Wasteland Holdout |
-| Corvath | Gleamharvester / Shoreline Penitent; Torchbearer of the Abyss / Keeper of the Lightpath; Summons of the Bonded / Ironclad Marksman; Astral Angler / Salvage Engine; Scrapyard Custodian / The Deathsworn |
-| Kael Voss | Harborwarden / Hope's Vanguard; Gleam Below / Blightmaw; Shared Revelation / Dreadcall Warden2; Wreckland Maverick / Conjured Zenith; Mirrorlight Architect / Nebula's Wake; Seeker of the Radiant Wilds / Forsaken Skyline; Summons of the Bonded / Ironclad Marksman; Simulacra / Twilight Troubadour |
-| Vaela | Seeker of the Radiant Wilds / Forsaken Skyline; Driftcaller Sovereign / Dawnhorn Elder; Seer of the Fallen / Derelict Voyage; Scrapyard Custodian / The Deathsworn; Seeker of the Radiant Wilds / Rift Pilgrim; Wreckland Maverick / Conjured Zenith |
-| Edran | Shared Revelation / Dreadcall Warden2; Seeker of the Radiant Wilds / Rift Pilgrim; Rootspring Summons / Surge of Fury; Gleamharvester / Shoreline Penitent |
-| Zeva | Shared Revelation / Dreadcall Warden2; Seeker of the Radiant Wilds / Rift Pilgrim; Gleam Below / Annular Recall; Rootspring Summons / Surge of Fury |
-| Kasane | Surge of Fury / Genesis Burst; Simulacra / Twilight Troubadour; Seeker of the Radiant Wilds / Rift Pilgrim; Rootspring Summons / Toll of Passage; Mirrorlight Architect / Nebula's Wake; Gleam Below / Annular Recall; Harborwarden / Hope's Vanguard; Aurora Confluence / Dreadcall Warden2 |
-| Rael | Gleamharvester / Shoreline Penitent; Torchbearer of the Abyss / Keeper of the Lightpath; Gleam Below / Annular Recall; Rootspring Summons / Toll of Passage; Gleam Below / Blightmaw; Surge of Fury / Genesis Burst |
-| Ovanel | Torchbearer of the Abyss / Keeper of the Lightpath; Surge of Fury / Genesis Burst; Rootspring Summons / Toll of Passage; Gleam Below / Blightmaw; Gleam Below / Annular Recall; Fathomscourge / Smoldering Ancient; Summons of the Bonded / Ironclad Marksman |
-| Yveth Coravel | Mother of Flames / Dawnprowler Panther; Young Beastcaller / Mother of Flames; Augur Crow / Blazepath Traveler; Harborwarden / Hope's Vanguard; Rootspring Summons / Surge of Fury; Borrowed Minutes / Blight Weaver2; Wasteland Holdout / Apocalypse Vigilante; Mirrorlight Architect / Nebula's Wake |
-| Grath | Mother of Flames / Dawnprowler Panther; Young Beastcaller / Mother of Flames; Harborwarden / Hope's Vanguard; Astral Angler / Salvage Engine; Doorlight Foundling / Emberwolf Triad |
-| Radulf | Mother of Flames / Dawnprowler Panther; Doorlight Foundling / Emberwolf Triad; Young Beastcaller / Mother of Flames; Mirrorlight Architect / Nebula's Wake; Harborwarden / Hope's Vanguard; Astral Angler / Salvage Engine; Gleam Below / Blightmaw; Blightmaw / Wasteland Holdout |
-| Demetrios | Mother of Flames / Dawnprowler Panther; Young Beastcaller / Mother of Flames; Doorlight Foundling / Emberwolf Triad; Rootspring Summons / Surge of Fury; Harborwarden / Hope's Vanguard; Scrapyard Custodian / The Deathsworn; Blightmaw / Wasteland Holdout |
-| Gunnar Deepforge | Lone Castaway / Ironclad Marksman; Company Commander / Emberfang; Desolation's Edge / Wreckland Maverick; Desolation's Edge / Tidecaller; Seeker of the Radiant Wilds / Rift Pilgrim; Rootspring Summons / Toll of Passage; Rootspring Summons / Surge of Fury; Gleam Below / Annular Recall |
-| Tensho | Desolation's Edge / Tidecaller; Lone Castaway / Ironclad Marksman; Desolation's Edge / Wreckland Maverick; Company Commander / Emberfang; Fathomscourge / Smoldering Ancient; Rootspring Summons / Toll of Passage; Gleam Below / Blightmaw; Shared Revelation / Dreadcall Warden2 |
-| Valdren | Desolation's Edge / Wreckland Maverick; Lone Castaway / Ironclad Marksman; Desolation's Edge / Tidecaller; Company Commander / Emberfang; Seeker of the Radiant Wilds / Rift Pilgrim; Gleam Below / Blightmaw; Fathomscourge / Smoldering Ancient |
