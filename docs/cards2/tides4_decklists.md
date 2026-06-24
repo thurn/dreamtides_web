@@ -84,7 +84,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 2× Avatar of Cosmic Reckoning
 - 2× Vigil Keeper
 - 2× Skull Weaver
-- 1× Ashfront Lieutenant
+- 1× Silent Gatherer
 - 1× Silent Avenger
 - 1× Herald of the Last Light
 - 1× Fathomless Maw
@@ -186,7 +186,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 2× Vigil Keeper
 - 2× Carrion Shepherd
 - 2× Skull Weaver
-- 1× Ashfront Lieutenant
+- 1× Silent Gatherer
 - 1× Silent Avenger
 - 1× Herald of the Last Light
 - 1× Fathomless Maw
@@ -246,7 +246,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 2× Exiles of the Last Light
 - 2× Avatar of Cosmic Reckoning
 - 2× Skull Weaver
-- 1× Ashfront Lieutenant
+- 1× Silent Gatherer
 - 1× Nightmare Manifest
 - 1× Herald of the Last Light
 - 1× Stoneborn Leviathan
@@ -356,7 +356,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 Tide-sig-04 is a character-heavy deck (86 of 110 copies are characters) built around granting awakened to all allied characters and then exploiting that every-phase activity through Dawn chaining. Pyrestone Avatar and Pinnacle Ascendant each give every ally awakened, transforming the entire board into a source of repeated Dawn triggers, and Unquenched amplifies this by re-firing each ally's Dawn ability whenever any ally is materialized. The erode engine — anchored by Fargazer ("when you play a character, erode 1; reclaim 2●"), Searcher in the Mists ("materialized, dissolved: erode 4"), and Part the Veil ("erode 4, pick two cards for hand") — steadily populates the void to activate Soulkindler's passive "+1✦ to all allied characters while in your void" and to fuel void-banishing finishers like Paradox Enforcer. A secondary abandon subtheme (Kindlehorn and Obliterator of Worlds both store ⧗ when a character is abandoned and spend it to dissolve enemies; Stolen Genesis sacrifices a character to pull a higher-cost one from the deck) converts the abandon cost into targeted removal or acceleration rather than pure board presence. Compared to its nearest sibling tide-sig-06 (Corvath), which duplicates several of the same awakened and erode enablers but instead invests its additional slots in discard-cycling payoffs (2x Urban Cipher, 2x Evacuation Enforcer) and warrior-figment production (2x Harborwarden, Standard Bearer), this tide goes deeper on Dawn-chain amplification and the abandon-for-removal suite, creating a slower, more resilient value engine that scales with void size rather than hand churn.
 
 - 2× Unquenched
-- 2× Soulkindler
+- 2× Shaper of Memory
 - 2× Part the Veil
 - 2× Grotto Seer
 - 2× Pyrestone Avatar
@@ -477,7 +477,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 2× Fargazer
 - 2× Kindred Sparks
 - 2× Wasteland Arbitrator
-- 1× Ashfront Lieutenant
+- 1× Silent Gatherer
 - 1× Silent Avenger
 - 1× Nightmare Manifest
 - 1× Herald of the Last Light
@@ -503,7 +503,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Shardwoven Tyrant
 - 1× Silent Avenger
 - 1× Immolate and Rise
-- 1× Soulkindler
+- 1× Shaper of Memory
 - 1× Depthwalker
 - 1× Hope's Vanguard
 - 1× Corrupted Host
@@ -570,7 +570,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 
 ## Corvath signature — Discard Void Depth
 
-`tide-sig-06` — signature tide, 87 distinct cards, 110 copies, Corvath's signature
+`tide-sig-06` — signature tide, 95 distinct cards, 109 copies, Corvath's signature
 
 *A discard-driven tide that builds void depth as a resource, rewarding it with void-presence power boosts and massive void-banishing finishers, distinguishing itself from the Vrakmoth signature's abandon-sacrifice engines by treating discard as its primary fuel rather than sacrificing characters.*
 
@@ -578,30 +578,27 @@ Tide-sig-06 is a heavily character-weighted deck (84 of 110 copies are character
 
 - 2× Unquenched
 - 2× Sunken Radiance
-- 2× Sorrowful Prince
 - 2× Paradox Enforcer
 - 2× Veil of the Wastes
-- 2× Soulkindler
+- 2× Shaper of Memory
 - 2× Price of Redemption
-- 2× Oblivion Guide
-- 2× Aurora Confluence
 - 2× Part the Veil
-- 2× Verdant Wayfarer
 - 2× Grotto Seer
 - 2× Pyrestone Avatar
-- 2× Urban Cipher
 - 2× Ash Harbinger
-- 2× Pattern Seeker
 - 2× Silent Gatherer
-- 2× Torchbearer of the Abyss
-- 2× Wasteland Arbitrator
-- 2× Shadowprowler
 - 2× Evacuation Enforcer
 - 2× Pinnacle Ascendant
 - 2× Forgotten Sleeper
 - 1× Unleashed Destruction
-- 1× Crimson Pilgrimage
+- 1× Silent Gatherer
+- 1× Silent Avenger
+- 1× Nightmare Manifest
+- 1× Herald of the Last Light
 - 1× Ridge Vortex Explorer
+- 1× Unleash Ruin
+- 1× Wistful Angler
+- 1× Cloudmantle Ray
 - 1× Fell the Mighty
 - 1× Dustborn Veteran
 - 1× Woodland Apparition
@@ -610,42 +607,50 @@ Tide-sig-06 is a heavily character-weighted deck (84 of 110 copies are character
 - 1× Emberwatch Rescuer
 - 1× Searcher in the Mists
 - 1× Hope's Vanguard
+- 1× Petal-Seer
 - 1× Architect of Memory
 - 1× Weight of Memory
-- 1× Angel of the Eclipse
+- 1× Sorrowful Prince
 - 1× Tidewreck Navigator
 - 1× Immolate and Rise
 - 1× Graywatch
 - 1× Unbroken
 - 1× Call of Calamity
-- 1× The Ringleader
+- 1× Depthwalker
 - 1× Ferryman's Tithe
+- 1× Soulkindler
+- 1× Curio Dealer
+- 1× Oblivion Guide
+- 1× Aurora Confluence
+- 1× Ashen Remnant
 - 1× Whisper of the Past
-- 1× Salvage Engine
-- 1× Seeker for the Way
-- 1× Desperation
 - 1× Peak Plunder
-- 1× Entropy Spike
-- 1× Clockwork Salvager
-- 1× The Devourer
+- 1× The Dread Sovereign
+- 1× Verdant Wayfarer
+- 1× Apocalypse
 - 1× Shatter the Frail
 - 1× Fleeting Reunion
-- 1× Twice-Lit Portal
 - 1× Duskwall Delver
 - 1× Abandon Constraints
 - 1× Fargazer
+- 1× Wondrous Clearing
 - 1× Minstrel of Falling Light
 - 1× Gleamharvester
 - 1× Eruption
 - 1× Together Against the Tide
+- 1× Urban Cipher
 - 1× Seek Answers
-- 1× Emberwatch Veteran
 - 1× Pyrokinetic Surge
+- 1× Pattern Seeker
 - 1× Forsaken Skyline
 - 1× Kindred Sparks
+- 1× Torchbearer of the Abyss
 - 1× Exiles of the Last Light
 - 1× Shadowpaw
-- 1× Lurking Dread
+- 1× Ferryman of the Falls
+- 1× Selfless Rescuer
+- 1× Wasteland Arbitrator
+- 1× Shadowprowler
 - 1× Harrowing Officiant
 - 1× Shadowcaller
 - 1× Key Sifter
@@ -653,15 +658,18 @@ Tide-sig-06 is a heavily character-weighted deck (84 of 110 copies are character
 - 1× The Rising God
 - 1× Ruin Scavenger
 - 1× Rubble Diviner
-- 1× Vessel of Echoes
 - 1× Shoreline Penitent
+- 1× Memory Tracer
 - 1× Return to Nowhere
 - 1× Oracle of Shifting Skies
 - 1× Scrapyard Custodian
 - 1× Shadowpaw
 - 1× The Calling Night
+- 1× Carrion Shepherd
+- 1× Sunset Chronicler
 - 1× Wandering Archivist
 - 1× Break the Veil
+- 1× Scrap Reclaimer
 - 1× Immortal Reaper
 
 ## Kael Voss signature — Survivor Token Reclaim
@@ -688,7 +696,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 2× The Rising God
 - 2× Carrion Shepherd
 - 1× Unleashed Destruction
-- 1× Ashfront Lieutenant
+- 1× Silent Gatherer
 - 1× Silent Avenger
 - 1× Nightmare Manifest
 - 1× Herald of the Last Light
@@ -707,7 +715,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Sorrowful Prince
 - 1× Silent Avenger
 - 1× Immolate and Rise
-- 1× Soulkindler
+- 1× Shaper of Memory
 - 1× Hope's Vanguard
 - 1× Corrupted Host
 - 1× Specter of Silent Snow
@@ -818,7 +826,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Ashborn Necromancer
 - 1× Watcher in the Ruins
 - 1× Immolate and Rise
-- 1× Soulkindler
+- 1× Shaper of Memory
 - 1× Hope's Vanguard
 - 1× Collateral Damage
 - 1× Twilight Reclaimer
@@ -1221,7 +1229,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Duneveil Vanguard
 - 1× Unbroken
 - 1× Call of Calamity
-- 1× Soulkindler
+- 1× Shaper of Memory
 - 1× From the Barrow
 - 1× The Waking Titan
 - 1× Dreamscatter
@@ -1323,7 +1331,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Ancient Descent
 - 1× Unbroken
 - 1× Call of Calamity
-- 1× Soulkindler
+- 1× Shaper of Memory
 - 1× From the Barrow
 - 1× The Waking Titan
 - 1× Dreamscatter
@@ -1438,7 +1446,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Winterbough Monk
 - 1× Assault Leader
 - 1× Eclipse Herald
-- 1× Sundown Surfer
+- 1× He Who Lies Dreaming
 - 1× Gatebound Warden
 - 1× Ambersting
 - 1× Abomination of Memory
@@ -1454,7 +1462,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Featherlight Summoner
 - 1× Infernal Cavalier
 - 1× Looming Oracle
-- 1× Melodist of the Finale
+- 1× Angel of the Eclipse
 - 1× Selfless Rescuer
 - 1× Shattering Gambit
 - 1× Warrior's Path
@@ -1502,7 +1510,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 2× Empyreal Light
 - 2× Spiritbound Alpha
 - 2× Shadowpaw
-- 2× Melodist of the Finale
+- 2× Angel of the Eclipse
 - 2× Ghostlight Wolves
 - 2× Celestial Reverie
 - 2× Dreamcatcher's Call
@@ -1586,7 +1594,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 2× Spiritbound Alpha
 - 2× Shadowpaw
 - 2× Looming Oracle
-- 2× Melodist of the Finale
+- 2× Angel of the Eclipse
 - 2× Ghostlight Wolves
 - 2× Celestial Reverie
 - 2× Dreamcatcher's Call
@@ -1660,7 +1668,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 2× Empyreal Light
 - 2× Spiritbound Alpha
 - 2× Shadowpaw
-- 2× Melodist of the Finale
+- 2× Angel of the Eclipse
 - 2× Ghostlight Wolves
 - 2× Celestial Reverie
 - 2× Dreamcatcher's Call
@@ -1725,7 +1733,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 2× Harbor Warden
 - 2× The Deathsworn
 - 2× Sun Clan Lieutenant
-- 2× Gilded Catalyst
+- 2× Sky Legion Captain
 - 2× Burning Revenant
 - 2× Cinderblade Legionnaire
 - 2× Skyflame Commander
@@ -1772,7 +1780,7 @@ Tide-sig-18 is built almost entirely out of warriors, with a small complement of
 - 1× Cloaked Sentinel
 - 1× Eclipse Herald
 - 1× Shatterpoint Agent
-- 1× Sundown Surfer
+- 1× He Who Lies Dreaming
 - 1× Spirit Field Reclaimer
 - 1× Blade of Unity
 - 1× Crumbling Covenant
@@ -1854,7 +1862,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 1× Frostbound Defiant
 - 1× Dreadcall Warden
 - 1× Reforged Automaton
-- 1× Gilded Catalyst
+- 1× Sky Legion Captain
 - 1× Spellweaver
 - 1× Relentless Pursuer
 - 1× Vengeance Taker
@@ -1871,7 +1879,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 - 1× Forsworn Champion
 - 1× Eclipse Herald
 - 1× Shatterpoint Agent
-- 1× Sundown Surfer
+- 1× He Who Lies Dreaming
 - 1× Spirit Field Reclaimer
 - 1× Blade of Unity
 - 1× Speaker for the Forgotten
@@ -1912,7 +1920,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 
 - 2× Harbor Warden
 - 2× Sun Clan Lieutenant
-- 2× Gilded Catalyst
+- 2× Sky Legion Captain
 - 2× Burning Revenant
 - 2× Cinderblade Legionnaire
 - 2× Pathfinder
@@ -1962,7 +1970,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× Wake the Fallen
 - 1× Cloaked Sentinel
 - 1× Shatterpoint Agent
-- 1× Sundown Surfer
+- 1× He Who Lies Dreaming
 - 1× Spirit Field Reclaimer
 - 1× Blade of Unity
 - 1× Pit Descender
@@ -2169,7 +2177,7 @@ Tide-fac-04 is built almost entirely around spirit animals, with 35 characters a
 - 1× Spiritbound Alpha
 - 1× Shadowpaw
 - 1× Looming Oracle
-- 1× Melodist of the Finale
+- 1× Angel of the Eclipse
 - 1× Dreamborne Leviathan
 - 1× Sunshadow Eagle
 - 1× Blood Moon Triad
@@ -2356,7 +2364,7 @@ Tide-fac-08 is an 80% character tide built almost entirely around spirit animals
 - 1× Tidewreck Navigator
 - 1× Immolate and Rise
 - 1× Paradox Enforcer
-- 1× Soulkindler
+- 1× Shaper of Memory
 - 1× Corrupted Host
 - 1× Curio Dealer
 - 1× Peak Plunder
@@ -2562,7 +2570,7 @@ Tide-fac-12 is built almost entirely of warriors (42 of 45 copies) and organizes
 - 1× Empyreal Light
 - 1× Spiritbound Alpha
 - 1× Shadowpaw
-- 1× Melodist of the Finale
+- 1× Angel of the Eclipse
 - 1× Mother of Flames
 - 1× Dreamborne Leviathan
 - 1× Blood Moon Triad
@@ -2662,7 +2670,7 @@ Tide-fac-14 is an almost entirely character-based tide (39 of 45 copies) built a
 - 1× Empyreal Light
 - 1× Spiritbound Alpha
 - 1× Shadowpaw
-- 1× Melodist of the Finale
+- 1× Angel of the Eclipse
 - 1× Dreamcatcher's Call
 - 1× Mother of Flames
 - 1× Dreamborne Leviathan
@@ -2687,7 +2695,7 @@ This tide is almost entirely warriors (43 of 45 cards) built around a tight loop
 - 1× The Deathsworn
 - 1× Sun Clan Lieutenant
 - 1× Reforged Automaton
-- 1× Gilded Catalyst
+- 1× Sky Legion Captain
 - 1× Spellweaver
 - 1× Burning Revenant
 - 1× Cinderblade Legionnaire
@@ -2699,7 +2707,7 @@ This tide is almost entirely warriors (43 of 45 cards) built around a tight loop
 - 1× Blood Reaver
 - 1× Assault Leader
 - 1× Forsworn Champion
-- 1× Sundown Surfer
+- 1× He Who Lies Dreaming
 - 1× Speaker for the Forgotten
 - 1× Company Commander
 - 1× Dreadmount Sovereign
@@ -2742,7 +2750,7 @@ Tide-fac-16 is almost entirely characters (43 of 45 copies), nearly all warriors
 - 1× Harbor Warden
 - 1× The Deathsworn
 - 1× Sun Clan Lieutenant
-- 1× Gilded Catalyst
+- 1× Sky Legion Captain
 - 1× Spellweaver
 - 1× Burning Revenant
 - 1× Haunted Betrayer
@@ -2755,7 +2763,7 @@ Tide-fac-16 is almost entirely characters (43 of 45 copies), nearly all warriors
 - 1× Assault Leader
 - 1× Forsworn Champion
 - 1× Eclipse Herald
-- 1× Sundown Surfer
+- 1× He Who Lies Dreaming
 - 1× Speaker for the Forgotten
 - 1× Company Commander
 - 1× Dreadmount Sovereign
@@ -2896,7 +2904,7 @@ Tide-fac-19 is a character-heavy facet (32 characters, 13 events) built around a
 - 1× Harbor Warden
 - 1× The Deathsworn
 - 1× Sun Clan Lieutenant
-- 1× Gilded Catalyst
+- 1× Sky Legion Captain
 - 1× Burning Revenant
 - 1× Haunted Betrayer
 - 1× Cinderblade Legionnaire
@@ -3014,7 +3022,7 @@ Tide-fac-21 is a character-heavy spirit animal swarm built around stacking ✦ o
 - 1× Empyreal Light
 - 1× Spiritbound Alpha
 - 1× Shadowpaw
-- 1× Melodist of the Finale
+- 1× Angel of the Eclipse
 - 1× Dreamcatcher's Call
 - 1× Mother of Flames
 - 1× Dreamborne Leviathan
@@ -3062,7 +3070,7 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 1× Spiritbound Alpha
 - 1× Shadowpaw
 - 1× Looming Oracle
-- 1× Melodist of the Finale
+- 1× Angel of the Eclipse
 - 1× Amythest Aurelia
 - 1× Dreamcatcher's Call
 - 1× Mother of Flames
@@ -3349,7 +3357,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Architect of Memory
 - 1× Sorrowful Prince
 - 1× Unbroken
-- 1× Soulkindler
+- 1× Shaper of Memory
 - 1× Oblivion Guide
 - 1× Aurora Confluence
 - 1× Molten Duel
@@ -3402,7 +3410,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Soulbinder
 - 1× Fragments of Vision
 - 1× Weblight Waif
-- 1× Soulkindler
+- 1× Shaper of Memory
 - 1× From the Barrow
 - 1× Starfall Communion
 - 1× Pathfinder Adrift
@@ -3446,7 +3454,7 @@ Tide-fac-30 is built almost entirely around spirit animal characters (36 of 45 c
 - 1× Harbor Warden
 - 1× The Deathsworn
 - 1× Sun Clan Lieutenant
-- 1× Gilded Catalyst
+- 1× Sky Legion Captain
 - 1× Spellweaver
 - 1× Cinderblade Legionnaire
 - 1× Pathfinder
@@ -3460,7 +3468,7 @@ Tide-fac-30 is built almost entirely around spirit animal characters (36 of 45 c
 - 1× Assault Leader
 - 1× Forsworn Champion
 - 1× Eclipse Herald
-- 1× Sundown Surfer
+- 1× He Who Lies Dreaming
 - 1× Company Commander
 - 1× Dreadmount Sovereign
 - 1× Prism Caller
@@ -3522,7 +3530,7 @@ Tide-fac-31 is almost entirely characters (41 of 45 cards), built around a dense
 - 1× Spirit of the Greenwood
 - 1× Empyreal Light
 - 1× Shadowpaw
-- 1× Melodist of the Finale
+- 1× Angel of the Eclipse
 - 1× Ghostlight Wolves
 - 1× Dreamcatcher's Call
 - 1× Mother of Flames
@@ -3648,7 +3656,7 @@ This tide is built almost entirely from spirit animal characters (23 of 30 cards
 - 1× Empyreal Light
 - 1× Spiritbound Alpha
 - 1× Shadowpaw
-- 1× Melodist of the Finale
+- 1× Angel of the Eclipse
 - 1× Ghostlight Wolves
 - 1× Dreamcatcher's Call
 - 1× Dreamborne Leviathan
@@ -3785,7 +3793,7 @@ Tide-neu-06 is a character-dense discard engine built around accumulating a larg
 - 1× Sorrowful Prince
 - 1× Paradox Enforcer
 - 1× Unbroken
-- 1× Soulkindler
+- 1× Shaper of Memory
 - 1× Oblivion Guide
 - 1× Verdant Wayfarer
 - 1× Pyrestone Avatar
@@ -3925,7 +3933,7 @@ Tide-neu-10 is built almost entirely from warriors, with its central engine driv
 - 2× Starbound Striker
 - 1× Harbor Warden
 - 1× Intermezzo Balladeer
-- 1× Gilded Catalyst
+- 1× Sky Legion Captain
 - 1× Burning Revenant
 - 1× Cinderblade Legionnaire
 - 1× Pathfinder
@@ -3999,7 +4007,7 @@ Tide-neu-12 is a character-heavy deck (26 of 30 cards are characters) built arou
 - 1× Voidshield Guardian
 - 1× Reforged Automaton
 - 1× Glimmerwood Scout
-- 1× Gilded Catalyst
+- 1× Sky Legion Captain
 - 1× Spellweaver
 - 1× Skyflame Commander
 - 1× Clifftop Marksman

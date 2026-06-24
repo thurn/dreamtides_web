@@ -2048,7 +2048,7 @@ card-number = 110
 art = { x = -0.228, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Ashfront Lieutenant"
+name = "Silent Gatherer"
 mtg-name = "Insidious Roots"
 id = "01298848-1ebb-48a1-b00b-d7e0af890870"
 rendered-text = """
@@ -2057,16 +2057,16 @@ Veil 2●
 ▸Dawn: Gain 1● for each allied figment."""
 energy-cost = 2
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Child"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June24", "Art Duplicate"]
-image-number = 1639942837
+tags = ["Art Rework", "June24", "Art Duplicate", "Art OK"]
+image-number = 658076071
 art-owned = false
 card-number = 111
-art = { x = 0.4, y = 0, scale = 1.17 }
+art = { x = 0.344, y = 0.18, scale = 1.37 }
 
 [[cards]]
 name = "Flagbearer of Decay"
@@ -3016,21 +3016,22 @@ art-owned = true
 card-number = 162
 
 [[cards]]
-name = "Soulkindler"
+name = "Shaper of Memory"
 mtg-name = "Anger"
 id = "455ef341-8a26-44e1-b287-19e53bdc6158"
 rendered-text = "If this card is in your void, allied characters have +1✦."
 energy-cost = 4
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "June24", "Art Duplicate"]
-image-number = 512756368
+tags = ["Art Rework", "June24", "Art Duplicate", "Art OK"]
+image-number = 1207264096
 art-owned = false
 card-number = 163
+art = { x = 0, y = 1, scale = 1.37 }
 
 [[cards]]
 name = "Unquenched"
@@ -6693,21 +6694,22 @@ card-number = 361
 art = { x = 0.054, y = -0.4, scale = 1.97 }
 
 [[cards]]
-name = "Gilded Catalyst"
+name = "Sky Legion Captain"
 mtg-name = "Digsite Engineer"
 id = "3fab0780-59d4-45f1-8aac-a870ad8729ac"
 rendered-text = "When you play a warrior, you may pay 2● to materialize a Legionnaire figment."
-energy-cost = 3
+energy-cost = 2
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Warrior"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Spark Scaler", "Art Rework", "June24", "Art Duplicate"]
-image-number = 2189428529
+tags = ["Spark Scaler", "Art Rework", "June24", "Art Duplicate", "Art OK"]
+image-number = 2023111781
 art-owned = false
 card-number = 362
+art = { x = 0.092, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "The Rising God"
@@ -7210,7 +7212,7 @@ art-owned = true
 card-number = 389
 
 [[cards]]
-name = "Melodist of the Finale"
+name = "Angel of the Eclipse"
 mtg-name = "Earthcraft"
 id = "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2"
 rendered-text = """
@@ -7224,10 +7226,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Character Payoff", "Art Rework", "June24", "Art Duplicate"]
-image-number = 1074373424
+tags = ["Character Payoff", "Art Rework", "June24", "Art Duplicate", "Art OK"]
+image-number = 753489184
 art-owned = false
 card-number = 390
+art = { x = -0.07, y = -0.231, scale = 1.3 }
 
 [[cards]]
 name = "Fleeting Reunion"
@@ -7647,25 +7650,25 @@ card-number = 412
 art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Sundown Surfer"
+name = "He Who Lies Dreaming"
 mtg-name = "Porcelain Legionnaire"
 id = "78599234-6054-4df1-8e79-c38782517f9a"
-rendered-text = """
-To play this character, pay 2⍟.
+rendered-text = '''
+To play this character, pay 4⍟.
 
-Unstoppable"""
+Unstoppable'''
 energy-cost = 2
 card-type = "Character"
 subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
-spark = 5
-tags = ["Art Rework", "June24", "Art Duplicate"]
-image-number = 403770319
+spark = 7
+tags = ["Art Rework", "June24", "Art Duplicate", "Art OK"]
+image-number = 2022594404
 art-owned = true
 card-number = 413
-art = { x = 0.114, y = 1, scale = 1.17 }
+art = { x = -0.012, y = 1, scale = 1.1 }
 
 [[cards]]
 name = "Pit Descender"

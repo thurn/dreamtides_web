@@ -236,7 +236,7 @@
       ]
     },
     "01298848-1ebb-48a1-b00b-d7e0af890870": {
-      "name": "Ashfront Lieutenant",
+      "name": "Silent Gatherer",
       "needs": [
         {
           "theme": "figments",
@@ -1820,7 +1820,7 @@
       ]
     },
     "3fab0780-59d4-45f1-8aac-a870ad8729ac": {
-      "name": "Gilded Catalyst",
+      "name": "Sky Legion Captain",
       "needs": [
         {
           "theme": "warriors",
@@ -2496,7 +2496,7 @@
       ]
     },
     "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2": {
-      "name": "Melodist of the Finale",
+      "name": "Angel of the Eclipse",
       "needs": [
         {
           "theme": "cheap-characters",
@@ -3753,7 +3753,7 @@
       ]
     },
     "455ef341-8a26-44e1-b287-19e53bdc6158": {
-      "name": "Soulkindler",
+      "name": "Shaper of Memory",
       "needs": [
         {
           "theme": "void",
