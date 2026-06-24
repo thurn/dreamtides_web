@@ -138,23 +138,6 @@ function deckCorpus(poolData: PoolData): DeckCorpus | null {
   return corpus;
 }
 
-// Convert a name-keyed Set to a UUID-keyed Set using the provided id map. When
-// `cardIdByName` is absent (synthetic / test PoolData with no UUID source) the
-// original name-keyed set is returned unchanged, so a name-keyed corpus keeps
-// working. Names that carry no UUID entry are silently dropped, matching the
-// behaviour of `resolveCountsToNames` (which skips keys that have no mapping).
-function toUuidSet(
-  nameSet: Set<string>,
-  cardIdByName: ReadonlyMap<string, string> | undefined,
-): Set<string> {
-  if (!cardIdByName) return nameSet;
-  const out = new Set<string>();
-  for (const name of nameSet) {
-    const id = cardIdByName.get(name);
-    if (id !== undefined) out.add(id);
-  }
-  return out;
-}
 
 // Build a pool by snowballing real decklists. Roll one of the Dreamcaller's
 // strategies (biased toward its theme), take a real decklist rich in that
@@ -173,31 +156,22 @@ export function generateDecklists(
   const corpus = deckCorpus(poolData);
   if (!corpus) missingPoolData("decklists", "no usable decklists are bundled");
 
-  const { core, archLists, draftLists, cardIdByName } = poolData;
+  const { core, archLists, draftLists } = poolData;
   const { decks, idf } = corpus;
   const idfOf = (c: string): number => idf.get(c) ?? 0;
 
-  // When the corpus is keyed by UUID (`decklistIds` source), internal lookups
-  // against the name-keyed archLists and draftLists need UUID-keyed mirrors.
-  // `toUuidArchLists` and `toUuidDraftLists` are built once here; they are
-  // identical to the originals when `cardIdByName` is absent (name-keyed corpus).
-  const toUuidArchLists = new Map<string, Set<string>>();
-  for (const [slug, nameSet] of archLists) {
-    toUuidArchLists.set(slug, toUuidSet(nameSet, cardIdByName));
-  }
-  const toUuidDraftLists = new Map<string, Set<string>>();
-  for (const [key, nameSet] of draftLists) {
-    toUuidDraftLists.set(key, toUuidSet(nameSet, cardIdByName));
-  }
+  // `archLists` and `draftLists` are keyed by UUID (when cards carry a stable
+  // `id`) or by display name (synthetic / test corpora). The corpus is keyed
+  // by UUID in the same way, so both sets use the same key space and no
+  // conversion is needed.
 
   // 0. The Dreamcaller's theme: the union of cards in its mechanic-archetype
   //    tide lists. `themeCosine` measures how dense a deck is in those cards
   //    (IDF-weighted, 0..1); it is 0 throughout when the Dreamcaller has no
   //    theme, so every theme term below collapses to 1 and the pool is unbiased.
-  //    Keys are UUIDs (matching the corpus) when `cardIdByName` is present.
   const themeCards = new Set<string>();
   for (const slug of themeArchetypes ?? []) {
-    for (const c of toUuidArchLists.get(slug) ?? []) themeCards.add(c);
+    for (const c of archLists.get(slug) ?? []) themeCards.add(c);
   }
   let themeSq = 0;
   for (const c of themeCards) themeSq += idfOf(c) ** 2;
@@ -215,7 +189,7 @@ export function generateDecklists(
   //    open-pool Dreamcaller (no list) leaves it unset, so the starter is then
   //    any real decklist.
   const eligible = (seedArchetypes ?? []).filter(
-    (a) => toUuidDraftLists.has(a) && colorPrefix(a) !== "",
+    (a) => draftLists.has(a) && colorPrefix(a) !== "",
   );
   let strategyLabel = "open";
   let strategyPrefix = "";
@@ -226,13 +200,13 @@ export function generateDecklists(
       eligible,
       eligible.map((a) => {
         let themeHits = 0;
-        for (const c of toUuidDraftLists.get(a) ?? []) if (themeCards.has(c)) themeHits++;
+        for (const c of draftLists.get(a) ?? []) if (themeCards.has(c)) themeHits++;
         return (1 + themeHits) ** DECKLISTS.themeStrategyExp;
       }),
     );
     strategyLabel = `D:${rolled}`;
     strategyPrefix = colorPrefix(rolled);
-    strategyCards = toUuidDraftLists.get(rolled) ?? null;
+    strategyCards = draftLists.get(rolled) ?? null;
   }
 
   // 2. Pick the starter: the decklist that best fits the rolled strategy (most
@@ -285,13 +259,13 @@ export function generateDecklists(
   //     theme (so a themed pool can never gate its own theme out — important for
   //     splashy themes like outsiders that are rarely a deck's *dominant* tide),
   //     then fills with the starter's other dominant archetypes up to
-  //     spineArchetypes. UUID-keyed archLists mirrors are used so that corpus
-  //     card keys (UUIDs) match correctly against archetype memberships.
+  //     spineArchetypes. `archLists` is UUID-keyed (matching the corpus) so
+  //     card keys agree with archetype membership sets.
   const spine = new Set<string>();
-  for (const slug of themeArchetypes ?? []) if (toUuidArchLists.has(slug)) spine.add(slug);
+  for (const slug of themeArchetypes ?? []) if (archLists.has(slug)) spine.add(slug);
   const spineBudget = Math.max(DECKLISTS.spineArchetypes, spine.size);
   const spineHits = new Map<string, number>();
-  for (const [slug, set] of toUuidArchLists) {
+  for (const [slug, set] of archLists) {
     let n = 0;
     for (const c of starter) if (set.has(c)) n++;
     if (n > 0) spineHits.set(slug, n);
@@ -302,7 +276,7 @@ export function generateDecklists(
   }
   const onSpine = (c: string): boolean => {
     if (spine.size === 0) return true;
-    for (const slug of spine) if (toUuidArchLists.get(slug)?.has(c)) return true;
+    for (const slug of spine) if (archLists.get(slug)?.has(c)) return true;
     return false;
   };
 
@@ -351,15 +325,15 @@ export function generateDecklists(
   //    its color prefix (e.g. "ubg"), matching the theme-based variants. For an
   //    open pool, take the colors a meaningful share of the pool actually sits
   //    in, so the identity reflects the real decklists rather than every color
-  //    a lone splash card touches. UUID-keyed draftLists mirrors are used so
-  //    that corpus card keys (UUIDs) match against color membership correctly.
+  //    a lone splash card touches. `draftLists` is UUID-keyed (matching the
+  //    corpus) so card keys agree with color membership sets.
   const C = new Set<string>();
   if (strategyPrefix !== "") {
     for (const letter of strategyPrefix) C.add(letter);
   } else {
     const unique = counts.size || 1;
     for (const letter of COLORS) {
-      const list = toUuidDraftLists.get(letter);
+      const list = draftLists.get(letter);
       if (!list) continue;
       let n = 0;
       for (const c of counts.keys()) if (list.has(c)) n++;
@@ -368,7 +342,7 @@ export function generateDecklists(
   }
   let domArch: string | null = null;
   let domScore = 0;
-  for (const [a, set] of toUuidArchLists) {
+  for (const [a, set] of archLists) {
     let s = 0;
     for (const c of counts.keys()) if (set.has(c)) s++;
     if (s > domScore) {

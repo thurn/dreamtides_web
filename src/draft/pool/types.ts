@@ -95,8 +95,21 @@ export interface PickRecord {
 
 /** The generator's reconstructed inputs. */
 export interface PoolData {
+  /**
+   * Cards flagged `core:true`, keyed by stable UUID (when available) or
+   * display name (synthetic / test cards with no `id`). These seed every pool.
+   */
   core: Set<string>;
+  /**
+   * Mechanic-archetype tide slugs → the set of cards in that archetype, each
+   * card keyed by UUID (or display name for test cards). Populated by
+   * `cards-v2-metadata.ts`; empty for runtime catalog cards.
+   */
   archLists: Map<string, Set<string>>;
+  /**
+   * Color-combo and color+archetype list keys → the set of cards in that
+   * list, each card keyed by UUID (or display name for test cards).
+   */
   draftLists: Map<string, Set<string>>;
   /**
    * Real per-deck card lists used by the `decklists`, `idf`, `idf2`, and `idf3`
@@ -188,17 +201,18 @@ export interface PoolData {
    */
   tides5Decks?: Tides5DecksJson;
   /**
-   * Current display name -> stable cards_v2 UUID, built from the card records in
-   * {@link buildPoolData} when they carry an `id`. The `seed` variant reads it to
-   * translate the name-keyed decklist corpus into its rename-proof UUID identity
-   * space; absent when no source card carries an `id`.
+   * Current display name -> stable cards_v2 UUID, built from the card records
+   * in {@link buildPoolData} when they carry an `id`. The `seed` variant reads
+   * it to translate the name-keyed decklist corpus into UUID identity space;
+   * absent when no source card carries an `id`.
    */
   cardIdByName?: Map<string, string>;
   /**
    * Stable cards_v2 UUID -> current display name, the inverse of
-   * {@link cardIdByName}. The `seed` variant reads it to map its UUID-keyed
-   * results back onto current names for the downstream name→card-number
-   * resolution; absent when no source card carries an `id`.
+   * {@link cardIdByName}. The `seed`, `idf3`, `decklists`, and related
+   * variants read it to map UUID-keyed pool results back onto display names
+   * for the downstream name→card-number resolution; absent when no source
+   * card carries an `id`.
    */
   cardNameById?: Map<string, string>;
 }

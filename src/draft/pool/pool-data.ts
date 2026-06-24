@@ -42,6 +42,12 @@ function addTo(
  * every bare color-combo list and color+archetype slice it belongs to. Runtime
  * catalog cards carry no `tides`, so their archetype lists stay empty;
  * `cards-v2-metadata.ts` supplies tides for the non-`idf3` variants.
+ *
+ * `core`, `archLists`, and `draftLists` are keyed on each card's stable UUID
+ * (`card.id`) when available, falling back to the display name only for
+ * synthetic / test cards that carry no `id`. This ensures two distinct cards
+ * that share a display name occupy separate entries rather than merging into
+ * one.
  */
 export function buildPoolData(
   cards: readonly PoolCard[],
@@ -52,28 +58,31 @@ export function buildPoolData(
   const core = new Set<string>();
   const archLists = new Map<string, Set<string>>();
   const draftLists = new Map<string, Set<string>>();
-  // Name<->UUID maps for the `seed` variant's rename-proof identity. Built only
-  // from cards that carry a stable `id`; first writer wins on name collisions, so
-  // these agree with the runtime `buildNameIndex` (name -> card number). Left
-  // undefined when no source card carries an id (e.g. synthetic test cards), in
-  // which case the `seed` variant keys by name.
+  // Name<->UUID maps for the `seed` variant's rename-proof identity and for
+  // resolving UUID-keyed pool output back to display names. Built only from
+  // cards that carry a stable `id`; first writer wins on name collisions.
+  // Left undefined when no source card carries an id (e.g. synthetic test
+  // cards), in which case all identifier maps key by name.
   let cardIdByName: Map<string, string> | undefined;
   let cardNameById: Map<string, string> | undefined;
   for (const card of cards) {
+    // Use the stable UUID as the card's identity key throughout; fall back to
+    // the display name only when no UUID is available (synthetic test cards).
+    const cardKey = card.id ?? card.name;
     if (card.id !== undefined) {
       cardIdByName ??= new Map<string, string>();
       cardNameById ??= new Map<string, string>();
       if (!cardIdByName.has(card.name)) cardIdByName.set(card.name, card.id);
       if (!cardNameById.has(card.id)) cardNameById.set(card.id, card.name);
     }
-    if (card.core) core.add(card.name);
+    if (card.core) core.add(cardKey);
     for (const tide of card.tides ?? []) {
       const key = TIDE_TO_ARCHETYPE.get(tide);
-      if (key) addTo(archLists, key, card.name);
+      if (key) addTo(archLists, key, cardKey);
     }
-    for (const list of card.colors ?? []) addTo(draftLists, list, card.name);
+    for (const list of card.colors ?? []) addTo(draftLists, list, cardKey);
     for (const list of card.draftArchetypes ?? []) {
-      addTo(draftLists, list, card.name);
+      addTo(draftLists, list, cardKey);
     }
   }
   return {

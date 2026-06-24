@@ -81,11 +81,14 @@ export function buildPickSigCorpus(poolData: PoolData): AffinityCorpus | null {
   return buildPickfitCorpus(poolData);
 }
 
-// Resolve a Dreamcaller's signature entries onto the corpus's UUID key space. A
-// signature entry is a card NAME at runtime (the loader resolves the source TOML's
-// rename-proof UUIDs to current names), but the pick corpus is UUID-keyed, so each
-// entry is matched as a name via `cardIdByName` first, then — for robustness, and
-// for synthetic test corpora keyed directly by UUID — as a literal lowercase UUID.
+// Resolve a Dreamcaller's signature entries onto the corpus's UUID key space.
+// At runtime `signatureCards` contains the stable cards_v2 UUIDs from
+// `dreamcaller.signatureCardIds`, so each entry is first matched as a literal
+// lowercase UUID in the corpus — the fast, collision-free path. For synthetic
+// test corpora that pass opaque string keys directly, the same path still
+// applies. As a legacy fallback, entries that are not found as UUIDs are
+// looked up as display names via `cardIdByName`; this path should not trigger
+// in production since `signatureCardIds` are already UUIDs.
 // Returns the set of corpus keys the signature locates.
 export function resolveSignatureToCorpus(
   corpus: AffinityCorpus,
@@ -95,13 +98,14 @@ export function resolveSignatureToCorpus(
   const corpusKeys = new Set(corpus.cards);
   const resolved = new Set<string>();
   for (const entry of signatureCards) {
-    const byName = cardIdByName?.get(entry)?.toLowerCase();
-    if (byName !== undefined && corpusKeys.has(byName)) {
-      resolved.add(byName);
+    const asId = entry.toLowerCase();
+    if (corpusKeys.has(asId)) {
+      resolved.add(asId);
       continue;
     }
-    const asId = entry.toLowerCase();
-    if (corpusKeys.has(asId)) resolved.add(asId);
+    // Legacy fallback: try interpreting the entry as a display name.
+    const byName = cardIdByName?.get(entry)?.toLowerCase();
+    if (byName !== undefined && corpusKeys.has(byName)) resolved.add(byName);
   }
   return resolved;
 }
