@@ -43,7 +43,8 @@
     "bake-tides5": "node scripts/bake-tides5.mjs",
     "check-tides5": "node scripts/check-tides5.mjs",
     "tides-similarity": "node scripts/tides-similarity-experiment.mjs",
-    "bake-draft-records": "node scripts/rebuild-adapted-draft-records.mjs"
+    "bake-draft-records": "node scripts/rebuild-adapted-draft-records.mjs",
+    "pool-collision-audit": "node scripts/pool-collision-audit.mjs"
   },
   "dependencies": {
     "@dicebear/collection": "^9.4.2",
