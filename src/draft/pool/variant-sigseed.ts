@@ -25,7 +25,7 @@ import {
   type AffinityCorpus,
   type AffinityGrowerTuning,
   growAffinityPoolFromSeeds,
-  toNamedVariantResult,
+  toVariantResult,
 } from "./affinity-grower.ts";
 import type { PoolStrategy } from "./strategy.ts";
 import { missingPoolData, type PoolData, type VariantResult } from "./types.ts";
@@ -91,7 +91,7 @@ export function drawSignatureSubset(
 
 // Build a `sigseed` pool: resolve the signature onto the corpus, draw a random
 // subset of those signature cards, and grow one deterministic pool anchored on
-// them, mapped back onto current display names. Throws when no draft records are
+// them, emitted keyed by UUID. Throws when no draft records are
 // bundled (an empty corpus), and reduces to plain `pickcohere` when the signature
 // is empty or none of its cards are in the corpus (nothing to anchor on).
 export function generateSigSeed(
@@ -126,7 +126,7 @@ export function generateSigSeed(
     SIGSEED.targetSize,
     SIGSEED,
   );
-  return toNamedVariantResult(poolData, grown.counts, grown.provenance, "sigseed");
+  return toVariantResult(grown.counts, grown.provenance, "sigseed");
 }
 
 /** Strategy adapter for the `sigseed` algorithm. */

@@ -11,8 +11,8 @@
 //
 // `tides5` reads its committed artifact (`data/tides5.jsonc`, served as
 // `/tides5-data.json`) from `poolData.tides5Decks`; the schema is the `tides4`
-// schema verbatim. Cards are keyed by cards_v2 UUID and mapped to current names
-// through `poolData.cardNameById`.
+// schema verbatim. The pool is keyed by cards_v2 UUID; the catalog index
+// (`poolData.cardNameById`) gates which UUIDs are dealable.
 
 import type { PoolStrategy } from "./strategy.ts";
 import type { Tides5DecksJson } from "./tides5-io.ts";

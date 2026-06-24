@@ -31,9 +31,10 @@
 // archetypes); one is drawn at random each run, so its pool is a coherent pool
 // that leans toward a different archetype each time — exactly how `sigseed`
 // reduces to a coherent, randomly-themed `pickcohere` pool for a signatureless
-// Dreamcaller. Cards are keyed by cards_v2 UUID and mapped to current names
-// through `poolData.cardNameById`.
+// Dreamcaller. The pool is keyed by cards_v2 UUID; the catalog index
+// (`poolData.cardNameById`) gates which UUIDs are dealable.
 
+import { asCardId, type CardId } from "../../types/card-identity.ts";
 import { shuffle } from "./rng.ts";
 import type { PoolStrategy } from "./strategy.ts";
 import {
@@ -126,8 +127,8 @@ export function generateTides3(
   // (the synthetic pools some tests build), the artifact's informational names
   // are used directly.
   const tideById = new Map(data.tides.map((t) => [t.id, t]));
-  const bag: string[] = [];
-  const bagCounts = new Map<string, number>();
+  const bag: CardId[] = [];
+  const bagCounts = new Map<CardId, number>();
   let dealable = 0;
   const deckIds: string[] = [];
   const joinTide = (id: string): void => {
@@ -135,14 +136,14 @@ export function generateTides3(
     if (!tide) return;
     deckIds.push(id);
     for (const card of tide.cards) {
-      const name = poolData.cardNameById
-        ? poolData.cardNameById.get(card.id)
-        : card.name;
-      if (name === undefined) continue;
+      // Skip cards whose UUID is no longer in the catalog (the index, when
+      // present, is the source of truth for catalog membership).
+      if (poolData.cardNameById && !poolData.cardNameById.has(card.id)) continue;
+      const cardId = asCardId(card.id);
       for (let i = 0; i < card.copies; i += 1) {
-        const have = bagCounts.get(name) ?? 0;
-        bagCounts.set(name, have + 1);
-        bag.push(name);
+        const have = bagCounts.get(cardId) ?? 0;
+        bagCounts.set(cardId, have + 1);
+        bag.push(cardId);
         if (have < TIDES3.cap) dealable += 1;
       }
     }
@@ -158,13 +159,13 @@ export function generateTides3(
   // One shuffle, one deal: take cards in bag order, skipping any already at the
   // copy cap, until the pool reaches the target size or the bag is empty.
   shuffle(rng, bag);
-  const counts = new Map<string, number>();
+  const counts = new Map<CardId, number>();
   let size = 0;
-  for (const name of bag) {
+  for (const cardId of bag) {
     if (size >= dealSize) break;
-    const have = counts.get(name) ?? 0;
+    const have = counts.get(cardId) ?? 0;
     if (have >= TIDES3.cap) continue;
-    counts.set(name, have + 1);
+    counts.set(cardId, have + 1);
     size += 1;
   }
 

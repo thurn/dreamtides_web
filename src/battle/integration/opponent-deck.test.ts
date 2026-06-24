@@ -16,7 +16,7 @@ import {
   selectOpponentDreamcaller,
 } from "./opponent-deck";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
-import { buildNameIndex } from "../../data/cards-v2-database";
+import { buildIdIndex, buildNameIndex } from "../../data/cards-v2-database";
 import type { DraftRecord } from "../../data/cards-v2-database";
 import { buildFitModel, type FitModel } from "../../draft/replay/fit-model";
 import { buildPoolData } from "../../draft/pool/pool-data";
@@ -127,7 +127,6 @@ function makeCorpus(db: Map<number, CardData>): {
  * decklist corpus, so affiliation probe affinities resolve.
  */
 function makePoolContext(db: Map<number, CardData>): RunPoolContext {
-  const nameIndex = buildNameIndex(db);
   const alpha = ALPHA_CARDS.map((n) => nameOf(db, n));
   const beta = BETA_CARDS.map((n) => nameOf(db, n));
   const idOf = (n: number): string => {
@@ -149,7 +148,7 @@ function makePoolContext(db: Map<number, CardData>): RunPoolContext {
   ]);
   return {
     poolData,
-    nameIndex,
+    idIndex: buildIdIndex(db),
     allDreamsignPoolIds: [],
     poolVariant: "idf3",
   };

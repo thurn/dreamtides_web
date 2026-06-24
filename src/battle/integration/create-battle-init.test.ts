@@ -78,9 +78,12 @@ function makeSteeredPoolContext(): {
   }));
   const poolData = buildPoolData(poolCards, [decklistA, decklistB]);
 
+  // This synthetic corpus carries no card UUIDs, so each card's identity is its
+  // name and the name->number map serves as the collision-free id index the pool
+  // resolves through.
   const poolContext: RunPoolContext = {
     poolData,
-    nameIndex,
+    idIndex: nameIndex,
     allDreamsignPoolIds: [],
     poolVariant: "idf3",
   };
@@ -701,12 +704,12 @@ describe("createBattleInit", () => {
       expect(init.enemyDeckDefinition.length).toBeGreaterThanOrEqual(
         MIN_BATTLE_DECK_SIZE,
       );
-      // Every chosen card resolves to a real card-database entry whose name is
-      // indexed in the run pool context.
+      // Every chosen card resolves to a real card-database entry whose identity
+      // is indexed in the run pool context.
       for (const card of init.enemyDeckDefinition) {
         expect(card.cardNumber).toBeGreaterThan(0);
         expect(cardDatabase.get(card.cardNumber)).toBeDefined();
-        expect(poolContext.nameIndex.has(card.name)).toBe(true);
+        expect(poolContext.idIndex.has(card.name)).toBe(true);
       }
     });
 
@@ -714,10 +717,10 @@ describe("createBattleInit", () => {
       const { poolContext, fitModel, draftRecords, decklistA, decklistB } =
         makeSteeredPoolContext();
       const decklistANumbers = new Set(
-        decklistA.map((name) => poolContext.nameIndex.get(name)),
+        decklistA.map((name) => poolContext.idIndex.get(name)),
       );
       const decklistBNumbers = new Set(
-        decklistB.map((name) => poolContext.nameIndex.get(name)),
+        decklistB.map((name) => poolContext.idIndex.get(name)),
       );
 
       for (const seedOverride of [11, 2024]) {
@@ -812,13 +815,13 @@ describe("createBattleInit", () => {
     });
 
     it("falls back when a poolContext resolves to an empty starter deck", () => {
-      // A poolContext whose name index shares nothing with the generated pool
-      // names yields an empty resolved list; the fallback still fills the deck.
+      // A poolContext whose id index shares nothing with the generated pool keys
+      // yields an empty resolved list; the fallback still fills the deck.
       const emptyIndexContext: RunPoolContext = {
         poolData: makeSteeredPoolContext().poolContext.poolData,
-        nameIndex: new Map<string, number>([["does-not-exist", -1]]),
+        idIndex: new Map<string, number>([["does-not-exist", -1]]),
         allDreamsignPoolIds: [],
-        // idf3 produces a starter deck whose names cannot resolve through this
+        // idf3 produces a starter deck whose keys cannot resolve through this
         // mismatched index, exercising the empty-resolved-list fallback.
         poolVariant: "idf3",
       };

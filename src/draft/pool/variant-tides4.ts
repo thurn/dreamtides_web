@@ -33,9 +33,10 @@
 // `sigseed` reduces to a coherent, randomly-themed `pickcohere` pool — it borrows a
 // random signatured Dreamcaller's whole pool (that archetype's signature core plus
 // its own facets), leaning toward a different coherent archetype each run rather
-// than a blend of unrelated leans. Cards are keyed by cards_v2 UUID and mapped to
-// current names through `poolData.cardNameById`.
+// than a blend of unrelated leans. The pool is keyed by cards_v2 UUID; the
+// catalog index (`poolData.cardNameById`) gates which UUIDs are dealable.
 
+import { asCardId, type CardId } from "../../types/card-identity.ts";
 import { shuffle } from "./rng.ts";
 import type { PoolStrategy } from "./strategy.ts";
 import {
@@ -78,9 +79,10 @@ export const TIDES4: Tides4Tuning = {
  * `sigseed`'s random signature subset, so a Dreamcaller leans its identity a
  * different way each run. A signatureless Dreamcaller (null starter) instead borrows
  * a random signatured Dreamcaller's pool, so it leans a different coherent archetype
- * each run. Tide-deck cards are keyed by cards_v2 UUID and mapped to current display
- * names through `poolData.cardNameById`; UUIDs absent from that map (cards no longer
- * in the catalog) are skipped. Without a `dreamcallerId` or a baked tide pool, every
+ * each run. Tide-deck cards are keyed by cards_v2 UUID; the catalog index
+ * (`poolData.cardNameById`) gates membership, so a UUID absent from it (a card
+ * dropped from the catalog) is skipped. Without a `dreamcallerId` or a baked tide
+ * pool, every
  * tide is shuffled together (a robustness fallback; load-time validation requires an
  * entry per Dreamcaller).
  */
@@ -196,26 +198,28 @@ export function combineTidesPool(
     }
   }
 
-  // The bag: every copy of every card in the joined tides, as current display
-  // names — in selection order, folding only as far as needed for a full pool.
-  // `dealable` counts the copies the deal below can actually use (the bag total
-  // minus copies beyond the per-card cap), so the pool keeps joining tides until
-  // it reaches full size. When no card index is available (the synthetic pools
-  // some tests build), the artifact's informational names are used directly.
+  // The bag: every copy of every card in the joined tides, keyed by stable card
+  // UUID ({@link CardId}) — in selection order, folding only as far as needed for
+  // a full pool. `dealable` counts the copies the deal below can actually use
+  // (the bag total minus copies beyond the per-card cap), so the pool keeps
+  // joining tides until it reaches full size. A card whose UUID is absent from
+  // the catalog index (a card removed from the catalog) is skipped; when no card
+  // index is available (the synthetic pools some tests build) every card's UUID
+  // is used directly.
   //
   // Every tide in the selection is also recorded for provenance — its full
-  // resolvable decklist and why it was joined — even past the point the bag is
+  // decklist (as UUIDs) and why it was joined — even past the point the bag is
   // full, so the Pool Viewer can show each individual tide deck and the "Why
   // Cards" surface can attribute every pooled card to the tide it rode in on.
   // Folding stops at the same point as before, so the dealt pool is unchanged.
-  const bag: string[] = [];
-  const bagCounts = new Map<string, number>();
+  const bag: CardId[] = [];
+  const bagCounts = new Map<CardId, number>();
   let dealable = 0;
   const deckIds: string[] = [];
   const tides: Tides4PoolTide[] = [];
-  // Card name -> joined tide ids that contain it, in join order. The first id is
-  // the card's "home" (primary) tide.
-  const containingTides = new Map<string, string[]>();
+  // CardId -> joined tide ids that contain it, in join order. The first id is the
+  // card's "home" (primary) tide.
+  const containingTides = new Map<CardId, string[]>();
   const recordTide = (
     id: string,
     selection: Tides4PoolTideSelection,
@@ -223,28 +227,28 @@ export function combineTidesPool(
   ): void => {
     const tide = tideById.get(id);
     if (!tide) return;
-    const cardNames: string[] = [];
-    const seenInTide = new Set<string>();
+    const cardIds: CardId[] = [];
+    const seenInTide = new Set<CardId>();
     for (const card of tide.cards) {
-      const name = poolData.cardNameById
-        ? poolData.cardNameById.get(card.id)
-        : card.name;
-      if (name === undefined) continue;
-      if (!seenInTide.has(name)) {
-        seenInTide.add(name);
-        cardNames.push(name);
+      // Skip cards whose UUID is no longer in the catalog (the index, when
+      // present, is the source of truth for catalog membership).
+      if (poolData.cardNameById && !poolData.cardNameById.has(card.id)) continue;
+      const cardId = asCardId(card.id);
+      if (!seenInTide.has(cardId)) {
+        seenInTide.add(cardId);
+        cardIds.push(cardId);
       }
       if (!fold) continue;
-      let homes = containingTides.get(name);
+      let homes = containingTides.get(cardId);
       if (homes === undefined) {
         homes = [];
-        containingTides.set(name, homes);
+        containingTides.set(cardId, homes);
       }
       if (!homes.includes(id)) homes.push(id);
       for (let i = 0; i < card.copies; i += 1) {
-        const have = bagCounts.get(name) ?? 0;
-        bagCounts.set(name, have + 1);
-        bag.push(name);
+        const have = bagCounts.get(cardId) ?? 0;
+        bagCounts.set(cardId, have + 1);
+        bag.push(cardId);
         if (have < TIDES4.cap) dealable += 1;
       }
     }
@@ -257,7 +261,7 @@ export function combineTidesPool(
       role: tide.role,
       selection,
       joined: fold,
-      cardNames,
+      cardIds,
       contributedCardCount: 0,
     });
   };
@@ -268,24 +272,24 @@ export function combineTidesPool(
   // One shuffle, one deal: take cards in bag order, skipping any already at the
   // copy cap, until the pool reaches the target size or the bag is empty.
   shuffle(rng, bag);
-  const counts = new Map<string, number>();
+  const counts = new Map<CardId, number>();
   let size = 0;
-  for (const name of bag) {
+  for (const cardId of bag) {
     if (size >= dealSize) break;
-    const have = counts.get(name) ?? 0;
+    const have = counts.get(cardId) ?? 0;
     if (have >= TIDES4.cap) continue;
-    counts.set(name, have + 1);
+    counts.set(cardId, have + 1);
     size += 1;
   }
 
   // Per-card provenance over the dealt pool, plus each tide's contribution (the
   // pooled cards whose home tide is that one).
-  const cardProvenanceByName: Record<string, Tides4PoolCardProvenance> = {};
+  const cardProvenanceById: Record<CardId, Tides4PoolCardProvenance> = {};
   const contributionByTide = new Map<string, number>();
-  for (const [name, copies] of counts) {
-    const homes = containingTides.get(name) ?? [];
+  for (const [cardId, copies] of counts) {
+    const homes = containingTides.get(cardId) ?? [];
     const primaryTideId = homes[0] ?? "";
-    cardProvenanceByName[name] = {
+    cardProvenanceById[cardId] = {
       copies,
       tideIds: [...homes],
       primaryTideId,
@@ -310,7 +314,7 @@ export function combineTidesPool(
     facetDrawnCount,
     facetAvailableCount,
     tides,
-    cardProvenanceByName,
+    cardProvenanceById,
   };
 
   // No color identity (this variant reads nothing but the tide decks); the labels

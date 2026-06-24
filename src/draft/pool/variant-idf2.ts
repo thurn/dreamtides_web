@@ -15,13 +15,17 @@
 // while pool coherence barely moves.
 
 import type { PoolStrategy } from "./strategy.ts";
-import { missingPoolData, type PoolData, type VariantResult } from "./types.ts";
+import {
+  brandPoolCounts,
+  missingPoolData,
+  type PoolData,
+  type VariantResult,
+} from "./types.ts";
 import {
   type IdfCorpus,
   idfCorpus,
   idfCosine,
   growIdfPool,
-  resolveCountsToNames,
 } from "./variant-idf.ts";
 
 interface Idf2Tuning {
@@ -113,7 +117,7 @@ export function generateIdf2(
   return {
     C: new Set(),
     selected: ["idf2", `deck#${String(startIdx)}`],
-    counts: resolveCountsToNames(counts, poolData.cardNameById),
+    counts: brandPoolCounts(counts),
   };
 }
 

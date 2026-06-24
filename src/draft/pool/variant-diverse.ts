@@ -10,7 +10,7 @@ import { ALPHA, HI, LO, TOPK } from "./constants.ts";
 import { randInt, shuffle, weightedPick, weightedSample } from "./rng.ts";
 import { onColorCandidates } from "./themes.ts";
 import type { PoolStrategy } from "./strategy.ts";
-import type { PoolData, VariantResult } from "./types.ts";
+import { brandPoolCounts, type PoolData, type VariantResult } from "./types.ts";
 import { canonicalColors, colorPrefix, inter, poolSize } from "./util.ts";
 
 // Knobs for the `diverse` variant. Grouped here so tuning is a one-stop edit.
@@ -257,7 +257,7 @@ export function generateDiverse(
     }
   }
 
-  return { C, selected, counts };
+  return { C, selected, counts: brandPoolCounts(counts) };
 }
 
 /** Strategy adapter for the `diverse` algorithm. */

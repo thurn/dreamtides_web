@@ -76,7 +76,6 @@ function makeContext(): RunPoolContext {
 
   return {
     poolData,
-    nameIndex,
     idIndex,
     allDreamsignPoolIds: ["ds1", "ds2", "ds3"],
     // These tests exercise idf3 package building and its provenance summary
@@ -163,7 +162,7 @@ describe("buildDreamcallerPackage", () => {
     const pkg = buildDreamcallerPackage(makeDreamcaller(), ctx, "seed-abc");
     const numbers = pkg.starterDecklistCardNumbers ?? [];
     expect(numbers.length).toBeGreaterThan(0);
-    const indexValues = new Set(ctx.nameIndex.values());
+    const indexValues = new Set(ctx.idIndex.values());
     const starterSet = new Set(STARTER_CARD_NUMBERS);
     for (const n of numbers) {
       expect(indexValues.has(n)).toBe(true);
@@ -385,9 +384,16 @@ function makeTides4Context(): RunPoolContext {
   const poolData = buildPoolData([], []);
   poolData.tides4Decks = tides4Decks;
 
+  // The tide cards carry id `${name}-id`; mirror that in the id index so the
+  // id-keyed pool resolves through it, exactly as production's buildIdIndex does.
+  const idIndex = new Map<string, number>();
+  for (const [name, cardNumber] of nameIndex) {
+    idIndex.set(`${name}-id`, cardNumber);
+  }
+
   return {
     poolData,
-    nameIndex,
+    idIndex,
     allDreamsignPoolIds: [],
     poolVariant: "tides4",
   };

@@ -195,11 +195,13 @@ describe("loadQuestContent", () => {
     expect(content.dreamcallers[0].signatureCards).toEqual(["Card 1", "Card 2"]);
     expect(content.dreamcallers[0].startingEssence).toBe(235);
 
-    // The pool context indexes every loaded card and carries the decklists.
+    // The pool context indexes every loaded card by id and carries the decklists.
     expect(content.poolContext).toBeDefined();
     const poolContext = content.poolContext!;
     for (const card of cards) {
-      expect(poolContext.nameIndex.get(card.name)).toBe(card.cardNumber);
+      expect(poolContext.idIndex.get(card.id.toLowerCase())).toBe(
+        card.cardNumber,
+      );
     }
     expect(poolContext.poolData.decklists).not.toHaveLength(0);
   });

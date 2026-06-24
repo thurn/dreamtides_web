@@ -2,6 +2,7 @@
 // request to the strategy the selected variant resolves to (see `registry.ts`)
 // and capping copies at 2. This module never branches on which algorithm runs.
 
+import type { CardId } from "../../types/card-identity.ts";
 import { COLORS } from "./constants.ts";
 import { buildPoolData } from "./pool-data.ts";
 import { poolStrategyFor } from "./registry.ts";
@@ -92,7 +93,7 @@ export function generatePoolFromData(
       dreamcallerId,
     });
 
-  const capped = new Map<string, number>();
+  const capped = new Map<CardId, number>();
   for (const [card, count] of counts) {
     capped.set(card, Math.min(2, count));
   }

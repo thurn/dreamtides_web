@@ -27,17 +27,16 @@
 // Cards are identified by their stable cards_v2 UUID, not by display name, so a
 // card rename never shifts the draw, the growth tie-breaks, or the provenance.
 // The decklist corpus arrives keyed by current name; this variant translates it
-// into UUID space on the way in (`PoolData.cardIdByName`) and maps the finished
-// pool back onto current names on the way out (`PoolData.cardNameById`), leaving
-// the downstream name→card-number resolution untouched. When the source cards
-// carry no id (some experiments and tests), both maps are absent and the variant
-// falls back to keying by name.
+// into UUID space on the way in (`PoolData.cardIdByName`) and emits the finished
+// pool keyed by UUID (the `CardId` output contract), which the downstream
+// resolver maps to card numbers through the id index. When the source cards carry
+// no id (some experiments and tests), the corpus keys are opaque ids throughout.
 
 import {
   type AffinityCorpus,
   type AffinityGrowerTuning,
   growAffinityPool,
-  toNamedProvenance,
+  toVariantResult,
 } from "./affinity-grower.ts";
 import type { PoolStrategy } from "./strategy.ts";
 import { missingPoolData, type PoolData, type VariantResult } from "./types.ts";
@@ -146,7 +145,7 @@ function buildSeedCorpus(poolData: PoolData): AffinityCorpus | null {
 // Build a `seed` pool: draw one card uniformly at random from the corpus, then
 // grow the pool around it by blended IDF-affinity to `SEED.targetSize` copies.
 // Cards are drawn and grown in UUID-key space (rename-proof); the finished pool
-// is mapped back onto current names. Ignores `signatureCards`, `seedArchetypes`,
+// is emitted keyed by UUID. Ignores `signatureCards`, `seedArchetypes`,
 // `themeArchetypes`, and the passed `targetSize` (the variant owns its size via
 // `SEED.targetSize`). Falls back to the `default` algorithm when no usable
 // decklists are bundled.
@@ -167,19 +166,10 @@ export function generateSeed(rng: () => number, poolData: PoolData): VariantResu
     SEED,
   );
 
-  // Step 3 — map the UUID-keyed pool back onto current display names so the
-  // downstream name→card-number resolution stays unchanged. When no id map is
-  // supplied the key is already a name and `nameOf` is the identity.
-  const nameOf = (key: string): string => poolData.cardNameById?.get(key) ?? key;
-  const namedCounts = new Map<string, number>();
-  for (const [key, copies] of counts) namedCounts.set(nameOf(key), copies);
-
-  return {
-    C: new Set(),
-    selected: ["seed", `card:${nameOf(seedKey)}`],
-    counts: namedCounts,
-    seedProvenance: toNamedProvenance(provenance, nameOf),
-  };
+  // Step 3 — assemble the UUID-keyed pool and provenance into the variant result.
+  // Counts are branded onto the `CardId` output contract; display names are
+  // resolved only at the render boundary.
+  return toVariantResult(counts, provenance, "seed");
 }
 
 /** Strategy adapter for the `seed` algorithm. */

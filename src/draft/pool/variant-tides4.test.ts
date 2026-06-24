@@ -8,6 +8,7 @@
 
 import { describe, expect, it } from "vitest";
 
+import { asCardId } from "../../types/card-identity.ts";
 import { makeRng } from "./rng.ts";
 import type { Tides4DecksJson } from "./tides4-io.ts";
 import { validateTides4Decks } from "./tides4-io.ts";
@@ -177,19 +178,19 @@ describe("generateTides4", () => {
     expect(poolSize(noId.counts)).toBe(TIDES4.dealSize);
   });
 
-  it("maps card UUIDs through cardNameById and skips unknown UUIDs", () => {
+  it("keys the pool by card UUID and skips UUIDs absent from the catalog", () => {
     const data = makeTides4(1, 4, 1);
     const poolData = makePoolData(data);
-    // Only two of the starter's UUIDs are in the catalog, under renamed names;
-    // every other tide's UUIDs are unknown and skipped.
+    // Only two of the starter's UUIDs are in the catalog (the index is the
+    // source of truth for membership); every other tide's UUIDs are skipped.
     poolData.cardNameById = new Map([
       ["tide-sig-1-card-0", "Renamed Zero"],
       ["tide-sig-1-card-1", "Renamed One"],
     ]);
     const result = generateTides4(makeRng(2), poolData, "dc-a");
     expect([...result.counts.keys()].sort()).toEqual([
-      "Renamed One",
-      "Renamed Zero",
+      "tide-sig-1-card-0",
+      "tide-sig-1-card-1",
     ]);
   });
 
@@ -226,9 +227,9 @@ describe("generateTides4 provenance", () => {
     const drawn = provenance.tides.filter((t) => t.selection === "facet-drawn");
     expect(drawn.length).toBe(provenance.facetDrawnCount);
 
-    // Every tide carries its full resolvable decklist (30 disjoint cards each).
+    // Every tide carries its full decklist as card ids (30 disjoint cards each).
     for (const tide of provenance.tides) {
-      expect(tide.cardNames.length).toBe(30);
+      expect(tide.cardIds.length).toBe(30);
     }
   });
 
@@ -242,11 +243,11 @@ describe("generateTides4 provenance", () => {
     const joinedIds = new Set(
       provenance.tides.filter((t) => t.joined).map((t) => t.id),
     );
-    const entries = Object.entries(provenance.cardProvenanceByName);
+    const entries = Object.entries(provenance.cardProvenanceById);
     // One provenance entry per distinct pooled card, copies matching the deal.
     expect(entries.length).toBe(result.counts.size);
-    for (const [name, card] of entries) {
-      expect(card.copies).toBe(result.counts.get(name));
+    for (const [id, card] of entries) {
+      expect(card.copies).toBe(result.counts.get(asCardId(id)));
       expect(card.tideIds.length).toBeGreaterThanOrEqual(1);
       expect(joinedIds.has(card.primaryTideId)).toBe(true);
       // Disjoint synthetic decks: each card belongs to exactly one tide.

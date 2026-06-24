@@ -143,18 +143,18 @@ describe("generateTides3", () => {
     expect(poolSize(noId.counts)).toBe(TIDES3.dealSize);
   });
 
-  it("maps card UUIDs through cardNameById and skips unknown UUIDs", () => {
+  it("keys the pool by card UUID and skips UUIDs absent from the catalog", () => {
     const data = makeTides3(1, 4);
     const poolData = makePoolData(data);
-    // Only two of the four UUIDs are in the catalog, under renamed display names.
+    // Only two of the four UUIDs are in the catalog; the rest are skipped.
     poolData.cardNameById = new Map([
       ["tide-1-card-0", "Renamed Zero"],
       ["tide-1-card-1", "Renamed One"],
     ]);
     const result = generateTides3(makeRng(2), poolData, "dc-a");
     expect([...result.counts.keys()].sort()).toEqual([
-      "Renamed One",
-      "Renamed Zero",
+      "tide-1-card-0",
+      "tide-1-card-1",
     ]);
   });
 

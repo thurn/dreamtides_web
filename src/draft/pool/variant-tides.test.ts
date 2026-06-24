@@ -117,16 +117,19 @@ describe("generateTides", () => {
     }
   });
 
-  it("maps card UUIDs through cardNameById and skips unknown UUIDs", () => {
+  it("keys the pool by card UUID and skips UUIDs absent from the catalog", () => {
     const data = makeTideDecks(1, 4);
     const poolData = makePoolData(data);
-    // Only two of the four UUIDs are in the catalog, under renamed display names.
+    // Only two of the four UUIDs are in the catalog; the rest are skipped.
     poolData.cardNameById = new Map([
       ["tide-1-card-0", "Renamed Zero"],
       ["tide-1-card-1", "Renamed One"],
     ]);
     const result = generateTides(makeRng(2), poolData, undefined, 200);
-    expect([...result.counts.keys()].sort()).toEqual(["Renamed One", "Renamed Zero"]);
+    expect([...result.counts.keys()].sort()).toEqual([
+      "tide-1-card-0",
+      "tide-1-card-1",
+    ]);
   });
 
   it("throws when no tide decks are bundled", () => {

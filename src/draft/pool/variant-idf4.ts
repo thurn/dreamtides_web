@@ -24,13 +24,18 @@
 // PRUNED corpus. idf4 is opt-in via `?algo=idf4`; `idf3` remains the default.
 
 import supportMeta from "../../../data/buildaround_support.json" with { type: "json" };
+import { asCardId } from "../../types/card-identity.ts";
 import type { PoolStrategy } from "./strategy.ts";
-import { missingPoolData, type PoolData, type VariantResult } from "./types.ts";
+import {
+  brandPoolCounts,
+  missingPoolData,
+  type PoolData,
+  type VariantResult,
+} from "./types.ts";
 import {
   type IdfDeck,
   growCoherentPool,
   idfCosine,
-  resolveCountsToNames,
 } from "./variant-idf.ts";
 import { IDF2, idf2Corpus } from "./variant-idf2.ts";
 
@@ -253,14 +258,13 @@ export function generateIdf4(
   // The request's `_targetSize` is deliberately ignored.
   const counts = growCoherentPool(decks, idfOf, startIdx, IDF4_POOL_SIZE);
 
-  // The grown pool and starter are keyed by the corpus's UUIDs; resolve them back
-  // onto current display names for the downstream name-keyed pool resolver.
-  const nameOf = (key: string): string => poolData.cardNameById?.get(key) ?? key;
+  // The grown pool and starter are keyed by the corpus's UUIDs, branded onto the
+  // `CardId` output contract for the downstream id-index resolver.
   return {
     C: new Set(),
     selected: ["idf4", `deck#${String(startIdx)}`],
-    counts: resolveCountsToNames(counts, poolData.cardNameById),
-    starterDeck: [...decks[startIdx].cards].map(nameOf),
+    counts: brandPoolCounts(counts),
+    starterDeck: [...decks[startIdx].cards].map(asCardId),
   };
 }
 

@@ -22,7 +22,7 @@
 import {
   growAffinityPoolFromSeeds,
   growPoolFromCorpus,
-  toNamedVariantResult,
+  toVariantResult,
 } from "./affinity-grower.ts";
 import type { PoolStrategy } from "./strategy.ts";
 import { missingPoolData, type PoolData, type VariantResult } from "./types.ts";
@@ -32,7 +32,7 @@ import { drawSignatureSubset, SIGSEED } from "./variant-sigseed.ts";
 
 // Build an `embedded` pool: resolve the signature onto the committed embedding
 // corpus, draw a random subset of those signature cards, and grow one
-// deterministic pool anchored on them, mapped back onto current display names.
+// deterministic pool anchored on them, emitted keyed by UUID.
 // Throws when the embedding was not loaded (no `poolData.affinityCorpus`), and
 // reduces to a `pickcohere`-style best-of-K grow over the embedding when the
 // signature is empty or none of its cards are in the corpus — exactly the
@@ -77,7 +77,7 @@ export function generateEmbedded(
     SIGSEED.targetSize,
     SIGSEED,
   );
-  return toNamedVariantResult(poolData, grown.counts, grown.provenance, "embedded");
+  return toVariantResult(grown.counts, grown.provenance, "embedded");
 }
 
 /** Strategy adapter for the `embedded` algorithm. */

@@ -6,7 +6,7 @@ import { ALPHA, COLORS, HI, JIT, K_WEIGHTS, LO, TOPK } from "./constants.ts";
 import { randInt, shuffle, weightedPick } from "./rng.ts";
 import { onColorCandidates } from "./themes.ts";
 import type { PoolStrategy } from "./strategy.ts";
-import type { PoolData, VariantResult } from "./types.ts";
+import { brandPoolCounts, type PoolData, type VariantResult } from "./types.ts";
 import { colorPrefix, inter, poolSize } from "./util.ts";
 
 export function generate(
@@ -138,7 +138,7 @@ export function generate(
     }
   }
 
-  return { C, selected, counts };
+  return { C, selected, counts: brandPoolCounts(counts) };
 }
 
 /** Strategy adapter for the `color_pool` algorithm. */

@@ -5,6 +5,8 @@
 
 import { describe, expect, it } from "vitest";
 
+import { asCardId } from "../../types/card-identity.ts";
+
 import { buildPoolData } from "./pool-data.ts";
 import { makeRng } from "./rng.ts";
 import type { PoolCard } from "./types.ts";
@@ -77,7 +79,7 @@ describe("generateIdf3 provenance", () => {
 
     // Any pooled signature card is flagged as a signature.
     for (const sig of SIGNATURE_CARDS) {
-      const entry = provenance.cardProvenanceById[sig];
+      const entry = provenance.cardProvenanceById[asCardId(sig)];
       if (entry !== undefined) expect(entry.isSignature).toBe(true);
     }
   });

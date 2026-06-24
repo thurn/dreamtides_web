@@ -11,17 +11,21 @@
 // The corpus is keyed on each card's stable cards_v2 UUID (the `decklistIds`
 // source), never its display name, so two distinct cards that share a name stay
 // distinct in document-frequency and similarity scoring. The grown pool's copy
-// counts therefore come out keyed by UUID; {@link resolveCountsToNames} maps them
-// back onto current display names at the variant boundary, since the downstream
-// pool resolver works in name space. A synthetic corpus with no UUID source
-// (tests) falls back to `decklists` and its keys are treated as opaque strings.
+// counts therefore come out keyed by UUID and are branded onto the `CardId`
+// output contract at the variant boundary, where the downstream resolver maps
+// them to card numbers through the collision-free id index. A synthetic corpus
+// with no UUID source (tests) passes opaque ids.
 
 import { COLORS } from "./constants.ts";
 import { randInt, shuffle, weightedPick } from "./rng.ts";
 import type { PoolStrategy } from "./strategy.ts";
-import { missingPoolData, type PoolData, type VariantResult } from "./types.ts";
+import {
+  brandPoolCounts,
+  missingPoolData,
+  type PoolData,
+  type VariantResult,
+} from "./types.ts";
 import { colorPrefix, poolSize } from "./util.ts";
-import { resolveCountsToNames } from "./variant-idf.ts";
 
 // Knobs for the `decklists` variant. Grouped here so tuning is a one-stop edit.
 interface DecklistsTuning {
@@ -352,9 +356,9 @@ export function generateDecklists(
   }
   const selected = [strategyLabel];
   if (domArch) selected.push(`A:${domArch}`);
-  // The corpus keys on UUIDs (decklistIds); resolve back to display names for
-  // the downstream name-keyed pool resolver, exactly as the idf variants do.
-  return { C, selected, counts: resolveCountsToNames(counts, poolData.cardNameById) };
+  // The corpus keys on UUIDs (decklistIds), branded onto the `CardId` output
+  // contract for the downstream id-index resolver, exactly as the idf variants do.
+  return { C, selected, counts: brandPoolCounts(counts) };
 }
 
 /** Strategy adapter for the `decklists` algorithm. */

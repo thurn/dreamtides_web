@@ -13,6 +13,7 @@
 
 import { describe, expect, it } from "vitest";
 
+import { asCardId } from "../../types/card-identity.ts";
 import { growAffinityPool, growAffinityPoolFromSeeds } from "./affinity-grower.ts";
 import { generatePoolFromData } from "./generate.ts";
 import { buildPoolData } from "./pool-data.ts";
@@ -71,19 +72,27 @@ describe("growAffinityPoolFromSeeds", () => {
     const grown = growAffinityPoolFromSeeds(corpus, [SIG, "part-a"], 60, SIGSEED);
     expect(grown.counts.get(SIG)).toBeGreaterThanOrEqual(1);
     expect(grown.counts.get("part-a")).toBeGreaterThanOrEqual(1);
-    expect(grown.provenance.cardProvenanceByName[SIG].isSeed).toBe(true);
-    expect(grown.provenance.cardProvenanceByName["part-a"].isSeed).toBe(true);
+    expect(grown.provenance.cardProvenanceById[asCardId(SIG)].isSeed).toBe(true);
+    expect(grown.provenance.cardProvenanceById[asCardId("part-a")].isSeed).toBe(
+      true,
+    );
     // The headline seed is the first seed; both seeds carry addOrder 0 and 1.
-    expect(grown.provenance.seedCardName).toBe(SIG);
-    expect(grown.provenance.cardProvenanceByName[SIG].addOrder).toBe(0);
-    expect(grown.provenance.cardProvenanceByName["part-a"].addOrder).toBe(1);
+    expect(grown.provenance.seedCardId).toBe(asCardId(SIG));
+    expect(grown.provenance.cardProvenanceById[asCardId(SIG)].addOrder).toBe(0);
+    expect(
+      grown.provenance.cardProvenanceById[asCardId("part-a")].addOrder,
+    ).toBe(1);
   });
 
   it("de-duplicates a repeated seed card", () => {
     const grown = growAffinityPoolFromSeeds(corpus, [SIG, SIG], 40, SIGSEED);
     // Two copies of the same seed collapse to one distinct seed, not a double.
-    expect(grown.provenance.cardProvenanceByName[SIG].copies).toBeLessThanOrEqual(SIGSEED.cap);
-    const seeds = Object.values(grown.provenance.cardProvenanceByName).filter((p) => p.isSeed);
+    expect(
+      grown.provenance.cardProvenanceById[asCardId(SIG)].copies,
+    ).toBeLessThanOrEqual(SIGSEED.cap);
+    const seeds = Object.values(grown.provenance.cardProvenanceById).filter(
+      (p) => p.isSeed,
+    );
     expect(seeds).toHaveLength(1);
   });
 });
@@ -133,7 +142,7 @@ describe("sigseed pool generation", () => {
   function seedCardsOf(p: ReturnType<typeof pool>): string[] {
     const prov = p.seedProvenance;
     if (!prov) throw new Error("expected seed provenance");
-    return Object.entries(prov.cardProvenanceByName)
+    return Object.entries(prov.cardProvenanceById)
       .filter(([, v]) => v.isSeed)
       .map(([k]) => k);
   }

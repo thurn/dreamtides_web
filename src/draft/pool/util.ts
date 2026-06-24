@@ -22,19 +22,25 @@ export function inter(set: Set<string>, other: Set<string>): number {
   return n;
 }
 
-// Pool size counts copies, capped at 2 per card.
-export function poolSize(counts: Map<string, number>): number {
+// Pool size counts copies, capped at 2 per card. Generic over the key type so it
+// accepts both the variants' internal string-keyed working maps and the public
+// `CardId`-keyed pool counts without coupling to either key brand.
+export function poolSize<K>(counts: ReadonlyMap<K, number>): number {
   let n = 0;
   for (const v of counts.values()) n += Math.min(2, v);
   return n;
 }
 
 /**
- * Expand a pool's copy counts into newline-ready card lines: names sorted, a
+ * Expand a pool's copy counts into newline-ready card lines: keys sorted, a
  * 2-of duplicated, so the line count equals the pool size. Shared by the Node
  * generator/simulation tooling so its output matches the in-app pool exactly.
+ * Generic over the (string-shaped) key type so it serves both internal working
+ * maps and `CardId`-keyed pool counts.
  */
-export function poolToLines(counts: Map<string, number>): string[] {
+export function poolToLines<K extends string>(
+  counts: ReadonlyMap<K, number>,
+): string[] {
   const lines: string[] = [];
   for (const [card, count] of [...counts.entries()].sort((a, b) =>
     a[0].localeCompare(b[0]),

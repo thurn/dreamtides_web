@@ -1,5 +1,6 @@
 // Shared public and internal types for the pool generator.
 
+import { asCardId, type CardId } from "../../types/card-identity.ts";
 import type { AffinityCorpus } from "./affinity-grower.ts";
 import type { TideDecksJson } from "./tides-io.ts";
 import type { TideRelationshipsJson } from "./tide-relationships-io.ts";
@@ -56,6 +57,24 @@ export function missingPoolData(variant: string, detail: string): never {
       `does not fall back to the random color pool; supply the missing data or ` +
       `choose a different ?algo=.`,
   );
+}
+
+/**
+ * Rebrand a copy-count map the variant engines build in their opaque card-key
+ * space as the {@link CardId}-keyed pool output contract. In production every
+ * key is a card's stable cards_v2 UUID (the only safe card identity); synthetic
+ * test corpora pass opaque ids, which are equally valid card ids. This is the
+ * single trusted boundary where a variant's internal key map becomes the public
+ * `counts` contract, so the keys are never display names. Pass an
+ * already-{@link CardId}-keyed map through untouched-shaped (a fresh rebranded
+ * copy) so callers always own a mutable result.
+ */
+export function brandPoolCounts(
+  counts: ReadonlyMap<string, number>,
+): Map<CardId, number> {
+  const out = new Map<CardId, number>();
+  for (const [key, copies] of counts) out.set(asCardId(key), copies);
+  return out;
 }
 
 /** The card fields the pool generator reads. `CardData` satisfies this shape. */
@@ -209,9 +228,9 @@ export interface PoolData {
   cardIdByName?: Map<string, string>;
   /**
    * Stable cards_v2 UUID -> current display name, the inverse of
-   * {@link cardIdByName}. The `seed`, `idf3`, `decklists`, and related
-   * variants read it to map UUID-keyed pool results back onto display names
-   * for the downstream name→card-number resolution; absent when no source
+   * {@link cardIdByName}. The provenance/debug surfaces read it to resolve a
+   * pool's UUID-keyed results to display names at the render boundary; the pool
+   * pipeline never keys any data structure on its output. Absent when no source
    * card carries an `id`.
    */
   cardNameById?: Map<string, string>;
@@ -242,7 +261,7 @@ export interface Idf3PoolAnchor {
   distinctiveCardNames: string[];
 }
 
-/** Per-card provenance within an `idf3` pool, keyed by card name. */
+/** Per-card provenance within an `idf3` pool, keyed by {@link CardId}. */
 export interface Idf3PoolCardProvenance {
   /** Whether this card is one of the Dreamcaller's signature cards. */
   isSignature: boolean;
@@ -279,20 +298,20 @@ export interface Idf3PoolProvenance {
   /** Every deck folded into the pool, starter first then nearest-to-farthest. */
   sourceDecks: Idf3PoolSourceDeck[];
   /**
-   * Per-card provenance, keyed by corpus card key (UUID in production, opaque
-   * string in synthetic/test corpora). Distinct UUIDs that share a display name
-   * keep separate entries here so no same-name card is silently dropped. The
-   * downstream resolver (`buildDreamcallerProvenance`) converts these keys to
-   * card numbers via the id index, resolving display names only at the final
-   * render boundary.
+   * Per-card provenance, keyed by {@link CardId} (a card's stable UUID in
+   * production, an opaque synthetic id in test corpora). Distinct UUIDs that
+   * share a display name keep separate entries here so no same-name card is
+   * silently dropped. The downstream resolver (`buildDreamcallerProvenance`)
+   * converts these ids to card numbers via the id index, resolving display
+   * names only at the final render boundary.
    */
-  cardProvenanceById: Record<string, Idf3PoolCardProvenance>;
+  cardProvenanceById: Record<CardId, Idf3PoolCardProvenance>;
 }
 
 /**
- * Per-card provenance within a `seed` pool, keyed by card name. Records how and
- * when each card entered the pool that grew outward from the single drawn seed
- * card, so a debug surface can explain why each card is present.
+ * Per-card provenance within a `seed` pool, keyed by {@link CardId}. Records how
+ * and when each card entered the pool that grew outward from the single drawn
+ * seed card, so a debug surface can explain why each card is present.
  */
 export interface SeedPoolCardProvenance {
   /** Whether this is the randomly drawn seed card the pool grew from. */
@@ -310,15 +329,16 @@ export interface SeedPoolCardProvenance {
 }
 
 /**
- * Full provenance for one generated `seed` pool, keyed by card name. Records the
- * seed card, the blend used, and per-card growth detail so a debug surface can
- * explain what the initial card was and how the pool grew to its target size.
+ * Full provenance for one generated `seed` pool, keyed by {@link CardId}. Records
+ * the seed card, the blend used, and per-card growth detail so a debug surface
+ * can explain what the initial card was and how the pool grew to its target size.
  * Only the `seed` variant produces this; the field is absent on every other
- * variant's result.
+ * variant's result. Card ids resolve to display names only at the final render
+ * boundary, so two distinct cards that share a display name stay distinct.
  */
 export interface SeedPoolProvenance {
-  /** The card drawn uniformly at random that seeded the whole pool. */
-  seedCardName: string;
+  /** The card (by {@link CardId}) drawn uniformly at random that seeded the pool. */
+  seedCardId: CardId;
   /** Target pool size in total copies the grower aimed for. */
   targetSize: number;
   /** The seed-vs-pool affinity blend weight used during growth (0-1). */
@@ -329,10 +349,10 @@ export interface SeedPoolProvenance {
   totalCopies: number;
   /** How many cards earned a second copy. */
   doubledCardCount: number;
-  /** The seed's strongest affinity partners that made it into the pool. */
-  topPartnerCardNames: string[];
-  /** Per-card provenance, keyed by card name. */
-  cardProvenanceByName: Record<string, SeedPoolCardProvenance>;
+  /** The seed's strongest affinity partners (by {@link CardId}) in the pool. */
+  topPartnerCardIds: CardId[];
+  /** Per-card provenance, keyed by {@link CardId}. */
+  cardProvenanceById: Record<CardId, SeedPoolCardProvenance>;
 }
 
 /**
@@ -371,13 +391,17 @@ export interface Tides4PoolTide {
    * can go unjoined; only joined tides contribute cards.
    */
   joined: boolean;
-  /** This tide's full decklist as card names that resolve in the catalog, in deck order. */
-  cardNames: string[];
+  /**
+   * This tide's full decklist as {@link CardId}s, in deck order. Resolved to
+   * display names only at the render boundary, so two distinct cards sharing a
+   * display name stay distinct entries.
+   */
+  cardIds: CardId[];
   /** Distinct pool cards whose earliest (join-order) source tide is this one. */
   contributedCardCount: number;
 }
 
-/** Per-card provenance within a `tides4` pool, keyed by card name. */
+/** Per-card provenance within a `tides4` pool, keyed by {@link CardId}. */
 export interface Tides4PoolCardProvenance {
   /** Copies of this card in the pool (1 or 2). */
   copies: number;
@@ -388,12 +412,12 @@ export interface Tides4PoolCardProvenance {
 }
 
 /**
- * Full provenance for one generated `tides4` pool, keyed by card name. Records
- * the tides the pool combined — the always-joined signature tide, the random
- * subset of theme tides, and the broad tail — and which tide each pooled card
- * came from, so a debug surface can show every individual tide deck and explain
- * why each offered card is in the pool. Only the `tides4` variant produces this;
- * the field is absent on every other variant's result.
+ * Full provenance for one generated `tides4` pool, keyed by {@link CardId}.
+ * Records the tides the pool combined — the always-joined signature tide, the
+ * random subset of theme tides, and the broad tail — and which tide each pooled
+ * card came from, so a debug surface can show every individual tide deck and
+ * explain why each offered card is in the pool. Only the `tides4` variant
+ * produces this; the field is absent on every other variant's result.
  */
 export interface Tides4PoolProvenance {
   /** The Dreamcaller this pool was built for. */
@@ -421,8 +445,8 @@ export interface Tides4PoolProvenance {
    * present), the drawn facets, then the fill (undrawn facets and broad tides).
    */
   tides: Tides4PoolTide[];
-  /** Per-card provenance for the dealt pool, keyed by card name. */
-  cardProvenanceByName: Record<string, Tides4PoolCardProvenance>;
+  /** Per-card provenance for the dealt pool, keyed by {@link CardId}. */
+  cardProvenanceById: Record<CardId, Tides4PoolCardProvenance>;
 }
 
 /** Result of one pool generation. */
@@ -431,8 +455,8 @@ export interface GeneratedPool {
   identity: string;
   /** Selected theme labels, e.g. "A:storm" or "D:ur-welder". */
   themes: string[];
-  /** Card name -> copy count (1 or 2). */
-  counts: Map<string, number>;
+  /** {@link CardId} -> copy count (1 or 2). Never keyed by display name. */
+  counts: Map<CardId, number>;
   /** Seed used for this run, so a pool can be reproduced. */
   seed: number;
   /** Total copies in the pool (sum of counts, each capped at 2). */
@@ -441,10 +465,10 @@ export interface GeneratedPool {
   variant: PoolVariant;
   /**
    * The single real decklist the `idf3` variant chose as this run's starter —
-   * the anchor deck the pool was grown from. Empty for variants that do not
-   * select a starter deck.
+   * the anchor deck the pool was grown from, as {@link CardId}s. Empty for
+   * variants that do not select a starter deck.
    */
-  starterDeck?: readonly string[];
+  starterDeck?: readonly CardId[];
   /**
    * Full per-card provenance for the run, set only by the `idf3` variant. The
    * provenance debug surface ("Why Cards") reads it to explain how each card
@@ -474,13 +498,14 @@ export interface GeneratedPool {
 export interface VariantResult {
   C: Set<string>;
   selected: string[];
-  counts: Map<string, number>;
+  counts: Map<CardId, number>;
   /**
-   * The real decklist this variant chose as the run's starter, if any. Only the
-   * `idf3` variant sets it (its grown-from anchor deck); other variants leave it
-   * undefined and `generate.ts` defaults the public field to `[]`.
+   * The real decklist this variant chose as the run's starter, if any, as
+   * {@link CardId}s. Only the `idf3` variant sets it (its grown-from anchor
+   * deck); other variants leave it undefined and `generate.ts` defaults the
+   * public field to `[]`.
    */
-  starterDeck?: readonly string[];
+  starterDeck?: readonly CardId[];
   /**
    * Full per-card provenance, set only by the `idf3` variant; threaded straight
    * onto {@link GeneratedPool}. Undefined for other variants.

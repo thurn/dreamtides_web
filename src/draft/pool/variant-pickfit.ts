@@ -30,8 +30,9 @@
 // UUID space — `PickRecord.packs`/`picks` hold ids, frozen into the corpus by
 // `add-uuids-to-draft-records.mjs` — so the whole computation runs on ids and a
 // card rename never shifts the draw, growth, or provenance. The finished pool is
-// mapped back onto current names on the way out via `PoolData.cardNameById`;
-// absent that map (synthetic test cards keyed by name), keys pass through as-is.
+// emitted keyed by UUID (the `CardId` output contract), which the downstream
+// resolver maps to card numbers through the id index; a synthetic test corpus
+// passes opaque ids through as-is.
 
 import {
   type AffinityCorpus,
@@ -94,7 +95,7 @@ export function buildPickfitCorpus(poolData: PoolData): AffinityCorpus | null {
 // Build a `pickfit` pool: draw one card uniformly at random from the corpus, then
 // grow the pool around it by blended pick-derived affinity to `PICKFIT.targetSize`
 // copies. Cards are drawn and grown in UUID-key space (rename-proof); the
-// finished pool is mapped back onto current names. Ignores `signatureCards`,
+// finished pool is emitted keyed by UUID. Ignores `signatureCards`,
 // `seedArchetypes`, `themeArchetypes`, and the passed `targetSize` (the variant
 // owns its size via `PICKFIT.targetSize`). Falls back to the `default` algorithm
 // when no usable draft records are bundled.

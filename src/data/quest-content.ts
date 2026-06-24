@@ -16,6 +16,7 @@ import {
   type Tides4ProvenanceSummary,
   type Tides4TideSummary,
 } from "../types/content";
+import { asCardId, type CardId } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { GeneratedPool, PoolData, PoolVariant } from "../draft/pool/types.ts";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types.ts";
@@ -25,7 +26,6 @@ import { loadFigmentDatabase } from "./figment-database";
 import {
   buildIdIndex,
   buildLegendaryCardNumbers,
-  buildNameIndex,
   loadAffinityCorpus,
   loadCardsV2Database,
   loadDecklists,
@@ -158,16 +158,16 @@ export interface QuestContent {
  */
 export interface RunPoolContext {
   poolData: PoolData;
-  nameIndex: Map<string, number>;
   /**
-   * Stable card UUID (lowercased) -> card-number index, the collision-free
-   * counterpart of {@link nameIndex}. Passed to {@link resolvePool} as the
-   * primary lookup so UUID-keyed pool variants (e.g. `idf3`) resolve without
-   * merging two distinct cards that share a display name. Absent in contexts
-   * that predate the id index (e.g. older tests); falls back to name-only
-   * resolution when omitted.
+   * Stable card UUID (lowercased) -> card-number index — the single,
+   * collision-free identity index every pool resolves through. A pool's
+   * `counts`, provenance, and starter deck are all keyed by {@link CardId}, so
+   * resolving them here (rather than through a display-name index) keeps two
+   * distinct cards that share a display name as two separate card numbers.
+   * Display names are read from {@link PoolData.cardNameById} only at the render
+   * boundary.
    */
-  idIndex?: ReadonlyMap<string, number>;
+  idIndex: ReadonlyMap<string, number>;
   /**
    * Card numbers whose rarity is `Legendary`. Pools cap these at a single
    * copy; absent contexts (e.g. tests) leave the set empty and apply no
@@ -382,7 +382,11 @@ function logPoolConstructed(
   ctx: RunPoolContext,
   pool: GeneratedPool,
 ): void {
-  const numberOf = (name: string): number | null => ctx.nameIndex.get(name) ?? null;
+  // Resolve a card id to its card number and display name only for the log line.
+  // The pool itself is keyed by id throughout; names are a render-time convenience.
+  const numberOf = (id: CardId): number | null => ctx.idIndex.get(id) ?? null;
+  const nameOf = (id: CardId): string =>
+    ctx.poolData.cardNameById?.get(id) ?? id;
   const base = {
     dreamcallerId: dreamcaller.id,
     algo: pool.variant,
@@ -414,29 +418,35 @@ function logPoolConstructed(
     return;
   }
 
-  const topCards = Object.entries(provenance.cardProvenanceByName)
+  const topCards = Object.entries(provenance.cardProvenanceById)
     .sort((a, b) => b[1].blendedScore - a[1].blendedScore)
     .slice(0, POOL_CONSTRUCTED_LOG_TOP_CARDS)
-    .map(([name, entry]) => ({
-      name,
-      cardNumber: numberOf(name),
-      addOrder: entry.addOrder,
-      copies: entry.copies,
-      seedAffinity: roundTo3(entry.seedAffinity),
-      poolAffinity: roundTo3(entry.poolAffinity),
-      blendedScore: roundTo3(entry.blendedScore),
-    }));
+    .map(([key, entry]) => {
+      const id = asCardId(key);
+      return {
+        cardId: id,
+        name: nameOf(id),
+        cardNumber: numberOf(id),
+        addOrder: entry.addOrder,
+        copies: entry.copies,
+        seedAffinity: roundTo3(entry.seedAffinity),
+        poolAffinity: roundTo3(entry.poolAffinity),
+        blendedScore: roundTo3(entry.blendedScore),
+      };
+    });
 
   logEvent("draft_pool_constructed", {
     ...base,
-    seedCardName: provenance.seedCardName,
-    seedCardNumber: numberOf(provenance.seedCardName),
+    seedCardId: provenance.seedCardId,
+    seedCardName: nameOf(provenance.seedCardId),
+    seedCardNumber: numberOf(provenance.seedCardId),
     seedAffinityWeight: provenance.seedAffinityWeight,
     totalCopies: provenance.totalCopies,
     doubledCardCount: provenance.doubledCardCount,
-    topPartners: provenance.topPartnerCardNames.map((name) => ({
-      name,
-      cardNumber: numberOf(name),
+    topPartners: provenance.topPartnerCardIds.map((id) => ({
+      cardId: id,
+      name: nameOf(id),
+      cardNumber: numberOf(id),
     })),
     topCards,
   });
@@ -456,13 +466,31 @@ export function buildDreamcallerPackage(
   const pool = generateDreamcallerPool(dreamcaller, ctx, questSeed);
   logPoolConstructed(dreamcaller, ctx, pool);
 
-  const { draftPoolCopiesByCard, unresolvedNames, cappedLegendaryCardNumbers } =
-    resolvePool(pool, ctx.nameIndex, ctx.legendaryCardNumbers, ctx.idIndex);
-  if (unresolvedNames.length > 0) {
-    logEvent("build_dreamcaller_package_unresolved_names", {
+  const {
+    draftPoolCopiesByCard,
+    unresolvedIds,
+    collidedCardNumbers,
+    cappedLegendaryCardNumbers,
+  } = resolvePool(pool, ctx.idIndex, ctx.legendaryCardNumbers);
+  if (unresolvedIds.length > 0) {
+    // A pool card whose UUID is not in the catalog id index (a card dropped from
+    // the catalog). Logged so a production pool stays reconstructable: the
+    // variant emitted these ids and the resolver left them out.
+    logEvent("build_dreamcaller_package_unresolved_ids", {
       dreamcallerId: dreamcaller.id,
-      unresolvedCount: unresolvedNames.length,
-      unresolvedNames,
+      algo: pool.variant,
+      unresolvedCount: unresolvedIds.length,
+      unresolvedIds,
+    });
+  }
+  if (collidedCardNumbers.length > 0) {
+    // Two distinct pool ids resolved to one card number — impossible under the
+    // collision-free id index, so this records a data anomaly (a stale or
+    // duplicate id) rather than the same-name merge the id-keyed pool prevents.
+    logEvent("build_dreamcaller_package_id_collision", {
+      dreamcallerId: dreamcaller.id,
+      algo: pool.variant,
+      collidedCardNumbers,
     });
   }
   if (cappedLegendaryCardNumbers.length > 0) {
@@ -482,8 +510,8 @@ export function buildDreamcallerPackage(
   const starterSet = new Set(STARTER_CARD_NUMBERS);
   const seen = new Set<number>();
   const starterDecklistCardNumbers: number[] = [];
-  for (const name of pool.starterDeck ?? []) {
-    const cardNumber = ctx.nameIndex.get(name);
+  for (const id of pool.starterDeck ?? []) {
+    const cardNumber = ctx.idIndex.get(id);
     if (cardNumber === undefined) continue;
     if (starterSet.has(cardNumber)) continue;
     if (seen.has(cardNumber)) continue;
@@ -528,15 +556,14 @@ export function buildDreamcallerProvenance(
   const starterSet = new Set(STARTER_CARD_NUMBERS);
   const cardProvenanceByNumber: Record<string, Idf3CardProvenance> = {};
   for (const [key, entry] of Object.entries(provenance.cardProvenanceById)) {
-    // Resolve the corpus key (UUID in production) via the id index first, then
-    // fall back to the name index for synthetic/test corpora whose keys are
-    // display names rather than UUIDs. This keeps two distinct cards that share
-    // a display name as two separate card-number entries.
-    const cardNumber = ctx.idIndex?.get(key) ?? ctx.nameIndex.get(key);
+    // Resolve the corpus key (a UUID in production, a synthetic id in tests)
+    // through the collision-free id index, so two distinct cards that share a
+    // display name stay two separate card-number entries.
+    const cardNumber = ctx.idIndex.get(key);
     if (cardNumber === undefined) continue;
     if (starterSet.has(cardNumber)) continue;
-    // When the id index resolves a UUID that was already handled (e.g. duplicate
-    // UUID), keep the first entry (same growth-order tie-break used elsewhere).
+    // When the id index resolves an id that was already handled (e.g. duplicate
+    // id), keep the first entry (same growth-order tie-break used elsewhere).
     if (cardProvenanceByNumber[String(cardNumber)] !== undefined) continue;
     cardProvenanceByNumber[String(cardNumber)] = { ...entry };
   }
@@ -581,10 +608,13 @@ export function buildDreamcallerSeedProvenance(
   const provenance = pool.seedProvenance;
   if (provenance === undefined) return null;
 
+  // Display names are a render-time convenience resolved from the card id; the
+  // provenance is keyed by id throughout, so same-name cards stay distinct.
+  const nameOf = (id: CardId): string => ctx.poolData.cardNameById?.get(id) ?? id;
   const starterSet = new Set(STARTER_CARD_NUMBERS);
   const cardProvenanceByNumber: Record<string, SeedCardProvenance> = {};
-  for (const [name, entry] of Object.entries(provenance.cardProvenanceByName)) {
-    const cardNumber = ctx.nameIndex.get(name);
+  for (const [key, entry] of Object.entries(provenance.cardProvenanceById)) {
+    const cardNumber = ctx.idIndex.get(key);
     if (cardNumber === undefined) continue;
     if (starterSet.has(cardNumber)) continue;
     cardProvenanceByNumber[String(cardNumber)] = { ...entry };
@@ -592,14 +622,14 @@ export function buildDreamcallerSeedProvenance(
 
   return {
     variant: pool.variant,
-    seedCardName: provenance.seedCardName,
-    seedCardNumber: ctx.nameIndex.get(provenance.seedCardName) ?? null,
+    seedCardName: nameOf(provenance.seedCardId),
+    seedCardNumber: ctx.idIndex.get(provenance.seedCardId) ?? null,
     targetSize: provenance.targetSize,
     seedAffinityWeight: provenance.seedAffinityWeight,
     distinctCardCount: provenance.distinctCardCount,
     totalCopies: provenance.totalCopies,
     doubledCardCount: provenance.doubledCardCount,
-    topPartnerCardNames: [...provenance.topPartnerCardNames],
+    topPartnerCardNames: provenance.topPartnerCardIds.map(nameOf),
     cardProvenanceByNumber,
   };
 }
@@ -626,11 +656,14 @@ export function buildDreamcallerTides4Provenance(
   if (provenance === undefined) return null;
 
   const starterSet = new Set(STARTER_CARD_NUMBERS);
-  const toNumbers = (names: readonly string[]): number[] => {
+  // Resolve a tide's decklist of card ids to card numbers through the id index,
+  // dropping starter cards and de-duplicating, so a tide deck shows the same
+  // draftable cards a player sees.
+  const toNumbers = (ids: readonly CardId[]): number[] => {
     const out: number[] = [];
     const seen = new Set<number>();
-    for (const name of names) {
-      const cardNumber = ctx.nameIndex.get(name);
+    for (const id of ids) {
+      const cardNumber = ctx.idIndex.get(id);
       if (cardNumber === undefined) continue;
       if (starterSet.has(cardNumber)) continue;
       if (seen.has(cardNumber)) continue;
@@ -642,8 +675,8 @@ export function buildDreamcallerTides4Provenance(
 
   const cardProvenanceByNumber: Record<string, Tides4CardProvenance> = {};
   const contributionByTide = new Map<string, number>();
-  for (const [name, entry] of Object.entries(provenance.cardProvenanceByName)) {
-    const cardNumber = ctx.nameIndex.get(name);
+  for (const [key, entry] of Object.entries(provenance.cardProvenanceById)) {
+    const cardNumber = ctx.idIndex.get(key);
     if (cardNumber === undefined) continue;
     if (starterSet.has(cardNumber)) continue;
     cardProvenanceByNumber[String(cardNumber)] = {
@@ -667,7 +700,7 @@ export function buildDreamcallerTides4Provenance(
     role: tide.role,
     selection: tide.selection,
     joined: tide.joined,
-    cardNumbers: toNumbers(tide.cardNames),
+    cardNumbers: toNumbers(tide.cardIds),
     contributedCardCount: contributionByTide.get(tide.id) ?? 0,
   }));
 
@@ -823,12 +856,8 @@ export async function loadQuestContent(
     signatureCardIds: [...(dc.signatureCardIds ?? [])],
   }));
 
-  // Build the name index once; reused by both poolContext and (in replay mode)
-  // the fit model to avoid building it twice.
-  const nameIndex = buildNameIndex(cardDatabase);
-  // The record-replay fit model keys on lowercased card ids, so it translates
-  // card numbers against this id index (collision-free) rather than the
-  // name index the pool engine uses.
+  // Build the collision-free id index once; every pool resolves through it, and
+  // (in replay mode) the fit model translates card numbers against it too.
   const idIndex = buildIdIndex(cardDatabase);
   const legendaryCardNumbers = buildLegendaryCardNumbers(cardDatabase);
 
@@ -868,7 +897,6 @@ export async function loadQuestContent(
 
   const poolContext: RunPoolContext = {
     poolData,
-    nameIndex,
     idIndex,
     legendaryCardNumbers,
     allDreamsignPoolIds: dreamsignTemplates.map((template) => template.id),

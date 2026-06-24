@@ -65,11 +65,25 @@ export function buildTestCorpusCards(): CardData[] {
 }
 
 /**
+ * The synthetic card id assigned to a corpus card name by
+ * {@link buildTestCorpusCards} (`corpus-<cardNumber>`). The id-keyed decklist
+ * corpus and the id index both key on these, so a generated pool resolves
+ * through the collision-free id path exactly as production does.
+ */
+function idForName(name: string): string {
+  const cardNumber = buildTestNameIndex().get(name);
+  if (cardNumber === undefined) {
+    throw new Error(`unknown test corpus card name: ${name}`);
+  }
+  return `corpus-${String(cardNumber)}`;
+}
+
+/**
  * Builds a {@link RunPoolContext} usable by `buildDreamcallerPackage`. The
- * generated pool draws names from {@link TEST_DECKLISTS}, all of which resolve
- * through the returned name index. The context also carries an id index built
- * from the same card records so `resolvePool` can handle UUID-keyed pool counts
- * (e.g. from the `idf3` variant) without merging same-name cards.
+ * generated pool is keyed by the corpus card ids (`corpus-<cardNumber>`), all of
+ * which resolve through the id index built from the same card records, so
+ * `resolvePool` maps the pool onto card numbers through the collision-free id
+ * path without merging same-name cards.
  */
 export function makeTestPoolContext(
   allDreamsignPoolIds: string[] = ["dreamsign-a", "dreamsign-b"],
@@ -78,9 +92,9 @@ export function makeTestPoolContext(
   const cardDatabase = new Map<number, CardData>(
     cards.map((c) => [c.cardNumber, c]),
   );
+  const decklistIds = TEST_DECKLISTS.map((deck) => deck.map(idForName));
   return {
-    poolData: buildPoolData(cards, TEST_DECKLISTS),
-    nameIndex: buildTestNameIndex(),
+    poolData: buildPoolData(cards, TEST_DECKLISTS, undefined, decklistIds),
     idIndex: buildIdIndex(cardDatabase),
     allDreamsignPoolIds,
     // This corpus has decklists but no draft records, so pin idf3 (which builds

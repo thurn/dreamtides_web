@@ -16,10 +16,13 @@
 // only variable between them is the corpus — an apples-to-apples comparison.
 //
 // Everything operates in an opaque card-key space (the caller's stable identity,
-// a cards_v2 UUID when available, else the card name); the caller maps keys back
-// onto display names on the way out.
+// a cards_v2 UUID in production, an opaque synthetic id in tests). That key is a
+// card's identity end to end; it is branded onto the `CardId`-keyed pool output
+// contract at the variant boundary and resolved to a display name only at render.
 
+import { asCardId, type CardId } from "../../types/card-identity.ts";
 import {
+  brandPoolCounts,
   missingPoolData,
   type PoolData,
   type SeedPoolCardProvenance,
@@ -122,7 +125,7 @@ export function growAffinityPoolFromSeeds(
   };
 
   const counts = new Map<string, number>();
-  const cardProvenanceByName: Record<string, SeedPoolCardProvenance> = {};
+  const cardProvenanceById: Record<CardId, SeedPoolCardProvenance> = {};
   const order: string[] = [];
 
   const { seedAffinityWeight: w, priorWeight, secondCopyFactor, cap } = tuning;
@@ -133,7 +136,7 @@ export function growAffinityPoolFromSeeds(
     counts.set(seedCard, 1);
     addToPoolAff(seedCard);
     order.push(seedCard);
-    cardProvenanceByName[seedCard] = {
+    cardProvenanceById[asCardId(seedCard)] = {
       isSeed: true,
       copies: 1,
       addOrder: order.length - 1,
@@ -193,7 +196,7 @@ export function growAffinityPoolFromSeeds(
       distinct += 1;
       addToPoolAff(bestCard);
       order.push(bestCard);
-      cardProvenanceByName[bestCard] = {
+      cardProvenanceById[asCardId(bestCard)] = {
         isSeed: false,
         copies: 1,
         addOrder: order.length - 1,
@@ -202,8 +205,8 @@ export function growAffinityPoolFromSeeds(
         blendedScore: bestScore,
       };
     } else {
-      cardProvenanceByName[bestCard] = {
-        ...cardProvenanceByName[bestCard],
+      cardProvenanceById[asCardId(bestCard)] = {
+        ...cardProvenanceById[asCardId(bestCard)],
         copies: 2,
       };
     }
@@ -213,7 +216,7 @@ export function growAffinityPoolFromSeeds(
   // ranked by their tie to the nearest seed (the single-seed row when there is one
   // seed), the seed cards themselves excluded.
   const seedSet = new Set(seeds);
-  const topPartnerCardNames = order
+  const topPartners = order
     .filter((c) => !seedSet.has(c))
     .sort((a, b) => seedAffNorm(b) - seedAffNorm(a) || (a < b ? -1 : 1))
     .slice(0, tuning.topPartnerCount);
@@ -223,15 +226,15 @@ export function growAffinityPoolFromSeeds(
 
   const provenance: SeedPoolProvenance = {
     // The headline seed is the first seed card; every seed is flagged `isSeed`
-    // in `cardProvenanceByName`, so a multi-seed start is fully recoverable.
-    seedCardName: seeds[0],
+    // in `cardProvenanceById`, so a multi-seed start is fully recoverable.
+    seedCardId: asCardId(seeds[0]),
     targetSize,
     seedAffinityWeight: w,
     distinctCardCount: distinct,
     totalCopies: total,
     doubledCardCount,
-    topPartnerCardNames,
-    cardProvenanceByName,
+    topPartnerCardIds: topPartners.map(asCardId),
+    cardProvenanceById,
   };
   return { counts, provenance };
 }
@@ -311,12 +314,12 @@ export function weightedSeedDraw(weights: ReadonlyMap<string, number>): SeedDraw
 // affinity-grown variant shares: fall back to the default algorithm when the
 // corpus is empty, otherwise draw `tuning.seedDraws` candidate seeds (default 1)
 // from `seedDraw` (uniform unless a steered variant supplies its own), grow a
-// pool from each, keep the most coherent, grow to `targetSize`, and map the
-// id-keyed result back onto current display names via `cardNameById`. `label` is
-// the variant's id, recorded in `selected` for provenance.
+// pool from each, keep the most coherent, grow to `targetSize`, and return the
+// `CardId`-keyed result. `label` is the variant's id, recorded in `selected` for
+// provenance.
 export function growPoolFromCorpus(
   rng: () => number,
-  poolData: PoolData,
+  _poolData: PoolData,
   corpus: AffinityCorpus | null,
   targetSize: number,
   tuning: AffinityGrowerTuning,
@@ -353,46 +356,24 @@ export function growPoolFromCorpus(
     missingPoolData(label, "no candidate seed could be drawn from its corpus");
   }
 
-  return toNamedVariantResult(poolData, counts, provenance, label);
+  return toVariantResult(counts, provenance, label);
 }
 
-// Map a key-keyed grown pool (counts + provenance) onto a {@link VariantResult} in
-// current display-name space: the shared tail every affinity-grown variant returns.
-// `label` is the variant id recorded in `selected`; the seed card is read from the
-// provenance, so the result always names the pool's actual seed.
-export function toNamedVariantResult(
-  poolData: PoolData,
-  counts: Map<string, number>,
+// Assemble a grown pool (the engine's UUID-keyed `counts` plus its already
+// `CardId`-keyed provenance) into a {@link VariantResult}: the shared tail every
+// affinity-grown variant returns. `label` is the variant id recorded in
+// `selected`; the seed id is read from the provenance, so the result always
+// identifies the pool's actual seed. Counts are branded onto the `CardId`-keyed
+// output contract here; display names are resolved only at the render boundary.
+export function toVariantResult(
+  counts: ReadonlyMap<string, number>,
   provenance: SeedPoolProvenance,
   label: string,
 ): VariantResult {
-  const nameOf = (key: string): string => poolData.cardNameById?.get(key) ?? key;
-  const namedCounts = new Map<string, number>();
-  for (const [key, copies] of counts) namedCounts.set(nameOf(key), copies);
-
   return {
     C: new Set(),
-    selected: [label, `card:${nameOf(provenance.seedCardName)}`],
-    counts: namedCounts,
-    seedProvenance: toNamedProvenance(provenance, nameOf),
-  };
-}
-
-// Remap a key-keyed provenance record onto current display names, the form the
-// public {@link SeedPoolProvenance} and the downstream name→card-number
-// resolution expect. `nameOf` is the identity when the keys are already names.
-export function toNamedProvenance(
-  provenance: SeedPoolProvenance,
-  nameOf: (key: string) => string,
-): SeedPoolProvenance {
-  const cardProvenanceByName: Record<string, SeedPoolCardProvenance> = {};
-  for (const [key, entry] of Object.entries(provenance.cardProvenanceByName)) {
-    cardProvenanceByName[nameOf(key)] = entry;
-  }
-  return {
-    ...provenance,
-    seedCardName: nameOf(provenance.seedCardName),
-    topPartnerCardNames: provenance.topPartnerCardNames.map(nameOf),
-    cardProvenanceByName,
+    selected: [label, `card:${provenance.seedCardId}`],
+    counts: brandPoolCounts(counts),
+    seedProvenance: provenance,
   };
 }

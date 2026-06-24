@@ -66,7 +66,7 @@ function makeContext(
   };
   return {
     poolData,
-    nameIndex: new Map(),
+    idIndex: new Map(),
     allDreamsignPoolIds: [],
     poolVariant,
   };

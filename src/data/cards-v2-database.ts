@@ -1,3 +1,4 @@
+import type { CardId } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type {
   AffinityCorpus,
@@ -280,8 +281,19 @@ export function buildLegendaryCardNumbers(
 export interface ResolvedPool {
   /** Fixed draft multiset keyed by card number (as string), values 1 or 2. */
   draftPoolCopiesByCard: Record<string, number>;
-  /** Pool names that had no matching card in the v2 database. */
-  unresolvedNames: string[];
+  /**
+   * Pool card ids ({@link CardId}) that had no matching card in the v2 database
+   * (a card no longer in the catalog). Surfaced so the caller can log them as a
+   * resolution anomaly.
+   */
+  unresolvedIds: CardId[];
+  /**
+   * Card numbers two distinct pool ids both resolved to. The id index is
+   * collision-free (one card number per id), so this is always empty in
+   * practice; it is surfaced so the caller can log an anomaly if a stale or
+   * duplicate id ever maps two pool entries onto one card.
+   */
+  collidedCardNumbers: number[];
   /**
    * Card numbers whose copy count was reduced to one because the card is
    * `Legendary` and the generated pool asked for more than one copy. Surfaced
@@ -291,35 +303,31 @@ export interface ResolvedPool {
 }
 
 /**
- * Map a generated pool's card keys (stable UUIDs or display names, depending
- * on the pool variant) onto v2 card numbers, producing the
- * `draftPoolCopiesByCard` multiset the draft engine consumes. Keys absent from
- * both indexes are collected in `unresolvedNames` and dropped from the pool.
+ * Map a generated pool's {@link CardId} keys onto v2 card numbers, producing the
+ * `draftPoolCopiesByCard` multiset the draft engine consumes. Resolution goes
+ * through the stable-UUID `idIndex` only — the single collision-free identity
+ * index — so two distinct cards that share a display name can never merge into
+ * one pool entry. A pool key absent from `idIndex` (a card dropped from the
+ * catalog) is collected in `unresolvedIds` and left out of the pool.
  *
  * Ordinary cards are capped at two copies. Legendary cards (those whose card
  * number appears in `legendaryCardNumbers`) are capped at one copy, so a pool
  * never contains a duplicate legendary.
- *
- * Resolution order: for each key, `idIndex` is tried first (stable UUID
- * lookup, collision-free), then `nameIndex` (display-name lookup). Variants
- * that output UUID-keyed counts (e.g. `idf3`) are resolved without risk of
- * merging two distinct cards that share a display name; variants that output
- * name-keyed counts fall through to `nameIndex` as before.
  */
 export function resolvePool(
   pool: GeneratedPool,
-  nameIndex: Map<string, number>,
+  idIndex: ReadonlyMap<string, number>,
   legendaryCardNumbers: ReadonlySet<number> = new Set<number>(),
-  idIndex?: ReadonlyMap<string, number>,
 ): ResolvedPool {
   const draftPoolCopiesByCard: Record<string, number> = {};
-  const unresolvedNames: string[] = [];
+  const unresolvedIds: CardId[] = [];
+  const collidedCardNumbers: number[] = [];
   const cappedLegendaryCardNumbers: number[] = [];
 
   for (const [key, copies] of pool.counts) {
-    const cardNumber = idIndex?.get(key) ?? nameIndex.get(key);
+    const cardNumber = idIndex.get(key);
     if (cardNumber === undefined) {
-      unresolvedNames.push(key);
+      unresolvedIds.push(key);
       continue;
     }
     const isLegendary = legendaryCardNumbers.has(cardNumber);
@@ -327,16 +335,19 @@ export function resolvePool(
     if (isLegendary && copies > 1) {
       cappedLegendaryCardNumbers.push(cardNumber);
     }
-    // When two distinct UUIDs resolve to the same card number (which cannot
-    // happen in the UUID-index path but is kept as a safety net), sum the
-    // copies and apply the cap.
+    // The id index maps one card number per id, so two distinct pool ids cannot
+    // resolve to the same card number under normal data. Record it if it ever
+    // does (a stale or duplicate id) so the caller can log the anomaly, then sum
+    // and cap rather than silently overwrite.
     const existing = draftPoolCopiesByCard[String(cardNumber)] ?? 0;
+    if (existing > 0) collidedCardNumbers.push(cardNumber);
     draftPoolCopiesByCard[String(cardNumber)] = Math.min(cap, existing + copies);
   }
 
   return {
     draftPoolCopiesByCard,
-    unresolvedNames,
+    unresolvedIds,
+    collidedCardNumbers,
     cappedLegendaryCardNumbers,
   };
 }

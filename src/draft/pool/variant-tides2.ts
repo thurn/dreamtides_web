@@ -34,6 +34,7 @@
 // lead's identity occupies a large share of it, reinforced (not diluted) by
 // allies chosen to combine well with it.
 
+import { asCardId, type CardId } from "../../types/card-identity.ts";
 import { shuffle } from "./rng.ts";
 import type { PoolStrategy } from "./strategy.ts";
 import {
@@ -71,9 +72,9 @@ export const TIDES2: Tides2Tuning = {
  * until the combined cards can deal a full pool, shuffle everything (with the
  * core tide's cards, when the artifact carries one) into one bag, and deal
  * `targetSize` copies with at most `cap` copies of any card. Tide-deck cards are
- * keyed by cards_v2 UUID and mapped to current display names through
- * `poolData.cardNameById`; UUIDs absent from that map (cards no longer in the
- * catalog) are skipped.
+ * keyed by cards_v2 UUID; the catalog index (`poolData.cardNameById`) gates
+ * membership, so a UUID absent from it (a card dropped from the catalog) is
+ * skipped.
  *
  * Every joining tide is justified by a published relationship in
  * `poolData.tides2Relationships`. A Dreamcaller without a tide-pool entry (stale
@@ -149,8 +150,8 @@ export function generateTides2(
   // reaches full size. When no card index is available (the synthetic pools some
   // tests build), the artifact's informational names are used directly.
   const tideById = new Map(data.tides.map((t) => [t.id, t]));
-  const bag: string[] = [];
-  const bagCounts = new Map<string, number>();
+  const bag: CardId[] = [];
+  const bagCounts = new Map<CardId, number>();
   let dealable = 0;
   const deckIds: string[] = [];
   const joinTide = (id: string): void => {
@@ -158,14 +159,14 @@ export function generateTides2(
     if (!tide) return;
     deckIds.push(id);
     for (const card of tide.cards) {
-      const name = poolData.cardNameById
-        ? poolData.cardNameById.get(card.id)
-        : card.name;
-      if (name === undefined) continue;
+      // Skip cards whose UUID is no longer in the catalog (the index, when
+      // present, is the source of truth for catalog membership).
+      if (poolData.cardNameById && !poolData.cardNameById.has(card.id)) continue;
+      const cardId = asCardId(card.id);
       for (let i = 0; i < card.copies; i += 1) {
-        const have = bagCounts.get(name) ?? 0;
-        bagCounts.set(name, have + 1);
-        bag.push(name);
+        const have = bagCounts.get(cardId) ?? 0;
+        bagCounts.set(cardId, have + 1);
+        bag.push(cardId);
         if (have < TIDES2.cap) dealable += 1;
       }
     }
@@ -180,13 +181,13 @@ export function generateTides2(
   // One shuffle, one deal: take cards in bag order, skipping any already at the
   // copy cap, until the pool reaches the target size or the bag is empty.
   shuffle(rng, bag);
-  const counts = new Map<string, number>();
+  const counts = new Map<CardId, number>();
   let size = 0;
-  for (const name of bag) {
+  for (const cardId of bag) {
     if (size >= dealSize) break;
-    const have = counts.get(name) ?? 0;
+    const have = counts.get(cardId) ?? 0;
     if (have >= TIDES2.cap) continue;
-    counts.set(name, have + 1);
+    counts.set(cardId, have + 1);
     size += 1;
   }
 

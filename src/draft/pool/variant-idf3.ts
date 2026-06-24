@@ -30,8 +30,10 @@
 // `variant-idf.coherent.test.ts` suite pins this scheme and the constants below
 // against the real `idf2` oracle.
 
+import { asCardId, type CardId } from "../../types/card-identity.ts";
 import type { PoolStrategy } from "./strategy.ts";
 import {
+  brandPoolCounts,
   missingPoolData,
   type Idf3PoolCardProvenance,
   type Idf3PoolProvenance,
@@ -196,14 +198,15 @@ export function generateIdf3(
   // Keyed by corpus key (UUID in production) throughout — no name resolution
   // here. Two distinct UUIDs that share a display name stay as two entries, so
   // the downstream id-index resolver can find both independently.
-  const cardProvenanceById: Record<string, Idf3PoolCardProvenance> = {};
+  const cardProvenanceById: Record<CardId, Idf3PoolCardProvenance> = {};
   const contributedByRank = new Array<number>(includedDecks.length).fill(0);
   for (let rank = 0; rank < includedDecks.length; rank += 1) {
     const { deckIndex, similarityToStarter } = includedDecks[rank];
     for (const key of decks[deckIndex].cards) {
       if (!counts.has(key)) continue;
-      if (cardProvenanceById[key] !== undefined) continue;
-      cardProvenanceById[key] = {
+      const id = asCardId(key);
+      if (cardProvenanceById[id] !== undefined) continue;
+      cardProvenanceById[id] = {
         isSignature: signatureSet.has(key),
         inStarterDeck: rank === 0,
         copies: cappedCopies(key),
@@ -239,14 +242,15 @@ export function generateIdf3(
     cardProvenanceById,
   };
 
-  // Counts stay UUID-keyed here; the downstream `resolvePool` resolves them to
-  // card numbers via the id index, so two distinct cards sharing a display name
-  // both survive to the final pool instead of merging at this boundary.
+  // Counts are branded onto the `CardId` output contract here; the downstream
+  // `resolvePool` resolves them to card numbers via the collision-free id index,
+  // so two distinct cards sharing a display name both survive to the final pool
+  // instead of merging at this boundary.
   return {
     C: new Set(),
     selected: ["idf3", `deck#${String(startIdx)}`],
-    counts,
-    starterDeck: [...decks[startIdx].cards].map(nameOf),
+    counts: brandPoolCounts(counts),
+    starterDeck: [...decks[startIdx].cards].map(asCardId),
     idf3Provenance,
   };
 }

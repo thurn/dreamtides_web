@@ -11,13 +11,18 @@
 // The corpus is keyed on each card's stable cards_v2 UUID (the `decklistIds`
 // source), never its display name, so two distinct cards that share a name stay
 // distinct in document-frequency and similarity scoring. The grown pool's copy
-// counts therefore come out keyed by UUID; {@link resolveCountsToNames} maps them
-// back onto current display names at the variant boundary, since the downstream
-// pool resolver works in name space. A synthetic corpus with no UUID source
-// (tests) falls back to `decklists` and its keys are treated as opaque strings.
+// counts therefore come out keyed by UUID and are branded onto the `CardId`
+// output contract at the variant boundary ({@link brandPoolCounts}); the
+// downstream resolver maps them to card numbers through the collision-free id
+// index. A synthetic corpus with no UUID source (tests) passes opaque ids.
 
 import type { PoolStrategy } from "./strategy.ts";
-import { missingPoolData, type PoolData, type VariantResult } from "./types.ts";
+import {
+  brandPoolCounts,
+  missingPoolData,
+  type PoolData,
+  type VariantResult,
+} from "./types.ts";
 
 // Knobs for the `idf` variant. These are the in-app equivalents of the
 // `scripts/similar-pool.mjs` command-line flags; edit here to retune. Grouped so
@@ -131,27 +136,6 @@ export function idfCosine(
   let dot = 0;
   for (const c of small.cards) if (large.cards.has(c)) dot += idfOf(c) ** 2;
   return dot / (a.norm * b.norm);
-}
-
-// Map a grown pool's copy counts (keyed by the corpus's UUID keys) back onto
-// current display names for the downstream name-keyed pool resolver. Two distinct
-// UUIDs that resolve to the same display name are merged, their merged count
-// capped at `IDF.cap` (the per-card copy cap), so the collapsed name never claims
-// more copies than the 2-copy rule allows. When `cardNameById` is absent (a
-// synthetic / test corpus whose keys are already opaque display strings) the
-// counts are returned unchanged, so name-keyed corpora keep working. Shared by
-// every IDF variant (`idf`/`idf2`/`idf3`/`idf4`) at its return boundary.
-export function resolveCountsToNames(
-  counts: Map<string, number>,
-  cardNameById: ReadonlyMap<string, string> | undefined,
-): Map<string, number> {
-  if (!cardNameById) return counts;
-  const out = new Map<string, number>();
-  for (const [key, n] of counts) {
-    const name = cardNameById.get(key) ?? key;
-    out.set(name, Math.min(IDF.cap, (out.get(name) ?? 0) + n));
-  }
-  return out;
 }
 
 /** One decklist folded into a grown pool, in growth order. */
@@ -321,12 +305,12 @@ export function generateIdf(
   // No color identity: deriving one would read the color metadata, and this
   // variant consumes nothing but the decklists. The identity string is left
   // empty; the labels record only that this is `idf` and which corpus decklist
-  // started the pool. The grown pool is keyed by the corpus's UUIDs, so resolve
-  // it back onto display names for the downstream name-keyed resolver.
+  // started the pool. The grown pool is keyed by the corpus's UUIDs, branded
+  // onto the `CardId` output contract for the downstream id-index resolver.
   return {
     C: new Set(),
     selected: ["idf", `deck#${String(startIdx)}`],
-    counts: resolveCountsToNames(counts, poolData.cardNameById),
+    counts: brandPoolCounts(counts),
   };
 }
 

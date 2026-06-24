@@ -185,7 +185,7 @@ export function buildSignatureSeedWeights(
 
 // Build a `picksig` pool: draw `PICKSIG.seedDraws` candidate seeds from the
 // signature-biased distribution, grow a pool from each, keep the most internally
-// coherent, mapped back onto current display names. Falls back to the `default`
+// coherent, emitted keyed by UUID. Falls back to the `default`
 // algorithm when no draft records are bundled, and to plain `pickcohere` when the
 // signature is empty or none of its cards are in the corpus.
 export function generatePickSig(
