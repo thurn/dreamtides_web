@@ -25,3 +25,77 @@ on each ingestion run.
 The collision is upstream of the draft records and merchant corpus. The
 adapted draft records in docs/draft_records_adapted/ are UUID-keyed and bypass
 this boundary entirely; they are the preferred data source for all algorithms.
+
+
+Re-audit 2026-06-24 — additional name-keyed structures found
+=============================================================
+
+A second sweep for Maps/Sets keyed by a Dreamtides display name (collisions
+where two distinct UUIDs share a name) surfaced two residuals not covered by the
+Issue 1-14 migration. Production code itself is clean — every live identity path
+(quest-content.ts, the idf/seed/sigseed/embedded pool corpus, opponent decks)
+keys on the stable cards_v2 UUID. The two residuals below are a divergent
+analysis script and a latent fallback map.
+
+Issue 15: merchant-experiment.ts builds the fit model on a name-keyed index
+---------------------------------------------------------------------------
+scripts/merchant-experiment.ts:194-200 builds the merchant fit model with
+  buildFitModel(records.map((r) => r.mainboard), nameIndex)
+where `nameIndex = buildNameIndex(cardDatabase)` is the name -> cardNumber index
+in src/data/cards-v2-database.ts:233-243. `buildNameIndex` keys the catalog by
+display name and keeps the first card per name ("When two records share a name
+the first wins"), so any record mainboard that references a duplicate-name card
+is translated to whichever UUID was seen first.
+
+This diverges from production: src/data/quest-content.ts:912-918 builds the same
+fit model with `buildFitModel(draftRecords.map((r) => r.mainboardIds), idIndex)`
+— UUID-keyed mainboards translated through the collision-free `buildIdIndex`
+(cards-v2-database.ts:253). The experiment harness is meant to mirror production
+(its own comment cites the production call site), but its name-keyed path can
+score a different fit than production for any deck containing a shared-name card.
+
+`buildNameIndex` has no non-test production consumers other than this script;
+quest-content.ts and the rest of the engine use `buildIdIndex`. Fix: switch
+merchant-experiment.ts to `record.mainboardIds` + `buildIdIndex(cardDatabase)`
+(matching production), after which `buildNameIndex` is reachable only from tests
+and can be removed. Two integration tests (create-battle-init.test.ts,
+opponent-deck.test.ts) currently call `buildNameIndex` over synthetic databases
+whose names are unique by construction, so they are unaffected but should be
+moved to `buildIdIndex` alongside the script.
+
+Issue 16: latent name -> UUID fallback map in the draft pool builder
+--------------------------------------------------------------------
+src/draft/pool/pool-data.ts:66-76 builds `cardIdByName: Map<string, string>`
+(display name -> UUID, first writer wins on name collisions) onto `PoolData`.
+Consumers: variant-seed.ts:85 (`cardIdByName?.get(name) ?? name`),
+variant-picksig.ts:107 (legacy signature-name fallback),
+variant-embedded.ts:57 and variant-sigseed.ts:113 (passed through).
+
+In production this map is inert: the idf/seed corpus is built from
+`poolData.decklistIds` (UUIDs) — variant-idf.ts:93 prefers `decklistIds` and
+only falls back to name-keyed `decklists` for synthetic test PoolData — and a
+Dreamcaller's `signatureCardIds` are already UUIDs, so every `cardIdByName.get`
+lookup is handed a UUID, misses the name-keyed map, and returns the UUID
+unchanged. The first-writer-wins collision can therefore only collapse two
+distinct same-name cards in the name-fallback path that runs for synthetic or
+legacy name-only PoolData, never on the live UUID corpus.
+
+It is a latent footgun rather than an active bug: the structure exists solely to
+service the name-keyed fallback, and any future caller that feeds it real
+display names would silently merge same-name cards. Preferred resolution is to
+delete the name-fallback path and require UUID-keyed corpus/signature input
+everywhere (the `decklists`/name source is already legacy versus `decklistIds`),
+removing `cardIdByName`/`cardNameById` from `PoolData`.
+
+Reviewed and confirmed NOT name-key bugs
+-----------------------------------------
+- src/journeys/ui/referencedCards.ts:128 `cardsByName` is `Map<string,
+  CardContent[]>` and stores EVERY card matching a scraped name, emitting all
+  candidates rather than collapsing to one. Journey option text is a rendered
+  flat string with no threaded UUIDs, so name-scraping is unavoidable here; the
+  array value is the correct collision-safe mitigation.
+- The idf/affinity corpus maps (variant-idf.ts, affinity-corpus-io.ts) and df /
+  prior / affinity maps are keyed on the UUID corpus, not names.
+- Synthetic test fixtures (journey_v2/archetypes/*.test.ts and the battle
+  integration tests) use card name as an opaque token because their fabricated
+  cards have no UUIDs and unique names by construction; not catalog identity.
