@@ -20,6 +20,7 @@
 #   6. setup-assets         copy the fresh artifacts into public/
 #   7. check-tides4          confirm the tides4 freshness gate passes
 #   8. check-tides5          confirm the tides5 freshness gate passes
+#   9. check-tide-annotations  confirm each tide label matches its deck contents
 #
 # Scope is the actively-maintained, freshness-gated artifacts. The legacy tides /
 # tides2 / tides3 bakes and the upstream MTG draft-record import are intentionally
@@ -44,29 +45,32 @@ if [[ ! -d node_modules ]]; then
   npm install
 fi
 
-step "1/8  setup-assets — build public/ inputs from source"
+step "1/9  setup-assets — build public/ inputs from source"
 node scripts/setup-assets.mjs
 
-step "2/8  bake-merchant-corpus — data/merchant_corpus.json"
+step "2/9  bake-merchant-corpus — data/merchant_corpus.json"
 node scripts/bake-merchant-corpus.mjs
 
-step "3/8  bake-affinity-corpus — data/affinity_corpus.jsonc"
+step "3/9  bake-affinity-corpus — data/affinity_corpus.jsonc"
 node scripts/bake-affinity-corpus.mjs
 
-step "4/8  bake-tides4 — data/tides4.jsonc + markdown"
+step "4/9  bake-tides4 — data/tides4.jsonc + markdown"
 node scripts/bake-tides4.mjs
 
-step "5/8  bake-tides5 — data/tides5.jsonc + markdown"
+step "5/9  bake-tides5 — data/tides5.jsonc + markdown"
 node scripts/bake-tides5.mjs
 
-step "6/8  setup-assets — copy fresh artifacts into public/"
+step "6/9  setup-assets — copy fresh artifacts into public/"
 node scripts/setup-assets.mjs
 
-step "7/8  check-tides4 — verify the freshness gate"
+step "7/9  check-tides4 — verify the freshness gate"
 node scripts/check-tides4.mjs
 
-step "8/8  check-tides5 — verify the freshness gate"
+step "8/9  check-tides5 — verify the freshness gate"
 node scripts/check-tides5.mjs
+
+step "9/9  check-tide-annotations — verify tide labels match their decks"
+node scripts/check-tide-annotations.mjs
 
 step "Done — git-tracked files changed by this run"
 git status --short -- data docs || true
