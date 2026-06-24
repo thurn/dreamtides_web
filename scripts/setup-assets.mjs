@@ -250,10 +250,8 @@ export function transformCard(card) {
  *      the seat has exactly 30 trimmed picks (10 per pack). Anything else — an
  *      incomplete record, or a non-standard pack layout — drops the seat.
  *
- * The corpus stores each card as its stable cards_v2 UUID (a bare card name is
- * also accepted, e.g. an unmigrated record or a name that never resolved to an
- * id, and is looked up through `cardMaps.nameToId`). A token whose id does not
- * resolve to a known card is dropped from whichever mainboard/pack/pick array it
+ * The corpus stores each card as its stable cards_v2 UUID. A token that is not a
+ * UUID for a known card is dropped from whichever mainboard/pack/pick array it
  * appears in; the total is logged. Storing the id is what makes the corpus
  * rename-proof: a renamed card keeps its id, so its picks survive and the bundle
  * just refreshes the display name from `idToName`.
@@ -281,7 +279,7 @@ export function transformCard(card) {
  *     short seat's observations stay valid.
  */
 export function buildDraftRecords(dir, cardMaps, opts = {}) {
-  const { nameToId, idToName } = cardMaps;
+  const { idToName } = cardMaps;
   const { seatFilter = null, requireFullPicks = true } = opts;
   let droppedNames = 0;
   let skippedIncomplete = 0;
@@ -297,19 +295,17 @@ export function buildDraftRecords(dir, cardMaps, opts = {}) {
     const { draftId } = raw;
 
     /**
-     * Resolve an array of card tokens (stable UUIDs, or bare names for unmigrated
-     * records) to current names + ids. Tokens whose id does not resolve to a
-     * known card are dropped (incrementing the global counter), so the returned
-     * `names` and `ids` stay index-aligned.
+     * Resolve an array of card tokens (stable cards_v2 UUIDs) to current names +
+     * ids. A token that is not a UUID for a known card is dropped (incrementing
+     * the global counter), so the returned `names` and `ids` stay index-aligned.
      */
     function resolve(tokens) {
       const outNames = [];
       const outIds = [];
       for (const token of tokens) {
-        const id = CARD_ID_RE.test(token) ? token : nameToId.get(token);
-        if (id !== undefined && idToName.has(id)) {
-          outNames.push(idToName.get(id));
-          outIds.push(id);
+        if (CARD_ID_RE.test(token) && idToName.has(token)) {
+          outNames.push(idToName.get(token));
+          outIds.push(token);
         } else {
           droppedNames++;
         }
@@ -387,7 +383,7 @@ export function buildDraftRecords(dir, cardMaps, opts = {}) {
  *
  * @param {string} manifestPath - path to `docs/known_good_decklists.json`
  * @param {string} draftRecordsAdaptedDir - path to `docs/draft_records_adapted/`
- * @param {{ idToName: Map<string,string>, nameToId: Map<string,string> }} cardMaps
+ * @param {{ idToName: Map<string,string> }} cardMaps
  * @returns {Array<{ id: string, draftId: string, seat: number, name: string, mainboardIds: string[] }>}
  */
 export function buildKnownGoodDecklists(manifestPath, draftRecordsAdaptedDir, cardMaps) {
@@ -416,34 +412,19 @@ export function buildKnownGoodDecklists(manifestPath, draftRecordsAdaptedDir, ca
 }
 
 /**
- * Build id<->name lookup maps from the parsed cards_v2 records. The `id` UUID is
- * the stable key every card-reference system uses; the maps resolve a reference
- * back to the current display name (and let a tolerant reader accept a bare name).
- *
- * When two distinct UUIDs share a display name, `nameToId` keeps the first-seen
- * UUID (first-writer-wins) and emits a console.warn listing the collision so
- * ingestion runs surface exactly which cards are being merged through the
- * name-only source data path.
+ * Build the `idToName` lookup map from the parsed cards_v2 records. The `id`
+ * UUID is the stable key every card-reference system uses; the map resolves a
+ * reference UUID back to the current display name for the render boundary.
  */
 export function buildCardMaps(cardsV2) {
   const idToName = new Map();
-  const nameToId = new Map();
   for (const card of cardsV2) {
     if (typeof card.id !== "string") {
       throw new Error(`cards_v2 card "${String(card.name)}" is missing an id`);
     }
     idToName.set(card.id, card.name);
-    if (!nameToId.has(card.name)) {
-      nameToId.set(card.name, card.id);
-    } else if (nameToId.get(card.name) !== card.id) {
-      console.warn(
-        `[buildCardMaps] display-name collision: "${card.name}" is shared by UUIDs ` +
-          `${nameToId.get(card.name)} (kept) and ${card.id} (ignored in nameToId). ` +
-          `Name-only source data will resolve to one arbitrary card.`,
-      );
-    }
   }
-  return { idToName, nameToId };
+  return { idToName };
 }
 
 /**

@@ -21,10 +21,10 @@ export const CARD_ID_RE =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/iu;
 
 /**
- * Read `cards_v2.toml` and return id<->name lookup maps. `idToName` is the
- * source of truth for resolving a reference UUID to its current display name;
- * `nameToId` lets the one-time migration (and any tolerant reader) accept a bare
- * card name and canonicalize it to a UUID.
+ * Read `cards_v2.toml` and return the `idToName` lookup map: a card's stable
+ * UUID resolved to its current display name. Every card-reference system keys on
+ * the UUID, so this map is the source of truth for resolving a reference to the
+ * name shown in the UI.
  */
 export function loadCardMaps(cardsV2TomlPath) {
   const parsed = parse(readFileSync(cardsV2TomlPath, "utf8"));
@@ -33,52 +33,26 @@ export function loadCardMaps(cardsV2TomlPath) {
     throw new Error(`Expected [[cards]] array in ${cardsV2TomlPath}`);
   }
   const idToName = new Map();
-  const nameToId = new Map();
   for (const card of cards) {
     if (typeof card.id !== "string") {
       throw new Error(`cards_v2 card "${String(card.name)}" is missing an id`);
     }
     idToName.set(card.id, card.name);
-    // First record wins on a duplicate name. When two distinct UUIDs share a
-    // display name, emit a warning so ingestion runs surface the collision: the
-    // name-only source data path (cubecobra decklists) cannot disambiguate them
-    // without cardNumber-tagged input.
-    if (!nameToId.has(card.name)) {
-      nameToId.set(card.name, card.id);
-    } else if (nameToId.get(card.name) !== card.id) {
-      console.warn(
-        `[loadCardMaps] display-name collision: "${card.name}" is shared by UUIDs ` +
-          `${nameToId.get(card.name)} (kept) and ${card.id} (ignored in nameToId). ` +
-          `Name-only source data will resolve to one arbitrary card.`,
-      );
-    }
   }
-  return { idToName, nameToId };
+  return { idToName };
 }
 
 /**
- * Build id<->name lookup maps from already-loaded card records (each with an
+ * Build the `idToName` lookup map from already-loaded card records (each with an
  * `id` and `name`), e.g. the parsed `cards_v2-data.json` bundle. Avoids
  * re-reading the TOML when the caller already has the records.
  */
 export function mapsFromCards(cards) {
   const idToName = new Map();
-  const nameToId = new Map();
   for (const card of cards) {
     idToName.set(card.id, card.name);
-    // First record wins on a duplicate name. Warn on collision so callers can
-    // see which display names are shared by two distinct UUIDs.
-    if (!nameToId.has(card.name)) {
-      nameToId.set(card.name, card.id);
-    } else if (nameToId.get(card.name) !== card.id) {
-      console.warn(
-        `[mapsFromCards] display-name collision: "${card.name}" is shared by UUIDs ` +
-          `${nameToId.get(card.name)} (kept) and ${card.id} (ignored in nameToId). ` +
-          `Name-only source data will resolve to one arbitrary card.`,
-      );
-    }
   }
-  return { idToName, nameToId };
+  return { idToName };
 }
 
 // Per-`meta` cache of the build-around support entries indexed by current card
@@ -120,8 +94,8 @@ export function supportEntryById(meta, id) {
 
 /**
  * Strip an optional trailing `# comment` and surrounding whitespace from a
- * corpus line. Returns the leading token (a UUID, or a bare card name during
- * migration), or "" for a blank/comment-only line.
+ * corpus line. Returns the leading token (a cards_v2 UUID), or "" for a
+ * blank/comment-only line.
  */
 export function corpusLineToken(line) {
   const hash = line.indexOf("#");
@@ -130,23 +104,22 @@ export function corpusLineToken(line) {
 }
 
 /**
- * Resolve a single corpus token to `{ id, name }`. Accepts either a card UUID or
- * (for the one-time migration) a bare card name. Throws on a token that resolves
- * to no card, so a dangling reference fails loudly rather than silently dropping.
+ * Resolve a single corpus token to `{ id, name }`. The token must be a cards_v2
+ * UUID; a bare card name or any other non-UUID token throws, so an ambiguous or
+ * dangling reference fails loudly rather than silently resolving to one of the
+ * cards that share a display name.
  */
-export function resolveToken(token, { idToName, nameToId }) {
-  if (CARD_ID_RE.test(token)) {
-    const name = idToName.get(token);
-    if (name === undefined) {
-      throw new Error(`Unknown card UUID: ${token}`);
-    }
-    return { id: token, name };
+export function resolveToken(token, { idToName }) {
+  if (!CARD_ID_RE.test(token)) {
+    throw new Error(
+      `Card reference must be a cards_v2 UUID, got: ${JSON.stringify(token)}`,
+    );
   }
-  const id = nameToId.get(token);
-  if (id === undefined) {
-    throw new Error(`Unknown card reference: ${JSON.stringify(token)}`);
+  const name = idToName.get(token);
+  if (name === undefined) {
+    throw new Error(`Unknown card UUID: ${token}`);
   }
-  return { id, name: token };
+  return { id: token, name };
 }
 
 /**
@@ -190,12 +163,12 @@ export function stripJsonComments(text) {
 /**
  * Read every adapted draft record (`*.jsonc`) in `dir` and return one decklist
  * per seat that has a non-empty mainboard: the seat's `mainboard` resolved to
- * current card names, in order. Card tokens are stable UUIDs (a bare name is
- * also accepted, e.g. an unmigrated record); a token that resolves to no known
- * card is dropped from that decklist. Seats with an empty (or fully unresolved)
- * mainboard are skipped, as are files without a `seats` array.
+ * current card names, in order. Card tokens are stable cards_v2 UUIDs; a token
+ * that is not a UUID for a known card is dropped from that decklist. Seats with
+ * an empty (or fully unresolved) mainboard are skipped, as are files without a
+ * `seats` array.
  */
-export function readAdaptedRecordDecklists(dir, { idToName, nameToId }) {
+export function readAdaptedRecordDecklists(dir, { idToName }) {
   const decks = [];
   for (const filename of readdirSync(dir)
     .filter((f) => f.endsWith(".jsonc"))
@@ -208,8 +181,9 @@ export function readAdaptedRecordDecklists(dir, { idToName, nameToId }) {
       if (!Array.isArray(seat.mainboard)) continue;
       const names = [];
       for (const token of seat.mainboard) {
-        const id = CARD_ID_RE.test(token) ? token : nameToId.get(token);
-        if (id !== undefined && idToName.has(id)) names.push(idToName.get(id));
+        if (CARD_ID_RE.test(token) && idToName.has(token)) {
+          names.push(idToName.get(token));
+        }
       }
       if (names.length > 0) decks.push(names);
     }
@@ -228,7 +202,7 @@ export function readAdaptedRecordDecklists(dir, { idToName, nameToId }) {
  * and resolution rules apply — a token that resolves to no known card is
  * dropped, and a seat with an empty (or fully unresolved) mainboard is skipped.
  */
-export function readAdaptedRecordDecklistIds(dir, { idToName, nameToId }) {
+export function readAdaptedRecordDecklistIds(dir, { idToName }) {
   const decks = [];
   for (const filename of readdirSync(dir)
     .filter((f) => f.endsWith(".jsonc"))
@@ -241,8 +215,9 @@ export function readAdaptedRecordDecklistIds(dir, { idToName, nameToId }) {
       if (!Array.isArray(seat.mainboard)) continue;
       const ids = [];
       for (const token of seat.mainboard) {
-        const id = CARD_ID_RE.test(token) ? token : nameToId.get(token);
-        if (id !== undefined && idToName.has(id)) ids.push(id.toLowerCase());
+        if (CARD_ID_RE.test(token) && idToName.has(token)) {
+          ids.push(token.toLowerCase());
+        }
       }
       if (ids.length > 0) decks.push(ids);
     }

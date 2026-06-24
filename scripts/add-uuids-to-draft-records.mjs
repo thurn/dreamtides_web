@@ -37,7 +37,18 @@ const limit = limitIdx !== -1 ? Number(argv[limitIdx + 1]) : Infinity;
 const cardsV2 = parse(
   readFileSync(join(ROOT, "data", "tabula", "cards_v2.toml"), "utf8"),
 ).cards;
-const { idToName, nameToId } = buildCardMaps(cardsV2);
+const { idToName } = buildCardMaps(cardsV2);
+
+// This migration is the one place that resolves a bare display name to a UUID,
+// so it owns its own name->id map. First record wins on a duplicate display
+// name; an ambiguous or unknown name is left as a bare token (see `toIds`) and
+// `buildDraftRecords` drops it at bundle time.
+const nameToId = new Map();
+for (const card of cardsV2) {
+  if (typeof card.id === "string" && !nameToId.has(card.name)) {
+    nameToId.set(card.name, card.id);
+  }
+}
 
 // Card-array keys whose string elements are card references (and get inline name
 // comments). `pickId` and other UUID-shaped fields are NOT card references, so

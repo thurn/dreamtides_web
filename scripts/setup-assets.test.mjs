@@ -562,30 +562,32 @@ describe("transformCard spark", () => {
 
 describe("buildDraftRecords", () => {
   /**
-   * Minimal cardMaps stub covering names A..F, a duplicate-test name "Dup", and
-   * per-pack markers P1..P3 used to assert which packs survive trimming.
+   * buildDraftRecords keys on stable cards_v2 UUIDs, so the synthetic records
+   * below store UUID-shaped tokens. `ID` maps short readable labels (A..F, a
+   * duplicate-test "Dup", and per-pack markers P1..P3) to those UUIDs, and the
+   * `idToName` stub resolves each UUID back to its label so the assertions can
+   * read in label space.
    */
-  const nameToId = new Map([
-    ["A", "id-a"],
-    ["B", "id-b"],
-    ["C", "id-c"],
-    ["D", "id-d"],
-    ["E", "id-e"],
-    ["F", "id-f"],
-    ["Dup", "id-dup"],
-    ["P1", "id-p1"],
-    ["P2", "id-p2"],
-    ["P3", "id-p3"],
-  ]);
+  const ID = {
+    A: "00000000-0000-0000-0000-00000000000a",
+    B: "00000000-0000-0000-0000-00000000000b",
+    C: "00000000-0000-0000-0000-00000000000c",
+    D: "00000000-0000-0000-0000-00000000000d",
+    E: "00000000-0000-0000-0000-00000000000e",
+    F: "00000000-0000-0000-0000-00000000000f",
+    Dup: "00000000-0000-0000-0000-0000000000d0",
+    P1: "00000000-0000-0000-0000-000000000001",
+    P2: "00000000-0000-0000-0000-000000000002",
+    P3: "00000000-0000-0000-0000-000000000003",
+  };
   const cardMaps = {
-    nameToId,
-    idToName: new Map([...nameToId].map(([name, id]) => [id, name])),
+    idToName: new Map(Object.entries(ID).map(([label, id]) => [id, label])),
   };
 
   /**
    * Build a synthetic picks array: 3 packs × `picksPerPack` picks.
    * pickInPack runs 1..picksPerPack for each pack.
-   * packCards for every pick contains ["A","B","C"] plus an optional extra.
+   * packCards for every pick contains [A, B, C] (as UUIDs) plus an optional extra.
    */
   function makePicks({ picksPerPack = 15, extraPackCards = [] } = {}) {
     const picks = [];
@@ -597,8 +599,8 @@ describe("buildDraftRecords", () => {
           pickNumber,
           pack,
           pickInPack: pip,
-          pick: pip === 1 ? ["A"] : [],
-          packCards: ["A", "B", "C", ...extraPackCards],
+          pick: pip === 1 ? [ID.A] : [],
+          packCards: [ID.A, ID.B, ID.C, ...extraPackCards],
         });
       }
     }
@@ -623,7 +625,7 @@ describe("buildDraftRecords", () => {
         draftId: "draft1",
         seats: [
           { seat: 0, mainboard: [], picks: makePicks() },
-          { seat: 1, mainboard: ["A"], picks: makePicks() },
+          { seat: 1, mainboard: [ID.A], picks: makePicks() },
         ],
       }),
     );
@@ -639,8 +641,8 @@ describe("buildDraftRecords", () => {
       JSON.stringify({
         draftId: "nopicks",
         seats: [
-          { seat: 0, mainboard: ["A"] },
-          { seat: 1, mainboard: ["A"], picks: makePicks() },
+          { seat: 0, mainboard: [ID.A] },
+          { seat: 1, mainboard: [ID.A], picks: makePicks() },
         ],
       }),
     );
@@ -655,13 +657,13 @@ describe("buildDraftRecords", () => {
     const picks = makePicks({ extraPackCards: [] });
     // Insert a duplicate into pack 2, pickInPack 3 (which trims to <=10, so it stays).
     const targetPick = picks.find((p) => p.pack === 2 && p.pickInPack === 3);
-    targetPick.packCards = ["A", "Dup", "Dup", "B"];
+    targetPick.packCards = [ID.A, ID.Dup, ID.Dup, ID.B];
 
     writeFileSync(
       join(dir, "draft.jsonc"),
       JSON.stringify({
         draftId: "abc",
-        seats: [{ seat: 2, mainboard: ["A", "B"], picks }],
+        seats: [{ seat: 2, mainboard: [ID.A, ID.B], picks }],
       }),
     );
     const result = buildDraftRecords(dir, cardMaps);
@@ -689,8 +691,8 @@ describe("buildDraftRecords", () => {
     // packIds/pickIds carry the stable ids, aligned index-for-index with names.
     expect(rec.packIds).toHaveLength(30);
     expect(rec.pickIds).toHaveLength(30);
-    expect(rec.packIds[12]).toEqual(["id-a", "id-dup", "id-dup", "id-b"]);
-    expect(rec.pickIds[0]).toEqual(["id-a"]);
+    expect(rec.packIds[12]).toEqual([ID.A, ID.Dup, ID.Dup, ID.B]);
+    expect(rec.pickIds[0]).toEqual([ID.A]);
   });
 
   it("emits id as <draftId>#<seat>", () => {
@@ -699,7 +701,7 @@ describe("buildDraftRecords", () => {
       join(dir, "draft.jsonc"),
       JSON.stringify({
         draftId: "xyz-123",
-        seats: [{ seat: 5, mainboard: ["A"], picks: makePicks() }],
+        seats: [{ seat: 5, mainboard: [ID.A], picks: makePicks() }],
       }),
     );
     const result = buildDraftRecords(dir, cardMaps);
@@ -717,7 +719,7 @@ describe("buildDraftRecords", () => {
       join(dir, "draft.jsonc"),
       JSON.stringify({
         draftId: "incomplete",
-        seats: [{ seat: 0, mainboard: ["A"], picks: incompletePicks }],
+        seats: [{ seat: 0, mainboard: [ID.A], picks: incompletePicks }],
       }),
     );
     const result = buildDraftRecords(dir, cardMaps);
@@ -729,6 +731,10 @@ describe("buildDraftRecords", () => {
     // A 5-pack draft, 10 picks per pack. Packs 1-3 (pickInPack <= 10) yield the
     // 30 trimmed picks; packs 4-5 are dropped entirely. Each pick is tagged with
     // its pack marker (P1..P5) so we can assert which packs survived.
+    // Packs 1-3 carry resolvable per-pack markers (P1..P3); packs 4-5 carry
+    // markers absent from the catalog, so even if they were not trimmed they
+    // would resolve to nothing.
+    const PACK_MARKER = { 1: ID.P1, 2: ID.P2, 3: ID.P3, 4: "pack-4", 5: "pack-5" };
     const picks = [];
     let pickNumber = 0;
     for (let pack = 1; pack <= 5; pack++) {
@@ -738,8 +744,8 @@ describe("buildDraftRecords", () => {
           pickNumber,
           pack,
           pickInPack: pip,
-          pick: ["A"],
-          packCards: [`P${pack}`, "A", "B"],
+          pick: [ID.A],
+          packCards: [PACK_MARKER[pack], ID.A, ID.B],
         });
       }
     }
@@ -747,7 +753,7 @@ describe("buildDraftRecords", () => {
       join(dir, "draft.jsonc"),
       JSON.stringify({
         draftId: "fivepack",
-        seats: [{ seat: 0, mainboard: ["A"], picks }],
+        seats: [{ seat: 0, mainboard: [ID.A], picks }],
       }),
     );
     const result = buildDraftRecords(dir, cardMaps);
@@ -762,45 +768,43 @@ describe("buildDraftRecords", () => {
     expect(allNames).not.toContain("P5");
   });
 
-  it("drops names absent from cardMaps.nameToId and excludes them from output", () => {
+  it("drops tokens that are not a known card UUID and excludes them from output", () => {
     const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
-    // "Unknown" is not in cardMaps.nameToId.
+    // A UUID that is not in cardMaps.idToName (an unknown/removed card).
+    const UNKNOWN = "99999999-9999-9999-9999-999999999999";
     const picks = makePicks();
-    picks[0].packCards = ["A", "Unknown", "B"];
-    picks[0].pick = ["Unknown"];
+    picks[0].packCards = [ID.A, UNKNOWN, ID.B];
+    picks[0].pick = [UNKNOWN];
 
     writeFileSync(
       join(dir, "draft.jsonc"),
       JSON.stringify({
         draftId: "nametest",
-        seats: [{ seat: 0, mainboard: ["A", "Unknown", "C"], picks }],
+        seats: [{ seat: 0, mainboard: [ID.A, UNKNOWN, ID.C], picks }],
       }),
     );
     const result = buildDraftRecords(dir, cardMaps);
     expect(result).toHaveLength(1);
     const rec = result[0];
 
-    // "Unknown" dropped from mainboard
-    expect(rec.mainboard).not.toContain("Unknown");
-    expect(rec.mainboard).toContain("A");
+    // The unknown card dropped from mainboard, leaving the resolved labels.
+    expect(rec.mainboard).toEqual(["A", "C"]);
 
-    // "Unknown" dropped from pack
-    expect(rec.packs[0]).not.toContain("Unknown");
-    expect(rec.packs[0]).toContain("A");
+    // The unknown card dropped from pack.
+    expect(rec.packs[0]).toEqual(["A", "B"]);
 
-    // "Unknown" dropped from pick (leaving empty array)
+    // The unknown card dropped from pick (leaving empty array).
     expect(rec.picks[0]).toEqual([]);
   });
 
   it("resolves UUID tokens through idToName, surviving a rename (JSONC input)", () => {
     const dir = mkdtempSync(join(tmpdir(), "quest-draft-records-"));
-    // The corpus stores stable ids. `RENAMED_ID`'s historical display name is
-    // gone from nameToId (the card was renamed), but idToName still maps the id
-    // to its current name — so the pick must survive and surface the new name.
+    // The corpus stores stable ids. `RENAMED_ID`'s historical display name does
+    // not appear anywhere; idToName maps the id to its current name — so the pick
+    // must survive and surface the new name purely from its UUID.
     const RENAMED_ID = "11111111-1111-1111-1111-111111111111";
     const STAPLE_ID = "22222222-2222-2222-2222-222222222222";
     const renameMaps = {
-      nameToId: new Map([["Staple", STAPLE_ID]]),
       idToName: new Map([
         [STAPLE_ID, "Staple"],
         [RENAMED_ID, "Reborn Hero"],
@@ -845,9 +849,9 @@ describe("buildDraftRecords", () => {
     expect(rec.packIds[0]).toEqual([RENAMED_ID, STAPLE_ID]);
     expect(rec.picks[0]).toEqual(["Reborn Hero"]);
     expect(rec.pickIds[0]).toEqual([RENAMED_ID]);
-    // The name only exists in idToName, never in nameToId — proving the id, not a
-    // name lookup, carried it through.
-    expect(renameMaps.nameToId.has("Reborn Hero")).toBe(false);
+    // The current name is reachable only by resolving the stable id through
+    // idToName — proving the id, not a name lookup, carried the card through.
+    expect(renameMaps.idToName.get(RENAMED_ID)).toBe("Reborn Hero");
   });
 });
 
