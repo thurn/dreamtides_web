@@ -54,4 +54,21 @@ describe("findReferencedCardPreviews", () => {
 
     expect(previews.map((card) => card.name)).toEqual(["Spell Tome"]);
   });
+
+  it("returns all cards that share a display name, keyed by distinct UUIDs", () => {
+    // Two cards with the same display name but different UUIDs and rules text.
+    const cardsWithDuplicate = [
+      ...cards,
+      makeCard("Spell Tome", 201, { id: "card-201-alt" }),
+    ];
+
+    const previews = findReferencedCardPreviews(
+      "Gain 'Spell Tome'.",
+      cardsWithDuplicate,
+    );
+
+    // Both cards should appear, not just the last-registered one.
+    expect(previews.map((card) => card.id)).toEqual(["card-101", "card-201-alt"]);
+    expect(previews.map((card) => card.name)).toEqual(["Spell Tome", "Spell Tome"]);
+  });
 });

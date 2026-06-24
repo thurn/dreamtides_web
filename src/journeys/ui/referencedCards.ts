@@ -100,14 +100,43 @@ function quotedNames(text: string): string[] {
   return names;
 }
 
+/**
+ * Returns `CardData` previews for every card whose display name appears
+ * (single-quoted) in `text`, in first-mention order.
+ *
+ * Multiple distinct cards can share the same display name (different UUIDs,
+ * different rules). To avoid silently surfacing the wrong card, this function
+ * returns ALL cards that match each scraped name, so the hover preview shows
+ * every candidate rather than arbitrarily collapsing to one.
+ *
+ * --- Why name-scraping is still used here ---
+ * The journey text is a rendered flat string (`JourneyOption.text` /
+ * `JourneyTreeBranch.text`). Structured per-option card-UUID references are not
+ * threaded from the cost/reward template `render()` functions into the manifest
+ * today; doing so would require adding `referencedCardIds` to both manifest
+ * types and plumbing it through every shape fill. Until that migration happens,
+ * this name-based lookup is the only available mechanism. The residual risk
+ * (multiple candidates shown for a shared name) is preferable to the prior
+ * silent last-writer-wins collapse.
+ */
 export function findReferencedCardPreviews(
   text: string,
   cards: readonly CardContent[],
 ): CardData[] {
-  const cardsByName = new Map(cards.map((card) => [card.name, card]));
+  // Group all cards by display name. Cards with the same name get different
+  // UUID-keyed entries; we emit all of them when the name appears in the text.
+  const cardsByName = new Map<string, CardContent[]>();
+  for (const card of cards) {
+    const group = cardsByName.get(card.name);
+    if (group === undefined) {
+      cardsByName.set(card.name, [card]);
+    } else {
+      group.push(card);
+    }
+  }
 
   return quotedNames(text).flatMap((name) => {
-    const card = cardsByName.get(name);
-    return card === undefined ? [] : [cardContentToDisplayData(card)];
+    const group = cardsByName.get(name);
+    return group === undefined ? [] : group.map(cardContentToDisplayData);
   });
 }
