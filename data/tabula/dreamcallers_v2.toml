@@ -5,10 +5,26 @@
 # flavor best fits the new ability. Starting essence is left unset and assigned
 # separately.
 #
-# `signature-cards` is the standard `idf3` draft-pool steering data: a short list
-# of distinctive card names standing in for "what this Dreamcaller wants to do".
-# `idf3` uses it to locate the real decks that most embody the Dreamcaller and
-# bias pool construction toward them (see `docs/cards2/idf3_signature_design.md`).
+# `signature-cards` is draft-pool steering data: a short list of cards standing in
+# for "what this Dreamcaller wants to do", used by `idf3` to locate the real decks
+# that most embody the Dreamcaller and bias pool construction toward them (see
+# `docs/cards2/idf3_signature_design.md`).
+#
+# How the signature cards are chosen
+# ----------------------------------
+# Each Dreamcaller with signatures is assigned an MTG archetype, recorded in its
+# `mtg-name` field. `docs/cards2/card_associations.md` lists, for every archetype,
+# the five MTG cards most uniquely associated with it across real draft decks. Each
+# of those MTG cards is mapped back to its Dreamtides equivalent(s) through the
+# `mtg-name` field in `data/tabula/cards_v2.toml`, and the resulting Dreamtides
+# cards form the signature list. A Dreamcaller can therefore end up with fewer than
+# five signatures (when an associated MTG card has no Dreamtides equivalent) or more
+# than five (when one MTG card maps to several Dreamtides cards).
+#
+# Read `docs/cards2/card_associations.md` for the full archetype-to-card
+# associations and the lift-based method used to derive them. Entries whose
+# signatures were authored by hand instead of derived this way carry an inline note
+# in place of an `mtg-name` field.
 
 [[dreamcaller]]
 name = "Drusus Calvus"
@@ -100,6 +116,7 @@ title = "Wreckoner"
 id = "133E22DD-F81B-406D-B4E3-98C346D7FD4E"
 image-number = "0013"
 rendered-text = "Once per turn, if there are 7 or more cards in your void, you may play a character from your void."
+mtg-name = "Lurrus of the Dream-Den"
 signature-cards = [
   "4644db03-fbcd-4af5-a229-17962ce093d5", # Duskreaper
   "cd4d689d-1442-4a19-8e6a-182b425d066d", # Warfield Stalwart
@@ -115,6 +132,7 @@ title = "Shrouded Inquisitor"
 id = "9D64A4A2-3DC7-456E-9EB2-5FE3A48883C4"
 image-number = "0112"
 rendered-text = "2●, ☪, Abandon an ally: Materialize a random character with cost 1● higher from your deck."
+mtg-name = "Viscera Seer"
 signature-cards = [
   "4644db03-fbcd-4af5-a229-17962ce093d5", # Duskreaper
   "a30a5fdc-a6ec-4289-89cf-40f5cbe6fbaa", # Kindred Sparks
@@ -129,6 +147,7 @@ title = "Spent-Blood Chieftain"
 id = "16B579FE-C15B-4DF6-8262-D45CE44732AE"
 image-number = "0064"
 rendered-text = "Once per turn, when you abandon an ally, the next character you play this turn costs 2● less."
+mtg-name = "Phyrexian Altar"
 signature-cards = [
   "cf173b05-7bf2-465b-91e2-41f213c536d1", # Phantasmal Recruiter
   "9adbe3db-d872-4b75-92b5-d7f2798c22ce", # Titan of Forgotten Echoes
@@ -144,6 +163,7 @@ title = "Ashbroker"
 id = "86026206-1B11-4F38-A24E-FD3C697F5353"
 image-number = "0087"
 rendered-text = "Once per turn, when you discard a card, draw a card with ephemeral."
+mtg-name = "Inti, Seneschal of the Sun"
 signature-cards = [
   "6d6ce556-60df-486f-b2d8-5df168a6f75e", # Wreckborn
   "5a27e236-86d7-442f-81d2-fb29a2b7f12a", # Shadowbinder
@@ -161,6 +181,7 @@ title = "Twice-Mourned"
 id = "6488452D-4E9E-466C-96DF-716D4EC646B1"
 image-number = "0017"
 rendered-text = "When you play your second character in a turn, a character in your void gains reclaim 2● until end of turn."
+mtg-name = "Vengevine"
 signature-cards = [
   "06a4709d-fbef-4ea2-aa5e-caa2beac80ab", # Ridge Vortex Explorer
   "01298848-1ebb-48a1-b00b-d7e0af890870", # Ashfront Lieutenant
@@ -176,6 +197,7 @@ title = "the Salvage-Born"
 id = "B8C1B0AB-0FE6-47D6-B576-0C2231AEB81E"
 image-number = "0044"
 rendered-text = "Once per turn, when you discard a card, it gains reclaim until end of turn."
+mtg-name = "Containment Construct"
 signature-cards = [
   "ed4d5342-0690-40b7-ab48-6b76035466f2", # Shadowpaw
   "b4838d67-f055-4fd3-a64d-0a4d2b6678cc", # Torchbearer of the Abyss
@@ -191,6 +213,7 @@ title = "Recon Commander"
 id = "81954CA0-DA36-49DD-915C-1CCB1B2D7B05"
 image-number = "0007"
 rendered-text = "2●, ☪, Discard a card: Materialize a 1✦ survivor figment."
+mtg-name = "Zombie Infestation"
 signature-cards = [
   "9495f501-f627-4b74-a848-b3d928641229", # Emberwatch Veteran
   "d55d9fd8-ad2d-41f4-aa7f-5958432f00aa", # Vessel of Echoes
@@ -206,6 +229,7 @@ title = "Ember Among Remnants"
 id = "60BD584B-5BC8-4EE7-8A98-CBB304EB71AB"
 image-number = "0028"
 rendered-text = "When a card leaves your void, a random card in your void gains reclaim."
+mtg-name = "Cryptbreaker"
 signature-cards = [
   "4e1c0192-2649-489f-aad3-75ff2887c0a7", # Twilight Reclaimer
   "4733876a-d6b1-48d2-b322-5f71aee9f3d6", # Cinderfang
@@ -221,6 +245,8 @@ title = "the Invocant"
 id = "5E28154D-770A-4B84-8AAC-9DE44F5D7D02"
 image-number = "0080"
 rendered-text = "❖ – 4●, ☪: Materialize a 1✦ outsider figment."
+# Signatures authored by hand around three evasive outsiders (see commit a98fbb67);
+# not derived from the card_associations.md archetype mapping.
 signature-cards = [
   "954e8d50-d494-4fb2-b4c7-74979083b774", # Driftrider
   "4f29a241-9265-4669-a189-5a2a91923e12", # Vanishing Inquisitor
@@ -233,6 +259,7 @@ title = "the Dredger"
 id = "4D5E3933-7DD6-406B-922D-DD78ACFA044A"
 image-number = "0005"
 rendered-text = "❖❖ – 2●, ☪, Discard a card: An event in your void gains reclaim until end of turn."
+mtg-name = "Snapcaster Mage"
 signature-cards = [
   "954e8d50-d494-4fb2-b4c7-74979083b774", # Driftrider
   "8cb543d7-e70b-4526-b473-bb17dcaee2a7", # Planetgazer
@@ -248,6 +275,7 @@ title = "Wearer of the Stolen Face"
 id = "2B7E921D-0CD7-4C20-A415-9E7EEDE7B477"
 image-number = "0060"
 rendered-text = "4●, ☪: Copy the next event you play this turn."
+mtg-name = "Bonus Round"
 signature-cards = [
   "4d4618bd-4779-4953-b446-dab05e1da5db", # Nebula's Wake
   "4752fc43-6696-4bc3-88d0-4d5b97622fa8", # From the Barrow
@@ -262,6 +290,7 @@ title = "Chain Accelerant"
 id = "84E7020C-7384-4CC3-A20F-AB05F03CC375"
 image-number = "0106"
 rendered-text = "When you play your second event in a turn, foresee 2."
+mtg-name = "Dragon's Rage Channeler"
 signature-cards = [
   "6fa9c440-3912-4b1e-868c-840ae772fe1c", # The Devourer
   "c11eb833-a45b-4983-949d-848039d0504c", # Shadowprowler
@@ -276,6 +305,7 @@ title = "Lector of the Receding Rite"
 id = "F6208407-C4E9-42AC-B533-346704F5E39E"
 image-number = "0078"
 rendered-text = "2●, ☪: If you played an event this turn, draw an event."
+mtg-name = "Young Pyromancer"
 signature-cards = [
   "3811a0a2-66af-4c06-b179-948dfa9b2ee3", # Weblight Waif
   "95711262-8510-475c-a572-c1cd144d54cb", # Somber Flockmaster
@@ -289,6 +319,8 @@ title = "Scion of the Returning Tide"
 id = "FE2510D9-BFEE-4C35-97F9-30E0CD2E2851"
 image-number = "0084"
 rendered-text = "2●, ☪: Return an ally to hand. Its cost is reduced by 1●."
+# Original hand-picked signature set; not derived from the card_associations.md
+# archetype mapping.
 signature-cards = [
   "caaee8a9-0c22-41b4-950f-4c1131b98221", # Celestial Reverie
   "a424b91a-8c3c-4f96-8ac9-8bbbbbbd28b5", # Ambush Operative
@@ -303,6 +335,7 @@ title = "Packmaster"
 id = "94E7C651-25E9-4A62-9DE4-EAF5BA20542C"
 image-number = "0095"
 rendered-text = "4●, ☪: Gain 1● for each allied spirit animal."
+mtg-name = "Priest of Titania"
 signature-cards = [
   "61060827-8bed-4b63-b63d-6c3b0536e941", # Sunshadow Eagle
   "c8579b20-95ff-4b1d-b4c6-6bd049fc4760", # Ghostlight Wolves
@@ -318,6 +351,7 @@ title = "Hegemon of Shattered Thrones"
 id = "3EBABA62-9000-429D-B203-2A5A9724389A"
 image-number = "0045"
 rendered-text = "With 3 or more allied characters, the first character you play each turn costs 1● less."
+mtg-name = "Aluren"
 signature-cards = [
   "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", # Dawnprowler Panther
   "d30bd488-f921-49cb-a44f-353c54cb6548", # Starrunner
@@ -332,6 +366,7 @@ title = "Strategos of the Phalanx"
 id = "2C53B1B9-9291-4BBA-8D3A-F40B545C8F3C"
 image-number = "0100"
 rendered-text = "When you play your second character in a turn, draw a card with ephemeral."
+mtg-name = "Glimpse of Nature"
 signature-cards = [
   "7f550d4e-c6a1-4e5e-ae0c-1b3edd6f0f4a", # Stoneborn Eternal
   "7992dbb5-ca45-4066-aca3-ff1d6d87619e", # Moonbound Wolf
@@ -346,6 +381,7 @@ title = "The Hammer's Echo"
 id = "BF72ADFF-7D74-4BE8-9B93-1DB7BA13A1DB"
 image-number = "0108"
 rendered-text = "2●, ☪: Materialize a 0✦ figment copy of the last warrior you played this turn."
+mtg-name = "Urza, Lord High Artificer"
 signature-cards = [
   "41044897-b70a-4e2b-8eb6-baf843a14a43", # Spellweaver
   "a9b5afaa-e149-4bf4-9007-077e8e9f12e6", # Starshot Gunner
@@ -361,6 +397,7 @@ title = "Daimyo of Lacquered Fury"
 id = "BFC40414-5264-41BF-86E1-A0F41EE4F5B5"
 image-number = "0029"
 rendered-text = "When the first card you draw in a turn is a warrior, reduce its cost by 1●."
+mtg-name = "Mishra's Workshop"
 signature-cards = [
   "426825c7-7259-41af-ac1c-c042b878d69b", # Burning Revenant
   "81074582-dfb3-497c-8c04-f97a24d6b1d4", # Pit Descender
@@ -375,6 +412,7 @@ title = "Warhost Exemplar"
 id = "91D4C3B5-FD63-480B-9ED5-979109A227BB"
 image-number = "0056"
 rendered-text = "2●, ☪: A warrior in your void gains reclaim until end of turn."
+mtg-name = "Emry, Lurker of the Loch"
 signature-cards = [
   "b977afaf-f583-45ec-8e34-99fbfa4e9190", # Grim Reclaimer
   "90a6a7a0-b739-475e-8379-647741aab423", # Voidsire
