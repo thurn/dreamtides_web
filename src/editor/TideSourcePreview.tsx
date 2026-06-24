@@ -19,7 +19,17 @@ interface TideSourcePreviewProps {
 
 function dreamcallerHoverContent(dreamcaller: EditorDreamcaller) {
   return (
-    <div style={{ maxWidth: 260, color: "#f7f1df" }}>
+    <div
+      style={{
+        maxWidth: 260,
+        color: "#f7f1df",
+        background: "#0e1215",
+        border: "1px solid rgba(255, 255, 255, 0.16)",
+        borderRadius: 10,
+        padding: "10px 12px",
+        boxShadow: "0 18px 34px rgba(0, 0, 0, 0.5)",
+      }}
+    >
       <div style={{ fontWeight: 800, fontSize: "0.9rem" }}>{dreamcaller.name}</div>
       <div style={{ color: "#8edbd1", fontSize: "0.74rem", marginBottom: 6 }}>
         {dreamcaller.title}
@@ -50,6 +60,7 @@ export function TideSourcePreview({
       <HoverPopover
         triggerAs="div"
         delayMs={150}
+        maxWidthPx={null}
         content={dreamcallerHoverContent(dreamcaller)}
         style={{ width: size, height: size, flex: `0 0 ${size}px` }}
       >
