@@ -25,6 +25,7 @@ import {
   startQuestFromDreamcaller,
 } from "./quest-state-actions";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import type { DreamcallerContent } from "../types/content";
 import type {
   DreamscapeNode,
@@ -65,8 +66,8 @@ function makeCard(
   overrides: Partial<CardData> = {},
 ): CardData {
   return {
-    name: `Card ${String(cardNumber)}`,
-    id: `card-${String(cardNumber)}`,
+    name: asCardName(`Card ${String(cardNumber)}`),
+    id: asCardId(`card-${String(cardNumber)}`),
     cardNumber,
     cardType: "Event",
     subtype: "Test",

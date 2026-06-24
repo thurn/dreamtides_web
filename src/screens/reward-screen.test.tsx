@@ -8,6 +8,7 @@ import type { HTMLAttributes, ReactElement, ReactNode } from "react";
 import type { QuestMutations } from "../state/quest-context";
 import type { QuestState } from "../types/quest";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import type { DreamsignTemplate } from "../types/content";
 import { RewardSiteScreen } from "./RewardSiteScreen";
 import { useQuest } from "../state/quest-context";
@@ -184,8 +185,8 @@ function makeCardDatabase(): Map<number, CardData> {
     [
       1,
       {
-        name: "Card Reward",
-        id: "card-reward",
+        name: asCardName("Card Reward"),
+        id: asCardId("card-reward"),
         cardNumber: 1,
         cardType: "Character",
         subtype: "",

@@ -1,3 +1,4 @@
+import { asCardId, asCardName } from "../types/card-identity";
 import type { ArtCrop, CardData } from "../types/cards";
 
 /** Figment fields edited inline through the card frame. */
@@ -110,8 +111,8 @@ export function figmentHasTitleBar(name: string, subtype: string): boolean {
  */
 export function figmentPreviewCard(record: EditorFigmentRecord): CardData {
   return {
-    name: record.name,
-    id: `figment-${record.id}`,
+    name: asCardName(record.name),
+    id: asCardId(`figment-${record.id}`),
     cardNumber: record.sourceIndex,
     cardType: "Character",
     subtype: record.subtype,

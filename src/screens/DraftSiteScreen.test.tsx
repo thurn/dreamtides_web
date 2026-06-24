@@ -7,6 +7,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { QuestMutations } from "../state/quest-context";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import type { DraftState } from "../types/draft";
 import type { QuestState } from "../types/quest";
 import { DraftSiteScreen } from "./DraftSiteScreen";
@@ -175,8 +176,8 @@ function makeCardDatabase(): Map<number, CardData> {
     [
       1,
       {
-        name: "Starter Lantern",
-        id: "starter-lantern",
+        name: asCardName("Starter Lantern"),
+        id: asCardId("starter-lantern"),
         cardNumber: 1,
         cardType: "Character",
         subtype: "",
@@ -192,8 +193,8 @@ function makeCardDatabase(): Map<number, CardData> {
     [
       101,
       {
-        name: "Arc Runner",
-        id: "arc-runner",
+        name: asCardName("Arc Runner"),
+        id: asCardId("arc-runner"),
         cardNumber: 101,
         cardType: "Character",
         subtype: "",
@@ -209,8 +210,8 @@ function makeCardDatabase(): Map<number, CardData> {
     [
       102,
       {
-        name: "Alpha Warden",
-        id: "alpha-warden",
+        name: asCardName("Alpha Warden"),
+        id: asCardId("alpha-warden"),
         cardNumber: 102,
         cardType: "Character",
         subtype: "",
@@ -226,8 +227,8 @@ function makeCardDatabase(): Map<number, CardData> {
     [
       103,
       {
-        name: "Beta Ledger",
-        id: "beta-ledger",
+        name: asCardName("Beta Ledger"),
+        id: asCardId("beta-ledger"),
         cardNumber: 103,
         cardType: "Event",
         subtype: "",
@@ -243,8 +244,8 @@ function makeCardDatabase(): Map<number, CardData> {
     [
       104,
       {
-        name: "Gamma Echo",
-        id: "gamma-echo",
+        name: asCardName("Gamma Echo"),
+        id: asCardId("gamma-echo"),
         cardNumber: 104,
         cardType: "Event",
         subtype: "",
@@ -260,8 +261,8 @@ function makeCardDatabase(): Map<number, CardData> {
     [
       201,
       {
-        name: "Reserve One",
-        id: "reserve-one",
+        name: asCardName("Reserve One"),
+        id: asCardId("reserve-one"),
         cardNumber: 201,
         cardType: "Character",
         subtype: "",
@@ -277,8 +278,8 @@ function makeCardDatabase(): Map<number, CardData> {
     [
       202,
       {
-        name: "Reserve Two",
-        id: "reserve-two",
+        name: asCardName("Reserve Two"),
+        id: asCardId("reserve-two"),
         cardNumber: 202,
         cardType: "Character",
         subtype: "",
@@ -294,8 +295,8 @@ function makeCardDatabase(): Map<number, CardData> {
     [
       203,
       {
-        name: "Reserve Three",
-        id: "reserve-three",
+        name: asCardName("Reserve Three"),
+        id: asCardId("reserve-three"),
         cardNumber: 203,
         cardType: "Event",
         subtype: "",
@@ -311,8 +312,8 @@ function makeCardDatabase(): Map<number, CardData> {
     [
       204,
       {
-        name: "Reserve Four",
-        id: "reserve-four",
+        name: asCardName("Reserve Four"),
+        id: asCardId("reserve-four"),
         cardNumber: 204,
         cardType: "Event",
         subtype: "",

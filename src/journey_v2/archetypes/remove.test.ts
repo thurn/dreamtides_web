@@ -16,10 +16,12 @@ import type { DeckEntry } from "../../types/quest";
 import type { FitModel } from "../../draft/replay/fit-model";
 import type { MerchantContext } from "../types";
 import { purgeBuilder, purgeReplaceBuilder } from "./remove";
+import { asCardId } from "../../types/card-identity";
+import type { CardId } from "../../types/card-identity";
 
-function uuid(n: number): string {
+function uuid(n: number): CardId {
   const hex = n.toString(16).padStart(12, "0");
-  return `00000000-0000-4000-8000-${hex}`;
+  return asCardId(`00000000-0000-4000-8000-${hex}`);
 }
 
 /**

@@ -46,6 +46,7 @@
  * `JourneyContext` this screen receives.
  */
 
+import { asCardId } from "../../types/card-identity";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { applyBranch, planBranch } from "../apply/applyBranch";
@@ -217,7 +218,7 @@ function buildCardChooserCandidates(
       : request.rolledCardIds ?? context.content.cards.map((card) => card.id);
 
   return cardIds.flatMap((cardId, index) => {
-    const card = cardsById.get(cardId);
+    const card = cardsById.get(asCardId(cardId));
     if (!card || (starterOnly && card.rarity !== "Starter")) return [];
     return [
       {

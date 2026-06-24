@@ -8,6 +8,7 @@ import {
 } from "../__test-helpers__/atlas-fixtures";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import type { DreamcallerContent } from "../types/content";
 import type { QuestContent } from "../data/quest-content";
 import {
@@ -38,8 +39,8 @@ function makeCard(
   overrides: Partial<CardData> = {},
 ): CardData {
   return {
-    name: `Card ${String(cardNumber)}`,
-    id: `card-${String(cardNumber)}`,
+    name: asCardName(`Card ${String(cardNumber)}`),
+    id: asCardId(`card-${String(cardNumber)}`),
     cardNumber,
     cardType: "Event",
     subtype: "Test",
@@ -163,7 +164,10 @@ function makeReplayFitModel(): FitModel {
 function makeReplayCardDatabase(): Map<number, CardData> {
   const cards = new Map<number, CardData>();
   for (const cardNumber of REPLAY_NAME_INDEX.values()) {
-    cards.set(cardNumber, makeCard(cardNumber, { name: `C${String(cardNumber)}` }));
+    cards.set(
+      cardNumber,
+      makeCard(cardNumber, { name: asCardName(`C${String(cardNumber)}`) }),
+    );
   }
   return cards;
 }

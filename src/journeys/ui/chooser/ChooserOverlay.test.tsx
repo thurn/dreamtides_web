@@ -6,6 +6,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ReactElement } from "react";
 
 import type { CardData } from "../../../types/cards";
+import { asCardId, asCardName } from "../../../types/card-identity";
 import type { ChooserRequest } from "../../apply/chooserPlan";
 
 import {
@@ -70,8 +71,8 @@ const cardCandidates: readonly CardChooserCandidate[] = [
 
 function makeCard(overrides: Partial<CardData>): CardData {
   return {
-    name: "Alpha",
-    id: "alpha",
+    name: asCardName("Alpha"),
+    id: asCardId("alpha"),
     cardNumber: 101,
     cardType: "Character",
     subtype: "Warrior",

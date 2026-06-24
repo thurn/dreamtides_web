@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import type { CardContent } from "../content/types";
+import { asCardId, asCardName } from "../../types/card-identity";
 import { findReferencedCardPreviews } from "./referencedCards";
 
 function makeCard(
@@ -9,8 +10,8 @@ function makeCard(
   overrides: Partial<CardContent> = {},
 ): CardContent {
   return {
-    id: `card-${String(cardNumber)}`,
-    name,
+    id: asCardId(`card-${String(cardNumber)}`),
+    name: asCardName(name),
     cardNumber,
     cardType: "Event",
     energyCost: 2,
@@ -59,7 +60,7 @@ describe("findReferencedCardPreviews", () => {
     // Two cards with the same display name but different UUIDs and rules text.
     const cardsWithDuplicate = [
       ...cards,
-      makeCard("Spell Tome", 201, { id: "card-201-alt" }),
+      makeCard("Spell Tome", 201, { id: asCardId("card-201-alt") }),
     ];
 
     const previews = findReferencedCardPreviews(

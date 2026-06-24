@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { QuestMutations } from "../state/quest-context";
 import type { QuestState, RuntimeShopSlot } from "../types/quest";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import { ShopScreen } from "./ShopScreen";
 import { useQuest } from "../state/quest-context";
 
@@ -126,8 +127,8 @@ function makeCardDatabase(): Map<number, CardData> {
       1,
       {
         cardNumber: 1,
-        id: "card-1",
-        name: "Test Card",
+        id: asCardId("card-1"),
+        name: asCardName("Test Card"),
         cardType: "Character",
         subtype: "",
         isStarter: false,

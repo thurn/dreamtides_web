@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type { QuestContent } from "../../data/quest-content";
 import type { MerchantCorpusCard } from "../../data/merchant-corpus";
@@ -29,7 +30,11 @@ function poolCards(count: number): {
     const cardNumber = 1000 + i;
     const id = `aaaa0000-0000-4000-8000-${String(cardNumber).padStart(12, "0")}`;
     cards.push(
-      makeMerchantTestCard({ id, cardNumber, name: `Pool ${String(cardNumber)}` }),
+      makeMerchantTestCard({
+        id: asCardId(id),
+        cardNumber,
+        name: asCardName(`Pool ${String(cardNumber)}`),
+      }),
     );
     // Quality varies so the strong band has multiple distinct members.
     corpus[id] = { quality: (i % 20) / 20 + 0.01 * i };

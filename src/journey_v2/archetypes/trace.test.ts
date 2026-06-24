@@ -22,9 +22,13 @@ import { duplicateBuilder } from "./duplicate";
 import { purgeBuilder } from "./remove";
 import { addSiteBuilder } from "./site";
 import { MERCHANT_PLACEABLE_SITE_TYPES } from "./site";
+import { asCardId, asCardName } from "../../types/card-identity";
+import type { CardId } from "../../types/card-identity";
 
-function uuid(n: number): string {
-  return `00000000-0000-4000-8000-${n.toString(16).padStart(12, "0")}`;
+function uuid(n: number): CardId {
+  return asCardId(
+    `00000000-0000-4000-8000-${n.toString(16).padStart(12, "0")}`,
+  );
 }
 
 function makePoolCards(count: number): CardData[] {
@@ -32,7 +36,7 @@ function makePoolCards(count: number): CardData[] {
     makeMerchantTestCard({
       id: uuid(100 + i),
       cardNumber: 100 + i,
-      name: `Pool ${String(100 + i)}`,
+      name: asCardName(`Pool ${String(100 + i)}`),
       energyCost: 2,
       spark: 2,
     }),
@@ -133,7 +137,7 @@ describe("dreamsign trace", () => {
   }): MerchantContext {
     const deckCards = Array.from({ length: 3 }, (_, i) =>
       makeMerchantTestCard({
-        id: `warrior-${String(i)}`,
+        id: asCardId(`warrior-${String(i)}`),
         cardNumber: 200 + i,
         subtype: "Warrior",
       }),
@@ -191,7 +195,7 @@ describe("dreamsign trace", () => {
     // its match score is 0 and neither the covered nor the generic tier forms.
     const deckCards = Array.from({ length: 3 }, (_, i) =>
       makeMerchantTestCard({
-        id: `warrior-only-${String(i)}`,
+        id: asCardId(`warrior-only-${String(i)}`),
         cardNumber: 210 + i,
         subtype: "Warrior",
       }),

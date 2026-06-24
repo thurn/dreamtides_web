@@ -11,6 +11,7 @@ import { describe, expect, it } from "vitest";
 
 import type { AffiliationContent } from "../types/content.ts";
 import type { CardData } from "../types/cards.ts";
+import { asCardId } from "../types/card-identity.ts";
 import { buildPoolData } from "../draft/pool/pool-data.ts";
 import type { PoolData } from "../draft/pool/types.ts";
 import { weightedSample } from "../draft/pool/rng.ts";
@@ -165,7 +166,7 @@ describe("affiliation reweighting weight contract", () => {
     const numberById = new Map(CARDS.map((c) => [c.id, c.cardNumber]));
     const signatureNumbers = new Set(
       affiliation.signatureCards
-        .map((uuid) => numberById.get(uuid))
+        .map((uuid) => numberById.get(asCardId(uuid)))
         .filter((n): n is number => n !== undefined),
     );
     expect(signatureNumbers.size).toBeGreaterThan(0);
@@ -217,7 +218,7 @@ describe("affiliation reweighting weight contract", () => {
     const numberById = new Map(CARDS.map((c) => [c.id, c.cardNumber]));
     const signatureNumbers = new Set(
       affiliation.signatureCards
-        .map((uuid) => numberById.get(uuid))
+        .map((uuid) => numberById.get(asCardId(uuid)))
         .filter((n): n is number => n !== undefined),
     );
     expect(signatureNumbers.size).toBeGreaterThan(0);

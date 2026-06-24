@@ -6,6 +6,7 @@ import {
 } from "./card-text";
 import { GLOSSARY } from "../data/glossary";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 
 // Representative live glossary entries, so the term-dependent tokenizer tests
 // track the data instead of hardcoding names that change as the glossary
@@ -390,8 +391,6 @@ describe("tokenizeRulesText", () => {
 
 function makeCard(overrides: Partial<CardData>): CardData {
   return {
-    name: "Test Card",
-    id: "test-card",
     cardNumber: 1,
     cardType: "Character",
     subtype: "",
@@ -403,6 +402,8 @@ function makeCard(overrides: Partial<CardData>): CardData {
     imageNumber: 1,
     artOwned: true,
     ...overrides,
+    id: asCardId(overrides.id ?? "test-card"),
+    name: asCardName(overrides.name ?? "Test Card"),
   };
 }
 

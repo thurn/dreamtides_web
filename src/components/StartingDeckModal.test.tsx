@@ -7,6 +7,7 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { QuestMutations } from "../state/quest-context";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import type { QuestState } from "../types/quest";
 import { StartingDeckModal } from "./StartingDeckModal";
 import { useQuest } from "../state/quest-context";
@@ -164,8 +165,8 @@ function makeCardDatabase(): Map<number, CardData> {
     [
       1,
       {
-        name: "Archive Sentry",
-        id: "archive-sentry",
+        name: asCardName("Archive Sentry"),
+        id: asCardId("archive-sentry"),
         cardNumber: 1,
         cardType: "Character",
         subtype: "",
@@ -181,8 +182,8 @@ function makeCardDatabase(): Map<number, CardData> {
     [
       2,
       {
-        name: "Glimpse of What Was",
-        id: "glimpse",
+        name: asCardName("Glimpse of What Was"),
+        id: asCardId("glimpse"),
         cardNumber: 2,
         cardType: "Event",
         subtype: "",

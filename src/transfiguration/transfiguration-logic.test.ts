@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, afterEach } from "vitest";
 import type { CardData } from "../types/cards";
 import type { TransfigurationType } from "../types/quest";
+import { asCardId, asCardName } from "../types/card-identity";
 import {
   isEmpoweredEligible,
   isAmplifiedEligible,
@@ -24,8 +25,8 @@ import {
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
-    name: "Test Card",
-    id: "test-card",
+    name: asCardName("Test Card"),
+    id: asCardId("test-card"),
     cardNumber: 1,
     cardType: "Character",
     subtype: "",

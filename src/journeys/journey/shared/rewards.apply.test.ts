@@ -19,6 +19,7 @@ import type { ChooserPlanningContext, ChooserResolution } from "../../apply/choo
 import { getLogEntries, resetLog } from "../../../logging";
 import type { JourneyContext, QuestStateProjection } from "../context";
 import type { Dreamsign } from "../../../types/quest";
+import { asCardId, asCardName } from "../../../types/card-identity";
 
 import { getReward } from "./rewards";
 import { isCardEligibleForTransfiguration } from "./content";
@@ -60,7 +61,7 @@ function buildContext(overrides: {
       summary: {
         totalCards,
         starterCards: deckEntries
-          .filter((entry) => starterIds.has(entry.cardId))
+          .filter((entry) => starterIds.has(asCardId(entry.cardId)))
           .reduce((total, entry) => total + entry.copies, 0),
         uniqueCards: deckEntries.length,
       },
@@ -91,8 +92,8 @@ function planningContext(
 function cardFixture(): readonly CardContent[] {
   return [
     {
-      id: "starter-alpha",
-      name: "Starter Alpha",
+      id: asCardId("starter-alpha"),
+      name: asCardName("Starter Alpha"),
       rarity: "Starter",
       cardType: "Event",
       energyCost: 0,
@@ -101,8 +102,8 @@ function cardFixture(): readonly CardContent[] {
       raw: {},
     },
     {
-      id: "starter-beta",
-      name: "Starter Beta",
+      id: asCardId("starter-beta"),
+      name: asCardName("Starter Beta"),
       rarity: "Starter",
       cardType: "Character",
       energyCost: 0,
@@ -111,8 +112,8 @@ function cardFixture(): readonly CardContent[] {
       raw: {},
     },
     {
-      id: "event-alpha",
-      name: "Event Alpha",
+      id: asCardId("event-alpha"),
+      name: asCardName("Event Alpha"),
       rarity: "common",
       cardType: "Event",
       energyCost: 1,
@@ -121,8 +122,8 @@ function cardFixture(): readonly CardContent[] {
       raw: {},
     },
     {
-      id: "event-beta",
-      name: "Event Beta",
+      id: asCardId("event-beta"),
+      name: asCardName("Event Beta"),
       rarity: "common",
       cardType: "Event",
       energyCost: 2,
@@ -136,8 +137,8 @@ function cardFixture(): readonly CardContent[] {
 function draftCardFixture(): readonly CardContent[] {
   return [
     {
-      id: "event-alpha",
-      name: "Event Alpha",
+      id: asCardId("event-alpha"),
+      name: asCardName("Event Alpha"),
       rarity: "common",
       cardType: "Event",
       energyCost: 1,
@@ -146,8 +147,8 @@ function draftCardFixture(): readonly CardContent[] {
       raw: {},
     },
     {
-      id: "event-beta",
-      name: "Event Beta",
+      id: asCardId("event-beta"),
+      name: asCardName("Event Beta"),
       rarity: "common",
       cardType: "Event",
       energyCost: 2,
@@ -156,8 +157,8 @@ function draftCardFixture(): readonly CardContent[] {
       raw: {},
     },
     {
-      id: "event-gamma",
-      name: "Event Gamma",
+      id: asCardId("event-gamma"),
+      name: asCardName("Event Gamma"),
       rarity: "common",
       cardType: "Event",
       energyCost: 3,
@@ -166,8 +167,8 @@ function draftCardFixture(): readonly CardContent[] {
       raw: {},
     },
     {
-      id: "event-delta",
-      name: "Event Delta",
+      id: asCardId("event-delta"),
+      name: asCardName("Event Delta"),
       rarity: "common",
       cardType: "Event",
       energyCost: 4,
@@ -476,7 +477,7 @@ describe("Card reward apply (non-choice)", () => {
     const eventIds = new Set(
       cards.filter((card) => card.cardType === "Event").map((card) => card.id),
     );
-    expect(ids.every((id) => eventIds.has(id))).toBe(true);
+    expect(ids.every((id) => eventIds.has(asCardId(id)))).toBe(true);
   });
 
   it("gain_named_card resolves the literal card name to its catalog id", () => {

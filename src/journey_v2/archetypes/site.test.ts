@@ -10,6 +10,7 @@ import {
 } from "../testing/fixtures";
 import type { QuestState } from "../../types/quest";
 import type { MerchantContext } from "../types";
+import { asCardId } from "../../types/card-identity";
 import { addSiteBuilder, MERCHANT_PLACEABLE_SITE_TYPES } from "./site";
 
 function makeDreamscapeState(overrides: Partial<QuestState> = {}): QuestState {
@@ -82,7 +83,7 @@ function makeDreamscapeState(overrides: Partial<QuestState> = {}): QuestState {
 
 function makeContext(state: QuestState): MerchantContext {
   const questContent = makeMerchantTestContent({
-    cards: [makeMerchantTestCard({ id: "11111111-1111-4111-8111-111111111111", cardNumber: 1 })],
+    cards: [makeMerchantTestCard({ id: asCardId("11111111-1111-4111-8111-111111111111"), cardNumber: 1 })],
   });
   return buildMerchantContext({ questState: state, questContent, site: makeMerchantTestSite() });
 }
@@ -114,7 +115,7 @@ describe("add_site apply — current dreamscape gains exactly one site", () => {
     const state = makeDreamscapeState();
     const context = makeContext(state);
     const questContent = makeMerchantTestContent({
-      cards: [makeMerchantTestCard({ id: "11111111-1111-4111-8111-111111111111", cardNumber: 1 })],
+      cards: [makeMerchantTestCard({ id: asCardId("11111111-1111-4111-8111-111111111111"), cardNumber: 1 })],
     });
 
     const rng = merchantRng("add-site-apply-test", "0");
@@ -149,7 +150,7 @@ describe("add_site apply — current dreamscape gains exactly one site", () => {
     const state = makeDreamscapeState();
     const context = makeContext(state);
     const questContent = makeMerchantTestContent({
-      cards: [makeMerchantTestCard({ id: "11111111-1111-4111-8111-111111111111", cardNumber: 1 })],
+      cards: [makeMerchantTestCard({ id: asCardId("11111111-1111-4111-8111-111111111111"), cardNumber: 1 })],
     });
 
     const rng = merchantRng("add-site-other-dreamscape-test", "0");
@@ -182,7 +183,7 @@ describe("add_site apply — distinct site ids on repeated apply", () => {
     const state = makeDreamscapeState();
     const context = makeContext(state);
     const questContent = makeMerchantTestContent({
-      cards: [makeMerchantTestCard({ id: "11111111-1111-4111-8111-111111111111", cardNumber: 1 })],
+      cards: [makeMerchantTestCard({ id: asCardId("11111111-1111-4111-8111-111111111111"), cardNumber: 1 })],
     });
 
     const rng = merchantRng("add-site-distinct-ids-test", "0");

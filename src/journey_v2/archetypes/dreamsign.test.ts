@@ -13,6 +13,7 @@ import {
 } from "../testing/fixtures";
 import type { DreamsignProfile } from "../../data/dreamsign-profiles";
 import type { MerchantContext } from "../types";
+import { asCardId } from "../../types/card-identity";
 import { dreamsignBuilder, dreamsignDraftBuilder } from "./dreamsign";
 
 function makeContext(input: {
@@ -145,7 +146,7 @@ describe("suited dreamsign pool — generic signs never crowd out a real match",
   }): MerchantContext {
     const deckCards = Array.from({ length: 3 }, (_, i) =>
       makeMerchantTestCard({
-        id: `warrior-uuid-${String(i)}`,
+        id: asCardId(`warrior-uuid-${String(i)}`),
         cardNumber: 100 + i,
         subtype: "Warrior",
       }),

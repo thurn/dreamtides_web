@@ -13,11 +13,12 @@ import {
   selectRecordIndex,
   selectReplayRecordIndex,
 } from "../draft/replay/draft-records";
+import { asCardId, asCardName } from "../types/card-identity";
 
 function makeCard(cardNumber: number): CardData {
   return {
-    name: `Card ${String(cardNumber)}`,
-    id: `card-${String(cardNumber)}`,
+    name: asCardName(`Card ${String(cardNumber)}`),
+    id: asCardId(`card-${String(cardNumber)}`),
     cardNumber,
     cardType: "Character",
     subtype: "",

@@ -1,10 +1,11 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { cardImageUrl, loadCardDatabase } from "./card-database";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 
 const SAMPLE_CARD: CardData = {
-  name: "Test Card",
-  id: "abc-123",
+  name: asCardName("Test Card"),
+  id: asCardId("abc-123"),
   cardNumber: 42,
   cardType: "Character",
   subtype: "Beast",
@@ -25,7 +26,7 @@ describe("loadCardDatabase", () => {
   it("fetches card-data.json and returns a Map keyed by cardNumber", async () => {
     const cards: CardData[] = [
       SAMPLE_CARD,
-      { ...SAMPLE_CARD, cardNumber: 99, name: "Another Card" },
+      { ...SAMPLE_CARD, cardNumber: 99, name: asCardName("Another Card") },
     ];
     vi.stubGlobal(
       "fetch",

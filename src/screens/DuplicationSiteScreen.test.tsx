@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { HTMLAttributes, ReactElement, ReactNode } from "react";
 import type { QuestMutations } from "../state/quest-context";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import type { QuestState, SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { DuplicationSiteScreen } from "./DuplicationSiteScreen";
@@ -160,8 +161,8 @@ function makeCardDatabase(): Map<number, CardData> {
     [
       101,
       {
-        name: "Test Card",
-        id: "test-card",
+        name: asCardName("Test Card"),
+        id: asCardId("test-card"),
         cardNumber: 101,
         cardType: "Character",
         subtype: "",

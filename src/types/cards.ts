@@ -1,3 +1,5 @@
+import type { CardId, CardName } from "./card-identity";
+
 /** The two card types in Dreamtides. */
 export type CardType = "Character" | "Event";
 
@@ -31,8 +33,8 @@ export interface ArtCrop {
 
 /** A single card record loaded from card-data.json. */
 export interface CardData {
-  name: string;
-  id: string;
+  name: CardName;
+  id: CardId;
   cardNumber: number;
   cardType: CardType;
   subtype: string;

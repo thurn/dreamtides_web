@@ -1,3 +1,4 @@
+import { asCardId, asCardName } from "../../types/card-identity";
 import type {
   CSSProperties,
   DragEventHandler,
@@ -79,8 +80,8 @@ export function battleCardDisplayFromInstance(
   instance: BattleCardInstance,
 ): CardData {
   return {
-    name: instance.definition.name,
-    id: `battle-card-${instance.battleCardId}`,
+    name: asCardName(instance.definition.name),
+    id: asCardId(`battle-card-${instance.battleCardId}`),
     cardNumber: instance.definition.cardNumber,
     cardType: instance.definition.battleCardKind === "character" ? "Character" : "Event",
     subtype: instance.definition.subtype,

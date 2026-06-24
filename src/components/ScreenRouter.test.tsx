@@ -12,6 +12,7 @@ import {
 import { parseRuntimeConfig } from "../runtime/runtime-config";
 import type { QuestContent } from "../data/quest-content";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import type { CardSourceDebugState, QuestState, SiteState } from "../types/quest";
 import {
   makeMerchantTestCard,
@@ -70,9 +71,9 @@ function card(
   overrides: Partial<CardData> = {},
 ): CardData {
   return makeMerchantTestCard({
-    id,
+    id: asCardId(id),
     cardNumber,
-    name: `Router Fixture ${cardNumber}`,
+    name: asCardName(`Router Fixture ${cardNumber}`),
     cardType: "Character",
     energyCost: 2,
     spark: 1,
@@ -84,14 +85,14 @@ function card(
 function fixtureCards(): CardData[] {
   return [
     card(UUIDS.deckHighEvent, 1, {
-      name: "High Event",
+      name: asCardName("High Event"),
       cardType: "Event",
       energyCost: 5,
       spark: null,
       renderedText: "Fast.",
     }),
     card(UUIDS.deckHighCharacter, 2, {
-      name: "High Character",
+      name: asCardName("High Character"),
       energyCost: 5,
       spark: 4,
     }),

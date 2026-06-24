@@ -5,6 +5,7 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import { SIZE_PRESETS } from "../components/card-size";
 import CardEditorApp from "./CardEditorApp";
 import { DEFAULT_EDITOR_DISPLAY_STATE } from "./editor-url-state";
@@ -25,10 +26,13 @@ function deferred<T>(): {
   return { promise, resolve, reject };
 }
 
-function makePreview(overrides: Partial<CardData> = {}): CardData {
+function makePreview(
+  overrides: Omit<Partial<CardData>, "id" | "name"> & { id?: string; name?: string } = {},
+): CardData {
+  const { id: overrideId, name: overrideName, ...rest } = overrides;
   return {
-    id: "card-id-1",
-    name: "Moonlit Envoy",
+    id: asCardId("card-id-1"),
+    name: asCardName("Moonlit Envoy"),
     cardNumber: 12,
     cardType: "Character",
     subtype: "Scout",
@@ -39,7 +43,9 @@ function makePreview(overrides: Partial<CardData> = {}): CardData {
     renderedText: "Draw a card.",
     imageNumber: 12,
     artOwned: true,
-    ...overrides,
+    ...rest,
+    ...(overrideId !== undefined ? { id: asCardId(overrideId) } : {}),
+    ...(overrideName !== undefined ? { name: asCardName(overrideName) } : {}),
   };
 }
 

@@ -1,3 +1,4 @@
+import { asCardId, asCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { DreamcallerContent, ResolvedDreamcallerPackage } from "../types/content";
 import type { DeckEntry, Dreamcaller, Dreamsign, QuestState, SiteState } from "../types/quest";
@@ -231,8 +232,8 @@ function makeCard(
   spark: number | null,
 ): CardData {
   return {
-    name,
-    id: `card-${String(cardNumber)}`,
+    name: asCardName(name),
+    id: asCardId(`card-${String(cardNumber)}`),
     cardNumber,
     cardType,
     subtype: cardType === "Character" ? "Unit" : "Spell",

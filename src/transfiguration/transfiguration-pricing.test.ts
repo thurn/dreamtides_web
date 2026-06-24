@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import type { CardData } from "../types/cards";
 import type { TransfigurationType } from "../types/quest";
+import { asCardId, asCardName } from "../types/card-identity";
 import {
   MAX_TRANSFIGURATION_COST,
   MIN_TRANSFIGURATION_COST,
@@ -11,8 +12,8 @@ import {
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
-    name: "Test Card",
-    id: "test-card",
+    name: asCardName("Test Card"),
+    id: asCardId("test-card"),
     cardNumber: 101,
     cardType: "Character",
     subtype: "",

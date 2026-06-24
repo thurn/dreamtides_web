@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { computeDeckSummary } from "./deck-summary";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import type { DeckEntry } from "../types/quest";
 
 function makeCard(
@@ -8,8 +9,6 @@ function makeCard(
   overrides: Partial<CardData> = {},
 ): CardData {
   return {
-    name: `Card ${String(cardNumber)}`,
-    id: `card-${String(cardNumber)}`,
     cardNumber,
     cardType: "Character",
     subtype: "",
@@ -21,6 +20,8 @@ function makeCard(
     imageNumber: cardNumber,
     artOwned: true,
     ...overrides,
+    id: asCardId(overrides.id ?? `card-${String(cardNumber)}`),
+    name: asCardName(overrides.name ?? `Card ${String(cardNumber)}`),
   };
 }
 

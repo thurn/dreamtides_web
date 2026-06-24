@@ -15,11 +15,13 @@ import {
 import type { CardData } from "../../types/cards";
 import type { DeckEntry } from "../../types/quest";
 import type { MerchantContext } from "../types";
+import { asCardId } from "../../types/card-identity";
+import type { CardId } from "../../types/card-identity";
 import { duplicateBuilder } from "./duplicate";
 
-function uuid(n: number): string {
+function uuid(n: number): CardId {
   const hex = n.toString(16).padStart(12, "0");
-  return `00000000-0000-4000-8000-${hex}`;
+  return asCardId(`00000000-0000-4000-8000-${hex}`);
 }
 
 /**

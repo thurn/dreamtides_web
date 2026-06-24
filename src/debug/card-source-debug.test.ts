@@ -1,12 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { buildCardSourceDebugState } from "./card-source-debug";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import type { ResolvedDreamcallerPackage } from "../types/content";
 
 function makeCard(cardNumber: number, name: string): CardData {
   return {
-    name,
-    id: `card-${String(cardNumber)}`,
+    name: asCardName(name),
+    id: asCardId(`card-${String(cardNumber)}`),
     cardNumber,
     cardType: "Character",
     subtype: "",

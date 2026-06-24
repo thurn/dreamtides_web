@@ -11,10 +11,14 @@ import {
 } from "../testing/fixtures";
 import type { CardData } from "../../types/cards";
 import type { MerchantContext } from "../types";
+import { asCardId, asCardName } from "../../types/card-identity";
+import type { CardId } from "../../types/card-identity";
 import { buildCategoryUniverse } from "./categories";
 
-function uuid(n: number): string {
-  return `00000000-0000-4000-8000-${n.toString(16).padStart(12, "0")}`;
+function uuid(n: number): CardId {
+  return asCardId(
+    `00000000-0000-4000-8000-${n.toString(16).padStart(12, "0")}`,
+  );
 }
 
 function makeContext(input: {
@@ -74,7 +78,7 @@ describe("category universe", () => {
     const flagship = makeMerchantTestCard({
       id: uuid(500),
       cardNumber: 500,
-      name: "Skull Weaver",
+      name: asCardName("Skull Weaver"),
     });
     const member = makeMerchantTestCard({ id: uuid(501), cardNumber: 501 });
     const context = makeContext({

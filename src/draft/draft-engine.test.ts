@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { getLogEntries, resetLog } from "../logging";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import type { PoolDraftState } from "../types/draft";
 import type { ResolvedDreamcallerPackage } from "../types/content";
 import type { FitModel } from "./replay/fit-model";
@@ -26,8 +27,8 @@ function makeCard(
   overrides: Partial<CardData> = {},
 ): CardData {
   return {
-    name: `TestCard${String(cardNumber)}`,
-    id: `test-${String(cardNumber)}`,
+    name: asCardName(`TestCard${String(cardNumber)}`),
+    id: asCardId(`test-${String(cardNumber)}`),
     cardNumber,
     cardType: "Character",
     subtype: "",

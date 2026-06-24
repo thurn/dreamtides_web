@@ -1,3 +1,4 @@
+import { asCardName } from "../types/card-identity";
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { CSSProperties } from "react";
 import {
@@ -135,7 +136,7 @@ function figmentPreviewWithDrafts(
   const next: CardData = { ...preview };
   const name = drafts.name;
   if (typeof name === "string" && name.trim().length > 0) {
-    next.name = name;
+    next.name = asCardName(name);
   }
   const subtype = drafts.subtype;
   if (typeof subtype === "string") {

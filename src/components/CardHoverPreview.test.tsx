@@ -5,6 +5,7 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import {
   CardHoverPreview,
   definitionSideForCardHover,
@@ -12,8 +13,6 @@ import {
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
-    name: "Preview Card",
-    id: "preview-card",
     cardNumber: 1,
     cardType: "Character",
     subtype: "",
@@ -25,6 +24,8 @@ function makeCard(overrides: Partial<CardData> = {}): CardData {
     imageNumber: 1,
     artOwned: false,
     ...overrides,
+    id: asCardId(overrides.id ?? "preview-card"),
+    name: asCardName(overrides.name ?? "Preview Card"),
   };
 }
 

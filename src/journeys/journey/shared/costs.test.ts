@@ -26,10 +26,13 @@ import { describe, expect, it } from "vitest";
 import type { CardContent, ContentBundle } from "../../content/types";
 import type { DrawContext } from "../../util/rng";
 import type { JourneyContext, QuestStateProjection } from "../context";
+import { asCardId, asCardName } from "../../../types/card-identity";
 
 import { COSTS, getCost } from "./costs";
 
-function card(overrides: Partial<CardContent> & { id: string; name: string }): CardContent {
+function card(
+  overrides: Omit<Partial<CardContent>, "id" | "name"> & { id: string; name: string },
+): CardContent {
   return {
     rarity: overrides.rarity ?? "common",
     cardType: overrides.cardType ?? "Event",
@@ -38,6 +41,8 @@ function card(overrides: Partial<CardContent> & { id: string; name: string }): C
     cardNumber: overrides.cardNumber ?? 0,
     raw: overrides.raw ?? {},
     ...overrides,
+    id: asCardId(overrides.id),
+    name: asCardName(overrides.name),
   };
 }
 

@@ -1,3 +1,4 @@
+import { asCardName } from "../../types/card-identity";
 import type { FitModel } from "../../draft/replay/fit-model";
 import { MINIMAL_ATLAS_CONFIG, MINIMAL_DREAMSCAPES } from "../../__test-helpers__/atlas-fixtures";
 import type {
@@ -30,7 +31,7 @@ export function makeMerchantTestCard(
 ): CardData {
   const { id, cardNumber, ...rest } = overrides;
   return {
-    name: `Fixture Card ${cardNumber}`,
+    name: asCardName(`Fixture Card ${cardNumber}`),
     id,
     cardNumber,
     cardType: "Character",

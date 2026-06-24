@@ -1,3 +1,4 @@
+import { asCardName } from "../types/card-identity";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   editorTomlParam,
@@ -411,7 +412,7 @@ function cardPreviewWithDrafts(
   const next: CardData = { ...preview };
   const name = drafts.name;
   if (typeof name === "string" && name.trim().length > 0) {
-    next.name = name;
+    next.name = asCardName(name);
   }
   const cardType = drafts["card-type"];
   if (cardType === "Character" || cardType === "Event") {

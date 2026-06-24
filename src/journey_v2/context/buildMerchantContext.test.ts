@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { asCardId } from "../../types/card-identity";
 import { buildMerchantContext } from "./buildMerchantContext";
 import {
   TEST_CARD_UUIDS,
@@ -16,11 +17,11 @@ import {
 describe("buildMerchantContext", () => {
   it("indexes all catalog cards with UUIDs", () => {
     const ordinaryCard = makeMerchantTestCard({
-      id: TEST_CARD_UUIDS.ordinary,
+      id: asCardId(TEST_CARD_UUIDS.ordinary),
       cardNumber: 101,
     });
     const deckCard = makeMerchantTestCard({
-      id: TEST_CARD_UUIDS.deckCopy,
+      id: asCardId(TEST_CARD_UUIDS.deckCopy),
       cardNumber: 102,
     });
 
@@ -36,7 +37,7 @@ describe("buildMerchantContext", () => {
 
   it("projects deck entries to concrete entry ids and card UUIDs", () => {
     const deckCard = makeMerchantTestCard({
-      id: TEST_CARD_UUIDS.deckCopy,
+      id: asCardId(TEST_CARD_UUIDS.deckCopy),
       cardNumber: 201,
     });
     const deckEntry = makeMerchantTestDeckEntry({
@@ -85,21 +86,21 @@ describe("buildMerchantContext", () => {
 
   it("excludes starter and special cards from grant candidates", () => {
     const ordinaryCard = makeMerchantTestCard({
-      id: TEST_CARD_UUIDS.ordinary,
+      id: asCardId(TEST_CARD_UUIDS.ordinary),
       cardNumber: 301,
     });
     const starterFlagCard = makeMerchantTestCard({
-      id: TEST_CARD_UUIDS.starterFlag,
+      id: asCardId(TEST_CARD_UUIDS.starterFlag),
       cardNumber: 302,
       isStarter: true,
     });
     const starterRarityCard = makeMerchantTestCard({
-      id: TEST_CARD_UUIDS.starterRarity,
+      id: asCardId(TEST_CARD_UUIDS.starterRarity),
       cardNumber: 303,
       rarity: "Starter",
     });
     const specialRarityCard = makeMerchantTestCard({
-      id: TEST_CARD_UUIDS.specialRarity,
+      id: asCardId(TEST_CARD_UUIDS.specialRarity),
       cardNumber: 304,
       rarity: "Special",
     });
@@ -124,7 +125,7 @@ describe("buildMerchantContext", () => {
 
   it("uses loaded catalog cards for grant candidates without run pool data", () => {
     const ordinaryCard = makeMerchantTestCard({
-      id: TEST_CARD_UUIDS.ordinary,
+      id: asCardId(TEST_CARD_UUIDS.ordinary),
       cardNumber: 305,
     });
 
@@ -141,20 +142,20 @@ describe("buildMerchantContext", () => {
 
   it("includes ordinary catalog cards outside the run pool", () => {
     const inPoolCard = makeMerchantTestCard({
-      id: TEST_CARD_UUIDS.ordinary,
+      id: asCardId(TEST_CARD_UUIDS.ordinary),
       cardNumber: 401,
     });
     const outsidePoolCard = makeMerchantTestCard({
-      id: TEST_CARD_UUIDS.outsidePool,
+      id: asCardId(TEST_CARD_UUIDS.outsidePool),
       cardNumber: 402,
     });
     const inPoolStarterCard = makeMerchantTestCard({
-      id: TEST_CARD_UUIDS.starterRarity,
+      id: asCardId(TEST_CARD_UUIDS.starterRarity),
       cardNumber: 403,
       rarity: "Starter",
     });
     const inPoolSpecialCard = makeMerchantTestCard({
-      id: TEST_CARD_UUIDS.specialRarity,
+      id: asCardId(TEST_CARD_UUIDS.specialRarity),
       cardNumber: 404,
       rarity: "Special",
     });

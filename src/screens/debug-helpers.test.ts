@@ -5,6 +5,7 @@ import {
 } from "./debug-helpers";
 import type { PoolDraftState } from "../types/draft";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import type {
   DreamsignTemplate,
   ResolvedDreamcallerPackage,
@@ -12,8 +13,8 @@ import type {
 
 function makeCard(num: number, name: string): CardData {
   return {
-    name,
-    id: `card-${String(num)}`,
+    name: asCardName(name),
+    id: asCardId(`card-${String(num)}`),
     cardNumber: num,
     cardType: "Character",
     subtype: "",

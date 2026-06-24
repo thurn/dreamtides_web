@@ -8,6 +8,7 @@ import {
 } from "./content-bridge";
 import { buildJourneyContext } from "./buildContext";
 import { journeySeedForSite } from "./seed";
+import { asCardId, asCardName } from "../../types/card-identity";
 import type { CardData } from "../../types/cards";
 import type {
   DreamcallerContent,
@@ -27,8 +28,8 @@ import type {
 
 function makeCard(overrides: Partial<CardData> & { cardNumber: number }): CardData {
   return {
-    id: `card-${overrides.cardNumber}`,
-    name: `Card ${overrides.cardNumber}`,
+    id: asCardId(`card-${overrides.cardNumber}`),
+    name: asCardName(`Card ${overrides.cardNumber}`),
     cardType: "Character",
     subtype: "",
     isStarter: false,
@@ -213,11 +214,11 @@ describe("buildJourneyContext bane derivation", () => {
   // entries (banes are not removed from the deck).
   it("projects bane-flagged deck entries to projection.banes without dropping them from the deck", () => {
     const cards: CardData[] = [
-      makeCard({ cardNumber: 1, id: "card-normal-1", name: "Normal One" }),
-      makeCard({ cardNumber: 2, id: "card-normal-2", name: "Normal Two" }),
-      makeCard({ cardNumber: 3, id: "card-normal-3", name: "Normal Three" }),
-      makeCard({ cardNumber: 99, id: "card-bane-a", name: "Bane Alpha" }),
-      makeCard({ cardNumber: 100, id: "card-bane-b", name: "Bane Beta" }),
+      makeCard({ cardNumber: 1, id: asCardId("card-normal-1"), name: asCardName("Normal One") }),
+      makeCard({ cardNumber: 2, id: asCardId("card-normal-2"), name: asCardName("Normal Two") }),
+      makeCard({ cardNumber: 3, id: asCardId("card-normal-3"), name: asCardName("Normal Three") }),
+      makeCard({ cardNumber: 99, id: asCardId("card-bane-a"), name: asCardName("Bane Alpha") }),
+      makeCard({ cardNumber: 100, id: asCardId("card-bane-b"), name: asCardName("Bane Beta") }),
     ];
     const deck: DeckEntry[] = [
       makeDeckEntry({ entryId: "e1", cardNumber: 1 }),
@@ -256,12 +257,12 @@ describe("buildJourneyContext deck projection", () => {
 
   it("collapses duplicate cardNumber rows and aggregates the deck summary", () => {
     const cards: CardData[] = [
-      makeCard({ cardNumber: 1, id: "card-1", name: "One" }),
-      makeCard({ cardNumber: 2, id: "card-2", name: "Two" }),
+      makeCard({ cardNumber: 1, id: asCardId("card-1"), name: asCardName("One") }),
+      makeCard({ cardNumber: 2, id: asCardId("card-2"), name: asCardName("Two") }),
       makeCard({
         cardNumber: 3,
-        id: "card-3",
-        name: "Three",
+        id: asCardId("card-3"),
+        name: asCardName("Three"),
         rarity: "Starter",
       }),
     ];
@@ -302,7 +303,7 @@ describe("buildJourneyContext deck projection", () => {
 
   it("preserves transfiguration state alongside projected deck entry ids", () => {
     const cards: CardData[] = [
-      makeCard({ cardNumber: 1, id: "card-1", name: "One" }),
+      makeCard({ cardNumber: 1, id: asCardId("card-1"), name: asCardName("One") }),
     ];
     const deck: DeckEntry[] = [
       makeDeckEntry({
@@ -333,7 +334,7 @@ describe("buildJourneyContext deck projection", () => {
 
   it("projects fast keyword modifications as entry-specific journey cards", () => {
     const cards: CardData[] = [
-      makeCard({ cardNumber: 1, id: "card-1", name: "One", isFast: false }),
+      makeCard({ cardNumber: 1, id: asCardId("card-1"), name: asCardName("One"), isFast: false }),
     ];
     const deck: DeckEntry[] = [
       makeDeckEntry({
@@ -376,7 +377,7 @@ describe("buildJourneyContext deck projection", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
 
     const cards: CardData[] = [
-      makeCard({ cardNumber: 1, id: "card-1", name: "One" }),
+      makeCard({ cardNumber: 1, id: asCardId("card-1"), name: asCardName("One") }),
     ];
     const deck: DeckEntry[] = [
       makeDeckEntry({ entryId: "e1", cardNumber: 1 }),
@@ -500,8 +501,8 @@ describe("cardDataToCardContent and dreamcallerContentToJourneyDreamcaller", () 
   it("maps required fields and preserves CardData in raw for downstream helpers", () => {
     const card = makeCard({
       cardNumber: 42,
-      id: "card-42",
-      name: "Forty-Two",
+      id: asCardId("card-42"),
+      name: asCardName("Forty-Two"),
       energyCost: 3,
       spark: 2,
       rarity: "Legendary",

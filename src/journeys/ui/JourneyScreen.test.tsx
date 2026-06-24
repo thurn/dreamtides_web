@@ -50,6 +50,7 @@ import type { ChooserRequest, ChooserResolution } from "../apply/chooserPlan";
 import { createRecordingMutations } from "../apply/testing/recordingMutations";
 import type { Reward } from "../journey/shared/types";
 import type { JourneyContext } from "../journey/context";
+import { asCardId, asCardName } from "../../types/card-identity";
 import {
   makeUnlockedBranch,
   makeUnlockedOption,
@@ -403,8 +404,8 @@ function contextWithDeck(): JourneyContext {
       ...dummyContext().content,
       cards: [
         {
-          id: "card-a",
-          name: "Glimmer Knife",
+          id: asCardId("card-a"),
+          name: asCardName("Glimmer Knife"),
           rarity: "Starter",
           cardType: "Event",
           energyCost: 1,
@@ -413,8 +414,8 @@ function contextWithDeck(): JourneyContext {
           raw: { renderedText: "Deal 1 damage.", rulesText: "Deal 1 damage." },
         },
         {
-          id: "card-b",
-          name: "Amber Lantern",
+          id: asCardId("card-b"),
+          name: asCardName("Amber Lantern"),
           rarity: "Starter",
           cardType: "Character",
           energyCost: 1,
@@ -451,8 +452,8 @@ function contextWithTransfiguredDeckEntries(): JourneyContext {
       ...base.content,
       cards: [
         {
-          id: "card-a",
-          name: "Glimmer Knife",
+          id: asCardId("card-a"),
+          name: asCardName("Glimmer Knife"),
           rarity: "Starter",
           cardType: "Event",
           energyCost: 1,

@@ -1,3 +1,4 @@
+import { asCardId } from "../../../types/card-identity";
 import type { CardContent } from "../../content/types";
 import type { JourneyContext, ProjectedDeckEntryTransfiguration } from "../context";
 import { cardMatches, isCardEligibleForTransfiguration } from "./content";
@@ -12,7 +13,7 @@ export type ProjectedDeckEntry = {
 export function projectedDeckEntries(ctx: JourneyContext): ProjectedDeckEntry[] {
   const cardsById = new Map(ctx.content.cards.map((card) => [card.id, card]));
   return ctx.state.quest.deck.entries.flatMap((entry) => {
-    const card = cardsById.get(entry.cardId);
+    const card = cardsById.get(asCardId(entry.cardId));
     if (card === undefined) return [];
     return (entry.entryIds ?? []).map((entryId, index) => ({
       entryId,

@@ -5,6 +5,7 @@
 // downstream (the generation pipeline, shape plugins, predicate resolvers,
 // validators) consumes the `JourneyContext` this builder returns.
 
+import { asCardId } from "../../types/card-identity";
 import { sha256 } from "js-sha256";
 
 import { applyCardKeywordModification } from "../../card-type-change";
@@ -94,7 +95,7 @@ function applyDeckEntryModificationToJourneyCard(
   if (typeChange == null && !hasFastModification && !hasReclaimModification) {
     return card;
   }
-  const id = modifiedCardId(card.id, entry.entryId);
+  const id = asCardId(modifiedCardId(card.id, entry.entryId));
   const cardType = typeChange?.cardType ?? card.cardType;
   const subtype = typeChange?.subtype ?? card.raw.subtype;
   const isFast = hasFastModification ? true : card.raw["is-fast"];

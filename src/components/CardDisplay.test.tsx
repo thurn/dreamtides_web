@@ -5,14 +5,13 @@ import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import { computeCardTextScale } from "./card-display-scale";
 import { CardDisplay } from "./CardDisplay";
 import { CardView } from "./CardView";
 
 function makeCard(overrides: Partial<CardData>): CardData {
   return {
-    name: "Test Card",
-    id: "test-card",
     cardNumber: 1,
     cardType: "Character",
     subtype: "",
@@ -24,6 +23,8 @@ function makeCard(overrides: Partial<CardData>): CardData {
     imageNumber: 1,
     artOwned: true,
     ...overrides,
+    id: asCardId(overrides.id ?? "test-card"),
+    name: asCardName(overrides.name ?? "Test Card"),
   };
 }
 
@@ -97,7 +98,7 @@ describe("CardDisplay", () => {
 
   it("renders the image fallback through the shared card view", () => {
     const { container, root } = mount(
-      <CardDisplay card={makeCard({ name: "Fallback Name" })} />,
+      <CardDisplay card={makeCard({ name: asCardName("Fallback Name") })} />,
     );
     const image = container.querySelector("img");
 
@@ -504,7 +505,7 @@ describe("CardDisplay", () => {
     const { container, root } = mount(
       <CardDisplay
         card={makeCard({
-          name: "Test Card",
+          name: asCardName("Test Card"),
           isFast: true,
           cardType: "Character",
           subtype: "Explorer",
@@ -554,7 +555,7 @@ describe("CardDisplay", () => {
     const { container, root } = mount(
       <CardDisplay
         card={makeCard({
-          name: "Test Card",
+          name: asCardName("Test Card"),
           isFast: true,
           isInterrupt: true,
           cardType: "Character",
@@ -610,7 +611,7 @@ describe("CardDisplay", () => {
     const { container, root } = mount(
       <CardDisplay
         card={makeCard({
-          name: "Test Card",
+          name: asCardName("Test Card"),
           isFast: true,
           cardType: "Character",
           subtype: "",

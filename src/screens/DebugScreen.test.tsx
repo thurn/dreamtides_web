@@ -5,6 +5,7 @@ import type { HTMLAttributes, ReactElement, ReactNode } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import type {
   DreamsignTemplate,
   ResolvedDreamcallerPackage,
@@ -50,8 +51,8 @@ vi.mock("framer-motion", () => ({
 
 function makeCard(cardNumber: number, name: string): CardData {
   return {
-    name,
-    id: `card-${String(cardNumber)}`,
+    name: asCardName(name),
+    id: asCardId(`card-${String(cardNumber)}`),
     cardNumber,
     cardType: "Character",
     subtype: "",

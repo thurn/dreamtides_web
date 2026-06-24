@@ -6,9 +6,11 @@
 // `src/journeys/journey/`, `src/journeys/content/`, `src/journeys/ui/`, or
 // `src/journeys/util/` reaches back into prototype-wide types.
 
+import type { CardId, CardName } from "../../types/card-identity";
+
 export type CardContent = {
-  id: string;
-  name: string;
+  id: CardId;
+  name: CardName;
   rarity: string;
   cardType: string;
   energyCost: number | "*";

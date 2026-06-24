@@ -10,6 +10,7 @@ import { describe, expect, it } from "vitest";
 
 import type { CardContent, ContentBundle, DreamsignContent } from "../../content/types";
 import type { JourneyContext, QuestStateProjection } from "../context";
+import { asCardId, asCardName } from "../../../types/card-identity";
 import {
   canAffordEssence,
   canAffordOmens,
@@ -20,9 +21,9 @@ import {
   transfigurationHasEligibleTarget,
 } from "./viability";
 
-function card(overrides: Partial<CardContent> & { id: string }): CardContent {
+function card(overrides: Omit<Partial<CardContent>, "id"> & { id: string }): CardContent {
   return {
-    name: overrides.name ?? overrides.id,
+    name: overrides.name ?? asCardName(overrides.id),
     rarity: overrides.rarity ?? "common",
     cardType: overrides.cardType ?? "Event",
     energyCost: overrides.energyCost ?? 3,
@@ -30,6 +31,7 @@ function card(overrides: Partial<CardContent> & { id: string }): CardContent {
     cardNumber: overrides.cardNumber ?? 0,
     raw: overrides.raw ?? {},
     ...overrides,
+    id: asCardId(overrides.id),
   };
 }
 

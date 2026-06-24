@@ -25,10 +25,12 @@ import {
   tribalChangeBuilder,
 } from "./improve";
 import { eligibleTransfigurations } from "../../transfiguration/transfiguration-logic";
+import { asCardId, asCardName } from "../../types/card-identity";
+import type { CardId } from "../../types/card-identity";
 
-function uuid(n: number): string {
+function uuid(n: number): CardId {
   const hex = n.toString(16).padStart(12, "0");
-  return `00000000-0000-4000-8000-${hex}`;
+  return asCardId(`00000000-0000-4000-8000-${hex}`);
 }
 
 /**
@@ -210,7 +212,7 @@ describe("improve family — transfigure pair enumeration", () => {
     const direwolf = makeMerchantTestCard({
       id: uuid(900),
       cardNumber: 900,
-      name: "Marked Direwolf",
+      name: asCardName("Marked Direwolf"),
       cardType: "Character",
       energyCost: 0, // not Empowered-eligible: Kindled is its ONLY eligibility
       spark: 4,
@@ -231,7 +233,7 @@ describe("improve family — transfigure pair enumeration", () => {
         makeMerchantTestCard({
           id: uuid(n),
           cardNumber: n,
-          name: `Event ${String(n)}`,
+          name: asCardName(`Event ${String(n)}`),
           cardType: "Event",
           energyCost: 0,
           spark: null,

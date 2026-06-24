@@ -1,3 +1,4 @@
+import { asCardName } from "../types/card-identity";
 import { useRef, type ReactNode } from "react";
 import { CardView } from "../components/CardView";
 import type { CardViewSlots } from "../components/CardView";
@@ -79,7 +80,7 @@ export default function EditableFigment({
 
   const visibleCard = {
     ...figmentPreviewCard(figment),
-    name: visibleName,
+    name: asCardName(visibleName),
     subtype: visibleSubtype,
     renderedText: visibleRulesText,
     spark: visibleSpark,

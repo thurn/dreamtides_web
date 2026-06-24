@@ -8,6 +8,7 @@ import { buildFitModel, type FitModel } from "../../draft/replay/fit-model";
 import { buildPoolData } from "../../draft/pool/pool-data";
 import type { RunPoolContext } from "../../data/quest-content";
 import type { CardData } from "../../types/cards";
+import { asCardId, asCardName } from "../../types/card-identity";
 import type { DreamcallerContent } from "../../types/content";
 import type { PoolCard } from "../../draft/pool/types";
 import type { CardKeywordModification, CardTypeChange } from "../../types/quest";
@@ -32,8 +33,8 @@ function makePackageCard(
   packageTide: string,
 ): CardData {
   return {
-    name: `${packageTide} ${String(cardNumber)}`,
-    id: `${packageTide}-${String(cardNumber)}`,
+    name: asCardName(`${packageTide} ${String(cardNumber)}`),
+    id: asCardId(`${packageTide}-${String(cardNumber)}`),
     cardNumber,
     cardType,
     subtype: cardType === "Character" ? "Echo" : "Spell",

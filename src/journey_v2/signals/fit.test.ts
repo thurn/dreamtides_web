@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { buildFitModel } from "../../draft/replay/fit-model";
 import { fitScores, fitLooByEntry, centrality } from "./fit";
 import type { CardData } from "../../types/cards";
+import { asCardId, asCardName } from "../../types/card-identity";
 import type { MerchantDeckCard } from "../types";
 import type { DeckEntry } from "../../types/quest";
 
@@ -17,9 +18,9 @@ function makeCard(
   spark: number | null = null,
 ): CardData {
   return {
-    id,
+    id: asCardId(id),
     cardNumber,
-    name,
+    name: asCardName(name),
     cardType: "Character",
     subtype: "Warrior",
     isStarter: false,

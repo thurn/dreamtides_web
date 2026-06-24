@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { DreamsignProfile } from "../../data/dreamsign-profiles";
 import type { CardData } from "../../types/cards";
+import { asCardId, asCardName } from "../../types/card-identity";
 import { dreamsignHasDeckCoverage, dreamsignMatchScore } from "./dreamsignMatch";
 
 // ---------------------------------------------------------------------------
@@ -13,9 +14,9 @@ function makeCard(
   overrides: Partial<CardData> = {},
 ): CardData {
   return {
-    id,
+    id: asCardId(id),
     cardNumber,
-    name: `Card-${id}`,
+    name: asCardName(`Card-${id}`),
     cardType: "Character",
     subtype: "Warrior",
     isStarter: false,

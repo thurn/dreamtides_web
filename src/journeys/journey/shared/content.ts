@@ -6,6 +6,7 @@
 // (bane names, site types, transfigurations) so consumers do not need to
 // reach directly into effects.
 
+import { asCardName } from "../../../types/card-identity";
 import {
   BANE_NAMES,
   SITE_TYPES,
@@ -105,7 +106,7 @@ export function baneCount(ctx: JourneyContext): number {
  */
 export function availableBaneNames(ctx: JourneyContext): readonly string[] {
   const cardNames = new Set(ctx.content.cards.map((card) => card.name));
-  return BANE_NAMES.filter((name) => cardNames.has(name));
+  return BANE_NAMES.filter((name) => cardNames.has(asCardName(name)));
 }
 
 export function pickFromList<T>(

@@ -13,6 +13,7 @@ import type {
   MerchantOffer,
 } from "../types";
 import { makeMerchantTestCard } from "../testing/fixtures";
+import { asCardId, asCardName } from "../../types/card-identity";
 import { DreamMerchantScreen } from "./DreamMerchantScreen";
 
 vi.mock("../../components/CardView", () => ({
@@ -78,7 +79,7 @@ function click(element: HTMLElement) {
 
 function card(overrides: Partial<CardData> & Pick<CardData, "id" | "cardNumber">) {
   return makeMerchantTestCard({
-    name: `Merchant Card ${String(overrides.cardNumber)}`,
+    name: asCardName(`Merchant Card ${String(overrides.cardNumber)}`),
     cardType: "Character",
     renderedText: "Draw a card.",
     ...overrides,
@@ -86,9 +87,9 @@ function card(overrides: Partial<CardData> & Pick<CardData, "id" | "cardNumber">
 }
 
 const grantCard = card({
-  id: "81000000-0000-4000-8000-000000000002",
+  id: asCardId("81000000-0000-4000-8000-000000000002"),
   cardNumber: 12,
-  name: "Green Contract",
+  name: asCardName("Green Contract"),
 });
 
 function catalogObject(cardData = grantCard): MerchantGameObject {
@@ -155,9 +156,9 @@ function dreamsignOffer(): MerchantOffer {
 function chooserOffer(): MerchantOffer {
   const candidate = (suffix: string): MerchantChoiceCandidate => {
     const c = card({
-      id: `81000000-0000-4000-8000-0000000000${suffix}`,
+      id: asCardId(`81000000-0000-4000-8000-0000000000${suffix}`),
       cardNumber: Number(suffix),
-      name: `Choice ${suffix}`,
+      name: asCardName(`Choice ${suffix}`),
     });
     return {
       choiceId: `choice-${suffix}`,

@@ -1,3 +1,4 @@
+import { asCardName } from "../types/card-identity";
 import { useCallback, useRef, useState, type ReactNode } from "react";
 import { CardView } from "../components/CardView";
 import type { CardViewSlots } from "../components/CardView";
@@ -350,7 +351,7 @@ export default function EditableCard({
     ...card.preview,
     energyCost: visibleEnergy.energyCost,
     energyCosts: visibleEnergy.energyCosts ?? undefined,
-    name: visibleName,
+    name: asCardName(visibleName),
     renderedText: visibleRulesText,
     spark: visibleSpark,
     sparkVariable: visibleSparkVariable,

@@ -8,6 +8,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { QuestContent } from "../data/quest-content";
 import type { MultiplayerRoom, RoomSession } from "../multiplayer/room-types";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import type { DreamcallerContent, DreamsignTemplate } from "../types/content";
 import type { CardTypeChange, Dreamsign, QuestState, SiteState } from "../types/quest";
 import {
@@ -103,8 +104,8 @@ function mount(element: ReactElement): {
 
 function makeCard(cardNumber: number): CardData {
   return {
-    name: `Card ${String(cardNumber)}`,
-    id: `card-${String(cardNumber)}`,
+    name: asCardName(`Card ${String(cardNumber)}`),
+    id: asCardId(`card-${String(cardNumber)}`),
     cardNumber,
     cardType: "Event",
     subtype: "Test",
@@ -276,9 +277,9 @@ function makeMerchantCard(
   overrides: Partial<CardData> = {},
 ): CardData {
   return makeMerchantTestCard({
-    id,
+    id: asCardId(id),
     cardNumber,
-    name: `Merchant Fixture ${String(cardNumber)}`,
+    name: asCardName(`Merchant Fixture ${String(cardNumber)}`),
     cardType: "Character",
     energyCost: 2,
     spark: 1,
@@ -3438,7 +3439,7 @@ describe("MultiplayerQuestProvider", () => {
           ...makeQuestContent(),
           cardDatabase: new Map([
             [101, makeCard(101)],
-            [501, { ...makeCard(501), name: "Nightmare" }],
+            [501, { ...makeCard(501), name: asCardName("Nightmare") }],
           ]),
         }}
       >

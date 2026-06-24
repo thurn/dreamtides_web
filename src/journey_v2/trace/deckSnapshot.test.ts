@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { asCardId } from "../../types/card-identity";
 import { buildMerchantContext } from "../context/buildMerchantContext";
 import {
   makeMerchantTestCard,
@@ -32,21 +33,21 @@ describe("deckFeatureTallies", () => {
   it("tallies card type, subtype, cost band, and keywords", () => {
     const cards: CardData[] = [
       makeMerchantTestCard({
-        id: "a",
+        id: asCardId("a"),
         cardNumber: 1,
         cardType: "Character",
         subtype: "Warrior",
         energyCost: 1,
       }),
       makeMerchantTestCard({
-        id: "b",
+        id: asCardId("b"),
         cardNumber: 2,
         cardType: "Character",
         subtype: "Warrior",
         energyCost: 3,
       }),
       makeMerchantTestCard({
-        id: "c",
+        id: asCardId("c"),
         cardNumber: 3,
         cardType: "Event",
         subtype: "Spell",
@@ -64,7 +65,7 @@ describe("deckFeatureTallies", () => {
 
   it("buckets a variable (null) cost into its own band", () => {
     const tallies = deckFeatureTallies([
-      makeMerchantTestCard({ id: "x", cardNumber: 9, energyCost: null }),
+      makeMerchantTestCard({ id: asCardId("x"), cardNumber: 9, energyCost: null }),
     ]);
     expect(tallies.costBand).toEqual({ variable: 1 });
   });
@@ -73,8 +74,8 @@ describe("deckFeatureTallies", () => {
 describe("buildMerchantDeckSnapshot", () => {
   it("reports size, sorted card numbers, and feature tallies", () => {
     const cards = [
-      makeMerchantTestCard({ id: "a", cardNumber: 30, subtype: "Warrior" }),
-      makeMerchantTestCard({ id: "b", cardNumber: 10, subtype: "Warrior" }),
+      makeMerchantTestCard({ id: asCardId("a"), cardNumber: 30, subtype: "Warrior" }),
+      makeMerchantTestCard({ id: asCardId("b"), cardNumber: 10, subtype: "Warrior" }),
     ];
     const snapshot = buildMerchantDeckSnapshot(contextWithDeck(cards));
     expect(snapshot.size).toBe(2);
@@ -85,8 +86,8 @@ describe("buildMerchantDeckSnapshot", () => {
 
   it("produces a stable hash for the same deck content regardless of order", () => {
     const cards = [
-      makeMerchantTestCard({ id: "a", cardNumber: 30 }),
-      makeMerchantTestCard({ id: "b", cardNumber: 10 }),
+      makeMerchantTestCard({ id: asCardId("a"), cardNumber: 30 }),
+      makeMerchantTestCard({ id: asCardId("b"), cardNumber: 10 }),
     ];
     const reversed = [...cards].reverse();
     expect(buildMerchantDeckSnapshot(contextWithDeck(cards)).hash).toBe(

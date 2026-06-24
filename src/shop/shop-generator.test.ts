@@ -12,11 +12,12 @@ import {
   STANDARD_CARD_PRICE,
   SPECIALTY_CARD_PRICE,
 } from "./shop-generator";
+import { asCardId, asCardName } from "../types/card-identity";
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
-    name: "Test Card",
-    id: "test-id",
+    name: asCardName("Test Card"),
+    id: asCardId("test-id"),
     cardNumber: 1,
     cardType: "Character",
     subtype: "",
@@ -176,7 +177,7 @@ describe("rerollCost", () => {
 
 describe("shop runtime conversion", () => {
   it("round-trips card and Dreamsign slots", () => {
-    const card = makeCard({ cardNumber: 7, name: "Seven Bells" });
+    const card = makeCard({ cardNumber: 7, name: asCardName("Seven Bells") });
     const dreamsign = {
       id: "dreamsign-1",
       name: "Dreamsign One",

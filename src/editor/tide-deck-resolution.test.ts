@@ -1,12 +1,13 @@
 import { describe, expect, it } from "vitest";
 import type { CardData } from "../types/cards";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
+import { asCardId, asCardName } from "../types/card-identity";
 import { resolveTideDeck } from "./tide-deck-resolution";
 
 function makeCard(id: string, cardNumber: number, name: string): CardData {
   return {
-    name,
-    id,
+    name: asCardName(name),
+    id: asCardId(id),
     cardNumber,
     cardType: "Character",
     subtype: "Unit",

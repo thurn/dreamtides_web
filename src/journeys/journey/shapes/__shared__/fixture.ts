@@ -12,10 +12,14 @@
 
 import type { CardContent, DreamsignContent } from "../../../content/types";
 import type { JourneyContext, QuestStateProjection } from "../../context";
+import { asCardId, asCardName } from "../../../../types/card-identity";
 import type { DrawContext } from "../../../util/rng";
 
 function card(
-  overrides: Partial<CardContent> & { id: string; name: string },
+  overrides: Omit<Partial<CardContent>, "id" | "name"> & {
+    id: string;
+    name: string;
+  },
 ): CardContent {
   return {
     rarity: overrides.rarity ?? "Common",
@@ -25,6 +29,8 @@ function card(
     cardNumber: overrides.cardNumber ?? 0,
     raw: overrides.raw ?? { "rendered-text": "Draw a card." },
     ...overrides,
+    id: asCardId(overrides.id),
+    name: asCardName(overrides.name),
   };
 }
 

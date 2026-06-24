@@ -22,6 +22,7 @@
 //   - `deckContainsDiscardAbility`
 //   - `transfigurationHasEligibleTarget`
 
+import { asCardId } from "../../../types/card-identity";
 import type { JourneyContext } from "../context";
 import { isCardEligibleForTransfiguration } from "../effects";
 import { cardMatches } from "./content";
@@ -73,7 +74,7 @@ export function deckHasDuplicateStack(ctx: JourneyContext): boolean {
 export function deckContainsCardByName(ctx: JourneyContext, cardName: string): boolean {
   const cardsById = new Map(ctx.content.cards.map((card) => [card.id, card]));
   return ctx.state.quest.deck.entries.some((entry) => {
-    const card = cardsById.get(entry.cardId);
+    const card = cardsById.get(asCardId(entry.cardId));
     return card !== undefined && card.name === cardName;
   });
 }
@@ -84,7 +85,7 @@ export function transfigurationHasEligibleTarget(
 ): boolean {
   const cardsById = new Map(ctx.content.cards.map((card) => [card.id, card]));
   return ctx.state.quest.deck.entries.some((entry) => {
-    const card = cardsById.get(entry.cardId);
+    const card = cardsById.get(asCardId(entry.cardId));
     return card !== undefined && isCardEligibleForTransfiguration(transfigurationId, card);
   });
 }

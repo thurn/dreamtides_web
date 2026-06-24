@@ -1,12 +1,13 @@
 import { describe, expect, it } from "vitest";
 
 import type { CardData } from "./types/cards";
+import { asCardId, asCardName } from "./types/card-identity";
 import { applyCardKeywordModification } from "./card-type-change";
 
 function makeCard(overrides: Partial<CardData> = {}): CardData {
   return {
-    name: "Test Event",
-    id: "test-event",
+    name: asCardName("Test Event"),
+    id: asCardId("test-event"),
     cardNumber: 1,
     cardType: "Event",
     subtype: "",

@@ -27,6 +27,7 @@ import type { CardContent, ContentBundle, DreamsignContent } from "../../content
 import { createRecordingMutations } from "../../apply/testing/recordingMutations";
 import type { ChooserPlanningContext, ChooserResolution } from "../../apply/chooserPlan";
 import { getLogEntries, resetLog } from "../../../logging";
+import { asCardId, asCardName } from "../../../types/card-identity";
 import type { JourneyContext, QuestStateProjection } from "../context";
 
 import { BANE_NAMES } from "./content";
@@ -69,7 +70,7 @@ function buildContext(overrides: {
       summary: {
         totalCards,
         starterCards: deckEntries
-          .filter((entry) => starterIds.has(entry.cardId))
+          .filter((entry) => starterIds.has(asCardId(entry.cardId)))
           .reduce((total, entry) => total + entry.copies, 0),
         uniqueCards: deckEntries.length,
       },
@@ -100,8 +101,8 @@ function planningContext(
 function cardFixture(): readonly CardContent[] {
   return [
     {
-      id: "starter-alpha",
-      name: "Starter Alpha",
+      id: asCardId("starter-alpha"),
+      name: asCardName("Starter Alpha"),
       rarity: "Starter",
       cardType: "Event",
       energyCost: 0,
@@ -110,8 +111,8 @@ function cardFixture(): readonly CardContent[] {
       raw: {},
     },
     {
-      id: "starter-beta",
-      name: "Starter Beta",
+      id: asCardId("starter-beta"),
+      name: asCardName("Starter Beta"),
       rarity: "Starter",
       cardType: "Character",
       energyCost: 0,
@@ -120,8 +121,8 @@ function cardFixture(): readonly CardContent[] {
       raw: {},
     },
     {
-      id: "event-alpha",
-      name: "Event Alpha",
+      id: asCardId("event-alpha"),
+      name: asCardName("Event Alpha"),
       rarity: "common",
       cardType: "Event",
       energyCost: 1,
@@ -130,8 +131,8 @@ function cardFixture(): readonly CardContent[] {
       raw: {},
     },
     {
-      id: "event-beta",
-      name: "Event Beta",
+      id: asCardId("event-beta"),
+      name: asCardName("Event Beta"),
       rarity: "common",
       cardType: "Event",
       energyCost: 2,
@@ -182,8 +183,8 @@ function dreamsignFixture(): readonly DreamsignContent[] {
 // cardId routed through `addBaneCardById` corresponds to the named bane.
 function baneCardFixture(): readonly CardContent[] {
   return BANE_NAMES.map((name, i) => ({
-    id: `bane-card-${name.toLowerCase()}-${String(i)}`,
-    name,
+    id: asCardId(`bane-card-${name.toLowerCase()}-${String(i)}`),
+    name: asCardName(name),
     rarity: "common",
     cardType: "Event",
     energyCost: 0,
@@ -333,7 +334,7 @@ describe("Bane cost apply", () => {
       expect(call.method).toBe("addBaneCardById");
       expect(call.args[1]).toBe("dream_journey:gain_random_banes");
       const cardId = call.args[0] as string;
-      const card = byId.get(cardId);
+      const card = byId.get(asCardId(cardId));
       expect(card).toBeDefined();
       expect(baneNameSet.has(card!.name)).toBe(true);
     }
@@ -420,8 +421,8 @@ describe("Bane cost apply", () => {
     function nightmareOnlyCards(): readonly CardContent[] {
       return [
         {
-          id: "nightmare-card",
-          name: "Nightmare",
+          id: asCardId("nightmare-card"),
+          name: asCardName("Nightmare"),
           rarity: "Special",
           cardType: "Event",
           energyCost: 2,
@@ -604,7 +605,7 @@ describe("Card cost apply (non-choice)", () => {
       { method: "addCardById", args: ["event-beta", "dream_journey:gain_random_cards_from_pool"] },
     ]);
     const catalogIds = new Set(cards.map((card) => card.id));
-    expect(calls.every((call) => catalogIds.has(call.args[0] as string))).toBe(true);
+    expect(calls.every((call) => catalogIds.has(asCardId(call.args[0] as string)))).toBe(true);
   });
 
   it("transform_card_to_random_pool removes the named deck entry before adding a rolled catalog card", () => {
@@ -629,7 +630,7 @@ describe("Card cost apply (non-choice)", () => {
       method: "addCardById",
       args: ["starter-beta", "dream_journey:transform_card_to_random_pool"],
     });
-    expect(new Set(cards.map((card) => card.id)).has(calls[1].args[0] as string)).toBe(true);
+    expect(new Set(cards.map((card) => card.id)).has(asCardId(calls[1].args[0] as string))).toBe(true);
   });
 
   it("remove_transfiguration_from_card clears the first matching deck entry", () => {
@@ -828,7 +829,7 @@ describe("Card cost apply (non-choice)", () => {
     const starterIds = new Set(
       cards.filter((card) => card.rarity === "Starter").map((card) => card.id),
     );
-    expect(starterIds.has(calls[0].args[0] as string)).toBe(true);
+    expect(starterIds.has(asCardId(calls[0].args[0] as string))).toBe(true);
   });
 });
 

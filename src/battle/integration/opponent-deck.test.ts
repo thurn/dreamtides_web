@@ -29,6 +29,7 @@ import type {
   DreamsignTemplate,
 } from "../../types/content";
 import type { CardData } from "../../types/cards";
+import { asCardName, type CardId } from "../../types/card-identity";
 import type { PoolCard } from "../../draft/pool/types";
 
 const MIN_BATTLE_DECK_SIZE = 25;
@@ -179,8 +180,8 @@ function makeDreamcallers(
       startingEssence: 250,
       signatureCards: [...signatureCards],
       signatureCardIds: signatureCards
-        .map((name) => idByName.get(name))
-        .filter((id): id is string => id !== undefined),
+        .map((name) => idByName.get(asCardName(name)))
+        .filter((id): id is CardId => id !== undefined),
     },
   ];
 }

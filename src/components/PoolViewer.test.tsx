@@ -4,6 +4,7 @@ import { act, type ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { CardData } from "../types/cards";
+import { asCardId, asCardName } from "../types/card-identity";
 import type {
   ResolvedDreamcallerPackage,
   SeedProvenanceSummary,
@@ -28,8 +29,8 @@ function makeCard(
   mtgName?: string,
 ): CardData {
   return {
-    name,
-    id: `card-${String(cardNumber)}`,
+    name: asCardName(name),
+    id: asCardId(`card-${String(cardNumber)}`),
     cardNumber,
     cardType,
     subtype,
@@ -86,7 +87,7 @@ function makeResolvedPackage(
       signatureCards,
       // Index-aligned ids; an unknown name maps to a non-resolving placeholder.
       signatureCardIds: signatureCards.map(
-        (name) => idByName.get(name) ?? `missing-${name}`,
+        (name) => idByName.get(asCardName(name)) ?? asCardId(`missing-${name}`),
       ),
     },
     draftPoolCopiesByCard: {},
@@ -712,8 +713,8 @@ describe("PoolViewer", () => {
     // Aspect", but its id-aligned mainboardIds point only at #91, so an id-keyed
     // resolution must show #91 and never #90.
     const collisionDb = new Map<number, CardData>([
-      [90, { ...makeCard(90, "Twin Aspect", "Character", 2, "Mystic"), id: "card-90" }],
-      [91, { ...makeCard(91, "Twin Aspect", "Event", 3, ""), id: "card-91" }],
+      [90, { ...makeCard(90, "Twin Aspect", "Character", 2, "Mystic"), id: asCardId("card-90") }],
+      [91, { ...makeCard(91, "Twin Aspect", "Event", 3, ""), id: asCardId("card-91") }],
     ]);
     const collisionRecord: DraftRecord = {
       id: "seat-collision",

@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { asCardId } from "../../types/card-identity";
 import { buildMerchantContext } from "../context/buildMerchantContext";
 import {
   makeMerchantTestCard,
@@ -31,7 +32,7 @@ function makeContext(input?: { seed?: string; siteId?: string }): MerchantContex
   const questContent = makeMerchantTestContent({
     cards: [
       makeMerchantTestCard({
-        id: "11111111-1111-4111-8111-111111111111",
+        id: asCardId("11111111-1111-4111-8111-111111111111"),
         cardNumber: 1,
       }),
     ],
@@ -51,7 +52,7 @@ function makeOffer(input: {
   displayName?: string;
 }): MerchantOffer {
   const card = makeMerchantTestCard({
-    id: "22222222-2222-4222-8222-222222222222",
+    id: asCardId("22222222-2222-4222-8222-222222222222"),
     cardNumber: 2,
   });
   return {

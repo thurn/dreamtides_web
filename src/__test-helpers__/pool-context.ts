@@ -1,3 +1,4 @@
+import { asCardId, asCardName } from "../types/card-identity";
 import { buildPoolData } from "../draft/pool/pool-data";
 import { buildIdIndex } from "../data/cards-v2-database";
 import type { CardData } from "../types/cards";
@@ -46,8 +47,8 @@ export function buildTestCorpusCards(): CardData[] {
   const cards: CardData[] = [];
   for (const [name, cardNumber] of buildTestNameIndex()) {
     cards.push({
-      name,
-      id: `corpus-${String(cardNumber)}`,
+      name: asCardName(name),
+      id: asCardId(`corpus-${String(cardNumber)}`),
       cardNumber,
       cardType: "Character",
       subtype: "",

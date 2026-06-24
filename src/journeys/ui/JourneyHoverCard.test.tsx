@@ -20,6 +20,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { HTMLAttributes, ReactNode } from "react";
 
 import type { CardData } from "../../types/cards";
+import { asCardId, asCardName } from "../../types/card-identity";
 import { JourneyHoverCard } from "./JourneyHoverCard";
 
 // Mock framer-motion so the rendered DOM matches the JSX one-to-one and we
@@ -78,8 +79,8 @@ function queryTermHeadings(container: HTMLElement): string[] {
 
 function makeCard(name: string, cardNumber: number): CardData {
   return {
-    id: `card-${String(cardNumber)}`,
-    name,
+    id: asCardId(`card-${String(cardNumber)}`),
+    name: asCardName(name),
     cardNumber,
     cardType: "Event",
     subtype: "Spell",

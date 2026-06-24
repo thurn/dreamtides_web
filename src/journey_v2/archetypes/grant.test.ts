@@ -26,11 +26,13 @@ import {
   strongCardBuilder,
   transfiguredDraftBuilder,
 } from "./grant";
+import { asCardId, asCardName } from "../../types/card-identity";
+import type { CardId } from "../../types/card-identity";
 
 // A simple deterministic UUID generator for fixtures.
-function uuid(n: number): string {
+function uuid(n: number): CardId {
   const hex = n.toString(16).padStart(12, "0");
-  return `00000000-0000-4000-8000-${hex}`;
+  return asCardId(`00000000-0000-4000-8000-${hex}`);
 }
 
 /**
@@ -45,7 +47,7 @@ function makePoolCards(poolSize: number): CardData[] {
       makeMerchantTestCard({
         id: uuid(n),
         cardNumber: n,
-        name: `Pool ${String(n)}`,
+        name: asCardName(`Pool ${String(n)}`),
         energyCost: 2,
         spark: 2,
       }),
@@ -187,12 +189,14 @@ describe("grant family — fit_card_grant", () => {
     const inPoolUuids = new Set(inPoolNumbers.map((n) => uuid(n)));
     const outOfPoolUuids = new Set([uuid(108), uuid(109)]);
     for (const candidate of traceCandidates) {
-      expect(inPoolUuids.has(candidate.cardUuid ?? "")).toBe(true);
-      expect(outOfPoolUuids.has(candidate.cardUuid ?? "")).toBe(false);
+      expect(inPoolUuids.has(asCardId(candidate.cardUuid ?? ""))).toBe(true);
+      expect(outOfPoolUuids.has(asCardId(candidate.cardUuid ?? ""))).toBe(
+        false,
+      );
       expect(candidate.inDraftPool).toBe(true);
     }
     // The granted card itself is drawn from the draft pool.
-    expect(inPoolUuids.has(draft?.targetKey ?? "")).toBe(true);
+    expect(inPoolUuids.has(asCardId(draft?.targetKey ?? ""))).toBe(true);
   });
 });
 
@@ -428,7 +432,7 @@ describe("grant family — category_draft_known", () => {
       expect(targetKey.startsWith("subtype:Synth:")).toBe(false);
       // Every offered card is a real draft-pool card.
       for (const candidate of draft?.choiceRequest?.candidates ?? []) {
-        expect(draftPool.has(candidate.cardUuid ?? "")).toBe(true);
+        expect(draftPool.has(asCardId(candidate.cardUuid ?? ""))).toBe(true);
       }
     }
   });
@@ -716,7 +720,7 @@ describe("grant family — strong_card", () => {
       );
       expect(offer).not.toBeNull();
       if (offer === null) continue;
-      expect(lowQualityUuids.has(offer.targetKey ?? "")).toBe(false);
+      expect(lowQualityUuids.has(asCardId(offer.targetKey ?? ""))).toBe(false);
     }
   });
 });

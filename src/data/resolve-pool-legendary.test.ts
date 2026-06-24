@@ -6,6 +6,7 @@ import {
   buildNameIndex,
   resolvePool,
 } from "./cards-v2-database";
+import { asCardId, asCardName } from "../types/card-identity";
 
 /**
  * Minimal card record factory. Only the fields `buildNameIndex` /
@@ -18,7 +19,7 @@ function makeCard(overrides: Partial<CardData> & {
   cardNumber: number;
 }): CardData {
   return {
-    id: `id-${String(overrides.cardNumber)}`,
+    id: asCardId(`id-${String(overrides.cardNumber)}`),
     cardType: "Character",
     subtype: "Beast",
     isStarter: false,
@@ -46,10 +47,10 @@ function makePool(counts: Record<string, number>): GeneratedPool {
 describe("buildLegendaryCardNumbers", () => {
   it("collects exactly the card numbers whose rarity is Legendary", () => {
     const db = new Map<number, CardData>([
-      [1, makeCard({ name: "Ordinary", cardNumber: 1 })],
-      [2, makeCard({ name: "Hero", cardNumber: 2, rarity: "Legendary" })],
-      [3, makeCard({ name: "Starter", cardNumber: 3, rarity: "Starter" })],
-      [4, makeCard({ name: "Champion", cardNumber: 4, rarity: "Legendary" })],
+      [1, makeCard({ name: asCardName("Ordinary"), cardNumber: 1 })],
+      [2, makeCard({ name: asCardName("Hero"), cardNumber: 2, rarity: "Legendary" })],
+      [3, makeCard({ name: asCardName("Starter"), cardNumber: 3, rarity: "Starter" })],
+      [4, makeCard({ name: asCardName("Champion"), cardNumber: 4, rarity: "Legendary" })],
     ]);
     const legendary = buildLegendaryCardNumbers(db);
     expect(legendary).toEqual(new Set([2, 4]));
@@ -58,8 +59,8 @@ describe("buildLegendaryCardNumbers", () => {
 
 describe("resolvePool legendary cap", () => {
   const db = new Map<number, CardData>([
-    [10, makeCard({ name: "Common", cardNumber: 10 })],
-    [11, makeCard({ name: "Legend", cardNumber: 11, rarity: "Legendary" })],
+    [10, makeCard({ name: asCardName("Common"), cardNumber: 10 })],
+    [11, makeCard({ name: asCardName("Legend"), cardNumber: 11, rarity: "Legendary" })],
   ]);
   const nameIndex = buildNameIndex(db);
   const legendaryCardNumbers = buildLegendaryCardNumbers(db);
