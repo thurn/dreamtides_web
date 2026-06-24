@@ -24,10 +24,13 @@
 //     `sigseed` pool's play-rate prior pulls in, and the body of a signatureless
 //     Dreamcaller's pool.
 //
-// At runtime the whole algorithm is the tide selection, one shuffle, and one
-// deal below: join the starter, draw a random subset of facets, top up with broad
-// tides until a full pool is dealable, shuffle everything into one bag, and deal
-// `TIDES4.dealSize` copies at most `TIDES4.cap` of any card. A signatured
+// At runtime the whole algorithm is the tide selection, one shuffle, and the
+// two-pass deal below: join the starter, draw a random subset of facets, top up
+// with broad tides until a full pool is dealable, shuffle everything into one
+// bag, and deal `TIDES4.dealSize` copies at most `TIDES4.cap` of any card —
+// seeding the starter's (signature) cards first so the signature tide is
+// guaranteed into the pool rather than risking being cut by the bag overflow. A
+// signatured
 // Dreamcaller leans its own identity a different way each run (the facet subset).
 // A signatureless Dreamcaller has no identity to anchor on, so — exactly as
 // `sigseed` reduces to a coherent, randomly-themed `pickcohere` pool — it borrows a
@@ -75,7 +78,8 @@ export const TIDES4: Tides4Tuning = {
  * of its facet tides and join them, then top the bag up with broad neutral tides
  * (and any remaining facets) until a full pool can be dealt; finally shuffle the
  * whole bag and deal `TIDES4.dealSize` copies with at most `TIDES4.cap` copies of
- * any card. The random facet subset is the variety engine — it is the analogue of
+ * any card, seeding the starter's signature cards first so the signature tide is
+ * always present in the dealt pool. The random facet subset is the variety engine — it is the analogue of
  * `sigseed`'s random signature subset, so a Dreamcaller leans its identity a
  * different way each run. A signatureless Dreamcaller (null starter) instead borrows
  * a random signatured Dreamcaller's pool, so it leans a different coherent archetype
@@ -220,6 +224,11 @@ export function combineTidesPool(
   // CardId -> joined tide ids that contain it, in join order. The first id is the
   // card's "home" (primary) tide.
   const containingTides = new Map<CardId, string[]>();
+  // The card UUIDs of the always-joined signature tide(s) (selection `"starter"`).
+  // These are guaranteed a slot in the dealt pool: the deal below seeds them
+  // before filling the remainder, so the signature tide is never cut by the bag
+  // overflow the way a facet or neutral card can be.
+  const signatureCardIds = new Set<CardId>();
   const recordTide = (
     id: string,
     selection: Tides4PoolTideSelection,
@@ -245,6 +254,7 @@ export function combineTidesPool(
         containingTides.set(cardId, homes);
       }
       if (!homes.includes(id)) homes.push(id);
+      if (selection === "starter") signatureCardIds.add(cardId);
       for (let i = 0; i < card.copies; i += 1) {
         const have = bagCounts.get(cardId) ?? 0;
         bagCounts.set(cardId, have + 1);
@@ -269,11 +279,38 @@ export function combineTidesPool(
     recordTide(id, selection, dealable < dealSize);
   }
 
-  // One shuffle, one deal: take cards in bag order, skipping any already at the
-  // copy cap, until the pool reaches the target size or the bag is empty.
+  // One shuffle, two passes: every signature card is guaranteed at least one copy
+  // in the dealt pool, then the remainder (including second copies of those
+  // signature cards) is filled from the broader bag. Both passes walk the same
+  // shuffled bag, so the copy cap and the ordering among same-priority cards are
+  // unchanged from the single-deal version.
+  //
+  // Pass 1 seeds ONE copy of each distinct signature card. Because the deal stops
+  // at `dealSize` and the bag carries more dealable copies than the pool holds, a
+  // single shuffled deal would drop a slice of the signature tide along with
+  // everything else. Guaranteeing one copy each — rather than dealing signature
+  // cards straight to the copy cap — keeps the floor to the pool size: a signature
+  // tide has well under `dealSize` distinct cards, so all of them fit with room to
+  // spare, whereas seeding two copies each could exhaust the pool before every
+  // distinct signature card was covered (many signature cards also ride in a facet
+  // or neutral tide, so they reach two copies in the bag). Walking the shuffled bag
+  // keeps the choice unbiased in the degenerate case where a signature tide has
+  // more distinct cards than `dealSize`; in normal data every signature card is
+  // dealt.
+  //
+  // Pass 2 fills the rest of the pool from the shuffled bag exactly as the single
+  // deal did, dealing up to the copy cap; signature cards seeded in pass 1 can pick
+  // up their second copy here, and cards already at the cap are skipped.
   shuffle(rng, bag);
   const counts = new Map<CardId, number>();
   let size = 0;
+  for (const cardId of bag) {
+    if (size >= dealSize) break;
+    if (!signatureCardIds.has(cardId)) continue;
+    if ((counts.get(cardId) ?? 0) >= 1) continue;
+    counts.set(cardId, 1);
+    size += 1;
+  }
   for (const cardId of bag) {
     if (size >= dealSize) break;
     const have = counts.get(cardId) ?? 0;

@@ -5,7 +5,8 @@
 // `docs/known_good_decklists.json`, discarding every other draft seat. The two
 // variants are indistinguishable at runtime — both load a committed tide-deck
 // artifact and combine it through {@link combineTidesPool} (join the starter, draw
-// a random subset of facets, top up with broad tides, shuffle, and deal). Only the
+// a random subset of facets, top up with broad tides, shuffle, and deal — seeding
+// the signature tide first so it is guaranteed into the pool). Only the
 // data the decks were grown from differs, so any difference between a `tides4` and
 // a `tides5` pool is attributable purely to the known-good corpus restriction.
 //

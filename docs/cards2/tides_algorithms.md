@@ -553,10 +553,17 @@ facets are taken from a shuffled copy of the Dreamcaller's facet list. If the
 core plus the drawn facets cannot yet fill the pool, the remaining on-identity
 facets are joined next, then the broad **neutral** tail — on-theme cards before
 generic ones. Finally the combined bag is shuffled once and **150 copies are
-dealt**, never more than two of any card, with "dealable" counting the copies the
-deal can actually use so overlapping tides keep joining until a full pool is
-genuinely reachable. The random facet subset is the variety engine; the deal of
-150 from a larger bag adds a second, finer source of run-to-run variation. The
+dealt** in two passes, never more than two of any card, with "dealable" counting
+the copies the deal can actually use so overlapping tides keep joining until a
+full pool is genuinely reachable. The first pass **guarantees the signature tide**:
+it seeds one copy of every starter card before anything else, so the signature
+tide is always present in full rather than risking being cut when the shuffled bag
+overflows 150 (a signature tide has well under 150 distinct cards, so it always
+fits with room to spare). The second pass fills the remaining slots from the same
+shuffled bag — second copies of signature cards and the facet/neutral cards —
+exactly as a single deal would. The random facet subset is the variety engine; the
+deal of the non-signature remainder from a larger bag adds a second, finer source
+of run-to-run variation. The
 result's label records the algorithm and the joined tide ids, logged on
 `draft_pool_constructed` so a pool can be traced back to its decks.
 

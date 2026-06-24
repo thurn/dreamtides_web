@@ -110,6 +110,25 @@ describe("generateTides4", () => {
     expect(poolSize(result.counts)).toBe(18);
   });
 
+  it("guarantees every signature card a slot in the dealt pool", () => {
+    // A signature tide of 120 distinct cards plus six facet tides; the bag
+    // overflows the deal size many times over, so a single shuffled deal would
+    // drop a slice of the signature tide. Every signature card UUID must still
+    // appear (at least one copy) in every run.
+    const poolData = makePoolData(makeTides4(6, 120));
+    const signatureCardIds = Array.from(
+      { length: 120 },
+      (_, i) => `tide-sig-1-card-${String(i)}`,
+    );
+    for (let seed = 0; seed < 30; seed += 1) {
+      const result = generateTides4(makeRng(seed), poolData, "dc-a");
+      expect(poolSize(result.counts)).toBe(TIDES4.dealSize);
+      for (const id of signatureCardIds) {
+        expect(result.counts.has(asCardId(id))).toBe(true);
+      }
+    }
+  });
+
   it("always joins a signatured Dreamcaller's starter first", () => {
     const poolData = makePoolData(makeTides4(6, 30));
     for (let seed = 0; seed < 20; seed += 1) {
