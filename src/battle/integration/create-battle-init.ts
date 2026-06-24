@@ -5,7 +5,12 @@ import type {
   DreamscapeContent,
   DreamsignTemplate,
 } from "../../types/content";
-import type { BattleModifier, QuestState, SiteState } from "../../types/quest";
+import type {
+  BattleModifier,
+  DreamscapeNode,
+  QuestState,
+  SiteState,
+} from "../../types/quest";
 import type { RunPoolContext } from "../../data/quest-content";
 import type { DraftRecord } from "../../data/cards-v2-database";
 import type { FitModel } from "../../draft/replay/fit-model";
@@ -23,9 +28,14 @@ import {
   resolveBattleAffiliation,
   resolveRunLayerCount,
   selectOpponentDreamcaller,
-  type OpponentDeckBuild,
   type OpponentDeckLogArgs,
 } from "./opponent-deck";
+import { buildCorpusOpponentDeck } from "./corpus-opponent-deck";
+import type {
+  KnownGoodDecklist,
+  DreamsignSignature,
+} from "../../data/quest-content";
+import { logEvent } from "../../logging";
 import type {
   BattleDeckCardDefinition,
   BattleDreamcallerSummary,
@@ -115,14 +125,29 @@ export interface CreateBattleInitInput {
    */
   poolContext?: RunPoolContext;
   /**
+   * The corpus of known-good human decklists the opponent deck is selected from
+   * (corpus algorithm). When present, the opponent deck is a known-good decklist
+   * chosen for the opponent Dreamcaller's signature cards and the dreamscape
+   * affiliation, then tuned to the run position. Optional: when absent the
+   * opponent deck falls back to the coherent draft simulation.
+   */
+  knownGoodDecklists?: readonly KnownGoodDecklist[];
+  /**
+   * Dreamsign signatures (tailored / neutral) the corpus algorithm scores a
+   * tuned deck against when assigning the opponent's dreamsign. Optional: when
+   * absent the corpus build falls back to a seeded neutral dreamsign.
+   */
+  dreamsignSignatures?: ReadonlyMap<string, DreamsignSignature>;
+  /**
    * The corpus-trained deck-fit model, shared across battles in a session. Drives
-   * the opponent's coherent draft. Optional: when absent the enemy deck falls
-   * back to a sample of draftable cards from the card database.
+   * the opponent's coherent draft, which builds the opponent deck when no
+   * {@link knownGoodDecklists} corpus is available. Optional: when absent the
+   * enemy deck falls back to a sample of draftable cards from the card database.
    */
   fitModel?: FitModel;
   /**
    * The adapted draft-record corpus. Supplies the real pack structures the
-   * opponent's coherent draft picks from. Optional: when empty the enemy deck
+   * coherent-draft fallback picks from. Optional: when empty the enemy deck
    * falls back to a sample of draftable cards from the card database.
    */
   draftRecords?: readonly DraftRecord[];
@@ -134,14 +159,16 @@ export interface CreateBattleInitInput {
    */
   aiMode?: boolean;
   /**
-   * Hook for the `opponent_deck_constructed` reconstruction log. When omitted,
-   * {@link createBattleInit} logs the event inline at construction time. The
-   * multiplayer ensure path passes a capture callback instead and defers the
-   * log until its init actually wins the `ensureBattleSession` transaction, so
+   * Logging hand-off for the opponent build's reconstruction events
+   * (`corpus_opponent_dreamcaller_selected` + `corpus_opponent_deck_constructed`,
+   * or the coherent / fallback `opponent_deck_constructed`). When omitted,
+   * {@link createBattleInit} emits the events inline at construction time. The
+   * multiplayer ensure path passes a callback that captures the emit thunk and
+   * fires it only once its init wins the `ensureBattleSession` transaction, so
    * the room records exactly one opponent deck per battle rather than one per
    * client that speculatively computed an init.
    */
-  onOpponentDeckConstructed?: (args: OpponentDeckLogArgs) => void;
+  deferOpponentLog?: (emit: () => void) => void;
 }
 
 function applyBattleRewardModifiers(
@@ -211,15 +238,30 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     });
   // The opponent is built by emulating its Dreamcaller's journey to the
   // equivalent run depth (quests doc "Battle"): a deterministic opponent
-  // Dreamcaller, a single dreamsign from the run midpoint onward, and a deck
-  // simulated from that Dreamcaller's tides, biased toward the dreamscape's
-  // affiliation and scaled by run progress.
+  // Dreamcaller drawn from the dreamscape's residents, a single dreamsign from
+  // the run midpoint onward, and a deck selected by the corpus algorithm — a
+  // known-good human decklist matching the Dreamcaller's signature cards and the
+  // dreamscape affiliation, tuned to the run position. When no known-good corpus
+  // is supplied the deck falls back to the coherent-draft simulation.
   const completionLevelAtStart = state.completionLevel;
   const layerCount = resolveRunLayerCount(state.atlas.layers);
+  const currentNode =
+    state.currentDreamscape === null
+      ? null
+      : state.atlas.nodes[state.currentDreamscape] ?? null;
+  // The opponent Dreamcaller is one of the dreamscape's RESIDENTS (the corpus
+  // algorithm fields native rivals); a neutral / starter dreamscape, or a
+  // battle whose dreamscape content is absent, has no residents and the full
+  // roster is used. Resolved before selection so it narrows the pick pool.
+  const residentDreamcallerIds = resolveDreamscapeResidentIds(
+    currentNode,
+    input.dreamscapes ?? [],
+  );
   const opponentDreamcaller = selectOpponentDreamcaller(
     dreamcallers,
     state.dreamcaller?.id ?? null,
     streams.enemyDescriptor,
+    residentDreamcallerIds,
   );
   const opponentDreamsigns = buildOpponentDreamsigns(
     completionLevelAtStart,
@@ -227,10 +269,6 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     dreamsignTemplates,
     streams.enemyDescriptor,
   );
-  const currentNode =
-    state.currentDreamscape === null
-      ? null
-      : state.atlas.nodes[state.currentDreamscape] ?? null;
   const battleAffiliation = resolveBattleAffiliation(
     currentNode,
     input.dreamscapes ?? [],
@@ -245,46 +283,99 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
   );
   const poolSeed = deriveEnemyPoolSeed(seed);
   const aiMode = input.aiMode ?? false;
-  const opponentBuild = aiMode
-    ? null
-    : buildOpponentDeck({
-        opponentDreamcaller,
-        fitModel: input.fitModel,
-        draftRecords: input.draftRecords ?? [],
-        poolContext: input.poolContext,
-        cardDatabase,
-        affiliation: battleAffiliation,
-        completionLevel: completionLevelAtStart,
-        layerCount,
-        poolSeed,
-      });
+
+  // Corpus build (the production opponent algorithm). Its
+  // `corpus_opponent_deck_constructed` log is captured into `emitCorpusDeckLog`
+  // so it fires with the rest of the opponent reconstruction logs, deferred to
+  // transaction-commit in multiplayer.
+  let emitCorpusDeckLog: (() => void) | null = null;
+  const corpusBuild =
+    aiMode || input.knownGoodDecklists === undefined
+      ? null
+      : buildCorpusOpponentDeck({
+          opponentDreamcaller,
+          knownGoodDecklists: input.knownGoodDecklists,
+          affiliation: battleAffiliation,
+          cardDatabase,
+          dreamsignSignatures: input.dreamsignSignatures,
+          dreamsignTemplates,
+          completionLevel: completionLevelAtStart,
+          layerCount,
+          poolSeed,
+          battleEntryKey,
+          deferLog: (emit) => {
+            emitCorpusDeckLog = emit;
+          },
+        });
+
+  // Coherent-draft fallback: only when the corpus algorithm produced no deck
+  // (no known-good corpus, e.g. tests / minimal content). `null` in aiMode and
+  // whenever the corpus build succeeded.
+  const coherentBuild =
+    aiMode || corpusBuild !== null
+      ? null
+      : buildOpponentDeck({
+          opponentDreamcaller,
+          fitModel: input.fitModel,
+          draftRecords: input.draftRecords ?? [],
+          poolContext: input.poolContext,
+          cardDatabase,
+          affiliation: battleAffiliation,
+          completionLevel: completionLevelAtStart,
+          layerCount,
+          poolSeed,
+        });
+
+  const chosenCards = corpusBuild?.finalCards ?? coherentBuild?.cards ?? null;
   const enemyDeckDefinition = finalizeEnemyDeck(
-    opponentBuild,
+    chosenCards,
     cardDatabase,
     streams.enemyDeckOrder,
     aiMode,
   ).map(freezeBattleDeckCardDefinition);
-  const opponentDeckLogArgs: OpponentDeckLogArgs = {
-    battleEntryKey,
-    opponentDreamcaller,
-    poolVariant: aiMode
-      ? "ai_starter"
-      : input.poolContext?.poolVariant ?? DEFAULT_POOL_VARIANT,
-    poolSeed,
-    completionLevel: completionLevelAtStart,
-    layerCount,
-    affiliation: battleAffiliation,
-    dreamsigns: opponentDreamsigns,
-    build: opponentBuild,
-    fallbackDeckSize: enemyDeckDefinition.length,
-  };
-  // Defer the reconstruction log to the caller when it wants to gate logging on
-  // the committed init (multiplayer ensure path); otherwise log inline so
-  // single-call sites and tests still record the event.
-  if (input.onOpponentDeckConstructed) {
-    input.onOpponentDeckConstructed(opponentDeckLogArgs);
-  } else {
+
+  // Assemble the deferred opponent reconstruction logs. The corpus path records
+  // the dreamscape-restricted Dreamcaller pick plus the corpus deck build; the
+  // fallback / aiMode path records the coherent `opponent_deck_constructed`.
+  const emitOpponentLogs = (): void => {
+    if (corpusBuild !== null) {
+      logEvent("corpus_opponent_dreamcaller_selected", {
+        battleEntryKey,
+        dreamscapeId: state.currentDreamscape,
+        completionLevel: completionLevelAtStart,
+        restrictedToDreamscapeResidents:
+          residentDreamcallerIds != null &&
+          residentDreamcallerIds.length > 0,
+        eligibleDreamcallerIds: residentDreamcallerIds ?? [],
+        selectedDreamcallerId: opponentDreamcaller?.id ?? null,
+        selectedDreamcallerName: opponentDreamcaller?.name ?? null,
+      });
+      emitCorpusDeckLog?.();
+      return;
+    }
+    const opponentDeckLogArgs: OpponentDeckLogArgs = {
+      battleEntryKey,
+      opponentDreamcaller,
+      poolVariant: aiMode
+        ? "ai_starter"
+        : input.poolContext?.poolVariant ?? DEFAULT_POOL_VARIANT,
+      poolSeed,
+      completionLevel: completionLevelAtStart,
+      layerCount,
+      affiliation: battleAffiliation,
+      dreamsigns: opponentDreamsigns,
+      build: coherentBuild,
+      fallbackDeckSize: enemyDeckDefinition.length,
+    };
     logOpponentDeckConstructed(opponentDeckLogArgs);
+  };
+  // Defer the reconstruction logs to the caller when it wants to gate logging on
+  // the committed init (multiplayer ensure path); otherwise emit inline so
+  // single-call sites and tests still record the events.
+  if (input.deferOpponentLog) {
+    input.deferOpponentLog(emitOpponentLogs);
+  } else {
+    emitOpponentLogs();
   }
   const dreamwellDeck = buildDreamwellDeck(
     input.dreamwellCards ?? [],
@@ -498,6 +589,24 @@ export function buildEnemyDescriptor(
 }
 
 /**
+ * The resident Dreamcaller ids of the dreamscape this battle takes place in, so
+ * the opponent is one of the region's own rivals (corpus algorithm). Returns
+ * `null` when the battle has no dreamscape node, the node's dreamscape content
+ * is absent (e.g. battle-engine tests omit `dreamscapes`), or the dreamscape is
+ * the residentless starter — in which case selection draws from the full roster.
+ */
+function resolveDreamscapeResidentIds(
+  node: DreamscapeNode | null,
+  dreamscapes: readonly DreamscapeContent[],
+): readonly string[] | null {
+  const dreamscapeId = node?.dreamscapeId;
+  if (dreamscapeId == null) return null;
+  const dreamscape = dreamscapes.find((d) => d.id === dreamscapeId);
+  const residents = dreamscape?.dreamcallerIds ?? null;
+  return residents !== null && residents.length > 0 ? residents : null;
+}
+
+/**
  * Mixes the battle seed into a distinct stream for the enemy pool draw so the
  * enemy deck is reproducible per battle seed without colliding with the other
  * battle RNG streams.
@@ -508,19 +617,20 @@ function deriveEnemyPoolSeed(seed: number): number {
 }
 
 /**
- * Turns an {@link OpponentDeckBuild} (or the AI-mode / fallback path) into the
- * concrete enemy battle deck: the chosen cards padded up to
+ * Turns the opponent build's chosen cards (or the AI-mode / fallback path) into
+ * the concrete enemy battle deck: the chosen cards padded up to
  * `MIN_BATTLE_DECK_SIZE` and shuffled into the enemy draw order.
  *
  *  - In `aiMode` the deck is the fixed AI Starter deck (3 copies of each
  *    starter), shuffled through the enemy-deck RNG stream.
- *  - Otherwise the simulated-journey build's cards are used. When the build is
- *    `null` (no `poolContext`, or the simulated pool resolved to no cards) the
- *    deck falls back to a shuffled sample of draftable cards (non-starter,
- *    numeric cost) so the enemy always has a non-empty deck.
+ *  - Otherwise the corpus (or coherent fallback) build's cards are used. When
+ *    `chosenCards` is `null` or empty (no corpus, no fitModel — the simulated
+ *    pool resolved to no cards) the deck falls back to a shuffled sample of
+ *    draftable cards (non-starter, numeric cost) so the enemy always has a
+ *    non-empty deck.
  */
 function finalizeEnemyDeck(
-  build: OpponentDeckBuild | null,
+  chosenCards: readonly CardData[] | null,
   cardDatabase: ReadonlyMap<number, CardData>,
   rng: BattleRng,
   aiMode: boolean,
@@ -531,7 +641,7 @@ function finalizeEnemyDeck(
       .map(cloneBattleDeckCardDefinition);
   }
 
-  let chosen: CardData[] = build?.cards ?? [];
+  let chosen: CardData[] = chosenCards ? [...chosenCards] : [];
 
   if (chosen.length === 0) {
     chosen = rng.shuffle(

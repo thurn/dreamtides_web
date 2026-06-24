@@ -3,10 +3,6 @@ import type { Database } from "firebase/database";
 import { ensureBattleSession } from "../multiplayer/battle-service";
 import type { SharedBattleState } from "../multiplayer/battle-types";
 import { createBattleInit } from "../battle/integration/create-battle-init";
-import {
-  logOpponentDeckConstructed,
-  type OpponentDeckLogArgs,
-} from "../battle/integration/opponent-deck";
 import { createInitialBattleState } from "../battle/state/create-initial-state";
 import type { CardData } from "../types/cards";
 import type {
@@ -16,7 +12,11 @@ import type {
   DreamsignTemplate,
 } from "../types/content";
 import type { DreamwellCard } from "../data/dreamwell-database";
-import type { RunPoolContext } from "../data/quest-content";
+import type {
+  RunPoolContext,
+  KnownGoodDecklist,
+  DreamsignSignature,
+} from "../data/quest-content";
 import type { DraftRecord } from "../data/cards-v2-database";
 import type { FitModel } from "../draft/replay/fit-model";
 import type { QuestState, SiteState } from "../types/quest";
@@ -76,9 +76,20 @@ export function useEnsureBattleSession(input: {
   dreamwellCards: readonly DreamwellCard[];
   dreamsignTemplates?: readonly DreamsignTemplate[];
   poolContext?: RunPoolContext;
-  /** The corpus-trained fit model that drives the opponent's coherent draft. */
+  /**
+   * The corpus of known-good human decklists the opponent deck is selected from
+   * (corpus algorithm). When absent, the opponent deck falls back to the
+   * coherent draft simulation.
+   */
+  knownGoodDecklists?: readonly KnownGoodDecklist[];
+  /**
+   * Dreamsign signatures the corpus algorithm scores a tuned opponent deck
+   * against when assigning the opponent's dreamsign.
+   */
+  dreamsignSignatures?: ReadonlyMap<string, DreamsignSignature>;
+  /** The corpus-trained fit model driving the coherent-draft fallback. */
   fitModel?: FitModel;
-  /** The adapted draft-record corpus supplying the opponent draft's packs. */
+  /** The adapted draft-record corpus supplying the coherent fallback's packs. */
   draftRecords?: readonly DraftRecord[];
   seedOverride: number | null;
   aiMode?: boolean;
@@ -100,11 +111,11 @@ export function useEnsureBattleSession(input: {
     }
     inFlightKey.current = input.battleEntryKey;
 
-    // Captured rather than logged inline: this client computes an init
+    // Captured rather than emitted inline: this client computes an init
     // speculatively, but only the client whose init wins the
     // `ensureBattleSession` transaction should record the opponent deck, so the
-    // room holds exactly one `opponent_deck_constructed` per battle.
-    let opponentDeckLogArgs: OpponentDeckLogArgs | null = null;
+    // room holds exactly one opponent reconstruction record per battle.
+    let emitOpponentLogs: (() => void) | null = null;
     const init = createBattleInit({
       battleEntryKey: input.battleEntryKey,
       site: input.site,
@@ -116,12 +127,14 @@ export function useEnsureBattleSession(input: {
       dreamwellCards: input.dreamwellCards,
       dreamsignTemplates: input.dreamsignTemplates,
       poolContext: input.poolContext,
+      knownGoodDecklists: input.knownGoodDecklists,
+      dreamsignSignatures: input.dreamsignSignatures,
       fitModel: input.fitModel,
       draftRecords: input.draftRecords,
       seedOverride: input.seedOverride,
       aiMode: input.aiMode,
-      onOpponentDeckConstructed: (args) => {
-        opponentDeckLogArgs = args;
+      deferOpponentLog: (emit) => {
+        emitOpponentLogs = emit;
       },
     });
     const initial = createInitialBattleState(init);
@@ -134,8 +147,8 @@ export function useEnsureBattleSession(input: {
       actorId: input.clientId,
     })
       .then((committedInit) => {
-        if (committedInit && opponentDeckLogArgs !== null) {
-          logOpponentDeckConstructed(opponentDeckLogArgs);
+        if (committedInit && emitOpponentLogs !== null) {
+          emitOpponentLogs();
         }
       })
       .catch((error: unknown) => {
@@ -156,6 +169,8 @@ export function useEnsureBattleSession(input: {
     input.dreamwellCards,
     input.dreamsignTemplates,
     input.poolContext,
+    input.knownGoodDecklists,
+    input.dreamsignSignatures,
     input.fitModel,
     input.draftRecords,
     input.questState,

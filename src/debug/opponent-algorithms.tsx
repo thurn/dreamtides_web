@@ -212,15 +212,15 @@ const corpusAlgorithm: DebugAlgorithm = {
 };
 
 export const OPPONENT_ALGORITHMS: readonly DebugAlgorithm[] = [
-  coherentAlgorithm,
   corpusAlgorithm,
+  coherentAlgorithm,
 ];
 
-/** Resolve the algorithm for an `?algo=` value, defaulting to coherent. */
+/** Resolve the algorithm for an `?algo=` value, defaulting to corpus. */
 export function getAlgorithm(id: string | null): DebugAlgorithm {
   return (
     OPPONENT_ALGORITHMS.find((algorithm) => algorithm.id === id) ??
-    coherentAlgorithm
+    corpusAlgorithm
   );
 }
 

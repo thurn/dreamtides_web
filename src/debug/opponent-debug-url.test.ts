@@ -34,24 +34,24 @@ describe("opponent-debug-url", () => {
     expect(parseOpponentDebugParams(search)).toEqual(params);
   });
 
-  it("round-trips the corpus algo through the query string", () => {
+  it("round-trips the coherent algo through the query string", () => {
     const params: OpponentDebugParams = {
       completionLevel: 2,
       dreamscapeId: "grid_city",
       nonce: 1,
-      algo: "corpus",
+      algo: "coherent",
     };
     const search = opponentDebugSearch(params);
-    expect(search).toContain("algo=corpus");
+    expect(search).toContain("algo=coherent");
     expect(parseOpponentDebugParams(search)).toEqual(params);
   });
 
-  it("omits the algo token for the coherent default", () => {
+  it("omits the algo token for the corpus default", () => {
     const search = opponentDebugSearch({
       completionLevel: 1,
       dreamscapeId: null,
       nonce: 0,
-      algo: "coherent",
+      algo: "corpus",
     });
     expect(search).not.toContain("algo");
   });
@@ -61,7 +61,7 @@ describe("opponent-debug-url", () => {
       completionLevel: MAX_LAYER,
       dreamscapeId: "the_rust_expanse",
       nonce: 5,
-      algo: "coherent",
+      algo: "corpus",
     };
     const id = opponentGenerationId(params);
     expect(parseOpponentGenerationId(id)).toEqual(params);
@@ -90,7 +90,7 @@ describe("opponent-debug-url", () => {
       completionLevel: 2,
       dreamscapeId: null,
       nonce: 0,
-      algo: "coherent",
+      algo: "corpus",
     });
   });
 
@@ -112,7 +112,7 @@ describe("opponent-debug-url", () => {
       completionLevel: 2,
       dreamscapeId: null,
       nonce: 4,
-      algo: "coherent",
+      algo: "corpus",
     });
   });
 
@@ -124,12 +124,12 @@ describe("opponent-debug-url", () => {
     expect(parseOpponentDebugParams("?layer=-3").completionLevel).toBe(0);
   });
 
-  it("defaults a bare query to the layer-0 neutral coherent generation", () => {
+  it("defaults a bare query to the layer-0 neutral corpus generation", () => {
     expect(parseOpponentDebugParams("")).toEqual({
       completionLevel: 0,
       dreamscapeId: null,
       nonce: 0,
-      algo: "coherent",
+      algo: "corpus",
     });
   });
 
@@ -138,7 +138,7 @@ describe("opponent-debug-url", () => {
       completionLevel: 0,
       dreamscapeId: null,
       nonce: 0,
-      algo: "coherent",
+      algo: "corpus",
     });
   });
 });

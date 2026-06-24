@@ -53,11 +53,11 @@ function normalizeDreamscape(raw: string | null | undefined): string | null {
 }
 
 /** Coerce an arbitrary `?algo=` / selector value to a known algorithm,
- * defaulting to coherent. */
+ * defaulting to corpus. */
 export function normalizeOpponentDebugAlgo(
   raw: string | null | undefined,
 ): OpponentDebugAlgo {
-  return raw?.trim() === "corpus" ? "corpus" : "coherent";
+  return raw?.trim() === "coherent" ? "coherent" : "corpus";
 }
 
 /**
@@ -80,7 +80,7 @@ export function opponentGenerationId(params: OpponentDebugParams): string {
  * ids that themselves contain no colons (every real dreamscape id is a single
  * token), validating the trailing layer / nonce as numbers. The id does not
  * carry the algorithm choice (a separate query param), so the returned `algo`
- * is the default `"coherent"`; callers reading a full query string overlay the
+ * is the default `"corpus"`; callers reading a full query string overlay the
  * `?algo=` value.
  */
 export function parseOpponentGenerationId(
@@ -95,7 +95,7 @@ export function parseOpponentGenerationId(
     completionLevel: clampLayer(layer),
     dreamscapeId: normalizeDreamscape(parts[1]),
     nonce: normalizeNonce(nonce),
-    algo: "coherent",
+    algo: "corpus",
   };
 }
 
@@ -131,7 +131,7 @@ export function parseOpponentDebugParams(
 /**
  * Serialize params into a canonical `?layer=…&dreamscape=…&n=…` query string
  * (leading `?` included; `dreamscape` omitted for a neutral build, `algo`
- * omitted for the coherent default so existing links stay bare). Round-trips
+ * omitted for the corpus default so default links stay bare). Round-trips
  * with {@link parseOpponentDebugParams}.
  */
 export function opponentDebugSearch(params: OpponentDebugParams): string {
@@ -141,7 +141,7 @@ export function opponentDebugSearch(params: OpponentDebugParams): string {
     query.set("dreamscape", params.dreamscapeId);
   }
   query.set("n", String(params.nonce));
-  if (params.algo === "corpus") {
+  if (params.algo === "coherent") {
     query.set("algo", params.algo);
   }
   return `?${query.toString()}`;

@@ -187,6 +187,23 @@ export function buildCorpusOpponentDeck(args: {
   completionLevel: number;
   layerCount: number;
   poolSeed: number;
+  /**
+   * The battle entry key the deck is built for, recorded in
+   * `corpus_opponent_deck_constructed` so a production battle's opponent deck
+   * greps out of `logs/quest-log.jsonl` by entry key (matching the coherent
+   * algorithm's `opponent_deck_constructed`). Omitted by callers without an
+   * entry key (e.g. unit tests).
+   */
+  battleEntryKey?: string;
+  /**
+   * Logging hand-off. The builder constructs the
+   * `corpus_opponent_deck_constructed` record into an `emit` thunk and passes it
+   * here. The default emits immediately (the debug tool and tests log inline);
+   * the multiplayer battle path passes a callback that captures the thunk and
+   * fires it only once its init wins the `ensureBattleSession` transaction, so
+   * the room records exactly one opponent deck per battle.
+   */
+  deferLog?: (emit: () => void) => void;
 }): CorpusOpponentDeckBuild | null {
   const {
     opponentDreamcaller,
@@ -198,6 +215,10 @@ export function buildCorpusOpponentDeck(args: {
     completionLevel,
     layerCount,
     poolSeed,
+    battleEntryKey,
+    deferLog = (emit) => {
+      emit();
+    },
   } = args;
 
   if (knownGoodDecklists.length === 0) return null;
@@ -534,27 +555,30 @@ export function buildCorpusOpponentDeck(args: {
     id: lc(card.id),
     name: card.name,
   });
-  logEvent("corpus_opponent_deck_constructed", {
-    sourceId: picked.id,
-    sourceName: picked.name,
-    signatureFit: round4(picked.signatureFit),
-    affiliationFit: round4(picked.affiliationFit),
-    combined: round4(picked.combined),
-    candidateCount: candidates.length,
-    topK: topK.map((t) => ({ id: t.id, combined: round4(t.combined) })),
-    poolSeed,
-    completionLevel,
-    layerCount,
-    legendariesRemoved: legendariesRemoved.map(cardSummary),
-    legendaryReplacements: legendaryReplacements.map(cardSummary),
-    cardsCut: cardsCut.map(cardSummary),
-    startersAdded: startersAdded.map(cardSummary),
-    dreamsign:
-      dreamsign === null
-        ? null
-        : { id: dreamsign.id, name: dreamsign.name, fit: round4(dreamsign.fit) },
-    abilityActive,
-    finalCardIds: finalCards.map(uuidOf),
+  deferLog(() => {
+    logEvent("corpus_opponent_deck_constructed", {
+      ...(battleEntryKey === undefined ? {} : { battleEntryKey }),
+      sourceId: picked.id,
+      sourceName: picked.name,
+      signatureFit: round4(picked.signatureFit),
+      affiliationFit: round4(picked.affiliationFit),
+      combined: round4(picked.combined),
+      candidateCount: candidates.length,
+      topK: topK.map((t) => ({ id: t.id, combined: round4(t.combined) })),
+      poolSeed,
+      completionLevel,
+      layerCount,
+      legendariesRemoved: legendariesRemoved.map(cardSummary),
+      legendaryReplacements: legendaryReplacements.map(cardSummary),
+      cardsCut: cardsCut.map(cardSummary),
+      startersAdded: startersAdded.map(cardSummary),
+      dreamsign:
+        dreamsign === null
+          ? null
+          : { id: dreamsign.id, name: dreamsign.name, fit: round4(dreamsign.fit) },
+      abilityActive,
+      finalCardIds: finalCards.map(uuidOf),
+    });
   });
 
   return {

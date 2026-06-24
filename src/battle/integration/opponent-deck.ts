@@ -1,24 +1,29 @@
-// Opponent deck + descriptor construction for the Battle site (quests doc
-// "Battle"; design `docs/cards2/opponent_deck_coherent_draft_design.md`). Each
-// battle has an assigned opponent Dreamcaller whose deck is built by simulating a
-// coherent draft: at each pick the opponent takes the card that best FITS the
-// deck drafted so far, where "fit" is learned entirely from the corpus of real
-// human draft records (`docs/draft_records_adapted/`). Difficulty scales with the
-// run by giving stronger opponents a larger pick budget, more post-draft removals,
-// and a lower exploration temperature, mirroring how a player's deck tightens.
-// Opponents carry no dreamsigns in the early battles; from the run midpoint onward
-// each opponent brings a single dreamsign.
+// Opponent descriptor primitives + the coherent-draft deck algorithm for the
+// Battle site (quests doc "Battle"; design
+// `docs/cards2/opponent_deck_coherent_draft_design.md`).
 //
-// In an affiliated dreamscape the deck must also belong to that affiliation: the
-// draft seed widens to the affiliation probe, pack composition is biased toward
-// affiliated cards, and best-of-N draft selection keeps the draft that best
-// matches the affiliation while staying coherent. In a neutral dreamscape there
-// is no affiliation target and selection optimizes coherence alone.
+// Every battle uses this module's descriptor primitives —
+// `selectOpponentDreamcaller`, `buildOpponentDreamsigns`,
+// `resolveBattleAffiliation`, and the run-scaling helpers — to assemble the
+// enemy Dreamcaller, its dreamsigns (none in early battles; one from the run
+// midpoint onward), and the affiliation the deck leans toward.
 //
-// This module is the single source of opponent construction. `create-battle-init`
-// calls into it to assemble the enemy descriptor (dreamcaller + dreamsigns) and
-// the enemy battle deck, then logs `opponent_deck_constructed` so a battle's
-// opponent can be reconstructed from `logs/quest-log.jsonl`.
+// `buildOpponentDeck` is the coherent-draft deck algorithm: at each pick the
+// opponent takes the card that best FITS the deck drafted so far, where "fit"
+// is learned entirely from the corpus of real human draft records
+// (`docs/draft_records_adapted/`). Difficulty scales with the run by giving
+// stronger opponents a larger pick budget, more post-draft removals, and a lower
+// exploration temperature, mirroring how a player's deck tightens. In an
+// affiliated dreamscape the draft seed widens to the affiliation probe, pack
+// composition is biased toward affiliated cards, and best-of-N selection keeps
+// the draft that best matches the affiliation while staying coherent; a neutral
+// dreamscape optimizes coherence alone. `create-battle-init` builds the
+// production opponent deck with the corpus algorithm
+// (`corpus-opponent-deck.ts`) and falls back to this coherent draft when no
+// known-good decklist corpus is supplied; the `/opponent` debug tool exposes
+// this algorithm directly as "Coherent". Both paths log
+// `opponent_deck_constructed` so the build can be reconstructed from
+// `logs/quest-log.jsonl`.
 
 import type { CardData } from "../../types/cards";
 import type {
