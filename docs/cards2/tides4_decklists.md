@@ -125,7 +125,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Together Against the Tide
 - 1× Burning Pursuit
 - 1× Pyrokinetic Surge
-- 1× Kindlehorn
+- 1× Blight Weaver
 - 1× Verdant Pioneer
 - 1× Dreadweaver
 - 1× Wasteland Arbitrator
@@ -220,7 +220,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× Burning Pursuit
 - 1× Pyrokinetic Surge
 - 1× Dawnrunner
-- 1× Kindlehorn
+- 1× Blight Weaver
 - 1× Lurking Dread
 - 1× Wasteland Arbitrator
 - 1× Shadowcaller
@@ -274,7 +274,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Paradox Enforcer
 - 1× Enginespeaker
 - 1× Veil of the Wastes
-- 1× Voidcaller
+- 1× Soulcleft Spinner
 - 1× Duskreaper
 - 1× Emerald Guardian
 - 1× Hope's Vanguard
@@ -315,7 +315,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Titan of Forgotten Echoes
 - 1× Dawnrunner
 - 1× Kindred Sparks
-- 1× Kindlehorn
+- 1× Blight Weaver
 - 1× Spiritbound Alpha
 - 1× Defiant Holdout
 - 1× Shadowpaw
@@ -540,7 +540,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Ash Harbinger
 - 1× Pyrokinetic Surge
 - 1× Dawnrunner
-- 1× Kindlehorn
+- 1× Blight Weaver
 - 1× Defiant Holdout
 - 1× Silent Gatherer
 - 1× Exiles of the Last Light
@@ -843,7 +843,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Pyrokinetic Surge
 - 1× Dawnrunner
 - 1× Final Gambit
-- 1× Kindlehorn
+- 1× Blight Weaver
 - 1× Defiant Holdout
 - 1× Silent Gatherer
 - 1× Dreadweaver
@@ -1427,7 +1427,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Packcaller of Shadows
 - 1× Sky Voyager
 - 1× Dusk Duelist
-- 1× Voidcaller
+- 1× Soulcleft Spinner
 - 1× Emerald Guardian
 - 1× Looming Oracle
 - 1× Curio Dealer
@@ -1522,7 +1522,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 1× Packcaller of Shadows
 - 1× Sky Voyager
 - 1× Dusk Duelist
-- 1× Voidcaller
+- 1× Soulcleft Spinner
 - 1× Depthwalker
 - 1× Curio Dealer
 - 1× Ashen Remnant
@@ -1605,7 +1605,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 1× Packcaller of Shadows
 - 1× Sky Voyager
 - 1× Dusk Duelist
-- 1× Voidcaller
+- 1× Soulcleft Spinner
 - 1× Depthwalker
 - 1× Ashen Remnant
 - 1× The Dread Sovereign
@@ -1683,7 +1683,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Packcaller of Shadows
 - 1× Sky Voyager
 - 1× Dusk Duelist
-- 1× Voidcaller
+- 1× Soulcleft Spinner
 - 1× Depthwalker
 - 1× Curio Dealer
 - 1× Ashen Remnant
@@ -1904,7 +1904,7 @@ Tide-sig-19 is an overwhelmingly character-heavy warrior deck (101 of 110 copies
 
 ## Valdren signature — Sacrifice Energy Recursion
 
-`tide-sig-20` — signature tide, 83 distinct cards, 110 copies, Valdren's signature
+`tide-sig-20` — signature tide, 81 distinct cards, 110 copies, Valdren's signature
 
 *A warrior-dense tide that converts abandoned allies into energy and upgrades through sacrifice, then recycles dissolved warriors from the void — distinguished from its nearest siblings by its double-down on sacrifice-for-energy density and the abandon-as-upgrade ladder rather than interrupt disruption or individual spark investment.*
 
@@ -1912,6 +1912,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 
 - 2× Harbor Warden
 - 2× Sun Clan Lieutenant
+- 2× Gilded Catalyst
 - 2× Burning Revenant
 - 2× Cinderblade Legionnaire
 - 2× Pathfinder
@@ -1920,6 +1921,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 2× Blood Reaver
 - 2× Assault Leader
 - 2× Forsworn Champion
+- 2× Eclipse Herald
 - 2× Speaker for the Forgotten
 - 2× Company Commander
 - 2× Dreadmount Sovereign
@@ -1942,10 +1944,9 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× Night Raid Commando
 - 1× The Deathsworn
 - 1× Intermezzo Balladeer
-- 1× Volcanic Channeler
+- 1× Through the Rift
 - 1× Reforged Automaton
 - 1× Tidecaller
-- 1× Gilded Catalyst
 - 1× Spellweaver
 - 1× Vengeance Taker
 - 1× Haunted Betrayer
@@ -1953,16 +1954,13 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× Shadow March
 - 1× Barrage Specialist
 - 1× Inspiring Templar
-- 1× Momentum's Edge
 - 1× Seeker for the Way
-- 1× Twilight Suppressor
 - 1× Clifftop Marksman
 - 1× Bloomweaver
 - 1× Aspiring Guardian
-- 1× Dragonward
 - 1× First Encounter
 - 1× Wake the Fallen
-- 1× Eclipse Herald
+- 1× Cloaked Sentinel
 - 1× Shatterpoint Agent
 - 1× Sundown Surfer
 - 1× Spirit Field Reclaimer
@@ -1970,6 +1968,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× Pit Descender
 - 1× Invoker of Myths
 - 1× Prism Caller
+- 1× Prophet of the Consumed
 - 1× Worldbreacher
 - 1× Voidsire
 - 1× Vault Infiltrator
@@ -1983,16 +1982,15 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× Fangbound
 - 1× Assault Trooper
 - 1× Wired Duelist
-- 1× Avatar of Cosmic Reckoning
 - 1× Vanguard Charger
 - 1× Blood Moon Ronin
 - 1× Advance Gunner
 - 1× Containment Specialist
 - 1× Melodist of the Finale
+- 1× Key to the Moment
 - 1× Night Prowler
 - 1× Clockwork Conductor
 - 1× Tranquil Duelist
-- 1× Skull Weaver
 
 ## Lean: Skull Weaver — Abandon Scaling
 
@@ -2033,7 +2031,7 @@ Tide-fac-01 is an almost entirely character-based (40 of 45 copies) midrange eng
 - 1× Cinderheart
 - 1× Together Against the Tide
 - 1× Pyrokinetic Surge
-- 1× Kindlehorn
+- 1× Blight Weaver
 - 1× Defiant Holdout
 - 1× Dreadweaver
 - 1× Shadowcaller
@@ -2872,7 +2870,7 @@ Tide-fac-18 is built around two interlocking halves: an energy ramp package and 
 - 1× Burning Pursuit
 - 1× Pyrokinetic Surge
 - 1× Dawnrunner
-- 1× Kindlehorn
+- 1× Blight Weaver
 - 1× Defiant Holdout
 - 1× Exiles of the Last Light
 - 1× Dreadweaver
@@ -3001,7 +2999,7 @@ Tide-fac-21 is a character-heavy spirit animal swarm built around stacking ✦ o
 - 1× Beacon of Tomorrow
 - 1× Lumin-Gate Seer
 - 1× Sky Voyager
-- 1× Voidcaller
+- 1× Soulcleft Spinner
 - 1× Emerald Guardian
 - 1× Flamboyant Flamingo
 - 1× Roots of Rebirth
@@ -3509,7 +3507,7 @@ Tide-fac-31 is almost entirely characters (41 of 45 cards), built around a dense
 - 1× Beacon of Tomorrow
 - 1× Lumin-Gate Seer
 - 1× Sky Voyager
-- 1× Voidcaller
+- 1× Soulcleft Spinner
 - 1× Emerald Guardian
 - 1× Flamboyant Flamingo
 - 1× Roots of Rebirth
@@ -3837,7 +3835,7 @@ Tide-neu-07 is built almost entirely on characters (28 of 30 cards), organized a
 - 1× Titan of Forgotten Echoes
 - 1× Dawnrunner
 - 1× Kindred Sparks
-- 1× Kindlehorn
+- 1× Blight Weaver
 - 1× Exiles of the Last Light
 - 1× Avatar of Cosmic Reckoning
 - 1× Obliterator of Worlds

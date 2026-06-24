@@ -977,7 +977,7 @@
       ]
     },
     "69d9e550-eacc-49f2-8cc5-30b8940c9eed": {
-      "name": "Dragonward",
+      "name": "Mystic Boatman",
       "needs": [],
       "supports": [
         "cheap-characters"
@@ -2229,7 +2229,7 @@
       ]
     },
     "a6866438-3632-408d-b464-c10f8a43a5c2": {
-      "name": "Kindlehorn",
+      "name": "Blight Weaver",
       "needs": [
         {
           "theme": "abandon",
@@ -4649,7 +4649,7 @@
       ]
     },
     "40b44ed7-d737-455b-bd42-e617a263b110": {
-      "name": "Voidcaller",
+      "name": "Soulcleft Spinner",
       "needs": [],
       "supports": [
         "cheap-characters"
