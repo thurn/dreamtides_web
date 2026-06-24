@@ -2727,7 +2727,7 @@ This tide is almost entirely warriors (43 of 45 cards) built around a tight loop
 - 1× Tethered Hollow
 - 1× Tranquil Duelist
 
-## Lean: Burning Revenant — Warrior Token Flood
+## Lean: Burning Revenant — Warrior Figment Swarm
 
 `tide-fac-16` — facet tide, 41 distinct cards, 45 copies
 

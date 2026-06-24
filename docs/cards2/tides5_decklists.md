@@ -2870,7 +2870,7 @@ Tide-fac-16 is almost entirely characters (43 of 45 copies), nearly all warriors
 - 1× Ethereal Trailblazer
 - 1× Tranquil Duelist
 
-## Lean: Burning Revenant — Warrior Token Flood
+## Lean: Burning Revenant — Warrior Figment Swarm
 
 `tide-fac-18` — facet tide, 40 distinct cards, 45 copies
 

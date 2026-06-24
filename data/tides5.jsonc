@@ -3007,9 +3007,9 @@
     {
       "id": "tide-fac-18",
       "name": "Lean: Burning Revenant",
-      "shortName": "Warrior Token Flood",
-      "displayName": "Swelling Ranks",
-      "displayDescription": "Floods the field with figments, rewarding each new arrival with cards and power.",
+      "shortName": "Warrior Figment Swarm",
+      "displayName": "The Gathering Horde",
+      "displayDescription": "Swells the field with Warrior figments, then turns the massed ranks into mounting power and pressure.",
       "summary": "A warrior-tribal flood deck that generates a stream of figment tokens and rewards each new warrior materialization with card draw and spark growth, distinguishing itself from its siblings by fueling payoffs through board expansion rather than energy-from-sacrifice or void-return resilience.",
       "description": "Tide-fac-16 is almost entirely characters (43 of 45 copies), nearly all warriors, built around producing an ever-wider board of warriors and converting that width into resources and spark. The central token-generation engine involves multiple pieces that each create 1✦ warrior figments: Worldbreacher taps to produce one, Voidsire creates one every time you play a warrior, Spellweaver pays one energy to sacrifice a non-figment warrior and replace it with a figment, and Crescendo Channeler produces one each Dawn while also converting board width into energy. Those figments feed materialization-trigger payoffs — Reforged Automaton draws a warrior and permanently gains +1✦ for each non-figment warrior that materializes, while Invoker of Myths draws a card once per turn whenever any warrior materializes — so the engine rewards both the act of flooding and the individual warrior arrivals. Separate from these triggers, the tide carries a deep package of spark-scaling commanders (Inspiring Templar, Skyflame Commander, Assault Leader, Dreadmount Sovereign, Shadow Reflection) that all scale ✦ off allied warrior count, turning the wide board into a burst combat threat. Compared to the nearest sibling (fac-29), which centers on Blood Reaver at two copies to recoup energy by sacrificing warriors, this tide treats sacrifice as an incidental tool and instead wins through compounding board presence; compared to fac-17, whose identity rests on multiple copies of Dissolved-return warriors creating a resilient void loop, this tide generates fresh figment warriors rather than recovering lost ones, leaning into momentum and critical mass over attrition and recursion.",
       "color": "yellow",
