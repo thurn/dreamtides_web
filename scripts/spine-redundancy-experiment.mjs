@@ -23,6 +23,7 @@ const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));
 
 const cards = readJson("public/cards_v2-data.json");
 const decklistsData = readJson("public/decklists-data.json");
+const decklistIdsData = readJson("public/decklist-ids-data.json");
 const dreamcallers = readJson("public/dreamcallers-v2-data.json");
 
 // Theme map copied verbatim from src/data/dreamcallers-v2-database.ts
@@ -50,7 +51,12 @@ const DREAMCALLER_THEMES = {
   Valdren: ["warrior-aggro", "warrior-combo"],
 };
 
-const poolData = buildPoolData(cards, decklistsData);
+// Pass the id-keyed corpus as the 4th argument so the oracle keys df/idf/cosine
+// on stable UUIDs (same as variant-decklists.ts now does). The name-keyed
+// decklists are still passed as the 2nd argument for callers that rely on the
+// `decklists` field for other purposes (e.g. tests), but the decklists variant
+// itself will prefer decklistIds when present.
+const poolData = buildPoolData(cards, decklistsData, undefined, decklistIdsData);
 
 // ---------------------------------------------------------------------------
 // Faithful re-port of the decklists internals, copied line-for-line from
@@ -114,8 +120,24 @@ function poolSize(counts) {
   for (const v of counts.values()) n += Math.min(2, v);
   return n;
 }
+
+// Convert a name-keyed Set to a UUID-keyed Set using the provided id map.
+// When cardIdByName is absent, returns the original set unchanged (name-keyed
+// corpus fallback for synthetic / test PoolData with no UUID source).
+function toUuidSet(nameSet, cardIdByName) {
+  if (!cardIdByName) return nameSet;
+  const out = new Set();
+  for (const name of nameSet) {
+    const id = cardIdByName.get(name);
+    if (id !== undefined) out.add(id);
+  }
+  return out;
+}
+
 function buildCorpus(pd) {
-  const source = pd.decklists;
+  // Prefer the id-keyed corpus so same-name cards stay distinct; fall back to
+  // the name corpus for synthetic / test PoolData that carries no UUID source.
+  const source = pd.decklistIds ?? pd.decklists;
   if (!source || source.length === 0) return null;
   const filtered = source
     .map((d) => new Set(d))
@@ -148,13 +170,24 @@ function generateDecklistsInstrumented(
   { disableSpine = false, spineArchetypes = DECKLISTS.spineArchetypes } = {},
 ) {
   const corpus = CORPUS;
-  const { core, archLists, draftLists } = pd;
+  const { core, archLists, draftLists, cardIdByName } = pd;
   const { decks, idf } = corpus;
   const idfOf = (c) => idf.get(c) ?? 0;
 
+  // Build UUID-keyed mirrors of archLists and draftLists so corpus card keys
+  // (UUIDs from decklistIds) match correctly against archetype/color membership.
+  const toUuidArchLists = new Map();
+  for (const [slug, nameSet] of archLists) {
+    toUuidArchLists.set(slug, toUuidSet(nameSet, cardIdByName));
+  }
+  const toUuidDraftLists = new Map();
+  for (const [key, nameSet] of draftLists) {
+    toUuidDraftLists.set(key, toUuidSet(nameSet, cardIdByName));
+  }
+
   const themeCards = new Set();
   for (const slug of themeArchetypes ?? [])
-    for (const c of archLists.get(slug) ?? []) themeCards.add(c);
+    for (const c of toUuidArchLists.get(slug) ?? []) themeCards.add(c);
   let themeSq = 0;
   for (const c of themeCards) themeSq += idfOf(c) ** 2;
   const themeNorm = Math.sqrt(themeSq) || 1;
@@ -166,7 +199,7 @@ function generateDecklistsInstrumented(
   };
 
   const eligible = (seedArchetypes ?? []).filter(
-    (a) => draftLists.has(a) && colorPrefix(a) !== "",
+    (a) => toUuidDraftLists.has(a) && colorPrefix(a) !== "",
   );
   let strategyPrefix = "";
   let strategyCards = null;
@@ -176,12 +209,12 @@ function generateDecklistsInstrumented(
       eligible,
       eligible.map((a) => {
         let themeHits = 0;
-        for (const c of draftLists.get(a) ?? []) if (themeCards.has(c)) themeHits++;
+        for (const c of toUuidDraftLists.get(a) ?? []) if (themeCards.has(c)) themeHits++;
         return (1 + themeHits) ** DECKLISTS.themeStrategyExp;
       }),
     );
     strategyPrefix = colorPrefix(rolled);
-    strategyCards = draftLists.get(rolled) ?? null;
+    strategyCards = toUuidDraftLists.get(rolled) ?? null;
   }
 
   const randomDeck = () => decks[Math.floor(rng() * decks.length)].cards;
@@ -220,10 +253,10 @@ function generateDecklistsInstrumented(
   };
 
   const spine = new Set();
-  for (const slug of themeArchetypes ?? []) if (archLists.has(slug)) spine.add(slug);
+  for (const slug of themeArchetypes ?? []) if (toUuidArchLists.has(slug)) spine.add(slug);
   const spineBudget = Math.max(spineArchetypes, spine.size);
   const spineHits = new Map();
-  for (const [slug, set] of archLists) {
+  for (const [slug, set] of toUuidArchLists) {
     let n = 0;
     for (const c of starter) if (set.has(c)) n++;
     if (n > 0) spineHits.set(slug, n);
@@ -235,7 +268,7 @@ function generateDecklistsInstrumented(
   const onSpine = (c) => {
     if (disableSpine) return true;
     if (spine.size === 0) return true;
-    for (const slug of spine) if (archLists.get(slug)?.has(c)) return true;
+    for (const slug of spine) if (toUuidArchLists.get(slug)?.has(c)) return true;
     return false;
   };
 
@@ -267,7 +300,7 @@ function generateDecklistsInstrumented(
     used.add(pick.cards);
     // instrumentation: how many of this neighbor's cards does the spine pass?
     let on = 0;
-    for (const c of pick.cards) if (spine.size === 0 || [...spine].some((s) => archLists.get(s)?.has(c))) on++;
+    for (const c of pick.cards) if (spine.size === 0 || [...spine].some((s) => toUuidArchLists.get(s)?.has(c))) on++;
     foldStats.push({ size: pick.cards.size, onSpine: on });
     const before = poolSize(counts);
     for (const c of shuffle(rng, [...pick.cards])) {
@@ -277,14 +310,14 @@ function generateDecklistsInstrumented(
     stall = poolSize(counts) === before ? stall + 1 : 0;
   }
 
-  // identity (step 5)
+  // identity (step 5) — use UUID-keyed draftLists mirrors
   const C = new Set();
   if (strategyPrefix !== "") {
     for (const letter of strategyPrefix) C.add(letter);
   } else {
     const unique = counts.size || 1;
     for (const letter of COLORS) {
-      const list = draftLists.get(letter);
+      const list = toUuidDraftLists.get(letter);
       if (!list) continue;
       let n = 0;
       for (const c of counts.keys()) if (list.has(c)) n++;
@@ -292,7 +325,15 @@ function generateDecklistsInstrumented(
     }
   }
   const identity = [...COLORS].filter((c) => C.has(c)).join("");
-  return { counts, identity, foldStats, spine, themeCards, starter };
+
+  // Resolve UUID-keyed counts to display names (matching the oracle's output).
+  const resolvedCounts = new Map();
+  for (const [key, v] of counts) {
+    const name = pd.cardNameById?.get(key) ?? key;
+    resolvedCounts.set(name, Math.min(2, (resolvedCounts.get(name) ?? 0) + v));
+  }
+
+  return { counts: resolvedCounts, identity, foldStats, spine, themeCards, starter };
 }
 
 const capCounts = (counts) => {
@@ -430,7 +471,13 @@ for (const dc of themed) {
   const themeArch = DREAMCALLER_THEMES[dc.name];
   const on = generateDecklistsInstrumented(makeRng(7), poolData, seedArch, themeArch, {});
   const spine = on.spine;
-  const onSpine = (c) => spine.size === 0 || [...spine].some((s) => poolData.archLists.get(s)?.has(c));
+  const { cardIdByName } = poolData;
+  // Build UUID-keyed archLists for the control spine check
+  const toUuidArchLists = new Map();
+  for (const [slug, nameSet] of poolData.archLists) {
+    toUuidArchLists.set(slug, toUuidSet(nameSet, cardIdByName));
+  }
+  const onSpine = (c) => spine.size === 0 || [...spine].some((s) => toUuidArchLists.get(s)?.has(c));
   for (const d of CORPUS.decks) {
     let k = 0;
     for (const c of d.cards) if (onSpine(c)) k++;
