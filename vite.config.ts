@@ -8,6 +8,7 @@ import type { Plugin, ViteDevServer } from "vite";
 import { createCardEditorApiMiddleware } from "./scripts/card-editor-api.mjs";
 import { createDreamsignEditorApiMiddleware } from "./scripts/dreamsign-editor-api.mjs";
 import { createDreamcallerEditorApiMiddleware } from "./scripts/dreamcaller-editor-api.mjs";
+import { createTidesEditorApiMiddleware } from "./scripts/tides-editor-api.mjs";
 import { createDreamscapeEditorApiMiddleware } from "./scripts/dreamscape-editor-api.mjs";
 import { createFigmentEditorApiMiddleware } from "./scripts/figment-editor-api.mjs";
 import { refreshFigmentDataJson } from "./scripts/figment-editor-data.mjs";
@@ -87,6 +88,17 @@ function dreamcallerEditorApiPlugin(): Plugin {
     apply: "serve",
     configureServer(server) {
       server.middlewares.use(createDreamcallerEditorApiMiddleware({ rootDir: __dirname }));
+    },
+  };
+}
+
+/** Vite plugin that serves the tides editor read/write endpoints (`/tides`). */
+function tidesEditorApiPlugin(): Plugin {
+  return {
+    name: "tides-editor-api",
+    apply: "serve",
+    configureServer(server) {
+      server.middlewares.use(createTidesEditorApiMiddleware({ rootDir: __dirname }));
     },
   };
 }
@@ -708,6 +720,7 @@ export default defineConfig({
     cardEditorApiPlugin(),
     dreamsignEditorApiPlugin(),
     dreamcallerEditorApiPlugin(),
+    tidesEditorApiPlugin(),
     dreamscapeEditorApiPlugin(),
     figmentEditorApiPlugin(),
     figmentDataHotReloadPlugin(),
@@ -775,6 +788,12 @@ export default defineConfig({
         path.resolve(path.join(__dirname, "data", "tides4.jsonc")),
         path.resolve(path.join(__dirname, "public", "dreamcallers-v2-data.json")),
         path.resolve(path.join(__dirname, "public", "tides4-data.json")),
+        // The tides editor (/tides) writes data/tides<n>.jsonc annotation edits
+        // and regenerates the matching public/tides<n>-data.json on every save;
+        // ignore the tides5 pair (the tides4 pair is already ignored above) so an
+        // editor save does not trigger a full page reload mid-edit.
+        path.resolve(path.join(__dirname, "data", "tides5.jsonc")),
+        path.resolve(path.join(__dirname, "public", "tides5-data.json")),
         // The Dreamwell editor regenerates public/dreamwell-data.json on every
         // save; ignore it so an editor save does not trigger a full page reload
         // that closes the open card editor mid-edit.

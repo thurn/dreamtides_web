@@ -343,12 +343,25 @@ export function serializeArtifact(json, header = HEADER) {
         anno.push(`      ${JSON.stringify(key)}: ${JSON.stringify(tide[key])},`);
       }
     }
+    // Provenance UUIDs (preserved across bakes): a signature tide carries the
+    // `dreamcallerId` it belongs to, and a facet/neutral tide carries the
+    // `leanCardId` it is themed around. Emitted after `role` so the deck body
+    // stays last. Cards are referenced only by stable UUID, never by name.
+    const provenance = [];
+    for (const key of ["dreamcallerId", "leanCardId"]) {
+      if (typeof tide[key] === "string" && tide[key] !== "") {
+        provenance.push(
+          `      ${JSON.stringify(key)}: ${JSON.stringify(tide[key])},`,
+        );
+      }
+    }
     return [
       "    {",
       `      "id": ${JSON.stringify(tide.id)},`,
       `      "name": ${JSON.stringify(tide.name)},`,
       ...anno,
       `      "role": ${JSON.stringify(tide.role)},`,
+      ...provenance,
       `      "cards": [`,
       ...cards,
       "      ]",
@@ -800,6 +813,10 @@ export function buildTides4({
       name: `Lean: ${nameOf(anchor) ?? anchor}`,
       role: "facet",
       anchorKey: anchor,
+      // The single signature-region card this facet pool is grown from, by stable
+      // UUID. Serialized as `leanCardId` so player-facing and editor screens can
+      // show the themed card without re-resolving it from the (non-unique) name.
+      leanCardId: anchor,
       cards: cardsList,
     });
     facetTideByAnchor.set(anchor, id);
@@ -818,7 +835,15 @@ export function buildTides4({
     const id = `tide-neu-${String(i + 1).padStart(2, "0")}`;
     const cardsList = growTideCards(corpus, [seed], TUNING.neutralTideSize, nameOf, detailOf);
     const top = cardsList.slice(0, 2).map((c) => c.name).join(" / ");
-    const tide = { id, name: `Broad: ${top}`, role: "neutral", cards: cardsList };
+    // The farthest-point seed this broad pool is grown from, by stable UUID,
+    // serialized as `leanCardId` so the editor can feature its themed card.
+    const tide = {
+      id,
+      name: `Broad: ${top}`,
+      role: "neutral",
+      leanCardId: seed,
+      cards: cardsList,
+    };
     tides.push(tide);
     neutralTides.push(tide);
   });
@@ -910,6 +935,8 @@ export function buildTides4({
         description,
         color,
         role,
+        dreamcallerId,
+        leanCardId,
         cards,
       }) => {
       const out = { id, name };
@@ -922,6 +949,11 @@ export function buildTides4({
       if (description !== undefined) out.description = description;
       if (color !== undefined) out.color = color;
       out.role = role;
+      // Provenance UUIDs: a signature tide names its Dreamcaller, a facet/neutral
+      // tide names the card it is themed around. Both are stable cards_v2/
+      // Dreamcaller UUIDs (never names) so a rename never invalidates them.
+      if (dreamcallerId !== undefined) out.dreamcallerId = dreamcallerId;
+      if (leanCardId !== undefined) out.leanCardId = leanCardId;
       out.cards = cards;
       return out;
     }),

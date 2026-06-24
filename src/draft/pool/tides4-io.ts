@@ -87,6 +87,19 @@ export interface Tides4DeckJson {
   color: Tides4Color;
   /** Whether this is a signature floor, a directional facet, or a broad tide. */
   role: Tides4Role;
+  /**
+   * For a `signature` tide, the stable UUID of the Dreamcaller whose signature
+   * cards it holds. Absent on facet and neutral tides. Lets the player-facing and
+   * editor screens resolve the source Dreamcaller without matching on names.
+   */
+  dreamcallerId?: string;
+  /**
+   * For a `facet` or `neutral` tide, the stable cards_v2 UUID of the single card
+   * the pool is themed around (a facet's lean anchor, a neutral's farthest-point
+   * seed). Absent on signature tides. Lets a screen feature the themed card by
+   * UUID rather than re-resolving it from the (non-unique) tide name.
+   */
+  leanCardId?: string;
   /** The decklist as UUID + copies entries. */
   cards: TideDeckCardJson[];
 }

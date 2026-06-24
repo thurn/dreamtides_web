@@ -9,47 +9,12 @@ import { EssenceValue } from "../components/EssenceValue";
 import { HoverPopover } from "../components/HoverPopover";
 import { CardTermDefinitions } from "../components/CardTermDefinitions";
 import { RulesText } from "../components/RulesText";
-import type { Tides4Color, Tides4DeckJson } from "../draft/pool/tides4-io";
+import { TIDE_COLOR_CHIP } from "../components/tide-visuals";
+import type { Tides4DeckJson } from "../draft/pool/tides4-io";
 import type { DreamcallerContent } from "../types/content";
 
 const DREAMCALLER_ACCENT = "#c084fc";
 
-/**
- * Per deck color, the tide chip's dark background, matching border, and the
- * white-outline Boxicons glyph that marks the color. The background is a deep
- * shade of the color and the border a brighter tint of it, so the chip reads as
- * its color while staying legible with white text and icon.
- */
-const TIDE_COLOR_CHIP: Record<
-  Tides4Color,
-  { background: string; border: string; icon: string }
-> = {
-  purple: {
-    background: "#3b1259",
-    border: "rgba(192, 132, 252, 0.55)",
-    icon: "bx-skull",
-  },
-  green: {
-    background: "#0f3d22",
-    border: "rgba(74, 222, 128, 0.55)",
-    icon: "bx-leaf",
-  },
-  yellow: {
-    background: "#4a3a00",
-    border: "rgba(250, 204, 21, 0.55)",
-    icon: "bx-shield",
-  },
-  blue: {
-    background: "#13315c",
-    border: "rgba(96, 165, 250, 0.55)",
-    icon: "bx-eye-alt",
-  },
-  orange: {
-    background: "#5c2c0f",
-    border: "rgba(251, 146, 60, 0.55)",
-    icon: "bx-hot",
-  },
-};
 const DREAMCALLER_HOVER_TRANSITION = { duration: 0.12, delay: 0 } as const;
 const DREAMCALLER_TAP_TRANSITION = { duration: 0.08, delay: 0 } as const;
 const SIGNATURE_CARDS_LABEL_HOVER_BLURB =
