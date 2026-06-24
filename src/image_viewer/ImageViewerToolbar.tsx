@@ -14,6 +14,8 @@ export interface ImageViewerToolbarProps {
   visibleCount: number;
   totalCount: number;
   onDisplayStateChange: (next: ImageViewerDisplayState) => void;
+  /** Re-randomize the order; only meaningful while random order is enabled. */
+  onShuffle: () => void;
 }
 
 const controlStyle: CSSProperties = {
@@ -55,6 +57,7 @@ export default function ImageViewerToolbar({
   visibleCount,
   totalCount,
   onDisplayStateChange,
+  onShuffle,
 }: ImageViewerToolbarProps) {
   return (
     <div
@@ -126,6 +129,30 @@ export default function ImageViewerToolbar({
         />
         Show used images
       </label>
+
+      <label style={{ ...labelStyle, cursor: "pointer" }}>
+        <input
+          type="checkbox"
+          checked={displayState.randomOrder}
+          onChange={(event) =>
+            onDisplayStateChange({
+              ...displayState,
+              randomOrder: event.target.checked,
+            })
+          }
+        />
+        Random order
+      </label>
+
+      {displayState.randomOrder ? (
+        <button
+          type="button"
+          onClick={onShuffle}
+          style={{ ...controlStyle, cursor: "pointer" }}
+        >
+          Shuffle
+        </button>
+      ) : null}
 
       <span
         role="status"

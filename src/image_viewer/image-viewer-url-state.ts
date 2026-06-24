@@ -9,6 +9,7 @@ import {
 export const DEFAULT_IMAGE_VIEWER_DISPLAY_STATE: ImageViewerDisplayState = {
   category: ALL_CATEGORY,
   showUsed: false,
+  randomOrder: false,
   columns: DEFAULT_COLUMNS,
 };
 
@@ -22,8 +23,9 @@ function parseColumns(raw: string | null): ColumnCount {
 /**
  * Parse the viewer's display state from a URL query string. Unknown or missing
  * parameters fall back to the defaults (all categories, used images hidden,
- * four columns). `category` is accepted verbatim so a literal subdirectory name
- * round-trips; the app validates it against the loaded manifest.
+ * alphabetical order, four columns). `category` is accepted verbatim so a
+ * literal subdirectory name round-trips; the app validates it against the
+ * loaded manifest.
  */
 export function parseImageViewerDisplayState(
   search: string,
@@ -31,11 +33,13 @@ export function parseImageViewerDisplayState(
   const params = new URLSearchParams(search);
   const category = params.get("category");
   const used = params.get("used");
+  const random = params.get("random");
 
   return {
     category:
       category !== null && category.trim() !== "" ? category : ALL_CATEGORY,
     showUsed: used === "1" || used === "true",
+    randomOrder: random === "1" || random === "true",
     columns: parseColumns(params.get("cols")),
   };
 }
@@ -53,6 +57,9 @@ export function serializeImageViewerDisplayState(
   }
   if (state.showUsed) {
     params.set("used", "1");
+  }
+  if (state.randomOrder) {
+    params.set("random", "1");
   }
   if (state.columns !== DEFAULT_COLUMNS) {
     params.set("cols", String(state.columns));

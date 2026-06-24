@@ -12,9 +12,20 @@ describe("parseImageViewerDisplayState", () => {
     );
   });
 
-  it("parses category, used, and columns", () => {
-    expect(parseImageViewerDisplayState("?category=warrior&used=1&cols=6")).toEqual(
-      { category: "warrior", showUsed: true, columns: 6 },
+  it("parses category, used, random, and columns", () => {
+    expect(
+      parseImageViewerDisplayState("?category=warrior&used=1&random=1&cols=6"),
+    ).toEqual({
+      category: "warrior",
+      showUsed: true,
+      randomOrder: true,
+      columns: 6,
+    });
+  });
+
+  it("defaults random order off", () => {
+    expect(parseImageViewerDisplayState("?category=warrior").randomOrder).toBe(
+      false,
     );
   });
 
@@ -35,7 +46,12 @@ describe("serializeImageViewerDisplayState", () => {
   });
 
   it("round-trips a non-default state", () => {
-    const state = { category: "events", showUsed: true, columns: 8 as const };
+    const state = {
+      category: "events",
+      showUsed: true,
+      randomOrder: true,
+      columns: 8 as const,
+    };
     const parsed = parseImageViewerDisplayState(
       serializeImageViewerDisplayState(state),
     );

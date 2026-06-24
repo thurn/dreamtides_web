@@ -24,6 +24,37 @@ type LoadStatus =
   | { kind: "loaded" }
   | { kind: "error"; message: string };
 
+/** Small seedable PRNG (mulberry32) so a shuffle is reproducible for one seed. */
+function mulberry32(seed: number): () => number {
+  let state = seed >>> 0;
+  return () => {
+    state += 0x6d2b79f5;
+    let t = state;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
+ * Return a new array with the entries Fisher–Yates shuffled by the given seed.
+ * The same seed and input always yield the same order, so the gallery stays
+ * stable across unrelated re-renders (filter toggles, used marks) until the
+ * curator explicitly reshuffles.
+ */
+function shuffleBySeed(
+  images: ImageManifestEntry[],
+  seed: number,
+): ImageManifestEntry[] {
+  const random = mulberry32(seed);
+  const shuffled = images.slice();
+  for (let i = shuffled.length - 1; i > 0; i -= 1) {
+    const j = Math.floor(random() * (i + 1));
+    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+  }
+  return shuffled;
+}
+
 /** Resolve the set of category subdirectories a selection expands to. */
 function categoriesForSelection(
   category: string,
@@ -50,6 +81,14 @@ export default function ImageViewerApp() {
         ? DEFAULT_IMAGE_VIEWER_DISPLAY_STATE
         : parseImageViewerDisplayState(window.location.search),
   );
+  // Seed for the random ordering. Bumped by the toolbar's Shuffle button so the
+  // gallery reshuffles only on explicit request, not on every render.
+  const [shuffleSeed, setShuffleSeed] = useState(() =>
+    Math.floor(Math.random() * 0xffffffff),
+  );
+  const handleShuffle = useCallback(() => {
+    setShuffleSeed(Math.floor(Math.random() * 0xffffffff));
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -89,12 +128,21 @@ export default function ImageViewerApp() {
       return [];
     }
     const selected = categoriesForSelection(displayState.category, manifest);
-    return manifest.images.filter(
+    const filtered = manifest.images.filter(
       (image) =>
         selected.has(image.category) &&
         (displayState.showUsed || !(image.used || image.manuallyUsed)),
     );
-  }, [manifest, displayState.category, displayState.showUsed]);
+    return displayState.randomOrder
+      ? shuffleBySeed(filtered, shuffleSeed)
+      : filtered;
+  }, [
+    manifest,
+    displayState.category,
+    displayState.showUsed,
+    displayState.randomOrder,
+    shuffleSeed,
+  ]);
 
   // Toggle an image's manual-used mark. The mark is keyed by image number on the
   // server, so every manifest entry sharing that number flips together. The grid
@@ -250,6 +298,7 @@ export default function ImageViewerApp() {
               visibleCount={visibleImages.length}
               totalCount={manifest.images.length}
               onDisplayStateChange={setDisplayState}
+              onShuffle={handleShuffle}
             />
             {actionError !== null ? (
               <p

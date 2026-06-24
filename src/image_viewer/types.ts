@@ -55,6 +55,8 @@ export interface ImageViewerDisplayState {
   category: string;
   /** When true, images already used by a finished card are shown too. */
   showUsed: boolean;
+  /** When true, the visible images are shuffled instead of shown alphabetically. */
+  randomOrder: boolean;
   /** Images tiled per row. */
   columns: ColumnCount;
 }
