@@ -66,16 +66,18 @@ describe("generateIdf3 provenance", () => {
     expect(provenance.sourceDecks[0].similarityToStarter).toBe(1);
 
     // Every card of the drawn starter deck traces back to rank 0.
+    // In this synthetic corpus (no cardNameById) the corpus keys are the card
+    // names themselves, so cardProvenanceById is keyed by name here.
     const starterCardName = (result.starterDeck ?? [])[0];
     expect(starterCardName).toBeDefined();
-    const starterEntry = provenance.cardProvenanceByName[starterCardName];
+    const starterEntry = provenance.cardProvenanceById[starterCardName];
     expect(starterEntry).toBeDefined();
     expect(starterEntry.inStarterDeck).toBe(true);
     expect(starterEntry.sourceRank).toBe(0);
 
     // Any pooled signature card is flagged as a signature.
     for (const sig of SIGNATURE_CARDS) {
-      const entry = provenance.cardProvenanceByName[sig];
+      const entry = provenance.cardProvenanceById[sig];
       if (entry !== undefined) expect(entry.isSignature).toBe(true);
     }
   });
@@ -90,7 +92,7 @@ describe("generateIdf3 provenance", () => {
 
     // Growth folds in at least one neighbour deck to approach the target size,
     // so some pooled card descends from a deck past the starter.
-    const grown = Object.values(provenance.cardProvenanceByName).filter(
+    const grown = Object.values(provenance.cardProvenanceById).filter(
       (entry) => !entry.inStarterDeck,
     );
     expect(grown.length).toBeGreaterThan(0);
@@ -106,7 +108,7 @@ describe("generateIdf3 provenance", () => {
       0,
     );
     expect(totalContributed).toBe(
-      Object.keys(provenance.cardProvenanceByName).length,
+      Object.keys(provenance.cardProvenanceById).length,
     );
   });
 

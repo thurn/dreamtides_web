@@ -243,8 +243,9 @@ export interface Idf3PoolCardProvenance {
 }
 
 /**
- * Full provenance for one generated `idf3` pool, keyed by card name. Records the
- * whole chain — signature -> anchors -> starter -> grown neighbours — so a debug
+ * Full provenance for one generated `idf3` pool, keyed by corpus card key
+ * (UUID in production, opaque string in synthetic corpora). Records the whole
+ * chain — signature -> anchors -> starter -> grown neighbours — so a debug
  * surface can explain why each card is in the pool. Only the `idf3` variant
  * produces this; the field is absent on every other variant's result.
  */
@@ -263,8 +264,15 @@ export interface Idf3PoolProvenance {
   starterCardCount: number;
   /** Every deck folded into the pool, starter first then nearest-to-farthest. */
   sourceDecks: Idf3PoolSourceDeck[];
-  /** Per-card provenance, keyed by card name. */
-  cardProvenanceByName: Record<string, Idf3PoolCardProvenance>;
+  /**
+   * Per-card provenance, keyed by corpus card key (UUID in production, opaque
+   * string in synthetic/test corpora). Distinct UUIDs that share a display name
+   * keep separate entries here so no same-name card is silently dropped. The
+   * downstream resolver (`buildDreamcallerProvenance`) converts these keys to
+   * card numbers via the id index, resolving display names only at the final
+   * render boundary.
+   */
+  cardProvenanceById: Record<string, Idf3PoolCardProvenance>;
 }
 
 /**

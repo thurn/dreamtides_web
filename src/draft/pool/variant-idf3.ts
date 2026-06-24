@@ -43,7 +43,6 @@ import {
   type IdfDeck,
   idfCosine,
   growIdfPool,
-  resolveCountsToNames,
 } from "./variant-idf.ts";
 import { IDF2, idf2Corpus } from "./variant-idf2.ts";
 
@@ -188,21 +187,23 @@ export function generateIdf3(
   // nearest-to-farthest neighbours) and recording the first deck that holds each
   // card yields, for every card, the closest-to-starter deck it came from — the
   // "distance from the starting point" the debug surface reports. The probe,
-  // growth, and this attribution all run in the corpus's UUID key space; the
-  // display fields are resolved to current card names via `nameOf` at the end.
+  // growth, and this attribution all run in the corpus's UUID key space; display
+  // names are resolved only at the final render boundary, not here, so two
+  // distinct cards sharing a display name keep separate entries.
   const nameOf = (key: string): string => poolData.cardNameById?.get(key) ?? key;
   const signatureSet = new Set(signatureCards ?? []);
   const cappedCopies = (key: string): number => Math.min(2, counts.get(key) ?? 0);
-  // Keyed by corpus key (UUID) while building, so growth-order dedup stays exact;
-  // resolved to a name-keyed record below.
-  const provenanceByKey: Record<string, Idf3PoolCardProvenance> = {};
+  // Keyed by corpus key (UUID in production) throughout — no name resolution
+  // here. Two distinct UUIDs that share a display name stay as two entries, so
+  // the downstream id-index resolver can find both independently.
+  const cardProvenanceById: Record<string, Idf3PoolCardProvenance> = {};
   const contributedByRank = new Array<number>(includedDecks.length).fill(0);
   for (let rank = 0; rank < includedDecks.length; rank += 1) {
     const { deckIndex, similarityToStarter } = includedDecks[rank];
     for (const key of decks[deckIndex].cards) {
       if (!counts.has(key)) continue;
-      if (provenanceByKey[key] !== undefined) continue;
-      provenanceByKey[key] = {
+      if (cardProvenanceById[key] !== undefined) continue;
+      cardProvenanceById[key] = {
         isSignature: signatureSet.has(key),
         inStarterDeck: rank === 0,
         copies: cappedCopies(key),
@@ -211,14 +212,6 @@ export function generateIdf3(
       };
       contributedByRank[rank] += 1;
     }
-  }
-  // Resolve provenance keys to display names. Two distinct UUIDs that share a
-  // name collapse to one entry; the nearest-source (earliest in growth order)
-  // wins, matching the name-keyed pool the resolver downstream produces.
-  const cardProvenanceByName: Record<string, Idf3PoolCardProvenance> = {};
-  for (const [key, entry] of Object.entries(provenanceByKey)) {
-    const name = nameOf(key);
-    if (cardProvenanceByName[name] === undefined) cardProvenanceByName[name] = entry;
   }
 
   const sourceDecks: Idf3PoolSourceDeck[] = includedDecks.map((d, rank) => ({
@@ -243,13 +236,16 @@ export function generateIdf3(
     ),
     starterCardCount: decks[startIdx].cards.size,
     sourceDecks,
-    cardProvenanceByName,
+    cardProvenanceById,
   };
 
+  // Counts stay UUID-keyed here; the downstream `resolvePool` resolves them to
+  // card numbers via the id index, so two distinct cards sharing a display name
+  // both survive to the final pool instead of merging at this boundary.
   return {
     C: new Set(),
     selected: ["idf3", `deck#${String(startIdx)}`],
-    counts: resolveCountsToNames(counts, poolData.cardNameById),
+    counts,
     starterDeck: [...decks[startIdx].cards].map(nameOf),
     idf3Provenance,
   };

@@ -63,9 +63,21 @@ function makeContext(): RunPoolContext {
 
   const poolData = buildPoolData(cards, decklists, undefined, decklistIds);
 
+  // Build id index: stable UUID (lowercased) -> card number, mirroring
+  // production's buildIdIndex so resolvePool can resolve UUID-keyed idf3 counts
+  // without merging same-name cards.
+  const idIndex = new Map<string, number>();
+  for (const name of names) {
+    const cardNumber = nameIndex.get(name);
+    if (cardNumber !== undefined) {
+      idIndex.set(idForName(name), cardNumber);
+    }
+  }
+
   return {
     poolData,
     nameIndex,
+    idIndex,
     allDreamsignPoolIds: ["ds1", "ds2", "ds3"],
     // These tests exercise idf3 package building and its provenance summary
     // (which is only produced for idf3), so pin the variant rather than

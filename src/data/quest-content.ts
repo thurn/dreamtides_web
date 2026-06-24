@@ -160,6 +160,15 @@ export interface RunPoolContext {
   poolData: PoolData;
   nameIndex: Map<string, number>;
   /**
+   * Stable card UUID (lowercased) -> card-number index, the collision-free
+   * counterpart of {@link nameIndex}. Passed to {@link resolvePool} as the
+   * primary lookup so UUID-keyed pool variants (e.g. `idf3`) resolve without
+   * merging two distinct cards that share a display name. Absent in contexts
+   * that predate the id index (e.g. older tests); falls back to name-only
+   * resolution when omitted.
+   */
+  idIndex?: ReadonlyMap<string, number>;
+  /**
    * Card numbers whose rarity is `Legendary`. Pools cap these at a single
    * copy; absent contexts (e.g. tests) leave the set empty and apply no
    * legendary-specific cap.
@@ -448,7 +457,7 @@ export function buildDreamcallerPackage(
   logPoolConstructed(dreamcaller, ctx, pool);
 
   const { draftPoolCopiesByCard, unresolvedNames, cappedLegendaryCardNumbers } =
-    resolvePool(pool, ctx.nameIndex, ctx.legendaryCardNumbers);
+    resolvePool(pool, ctx.nameIndex, ctx.legendaryCardNumbers, ctx.idIndex);
   if (unresolvedNames.length > 0) {
     logEvent("build_dreamcaller_package_unresolved_names", {
       dreamcallerId: dreamcaller.id,
@@ -518,10 +527,17 @@ export function buildDreamcallerProvenance(
 
   const starterSet = new Set(STARTER_CARD_NUMBERS);
   const cardProvenanceByNumber: Record<string, Idf3CardProvenance> = {};
-  for (const [name, entry] of Object.entries(provenance.cardProvenanceByName)) {
-    const cardNumber = ctx.nameIndex.get(name);
+  for (const [key, entry] of Object.entries(provenance.cardProvenanceById)) {
+    // Resolve the corpus key (UUID in production) via the id index first, then
+    // fall back to the name index for synthetic/test corpora whose keys are
+    // display names rather than UUIDs. This keeps two distinct cards that share
+    // a display name as two separate card-number entries.
+    const cardNumber = ctx.idIndex?.get(key) ?? ctx.nameIndex.get(key);
     if (cardNumber === undefined) continue;
     if (starterSet.has(cardNumber)) continue;
+    // When the id index resolves a UUID that was already handled (e.g. duplicate
+    // UUID), keep the first entry (same growth-order tie-break used elsewhere).
+    if (cardProvenanceByNumber[String(cardNumber)] !== undefined) continue;
     cardProvenanceByNumber[String(cardNumber)] = { ...entry };
   }
 
@@ -853,6 +869,7 @@ export async function loadQuestContent(
   const poolContext: RunPoolContext = {
     poolData,
     nameIndex,
+    idIndex,
     legendaryCardNumbers,
     allDreamsignPoolIds: dreamsignTemplates.map((template) => template.id),
     poolVariant,

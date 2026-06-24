@@ -1,4 +1,5 @@
 import { buildPoolData } from "../draft/pool/pool-data";
+import { buildIdIndex } from "../data/cards-v2-database";
 import type { CardData } from "../types/cards";
 import type { RunPoolContext } from "../data/quest-content";
 
@@ -65,15 +66,21 @@ export function buildTestCorpusCards(): CardData[] {
 /**
  * Builds a {@link RunPoolContext} usable by `buildDreamcallerPackage`. The
  * generated pool draws names from {@link TEST_DECKLISTS}, all of which resolve
- * through the returned name index.
+ * through the returned name index. The context also carries an id index built
+ * from the same card records so `resolvePool` can handle UUID-keyed pool counts
+ * (e.g. from the `idf3` variant) without merging same-name cards.
  */
 export function makeTestPoolContext(
   allDreamsignPoolIds: string[] = ["dreamsign-a", "dreamsign-b"],
 ): RunPoolContext {
   const cards = buildTestCorpusCards();
+  const cardDatabase = new Map<number, CardData>(
+    cards.map((c) => [c.cardNumber, c]),
+  );
   return {
     poolData: buildPoolData(cards, TEST_DECKLISTS),
     nameIndex: buildTestNameIndex(),
+    idIndex: buildIdIndex(cardDatabase),
     allDreamsignPoolIds,
     // This corpus has decklists but no draft records, so pin idf3 (which builds
     // from the decklist corpus) rather than inheriting the records-driven
