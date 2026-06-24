@@ -385,50 +385,10 @@ export default function DreamcallerDetailView({
     [dreamcaller.tidePool.neutral, tideById],
   );
 
-  // Resolve the Dreamcaller's signature card names (sourced from quest content,
-  // which mirrors `signature-cards` in dreamcallers_v2.toml) to renderable
-  // cards. Matching is name-on-name against the card database, the same key the
-  // bundle and the /sigdecks tool use.
-  const signature = useMemo<SignatureResolution>(() => {
-    if (questContent === null) {
-      return { cards: [], unresolved: [] };
-    }
-    const match = questContent.dreamcallers.find(
-      (entry) => entry.id === dreamcaller.id,
-    );
-    const names = match?.signatureCards ?? [];
-    if (names.length === 0) {
-      return { cards: [], unresolved: [] };
-    }
-    const byName = new Map<string, CardData>();
-    for (const card of questContent.cardDatabase.values()) {
-      byName.set(card.name.toLowerCase(), card);
-    }
-    const cards: CardData[] = [];
-    const unresolved: string[] = [];
-    for (const name of names) {
-      const card = byName.get(name.toLowerCase());
-      if (card === undefined) {
-        unresolved.push(name);
-      } else {
-        cards.push(card);
-      }
-    }
-    return { cards, unresolved };
-  }, [questContent, dreamcaller.id]);
-
-  // Which Tide (if any) the viewer has clicked to reveal its decklist.
-  const [selectedTideId, setSelectedTideId] = useState<string | null>(null);
-
-  // Drop the open tide selection whenever the screen switches Dreamcallers so a
-  // stale id (one not in the new Dreamcaller's pool) never lingers.
-  useEffect(() => {
-    setSelectedTideId(null);
-  }, [dreamcaller.id]);
-
   // The tide decklists key cards by their stable cards_v2 UUID; the card
   // database is keyed by card number, so index it by lowercased UUID to resolve
-  // a tide's `{ id, copies }` entries to renderable cards.
+  // a tide's `{ id, copies }` entries to renderable cards. Also used by the
+  // signature-card panel below.
   const cardsByUuid = useMemo(() => {
     const byId = new Map<string, CardData>();
     if (questContent !== null) {
@@ -438,6 +398,52 @@ export default function DreamcallerDetailView({
     }
     return byId;
   }, [questContent]);
+
+  // Resolve the Dreamcaller's signature cards to renderable CardData. Resolution
+  // uses `signatureCardIds` (stable cards_v2 UUIDs, index-aligned with
+  // `signatureCards`) so two cards that share a display name are never confused.
+  const signature = useMemo<SignatureResolution>(() => {
+    if (questContent === null) {
+      return { cards: [], unresolved: [] };
+    }
+    const match = questContent.dreamcallers.find(
+      (entry) => entry.id === dreamcaller.id,
+    );
+    const ids = match?.signatureCardIds ?? [];
+    const names = match?.signatureCards ?? [];
+    if (ids.length === 0 && names.length === 0) {
+      return { cards: [], unresolved: [] };
+    }
+    const cards: CardData[] = [];
+    const unresolved: string[] = [];
+    // Prefer UUID-keyed resolution; fall back to the display name for any index
+    // position where `signatureCardIds` is absent or shorter than `signatureCards`.
+    const resolveCount = Math.max(ids.length, names.length);
+    for (let i = 0; i < resolveCount; i++) {
+      const uuid = ids[i];
+      const card =
+        uuid !== undefined
+          ? cardsByUuid.get(uuid.toLowerCase())
+          : undefined;
+      if (card !== undefined) {
+        cards.push(card);
+      } else {
+        // UUID lookup failed (missing id or UUID not in database); record as
+        // unresolved using the display name where available.
+        unresolved.push(names[i] ?? uuid ?? `index ${String(i)}`);
+      }
+    }
+    return { cards, unresolved };
+  }, [questContent, dreamcaller.id, cardsByUuid]);
+
+  // Which Tide (if any) the viewer has clicked to reveal its decklist.
+  const [selectedTideId, setSelectedTideId] = useState<string | null>(null);
+
+  // Drop the open tide selection whenever the screen switches Dreamcallers so a
+  // stale id (one not in the new Dreamcaller's pool) never lingers.
+  useEffect(() => {
+    setSelectedTideId(null);
+  }, [dreamcaller.id]);
 
   const deckById = useMemo(() => {
     const byId = new Map<string, Tides4DeckJson>();
