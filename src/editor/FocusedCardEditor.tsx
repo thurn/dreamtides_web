@@ -48,6 +48,11 @@ export interface FocusedFieldSpec {
   field: string;
   label: string;
   kind: "text" | "multiline" | "number" | "select";
+  /**
+   * Lay this field out at half width so it can share a row with the next
+   * half-width field (e.g. energy cost beside spark). Full width otherwise.
+   */
+  halfWidth?: boolean;
   /** Options for `select` controls; ignored otherwise. */
   options?: readonly { value: string; label: string }[];
   /** Confirmed value, as the app currently holds it. */
@@ -238,12 +243,12 @@ const overlayStyle: CSSProperties = {
 const panelStyle: CSSProperties = {
   position: "relative",
   display: "flex",
-  gap: "28px",
+  gap: "24px",
   alignItems: "stretch",
   maxWidth: "min(960px, 96vw)",
   width: "100%",
   maxHeight: "calc(100dvh - 48px)",
-  padding: "20px",
+  padding: "16px",
   borderRadius: "12px",
   border: "1px solid rgba(247, 241, 223, 0.18)",
   background: "#121c1f",
@@ -254,21 +259,21 @@ const panelStyle: CSSProperties = {
 };
 
 const controlButtonStyle: CSSProperties = {
-  minWidth: "40px",
-  minHeight: "40px",
+  minWidth: "34px",
+  minHeight: "34px",
   border: "1px solid rgba(247, 241, 223, 0.28)",
   borderRadius: "8px",
   background: "#16242a",
   color: "#f7f1df",
-  fontSize: "1.05rem",
+  fontSize: "1rem",
   fontWeight: 800,
   cursor: "pointer",
 };
 
 const sectionLabelStyle: CSSProperties = {
-  margin: "0 0 6px",
+  margin: "0 0 3px",
   color: "#8edbd1",
-  fontSize: "0.74rem",
+  fontSize: "0.72rem",
   fontWeight: 800,
   textTransform: "uppercase",
   letterSpacing: "0.04em",
@@ -279,7 +284,7 @@ const inputStyle: CSSProperties = {
   width: "100%",
   minWidth: 0,
   padding: "0 10px",
-  height: "40px",
+  height: "34px",
   borderRadius: "8px",
   border: "1px solid rgba(247, 241, 223, 0.28)",
   background: "#16242a",
@@ -327,9 +332,9 @@ function StatusLine({
       data-editor-focused-status={testId}
       style={{
         display: "block",
-        marginTop: "4px",
-        minHeight: "1.1em",
-        fontSize: "0.78rem",
+        marginTop: "2px",
+        minHeight: "0.95em",
+        fontSize: "0.74rem",
         fontWeight: 700,
         color: isError ? "#f0a8a0" : "#8edbd1",
       }}
@@ -492,13 +497,13 @@ function FocusedScalarField({
             focusedRef.current = false;
             commit();
           }}
-          rows={4}
+          rows={3}
           style={{
             ...inputStyle,
             height: "auto",
-            minHeight: "92px",
+            minHeight: "68px",
             padding: "8px 10px",
-            lineHeight: 1.35,
+            lineHeight: 1.3,
             resize: "vertical",
           }}
         />
@@ -535,7 +540,7 @@ function FocusedScalarField({
         />
       )}
       {status === null ? (
-        <span style={{ display: "block", minHeight: "1.1em", marginTop: "4px" }} />
+        <span style={{ display: "block", minHeight: "0.95em", marginTop: "2px" }} />
       ) : (
         <StatusLine isError={status.isError} text={status.text} testId={spec.field} />
       )}
@@ -779,7 +784,7 @@ export default function FocusedCardEditor({
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: "14px",
+            gap: "12px",
             minWidth: 0,
             flex: "1 1 auto",
             overflowY: "auto",
@@ -797,13 +802,28 @@ export default function FocusedCardEditor({
             <h2 style={{ margin: 0, fontSize: "1rem", fontWeight: 800 }}>{title}</h2>
           </div>
 
-          {fields.map((field) => (
-            <FocusedScalarField
-              key={field.field}
-              spec={field}
-              onDraft={handleFieldDraft}
-            />
-          ))}
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
+              gap: "10px 12px",
+            }}
+          >
+            {fields.map((field) => (
+              <div
+                key={field.field}
+                style={{
+                  gridColumn:
+                    field.halfWidth || field.kind === "number"
+                      ? "span 1"
+                      : "1 / -1",
+                  minWidth: 0,
+                }}
+              >
+                <FocusedScalarField spec={field} onDraft={handleFieldDraft} />
+              </div>
+            ))}
+          </div>
 
           <div>
             <p style={sectionLabelStyle}>Image number</p>
@@ -833,13 +853,21 @@ export default function FocusedCardEditor({
             />
           </div>
 
+          <div
+            style={{
+              display: "flex",
+              gap: "20px",
+              flexWrap: "wrap",
+              alignItems: "flex-start",
+            }}
+          >
           <div>
             <p style={sectionLabelStyle}>Pan</p>
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(3, 40px)",
-                gridTemplateRows: "repeat(2, 40px)",
+                gridTemplateColumns: "repeat(3, 34px)",
+                gridTemplateRows: "repeat(2, 34px)",
                 gap: "6px",
                 alignItems: "center",
                 justifyItems: "center",
@@ -898,8 +926,8 @@ export default function FocusedCardEditor({
             </div>
             <div
               style={{
-                marginTop: "6px",
-                fontSize: "0.78rem",
+                marginTop: "4px",
+                fontSize: "0.74rem",
                 color: "#c9d3cf",
                 display: "flex",
                 flexDirection: "column",
@@ -922,6 +950,7 @@ export default function FocusedCardEditor({
                 {artStatusText}
               </span>
             </div>
+          </div>
           </div>
 
           {tagSections.map((section) => (

@@ -1237,6 +1237,7 @@ export default function CardEditorApp({
               field: "energy-cost",
               label: "Energy cost",
               kind: "text",
+              halfWidth: true,
               value: artEditorCard["energy-cost"],
               saveEntry: fieldSaveEntry(saveState, {
                 cardId: artEditorCard.id,
@@ -1249,6 +1250,7 @@ export default function CardEditorApp({
               field: "spark",
               label: "Spark",
               kind: "text",
+              halfWidth: true,
               value: artEditorCard.spark,
               saveEntry: fieldSaveEntry(saveState, {
                 cardId: artEditorCard.id,
