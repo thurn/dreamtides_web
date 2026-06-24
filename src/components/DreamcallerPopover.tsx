@@ -1,11 +1,22 @@
-import type { Dreamcaller } from "../types/quest";
 import { DreamcallerPortrait } from "./DreamcallerPortrait";
 import { RulesText } from "./RulesText";
 
 const ACCENT_COLOR = "#a855f7";
 
+/**
+ * The fields the popover renders: the portrait visual plus the ability text.
+ * A full `Dreamcaller` satisfies this, as does the editor's `DreamcallerOption`,
+ * so the popover can be reused on the dreamscape editor's resident list.
+ */
+interface DreamcallerPopoverData {
+  name: string;
+  title: string;
+  imageNumber: string;
+  renderedText: string;
+}
+
 interface DreamcallerPopoverProps {
-  dreamcaller: Dreamcaller;
+  dreamcaller: DreamcallerPopoverData;
 }
 
 export function DreamcallerPopover({ dreamcaller }: DreamcallerPopoverProps) {

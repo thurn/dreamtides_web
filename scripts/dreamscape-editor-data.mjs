@@ -258,9 +258,10 @@ export function refreshDreamscapesDataJson({
 }
 
 /**
- * Read the Dreamcaller catalog as `{ id, name, title, imageNumber }` options for
- * the editor's resident-Dreamcaller picker and portraits. Ids are the canonical
- * UUID key written into a dreamscape's `dreamcaller-ids`.
+ * Read the Dreamcaller catalog as `{ id, name, title, imageNumber, renderedText }`
+ * options for the editor's resident-Dreamcaller picker, portraits, and ability
+ * hover popovers. Ids are the canonical UUID key written into a dreamscape's
+ * `dreamcaller-ids`.
  */
 export function readDreamcallerOptions({ rootDir = ROOT } = {}) {
   const parsed = parse(readFileSync(join(rootDir, DREAMCALLERS_TOML_PATH), "utf8"));
@@ -273,6 +274,8 @@ export function readDreamcallerOptions({ rootDir = ROOT } = {}) {
       title: typeof dreamcaller.title === "string" ? dreamcaller.title : "",
       imageNumber:
         typeof dreamcaller["image-number"] === "string" ? dreamcaller["image-number"] : "",
+      renderedText:
+        typeof dreamcaller["rendered-text"] === "string" ? dreamcaller["rendered-text"] : "",
     }));
 }
 

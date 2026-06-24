@@ -1,5 +1,7 @@
 import type { CSSProperties } from "react";
+import { DreamcallerPopover } from "../components/DreamcallerPopover";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
+import { HoverPopover } from "../components/HoverPopover";
 import type {
   DreamcallerAssignmentAction,
   DreamcallerOption,
@@ -126,11 +128,19 @@ export default function DreamscapeResidents({
             }}
           >
             {resident.option !== null ? (
-              <DreamcallerPortrait
-                dreamcaller={resident.option}
-                variant="thumb"
-                style={{ width: `${String(thumb)}px`, height: `${String(thumb)}px`, flex: "0 0 auto" }}
-              />
+              <HoverPopover
+                placement="left"
+                delayMs={150}
+                maxWidthPx={null}
+                style={{ flex: "0 0 auto", cursor: "help" }}
+                content={<DreamcallerPopover dreamcaller={resident.option} />}
+              >
+                <DreamcallerPortrait
+                  dreamcaller={resident.option}
+                  variant="thumb"
+                  style={{ width: `${String(thumb)}px`, height: `${String(thumb)}px` }}
+                />
+              </HoverPopover>
             ) : (
               <span
                 style={{

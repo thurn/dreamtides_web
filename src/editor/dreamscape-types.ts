@@ -42,6 +42,8 @@ export interface DreamcallerOption {
   name: string;
   title: string;
   imageNumber: string;
+  /** The Dreamcaller's ability text, shown in the resident hover popover. */
+  renderedText: string;
 }
 
 export interface LoadEditorDreamscapesResponse {
