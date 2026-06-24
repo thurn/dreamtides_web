@@ -391,47 +391,41 @@ export function buildCorpusOpponentDeck(args: {
   // Build an IdfDeck view of the (post-legendary) deck for fit scoring.
   const tunedIdfDeck = (): IdfDeck => makeIdfDeck(deckUuidSet(), corpus);
 
-  // Step 2 — Starter dilution. Cut the N least-synergistic NON-starter cards
-  // and add N Starters, preserving size. At layer 0 add ALL 10 starters;
-  // otherwise add the N Starters with highest signatureFit to the tuned deck.
+  // Step 2 — Starter dilution. Cut exactly `count` least-synergistic
+  // NON-starter cards and add exactly `count` Starters, preserving deck size.
+  // `count` is the minimum of (a) the desired dilution for this layer, (b) the
+  // number of non-starter cards available to cut, and (c) the number of Starters
+  // not already present in the deck. This three-way cap ensures
+  // `startersAdded.length === cardsCut.length` in all edge cases (fewer
+  // non-starters than desired N, deck already containing some Starters, etc.).
+  //
+  // At layer 0 the desired count is "all Starters"; at other layers it is the
+  // layer's scheduled dilution count.  Starters are chosen by highest
+  // signatureFit (seeded tie-break), not-already-in-deck.
   const starterCount = starterDilutionAt(layer);
   if (starterCount > 0) {
-    // Cut the N least-synergistic non-starter cards.
-    const ascending = synergyAscending(deck.map(uuidOf), cooc);
-    const cutUuids: string[] = [];
-    for (const uuid of ascending) {
-      if (cutUuids.length >= starterCount) break;
-      const card = byUuid.get(uuid);
-      if (card === undefined) continue;
-      if (isStarterCard(card)) continue; // never cut a starter
-      cutUuids.push(uuid);
-    }
-    const cutSet = new Set(cutUuids);
-    for (const uuid of cutUuids) {
-      const card = byUuid.get(uuid);
-      if (card !== undefined) cardsCut.push(card);
-    }
-    deck = deck.filter((c) => !cutSet.has(uuidOf(c)));
-
-    // Choose the Starters to add. Layer 0: all of them. Otherwise: the
-    // highest-signatureFit starters (seeded tie-break), not already in deck.
-    const inDeck = deckUuidSet();
+    // Determine which Starters are addable (not already in deck) BEFORE cuts,
+    // because the pre-cut deck is the authoritative state for duplicate checks.
+    const inDeckBefore = deckUuidSet();
     const idfDeckForFit = tunedIdfDeck();
-    const availableStarters = [...startersByNumber.values()].filter(
-      (s) => !inDeck.has(uuidOf(s)),
+    const addableStarters = [...startersByNumber.values()].filter(
+      (s) => !inDeckBefore.has(uuidOf(s)),
     );
-    let chosenStarters: CardData[];
+
+    // Choose which addable Starters to add: layer 0 → all, otherwise top-N by
+    // signatureFit with seeded tie-break. We select up to `starterCount` here;
+    // the final `count` cap below may trim further.
+    let candidateStarters: CardData[];
     if (layer === 0) {
-      // Add all starters (their order does not matter for size preservation).
-      chosenStarters = [...startersByNumber.values()];
+      candidateStarters = addableStarters;
     } else {
-      const scoredStarters = availableStarters.map((s) => ({
+      const scoredStarters = addableStarters.map((s) => ({
         card: s,
         fit: finiteOrZero(
           signatureFit(new Set([uuidOf(s)]), idfDeckForFit, corpus),
         ),
       }));
-      chosenStarters = pickTopN(
+      candidateStarters = pickTopN(
         scoredStarters,
         starterCount,
         (s) => s.fit,
@@ -439,12 +433,33 @@ export function buildCorpusOpponentDeck(args: {
         stageBRng,
       ).map((s) => s.card);
     }
+
+    // Enumerate non-starter cards available to cut (ascending synergy order).
+    const ascending = synergyAscending(deck.map(uuidOf), cooc);
+    const cuttableUuids: string[] = [];
+    for (const uuid of ascending) {
+      const card = byUuid.get(uuid);
+      if (card === undefined) continue;
+      if (isStarterCard(card)) continue; // never cut a starter
+      cuttableUuids.push(uuid);
+    }
+
+    // Three-way cap: can't cut more than we have; can't add more than are
+    // addable; can't exceed the layer's desired dilution count.
+    const count = Math.min(starterCount, cuttableUuids.length, candidateStarters.length);
+
+    const cutUuids = cuttableUuids.slice(0, count);
+    const cutSet = new Set(cutUuids);
+    for (const uuid of cutUuids) {
+      const card = byUuid.get(uuid);
+      if (card !== undefined) cardsCut.push(card);
+    }
+    deck = deck.filter((c) => !cutSet.has(uuidOf(c)));
+
+    const chosenStarters = candidateStarters.slice(0, count);
     for (const s of chosenStarters) {
-      // Avoid duplicating a starter already in the deck.
-      if (!deckUuidSet().has(uuidOf(s))) {
-        deck.push(s);
-        startersAdded.push(s);
-      }
+      deck.push(s);
+      startersAdded.push(s);
     }
   }
 

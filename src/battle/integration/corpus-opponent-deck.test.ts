@@ -760,6 +760,112 @@ describe("buildCorpusOpponentDeck Stage B (layer tuning)", () => {
   });
 });
 
+describe("buildCorpusOpponentDeck Stage B starter-dilution size preservation (boundary cases)", () => {
+  // These tests exercise edge cases where naive clamping would cause deck-size
+  // drift.  They use synthetic mini-fixtures so they do NOT pin any tunable
+  // constant (STARTER_DILUTION values, layer thresholds, etc.).
+  //
+  // The shared invariant under test:
+  //   finalCards.length === baseCards.length
+  //   startersAdded.length === cardsCut.length
+  //   no duplicate UUIDs in finalCards
+
+  function assertSizePreserved(result: ReturnType<typeof buildCorpusOpponentDeck>) {
+    expect(result).not.toBeNull();
+    const r = result!;
+    expect(r.finalCards.length).toBe(r.baseCards.length);
+    expect(r.modifications.startersAdded.length).toBe(r.modifications.cardsCut.length);
+    const finalUuids = r.finalCards.map((c) => c.id.toLowerCase());
+    expect(new Set(finalUuids).size).toBe(finalUuids.length);
+  }
+
+  it("preserves size at layer 0 when the base deck has fewer non-starter cards than the desired dilution count", () => {
+    // Layer 0 wants to add all 10 Starters (STARTER_DILUTION[0]), but we build
+    // a base deck with only 2 non-starter cards — fewer than 10 — so cuts < 10.
+    // The three-way min must clamp additions to match cuts.
+    //
+    // Deck: 1 signature card (not a starter) + 1 ordinary card = 2 non-starters.
+    // Desired dilution at layer 0 = 10 (whatever STARTER_DILUTION[0] is).
+    // Available non-starters = 2, addable starters = 10, desired = 10 → count = 2.
+    const layer0DilutionSpec = STAGE_B_LAYER_SPEC[0];
+    // Guard: this test only makes sense if layer 0 has a dilution > 2.
+    expect(layer0DilutionSpec.startersAdded).toBeGreaterThan(2);
+
+    const tinyCard1 = makeCard("fe000001-0000-0000-0000-000000000001", 9001, "Tiny A");
+    const tinyCard2 = makeCard("fe000002-0000-0000-0000-000000000002", 9002, "Tiny B");
+    const tinySig = makeCard("fe000003-0000-0000-0000-000000000003", 9003, "Tiny Sig");
+
+    // All STARTERS + the tiny cards must be in the database.
+    const tinyDb = cardDb([...STARTERS, tinyCard1, tinyCard2, tinySig]);
+
+    // Two decklists: target (only the tiny non-starters) and a filler for corpus.
+    const tinyDeck = makeDecklist("tiny", [tinySig.id, tinyCard1.id, tinyCard2.id]);
+    const fillerDeck = makeDecklist("filler", [tinyCard1.id, tinyCard2.id]);
+
+    const result = buildCorpusOpponentDeck({
+      opponentDreamcaller: makeDreamcaller("dc-tiny", [tinySig.id]),
+      knownGoodDecklists: [tinyDeck, fillerDeck],
+      affiliation: null,
+      cardDatabase: tinyDb,
+      dreamsignSignatures: undefined,
+      dreamsignTemplates: [],
+      completionLevel: 0,
+      layerCount: STAGE_B_LAYER_SPEC.length,
+      poolSeed: 0,
+    });
+
+    assertSizePreserved(result);
+    // We cut at most 2 non-starters (tinyCard1, tinyCard2) but tinySig is also
+    // non-starter — so up to 3 could be cut, but we add at most 3 starters.
+    // The key invariant: cuts === additions.
+    expect(result!.modifications.cardsCut.length).toBeLessThanOrEqual(
+      result!.baseCards.filter((c) => !isStarter(c)).length,
+    );
+  });
+
+  it("preserves size at layer 0 when the base deck already contains a Starter card", () => {
+    // The base deck already includes one Starter (STARTERS[0]).  At layer 0 the
+    // desired dilution wants to add all 10 Starters, but STARTERS[0] is already
+    // present — so only 9 are addable, while the naive code would try to cut 10
+    // non-starters (or add 10 including the already-present one via the duplicate
+    // guard skipping it).  The fix must keep cuts === additions.
+    const layer0DilutionSpec = STAGE_B_LAYER_SPEC[0];
+    expect(layer0DilutionSpec.startersAdded).toBeGreaterThan(1);
+
+    // Build a deck: 1 sig card + 1 ordinary card + 1 starter already present.
+    // This guarantees addable = total_starters - 1 < desired (at layer 0 desired
+    // = total starters) — so the cap from addable.length kicks in.
+    const preseedSig = makeCard("fd000001-0000-0000-0000-000000000001", 9101, "PS Sig");
+    const preseedOrd = makeCard("fd000002-0000-0000-0000-000000000002", 9102, "PS Ord");
+    const preseededStarter = STARTERS[0]; // already in deck
+
+    const preseedDb = cardDb([...STARTERS, preseedSig, preseedOrd]);
+
+    // Deck includes the starter explicitly.
+    const preseedDeckIds = [preseedSig.id, preseedOrd.id, preseededStarter.id];
+    const preseedDeck = makeDecklist("preseed", preseedDeckIds);
+    const fillerDeck2 = makeDecklist("filler2", [preseedOrd.id, preseedSig.id]);
+
+    const result = buildCorpusOpponentDeck({
+      opponentDreamcaller: makeDreamcaller("dc-ps", [preseedSig.id]),
+      knownGoodDecklists: [preseedDeck, fillerDeck2],
+      affiliation: null,
+      cardDatabase: preseedDb,
+      dreamsignSignatures: undefined,
+      dreamsignTemplates: [],
+      completionLevel: 0,
+      layerCount: STAGE_B_LAYER_SPEC.length,
+      poolSeed: 0,
+    });
+
+    assertSizePreserved(result);
+    // The already-present starter must not be duplicated in finalCards.
+    const finalUuids = result!.finalCards.map((c) => c.id.toLowerCase());
+    const starterUuid = preseededStarter.id.toLowerCase();
+    expect(finalUuids.filter((id) => id === starterUuid).length).toBe(1);
+  });
+});
+
 describe("buildCorpusOpponentDeck Stage B logging", () => {
   beforeEach(() => {
     resetLog();
