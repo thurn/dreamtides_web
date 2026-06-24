@@ -1,10 +1,15 @@
 import { DEFAULT_RUN_LAYER_COUNT } from "../battle/integration/opponent-deck";
 
+/** The opponent-deck algorithm a generation is viewed through. */
+export type OpponentDebugAlgo = "coherent" | "corpus";
+
 /**
  * The parameters that fully determine one opponent generation in the
- * `/opponent` debug tool. Generation is deterministic in these three values
- * (they derive the battle seed), so a generation is reproducible from them
- * alone — no extra state to capture.
+ * `/opponent` debug tool. The `completionLevel` / `dreamscapeId` / `nonce`
+ * triple derives the battle seed (the generation is deterministic in them, so
+ * it is reproducible from them alone). `algo` selects the deck-building
+ * algorithm the same generation is viewed through — a separate, orthogonal
+ * choice that does not affect the seed.
  */
 export interface OpponentDebugParams {
   /** Run position, 0 (opening) through `DEFAULT_RUN_LAYER_COUNT - 1` (boss). */
@@ -13,6 +18,8 @@ export interface OpponentDebugParams {
   dreamscapeId: string | null;
   /** Re-roll counter: changing it re-derives the seed under the same position. */
   nonce: number;
+  /** The deck-building algorithm to view the generation through. */
+  algo: OpponentDebugAlgo;
 }
 
 /** Highest valid layer index (boss). */
@@ -45,6 +52,14 @@ function normalizeDreamscape(raw: string | null | undefined): string | null {
   return NEUTRAL_TOKENS.has(trimmed) ? null : trimmed;
 }
 
+/** Coerce an arbitrary `?algo=` / selector value to a known algorithm,
+ * defaulting to coherent. */
+export function normalizeOpponentDebugAlgo(
+  raw: string | null | undefined,
+): OpponentDebugAlgo {
+  return raw?.trim() === "corpus" ? "corpus" : "coherent";
+}
+
 /**
  * The shareable generation id for `params`, e.g.
  * `opponent-debug:pharaohs_gate:3:2`. This is byte-for-byte the
@@ -63,7 +78,10 @@ export function opponentGenerationId(params: OpponentDebugParams): string {
  * Parse a generation id (`opponent-debug:<dreamscape>:<layer>:<nonce>`) back
  * into params, or `null` when it is not a well-formed id. Tolerant of dreamscape
  * ids that themselves contain no colons (every real dreamscape id is a single
- * token), validating the trailing layer / nonce as numbers.
+ * token), validating the trailing layer / nonce as numbers. The id does not
+ * carry the algorithm choice (a separate query param), so the returned `algo`
+ * is the default `"coherent"`; callers reading a full query string overlay the
+ * `?algo=` value.
  */
 export function parseOpponentGenerationId(
   id: string,
@@ -77,6 +95,7 @@ export function parseOpponentGenerationId(
     completionLevel: clampLayer(layer),
     dreamscapeId: normalizeDreamscape(parts[1]),
     nonce: normalizeNonce(nonce),
+    algo: "coherent",
   };
 }
 
@@ -91,22 +110,28 @@ export function parseOpponentDebugParams(
 ): OpponentDebugParams {
   const query = new URLSearchParams(search);
 
+  // The algorithm is an orthogonal query param read independently of the seed
+  // params, so a `gen=` link and an `?algo=` choice compose freely.
+  const algo = normalizeOpponentDebugAlgo(query.get("algo"));
+
   const gen = query.get("gen");
   if (gen != null) {
     const fromId = parseOpponentGenerationId(gen);
-    if (fromId !== null) return fromId;
+    if (fromId !== null) return { ...fromId, algo };
   }
 
   return {
     completionLevel: clampLayer(Number(query.get("layer"))),
     dreamscapeId: normalizeDreamscape(query.get("dreamscape")),
     nonce: normalizeNonce(Number(query.get("n"))),
+    algo,
   };
 }
 
 /**
  * Serialize params into a canonical `?layer=…&dreamscape=…&n=…` query string
- * (leading `?` included; `dreamscape` omitted for a neutral build). Round-trips
+ * (leading `?` included; `dreamscape` omitted for a neutral build, `algo`
+ * omitted for the coherent default so existing links stay bare). Round-trips
  * with {@link parseOpponentDebugParams}.
  */
 export function opponentDebugSearch(params: OpponentDebugParams): string {
@@ -116,5 +141,8 @@ export function opponentDebugSearch(params: OpponentDebugParams): string {
     query.set("dreamscape", params.dreamscapeId);
   }
   query.set("n", String(params.nonce));
+  if (params.algo === "corpus") {
+    query.set("algo", params.algo);
+  }
   return `?${query.toString()}`;
 }

@@ -8,14 +8,11 @@ import type {
 } from "../types/content";
 import { loadQuestContent, type QuestContent } from "../data/quest-content";
 import {
-  buildOpponentDeck,
   buildOpponentDreamsigns,
   DEFAULT_RUN_LAYER_COUNT,
-  logOpponentDeckConstructed,
   opponentCarriesDreamsign,
   runMidpointCompletionLevel,
   selectOpponentDreamcaller,
-  type OpponentDeckBuild,
 } from "../battle/integration/opponent-deck";
 import { createBattleRngStreams, deriveBattleSeed } from "../battle/random";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
@@ -24,6 +21,11 @@ import { HoverZoomCard } from "../components/HoverZoomCard";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
 import { dreamsignIconUrl } from "../atlas/atlas-display";
 import {
+  getAlgorithm,
+  OPPONENT_ALGORITHMS,
+} from "./opponent-algorithms";
+import {
+  normalizeOpponentDebugAlgo,
   opponentDebugSearch,
   opponentGenerationId,
   parseOpponentDebugParams,
@@ -36,11 +38,13 @@ import {
  * and re-roll the same parameters to study the spread.
  *
  * The opponent is built by replaying the exact primitives `createBattleInit`
- * uses ({@link selectOpponentDreamcaller}, {@link buildOpponentDreamsigns},
- * {@link buildOpponentDeck}), so what the tool shows matches what a real battle
- * at the same position would generate for a given seed. "Refresh" advances a
- * nonce that changes the battle seed, re-rolling a fresh generation under the
- * same layer / dreamscape parameters.
+ * uses ({@link selectOpponentDreamcaller}, {@link buildOpponentDreamsigns}) to
+ * derive the run context, then routing the deck through a selected algorithm
+ * (see `opponent-algorithms.tsx`), so what the tool shows matches what a real
+ * battle at the same position would generate for a given seed. "Refresh"
+ * advances a nonce that changes the battle seed, re-rolling a fresh generation
+ * under the same layer / dreamscape parameters. The `?algo=` param selects the
+ * opponent-deck algorithm (coherent or corpus).
  */
 
 /** The fixed enemy-pool sub-seed derivation `createBattleInit` applies to the
@@ -52,11 +56,13 @@ function deriveEnemyPoolSeed(seed: number): number {
 interface OpponentGeneration {
   /** The shareable id for this generation; identical to the logged battleEntryKey. */
   generationId: string;
+  /** Byte-for-byte the logged battleEntryKey (== {@link generationId}); the
+   * coherent algorithm passes it to `logOpponentDeckConstructed`. */
+  battleEntryKey: string;
   dreamcaller: DreamcallerContent | null;
   dreamsigns: DreamsignTemplate[];
   affiliation: AffiliationContent | null;
   dreamscape: DreamscapeContent | null;
-  build: OpponentDeckBuild | null;
   seed: number;
   poolSeed: number;
   completionLevel: number;
@@ -75,10 +81,13 @@ function generateOpponent(
   const layerCount = DEFAULT_RUN_LAYER_COUNT;
   // The generation id IS the logged battleEntryKey, so the id a user shares
   // (in the URL or verbally) greps the `opponent_deck_constructed` log directly.
+  // The id is algorithm-independent — it identifies the seeded generation, not
+  // the algorithm the deck is viewed through — so the algo field is irrelevant.
   const battleEntryKey = opponentGenerationId({
     completionLevel,
     dreamscapeId,
     nonce,
+    algo: "coherent",
   });
   const seed = deriveBattleSeed(`opponent-debug-seed:${battleEntryKey}`);
   const streams = createBattleRngStreams(seed);
@@ -108,40 +117,17 @@ function generateOpponent(
         null;
 
   const poolSeed = deriveEnemyPoolSeed(seed);
-  const build = buildOpponentDeck({
-    opponentDreamcaller: dreamcaller,
-    fitModel: content.fitModel,
-    draftRecords: content.draftRecords ?? [],
-    poolContext: content.poolContext,
-    cardDatabase: content.cardDatabase,
-    affiliation,
-    completionLevel,
-    layerCount,
-    poolSeed,
-  });
 
-  // Record the generation so the debug run is reconstructable from the quest
-  // log just like a production battle's opponent build.
-  logOpponentDeckConstructed({
-    battleEntryKey,
-    opponentDreamcaller: dreamcaller,
-    poolVariant: content.poolContext?.poolVariant ?? DEFAULT_POOL_VARIANT,
-    poolSeed,
-    completionLevel,
-    layerCount,
-    affiliation,
-    dreamsigns,
-    build,
-    fallbackDeckSize: build?.cards.length ?? 0,
-  });
-
+  // The deck build + reconstruction logging is owned by the selected algorithm
+  // (see `opponent-algorithms.tsx`); `generateOpponent` produces only the run
+  // CONTEXT both algorithms consume.
   return {
     generationId: battleEntryKey,
+    battleEntryKey,
     dreamcaller,
     dreamsigns,
     affiliation,
     dreamscape,
-    build,
     seed,
     poolSeed,
     completionLevel,
@@ -199,18 +185,24 @@ export default function OpponentDebugApp() {
     initialParams.dreamscapeId,
   );
   const [nonce, setNonce] = useState(initialParams.nonce);
+  const [algoId, setAlgoId] = useState(initialParams.algo);
   const [copied, setCopied] = useState(false);
 
   // Keep the address bar in sync with the current parameters (no history spam:
   // replaceState, not pushState) so the URL is always a shareable debug link.
   useEffect(() => {
-    const search = opponentDebugSearch({ completionLevel, dreamscapeId, nonce });
+    const search = opponentDebugSearch({
+      completionLevel,
+      dreamscapeId,
+      nonce,
+      algo: algoId,
+    });
     window.history.replaceState(
       null,
       "",
       `${window.location.pathname}${search}`,
     );
-  }, [completionLevel, dreamscapeId, nonce]);
+  }, [completionLevel, dreamscapeId, nonce, algoId]);
 
   useEffect(() => {
     let cancelled = false;
@@ -243,6 +235,22 @@ export default function OpponentDebugApp() {
     return generateOpponent(content, completionLevel, dreamscapeId, nonce);
   }, [content, completionLevel, dreamscapeId, nonce]);
 
+  // The selected algorithm turns the run context into the rendered view (deck,
+  // stat tiles, dreamsign labels, ability, provenance). Re-runs when the algo
+  // changes; this is where the deck build + reconstruction logging happen.
+  const view = useMemo(() => {
+    if (content === null || generation === null) return null;
+    return getAlgorithm(algoId).build(content, {
+      opponentDreamcaller: generation.dreamcaller,
+      affiliation: generation.affiliation,
+      completionLevel: generation.completionLevel,
+      layerCount: generation.layerCount,
+      poolSeed: generation.poolSeed,
+      dreamsigns: generation.dreamsigns,
+      battleEntryKey: generation.battleEntryKey,
+    });
+  }, [content, generation, algoId]);
+
   const copyGenerationId = (id: string) => {
     const done = () => {
       setCopied(true);
@@ -260,7 +268,7 @@ export default function OpponentDebugApp() {
 
   const midpoint = runMidpointCompletionLevel(DEFAULT_RUN_LAYER_COUNT);
 
-  const deckCards: readonly CardData[] = generation?.build?.distinctCards ?? [];
+  const deckCards: readonly CardData[] = view?.deckCards ?? [];
 
   return (
     <div
@@ -379,6 +387,23 @@ export default function OpponentDebugApp() {
                     <option key={d.id} value={d.id}>
                       {d.name}
                       {d.affiliationId == null ? " (neutral)" : ""}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <span style={labelStyle}>Algorithm</span>
+                <select
+                  value={algoId}
+                  onChange={(e) => {
+                    setAlgoId(normalizeOpponentDebugAlgo(e.target.value));
+                  }}
+                  style={selectStyle}
+                >
+                  {OPPONENT_ALGORITHMS.map((algorithm) => (
+                    <option key={algorithm.id} value={algorithm.id}>
+                      {algorithm.label}
                     </option>
                   ))}
                 </select>
@@ -587,40 +612,13 @@ export default function OpponentDebugApp() {
                     marginTop: 14,
                   }}
                 >
-                  <StatTile
-                    label="Affiliation"
-                    value={generation.affiliation?.name ?? "Neutral"}
-                  />
-                  <StatTile
-                    label="Distinct"
-                    value={String(
-                      generation.build?.distinctCards.length ?? 0,
-                    )}
-                  />
-                  <StatTile
-                    label="Coherence"
-                    value={
-                      generation.build
-                        ? generation.build.coherence.score.toFixed(3)
-                        : "—"
-                    }
-                  />
-                  <StatTile
-                    label="Affil. fit"
-                    value={
-                      generation.build
-                        ? generation.build.affiliationFit.toFixed(3)
-                        : "—"
-                    }
-                  />
-                  <StatTile
-                    label="Best of"
-                    value={String(generation.build?.candidateCount ?? 0)}
-                  />
-                  <StatTile
-                    label="Removed"
-                    value={String(generation.build?.removalCount ?? 0)}
-                  />
+                  {(view?.statRows ?? []).map((row) => (
+                    <StatTile
+                      key={row.label}
+                      label={row.label}
+                      value={row.value}
+                    />
+                  ))}
                 </div>
               </div>
 
@@ -650,40 +648,43 @@ export default function OpponentDebugApp() {
                   </span>
                 </div>
 
-                {generation.build === null ? (
+                {view === null || view.unavailable === true ? (
                   <div style={{ fontSize: 13, color: MUTED, padding: 12 }}>
-                    Coherent-draft simulation unavailable (no fit model, draft
-                    records, or usable packs). A real battle here would fall back
-                    to a sampled draftable deck.
+                    {algoId === "corpus"
+                      ? "Corpus opponent deck unavailable (no known-good decklists in the corpus)."
+                      : "Coherent-draft simulation unavailable (no fit model, draft records, or usable packs). A real battle here would fall back to a sampled draftable deck."}
                   </div>
                 ) : (
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns:
-                        "repeat(auto-fill, minmax(150px, 1fr))",
-                      gap: 12,
-                      maxHeight: "calc(100vh - 200px)",
-                      overflowY: "auto",
-                      paddingRight: 6,
-                    }}
-                  >
-                    {deckCards.map((card, index) => (
-                      // Mirror the quest deck viewer: hovering a tile grows the
-                      // card in place (portaled above the grid, escaping the
-                      // scroll clip) until its rules text is legible, with the
-                      // glossary definitions shown alongside. The in-grid card
-                      // suppresses its own term popover so the enlarged read is
-                      // the one carrying hover-help.
-                      <HoverZoomCard
-                        key={`${card.id}:${String(index)}`}
-                        logSurface="opponent_debug"
-                        glossaryText={card.renderedText}
-                      >
-                        <CardView card={card} suppressHoverHelp />
-                      </HoverZoomCard>
-                    ))}
-                  </div>
+                  <>
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns:
+                          "repeat(auto-fill, minmax(150px, 1fr))",
+                        gap: 12,
+                        maxHeight: "calc(100vh - 200px)",
+                        overflowY: "auto",
+                        paddingRight: 6,
+                      }}
+                    >
+                      {deckCards.map((card, index) => (
+                        // Mirror the quest deck viewer: hovering a tile grows the
+                        // card in place (portaled above the grid, escaping the
+                        // scroll clip) until its rules text is legible, with the
+                        // glossary definitions shown alongside. The in-grid card
+                        // suppresses its own term popover so the enlarged read is
+                        // the one carrying hover-help.
+                        <HoverZoomCard
+                          key={`${card.id}:${String(index)}`}
+                          logSurface="opponent_debug"
+                          glossaryText={card.renderedText}
+                        >
+                          <CardView card={card} suppressHoverHelp />
+                        </HoverZoomCard>
+                      ))}
+                    </div>
+                    {view.provenance}
+                  </>
                 )}
               </div>
             </div>
