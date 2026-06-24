@@ -17,7 +17,7 @@ function clamp01(v: number): number {
  * Score a set of candidate cards against a deck, returning a UUID-keyed map.
  *
  * This is a thin UUID-keyed wrapper over {@link scoreCandidatesForDeck}.
- * Candidates that are unknown to the fit model (no name mapping) are absent
+ * Candidates that are unknown to the fit model (no id mapping) are absent
  * from the returned map.
  *
  * @param candidates Cards to score.
@@ -72,39 +72,39 @@ export function fitLooByEntry(
   deckCards: readonly MerchantDeckCard[],
   fitModel: FitModel,
 ): Map<string, number> {
-  const { numberToName, coocNorm, idf } = fitModel;
+  const { numberToId, coocNorm, idf } = fitModel;
 
-  // Collect all deck card names for the co-occurrence computation
-  const deckNamesList: Array<string | undefined> = deckCards.map((dc) =>
-    numberToName.get(dc.cardNumber),
+  // Collect all deck card ids for the co-occurrence computation
+  const deckIdList: Array<string | undefined> = deckCards.map((dc) =>
+    numberToId.get(dc.cardNumber),
   );
 
   const result = new Map<string, number>();
 
   for (let i = 0; i < deckCards.length; i += 1) {
     const entry = deckCards[i];
-    const cardName = deckNamesList[i];
+    const cardId = deckIdList[i];
 
     // Skip if card is unknown to the model
-    if (cardName === undefined) continue;
+    if (cardId === undefined) continue;
 
     // Skip if card has idf=0 (filtered out due to df < minDf or df > maxDfFrac)
-    const cardIdf = idf.get(cardName);
+    const cardIdf = idf.get(cardId);
     if (cardIdf === undefined || cardIdf === 0) continue;
 
-    // Collect distinct other card names (deduplicated)
+    // Collect distinct other card ids (deduplicated)
     const seen = new Set<string>();
-    const otherNames: string[] = [];
+    const otherIds: string[] = [];
     for (let j = 0; j < deckCards.length; j += 1) {
       if (j === i) continue;
-      const otherName = deckNamesList[j];
-      if (otherName !== undefined && !seen.has(otherName) && otherName !== cardName) {
-        seen.add(otherName);
-        otherNames.push(otherName);
+      const otherId = deckIdList[j];
+      if (otherId !== undefined && !seen.has(otherId) && otherId !== cardId) {
+        seen.add(otherId);
+        otherIds.push(otherId);
       }
     }
 
-    if (otherNames.length === 0) {
+    if (otherIds.length === 0) {
       // Only card in the deck; co-occurrence is 0
       result.set(entry.entryId, 0);
       continue;
@@ -114,11 +114,11 @@ export function fitLooByEntry(
     // For each other deck card d, look up coocNorm[d][c] — how much c co-occurs
     // with d from d's perspective. Sum and divide.
     let sum = 0;
-    for (const other of otherNames) {
-      sum += coocNorm.get(other)?.get(cardName) ?? 0;
+    for (const other of otherIds) {
+      sum += coocNorm.get(other)?.get(cardId) ?? 0;
     }
 
-    result.set(entry.entryId, sum / otherNames.length);
+    result.set(entry.entryId, sum / otherIds.length);
   }
 
   return result;

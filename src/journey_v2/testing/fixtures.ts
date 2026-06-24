@@ -200,8 +200,8 @@ export function makeMerchantTestFitModel(): FitModel {
     idf: new Map(),
     prior: new Map(),
     coocNorm: new Map(),
-    numberToName: new Map(),
-    nameIndex: new Map(),
+    numberToId: new Map(),
+    idIndex: new Map(),
     tuning: {
       alpha: 1,
       beta: 1,

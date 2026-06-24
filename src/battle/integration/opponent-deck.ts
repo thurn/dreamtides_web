@@ -301,7 +301,7 @@ function signatureCardNumbers(
  * draft picks from the exact packs that produced the corpus decks. */
 function buildPackSource(
   draftRecords: readonly DraftRecord[],
-  nameIndex: ReadonlyMap<string, number>,
+  idIndex: ReadonlyMap<string, number>,
   seed: number,
 ): number[][] {
   if (draftRecords.length === 0) return [];
@@ -317,7 +317,7 @@ function buildPackSource(
   }
   const packs: number[][] = [];
   for (let i = 0; i < take; i += 1) {
-    for (const pack of buildPackSequence(draftRecords[indices[i]], nameIndex)) {
+    for (const pack of buildPackSequence(draftRecords[indices[i]], idIndex)) {
       if (pack.length > 0) packs.push(pack);
     }
   }
@@ -356,13 +356,13 @@ function cardCohesion(
   fitModel: FitModel,
 ): number {
   if (rest.length === 0) return 0;
-  const name = fitModel.numberToName.get(card);
-  if (name === undefined) return 0;
+  const id = fitModel.numberToId.get(card);
+  if (id === undefined) return 0;
   let sum = 0;
   for (const other of rest) {
-    const otherName = fitModel.numberToName.get(other);
-    if (otherName === undefined) continue;
-    sum += fitModel.coocNorm.get(otherName)?.get(name) ?? 0;
+    const otherId = fitModel.numberToId.get(other);
+    if (otherId === undefined) continue;
+    sum += fitModel.coocNorm.get(otherId)?.get(id) ?? 0;
   }
   return sum / rest.length;
 }
@@ -484,7 +484,7 @@ export function buildOpponentDeck(args: {
     return null;
   }
 
-  const packs = buildPackSource(draftRecords, fitModel.nameIndex, poolSeed);
+  const packs = buildPackSource(draftRecords, fitModel.idIndex, poolSeed);
   if (packs.length === 0) {
     return null;
   }
@@ -494,6 +494,13 @@ export function buildOpponentDeck(args: {
   const idToNumber = new Map<string, number>();
   for (const card of cardDatabase.values())
     idToNumber.set(card.id.toLowerCase(), card.cardNumber);
+
+  // Card number -> display name, for bridging pack cards to the affiliation
+  // probe's name-keyed affinity map (the affiliation corpus is keyed by card
+  // name, distinct from the fit model's id space).
+  const nameByNumber = new Map<number, string>();
+  for (const card of cardDatabase.values())
+    nameByNumber.set(card.cardNumber, card.name);
 
   // Affiliation context (probe affinities) for an affiliated dreamscape; null in
   // a neutral dreamscape or when the affiliation cannot be scored.
@@ -520,7 +527,7 @@ export function buildOpponentDeck(args: {
     packs,
     affiliationCtx,
     affiliation?.opponentBiasStrength ?? 0,
-    fitModel.numberToName,
+    nameByNumber,
   );
 
   const targetDistinct = opponentDistinctCardCount(completionLevel, layerCount);

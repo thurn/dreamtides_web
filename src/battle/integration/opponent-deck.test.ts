@@ -102,7 +102,10 @@ function makeCorpus(db: Map<number, CardData>): {
         mainboardIds: mainboard,
         packs,
         picks: [],
-        packIds: [],
+        // The fit model and pack source key on the record's id arrays; this
+        // synthetic corpus uses card names as the id token, so the id arrays
+        // mirror the name arrays.
+        packIds: packs,
         pickIds: [],
       });
     }
@@ -111,7 +114,7 @@ function makeCorpus(db: Map<number, CardData>): {
   makeFactionRecords("beta", beta, alpha);
 
   const fitModel = buildFitModel(
-    records.map((r) => r.mainboard),
+    records.map((r) => r.mainboardIds),
     nameIndex,
   );
   return { fitModel, draftRecords: records };

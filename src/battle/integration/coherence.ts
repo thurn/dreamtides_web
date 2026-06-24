@@ -90,30 +90,30 @@ function mixHash(a: number, b: number): number {
   return h >>> 0;
 }
 
-/** Build the deck's IDF vector (cards as a name set, L2 norm over idf weights)
- * the same way `buildFitModel` builds its corpus deck vectors, so `idfCosine`
- * compares like with like. */
+/** Build the deck's IDF vector (cards as a card-id set, L2 norm over idf
+ * weights) the same way `buildFitModel` builds its corpus deck vectors, so
+ * `idfCosine` compares like with like. */
 function deckIdfVector(
-  deckNames: Set<string>,
+  deckIds: Set<string>,
   idf: ReadonlyMap<string, number>,
 ): IdfDeck {
   let sq = 0;
-  for (const c of deckNames) {
+  for (const c of deckIds) {
     const w = idf.get(c) ?? 0;
     sq += w * w;
   }
-  return { cards: deckNames, norm: Math.sqrt(sq) || 1 };
+  return { cards: deckIds, norm: Math.sqrt(sq) || 1 };
 }
 
 /** Mean IDF-cosine of the deck to its `knn` most similar corpus decks. */
 function nearestNeighborSimilarity(
-  deckNames: Set<string>,
+  deckIds: Set<string>,
   fitModel: FitModel,
   knn: number,
 ): number {
-  if (deckNames.size === 0 || fitModel.decks.length === 0) return 0;
+  if (deckIds.size === 0 || fitModel.decks.length === 0) return 0;
   const idfOf = (c: string): number => fitModel.idf.get(c) ?? 0;
-  const deckVec = deckIdfVector(deckNames, fitModel.idf);
+  const deckVec = deckIdfVector(deckIds, fitModel.idf);
   const sims: number[] = fitModel.decks.map((d) => idfCosine(deckVec, d, idfOf));
   sims.sort((a, b) => b - a);
   const k = Math.min(knn, sims.length);
@@ -126,16 +126,16 @@ function nearestNeighborSimilarity(
 /** Mean normalized co-occurrence strength across every unordered card pair in
  * the deck, read from the model's co-occurrence lookup. */
 function meanPairwiseCooccurrence(
-  deckNames: readonly string[],
+  deckIds: readonly string[],
   fitModel: FitModel,
 ): number {
-  if (deckNames.length < 2) return 0;
+  if (deckIds.length < 2) return 0;
   let sum = 0;
   let pairs = 0;
-  for (let i = 0; i < deckNames.length; i += 1) {
-    const row = fitModel.coocNorm.get(deckNames[i]);
-    for (let j = i + 1; j < deckNames.length; j += 1) {
-      sum += row?.get(deckNames[j]) ?? 0;
+  for (let i = 0; i < deckIds.length; i += 1) {
+    const row = fitModel.coocNorm.get(deckIds[i]);
+    for (let j = i + 1; j < deckIds.length; j += 1) {
+      sum += row?.get(deckIds[j]) ?? 0;
       pairs += 1;
     }
   }
@@ -154,13 +154,13 @@ function selfConsistency(
   fitModel: FitModel,
   tuning: CoherenceTuning,
 ): number {
-  const { nameIndex, numberToName } = fitModel;
+  const { idIndex, numberToId } = fitModel;
 
-  // The distractor universe is every card number the model can score (a name
+  // The distractor universe is every card number the model can score (an id
   // with a prior). Built once and reused across held-out cards.
   const universe: number[] = [];
-  for (const [name, num] of nameIndex) {
-    if (fitModel.prior.has(name)) universe.push(num);
+  for (const [id, num] of idIndex) {
+    if (fitModel.prior.has(id)) universe.push(num);
   }
   if (universe.length === 0) return 0;
 
@@ -170,7 +170,7 @@ function selfConsistency(
   for (const num of deckNumbers) {
     if (seen.has(num)) continue;
     seen.add(num);
-    if (numberToName.has(num)) distinct.push(num);
+    if (numberToId.has(num)) distinct.push(num);
   }
   if (distinct.length === 0) return 0;
 
@@ -220,25 +220,25 @@ export function scoreDeckCoherence(
   fitModel: FitModel,
   tuning: CoherenceTuning = DEFAULT_COHERENCE_TUNING,
 ): DeckCoherenceScore {
-  const { numberToName } = fitModel;
+  const { numberToId } = fitModel;
 
-  // Distinct deck card names known to the model, in stable first-seen order.
+  // Distinct deck card ids known to the model, in stable first-seen order.
   const seen = new Set<string>();
-  const names: string[] = [];
+  const ids: string[] = [];
   for (const num of deckCardNumbers) {
-    const name = numberToName.get(num);
-    if (name === undefined || seen.has(name)) continue;
-    seen.add(name);
-    names.push(name);
+    const id = numberToId.get(num);
+    if (id === undefined || seen.has(id)) continue;
+    seen.add(id);
+    ids.push(id);
   }
-  const nameSet = new Set(names);
+  const idSet = new Set(ids);
 
   const nearestNeighbor = nearestNeighborSimilarity(
-    nameSet,
+    idSet,
     fitModel,
     tuning.knn,
   );
-  const meanPairwiseCooccur = meanPairwiseCooccurrence(names, fitModel);
+  const meanPairwiseCooccur = meanPairwiseCooccurrence(ids, fitModel);
   const self = selfConsistency(deckCardNumbers, fitModel, tuning);
 
   const score =

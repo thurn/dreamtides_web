@@ -92,9 +92,10 @@ export const DEFAULT_TUNING = {
  * rare/common cutoffs, build per-deck IDF vectors, the play-rate prior, and the
  * normalized IDF-weighted co-occurrence lookup -- all from the SAME filtered set.
  *
- * @param corpusDecks readonly array of card-name arrays (one per deck).
+ * @param corpusDecks readonly array of card-id arrays (one per deck; lowercased
+ *   stable UUIDs).
  * @param tuning the FitTuning knobs.
- * @returns { decks, idf, prior, coocNorm } in card-name space.
+ * @returns { decks, idf, prior, coocNorm } in card-id space.
  */
 export function buildFitModel(corpusDecks, tuning) {
   // 1. Hygiene filter: keep decks whose DISTINCT-card count is in range.
@@ -198,7 +199,7 @@ export function minMaxNormalize(values) {
 }
 
 /** neighborCF stage. Mirrors `scoreNeighborCF`: empty deck -> empty map. */
-function scoreNeighborCF(candidateNames, deckSet, model, tuning) {
+function scoreNeighborCF(candidateIds, deckSet, model, tuning) {
   const { idf, decks } = model;
   const scores = new Map();
   if (deckSet.size === 0) return scores;
@@ -218,96 +219,96 @@ function scoreNeighborCF(candidateNames, deckSet, model, tuning) {
   for (const nb of neighbors) sumSim += nb.sim;
   const denom = Math.max(sumSim, 1e-9);
 
-  for (const name of candidateNames) {
+  for (const id of candidateIds) {
     let acc = 0;
     for (const nb of neighbors) {
-      if (decks[nb.i].cards.has(name)) acc += nb.sim;
+      if (decks[nb.i].cards.has(id)) acc += nb.sim;
     }
-    scores.set(name, (acc / denom) * (idf.get(name) ?? 0));
+    scores.set(id, (acc / denom) * (idf.get(id) ?? 0));
   }
   return scores;
 }
 
 /** cooccur stage. Mirrors `scoreCooccur`: empty deck -> empty map. */
-function scoreCooccur(candidateNames, deckSet, model) {
+function scoreCooccur(candidateIds, deckSet, model) {
   const { coocNorm } = model;
   const scores = new Map();
   if (deckSet.size === 0) return scores;
   const sizeDenom = Math.max(deckSet.size, 1);
-  for (const name of candidateNames) {
+  for (const id of candidateIds) {
     let acc = 0;
-    for (const d of deckSet) acc += coocNorm.get(d)?.get(name) ?? 0;
-    scores.set(name, acc / sizeDenom);
+    for (const d of deckSet) acc += coocNorm.get(d)?.get(id) ?? 0;
+    scores.set(id, acc / sizeDenom);
   }
   return scores;
 }
 
 /**
- * Rank a pack and return the best `offerSize` card names. The name-space mirror
- * of `computeReplayOffer` (the runtime works in card-number space and translates
- * at the boundary; here the corpus is already names, so we carry a name->number
+ * Rank a pack and return the best `offerSize` card ids. The id-space mirror of
+ * `computeReplayOffer` (the runtime works in card-number space and translates at
+ * the boundary; here the corpus is already card ids, so we carry an id->number
  * map only for the deterministic card-number tie-break).
  *
- * @param packNames pack card names (may contain duplicates / unknowns).
- * @param deckNames the deck so far (card names).
+ * @param packIds pack card ids (may contain duplicates / unknowns).
+ * @param deckIds the deck so far (card ids).
  * @param model from {@link buildFitModel}.
  * @param tuning FitTuning knobs.
- * @param numberOf name -> card number (for the tie-break; missing -> -1, the
+ * @param numberOf id -> card number (for the tie-break; missing -> -1, the
  *   same fallback the runtime uses).
- * @param offerSize how many names to return.
- * @returns the offered card names, ranked best-fit first (or sorted by card
+ * @param offerSize how many ids to return.
+ * @returns the offered card ids, ranked best-fit first (or sorted by card
  *   number when the deduped pack is <= offerSize).
  */
 export function rankTop4(
-  packNames,
-  deckNames,
+  packIds,
+  deckIds,
   model,
   tuning,
   numberOf,
   offerSize = OFFER_SIZE,
 ) {
-  // 1. Candidates: dedupe first-seen (drop unknown names -- here every corpus
-  //    name is known, but a caller may pass an unknown, mirroring the runtime).
+  // 1. Candidates: dedupe first-seen (drop unknown ids -- here every corpus id
+  //    is known, but a caller may pass an unknown, mirroring the runtime).
   const seen = new Set();
-  const candidateNames = [];
-  for (const name of packNames) {
-    if (model.prior.has(name) || numberOf.has(name)) {
+  const candidateIds = [];
+  for (const id of packIds) {
+    if (model.prior.has(id) || numberOf.has(id)) {
       // Known to the corpus or at least to the card index; dedupe first-seen.
-      if (!seen.has(name)) {
-        seen.add(name);
-        candidateNames.push(name);
+      if (!seen.has(id)) {
+        seen.add(id);
+        candidateIds.push(id);
       }
     }
   }
 
-  const toNumber = (name) => numberOf.get(name) ?? -1;
+  const toNumber = (id) => numberOf.get(id) ?? -1;
 
   // 2. Small pack: return everything, sorted by card number ascending.
-  if (candidateNames.length <= offerSize) {
-    return candidateNames.slice().sort((a, b) => toNumber(a) - toNumber(b));
+  if (candidateIds.length <= offerSize) {
+    return candidateIds.slice().sort((a, b) => toNumber(a) - toNumber(b));
   }
 
-  // 3. Deck set (names, deduped). Eval has no signatures (pure deck-fit).
-  const deckSet = new Set(deckNames);
+  // 3. Deck set (ids, deduped). Eval has no signatures (pure deck-fit).
+  const deckSet = new Set(deckIds);
 
   // 4. Score each stage independently.
-  const neighborCF = scoreNeighborCF(candidateNames, deckSet, model, tuning);
-  const cooccur = scoreCooccur(candidateNames, deckSet, model);
+  const neighborCF = scoreNeighborCF(candidateIds, deckSet, model, tuning);
+  const cooccur = scoreCooccur(candidateIds, deckSet, model);
 
   // 5. Per-term min-max normalize, then blend.
-  const nf = minMaxNormalize(candidateNames.map((c) => neighborCF.get(c) ?? 0));
-  const co = minMaxNormalize(candidateNames.map((c) => cooccur.get(c) ?? 0));
-  const pr = minMaxNormalize(candidateNames.map((c) => model.prior.get(c) ?? 0));
+  const nf = minMaxNormalize(candidateIds.map((c) => neighborCF.get(c) ?? 0));
+  const co = minMaxNormalize(candidateIds.map((c) => cooccur.get(c) ?? 0));
+  const pr = minMaxNormalize(candidateIds.map((c) => model.prior.get(c) ?? 0));
 
-  const scoredCandidates = candidateNames.map((name, idx) => ({
-    name,
-    number: toNumber(name),
+  const scoredCandidates = candidateIds.map((id, idx) => ({
+    id,
+    number: toNumber(id),
     fit: tuning.alpha * nf[idx] + tuning.beta * co[idx] + tuning.gamma * pr[idx],
   }));
 
   // 6. Rank by fit desc, tie-break by card number asc.
   scoredCandidates.sort((a, b) => b.fit - a.fit || a.number - b.number);
-  return scoredCandidates.slice(0, offerSize).map((c) => c.name);
+  return scoredCandidates.slice(0, offerSize).map((c) => c.id);
 }
 
 /**
@@ -315,35 +316,35 @@ export function rankTop4(
  * popularity-4 baseline. Top `offerSize` by prior desc, tie-break by card number.
  */
 export function rankPopularity(
-  packNames,
+  packIds,
   prior,
   numberOf,
   offerSize = OFFER_SIZE,
 ) {
   const seen = new Set();
-  const candidateNames = [];
-  for (const name of packNames) {
-    if (!seen.has(name)) {
-      seen.add(name);
-      candidateNames.push(name);
+  const candidateIds = [];
+  for (const id of packIds) {
+    if (!seen.has(id)) {
+      seen.add(id);
+      candidateIds.push(id);
     }
   }
-  const toNumber = (name) => numberOf.get(name) ?? -1;
-  if (candidateNames.length <= offerSize) {
-    return candidateNames.slice().sort((a, b) => toNumber(a) - toNumber(b));
+  const toNumber = (id) => numberOf.get(id) ?? -1;
+  if (candidateIds.length <= offerSize) {
+    return candidateIds.slice().sort((a, b) => toNumber(a) - toNumber(b));
   }
-  return candidateNames
-    .map((name) => ({ name, number: toNumber(name), p: prior.get(name) ?? 0 }))
+  return candidateIds
+    .map((id) => ({ id, number: toNumber(id), p: prior.get(id) ?? 0 }))
     .sort((a, b) => b.p - a.p || a.number - b.number)
     .slice(0, offerSize)
-    .map((c) => c.name);
+    .map((c) => c.id);
 }
 
-/** True if any name in `pickNames` appears in `offerNames`. The hit rule for
+/** True if any id in `pickIds` appears in `offerIds`. The hit rule for
  * multi-card human picks: a hit if the offer surfaced ANY card the human took. */
-export function isHit(offerNames, pickNames) {
-  const offer = offerNames instanceof Set ? offerNames : new Set(offerNames);
-  for (const name of pickNames) if (offer.has(name)) return true;
+export function isHit(offerIds, pickIds) {
+  const offer = offerIds instanceof Set ? offerIds : new Set(offerIds);
+  for (const id of pickIds) if (offer.has(id)) return true;
   return false;
 }
 
@@ -387,8 +388,8 @@ function dedupe(names) {
 }
 
 /**
- * Load the eval corpus exactly the way the live bundle does, plus a
- * name->card-number index for the tie-break. Returns { records, numberOf }.
+ * Load the eval corpus exactly the way the live bundle does, plus an
+ * id->card-number index for the tie-break. Returns { records, numberOf }.
  */
 export function loadCorpus() {
   const cardsV2 = parse(readText("data/tabula/cards_v2.toml")).cards;
@@ -409,12 +410,13 @@ export function loadCorpus() {
   } finally {
     console.log = realLog;
   }
-  // name -> card-number (first record wins on a duplicate name), mirroring
-  // buildNameIndex in src/data/cards-v2-database.ts.
+  // lowercased card id -> card-number, mirroring buildIdIndex in
+  // src/data/cards-v2-database.ts. Card ids are unique, so there is no
+  // duplicate-key resolution as there is for names.
   const numberOf = new Map();
   for (const card of cardsV2) {
-    if (typeof card["card-number"] === "number" && !numberOf.has(card.name)) {
-      numberOf.set(card.name, card["card-number"]);
+    if (typeof card["card-number"] === "number" && typeof card.id === "string") {
+      numberOf.set(card.id.toLowerCase(), card["card-number"]);
     }
   }
   return { records, numberOf };
@@ -491,28 +493,29 @@ function record(acc, pack, stage, hit, popHit, randP) {
  * @param evalRecords records to score (a subset for `--sample`).
  * @param allRecords the full corpus the LOO model draws OTHER mainboards from.
  * @param tuning FitTuning knobs.
- * @param numberOf name -> card number for the tie-break.
+ * @param numberOf id -> card number for the tie-break.
  */
 export function evaluate(evalRecords, allRecords, tuning, numberOf) {
   const t0 = Date.now();
   const acc = makeAccumulator();
 
   for (const rec of evalRecords) {
-    // LOO corpus: every other record's mainboard, excluding sibling seats that
-    // share this record's draftId (they share packs -> would leak the answer).
+    // LOO corpus: every other record's mainboard ids, excluding sibling seats
+    // that share this record's draftId (they share packs -> would leak the
+    // answer).
     const corpus = [];
     for (const other of allRecords) {
       if (other.draftId === rec.draftId) continue;
-      corpus.push(other.mainboard);
+      corpus.push(other.mainboardIds);
     }
     const model = buildFitModel(corpus, tuning);
 
-    const deckSoFar = []; // names, teacher-forced from the human's real picks
+    const deckSoFar = []; // ids, teacher-forced from the human's real picks
     const deckSet = new Set();
-    for (let i = 0; i < rec.picks.length; i += 1) {
-      const pickNames = rec.picks[i];
-      const packDedup = dedupe(rec.packs[i]);
-      const eligible = packDedup.length > OFFER_SIZE && pickNames.length > 0;
+    for (let i = 0; i < rec.pickIds.length; i += 1) {
+      const pickIds = rec.pickIds[i];
+      const packDedup = dedupe(rec.packIds[i]);
+      const eligible = packDedup.length > OFFER_SIZE && pickIds.length > 0;
 
       if (eligible) {
         // pickInPack is 1-based within this pack of 10 trimmed picks.
@@ -528,7 +531,7 @@ export function evaluate(evalRecords, allRecords, tuning, numberOf) {
           numberOf,
           OFFER_SIZE,
         );
-        const hit = isHit(offer, pickNames);
+        const hit = isHit(offer, pickIds);
 
         const popOffer = rankPopularity(
           packDedup,
@@ -536,12 +539,12 @@ export function evaluate(evalRecords, allRecords, tuning, numberOf) {
           numberOf,
           OFFER_SIZE,
         );
-        const popHit = isHit(popOffer, pickNames);
+        const popHit = isHit(popOffer, pickIds);
 
         // Random baseline: count the picked cards actually present in the pack.
         const packSet = new Set(packDedup);
         let hitsInPack = 0;
-        for (const n of pickNames) if (packSet.has(n)) hitsInPack += 1;
+        for (const n of pickIds) if (packSet.has(n)) hitsInPack += 1;
         const randP = randomHitProbability(
           packDedup.length,
           hitsInPack,
@@ -551,9 +554,9 @@ export function evaluate(evalRecords, allRecords, tuning, numberOf) {
         record(acc, pack, stage, hit, popHit, randP);
       }
 
-      // Teacher forcing: grow the deck by ALL names the human took (regardless
+      // Teacher forcing: grow the deck by ALL ids the human took (regardless
       // of eligibility). Empty picks add nothing.
-      for (const n of pickNames) {
+      for (const n of pickIds) {
         if (!deckSet.has(n)) {
           deckSet.add(n);
           deckSoFar.push(n);

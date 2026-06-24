@@ -1,5 +1,5 @@
-Name-based card identity in the IDF / replay / affiliation engine
-=================================================================
+Name-based card identity in the IDF / affiliation pool engine
+=============================================================
 
 Context (shared by all entries below): 24 distinct cards_v2 cards share a
 display name with another distinct card (different UUIDs, different rendered
@@ -7,23 +7,25 @@ text and rules). AGENTS.md requires identifying cards by stable UUID, never by
 name. The draft-record bundle already carries id-aligned fields (`mainboardIds`,
 `packIds`, `pickIds`, `signatureCardIds`) so consumers can key on ids.
 
-Already migrated to UUID identity (rendering paths, so the wrong card is NEVER
-shown to a player):
-  - src/components/PoolViewer.tsx        — record deck, signature cards, and
-    replay pick history resolve render targets by id.
-  - src/battle/integration/opponent-deck.ts — opponent draft signature seeds
-    read `signatureCardIds`.
-  - src/screens/QuestStartScreen.tsx     — signature-card React keys / data
-    attributes key on the id.
+Already migrated to UUID identity:
+  - Rendering paths (so the wrong card is NEVER shown to a player):
+      src/components/PoolViewer.tsx, src/battle/integration/opponent-deck.ts
+      (signature seeds), src/screens/QuestStartScreen.tsx.
+  - The record-replay / fit-model family now keys its corpus, idf, prior, and
+    co-occurrence on lowercased card ids and translates card numbers through a
+    `numberToId` / `idIndex` boundary: src/draft/replay/fit-model.ts,
+    src/draft/replay/draft-records.ts, the buildFitModel / buildReplayDraftState
+    wiring in src/data/quest-content.ts (fed `mainboardIds` / `packIds` /
+    `signatureCardIds`), its internal readers (src/battle/integration/coherence.ts,
+    opponent-deck.ts pack source + cohesion, src/journey_v2/signals/fit.ts), and
+    the offline mirror scripts/draft-replay-experiment.mjs (ported in lockstep;
+    recall@4 held at ~79-80% — slightly higher because the 24 collisions no longer
+    blend). The replay signature path now reads `signatureCardIds`.
 
-What remains is the SCORING engine, which still keys its corpora on display
-name. Impact is bounded and non-visual: a same-name collision blends two cards'
-document-frequency / affinity, slightly perturbing steering weights. It never
-renders the wrong card. The remaining work is independent of the rendering
-migration above and splits into the separate, independently-shippable issues
-below. The two scoring subsystems share ONLY the pure `idfCosine` helper, which
-is already key-agnostic (src/draft/idf-fit.ts treats keys as opaque strings), so
-neither blocks the other.
+What remains is the POOL idf-cosine engine, which still keys its corpus on
+display name. Impact is bounded and non-visual: a same-name collision blends two
+cards' document-frequency / affinity, slightly perturbing steering weights. It
+never renders the wrong card.
 
 Hard constraints that apply to every issue below:
   - Lockstep rule (AGENTS.md): an engine and its offline tuning mirror must move
@@ -32,42 +34,13 @@ Hard constraints that apply to every issue below:
   - The pick-data variants (`pickfit`/`pickearly`/`pickpos`/`pickchoice`/
     `pickcohere`/`picksig`) are ALREADY id-keyed (quest-content feeds them
     r.packIds / r.pickIds), so they are NOT part of this work.
+  - The fit-model family is done (see above); it shares ONLY the pure `idfCosine`
+    helper with the pool engine, and that helper is already key-agnostic
+    (src/draft/idf-fit.ts treats keys as opaque strings), so the work below is
+    independent of it.
 
 
-Issue 1 — Replay / fit-model family (start here)
-------------------------------------------------
-Lowest risk, highest confidence, fully self-contained. Has its own corpus, its
-own card-number boundary, and its own offline metric for verification. Needs NO
-asset-pipeline change: `mainboardIds` / `packIds` / `pickIds` are already
-bundled.
-
-Files:
-  - src/draft/replay/fit-model.ts        — corpus, idf, prior, co-occurrence,
-    neighbour-CF, and the candidate scoring are all in card-NAME space; the
-    public API already takes/returns card NUMBERS and translates at the boundary
-    via numberToName / nameIndex. Re-key the internals on lowercased UUIDs and
-    translate via a number<->id index instead.
-  - src/draft/replay/draft-records.ts    — resolveCardNames / selectReplayRecordIndex
-    / buildPackSequence key on nameIndex; move to an id index, and score
-    selectReplayRecordIndex over packIds + signatureCardIds + id-keyed idf.
-  - src/data/quest-content.ts            — buildFitModel(records.map(r => r.mainboard),
-    nameIndex) and buildReplayDraftState pass mainboard / signatureCards as
-    names. Build a UUID->cardNumber index and feed r.mainboardIds /
-    dreamcaller.signatureCardIds instead.
-  - scripts/draft-replay-experiment.mjs  — the offline recall@4 harness and the
-    source of DEFAULT_FIT_TUNING. Port to the same key space IN LOCKSTEP (it
-    already loads via buildDraftRecords, so mainboardIds/packIds/pickIds are
-    available).
-  - Tests: src/draft/replay/fit-model.test.ts, src/draft/replay/draft-records.test.ts,
-    plus any fixtures that hardcode name-keyed corpora.
-
-Verification: run `npm run draft-replay-metric` before and after; recall@4 should
-be essentially unchanged (it may shift very slightly as the 24 name collisions
-are resolved into distinct cards — that change is a correction, not a
-regression). Confirm the metric is reported and stable.
-
-
-Issue 2 — Pool idf-cosine corpus (idf / idf2 / idf3 / idf4 + affiliations)
+Issue 1 — Pool idf-cosine corpus (idf / idf2 / idf3 / idf4 + affiliations)
 --------------------------------------------------------------------------
 One atomic unit: idf2Corpus wraps idfCorpus, and idf3 / idf4 / affiliation-weights
 all read that same base corpus, so re-keying idfCorpus forces them to move
@@ -101,26 +74,23 @@ Note the decklists set is NOT identical to the fit-model corpus: decklists keeps
 every seat with a non-empty mainboard, while buildDraftRecords requires exactly
 30 trimmed picks, so the two corpora differ and cannot simply share one feed.
 
+Signature-id cleanup (fold in here): generateDreamcallerPool in
+src/data/quest-content.ts still passes dreamcaller.signatureCards (names) into
+the idf3 / sigseed signature inputs. sigseed's corpus is already id-keyed (it
+uses the pick-corpus + poolData.cardIdByName); idf3's is not. Once idfCorpus is
+id-keyed, pass the already-loaded dreamcaller.signatureCardIds instead.
+
 Verification: the coherent-growth oracle tests (variant-idf.coherent.test.ts pin
 idf3 against the idf2 oracle) plus `npm run tides-similarity`. Per AGENTS.md, do
 not add tests that pin specific production card names or TOML-derived content.
 
 
-Issue 3 — `embedded` variant (optional carve-out)
+Issue 2 — `embedded` variant (optional carve-out)
 --------------------------------------------------
-Independent of Issues 1 and 2: src/draft/pool/variant-embedded.ts reads its own
-baked artifact (data/affinity_corpus.jsonc, served as /affinity-corpus-data.json)
+Independent of Issue 1: src/draft/pool/variant-embedded.ts reads its own baked
+artifact (data/affinity_corpus.jsonc, served as /affinity-corpus-data.json)
 rather than either shared corpus.
 
 Work: re-bake the affinity corpus id-keyed and adapt variant-embedded.ts to
 score on ids (resolving display names from the id only at output). The bake is in
 scripts/setup-assets.mjs / the affinity-corpus bake path.
-
-
-Signature-id cleanup (fold into whichever of the above ships first)
--------------------------------------------------------------------
-`sigseed`'s corpus is already id-keyed (it uses the pick-corpus +
-poolData.cardIdByName); only its SIGNATURE INPUT is name-resolved. Same for the
-idf3 signature input. quest-content.ts passes dreamcaller.signatureCards (names);
-passing the already-loaded dreamcaller.signatureCardIds instead removes the last
-name-collision risk on the signature path in a few lines.

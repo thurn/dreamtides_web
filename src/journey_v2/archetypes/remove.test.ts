@@ -249,11 +249,11 @@ describe("purge — target diversity over 30 seeds", () => {
       coocNorm.set(a, row);
     }
 
-    // numberToName: cardNumber -> id (uuid used as name here)
-    const numberToName = new Map<number, string>(
+    // numberToId: cardNumber -> lowercased card id (the model's key space).
+    const numberToId = new Map<number, string>(
       allCards.map((c) => [c.cardNumber, c.id]),
     );
-    const nameIndex = new Map<string, number>(
+    const idIndex = new Map<string, number>(
       allCards.map((c) => [c.id, c.cardNumber]),
     );
 
@@ -262,8 +262,8 @@ describe("purge — target diversity over 30 seeds", () => {
       idf,
       prior,
       coocNorm,
-      numberToName,
-      nameIndex,
+      numberToId,
+      idIndex,
       tuning: {
         alpha: 1,
         beta: 1,

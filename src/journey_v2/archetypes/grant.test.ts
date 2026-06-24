@@ -61,19 +61,21 @@ function makePoolCards(poolSize: number): CardData[] {
  */
 function makeRankedFitModel(cards: readonly CardData[]): FitModel {
   const model = makeMerchantTestFitModel();
-  const numberToName = new Map<number, string>();
-  const nameIndex = new Map<string, number>();
+  // The fit model keys on an opaque card token; these synthetic tests use the
+  // card name as that token, kept consistent across every model map.
+  const numberToId = new Map<number, string>();
+  const idIndex = new Map<string, number>();
   const prior = new Map<string, number>();
   for (const card of cards) {
-    numberToName.set(card.cardNumber, card.name);
-    nameIndex.set(card.name, card.cardNumber);
+    numberToId.set(card.cardNumber, card.name);
+    idIndex.set(card.name, card.cardNumber);
     // Higher cardNumber -> higher prior so fit ranking is deterministic.
     prior.set(card.name, card.cardNumber / 100000);
   }
   return {
     ...model,
-    numberToName,
-    nameIndex,
+    numberToId,
+    idIndex,
     prior,
     tuning: { ...model.tuning, alpha: 0, beta: 0, gamma: 1 },
   };
@@ -501,8 +503,8 @@ describe("grant family — card_bundle", () => {
     // Re-register the deck cards in the model so the deck does not corrupt fit.
     const fullModel: FitModel = {
       ...model,
-      numberToName: new Map(allCards.map((c) => [c.cardNumber, c.name])),
-      nameIndex: new Map(allCards.map((c) => [c.name, c.cardNumber])),
+      numberToId: new Map(allCards.map((c) => [c.cardNumber, c.name])),
+      idIndex: new Map(allCards.map((c) => [c.name, c.cardNumber])),
     };
 
     const context = makeContext({
@@ -627,18 +629,18 @@ describe("grant family — strong_card", () => {
     spikeCardNumber: number,
   ): FitModel {
     const model = makeMerchantTestFitModel();
-    const numberToName = new Map<number, string>();
-    const nameIndex = new Map<string, number>();
+    const numberToId = new Map<number, string>();
+    const idIndex = new Map<string, number>();
     const prior = new Map<string, number>();
     for (const card of cards) {
-      numberToName.set(card.cardNumber, card.name);
-      nameIndex.set(card.name, card.cardNumber);
+      numberToId.set(card.cardNumber, card.name);
+      idIndex.set(card.name, card.cardNumber);
       prior.set(card.name, card.cardNumber === spikeCardNumber ? 1 : 0);
     }
     return {
       ...model,
-      numberToName,
-      nameIndex,
+      numberToId,
+      idIndex,
       prior,
       tuning: { ...model.tuning, alpha: 0, beta: 0, gamma: 1 },
     };

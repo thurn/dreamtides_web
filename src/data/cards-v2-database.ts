@@ -227,6 +227,24 @@ export function buildNameIndex(
 }
 
 /**
+ * Build a card-UUID -> card-number index from a v2 database, keyed on the
+ * lowercased stable card id. Card ids are unique (one per card), so unlike
+ * {@link buildNameIndex} there is no collision to resolve: two cards that share
+ * a display name keep distinct id keys here. This is the rename-stable index the
+ * record-replay fit model and draft-record helpers translate card numbers
+ * against, so a same-name collision never blends two distinct cards.
+ */
+export function buildIdIndex(
+  database: Map<number, CardData>,
+): Map<string, number> {
+  const index = new Map<string, number>();
+  for (const card of database.values()) {
+    index.set(card.id.toLowerCase(), card.cardNumber);
+  }
+  return index;
+}
+
+/**
  * Build the set of card numbers whose rarity is `Legendary`. Used by
  * {@link resolvePool} to cap legendary cards at a single copy per pool while
  * ordinary cards keep the standard two-copy allowance.

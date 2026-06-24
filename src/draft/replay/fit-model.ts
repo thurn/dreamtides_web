@@ -4,9 +4,10 @@
 // final decks. This module is pure: it builds an immutable model once from a
 // corpus of decklists, then scores each pick deterministically (no RNG, no I/O).
 //
-// Fit blends three signals, each computed in card-NAME space and then min-max
-// normalized across the candidates of a single pick so every signal speaks on a
-// comparable [0,1] scale before weighting:
+// Fit blends three signals, each computed in card-UUID space (lowercased stable
+// card ids — collision-free, so two cards that share a display name stay
+// distinct) and then min-max normalized across the candidates of a single pick
+// so every signal speaks on a comparable [0,1] scale before weighting:
 //   - neighborCF: collaborative filtering. Find the K corpus decks most similar
 //     to the current deck (IDF-cosine), then favour candidates those neighbours
 //     tend to run. This is "decks like yours also played X".
@@ -84,15 +85,16 @@ export const DEFAULT_FIT_TUNING: FitTuning = {
 
 /**
  * An immutable fit model built once from a decklist corpus. Everything here is
- * derived in card-NAME space; {@link computeReplayOffer} translates the card
- * numbers it is given through `numberToName` / `nameIndex` at the boundary.
+ * derived in card-UUID space (lowercased stable card ids); {@link
+ * computeReplayOffer} translates the card numbers it is given through
+ * `numberToId` / `idIndex` at the boundary.
  */
 export interface FitModel {
   /** Filtered corpus decks as IDF vectors, in their (filtered) corpus order. */
   decks: IdfDeck[];
-  /** idf weight per card name (0 for too-rare / too-common cards). */
+  /** idf weight per card id (0 for too-rare / too-common cards). */
   idf: Map<string, number>;
-  /** Global play-rate prior per card name: df(c) / N over filtered decks. */
+  /** Global play-rate prior per card id: df(c) / N over filtered decks. */
   prior: Map<string, number>;
   /**
    * Normalized symmetric co-occurrence lookup. `coocNorm.get(a)?.get(b)` is the
@@ -101,10 +103,10 @@ export interface FitModel {
    * the divisor differs per source card.
    */
   coocNorm: Map<string, Map<string, number>>;
-  /** Inverse of `nameIndex`: card number -> card name. */
-  numberToName: Map<number, string>;
-  /** The card-name -> card-number index the model was built against. */
-  nameIndex: ReadonlyMap<string, number>;
+  /** Inverse of `idIndex`: card number -> card id. */
+  numberToId: Map<number, string>;
+  /** The card-id -> card-number index the model was built against. */
+  idIndex: ReadonlyMap<string, number>;
   /** The tuning the model was built with. */
   tuning: FitTuning;
 }
@@ -116,18 +118,19 @@ export interface FitModel {
  * lookup are all derived from the SAME filtered set so every downstream signal
  * agrees on what the corpus is.
  *
- * @param corpusDecks Historical decks; each is a list of card names (duplicates
- *   and unknown names are tolerated — only distinct names matter).
- * @param nameIndex Card-name -> card-number index, used to translate the numeric
- *   inputs of {@link computeReplayOffer} into the name space the model lives in.
+ * @param corpusDecks Historical decks; each is a list of card ids (lowercased
+ *   stable UUIDs; duplicates and unknown ids are tolerated — only distinct ids
+ *   matter).
+ * @param idIndex Card-id -> card-number index, used to translate the numeric
+ *   inputs of {@link computeReplayOffer} into the id space the model lives in.
  * @param tuning Optional overrides for {@link DEFAULT_FIT_TUNING}.
  */
 export function buildFitModel(
   corpusDecks: readonly (readonly string[])[],
-  nameIndex: ReadonlyMap<string, number>,
+  idIndex: ReadonlyMap<string, number>,
   tuning: FitTuning = DEFAULT_FIT_TUNING,
 ): FitModel {
-  // 1. Hygiene filter in name space: keep decks whose DISTINCT-card count lands
+  // 1. Hygiene filter in id space: keep decks whose DISTINCT-card count lands
   //    in [minDeckSize, maxDeckSize]. Drops empty stubs and oversized aggregates
   //    that would distort df and co-occurrence.
   const filtered: Set<string>[] = [];
@@ -206,32 +209,32 @@ export function buildFitModel(
     coocNorm.set(a, normRow);
   }
 
-  // 6. Invert the name index for the number->name translation at the scoring
-  //    boundary. When a number maps from several names the first seen wins,
-  //    matching how the forward index resolves duplicate names.
-  const numberToName = new Map<number, string>();
-  for (const [name, number] of nameIndex) {
-    if (!numberToName.has(number)) numberToName.set(number, name);
+  // 6. Invert the id index for the number->id translation at the scoring
+  //    boundary. Card ids are unique, so each number maps from one id; the
+  //    first-seen guard is kept only for defensiveness.
+  const numberToId = new Map<number, string>();
+  for (const [id, number] of idIndex) {
+    if (!numberToId.has(number)) numberToId.set(number, id);
   }
 
-  return { decks, idf, prior, coocNorm, numberToName, nameIndex, tuning };
+  return { decks, idf, prior, coocNorm, numberToId, idIndex, tuning };
 }
 
-/** Translate card numbers to names via the model, dropping unknowns and
+/** Translate card numbers to card ids via the model, dropping unknowns and
  * deduping on first occurrence. Used for both candidates and the deck set. */
-function namesFromNumbers(
+function idsFromNumbers(
   numbers: readonly number[],
-  numberToName: Map<number, string>,
+  numberToId: Map<number, string>,
 ): string[] {
   const seen = new Set<string>();
-  const names: string[] = [];
+  const ids: string[] = [];
   for (const num of numbers) {
-    const name = numberToName.get(num);
-    if (name === undefined || seen.has(name)) continue;
-    seen.add(name);
-    names.push(name);
+    const id = numberToId.get(num);
+    if (id === undefined || seen.has(id)) continue;
+    seen.add(id);
+    ids.push(id);
   }
-  return names;
+  return ids;
 }
 
 /** Min-max normalize values to [0,1]. A constant array (max==min) yields all
@@ -259,7 +262,7 @@ function minMaxNormalize(values: readonly number[]): number[] {
  * so this returns an empty map (every candidate then scores 0).
  */
 function scoreNeighborCF(
-  candidateNames: readonly string[],
+  candidateIds: readonly string[],
   deckSet: Set<string>,
   model: Pick<FitModel, "idf" | "decks" | "tuning">,
 ): Map<string, number> {
@@ -286,12 +289,12 @@ function scoreNeighborCF(
   for (const nb of neighbors) sumSim += nb.sim;
   const denom = Math.max(sumSim, 1e-9);
 
-  for (const name of candidateNames) {
+  for (const id of candidateIds) {
     let acc = 0;
     for (const nb of neighbors) {
-      if (decks[nb.i].cards.has(name)) acc += nb.sim;
+      if (decks[nb.i].cards.has(id)) acc += nb.sim;
     }
-    scores.set(name, (acc / denom) * (idf.get(name) ?? 0));
+    scores.set(id, (acc / denom) * (idf.get(id) ?? 0));
   }
   return scores;
 }
@@ -303,7 +306,7 @@ function scoreNeighborCF(
  * partners, so this returns an empty map (every candidate then scores 0).
  */
 function scoreCooccur(
-  candidateNames: readonly string[],
+  candidateIds: readonly string[],
   deckSet: Set<string>,
   model: Pick<FitModel, "coocNorm">,
 ): Map<string, number> {
@@ -312,10 +315,10 @@ function scoreCooccur(
   if (deckSet.size === 0) return scores;
 
   const sizeDenom = Math.max(deckSet.size, 1);
-  for (const name of candidateNames) {
+  for (const id of candidateIds) {
     let acc = 0;
-    for (const d of deckSet) acc += coocNorm.get(d)?.get(name) ?? 0;
-    scores.set(name, acc / sizeDenom);
+    for (const d of deckSet) acc += coocNorm.get(d)?.get(id) ?? 0;
+    scores.set(id, acc / sizeDenom);
   }
   return scores;
 }
@@ -359,26 +362,26 @@ export function scoreCandidatesForDeck(
   deckCardNumbers: readonly number[],
   fitModel: FitModel,
 ): Map<number, CandidateFitScore> {
-  const { numberToName, nameIndex, prior, tuning } = fitModel;
+  const { numberToId, idIndex, prior, tuning } = fitModel;
 
-  // Translate candidate numbers to names, dropping unknowns and deduping.
-  const candidateNames = namesFromNumbers(candidateNumbers, numberToName);
+  // Translate candidate numbers to ids, dropping unknowns and deduping.
+  const candidateIds = idsFromNumbers(candidateNumbers, numberToId);
 
-  const toNumber = (name: string): number => nameIndex.get(name) ?? -1;
+  const toNumber = (id: string): number => idIndex.get(id) ?? -1;
 
-  // Deck set translated to names.
-  const deckSet = new Set(namesFromNumbers(deckCardNumbers, numberToName));
+  // Deck set translated to ids.
+  const deckSet = new Set(idsFromNumbers(deckCardNumbers, numberToId));
 
-  // Score each term independently in card-name space.
-  const neighborCFMap = scoreNeighborCF(candidateNames, deckSet, fitModel);
-  const cooccurMap = scoreCooccur(candidateNames, deckSet, fitModel);
+  // Score each term independently in card-id space.
+  const neighborCFMap = scoreNeighborCF(candidateIds, deckSet, fitModel);
+  const cooccurMap = scoreCooccur(candidateIds, deckSet, fitModel);
 
-  // Raw arrays in the same order as candidateNames.
-  const nfRaw = candidateNames.map((c) => neighborCFMap.get(c) ?? 0);
-  const coRaw = candidateNames.map((c) => cooccurMap.get(c) ?? 0);
+  // Raw arrays in the same order as candidateIds.
+  const nfRaw = candidateIds.map((c) => neighborCFMap.get(c) ?? 0);
+  const coRaw = candidateIds.map((c) => cooccurMap.get(c) ?? 0);
   // prior is intentionally computed over ALL cards (including idf-zeroed
   // staples) so it works as the pick-1 fallback when the deck is empty.
-  const prRaw = candidateNames.map((c) => prior.get(c) ?? 0);
+  const prRaw = candidateIds.map((c) => prior.get(c) ?? 0);
 
   // Min-max normalize each term across candidates independently.
   const nf = minMaxNormalize(nfRaw);
@@ -386,9 +389,9 @@ export function scoreCandidatesForDeck(
   const pr = minMaxNormalize(prRaw);
 
   const result = new Map<number, CandidateFitScore>();
-  for (let idx = 0; idx < candidateNames.length; idx += 1) {
-    const name = candidateNames[idx];
-    result.set(toNumber(name), {
+  for (let idx = 0; idx < candidateIds.length; idx += 1) {
+    const id = candidateIds[idx];
+    result.set(toNumber(id), {
       fit: tuning.alpha * nf[idx] + tuning.beta * co[idx] + tuning.gamma * pr[idx],
       neighborCf: nfRaw[idx],
       cooccur: coRaw[idx],
@@ -423,25 +426,25 @@ export function computeReplayOffer(
   fitModel: FitModel,
   offerSize: number,
 ): number[] {
-  const { numberToName, nameIndex } = fitModel;
+  const { numberToId, idIndex } = fitModel;
 
-  // 1. Candidates: pack numbers -> names, drop unknowns, dedupe first-seen.
-  const candidateNames = namesFromNumbers(packCardNumbers, numberToName);
+  // 1. Candidates: pack numbers -> ids, drop unknowns, dedupe first-seen.
+  const candidateIds = idsFromNumbers(packCardNumbers, numberToId);
 
-  const toNumber = (name: string): number => {
-    const num = nameIndex.get(name);
-    // Names came out of numberToName (inverse of nameIndex), so this is defined;
-    // the ?? keeps the type honest without a non-null assertion.
+  const toNumber = (id: string): number => {
+    const num = idIndex.get(id);
+    // Ids came out of numberToId (inverse of idIndex), so this is defined; the
+    // ?? keeps the type honest without a non-null assertion.
     return num ?? -1;
   };
 
   // 2. Small pack: nothing to discriminate on — return everything, sorted by
   //    card number ascending for a stable, deck-independent order.
-  if (candidateNames.length <= offerSize) {
-    return candidateNames.map(toNumber).sort((a, b) => a - b);
+  if (candidateIds.length <= offerSize) {
+    return candidateIds.map(toNumber).sort((a, b) => a - b);
   }
 
-  // 3. Deck set = picked cards ∪ signatures, translated to names and deduped.
+  // 3. Deck set = picked cards ∪ signatures, translated to ids and deduped.
   //    Signatures are folded in exactly like picks so they steer early offers.
   const allDeckNumbers = [...deckCardNumbers, ...signatureCardNumbers];
 
@@ -450,7 +453,7 @@ export function computeReplayOffer(
 
   // 5. Rank by fit desc, tie-break by card number asc, return the first
   //    `offerSize` card numbers in that order.
-  const candidateNumbers = candidateNames.map(toNumber);
+  const candidateNumbers = candidateIds.map(toNumber);
   candidateNumbers.sort(
     (a, b) => (scored.get(b)?.fit ?? 0) - (scored.get(a)?.fit ?? 0) || a - b,
   );

@@ -431,23 +431,23 @@ describe("loadQuestContent", () => {
 // buildReplayDraftState
 // ---------------------------------------------------------------------------
 
-/** Minimal DraftRecord fixture with two packs. */
-function makeRecord(id: string, packCardNames: string[][]): DraftRecord {
+/** Minimal DraftRecord fixture with two packs, keyed by card id. */
+function makeRecord(id: string, packCardIds: string[][]): DraftRecord {
   return {
     id,
     draftId: `draft-${id}`,
     sourceFile: `draft-${id}-records.json`,
-    mainboard: packCardNames.flat(),
-    mainboardIds: packCardNames.flat(),
-    packs: packCardNames,
-    picks: packCardNames.map(() => []),
-    packIds: packCardNames,
-    pickIds: packCardNames.map(() => []),
+    mainboard: packCardIds.flat(),
+    mainboardIds: packCardIds.flat(),
+    packs: packCardIds,
+    picks: packCardIds.map(() => []),
+    packIds: packCardIds,
+    pickIds: packCardIds.map(() => []),
   };
 }
 
-/** Minimal DreamcallerContent fixture. */
-function makeDreamcaller(signatureCards: string[]): DreamcallerContent {
+/** Minimal DreamcallerContent fixture; signatures are keyed by card id. */
+function makeDreamcaller(signatureCardIds: string[]): DreamcallerContent {
   return {
     id: "dc-test",
     name: "Test Dreamcaller",
@@ -455,7 +455,7 @@ function makeDreamcaller(signatureCards: string[]): DreamcallerContent {
     renderedText: "",
     imageNumber: "0001",
     startingEssence: 250,
-    signatureCards,
+    signatureCardIds,
   };
 }
 
@@ -465,62 +465,62 @@ describe("buildReplayDraftState", () => {
   const card3 = makeCard(103);
   const card4 = makeCard(104);
 
-  // Build a name index from the fixture cards.
-  const nameIndex = new Map<string, number>([
-    [card1.name, card1.cardNumber],
-    [card2.name, card2.cardNumber],
-    [card3.name, card3.cardNumber],
-    [card4.name, card4.cardNumber],
+  // Build a card-id index from the fixture cards.
+  const idIndex = new Map<string, number>([
+    [card1.id, card1.cardNumber],
+    [card2.id, card2.cardNumber],
+    [card3.id, card3.cardNumber],
+    [card4.id, card4.cardNumber],
   ]);
 
   // Two fixture records with distinct ids.
-  const recordA = makeRecord("rec-a", [[card1.name, card2.name], [card3.name]]);
-  const recordB = makeRecord("rec-b", [[card2.name, card3.name], [card4.name]]);
+  const recordA = makeRecord("rec-a", [[card1.id, card2.id], [card3.id]]);
+  const recordB = makeRecord("rec-b", [[card2.id, card3.id], [card4.id]]);
   const records: DraftRecord[] = [recordA, recordB];
 
   it("throws when draftRecords is empty", () => {
     const dc = makeDreamcaller([]);
-    expect(() => buildReplayDraftState(dc, nameIndex, "seed-1", [])).toThrow(
+    expect(() => buildReplayDraftState(dc, idIndex, "seed-1", [])).toThrow(
       "buildReplayDraftState requires at least one draft record",
     );
   });
 
   it("selects a record deterministically for a fixed seed", () => {
     const dc = makeDreamcaller([]);
-    const state1 = buildReplayDraftState(dc, nameIndex, "seed-abc", records);
-    const state2 = buildReplayDraftState(dc, nameIndex, "seed-abc", records);
+    const state1 = buildReplayDraftState(dc, idIndex, "seed-abc", records);
+    const state2 = buildReplayDraftState(dc, idIndex, "seed-abc", records);
     expect(state1.recordId).toBe(state2.recordId);
   });
 
   it("returns a mode:replay state with packSequence resolved from the chosen record", () => {
     const dc = makeDreamcaller([]);
-    const state = buildReplayDraftState(dc, nameIndex, "quest-seed-1", records);
+    const state = buildReplayDraftState(dc, idIndex, "quest-seed-1", records);
     expect(state.mode).toBe("replay");
     // recordId must be one of the fixture ids.
     expect(["rec-a", "rec-b"]).toContain(state.recordId);
     // packSequence must be resolved to card numbers.
     const chosenRecord = records.find((r) => r.id === state.recordId)!;
-    expect(state.packSequence).toHaveLength(chosenRecord.packs.length);
-    for (let i = 0; i < chosenRecord.packs.length; i += 1) {
-      const expectedNumbers = chosenRecord.packs[i]
-        .map((name) => nameIndex.get(name))
+    expect(state.packSequence).toHaveLength(chosenRecord.packIds.length);
+    for (let i = 0; i < chosenRecord.packIds.length; i += 1) {
+      const expectedNumbers = chosenRecord.packIds[i]
+        .map((cardId) => idIndex.get(cardId))
         .filter((n): n is number => n !== undefined);
       expect(state.packSequence[i]).toEqual(expectedNumbers);
     }
   });
 
   it("resolves the dreamcaller's signature cards to signatureCardNumbers", () => {
-    // dc has Card 101 and Card 103 as signatures.
-    const dc = makeDreamcaller([card1.name, card3.name]);
-    const state = buildReplayDraftState(dc, nameIndex, "quest-seed-2", records);
+    // dc has card 101 and card 103 as signatures.
+    const dc = makeDreamcaller([card1.id, card3.id]);
+    const state = buildReplayDraftState(dc, idIndex, "quest-seed-2", records);
     expect(state.signatureCardNumbers).toContain(card1.cardNumber);
     expect(state.signatureCardNumbers).toContain(card3.cardNumber);
   });
 
-  it("drops signature names not present in the name index", () => {
-    const dc = makeDreamcaller(["Unknown Card", card2.name]);
-    const state = buildReplayDraftState(dc, nameIndex, "quest-seed-3", records);
-    // Only card2's number survives; the unknown name is silently dropped.
+  it("drops signature ids not present in the id index", () => {
+    const dc = makeDreamcaller(["unknown-card", card2.id]);
+    const state = buildReplayDraftState(dc, idIndex, "quest-seed-3", records);
+    // Only card2's number survives; the unknown id is silently dropped.
     expect(state.signatureCardNumbers).toEqual([card2.cardNumber]);
   });
 
@@ -529,7 +529,7 @@ describe("buildReplayDraftState", () => {
     const dc = makeDreamcaller([]);
     const ids = new Set<string>();
     for (let i = 0; i < 20; i += 1) {
-      const state = buildReplayDraftState(dc, nameIndex, `seed-${String(i)}`, records);
+      const state = buildReplayDraftState(dc, idIndex, `seed-${String(i)}`, records);
       ids.add(state.recordId);
     }
     // Both records must appear across the 20 seeds (probability of failure ≈ 2^-19).
@@ -551,8 +551,8 @@ describe("buildReplayDraftState", () => {
       decks: [],
       prior: new Map(),
       coocNorm: new Map(),
-      numberToName: new Map(),
-      nameIndex: new Map(),
+      numberToId: new Map(),
+      idIndex: new Map(),
       tuning: {
         alpha: 1,
         beta: 0.9,
@@ -568,9 +568,9 @@ describe("buildReplayDraftState", () => {
   }
 
   it("without a fitModel the selection equals the uniform fallback", () => {
-    const dc = makeDreamcaller([card1.name]);
+    const dc = makeDreamcaller([card1.id]);
     // No fitModel → uniform seeded draw.
-    const state = buildReplayDraftState(dc, nameIndex, "quest-fm-0", records);
+    const state = buildReplayDraftState(dc, idIndex, "quest-fm-0", records);
     const expectedSeed = hashStringToSeed("quest-fm-0:replay");
     const expectedIndex = selectRecordIndex(expectedSeed, records.length);
     expect(state.recordId).toBe(records[expectedIndex].id);
@@ -582,18 +582,18 @@ describe("buildReplayDraftState", () => {
     // order [recordA, recordB] differ from the uniform order [recordB, recordA]
     // for every seed, so the choice provably depends on the fitModel. The ranking
     // math itself is covered exhaustively in draft-records.test.ts.
-    const fitModel = makeFitModelStub([[card1.name, 3.0]]);
-    const dc = makeDreamcaller([card1.name]);
+    const fitModel = makeFitModelStub([[card1.id, 3.0]]);
+    const dc = makeDreamcaller([card1.id]);
     const ordered = [recordB, recordA];
     const seed = "quest-fm-1";
 
-    const matched = buildReplayDraftState(dc, nameIndex, seed, ordered, fitModel);
-    const uniform = buildReplayDraftState(dc, nameIndex, seed, ordered);
+    const matched = buildReplayDraftState(dc, idIndex, seed, ordered, fitModel);
+    const uniform = buildReplayDraftState(dc, idIndex, seed, ordered);
     expect(matched.recordId).not.toBe(uniform.recordId);
 
     // buildReplayDraftState delegates to selectReplayRecordIndex with fitModel.idf.
     const expectedIndex = selectReplayRecordIndex(
-      dc.signatureCards ?? [],
+      dc.signatureCardIds ?? [],
       ordered,
       fitModel.idf,
       hashStringToSeed(`${seed}:replay`),
@@ -603,10 +603,10 @@ describe("buildReplayDraftState", () => {
 
   it("with a fitModel whose idf has no weight for any signature, falls back to uniform", () => {
     // All idf weights are 0 for the signature cards.
-    const fitModel = makeFitModelStub([[card1.name, 0], [card2.name, 0]]);
-    const dc = makeDreamcaller([card1.name, card2.name]);
-    const state1 = buildReplayDraftState(dc, nameIndex, "quest-fm-2", records, fitModel);
-    const state2 = buildReplayDraftState(dc, nameIndex, "quest-fm-2", records);
+    const fitModel = makeFitModelStub([[card1.id, 0], [card2.id, 0]]);
+    const dc = makeDreamcaller([card1.id, card2.id]);
+    const state1 = buildReplayDraftState(dc, idIndex, "quest-fm-2", records, fitModel);
+    const state2 = buildReplayDraftState(dc, idIndex, "quest-fm-2", records);
     // Both should pick the same record (uniform fallback in both cases).
     expect(state1.recordId).toBe(state2.recordId);
   });

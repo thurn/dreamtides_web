@@ -1,25 +1,26 @@
 // Small deterministic helpers for the record-replay draft: choosing which
-// bundled record to replay, and resolving a record's card NAMES onto the v2 card
-// NUMBERS the draft engine consumes. All pure — `selectRecordIndex` and
-// `selectReplayRecordIndex` are the only stochastic pieces and both are fully
-// determined by their seeds.
+// bundled record to replay, and resolving a record's card IDS (lowercased stable
+// UUIDs) onto the v2 card NUMBERS the draft engine consumes. Keying on ids keeps
+// two distinct cards that share a display name apart. All pure —
+// `selectRecordIndex` and `selectReplayRecordIndex` are the only stochastic
+// pieces and both are fully determined by their seeds.
 
 import type { DraftRecord } from "../../data/cards-v2-database.ts";
 import { makeRng } from "../pool/rng.ts";
 
 /**
- * Resolve a list of card names to card numbers via `nameIndex`, dropping names
- * the index does not know and deduping on first occurrence (so a number appears
- * at most once, in the order its name was first seen).
+ * Resolve a list of card ids to card numbers via `idIndex`, dropping ids the
+ * index does not know and deduping on first occurrence (so a number appears at
+ * most once, in the order its id was first seen).
  */
-export function resolveCardNames(
-  names: readonly string[],
-  nameIndex: ReadonlyMap<string, number>,
+export function resolveCardIds(
+  ids: readonly string[],
+  idIndex: ReadonlyMap<string, number>,
 ): number[] {
   const seen = new Set<number>();
   const numbers: number[] = [];
-  for (const name of names) {
-    const num = nameIndex.get(name);
+  for (const id of ids) {
+    const num = idIndex.get(id);
     if (num === undefined || seen.has(num)) continue;
     seen.add(num);
     numbers.push(num);
@@ -48,11 +49,15 @@ export const REPLAY_RECORD_SHORTLIST = 25;
  * seeded draw when there is no usable signal (no signatures, or none carry IDF
  * weight, or no idf map).
  *
- * Scoring: `score(rec) = Σ over rec.packs of Σ over c in usableSig where pack
+ * Scoring: `score(rec) = Σ over rec.packIds of Σ over c in usableSig where pack
  * contains c of idf(c)`. Equivalently, for each usable signature card, its IDF
  * weight times the number of packs in the record that contain it. Packs that
  * duplicate a signature card contribute once per pack (not per copy), which
  * rewards breadth of coverage across packs over depth in a single pack.
+ *
+ * `signatureCardIds` and the per-card `idf` map are both keyed on lowercased
+ * card ids, matching the record `packIds`, so two distinct cards that share a
+ * display name never blend.
  *
  * Records are ranked by score DESC, tie-broken by original index ASC for
  * determinism. The `shortlist` is the top `min(shortlistSize, recordCount)`
@@ -61,7 +66,7 @@ export const REPLAY_RECORD_SHORTLIST = 25;
  * different seeds yield variety within the matched shortlist.
  */
 export function selectReplayRecordIndex(
-  signatureCardNames: readonly string[],
+  signatureCardIds: readonly string[],
   draftRecords: readonly DraftRecord[],
   idf: ReadonlyMap<string, number> | undefined,
   seed: number,
@@ -72,7 +77,7 @@ export function selectReplayRecordIndex(
   // Dedupe and filter to signatures with positive IDF weight.
   const seen = new Set<string>();
   const usableSig: string[] = [];
-  for (const c of signatureCardNames) {
+  for (const c of signatureCardIds) {
     if (seen.has(c)) continue;
     seen.add(c);
     if ((idf?.get(c) ?? 0) > 0) usableSig.push(c);
@@ -91,7 +96,7 @@ export function selectReplayRecordIndex(
         // usableSig holds only cards with positive idf weight (filtered above).
         const w = idf.get(c) ?? 0;
         // Count how many packs in this record contain c (using includes per pack).
-        for (const pack of rec.packs) {
+        for (const pack of rec.packIds) {
           if (pack.includes(c)) score += w;
         }
       }
@@ -108,15 +113,14 @@ export function selectReplayRecordIndex(
 }
 
 /**
- * Resolve a record's 30 trimmed packs from card names to card numbers. The
- * bundle already holds exactly the trimmed packs, so this does NOT re-trim; it
- * only maps each pack's names through `nameIndex`, dropping unresolved names and
- * deduping within each pack on first occurrence. Pack order and count are
- * preserved.
+ * Resolve a record's 30 trimmed packs from card ids to card numbers. The bundle
+ * already holds exactly the trimmed packs, so this does NOT re-trim; it only maps
+ * each pack's ids through `idIndex`, dropping unresolved ids and deduping within
+ * each pack on first occurrence. Pack order and count are preserved.
  */
 export function buildPackSequence(
   record: DraftRecord,
-  nameIndex: ReadonlyMap<string, number>,
+  idIndex: ReadonlyMap<string, number>,
 ): number[][] {
-  return record.packs.map((pack) => resolveCardNames(pack, nameIndex));
+  return record.packIds.map((pack) => resolveCardIds(pack, idIndex));
 }

@@ -6,7 +6,7 @@ import { describe, expect, it } from "vitest";
 import type { DraftRecord } from "../../data/cards-v2-database.ts";
 import {
   buildPackSequence,
-  resolveCardNames,
+  resolveCardIds,
   selectRecordIndex,
   selectReplayRecordIndex,
 } from "./draft-records.ts";
@@ -40,8 +40,8 @@ describe("selectRecordIndex", () => {
   });
 });
 
-describe("resolveCardNames", () => {
-  it("maps names to numbers, drops unresolved, dedupes first-seen, preserves order", () => {
+describe("resolveCardIds", () => {
+  it("maps ids to numbers, drops unresolved, dedupes first-seen, preserves order", () => {
     const index = new Map<string, number>([
       ["alpha", 10],
       ["beta", 20],
@@ -49,7 +49,7 @@ describe("resolveCardNames", () => {
     ]);
     // "ghost" is unresolved (dropped); "alpha" repeats (deduped to its first
     // position); order otherwise preserved.
-    const result = resolveCardNames(
+    const result = resolveCardIds(
       ["beta", "ghost", "alpha", "alpha", "gamma"],
       index,
     );
@@ -58,7 +58,7 @@ describe("resolveCardNames", () => {
 
   it("returns an empty array when nothing resolves", () => {
     const index = new Map<string, number>([["alpha", 1]]);
-    expect(resolveCardNames(["x", "y"], index)).toEqual([]);
+    expect(resolveCardIds(["x", "y"], index)).toEqual([]);
   });
 });
 

@@ -41,18 +41,18 @@ function makePoolCards(count: number): CardData[] {
 
 function rankedFitModel(cards: readonly CardData[]): FitModel {
   const model = makeMerchantTestFitModel();
-  const numberToName = new Map<number, string>();
-  const nameIndex = new Map<string, number>();
+  const numberToId = new Map<number, string>();
+  const idIndex = new Map<string, number>();
   const prior = new Map<string, number>();
   for (const card of cards) {
-    numberToName.set(card.cardNumber, card.name);
-    nameIndex.set(card.name, card.cardNumber);
+    numberToId.set(card.cardNumber, card.name);
+    idIndex.set(card.name, card.cardNumber);
     prior.set(card.name, card.cardNumber / 100000);
   }
   return {
     ...model,
-    numberToName,
-    nameIndex,
+    numberToId,
+    idIndex,
     prior,
     tuning: { ...model.tuning, alpha: 0, beta: 0, gamma: 1 },
   };

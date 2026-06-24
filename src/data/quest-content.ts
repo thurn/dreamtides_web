@@ -23,6 +23,7 @@ import { generatePoolFromData } from "../draft/pool/generate.ts";
 import { buildPoolData } from "../draft/pool/pool-data";
 import { loadFigmentDatabase } from "./figment-database";
 import {
+  buildIdIndex,
   buildLegendaryCardNumbers,
   buildNameIndex,
   loadAffinityCorpus,
@@ -62,7 +63,7 @@ import { STARTER_CARD_NUMBERS } from "./starter-cards";
 import { buildFitModel, type FitModel } from "../draft/replay/fit-model";
 import {
   selectReplayRecordIndex,
-  resolveCardNames,
+  resolveCardIds,
   buildPackSequence,
 } from "../draft/replay/draft-records";
 import { createInitialReplayDraftState } from "../draft/draft-engine";
@@ -796,6 +797,10 @@ export async function loadQuestContent(
   // Build the name index once; reused by both poolContext and (in replay mode)
   // the fit model to avoid building it twice.
   const nameIndex = buildNameIndex(cardDatabase);
+  // The record-replay fit model keys on lowercased card ids, so it translates
+  // card numbers against this id index (collision-free) rather than the
+  // name index the pool engine uses.
+  const idIndex = buildIdIndex(cardDatabase);
   const legendaryCardNumbers = buildLegendaryCardNumbers(cardDatabase);
 
   const poolData = buildPoolData(
@@ -846,8 +851,8 @@ export async function loadQuestContent(
   const fitModel =
     draftRecords.length > 0
       ? buildFitModel(
-          draftRecords.map((r) => r.mainboard),
-          nameIndex,
+          draftRecords.map((r) => r.mainboardIds),
+          idIndex,
         )
       : undefined;
 
@@ -888,7 +893,7 @@ export async function loadQuestContent(
  */
 export function buildReplayDraftState(
   dreamcaller: DreamcallerContent,
-  nameIndex: Map<string, number>,
+  idIndex: Map<string, number>,
   questSeed: string,
   draftRecords: readonly DraftRecord[],
   fitModel?: FitModel,
@@ -897,16 +902,16 @@ export function buildReplayDraftState(
     throw new Error("buildReplayDraftState requires at least one draft record");
   }
   const index = selectReplayRecordIndex(
-    dreamcaller.signatureCards ?? [],
+    dreamcaller.signatureCardIds ?? [],
     draftRecords,
     fitModel?.idf,
     hashStringToSeed(`${questSeed}:replay`),
   );
   const record = draftRecords[index];
-  const packSequence = buildPackSequence(record, nameIndex);
-  const signatureCardNumbers = resolveCardNames(
-    dreamcaller.signatureCards ?? [],
-    nameIndex,
+  const packSequence = buildPackSequence(record, idIndex);
+  const signatureCardNumbers = resolveCardIds(
+    dreamcaller.signatureCardIds ?? [],
+    idIndex,
   );
   return createInitialReplayDraftState({
     recordId: record.id,

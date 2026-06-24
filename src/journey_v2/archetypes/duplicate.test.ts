@@ -30,13 +30,15 @@ function uuid(n: number): string {
  */
 function makeFlatFitModel(cards: readonly CardData[], cooc = 0.5): FitModel {
   const model = makeMerchantTestFitModel();
-  const numberToName = new Map<number, string>();
-  const nameIndex = new Map<string, number>();
+  const numberToId = new Map<number, string>();
+  const idIndex = new Map<string, number>();
   const idf = new Map<string, number>();
   const coocNorm = new Map<string, Map<string, number>>();
+  // The fit model keys on an opaque card token; these synthetic tests use the
+  // card name as that token, kept consistent across every model map.
   for (const card of cards) {
-    numberToName.set(card.cardNumber, card.name);
-    nameIndex.set(card.name, card.cardNumber);
+    numberToId.set(card.cardNumber, card.name);
+    idIndex.set(card.name, card.cardNumber);
     idf.set(card.name, 1);
   }
   for (const a of cards) {
@@ -47,7 +49,7 @@ function makeFlatFitModel(cards: readonly CardData[], cooc = 0.5): FitModel {
     }
     coocNorm.set(a.name, row);
   }
-  return { ...model, numberToName, nameIndex, idf, coocNorm };
+  return { ...model, numberToId, idIndex, idf, coocNorm };
 }
 
 function makeContext(input: {

@@ -2,6 +2,7 @@ import { generateInitialAtlas } from "../atlas/atlas-generator";
 import { toQuestDreamcaller } from "../data/dreamcaller-selection";
 import { buildDreamcallerPackage, buildReplayDraftState } from "../data/quest-content";
 import type { QuestContent } from "../data/quest-content";
+import { buildIdIndex } from "../data/cards-v2-database";
 import { STARTER_CARD_NUMBERS } from "../data/starter-cards";
 import {
   DEFAULT_DRAFT_CONFIG,
@@ -496,7 +497,10 @@ export function startQuestFromDreamcaller({
   const draftState = useReplayDraft
     ? buildReplayDraftState(
         dreamcaller,
-        poolContext.nameIndex,
+        // The replay state resolves record pack ids and the Dreamcaller's
+        // signature card ids against a lowercased-id index, matching the
+        // id-keyed fit model.
+        buildIdIndex(questContent.cardDatabase),
         seed,
         questContent.draftRecords ?? [],
         questContent.fitModel,
