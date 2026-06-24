@@ -60,23 +60,6 @@ generate.ts, quest-content.ts, src/types/content.ts, the provenance types in
 src/draft/pool/types.ts, and the UI that reads the provenance, plus their tests.
 
 
-Issue 3 — pool-metrics.mjs analytical helpers key on display name
------------------------------------------------------------------
-Two metrics in scripts/pool-metrics.mjs (separate from the idf engine, which now
-feeds them the id corpus) still identify cards by name:
-  - `dominantSignatureTheme(dc.signatureCards, meta)` (called at ~line 907 and
-    ~226) looks each signature card up by name via `supportEntryByName`.
-  - `computeDreamcaller` / `archetypeSupportSet(ctx.decklists, sig, ...)` (~line
-    1486) learns a Dreamcaller's archetype-support set from the NAME decklist
-    corpus with name signatures.
-
-Fix: key both on UUIDs — pass `dc.signatureCardIds`, index buildaround_support
-by its UUID key, and learn the archetype-support set from
-`public/decklist-ids-data.json` — resolving names only for display. `scorePool`
-itself is fine: it scores the engine's name-resolved pool output, which is the
-pool the player actually receives.
-
-
 ================================================================================
 Codebase-wide card-name-identity audit (2026-06-24)
 ================================================================================

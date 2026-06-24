@@ -86,6 +86,19 @@ export function supportEntryByName(meta, name) {
 }
 
 /**
+ * Look up a `buildaround_support.json` card entry directly by its cards_v2
+ * UUID (case-insensitive). `buildaround_support.json` is natively keyed by
+ * lowercase UUID, so this is an O(1) lookup that avoids the name-index
+ * altogether — and is safe when two distinct cards share a display name.
+ *
+ * Returns `undefined` when the UUID is not in the support metadata (neutral
+ * cards are simply absent from the file).
+ */
+export function supportEntryById(meta, id) {
+  return (meta.cards ?? {})[id.toLowerCase()];
+}
+
+/**
  * Strip an optional trailing `# comment` and surrounding whitespace from a
  * corpus line. Returns the leading token (a UUID, or a bare card name during
  * migration), or "" for a blank/comment-only line.

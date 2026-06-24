@@ -113,7 +113,7 @@ import {
   validateTides4Decks,
   validateTides5Decks,
 } from "../src/draft/pool/index.ts";
-import { stripJsonComments, supportEntryByName } from "./lib/card-refs.mjs";
+import { stripJsonComments, supportEntryById, supportEntryByName } from "./lib/card-refs.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const readJson = (p) => JSON.parse(readFileSync(resolve(ROOT, p), "utf8"));
@@ -220,11 +220,15 @@ export const SMALL_THEME_COPIES = 2;
  * (not from whatever incidental support share the grown pool ends up with).
  * Returns null for a neutral Dreamcaller (no signature, or none of its signature
  * cards carry a theme tag).
+ *
+ * @param signatureCardIds  The Dreamcaller's `signatureCardIds` array (stable
+ *   cards_v2 UUIDs). Keyed on UUID so two distinct cards with the same display
+ *   name are never merged in the tally.
  */
-export function dominantSignatureTheme(signatureCards, meta) {
+export function dominantSignatureTheme(signatureCardIds, meta) {
   const tally = new Map();
-  for (const name of signatureCards ?? []) {
-    const entry = supportEntryByName(meta, name);
+  for (const id of signatureCardIds ?? []) {
+    const entry = supportEntryById(meta, id);
     if (!entry) continue;
     for (const t of entry.supports ?? []) tally.set(t, (tally.get(t) ?? 0) + 1);
     for (const n of entry.needs ?? []) tally.set(n.theme, (tally.get(n.theme) ?? 0) + 1);
@@ -781,6 +785,10 @@ function resolveMetric(argv) {
 /** Load the shared inputs every metric reads, applying any `--dreamcaller` filter. */
 function loadContext(argv) {
   const cards = readJson("public/cards_v2-data.json");
+  // Build an id->name lookup so callers can resolve a UUID to its display name
+  // at the render boundary (the only place names should appear).
+  const idToName = new Map();
+  for (const card of cards) idToName.set(card.id.toLowerCase(), card.name);
   const decklists = readJson("public/decklists-data.json");
   // The IDF-cosine variants score on the id-keyed corpus; feed it so the metric
   // reflects the same pools production builds. The grown pools come back keyed by
@@ -857,7 +865,7 @@ function loadContext(argv) {
   if (existsSync(tides5Path)) {
     poolData.tides5Decks = validateTides5Decks(readJsonc("data/tides5.jsonc"));
   }
-  return { dreamcallers, meta, poolData, decklists };
+  return { dreamcallers, meta, poolData, decklists, decklistIds, idToName };
 }
 
 /**
@@ -904,7 +912,7 @@ function computeAdequacy(ctx, { seeds, poolSize, variant, allowedThemes }) {
   for (const dc of ctx.dreamcallers) {
     steeredByDc.set(
       dc.name,
-      dominantSignatureTheme(dc.signatureCards, ctx.meta) !== null,
+      dominantSignatureTheme(dc.signatureCardIds, ctx.meta) !== null,
     );
   }
 
@@ -1481,13 +1489,24 @@ function computeDreamcaller(
   const supportByDc = new Map();
   const coldStart = [];
   for (const dc of ctx.dreamcallers) {
-    const sig = dc.signatureCards ?? [];
+    // Use the UUID id array (lowercased to match the corpus keys) so two cards
+    // with the same display name are never conflated in the lift computation.
+    const sig = (dc.signatureCardIds ?? []).map((id) => id.toLowerCase());
     if (!sig.length) continue; // neutral: no identity to learn
-    const set = archetypeSupportSet(ctx.decklists, sig, { k, lift, presence });
+    const set = archetypeSupportSet(ctx.decklistIds, sig, { k, lift, presence });
     if (set.sigDeckCount < minDecks || set.cards.size === 0) {
       coldStart.push({ name: dc.name, sigDeckCount: set.sigDeckCount, support: set.cards.size });
       continue;
     }
+    // Translate the UUID support set to display names so it can be compared
+    // against pool.counts (which the pool generator always resolves to names).
+    // UUIDs with no current display name (deleted cards) are silently dropped.
+    const cardNames = new Set();
+    for (const id of set.cards) {
+      const name = ctx.idToName.get(id);
+      if (name !== undefined) cardNames.add(name);
+    }
+    set.cardNames = cardNames;
     // big5 (scored on density toward `target`, kept at 50%) vs small (cannot
     // reach `target`, so rides along and is scored on full-playset
     // completeness) -- derived purely from the learned support-set size.
@@ -1509,11 +1528,11 @@ function computeDreamcaller(
     let score;
     let hit;
     if (set.kind === "big5") {
-      measure = supportSetShare(pool.counts, set.cards);
+      measure = supportSetShare(pool.counts, set.cardNames);
       score = target > 0 ? Math.min(1, measure / target) : measure >= 1 ? 1 : 0;
       hit = measure >= target;
     } else {
-      measure = supportSetCompleteness(pool.counts, set.cards);
+      measure = supportSetCompleteness(pool.counts, set.cardNames);
       score = measure; // completeness is already 0..1
       hit = measure >= 1;
     }
