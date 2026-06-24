@@ -39,9 +39,19 @@ export function loadCardMaps(cardsV2TomlPath) {
       throw new Error(`cards_v2 card "${String(card.name)}" is missing an id`);
     }
     idToName.set(card.id, card.name);
-    // First record wins on a duplicate name; references only need one
-    // representative card per name.
-    if (!nameToId.has(card.name)) nameToId.set(card.name, card.id);
+    // First record wins on a duplicate name. When two distinct UUIDs share a
+    // display name, emit a warning so ingestion runs surface the collision: the
+    // name-only source data path (cubecobra decklists) cannot disambiguate them
+    // without cardNumber-tagged input.
+    if (!nameToId.has(card.name)) {
+      nameToId.set(card.name, card.id);
+    } else if (nameToId.get(card.name) !== card.id) {
+      console.warn(
+        `[loadCardMaps] display-name collision: "${card.name}" is shared by UUIDs ` +
+          `${nameToId.get(card.name)} (kept) and ${card.id} (ignored in nameToId). ` +
+          `Name-only source data will resolve to one arbitrary card.`,
+      );
+    }
   }
   return { idToName, nameToId };
 }
@@ -56,7 +66,17 @@ export function mapsFromCards(cards) {
   const nameToId = new Map();
   for (const card of cards) {
     idToName.set(card.id, card.name);
-    if (!nameToId.has(card.name)) nameToId.set(card.name, card.id);
+    // First record wins on a duplicate name. Warn on collision so callers can
+    // see which display names are shared by two distinct UUIDs.
+    if (!nameToId.has(card.name)) {
+      nameToId.set(card.name, card.id);
+    } else if (nameToId.get(card.name) !== card.id) {
+      console.warn(
+        `[mapsFromCards] display-name collision: "${card.name}" is shared by UUIDs ` +
+          `${nameToId.get(card.name)} (kept) and ${card.id} (ignored in nameToId). ` +
+          `Name-only source data will resolve to one arbitrary card.`,
+      );
+    }
   }
   return { idToName, nameToId };
 }

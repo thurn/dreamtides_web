@@ -419,6 +419,11 @@ export function buildKnownGoodDecklists(manifestPath, draftRecordsAdaptedDir, ca
  * Build id<->name lookup maps from the parsed cards_v2 records. The `id` UUID is
  * the stable key every card-reference system uses; the maps resolve a reference
  * back to the current display name (and let a tolerant reader accept a bare name).
+ *
+ * When two distinct UUIDs share a display name, `nameToId` keeps the first-seen
+ * UUID (first-writer-wins) and emits a console.warn listing the collision so
+ * ingestion runs surface exactly which cards are being merged through the
+ * name-only source data path.
  */
 export function buildCardMaps(cardsV2) {
   const idToName = new Map();
@@ -428,7 +433,15 @@ export function buildCardMaps(cardsV2) {
       throw new Error(`cards_v2 card "${String(card.name)}" is missing an id`);
     }
     idToName.set(card.id, card.name);
-    if (!nameToId.has(card.name)) nameToId.set(card.name, card.id);
+    if (!nameToId.has(card.name)) {
+      nameToId.set(card.name, card.id);
+    } else if (nameToId.get(card.name) !== card.id) {
+      console.warn(
+        `[buildCardMaps] display-name collision: "${card.name}" is shared by UUIDs ` +
+          `${nameToId.get(card.name)} (kept) and ${card.id} (ignored in nameToId). ` +
+          `Name-only source data will resolve to one arbitrary card.`,
+      );
+    }
   }
   return { idToName, nameToId };
 }
