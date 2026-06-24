@@ -99,7 +99,9 @@ tested viewport sizes.
 
 # Deploy
 
-Deploy the prototype to production with `npm run build && firebase deploy --only hosting`; the production build needs a populated `.env` (gitignored) with the `VITE_FIREBASE_*` config, and the build fails fast if those vars are missing.
+Deploy the prototype to production with `npm run deploy` (`scripts/deploy.sh`). It runs every step needed to make production match local: builds `dist/`, deploys it to Firebase Hosting, and uploads the binary art to the Storage bucket. Art is served from the bucket — not Hosting — so a Hosting-only deploy leaves newly-keyed art 404ing; `npm run deploy` covers both origins.
+
+The build needs a populated `.env` + `.env.production` (gitignored) with the `VITE_FIREBASE_*` config and `VITE_ASSET_BASE_URL`, and fails fast if those vars are missing. The art upload needs an authenticated `gcloud` with write access to the bucket (`gcloud auth login`; see docs/quest_prototype/asset-hosting.md).
 
 # Documentation style
 
