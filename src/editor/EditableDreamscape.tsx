@@ -7,9 +7,14 @@ import {
   guidePortraitUrl,
 } from "../atlas/atlas-display";
 import type { SiteType } from "../types/quest";
+import DreamscapeResidents, {
+  type ResidentAssignmentStatus,
+} from "./DreamscapeResidents";
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";
 import type {
   AffiliationOption,
+  DreamcallerAssignmentAction,
+  DreamcallerOption,
   DreamscapeCardSize,
   EditableDreamscapeField,
   EditorDreamscapeRecord,
@@ -22,6 +27,14 @@ export interface EditableDreamscapeProps {
   guides: GuideOption[];
   affiliations: AffiliationOption[];
   siteTypes: string[];
+  dreamcallers: DreamcallerOption[];
+  regionNameByDreamcaller: Map<string, string>;
+  residentStatus: ResidentAssignmentStatus;
+  onAssignDreamcaller: (
+    record: EditorDreamscapeRecord,
+    action: DreamcallerAssignmentAction,
+    params: { inId?: string; outId?: string },
+  ) => void;
   saveEntryFor: (field: EditableDreamscapeField) => EditableFieldSaveEntry | null;
   onFieldBeginEdit: (
     record: EditorDreamscapeRecord,
@@ -178,6 +191,10 @@ export default function EditableDreamscape({
   guides,
   affiliations,
   siteTypes,
+  dreamcallers,
+  regionNameByDreamcaller,
+  residentStatus,
+  onAssignDreamcaller,
   saveEntryFor,
   onFieldBeginEdit,
   onFieldDraftChange,
@@ -493,6 +510,17 @@ export default function EditableDreamscape({
               ))}
             </div>
           </div>
+        ) : null}
+
+        {!record.isStarter ? (
+          <DreamscapeResidents
+            record={record}
+            size={size}
+            dreamcallers={dreamcallers}
+            regionNameByDreamcaller={regionNameByDreamcaller}
+            status={residentStatus}
+            onAssign={(action, params) => onAssignDreamcaller(record, action, params)}
+          />
         ) : null}
       </div>
     </article>

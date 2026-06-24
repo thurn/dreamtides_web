@@ -13,9 +13,12 @@ import { fileURLToPath } from "node:url";
 import {
   DEFAULT_DREAMSCAPE_TOML_PATH,
   SITE_TYPES,
+  applyDreamcallerChanges,
   makeValidateDreamscapeEdit,
   patchDreamscapesToml,
+  planDreamcallerAssignment,
   readAffiliationOptions,
+  readDreamcallerOptions,
   readDreamGuideOptions,
   readEditorDreamscapes,
   refreshDreamscapesDataJson,
@@ -75,8 +78,13 @@ function routeForRawPath(rawPath) {
     return { ok: true, resource: "collection" };
   }
 
-  const encodedSegment = rawPath.slice(BASE_PATH.length + 1);
-  if (encodedSegment.length === 0 || encodedSegment.includes("/")) {
+  const remainder = rawPath.slice(BASE_PATH.length + 1);
+  // A dreamcaller-assignment route is `${BASE_PATH}/:id/dreamcallers`; the bare
+  // record route is `${BASE_PATH}/:id`.
+  const segments = remainder.split("/");
+  const isDreamcallerRoute = segments.length === 2 && segments[1] === "dreamcallers";
+
+  if (remainder.length === 0 || (segments.length > 1 && !isDreamcallerRoute)) {
     return {
       ok: false,
       statusCode: 404,
@@ -87,7 +95,7 @@ function routeForRawPath(rawPath) {
 
   let dreamscapeId;
   try {
-    dreamscapeId = decodeURIComponent(encodedSegment);
+    dreamscapeId = decodeURIComponent(segments[0]);
   } catch {
     return {
       ok: false,
@@ -105,6 +113,10 @@ function routeForRawPath(rawPath) {
       message: "Route dreamscape id must be a canonical slug.",
       details: { id: dreamscapeId },
     };
+  }
+
+  if (isDreamcallerRoute) {
+    return { ok: true, resource: "dreamcallers", dreamscapeId };
   }
 
   return { ok: true, resource: "dreamscape", dreamscapeId };
@@ -249,8 +261,104 @@ function collectionPayload(rootDir, dreamscapeTomlPath) {
     dreamscapes: readEditorDreamscapes({ rootDir, dreamscapeTomlPath }),
     guides: readDreamGuideOptions({ rootDir }),
     affiliations: readAffiliationOptions({ rootDir }),
+    dreamcallers: readDreamcallerOptions({ rootDir }),
     siteTypes: SITE_TYPES,
   };
+}
+
+function assertAssignmentBody(body) {
+  if (body === null || typeof body !== "object" || Array.isArray(body)) {
+    return { ok: false, message: "Request body must be a JSON object." };
+  }
+  if (body.action !== "replace" && body.action !== "add" && body.action !== "remove") {
+    return { ok: false, message: 'action must be "replace", "add", or "remove".' };
+  }
+  if (body.inId !== undefined && typeof body.inId !== "string") {
+    return { ok: false, message: "inId must be a Dreamcaller id string." };
+  }
+  if (body.outId !== undefined && typeof body.outId !== "string") {
+    return { ok: false, message: "outId must be a Dreamcaller id string." };
+  }
+  return { ok: true };
+}
+
+async function handleDreamcallerAssignment(
+  req,
+  res,
+  rootDir,
+  dreamscapeId,
+  dreamscapeTomlPath,
+  fileSystem,
+) {
+  let body;
+  try {
+    body = await readJsonRequest(req);
+  } catch (error) {
+    if (error.code === "INVALID_JSON") {
+      errorResponse(res, 400, "INVALID_JSON", error.message);
+      return;
+    }
+    throw error;
+  }
+
+  const bodyResult = assertAssignmentBody(body);
+  if (!bodyResult.ok) {
+    errorResponse(res, 400, "INVALID_REQUEST", bodyResult.message);
+    return;
+  }
+
+  const totalStart = performance.now();
+  const dreamscapes = readEditorDreamscapes({ rootDir, dreamscapeTomlPath });
+  if (!dreamscapes.some((dreamscape) => dreamscape.id === dreamscapeId)) {
+    errorResponse(res, 404, "DREAMSCAPE_NOT_FOUND", "Dreamscape was not found.", {
+      id: dreamscapeId,
+    });
+    return;
+  }
+
+  const dreamcallers = readDreamcallerOptions({ rootDir });
+  const catalogIds = dreamcallers.map((dreamcaller) => dreamcaller.id);
+  const nameById = new Map(
+    dreamcallers.map((dreamcaller) => [dreamcaller.id.toLowerCase(), dreamcaller.name]),
+  );
+
+  const plan = planDreamcallerAssignment(dreamscapes, catalogIds, {
+    action: body.action,
+    dreamscapeId,
+    inId: body.inId,
+    outId: body.outId,
+  });
+  if (!plan.ok) {
+    errorResponse(res, 400, "INVALID_ASSIGNMENT", plan.message);
+    return;
+  }
+
+  const tomlPath = join(rootDir, dreamscapeTomlPath);
+  const source = fileSystem.readFileSync(tomlPath, "utf8");
+  const patchedSource = applyDreamcallerChanges(source, plan.changes, nameById);
+
+  const refreshesJson = dreamscapeTomlPath === DEFAULT_DREAMSCAPE_TOML_PATH;
+  const writes = [preparedWrite(tomlPath, patchedSource)];
+  if (refreshesJson) {
+    const dreamscapesJson = generateDreamscapesDataJsonFromToml(patchedSource, fileSystem);
+    writes.push(preparedWrite(join(rootDir, DREAMSCAPE_JSON_PATH), dreamscapesJson));
+  }
+  commitFiles(writes, fileSystem);
+
+  // Logged so a Dreamcaller reassignment can be reconstructed: the action, the
+  // callers moved, and every region whose roster changed.
+  console.log(
+    `[dreamscape-editor] ${body.action} on ${dreamscapeId}` +
+      `${body.inId !== undefined ? ` in=${body.inId}` : ""}` +
+      `${body.outId !== undefined ? ` out=${body.outId}` : ""}` +
+      ` -> changed [${plan.changes.map((change) => change.id).join(", ")}]`,
+  );
+
+  jsonResponse(res, 200, {
+    dreamscapes: readEditorDreamscapes({ rootDir, dreamscapeTomlPath }),
+    changed: plan.changes.map((change) => change.id),
+    timing: { totalMs: elapsedMs(totalStart) },
+  });
 }
 
 async function handlePatch(req, res, rootDir, dreamscapeId, dreamscapeTomlPath, fileSystem) {
@@ -408,7 +516,25 @@ export function createDreamscapeEditorApiMiddleware({
         return;
       }
 
-      methodNotAllowed(res, route.resource === "collection" ? ["GET"] : ["PATCH"]);
+      if (req.method === "POST" && route.resource === "dreamcallers") {
+        await handleDreamcallerAssignment(
+          req,
+          res,
+          rootDir,
+          route.dreamscapeId,
+          dreamscapeTomlPath,
+          fileSystem,
+        );
+        return;
+      }
+
+      const allowed =
+        route.resource === "collection"
+          ? ["GET"]
+          : route.resource === "dreamcallers"
+            ? ["POST"]
+            : ["PATCH"];
+      methodNotAllowed(res, allowed);
     } catch (error) {
       errorResponse(res, 500, "SAVE_FAILED", error instanceof Error ? error.message : "Save failed.");
     }

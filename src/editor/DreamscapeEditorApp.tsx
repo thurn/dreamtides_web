@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  assignDreamscapeDreamcaller,
   loadEditorDreamscapes,
   saveEditorDreamscapeField,
 } from "./dreamscape-editor-api";
@@ -23,6 +24,7 @@ import {
 } from "./save-state";
 import type { EditableFieldValue, EditableSaveState } from "./save-state";
 import type {
+  DreamcallerAssignmentAction,
   DreamscapeCatalog,
   DreamscapeDisplayState,
   EditableDreamscapeField,
@@ -33,6 +35,7 @@ import type { DreamscapeEditorApiClient } from "./dreamscape-types";
 const DEFAULT_DREAMSCAPE_API_CLIENT: DreamscapeEditorApiClient = {
   loadEditorDreamscapes,
   saveEditorDreamscapeField,
+  assignDreamscapeDreamcaller,
 };
 
 type LoadStatus =
@@ -136,6 +139,9 @@ export default function DreamscapeEditorApp({
   const [loadAttempt, setLoadAttempt] = useState(0);
   const [saveState, setSaveState] = useState<EditableSaveState>(EMPTY_EDITOR_SAVE_STATE);
   const saveStateRef = useRef(saveState);
+  // Per-dreamscape resident-reassignment feedback (one in-flight op at a time).
+  const [residentPendingId, setResidentPendingId] = useState<string | null>(null);
+  const [residentErrors, setResidentErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     let cancelled = false;
@@ -172,6 +178,18 @@ export default function DreamscapeEditorApp({
     () => filteredDreamscapes(dreamscapes, displayState),
     [dreamscapes, displayState],
   );
+
+  // Lowercased Dreamcaller id -> the name of the region that currently hosts it,
+  // so each resident picker can show where a caller lives before it is moved.
+  const regionNameByDreamcaller = useMemo(() => {
+    const map = new Map<string, string>();
+    for (const dreamscape of dreamscapes) {
+      for (const dreamcallerId of dreamscape.dreamcallerIds) {
+        map.set(dreamcallerId.toLowerCase(), dreamscape.name);
+      }
+    }
+    return map;
+  }, [dreamscapes]);
 
   function setEditorSaveState(
     updater: (current: EditableSaveState) => EditableSaveState,
@@ -268,6 +286,49 @@ export default function DreamscapeEditorApp({
         },
       };
     });
+  }
+
+  function handleAssignDreamcaller(
+    record: EditorDreamscapeRecord,
+    action: DreamcallerAssignmentAction,
+    params: { inId?: string; outId?: string },
+  ) {
+    if (residentPendingId !== null) {
+      return;
+    }
+    setResidentPendingId(record.id);
+    setResidentErrors((current) => {
+      const { [record.id]: _removed, ...rest } = current;
+      return rest;
+    });
+
+    void apiClient
+      .assignDreamscapeDreamcaller({
+        dreamscapeId: record.id,
+        action,
+        ...params,
+      })
+      .then((response) => {
+        // A reassignment can move a caller between two regions, so the response
+        // returns the full roster; re-sync every dreamscape from it.
+        setLoadStatus((current) =>
+          current.kind === "loaded"
+            ? {
+                kind: "loaded",
+                catalog: { ...current.catalog, dreamscapes: response.dreamscapes },
+              }
+            : current,
+        );
+      })
+      .catch((error: unknown) => {
+        setResidentErrors((current) => ({
+          ...current,
+          [record.id]: errorMessageFor(error),
+        }));
+      })
+      .finally(() => {
+        setResidentPendingId((current) => (current === record.id ? null : current));
+      });
   }
 
   function handleFieldSave(
@@ -454,6 +515,13 @@ export default function DreamscapeEditorApp({
                       guides={catalog.guides}
                       affiliations={catalog.affiliations}
                       siteTypes={catalog.siteTypes}
+                      dreamcallers={catalog.dreamcallers}
+                      regionNameByDreamcaller={regionNameByDreamcaller}
+                      residentStatus={{
+                        pending: residentPendingId === record.id,
+                        message: residentErrors[record.id] ?? null,
+                      }}
+                      onAssignDreamcaller={handleAssignDreamcaller}
                       saveEntryFor={(field) =>
                         fieldSaveEntry(saveState, { cardId: record.id, field })
                       }

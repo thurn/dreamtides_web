@@ -1,6 +1,8 @@
 import { EditorApiRequestError, editorTomlParam } from "./editor-api";
 import type { EditorApiErrorBody } from "./types";
 import type {
+  DreamcallerAssignmentRequest,
+  DreamcallerAssignmentResponse,
   DreamscapeCatalog,
   LoadEditorDreamscapesResponse,
   SaveEditorDreamscapeFieldRequest,
@@ -77,6 +79,7 @@ export async function loadEditorDreamscapes(
     dreamscapes: body.dreamscapes,
     guides: body.guides,
     affiliations: body.affiliations,
+    dreamcallers: body.dreamcallers,
     siteTypes: body.siteTypes,
   };
 }
@@ -97,4 +100,26 @@ export async function saveEditorDreamscapeField(
   );
 
   return readJsonResponse<SaveEditorDreamscapeFieldResponse>(response);
+}
+
+export async function assignDreamscapeDreamcaller(
+  request: DreamcallerAssignmentRequest,
+): Promise<DreamcallerAssignmentResponse> {
+  const response = await fetch(
+    withTomlParam(`/api/editor/dreamscapes/${request.dreamscapeId}/dreamcallers`),
+    {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        action: request.action,
+        ...(request.inId !== undefined ? { inId: request.inId } : {}),
+        ...(request.outId !== undefined ? { outId: request.outId } : {}),
+      }),
+    },
+  );
+
+  return readJsonResponse<DreamcallerAssignmentResponse>(response);
 }
