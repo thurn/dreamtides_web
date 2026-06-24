@@ -226,29 +226,12 @@ export async function loadTides2Relationships(
 }
 
 /**
- * Build a card-name -> card-number index from a v2 database. When two records
- * share a name the first wins; the draft pool only needs one representative
- * per name.
- */
-export function buildNameIndex(
-  database: Map<number, CardData>,
-): Map<string, number> {
-  const index = new Map<string, number>();
-  for (const card of database.values()) {
-    if (!index.has(card.name)) {
-      index.set(card.name, card.cardNumber);
-    }
-  }
-  return index;
-}
-
-/**
  * Build a card-UUID -> card-number index from a v2 database, keyed on the
- * lowercased stable card id. Card ids are unique (one per card), so unlike
- * {@link buildNameIndex} there is no collision to resolve: two cards that share
- * a display name keep distinct id keys here. This is the rename-stable index the
- * record-replay fit model and draft-record helpers translate card numbers
- * against, so a same-name collision never blends two distinct cards.
+ * lowercased stable card id. Card ids are unique (one per card), so there is no
+ * collision to resolve: two cards that share a display name keep distinct id
+ * keys here. This is the rename-stable index the record-replay fit model and
+ * draft-record helpers translate card numbers against, so a same-name collision
+ * never blends two distinct cards.
  */
 export function buildIdIndex(
   database: Map<number, CardData>,

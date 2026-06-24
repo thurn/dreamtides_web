@@ -2,7 +2,6 @@ import { describe, expect, it } from "vitest";
 import { makeBattleTestCardDatabase, makeBattleTestDreamcallers, makeBattleTestSite, makeBattleTestState } from "../test-support";
 import { createBattleInit, type CreateBattleInitInput } from "./create-battle-init";
 import { deriveBattleSeed } from "../random";
-import { buildNameIndex } from "../../data/cards-v2-database";
 import type { DraftRecord } from "../../data/cards-v2-database";
 import { buildFitModel, type FitModel } from "../../draft/replay/fit-model";
 import { buildPoolData } from "../../draft/pool/pool-data";
@@ -62,7 +61,12 @@ function makeSteeredPoolContext(): {
   decklistB: string[];
 } {
   const cardDatabase = makeBattleTestCardDatabase();
-  const nameIndex = buildNameIndex(cardDatabase);
+  // Synthetic corpus tokens are unique card names, so a local name -> cardNumber
+  // index serves as the collision-free id index the fit model resolves against.
+  const nameIndex = new Map<string, number>();
+  for (const card of cardDatabase.values()) {
+    if (!nameIndex.has(card.name)) nameIndex.set(card.name, card.cardNumber);
+  }
   const byNumber = (n: number): string => {
     const card = cardDatabase.get(n);
     if (card === undefined) throw new Error(`missing test card #${String(n)}`);

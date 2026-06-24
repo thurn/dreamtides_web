@@ -25,7 +25,7 @@ import type { DreamsignProfile } from "../src/data/dreamsign-profiles";
 import type { QuestContent } from "../src/data/quest-content";
 import { buildFitModel } from "../src/draft/replay/fit-model";
 import type { FitModel } from "../src/draft/replay/fit-model";
-import { buildNameIndex } from "../src/data/cards-v2-database";
+import { buildIdIndex } from "../src/data/cards-v2-database";
 import { STARTER_CARD_NUMBERS } from "../src/data/starter-cards";
 import type { CardData } from "../src/types/cards";
 import type { DreamsignTemplate } from "../src/types/content";
@@ -105,7 +105,7 @@ function readJson<T>(file: string): T {
 
 interface RawDraftRecord {
   id: string;
-  mainboard: string[];
+  mainboardIds: string[];
   pickIds: string[][];
 }
 
@@ -191,12 +191,15 @@ function buildQuestContent(): {
 
   const records = readJson<RawDraftRecord[]>("draft-records-data.json");
 
-  const nameIndex = buildNameIndex(cardDatabase);
+  // Mirror production (quest-content.ts): score fit over UUID-keyed mainboards
+  // translated through the collision-free id index, so a deck containing a card
+  // that shares a display name with another scores identically to live play.
+  const idIndex = buildIdIndex(cardDatabase);
   // Live fit corpus = all record mainboards (no per-record leave-one-out),
-  // matching quest-content.ts:502.
+  // matching quest-content.ts.
   const fitModel: FitModel = buildFitModel(
-    records.map((r) => r.mainboard),
-    nameIndex,
+    records.map((r) => r.mainboardIds),
+    idIndex,
   );
 
   const merchantCorpus = loadMerchantCorpusFromDisk();

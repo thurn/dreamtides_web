@@ -16,7 +16,7 @@ import {
   selectOpponentDreamcaller,
 } from "./opponent-deck";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
-import { buildIdIndex, buildNameIndex } from "../../data/cards-v2-database";
+import { buildIdIndex } from "../../data/cards-v2-database";
 import type { DraftRecord } from "../../data/cards-v2-database";
 import { buildFitModel, type FitModel } from "../../draft/replay/fit-model";
 import { buildPoolData } from "../../draft/pool/pool-data";
@@ -68,7 +68,12 @@ function makeCorpus(db: Map<number, CardData>): {
   fitModel: FitModel;
   draftRecords: DraftRecord[];
 } {
-  const nameIndex = buildNameIndex(db);
+  // Synthetic corpus tokens are unique card names, so a local name -> cardNumber
+  // index serves as the collision-free id index the fit model resolves against.
+  const nameIndex = new Map<string, number>();
+  for (const card of db.values()) {
+    if (!nameIndex.has(card.name)) nameIndex.set(card.name, card.cardNumber);
+  }
   const alpha = ALPHA_CARDS.map((n) => nameOf(db, n));
   const beta = BETA_CARDS.map((n) => nameOf(db, n));
 
