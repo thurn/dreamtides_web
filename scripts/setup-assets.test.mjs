@@ -19,10 +19,88 @@ import {
   setupAssets,
   stripJsonComments,
   transformCard,
+  validateDreamcallerMapping,
 } from "./setup-assets.mjs";
 
 afterEach(() => {
   vi.restoreAllMocks();
+});
+
+describe("validateDreamcallerMapping", () => {
+  // Synthetic fixtures only — this exercises the invariant logic, never the
+  // production TOML, so editing the real mapping cannot break these tests.
+  const scape = (id, dreamcallerIds, isStarter = false) => ({
+    id,
+    isStarter,
+    dreamcallerIds,
+  });
+
+  it("accepts a starter plus 3-4 caller regions and returns per-region counts", () => {
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    const counts = validateDreamcallerMapping(
+      [
+        scape("starter", [], true),
+        scape("a", ["dc-1", "dc-2", "dc-3"]),
+        scape("b", ["dc-4", "dc-5", "dc-6", "dc-7"]),
+      ],
+      ["dc-1", "dc-2", "dc-3", "dc-4", "dc-5", "dc-6", "dc-7"],
+    );
+    expect(counts).toEqual({ starter: 0, a: 3, b: 4 });
+    expect(console.warn).not.toHaveBeenCalled();
+  });
+
+  it("matches ids case-insensitively", () => {
+    vi.spyOn(console, "warn").mockImplementation(() => {});
+    validateDreamcallerMapping(
+      [scape("a", ["DC-1", "dc-2", "Dc-3"])],
+      ["dc-1", "DC-2", "dc-3"],
+    );
+    expect(console.warn).not.toHaveBeenCalled();
+  });
+
+  it("throws when one Dreamcaller is assigned to two dreamscapes", () => {
+    expect(() =>
+      validateDreamcallerMapping(
+        [
+          scape("a", ["dc-1", "dc-2", "dc-3"]),
+          scape("b", ["dc-3", "dc-4", "dc-5"]),
+        ],
+        ["dc-1", "dc-2", "dc-3", "dc-4", "dc-5"],
+      ),
+    ).toThrow(/assigned to both/);
+  });
+
+  it("throws when a non-starter region has fewer than 3 or more than 4", () => {
+    expect(() =>
+      validateDreamcallerMapping([scape("a", ["dc-1", "dc-2"])], [
+        "dc-1",
+        "dc-2",
+      ]),
+    ).toThrow(/must have 3-4/);
+    expect(() =>
+      validateDreamcallerMapping(
+        [scape("a", ["dc-1", "dc-2", "dc-3", "dc-4", "dc-5"])],
+        ["dc-1", "dc-2", "dc-3", "dc-4", "dc-5"],
+      ),
+    ).toThrow(/must have 3-4/);
+  });
+
+  it("throws when the starter dreamscape lists residents", () => {
+    expect(() =>
+      validateDreamcallerMapping([scape("starter", ["dc-1"], true)], ["dc-1"]),
+    ).toThrow(/starter dreamscape/);
+  });
+
+  it("warns (does not throw) on unknown and unassigned ids", () => {
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+    validateDreamcallerMapping(
+      [scape("a", ["dc-1", "dc-2", "ghost"])],
+      ["dc-1", "dc-2", "dc-orphan"],
+    );
+    const messages = warn.mock.calls.map((call) => call[0]).join("\n");
+    expect(messages).toMatch(/resolve to no Dreamcaller/);
+    expect(messages).toMatch(/not assigned to any dreamscape/);
+  });
 });
 
 describe("setupAssets", () => {

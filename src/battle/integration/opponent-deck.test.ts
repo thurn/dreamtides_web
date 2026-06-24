@@ -226,6 +226,7 @@ function makeAffiliationContent(db: ReadonlyMap<number, CardData>): {
       affiliationId: "alpha_affiliation",
       siteIcon: "",
       isStarter: false,
+      dreamcallerIds: [],
     },
   ];
   const baseState = makeBattleTestState();

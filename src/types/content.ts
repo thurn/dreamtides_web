@@ -46,6 +46,11 @@ export interface DreamsignTemplate {
  * starter dreamscape (`isStarter`) opens every run with a `fixedSites` sequence
  * and carries no guide or affiliation; every other dreamscape has a resident
  * `guideId` and a thematic `affiliationId`.
+ *
+ * `dreamcallerIds` lists the 3-4 Dreamcallers resident in this region (empty for
+ * the starter). Across all dreamscapes these lists partition
+ * dreamcallers_v2.toml: every non-starter Dreamcaller appears under exactly one
+ * dreamscape, an invariant the asset build enforces.
  */
 export interface DreamscapeContent {
   id: string;
@@ -57,6 +62,7 @@ export interface DreamscapeContent {
   siteIcon: string;
   isStarter: boolean;
   fixedSites?: SiteType[];
+  dreamcallerIds: string[];
 }
 
 /**

@@ -451,6 +451,92 @@ export function validateCardIds(keys, idToName, label) {
 }
 
 /**
+ * Enforce the dreamscape <-> Dreamcaller mapping invariant at build time:
+ * non-starter dreamscapes partition `dreamcallers_v2.toml` into resident groups.
+ * `dreamscapes` are the transformed dreamscape records and `dreamcallerIds` the
+ * set of every real Dreamcaller id. Fatal violations depend only on
+ * `dreamscapes.toml` itself, so a routine edit elsewhere can never trip them:
+ * the same Dreamcaller listed under two dreamscapes, the starter carrying
+ * residents, or a non-starter region outside the 3-4 band. Referential checks
+ * against the Dreamcaller set are non-fatal warnings instead, because the build
+ * may run against a reduced Dreamcaller fixture (the asset tests swap one in): a
+ * `dreamcaller-id` that resolves to no Dreamcaller, and a Dreamcaller assigned
+ * to no dreamscape, are each reported as a warning. In a full production build
+ * both files are real, so a stray id surfaces as paired warnings (the bad id is
+ * unknown and the orphaned Dreamcaller is unassigned). Ids are compared
+ * case-insensitively. Returns a `{ id -> count }` summary for logging.
+ */
+export function validateDreamcallerMapping(dreamscapes, dreamcallerIds) {
+  const known = new Map(
+    [...dreamcallerIds].map((id) => [id.toLowerCase(), id]),
+  );
+  const assignedTo = new Map(); // lowercased dreamcaller id -> dreamscape id
+  const unknown = [];
+  const counts = {};
+
+  for (const scape of dreamscapes) {
+    const ids = scape.dreamcallerIds ?? [];
+    counts[scape.id] = ids.length;
+
+    if (scape.isStarter) {
+      if (ids.length > 0) {
+        throw new Error(
+          `dreamscapes.toml: starter dreamscape "${scape.id}" must not list ` +
+            `dreamcaller-ids (found ${String(ids.length)})`,
+        );
+      }
+      continue;
+    }
+
+    if (ids.length < 3 || ids.length > 4) {
+      throw new Error(
+        `dreamscapes.toml: dreamscape "${scape.id}" has ${String(ids.length)} ` +
+          `dreamcaller-ids; each non-starter region must have 3-4`,
+      );
+    }
+
+    for (const rawId of ids) {
+      const key = rawId.toLowerCase();
+      if (!known.has(key)) {
+        unknown.push(`${rawId} (${scape.id})`);
+        continue;
+      }
+      const prior = assignedTo.get(key);
+      if (prior !== undefined) {
+        throw new Error(
+          `dreamscapes.toml: dreamcaller ${rawId} is assigned to both ` +
+            `"${prior}" and "${scape.id}"; each Dreamcaller belongs to exactly ` +
+            `one dreamscape`,
+        );
+      }
+      assignedTo.set(key, scape.id);
+    }
+  }
+
+  if (unknown.length > 0) {
+    console.warn(
+      `WARNING: dreamscapes.toml references ${String(unknown.length)} ` +
+        `dreamcaller id(s) that resolve to no Dreamcaller: ` +
+        `${unknown.slice(0, 5).join(", ")}` +
+        (unknown.length > 5 ? ", ..." : ""),
+    );
+  }
+
+  const unassigned = [...known.entries()]
+    .filter(([key]) => !assignedTo.has(key))
+    .map(([, id]) => id);
+  if (unassigned.length > 0) {
+    console.warn(
+      `WARNING: ${String(unassigned.length)} dreamcaller(s) are not assigned ` +
+        `to any dreamscape: ${unassigned.slice(0, 5).join(", ")}` +
+        (unassigned.length > 5 ? ", ..." : ""),
+    );
+  }
+
+  return counts;
+}
+
+/**
  * Default starting essence used when a Dreamcaller TOML record omits a
  * `starting-essence` value. Mirrors `DEFAULT_STARTING_ESSENCE` in
  * `src/types/content.ts`.
@@ -632,7 +718,9 @@ export function transformDreamsignProfile(profile) {
  * Convert a TOML dreamscape record to its runtime JSON representation. Keys are
  * renamed kebab->camel. The starter dreamscape omits `guide-id`/`affiliation-id`
  * in the TOML; those normalize to `null` so the runtime always sees an explicit
- * value, and `is-starter` defaults to `false` for the non-starter regions.
+ * value, and `is-starter` defaults to `false` for the non-starter regions. A
+ * dreamscape without `dreamcaller-ids` (the starter) normalizes to an empty
+ * list so the runtime always sees an array.
  */
 export function transformDreamscape(dreamscape) {
   const result = {};
@@ -642,6 +730,7 @@ export function transformDreamscape(dreamscape) {
   if (result.guideId == null) result.guideId = null;
   if (result.affiliationId == null) result.affiliationId = null;
   if (typeof result.isStarter !== "boolean") result.isStarter = false;
+  if (!Array.isArray(result.dreamcallerIds)) result.dreamcallerIds = [];
   return result;
 }
 
@@ -1207,6 +1296,21 @@ export function setupAssets({
   }
 
   const jsonDreamscapes = allDreamscapes.map(transformDreamscape);
+  // Enforce the resident-Dreamcaller invariant: non-starter dreamscapes
+  // partition dreamcallers_v2.toml into 3-4 per region with no Dreamcaller in
+  // two regions. `jsonDreamcallersV2` was parsed above, so its ids are the
+  // authoritative set checked against.
+  const dreamcallerCounts = validateDreamcallerMapping(
+    jsonDreamscapes,
+    jsonDreamcallersV2.map((dreamcaller) => dreamcaller.id),
+  );
+  for (const scape of jsonDreamscapes) {
+    if (scape.isStarter) continue;
+    console.log(
+      `  ${scape.id}: ${String(dreamcallerCounts[scape.id])} dreamcallers` +
+        ` -> ${scape.dreamcallerIds.join(", ")}`,
+    );
+  }
   writeFileSync(
     dreamscapesJsonPath,
     JSON.stringify(jsonDreamscapes, null, 2) + "\n",
