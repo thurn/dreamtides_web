@@ -1,125 +1,51 @@
-Card-name-identity audit — resolved
-====================================
+Follow-up: tides4 / tides5 curated annotations need a re-annotation pass
+========================================================================
 
-The codebase-wide audit of name-keyed card identity (Issues 1-14) is resolved.
-All engine, journeys, editor, pool-variant, and script sites that used a card's
-display name as an identity key have been migrated to UUID or cardNumber keys,
-with display names resolved only at the final render boundary.
+Correcting the signature resolution in the tides bake (UUID-keyed
+`signatureCardIds` instead of the name-keyed first-writer-wins fallback) changed
+the baked pools for 5 Dreamcallers' signature tides and re-selected/renumbered
+the facet tides. The hand-curated identity annotations (shortName, displayName,
+displayDescription, summary, description, color) are carried forward by stable
+tide id, so for the tides whose card contents changed those annotations now
+DESCRIBE THE OLD CONTENTS and should be regenerated.
 
-Residual: ingestion-boundary name fallback (Issue 14b) — defensive only,
-not exercised by current data
-----------------------------------------------------------------------
-scripts/setup-assets.mjs:buildCardMaps and scripts/lib/card-refs.mjs
-(loadCardMaps and mapsFromCards) build a `nameToId` map (display name -> UUID)
-so a tolerant reader can canonicalize a bare card name to a UUID. This is
-leftover scaffolding from the one-time name -> UUID migration; the migration is
-complete and every current source data path is UUID-keyed, so this is NOT a live
-correctness bug.
+These are the tides whose carried-forward annotations are stale (contents
+changed under the corrected signatures):
 
-The `nameToId` map is only ever READ on the name-fallback branch
-  const id = CARD_ID_RE.test(token) ? token : nameToId.get(token);
-i.e. only for a token that is not already a UUID. No current data reaches that
-branch:
-  * The adapted draft records (docs/draft_records_adapted/, the canonical
-    corpus) are entirely UUID-keyed: a scan finds 459,632 UUID tokens and 0
-    bare-name tokens across every mainboard/pick/packCards array.
-  * Dreamcaller `signature-cards` in dreamcallers_v2.toml are authored as
-    stable UUIDs, so resolveToken takes the UUID path.
-  * The merchant-corpus bake reads those same UUID-keyed records via
-    buildDraftRecords.
-So `nameToId.get(token)` is never called on production data; the first-writer-
-wins collision can only ever fire on hypothetical name-only input that nothing
-currently supplies. The remaining theoretical exposure is a developer hand-
-feeding a name-keyed list to a dev tool (e.g. similar-pool.mjs parseDeck), where
-a colliding name would resolve to one arbitrary card; resolveToken throws on an
-unknown token, so a dangling reference fails loudly rather than dropping
-silently.
+data/tides4.jsonc (22 tides):
+  tide-sig-03 (Kragg signature), tide-sig-04 (Vrakmoth signature),
+  tide-sig-06 (Corvath signature), tide-sig-08 (Vaela signature),
+  tide-sig-20 (Valdren signature),
+  tide-fac-10, tide-fac-11, tide-fac-14, tide-fac-19, tide-fac-20,
+  tide-fac-21, tide-fac-22, tide-fac-23, tide-fac-24, tide-fac-25,
+  tide-fac-26, tide-fac-27, tide-fac-28, tide-fac-29, tide-fac-30,
+  tide-fac-31, tide-fac-32.
 
-The three functions emit a console.warn whenever two cards_v2.toml records share
-a display name. This warning fires from MAP CONSTRUCTION, not from any actual
-misresolution: as of this audit 24 display names are each shared by two distinct
-UUIDs, so 24 warnings print on every asset-regen run regardless of whether any
-data references those names. The "will resolve to one arbitrary card" wording
-overstates the situation — with all current data UUID-keyed, no resolution to an
-arbitrary card occurs.
+data/tides5.jsonc (10 tides):
+  tide-sig-03 (Kragg signature), tide-sig-04 (Vrakmoth signature),
+  tide-sig-06 (Corvath signature), tide-sig-08 (Vaela signature),
+  tide-sig-20 (Valdren signature),
+  tide-fac-08, tide-fac-12, tide-fac-13, tide-fac-16, tide-fac-29.
 
-Recommended cleanup (code change deferred): drop the `nameToId` name-fallback
-entirely and require UUID tokens everywhere (throw on a non-UUID token), which
-removes both the dead branch and the 24 noisy warnings in one move. Until then,
-this entry stands as documentation that the fallback is defensive, not a live
-collision. The adapted draft records and merchant corpus all key on UUIDs and
-are the preferred data source for every algorithm.
+Re-run the LLM annotation pass for these tides (the bake preserves any updated
+annotations by tide id on the next re-bake).
 
 
-Re-audit 2026-06-24 — additional name-keyed structures found
-=============================================================
+Pre-existing: spine-redundancy-experiment.mjs port is not faithful
+==================================================================
 
-A second sweep for Maps/Sets keyed by a Dreamtides display name (collisions
-where two distinct UUIDs share a name) surfaced two residuals not covered by the
-Issue 1-14 migration. Production code itself is clean — every live identity path
-(quest-content.ts, the idf/seed/sigseed/embedded pool corpus, opponent decks)
-keys on the stable cards_v2 UUID. The two residuals below are a divergent
-analysis script and a latent fallback map.
+scripts/spine-redundancy-experiment.mjs carries a hand "re-port" of the
+`decklists` pool variant and self-checks it against the real algorithm
+(`generatePoolFromData`) before reporting. That self-check aborts with
+"PORT IS NOT FAITHFUL" (0/200 pools identical, off by a few cards per pool).
 
-Issue 15: merchant-experiment.ts builds the fit model on a name-keyed index
----------------------------------------------------------------------------
-scripts/merchant-experiment.ts:194-200 builds the merchant fit model with
-  buildFitModel(records.map((r) => r.mainboard), nameIndex)
-where `nameIndex = buildNameIndex(cardDatabase)` is the name -> cardNumber index
-in src/data/cards-v2-database.ts:233-243. `buildNameIndex` keys the catalog by
-display name and keeps the first card per name ("When two records share a name
-the first wins"), so any record mainboard that references a duplicate-name card
-is translated to whichever UUID was seen first.
-
-This diverges from production: src/data/quest-content.ts:912-918 builds the same
-fit model with `buildFitModel(draftRecords.map((r) => r.mainboardIds), idIndex)`
-— UUID-keyed mainboards translated through the collision-free `buildIdIndex`
-(cards-v2-database.ts:253). The experiment harness is meant to mirror production
-(its own comment cites the production call site), but its name-keyed path can
-score a different fit than production for any deck containing a shared-name card.
-
-`buildNameIndex` has no non-test production consumers other than this script;
-quest-content.ts and the rest of the engine use `buildIdIndex`. Fix: switch
-merchant-experiment.ts to `record.mainboardIds` + `buildIdIndex(cardDatabase)`
-(matching production), after which `buildNameIndex` is reachable only from tests
-and can be removed. Two integration tests (create-battle-init.test.ts,
-opponent-deck.test.ts) currently call `buildNameIndex` over synthetic databases
-whose names are unique by construction, so they are unaffected but should be
-moved to `buildIdIndex` alongside the script.
-
-Issue 16: latent name -> UUID fallback map in the draft pool builder
---------------------------------------------------------------------
-src/draft/pool/pool-data.ts:66-76 builds `cardIdByName: Map<string, string>`
-(display name -> UUID, first writer wins on name collisions) onto `PoolData`.
-Consumers: variant-seed.ts:85 (`cardIdByName?.get(name) ?? name`),
-variant-picksig.ts:107 (legacy signature-name fallback),
-variant-embedded.ts:57 and variant-sigseed.ts:113 (passed through).
-
-In production this map is inert: the idf/seed corpus is built from
-`poolData.decklistIds` (UUIDs) — variant-idf.ts:93 prefers `decklistIds` and
-only falls back to name-keyed `decklists` for synthetic test PoolData — and a
-Dreamcaller's `signatureCardIds` are already UUIDs, so every `cardIdByName.get`
-lookup is handed a UUID, misses the name-keyed map, and returns the UUID
-unchanged. The first-writer-wins collision can therefore only collapse two
-distinct same-name cards in the name-fallback path that runs for synthetic or
-legacy name-only PoolData, never on the live UUID corpus.
-
-It is a latent footgun rather than an active bug: the structure exists solely to
-service the name-keyed fallback, and any future caller that feeds it real
-display names would silently merge same-name cards. Preferred resolution is to
-delete the name-fallback path and require UUID-keyed corpus/signature input
-everywhere (the `decklists`/name source is already legacy versus `decklistIds`),
-removing `cardIdByName`/`cardNameById` from `PoolData`.
-
-Reviewed and confirmed NOT name-key bugs
------------------------------------------
-- src/journeys/ui/referencedCards.ts:128 `cardsByName` is `Map<string,
-  CardContent[]>` and stores EVERY card matching a scraped name, emitting all
-  candidates rather than collapsing to one. Journey option text is a rendered
-  flat string with no threaded UUIDs, so name-scraping is unavoidable here; the
-  array value is the correct collision-safe mitigation.
-- The idf/affinity corpus maps (variant-idf.ts, affinity-corpus-io.ts) and df /
-  prior / affinity maps are keyed on the UUID corpus, not names.
-- Synthetic test fixtures (journey_v2/archetypes/*.test.ts and the battle
-  integration tests) use card name as an opaque token because their fabricated
-  cards have no UUIDs and unique names by construction; not catalog identity.
+This is pre-existing, not introduced by the card-identity cleanup. On master the
+port translated the (already UUID-keyed) archLists/draftLists through a
+name -> UUID map, which dropped every member (0 of 82 kept for a sampled slug),
+so the port ran with empty archetype/color lists and was already unfaithful. The
+cleanup made the port read those UUID-keyed lists directly, which is strictly
+closer to the real algorithm, but the hand port still drifts from the live
+`decklists` variant in other ways. The experiment is a dormant dev tool (not in
+the build pipeline, lint, typecheck, or test suite). Resolving it means re-syncing
+the port with the current `decklists` variant or replacing it with a call into
+the real generator.
