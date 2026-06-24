@@ -33,17 +33,13 @@ Ignore all metadata systems on cards like "tides", "tags",
 "archetypes", etc. These are all legacy. Tides no longer
 exist.
 
-Please always identify cards by UUID, *never* by card name. A lot of our
-legacy algorithm code does this and it's a huge nightmare to support.
+Please always identify cards by UUID, *never* by card name.
 
-This is not stylistic: dozens of distinct cards share a display name with
-another card (different UUIDs, different rules), so any map, corpus, set,
-dedup key, similarity score, or lookup keyed on a name silently merges those
-cards — corrupting algorithm output and, at a render or selection site,
-surfacing the wrong card. Key every data structure, corpus, and lookup on the
-UUID and resolve the display name only at the final render boundary; treat any
-new `Map<cardName, …>`, name-keyed array, or `card.name ===` comparison as a
-bug to fix before you commit, not a shortcut to take.
+Card names ARE NOT UNIQUE. Creating a map or set keyed by card name
+or comparing card names for equality is ALWAYS A BUG. Eradicate
+this practice proactively when spotted. Names should be resolved
+immediately before display in the UI, all other code should use
+UUIDs.
 
 # Generation
 

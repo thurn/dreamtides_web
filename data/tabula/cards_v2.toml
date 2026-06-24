@@ -5029,7 +5029,7 @@ card-number = 272
 art = { x = 0.441, y = -0.361, scale = 1.87 }
 
 [[cards]]
-name = "Cinderblade Legionnaire"
+name = "Sunrise Strummer"
 mtg-name = "Bitterbloom Bearer"
 id = "22ebb4fe-483f-4bd2-b0cf-a2d0ea934ebf"
 rendered-text = """
@@ -5041,11 +5041,11 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = 1
-tags = ["Figment Maker", "Art Rework", "June24", "Art Duplicate"]
-image-number = 337161542
+tags = ["Figment Maker", "Art Rework", "June24", "Art Duplicate", "Art OK"]
+image-number = 612667703
 art-owned = false
 card-number = 273
-art = { x = 0, y = 1, scale = 1.27 }
+art = { x = 0.833, y = 1, scale = 1.37 }
 
 [[cards]]
 name = "Wondrous Clearing"
