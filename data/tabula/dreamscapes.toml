@@ -170,7 +170,7 @@ site-icon = "game-icons.net/sbed/scales"
 dreamcaller-ids = [
   "133E22DD-F81B-406D-B4E3-98C346D7FD4E", # Kell Tarn
   "9E4862FD-E18C-463E-9D5F-E5D73C29A66F", # Karev Soltis
-  "8A2FCD65-BBA7-459C-A6B0-F0391B9293FD", # Calloway Flint
+  "81954CA0-DA36-49DD-915C-1CCB1B2D7B05", # Kael Voss
 ]
 
 [[dreamscapes]]
@@ -187,7 +187,7 @@ site-icon = "game-icons.net/sbed/two-coins"
 # the station's gamble-for-tempo identity.
 dreamcaller-ids = [
   "9E19B3D1-12F2-43C1-9CB1-08DE7CD32E32", # Serenath Veyl
-  "81954CA0-DA36-49DD-915C-1CCB1B2D7B05", # Kael Voss
+  "8A2FCD65-BBA7-459C-A6B0-F0391B9293FD", # Calloway Flint
   "B99936CA-97F9-4930-AF5A-FA9EF92557EF", # Threxan
 ]
 
