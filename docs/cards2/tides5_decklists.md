@@ -2420,7 +2420,7 @@ This tide is built around a dense curve of inexpensive survivors whose arrival a
 - 1× Break the Veil
 - 1× Skull Weaver
 
-## Lean: Sunset Chronicler — Counterspell Outsider Draw
+## Lean: Sunset Chronicler — Spirit Animal Flood
 
 `tide-fac-09` — facet tide, 42 distinct cards, 44 copies
 
@@ -2471,7 +2471,7 @@ Tide-fac-07 runs an even split of events and characters (22/23) built around two
 - 1× Sunset Chronicler
 - 1× Lord of Hidden Paths
 
-## Lean: Paradox Enforcer — Spirit Animal Swarm
+## Lean: Paradox Enforcer — Void Recursion Finisher
 
 `tide-fac-10` — facet tide, 42 distinct cards, 45 copies
 
@@ -2522,7 +2522,7 @@ Tide-fac-08 is an 80% character tide built almost entirely around spirit animals
 - 1× Lord of Hidden Paths
 - 1× Scrap Reclaimer
 
-## Lean: Pattern Seeker — Ephemeral Copy Engine
+## Lean: Pattern Seeker — Discard Reclaim Engine
 
 `tide-fac-11` — facet tide, 40 distinct cards, 45 copies
 
@@ -2571,7 +2571,7 @@ Tide-fac-28 is built around a tight loop anchored by its 2x card The Ringleader 
 - 1× Forgotten Sleeper
 - 1× Wandering Archivist
 
-## Lean: Architect of Memory — Warrior Sacrifice Ramp
+## Lean: Architect of Memory — Discard Event Engine
 
 `tide-fac-12` — facet tide, 44 distinct cards, 45 copies
 
@@ -2624,7 +2624,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Wandering Archivist
 - 1× Immortal Reaper
 
-## Lean: Harbor Warden — Abandon Disruption
+## Lean: Harbor Warden — Dissolution Loop Warriors
 
 `tide-fac-13` — facet tide, 41 distinct cards, 45 copies
 
@@ -2674,7 +2674,7 @@ Tide-fac-19 is a character-heavy facet (32 characters, 13 events) built around a
 - 1× Ethereal Trailblazer
 - 1× Tranquil Duelist
 
-## Lean: Eternal Stag — Abandon Draw Engine
+## Lean: Eternal Stag — Spirit Animal Pump
 
 `tide-fac-14` — facet tide, 40 distinct cards, 44 copies
 
@@ -2723,7 +2723,7 @@ Tide-fac-31 is almost entirely characters (41 of 45 cards), built around a dense
 - 1× Lord of Hidden Paths
 - 1× Scrap Reclaimer
 
-## Lean: Kindred Sparks — Spirit Animal Pump
+## Lean: Kindred Sparks — Abandon Energy Ramp
 
 `tide-fac-15` — facet tide, 39 distinct cards, 44 copies
 
@@ -2919,7 +2919,7 @@ Tide-fac-16 is almost entirely characters (43 of 45 copies), nearly all warriors
 - 1× Containment Specialist
 - 1× Tranquil Duelist
 
-## Lean: Unleashed Destruction — Dissolution Loop Warriors
+## Lean: Unleashed Destruction — Ephemeral Copy Engine
 
 `tide-fac-19` — facet tide, 43 distinct cards, 45 copies
 
@@ -3301,7 +3301,7 @@ Tide-fac-26 is a character-heavy survivor tide built around the abandon trigger 
 - 1× Break the Veil
 - 1× Skull Weaver
 
-## Lean: Specter of Silent Snow — Discard Event Engine
+## Lean: Specter of Silent Snow — Abandon Draw Engine
 
 `tide-fac-27` — facet tide, 40 distinct cards, 43 copies
 
@@ -3395,7 +3395,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Forgotten Sleeper
 - 1× Wandering Archivist
 
-## Lean: Oracle of Shifting Skies — Warrior Sacrifice Ramp
+## Lean: Oracle of Shifting Skies — Event Copy Ramp
 
 `tide-fac-29` — facet tide, 44 distinct cards, 45 copies
 
@@ -3539,7 +3539,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Lord of Hidden Paths
 - 1× Scrap Reclaimer
 
-## Lean: Watcher in the Ruins — Discard Token Engine
+## Lean: Watcher in the Ruins — Survivor Figment Engine
 
 `tide-fac-32` — facet tide, 38 distinct cards, 44 copies
 
