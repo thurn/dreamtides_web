@@ -348,9 +348,9 @@ function run() {
   const noSignal = [];
   let sigIdx = 0;
   for (const dc of dreamcallers) {
-    const signature = dc.signatureCards ?? [];
+    const signature = dc.signatureCardIds ?? [];
     if (signature.length === 0) continue;
-    const keys = [...resolveSignatureToCorpus(corpus, signature, poolData.cardIdByName)].sort();
+    const keys = [...resolveSignatureToCorpus(corpus, signature)].sort();
     if (keys.length === 0) {
       noSignal.push(dc.name);
       continue;

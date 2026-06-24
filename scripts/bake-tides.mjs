@@ -571,7 +571,7 @@ function run() {
 
   // Pass decklistIds as the 4th arg so idfCorpus keys the IDF table and decks
   // on card UUIDs rather than display names. Display names are resolved only at
-  // the final render boundary via poolData.cardNameById / cardIdByName.
+  // the final render boundary via poolData.cardNameById.
   const poolData = buildPoolData(cards, decklists, undefined, decklistIds);
   const corpus = idfCorpus(poolData);
   if (!corpus) {
@@ -627,18 +627,16 @@ function run() {
   const favoredTidesByDreamcaller = {};
   const noSignal = [];
   for (const dc of dreamcallers) {
-    const signature = dc.signatureCards ?? [];
-    // Resolve display names → UUIDs; keep only those with a non-zero IDF weight.
+    const signature = dc.signatureCardIds ?? [];
+    // Signature cards are cards_v2 UUIDs, matched in the corpus's lowercased UUID
+    // key space; keep only those with a non-zero IDF weight.
     const probeIds = new Set(
       signature
-        .map((name) => poolData.cardIdByName?.get(name))
-        .filter((id) => id !== undefined && idfOf(id) > 0),
+        .map((id) => id.toLowerCase())
+        .filter((id) => idfOf(id) > 0),
     );
     const droppedSig = signature.filter(
-      (name) => {
-        const id = poolData.cardIdByName?.get(name);
-        return id === undefined || idfOf(id) === 0;
-      },
+      (id) => idfOf(id.toLowerCase()) === 0,
     );
     if (droppedSig.length > 0) {
       console.warn(

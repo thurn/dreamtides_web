@@ -26,11 +26,11 @@
 //
 // Cards are identified by their stable cards_v2 UUID, not by display name, so a
 // card rename never shifts the draw, the growth tie-breaks, or the provenance.
-// The decklist corpus arrives keyed by current name; this variant translates it
-// into UUID space on the way in (`PoolData.cardIdByName`) and emits the finished
-// pool keyed by UUID (the `CardId` output contract), which the downstream
-// resolver maps to card numbers through the id index. When the source cards carry
-// no id (some experiments and tests), the corpus keys are opaque ids throughout.
+// The decklist corpus arrives keyed by UUID (`PoolData.decklistIds`) and the
+// variant emits the finished pool keyed by UUID (the `CardId` output contract),
+// which the downstream resolver maps to card numbers through the id index. When
+// the source cards carry no id (some experiments and tests), the corpus keys are
+// opaque ids throughout.
 
 import {
   type AffinityCorpus,
@@ -78,27 +78,26 @@ function buildSeedCorpus(poolData: PoolData): AffinityCorpus | null {
   let result: AffinityCorpus | null = null;
   if (corpus && corpus.decks.length > 0) {
     const { decks, idf } = corpus;
-    // IDF weights are keyed by the corpus's display names; identity (df, affinity,
-    // prior, every map key below) is keyed by the rename-proof card key.
-    const idfOf = (name: string): number => idf.get(name) ?? 0;
-    const keyOf = (name: string): string =>
-      poolData.cardIdByName?.get(name) ?? name;
+    // The corpus and its IDF weights are keyed by each card's rename-proof UUID,
+    // so identity (df, affinity, prior, every map key below) keys on the corpus
+    // token directly.
+    const idfOf = (key: string): number => idf.get(key) ?? 0;
     const n = decks.length;
 
     // Document frequency per card key, and the play-rate prior derived from it.
-    // Counted once per deck per key, so two names that share a key (a duplicate
-    // display name) do not inflate the frequency.
+    // Counted once per deck per key, so a card contributes to its key once per
+    // deck.
     const df = new Map<string, number>();
     for (const deck of decks) {
       const keys = new Set<string>();
-      for (const c of deck.cards) keys.add(keyOf(c));
+      for (const c of deck.cards) keys.add(c);
       for (const k of keys) df.set(k, (df.get(k) ?? 0) + 1);
     }
     const prior = new Map<string, number>();
     for (const [c, d] of df) prior.set(c, d / n);
 
     // Raw IDF-weighted co-occurrence over every within-deck card pair, accumulated
-    // by card key while the IDF weights are read from the source names.
+    // by card key.
     const cooc = new Map<string, Map<string, number>>();
     const bump = (a: string, b: string, w: number): void => {
       let row = cooc.get(a);
@@ -111,11 +110,11 @@ function buildSeedCorpus(poolData: PoolData): AffinityCorpus | null {
     for (const deck of decks) {
       const names = [...deck.cards];
       for (let i = 0; i < names.length; i += 1) {
-        const aKey = keyOf(names[i]);
+        const aKey = names[i];
         const wa = idfOf(names[i]);
         if (wa === 0) continue;
         for (let j = i + 1; j < names.length; j += 1) {
-          const bKey = keyOf(names[j]);
+          const bKey = names[j];
           if (bKey === aKey) continue;
           const w = wa * idfOf(names[j]);
           if (w === 0) continue;

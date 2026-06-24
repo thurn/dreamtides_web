@@ -94,14 +94,6 @@ describe("buildSignatureAffinity", () => {
     expect(buildSignatureAffinity(corpus, undefined).size).toBe(0);
     expect(buildSignatureAffinity(corpus, ["not-a-real-card"]).size).toBe(0);
   });
-
-  it("resolves signature NAMES onto the UUID corpus via cardIdByName", () => {
-    // A signature given as a display name resolves to the same anchor as its id.
-    const cardIdByName = new Map([["Sig Card", SIG]]);
-    const aff = buildSignatureAffinity(corpus, ["Sig Card"], cardIdByName);
-    expect(aff.get(SIG)).toBe(1);
-    for (const p of PARTNERS) expect(aff.get(p)).toBeGreaterThan(0);
-  });
 });
 
 describe("buildSignatureSeedWeights", () => {

@@ -511,13 +511,14 @@ function run() {
   let signaturedCount = 0;
   let neutralCount = 0;
   for (const dc of dreamcallers) {
-    const signature = dc.signatureCards ?? [];
-    // Resolve display names → UUIDs so the probe operates in UUID space
-    // (matching the UUID-keyed IDF corpus). Keep only cards with IDF weight.
+    const signature = dc.signatureCardIds ?? [];
+    // Signature cards are cards_v2 UUIDs, matched in the corpus's lowercased UUID
+    // key space (matching the UUID-keyed IDF corpus). Keep only cards with IDF
+    // weight.
     const probeIds = new Set(
       signature
-        .map((name) => poolData.cardIdByName?.get(name))
-        .filter((id) => id !== undefined && idfOf(id) > 0),
+        .map((id) => id.toLowerCase())
+        .filter((id) => idfOf(id) > 0),
     );
     if (probeIds.size > 0) {
       const scored = tides

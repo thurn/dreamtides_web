@@ -51,11 +51,7 @@ export function generateEmbedded(
     );
   }
 
-  const signatureSet = resolveSignatureToCorpus(
-    corpus,
-    signatureCards ?? [],
-    poolData.cardIdByName,
-  );
+  const signatureSet = resolveSignatureToCorpus(corpus, signatureCards ?? []);
   if (signatureSet.size === 0) {
     // No signature anchor in the corpus: grow the unsteered best-of-K base over
     // the committed corpus, the same fallback `sigseed` takes via `pickcohere`.

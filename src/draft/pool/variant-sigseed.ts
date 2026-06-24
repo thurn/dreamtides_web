@@ -107,11 +107,7 @@ export function generateSigSeed(
     );
   }
 
-  const signatureSet = resolveSignatureToCorpus(
-    corpus,
-    signatureCards ?? [],
-    poolData.cardIdByName,
-  );
+  const signatureSet = resolveSignatureToCorpus(corpus, signatureCards ?? []);
   if (signatureSet.size === 0) {
     // No signature anchor in the corpus: there is nothing to seed exclusively
     // from, so fall back to the unsteered best-of-K base, exactly like `picksig`.

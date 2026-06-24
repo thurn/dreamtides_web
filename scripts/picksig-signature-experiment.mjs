@@ -83,21 +83,19 @@ function loadContext(argv) {
 
 // A pool's canonical identity: its card UUIDs with copy counts, sorted. Two pools
 // with the same cards-and-copies hash to the same string regardless of build
-// order, so the distinct-pool count is exact.
-function poolKey(pool, cardIdByName) {
+// order, so the distinct-pool count is exact. Pool counts are keyed by UUID.
+function poolKey(pool) {
   const parts = [];
-  for (const [name, count] of pool.counts) {
-    parts.push(`${cardIdByName.get(name) ?? name}:${count}`);
+  for (const [id, count] of pool.counts) {
+    parts.push(`${id}:${count}`);
   }
   parts.sort();
   return parts.join("|");
 }
 
 // The set of UUID keys present in a pool (ignoring copy count), for Jaccard.
-function poolCardSet(pool, cardIdByName) {
-  const s = new Set();
-  for (const name of pool.counts.keys()) s.add(cardIdByName.get(name) ?? name);
-  return s;
+function poolCardSet(pool) {
+  return new Set(pool.counts.keys());
 }
 
 function jaccardDistance(a, b) {
@@ -110,11 +108,10 @@ function jaccardDistance(a, b) {
 // Mean signature affinity over a pool's DISTINCT cards (copies don't change the
 // theme), using the algorithm's own normalised affinity. 0 for cards the corpus
 // doesn't know.
-function onThemeScore(pool, cardIdByName, sigAffinity) {
+function onThemeScore(pool, sigAffinity) {
   let sum = 0;
   let n = 0;
-  for (const name of pool.counts.keys()) {
-    const id = cardIdByName.get(name) ?? name;
+  for (const id of pool.counts.keys()) {
     sum += sigAffinity.get(id) ?? 0;
     n += 1;
   }
@@ -130,7 +127,6 @@ function main() {
   const seeds = Number(flag(argv, "--seeds", "200"));
   const asJson = has(argv, "--json");
   const { dreamcallers, poolData } = loadContext(argv);
-  const cardIdByName = poolData.cardIdByName ?? new Map();
   const corpus = buildPickSigCorpus(poolData);
   if (!corpus) {
     console.error("No pick-record corpus is available (run scripts/setup-assets.mjs).");
@@ -143,8 +139,8 @@ function main() {
   let fallbackMatched = 0;
 
   for (const dc of withSig) {
-    const signature = dc.signatureCards ?? [];
-    const sigAffinity = buildSignatureAffinity(corpus, signature, cardIdByName);
+    const signature = dc.signatureCardIds ?? [];
+    const sigAffinity = buildSignatureAffinity(corpus, signature);
     // A signature whose cards are all absent from the corpus carries no signal;
     // picksig is then just pickcohere, so it has no thematic identity to report.
     if (sigAffinity.size === 0) continue;
@@ -165,8 +161,8 @@ function main() {
         undefined,
         signature,
       );
-      distinct.add(poolKey(sigPool, cardIdByName));
-      sigScores.push(onThemeScore(sigPool, cardIdByName, sigAffinity));
+      distinct.add(poolKey(sigPool));
+      sigScores.push(onThemeScore(sigPool, sigAffinity));
       sigPools.push(sigPool);
 
       // pickcohere baseline on the same seed (signature ignored by pickcohere).
@@ -179,16 +175,16 @@ function main() {
         undefined,
         signature,
       );
-      baseScores.push(onThemeScore(basePool, cardIdByName, sigAffinity));
+      baseScores.push(onThemeScore(basePool, sigAffinity));
     }
 
     // Lean spread: mean pairwise Jaccard distance over a sample of distinct pools.
     const seen = new Set();
     for (const p of sigPools) {
-      const k = poolKey(p, cardIdByName);
+      const k = poolKey(p);
       if (seen.has(k)) continue;
       seen.add(k);
-      cardSets.push(poolCardSet(p, cardIdByName));
+      cardSets.push(poolCardSet(p));
       if (cardSets.length >= 40) break;
     }
     let spread = 0;
@@ -206,7 +202,7 @@ function main() {
       const empty = generatePoolFromData(poolData, seed, undefined, "picksig", undefined, undefined, []);
       const cohere = generatePoolFromData(poolData, seed, undefined, "pickcohere", undefined, undefined, []);
       fallbackChecked += 1;
-      if (poolKey(empty, cardIdByName) === poolKey(cohere, cardIdByName)) fallbackMatched += 1;
+      if (poolKey(empty) === poolKey(cohere)) fallbackMatched += 1;
     }
 
     rows.push({

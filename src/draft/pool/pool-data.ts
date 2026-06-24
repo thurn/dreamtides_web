@@ -58,21 +58,18 @@ export function buildPoolData(
   const core = new Set<string>();
   const archLists = new Map<string, Set<string>>();
   const draftLists = new Map<string, Set<string>>();
-  // Name<->UUID maps for the `seed` variant's rename-proof identity and for
-  // resolving UUID-keyed pool output back to display names. Built only from
-  // cards that carry a stable `id`; first writer wins on name collisions.
-  // Left undefined when no source card carries an id (e.g. synthetic test
-  // cards), in which case all identifier maps key by name.
-  let cardIdByName: Map<string, string> | undefined;
+  // UUID -> display name, for resolving UUID-keyed pool output back to display
+  // names at the render boundary. Built only from cards that carry a stable
+  // `id`; UUID keys are unique, so two cards that share a display name stay
+  // distinct. Left undefined when no source card carries an id (e.g. synthetic
+  // test cards), in which case identifier maps key by name.
   let cardNameById: Map<string, string> | undefined;
   for (const card of cards) {
     // Use the stable UUID as the card's identity key throughout; fall back to
     // the display name only when no UUID is available (synthetic test cards).
     const cardKey = card.id ?? card.name;
     if (card.id !== undefined) {
-      cardIdByName ??= new Map<string, string>();
       cardNameById ??= new Map<string, string>();
-      if (!cardIdByName.has(card.name)) cardIdByName.set(card.name, card.id);
       if (!cardNameById.has(card.id)) cardNameById.set(card.id, card.name);
     }
     if (card.core) core.add(cardKey);
@@ -92,7 +89,6 @@ export function buildPoolData(
     decklists,
     decklistIds,
     draftRecords,
-    cardIdByName,
     cardNameById,
   };
 }

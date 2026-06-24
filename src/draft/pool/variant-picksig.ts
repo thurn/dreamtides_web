@@ -82,30 +82,20 @@ export function buildPickSigCorpus(poolData: PoolData): AffinityCorpus | null {
 }
 
 // Resolve a Dreamcaller's signature entries onto the corpus's UUID key space.
-// At runtime `signatureCards` contains the stable cards_v2 UUIDs from
-// `dreamcaller.signatureCardIds`, so each entry is first matched as a literal
-// lowercase UUID in the corpus — the fast, collision-free path. For synthetic
-// test corpora that pass opaque string keys directly, the same path still
-// applies. As a legacy fallback, entries that are not found as UUIDs are
-// looked up as display names via `cardIdByName`; this path should not trigger
-// in production since `signatureCardIds` are already UUIDs.
+// `signatureCards` contains the stable cards_v2 UUIDs from
+// `dreamcaller.signatureCardIds`, so each entry is matched as a literal
+// lowercase UUID in the corpus — the collision-free path. Synthetic test corpora
+// that pass opaque string keys directly resolve through the same path.
 // Returns the set of corpus keys the signature locates.
 export function resolveSignatureToCorpus(
   corpus: AffinityCorpus,
   signatureCards: readonly string[],
-  cardIdByName: ReadonlyMap<string, string> | undefined,
 ): Set<string> {
   const corpusKeys = new Set(corpus.cards);
   const resolved = new Set<string>();
   for (const entry of signatureCards) {
     const asId = entry.toLowerCase();
-    if (corpusKeys.has(asId)) {
-      resolved.add(asId);
-      continue;
-    }
-    // Legacy fallback: try interpreting the entry as a display name.
-    const byName = cardIdByName?.get(entry)?.toLowerCase();
-    if (byName !== undefined && corpusKeys.has(byName)) resolved.add(byName);
+    if (corpusKeys.has(asId)) resolved.add(asId);
   }
   return resolved;
 }
@@ -116,19 +106,17 @@ export function resolveSignatureToCorpus(
 // affinity rows are normalised per source card, so the max captures "c is tightly
 // connected to the signature set" — and the non-anchor scores are then normalised
 // so the strongest on-theme partner is 1. The signature cards themselves are the
-// anchors at affinity 1. Signature entries are resolved onto the corpus by
-// `cardIdByName` (name → UUID); pass it from `poolData`. Returns an empty map when
-// no signature card resolves into the corpus (an empty or wholly-off-corpus
-// signature). Operates in the corpus's UUID key space.
+// anchors at affinity 1. Returns an empty map when no signature card resolves into
+// the corpus (an empty or wholly-off-corpus signature). Operates in the corpus's
+// UUID key space.
 export function buildSignatureAffinity(
   corpus: AffinityCorpus,
   signatureCards: readonly string[] | undefined,
-  cardIdByName?: ReadonlyMap<string, string>,
 ): Map<string, number> {
   const affinityByCard = new Map<string, number>();
   if (!signatureCards || signatureCards.length === 0) return affinityByCard;
 
-  const signatureSet = resolveSignatureToCorpus(corpus, signatureCards, cardIdByName);
+  const signatureSet = resolveSignatureToCorpus(corpus, signatureCards);
   if (signatureSet.size === 0) return affinityByCard;
 
   const { affinity } = corpus;
@@ -170,9 +158,8 @@ export function buildSignatureSeedWeights(
   corpus: AffinityCorpus,
   signatureCards: readonly string[] | undefined,
   tuning: PickSigTuning,
-  cardIdByName?: ReadonlyMap<string, string>,
 ): Map<string, number> {
-  const affinityByCard = buildSignatureAffinity(corpus, signatureCards, cardIdByName);
+  const affinityByCard = buildSignatureAffinity(corpus, signatureCards);
   if (affinityByCard.size === 0) return new Map<string, number>();
 
   const { sigAlpha, sigCap, sigEps } = tuning;
@@ -198,12 +185,7 @@ export function generatePickSig(
     corpus === null
       ? undefined
       : weightedSeedDraw(
-          buildSignatureSeedWeights(
-            corpus,
-            signatureCards,
-            PICKSIG,
-            poolData.cardIdByName,
-          ),
+          buildSignatureSeedWeights(corpus, signatureCards, PICKSIG),
         );
   return growPoolFromCorpus(
     rng,

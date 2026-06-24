@@ -55,11 +55,7 @@ let poolsGrown = 0;
 const withSig = dreamcallers.filter((d) => (d.signatureCards ?? []).length > 0);
 
 for (const dc of withSig) {
-  const resolved = resolveSignatureToCorpus(
-    corpus,
-    dc.signatureCards ?? [],
-    poolData.cardIdByName,
-  );
+  const resolved = resolveSignatureToCorpus(corpus, dc.signatureCardIds ?? []);
   const keys = [...resolved].sort();
   if (keys.length === 0) continue;
   for (const sub of subsets(keys, SIGSEED.maxSeedCards)) {

@@ -220,18 +220,12 @@ export interface PoolData {
    */
   tides5Decks?: Tides5DecksJson;
   /**
-   * Current display name -> stable cards_v2 UUID, built from the card records
-   * in {@link buildPoolData} when they carry an `id`. The `seed` variant reads
-   * it to translate the name-keyed decklist corpus into UUID identity space;
-   * absent when no source card carries an `id`.
-   */
-  cardIdByName?: Map<string, string>;
-  /**
-   * Stable cards_v2 UUID -> current display name, the inverse of
-   * {@link cardIdByName}. The provenance/debug surfaces read it to resolve a
-   * pool's UUID-keyed results to display names at the render boundary; the pool
-   * pipeline never keys any data structure on its output. Absent when no source
-   * card carries an `id`.
+   * Stable cards_v2 UUID -> current display name, built from the card records in
+   * {@link buildPoolData} when they carry an `id`. The provenance/debug surfaces
+   * read it to resolve a pool's UUID-keyed results to display names at the render
+   * boundary; the pool pipeline never keys any data structure on its output. UUID
+   * keys are unique, so two cards that share a display name stay distinct. Absent
+   * when no source card carries an `id`.
    */
   cardNameById?: Map<string, string>;
 }

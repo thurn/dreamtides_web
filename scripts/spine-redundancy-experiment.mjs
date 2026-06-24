@@ -121,19 +121,6 @@ function poolSize(counts) {
   return n;
 }
 
-// Convert a name-keyed Set to a UUID-keyed Set using the provided id map.
-// When cardIdByName is absent, returns the original set unchanged (name-keyed
-// corpus fallback for synthetic / test PoolData with no UUID source).
-function toUuidSet(nameSet, cardIdByName) {
-  if (!cardIdByName) return nameSet;
-  const out = new Set();
-  for (const name of nameSet) {
-    const id = cardIdByName.get(name);
-    if (id !== undefined) out.add(id);
-  }
-  return out;
-}
-
 function buildCorpus(pd) {
   // Prefer the id-keyed corpus so same-name cards stay distinct; fall back to
   // the name corpus for synthetic / test PoolData that carries no UUID source.
@@ -170,20 +157,15 @@ function generateDecklistsInstrumented(
   { disableSpine = false, spineArchetypes = DECKLISTS.spineArchetypes } = {},
 ) {
   const corpus = CORPUS;
-  const { core, archLists, draftLists, cardIdByName } = pd;
+  const { core, archLists, draftLists } = pd;
   const { decks, idf } = corpus;
   const idfOf = (c) => idf.get(c) ?? 0;
 
-  // Build UUID-keyed mirrors of archLists and draftLists so corpus card keys
-  // (UUIDs from decklistIds) match correctly against archetype/color membership.
-  const toUuidArchLists = new Map();
-  for (const [slug, nameSet] of archLists) {
-    toUuidArchLists.set(slug, toUuidSet(nameSet, cardIdByName));
-  }
-  const toUuidDraftLists = new Map();
-  for (const [key, nameSet] of draftLists) {
-    toUuidDraftLists.set(key, toUuidSet(nameSet, cardIdByName));
-  }
+  // archLists and draftLists are keyed by UUID (from the cards' stable ids), the
+  // same key space as the corpus cards (UUIDs from decklistIds), so they match
+  // archetype/color membership directly.
+  const toUuidArchLists = archLists;
+  const toUuidDraftLists = draftLists;
 
   const themeCards = new Set();
   for (const slug of themeArchetypes ?? [])
@@ -471,13 +453,8 @@ for (const dc of themed) {
   const themeArch = DREAMCALLER_THEMES[dc.name];
   const on = generateDecklistsInstrumented(makeRng(7), poolData, seedArch, themeArch, {});
   const spine = on.spine;
-  const { cardIdByName } = poolData;
-  // Build UUID-keyed archLists for the control spine check
-  const toUuidArchLists = new Map();
-  for (const [slug, nameSet] of poolData.archLists) {
-    toUuidArchLists.set(slug, toUuidSet(nameSet, cardIdByName));
-  }
-  const onSpine = (c) => spine.size === 0 || [...spine].some((s) => toUuidArchLists.get(s)?.has(c));
+  // archLists are UUID-keyed, the same key space as the corpus cards.
+  const onSpine = (c) => spine.size === 0 || [...spine].some((s) => poolData.archLists.get(s)?.has(c));
   for (const d of CORPUS.decks) {
     let k = 0;
     for (const c of d.cards) if (onSpine(c)) k++;

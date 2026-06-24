@@ -73,18 +73,17 @@ function loadContext(argv) {
   return { dreamcallers, poolData };
 }
 
-function poolKey(pool, cardIdByName) {
+// Pool counts are keyed by UUID.
+function poolKey(pool) {
   const parts = [];
-  for (const [name, count] of pool.counts) {
-    parts.push(`${cardIdByName.get(name) ?? name}:${count}`);
+  for (const [id, count] of pool.counts) {
+    parts.push(`${id}:${count}`);
   }
   parts.sort();
   return parts.join("|");
 }
-function poolCardSet(pool, cardIdByName) {
-  const s = new Set();
-  for (const name of pool.counts.keys()) s.add(cardIdByName.get(name) ?? name);
-  return s;
+function poolCardSet(pool) {
+  return new Set(pool.counts.keys());
 }
 function jaccardDistance(a, b) {
   let inter = 0;
@@ -92,11 +91,10 @@ function jaccardDistance(a, b) {
   const union = a.size + b.size - inter;
   return union === 0 ? 0 : 1 - inter / union;
 }
-function onThemeScore(pool, cardIdByName, sigAffinity) {
+function onThemeScore(pool, sigAffinity) {
   let sum = 0;
   let n = 0;
-  for (const name of pool.counts.keys()) {
-    const id = cardIdByName.get(name) ?? name;
+  for (const id of pool.counts.keys()) {
     sum += sigAffinity.get(id) ?? 0;
     n += 1;
   }
@@ -115,7 +113,6 @@ function main() {
   const seeds = Number(flag(argv, "--seeds", "200"));
   const asJson = has(argv, "--json");
   const { dreamcallers, poolData } = loadContext(argv);
-  const cardIdByName = poolData.cardIdByName ?? new Map();
   const corpus = buildPickSigCorpus(poolData);
   if (!corpus) {
     console.error("No pick-record corpus is available (run scripts/setup-assets.mjs).");
@@ -126,8 +123,8 @@ function main() {
   const rows = [];
 
   for (const dc of withSig) {
-    const signature = dc.signatureCards ?? [];
-    const sigAffinity = buildSignatureAffinity(corpus, signature, cardIdByName);
+    const signature = dc.signatureCardIds ?? [];
+    const sigAffinity = buildSignatureAffinity(corpus, signature);
     if (sigAffinity.size === 0) continue;
 
     const distinct = new Set();
@@ -138,15 +135,15 @@ function main() {
 
     for (let seed = 0; seed < seeds; seed += 1) {
       const sigseedPool = genPool(poolData, seed, "sigseed", signature);
-      distinct.add(poolKey(sigseedPool, cardIdByName));
-      sigseedScores.push(onThemeScore(sigseedPool, cardIdByName, sigAffinity));
+      distinct.add(poolKey(sigseedPool));
+      sigseedScores.push(onThemeScore(sigseedPool, sigAffinity));
       sigPools.push(sigseedPool);
 
       picksigScores.push(
-        onThemeScore(genPool(poolData, seed, "picksig", signature), cardIdByName, sigAffinity),
+        onThemeScore(genPool(poolData, seed, "picksig", signature), sigAffinity),
       );
       baseScores.push(
-        onThemeScore(genPool(poolData, seed, "pickcohere", signature), cardIdByName, sigAffinity),
+        onThemeScore(genPool(poolData, seed, "pickcohere", signature), sigAffinity),
       );
     }
 
@@ -154,10 +151,10 @@ function main() {
     const seen = new Set();
     const cardSets = [];
     for (const p of sigPools) {
-      const k = poolKey(p, cardIdByName);
+      const k = poolKey(p);
       if (seen.has(k)) continue;
       seen.add(k);
-      cardSets.push(poolCardSet(p, cardIdByName));
+      cardSets.push(poolCardSet(p));
       if (cardSets.length >= 40) break;
     }
     let spread = 0;
