@@ -107,36 +107,36 @@ export function rewardParamsFor(
 ): TemplateParams | null {
   switch (templateId) {
     case "gain_named_card":
-      return target.card === undefined ? null : { name: target.card.name };
+      return target.card === undefined ? null : { cardId: target.card.id, name: target.card.name };
     case "apply_named_transfiguration_to_card_name": {
       const transfiguration = stringParam(params, "transfiguration");
       return target.card === undefined || transfiguration === undefined
         ? null
-        : { transfiguration, cardName: target.card.name };
+        : { transfiguration, cardId: target.card.id, cardName: target.card.name };
     }
     case "duplicate_named_card_X": {
       const count = numberParam(params, "count");
       return target.card === undefined || count === undefined
         ? null
-        : { cardName: target.card.name, count };
+        : { cardId: target.card.id, cardName: target.card.name, count };
     }
     case "change_card_to_become_type": {
       const cardTypePredicateId = stringParam(params, "predicateId");
       return target.card === undefined || cardTypePredicateId === undefined
         ? null
-        : { cardName: target.card.name, cardTypePredicateId };
+        : { cardId: target.card.id, cardName: target.card.name, cardTypePredicateId };
     }
     case "make_card_reclaim": {
       const count = numberParam(params, "count");
       return target.card === undefined || count === undefined
         ? null
-        : { cardName: target.card.name, count };
+        : { cardId: target.card.id, cardName: target.card.name, count };
     }
     case "opening_hand_grant_for_X_battles": {
       const battles = numberParam(params, "battles");
       return target.card === undefined || battles === undefined
         ? null
-        : { cardName: target.card.name, battles };
+        : { cardId: target.card.id, cardName: target.card.name, battles };
     }
     case "gain_random_predicate_cards":
     case "duplicate_random_predicate": {
@@ -659,13 +659,14 @@ const operations: readonly OperationTemplate[] = Object.freeze([
     symbols: ["reward", "rewrite"],
     targetKinds: ["chosen_starter"],
     weight: 1,
-    rollParams: (ctx, draw, target) => ({
-      cardName: pickFromList(draw, `otmo:${target.key}:starter-replacement`, ctx.content.cards).name,
-    }),
+    rollParams: (ctx, draw, target) => {
+      const card = pickFromList(draw, `otmo:${target.key}:starter-replacement`, ctx.content.cards);
+      return { newCardId: card.id, newCardName: card.name };
+    },
     viable: (_params, ctx) => starterCardCount(ctx) > 0 && ctx.content.cards.length > 0,
     cec: () => CARD_CEC * 0.8,
     render: (params) =>
-      `Transform a chosen Starter card into ${quoteName(String(params.cardName))}`,
+      `Transform a chosen Starter card into ${quoteName(String(params.newCardName ?? params.cardName))}`,
   },
   {
     id: "transfigure_chosen_starters",

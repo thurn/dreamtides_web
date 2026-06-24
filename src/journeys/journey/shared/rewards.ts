@@ -61,7 +61,7 @@ import type { DrawContext } from "../../util/rng";
 import { drawInt, weightedChoice } from "../../util/rng";
 import type { JourneyMutations } from "../../apply/JourneyMutations";
 import { logSkippedVisualTemplate } from "../../apply/skipLog";
-import type { DreamsignContent } from "../../content/types";
+import type { CardContent, DreamsignContent } from "../../content/types";
 import type { JourneyContext } from "../context";
 import { CARD_CEC, STAGE_MULTIPLIER, cardPoolCEC } from "./cec";
 import {
@@ -78,12 +78,13 @@ import {
   transfigurationsEligibleForPredicate,
 } from "./content";
 import {
+  findDeckEntriesByCardId,
   findDeckEntriesByName,
   findDeckEntriesByPredicate,
-  findFirstDeckEntryIdByCardName,
+  findFirstDeckEntryIdByCardId,
   findFirstStarterDeckEntryId,
   findProjectedDeckEntry,
-  findUntransfiguredDeckEntriesByName,
+  findUntransfiguredDeckEntriesByCardId,
   findUntransfiguredDeckEntriesByPredicate,
   findUntransfiguredDeckEntriesByPredicateEligibleForTransfiguration,
   findUntransfiguredDeckEntryIds,
@@ -95,9 +96,10 @@ import { PREDICATES, getPredicate } from "./predicates";
 import { quoteName } from "./text";
 import type { Predicate, PredicateKind, Reward, TemplateParams } from "./types";
 import {
+  deckContainsCard,
   deckContainsCardByName,
   deckContainsPredicate,
-  deckContainsUntransfiguredCardByName,
+  deckContainsUntransfiguredCardById,
   deckContainsUntransfiguredPredicate,
   deckHasUntransfiguredMinSize,
   deckHasMinSize,
@@ -312,6 +314,10 @@ function predicateAdmitsTransfiguration(
 
 function resolveCardIdByName(ctx: JourneyContext, name: string): string | undefined {
   return ctx.content.cards.find((card) => card.name === name)?.id;
+}
+
+function resolveCardById(ctx: JourneyContext, cardId: string): CardContent | undefined {
+  return ctx.content.cards.find((card) => card.id === cardId);
 }
 
 function warnSkippedCardApply(templateId: string, reason: string): void {
@@ -1215,29 +1221,29 @@ const takeAnyFromPredicateChoices: Reward<TakeAnyParams> = {
   },
 };
 
-type GainNamedCardParams = { name: string };
+type GainNamedCardParams = { cardId: string; name?: string };
 const gainNamedCard: Reward<GainNamedCardParams> = {
   id: "gain_named_card",
   weight: 1.0,
   rollParams: (ctx, draw) => {
     const pool = namedCardGainPool(ctx);
-    if (pool.length === 0) return { name: "Placeholder Card" };
+    if (pool.length === 0) return { cardId: "placeholder", name: "Placeholder Card" };
     const card = pickFromList(draw, "gain_named_card:card", pool);
-    return { name: card.name };
+    return { cardId: card.id, name: card.name };
   },
   cec: () => CARD_CEC * STAGE_MULTIPLIER,
   viable: (_p, ctx) => namedCardGainPool(ctx).length > 0,
-  render: (p) => `Gain ${quoteName(p.name)}`,
+  render: (p) => `Gain ${quoteName(p.name ?? p.cardId)}`,
   apply: (p, ctx, mut) => {
-    const cardId = resolveCardIdByName(ctx, p.name);
-    if (cardId === undefined) {
+    const card = resolveCardById(ctx, p.cardId);
+    if (card === undefined) {
       warnSkippedCardApply(
         "gain_named_card",
-        `catalog card named ${JSON.stringify(p.name)} was not found`,
+        `catalog card with id ${JSON.stringify(p.cardId)} was not found`,
       );
       return;
     }
-    mut.addCardById(cardId, "dream_journey:gain_named_card");
+    mut.addCardById(card.id, "dream_journey:gain_named_card");
   },
 };
 
@@ -1405,7 +1411,7 @@ const applyNamedTransfigurationToChosenPredicateCards: Reward<ApplyNamedTransfig
     },
   };
 
-type ApplyNamedTransfigCardNameParams = { transfiguration: string; cardName: string };
+type ApplyNamedTransfigCardNameParams = { transfiguration: string; cardId: string; cardName?: string };
 const applyNamedTransfigurationToCardName: Reward<ApplyNamedTransfigCardNameParams> = {
   id: "apply_named_transfiguration_to_card_name",
   weight: 1.0,
@@ -1424,29 +1430,29 @@ const applyNamedTransfigurationToCardName: Reward<ApplyNamedTransfigCardNamePara
       isCardEligibleForTransfiguration(transfiguration, card),
     );
     const pool = eligibleDeckCards.length > 0 ? eligibleDeckCards : deckCards;
-    return {
-      transfiguration,
-      cardName: pool.length > 0
-        ? pickFromList(draw, "named_transfig_named:c", pool).name
-        : "Placeholder Card",
-    };
+    const card = pool.length > 0
+      ? pickFromList(draw, "named_transfig_named:c", pool)
+      : undefined;
+    return card !== undefined
+      ? { transfiguration, cardId: card.id, cardName: card.name }
+      : { transfiguration, cardId: "placeholder", cardName: "Placeholder Card" };
   },
   cec: () => CARD_CEC * 0.8,
   // The named card must have an untransfigured concrete entry that can receive
   // the requested transfiguration; viability mirrors the apply target filter.
   viable: (p, ctx) =>
-    deckContainsUntransfiguredCardByName(ctx, p.cardName, p.transfiguration),
-  render: (p) => `Apply ${p.transfiguration} to ${quoteName(p.cardName)}`,
+    deckContainsUntransfiguredCardById(ctx, p.cardId, p.transfiguration),
+  render: (p) => `Apply ${p.transfiguration} to ${quoteName(p.cardName ?? p.cardId)}`,
   apply: (p, ctx, mut) => {
-    const entryId = findUntransfiguredDeckEntriesByName(
+    const entryId = findUntransfiguredDeckEntriesByCardId(
       ctx,
-      p.cardName,
+      p.cardId,
       (card) => isCardEligibleForTransfiguration(p.transfiguration, card),
     )[0];
     if (entryId === undefined) {
       warnSkippedCardApply(
         "apply_named_transfiguration_to_card_name",
-        `untransfigured deck entry for card name ${JSON.stringify(p.cardName)} was not found`,
+        `untransfigured deck entry for card id ${JSON.stringify(p.cardId)} was not found`,
       );
       return;
     }
@@ -1611,35 +1617,33 @@ const transfigureAllStarters: Reward<TransfigureAllStartersParams> = {
   },
 };
 
-type ChangeCardBecomeTypeParams = { cardName: string; cardTypePredicateId: string };
+type ChangeCardBecomeTypeParams = { cardId: string; cardName?: string; cardTypePredicateId: string };
 const changeCardToBecomeType: Reward<ChangeCardBecomeTypeParams> = {
   id: "change_card_to_become_type",
   weight: 1.0,
   rollParams: (ctx, draw) => {
     const deckCards = cardMatches(ctx, { source: "deck" });
-    return {
-      cardName: deckCards.length > 0
-        ? pickFromList(draw, "change_become:c", deckCards).name
-        : "Placeholder Card",
-      cardTypePredicateId: pickFromList(draw, "change_become:t", CARD_TYPE_PREDICATE_IDS),
-    };
+    const card = deckCards.length > 0
+      ? pickFromList(draw, "change_become:c", deckCards)
+      : undefined;
+    return card !== undefined
+      ? { cardId: card.id, cardName: card.name, cardTypePredicateId: pickFromList(draw, "change_become:t", CARD_TYPE_PREDICATE_IDS) }
+      : { cardId: "placeholder", cardName: "Placeholder Card", cardTypePredicateId: pickFromList(draw, "change_become:t", CARD_TYPE_PREDICATE_IDS) };
   },
   cec: () => CARD_CEC * 0.6,
-  // Named-card smell: the rolled `cardName` must still be in the deck.
-  // CLI shipped `cardMatches(ctx, { source: "deck" }).length >= 1`, which
-  // surfaces a no-op when the deck holds a different card.
-  viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
+  // The rolled card must still be in the deck; keyed on card id.
+  viable: (p, ctx) => deckContainsCard(ctx, p.cardId),
   render: (p) => {
     const singular = getPredicate(p.cardTypePredicateId).text.singular;
     const article = /^[aeiou]/i.test(singular) ? "an" : "a";
-    return `Change ${quoteName(p.cardName)} to become ${article} ${singular}`;
+    return `Change ${quoteName(p.cardName ?? p.cardId)} to become ${article} ${singular}`;
   },
   apply: (p, ctx, mut) => {
-    const entryId = findFirstDeckEntryIdByCardName(ctx, p.cardName);
+    const entryId = findFirstDeckEntryIdByCardId(ctx, p.cardId);
     if (entryId === undefined) {
       warnSkippedCardApply(
         "change_card_to_become_type",
-        `deck entry for card name ${JSON.stringify(p.cardName)} was not found`,
+        `deck entry for card id ${JSON.stringify(p.cardId)} was not found`,
       );
       return;
     }
@@ -1864,35 +1868,33 @@ const purgeChosenPredicateWithReplacement: Reward<PurgeChosenPredWithReplParams>
   },
 };
 
-type PurgeNamedStarterParams = { cardName: string };
+type PurgeNamedStarterParams = { cardId: string; cardName?: string };
 const purgeNamedStarter: Reward<PurgeNamedStarterParams> = {
   id: "purge_named_starter",
   weight: 1.0,
   rollParams: (ctx, draw) => {
     const starters = cardMatches(ctx, { starter: true });
-    return {
-      cardName: starters.length > 0
-        ? pickFromList(draw, "purge_named_starter:c", starters).name
-        : "Placeholder Starter",
-    };
+    const card = starters.length > 0
+      ? pickFromList(draw, "purge_named_starter:c", starters)
+      : undefined;
+    return card !== undefined
+      ? { cardId: card.id, cardName: card.name }
+      : { cardId: "placeholder", cardName: "Placeholder Starter" };
   },
   cec: () => CARD_CEC * 0.4,
-  // Named-card smell: the rolled starter name must still be a deck card.
-  // CLI shipped `cardMatches(ctx, { starter: true }).length >= 1`, which
-  // would surface a no-op option whenever the deck has at least one
-  // starter even if the specific named one was already purged.
-  viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
-  render: (p) => `Purge ${quoteName(p.cardName)}`,
+  // The rolled starter must still be in the deck; keyed on card id.
+  viable: (p, ctx) => deckContainsCard(ctx, p.cardId),
+  render: (p) => `Purge ${quoteName(p.cardName ?? p.cardId)}`,
   apply: (p, ctx, mut) => {
-    const entryId = findDeckEntriesByName(
+    const entryId = findDeckEntriesByCardId(
       ctx,
-      p.cardName,
+      p.cardId,
       (card) => card.rarity === "Starter",
     )[0];
     if (entryId === undefined) {
       warnSkippedCardApply(
         "purge_named_starter",
-        `starter deck entry for card name ${JSON.stringify(p.cardName)} was not found`,
+        `starter deck entry for card id ${JSON.stringify(p.cardId)} was not found`,
       );
       return;
     }
@@ -1975,77 +1977,84 @@ const purgeRandomStarterWithPredicateReplacement: Reward<PurgeRandomStarterReplP
   },
 };
 
-type TransformStarterParams = { newCardName: string };
+type TransformStarterParams = { newCardId: string; newCardName?: string };
 const transformStarterIntoNamedCard: Reward<TransformStarterParams> = {
   id: "transform_starter_into_named_card",
   weight: 1.0,
-  rollParams: (ctx, draw) => ({
-    newCardName: ctx.content.cards.length > 0
-      ? pickFromList(draw, "xform_starter:c", ctx.content.cards).name
-      : "Placeholder Card",
-  }),
+  rollParams: (ctx, draw) => {
+    const card = ctx.content.cards.length > 0
+      ? pickFromList(draw, "xform_starter:c", ctx.content.cards)
+      : undefined;
+    return card !== undefined
+      ? { newCardId: card.id, newCardName: card.name }
+      : { newCardId: "placeholder", newCardName: "Placeholder Card" };
+  },
   cec: () => CARD_CEC * 0.8,
   viable: (_p, ctx) => starterCardCount(ctx) >= 1 && ctx.content.cards.length > 0,
-  render: (p) => `Choose a starter card to transform into ${quoteName(p.newCardName)}`,
+  render: (p) => `Choose a starter card to transform into ${quoteName(p.newCardName ?? p.newCardId)}`,
   apply: (p, ctx, mut) => {
     const entryId = findFirstStarterDeckEntryId(ctx);
     if (entryId === undefined) {
       warnSkippedCardApply("transform_starter_into_named_card", "starter deck entry was not found");
       return;
     }
-    const cardId = resolveCardIdByName(ctx, p.newCardName);
-    if (cardId === undefined) {
+    const card = resolveCardById(ctx, p.newCardId);
+    if (card === undefined) {
       warnSkippedCardApply(
         "transform_starter_into_named_card",
-        `catalog card named ${JSON.stringify(p.newCardName)} was not found`,
+        `catalog card with id ${JSON.stringify(p.newCardId)} was not found`,
       );
       return;
     }
     mut.removeDeckEntry(entryId, "dream_journey:transform_starter_into_named_card");
-    mut.addCardById(cardId, "dream_journey:transform_starter_into_named_card");
+    mut.addCardById(card.id, "dream_journey:transform_starter_into_named_card");
   },
 };
 
-type TransformDeckCardParams = { oldCardName: string; newCardName: string };
+type TransformDeckCardParams = { oldCardId: string; oldCardName?: string; newCardId: string; newCardName?: string };
 const transformCardInDeckIntoNamed: Reward<TransformDeckCardParams> = {
   id: "transform_card_in_deck_into_named",
   weight: 1.0,
   rollParams: (ctx, draw) => {
     const deckCards = cardMatches(ctx, { source: "deck" });
+    const oldCard = deckCards.length > 0
+      ? pickFromList(draw, "xform_deck:old", deckCards)
+      : undefined;
+    const newCard = ctx.content.cards.length > 0
+      ? pickFromList(draw, "xform_deck:new", ctx.content.cards)
+      : undefined;
     return {
-      oldCardName: deckCards.length > 0
-        ? pickFromList(draw, "xform_deck:old", deckCards).name
-        : "Placeholder Card A",
-      newCardName: ctx.content.cards.length > 0
-        ? pickFromList(draw, "xform_deck:new", ctx.content.cards).name
-        : "Placeholder Card B",
+      oldCardId: oldCard?.id ?? "placeholder-a",
+      oldCardName: oldCard?.name ?? "Placeholder Card A",
+      newCardId: newCard?.id ?? "placeholder-b",
+      newCardName: newCard?.name ?? "Placeholder Card B",
     };
   },
   cec: () => CARD_CEC,
-  // Named-card smell on `oldCardName`. CLI shipped
+  // Named-card smell on `oldCardId`. CLI shipped
   // `cardMatches(ctx, { source: "deck" }).length >= 1 && content.cards.length > 0`.
   viable: (p, ctx) =>
-    deckContainsCardByName(ctx, p.oldCardName) && ctx.content.cards.length > 0,
-  render: (p) => `Transform ${quoteName(p.oldCardName)} into ${quoteName(p.newCardName)}`,
+    deckContainsCard(ctx, p.oldCardId) && ctx.content.cards.length > 0,
+  render: (p) => `Transform ${quoteName(p.oldCardName ?? p.oldCardId)} into ${quoteName(p.newCardName ?? p.newCardId)}`,
   apply: (p, ctx, mut) => {
-    const entryId = findFirstDeckEntryIdByCardName(ctx, p.oldCardName);
+    const entryId = findFirstDeckEntryIdByCardId(ctx, p.oldCardId);
     if (entryId === undefined) {
       warnSkippedCardApply(
         "transform_card_in_deck_into_named",
-        `deck entry for card name ${JSON.stringify(p.oldCardName)} was not found`,
+        `deck entry for card id ${JSON.stringify(p.oldCardId)} was not found`,
       );
       return;
     }
-    const cardId = resolveCardIdByName(ctx, p.newCardName);
-    if (cardId === undefined) {
+    const newCard = resolveCardById(ctx, p.newCardId);
+    if (newCard === undefined) {
       warnSkippedCardApply(
         "transform_card_in_deck_into_named",
-        `catalog card named ${JSON.stringify(p.newCardName)} was not found`,
+        `catalog card with id ${JSON.stringify(p.newCardId)} was not found`,
       );
       return;
     }
     mut.removeDeckEntry(entryId, "dream_journey:transform_card_in_deck_into_named");
-    mut.addCardById(cardId, "dream_journey:transform_card_in_deck_into_named");
+    mut.addCardById(newCard.id, "dream_journey:transform_card_in_deck_into_named");
   },
 };
 
@@ -2103,6 +2112,7 @@ const transformChosenPredicateIntoNamed: Reward<TransformPredCardParams> = {
 };
 
 type DupNamedCardParams = {
+  cardId?: string;
   cardName?: string;
   count?: number;
   name?: string;
@@ -2122,26 +2132,33 @@ const duplicateNamedCardX: Reward<DupNamedCardParams> = {
   weight: 1.0,
   rollParams: (ctx, draw) => {
     const deckCards = cardMatches(ctx, { source: "deck" });
-    return {
-      cardName: deckCards.length > 0
-        ? pickFromList(draw, "dup_named:c", deckCards).name
-        : "Placeholder Card",
-      count: drawInt(draw, "dup_named:n", 1, 3),
-    };
+    const card = deckCards.length > 0
+      ? pickFromList(draw, "dup_named:c", deckCards)
+      : undefined;
+    return card !== undefined
+      ? { cardId: card.id, cardName: card.name, count: drawInt(draw, "dup_named:n", 1, 3) }
+      : { cardId: "placeholder", cardName: "Placeholder Card", count: drawInt(draw, "dup_named:n", 1, 3) };
   },
   cec: (p) => CARD_CEC * duplicateNamedCardCount(p),
-  // Named-card smell. CLI shipped
-  // `cardMatches(ctx, { source: "deck" }).length >= 1`.
-  viable: (p, ctx) => deckContainsCardByName(ctx, duplicateNamedCardName(p)),
-  render: (p) =>
-    `Create ${duplicateNamedCardCount(p)} duplicate${duplicateNamedCardCount(p) === 1 ? "" : "s"} of ${quoteName(duplicateNamedCardName(p))}`,
+  // Keyed on cardId when present, with name-based fallback for persisted data.
+  viable: (p, ctx) =>
+    p.cardId !== undefined
+      ? deckContainsCard(ctx, p.cardId)
+      : deckContainsCardByName(ctx, duplicateNamedCardName(p)),
+  render: (p) => {
+    const displayName = p.cardName ?? p.name ?? p.cardId ?? "";
+    const count = duplicateNamedCardCount(p);
+    return `Create ${count} duplicate${count === 1 ? "" : "s"} of ${quoteName(displayName)}`;
+  },
   apply: (p, ctx, mut) => {
-    const cardName = duplicateNamedCardName(p);
-    const entryId = findDeckEntriesByName(ctx, cardName)[0];
+    const entryId = p.cardId !== undefined
+      ? findDeckEntriesByCardId(ctx, p.cardId)[0]
+      : findDeckEntriesByName(ctx, duplicateNamedCardName(p))[0];
     if (entryId === undefined) {
+      const key = p.cardId !== undefined ? `card id ${JSON.stringify(p.cardId)}` : `card name ${JSON.stringify(duplicateNamedCardName(p))}`;
       warnSkippedCardApply(
         "duplicate_named_card_X",
-        `deck entry for card name ${JSON.stringify(cardName)} was not found`,
+        `deck entry for ${key} was not found`,
       );
       return;
     }
@@ -2867,29 +2884,29 @@ const draftPredicateCardWithTransfiguration: Reward<DraftPredicateCardWithTransf
     },
   };
 
-type MakeCardReclaimParams = { cardName: string; count: number };
+type MakeCardReclaimParams = { cardId: string; cardName?: string; count: number };
 const makeCardReclaim: Reward<MakeCardReclaimParams> = {
   id: "make_card_reclaim",
   weight: 1.0,
   rollParams: (ctx, draw) => {
     const deckCards = cardMatches(ctx, { source: "deck" });
-    return {
-      cardName: deckCards.length > 0
-        ? pickFromList(draw, "make_reclaim:c", deckCards).name
-        : "Placeholder Card",
-      count: drawInt(draw, "make_reclaim:n", 1, 3),
-    };
+    const card = deckCards.length > 0
+      ? pickFromList(draw, "make_reclaim:c", deckCards)
+      : undefined;
+    return card !== undefined
+      ? { cardId: card.id, cardName: card.name, count: drawInt(draw, "make_reclaim:n", 1, 3) }
+      : { cardId: "placeholder", cardName: "Placeholder Card", count: drawInt(draw, "make_reclaim:n", 1, 3) };
   },
   cec: (p) => CARD_CEC * 0.5 * p.count,
-  // Named-card smell.
-  viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
-  render: (p) => `Add Reclaim ${p.count} to ${quoteName(p.cardName)}`,
+  // Keyed on card id.
+  viable: (p, ctx) => deckContainsCard(ctx, p.cardId),
+  render: (p) => `Add Reclaim ${p.count} to ${quoteName(p.cardName ?? p.cardId)}`,
   apply: (p, ctx, mut) => {
-    const entryId = findDeckEntriesByName(ctx, p.cardName)[0];
+    const entryId = findDeckEntriesByCardId(ctx, p.cardId)[0];
     if (entryId === undefined) {
       warnSkippedCardApply(
         "make_card_reclaim",
-        `deck entry for card name ${JSON.stringify(p.cardName)} was not found`,
+        `deck entry for card id ${JSON.stringify(p.cardId)} was not found`,
       );
       return;
     }
@@ -2939,47 +2956,47 @@ const makeRandomCardsReclaim: Reward<MakeRandomCardsReclaimParams> = {
   },
 };
 
-type OpeningHandGrantParams = { cardName: string; battles: number };
+type OpeningHandGrantParams = { cardId: string; cardName?: string; battles: number };
 const openingHandGrantForXBattles: Reward<OpeningHandGrantParams> = {
   id: "opening_hand_grant_for_X_battles",
   weight: 0.5,
   rollParams: (ctx, draw) => {
     const deckCards = cardMatches(ctx, { source: "deck" });
-    return {
-      cardName: deckCards.length > 0
-        ? pickFromList(draw, "oh_grant:c", deckCards).name
-        : "Placeholder Card",
-      battles: rollPositiveTemporaryBattles(draw, "oh_grant:b"),
-    };
+    const card = deckCards.length > 0
+      ? pickFromList(draw, "oh_grant:c", deckCards)
+      : undefined;
+    return card !== undefined
+      ? { cardId: card.id, cardName: card.name, battles: rollPositiveTemporaryBattles(draw, "oh_grant:b") }
+      : { cardId: "placeholder", cardName: "Placeholder Card", battles: rollPositiveTemporaryBattles(draw, "oh_grant:b") };
   },
   cec: (p) => CARD_CEC * 0.3 * p.battles,
-  // Named-card smell.
-  viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
+  // Keyed on card id.
+  viable: (p, ctx) => deckContainsCard(ctx, p.cardId),
   render: (p) =>
-    `Your opening hand contains ${quoteName(p.cardName)} for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
+    `Your opening hand contains ${quoteName(p.cardName ?? p.cardId)} for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
   apply: () => {
     logSkippedVisualTemplate("opening_hand_grant_for_X_battles", "battle_window");
   },
 };
 
-type TemporaryCardCopyParams = { cardName: string; battles: number };
+type TemporaryCardCopyParams = { cardId: string; cardName?: string; battles: number };
 const temporaryCardCopyForXBattles: Reward<TemporaryCardCopyParams> = {
   id: "temporary_card_copy_for_X_battles",
   weight: 0.25,
   rollParams: (ctx, draw) => {
     const deckCards = cardMatches(ctx, { source: "deck" });
-    return {
-      cardName: deckCards.length > 0
-        ? pickFromList(draw, "temp_copy:c", deckCards).name
-        : "Placeholder Card",
-      battles: rollPositiveTemporaryBattles(draw, "temp_copy:b"),
-    };
+    const card = deckCards.length > 0
+      ? pickFromList(draw, "temp_copy:c", deckCards)
+      : undefined;
+    return card !== undefined
+      ? { cardId: card.id, cardName: card.name, battles: rollPositiveTemporaryBattles(draw, "temp_copy:b") }
+      : { cardId: "placeholder", cardName: "Placeholder Card", battles: rollPositiveTemporaryBattles(draw, "temp_copy:b") };
   },
   cec: (p) => CARD_CEC * 0.25 * p.battles,
-  // Named-card smell.
-  viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
+  // Keyed on card id.
+  viable: (p, ctx) => deckContainsCard(ctx, p.cardId),
   render: (p) =>
-    `Gain a temporary copy of ${quoteName(p.cardName)} for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
+    `Gain a temporary copy of ${quoteName(p.cardName ?? p.cardId)} for the next ${p.battles} battle${p.battles === 1 ? "" : "s"}`,
   apply: () => {
     logSkippedVisualTemplate("temporary_card_copy_for_X_battles", "battle_window");
   },
@@ -3481,11 +3498,25 @@ function metaRewardPairKey(firstId: string, secondId: string): string {
 }
 
 function paramsTargetStarterCard(params: TemplateParams, ctx: JourneyContext): boolean {
-  return [params.cardName, params.oldCardName].some(
-    (cardName) =>
-      typeof cardName === "string"
-      && findDeckEntriesByName(ctx, cardName, (card) => card.rarity === "Starter").length > 0,
-  );
+  const candidates: Array<{ id?: string; name?: string }> = [
+    {
+      id: typeof params.cardId === "string" ? params.cardId : undefined,
+      name: typeof params.cardName === "string" ? params.cardName : undefined,
+    },
+    {
+      id: typeof params.oldCardId === "string" ? params.oldCardId : undefined,
+      name: typeof params.oldCardName === "string" ? params.oldCardName : undefined,
+    },
+  ];
+  return candidates.some(({ id, name }) => {
+    if (id !== undefined) {
+      return findDeckEntriesByCardId(ctx, id, (card) => card.rarity === "Starter").length > 0;
+    }
+    if (name !== undefined) {
+      return findDeckEntriesByName(ctx, name, (card) => card.rarity === "Starter").length > 0;
+    }
+    return false;
+  });
 }
 
 function randomStarterRemovalCanInvalidateNamedStarterTarget(

@@ -300,7 +300,7 @@ describe("one_operation_many_targets shape", () => {
       target: metaRewardTarget(),
       expected: {
         subIds: ["gain_named_card", "gain_named_dreamsign"],
-        subParams: [{ name: "Steady Burn" }, { name: "Quiet Star" }],
+        subParams: [{ cardId: "card-1", name: "Steady Burn" }, { name: "Quiet Star" }],
       },
     },
   ])("maps $templateId to shared reward params", ({ templateId, params, target, expected }) => {
@@ -387,6 +387,7 @@ describe("one_operation_many_targets shape", () => {
     expect(payload.convertedEssence).toBe(option.effectConvertedEssence);
     expect(selector?.selectorKind).toBe("card");
     expect(payloadRecord(payload)).toEqual({
+      cardId: selector?.selectorKind === "card" ? selector.ids?.[0] : undefined,
       cardName: selector?.selectorKind === "card" ? selector.names?.[0] : undefined,
       transfiguration: rewardOperation?.payload.transfigurationName,
     });

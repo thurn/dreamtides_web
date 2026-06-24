@@ -304,7 +304,7 @@ describe("deck-scope viability audits", () => {
       "remove_transfiguration_from_card",
     ]) {
       const t = getCost(id);
-      expect(t.viable({ cardName: "Steady Burn" }, ctx), id).toBe(false);
+      expect(t.viable({ cardId: "steady-burn", cardName: "Steady Burn" }, ctx), id).toBe(false);
     }
   });
 
@@ -319,7 +319,7 @@ describe("deck-scope viability audits", () => {
       "transform_card_to_random_pool",
     ]) {
       const t = getCost(id);
-      expect(t.viable({ cardName: "Steady Burn" }, ctx), id).toBe(true);
+      expect(t.viable({ cardId: "steady-burn", cardName: "Steady Burn" }, ctx), id).toBe(true);
     }
   });
 
@@ -346,8 +346,8 @@ describe("deck-scope viability audits", () => {
         },
       ],
     });
-    expect(t.viable({ cardName: "Steady Burn" }, untransfigured)).toBe(false);
-    expect(t.viable({ cardName: "Steady Burn" }, partiallyTransfigured)).toBe(true);
+    expect(t.viable({ cardId: "steady-burn", cardName: "Steady Burn" }, untransfigured)).toBe(false);
+    expect(t.viable({ cardId: "steady-burn", cardName: "Steady Burn" }, partiallyTransfigured)).toBe(true);
   });
 
   it("remove_transfiguration_from_card rolls only transfigured named entries", () => {
@@ -371,6 +371,7 @@ describe("deck-scope viability audits", () => {
     });
 
     expect(t.rollParams(ctx, { ...draw, selectionAttempt: 1 })).toEqual({
+      cardId: "steady-burn",
       cardName: "Steady Burn",
     });
   });
@@ -683,7 +684,7 @@ describe("meta_pay_2_costs (compound) locking", () => {
     const params = {
       subIds: [firstId, secondId] as const,
       subParams: [
-        { cardName: "Whatever" },
+        { cardId: "nonexistent-id", cardName: "Whatever" },
         { drawCount: 2 },
       ] as const,
     };

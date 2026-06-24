@@ -54,6 +54,21 @@ function targetName(target: TargetedRewardTarget): string | undefined {
   return undefined;
 }
 
+function targetCardId(target: TargetedRewardTarget): string | undefined {
+  const selector = target.selector;
+  if (
+    "ids" in selector
+    && Array.isArray(selector.ids)
+    && selector.ids.length > 0
+    && selector.selectorKind === "card"
+    && selector.selection === "exact"
+  ) {
+    const id = selector.ids[0];
+    return typeof id === "string" ? id : undefined;
+  }
+  return undefined;
+}
+
 function predicateId(target: TargetedRewardTarget): string | undefined {
   return target.key.startsWith("predicate:") ? target.key.replace("predicate:", "") : undefined;
 }
@@ -111,7 +126,7 @@ function metaRewardParams(
   return pair
     ? {
         subIds: ["gain_named_card", "gain_named_dreamsign"],
-        subParams: [{ name: pair.cardName }, { name: pair.dreamsignName }],
+        subParams: [{ cardId: pair.cardId, name: pair.cardName }, { name: pair.dreamsignName }],
       }
     : null;
 }
@@ -122,6 +137,7 @@ export function rewardParamsFor(
   target: TargetedRewardTarget,
 ): TemplateParams | null {
   const cardName = targetName(target);
+  const cardId = targetCardId(target);
   const predId = predicateId(target);
   const cardTypePredId = cardTypePredicateId(target);
   const siteType = routeSiteType(target);
@@ -129,13 +145,16 @@ export function rewardParamsFor(
 
   switch (templateId) {
     case "gain_named_card":
+      return cardName === undefined
+        ? null
+        : { cardId: cardId ?? undefined, name: cardName };
     case "gain_named_dreamsign":
       return cardName === undefined ? null : { name: cardName };
     case "apply_named_transfiguration_to_card_name": {
       const transfiguration = stringParam(params, "transfiguration");
       return cardName === undefined || transfiguration === undefined
         ? null
-        : { transfiguration, cardName };
+        : { transfiguration, cardId: cardId ?? undefined, cardName };
     }
     case "gain_random_predicate_cards":
     case "duplicate_random_predicate": {
@@ -149,24 +168,33 @@ export function rewardParamsFor(
         : { ...transfigPred, count };
     }
     case "purge_named_starter":
-      return cardName === undefined ? null : { cardName };
+      return cardName === undefined ? null : { cardId: cardId ?? undefined, cardName };
     case "purge_random_starter_with_predicate_replacement":
       return predId === undefined ? null : { predicateId: predId };
     case "transform_card_in_deck_into_named": {
       const oldCardName = stringParam(params, "oldCardName");
+      const oldCardId = stringParam(params, "oldCardId");
+      const newCardId = cardId;
       return cardName === undefined || oldCardName === undefined
         ? null
-        : { oldCardName, newCardName: cardName };
+        : {
+            oldCardId: oldCardId ?? undefined,
+            oldCardName,
+            newCardId: newCardId ?? undefined,
+            newCardName: cardName,
+          };
     }
     case "duplicate_named_card_X": {
       const count = numberParam(params, "count");
-      return cardName === undefined || count === undefined ? null : { cardName, count };
+      return cardName === undefined || count === undefined
+        ? null
+        : { cardId: cardId ?? undefined, cardName, count };
     }
     case "change_card_to_become_type": {
       const cardTypePredicateId = stringParam(params, "cardTypePredicateId");
       return cardName === undefined || cardTypePredicateId === undefined
         ? null
-        : { cardName, cardTypePredicateId };
+        : { cardId: cardId ?? undefined, cardName, cardTypePredicateId };
     }
     case "modify_random_cards_to_types": {
       const count = numberParam(params, "count");
@@ -176,12 +204,16 @@ export function rewardParamsFor(
     }
     case "make_card_reclaim": {
       const count = numberParam(params, "count");
-      return cardName === undefined || count === undefined ? null : { cardName, count };
+      return cardName === undefined || count === undefined
+        ? null
+        : { cardId: cardId ?? undefined, cardName, count };
     }
     case "opening_hand_grant_for_X_battles":
     case "temporary_card_copy_for_X_battles": {
       const battles = numberParam(params, "battles");
-      return cardName === undefined || battles === undefined ? null : { cardName, battles };
+      return cardName === undefined || battles === undefined
+        ? null
+        : { cardId: cardId ?? undefined, cardName, battles };
     }
     case "card_cost_reduction_for_X_battles": {
       const amount = numberParam(params, "amount");

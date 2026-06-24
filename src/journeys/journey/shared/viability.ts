@@ -26,8 +26,10 @@ import type { JourneyContext } from "../context";
 import { isCardEligibleForTransfiguration } from "../effects";
 import { cardMatches } from "./content";
 import {
+  findTransfiguredDeckEntriesByCardId,
   findTransfiguredDeckEntriesByName,
   findTransfiguredDeckEntriesByPredicate,
+  findUntransfiguredDeckEntriesByCardId,
   findUntransfiguredDeckEntriesByName,
   findUntransfiguredDeckEntriesByPredicate,
   findUntransfiguredDeckEntriesByPredicateEligibleForTransfiguration,
@@ -126,6 +128,31 @@ export function deckContainsTransfiguredCardByName(
   cardName: string,
 ): boolean {
   return findTransfiguredDeckEntriesByName(ctx, cardName).length >= 1;
+}
+
+export function deckContainsCardId(ctx: JourneyContext, cardId: string): boolean {
+  return deckContainsCard(ctx, cardId);
+}
+
+export function deckContainsUntransfiguredCardById(
+  ctx: JourneyContext,
+  cardId: string,
+  transfigurationId?: string,
+): boolean {
+  return findUntransfiguredDeckEntriesByCardId(
+    ctx,
+    cardId,
+    transfigurationId === undefined
+      ? undefined
+      : (card) => isCardEligibleForTransfiguration(transfigurationId, card),
+  ).length >= 1;
+}
+
+export function deckContainsTransfiguredCardById(
+  ctx: JourneyContext,
+  cardId: string,
+): boolean {
+  return findTransfiguredDeckEntriesByCardId(ctx, cardId).length >= 1;
 }
 
 export function deckContainsTransfiguredPredicate(

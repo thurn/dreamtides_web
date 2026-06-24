@@ -141,3 +141,45 @@ export function findDeckEntryTransfiguration(
 ): ProjectedDeckEntryTransfiguration | undefined {
   return findProjectedDeckEntry(ctx, entryId)?.transfiguration;
 }
+
+export function findDeckEntriesByCardId(
+  ctx: JourneyContext,
+  cardId: string,
+  filter: (card: CardContent) => boolean = () => true,
+): string[] {
+  return projectedDeckEntries(ctx)
+    .filter((entry) => entry.card.id === cardId && filter(entry.card))
+    .map((entry) => entry.entryId);
+}
+
+export function findFirstDeckEntryIdByCardId(
+  ctx: JourneyContext,
+  cardId: string,
+  filter: (card: CardContent) => boolean = () => true,
+): string | undefined {
+  return findDeckEntriesByCardId(ctx, cardId, filter)[0];
+}
+
+export function findUntransfiguredDeckEntriesByCardId(
+  ctx: JourneyContext,
+  cardId: string,
+  filter: (card: CardContent) => boolean = () => true,
+): string[] {
+  return projectedDeckEntries(ctx)
+    .filter(
+      (entry) =>
+        entry.card.id === cardId
+        && filter(entry.card)
+        && entry.transfiguration == null,
+    )
+    .map((entry) => entry.entryId);
+}
+
+export function findTransfiguredDeckEntriesByCardId(
+  ctx: JourneyContext,
+  cardId: string,
+): string[] {
+  return projectedDeckEntries(ctx)
+    .filter((entry) => entry.card.id === cardId && entry.transfiguration != null)
+    .map((entry) => entry.entryId);
+}

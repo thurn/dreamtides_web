@@ -301,11 +301,11 @@ describe("transfiguration eligibility audit", () => {
         deckEntries: [{ cardId: eligible.id, copies: 1 }],
       });
       expect(
-        t.viable({ transfiguration, cardName: eligible.name }, noMatch),
+        t.viable({ transfiguration, cardId: eligible.id, cardName: eligible.name }, noMatch),
         `${transfiguration} should decline when no deck card is eligible`,
       ).toBe(false);
       expect(
-        t.viable({ transfiguration, cardName: eligible.name }, hasMatch),
+        t.viable({ transfiguration, cardId: eligible.id, cardName: eligible.name }, hasMatch),
         `${transfiguration} should admit when at least one deck card is eligible`,
       ).toBe(true);
     },
@@ -322,11 +322,11 @@ describe("transfiguration eligibility audit", () => {
     });
     for (const transfiguration of ["Amplified", "Perfected"]) {
       expect(
-        t.viable({ transfiguration, cardName: COST_TWO_EVENT.name }, empty),
+        t.viable({ transfiguration, cardId: COST_TWO_EVENT.id, cardName: COST_TWO_EVENT.name }, empty),
         transfiguration,
       ).toBe(false);
       expect(
-        t.viable({ transfiguration, cardName: COST_TWO_EVENT.name }, nonEmpty),
+        t.viable({ transfiguration, cardId: COST_TWO_EVENT.id, cardName: COST_TWO_EVENT.name }, nonEmpty),
         transfiguration,
       ).toBe(true);
     }
@@ -464,10 +464,10 @@ describe("transfiguration-state viability", () => {
       ],
     });
     expect(
-      t.viable({ transfiguration: "Empowered", cardName: EVENT_CARD.name }, fullyTransfigured),
+      t.viable({ transfiguration: "Empowered", cardId: EVENT_CARD.id, cardName: EVENT_CARD.name }, fullyTransfigured),
     ).toBe(false);
     expect(
-      t.viable({ transfiguration: "Empowered", cardName: EVENT_CARD.name }, partiallyTransfigured),
+      t.viable({ transfiguration: "Empowered", cardId: EVENT_CARD.id, cardName: EVENT_CARD.name }, partiallyTransfigured),
     ).toBe(true);
   });
 
@@ -612,23 +612,23 @@ describe("named-card deck-scope audit", () => {
   // card_name` is covered in the transfiguration-state suite because it also
   // depends on per-entry transfiguration state and per-card eligibility.
   const NAMED_CARD_CASES = [
-    { id: "duplicate_named_card_X", params: { cardName: "Steady Burn", count: 1 } },
+    { id: "duplicate_named_card_X", params: { cardId: "steady-burn", cardName: "Steady Burn", count: 1 } },
     {
       id: "transform_card_in_deck_into_named",
-      params: { oldCardName: "Steady Burn", newCardName: "Steady Burn" },
+      params: { oldCardId: "steady-burn", oldCardName: "Steady Burn", newCardId: "steady-burn", newCardName: "Steady Burn" },
     },
-    { id: "make_card_reclaim", params: { cardName: "Steady Burn", count: 1 } },
+    { id: "make_card_reclaim", params: { cardId: "steady-burn", cardName: "Steady Burn", count: 1 } },
     {
       id: "opening_hand_grant_for_X_battles",
-      params: { cardName: "Steady Burn", battles: 3 },
+      params: { cardId: "steady-burn", cardName: "Steady Burn", battles: 3 },
     },
     {
       id: "temporary_card_copy_for_X_battles",
-      params: { cardName: "Steady Burn", battles: 3 },
+      params: { cardId: "steady-burn", cardName: "Steady Burn", battles: 3 },
     },
     {
       id: "change_card_to_become_type",
-      params: { cardName: "Steady Burn", cardTypePredicateId: "warriors" },
+      params: { cardId: "steady-burn", cardName: "Steady Burn", cardTypePredicateId: "warriors" },
     },
   ] as const;
 
@@ -666,7 +666,7 @@ describe("named-card deck-scope audit", () => {
       starterCards: 0,
     });
     expect(
-      getReward("purge_named_starter").viable({ cardName: "Starter A" }, ctx),
+      getReward("purge_named_starter").viable({ cardId: "starter-a", cardName: "Starter A" }, ctx),
     ).toBe(false);
   });
 
@@ -682,7 +682,7 @@ describe("named-card deck-scope audit", () => {
       starterCards: 1,
     });
     expect(
-      getReward("purge_named_starter").viable({ cardName: "Starter A" }, ctx),
+      getReward("purge_named_starter").viable({ cardId: "starter-a", cardName: "Starter A" }, ctx),
     ).toBe(true);
   });
 });
@@ -875,6 +875,7 @@ describe("meta_gain_2_rewards (compound) viability", () => {
     });
     expect(getReward("purge_random_starter").viable({}, ctx)).toBe(true);
     expect(getReward("make_card_reclaim").viable({
+      cardId: STARTER_CARD.id,
       cardName: STARTER_CARD.name,
       count: 2,
     }, ctx)).toBe(true);
@@ -887,10 +888,10 @@ describe("meta_gain_2_rewards (compound) viability", () => {
         subIds,
         subParams: [
           subIds[0] === "make_card_reclaim"
-            ? { cardName: STARTER_CARD.name, count: 2 }
+            ? { cardId: STARTER_CARD.id, cardName: STARTER_CARD.name, count: 2 }
             : {},
           subIds[1] === "make_card_reclaim"
-            ? { cardName: STARTER_CARD.name, count: 2 }
+            ? { cardId: STARTER_CARD.id, cardName: STARTER_CARD.name, count: 2 }
             : {},
         ] as const,
       }, ctx), subIds.join(" + ")).toBe(false);
@@ -905,7 +906,9 @@ describe("meta_gain_2_rewards (compound) viability", () => {
       starterCards: 1,
     });
     const transformParams = {
+      oldCardId: STARTER_CARD.id,
       oldCardName: STARTER_CARD.name,
+      newCardId: STARTER_CARD.id,
       newCardName: STARTER_CARD.name,
     };
     expect(getReward("purge_random_starter").viable({}, ctx)).toBe(true);

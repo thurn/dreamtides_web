@@ -526,7 +526,7 @@ describe("Card cost apply (non-choice)", () => {
       ],
     });
     const { mut, calls } = createRecordingMutations();
-    t.apply({ cardName: "Event Alpha" }, ctx, mut, undefined);
+    t.apply({ cardId: "event-alpha", cardName: "Event Alpha" }, ctx, mut, undefined);
 
     expect(calls).toEqual([
       {
@@ -611,7 +611,7 @@ describe("Card cost apply (non-choice)", () => {
       ],
     });
     const { mut, calls } = createRecordingMutations();
-    t.apply({ cardName: "Event Alpha" }, ctx, mut, undefined);
+    t.apply({ cardId: "event-alpha", cardName: "Event Alpha" }, ctx, mut, undefined);
 
     expect(calls).toHaveLength(2);
     expect(calls[0]).toEqual({
@@ -640,7 +640,7 @@ describe("Card cost apply (non-choice)", () => {
       ],
     });
     const { mut, calls } = createRecordingMutations();
-    t.apply({ cardName: "Event Alpha" }, ctx, mut, undefined);
+    t.apply({ cardId: "event-alpha", cardName: "Event Alpha" }, ctx, mut, undefined);
 
     expect(calls).toEqual([
       {
@@ -664,7 +664,7 @@ describe("Card cost apply (non-choice)", () => {
       ],
     });
     const { mut, calls } = createRecordingMutations();
-    t.apply({ cardName: "Event Alpha" }, ctx, mut, undefined);
+    t.apply({ cardId: "event-alpha", cardName: "Event Alpha" }, ctx, mut, undefined);
 
     expect(calls).toEqual([
       {
@@ -690,10 +690,10 @@ describe("Card cost apply (non-choice)", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     try {
       const { mut, calls } = createRecordingMutations();
-      t.apply({ cardName: "Event Alpha" }, ctx, mut, undefined);
+      t.apply({ cardId: "event-alpha", cardName: "Event Alpha" }, ctx, mut, undefined);
       expect(calls).toEqual([]);
       expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining("no named deck entries for card name \"Event Alpha\" have a transfiguration"),
+        expect.stringContaining("no deck entries for card id \"event-alpha\" have a transfiguration"),
       );
     } finally {
       warnSpy.mockRestore();
@@ -715,10 +715,10 @@ describe("Card cost apply (non-choice)", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     try {
       const { mut, calls } = createRecordingMutations();
-      t.apply({ cardName: "Event Alpha" }, ctx, mut, undefined);
+      t.apply({ cardId: "event-alpha", cardName: "Event Alpha" }, ctx, mut, undefined);
       expect(calls).toEqual([]);
       expect(warnSpy).toHaveBeenCalledWith(
-        expect.stringContaining("no named deck entries for card name \"Event Alpha\" have a transfiguration"),
+        expect.stringContaining("no deck entries for card id \"event-alpha\" have a transfiguration"),
       );
     } finally {
       warnSpy.mockRestore();

@@ -56,10 +56,10 @@ import {
   pickFromList,
 } from "./content";
 import {
-  findDeckEntriesByName,
+  findDeckEntriesByCardId,
   findDeckEntriesByPredicate,
   findDeckEntryTransfiguration,
-  findFirstDeckEntryIdByCardName,
+  findFirstDeckEntryIdByCardId,
   projectedDeckEntries,
 } from "./deckEntries";
 import { NEGATIVE_DREAMWELL_CARDS } from "./dreamwell";
@@ -67,9 +67,9 @@ import { PREDICATES, getPredicate } from "./predicates";
 import { quoteName, withLockedPrefix } from "./text";
 import type { Cost, Predicate } from "./types";
 import {
-  deckContainsCardByName,
+  deckContainsCard,
   deckContainsPredicate,
-  deckContainsTransfiguredCardByName,
+  deckContainsTransfiguredCardById,
   deckContainsTransfiguredPredicate,
   deckHasDuplicateStack,
   deckHasMinSize,
@@ -578,33 +578,33 @@ function rollPredicate(draw: DrawContext, label: string): Predicate {
   );
 }
 
-type PurgeNamedCardParams = { cardName: string };
+type PurgeNamedCardParams = { cardId: string; cardName?: string };
 const purgeNamedCard: Cost<PurgeNamedCardParams> = {
   id: "purge_named_card",
   weight: MINOR_RANDOM_TRADE_COST_WEIGHT,
   rollParams: (ctx, draw) => {
     const deckCards = cardMatches(ctx, { source: "deck" });
-    return {
-      cardName: deckCards.length > 0
-        ? pickFromList(draw, "purge_named:c", deckCards).name
-        : "Placeholder Card",
-    };
+    const card = deckCards.length > 0
+      ? pickFromList(draw, "purge_named:c", deckCards)
+      : undefined;
+    return card !== undefined
+      ? { cardId: card.id, cardName: card.name }
+      : { cardId: "placeholder", cardName: "Placeholder Card" };
   },
   cec: () => CARD_CEC * 0.5,
-  // The template purges a specific named card, so viability requires the deck
-  // to actually contain a card with that name. Using `deckHasMinSize(ctx, 1)`
+  // The template purges a specific card, so viability requires the deck to
+  // actually contain a card with that id. Using `deckHasMinSize(ctx, 1)`
   // would surface a no-op option whenever the deck is non-empty but lacks the
-  // named card (e.g. after a state transition between rollParams and
-  // viable).
-  viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
+  // specific card (e.g. after a state transition between rollParams and viable).
+  viable: (p, ctx) => deckContainsCard(ctx, p.cardId),
   locked: () => false,
-  render: (p) => `Purge ${quoteName(p.cardName)}`,
+  render: (p) => `Purge ${quoteName(p.cardName ?? p.cardId)}`,
   apply: (p, ctx, mut) => {
-    const entryId = findDeckEntriesByName(ctx, p.cardName)[0];
+    const entryId = findDeckEntriesByCardId(ctx, p.cardId)[0];
     if (entryId === undefined) {
       warnSkippedCardApply(
         "purge_named_card",
-        `deck entry for card name ${JSON.stringify(p.cardName)} was not found`,
+        `deck entry for card id ${JSON.stringify(p.cardId)} was not found`,
       );
       return;
     }
@@ -707,31 +707,32 @@ const gainRandomCardsFromPool: Cost<GainRandomFromPoolParams> = {
   },
 };
 
-type TransformCardToRandomParams = { cardName: string };
+type TransformCardToRandomParams = { cardId: string; cardName?: string };
 const transformCardToRandomPool: Cost<TransformCardToRandomParams> = {
   id: "transform_card_to_random_pool",
   weight: MINOR_RANDOM_TRADE_COST_WEIGHT,
   rollParams: (ctx, draw) => {
     const deckCards = cardMatches(ctx, { source: "deck" });
-    return {
-      cardName: deckCards.length > 0
-        ? pickFromList(draw, "xform_random:c", deckCards).name
-        : "Placeholder Card",
-    };
+    const card = deckCards.length > 0
+      ? pickFromList(draw, "xform_random:c", deckCards)
+      : undefined;
+    return card !== undefined
+      ? { cardId: card.id, cardName: card.name }
+      : { cardId: "placeholder", cardName: "Placeholder Card" };
   },
   cec: () => CARD_CEC * 0.5,
-  // The chosen card is named by params; viability requires the deck to
-  // contain a card with that name. `deckHasMinSize(ctx, 1)` would surface a
-  // no-op option whenever the deck holds different cards.
-  viable: (p, ctx) => deckContainsCardByName(ctx, p.cardName),
+  // The chosen card is keyed by id; viability requires the deck to contain a
+  // card with that id. `deckHasMinSize(ctx, 1)` would surface a no-op option
+  // whenever the deck holds different cards.
+  viable: (p, ctx) => deckContainsCard(ctx, p.cardId),
   locked: () => false,
-  render: (p) => `Transform ${quoteName(p.cardName)} into a random card from the pool`,
+  render: (p) => `Transform ${quoteName(p.cardName ?? p.cardId)} into a random card from the pool`,
   apply: (p, ctx, mut) => {
-    const entryId = findFirstDeckEntryIdByCardName(ctx, p.cardName);
+    const entryId = findFirstDeckEntryIdByCardId(ctx, p.cardId);
     if (entryId === undefined) {
       warnSkippedCardApply(
         "transform_card_to_random_pool",
-        `deck entry for card name ${JSON.stringify(p.cardName)} was not found`,
+        `deck entry for card id ${JSON.stringify(p.cardId)} was not found`,
       );
       return;
     }
@@ -1117,7 +1118,7 @@ const shuffleNegativeDreamwellCards: Cost<ShuffleNegDreamwellParams> = {
   },
 };
 
-type RemoveTransfigCardParams = { cardName: string };
+type RemoveTransfigCardParams = { cardId: string; cardName?: string };
 const removeTransfigurationFromCard: Cost<RemoveTransfigCardParams> = {
   id: "remove_transfiguration_from_card",
   weight: MINOR_RANDOM_TRADE_COST_WEIGHT,
@@ -1125,18 +1126,19 @@ const removeTransfigurationFromCard: Cost<RemoveTransfigCardParams> = {
     const deckCards = projectedDeckEntries(ctx)
       .filter((entry) => entry.transfiguration != null)
       .map((entry) => entry.card);
-    return {
-      cardName: deckCards.length > 0
-        ? pickFromList(draw, "rem_transfig:c", deckCards).name
-        : "Placeholder Card",
-    };
+    const card = deckCards.length > 0
+      ? pickFromList(draw, "rem_transfig:c", deckCards)
+      : undefined;
+    return card !== undefined
+      ? { cardId: card.id, cardName: card.name }
+      : { cardId: "placeholder", cardName: "Placeholder Card" };
   },
   cec: () => CARD_CEC * 0.6,
-  viable: (p, ctx) => deckContainsTransfiguredCardByName(ctx, p.cardName),
+  viable: (p, ctx) => deckContainsTransfiguredCardById(ctx, p.cardId),
   locked: () => false,
-  render: (p) => `Remove the transfiguration from ${quoteName(p.cardName)}`,
+  render: (p) => `Remove the transfiguration from ${quoteName(p.cardName ?? p.cardId)}`,
   apply: (p, ctx, mut) => {
-    const matchingEntryIds = findDeckEntriesByName(ctx, p.cardName);
+    const matchingEntryIds = findDeckEntriesByCardId(ctx, p.cardId);
     const entryId = matchingEntryIds.find((candidate) =>
       findDeckEntryTransfiguration(ctx, candidate) != null
     );
@@ -1144,8 +1146,8 @@ const removeTransfigurationFromCard: Cost<RemoveTransfigCardParams> = {
       warnSkippedCardApply(
         "remove_transfiguration_from_card",
         matchingEntryIds.length === 0
-          ? `deck entry for card name ${JSON.stringify(p.cardName)} was not found`
-          : `no named deck entries for card name ${JSON.stringify(p.cardName)} have a transfiguration`,
+          ? `deck entry for card id ${JSON.stringify(p.cardId)} was not found`
+          : `no deck entries for card id ${JSON.stringify(p.cardId)} have a transfiguration`,
       );
       return;
     }

@@ -372,7 +372,7 @@ describe("Card reward apply (non-choice)", () => {
       ],
     });
     const { mut, calls } = createRecordingMutations();
-    t.apply({ cardName: "Starter Alpha" }, ctx, mut, undefined);
+    t.apply({ cardId: "starter-alpha", cardName: "Starter Alpha" }, ctx, mut, undefined);
 
     expect(calls).toEqual([
       {
@@ -483,7 +483,7 @@ describe("Card reward apply (non-choice)", () => {
     const t = getReward("gain_named_card");
     const ctx = buildContext({ cards: cardFixture() });
     const { mut, calls } = createRecordingMutations();
-    t.apply({ name: "Event Beta" }, ctx, mut, undefined);
+    t.apply({ cardId: "event-beta", name: "Event Beta" }, ctx, mut, undefined);
 
     expect(calls).toEqual([
       { method: "addCardById", args: ["event-beta", "dream_journey:gain_named_card"] },
@@ -501,7 +501,7 @@ describe("Card reward apply (non-choice)", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     try {
       const { mut, calls } = createRecordingMutations();
-      t.apply({ transfiguration: "Amplified", cardName: "Event Alpha" }, ctx, mut, undefined);
+      t.apply({ transfiguration: "Amplified", cardId: "event-alpha", cardName: "Event Alpha" }, ctx, mut, undefined);
       expect(calls).toEqual([]);
       expect(warnSpy).toHaveBeenCalledTimes(1);
     } finally {
@@ -523,7 +523,7 @@ describe("Card reward apply (non-choice)", () => {
       ],
     });
     const { mut, calls } = createRecordingMutations();
-    t.apply({ transfiguration: "Empowered", cardName: "Event Alpha" }, ctx, mut, undefined);
+    t.apply({ transfiguration: "Empowered", cardId: "event-alpha", cardName: "Event Alpha" }, ctx, mut, undefined);
 
     expect(calls).toEqual([
       {
@@ -548,7 +548,7 @@ describe("Card reward apply (non-choice)", () => {
     const { mut, calls } = createRecordingMutations();
 
     t.apply(
-      { cardName: "Event Alpha", cardTypePredicateId: "spirit_animals" },
+      { cardId: "event-alpha", cardName: "Event Alpha", cardTypePredicateId: "spirit_animals" },
       ctx,
       mut,
       undefined,
@@ -661,7 +661,7 @@ describe("Card reward apply (non-choice)", () => {
     });
     const { mut, calls } = createRecordingMutations();
 
-    t.apply({ cardName: "Event Alpha", count: 2 }, ctx, mut, undefined);
+    t.apply({ cardId: "event-alpha", cardName: "Event Alpha", count: 2 }, ctx, mut, undefined);
 
     expect(calls).toEqual([
       {
@@ -2320,7 +2320,7 @@ describe("Card reward apply (non-choice)", () => {
       ],
     });
     const { mut, calls } = createRecordingMutations();
-    t.apply({ newCardName: "Event Beta" }, ctx, mut, undefined);
+    t.apply({ newCardId: "event-beta", newCardName: "Event Beta" }, ctx, mut, undefined);
 
     expect(calls).toEqual([
       {
@@ -2345,7 +2345,7 @@ describe("Card reward apply (non-choice)", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     try {
       const { mut, calls } = createRecordingMutations();
-      t.apply({ newCardName: "Event Beta" }, ctx, mut, undefined);
+      t.apply({ newCardId: "event-beta", newCardName: "Event Beta" }, ctx, mut, undefined);
       expect(calls).toEqual([]);
       expect(warnSpy).toHaveBeenCalledTimes(1);
     } finally {
@@ -2356,7 +2356,7 @@ describe("Card reward apply (non-choice)", () => {
   it("transform_starter_into_named_card warns and skips when the target card is missing", () => {
     const t = getReward("transform_starter_into_named_card");
     const ctx = buildContext({
-      cards: cardFixture().filter((card) => card.name !== "Event Beta"),
+      cards: cardFixture().filter((card) => card.id !== "event-beta"),
       deckEntries: [
         { cardId: "starter-alpha", copies: 1, entryIds: ["deck-starter-alpha"] },
       ],
@@ -2364,7 +2364,7 @@ describe("Card reward apply (non-choice)", () => {
     const warnSpy = vi.spyOn(console, "warn").mockImplementation(() => {});
     try {
       const { mut, calls } = createRecordingMutations();
-      t.apply({ newCardName: "Event Beta" }, ctx, mut, undefined);
+      t.apply({ newCardId: "event-beta", newCardName: "Event Beta" }, ctx, mut, undefined);
       expect(calls).toEqual([]);
       expect(warnSpy).toHaveBeenCalledTimes(1);
     } finally {
@@ -2383,7 +2383,7 @@ describe("Card reward apply (non-choice)", () => {
       ],
     });
     const { mut, calls } = createRecordingMutations();
-    t.apply({ oldCardName: "Event Alpha", newCardName: "Event Beta" }, ctx, mut, undefined);
+    t.apply({ oldCardId: "event-alpha", oldCardName: "Event Alpha", newCardId: "event-beta", newCardName: "Event Beta" }, ctx, mut, undefined);
 
     expect(calls).toEqual([
       {
@@ -2409,7 +2409,7 @@ describe("Card reward apply (non-choice)", () => {
     try {
       const { mut, calls } = createRecordingMutations();
       t.apply(
-        { oldCardName: "Event Alpha", newCardName: "Event Beta" },
+        { oldCardId: "event-alpha", oldCardName: "Event Alpha", newCardId: "event-beta", newCardName: "Event Beta" },
         ctx,
         mut,
         undefined,
@@ -2424,7 +2424,7 @@ describe("Card reward apply (non-choice)", () => {
   it("transform_card_in_deck_into_named warns and skips when the target card is missing", () => {
     const t = getReward("transform_card_in_deck_into_named");
     const ctx = buildContext({
-      cards: cardFixture().filter((card) => card.name !== "Event Beta"),
+      cards: cardFixture().filter((card) => card.id !== "event-beta"),
       deckEntries: [
         { cardId: "event-alpha", copies: 1, entryIds: ["deck-event-alpha"] },
       ],
@@ -2433,7 +2433,7 @@ describe("Card reward apply (non-choice)", () => {
     try {
       const { mut, calls } = createRecordingMutations();
       t.apply(
-        { oldCardName: "Event Alpha", newCardName: "Event Beta" },
+        { oldCardId: "event-alpha", oldCardName: "Event Alpha", newCardId: "event-beta", newCardName: "Event Beta" },
         ctx,
         mut,
         undefined,
