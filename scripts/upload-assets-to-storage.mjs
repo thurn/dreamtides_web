@@ -104,9 +104,23 @@ function main() {
     // rsync the staged tree to the bucket root, mirroring paths. No
     // delete-unmatched flag, so the upload is purely additive and never removes
     // an unrelated bucket object.
+    //
+    // `--checksums-only` compares content hashes instead of modification times.
+    // The staging copy above (`cp -RL` into a fresh temp dir) stamps every file
+    // with the current mtime on each run, so rsync's default mtime comparison
+    // would treat all art as changed and re-upload the entire set every time.
+    // Hashing local files is cheap; this makes the upload skip unchanged art and
+    // only push files whose bytes actually differ from the bucket.
     execFileSync(
       "gcloud",
-      ["storage", "rsync", "--recursive", staging, `gs://${BUCKET}`],
+      [
+        "storage",
+        "rsync",
+        "--recursive",
+        "--checksums-only",
+        staging,
+        `gs://${BUCKET}`,
+      ],
       { stdio: "inherit" },
     );
     console.log("Upload complete.");
