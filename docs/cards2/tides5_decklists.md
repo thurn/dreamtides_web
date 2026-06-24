@@ -1511,7 +1511,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 
 ## Grath signature — Spirit Animal Flood
 
-`tide-sig-15` — signature tide, 77 distinct cards, 108 copies, Grath's signature
+`tide-sig-15` — signature tide, 73 distinct cards, 108 copies, Grath's signature
 
 *A spirit animal flooding engine that ramps energy through Dawn triggers on cheap creatures and converts a wide board into an overwhelming finish, distinguished from its nearest sibling by leaning into board-wide character-play synergies — Conduit of Resonance chains Dawn triggers across all allies on every character played, and Cindermarch mass-awakens the board on materialization — rather than single-champion burst or hand-filtering loops.*
 
@@ -1521,6 +1521,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 2× Cloudmantle Ray
 - 2× Luminwings
 - 2× Blazing Emberwing
+- 2× Petal-Seer
 - 2× Beacon of Tomorrow
 - 2× Lumin-Gate Seer
 - 2× Spirit Bond
@@ -1528,7 +1529,9 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 2× Flamboyant Flamingo
 - 2× Roots of Rebirth
 - 2× Eternal Stag
+- 2× Ashen Remnant
 - 2× Vigilant Howler
+- 2× The Dread Sovereign
 - 2× Ebonwing
 - 2× Moonbound Wolf
 - 2× Ethereal Courser
@@ -1546,50 +1549,43 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 2× Sunshadow Eagle
 - 2× Blood Moon Triad
 - 2× Turquoise Aurelia
+- 2× Dawnprowler Panther
 - 2× Lord of Hidden Paths
 - 2× Scrap Reclaimer
-- 1× Endless Projection
 - 1× Wistful Angler
 - 1× Radiant Trio
 - 1× Cindermarch
 - 1× Conduit of Resonance
-- 1× Petal-Seer
 - 1× Packcaller of Shadows
 - 1× Sky Voyager
 - 1× Dusk Duelist
 - 1× Voidcaller
 - 1× Curio Dealer
-- 1× Ashen Remnant
 - 1× Momentum's Edge
 - 1× Prophet of the Consumed
-- 1× The Dread Sovereign
 - 1× Dawnhorn Elder
 - 1× Winterbough Monk
-- 1× Eclipse Herald
 - 1× Ambersting
+- 1× Amber Aurelia
 - 1× Sylvan Matriarch
 - 1× Lumineth
 - 1× Frostbound Defiant
 - 1× Kindlehorn
-- 1× Shapeshifter Spirit
 - 1× Carrion Lord
 - 1× Forsaken Pact
-- 1× Ethereal Courser
 - 1× Starsea Traveler
 - 1× Looming Oracle
+- 1× Bloomweaver
 - 1× Melodist of the Finale
 - 1× Selfless Rescuer
-- 1× Forgotten Factory Titan
 - 1× Paleclaw Panther
 - 1× Amythest Aurelia
 - 1× Ruin Scavenger
+- 1× Overstory Explorer
 - 1× Memory Tracer
 - 1× Mother of Flames
-- 1× Containment Specialist
 - 1× Quiet Reflection
-- 1× Dawnprowler Panther
 - 1× Sunset Chronicler
-- 1× Still Dreamer
 - 1× Heavenward Penitent
 - 1× Clockwork Conductor
 - 1× Nexus Wayfinder
@@ -1660,7 +1656,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 1× Kindlehorn
 - 1× Carrion Lord
 - 1× Forsaken Pact
-- 1× Ethereal Courser
+- 1× Ferryman of the Falls
 - 1× Starsea Traveler
 - 1× Looming Oracle
 - 1× Selfless Rescuer
@@ -1743,7 +1739,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Empyreal Light
 - 1× Carrion Lord
 - 1× Forsaken Pact
-- 1× Ethereal Courser
+- 1× Ferryman of the Falls
 - 1× Starsea Traveler
 - 1× Looming Oracle
 - 1× Melodist of the Finale
@@ -2239,7 +2235,7 @@ Tide-fac-04 is built almost entirely around spirit animals, with 35 characters a
 - 1× Spirit of the Greenwood
 - 1× Empyreal Light
 - 1× Spiritbound Alpha
-- 1× Ethereal Courser
+- 1× Ferryman of the Falls
 - 1× Shadowpaw
 - 1× Melodist of the Finale
 - 1× Celestial Reverie
@@ -2701,9 +2697,13 @@ Tide-fac-11 is a character-dense deck (40 of 45 copies are characters) built aro
 - 1× Lord of Hidden Paths
 - 1× Scrap Reclaimer
 
-## Lean: Eternal Stag
+## Lean: Eternal Stag — Abandon Draw Engine
 
 `tide-fac-14` — facet tide, 40 distinct cards, 44 copies
+
+*A sacrifice-driven tide that converts abandoned and dissolved allies into card draw and ✦ growth, distinguishing itself from sibling tides by centering its payoffs on hand replenishment and spark escalation rather than ⍟ accumulation or erosion loops.*
+
+Tide-fac-31 is almost entirely characters (41 of 45 cards), built around a dense network of abandon and dissolution triggers that reward the player for cycling allies through play. The central engine pairs Soulreaver and Deathwalker — which each draw a card when a non-figment or survivor ally is dissolved — with Herald of the Last Light and Harvester of Despair, which grow their ✦ by one each time the player abandons a character, and with Dreadweaver, which can abandon two characters at once to gain +2✦ and draw two cards simultaneously. Volcanic Channeler recycles dissolution events into energy (●), and Dustborn Veteran and Shadowcaller replace dissolved survivors with 1✦ figments, ensuring the board is never fully emptied by the engine's own consumption. Stolen Genesis and The Rising God serve as high-end payoffs that use abandonment as their activation cost — Stolen Genesis cheats a higher-cost character from the deck, while The Rising God reclaims from the void by abandoning two characters — giving the sacrifice chain a clear escalating destination. Compared to nearest sibling fac-24, which channels abandonment into ⍟ accumulation and enemy removal (Obliterator of Worlds' ⧗ engine, Silent Avenger's per-dissolution ⍟, Collateral Damage's mass wipe), this tide spends its sacrificial currency on card advantage and spark scaling; compared to fac-25, which instead runs a void-erosion loop with self-recurring bodies like Veil of the Wastes and Fargazer, this tide's recursion is incidental and its primary return on investment is hand refueling and widening individual characters' ✦.
 
 - 2× Cloudmantle Ray
 - 2× Blazing Emberwing
@@ -3558,13 +3558,13 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Lord of Hidden Paths
 - 1× Scrap Reclaimer
 
-## Lean: Watcher in the Ruins — Abandon Draw Engine
+## Lean: Watcher in the Ruins — Discard Token Engine
 
 `tide-fac-32` — facet tide, 38 distinct cards, 44 copies
 
-*A sacrifice-driven tide that converts abandoned and dissolved allies into card draw and ✦ growth, distinguishing itself from sibling tides by centering its payoffs on hand replenishment and spark escalation rather than ⍟ accumulation or erosion loops.*
+*This tide converts discarded cards into warrior figment tokens and then sacrifices those tokens to dissolve enemies, pairing a hand-churn engine with board-based removal payoffs that its nearest sibling — which uses discard primarily to draw cards and gain energy — does not provide.*
 
-Tide-fac-31 is almost entirely characters (41 of 45 cards), built around a dense network of abandon and dissolution triggers that reward the player for cycling allies through play. The central engine pairs Soulreaver and Deathwalker — which each draw a card when a non-figment or survivor ally is dissolved — with Herald of the Last Light and Harvester of Despair, which grow their ✦ by one each time the player abandons a character, and with Dreadweaver, which can abandon two characters at once to gain +2✦ and draw two cards simultaneously. Volcanic Channeler recycles dissolution events into energy (●), and Dustborn Veteran and Shadowcaller replace dissolved survivors with 1✦ figments, ensuring the board is never fully emptied by the engine's own consumption. Stolen Genesis and The Rising God serve as high-end payoffs that use abandonment as their activation cost — Stolen Genesis cheats a higher-cost character from the deck, while The Rising God reclaims from the void by abandoning two characters — giving the sacrifice chain a clear escalating destination. Compared to nearest sibling fac-24, which channels abandonment into ⍟ accumulation and enemy removal (Obliterator of Worlds' ⧗ engine, Silent Avenger's per-dissolution ⍟, Collateral Damage's mass wipe), this tide spends its sacrificial currency on card advantage and spark scaling; compared to fac-25, which instead runs a void-erosion loop with self-recurring bodies like Veil of the Wastes and Fargazer, this tide's recursion is incidental and its primary return on investment is hand refueling and widening individual characters' ✦.
+Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built around a two-stage loop: discard cards to produce 1✦ warrior figments, then abandon pairs of those figments to dissolve enemies up to 4✦. Harborwarden at two copies anchors both halves of this loop, while Hope's Vanguard adds a second discard-to-figment outlet for survivor tokens. The hand-churn side of the engine is driven by Evacuation Enforcer (awakened; taps to draw 2 and discard 3) and Key Sifter (replaces each discard with a draw), keeping cards flowing through the hand at speed. Secondary payoffs include Unbroken (grows +1✦ per discard) and Torchbearer of the Abyss (draws a card and gains 1● each time a card is discarded). Compared to its nearest sibling (tide-fac-27), which runs Torchbearer at two copies and leans into void-size interrupt removal and event-copy payoffs, this tide is less focused on energy accumulation and removal events and more focused on converting the act of discarding into a board presence that can then be sacrificed to answer the opponent's threats directly.
 
 - 2× Dustborn Veteran
 - 2× Stargazer Adrift

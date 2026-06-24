@@ -6,25 +6,49 @@ All engine, journeys, editor, pool-variant, and script sites that used a card's
 display name as an identity key have been migrated to UUID or cardNumber keys,
 with display names resolved only at the final render boundary.
 
-Residual: ingestion-boundary name collisions (Issue 14b)
----------------------------------------------------------
+Residual: ingestion-boundary name fallback (Issue 14b) — defensive only,
+not exercised by current data
+----------------------------------------------------------------------
 scripts/setup-assets.mjs:buildCardMaps and scripts/lib/card-refs.mjs
-(loadCardMaps and mapsFromCards) build a `nameToId` map to support legacy
-cubecobra source data that carries only display names (no UUIDs or cardNumbers).
-When two distinct UUIDs share a display name, `nameToId` retains the first-seen
-UUID (first-writer-wins). This is the intended behavior for name-only source
-data: the collision cannot be resolved without disambiguated input
-(cardNumber-tagged decklists).
+(loadCardMaps and mapsFromCards) build a `nameToId` map (display name -> UUID)
+so a tolerant reader can canonicalize a bare card name to a UUID. This is
+leftover scaffolding from the one-time name -> UUID migration; the migration is
+complete and every current source data path is UUID-keyed, so this is NOT a live
+correctness bug.
 
-All three functions now emit a console.warn listing the colliding name and both
-UUIDs when a duplicate is detected, so ingestion runs surface exactly which
-cards are merged through this boundary. As of this audit 24 display names in
-cards_v2.toml are each shared by two distinct UUIDs; those 24 warnings appear
-on each ingestion run.
+The `nameToId` map is only ever READ on the name-fallback branch
+  const id = CARD_ID_RE.test(token) ? token : nameToId.get(token);
+i.e. only for a token that is not already a UUID. No current data reaches that
+branch:
+  * The adapted draft records (docs/draft_records_adapted/, the canonical
+    corpus) are entirely UUID-keyed: a scan finds 459,632 UUID tokens and 0
+    bare-name tokens across every mainboard/pick/packCards array.
+  * Dreamcaller `signature-cards` in dreamcallers_v2.toml are authored as
+    stable UUIDs, so resolveToken takes the UUID path.
+  * The merchant-corpus bake reads those same UUID-keyed records via
+    buildDraftRecords.
+So `nameToId.get(token)` is never called on production data; the first-writer-
+wins collision can only ever fire on hypothetical name-only input that nothing
+currently supplies. The remaining theoretical exposure is a developer hand-
+feeding a name-keyed list to a dev tool (e.g. similar-pool.mjs parseDeck), where
+a colliding name would resolve to one arbitrary card; resolveToken throws on an
+unknown token, so a dangling reference fails loudly rather than dropping
+silently.
 
-The collision is upstream of the draft records and merchant corpus. The
-adapted draft records in docs/draft_records_adapted/ are UUID-keyed and bypass
-this boundary entirely; they are the preferred data source for all algorithms.
+The three functions emit a console.warn whenever two cards_v2.toml records share
+a display name. This warning fires from MAP CONSTRUCTION, not from any actual
+misresolution: as of this audit 24 display names are each shared by two distinct
+UUIDs, so 24 warnings print on every asset-regen run regardless of whether any
+data references those names. The "will resolve to one arbitrary card" wording
+overstates the situation — with all current data UUID-keyed, no resolution to an
+arbitrary card occurs.
+
+Recommended cleanup (code change deferred): drop the `nameToId` name-fallback
+entirely and require UUID tokens everywhere (throw on a non-UUID token), which
+removes both the dead branch and the 24 noisy warnings in one move. Until then,
+this entry stands as documentation that the fallback is defensive, not a live
+collision. The adapted draft records and merchant corpus all key on UUIDs and
+are the preferred data source for every algorithm.
 
 
 Re-audit 2026-06-24 — additional name-keyed structures found

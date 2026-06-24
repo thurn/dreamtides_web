@@ -8241,7 +8241,7 @@ card-number = 444
 art = { x = 0, y = 0, scale = 1.17 }
 
 [[cards]]
-name = "Ethereal Courser"
+name = "Ferryman of the Falls"
 mtg-name = "Shrieking Drake"
 id = "ad76c77a-e456-4e59-bbf7-6bcb56f892ee"
 rendered-text = '''
@@ -8255,10 +8255,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["ETB Bounce", "Art Rework", "June24", "Art Duplicate"]
-image-number = 2127752123
+tags = ["ETB Bounce", "Art Rework", "June24", "Art Duplicate", "Art OK"]
+image-number = 511427716
 art-owned = false
 card-number = 445
+art = { x = -0.285, y = 0.608, scale = 1.17 }
 
 [[cards]]
 name = "Ethereal Courser"
