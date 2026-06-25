@@ -21,6 +21,10 @@ import { dispatchBattleReset, dispatchClearBattleState } from "../../multiplayer
 import type { SharedBattleState } from "../../multiplayer/battle-types";
 import { completeBattleSiteVictory } from "../integration/battle-completion-bridge";
 import { beginQuestFailureRoute } from "../integration/failure-route";
+import {
+  opponentCarriesDreamsign,
+  resolveRunLayerCount,
+} from "../integration/opponent-deck";
 import { emitBattleTransitionLogEvents } from "../state/reducer";
 import {
   selectBattleCardLocation,
@@ -995,6 +999,14 @@ function PlayableBattleScreenInner({
     questContent,
   );
 
+  // The opponent's Dreamcaller ability comes online from the run midpoint on —
+  // the same gate that grants its dreamsign. Before that point it lies dormant,
+  // so the enemy side summary labels the ability as inactive.
+  const enemyDreamcallerAbilityActive = opponentCarriesDreamsign(
+    battleInit.completionLevelAtStart,
+    resolveRunLayerCount(battleInit.atlasSnapshot.layers),
+  );
+
   return (
     <div
       className="battle-shell"
@@ -1173,6 +1185,9 @@ function PlayableBattleScreenInner({
           dreamsigns={openSideSummary === "player"
             ? battleInit.dreamsignSummaries
             : battleInit.enemyDescriptor.dreamsigns}
+          dreamcallerAbilityInactive={
+            openSideSummary === "enemy" && !enemyDreamcallerAbilityActive
+          }
           isActive={reducerState.mutable.activeSide === openSideSummary}
           isSelected={false}
           onClose={() => {

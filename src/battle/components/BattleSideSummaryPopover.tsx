@@ -12,6 +12,7 @@ import { RulesText } from "../../components/RulesText";
 export function BattleSideSummaryPopover({
   dreamcaller = null,
   dreamsigns = [],
+  dreamcallerAbilityInactive = false,
   isSelected = false,
   isActive,
   onClose,
@@ -27,6 +28,12 @@ export function BattleSideSummaryPopover({
    * (quests doc "Battle"). Empty for a side carrying no dreamsigns.
    */
   dreamsigns?: readonly BattleDreamsignSummary[];
+  /**
+   * Whether this side's Dreamcaller ability is dormant for the current battle.
+   * The opponent's ability comes online only from the run midpoint on, so before
+   * then the summary labels the ability as inactive beneath its rules text.
+   */
+  dreamcallerAbilityInactive?: boolean;
   isSelected?: boolean;
   isActive: boolean;
   onClose: () => void;
@@ -102,6 +109,14 @@ export function BattleSideSummaryPopover({
               <div className="dreamcaller-text" data-battle-summary-dreamcaller-rules="">
                 <RulesText text={dreamcaller.renderedText} />
               </div>
+              {dreamcallerAbilityInactive ? (
+                <div
+                  className="dreamcaller-ability-inactive"
+                  data-battle-summary-dreamcaller-inactive=""
+                >
+                  Opponent dreamcaller ability is not active.
+                </div>
+              ) : null}
             </div>
           </div>
           <div className="floating-section" data-battle-summary-dreamsigns="">

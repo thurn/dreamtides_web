@@ -8,6 +8,10 @@ import { EssenceValue } from "../../components/EssenceValue";
 import { dreamcallerImageSrc } from "../../components/DreamcallerPortrait";
 import { dreamscapeSceneUrl } from "../../atlas/atlas-display";
 import { assetUrl } from "../../runtime/asset-url";
+import {
+  opponentCarriesDreamsign,
+  resolveRunLayerCount,
+} from "../integration/opponent-deck";
 import { logEvent, logEventOnce } from "../../logging";
 
 /** The fixed authoring canvas the Battle Start composition is laid out against. */
@@ -171,6 +175,13 @@ export function BattleStartScreen({
   );
 
   const hasAbility = enemy.abilityText.trim() !== "";
+  // The opponent's Dreamcaller ability comes online from the run midpoint on —
+  // the same gate that grants its dreamsign. Before that point it lies dormant,
+  // so the Battle Start screen labels the ability as inactive.
+  const dreamcallerAbilityActive = opponentCarriesDreamsign(
+    init.completionLevelAtStart,
+    resolveRunLayerCount(init.atlasSnapshot.layers),
+  );
   const hasDreamsigns = dreamsigns.length > 0;
   const hasSignatureCards = signatureCards.length > 0;
   const portraitSrc = dreamcallerImageSrc(enemy.imageNumber ?? "001");
@@ -262,6 +273,11 @@ export function BattleStartScreen({
               <div className="bs-ability-txt">
                 <RulesText text={enemy.abilityText} />
               </div>
+              {!dreamcallerAbilityActive && (
+                <div className="bs-ability-inactive">
+                  Opponent dreamcaller ability is not active.
+                </div>
+              )}
             </div>
           )}
 
