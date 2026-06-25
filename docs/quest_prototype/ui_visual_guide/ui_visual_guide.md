@@ -266,7 +266,11 @@ cluster**.
   raises the Dreamcaller popover** (see below).
 - **Dreamsign row** — a row of small art thumbnails, one per dreamsign the player
   currently holds (up to the 12 cap). **Hovering a thumbnail raises that
-  dreamsign's hover card** (its larger art, name, and full effect text).
+  dreamsign's hover card** (its larger art, name, and full effect text). Only the
+  first several thumbnails are drawn inline; once the player holds more than fit,
+  a trailing **"+N" overflow pill** caps the row. **Hovering the pill** raises a
+  scrolling popover listing every overflowed dreamsign (each with its name and
+  full effect text).
 
 ![Dreamcaller HUD popover](images/22-dreamcaller-popover.png)
 
@@ -385,10 +389,14 @@ choosing one adds it to the deck and brings up the next pick.
 
 **Layout.** The four offered cards are shown large and face-up in the center
 (here a 2×2 grid of full card renders, sorted by cost), with a **"Draft — Pick
-N/5"** label in the top-left tracking progress. A **deck tray** down the right
-edge lists the cards acquired so far this visit. There is no resident guide on the
-Draft site (it has no Dream Guide); the red "✕" in the top-right cancels out of the
-site.
+N/5"** label in the top-left and a **progress bar** beside it that fills as picks
+are made. A **deck tray** down the right edge lists the cards acquired so far this
+visit; cards drafted more than once show a **"×N" copy-count badge** on their row,
+and the row that just received a pick **flashes/glows** to show where the new card
+landed. A **chevron toggle** docked at the tray's inner edge **collapses the tray
+to a thin rail** (and re-expands it), reclaiming space for the offer. There is no
+resident guide on the Draft site (it has no Dream Guide); the red "✕" in the
+top-right cancels out of the site.
 
 **What you can click:**
 
@@ -425,9 +433,11 @@ shows the running essence balance (and discount, when one applies). The red "✕
 
 - **A card's Buy button** — purchases it (if affordable); the card lifts and fades,
   essence is deducted (the HUD essence count-up plays), and the slot settles into a
-  ghosted "sold" state.
-- **The restock tile** — refreshes the unsold wares once for essence (then
-  disables); the wares scale out and the new set scales in.
+  ghosted **"Acquired"** state. Cards the player cannot currently afford show a
+  disabled Buy button.
+- **The restock tile** — refreshes the unsold wares once for essence; the wares
+  scale out and the new set scales in. Once used, the tile relabels to
+  **"Restocked"** and disables.
 - **Close (✕)** — leaves the shop. Purchased/unpurchased wares stay visible but the
   site cannot be re-entered.
 
@@ -527,16 +537,24 @@ heading. Each card is rendered as the *transfigured* version on offer, with its
 name and any changed rules text **tinted to the transfiguration's color** and an
 **emblem** in its name bar, so the player can preview the change. (Cards already
 transfigured are not eligible. The enhanced/home version lets the player pick *any*
-card and *any* applicable form.)
+card and *any* applicable form.) At the home forge, cards already reforged on
+earlier visits appear alongside the eligible candidates as **dimmed tiles with a
+colored "Reforged" tag**. If no eligible cards remain, the body collapses to a
+short **"No eligible cards to reforge."** notice with a single **"Leave the
+forge"** button.
 
 ![Transfiguration form selection](images/11b-transfiguration-forms.png)
 
 **Phase 2 — pick a form.** After a card is chosen, the screen switches to **"Choose
 its new form."**: the selected card sits on the left and a **list of available
-forms** appears on the right — each row naming the form (Empowered, Amplified,
-Inspired, Enduring, Kindled, Hastened, etc.), its effect, and its **essence cost**
-(some are free), with a colored accent per form. A **"Transfigure — N⬢"** confirm
-button commits the choice.
+forms** appears on the right — each row carrying a **colored form icon**, the form
+name (Empowered, Amplified, Inspired, Enduring, Kindled, Hastened, etc.), its
+effect, and its **essence cost** ("Free" for the free ones), with a colored accent
+per form. Forms the player cannot afford are **dimmed and disabled**. A footer runs
+along the bottom: a **"Back"** control (returns to the card list), an **"Essence"
+wallet readout** showing the current balance, and the confirm button — **"Transfigure
+it · N⬢"** (or just "Transfigure it" for a free form), which reads **"Not enough
+essence"** and stays disabled when the chosen form is unaffordable.
 
 **What you can click:**
 
@@ -569,8 +587,10 @@ deck** when enhanced/home) and the player picks one to copy.
 
 **Layout.** Deacon stands lower-left with a speech bubble; the center shows the
 candidate cards in a row. Selection is single-choice: clicking a card highlights
-it. A **"Duplicate this card"** confirm button sits in the top-right (next to the
-red "✕" close).
+it and **dims the other candidates** to emphasize the choice. A **"Duplicate this
+card"** confirm button sits in the top-right (next to the red "✕" close). In the
+enhanced/home form a small **"Enhanced · Any card"** chip in the top-left signals
+that the candidate set is the whole deck.
 
 **What you can click:**
 
@@ -602,11 +622,16 @@ essence to permanently remove cards from the deck (and remove
 [banes](../../quests/quests.md#banes) cheaply or free). It is the deck-thinning
 site.
 
-**Layout.** A top fixed bar shows the **essence remaining after** the current
-selection and the **cost of the next card**; Master Takeshi stands lower-left with
-a speech bubble. The body is a **scrolling grid of every deck card**. Bane cards
-(and bane dreamsigns, shown after the deck cards) carry a free chip. A **"Purge
-cards"** confirm button sits top-right beside the red "✕" close.
+**Layout.** A top fixed bar shows the **"Essence after"** readout (balance left
+after the current selection, over the starting total) and a **"Next card"** cell
+giving the cost of the next removal — which instead reads **"Visit limit reached"**
+when the per-visit purge cap is hit or **"Not enough essence"** when the next card
+is unaffordable. Master Takeshi stands lower-left with a speech bubble. The body is
+a **scrolling grid of every deck card**. Bane cards carry a green **"Free" chip**, a
+**"Bane" tag**, and a red selection wash (bane dreamsigns, shown after the deck
+cards, are likewise free). The top-right confirm button reads **"Purge cards"** when
+nothing is selected and **"Purge N cards · ⬢cost"** once cards are picked; the red
+"✕" close sits beside it.
 
 **What you can click:**
 
@@ -640,8 +665,11 @@ bundle of cards or other grants tuned to the player's deck, and the player takes
 one. This is where the largest, deck-reshaping effects live.
 
 **Layout.** The resident Seer stands at the center of the scene under an
-**"Augury"** title, with a one-line dialog beneath the figure. The two offers flank
-the Seer left and right; each offer is a column with a fixed three-part structure:
+**"Augury"** title. A frosted **guide-caption panel** in the lower-left carries the
+guide's name (small uppercase purple label) and a one-line greeting; a small
+multiplayer **"N connected"** presence chip sits in the top-left. The two offers
+flank the Seer left and right; each offer is a column with a fixed three-part
+structure:
 
 - a **header** pinned to the top — a small uppercase **category pill** (e.g.
   "GRANT · POWER GIFT", "IMPROVE · TRANSFIGURE", "REMOVE · PURGE", "SITE · …",
@@ -736,13 +764,25 @@ its raw objects, so a column never blanks out.
   if the offer required a choice); the chosen reward animates to the deck/HUD and
   the site completes. Pre-targeted offers (power gift, transfigure, purge,
   dreamsign gift, add-site) have no candidate step — the button is live
-  immediately.
+  immediately. For choose-style offers the button stays **disabled (dimmed,
+  not-allowed cursor)** until a candidate is selected.
 - **Close (✕)** — declines, when the offer is decline-able.
 - *(Developer)* **reroll / force category** — regenerate the encounter, or force a
   specific reward category, for QA.
 
 **What you can hover:** **offer cards** → enlarged previews; **dreamsign icons** →
 the dreamsign's full rules text.
+
+**Feedback toasts.** Accepting an offer floats a brief green-bordered **reaction
+toast** over the center of the screen with the guide's accept line (e.g. "Well
+chosen, traveler!"). If an accept fails (a stale encounter, a mismatch, a missing
+offer), a red-bordered **validation toast** appears in the same spot explaining why
+the offer could not be taken.
+
+> **Portrait note:** below a narrow width the merchant uses a two-step flow instead
+> of the side-by-side columns — a summary overview showing the Seer and the two
+> offers as tappable cards, and a per-offer detail view reached by tapping one, with
+> a **"‹ Back"** control to return to the overview.
 
 > **Note:** if encounter generation fails, the site shows a "The counter is bare
 > tonight. The road remains open." fallback with a single **Walk away** button.
@@ -959,8 +999,13 @@ dropdown with these entries:
   Augury / merchant offers were generated.
 - **Edit Quest State** — opens the *Quest Debug Editor*, a tabbed inspector/editor
   for live quest state (deck, essence, dreamsigns, atlas node states).
-- **Save Quest** — prompts for a name and saves the run; a status toast confirms.
-- **Load Quest** — opens a submenu of saved runs to load.
+- **Save Quest** — prompts for a name and saves the run; a small **status toast**
+  then appears near the HUD's right cluster confirming the save (e.g. "Saved
+  '<name>'.") and auto-dismisses after a few seconds.
+- **Load Quest** — replaces the menu with a **Load submenu**: a back control and a
+  scrolling list of saved runs (each showing its name, the screen it was saved on,
+  and a timestamp), with explicit **loading**, **error**, and **empty** states.
+  Choosing a run loads that quest state.
 - **Download Log** — downloads `quest-log.jsonl`.
 
 ![Pool Viewer](images/21-pool-viewer.png)

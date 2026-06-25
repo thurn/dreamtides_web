@@ -161,6 +161,30 @@ an optional expiry hint like "T4") show notes attached via the card context
 menu. When a card has more than three notes a **"+N more"** overflow chip
 appears. Clicking a note chip opens that note in the card-note editor.
 
+**On-card state indicators.** Beyond the chips above, the card render itself
+encodes several pieces of live rules state directly on the face of the card:
+
+- **Spark coloring** — a character's spark value is tinted when its *effective*
+  spark differs from its printed spark: it reads as **boosted** when raised and
+  **nerfed** when lowered, so a buffed or debuffed character is legible at a
+  glance without opening the card.
+- **Exhausted glyph** — an exhausted character shows a small **☪ moon glyph** over
+  its art, marking it as tapped/spent for the turn (Basic Automation clears
+  exhaustion at Dawn).
+- **Figment-count badge** — a character carrying more than one stacked figment
+  token shows a small numeric badge with that count.
+- **Counter badge** — a card holding stored counters shows a **⧗ glyph followed by
+  the count** in its corner.
+- **Hidden face** — a card the local player may not see (the opponent's hand cards
+  in normal play, or either hand in the relevant debug-view mode) renders
+  face-down: its cost, spark, name, and type all show as **"?"** and its art is
+  suppressed.
+
+**Support highlighting.** While positioning characters, battlefield slots that a
+back-rank character *supports* (the front-rank slots it passively boosts) are
+**highlighted** on the board, so the player can see which slots a support
+relationship covers.
+
 **Bottom Action Bar.** Below the hand, a row of controls: **Undo / Redo**, a
 **Basic Automation** on/off gear toggle, a **Battle Log** toggle (opens a
 side drawer of the full command history), a **Dreamwell History** toggle (the
