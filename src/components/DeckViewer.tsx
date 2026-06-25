@@ -141,15 +141,19 @@ export function DeckViewer({
       .map((entry, index) => {
         const card = cardDatabase.get(entry.cardNumber);
         if (!card) return null;
-        const modified = applyCardStatOverride(
-          applyDeckEntryCardModification(card, {
-            typeChange: entry.typeChange,
-            keywords: entry.keywordModification,
-          }),
-          entry.statOverride,
-        );
+        const modified = applyDeckEntryCardModification(card, {
+          typeChange: entry.typeChange,
+          keywords: entry.keywordModification,
+        });
+        // Apply the debug stat override LAST, after transfiguration, so an
+        // explicit override wins over transfiguration-derived stats (matching
+        // resolveDeckEntryCard and the battle path).
         if (entry.transfiguration === null) {
-          return { entry, card: modified, index };
+          return {
+            entry,
+            card: applyCardStatOverride(modified, entry.statOverride),
+            index,
+          };
         }
         const transfigured = buildTransfigurationDisplay(
           modified,
@@ -157,7 +161,7 @@ export function DeckViewer({
         );
         return {
           entry,
-          card: transfigured.card,
+          card: applyCardStatOverride(transfigured.card, entry.statOverride),
           transfiguration: transfigured.display,
           index,
         };
