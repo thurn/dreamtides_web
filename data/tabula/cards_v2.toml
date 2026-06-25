@@ -2146,13 +2146,13 @@ card-number = 115
 art = { x = 0.353, y = 0.931, scale = 1.17 }
 
 [[cards]]
-name = "Call of the Lost"
+name = "Call the Lost"
 mtg-name = "Empty the Warrens"
 id = "2690912e-0295-4d12-a603-5946d37902d3"
-rendered-text = """
-For each card you've played this turn, materialize a 1✦ ember figment with awakened.
+rendered-text = '''
+For each card you've played this turn, materialize a 2✦ shadow figment.
 
-Reclaim 2●"""
+Reclaim 2●'''
 energy-cost = 3
 card-type = "Event"
 subtype = ""
@@ -2160,10 +2160,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Figment Maker", "Art Rework", "June26"]
-image-number = 1252796548
+tags = ["Figment Maker", "Art Rework", "June26", "Art OK"]
+image-number = 454095508
 art-owned = false
 card-number = 116
+art = { x = -0.068, y = 1, scale = 1.07 }
 
 [[cards]]
 name = "Blood Reaver"
@@ -3096,7 +3097,7 @@ card-number = 166
 art = { x = -0.042, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Ferryman's Tithe"
+name = "Immolate"
 mtg-name = "Flare of Malice"
 id = "4eb42989-7498-4995-a3ab-89eb026b0c13"
 rendered-text = """
@@ -3110,10 +3111,11 @@ rarity = ""
 is-fast = true
 is-interrupt = true
 spark = ""
-tags = ["Removal", "Art Rework", "June26"]
-image-number = 1125132764
+tags = ["Removal", "Art Rework", "June26", "Art OK"]
+image-number = 1907487244
 art-owned = false
 card-number = 167
+art = { x = 0, y = 1, scale = 1.1 }
 
 [[cards]]
 name = "Emberfang"
@@ -7700,7 +7702,7 @@ art-owned = false
 card-number = 414
 
 [[cards]]
-name = "Roots of Rebirth"
+name = "Portal of Twin Paths"
 mtg-name = "Collected Company"
 id = "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81"
 rendered-text = "Materialize two random ≤2● cost characters from your deck."
@@ -7711,10 +7713,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "June26"]
-image-number = 2155438699
+tags = ["Art Rework", "June26", "Art OK"]
+image-number = 2285036625
 art-owned = false
 card-number = 415
+art = { x = 0.504, y = 0.398, scale = 1.17 }
 
 [[cards]]
 name = "Apocalypse"

@@ -531,7 +531,7 @@
       ]
     },
     "2690912e-0295-4d12-a603-5946d37902d3": {
-      "name": "Call of the Lost",
+      "name": "Call the Lost",
       "needs": [
         {
           "theme": "storm",
@@ -1556,7 +1556,7 @@
       ]
     },
     "4eb42989-7498-4995-a3ab-89eb026b0c13": {
-      "name": "Ferryman's Tithe",
+      "name": "Immolate",
       "needs": [],
       "supports": [
         "events"
@@ -3205,7 +3205,7 @@
       ]
     },
     "4a8bdcd7-cf88-48d4-80d0-a83fd6617d81": {
-      "name": "Roots of Rebirth",
+      "name": "Portal of Twin Paths",
       "needs": [
         {
           "theme": "cheap-characters",
