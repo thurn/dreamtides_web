@@ -205,6 +205,228 @@ tap-to-open chips.
 
 ---
 
+# Dreamwell Card Display
+
+![Dreamwell card shown above the battlefield](images/b08-dreamwell-card.png)
+
+**What it does.** At the start of each turn from turn 2 onward, the active side's
+**Dreamwell card** is revealed and shown centered above the battlefield during the
+Dreamwell phase. The Dreamwell is the shared energy/draw engine: each revealed
+card ramps the side's energy (and some cards carry an extra scripted effect). This
+display is how the player sees which Dreamwell card came up this turn.
+
+**Layout.** A single wide, landscape-format card floats above the battlefield
+while the phase rail shows **DREAMWELL** active. The card shows its art, its
+**name** (e.g. "Nomad's Verge"), and its **effect text** (e.g. "Materialize a
+1⬢ ethereal figment"). A badge in the top-right corner reads **"Auto"** with the
+**energy number** it adds (here "1"), indicating the card's energy is applied
+automatically by Basic Automation. The first round surfaces no Dreamwell card, so
+the display appears only from turn 2 on.
+
+**What you can click / hover.** The central card is primarily a reveal, not a
+control: under Basic Automation its energy (and any deterministic effect) is
+applied automatically and the phase auto-advances. Cards that carry an
+interactive effect (for example "draw, then discard") raise a separate prompt
+overlay — see the Card Picker and Foresee sections. The full Dreamwell deck and
+its revealed history can be opened from the Action Bar's **Dreamwell History**
+drawer.
+
+**Redesign notes.** This is a brief, high-attention moment (the turn's "what did
+I draw from the well") and needs to be glanceable and then get out of the way. On
+mobile the wide card format competes with the board for the center of the screen;
+the energy/Auto badge is the one piece that must stay legible.
+
+---
+
+# Card Zone Browser (Deck / Void / Banished)
+
+![Deck browser](images/b05-deck-browser.png)
+
+**What it does.** The zone browser is a single reusable modal for inspecting the
+full contents of a card zone — a side's **deck**, **void**, or **banished** pile.
+It is opened by clicking a zone's count chip on the board (Void / Banished) or via
+the Inspector's "Open Deck". The same component renders all three zones; only the
+title and contents differ.
+
+![Void browser](images/b07-void-browser.png)
+
+**Layout.** A titled panel ("Your Deck", "Your Void", etc.) with a **card count**
+subtitle, then a control row — a **search-by-name** box, a **sort** dropdown
+("Current order"), and a **type filter** dropdown ("All types") — and an **✕**
+close. Below is a scrolling **grid of card tiles**; each tile shows the card's
+energy-cost orb, spark value, name, and type (and, for an ordered deck, a `#`
+position index). The deck variant adds a row of zone-specific action buttons along
+the bottom — **Reveal Top**, **Play From Top**, **Hide Top**, **Foresee…**, and
+**Reorder Full Deck**. The deck browser appears centered; the void/banished
+browsers anchor near their zone (top-left/top-right) and are more compact.
+
+**What you can click:**
+
+- **The search box / sort / type filter** — narrow and reorder the visible cards.
+- **A card tile** — select it (and, depending on zone, drag it elsewhere or open
+  its actions).
+- **Bottom action buttons** (deck) — Reveal Top, Play From Top, Hide Top, open
+  **Foresee** on the deck, or **Reorder Full Deck** (opens the deck-order picker).
+- **✕ close** — dismiss the browser.
+
+**What you can hover:** each card tile enlarges to a full card preview with its
+rules text.
+
+**Redesign notes.** This is a clean, self-contained browser that maps well to a
+mobile full-screen sheet. The search/sort/filter controls and the per-zone action
+row are the parts to preserve; the card grid is the kind of dense element a phone
+handles fine as a vertical scroll.
+
+---
+
+# Card Picker (Choose / Discard a Card)
+
+![Choose a card to discard modal](images/b09-discard-modal.png)
+
+**What it does.** The card picker is the modal that asks the player to pick one or
+more cards from a set — for example "Choose a card to discard", "Discard 2 cards",
+or "Reveal three matching cards and choose one to draw". It is raised by card and
+Dreamwell-card effects that require a choice (the screenshot shows the Dreamwell
+card "Ancient Mine — Gain 2⬢. Discard a card." driving a discard pick). It blocks
+the board until resolved.
+
+**Layout.** A centered modal over a dimmed board. At the top sits the **source
+card** that triggered the prompt (its art + name + effect), so the player knows
+why they are choosing. Below is the **prompt label** ("Discard a card") and a
+**"Choose N"** count line, with a **CONFIRM** button (disabled until a valid
+selection is made; a **Skip** appears instead when the prompt is optional). The
+body is a **grid of candidate cards** to choose from; for a "draw" variant the
+freshly-relevant card may be highlighted.
+
+**What you can click:**
+
+- **A candidate card** — toggle its selection (up to the required count).
+- **CONFIRM** — commit the selection and apply the effect (discard / draw / etc.).
+- **Skip** — decline, when the prompt is optional.
+
+**What you can hover:** candidate cards enlarge to show full art and rules text.
+
+**Redesign notes.** This is a focused, blocking decision and is one of the better
+candidates for a clean mobile sheet: source card up top, a scrollable candidate
+grid, and a single confirm. The count requirement and the disabled-until-valid
+confirm are the interaction details to preserve.
+
+---
+
+# Foresee Overlay
+
+![Foresee overlay](images/b06-foresee.png)
+
+**What it does.** Foresee lets the player look at the top N cards of a deck and
+decide what to do with each — leave on top, send to the bottom, send to the void,
+or play from the top — and optionally reorder them all. It is raised by Foresee
+effects, by the Inspector's per-side "Foresee" tool, and from the deck browser's
+"Foresee…" action.
+
+**Layout.** A centered modal headed **"Foreseeing N cards"** with a one-line
+explanation ("Top of <side> deck — leave on top, send to bottom or void, play
+from top, or reorder all"). Top-right are a **FORESEE 1 FEWER** / **FORESEE 1
+MORE** pair (adjust how deep to look) and **CLOSE FORESEE**. The body shows the
+top cards in order, each in a labeled **Position 1 / 2 / 3** column with its full
+art and a stack of per-card action buttons: **Play From Top**, **Leave On Top**,
+**Send To Bottom**, **Send To Void**. A **REORDER ALL…** button (bottom-right)
+opens the full deck-order picker for finer control.
+
+**What you can click:**
+
+- **FORESEE 1 FEWER / MORE** — change how many top cards are shown.
+- **A per-card action** (Play From Top / Leave On Top / Send To Bottom / Send To
+  Void) — resolve that card.
+- **REORDER ALL…** — open the deck-order picker to arrange the whole set.
+- **CLOSE FORESEE** — finish.
+
+**What you can hover:** each shown card is full size already; hovering enlarges it
+further with rules text.
+
+**Redesign notes.** Foresee is a per-card decision over a small ordered set — it
+translates to mobile as a vertical list of cards each with its action buttons. The
+"1 fewer / 1 more" depth control and the per-card destination buttons are the core
+interactions; the wide multi-column layout is the part that needs rethinking for a
+narrow screen.
+
+---
+
+# Card Context Menu (Right-Click)
+
+![Card right-click context menu](images/b04-card-context-menu.png)
+
+**What it does.** Right-clicking (or long-pressing) any card — in hand, on the
+battlefield, in the stack, or in a zone browser — opens a context menu of actions
+for that specific card. It is primarily a **developer/manual-play** tool: it
+exposes direct moves and edits that bypass the normal rules flow, useful for
+setting up board states and debugging. In a mobile redesign this belongs with the
+developer tooling rather than the player-facing board.
+
+**Layout.** A small floating menu anchored at the cursor, headed by the **card
+name** and its current location (e.g. "Nexus Wayfinder — PLAYER · HAND"), then a
+list of actions grouped by kind:
+
+- **Play to Back Rank / Play to Front Rank** — play the card to a rank.
+- **Add Spark ›** — a submenu to adjust the card's spark.
+- **→ Back Rank / → Front Rank / → Void / → Banished / → Deck top / → Deck
+  bottom** — move the card directly to any zone (no cost, no rules checks).
+- **Create Copy ›** — duplicate the card.
+- **Markers / Status / Counters ›** — submenus for card markers, status, and
+  counters.
+- **Add Note…** — attach a developer note to the card (opens the note editor).
+
+**What you can click:** every row is an action; rows marked **›** open a submenu.
+Clicking outside the menu dismisses it.
+
+**Redesign notes.** Because this is a manual/debug surface, it should not appear in
+the player-facing battle on mobile. If a player-facing card action menu is wanted
+(e.g. "play to front / back"), it should be a deliberately small, curated subset —
+the current menu's full move/edit list is developer tooling.
+
+---
+
+# Dreamcaller & Dreamsign Hovers
+
+Each side's **Dreamcaller** and the player's **Dreamsigns** are surfaced in the
+battle through two hover affordances. Both put information that is otherwise
+off-screen one hover (or long-press) away.
+
+**Side summary (Dreamcaller + Dreamsigns).**
+
+![Dreamcaller side-summary popover](images/b03-dreamcaller-summary.png)
+
+Hovering (or focusing) a side's **Dreamcaller portrait** in its Status Strip
+raises a **side-summary popover** for that side. It is headed "PLAYER SUMMARY" /
+the opponent's name, with the Dreamcaller's **name and title**, a **Close**, the
+**Dreamcaller card** (portrait + full ability text), and a **DREAMSIGNS** section
+listing every dreamsign that side carries — each with its name and full effect
+text. This is the one place in battle to read a side's complete passive setup
+(its Dreamcaller ability plus all dreamsigns) at once.
+
+**Dreamsign thumbnail hover.**
+
+![Dreamsign hover card](images/b02-dreamsign-hover.png)
+
+The player's dreamsigns also appear as a row of small **art thumbnails** in the
+Action Bar (bottom-left). Hovering one raises a **dreamsign hover card** showing
+the dreamsign's larger art, its **name** (e.g. "Red Pin"), and its full **effect
+text** ("Once per turn, when you play a 2⬢ cost character, draw a card"). This is
+the same hover card used by the dreamsign row on the quest HUD.
+
+**What you can click / hover:**
+
+- **Hover/focus a Dreamcaller portrait** (in the Status Strip) → the side-summary
+  popover (Dreamcaller ability + all that side's dreamsigns).
+- **Hover a dreamsign thumbnail** (in the Action Bar) → that dreamsign's hover
+  card.
+
+**Redesign notes.** All of this is reference information delivered only on hover,
+so it needs a touch-first equivalent (tap-to-open the side summary; tap a dreamsign
+to expand it). The side-summary popover is essentially a per-side "passives sheet"
+and is a natural fit for a tap-to-open panel on mobile.
+
+---
+
 # Battle Inspector (Developer)
 
 ![Battle Inspector panel](images/04-battle-inspector.png)
