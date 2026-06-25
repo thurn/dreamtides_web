@@ -1,25 +1,18 @@
 # Deploys the built site to the Firebase Hosting `live` channel on every push
 # to master.
 #
-# firebase-tools authenticates by exchanging the service-account JWT for a Google
-# OAuth access token. That token request (https://www.googleapis.com/oauth2/v4/token)
-# intermittently fails on GitHub-hosted runners with "Premature close" — the TLS
-# connection is reset partway through the response, surfacing as "Failed to
-# authenticate, have you run firebase login?". It fails before any files are
-# uploaded and reports no Google-side error reason, i.e. a transport-level reset
-# rather than a credential or quota problem. The failure rate jumped from ~0% to
-# 30-60% on 2026-06-24 with no change to our toolchain (the same Node and
-# firebase-tools versions ran clean for days before), so the trigger is external
-# to this repo.
+# Node is pinned to 24.16.0 via actions/setup-node. firebase-tools mints its
+# Google OAuth access token (https://www.googleapis.com/oauth2/v4/token) through
+# node-fetch in apiv2.js. Node 24.17.0 shipped a security fix ("http: fix
+# response queue poisoning in http.Agent") that regressed keep-alive socket
+# reuse for node-fetch, so the token-fetch response body is cut mid-stream and
+# surfaces as "Invalid response body ... Premature close" / "Failed to
+# authenticate, have you run firebase login?". The deploy never reaches file
+# upload. Node 24.16.0 predates the regression and exchanges the token cleanly,
+# which is also the version used for local development (see .nvmrc). Without the
+# pin the runner installs the latest 24.x, which carries the regression.
 #
-# The deploy is attempted up to three times with a 30s backoff so a transient
-# reset gets another attempt instead of failing the run on the first blip. (Note:
-# all three attempts share one runner, so this does not help when the reset
-# condition persists for the whole job; a fresh-runner retry would be needed for
-# that case.) The deploy step uses FirebaseExtended/action-hosting-deploy, which
-# handles service-account credential setup; the retry is expressed as guarded
-# repeats of that step because a `uses:` action cannot be wrapped in a retry
-# runner.
+# References: nodejs/node#63989, firebase/firebase-tools#10692.
 
 name: Deploy to Firebase Hosting on merge
 on:
@@ -39,42 +32,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24.16.0
       - run: npm ci && npm run build
-
-      - name: Deploy to Firebase Hosting (attempt 1)
-        id: deploy1
-        continue-on-error: true
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_QUEST_PROTOTYPE_D7027 }}
-          channelId: live
-          projectId: redacted-firebase-project
-
-      - name: Back off before retry
-        if: steps.deploy1.outcome == 'failure'
-        run: sleep 30
-
-      - name: Deploy to Firebase Hosting (attempt 2)
-        id: deploy2
-        if: steps.deploy1.outcome == 'failure'
-        continue-on-error: true
-        uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: ${{ secrets.GITHUB_TOKEN }}
-          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_QUEST_PROTOTYPE_D7027 }}
-          channelId: live
-          projectId: redacted-firebase-project
-
-      - name: Back off before final retry
-        if: steps.deploy1.outcome == 'failure' && steps.deploy2.outcome == 'failure'
-        run: sleep 30
-
-      # The final attempt is not continue-on-error, so the job fails only if all
-      # three attempts fail.
-      - name: Deploy to Firebase Hosting (attempt 3)
-        if: steps.deploy1.outcome == 'failure' && steps.deploy2.outcome == 'failure'
-        uses: FirebaseExtended/action-hosting-deploy@v0
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_QUEST_PROTOTYPE_D7027 }}
