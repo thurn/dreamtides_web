@@ -341,7 +341,7 @@
       ]
     },
     "a031eada-2c47-49c6-8c19-d2fe85f8ce97": {
-      "name": "Barrage Specialist",
+      "name": "Revelation Explorer",
       "needs": [],
       "supports": [
         "events"
@@ -2976,7 +2976,7 @@
       ]
     },
     "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f": {
-      "name": "Prophet of the Consumed",
+      "name": "The Bondweaver",
       "needs": [],
       "supports": [
         "cheap-characters"

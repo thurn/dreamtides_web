@@ -4614,7 +4614,7 @@ card-number = 249
 art = { x = -0.294, y = 0.032, scale = 1.17 }
 
 [[cards]]
-name = "Barrage Specialist"
+name = "Revelation Explorer"
 mtg-name = "Spellseeker"
 id = "a031eada-2c47-49c6-8c19-d2fe85f8ce97"
 rendered-text = "▸Materialized: Discover a ≤2● cost event."
@@ -4625,11 +4625,11 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = 2
-tags = ["Discover", "Art Rework", "June26", "Art Duplicate"]
-image-number = 450347140
+tags = ["Discover", "Art Rework", "June26", "Art Duplicate", "Art OK"]
+image-number = 2191235665
 art-owned = false
 card-number = 250
-art = { x = -0.7, y = 1, scale = 1.17 }
+art = { x = 0.11, y = -0.1, scale = 1.67 }
 
 [[cards]]
 name = "Surge of Fury"
@@ -8537,7 +8537,7 @@ card-number = 459
 art = { x = -0.21, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Prophet of the Consumed"
+name = "The Bondweaver"
 mtg-name = "Shardless Agent"
 id = "5aaf13de-25bc-467f-a4a0-fe2c4373cc9f"
 rendered-text = "▸Materialized: Draw a ≤2● cost card. It costs 0●."
@@ -8548,10 +8548,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 3
-tags = ["Art Rework", "June26", "Art Duplicate"]
-image-number = 1991802452
+tags = ["Art Rework", "June26", "Art Duplicate", "Art OK"]
+image-number = 1134692546
 art-owned = false
 card-number = 460
+art = { x = -0.252, y = 0.869, scale = 1.17 }
 
 [[cards]]
 name = "Silent Avenger"

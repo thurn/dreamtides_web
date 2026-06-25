@@ -1159,7 +1159,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Ashlight Caller
 - 1× Pattern Seeker
 - 1× Forsaken Skyline
-- 1× Barrage Specialist
+- 1× Revelation Explorer
 - 1× Silent Gatherer
 - 1× Across the Void
 - 1× Torchbearer of the Abyss
@@ -1445,7 +1445,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Barrage Specialist
 - 1× Ashen Remnant
 - 1× Momentum's Edge
-- 1× Prophet of the Consumed
+- 1× The Bondweaver
 - 1× Call to the Unknown
 - 1× Clifftop Marksman
 - 1× The Dread Sovereign
@@ -1543,7 +1543,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 1× Soulcleft Spinner
 - 1× Curio Dealer
 - 1× Momentum's Edge
-- 1× Prophet of the Consumed
+- 1× The Bondweaver
 - 1× Dawnhorn Elder
 - 1× Winterbough Monk
 - 1× Ambersting
@@ -1625,7 +1625,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 1× Sky Voyager
 - 1× Dusk Duelist
 - 1× Soulcleft Spinner
-- 1× Prophet of the Consumed
+- 1× The Bondweaver
 - 1× Dawnhorn Elder
 - 1× Winterbough Monk
 - 1× Ambersting
@@ -1706,7 +1706,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Curio Dealer
 - 1× Ashen Remnant
 - 1× Momentum's Edge
-- 1× Prophet of the Consumed
+- 1× The Bondweaver
 - 1× The Dread Sovereign
 - 1× Dawnhorn Elder
 - 1× Winterbough Monk
@@ -3940,7 +3940,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Flamboyant Flamingo
 - 1× Portal of Twin Paths
 - 1× Eternal Stag
-- 1× Prophet of the Consumed
+- 1× The Bondweaver
 - 1× Crumbling Behemoth
 - 1× Aurora Conductor
 - 1× Spiritbound Alpha

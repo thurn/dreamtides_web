@@ -1043,7 +1043,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Paradox Corps Enforcer
 - 1× Keeper of the Tides
 - 1× Ashlight Caller
-- 1× Barrage Specialist
+- 1× Revelation Explorer
 - 1× Guiding Light
 - 1× Annular Recall
 - 1× Riftwalker
@@ -1143,7 +1143,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 1× Seek Answers
 - 1× Somber Flockmaster
 - 1× Forsaken Skyline
-- 1× Barrage Specialist
+- 1× Revelation Explorer
 - 1× Guiding Light
 - 1× Annular Recall
 - 1× Spiral Offering
@@ -3607,7 +3607,7 @@ tide-neu-01 is a broad neutral tide built almost entirely from events (23 of 30 
 - 1× Crumbling Covenant
 - 1× Ecliptic Vantage
 - 1× Starcatcher
-- 1× Barrage Specialist
+- 1× Revelation Explorer
 - 1× Moment Rewound
 - 1× Miraculous Arrival
 - 1× Iconoclast
