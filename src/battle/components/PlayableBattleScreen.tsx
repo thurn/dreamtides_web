@@ -291,6 +291,7 @@ function PlayableBattleScreenInner({
     state: reducerState.mutable,
     dreamwellDeck: battleInit.dreamwellDeck,
     dispatchEdit: dispatchAutomationEdit,
+    isPrimaryClient,
     cancelPromptSignal: remoteCommandEpoch,
   });
 

@@ -21,6 +21,20 @@ export interface DreamwellRunnerArgs {
   dreamwellDeck: readonly DreamwellCardDefinition[];
   dispatchEdit: (edit: BattleDebugEdit) => void; // bypasses planBasicAutomationCommands
   /**
+   * Whether this client is the single battle authority (owns init + the
+   * once-per-turn Dreamwell reveal). A Dreamwell card's scripted edits — a flat
+   * "gain 1 energy" with no prompt, for example — are authority mutations that
+   * must apply exactly once. In a shared room EVERY connected client runs this
+   * runner off the synced reveal, so without a gate each automatic edit would be
+   * dispatched once per client (two clients ⇒ +2 energy from a +1 card). The
+   * primary client owns a run from the start; ownership transfers to whichever
+   * client resolves a prompt (see `resolvePrompt`), because only the resolver
+   * keeps walking the run while the partner's overlay is torn down by
+   * `cancelPromptSignal`. Single-player has one primary client, so it is
+   * unaffected.
+   */
+  isPrimaryClient: boolean;
+  /**
    * A monotonic counter that increments whenever a coop partner advances the
    * shared battle (see `remoteCommandEpoch` in the multiplayer context). When it
    * changes while a prompt is open, the partner has resolved that choice on
@@ -75,7 +89,7 @@ function logDreamwell(
 // ---------------------------------------------------------------------------
 
 export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRunnerResult {
-  const { enabled, state, dreamwellDeck, dispatchEdit, cancelPromptSignal } = args;
+  const { enabled, state, dreamwellDeck, dispatchEdit, isPrimaryClient, cancelPromptSignal } = args;
 
   // Internal runner state: the active card run (null when idle).
   const [run, setRun] = useState<{
@@ -97,6 +111,13 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
 
   // Key guard: fires at most once per (side, turn) combination.
   const lastRunKeyRef = useRef<string | null>(null);
+
+  // Whether THIS client owns the active run's authority edits. Set when a run
+  // starts (the primary client owns it) and flipped true when this client
+  // resolves a prompt (the resolver continues the run alone while the partner's
+  // overlay is dismissed). Automatic `dispatch`-plan edits fire only when this is
+  // true, so a flat scripted edit (no prompt) is applied by exactly one client.
+  const ownsRunRef = useRef(false);
 
   // Re-render guard: skip advance if the queue reference has not changed.
   const processedQueueRef = useRef<EffectStep[] | null>(null);
@@ -138,6 +159,11 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
     const script = cardId != null ? selectDreamwellEffectScript(cardId) : null;
 
     if (script !== null && script.steps.length > 0) {
+      // The primary client owns this run's authority edits from the start. The
+      // non-primary client still starts the run (to walk to any prompt and show
+      // it) but does not dispatch automatic edits — it receives them via synced
+      // commands — unless it later resolves a prompt and takes ownership.
+      ownsRunRef.current = isPrimaryClient;
       setRun({
         cardId: script.id,
         cardName: card?.name ?? "",
@@ -163,6 +189,7 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
     state.sides[state.activeSide].dreamwellDrawnTurn,
     state.sides[state.activeSide].dreamwellCardIndex,
     dreamwellDeck,
+    isPrimaryClient,
     // Re-run when the active run finishes (`run` → null) so the next card starts.
     run,
   ]);
@@ -181,6 +208,7 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
       setActivePrompt(null);
       pausedRef.current = null;
       processedQueueRef.current = null;
+      ownsRunRef.current = false;
       // `lastRunKeyRef` is deliberately NOT reset here: if the operator toggles
       // automation off and back on during the same (side, turn) Dreamwell phase,
       // the start effect's key guard keeps the bonus ability from replaying.
@@ -215,9 +243,17 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
         dreamwellCardId: run.cardId,
         editKinds: plan.edits.map((e) => e.kind),
         targetIds: plan.edits.map((e) => extractEditTarget(e)),
+        dispatched: ownsRunRef.current,
       });
-      for (const edit of plan.edits) {
-        dispatchEdit(edit);
+      // Only the run's owner dispatches these authority edits; the non-owner
+      // walks the queue (so it reaches and shows any later prompt) but receives
+      // the resulting state via synced commands instead of applying it locally.
+      // Without this gate both coop clients would apply the same edit (the
+      // double "gain 1 energy" bug).
+      if (ownsRunRef.current) {
+        for (const edit of plan.edits) {
+          dispatchEdit(edit);
+        }
       }
       // Advance the queue by updating remaining to a new array so this effect
       // re-runs and processes the next step.
@@ -271,6 +307,11 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
         resultingEditKinds: edits.map((e) => e.kind),
       });
 
+      // Resolving the prompt makes THIS client the run's owner: the partner's
+      // overlay is torn down by `cancelPromptSignal`, so this client is now the
+      // sole driver of the remaining queue and must dispatch its edits (these
+      // resolution edits, and any automatic steps after the prompt) exactly once.
+      ownsRunRef.current = true;
       for (const edit of edits) {
         dispatchEdit(edit);
       }
@@ -302,6 +343,7 @@ export function useDreamwellEffectRunner(args: DreamwellRunnerArgs): DreamwellRu
     setActivePrompt(null);
     pausedRef.current = null;
     processedQueueRef.current = null;
+    ownsRunRef.current = false;
     // `lastRunKeyRef` deliberately stays set: the partner handled this (side,
     // turn) Dreamwell prompt, so it must not replay locally.
   }, [cancelPromptSignal, activePrompt, run, state]);

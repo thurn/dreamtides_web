@@ -42,3 +42,29 @@ closer to the real algorithm, but the hand port still drifts from the live
 the build pipeline, lint, typecheck, or test suite). Resolving it means re-syncing
 the port with the current `decklists` variant or replacing it with a call into
 the real generator.
+
+
+Pre-existing: coop double-dispatch in useBattleEffectRunner
+===========================================================
+
+src/battle/automation/use-battle-effect-runner.ts has the SAME structural coop
+bug just fixed in use-dreamwell-effect-runner.ts: its advance effect's
+`plan.type === "dispatch"` branch dispatches scripted edits on EVERY connected
+client. In a shared room every client runs the runner off the synced board, so a
+flat (non-prompt) ▸Materialized script — draw a card, grant spark — applies once
+per client (+2 in a two-client coop game), mirroring the dreamwell "gain 1 energy"
+-> +2 energy double-trigger.
+
+The fix is the same ownership model now in the dreamwell runner: own a run from
+the pump effect when it starts (ownsRun = isPrimaryClient), transfer ownership to
+whichever client resolves a prompt (ownsRun = true in resolvePrompt), reset on
+teardown, and gate the dispatch loop on ownsRun. The runner must still START runs
+and walk the queue on the non-owner so interactive ▸Dawn / pick-cards prompts
+surface on both clients; only the automatic edit dispatch is gated. The Support
+recompute (planSupportRecompute) also dispatches on every client but is idempotent
+(sets staticSparkBonus to a computed value, not an increment), so double-dispatch
+there is harmless beyond redundant synced commands.
+
+Not fixed here: a separate runner with no reproduction in hand and a more involved
+pending-queue/multi-run structure. The verified, reported bug was the dreamwell
+energy double-trigger (game r3f7vk).
