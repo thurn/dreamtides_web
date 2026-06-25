@@ -10,19 +10,16 @@
 # rather than a credential or quota problem. The failure rate jumped from ~0% to
 # 30-60% on 2026-06-24 with no change to our toolchain (the same Node and
 # firebase-tools versions ran clean for days before), so the trigger is external
-# to this repo. Two mitigations:
+# to this repo.
 #
-#   * NODE_OPTIONS=--dns-result-order=ipv4first (job level, inherited by the
-#     deploy action's firebase-tools subprocess) — premature-close to
-#     googleapis.com on CI is most often a flaky IPv6 egress path (the connection
-#     lands on an AAAA address that black-holes mid-response). Preferring IPv4
-#     avoids that path, which a same-runner retry alone cannot.
-#   * Retry the deploy up to three times with a 30s backoff so a transient reset
-#     gets another attempt on a fresh connection instead of failing the run.
-#
-# The deploy uses FirebaseExtended/action-hosting-deploy, which handles
-# service-account credential setup; the retry is expressed as guarded repeats of
-# that step because a `uses:` action cannot be wrapped in a retry runner.
+# The deploy is attempted up to three times with a 30s backoff so a transient
+# reset gets another attempt instead of failing the run on the first blip. (Note:
+# all three attempts share one runner, so this does not help when the reset
+# condition persists for the whole job; a fresh-runner retry would be needed for
+# that case.) The deploy step uses FirebaseExtended/action-hosting-deploy, which
+# handles service-account credential setup; the retry is expressed as guarded
+# repeats of that step because a `uses:` action cannot be wrapped in a retry
+# runner.
 
 name: Deploy to Firebase Hosting on merge
 on:
@@ -40,9 +37,6 @@ concurrency:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
-    env:
-      # Inherited by the deploy action's `npx firebase-tools` subprocess.
-      NODE_OPTIONS: --dns-result-order=ipv4first
     steps:
       - uses: actions/checkout@v4
       - run: npm ci && npm run build
