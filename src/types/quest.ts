@@ -94,6 +94,11 @@ export interface DeckEntry {
   transfiguration: TransfigurationType | null;
   typeChange?: CardTypeChange | null;
   keywordModification?: CardKeywordModification | null;
+  /** Debug-only absolute overrides for printed stats on one concrete deck
+   *  entry. Applied last, after transfiguration and card modifications, so an
+   *  explicit value wins over transfiguration-derived math. A missing key
+   *  leaves the corresponding stat at its resolved value. */
+  statOverride?: { energyCost?: number; spark?: number };
   isBane: boolean;
 }
 

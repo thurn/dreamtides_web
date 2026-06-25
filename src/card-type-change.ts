@@ -2,10 +2,13 @@ import type { CardData } from "./types/cards";
 import type {
   CardKeywordModification,
   CardTypeChange,
+  DeckEntry,
   DeckEntryCardModification,
 } from "./types/quest";
+import { applyTransfigurationToCard } from "./transfiguration/transfiguration-logic";
 
 type CardTypeFields = Pick<CardData, "cardType" | "subtype">;
+type CardStatFields = Pick<CardData, "energyCost" | "spark">;
 type CardKeywordFields = Pick<CardData, "isFast" | "renderedText"> & {
   reclaimCost?: number | null;
 };
@@ -94,4 +97,37 @@ export function applyDeckEntryCardModification<
     applyCardTypeChange(card, modification.typeChange),
     modification.keywords,
   );
+}
+
+/** Returns a card-like value with absolute debug stat overrides applied.
+ *  Absent keys leave the corresponding stat unchanged. */
+export function applyCardStatOverride<T extends CardStatFields>(
+  card: T,
+  statOverride: { energyCost?: number; spark?: number } | null | undefined,
+): T {
+  if (statOverride == null) return card;
+  return {
+    ...card,
+    ...(statOverride.energyCost !== undefined
+      ? { energyCost: statOverride.energyCost }
+      : {}),
+    ...(statOverride.spark !== undefined ? { spark: statOverride.spark } : {}),
+  };
+}
+
+/** The canonical deck-entry resolution: transfiguration, then type/keyword
+ *  modifications, then debug stat overrides (applied last). */
+export function resolveDeckEntryCard(
+  card: CardData,
+  entry: DeckEntry,
+): CardData {
+  const transfigured =
+    entry.transfiguration === null
+      ? card
+      : applyTransfigurationToCard(card, entry.transfiguration);
+  const modified = applyDeckEntryCardModification(transfigured, {
+    typeChange: entry.typeChange,
+    keywords: entry.keywordModification,
+  });
+  return applyCardStatOverride(modified, entry.statOverride);
 }
