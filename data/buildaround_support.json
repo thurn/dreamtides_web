@@ -417,7 +417,7 @@
       ]
     },
     "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea": {
-      "name": "Bloomweaver",
+      "name": "Cloudstrider",
       "needs": [
         {
           "theme": "cheap-characters",
@@ -1155,7 +1155,7 @@
       ]
     },
     "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2": {
-      "name": "Duneveil Vanguard",
+      "name": "Soulrender",
       "needs": [
         {
           "theme": "discard",
@@ -1886,7 +1886,7 @@
       ]
     },
     "b977afaf-f583-45ec-8e34-99fbfa4e9190": {
-      "name": "Grim Reclaimer",
+      "name": "Blood Altar Monarch",
       "needs": [
         {
           "theme": "warriors",
@@ -2361,7 +2361,7 @@
       ]
     },
     "4b20e66e-2466-4518-8ef9-67f580bd6f14": {
-      "name": "Looming Oracle",
+      "name": "Futuresight Host",
       "needs": [],
       "supports": [
         "cheap-characters"
@@ -3156,7 +3156,7 @@
       ]
     },
     "1bae969b-0bc4-4777-86f3-1e860d601c5c": {
-      "name": "Riftwalker",
+      "name": "Blood Sun Oppressor",
       "needs": [],
       "supports": [
         "cheap-characters"
@@ -3468,7 +3468,7 @@
       "supports": []
     },
     "5a27e236-86d7-442f-81d2-fb29a2b7f12a": {
-      "name": "Shadowbinder",
+      "name": "Pyre Caller",
       "needs": [],
       "supports": [
         "figments"
@@ -3494,7 +3494,7 @@
       ]
     },
     "ed4d5342-0690-40b7-ab48-6b76035466f2": {
-      "name": "Shadowpaw",
+      "name": "Chaos Crasher",
       "needs": [],
       "supports": [
         "discard",
@@ -3724,7 +3724,7 @@
       ]
     },
     "31501d09-5dde-44f4-a938-7ca95ad988a0": {
-      "name": "Sorrowful Prince",
+      "name": "Fallen One",
       "needs": [],
       "supports": [
         "warriors",
@@ -4656,7 +4656,7 @@
       ]
     },
     "2708c635-9332-4cfb-b43d-889ba2e329b6": {
-      "name": "Voidshield Guardian",
+      "name": "Sworn Defender",
       "needs": [],
       "supports": [
         "cheap-characters"

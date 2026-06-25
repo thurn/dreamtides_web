@@ -569,7 +569,7 @@ art-owned = false
 card-number = 31
 
 [[cards]]
-name = "Bloomweaver"
+name = "Cloudstrider"
 mtg-name = "Fastbond"
 id = "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea"
 rendered-text = """
@@ -578,15 +578,16 @@ Veil 2●
 When you play a ≤2● cost character, gain 1●."""
 energy-cost = 1
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Character Payoff", "Art Rework", "June25", "Art Duplicate"]
-image-number = 1790126246
+tags = ["Character Payoff", "Art Rework", "June25", "Art Duplicate", "Art OK"]
+image-number = 1788833075
 art-owned = true
 card-number = 32
+art = { x = -0.084, y = 0.242, scale = 1.17 }
 
 [[cards]]
 name = "Spirit Field Reclaimer"
@@ -1497,10 +1498,10 @@ card-number = 80
 art = { x = -0.27, y = 0.416, scale = 1.67 }
 
 [[cards]]
-name = "Grim Reclaimer"
+name = "Blood Altar Monarch"
 mtg-name = "Sai, Master Thopterist"
 id = "b977afaf-f583-45ec-8e34-99fbfa4e9190"
-rendered-text = "2●, Abandon 2 warriors: Draw a card."
+rendered-text = "1●, Abandon 2 warriors: Draw a card."
 energy-cost = 2
 card-type = "Character"
 subtype = "Visitor"
@@ -1508,10 +1509,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June25", "Art Duplicate"]
-image-number = 1740270992
+tags = ["Art Rework", "June25", "Art Duplicate", "Art OK"]
+image-number = 1219782721
 art-owned = false
 card-number = 81
+art = { x = 0, y = 1, scale = 1.36 }
 
 [[cards]]
 name = "Voidsire"
@@ -1866,7 +1868,7 @@ art-owned = false
 card-number = 100
 
 [[cards]]
-name = "Shadowbinder"
+name = "Pyre Caller"
 mtg-name = "Chandra, Acolyte of Flame"
 id = "5a27e236-86d7-442f-81d2-fb29a2b7f12a"
 rendered-text = """
@@ -1880,10 +1882,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Figment Maker", "Art Rework", "June25", "Art Duplicate"]
-image-number = 1450052381
+tags = ["Figment Maker", "Art Rework", "June25", "Art Duplicate", "Art OK"]
+image-number = 712713349
 art-owned = false
 card-number = 101
+art = { x = -0.042, y = 0.897, scale = 1.07 }
 
 [[cards]]
 name = "Keeper of the Lightpath"
@@ -2762,7 +2765,7 @@ card-number = 148
 art = { x = 0, y = 1, scale = 1.37 }
 
 [[cards]]
-name = "Glimmerwood Scout"
+name = "Lurking Regent"
 mtg-name = "Skyclave Apparition"
 id = "32f3d6f2-43c5-4510-a23e-558769a7a8c9"
 rendered-text = """
@@ -2771,15 +2774,16 @@ rendered-text = """
 When this character leaves play, the opponent draws a card."""
 energy-cost = 3
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Removal", "Art Rework", "June25", "Art Duplicate"]
-image-number = 2155438709
+tags = ["Removal", "Art Rework", "June25", "Art Duplicate", "Art OK"]
+image-number = 425039560
 art-owned = false
 card-number = 149
+art = { x = 0.068, y = 0.897, scale = 1.07 }
 
 [[cards]]
 name = "Virtuoso of Harmony"
@@ -4326,21 +4330,22 @@ card-number = 234
 art = { x = 0.782, y = 1, scale = 1.11 }
 
 [[cards]]
-name = "Duneveil Vanguard"
+name = "Soulrender"
 mtg-name = "Molten Vortex"
 id = "3b4ec013-0e07-4bf8-9879-5fbe3bf318b2"
 rendered-text = "Discard a ≤2● cost character: Dissolve a ≤2● cost enemy."
 energy-cost = 3
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Removal", "Art Rework", "June25", "Art Duplicate"]
-image-number = 1639942840
+tags = ["Removal", "Art Rework", "June25", "Art Duplicate", "Art OK"]
+image-number = 1207264102
 art-owned = true
 card-number = 235
+art = { x = -0.368, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Guiding Light"
@@ -4515,21 +4520,22 @@ card-number = 244
 art = { x = 0.059, y = 0, scale = 1.67 }
 
 [[cards]]
-name = "Voidshield Guardian"
+name = "Sworn Defender"
 mtg-name = "Giver of Runes"
 id = "2708c635-9332-4cfb-b43d-889ba2e329b6"
 rendered-text = "❖❖ – ☪: Another allied character cannot be targeted by effects this turn."
 energy-cost = 1
 card-type = "Character"
-subtype = "Synth"
+subtype = "Warrior"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "June25", "Art Duplicate"]
-image-number = 2186149279
+tags = ["Art Rework", "June25", "Art Duplicate", "Art OK"]
+image-number = 2430444885
 art-owned = true
 card-number = 245
+art = { x = 0.042, y = 1, scale = 1.47 }
 
 [[cards]]
 name = "Cascade of Reflections"
@@ -6355,7 +6361,7 @@ card-number = 343
 art = { x = -0.045, y = 0.64, scale = 1.47 }
 
 [[cards]]
-name = "Shadowpaw"
+name = "Chaos Crasher"
 mtg-name = "The Underworld Cookbook"
 id = "ed4d5342-0690-40b7-ab48-6b76035466f2"
 rendered-text = """
@@ -6369,10 +6375,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "June25", "Art Duplicate"]
-image-number = 410444914
+tags = ["Art Rework", "June25", "Art Duplicate", "Art OK"]
+image-number = 626543207
 art-owned = false
 card-number = 344
+art = { x = 0.172, y = -0.636, scale = 1.57 }
 
 [[cards]]
 name = "Selfless Rescuer"
@@ -6914,22 +6921,24 @@ card-number = 373
 art = { x = 0, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Sorrowful Prince"
+name = "Fallen One"
 mtg-name = "Blazing Rootwalla"
 id = "31501d09-5dde-44f4-a938-7ca95ad988a0"
-rendered-text = "X●: This character gains +X✦ until end of turn."
+rendered-text = """❖ – Discard a card: Move this character to an empty character position.
+
+X●: This character gains +X✦ until end of turn."""
 energy-cost = 2
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "June25", "Art Duplicate"]
-image-number = 432001912
+tags = ["Art Rework", "June25", "Art Duplicate", "Art OK"]
+image-number = 2295991869
 art-owned = false
 card-number = 374
-art = { x = 0, y = 1, scale = 1.17 }
+art = { x = 0, y = 1, scale = 1.07 }
 
 [[cards]]
 name = "Oblivion Guide"
@@ -7138,22 +7147,22 @@ art-owned = false
 card-number = 385
 
 [[cards]]
-name = "Riftwalker"
+name = "Blood Sun Oppressor"
 mtg-name = "Deep-Cavern Bat"
 id = "1bae969b-0bc4-4777-86f3-1e860d601c5c"
 rendered-text = "▸Materialized: Banish a chosen card from the opponent's hand until this character leaves play."
 energy-cost = 2
 card-type = "Character"
-subtype = "Synth"
+subtype = "Visitor"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Tidehollow Sculler", "Art Rework", "June25", "Art Duplicate"]
-image-number = 1793552422
+tags = ["Tidehollow Sculler", "Art Rework", "June25", "Art Duplicate", "Art OK"]
+image-number = 703988032
 art-owned = false
 card-number = 386
-art = { x = 0.252, y = 0.032, scale = 1.17 }
+art = { x = -0.042, y = -0.276, scale = 1.37 }
 
 [[cards]]
 name = "Aftermath Bloom"
@@ -7875,7 +7884,7 @@ card-number = 424
 art = { x = -0.21, y = 0.608, scale = 1.17 }
 
 [[cards]]
-name = "Looming Oracle"
+name = "Futuresight Host"
 mtg-name = "Wall of Omens"
 id = "4b20e66e-2466-4518-8ef9-67f580bd6f14"
 rendered-text = '''
@@ -7889,10 +7898,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 0
-tags = ["ETB Draw", "Art Rework", "June25", "Art Duplicate"]
-image-number = 717263287
+tags = ["ETB Draw", "Art Rework", "June25", "Art Duplicate", "Art OK"]
+image-number = 1470059003
 art-owned = false
 card-number = 425
+art = { x = 0, y = -0.573, scale = 1.67 }
 
 [[cards]]
 name = "Packcaller of Shadows"
@@ -8021,7 +8031,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "July22"]
+tags = ["Art Rework", "July22", "Art OK"]
 image-number = 1180104511
 art-owned = false
 card-number = 432
