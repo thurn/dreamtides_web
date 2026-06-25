@@ -383,19 +383,14 @@ the **Battle Log** and **Dreamwell History** drawers, and finally the
 Defeat shows the result overlay with a reset path — see the Victory/Defeat
 screen).
 
-> **Developer surfaces (each should be its own separate screen on mobile, not an
-> inline panel):**
-> - **Inspector** (right-edge drawer, open by default on wide desktop): a live
->   dump of battle state plus debug tools — AI-proposal status, "Show enemy hand"
->   / "Hide player hand" toggles, **Pool Viewer**, **Foresee**, **Figment
->   creator**, **Erode**, **Reset battle**, and per-side energy/score/draw editors.
-> - The **right-click card context menu** (per-card debug actions, card notes).
-> - The board's manual energy/score/phase steppers in the status strips, which
->   exist for hand-driven/debug play.
->
-> The intended player-facing battle is the status bar + phase rail, the symmetric
-> battlefield, the side status strips (score/energy), the hand tray, and the
-> minimal action bar — everything else is developer tooling.
+> **Developer surfaces on this screen** (each should be its own separate screen
+> on mobile, not an inline panel): the **Battle Inspector** (right-edge drawer —
+> documented in its own section below), the **right-click card context menu**
+> (per-card debug actions and card notes), and the board's manual
+> energy/score/phase steppers built into the status strips for hand-driven/debug
+> play. The intended player-facing battle is the status bar + phase rail, the
+> symmetric battlefield, the side status strips (score/energy), the hand tray, and
+> the minimal action bar — everything else is developer tooling.
 
 **Redesign notes.** This is the hardest screen to fit to portrait: it must
 simultaneously present two mirrored multi-rank boards, two side columns of
@@ -409,3 +404,61 @@ top-vs-bottom board plus a bottom hand and bottom action bar all compete for
 vertical space on a phone; the side columns (zones + status strips) have no
 natural home in a narrow layout and will likely need to collapse into
 tap-to-open chips.
+
+---
+
+# Battle Inspector (Developer)
+
+![Battle Inspector panel](images/04-battle-inspector.png)
+
+**What it does.** The Inspector is a **developer/debug panel** for the battle
+board — a live read-out of battle state plus a dense set of tools for forcing
+state, editing each side, and inspecting the AI. It is **not part of the
+player-facing game**; it is promoted to its own section here because it is a
+large, complex sub-UI. On desktop it is a right-edge drawer that is open by
+default at wide widths; on a narrow layout it collapses to an "INSPECT" handle.
+In a mobile redesign this belongs on a **separate developer screen**, not docked
+beside the live board.
+
+**How it opens.** A vertical **"INSPECT" / "CLOSE" handle** rides the right edge
+of the board; clicking it toggles the drawer. The Action Bar's Inspector button
+toggles the same drawer. When open it shows a header ("Inspector" + an ✕ close)
+above a scrolling body of sections.
+
+**Sections, top to bottom:**
+
+- **Battle State** — a read-out: chips for the current **Turn**, **phase**,
+  **active side**, and **result** ("Live" until decided); the **Battle**
+  (opponent name); per-side **zone counts** in a compact code (H=hand, D=deck,
+  V=void, B=banished, Bk=back rank, Fr=front rank); the **Stack** size; and the
+  **Dreamwell order** band of the next Dreamwell card.
+- **AI Reasoning** (only in AI battles) — the planner's read on the current
+  decision: the held **Proposal** description, its **Kind**, the **Card** and
+  **Target** involved, the **Heuristic** score before→after, a live static
+  **board evaluation** ("Live eval", or "win"/"loss" when decided), the fixed
+  **Planner** settings ("beam 12 · expectiminimax · sample 8"), and a count of
+  **recent AI choices** with the latest rationale.
+- **Visibility** — chip buttons: **Pool Viewer** (open the card-pool browser),
+  **Show / Hide enemy hand**, and **Hide / Show player hand** (the
+  multiplayer-view simulation).
+- **Result** — chip buttons to force an outcome: **Skip to rewards**, **Force
+  defeat**, **Force draw**, and a red **Reset battle**.
+- **Your state** and **Enemy state** — one editor block per side, each with:
+  stepper rows for **Energy**, **Max energy**, and **Score**; a **Draw / discard**
+  row (**+1 Draw**, **Discard**); a **Deck tools** row (**Foresee**, **Shuffle**,
+  **Open Deck**); a **Dreamwell + draw** button (run the energy ramp + draw); an
+  **Erode** row (a count stepper + an "Erode N" button that mills the top N cards);
+  and a **Side actions** row (**Create Figment**).
+- **History** — **↶ Undo** and **↷ Redo** chips (disabled when there is nothing to
+  undo/redo).
+
+**What you can click:** every item above is a control — read-outs in Battle State
+/ AI Reasoning are passive, and everything in Visibility, Result, the per-side
+editors, and History is an actionable chip, stepper, or button. Several of these
+open their own overlays (Pool Viewer, Foresee, the deck browser, the Figment
+creator), which are themselves complex sub-UIs.
+
+**Redesign notes.** This panel has no player-facing role and should be excluded
+from the gameplay layout entirely, re-homed onto a dedicated developer screen.
+Documented here so its tools are inventoried and so the board's redesign can
+reclaim the ~27% of screen width it currently occupies.
