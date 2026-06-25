@@ -42,6 +42,11 @@ export function BattleDreamwellDisplay({
     >
       {visible && card !== null ? (
         <div
+          // Key on the card identity so a card change mounts a fresh subtree
+          // (and fresh `<img>` elements) rather than reusing the prior card's
+          // DOM — a reused `<img>` keeps painting the old art until the new
+          // source decodes, which would flash the previous Dreamwell card.
+          key={card.id}
           data-battle-dreamwell-card={card.id}
           data-battle-dreamwell-side={side}
           data-battle-dreamwell-automation={automationStatus}

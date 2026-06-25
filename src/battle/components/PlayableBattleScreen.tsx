@@ -419,7 +419,7 @@ function PlayableBattleScreenInner({
   // locally-driven side. Skipped on the AI's own turn (the AI driver advances
   // itself) and when automation is off (the operator is stepping manually).
   // Ref-guarded to fire once per (side, turn).
-  const round1DreamwellDrawnTurn =
+  const activeDreamwellDrawnTurn =
     reducerState.mutable.sides[activeSide].dreamwellDrawnTurn;
   const lastDreamwellAutoAdvanceKeyRef = useRef<string | null>(null);
   useEffect(() => {
@@ -434,7 +434,7 @@ function PlayableBattleScreenInner({
     }
     // Wait for this turn's Dreamwell reveal to land so its energy is applied
     // before the phase advances.
-    if (round1DreamwellDrawnTurn !== activeTurnNumber) {
+    if (activeDreamwellDrawnTurn !== activeTurnNumber) {
       return;
     }
     const advanceKey = `${activeSide}:${String(activeTurnNumber)}`;
@@ -455,7 +455,7 @@ function PlayableBattleScreenInner({
     activePhase,
     activeTurnNumber,
     battleResult,
-    round1DreamwellDrawnTurn,
+    activeDreamwellDrawnTurn,
   ]);
 
   // The Dreamwell card the active side is currently showing (the card at its
@@ -482,8 +482,20 @@ function PlayableBattleScreenInner({
   }, [activeDreamwellCardIndex, battleInit.dreamwellDeck]);
   // The Dreamwell card is hidden during the opening round (turn 1): no card is
   // surfaced until each side reaches its Dreamwell phase on a later turn.
+  //
+  // `dreamwellCardIndex` persists across turns — between this side's reveals it
+  // still points at the card it drew last turn. The Dreamwell phase begins
+  // before this turn's `DRAW_DREAMWELL_CARD` reveal has committed, so surfacing
+  // the card the instant the phase opens would flash the previous turn's card
+  // until the draw lands. Gate on the draw having committed for this turn
+  // (`dreamwellDrawnTurn === activeTurnNumber`) so the card appears only once it
+  // is this turn's card; the brief pre-draw moment shows no card rather than a
+  // stale one.
   const isDreamwellDisplayVisible =
-    activePhase === "dreamwell" && battleResult === null && activeTurnNumber > 1;
+    activePhase === "dreamwell" &&
+    battleResult === null &&
+    activeTurnNumber > 1 &&
+    activeDreamwellDrawnTurn === activeTurnNumber;
 
   useEffect(() => {
     if (reducerState.mutable !== battleState.reducer.mutable) {
