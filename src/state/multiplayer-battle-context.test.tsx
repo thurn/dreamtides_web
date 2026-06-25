@@ -375,6 +375,92 @@ describe("useMultiplayerBattle", () => {
     expect(captured[captured.length - 1]?.remoteCommandEpoch).toBe(1);
   });
 
+  it("does not bump remoteCommandEpoch for a partner's prompt-internal edit but still reseeds state", () => {
+    const fakeBattleState = makeFakeBattleState();
+    const captured: MultiplayerBattleValue[] = [];
+    const renderWith = (battleState: SharedBattleState): ReactNode => (
+      <MultiplayerBattleProvider
+        database={{} as Database}
+        roomId="room-coop"
+        clientId="client-a"
+        connectedCount={2}
+        battleState={battleState}
+      >
+        <CaptureValue onValue={(value) => captured.push(value)} />
+      </MultiplayerBattleProvider>
+    );
+
+    const { root } = mount(renderWith(fakeBattleState));
+    expect(captured[captured.length - 1]?.remoteCommandEpoch).toBe(0);
+
+    // The partner manipulated the shared foresee deck from inside the overlay:
+    // same battle, serial ahead, and the move carries a prompt-internal source
+    // surface. It must reseed our state (so the new score shows) WITHOUT bumping
+    // the dismiss epoch (so our copy of the same overlay stays open).
+    const promptInternalTransition = {
+      metadata: { sourceSurface: "foresee-overlay" },
+    } as unknown as SharedBattleState["reducer"]["lastTransition"];
+    const advanced: SharedBattleState = {
+      init: fakeBattleState.init,
+      reducer: {
+        ...fakeBattleState.reducer,
+        mutable: {
+          ...fakeBattleState.reducer.mutable,
+          sides: {
+            ...fakeBattleState.reducer.mutable.sides,
+            player: {
+              ...fakeBattleState.reducer.mutable.sides.player,
+              score: 7,
+            },
+          },
+        },
+        commandSerial: 1,
+        lastTransition: promptInternalTransition,
+      },
+    };
+    act(() => {
+      root.render(renderWith(advanced));
+    });
+    const value = captured[captured.length - 1];
+    expect(value?.remoteCommandEpoch).toBe(0);
+    expect(value?.reducerState?.mutable.sides.player.score).toBe(7);
+  });
+
+  it("bumps remoteCommandEpoch for a partner's non-prompt-internal edit", () => {
+    const fakeBattleState = makeFakeBattleState();
+    const captured: MultiplayerBattleValue[] = [];
+    const renderWith = (battleState: SharedBattleState): ReactNode => (
+      <MultiplayerBattleProvider
+        database={{} as Database}
+        roomId="room-coop"
+        clientId="client-a"
+        connectedCount={2}
+        battleState={battleState}
+      >
+        <CaptureValue onValue={(value) => captured.push(value)} />
+      </MultiplayerBattleProvider>
+    );
+
+    const { root } = mount(renderWith(fakeBattleState));
+    expect(captured[captured.length - 1]?.remoteCommandEpoch).toBe(0);
+
+    const resolutionTransition = {
+      metadata: { sourceSurface: "auto-system" },
+    } as unknown as SharedBattleState["reducer"]["lastTransition"];
+    const advanced: SharedBattleState = {
+      init: fakeBattleState.init,
+      reducer: {
+        ...fakeBattleState.reducer,
+        commandSerial: 1,
+        lastTransition: resolutionTransition,
+      },
+    };
+    act(() => {
+      root.render(renderWith(advanced));
+    });
+    expect(captured[captured.length - 1]?.remoteCommandEpoch).toBe(1);
+  });
+
   it("does not bump remoteCommandEpoch when the same room snapshot re-renders", () => {
     const fakeBattleState = makeFakeBattleState();
     const captured: MultiplayerBattleValue[] = [];

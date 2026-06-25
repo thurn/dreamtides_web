@@ -19,7 +19,26 @@ import {
   battleControllerReducer,
   type BattleControllerAction,
 } from "../battle/state/controller";
-import type { BattleReducerState } from "../battle/types";
+import type {
+  BattleCommandSourceSurface,
+  BattleReducerState,
+} from "../battle/types";
+
+/**
+ * Source surfaces for edits dispatched from *within* a still-open shared prompt.
+ * A partner command from one of these is an intermediate manipulation of the
+ * prompt's own subject (e.g. the foresee overlay revealing or reordering deck
+ * cards), not a resolution of the prompt — so it must sync to a partner who has
+ * the same overlay open without dismissing it. See the reconciliation effect.
+ */
+const PROMPT_INTERNAL_SOURCE_SURFACES: ReadonlySet<BattleCommandSourceSurface> =
+  new Set<BattleCommandSourceSurface>(["foresee-overlay", "deck-order-picker"]);
+
+function isPromptInternalSurface(
+  surface: BattleCommandSourceSurface | null,
+): boolean {
+  return surface !== null && PROMPT_INTERNAL_SOURCE_SURFACES.has(surface);
+}
 
 export interface MultiplayerBattleValue {
   database: Database;
@@ -44,13 +63,18 @@ export interface MultiplayerBattleValue {
   reducerState: BattleReducerState | null;
   dispatch: (action: BattleControllerAction) => void;
   /**
-   * A monotonic counter bumped every time a REMOTE actor (our coop partner)
-   * advances the shared battle past our local command serial. Coop UI watches
-   * this to dismiss choices the partner already resolved — most importantly an
-   * open automation prompt (e.g. "Choose a card to discard"), which is purely
-   * local runner state and would otherwise stay on screen forever after the
-   * partner picks. It never bumps for our own optimistic writes (those keep the
-   * room serial in lockstep with ours) nor in single-player (no remote actor).
+   * A monotonic counter bumped when a REMOTE actor (our coop partner) advances
+   * the shared battle past our local command serial with a move that resolves or
+   * advances past a choice. Coop UI watches this to dismiss choices the partner
+   * already resolved — most importantly an open automation prompt (e.g. "Choose
+   * a card to discard"), which is purely local runner state and would otherwise
+   * stay on screen forever after the partner picks. It deliberately does NOT
+   * bump for the partner's intermediate edits inside a still-open shared prompt
+   * (the foresee overlay / deck-order picker): those sync their deck changes to
+   * our copy of the same overlay without closing it, so both players keep
+   * interacting with one shared choice. It never bumps for our own optimistic
+   * writes (those keep the room serial in lockstep with ours) nor in
+   * single-player (no remote actor).
    */
   remoteCommandEpoch: number;
 }
@@ -146,10 +170,22 @@ export function MultiplayerBattleProvider({
     if (battleState.reducer.commandSerial > current.serial) {
       // The room ran AHEAD of us on the same battle: a remote command our coop
       // partner applied (our own writes keep the room serial in lockstep, so the
-      // strict `>` is uniquely a partner move). Reseed to their state and bump
-      // the epoch so any prompt we have open can dismiss itself.
+      // strict `>` is uniquely a partner move). Always reseed to their state so
+      // their changes are reflected locally.
       commitLocal(seedLocalFromShared(battleState));
-      setRemoteCommandEpoch((epoch) => epoch + 1);
+      // Bump the dismiss epoch only for partner moves that should tear down an
+      // open local prompt. Edits made *inside* a shared prompt — the foresee
+      // overlay's reveal/reorder/send-to-void and the deck-order picker — must
+      // sync their deck changes to a partner who has the SAME prompt open
+      // without dismissing it, so both players see one shared choice and either
+      // can act on it. Every other remote move (a card play, a phase advance, a
+      // pick-cards/choice resolution) genuinely advances past the prompt, so it
+      // bumps the epoch and any leftover overlay closes.
+      const surface =
+        battleState.reducer.lastTransition?.metadata.sourceSurface ?? null;
+      if (!isPromptInternalSurface(surface)) {
+        setRemoteCommandEpoch((epoch) => epoch + 1);
+      }
     }
   }, [battleState, commitLocal]);
 
