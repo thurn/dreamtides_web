@@ -7,13 +7,22 @@
 # connection is reset partway through the response, surfacing as "Failed to
 # authenticate, have you run firebase login?". It fails before any files are
 # uploaded and reports no Google-side error reason, i.e. a transport-level reset
-# rather than a credential or quota problem. Two mitigations:
+# rather than a credential or quota problem. The failure rate jumped from ~0% to
+# 30-60% on 2026-06-24 with no change to our toolchain (the same Node and
+# firebase-tools versions ran clean for days before), so the trigger is external
+# to this repo. Two mitigations:
 #
-#   * --dns-result-order=ipv4first — premature-close to googleapis.com on CI is
-#     most often a flaky IPv6 egress path (the connection lands on an AAAA
-#     address that black-holes mid-response). Preferring IPv4 avoids that path.
-#   * retry-with-backoff — absorbs any residual transient reset regardless of
-#     cause, instead of failing the whole deploy on the first blip.
+#   * NODE_OPTIONS=--dns-result-order=ipv4first (job level, inherited by the
+#     deploy action's firebase-tools subprocess) — premature-close to
+#     googleapis.com on CI is most often a flaky IPv6 egress path (the connection
+#     lands on an AAAA address that black-holes mid-response). Preferring IPv4
+#     avoids that path, which a same-runner retry alone cannot.
+#   * Retry the deploy up to three times with a 30s backoff so a transient reset
+#     gets another attempt on a fresh connection instead of failing the run.
+#
+# The deploy uses FirebaseExtended/action-hosting-deploy, which handles
+# service-account credential setup; the retry is expressed as guarded repeats of
+# that step because a `uses:` action cannot be wrapped in a retry runner.
 
 name: Deploy to Firebase Hosting on merge
 on:
@@ -31,21 +40,49 @@ concurrency:
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    env:
+      # Inherited by the deploy action's `npx firebase-tools` subprocess.
+      NODE_OPTIONS: --dns-result-order=ipv4first
     steps:
       - uses: actions/checkout@v4
       - run: npm ci && npm run build
-      - name: Write service account credentials
-        run: |
-          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$RUNNER_TEMP/firebase-service-account.json"
-        env:
-          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_QUEST_PROTOTYPE_D7027 }}
-      - name: Deploy to Firebase Hosting (live)
-        uses: nick-fields/retry@v3
+
+      - name: Deploy to Firebase Hosting (attempt 1)
+        id: deploy1
+        continue-on-error: true
+        uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          timeout_minutes: 10
-          max_attempts: 4
-          retry_wait_seconds: 30
-          command: npx --yes firebase-tools@latest deploy --only hosting --project redacted-firebase-project --non-interactive
-        env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ runner.temp }}/firebase-service-account.json
-          NODE_OPTIONS: --dns-result-order=ipv4first
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_QUEST_PROTOTYPE_D7027 }}
+          channelId: live
+          projectId: redacted-firebase-project
+
+      - name: Back off before retry
+        if: steps.deploy1.outcome == 'failure'
+        run: sleep 30
+
+      - name: Deploy to Firebase Hosting (attempt 2)
+        id: deploy2
+        if: steps.deploy1.outcome == 'failure'
+        continue-on-error: true
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_QUEST_PROTOTYPE_D7027 }}
+          channelId: live
+          projectId: redacted-firebase-project
+
+      - name: Back off before final retry
+        if: steps.deploy1.outcome == 'failure' && steps.deploy2.outcome == 'failure'
+        run: sleep 30
+
+      # The final attempt is not continue-on-error, so the job fails only if all
+      # three attempts fail.
+      - name: Deploy to Firebase Hosting (attempt 3)
+        if: steps.deploy1.outcome == 'failure' && steps.deploy2.outcome == 'failure'
+        uses: FirebaseExtended/action-hosting-deploy@v0
+        with:
+          repoToken: ${{ secrets.GITHUB_TOKEN }}
+          firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_QUEST_PROTOTYPE_D7027 }}
+          channelId: live
+          projectId: redacted-firebase-project
