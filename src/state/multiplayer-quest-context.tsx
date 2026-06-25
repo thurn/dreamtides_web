@@ -3569,17 +3569,6 @@ export function MultiplayerQuestProvider({
   const setEssenceCap = useCallback((value: number, source: string) => {
     const current = currentRef.current;
     const now = new Date().toISOString();
-    const before = {
-      essenceCap: current.state.essenceCap,
-      essence: current.state.essence,
-    };
-    logEvent("quest_debug_edit", {
-      target: "questState",
-      field: "essenceCap",
-      before: before.essenceCap,
-      after: value,
-      source,
-    });
     writeRoomTransaction({
       database: current.database,
       roomId: current.session.roomId,
@@ -3587,6 +3576,13 @@ export function MultiplayerQuestProvider({
         if (room === null || room.questState === null) {
           return room ?? undefined;
         }
+        logEvent("quest_debug_edit", {
+          target: "questState",
+          field: "essenceCap",
+          before: room.questState.essenceCap,
+          after: value,
+          source,
+        });
         return {
           ...room,
           questState: {
@@ -3606,13 +3602,6 @@ export function MultiplayerQuestProvider({
   const setMaxDreamsigns = useCallback((value: number, source: string) => {
     const current = currentRef.current;
     const now = new Date().toISOString();
-    logEvent("quest_debug_edit", {
-      target: "questState",
-      field: "maxDreamsigns",
-      before: current.state.maxDreamsigns,
-      after: value,
-      source,
-    });
     writeRoomTransaction({
       database: current.database,
       roomId: current.session.roomId,
@@ -3620,6 +3609,13 @@ export function MultiplayerQuestProvider({
         if (room === null || room.questState === null) {
           return room ?? undefined;
         }
+        logEvent("quest_debug_edit", {
+          target: "questState",
+          field: "maxDreamsigns",
+          before: room.questState.maxDreamsigns,
+          after: value,
+          source,
+        });
         return {
           ...room,
           questState: {
@@ -3638,13 +3634,6 @@ export function MultiplayerQuestProvider({
   const setCompletionLevel = useCallback((value: number, source: string) => {
     const current = currentRef.current;
     const now = new Date().toISOString();
-    logEvent("quest_debug_edit", {
-      target: "questState",
-      field: "completionLevel",
-      before: current.state.completionLevel,
-      after: value,
-      source,
-    });
     writeRoomTransaction({
       database: current.database,
       roomId: current.session.roomId,
@@ -3652,6 +3641,13 @@ export function MultiplayerQuestProvider({
         if (room === null || room.questState === null) {
           return room ?? undefined;
         }
+        logEvent("quest_debug_edit", {
+          target: "questState",
+          field: "completionLevel",
+          before: room.questState.completionLevel,
+          after: value,
+          source,
+        });
         return {
           ...room,
           questState: {
@@ -3676,18 +3672,6 @@ export function MultiplayerQuestProvider({
       const current = currentRef.current;
       const now = new Date().toISOString();
       const actionId = crypto.randomUUID();
-      const existing = current.state.deck.find(
-        (candidate) => candidate.entryId === entryId,
-      );
-      logEvent("quest_debug_edit", {
-        target: "deckEntry",
-        field: "statOverride",
-        entryId,
-        cardNumber: existing?.cardNumber ?? null,
-        before: existing?.statOverride ?? null,
-        after: statOverride,
-        source,
-      });
       writeRoomTransaction({
         database: current.database,
         roomId: current.session.roomId,
@@ -3701,6 +3685,15 @@ export function MultiplayerQuestProvider({
           if (entry === undefined) {
             return room;
           }
+          logEvent("quest_debug_edit", {
+            target: "deckEntry",
+            field: "statOverride",
+            entryId,
+            cardNumber: entry.cardNumber,
+            before: entry.statOverride ?? null,
+            after: statOverride,
+            source,
+          });
           return {
             ...room,
             questState: {
@@ -3750,18 +3743,6 @@ export function MultiplayerQuestProvider({
       const current = currentRef.current;
       const now = new Date().toISOString();
       const actionId = crypto.randomUUID();
-      const existing = current.state.deck.find(
-        (candidate) => candidate.entryId === entryId,
-      );
-      logEvent("quest_debug_edit", {
-        target: "deckEntry",
-        field: "keywordModification",
-        entryId,
-        cardNumber: existing?.cardNumber ?? null,
-        before: existing?.keywordModification ?? null,
-        after: keywordModification,
-        source,
-      });
       writeRoomTransaction({
         database: current.database,
         roomId: current.session.roomId,
@@ -3775,6 +3756,15 @@ export function MultiplayerQuestProvider({
           if (entry === undefined) {
             return room;
           }
+          logEvent("quest_debug_edit", {
+            target: "deckEntry",
+            field: "keywordModification",
+            entryId,
+            cardNumber: entry.cardNumber,
+            before: entry.keywordModification ?? null,
+            after: keywordModification,
+            source,
+          });
           return {
             ...room,
             questState: {
@@ -3820,18 +3810,6 @@ export function MultiplayerQuestProvider({
       const current = currentRef.current;
       const now = new Date().toISOString();
       const actionId = crypto.randomUUID();
-      const existing = current.state.deck.find(
-        (candidate) => candidate.entryId === entryId,
-      );
-      logEvent("quest_debug_edit", {
-        target: "deckEntry",
-        field: "typeChange",
-        entryId,
-        cardNumber: existing?.cardNumber ?? null,
-        before: existing?.typeChange ?? null,
-        after: typeChange,
-        source,
-      });
       writeRoomTransaction({
         database: current.database,
         roomId: current.session.roomId,
@@ -3845,6 +3823,15 @@ export function MultiplayerQuestProvider({
           if (entry === undefined) {
             return room;
           }
+          logEvent("quest_debug_edit", {
+            target: "deckEntry",
+            field: "typeChange",
+            entryId,
+            cardNumber: entry.cardNumber,
+            before: entry.typeChange ?? null,
+            after: typeChange,
+            source,
+          });
           return {
             ...room,
             questState: {
@@ -3889,15 +3876,6 @@ export function MultiplayerQuestProvider({
     (index: number, isBane: boolean, source: string) => {
       const current = currentRef.current;
       const now = new Date().toISOString();
-      const existing = current.state.dreamsigns[index];
-      logEvent("quest_debug_edit", {
-        target: "dreamsign",
-        field: "isBane",
-        index,
-        before: existing?.isBane ?? null,
-        after: isBane,
-        source,
-      });
       writeRoomTransaction({
         database: current.database,
         roomId: current.session.roomId,
@@ -3905,9 +3883,18 @@ export function MultiplayerQuestProvider({
           if (room === null || room.questState === null) {
             return room ?? undefined;
           }
-          if (room.questState.dreamsigns[index] === undefined) {
+          const existing = room.questState.dreamsigns[index];
+          if (existing === undefined) {
             return room;
           }
+          logEvent("quest_debug_edit", {
+            target: "dreamsign",
+            field: "isBane",
+            index,
+            before: existing.isBane,
+            after: isBane,
+            source,
+          });
           return {
             ...room,
             questState: {

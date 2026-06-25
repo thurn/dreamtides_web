@@ -3745,6 +3745,37 @@ describe("MultiplayerQuestProvider", () => {
     expect(afterClear?.questState?.deck[1]).not.toHaveProperty("statOverride");
   });
 
+  it("setDeckEntryStatOverride no-ops and does not log for a missing deck entry", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      deck: [
+        { entryId: "deck-1", cardNumber: 101, transfiguration: null, isBane: false },
+      ],
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    const setOverride = captured[captured.length - 1]?.mutations
+      .setDeckEntryStatOverride;
+    expect(setOverride).toBeDefined();
+
+    // Targeting an entryId that is not in the deck is a no-op: the updater
+    // returns the room unchanged and no quest_debug_edit log is emitted.
+    loggingMocks.logEvent.mockClear();
+    setOverride!("missing-entry", { spark: 5 }, "test");
+    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+    expect(loggingMocks.logEvent).not.toHaveBeenCalled();
+  });
+
   it("scalar debug setters update maxDreamsigns, completionLevel, and essenceCap", () => {
     const captured: QuestContextValue[] = [];
     const questState: QuestState = {
@@ -3816,9 +3847,12 @@ describe("MultiplayerQuestProvider", () => {
     expect(next?.questState?.dreamsigns[0]?.isBane).toBe(false);
     expect(next?.questState?.dreamsigns[1]?.isBane).toBe(true);
 
-    // Out-of-range index no-ops.
+    // Out-of-range index no-ops, and must not emit a quest_debug_edit log
+    // because no state was actually changed.
+    loggingMocks.logEvent.mockClear();
     setBane!(9, true, "test");
     expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+    expect(loggingMocks.logEvent).not.toHaveBeenCalled();
   });
 
   it("debug stat-override edit preserves the non-null dreamcaller invariant", () => {
