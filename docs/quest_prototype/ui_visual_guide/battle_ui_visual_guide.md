@@ -20,9 +20,9 @@ the **Battle Board** (the live match) — plus a family of overlays, drawers, an
 panels the board raises: the Dreamwell card display, the card zone browser, the
 card picker and choice prompt, the Foresee overlay, the deck-order picker, the
 right-click context menu, the battle-log and Dreamwell-history drawers, the
-card-hover preview, the Dreamcaller/dreamsign hovers and panel, and the
-developer surfaces (Inspector, Figment creator, card-note editor). Each is
-documented in its own section below.
+card-hover preview, the Dreamcaller/dreamsign hovers and panel, the
+end-of-battle result/reward surface, and the developer surfaces (Inspector,
+Figment creator, card-note editor). Each is documented in its own section below.
 
 ---
 
@@ -103,8 +103,11 @@ match state: the **turn / round number** ("Turn 1"), a **phase rail** naming the
 turn's phases — **DREAMWELL · DAY · DUSK · NIGHT · CHALLENGE** — with the current
 phase highlighted, and both sides' **scores** (points toward the win threshold).
 The active phase advances through this sequence; in manual mode the phase names
-act as controls to set the phase. A screen-reader live region (not visible)
-announces "<side> Turn N <Phase>" as state changes.
+act as controls to set the phase. When the AI opponent's side is active, a small
+**"AI thinking…"** indicator (an animated pulsing dot + label) appears at the
+right end of the status bar, beside the score readout — distinct from the
+fuller AI proposal banner below the bar. A screen-reader live region (not
+visible) announces "<side> Turn N <Phase>" as state changes.
 
 **AI proposal banner.** Just under the status bar, a slim banner appears while the
 AI opponent holds an un-approved move ("AI proposes: …") or is computing one
@@ -133,8 +136,10 @@ battlefield sit two **side-zone columns**, one per side, each containing:
 - a **Status Strip** for that side showing the side's **Dreamcaller portrait**
   (name + title), **energy** (current/max — the resource for playing cards),
   **score**, and a **Draw Card** control, with the active side highlighted.
-  Clicking the portrait opens that side's **summary popover** (Dreamcaller ability
-  + dreamsigns). The strip also exposes per-side energy/score/draw steppers used
+  The Dreamcaller portrait carries a small **hand-count badge** (a card glyph +
+  number) in its corner showing how many cards that side holds. Clicking the
+  portrait opens that side's **summary popover** (Dreamcaller ability +
+  dreamsigns). The strip also exposes per-side energy/score/draw steppers used
   for manual play and debugging.
 
 There is also a **Stack zone** (labeled "Stack") used while a card/effect is
@@ -142,8 +147,19 @@ resolving, with per-entry "Void" / "Banish" resolution buttons, and it accepts
 dropped cards.
 
 **The player's hand.** A **hand tray** runs along the bottom: the local player's
-cards fanned/rowed face-up, showing each card's cost and art. (A debug mode can
-hide the player's hand and/or reveal the opponent's hand in a tray at top.)
+cards fanned/rowed face-up, showing each card's cost and art. With Basic
+Automation on, cards whose effect is auto-handled carry a small **automation
+gear icon** overlaid on the card, marking them as ones the system will resolve
+for you. (A debug mode can hide the player's hand and/or reveal the opponent's
+hand in a tray at top.)
+
+**On-card markers and note chips.** Cards on the battlefield (and in hand) can
+carry small **chips** rendered on the card itself: a red **"Prevented"** marker
+(shield icon) and a blue **"Copied"** marker (duplicate icon) reflect rules
+state set during play, and **developer note chips** (amber, truncated text with
+an optional expiry hint like "T4") show notes attached via the card context
+menu. When a card has more than three notes a **"+N more"** overflow chip
+appears. Clicking a note chip opens that note in the card-note editor.
 
 **Bottom Action Bar.** Below the hand, a row of controls: **Undo / Redo**, a
 **Basic Automation** on/off gear toggle, a **Battle Log** toggle (opens a
@@ -180,8 +196,8 @@ an option), a **Foresee** overlay (look at / reorder the top of a deck), a
 **deck-order picker**, the **side summary** popover, the **Dreamcaller panel**,
 the **Battle Log** and **Dreamwell History** drawers, and finally the
 **result/reward overlay** when the battle ends (Victory shows the reward surface;
-Defeat shows the result overlay with a reset path — see the Victory/Defeat
-screen).
+Defeat shows the result overlay with a reset path — see the
+[Battle Result & Reward](#battle-result--reward) section).
 
 > **Developer surfaces on this screen** (each should be its own separate screen
 > on mobile, not an inline panel): the **Battle Inspector** (right-edge drawer —
@@ -583,6 +599,54 @@ badge for banes; "No active Dreamsigns" when empty).
 mobile design likely wants one canonical "side detail" surface rather than both;
 this panel's larger card-forward layout is the better starting point for a
 tap-to-open sheet.
+
+---
+
+# Battle Result & Reward
+
+**What it does.** When the match ends, the board raises one of two end-of-battle
+overlays depending on the outcome. A **win** raises the full **reward surface**
+(the player's payoff for the fight); a **loss or draw** raises the smaller
+**result overlay** (which offers a path back to the run). Both sit above all
+other battle chrome, including the Inspector.
+
+**Reward surface (Victory).** A topmost modal over a near-opaque dark scrim,
+centered:
+
+- a large gold **"Victory!"** title;
+- a one-line **summary** beneath it pairing the defeated opponent with the final
+  score and length (e.g. "Defeated Seraveth · 10-5 · 6 turns");
+- an **"Essence Earned"** callout — a purple-tinted capsule with the reward value
+  animating a **count-up** (e.g. "+100⬢"), glued to the essence glyph so it reads
+  as currency;
+- a primary **Continue** button that banks the reward and returns to the run
+  (disabled while the reward is still locking in);
+- a secondary **"Cancel (Undo)"** button in the top-right that appears only while
+  the reward is still cancellable — backing out returns to the board so the
+  result is round-trippable with Undo/Redo. Escape does the same while cancel is
+  available.
+
+**Result overlay (Defeat / Draw / inspected Victory).** A simpler centered panel
+titled **"Victory."**, **"Defeat."**, or **"Draw."** with up to two actions: a
+**"Keep inspecting"** button (always present) that dismisses the overlay so the
+player can study the final board, and — on any non-victory result — a red
+**"Reset run…"** button that abandons the run.
+
+**Reopen pill.** Once either overlay has been dismissed (via "Keep inspecting" or
+Cancel), a small **"<result> — reopen"** pill appears at the bottom of the board;
+clicking it raises the corresponding overlay again so the player can return to
+the reward/continue flow after inspecting.
+
+**What you can click:** **Continue** / **Cancel (Undo)** on the reward surface;
+**Keep inspecting** / **Reset run…** on the result overlay; the **reopen pill**
+once an overlay is dismissed.
+
+**Redesign notes.** The reward surface is a clean, celebratory full-screen
+moment that maps well to mobile — title, summary, animated essence payoff, one
+primary action. The two-overlay split (rich reward on a win, minimal result on a
+loss) and the "inspect then reopen" affordance are the behaviors to preserve; the
+Cancel/Undo round-trip is a developer-leaning nicety that a player-facing design
+may want to drop in favor of a committed reward.
 
 ---
 

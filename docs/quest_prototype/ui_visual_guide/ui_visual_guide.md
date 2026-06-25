@@ -48,10 +48,12 @@ distinct play identities at a glance and commit.
 > **Developer surface (separate mobile screen):** in the prototype this screen is
 > preceded by a "room gate" landing page — a centered "Dreamtides / Quest
 > Multiplayer" splash with a glowing **Create Game** button and a **Load Quest ▾**
-> dropdown in the top-right. That gate is multiplayer/debug plumbing for creating
-> or rejoining a shared room. For a player-facing design it should be replaced by
-> a normal title/menu screen (or skipped entirely); the saved-run loading belongs
-> on a dedicated developer screen.
+> dropdown in the top-right. Once a room is joined, a small **"N connected"**
+> pill appears in the top-left showing the number of connected clients in the
+> shared room. That gate is multiplayer/debug plumbing for creating or rejoining
+> a shared room. For a player-facing design it should be replaced by a normal
+> title/menu screen (or skipped entirely); the saved-run loading belongs on a
+> dedicated developer screen.
 
 **Overall layout.** Centered, vertically-stacked composition on a near-black
 backdrop with a faint purple vignette:
@@ -642,14 +644,20 @@ The two offers flank him left and right — each headed by a short **offer title
 (e.g. "Gain 2 cards that work together", "Improve 1 starter card") and a
 one-line description, with the offer's **cards/grants** shown beneath and a purple
 **accept button** ("Take these cards", "Transfigure it"). Some offers, when
-accepted, open a **choice sub-menu** (a grid of candidates to refine the reward).
-A developer **reroll** / **force-archetype** control sits in the top-right.
+accepted, open a **chooser overlay** to refine the reward — a centered modal
+(dark purple gradient panel, title header, scrolling candidate area, and a
+purple **Confirm** + slate **Cancel** footer) that comes in three forms
+depending on the offer: a **card chooser** (pick which cards to take), a
+**dreamsign chooser** (pick which dreamsigns), or a **transfiguration chooser**
+(pick which form to apply). A developer **reroll** / **force-archetype** control
+sits in the top-right.
 
 **What you can click:**
 
-- **An offer's accept button** — claims that offer (and may open a choice
-  sub-menu); the chosen reward animates to the deck/HUD and the site completes.
-- **(In a choice sub-menu) a candidate** — refines the offer.
+- **An offer's accept button** — claims that offer (and may open the chooser
+  overlay); the chosen reward animates to the deck/HUD and the site completes.
+- **(In the chooser overlay) candidates, then Confirm** — pick the card(s),
+  dreamsign(s), or form to refine the offer; **Cancel** backs out of the choice.
 - **Close (✕)** — declines, when the offer is decline-able.
 - *(Developer)* **reroll / force archetype** — regenerate the encounter for QA.
 
