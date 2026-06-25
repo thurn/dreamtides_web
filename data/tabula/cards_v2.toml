@@ -2596,21 +2596,22 @@ card-number = 139
 art = { x = 0, y = 0.1, scale = 1.2 }
 
 [[cards]]
-name = "Frostbound Defiant"
+name = "Aurora Conductor"
 mtg-name = "Ignoble Hierarch"
 id = "98f16d26-be71-49ad-9034-5fafb5d3f053"
 rendered-text = "▸Night: If you have only one challenger, give that character +3✦."
 energy-cost = 2
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Musician"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "June26", "Art Duplicate"]
-image-number = 499788403
+tags = ["Art Rework", "June26", "Art Duplicate", "Art OK"]
+image-number = 519475501
 art-owned = false
 card-number = 140
+art = { x = 0.057, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Looming Oracle"
@@ -8443,7 +8444,7 @@ card-number = 454
 art = { x = 0, y = 0, scale = 1.67 }
 
 [[cards]]
-name = "Shadowprowler"
+name = "Aerie Defender"
 mtg-name = "Inti, Seneschal of the Sun"
 id = "c11eb833-a45b-4983-949d-848039d0504c"
 rendered-text = "▸Challenge: You may discard a card to give this character +2✦."
@@ -8454,10 +8455,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 1
-tags = ["Art Rework", "June26", "Art Duplicate"]
-image-number = 1129012706
+tags = ["Art Rework", "June26", "Art Duplicate", "Art OK"]
+image-number = 1159163608
 art-owned = false
 card-number = 455
+art = { x = -0.318, y = 1, scale = 1.37 }
 
 [[cards]]
 name = "Pattern Seeker"
@@ -8803,7 +8805,7 @@ card-number = 474
 art = { x = 0, y = 0, scale = 1.17 }
 
 [[cards]]
-name = "Warfield Stalwart"
+name = "Hungering Mass"
 mtg-name = "Hidden Stockpile"
 id = "cd4d689d-1442-4a19-8e6a-182b425d066d"
 rendered-text = """
@@ -8812,15 +8814,16 @@ rendered-text = """
 1●, Abandon another character: Foresee 1."""
 energy-cost = 2
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Ancient"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Figment Maker", "Art Rework", "June26", "Art Duplicate"]
-image-number = 1328168246
+tags = ["Figment Maker", "Art Rework", "June26", "Art Duplicate", "Art OK"]
+image-number = 1557999812
 art-owned = false
 card-number = 475
+art = { x = -0.002, y = 1, scale = 1.07 }
 
 [[cards]]
 name = "Ambush Operative"
@@ -9089,21 +9092,22 @@ card-number = 489
 art = { x = 0.714, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Eternal Sentry"
+name = "Dark Lord's Champion"
 mtg-name = "Sneaky Snacker"
 id = "7e2f2ac0-4e3c-4520-80c6-c830581b40de"
 rendered-text = "When you draw your third card in a turn, materialize this character from your void."
 energy-cost = 4
 card-type = "Character"
-subtype = "Visitor"
+subtype = "Warrior"
 rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 5
-tags = ["Art Rework", "June26", "Art Duplicate"]
-image-number = 1725212353
+tags = ["Art Rework", "June26", "Art Duplicate", "Art OK"]
+image-number = 247705264
 art-owned = false
 card-number = 490
+art = { x = 0, y = -0.343, scale = 1.5 }
 
 [[cards]]
 name = "Breach Artist"

@@ -1398,7 +1398,7 @@
       ]
     },
     "7e2f2ac0-4e3c-4520-80c6-c830581b40de": {
-      "name": "Eternal Sentry",
+      "name": "Dark Lord's Champion",
       "needs": [
         {
           "theme": "storm",
@@ -3504,7 +3504,7 @@
       ]
     },
     "c11eb833-a45b-4983-949d-848039d0504c": {
-      "name": "Shadowprowler",
+      "name": "Aerie Defender",
       "needs": [],
       "supports": [
         "cheap-characters",
@@ -4705,7 +4705,7 @@
       ]
     },
     "cd4d689d-1442-4a19-8e6a-182b425d066d": {
-      "name": "Warfield Stalwart",
+      "name": "Hungering Mass",
       "needs": [
         {
           "theme": "abandon",

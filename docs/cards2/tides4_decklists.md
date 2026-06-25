@@ -131,7 +131,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Wasteland Arbitrator
 - 1× Shadowcaller
 - 1× Starfall
-- 1× Warfield Stalwart
+- 1× Hungering Mass
 - 1× The Rising God
 - 1× Ruin Scavenger
 - 1× Urban Desperado
@@ -309,7 +309,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Together Against the Tide
 - 1× Dreamvale Monarch
 - 1× Pyrokinetic Surge
-- 1× Frostbound Defiant
+- 1× Aurora Conductor
 - 1× Spirit of the Greenwood
 - 1× Titan of Forgotten Echoes
 - 1× Dawnrunner
@@ -435,7 +435,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Arc Gate Opening
 - 1× Wasteland Arbitrator
 - 1× Dreadwood Emissary
-- 1× Shadowprowler
+- 1× Aerie Defender
 - 1× Harrowing Officiant
 - 1× Flash of Power
 - 1× Thornwood Delver
@@ -639,7 +639,7 @@ Tide-sig-06 is a heavily character-weighted deck (84 of 110 copies are character
 - 1× Torchbearer of the Abyss
 - 1× Exiles of the Last Light
 - 1× Lurking Dread
-- 1× Shadowprowler
+- 1× Aerie Defender
 - 1× Harrowing Officiant
 - 1× Shadowcaller
 - 1× Key Sifter
@@ -739,7 +739,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Exiles of the Last Light
 - 1× Dreadweaver
 - 1× Lurking Dread
-- 1× Shadowprowler
+- 1× Aerie Defender
 - 1× Harrowing Officiant
 - 1× Shadowcaller
 - 1× Avatar of Cosmic Reckoning
@@ -867,7 +867,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 2× Vanishing Inquisitor
 - 2× Sunset Chapel Rest
 - 2× Pilgrim of Old Stones
-- 2× Eternal Sentry
+- 2× Dark Lord's Champion
 - 2× Planetgazer
 - 2× Last Beacon
 - 2× Abyssal Deputy
@@ -1027,7 +1027,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Crumbling Covenant
 - 1× Canopy of Stars
 - 1× Twice-Lit Portal
-- 1× Eternal Sentry
+- 1× Dark Lord's Champion
 - 1× Collapse Protocol
 - 1× Frontline Martyr
 - 1× Genesis Burst
@@ -1251,7 +1251,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Iconoclast
 - 1× Wasteland Arbitrator
 - 1× Dreadwood Emissary
-- 1× Shadowprowler
+- 1× Aerie Defender
 - 1× Flash of Power
 - 1× Thornwood Delver
 - 1× Simulacra
@@ -1354,7 +1354,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Cloudback Courier
 - 1× Gateweaver
 - 1× Dreadwood Emissary
-- 1× Shadowprowler
+- 1× Aerie Defender
 - 1× Flash of Power
 - 1× Knowledge Restored
 - 1× Thornwood Delver
@@ -1438,7 +1438,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Sylvan Matriarch
 - 1× Bladefall
 - 1× Lumineth
-- 1× Frostbound Defiant
+- 1× Aurora Conductor
 - 1× Kindlehorn
 - 1× Shapeshifter Spirit
 - 1× Ambush Operative
@@ -1527,7 +1527,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 1× Wondrous Clearing
 - 1× Sylvan Matriarch
 - 1× Lumineth
-- 1× Frostbound Defiant
+- 1× Aurora Conductor
 - 1× Kindlehorn
 - 1× Carrion Lord
 - 1× Forsaken Pact
@@ -1572,7 +1572,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 2× Ethereal Courser
 - 2× Crumbling Behemoth
 - 2× Dreamvale Monarch
-- 2× Frostbound Defiant
+- 2× Aurora Conductor
 - 2× Spirit of the Greenwood
 - 2× Empyreal Light
 - 2× Spiritbound Alpha
@@ -1687,7 +1687,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 1× Amber Aurelia
 - 1× Sylvan Matriarch
 - 1× Lumineth
-- 1× Frostbound Defiant
+- 1× Aurora Conductor
 - 1× Kindlehorn
 - 1× Carrion Lord
 - 1× Forsaken Pact
@@ -2153,7 +2153,7 @@ Tide-fac-04 is built almost entirely around spirit animals, with 35 characters a
 - 1× Ethereal Courser
 - 1× Crumbling Behemoth
 - 1× Amber Aurelia
-- 1× Frostbound Defiant
+- 1× Aurora Conductor
 - 1× Spirit of the Greenwood
 - 1× Empyreal Light
 - 1× Spiritbound Alpha
@@ -2250,7 +2250,7 @@ This tide runs an even split of characters and events, with its mechanical ident
 - 1× Momentum of the Fallen
 - 1× Pilgrim of Old Stones
 - 1× Crumbling Covenant
-- 1× Eternal Sentry
+- 1× Dark Lord's Champion
 - 1× Collapse Protocol
 - 1× Breach Artist
 - 1× Duskshore Virtuoso
@@ -2304,7 +2304,7 @@ Tide-fac-07 runs an even split of events and characters (22/23) built around two
 - 1× Ethereal Courser
 - 1× Crumbling Behemoth
 - 1× Dreamvale Monarch
-- 1× Frostbound Defiant
+- 1× Aurora Conductor
 - 1× Empyreal Light
 - 1× Spiritbound Alpha
 - 1× Shadowpaw
@@ -2461,7 +2461,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Gateweaver
 - 1× Iconoclast
 - 1× Arc Gate Opening
-- 1× Shadowprowler
+- 1× Aerie Defender
 - 1× Flash of Power
 - 1× Key Sifter
 - 1× Rubble Diviner
@@ -3005,7 +3005,7 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 1× Moonbound Wolf
 - 1× Ethereal Courser
 - 1× Crumbling Behemoth
-- 1× Frostbound Defiant
+- 1× Aurora Conductor
 - 1× Spirit of the Greenwood
 - 1× Empyreal Light
 - 1× Spiritbound Alpha
@@ -3056,7 +3056,7 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Momentum of the Fallen
 - 1× Terminus
 - 1× Pilgrim of Old Stones
-- 1× Eternal Sentry
+- 1× Dark Lord's Champion
 - 1× Resilient Wanderer
 - 1× Echoes of the Journey
 - 1× Spirit of Smoldering Echoes
@@ -3109,7 +3109,7 @@ Tide-fac-24 is built almost entirely on characters (41 of 45 copies), with a sur
 - 1× Momentum of the Fallen
 - 1× Pilgrim of Old Stones
 - 1× Crumbling Covenant
-- 1× Eternal Sentry
+- 1× Dark Lord's Champion
 - 1× Resilient Wanderer
 - 1× Breach Artist
 - 1× Duskshore Virtuoso
@@ -3266,7 +3266,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Cinderheart
 - 1× Together Against the Tide
 - 1× Burning Pursuit
-- 1× Frostbound Defiant
+- 1× Aurora Conductor
 - 1× Dawnrunner
 - 1× Defiant Holdout
 - 1× Exiles of the Last Light
@@ -3371,7 +3371,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Gateweaver
 - 1× Iconoclast
 - 1× Arc Gate Opening
-- 1× Shadowprowler
+- 1× Aerie Defender
 - 1× Flash of Power
 - 1× Key Sifter
 - 1× Rubble Diviner
@@ -3571,7 +3571,7 @@ Tide-neu-06 is a character-dense discard engine built around accumulating a larg
 - 1× Silent Gatherer
 - 1× Torchbearer of the Abyss
 - 1× Wasteland Arbitrator
-- 1× Shadowprowler
+- 1× Aerie Defender
 - 1× Key Sifter
 - 1× Rubble Diviner
 - 1× Shoreline Penitent
@@ -3794,7 +3794,7 @@ Tide-neu-06 is a character-dense discard engine built around accumulating a larg
 - 1× Ash Harbinger
 - 1× Pattern Seeker
 - 1× Torchbearer of the Abyss
-- 1× Shadowprowler
+- 1× Aerie Defender
 - 1× Rubble Diviner
 - 1× Evacuation Enforcer
 - 1× Shoreline Penitent
