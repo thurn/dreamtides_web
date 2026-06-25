@@ -302,6 +302,7 @@ function PlayableBattleScreenInner({
     enabled: isBasicAutomationEnabled,
     state: reducerState.mutable,
     dispatchEdit: dispatchAutomationEdit,
+    isPrimaryClient,
     cancelPromptSignal: remoteCommandEpoch,
   });
 

@@ -22,6 +22,20 @@ export interface BattleEffectRunnerArgs {
   state: BattleMutableState; // reducerState.mutable (live, per-render)
   dispatchEdit: (edit: BattleDebugEdit) => void; // bypasses planBasicAutomationCommands
   /**
+   * Whether this client is the single battle authority. A scripted ▸Materialized
+   * / ▸Dawn step's edits are authority mutations that must apply exactly once,
+   * but in a shared room every connected client runs this runner off the synced
+   * board, so without a gate each automatic edit would be dispatched once per
+   * client (two clients ⇒ a ▸Materialized "draw a card" draws twice). The primary
+   * client owns a run from the start; ownership transfers to whichever client
+   * resolves a prompt (see `resolvePrompt`), because only the resolver keeps
+   * walking the run while the partner's overlay is torn down by
+   * `cancelPromptSignal`. Single-player has one primary client, so it is
+   * unaffected. The idempotent Support recompute is likewise gated so only the
+   * authority writes its `SET_CARD_STATIC_SPARK_BONUS` edits.
+   */
+  isPrimaryClient: boolean;
+  /**
    * A monotonic counter that increments whenever a coop partner advances the
    * shared battle (see `remoteCommandEpoch` in the multiplayer context). When it
    * changes while a prompt is open, the partner has resolved that choice on
@@ -277,7 +291,7 @@ function extractEditTarget(edit: BattleDebugEdit): string | null {
  * Dawn scripts are deferred to the post-dawn scan above.
  */
 export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffectRunnerResult {
-  const { enabled, state, dispatchEdit, cancelPromptSignal } = args;
+  const { enabled, state, dispatchEdit, isPrimaryClient, cancelPromptSignal } = args;
 
   // The in-play ids observed on the previous render. `null` until the first
   // observation, which seeds the set WITHOUT firing (so characters already in
@@ -292,6 +306,13 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
 
   // The active run (null when idle). `steps` is the remaining queue.
   const [run, setRun] = useState<EffectRun | null>(null);
+
+  // Whether THIS client owns the active run's authority edits. Set when the pump
+  // starts a run (the primary client owns it) and flipped true when this client
+  // resolves a prompt (the resolver continues the run alone while the partner's
+  // overlay is dismissed). Automatic `dispatch`-plan edits fire only when this is
+  // true, so a flat scripted step (no prompt) is applied by exactly one client.
+  const ownsRunRef = useRef(false);
 
   // The active prompt shown to the player (null when idle or between prompts).
   const [activePrompt, setActivePrompt] = useState<ActivePrompt | null>(null);
@@ -411,6 +432,11 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
     if (run !== null) return;
     const next = pendingRef.current.shift();
     if (next === undefined) return;
+    // The primary client owns this run's authority edits from the start. The
+    // non-primary client still starts the run (to walk to any prompt and show
+    // it) but does not dispatch automatic edits — it receives them via synced
+    // commands — unless it later resolves a prompt and takes ownership.
+    ownsRunRef.current = isPrimaryClient;
     setRun(next);
     logBattleEffect(state, BATTLE_EFFECT_LOG.started, {
       cardId: next.cardId,
@@ -422,7 +448,7 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
     // Re-run when the active run finishes (`run` → null) so the next pending run
     // starts, and when a board change enqueues new runs (`enqueueTick`). `state`
     // is read fresh each run.
-  }, [run, enabled, state.result, enqueueTick, state]);
+  }, [run, enabled, state.result, enqueueTick, state, isPrimaryClient]);
 
   // ---------------------------------------------------------------------------
   // Advance effect — walks the active run's queue one step at a time
@@ -441,6 +467,7 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
       pausedRef.current = null;
       processedQueueRef.current = null;
       pendingRef.current = [];
+      ownsRunRef.current = false;
       return;
     }
 
@@ -478,9 +505,16 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
         battleCardId: run.battleCardId,
         editKinds: plan.edits.map((e) => e.kind),
         targetIds: plan.edits.map((e) => extractEditTarget(e)),
+        dispatched: ownsRunRef.current,
       });
-      for (const edit of plan.edits) {
-        dispatchEdit(edit);
+      // Only the run's owner dispatches these authority edits; the non-owner
+      // walks the queue (so it reaches and shows any later prompt) but receives
+      // the resulting state via synced commands instead of applying it locally.
+      // Without this gate both coop clients would apply the same edit.
+      if (ownsRunRef.current) {
+        for (const edit of plan.edits) {
+          dispatchEdit(edit);
+        }
       }
       // Advance the queue by updating steps to a new array so this effect
       // re-runs and processes the next step.
@@ -536,6 +570,11 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
         resultingEditKinds: edits.map((e) => e.kind),
       });
 
+      // Resolving the prompt makes THIS client the run's owner: the partner's
+      // overlay is torn down by `cancelPromptSignal`, so this client is now the
+      // sole driver of the remaining queue and must dispatch its edits (these
+      // resolution edits, and any automatic steps after the prompt) exactly once.
+      ownsRunRef.current = true;
       for (const edit of edits) {
         dispatchEdit(edit);
       }
@@ -572,14 +611,19 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
     pausedRef.current = null;
     processedQueueRef.current = null;
     pendingRef.current = [];
+    ownsRunRef.current = false;
   }, [cancelPromptSignal, activePrompt, run, state]);
 
   // ---------------------------------------------------------------------------
   // Support — idempotent recompute of staticSparkBonus
   // ---------------------------------------------------------------------------
   useEffect(() => {
-    // Runs regardless of `enabled`: when disabled, planSupportRecompute targets
-    // every in-play instance to 0, clearing any prior bonus.
+    // Authority-only: the recompute writes shared `staticSparkBonus` edits, so a
+    // non-primary client running it too would double-write them to the room. It
+    // receives the authority's recompute via synced commands instead. (Runs
+    // regardless of `enabled`: when disabled, planSupportRecompute targets every
+    // in-play instance to 0, clearing any prior bonus.)
+    if (!isPrimaryClient) return;
     const edits = planSupportRecompute(state, enabled, Date.now());
     if (edits.length === 0) return;
     for (const edit of edits) {
@@ -595,7 +639,7 @@ export function useBattleEffectRunner(args: BattleEffectRunnerArgs): BattleEffec
     // Depend on the Support-relevant board shape (occupancy + each instance's
     // current bonus) so the recompute re-runs to its fixed point but not on
     // unrelated renders. `state`/`dispatchEdit` are read fresh each run.
-  }, [enabled, supportShapeKey(state)]);
+  }, [enabled, isPrimaryClient, supportShapeKey(state)]);
 
   return {
     activePrompt,
