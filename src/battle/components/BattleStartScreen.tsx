@@ -170,6 +170,7 @@ export function BattleStartScreen({
     [signatureSummaries, cardDatabase],
   );
 
+  const hasAbility = enemy.abilityText.trim() !== "";
   const hasDreamsigns = dreamsigns.length > 0;
   const hasSignatureCards = signatureCards.length > 0;
   const portraitSrc = dreamcallerImageSrc(enemy.imageNumber ?? "001");
@@ -251,13 +252,18 @@ export function BattleStartScreen({
             {enemy.subtitle ? (
               <div className="bs-title">{enemy.subtitle}</div>
             ) : null}
+          </div>
+
+          {/* the Dreamcaller's ability — its own titled block */}
+          {hasAbility && <div className="bs-rule" />}
+          {hasAbility && (
             <div className="bs-ability">
-              <i className="bxf bx-info-circle" aria-hidden="true" />
+              <div className="bs-caption">Ability</div>
               <div className="bs-ability-txt">
                 <RulesText text={enemy.abilityText} />
               </div>
             </div>
-          </div>
+          )}
 
           {/* what they bring — dreamsigns (omitted when the opponent carries none) */}
           {hasDreamsigns && <div className="bs-rule" />}

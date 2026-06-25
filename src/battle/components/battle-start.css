@@ -204,17 +204,11 @@
   color: #cdb8ee;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
 }
+/* ability — its own titled block between dividers */
 .bs-ability {
   display: flex;
-  gap: 11px;
+  flex-direction: column;
   align-items: flex-start;
-  margin-top: 26px;
-}
-.bs-ability .bxf {
-  color: #b89bf0;
-  font-size: 17px;
-  margin-top: 3px;
-  flex: 0 0 auto;
 }
 .bs-ability-txt {
   font-family: "Fira Sans Condensed", "Inter", sans-serif;
@@ -227,7 +221,7 @@
 /* hairline divider between groups */
 .bs-rule {
   height: 1px;
-  margin: 36px 0;
+  margin: 38px 0;
   background: linear-gradient(90deg, rgba(168, 85, 247, 0.34), rgba(168, 85, 247, 0.08) 70%, transparent);
 }
 
