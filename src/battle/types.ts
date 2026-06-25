@@ -291,6 +291,19 @@ export interface DreamwellCardDefinition {
   art?: ArtCrop;
 }
 
+/**
+ * A card chosen to typify an opponent Dreamcaller's ability, shown on the
+ * Battle Start screen before hands are dealt. Identity is the stable cards_v2
+ * UUID (`cardId`); `cardNumber` is the card-database key the screen resolves the
+ * full card from for rendering. Selected by `selectSignatureCards`
+ * (`src/battle/integration/signature-cards.ts`).
+ */
+export interface BattleSignatureCard {
+  cardId: string;
+  cardNumber: number;
+  name: string;
+}
+
 export interface BattleEnemyDescriptor {
   id: string;
   name: string;
@@ -300,9 +313,16 @@ export interface BattleEnemyDescriptor {
   abilityText: string;
   /**
    * The concrete Dreamsigns the opponent brings to the battle, shown before
-   * hands are dealt.
+   * hands are dealt. Empty for most opponents (Dreamsigns arrive from the run
+   * midpoint on), in which case the Battle Start screen omits the section.
    */
   dreamsigns: readonly BattleDreamsignSummary[];
+  /**
+   * The three cards from the opponent's deck most representative of its
+   * Dreamcaller's ability, shown on the Battle Start screen. Empty only when the
+   * opponent has no deck (synthetic fallback descriptor).
+   */
+  signatureCards: readonly BattleSignatureCard[];
 }
 
 export interface BattleDreamcallerSummary {

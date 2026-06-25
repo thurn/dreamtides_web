@@ -40,6 +40,22 @@ vi.mock("../multiplayer/battle-service", async () => {
   };
 });
 
+vi.mock("../battle/components/BattleStartScreen", () => ({
+  BattleStartScreen: ({
+    init,
+    onBegin,
+  }: {
+    init: { battleId: string };
+    onBegin: () => void;
+  }) => (
+    <div data-screen="battle-start" data-battle-id={init.battleId}>
+      <button type="button" data-begin="" onClick={onBegin}>
+        Begin Battle
+      </button>
+    </div>
+  ),
+}));
+
 vi.mock("../battle/components/PlayableBattleScreen", async () => {
   const { useMultiplayerBattle } = await import(
     "../state/multiplayer-battle-context"
@@ -337,7 +353,7 @@ describe("BattleSiteRoute", () => {
     expect(battleService.ensureBattleSession).toHaveBeenCalled();
   });
 
-  it("renders PlayableBattleScreen using shared battleInit and initialState when battleState is present", () => {
+  it("reveals the Battle Start screen first, then PlayableBattleScreen once Begin Battle is clicked", () => {
     const fakeBattleState = makeFakeBattleState();
     const { container } = mount(
       <BattleSiteRoute
@@ -355,6 +371,20 @@ describe("BattleSiteRoute", () => {
       />,
       fakeBattleState,
     );
+
+    // The opposing Dreamcaller is revealed before the playable surface mounts.
+    const startScreen = container.querySelector('[data-screen="battle-start"]');
+    expect(startScreen).not.toBeNull();
+    expect(startScreen?.getAttribute("data-battle-id")).toBe(
+      fakeBattleState.init.battleId,
+    );
+    expect(container.querySelector('[data-screen="playable"]')).toBeNull();
+
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>("[data-begin]")
+        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
 
     const screen = container.querySelector('[data-screen="playable"]');
     expect(screen).not.toBeNull();
@@ -387,6 +417,12 @@ describe("BattleSiteRoute", () => {
       fakeBattleState,
     );
 
+    // Reach the playable surface through the Battle Start reveal.
+    act(() => {
+      container
+        .querySelector<HTMLButtonElement>("[data-begin]")
+        ?.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    });
     expect(
       container
         .querySelector('[data-screen="playable"]')
@@ -415,11 +451,11 @@ describe("BattleSiteRoute", () => {
       );
     });
 
-    // The shared battleState's init still drives the rendered seed/key
-    // (Task 13 will own keying off the shared init); we just confirm the
+    // The battleEntryKey changed (completionLevel 3 → 4), so the per-battle
+    // begin gate resets and the Battle Start reveal returns; we just confirm the
     // route stays up and reflects the loaded shared state.
     expect(
-      container.querySelector('[data-screen="playable"]'),
+      container.querySelector('[data-screen="battle-start"]'),
     ).not.toBeNull();
   });
 });

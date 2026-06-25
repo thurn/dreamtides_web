@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import type { CardData } from "../types/cards";
 import type { SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
@@ -5,6 +6,7 @@ import { useMultiplayerBattle } from "../state/multiplayer-battle-context";
 import { useEnsureBattleSession } from "../state/use-ensure-battle-session";
 import type { RuntimeConfig } from "../runtime/runtime-config";
 import { PlayableBattleScreen } from "../battle/components/PlayableBattleScreen";
+import { BattleStartScreen } from "../battle/components/BattleStartScreen";
 
 export function createBattleEntryKey(
   dreamscapeId: string | null,
@@ -38,6 +40,16 @@ export function BattleSiteRoute({
     state.completionLevel,
   );
 
+  // Whether the player has dismissed the Battle Start reveal and entered the
+  // playable battle. This is a per-client UI gate: in coop each player sees the
+  // reveal and clicks through independently; the shared battle session already
+  // exists, so dismissing only mounts the playable surface locally. Keyed by
+  // `battleEntryKey` so a fresh battle at the same route shows the reveal again.
+  const [begunEntryKey, setBegunEntryKey] = useState<string | null>(null);
+  useEffect(() => {
+    setBegunEntryKey(null);
+  }, [battleEntryKey]);
+
   useEnsureBattleSession({
     database,
     roomId,
@@ -68,6 +80,21 @@ export function BattleSiteRoute({
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
         <p className="text-lg opacity-80">Preparing battle…</p>
       </div>
+    );
+  }
+
+  // The opposing Dreamcaller is revealed before hands are dealt. Once the player
+  // clicks "Begin Battle", the playable surface mounts against the same shared
+  // session.
+  if (begunEntryKey !== battleEntryKey) {
+    return (
+      <BattleStartScreen
+        init={battleState.init}
+        cardDatabase={cardDatabase}
+        onBegin={() => {
+          setBegunEntryKey(battleEntryKey);
+        }}
+      />
     );
   }
 

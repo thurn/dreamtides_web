@@ -1,0 +1,580 @@
+/* Battle Start — the opposing Dreamcaller revealed before the battle begins.
+ * The enemy portrait is the hero; objectives, ability, signature cards, and
+ * (when present) dreamsigns float around it as quiet frosted plum chrome.
+ * Authored against a fixed 1920×1080 canvas and scaled to fit the viewport. */
+
+.bs-root {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  overflow: hidden;
+  background: #000;
+  font-family:
+    system-ui,
+    -apple-system,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* fit-to-viewport canvas */
+.bs-canvas {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 1920px;
+  height: 1080px;
+  transform-origin: center;
+  background: radial-gradient(140% 120% at 50% 30%, #241b42 0%, #130d29 52%, #0a0718 100%);
+}
+
+/* ---- background layers ---- */
+.bs-bg {
+  position: absolute;
+  inset: 0;
+}
+/* dreamscape scene art, dimmed so the chrome over it stays legible */
+.bs-scene {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+}
+.bs-scene.shown {
+  opacity: 0.32;
+}
+.bs-scene img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+/* enemy aura bloom behind the figure */
+.bs-aura {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  width: 1180px;
+  height: 1180px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  background: radial-gradient(
+    circle at 50% 46%,
+    rgba(239, 68, 68, 0.3) 0%,
+    rgba(120, 30, 80, 0.2) 34%,
+    transparent 66%
+  );
+  animation: bs-aura-pulse 7s ease-in-out infinite;
+}
+@keyframes bs-aura-pulse {
+  0%,
+  100% {
+    opacity: 0.82;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.04);
+  }
+}
+.bs-vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(115% 120% at 50% 38%, transparent 50%, rgba(9, 6, 20, 0.78) 100%),
+    linear-gradient(
+      180deg,
+      rgba(8, 5, 18, 0.5) 0%,
+      transparent 24%,
+      transparent 52%,
+      rgba(7, 4, 16, 0.86) 100%
+    );
+}
+
+/* ---- the Dreamcaller portrait render ---- */
+.bs-figure {
+  position: absolute;
+  left: 50%;
+  top: 70px;
+  transform: translateX(-50%);
+  width: 720px;
+  height: 720px;
+  object-fit: cover;
+  object-position: 50% 18%;
+  -webkit-mask-image: radial-gradient(54% 60% at 50% 42%, #000 46%, transparent 82%);
+  mask-image: radial-gradient(54% 60% at 50% 42%, #000 46%, transparent 82%);
+  filter: drop-shadow(0 24px 60px rgba(0, 0, 0, 0.6)) brightness(1.03) saturate(1.05);
+  animation: bs-rise 1s cubic-bezier(0.18, 0.7, 0.2, 1) both;
+}
+/* recolor the portrait toward plum so it sits in the dream wash */
+.bs-figure-tint {
+  position: absolute;
+  left: 50%;
+  top: 70px;
+  transform: translateX(-50%);
+  width: 720px;
+  height: 720px;
+  pointer-events: none;
+  mix-blend-mode: soft-light;
+  background: linear-gradient(180deg, rgba(124, 58, 237, 0.45), rgba(20, 12, 40, 0.6));
+  -webkit-mask-image: radial-gradient(54% 60% at 50% 42%, #000 46%, transparent 82%);
+  mask-image: radial-gradient(54% 60% at 50% 42%, #000 46%, transparent 82%);
+  animation: bs-rise 1s cubic-bezier(0.18, 0.7, 0.2, 1) both;
+}
+/* fallback when the portrait image is missing */
+.bs-figure-fallback {
+  position: absolute;
+  left: 50%;
+  top: 70px;
+  transform: translateX(-50%);
+  width: 720px;
+  height: 720px;
+  display: grid;
+  place-items: center;
+  font-family: "EB Garamond", Georgia, serif;
+  font-size: 320px;
+  font-weight: 600;
+  color: rgba(216, 180, 254, 0.5);
+  background: radial-gradient(
+    circle at 50% 38%,
+    rgba(168, 85, 247, 0.22) 0%,
+    rgba(20, 12, 40, 0) 62%
+  );
+  -webkit-mask-image: radial-gradient(54% 60% at 50% 42%, #000 46%, transparent 82%);
+  mask-image: radial-gradient(54% 60% at 50% 42%, #000 46%, transparent 82%);
+}
+@keyframes bs-rise {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(26px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+/* ---- top: eyebrow + objective chips ---- */
+.bs-top {
+  position: absolute;
+  left: 50%;
+  top: 52px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  text-align: center;
+  animation: bs-fade 0.7s ease both 0.15s;
+}
+.bs-eyebrow {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 14px;
+  font-weight: 800;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: #ff9b97;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+}
+.bs-eyebrow .bxf {
+  font-size: 15px;
+}
+.bs-eyebrow::before,
+.bs-eyebrow::after {
+  content: "";
+  width: 40px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(239, 68, 68, 0.6));
+}
+.bs-eyebrow::after {
+  transform: scaleX(-1);
+}
+
+.bs-objectives {
+  display: flex;
+  align-items: stretch;
+  gap: 0;
+  padding: 6px 8px;
+  border-radius: 999px;
+  background: rgba(10, 6, 20, 0.62);
+  border: 1px solid rgba(168, 85, 247, 0.28);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+}
+.bs-obj {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 34px;
+}
+.bs-obj + .bs-obj {
+  border-left: 1px solid rgba(168, 85, 247, 0.28);
+}
+.bs-obj-val {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: "EB Garamond", Georgia, serif;
+  font-weight: 600;
+  font-size: 38px;
+  line-height: 1;
+  color: #f6f0ff;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+.bs-obj-sym {
+  font-size: 30px;
+  line-height: 1;
+}
+.bs-obj-sym.score {
+  color: #d8c2ff;
+  text-shadow: 0 0 16px rgba(168, 85, 247, 0.7);
+}
+.bs-obj-lbl {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #b9a7d6;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+/* essence value: keep the EssenceValue glyph sized to the objective number */
+.bs-obj-essence {
+  font-family: "EB Garamond", Georgia, serif;
+  font-weight: 600;
+  font-size: 38px;
+  line-height: 1;
+  text-shadow: 0 0 16px rgba(216, 180, 254, 0.5);
+}
+
+/* ---- center name plate (over the faded portrait) ---- */
+.bs-plate {
+  position: absolute;
+  left: 50%;
+  bottom: 196px;
+  transform: translateX(-50%);
+  width: 660px;
+  text-align: center;
+  z-index: 4;
+  animation: bs-fade 0.7s ease both 0.3s;
+}
+.bs-name {
+  font-family: "EB Garamond", Georgia, serif;
+  font-weight: 600;
+  font-size: 78px;
+  line-height: 0.96;
+  margin: 0;
+  color: #f6f0ff;
+  letter-spacing: 0.01em;
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.8),
+    0 0 34px rgba(168, 85, 247, 0.35);
+}
+.bs-title {
+  font-family: "EB Garamond", Georgia, serif;
+  font-style: italic;
+  font-weight: 500;
+  font-size: 25px;
+  margin: 6px 0 0;
+  color: #cbb6ec;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+.bs-ability {
+  margin: 18px auto 0;
+  max-width: 540px;
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  padding: 14px 20px;
+  border-radius: 12px;
+  background: rgba(14, 9, 26, 0.62);
+  border: 1px solid rgba(168, 85, 247, 0.22);
+  backdrop-filter: blur(8px);
+}
+.bs-ability .bxf {
+  color: #c7a6ff;
+  font-size: 19px;
+  margin-top: 2px;
+  flex: 0 0 auto;
+}
+.bs-ability-txt {
+  font-family: "Fira Sans Condensed", "Inter", sans-serif;
+  font-size: 19px;
+  line-height: 1.36;
+  color: #e7defb;
+  text-align: left;
+}
+
+/* ---- side columns ---- */
+.bs-col {
+  position: absolute;
+  top: 210px;
+  width: 320px;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.bs-col.left {
+  left: 80px;
+  animation: bs-slide-l 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both 0.35s;
+}
+.bs-col.right {
+  right: 80px;
+  animation: bs-slide-r 0.8s cubic-bezier(0.2, 0.7, 0.2, 1) both 0.35s;
+}
+.bs-col-head {
+  align-self: flex-start;
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 11.5px;
+  font-weight: 800;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #cdbceb;
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  margin-bottom: 2px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(10, 6, 20, 0.62);
+  border: 1px solid rgba(168, 85, 247, 0.28);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7);
+}
+.bs-col.right .bs-col-head {
+  align-self: flex-end;
+}
+.bs-col-head .bxf {
+  color: var(--color-primary-light);
+  font-size: 13px;
+}
+
+/* signature cards (right) */
+.bs-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.bs-cardrow {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(16, 11, 28, 0.5);
+  border: 1px solid rgba(168, 85, 247, 0.16);
+  backdrop-filter: blur(7px);
+  flex-direction: row-reverse;
+  text-align: right;
+}
+.bs-cardrow .bs-card-art {
+  flex: 0 0 auto;
+  width: 92px;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.5));
+}
+.bs-card-meta {
+  min-width: 0;
+  flex: 1 1 auto;
+}
+.bs-card-name {
+  font-family: "EB Garamond", Georgia, serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: #f2ecff;
+  line-height: 1.12;
+}
+.bs-card-type {
+  font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6b7280;
+  margin-top: 4px;
+}
+
+/* dreamsigns (left) */
+.bs-sign {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: rgba(16, 11, 28, 0.5);
+  border: 1px solid rgba(168, 85, 247, 0.16);
+  backdrop-filter: blur(7px);
+  text-align: left;
+}
+.bs-sign-disc {
+  position: relative;
+  flex: 0 0 auto;
+  width: 60px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+}
+.bs-sign-aura {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: conic-gradient(
+    from 0deg,
+    rgba(251, 191, 36, 0.5),
+    rgba(168, 85, 247, 0.15),
+    rgba(251, 191, 36, 0.5)
+  );
+  filter: blur(5px);
+  animation: bs-spin 9s linear infinite;
+}
+@keyframes bs-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.bs-sign-disc .bxf {
+  position: relative;
+  font-size: 30px;
+  color: #fbe7a8;
+  filter: drop-shadow(0 2px 5px rgba(0, 0, 0, 0.6));
+}
+.bs-sign-name {
+  font-family: "EB Garamond", Georgia, serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: #f7ecd8;
+  line-height: 1.12;
+}
+.bs-sign-rule {
+  font-family: "Fira Sans Condensed", "Inter", sans-serif;
+  font-size: 13.5px;
+  line-height: 1.3;
+  color: var(--color-text-dim);
+  margin-top: 4px;
+}
+
+/* ---- begin battle button ---- */
+.bs-cta {
+  position: absolute;
+  left: 50%;
+  bottom: 60px;
+  transform: translateX(-50%);
+  z-index: 6;
+  animation: bs-fade 0.7s ease both 0.5s;
+}
+.bs-begin {
+  display: inline-flex;
+  align-items: center;
+  gap: 13px;
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 21px;
+  letter-spacing: 0.01em;
+  color: #fff;
+  cursor: pointer;
+  padding: 18px 52px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 150, 140, 0.55);
+  background: linear-gradient(180deg, #b8324a, #7e1f2f);
+  box-shadow:
+    0 0 30px rgba(239, 68, 68, 0.32),
+    0 10px 26px rgba(0, 0, 0, 0.5);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.16s ease,
+    filter 0.16s ease;
+}
+.bs-begin .bxf {
+  font-size: 22px;
+}
+.bs-begin:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.08);
+  box-shadow:
+    0 0 44px rgba(239, 68, 68, 0.5),
+    0 14px 30px rgba(0, 0, 0, 0.55);
+}
+.bs-begin:active {
+  transform: translateY(0) scale(0.985);
+}
+
+/* ---- motes ---- */
+.bs-motes {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.bs-motes span {
+  position: absolute;
+  border-radius: 50%;
+  background: #d8b4fe;
+  box-shadow: 0 0 6px rgba(216, 180, 254, 0.8);
+  animation: bs-drift linear infinite;
+}
+@keyframes bs-drift {
+  0% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(13px, -24px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+
+@keyframes bs-fade {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(10px);
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes bs-slide-l {
+  from {
+    opacity: 0;
+    transform: translateX(-22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+@keyframes bs-slide-r {
+  from {
+    opacity: 0;
+    transform: translateX(22px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bs-aura,
+  .bs-figure,
+  .bs-figure-tint,
+  .bs-top,
+  .bs-plate,
+  .bs-col,
+  .bs-cta,
+  .bs-motes span,
+  .bs-sign-aura {
+    animation: none !important;
+  }
+  .bs-top,
+  .bs-plate,
+  .bs-cta {
+    transform: translateX(-50%);
+  }
+}

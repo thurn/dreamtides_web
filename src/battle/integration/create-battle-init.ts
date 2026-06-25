@@ -30,6 +30,7 @@ import {
   type OpponentDeckLogArgs,
 } from "./opponent-deck";
 import { buildCorpusOpponentDeck } from "./corpus-opponent-deck";
+import { selectSignatureCards } from "./signature-cards";
 import type {
   KnownGoodDecklist,
   DreamsignSignature,
@@ -42,6 +43,7 @@ import type {
   BattleEnemyDescriptor,
   BattleInit,
   BattleQuestDeckEntry,
+  BattleSignatureCard,
   DreamwellCardDefinition,
 } from "../types";
 import type { DreamwellCard } from "../../data/dreamwell-database";
@@ -273,12 +275,10 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     input.dreamscapes ?? [],
     input.affiliations ?? [],
   );
-  const enemyDescriptor = freezeBattleEnemyDescriptor(
-    buildEnemyDescriptor(
-      opponentDreamcaller,
-      opponentDreamsigns,
-      streams.enemyDescriptor.nextFloat,
-    ),
+  const enemyDescriptorBase = buildEnemyDescriptor(
+    opponentDreamcaller,
+    opponentDreamsigns,
+    streams.enemyDescriptor.nextFloat,
   );
   const poolSeed = deriveEnemyPoolSeed(seed);
   const aiMode = input.aiMode ?? false;
@@ -333,10 +333,52 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
     aiMode,
   ).map(freezeBattleDeckCardDefinition);
 
+  // The opponent's signature cards: the three deck cards most representative of
+  // its Dreamcaller's ability, shown on the Battle Start screen. Resolved from
+  // the finalized enemy deck (whose cards are already non-starter) back to the
+  // catalog `CardData` so the selection can weigh rules text, rarity, and cost.
+  const signatureCandidates = enemyDeckDefinition
+    .map((definition) => cardDatabase.get(definition.cardNumber))
+    .filter((card): card is CardData => card !== undefined);
+  const signatureSelections = selectSignatureCards({
+    abilityText: opponentDreamcaller?.renderedText ?? "",
+    candidates: signatureCandidates,
+    count: 3,
+  });
+  const enemyDescriptor = freezeBattleEnemyDescriptor({
+    ...enemyDescriptorBase,
+    signatureCards: signatureSelections.map(
+      (selection): BattleSignatureCard => ({
+        cardId: selection.cardId,
+        cardNumber: selection.cardNumber,
+        name: selection.name,
+      }),
+    ),
+  });
+
   // Assemble the deferred opponent reconstruction logs. The corpus path records
   // the dreamscape-restricted Dreamcaller pick plus the corpus deck build; the
   // fallback / aiMode path records the coherent `opponent_deck_constructed`.
   const emitOpponentLogs = (): void => {
+    // The signature-card pick is independent of which opponent-deck algorithm
+    // ran, so it is recorded for every battle. `matchedTerms` / `score` make the
+    // pick reconstructable: each card is chosen for the glossary keywords it
+    // shares with the Dreamcaller's ability (idf-weighted across the deck).
+    logEvent("opponent_signature_cards_selected", {
+      battleEntryKey,
+      dreamscapeId: state.currentDreamscape,
+      completionLevel: completionLevelAtStart,
+      dreamcallerId: opponentDreamcaller?.id ?? null,
+      dreamcallerName: opponentDreamcaller?.name ?? null,
+      abilityText: opponentDreamcaller?.renderedText ?? null,
+      signatureCards: signatureSelections.map((selection) => ({
+        cardId: selection.cardId,
+        cardNumber: selection.cardNumber,
+        name: selection.name,
+        matchedTerms: selection.matchedTerms,
+        score: selection.score,
+      })),
+    });
     if (corpusBuild !== null) {
       logEvent("corpus_opponent_dreamcaller_selected", {
         battleEntryKey,
@@ -572,6 +614,7 @@ export function buildEnemyDescriptor(
       portraitSeed: 0,
       abilityText: "A synthetic opponent assembled for prototype combat.",
       dreamsigns,
+      signatureCards: [],
     };
   }
 
@@ -579,11 +622,16 @@ export function buildEnemyDescriptor(
   return {
     id: `enemy:${opponentDreamcaller.id}:${String(portraitSeed)}`,
     name: opponentDreamcaller.name,
-    subtitle: "",
+    // The Dreamcaller's title (e.g. "Wreckoner") rides the descriptor as its
+    // subtitle so the Battle Start name plate and the in-battle side summary can
+    // show it under the name.
+    subtitle: opponentDreamcaller.title,
     imageNumber: opponentDreamcaller.imageNumber,
     portraitSeed,
     abilityText: opponentDreamcaller.renderedText,
     dreamsigns,
+    // Filled in by the caller once the enemy deck is built.
+    signatureCards: [],
   };
 }
 
@@ -766,6 +814,9 @@ function freezeBattleEnemyDescriptor(
     ...descriptor,
     dreamsigns: Object.freeze(
       descriptor.dreamsigns.map((dreamsign) => Object.freeze({ ...dreamsign })),
+    ),
+    signatureCards: Object.freeze(
+      descriptor.signatureCards.map((card) => Object.freeze({ ...card })),
     ),
   });
 }

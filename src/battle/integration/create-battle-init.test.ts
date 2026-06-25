@@ -635,7 +635,9 @@ describe("createBattleInit", () => {
 
       expect(selectedDreamcaller).toBeDefined();
       expect(init.enemyDescriptor.name).toBe(selectedDreamcaller?.name);
-      expect(init.enemyDescriptor.subtitle).toBe("");
+      // The descriptor carries the Dreamcaller's title as its subtitle so the
+      // Battle Start name plate and the in-battle side summary can show it.
+      expect(init.enemyDescriptor.subtitle).toBe(selectedDreamcaller?.title);
       for (const prefix of ["Shadow", "Nightmare", "Phantom", "Dark"]) {
         expect(init.enemyDescriptor.name.startsWith(`${prefix} `)).toBe(false);
       }
