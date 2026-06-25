@@ -24,6 +24,7 @@ import { PoolViewer } from "./components/PoolViewer";
 import { StartingDeckModal } from "./components/StartingDeckModal";
 import { GlossaryPopup } from "./components/GlossaryPopup";
 import { DebugScreen } from "./screens/DebugScreen";
+import QuestDebugEditor from "./screens/QuestDebugEditor";
 import { CardSourceOverlay } from "./screens/CardSourceOverlay";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { STARTER_CARD_NUMBERS } from "./data/starter-cards";
@@ -63,6 +64,7 @@ export function QuestApp({
   const [poolViewerOpen, setPoolViewerOpen] = useState(false);
   const [glossaryOpen, setGlossaryOpen] = useState(false);
   const [debugScreenOpen, setDebugScreenOpen] = useState(false);
+  const [questEditorOpen, setQuestEditorOpen] = useState(false);
   const [cardSourceOverlayOpen, setCardSourceOverlayOpen] = useState(false);
   const [journeyExplanationOpen, setJourneyExplanationOpen] = useState(false);
   const [journeyExplanation, setJourneyExplanation] =
@@ -321,6 +323,14 @@ export function QuestApp({
     setDebugScreenOpen(false);
   }, []);
 
+  const handleOpenQuestEditor = useCallback(() => {
+    setQuestEditorOpen(true);
+  }, []);
+
+  const handleCloseQuestEditor = useCallback(() => {
+    setQuestEditorOpen(false);
+  }, []);
+
   const handleToggleCardSourceOverlay = useCallback(() => {
     setCardSourceOverlayOpen((prev) => !prev);
   }, []);
@@ -416,6 +426,7 @@ export function QuestApp({
               onOpenGlossary={handleOpenGlossary}
               onOpenPoolViewer={handleOpenPoolViewer}
               onOpenDebugScreen={handleOpenDebugScreen}
+              onOpenQuestEditor={handleOpenQuestEditor}
               onToggleCardSourceOverlay={handleToggleCardSourceOverlay}
               hasDraftData={hasDraftData}
               hasCardSourceDebug={hasCardSourceDebug}
@@ -478,6 +489,12 @@ export function QuestApp({
             onForceLegendaryOffer={mutations.setDraftState}
             questState={state}
             onLoadQuestState={mutations.loadQuestState}
+          />
+        </ErrorBoundary>
+        <ErrorBoundary scope="overlay:quest-editor" onClose={handleCloseQuestEditor}>
+          <QuestDebugEditor
+            isOpen={questEditorOpen}
+            onClose={handleCloseQuestEditor}
           />
         </ErrorBoundary>
         <ErrorBoundary

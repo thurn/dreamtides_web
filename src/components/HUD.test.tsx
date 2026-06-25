@@ -191,6 +191,7 @@ describe("HUD", () => {
     onOpenGlossary: () => void;
     onOpenPoolViewer: () => void;
     onOpenDebugScreen: () => void;
+    onOpenQuestEditor: () => void;
     onToggleCardSourceOverlay: () => void;
     onToggleJourneyExplanation: () => void;
     hasDraftData: boolean;
@@ -203,6 +204,7 @@ describe("HUD", () => {
         onOpenGlossary={overrides.onOpenGlossary ?? vi.fn()}
         onOpenPoolViewer={overrides.onOpenPoolViewer ?? vi.fn()}
         onOpenDebugScreen={overrides.onOpenDebugScreen ?? vi.fn()}
+        onOpenQuestEditor={overrides.onOpenQuestEditor ?? vi.fn()}
         onToggleCardSourceOverlay={
           overrides.onToggleCardSourceOverlay ?? vi.fn()
         }
@@ -300,6 +302,32 @@ describe("HUD", () => {
       expect(current.classList.contains("overflow-hidden")).toBe(false);
       current = current.parentElement;
     }
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders an Edit Quest State action wired to onOpenQuestEditor", () => {
+    setQuestContext(makeState([]));
+    const onOpenQuestEditor = vi.fn();
+    const { container, root } = renderHud({ onOpenQuestEditor });
+
+    const menuButton = container.querySelector<HTMLButtonElement>(
+      '[data-testid="hud-utility-menu-button"]',
+    );
+    act(() => {
+      menuButton?.click();
+    });
+
+    const editorButton = container.querySelector<HTMLButtonElement>(
+      '[data-testid="hud-quest-editor-button"]',
+    );
+    expect(editorButton).not.toBeNull();
+    act(() => {
+      editorButton?.click();
+    });
+    expect(onOpenQuestEditor).toHaveBeenCalledTimes(1);
 
     act(() => {
       root.unmount();

@@ -212,6 +212,7 @@ export function HudDreamsignLayoutDemo() {
           onOpenGlossary={noop}
           onOpenPoolViewer={noop}
           onOpenDebugScreen={noop}
+          onOpenQuestEditor={noop}
           onToggleCardSourceOverlay={noop}
           onToggleJourneyExplanation={noop}
           hasDraftData={true}

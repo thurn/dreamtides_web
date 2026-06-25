@@ -63,6 +63,7 @@ interface HudProps {
   onOpenGlossary: () => void;
   onOpenPoolViewer: () => void;
   onOpenDebugScreen: () => void;
+  onOpenQuestEditor: () => void;
   onToggleCardSourceOverlay: () => void;
   onToggleJourneyExplanation: () => void;
   hasDraftData: boolean;
@@ -84,6 +85,7 @@ export function HUD({
   onOpenGlossary,
   onOpenPoolViewer,
   onOpenDebugScreen,
+  onOpenQuestEditor,
   onToggleCardSourceOverlay,
   onToggleJourneyExplanation,
   hasDraftData,
@@ -450,6 +452,14 @@ export function HUD({
                       testId="hud-why-journey-button"
                     />
                   ) : null}
+                  <UtilityMenuButton
+                    label="Edit Quest State"
+                    onClick={() => {
+                      closeUtilityMenu();
+                      onOpenQuestEditor();
+                    }}
+                    testId="hud-quest-editor-button"
+                  />
                   <UtilityMenuButton
                     label="Save Quest"
                     onClick={() => {
