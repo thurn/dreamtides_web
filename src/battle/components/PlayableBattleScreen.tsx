@@ -57,6 +57,7 @@ import { BattleForeseeOverlay } from "./BattleForeseeOverlay";
 import { BattleHandTray } from "./BattleHandTray";
 import { BattleInspector } from "./BattleInspector";
 import { BattleCardNoteEditor } from "./BattleCardNoteEditor";
+import { BattleDreamwellHistoryDrawer } from "./BattleDreamwellHistoryDrawer";
 import { BattleLogDrawer } from "./BattleLogDrawer";
 import { BattleResultOverlay } from "./BattleResultOverlay";
 import { BattleRewardSurface } from "./BattleRewardSurface";
@@ -172,6 +173,7 @@ function PlayableBattleScreenInner({
   const isDesktopInspectorLayout = useIsDesktopInspectorLayout();
   const [isInspectorDrawerOpen, setIsInspectorDrawerOpen] = useState(readIsDesktopInspectorLayout());
   const [isBattleLogOpen, setIsBattleLogOpen] = useState(false);
+  const [isDreamwellHistoryOpen, setIsDreamwellHistoryOpen] = useState(false);
   const [isOpponentHandRevealed, setIsOpponentHandRevealed] = useState(false);
   // Debug "hide player hand" mode: hides your own hand and renders the enemy
   // hand full size (with hover-to-enlarge) in its place, to simulate the local
@@ -548,6 +550,7 @@ function PlayableBattleScreenInner({
       setOpenSideSummary(null);
       setIsDreamcallerPanelOpen(false);
       setIsBattleLogOpen(false);
+      setIsDreamwellHistoryOpen(false);
       return;
     }
 
@@ -1579,7 +1582,14 @@ function PlayableBattleScreenInner({
             onOpenForesee={(_side, _count) => undefined}
             onRedo={() => dispatch({ type: "REDO" })}
             onToggleBasicAutomation={() => setIsBasicAutomationEnabled((value) => !value)}
-            onToggleBattleLog={() => setIsBattleLogOpen((value) => !value)}
+            onToggleBattleLog={() => {
+              setIsBattleLogOpen((value) => !value);
+              setIsDreamwellHistoryOpen(false);
+            }}
+            onToggleDreamwellHistory={() => {
+              setIsDreamwellHistoryOpen((value) => !value);
+              setIsBattleLogOpen(false);
+            }}
             onToggleInspector={() => setIsInspectorDrawerOpen((value) => !value)}
             onUndo={() => dispatch({ type: "UNDO" })}
           />
@@ -1650,6 +1660,12 @@ function PlayableBattleScreenInner({
         isOpen={isBattleLogOpen}
         lastTransition={reducerState.lastTransition}
         onClose={() => setIsBattleLogOpen(false)}
+      />
+      <BattleDreamwellHistoryDrawer
+        dreamwellDeck={battleInit.dreamwellDeck}
+        dreamwellDeckIndex={reducerState.mutable.dreamwellDeckIndex}
+        isOpen={isDreamwellHistoryOpen}
+        onClose={() => setIsDreamwellHistoryOpen(false)}
       />
       {showResultOverlay ? (
         reducerState.mutable.result === "victory" && rewardOverlay !== null ? (

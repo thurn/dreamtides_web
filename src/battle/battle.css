@@ -2442,6 +2442,22 @@
   max-height: min(520px, calc(100vh - 220px));
 }
 
+.dreamwell-history-drawer {
+  width: min(360px, calc(100vw - 40px));
+  max-height: min(520px, calc(100vh - 220px));
+}
+
+.dreamwell-history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 0;
+}
+
+.dreamwell-history-entry {
+  width: 100%;
+}
+
 .battle-shell[data-battle-inspector-open="true"] .log-drawer {
   right: calc(var(--inspector-width) + 20px);
 }

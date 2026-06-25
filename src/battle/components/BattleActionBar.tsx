@@ -16,6 +16,7 @@ export function BattleActionBar({
   onRedo,
   onToggleBasicAutomation,
   onToggleBattleLog,
+  onToggleDreamwellHistory,
   onToggleInspector: _onToggleInspector,
   onUndo,
 }: {
@@ -32,6 +33,7 @@ export function BattleActionBar({
   onRedo: () => void;
   onToggleBasicAutomation: () => void;
   onToggleBattleLog: () => void;
+  onToggleDreamwellHistory: () => void;
   onToggleInspector: () => void;
   onUndo: () => void;
 }) {
@@ -95,6 +97,14 @@ export function BattleActionBar({
           disabled={futureCount === 0}
         >
           Redo
+        </button>
+        <button
+          type="button"
+          data-battle-action="toggle-dreamwell-history"
+          className="btn ghost sm"
+          onClick={onToggleDreamwellHistory}
+        >
+          Dreamwell
         </button>
         <button
           type="button"
