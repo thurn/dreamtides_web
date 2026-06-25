@@ -11,6 +11,11 @@ algorithm did in a given production game, would I be able to?"* Read the logs;
 never argue about algorithm behavior from the source code alone when a
 production trace exists.
 
+A run played in the browser also mirrors its log to Firebase Realtime Database,
+so a deployed/production game can be reconstructed even though it never touched
+`logs/quest-log.jsonl`. See **Getting production logs** below before answering a
+question about a game you can't find in the local file.
+
 This skill targets two question families:
 
 1. **Draft pool construction** — "Why is *Terminus* in my warriors draft pool?"
@@ -43,6 +48,46 @@ nearest timestamp window and the relevant `dreamcallerId` / `siteId`.
 
 Always pretty-print with `python3 -c` reading the file — avoid `cat`/`sed`/`head`
 on raw JSONL when you actually need a field.
+
+## Getting production logs
+
+`logs/quest-log.jsonl` only captures runs played against the local Vite dev
+server. A run played in a browser against Realtime Database — the deployed
+`redacted-firebase-project.web.app` build, or a local run in a multiplayer room —
+mirrors every `logEvent` into `rooms/<roomId>/logs`, where **`roomId` is the
+`gameId`** (the `?game=<id>` token, e.g. `r3f7vk`). Each child is one log entry
+stored as a single-line JSON string under a push key; push keys sort
+chronologically. The node is bounded to the newest `ROOM_LOG_LIMIT` (2000)
+entries, so for a long game the earliest events may have been pruned — say so if
+the trace starts mid-run.
+
+When a question names a deployed game (a `web.app` URL or a `?game=` id) that
+isn't in the local file, fetch its log from RTDB and convert it to the same
+JSONL the rest of this skill consumes. The room read rules are open, so an
+unauthenticated REST `GET` works; sorting the values by key and printing them
+yields valid JSONL (each value is already a JSON line):
+
+```bash
+# Production (cloud) — for the game at .../?game=r3f7vk
+ROOM=r3f7vk
+curl -s "https://redacted-firebase-project-default-rtdb.firebaseio.com/rooms/$ROOM/logs.json" \
+  | python3 -c 'import json,sys; d=json.load(sys.stdin) or {}; [print(d[k]) for k in sorted(d)]' \
+  > "/tmp/quest-log-$ROOM.jsonl"
+wc -l "/tmp/quest-log-$ROOM.jsonl"   # 0 lines ⇒ no logs stored (game predates persistence, or wrong id)
+
+# Local emulator (npm run dev) — note the ns and that the port may vary (9000, 9002, ...)
+curl -s "http://127.0.0.1:9000/rooms/$ROOM/logs.json?ns=demo-quest-prototype" \
+  | python3 -c 'import json,sys; d=json.load(sys.stdin) or {}; [print(d[k]) for k in sorted(d)]' \
+  > "/tmp/quest-log-$ROOM.jsonl"
+```
+
+The database URL is `VITE_FIREBASE_DATABASE_URL` (project `redacted-firebase-project`).
+Then run the rest of this skill against `/tmp/quest-log-$ROOM.jsonl` exactly as
+if it were `logs/quest-log.jsonl` — every entry already carries its `gameId`, so
+`grep '"gameId":"r3f7vk"'` still isolates it (the converted file holds only that
+game). Non-CLI alternative: open `https://redacted-firebase-project.web.app/?viewLogs=<roomId>`
+(or `http://localhost:5173/?viewLogs=<roomId>` locally) and use the viewer's
+**Download .jsonl** button to get the identical file.
 
 ## Phase 1: Draft pool questions
 
