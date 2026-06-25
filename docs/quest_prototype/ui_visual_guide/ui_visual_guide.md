@@ -634,32 +634,115 @@ essence summary, and the affordability dimming all have to be visible at once.
 
 ![Dream Augury / merchant offers run by Aldric](images/15-dream-augury.png)
 
-**What it does.** Dream Augury (guide: **Aldric, the Seer**) is the run's
+**What it does.** Dream Augury (home guide: **Aldric, the Seer**) is the run's
 random-event / curated-reward site. It presents (by default) **two offers**, each a
 bundle of cards or other grants tuned to the player's deck, and the player takes
 one. This is where the largest, deck-reshaping effects live.
 
-**Layout.** Aldric stands at the center of the scene under an **"Augury"** title.
-The two offers flank him left and right — each headed by a short **offer title**
-(e.g. "Gain 2 cards that work together", "Improve 1 starter card") and a
-one-line description, with the offer's **cards/grants** shown beneath and a purple
-**accept button** ("Take these cards", "Transfigure it"). Offers that let the
-player pick among options render their **candidates inline** as a selectable grid
-of game objects (cards, dreamsigns, or transfiguration forms) inside the offer
-column — the offer's accept button stays disabled until one candidate is
-selected, so the choice is made in place before accepting. A developer
-**reroll** / **force-archetype** control sits in the top-right.
+**Layout.** The resident Seer stands at the center of the scene under an
+**"Augury"** title, with a one-line dialog beneath the figure. The two offers flank
+the Seer left and right; each offer is a column with a fixed three-part structure:
+
+- a **header** pinned to the top — a small uppercase **category pill** (e.g.
+  "GRANT · POWER GIFT", "IMPROVE · TRANSFIGURE", "REMOVE · PURGE", "SITE · …",
+  "DREAMSIGN · DRAFT"), a bold **offer title** (e.g. "Receive Assault Trooper",
+  "Draft a mid-cost card"), and a one-line **summary**;
+- the offer's **game objects** in the vertical center — the cards, dreamsigns,
+  transfigure previews, or map slice the reward is made of (the part that varies
+  most by reward type, detailed below);
+- a purple **accept button** pinned to the bottom. Both columns share one
+  baseline, so the two accept buttons line up no matter how tall each offer's
+  objects are.
+
+A developer **reroll** / **force-category** control sits in the top-right.
+
+**Reward types (what the objects look like).** The visual treatment is derived from
+the offer's category, so the same column renders very differently depending on what
+is being granted. The families:
+
+*Card grants.*
+
+![Augury: a power-gift hero card (left) and a transfigure before/after pair (right)](images/15b-augury-power-gift-transfigure.png)
+
+- **Power gift / strong card** (above, left) — one large, pre-targeted card
+  centered under a purple glow; the button reads **"Take this card"**.
+- **Card bundle** — several pre-targeted cards granted *together*, shown in a row;
+  the button reads **"Take these cards"**.
+- **Card draft / themed package** (below, left) — a **grid of full cards, pick 1
+  of N**. The cards float idle and dimmed until one is clicked; the selected card
+  brightens, gains a glowing ring and a **"CHOSEN"** badge, and the others stay
+  dimmed, while the button flips from **"Choose"** to **"Take"**.
+
+![Augury: a card-draft grid with a card selected (left) and a dreamsign-draft grid (right)](images/15c-augury-card-draft-dreamsign.png)
+
+  Two draft variants restyle the grid: a **transfigured draft** shows each
+  candidate *already transfigured* (teal ring/badge instead of purple), and a
+  **doubled / "keep two copies" draft** renders the selected pick as an
+  overlapping **×2 pair** so the doubling reads the moment it is chosen.
+
+*Transfigure / improve.*
+
+- **Transfigure** (first image, right) — a **before → after** pair: the current
+  card (dimmed, captioned **"Now"**) → an animated arrow → the rewritten card
+  (teal ring, captioned **"After"**), so the player previews the exact change; the
+  button reads **"Transfigure it"**. Keyword and tribal-change offers use the same
+  before/after treatment.
+- **Improve several starters** — one Now → After pair *per card*, stacked
+  vertically; the button reads **"Transfigure them"**.
+
+*Duplicate.*
+
+- **Duplicate (single)** — one pre-targeted card shown as an overlapping **×2
+  pair** (blue ring + "×2" badge); the button reads **"Duplicate it"**.
+- **Duplicate (choose)** — pick one of up to three deck cards; the selected card
+  becomes the ×2 pair; the button reads **"Choose"** → **"Duplicate"**.
+
+*Remove.*
+
+- **Purge** — one card under a red circular **✕ seal**, desaturated and darkened
+  to read as "to be banished"; the button reads **"Purge it"**.
+- **Purge & replace** — the banished card under the red seal → an arrow → a
+  **replacement card grid** to pick from; the button reads **"Choose a
+  replacement"** → **"Swap"**.
+
+*Dreamsigns.*
+
+- **Dreamsign gift** — a single pre-targeted **dreamsign icon** with its name
+  caption (full rules on hover); the button reads **"Take dreamsign"**.
+- **Dreamsign draft** (second image, right) — a row of dreamsign icons, **pick
+  one**; the selected icon gains a purple ring; the button reads **"Choose"** →
+  **"Take"**.
+
+*Map.*
+
+![Augury: an add-site map slice (left) and a power-gift hero card (right)](images/15d-augury-add-site.png)
+
+- **Add a site** (above, left) — not cards at all, but a vertical **slice of the
+  dreamscape map**: the completed prior node (a **✓**) → a glowing green **"+ NEW
+  SITE"** node naming the site type being inserted → the locked **Battle** node (a
+  **🔒**). This previews *where* the new site lands in the current dreamscape; the
+  button reads **"Add this site"**.
+
+Any offer whose data does not match a known treatment falls back to a plain row of
+its raw objects, so a column never blanks out.
 
 **What you can click:**
 
-- **An offer's inline candidate** — when an offer presents a choice, clicking a
-  candidate selects it (and enables that offer's accept button).
+- **An offer's inline candidate** — for draft / choose / replace / dreamsign-draft
+  offers, clicking a candidate selects it (ring + "CHOSEN"/×2 treatment) and
+  enables that offer's accept button. Clicking another candidate moves the
+  selection.
 - **An offer's accept button** — claims that offer (with the selected candidate,
-  if any); the chosen reward animates to the deck/HUD and the site completes.
+  if the offer required a choice); the chosen reward animates to the deck/HUD and
+  the site completes. Pre-targeted offers (power gift, transfigure, purge,
+  dreamsign gift, add-site) have no candidate step — the button is live
+  immediately.
 - **Close (✕)** — declines, when the offer is decline-able.
-- *(Developer)* **reroll / force archetype** — regenerate the encounter for QA.
+- *(Developer)* **reroll / force category** — regenerate the encounter, or force a
+  specific reward category, for QA.
 
-**What you can hover:** **offer cards** → enlarged previews.
+**What you can hover:** **offer cards** → enlarged previews; **dreamsign icons** →
+the dreamsign's full rules text.
 
 > **Note:** if encounter generation fails, the site shows a "The counter is bare
 > tonight. The road remains open." fallback with a single **Walk away** button.
@@ -672,9 +755,15 @@ Aldric's home specialty (bigger, more curated rewards) is described in
 in this UI.
 
 **Redesign notes.** Two rich, deck-tuned offers side-by-side make for a wide
-layout, each offer bundling a title, a description, several cards/grants, and an
-accept action. Some offers add an extra step via the choice sub-menu. The
-reroll/force-archetype control is developer-only tooling mixed into the screen.
+layout, each offer bundling a category pill, a title, a description, a cluster of
+game objects, and an accept action. The hard part for a redesign is that "the
+cluster of game objects" is really a dozen different bespoke treatments (hero
+card, card row, pick-one grid, before/after pair, ×2 duplicate pair, red-seal
+purge, dreamsign icons, map slice) that all have to read clearly at a glance and,
+for the choose-style ones, support an inline selection — a lot of distinct visual
+language to carry onto a narrow screen. Card and dreamsign detail is hover-only,
+with no touch equivalent, and the reroll/force-category control is developer-only
+tooling mixed into the screen.
 
 ## Tempting Offer, Gamble & Temporal Fork (Placeholder)
 

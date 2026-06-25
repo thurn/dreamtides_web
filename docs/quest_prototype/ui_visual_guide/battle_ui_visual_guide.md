@@ -588,8 +588,8 @@ dedicated counterpart to the hover side-summary popover (see
 > could not be captured live. It is documented here for completeness; functionally
 > it duplicates the side-summary popover at a larger size.
 
-**Layout.** A centered floating panel over a scrim, headed "Battle Side / <name> /
-<title> / Close", with a large **Dreamcaller card** (portrait + full ability text)
+**Layout.** A centered floating panel over a scrim, headed "Battle Side / name /
+title / Close", with a large **Dreamcaller card** (portrait + full ability text)
 and a **Dreamsigns** section listing each dreamsign (name + effect, with a "Bane"
 badge for banes; "No active Dreamsigns" when empty).
 
