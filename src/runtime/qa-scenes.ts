@@ -87,6 +87,70 @@ function parkOnSite(
   };
 }
 
+/**
+ * The quest victory end screen, shown after the final boss is defeated. Built
+ * by parking the run on the `questComplete` screen with a full completion count,
+ * so the summary stats and final-deck reveal can be QA'd without playing seven
+ * battles forward.
+ */
+const QUEST_COMPLETE_SCENE: QaScene = {
+  id: "questcomplete",
+  label: "Quest Complete",
+  description:
+    "The victory end screen with completion stats and the final-deck reveal, " +
+    "parked on the questComplete screen for UI QA.",
+  build: (questContent) => {
+    const foundation = createQaQuestFoundation(questContent);
+    if (foundation === null) {
+      return null;
+    }
+    return {
+      ...foundation.state,
+      completionLevel: 7,
+      screen: { type: "questComplete" },
+    };
+  },
+};
+
+/**
+ * The quest defeat end screen, shown after a lost battle. Built with a frozen
+ * failure summary describing a defeat, so the result title, reason badge, and
+ * summary grid can be QA'd without losing a real battle.
+ */
+const QUEST_FAILED_SCENE: QaScene = {
+  id: "questfailed",
+  label: "Quest Failed",
+  description:
+    "The defeat end screen with its failure summary, parked on the " +
+    "questFailed screen for UI QA.",
+  build: (questContent) => {
+    const foundation = createQaQuestFoundation(questContent);
+    if (foundation === null) {
+      return null;
+    }
+    const node = foundation.starterNode;
+    const battleSite = node.sites.find((site) => site.type === "Battle");
+    const siteId = battleSite?.id ?? node.sites[0]?.id ?? "qa-site";
+    return {
+      ...foundation.state,
+      completionLevel: 2,
+      currentDreamscape: node.id,
+      screen: { type: "questFailed" },
+      failureSummary: {
+        battleId: "qa-battle",
+        result: "defeat",
+        reason: "score_target_reached",
+        siteId,
+        siteLabel: "Battle",
+        dreamscapeIdOrNone: node.id,
+        turnNumber: 6,
+        playerScore: 4,
+        enemyScore: 10,
+      },
+    };
+  },
+};
+
 /** Registers a `?goto=` site scene for the given site type. */
 function siteScene(
   id: string,
@@ -124,6 +188,8 @@ export const QA_SCENES: readonly QaScene[] = [
     "Dreamsign Revelation",
     "DreamsignRevelation",
   ),
+  QUEST_COMPLETE_SCENE,
+  QUEST_FAILED_SCENE,
 ];
 
 /** Returns the QA scene for `id`, or null when `id` is not registered. */

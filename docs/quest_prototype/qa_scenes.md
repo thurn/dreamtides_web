@@ -61,6 +61,8 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `dreamaugury`            | Dream Augury site                                               |
 | `tempting`               | Tempting Offer site                                             |
 | `dreamsign-revelation`   | Dreamsign Revelation site                                       |
+| `questcomplete`          | Quest victory end screen (completion stats + final-deck reveal) |
+| `questfailed`            | Quest defeat end screen (failure summary)                       |
 
 ## Combining with other parameters
 
