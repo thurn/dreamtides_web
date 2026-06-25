@@ -1,5 +1,7 @@
+import { mkdtempSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
-import { dirname, resolve } from "node:path";
+import { dirname, join, resolve } from "node:path";
 
 import { describe, expect, it } from "vitest";
 
@@ -11,6 +13,14 @@ import {
 } from "./lib/tide-annotation-check.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+
+// Write a throwaway artifact and run the artifact-level check on it, so the
+// duplicate-label assertions never depend on production data.
+function checkSynthetic(tides: unknown[]) {
+  const file = join(mkdtempSync(join(tmpdir(), "tide-anno-")), "tides.jsonc");
+  writeFileSync(file, JSON.stringify({ version: 1, tides }));
+  return checkArtifactAnnotations({ artifactPath: file });
+}
 
 // Guards the player-facing tide labels against the recurring drift where the
 // affinity grow reshapes a tide's cards while its hand-authored label stays pinned
@@ -110,6 +120,27 @@ describe("tide annotation consistency", () => {
     });
     expect(ok).toBe(false);
     expect(problems.join(" ")).toMatch(/unknown mechanic/);
+  });
+
+  it("flags a duplicate shortName across tides", () => {
+    const result = checkSynthetic([
+      { id: "a", shortName: "Spirit Animal Flood", cards: [{ id: "c" }] },
+      { id: "b", shortName: "Spirit Animal Flood", cards: [{ id: "c" }] },
+    ]);
+    expect(result.ok).toBe(false);
+    const dup = result.duplicateNames.find((d) => d.field === "shortName");
+    expect(dup?.ids).toEqual(["a", "b"]);
+  });
+
+  it("flags a duplicate displayName across tides", () => {
+    const result = checkSynthetic([
+      { id: "a", displayName: "Into Oblivion", cards: [{ id: "c" }] },
+      { id: "b", displayName: "Into Oblivion", cards: [{ id: "c" }] },
+    ]);
+    expect(result.ok).toBe(false);
+    expect(
+      result.duplicateNames.some((d) => d.field === "displayName"),
+    ).toBe(true);
   });
 
   it("counts mechanics from rules text", () => {

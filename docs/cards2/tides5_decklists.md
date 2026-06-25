@@ -2131,7 +2131,7 @@ Tide-fac-02 is built almost entirely of characters (41 of 45 cards) and operates
 - 1× Vigil Keeper
 - 1× Carrion Shepherd
 
-## Lean: Flash of Power — Event Storm Ramp
+## Lean: Flash of Power — Event Storm Combo
 
 `tide-fac-03` — facet tide, 39 distinct cards, 45 copies
 
@@ -2228,7 +2228,7 @@ Tide-fac-04 is built almost entirely around spirit animals, with 35 characters a
 - 1× Scrap Reclaimer
 - 1× Nexus Wayfinder
 
-## Lean: Celestial Reverie — Spirit Animal Flood
+## Lean: Celestial Reverie — Spirit Animal Burst
 
 `tide-fac-05` — facet tide, 39 distinct cards, 45 copies
 
@@ -2420,7 +2420,7 @@ This tide is built around a dense curve of inexpensive survivors whose arrival a
 - 1× Break the Veil
 - 1× Skull Weaver
 
-## Lean: Sunset Chronicler — Spirit Animal Flood
+## Lean: Sunset Chronicler — Spirit Animal Tokens
 
 `tide-fac-09` — facet tide, 42 distinct cards, 44 copies
 
@@ -3018,7 +3018,7 @@ This tide is almost entirely composed of warriors (43 of 45 copies), built aroun
 - 1× Vigil Keeper
 - 1× Carrion Shepherd
 
-## Lean: Call of the Lost — Event Chain Combo
+## Lean: Call of the Lost — Event Count Combo
 
 `tide-fac-21` — facet tide, 41 distinct cards, 45 copies
 

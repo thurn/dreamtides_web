@@ -14,8 +14,8 @@
 // recomputes the tide's actual archetype signature from its current cards and
 // verifies the claims still hold, so a content shift that invalidates a label
 // fails loudly (re-review the label) instead of shipping silently. It also
-// enforces that `displayName` is unique across tides (a duplicate name reads as
-// two indistinguishable options on the player-facing tide screens).
+// enforces that `displayName` and `shortName` are each unique across tides (a
+// duplicate label reads as two indistinguishable options on the tide screens).
 //
 // The check validates the RELATIONSHIP between a label's claims and its contents,
 // never hardcoded card values — so editing a TOML never trips it on its own; only
@@ -184,12 +184,17 @@ export function checkArtifactAnnotations({
 
   const failures = [];
   const missingClaims = [];
-  const nameToIds = new Map();
+  // Both player-facing labels must be unique across tides: a repeated displayName
+  // or shortName reads as two indistinguishable options on the tide screens.
+  const seen = { displayName: new Map(), shortName: new Map() };
 
   for (const tide of tides) {
-    if (typeof tide.displayName === "string" && tide.displayName !== "") {
-      if (!nameToIds.has(tide.displayName)) nameToIds.set(tide.displayName, []);
-      nameToIds.get(tide.displayName).push(tide.id);
+    for (const field of ["displayName", "shortName"]) {
+      const value = tide[field];
+      if (typeof value === "string" && value !== "") {
+        if (!seen[field].has(value)) seen[field].set(value, []);
+        seen[field].get(value).push(tide.id);
+      }
     }
     if (requireClaims && (!tide.claims || typeof tide.claims !== "object")) {
       missingClaims.push(tide.id);
@@ -204,9 +209,12 @@ export function checkArtifactAnnotations({
     }
   }
 
-  const duplicateNames = [...nameToIds.entries()]
-    .filter(([, ids]) => ids.length > 1)
-    .map(([name, ids]) => ({ name, ids }));
+  const duplicateNames = [];
+  for (const field of ["displayName", "shortName"]) {
+    for (const [value, ids] of seen[field]) {
+      if (ids.length > 1) duplicateNames.push({ field, value, ids });
+    }
+  }
 
   const ok =
     failures.length === 0 &&
@@ -232,9 +240,9 @@ export function formatAnnotationFailures(result) {
   lines.push("");
 
   if (result.duplicateNames.length) {
-    lines.push("Duplicate displayName (each must be unique across tides):");
-    for (const { name, ids } of result.duplicateNames) {
-      lines.push(`    • "${name}" used by: ${ids.join(", ")}`);
+    lines.push("Duplicate label (displayName and shortName must each be unique):");
+    for (const { field, value, ids } of result.duplicateNames) {
+      lines.push(`    • ${field} "${value}" used by: ${ids.join(", ")}`);
     }
     lines.push("");
   }

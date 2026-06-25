@@ -2078,7 +2078,7 @@ Tide-fac-02 is built almost entirely of characters (41 of 45 cards) and operates
 - 1× Torn Circuit Feeder
 - 1× Scrap Reclaimer
 
-## Lean: Flash of Power — Event Storm Ramp
+## Lean: Flash of Power — Event Storm Combo
 
 `tide-fac-03` — facet tide, 36 distinct cards, 45 copies
 
@@ -2170,7 +2170,7 @@ Tide-fac-04 is built almost entirely around spirit animals, with 35 characters a
 - 1× Scrap Reclaimer
 - 1× Nexus Wayfinder
 
-## Lean: Celestial Reverie — Spirit Animal Flood
+## Lean: Celestial Reverie — Spirit Animal Burst
 
 `tide-fac-05` — facet tide, 37 distinct cards, 45 copies
 
@@ -2269,7 +2269,7 @@ This tide runs an even split of characters and events, with its mechanical ident
 - 1× Standoff
 - 1× Moonlit Voyage
 
-## Lean: Sunset Chronicler — Spirit Animal Flood
+## Lean: Sunset Chronicler — Spirit Animal Tokens
 
 `tide-fac-07` — facet tide, 44 distinct cards, 45 copies
 
@@ -2881,7 +2881,7 @@ Tide-fac-18 is built around two interlocking halves: an energy ramp package and 
 - 1× Vigil Keeper
 - 1× Skull Weaver
 
-## Lean: Call of the Lost — Event Chain Combo
+## Lean: Call of the Lost — Event Count Combo
 
 `tide-fac-19` — facet tide, 37 distinct cards, 45 copies
 
@@ -3619,7 +3619,7 @@ tide-neu-01 is a broad neutral tide built almost entirely from events (23 of 30 
 - 1× The Power Within
 - 1× A New Adventure
 
-## Broad: Celestial Reverie / Stoneborn Leviathan — Spirit Animal Flood
+## Broad: Celestial Reverie / Stoneborn Leviathan — Spirit Animal Draw
 
 `tide-neu-02` — neutral tide, 29 distinct cards, 30 copies
 

@@ -2232,7 +2232,7 @@
     {
       "id": "tide-fac-03",
       "name": "Lean: Flash of Power",
-      "shortName": "Event Storm Ramp",
+      "shortName": "Event Storm Combo",
       "displayName": "The Worldbreaker",
       "displayDescription": "Builds toward one explosive turn, detonating stored power into copied, chained events.",
       "summary": "This tide builds toward a single explosive turn by ramping energy through cheap bursts and event-triggered refunds, then detonating that energy into copied and chained events — distinguishing itself from the nearest sibling (tide-fac-20) by centering on mass-copy finishers and void-depth payoffs rather than steady draw-filter and token production.",
@@ -2339,7 +2339,7 @@
     {
       "id": "tide-fac-05",
       "name": "Lean: Celestial Reverie",
-      "shortName": "Spirit Animal Flood",
+      "shortName": "Spirit Animal Burst",
       "displayName": "Teeming Thicket",
       "displayDescription": "Turns a dense pack of cheap Spirit Animals into surging power and a board-wide burst.",
       "summary": "A spirit animal swarm that converts board width into energy through Dawn triggers and stored charges, then closes with a board-wide ✦ explosion — distinguished from its nearest siblings by emphasizing energy generation from cheap-creature density rather than drawing or discovering cards.",
@@ -2550,7 +2550,7 @@
     {
       "id": "tide-fac-09",
       "name": "Lean: Sunset Chronicler",
-      "shortName": "Spirit Animal Flood",
+      "shortName": "Spirit Animal Tokens",
       "displayName": "The Untamed Flood",
       "displayDescription": "Floods the board with Spirit Animals and figments, turning sheer width into power and a bursting finish.",
       "summary": "A tempo-control tide that combines a dense interrupt-speed counterspell suite with an outsider score-draw engine, distinguishing itself from its sibling Driftrider tide by anchoring on reactive card prevention rather than bounce and control-theft.",
@@ -3206,7 +3206,7 @@
     {
       "id": "tide-fac-21",
       "name": "Lean: Call of the Lost",
-      "shortName": "Event Chain Combo",
+      "shortName": "Event Count Combo",
       "displayName": "The Quickening Chain",
       "displayDescription": "Spins a high-velocity run of events, cashing in the played card count for victory.",
       "summary": "This tide builds a high-velocity event chain — ramping energy through Arc Gate Opening, Flash of Power, and Starcatcher, then cashing in cards-played-this-turn counters for erosion (Hatching Ground), score (Broadcast Array), and a refueling draw (Echoes of the Journey) — distinguishing itself from its closest sibling, Flash of Power, which centers on detonation-copy bombs rather than accumulating turn-count payoffs.",
