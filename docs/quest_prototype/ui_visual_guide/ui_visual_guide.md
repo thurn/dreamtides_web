@@ -643,21 +643,19 @@ one. This is where the largest, deck-reshaping effects live.
 The two offers flank him left and right — each headed by a short **offer title**
 (e.g. "Gain 2 cards that work together", "Improve 1 starter card") and a
 one-line description, with the offer's **cards/grants** shown beneath and a purple
-**accept button** ("Take these cards", "Transfigure it"). Some offers, when
-accepted, open a **chooser overlay** to refine the reward — a centered modal
-(dark purple gradient panel, title header, scrolling candidate area, and a
-purple **Confirm** + slate **Cancel** footer) that comes in three forms
-depending on the offer: a **card chooser** (pick which cards to take), a
-**dreamsign chooser** (pick which dreamsigns), or a **transfiguration chooser**
-(pick which form to apply). A developer **reroll** / **force-archetype** control
-sits in the top-right.
+**accept button** ("Take these cards", "Transfigure it"). Offers that let the
+player pick among options render their **candidates inline** as a selectable grid
+of game objects (cards, dreamsigns, or transfiguration forms) inside the offer
+column — the offer's accept button stays disabled until one candidate is
+selected, so the choice is made in place before accepting. A developer
+**reroll** / **force-archetype** control sits in the top-right.
 
 **What you can click:**
 
-- **An offer's accept button** — claims that offer (and may open the chooser
-  overlay); the chosen reward animates to the deck/HUD and the site completes.
-- **(In the chooser overlay) candidates, then Confirm** — pick the card(s),
-  dreamsign(s), or form to refine the offer; **Cancel** backs out of the choice.
+- **An offer's inline candidate** — when an offer presents a choice, clicking a
+  candidate selects it (and enables that offer's accept button).
+- **An offer's accept button** — claims that offer (with the selected candidate,
+  if any); the chosen reward animates to the deck/HUD and the site completes.
 - **Close (✕)** — declines, when the offer is decline-able.
 - *(Developer)* **reroll / force archetype** — regenerate the encounter for QA.
 

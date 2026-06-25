@@ -604,6 +604,8 @@ tap-to-open sheet.
 
 # Battle Result & Reward
 
+![Battle reward surface (Victory)](images/b16-battle-reward.png)
+
 **What it does.** When the match ends, the board raises one of two end-of-battle
 overlays depending on the outcome. A **win** raises the full **reward surface**
 (the player's payoff for the fight); a **loss or draw** raises the smaller
