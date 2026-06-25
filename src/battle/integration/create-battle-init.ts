@@ -15,8 +15,7 @@ import type { RunPoolContext } from "../../data/quest-content";
 import type { DraftRecord } from "../../data/cards-v2-database";
 import type { FitModel } from "../../draft/replay/fit-model";
 import { DEFAULT_POOL_VARIANT } from "../../draft/pool/types";
-import { applyDeckEntryCardModification } from "../../card-type-change";
-import { applyTransfigurationToCard } from "../../transfiguration/transfiguration-logic";
+import { resolveDeckEntryCard } from "../../card-type-change";
 import { createBattleRngStreams, deriveBattleSeed } from "../random";
 import type { BattleRng } from "../random";
 import { createBaseBattleDeckCardDefinition } from "../card-definition";
@@ -710,16 +709,10 @@ function normalizePlayerDeckCard(
   entry: QuestState["deck"][number],
   card: CardData,
 ): BattleDeckCardDefinition {
-  // Apply the deck entry's transfiguration so the battle card carries the
-  // modified cost, spark, and rules text rather than the printed base values.
-  const transfiguredCard =
-    entry.transfiguration === null
-      ? card
-      : applyTransfigurationToCard(card, entry.transfiguration);
-  const effectiveCard = applyDeckEntryCardModification(transfiguredCard, {
-    typeChange: entry.typeChange,
-    keywords: entry.keywordModification,
-  });
+  // Resolve the deck entry so the battle card carries the modified cost, spark,
+  // and rules text (transfiguration, type/keyword changes, then debug stat
+  // overrides) rather than the printed base values.
+  const effectiveCard = resolveDeckEntryCard(card, entry);
   return {
     sourceDeckEntryId: entry.entryId,
     // The stable base-catalog UUID, kept even when the entry is transfigured or

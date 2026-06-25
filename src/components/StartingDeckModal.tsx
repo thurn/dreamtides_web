@@ -5,7 +5,10 @@ import type { DeckEntry } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "./CardDisplay";
 import { HoverZoomCard } from "./HoverZoomCard";
-import { applyDeckEntryCardModification } from "../card-type-change";
+import {
+  applyCardStatOverride,
+  applyDeckEntryCardModification,
+} from "../card-type-change";
 import { logEvent } from "../logging";
 
 /** Props for the StartingDeckModal component. */
@@ -78,10 +81,13 @@ export function StartingDeckModal({
         if (!card) return null;
         return {
           entry,
-          card: applyDeckEntryCardModification(card, {
-            typeChange: entry.typeChange,
-            keywords: entry.keywordModification,
-          }),
+          card: applyCardStatOverride(
+            applyDeckEntryCardModification(card, {
+              typeChange: entry.typeChange,
+              keywords: entry.keywordModification,
+            }),
+            entry.statOverride,
+          ),
         };
       })
       .filter((e): e is ResolvedEntry => e !== null);

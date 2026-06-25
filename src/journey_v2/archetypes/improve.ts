@@ -1,11 +1,14 @@
-import { applyDeckEntryCardModification } from "../../card-type-change";
+import {
+  applyDeckEntryCardModification,
+  resolveDeckEntryCard,
+} from "../../card-type-change";
 import {
   applyTransfigurationToCard,
   buildTransfigurationDisplay,
   eligibleTransfigurations,
 } from "../../transfiguration/transfiguration-logic";
 import type { CardData } from "../../types/cards";
-import type { CardTypeChange, DeckEntry, TransfigurationType } from "../../types/quest";
+import type { CardTypeChange, TransfigurationType } from "../../types/quest";
 import { centrality } from "../signals/fit";
 import { bandSample, type MerchantRng } from "../signals/rng";
 import { MERCHANT_TUNING } from "../tuning";
@@ -62,15 +65,7 @@ function clamp01(v: number): number {
  * Reclaim grant) rather than the base card.
  */
 function effectiveCardFor(deckCard: MerchantDeckCard): CardData {
-  const entry: DeckEntry = deckCard.deckEntry;
-  const transfigured =
-    entry.transfiguration === null
-      ? deckCard.card
-      : applyTransfigurationToCard(deckCard.card, entry.transfiguration);
-  return applyDeckEntryCardModification(transfigured, {
-    typeChange: entry.typeChange,
-    keywords: entry.keywordModification,
-  });
+  return resolveDeckEntryCard(deckCard.card, deckCard.deckEntry);
 }
 
 /**

@@ -25,7 +25,10 @@ import {
 import { computeDeckSummary } from "./deck-summary";
 import { DreamcallerPortrait } from "./DreamcallerPortrait";
 import { RulesText } from "./RulesText";
-import { applyDeckEntryCardModification } from "../card-type-change";
+import {
+  applyCardStatOverride,
+  applyDeckEntryCardModification,
+} from "../card-type-change";
 
 /** Sort criteria options. */
 type SortCriteria =
@@ -138,10 +141,13 @@ export function DeckViewer({
       .map((entry, index) => {
         const card = cardDatabase.get(entry.cardNumber);
         if (!card) return null;
-        const modified = applyDeckEntryCardModification(card, {
-          typeChange: entry.typeChange,
-          keywords: entry.keywordModification,
-        });
+        const modified = applyCardStatOverride(
+          applyDeckEntryCardModification(card, {
+            typeChange: entry.typeChange,
+            keywords: entry.keywordModification,
+          }),
+          entry.statOverride,
+        );
         if (entry.transfiguration === null) {
           return { entry, card: modified, index };
         }

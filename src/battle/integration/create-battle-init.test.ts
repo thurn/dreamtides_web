@@ -547,6 +547,58 @@ describe("createBattleInit", () => {
       expect(changedCard?.renderedText).toContain("Reclaim 2●");
     });
 
+    it("applies quest deck entry stat overrides to player battle card definitions", () => {
+      const baseInput = makeBaseInput();
+      const changedEntryId = "deck-1";
+      const changedEntry = baseInput.state.deck.find(
+        (entry) => entry.entryId === changedEntryId,
+      );
+      if (changedEntry === undefined) {
+        throw new Error(`Missing test deck entry: ${changedEntryId}`);
+      }
+      // Derive the printed stats from the live card database so the test
+      // survives edits to the fixture's printed values.
+      const printed = makeBattleTestCardDatabase().get(changedEntry.cardNumber);
+      if (printed === undefined) {
+        throw new Error(`Missing test card: ${String(changedEntry.cardNumber)}`);
+      }
+      const printedEnergyCost = printed.energyCost;
+      const printedSpark = printed.spark;
+      if (printedEnergyCost === null || printedSpark === null) {
+        throw new Error(
+          "Expected the chosen test card to have numeric printed stats",
+        );
+      }
+      const overriddenEnergyCost = printedEnergyCost + 7;
+      const overriddenSpark = printedSpark + 7;
+
+      const stateWithStatOverride = {
+        ...baseInput.state,
+        deck: baseInput.state.deck.map((entry) =>
+          entry.entryId === changedEntryId
+            ? {
+                ...entry,
+                statOverride: {
+                  energyCost: overriddenEnergyCost,
+                  spark: overriddenSpark,
+                },
+              }
+            : entry,
+        ),
+      };
+
+      const init = createBattleInit({
+        ...baseInput,
+        state: stateWithStatOverride,
+      });
+      const changedCard = init.playerDeckOrder.find(
+        (card) => card.sourceDeckEntryId === changedEntryId,
+      );
+
+      expect(changedCard?.printedEnergyCost).toBe(overriddenEnergyCost);
+      expect(changedCard?.printedSpark).toBe(overriddenSpark);
+    });
+
     it("throws when a quest deck entry references a missing card number", () => {
       const baseInput = makeBaseInput();
       const stateWithUnknownCard = {

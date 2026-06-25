@@ -1,6 +1,9 @@
 import type { CardData } from "../types/cards";
 import type { DeckEntry } from "../types/quest";
-import { applyDeckEntryCardModification } from "../card-type-change";
+import {
+  applyCardStatOverride,
+  applyDeckEntryCardModification,
+} from "../card-type-change";
 
 export interface DeckSummary {
   total: number;
@@ -25,10 +28,13 @@ export function computeDeckSummary(
     if (card === undefined) {
       continue;
     }
-    const effectiveCard = applyDeckEntryCardModification(card, {
-      typeChange: entry.typeChange,
-      keywords: entry.keywordModification,
-    });
+    const effectiveCard = applyCardStatOverride(
+      applyDeckEntryCardModification(card, {
+        typeChange: entry.typeChange,
+        keywords: entry.keywordModification,
+      }),
+      entry.statOverride,
+    );
 
     total += 1;
 
@@ -38,8 +44,8 @@ export function computeDeckSummary(
       eventCount += 1;
     }
 
-    if (card.energyCost !== null) {
-      totalEnergyCost += card.energyCost;
+    if (effectiveCard.energyCost !== null) {
+      totalEnergyCost += effectiveCard.energyCost;
       cardsWithEnergyCost += 1;
     }
   }
