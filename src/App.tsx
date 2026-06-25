@@ -12,6 +12,7 @@ import {
 } from "./data/quest-content";
 import { getFirebaseDatabase } from "./firebase/app-config";
 import { MultiplayerRoomGate } from "./multiplayer/MultiplayerRoomGate";
+import { RoomLogViewer } from "./multiplayer/RoomLogViewer";
 import { connectedClientCount, isPrimaryClient } from "./multiplayer/room-service";
 import { useQuest } from "./state/quest-context";
 import { MultiplayerQuestProvider } from "./state/multiplayer-quest-context";
@@ -650,6 +651,19 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
         <div className="h-8 w-8 animate-spin rounded-full border-2 border-slate-500 border-t-transparent" />
         <p className="text-lg opacity-80">Loading quest content...</p>
       </div>
+    );
+  }
+
+  // `?viewLogs=<roomId>`: render the read-only log viewer instead of joining a
+  // game, so a production run's persisted log can be inspected without playing.
+  const viewLogsRoomId = runtimeConfig.viewLogs ?? null;
+  if (viewLogsRoomId !== null) {
+    return (
+      <RoomLogViewer
+        database={database}
+        gameId={viewLogsRoomId}
+        databaseMode={runtimeConfig.databaseMode}
+      />
     );
   }
 

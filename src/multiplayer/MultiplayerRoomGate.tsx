@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import type { Database, Unsubscribe } from "firebase/database";
-import { clearLogContext, setLogContext } from "../logging";
+import { clearLogContext, setLogContext, setLogSink } from "../logging";
+import { createRoomLogSink } from "./room-log-service";
 import type { DatabaseMode } from "../runtime/runtime-config";
 import { listSavedQuests, type SavedQuestSummary } from "../state/saved-quests";
 import { generateRoomId } from "./room-id";
@@ -103,6 +104,34 @@ export function MultiplayerRoomGate({
       clearLogContext();
     };
   }, [readyRoomId]);
+
+  // Mirror every log event for this session into the room's Realtime Database
+  // log node so a production run's log survives the playing tab closing and can
+  // be read back from `?viewLogs=<roomId>`. The sink batches writes and prunes
+  // to the newest entries; a `visibilitychange` flush captures the tail when the
+  // tab is backgrounded or closed, beyond the periodic flush.
+  useEffect(() => {
+    if (readyRoomId === null) {
+      return undefined;
+    }
+    const sink = createRoomLogSink(database, readyRoomId);
+    setLogSink((entry) => {
+      sink.record(entry);
+    });
+
+    const handleVisibilityChange = (): void => {
+      if (document.visibilityState === "hidden") {
+        void sink.flushNow();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      setLogSink(null);
+      void sink.dispose();
+    };
+  }, [database, readyRoomId]);
 
   useEffect(() => {
     setActiveRoomId(gameId);

@@ -6,6 +6,7 @@ import {
   buildQuestFieldUpdate,
   presencePath,
   questStatePath,
+  roomLogsPath,
   roomPath,
 } from "./room-paths";
 
@@ -15,6 +16,7 @@ describe("room path helpers", () => {
     expect(questStatePath("ab12")).toBe("rooms/ab12/questState");
     expect(presencePath("ab12", "client-1")).toBe("rooms/ab12/presence/client-1");
     expect(actionLogPath("ab12", "action-1")).toBe("rooms/ab12/actionLog/action-1");
+    expect(roomLogsPath("ab12")).toBe("rooms/ab12/logs");
   });
 
   it("rejects unsafe Firebase path segments", () => {

@@ -55,6 +55,16 @@ export function actionLogPath(roomId: string, actionId: string): string {
   return `${roomPath(roomId)}/actionLog/${assertFirebasePathSegment(actionId, "actionId")}`;
 }
 
+/**
+ * Path to a room's persisted quest-log node. Each child is a push-keyed,
+ * single-line JSON string log entry mirrored from {@link logEvent}, letting a
+ * production game's log be read back from `?viewLogs=<roomId>` long after the
+ * playing browser tab has closed (the in-memory accumulator is otherwise lost).
+ */
+export function roomLogsPath(roomId: string): string {
+  return `${roomPath(roomId)}/logs`;
+}
+
 export function buildQuestFieldUpdate<K extends keyof QuestState>(
   roomId: string,
   field: K,

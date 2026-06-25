@@ -20,6 +20,7 @@ describe("parseRuntimeConfig", () => {
       debugJourneyCost: null,
       loadQuestName: null,
       gotoScene: null,
+      viewLogs: null,
     });
   });
 
@@ -250,6 +251,20 @@ describe("parseRuntimeConfig", () => {
       expect(parseRuntimeConfig("?packsize=2.5").fresh20PackSize).toBeUndefined();
       expect(parseRuntimeConfig("?packsize=abc").fresh20PackSize).toBeUndefined();
       expect(parseRuntimeConfig("?packsize=").fresh20PackSize).toBeUndefined();
+    });
+  });
+
+  describe("viewLogs", () => {
+    it("returns a normalized room id from viewLogs", () => {
+      expect(parseRuntimeConfig("?viewLogs=QuestRoom123").viewLogs).toBe(
+        "questroom123",
+      );
+    });
+
+    it("returns null when absent or malformed", () => {
+      expect(parseRuntimeConfig("").viewLogs).toBeNull();
+      expect(parseRuntimeConfig("?viewLogs=").viewLogs).toBeNull();
+      expect(parseRuntimeConfig("?viewLogs=bad_id").viewLogs).toBeNull();
     });
   });
 });

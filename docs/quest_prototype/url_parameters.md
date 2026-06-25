@@ -226,6 +226,27 @@ Example:
 http://localhost:5173/?game=quest42
 ```
 
+## `viewLogs`
+
+Renders the read-only quest-log viewer for a room instead of joining a game,
+parsed into `runtimeConfig.viewLogs`. The value is a room id, normalized exactly
+like `?game=` (lowercase, 4 to 24 letters or digits); an invalid value is
+treated as absent and the app boots normally.
+
+While a game is played, every `logEvent` entry for that room is mirrored into
+Realtime Database at `rooms/<roomId>/logs` (newest `ROOM_LOG_LIMIT` entries
+retained), so a run's log survives the playing tab closing. `?viewLogs=<roomId>`
+reads that node back, shows the entries as JSONL with a substring filter and a
+download button, and works against whichever database `?realtime` selects
+(cloud by default on a deployed build, the emulator in local dev). It pairs
+naturally with the `gameId` that already stamps every entry: open the same id
+the player used.
+
+```
+https://redacted-firebase-project.web.app/?viewLogs=r3f7vk   # view a production run's log
+http://localhost:5173/?viewLogs=quest42                  # view a local run's log
+```
+
 ## `goto`
 
 Jumps a fresh room straight onto a developer QA scene on boot, parsed into
@@ -288,6 +309,7 @@ http://localhost:5173/                          # default
 http://localhost:5173/?seed=42                  # fixed seed
 http://localhost:5173/?startInBattle=1          # boot straight into battle
 http://localhost:5173/?game=quest42             # parsed multiplayer room id
+http://localhost:5173/?viewLogs=quest42         # read-only quest-log viewer for a room
 http://localhost:5173/?goto=atlas               # jump straight to a QA scene
 http://localhost:5173/?realtime=1               # use cloud Firebase RTDB
 http://localhost:5173/?identicons=1             # force identicon art for cards

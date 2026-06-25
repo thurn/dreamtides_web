@@ -13,12 +13,53 @@ import {
   logEventOnce,
   resetLog,
   setLogContext,
+  setLogSink,
 } from "./logging";
+import type { LogEntry } from "./logging";
 import type { BattleMutableState } from "./battle/types";
 
 beforeEach(() => {
   resetLog();
   vi.restoreAllMocks();
+});
+
+describe("setLogSink", () => {
+  it("forwards every entry to the installed sink", () => {
+    vi.spyOn(console, "log").mockImplementation(() => {});
+    const received: LogEntry[] = [];
+    setLogSink((entry) => {
+      received.push(entry);
+    });
+
+    logEvent("alpha", { value: 1 });
+    logEvent("beta");
+
+    expect(received.map((e) => e.event)).toEqual(["alpha", "beta"]);
+    expect(received[0].value).toBe(1);
+  });
+
+  it("stops forwarding once the sink is removed", () => {
+    vi.spyOn(console, "log").mockImplementation(() => {});
+    const received: LogEntry[] = [];
+    setLogSink((entry) => {
+      received.push(entry);
+    });
+    logEvent("kept");
+    setLogSink(null);
+    logEvent("dropped");
+
+    expect(received.map((e) => e.event)).toEqual(["kept"]);
+  });
+
+  it("swallows a throwing sink so logging still returns the entry", () => {
+    vi.spyOn(console, "log").mockImplementation(() => {});
+    setLogSink(() => {
+      throw new Error("sink boom");
+    });
+
+    const entry = logEvent("resilient");
+    expect(entry.event).toBe("resilient");
+  });
 });
 
 describe("logEvent", () => {

@@ -19,6 +19,15 @@ export interface LogEntry {
 
 type LogListener = () => void;
 
+/**
+ * Receives every {@link logEvent} entry as it is emitted, for transports beyond
+ * the in-memory accumulator (the multiplayer gate installs one that mirrors
+ * entries into the room's Realtime Database node so a production game's log
+ * survives the playing tab closing). Best-effort: a throwing sink is swallowed
+ * so logging never wedges the caller.
+ */
+export type LogSink = (entry: Readonly<LogEntry>) => void;
+
 const RESERVED_KEYS: ReadonlySet<string> = new Set([
   "timestamp",
   "event",
@@ -40,6 +49,16 @@ let isLogSnapshotDirty = false;
 // untouched. Explicit `fields` on a call win over context; reserved keys can be
 // set by neither.
 let logContext: Record<string, unknown> = {};
+
+let logSink: LogSink | null = null;
+
+/**
+ * Install (or with `null`, remove) the {@link LogSink} that receives every
+ * subsequent {@link logEvent} entry. Replaces any previously installed sink.
+ */
+export function setLogSink(sink: LogSink | null): void {
+  logSink = sink;
+}
 
 /**
  * Replace the ambient log context merged into every subsequent {@link logEvent}.
@@ -93,7 +112,15 @@ export function logEvent(
   isLogSnapshotDirty = true;
   notifyLogListeners();
   postLogEntryToDevServer(entry);
-  return Object.freeze({ ...entry });
+  const frozen = Object.freeze({ ...entry });
+  if (logSink !== null) {
+    try {
+      logSink(frozen);
+    } catch {
+      // Best-effort transport: a throwing sink must never break logging.
+    }
+  }
+  return frozen;
 }
 
 /**
@@ -408,6 +435,7 @@ export function resetLog(): void {
   logSnapshotCache = [];
   isLogSnapshotDirty = false;
   logContext = {};
+  logSink = null;
   notifyLogListeners();
 }
 

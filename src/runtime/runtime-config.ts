@@ -63,6 +63,16 @@ export interface RuntimeConfig {
    * it; it is optional only so test config literals can omit it.
    */
   gotoScene?: string | null;
+  /**
+   * Room id whose persisted quest log should be displayed, from
+   * `?viewLogs=<roomId>`. When set, the app renders the read-only log viewer
+   * (reading `rooms/<roomId>/logs` from Realtime Database) instead of joining a
+   * game, so a production run's log can be inspected after the playing tab has
+   * closed. Normalized like `?game=`; null when absent or malformed.
+   * `parseRuntimeConfig` always sets it; it is optional only so test config
+   * literals can omit it.
+   */
+  viewLogs?: string | null;
 }
 
 export type DatabaseMode = "emulator" | "realtime";
@@ -94,6 +104,7 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     debugJourneyCost: parseDebugJourneyId(params.get("debugJourneyCost")),
     loadQuestName: parseLoadQuestName(params.get("loadQuest")),
     gotoScene: parseGotoScene(params.get("goto")),
+    viewLogs: normalizeRoomId(params.get("viewLogs")),
   };
 }
 

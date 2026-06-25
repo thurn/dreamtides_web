@@ -46,6 +46,7 @@ Each room lives at `rooms/<roomId>` with the following shape:
 - `battleState` — the shared battle slice, or `null` between battles.
 - `presence` — `clientId` -> `{ connected, lastSeenAt }`.
 - `actionLog` — bounded recent action history for diagnostics.
+- `logs` — bounded mirror of the room's quest log, for the `?viewLogs=` viewer.
 
 ### Battle Slot
 
@@ -74,6 +75,18 @@ shared `actionLog`. Battle entries use the action key `battle:<KIND>`
 (for example `battle:PLAY_CARD`, `battle:UNDO`, `battle:RESET`,
 `battle:CLEAR_FORCED_RESULT`). The log is capped at 50 entries and
 pruned via a transaction.
+
+### Quest Log Mirror
+
+Every `logEvent` entry for a room (each already stamped with its `gameId`) is
+mirrored into `rooms/<roomId>/logs` by the sink the room gate installs
+(`createRoomLogSink` in `src/multiplayer/room-log-service.ts`). Each child is a
+push-keyed, single-line JSON string of one entry; storing entries as strings
+keeps arbitrary entry shapes safe from Realtime Database's forbidden-key,
+dropped-empty, and numeric-array-coercion rules. Writes are batched and the node
+is pruned to the newest `ROOM_LOG_LIMIT` (2000) entries. This persists a run's
+log past the playing tab closing so `?viewLogs=<roomId>` can read it back; see
+`docs/quest_prototype/url_parameters.md`.
 
 ## Local Testing
 
