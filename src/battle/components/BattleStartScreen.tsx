@@ -3,11 +3,11 @@ import "./battle-start.css";
 import type { BattleInit } from "../types";
 import type { CardData } from "../../types/cards";
 import { CardView } from "../../components/CardView";
-import { formatTypeLine } from "../../components/card-text";
 import { RulesText } from "../../components/RulesText";
 import { EssenceValue } from "../../components/EssenceValue";
 import { dreamcallerImageSrc } from "../../components/DreamcallerPortrait";
 import { dreamscapeSceneUrl } from "../../atlas/atlas-display";
+import { assetUrl } from "../../runtime/asset-url";
 import { logEvent, logEventOnce } from "../../logging";
 
 /** The fixed authoring canvas the Battle Start composition is laid out against. */
@@ -19,7 +19,7 @@ const CANVAS_HEIGHT = 1080;
  * are derived from the index so the field is deterministic (no `Math.random`)
  * and stable across re-renders.
  */
-const MOTES = Array.from({ length: 26 }, (_unused, i) => ({
+const MOTES = Array.from({ length: 24 }, (_unused, i) => ({
   left: (i * 53) % 100,
   top: (i * 71) % 100,
   size: 1.5 + ((i * 7) % 5) * 0.7,
@@ -28,12 +28,57 @@ const MOTES = Array.from({ length: 26 }, (_unused, i) => ({
 }));
 
 /**
+ * A single dreamsign in the rail: its artwork (or a glyph fallback when the
+ * image is missing) with a hover/focus tooltip carrying the name and effect. A
+ * bane dreamsign desaturates and takes a red accent so the warning reads first.
+ */
+function DreamsignIcon({
+  name,
+  effect,
+  imageName,
+  imageAlt,
+  isBane,
+}: {
+  name: string;
+  effect: string;
+  imageName: string | undefined;
+  imageAlt: string | undefined;
+  isBane: boolean;
+}) {
+  const [imageBroken, setImageBroken] = useState(false);
+  const showImage = imageName !== undefined && imageName !== "" && !imageBroken;
+  return (
+    <div className={"bs-sign" + (isBane ? " bane" : "")} tabIndex={0}>
+      {showImage ? (
+        <img
+          className="bs-sign-img"
+          src={assetUrl(`/dreamsigns/${imageName}`)}
+          alt={imageAlt ?? name}
+          onError={() => {
+            setImageBroken(true);
+          }}
+        />
+      ) : (
+        <div className="bs-sign-fallback" aria-hidden="true">
+          {isBane ? "☠" : "✦"}
+        </div>
+      )}
+      <div className="bs-sign-pop">
+        <div className="bs-sign-name">{name}</div>
+        <div className="bs-sign-rule">{effect}</div>
+      </div>
+    </div>
+  );
+}
+
+/**
  * The Battle Start screen: the opposing Dreamcaller revealed after the player
- * clicks a battle site and before hands are dealt. The enemy portrait is the
- * hero of the composition; the objectives (points to win, essence reward), the
- * Dreamcaller's ability, its signature cards, and — when it carries any — its
- * dreamsigns float around it as frosted plum chrome. "Begin Battle" hands off to
- * the playable battle.
+ * clicks a battle site and before hands are dealt. The Dreamcaller render is the
+ * hero of the composition on the left; everything else — name, ability,
+ * dreamsigns, signature cards, the battle objective (points to win, essence
+ * reward), and "Begin Battle" — lives in one compact rail on the right.
+ * Dreamsigns and signature cards are quiet thumbnails that reveal their detail
+ * on hover. "Begin Battle" hands off to the playable battle.
  *
  * The whole composition is authored against a fixed {@link CANVAS_WIDTH} ×
  * {@link CANVAS_HEIGHT} canvas and uniformly scaled to fit the viewport, so the
@@ -126,6 +171,7 @@ export function BattleStartScreen({
   );
 
   const hasDreamsigns = dreamsigns.length > 0;
+  const hasSignatureCards = signatureCards.length > 0;
   const portraitSrc = dreamcallerImageSrc(enemy.imageNumber ?? "001");
 
   function handleBegin() {
@@ -174,124 +220,121 @@ export function BattleStartScreen({
           ))}
         </div>
 
-        {/* hero portrait */}
-        {portraitBroken ? (
-          <div className="bs-figure-fallback" aria-hidden="true">
-            {enemy.name.charAt(0)}
-          </div>
-        ) : (
-          <>
-            <img
-              className="bs-figure"
-              src={portraitSrc}
-              alt={enemy.name}
-              onError={() => {
-                setPortraitBroken(true);
-              }}
-            />
-            <div className="bs-figure-tint" />
-          </>
-        )}
-
-        <div className="bs-vignette" />
-
-        {/* top: objectives */}
-        <div className="bs-top">
-          <div className="bs-eyebrow">
-            <i className="bxf bx-skull" aria-hidden="true" /> Incoming Battle
-          </div>
-          <div className="bs-objectives">
-            <div className="bs-obj">
-              <span className="bs-obj-val">
-                <span style={{ fontVariantNumeric: "tabular-nums" }}>
-                  {init.scoreToWin}
-                </span>
-                <i
-                  className="bxf bx-star-circle bs-obj-sym score"
-                  aria-hidden="true"
-                />
-              </span>
-              <div className="bs-obj-lbl">Points to Win</div>
+        {/* the Dreamcaller render — left */}
+        <div className="bs-figure-wrap">
+          {portraitBroken ? (
+            <div className="bs-figure-fallback" aria-hidden="true">
+              {enemy.name.charAt(0)}
             </div>
-            <div className="bs-obj">
-              <EssenceValue
-                amount={init.essenceReward}
-                className="bs-obj-essence"
-                data-battle-start-essence=""
+          ) : (
+            <>
+              <img
+                className="bs-figure"
+                src={portraitSrc}
+                alt={enemy.name}
+                onError={() => {
+                  setPortraitBroken(true);
+                }}
               />
-              <div className="bs-obj-lbl">Essence Reward</div>
-            </div>
-          </div>
+              <div className="bs-figure-tint" />
+            </>
+          )}
         </div>
 
-        {/* left: dreamsigns (omitted when the opponent carries none) */}
-        {hasDreamsigns && (
-          <div className="bs-col left">
-            <div className="bs-col-head">
-              <i className="bxf bx-moon" aria-hidden="true" /> Dreamsigns
-            </div>
-            <div className="bs-cards">
-              {dreamsigns.map((sign, i) => (
-                <div className="bs-sign" key={i}>
-                  <div className="bs-sign-disc">
-                    <div className="bs-sign-aura" />
-                    <i className="bxf bx-star" aria-hidden="true" />
-                  </div>
-                  <div>
-                    <div className="bs-sign-name">{sign.name}</div>
-                    <div className="bs-sign-rule">{sign.effectDescription}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        <div className="bs-scrim" />
 
-        {/* right: signature cards */}
-        <div className="bs-col right">
-          <div className="bs-col-head">
-            <i className="bxf bx-layer" aria-hidden="true" /> Signature Cards
-          </div>
-          <div className="bs-cards">
-            {signatureCards.map((card) => (
-              <div className="bs-cardrow" key={card.id}>
-                <div className="bs-card-art">
-                  <CardView card={card} hideRulesText suppressHoverHelp />
-                </div>
-                <div className="bs-card-meta">
-                  <div className="bs-card-name">{card.name}</div>
-                  <div className="bs-card-type">
-                    {formatTypeLine(card) || card.cardType}
-                    {card.rarity === "Legendary" ? " · Legendary" : ""}
-                  </div>
-                </div>
+        {/* everything else — right rail */}
+        <div className="bs-rail">
+          {/* who they are */}
+          <div className="bs-headline">
+            <h1 className="bs-name">{enemy.name}</h1>
+            {enemy.subtitle ? (
+              <div className="bs-title">{enemy.subtitle}</div>
+            ) : null}
+            <div className="bs-ability">
+              <i className="bxf bx-info-circle" aria-hidden="true" />
+              <div className="bs-ability-txt">
+                <RulesText text={enemy.abilityText} />
               </div>
-            ))}
-          </div>
-        </div>
-
-        {/* center name plate */}
-        <div className="bs-plate">
-          <h1 className="bs-name">{enemy.name}</h1>
-          {enemy.subtitle ? <div className="bs-title">{enemy.subtitle}</div> : null}
-          <div className="bs-ability">
-            <i className="bxf bx-info-circle" aria-hidden="true" />
-            <div className="bs-ability-txt">
-              <RulesText text={enemy.abilityText} />
             </div>
           </div>
-        </div>
 
-        {/* CTA */}
-        <div className="bs-cta">
-          <button
-            type="button"
-            className="bs-begin"
-            onClick={handleBegin}
-            data-battle-start-begin=""
-          >
-            <i className="bxf bx-skull" aria-hidden="true" /> Begin Battle
-          </button>
+          {/* what they bring — dreamsigns (omitted when the opponent carries none) */}
+          {hasDreamsigns && <div className="bs-rule" />}
+          {hasDreamsigns && (
+            <div className="bs-signgroup">
+              <div className="bs-caption">Dreamsigns</div>
+              <div className="bs-signs">
+                {dreamsigns.map((sign, i) => (
+                  <DreamsignIcon
+                    key={i}
+                    name={sign.name}
+                    effect={sign.effectDescription}
+                    imageName={sign.imageName}
+                    imageAlt={sign.imageAlt}
+                    isBane={sign.isBane}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* signature cards (omitted for a starter-deck opponent with none) */}
+          {hasSignatureCards && <div className="bs-rule" />}
+          {hasSignatureCards && (
+            <div className="bs-cardgroup">
+              <div className="bs-caption">Signature Cards</div>
+              <div className="bs-cards">
+                {signatureCards.map((card) => (
+                  <div className="bs-card" key={card.id}>
+                    <div className="bs-card-thumb">
+                      <CardView card={card} suppressHoverHelp />
+                    </div>
+                    <div className="bs-card-pop">
+                      <CardView card={card} suppressHoverHelp />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* the terms of this battle + the action */}
+          <div className="bs-rule" />
+
+          <div className="bs-foot">
+            <div className="bs-objective">
+              <div className="bs-stat">
+                <span className="bs-stat-val">
+                  <span style={{ fontVariantNumeric: "tabular-nums" }}>
+                    {init.scoreToWin}
+                  </span>
+                  <i
+                    className="bxf bx-star-circle bs-sym score"
+                    aria-hidden="true"
+                  />
+                </span>
+                <span className="bs-stat-lbl">to win</span>
+              </div>
+              <div className="bs-obj-div" />
+              <div className="bs-stat">
+                <EssenceValue
+                  amount={init.essenceReward}
+                  className="bs-stat-essence"
+                  data-battle-start-essence=""
+                />
+                <span className="bs-stat-lbl">reward</span>
+              </div>
+            </div>
+            <button
+              type="button"
+              className="bs-begin"
+              onClick={handleBegin}
+              data-battle-start-begin=""
+            >
+              <i className="bxf bx-skull" aria-hidden="true" /> Begin Battle
+            </button>
+          </div>
         </div>
       </div>
     </div>
