@@ -73,8 +73,7 @@ In portrait the figure moves to the top and the text column flows beneath it.
 - **Any opponent dreamsign** (when present) → the full dreamsign card on hover.
 
 **Redesign notes.** This screen is mostly presentational and translates to mobile
-relatively cleanly (figure on top, scouting info + a single big "Begin Battle"
-button below). The key content to preserve is the *scouting* function — ability,
+relatively cleanly. The key content to preserve is the *scouting* function — ability,
 signature cards, dreamsigns, and the win/reward stakes must all be legible before
 the player commits, and the card/dreamsign detail currently locked behind hover
 needs a tap equivalent.
@@ -362,8 +361,8 @@ narrow screen.
 battlefield, in the stack, or in a zone browser — opens a context menu of actions
 for that specific card. It is primarily a **developer/manual-play** tool: it
 exposes direct moves and edits that bypass the normal rules flow, useful for
-setting up board states and debugging. In a mobile redesign this belongs with the
-developer tooling rather than the player-facing board.
+setting up board states and debugging. In a mobile redesign this might be a long
+press activation or other secondary/hidden gesture.
 
 **Layout.** A small floating menu anchored at the cursor, headed by the **card
 name** and its current location (e.g. "Nexus Wayfinder — PLAYER · HAND"), then a
@@ -380,11 +379,6 @@ list of actions grouped by kind:
 
 **What you can click:** every row is an action; rows marked **›** open a submenu.
 Clicking outside the menu dismisses it.
-
-**Redesign notes.** Because this is a manual/debug surface, it should not appear in
-the player-facing battle on mobile. If a player-facing card action menu is wanted
-(e.g. "play to front / back"), it should be a deliberately small, curated subset —
-the current menu's full move/edit list is developer tooling.
 
 ---
 
