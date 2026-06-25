@@ -335,8 +335,11 @@ export function createBattleInit(input: CreateBattleInitInput): BattleInit {
 
   // The opponent's signature cards: the three deck cards most representative of
   // its Dreamcaller's ability, shown on the Battle Start screen. Resolved from
-  // the finalized enemy deck (whose cards are already non-starter) back to the
-  // catalog `CardData` so the selection can weigh rules text, rarity, and cost.
+  // the finalized enemy deck back to the catalog `CardData` so the selection can
+  // weigh rules text, rarity, and cost. `selectSignatureCards` excludes
+  // Legendary cards and prefers non-starter ones, falling back to starters only
+  // when the deck has too few non-starter cards (e.g. the AI's all-starter deck
+  // in `aiMode`).
   const signatureCandidates = enemyDeckDefinition
     .map((definition) => cardDatabase.get(definition.cardNumber))
     .filter((card): card is CardData => card !== undefined);

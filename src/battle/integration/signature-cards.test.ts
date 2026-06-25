@@ -78,7 +78,9 @@ describe("selectSignatureCards", () => {
     expect(picks[0]?.score).toBeGreaterThan(0);
   });
 
-  it("never selects starter cards", () => {
+  it("prefers a non-starter card over a more on-theme starter", () => {
+    // The starter shares the ability keyword (higher raw score) but a non-starter
+    // is available, so the non-starter is preferred and fills the single slot.
     const [termA] = plainGlossaryTerms();
     const abilityText = `When you ${termA}, gain an advantage.`;
     const starter = makeCard({
@@ -95,11 +97,63 @@ describe("selectSignatureCards", () => {
     const picks = selectSignatureCards({
       abilityText,
       candidates: [starter, nonStarter],
+      count: 1,
+    });
+
+    expect(picks.map((pick) => pick.cardId)).toEqual([nonStarter.id]);
+  });
+
+  it("falls back to starter cards when there are too few non-starter cards", () => {
+    // An all-starter deck (the AI's piloted deck): starters are eligible so the
+    // signature set is populated rather than empty, ranked by representativeness.
+    const [termA] = plainGlossaryTerms();
+    const onTheme = makeCard({
+      cardNumber: 1,
+      isStarter: true,
+      rarity: "Starter",
+      renderedText: `When you ${termA}, draw a card.`,
+    });
+    const offTheme = makeCard({
+      cardNumber: 2,
+      isStarter: true,
+      rarity: "Starter",
+      renderedText: "A plain starter with no shared keyword.",
+    });
+
+    const picks = selectSignatureCards({
+      abilityText: `When you ${termA}, gain an advantage.`,
+      candidates: [offTheme, onTheme],
       count: 3,
     });
 
-    expect(picks.map((pick) => pick.cardId)).not.toContain(starter.id);
-    expect(picks.map((pick) => pick.cardId)).toContain(nonStarter.id);
+    const ids = picks.map((pick) => pick.cardId);
+    expect(ids).toContain(onTheme.id);
+    expect(ids).toContain(offTheme.id);
+    // The on-theme starter outranks the off-theme one.
+    expect(ids[0]).toBe(onTheme.id);
+  });
+
+  it("never selects Legendary cards", () => {
+    const legendary = makeCard({
+      cardNumber: 1,
+      rarity: "Legendary",
+      energyCost: 6,
+      spark: 6,
+      renderedText: "A singular threat.",
+    });
+    const plain = makeCard({
+      cardNumber: 2,
+      renderedText: "A modest card.",
+    });
+
+    const picks = selectSignatureCards({
+      abilityText: "A calm and wordless presence.",
+      candidates: [legendary, plain],
+      count: 3,
+    });
+
+    expect(picks.map((pick) => pick.cardId)).not.toContain(legendary.id);
+    expect(picks.map((pick) => pick.cardId)).toContain(plain.id);
   });
 
   it("deduplicates repeated cards and caps the result at the requested count", () => {
@@ -126,10 +180,10 @@ describe("selectSignatureCards", () => {
 
   it("falls back to the deck's marquee cards when no keyword is shared", () => {
     // An ability with no glossary keyword: every score is zero, so the
-    // tie-breakers (rarity, then energy cost, then spark) decide the order.
-    const legendaryBomb = makeCard({
+    // tie-breakers (character over event, then energy cost, then spark) decide
+    // the order. Both candidates are characters here, so cost/spark break it.
+    const bigThreat = makeCard({
       cardNumber: 1,
-      rarity: "Legendary",
       energyCost: 6,
       spark: 6,
       renderedText: "A singular threat.",
@@ -143,12 +197,40 @@ describe("selectSignatureCards", () => {
 
     const picks = selectSignatureCards({
       abilityText: "A calm and wordless presence.",
-      candidates: [cheapCard, legendaryBomb],
+      candidates: [cheapCard, bigThreat],
       count: 1,
     });
 
-    expect(picks[0]?.cardId).toBe(legendaryBomb.id);
+    expect(picks[0]?.cardId).toBe(bigThreat.id);
     expect(picks[0]?.matchedTerms).toEqual([]);
+  });
+
+  it("prefers a character over an event when neither shares a keyword", () => {
+    // The zero-score fallback should surface a threat the opponent fields rather
+    // than a stray removal event, even when the event is the bigger card.
+    const removalEvent = makeCard({
+      cardNumber: 1,
+      cardType: "Event",
+      subtype: "Event",
+      energyCost: 5,
+      spark: null,
+      renderedText: "A wordless removal spell.",
+    });
+    const character = makeCard({
+      cardNumber: 2,
+      cardType: "Character",
+      energyCost: 2,
+      spark: 2,
+      renderedText: "A quiet creature.",
+    });
+
+    const picks = selectSignatureCards({
+      abilityText: "A calm and wordless presence.",
+      candidates: [removalEvent, character],
+      count: 1,
+    });
+
+    expect(picks[0]?.cardId).toBe(character.id);
   });
 
   it("is deterministic for the same deck and ability", () => {

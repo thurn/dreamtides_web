@@ -58,13 +58,21 @@ export function glossaryTermsIn(text: string): Set<string> {
 /** Higher is splashier; used only as a tie-breaker after the keyword score. */
 function rarityRank(rarity: Rarity | undefined): number {
   switch (rarity) {
-    case "Legendary":
-      return 2;
     case "Special":
       return 1;
     default:
       return 0;
   }
+}
+
+/**
+ * Character-over-event preference, used as a tie-breaker after the keyword
+ * score. When two cards are equally (or un-)representative of the ability, the
+ * character is surfaced ahead of the event, so the zero-score fallback shows a
+ * threat the opponent fields rather than a stray removal spell.
+ */
+function cardTypeRank(cardType: CardData["cardType"]): number {
+  return cardType === "Character" ? 1 : 0;
 }
 
 /**
@@ -83,35 +91,51 @@ function rarityRank(rarity: Rarity | undefined): number {
  *      one every card carries. A card's score is the summed idf of the keywords
  *      it shares with the ability.
  *
- * Cards are then ranked by score, breaking ties toward the deck's marquee cards
- * (rarity, then energy cost, then spark) and finally by `cardId` for a stable,
- * reproducible result. When an ability references no glossary keyword (or shares
- * none with the deck) every score is zero and the tie-breakers alone surface the
- * deck's biggest threats — a reasonable "here is what they bring" fallback.
+ * Cards are then ranked by score, breaking ties toward a character over an
+ * event (so the fallback is a threat rather than a stray removal spell), then
+ * toward the deck's marquee cards (rarity, then energy cost, then spark), and
+ * finally by `cardId` for a stable, reproducible result. When an ability
+ * references no glossary keyword (or shares none with the deck) every score is
+ * zero and the tie-breakers alone surface the deck's biggest threats — a
+ * reasonable "here is what they bring" fallback.
  *
- * Starter cards are never eligible: callers pass an already non-starter deck,
- * and any starter that slips through is filtered here as a guard.
+ * Legendary cards are never eligible — the signature set is the deck's
+ * representative cards, not its bombs. Non-starter cards are preferred; starters
+ * are eligible only to fill the set when there are too few non-starter cards
+ * (an opponent whose battle deck is the AI's all-starter deck still gets a
+ * signature set rather than an empty one).
  */
 export function selectSignatureCards(args: {
   /** The opponent Dreamcaller's ability text (`renderedText`). */
   abilityText: string;
-  /** The opponent's deck cards. Deduplicated and starter-filtered internally. */
+  /** The opponent's deck cards. Deduplicated and filtered internally. */
   candidates: readonly CardData[];
   /** How many signature cards to return (default 3). */
   count?: number;
 }): SignatureCardSelection[] {
   const { abilityText, candidates, count = 3 } = args;
 
-  // Distinct, non-starter candidates keyed by stable UUID. A deck can hold the
-  // same card more than once; the signature set should not.
-  const distinct: CardData[] = [];
+  // Distinct candidates keyed by stable UUID (a deck can hold the same card more
+  // than once; the signature set should not), partitioned so non-starter cards
+  // can be preferred. Legendary cards are excluded outright.
+  const distinctNonStarter: CardData[] = [];
+  const distinctStarter: CardData[] = [];
   const seen = new Set<string>();
   for (const card of candidates) {
-    if (card.isStarter) continue;
+    if (card.rarity === "Legendary") continue;
     if (seen.has(card.id)) continue;
     seen.add(card.id);
-    distinct.push(card);
+    if (card.isStarter) {
+      distinctStarter.push(card);
+    } else {
+      distinctNonStarter.push(card);
+    }
   }
+  // Prefer non-starter cards; dip into starters only to reach `count`.
+  const distinct =
+    distinctNonStarter.length >= count
+      ? distinctNonStarter
+      : [...distinctNonStarter, ...distinctStarter];
 
   const abilityTerms = glossaryTermsIn(abilityText);
 
@@ -150,6 +174,8 @@ export function selectSignatureCards(args: {
 
   scored.sort((a, b) => {
     if (b.score !== a.score) return b.score - a.score;
+    const cardType = cardTypeRank(b.card.cardType) - cardTypeRank(a.card.cardType);
+    if (cardType !== 0) return cardType;
     const rarity = rarityRank(b.card.rarity) - rarityRank(a.card.rarity);
     if (rarity !== 0) return rarity;
     const energy = (b.card.energyCost ?? 0) - (a.card.energyCost ?? 0);
