@@ -270,10 +270,11 @@ export function BattleStartScreen({
           {hasAbility && (
             <div className="bs-ability">
               <div className="bs-caption">Ability</div>
-              <div className="bs-ability-txt">
-                <RulesText text={enemy.abilityText} />
-              </div>
-              {!dreamcallerAbilityActive && (
+              {dreamcallerAbilityActive ? (
+                <div className="bs-ability-txt">
+                  <RulesText text={enemy.abilityText} />
+                </div>
+              ) : (
                 <div className="bs-ability-inactive">
                   Opponent dreamcaller ability is not active.
                 </div>
