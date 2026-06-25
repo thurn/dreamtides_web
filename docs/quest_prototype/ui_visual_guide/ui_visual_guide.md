@@ -365,6 +365,14 @@ close button** in the top-right that completes/leaves the site and returns to th
 Dreamscape; the exceptions are noted per site. The **Battle** site is documented
 in the companion [Battle UI Visual Guide](battle_ui_visual_guide.md).
 
+**Regular vs. enhanced.** When a site appears in its guide's **home dreamscape**
+it is *enhanced* (the guide's [Home
+Specialty](../../quests/quests.md#home-specialties)), and the screen renders
+differently from the standard, non-home version. Each guide site below shows both
+its regular and its enhanced capture and calls out the visible difference. The
+guideless sites — **Battle**, **Draft**, **Essence**, and **Dreamsign Reward** —
+are never enhanced and have only one form.
+
 ## Draft
 
 ![Draft site — a four-card pick](images/06-draft-site.png)
@@ -423,10 +431,19 @@ shows the running essence balance (and discount, when one applies). The red "✕
 
 **What you can hover:** **each ware card** → an enlarged card preview.
 
+**Enhanced (Tumbleleaf Village, Tobias's home).**
+
+![Card Shop, enhanced](images/08e-card-shop-enhanced.png)
+
+In Tobias's home dreamscape the shop is enhanced: the **restock tile reads
+"Restock Free"** instead of charging essence, and the wares are drawn from the
+player's Dreamcaller signature tide (so the offered cards differ, often more
+strongly on-theme). The layout is otherwise identical to the regular shop.
+
 **Redesign notes.** The screen carries several pieces of state at once: the
 price/sale tags, the affordability of each card (whether the player can afford
-it), and the once-only restock. Card detail is hover-only, with no touch
-equivalent.
+it), and the once-only restock (which is free in the enhanced form). Card detail
+is hover-only, with no touch equivalent.
 
 ## Dreamsign Market
 
@@ -442,6 +459,14 @@ the same purple **"Buy N⬢"** price button and sale tags.
 **What you can click / hover:** the same as the Card Shop — **Buy** a dreamsign,
 **restock**, **close**; hover a tile for its detail. A purchased dreamsign animates
 into the HUD dreamsign row.
+
+**Enhanced (Pharaoh's Gate, Amunet's home).**
+
+![Dreamsign Market, enhanced](images/09e-dreamsign-market-enhanced.png)
+
+In Amunet's home dreamscape the **restock tile reads "Restock Free"** (the player
+may refresh the dreamsign choices once at no cost); the layout is otherwise the
+same as the regular market.
 
 **Redesign notes.** Same as the Card Shop. The one extra wrinkle is the
 dreamsign cap (12): a market purchase that would exceed it routes through the
@@ -471,6 +496,15 @@ all detail is on hover), each with a purple **"Take"** button beneath it. The re
 
 **What you can hover:** **each dreamsign tile** → its hover card (larger art, name,
 full effect text) — the only way to read what each offered dreamsign does.
+
+**Enhanced (Winterwake Fjords, Sigrún's home).**
+
+![Dreamsign Revelation, enhanced](images/13e-dreamsign-revelation-enhanced.png)
+
+In Sigrún's home dreamscape the offer is enhanced to **four dreamsigns** to choose
+from (rather than the standard three, or the single take-it-or-leave-it offer the
+site can present elsewhere), tailored to the player's deck. The row layout is the
+same, just wider.
 
 **Redesign notes.** Because the tiles are art-only, the only way to read what each
 offered dreamsign does is the hover card, which has no touch equivalent. The offer
@@ -509,6 +543,15 @@ button commits the choice.
   essence, plays a forge-flash animation, marks the card transfigured).
 - **Close (✕)** — declines and returns to the Dreamscape.
 
+**Enhanced (Frostforge, Durgan's home).**
+
+![Transfiguration, enhanced](images/11e-transfiguration-enhanced.png)
+
+In Durgan's home dreamscape the heading becomes **"Pick any card to reforge."** and
+phase 1 shows the player's **entire deck** (in larger card tiles) rather than a
+random four, letting the player choose any card — and then any applicable form — to
+transfigure.
+
 **Redesign notes.** This is a two-phase flow (pick a card, then pick a form)
 rather than a single decision. Each card is *shown as its transfigured self* with a
 tint and emblem so the player previews the result; that preview, plus each form's
@@ -535,6 +578,14 @@ red "✕" close).
 - **Close (✕)** — declines and returns to the Dreamscape.
 
 **What you can hover:** **each candidate card** → an enlarged preview.
+
+**Enhanced (Hope's End, Deacon Holt's home).**
+
+![Duplication, enhanced](images/12e-duplication-enhanced.png)
+
+In Deacon's home dreamscape the candidate set expands from a small random hand to
+the player's **entire deck** (shown as a multi-row grid, with an "Any card" label),
+so the player can copy any card they own.
 
 **Redesign notes.** This is a single-select-then-confirm over a small card set.
 The enhanced "whole deck" variant widens that set from a fixed row to the entire
@@ -564,6 +615,14 @@ cards"** confirm button sits top-right beside the red "✕" close.
 - **Purge cards** — spends the essence and permanently removes the selected cards
   (they play a dissolve animation), then returns to the Dreamscape.
 - **Close (✕)** — leaves without purging.
+
+**Enhanced (Tsukiren, Master Takeshi's home).**
+
+![Purge, enhanced](images/10e-purge-enhanced.png)
+
+In Master Takeshi's home dreamscape the top bar gains an **"Enhanced — N% off"**
+chip and the per-card prices are discounted accordingly (the "next card" cost in
+the bar drops), making deck-thinning cheap in his home.
 
 **Redesign notes.** This is essentially the deck viewer in a selection mode plus a
 running cost meter. The full-deck grid, the escalating per-card price, the running
@@ -599,6 +658,13 @@ A developer **reroll** / **force-archetype** control sits in the top-right.
 > **Note:** if encounter generation fails, the site shows a "The counter is bare
 > tonight. The road remains open." fallback with a single **Walk away** button.
 
+**Enhanced (Wilderveil, Aldric's home).** The merchant screen renders the **same
+layout** whether or not the site is enhanced — the encounter generator does not yet
+key off the home/enhanced flag, so there is no distinct enhanced screen to capture.
+Aldric's home specialty (bigger, more curated rewards) is described in
+[quests.md](../../quests/quests.md#home-specialties) but is not currently reflected
+in this UI.
+
 **Redesign notes.** Two rich, deck-tuned offers side-by-side make for a wide
 layout, each offer bundling a title, a description, several cards/grants, and an
 accept action. Some offers add an extra step via the choice sub-menu. The
@@ -619,6 +685,15 @@ still taking shape. Travel on for now — its full encounter arrives soon." A si
 **Continue** button completes the site and returns to the Dreamscape.
 
 **What you can click:** **Continue** — the only control.
+
+**Enhanced (each guide's home dreamscape).**
+
+![Placeholder site, enhanced](images/16e-stub-enhanced.png)
+
+In the resident guide's home dreamscape the placeholder adds a purple **"⭐
+Enhanced"** badge beneath the site name; everything else (the dialog, the
+placeholder text, the Continue button) is unchanged. This badge is the only
+enhanced-vs-regular difference these stubs render today.
 
 **Redesign notes.** These are stubs; their real encounters (a reward-with-a-cost
 offer, a push-your-luck wager, a choice of time-based effects) are described in

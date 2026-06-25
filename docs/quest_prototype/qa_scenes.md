@@ -56,11 +56,17 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 | `duplication`            | Duplication site                                                |
 | `duplication-enhanced`   | Duplication site, enhanced (whole deck offered)                 |
 | `purge`                  | Purge site                                                       |
+| `purge-enhanced`         | Purge site, enhanced (discounted removals)                      |
 | `shop`                   | Shop site                                                        |
+| `shop-enhanced`          | Shop site, enhanced (free restock, signature-tide cards)        |
 | `dreamsignmarket`        | Dreamsign Market site                                           |
+| `dreamsignmarket-enhanced` | Dreamsign Market site, enhanced (free restock)                |
 | `dreamaugury`            | Dream Augury site                                               |
+| `dreamaugury-enhanced`   | Dream Augury site, enhanced flag (same UI as regular)           |
 | `tempting`               | Tempting Offer site                                             |
+| `tempting-enhanced`      | Tempting Offer site, enhanced (Enhanced badge)                  |
 | `dreamsign-revelation`   | Dreamsign Revelation site                                       |
+| `dreamsign-revelation-enhanced` | Dreamsign Revelation site, enhanced (four choices)        |
 | `questcomplete`          | Quest victory end screen (completion stats + final-deck reveal) |
 | `questfailed`            | Quest defeat end screen (failure summary)                       |
 
