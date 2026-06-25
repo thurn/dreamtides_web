@@ -80,10 +80,7 @@ describe("applyCardStatOverride", () => {
 
     expect(applyCardStatOverride(card, null)).toBe(card);
     expect(applyCardStatOverride(card, undefined)).toBe(card);
-    expect(applyCardStatOverride(card, {})).toMatchObject({
-      energyCost: 5,
-      spark: 2,
-    });
+    expect(applyCardStatOverride(card, {})).toBe(card);
   });
 });
 

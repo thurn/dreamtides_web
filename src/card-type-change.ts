@@ -100,12 +100,19 @@ export function applyDeckEntryCardModification<
 }
 
 /** Returns a card-like value with absolute debug stat overrides applied.
- *  Absent keys leave the corresponding stat unchanged. */
+ *  Absent keys leave the corresponding stat unchanged. An explicit override
+ *  value (e.g. `energyCost: 0`) replaces even a `null` base stat. Returns the
+ *  original `card` reference unchanged when there is nothing to apply. */
 export function applyCardStatOverride<T extends CardStatFields>(
   card: T,
   statOverride: { energyCost?: number; spark?: number } | null | undefined,
 ): T {
-  if (statOverride == null) return card;
+  if (
+    statOverride == null ||
+    (statOverride.energyCost === undefined && statOverride.spark === undefined)
+  ) {
+    return card;
+  }
   return {
     ...card,
     ...(statOverride.energyCost !== undefined
