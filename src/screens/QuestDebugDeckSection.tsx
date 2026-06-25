@@ -452,8 +452,16 @@ export default function QuestDebugDeckSection() {
     <div className="space-y-3">
       <AddCardPicker
         cardDatabase={cardDatabase}
-        onAdd={(cardNumber) => mutations.addCard(cardNumber, SOURCE)}
-        onAddBane={(cardNumber) => mutations.addBaneCard(cardNumber, SOURCE)}
+        onAdd={(cardNumber) => {
+          // The composed, Firebase-safe deck mutations key off the catalog
+          // UUID, so resolve cardNumber -> card.id before dispatching.
+          const card = cardDatabase.get(cardNumber);
+          if (card) mutations.addCardById(card.id, SOURCE);
+        }}
+        onAddBane={(cardNumber) => {
+          const card = cardDatabase.get(cardNumber);
+          if (card) mutations.addBaneCardById(card.id, SOURCE);
+        }}
       />
 
       {state.deck.length === 0 ? (
@@ -523,7 +531,7 @@ export default function QuestDebugDeckSection() {
                   <SmallButton
                     label="Remove"
                     tone="danger"
-                    onClick={() => mutations.removeCard(entry.entryId, SOURCE)}
+                    onClick={() => mutations.removeDeckEntry(entry.entryId, SOURCE)}
                   />
                 </div>
                 {expanded && (
