@@ -201,6 +201,33 @@ export interface QuestMutations {
    * test/demo mutation stubs omit it.
    */
   loadQuestState?: (state: QuestState, source: string) => void;
+  /** Debug-only: set `essenceCap` to `value`; current essence reclamps. */
+  setEssenceCap?: (value: number, source: string) => void;
+  /** Debug-only: set `maxDreamsigns` to `value`. */
+  setMaxDreamsigns?: (value: number, source: string) => void;
+  /** Debug-only: set `completionLevel` to `value`. */
+  setCompletionLevel?: (value: number, source: string) => void;
+  /** Debug-only: set or clear absolute stat overrides on a deck entry. */
+  setDeckEntryStatOverride?: (
+    entryId: string,
+    statOverride: { energyCost?: number; spark?: number } | null,
+    source: string,
+  ) => void;
+  /** Debug-only: replace (not merge) a deck entry's keyword modification, or
+   *  clear it with `null`. */
+  setDeckEntryKeywords?: (
+    entryId: string,
+    keywordModification: CardKeywordModification | null,
+    source: string,
+  ) => void;
+  /** Debug-only: replace or clear a deck entry's type/subtype override. */
+  setDeckEntryTypeChange?: (
+    entryId: string,
+    typeChange: CardTypeChange | null,
+    source: string,
+  ) => void;
+  /** Debug-only: set the `isBane` flag on the dreamsign at `index`. */
+  setDreamsignIsBane?: (index: number, isBane: boolean, source: string) => void;
   resetQuest: () => void;
 
   // ---- Dream Augury effect plumbing (Wave 1) ----

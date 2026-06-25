@@ -3706,4 +3706,155 @@ describe("MultiplayerQuestProvider", () => {
     expect(runtime?.kind).toBe("shop");
     expect(runtime?.kind === "shop" ? runtime.rerollCount : null).toBe(1);
   });
+
+  it("setDeckEntryStatOverride writes only the targeted entry and clears it", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      deck: [
+        { entryId: "deck-1", cardNumber: 101, transfiguration: null, isBane: false },
+        { entryId: "deck-2", cardNumber: 102, transfiguration: null, isBane: false },
+      ],
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    const setOverride = captured[captured.length - 1]?.mutations
+      .setDeckEntryStatOverride;
+    expect(setOverride).toBeDefined();
+
+    setOverride!("deck-2", { energyCost: 0, spark: 9 }, "test");
+    const afterSet = latestRoomTransactionUpdater()?.(session.room);
+    expect(afterSet?.questState?.deck[0]).not.toHaveProperty("statOverride");
+    expect(afterSet?.questState?.deck[1]?.statOverride).toEqual({
+      energyCost: 0,
+      spark: 9,
+    });
+    expect(afterSet?.metadata.updatedAt).not.toBe(session.room.metadata.updatedAt);
+
+    setOverride!("deck-2", null, "test");
+    const afterClear = latestRoomTransactionUpdater()?.(afterSet as MultiplayerRoom);
+    expect(afterClear?.questState?.deck[1]).not.toHaveProperty("statOverride");
+  });
+
+  it("scalar debug setters update maxDreamsigns, completionLevel, and essenceCap", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      essence: 400,
+      essenceCap: 500,
+      maxDreamsigns: 12,
+      completionLevel: 0,
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    const mutations = captured[captured.length - 1]?.mutations;
+    expect(mutations).toBeDefined();
+    expect(mutations?.setMaxDreamsigns).toBeDefined();
+    expect(mutations?.setCompletionLevel).toBeDefined();
+    expect(mutations?.setEssenceCap).toBeDefined();
+
+    mutations?.setMaxDreamsigns?.(6, "test");
+    expect(
+      latestRoomTransactionUpdater()?.(session.room)?.questState?.maxDreamsigns,
+    ).toBe(6);
+
+    mutations?.setCompletionLevel?.(4, "test");
+    expect(
+      latestRoomTransactionUpdater()?.(session.room)?.questState?.completionLevel,
+    ).toBe(4);
+
+    // essence (400) > new cap (250), so essence reclamps to the cap.
+    mutations?.setEssenceCap?.(250, "test");
+    const afterCap = latestRoomTransactionUpdater()?.(session.room);
+    expect(afterCap?.questState?.essenceCap).toBe(250);
+    expect(afterCap?.questState?.essence).toBe(250);
+  });
+
+  it("setDreamsignIsBane flips the bane flag at the index", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      dreamsigns: [
+        makeDreamsign("dreamsign-1", "Dreamsign One"),
+        makeDreamsign("dreamsign-2", "Dreamsign Two"),
+      ],
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    const setBane = captured[captured.length - 1]?.mutations.setDreamsignIsBane;
+    expect(setBane).toBeDefined();
+
+    setBane!(1, true, "test");
+    const next = latestRoomTransactionUpdater()?.(session.room);
+    expect(next?.questState?.dreamsigns[0]?.isBane).toBe(false);
+    expect(next?.questState?.dreamsigns[1]?.isBane).toBe(true);
+
+    // Out-of-range index no-ops.
+    setBane!(9, true, "test");
+    expect(latestRoomTransactionUpdater()?.(session.room)).toBe(session.room);
+  });
+
+  it("debug stat-override edit preserves the non-null dreamcaller invariant", () => {
+    const captured: QuestContextValue[] = [];
+    const questState: QuestState = {
+      ...createDefaultState(),
+      dreamcaller: {
+        id: "caller-1",
+        name: "Mira of Lanterns",
+        title: "Keeper of the Threshold Flame",
+        renderedText: "First dreamcaller.",
+        imageNumber: "0009",
+        startingEssence: 235,
+      },
+      deck: [
+        { entryId: "deck-1", cardNumber: 101, transfiguration: null, isBane: false },
+      ],
+    };
+    const session = makeSession(questState);
+    mount(
+      <MultiplayerQuestProvider
+        database={database}
+        session={session}
+        questContent={makeQuestContent()}
+      >
+        <CaptureQuest onQuest={(quest) => captured.push(quest)} />
+      </MultiplayerQuestProvider>,
+    );
+
+    captured[captured.length - 1]?.mutations.setDeckEntryStatOverride!(
+      "deck-1",
+      { spark: 3 },
+      "test",
+    );
+    const next = latestRoomTransactionUpdater()?.(session.room);
+    expect(next?.questState?.dreamcaller).not.toBeNull();
+    expect(next?.questState?.deck[0]?.statOverride).toEqual({ spark: 3 });
+  });
 });

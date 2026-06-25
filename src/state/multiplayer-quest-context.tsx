@@ -3566,6 +3566,367 @@ export function MultiplayerQuestProvider({
     });
   }, []);
 
+  const setEssenceCap = useCallback((value: number, source: string) => {
+    const current = currentRef.current;
+    const now = new Date().toISOString();
+    const before = {
+      essenceCap: current.state.essenceCap,
+      essence: current.state.essence,
+    };
+    logEvent("quest_debug_edit", {
+      target: "questState",
+      field: "essenceCap",
+      before: before.essenceCap,
+      after: value,
+      source,
+    });
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            essenceCap: value,
+            essence: clampEssence(room.questState.essence, value),
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+        };
+      },
+    });
+  }, []);
+
+  const setMaxDreamsigns = useCallback((value: number, source: string) => {
+    const current = currentRef.current;
+    const now = new Date().toISOString();
+    logEvent("quest_debug_edit", {
+      target: "questState",
+      field: "maxDreamsigns",
+      before: current.state.maxDreamsigns,
+      after: value,
+      source,
+    });
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            maxDreamsigns: value,
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+        };
+      },
+    });
+  }, []);
+
+  const setCompletionLevel = useCallback((value: number, source: string) => {
+    const current = currentRef.current;
+    const now = new Date().toISOString();
+    logEvent("quest_debug_edit", {
+      target: "questState",
+      field: "completionLevel",
+      before: current.state.completionLevel,
+      after: value,
+      source,
+    });
+    writeRoomTransaction({
+      database: current.database,
+      roomId: current.session.roomId,
+      updater: (room) => {
+        if (room === null || room.questState === null) {
+          return room ?? undefined;
+        }
+        return {
+          ...room,
+          questState: {
+            ...room.questState,
+            completionLevel: value,
+          },
+          metadata: {
+            ...room.metadata,
+            updatedAt: now,
+          },
+        };
+      },
+    });
+  }, []);
+
+  const setDeckEntryStatOverride = useCallback(
+    (
+      entryId: string,
+      statOverride: { energyCost?: number; spark?: number } | null,
+      source: string,
+    ) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      const existing = current.state.deck.find(
+        (candidate) => candidate.entryId === entryId,
+      );
+      logEvent("quest_debug_edit", {
+        target: "deckEntry",
+        field: "statOverride",
+        entryId,
+        cardNumber: existing?.cardNumber ?? null,
+        before: existing?.statOverride ?? null,
+        after: statOverride,
+        source,
+      });
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          const entry = room.questState.deck.find(
+            (candidate) => candidate.entryId === entryId,
+          );
+          if (entry === undefined) {
+            return room;
+          }
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              deck: room.questState.deck.map((candidate) => {
+                if (candidate.entryId !== entryId) {
+                  return candidate;
+                }
+                if (statOverride === null) {
+                  const { statOverride: _dropped, ...rest } = candidate;
+                  return rest;
+                }
+                return { ...candidate, statOverride };
+              }),
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "setDeckEntryStatOverride",
+                source,
+                summary: {
+                  entryId,
+                  cardNumber: entry.cardNumber,
+                  statOverride,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
+  const setDeckEntryKeywords = useCallback(
+    (
+      entryId: string,
+      keywordModification: CardKeywordModification | null,
+      source: string,
+    ) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      const existing = current.state.deck.find(
+        (candidate) => candidate.entryId === entryId,
+      );
+      logEvent("quest_debug_edit", {
+        target: "deckEntry",
+        field: "keywordModification",
+        entryId,
+        cardNumber: existing?.cardNumber ?? null,
+        before: existing?.keywordModification ?? null,
+        after: keywordModification,
+        source,
+      });
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          const entry = room.questState.deck.find(
+            (candidate) => candidate.entryId === entryId,
+          );
+          if (entry === undefined) {
+            return room;
+          }
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              deck: room.questState.deck.map((candidate) => {
+                if (candidate.entryId !== entryId) {
+                  return candidate;
+                }
+                if (keywordModification === null) {
+                  const { keywordModification: _dropped, ...rest } = candidate;
+                  return rest;
+                }
+                return { ...candidate, keywordModification };
+              }),
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "setDeckEntryKeywords",
+                source,
+                summary: {
+                  entryId,
+                  cardNumber: entry.cardNumber,
+                  keywords: keywordModification,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
+  const setDeckEntryTypeChange = useCallback(
+    (entryId: string, typeChange: CardTypeChange | null, source: string) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const actionId = crypto.randomUUID();
+      const existing = current.state.deck.find(
+        (candidate) => candidate.entryId === entryId,
+      );
+      logEvent("quest_debug_edit", {
+        target: "deckEntry",
+        field: "typeChange",
+        entryId,
+        cardNumber: existing?.cardNumber ?? null,
+        before: existing?.typeChange ?? null,
+        after: typeChange,
+        source,
+      });
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          const entry = room.questState.deck.find(
+            (candidate) => candidate.entryId === entryId,
+          );
+          if (entry === undefined) {
+            return room;
+          }
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              deck: room.questState.deck.map((candidate) => {
+                if (candidate.entryId !== entryId) {
+                  return candidate;
+                }
+                if (typeChange === null) {
+                  const { typeChange: _dropped, ...rest } = candidate;
+                  return rest;
+                }
+                return { ...candidate, typeChange };
+              }),
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+            actionLog: {
+              ...(room.actionLog ?? {}),
+              [actionId]: buildActionLogEntry({
+                timestamp: now,
+                actorId: current.session.clientId,
+                action: "setDeckEntryTypeChange",
+                source,
+                summary: {
+                  entryId,
+                  cardNumber: entry.cardNumber,
+                  typeChange,
+                },
+              }),
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
+  const setDreamsignIsBane = useCallback(
+    (index: number, isBane: boolean, source: string) => {
+      const current = currentRef.current;
+      const now = new Date().toISOString();
+      const existing = current.state.dreamsigns[index];
+      logEvent("quest_debug_edit", {
+        target: "dreamsign",
+        field: "isBane",
+        index,
+        before: existing?.isBane ?? null,
+        after: isBane,
+        source,
+      });
+      writeRoomTransaction({
+        database: current.database,
+        roomId: current.session.roomId,
+        updater: (room) => {
+          if (room === null || room.questState === null) {
+            return room ?? undefined;
+          }
+          if (room.questState.dreamsigns[index] === undefined) {
+            return room;
+          }
+          return {
+            ...room,
+            questState: {
+              ...room.questState,
+              dreamsigns: room.questState.dreamsigns.map((dreamsign, i) =>
+                i === index ? { ...dreamsign, isBane } : dreamsign,
+              ),
+            },
+            metadata: {
+              ...room.metadata,
+              updatedAt: now,
+            },
+          };
+        },
+      });
+    },
+    [],
+  );
+
   const addCardById = useCallback((cardId: string, source: string) => {
     const current = currentRef.current;
     const card = resolveCardById(current.questContent.cardDatabase, cardId);
@@ -4593,6 +4954,13 @@ export function MultiplayerQuestProvider({
       bootstrapStartInBattle,
       bootstrapQaScene,
       loadQuestState,
+      setEssenceCap,
+      setMaxDreamsigns,
+      setCompletionLevel,
+      setDeckEntryStatOverride,
+      setDeckEntryKeywords,
+      setDeckEntryTypeChange,
+      setDreamsignIsBane,
       resetQuest,
       setEssence,
       changeMaxEssence,
@@ -4666,6 +5034,13 @@ export function MultiplayerQuestProvider({
       setDraftState,
       setDreamcallerSelection,
       setEssence,
+      setEssenceCap,
+      setMaxDreamsigns,
+      setCompletionLevel,
+      setDeckEntryStatOverride,
+      setDeckEntryKeywords,
+      setDeckEntryTypeChange,
+      setDreamsignIsBane,
       setFailureSummary,
       setRemainingDreamsignPool,
       setScreen,
