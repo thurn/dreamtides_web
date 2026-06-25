@@ -5,237 +5,407 @@ prototype, written to brief a designer (e.g. Claude Design) on a mobile UI
 redesign. It assumes the reader has read [quests.md](../../quests/quests.md),
 which covers *what* each system does; this document covers *how each screen
 presents and behaves today* — what is on screen, how it is laid out, and what
-every clickable or hoverable element does.
+every clickable or hoverable element does. The guiding question for each screen
+is: "what are all the things you can click or hover here, where are they, and
+what do they do?"
 
-All screenshots are captured at 1920×1080 (the prototype's design canvas) in a
-desktop/landscape layout. Most screens also have a portrait layout for mobile;
-where the portrait arrangement differs meaningfully it is called out in the text.
+Each screen below is its own top-level (`#`) section. Screenshots are captured at
+1920×1080 (the prototype's design canvas) in a desktop/landscape layout. Most
+screens also have a portrait layout for mobile; where the portrait arrangement
+differs meaningfully it is called out in the text.
 
-A note on what to ignore for redesign purposes: the prototype carries a layer of
-**developer/debug affordances** that are not part of the player-facing game.
-These include the "Load Quest" / "Create Game" room gate, the "Debug: Regenerate
-Atlas" button, the battle **Inspector** panel, and the utility "⋯" menu's
+**On developer/debug surfaces.** The prototype carries a layer of
+developer/debug affordances mixed into the player UI: the "Create Game" / "Load
+Quest" room gate, the "Debug: Regenerate Atlas" button, the battle **Inspector**
+panel, the per-card right-click context menu, and the "⋯" utility menu's
 developer entries (Pool Viewer, Package Debug, Why Cards, Why Journey, Edit Quest
-State, Save/Load/Download Log). They are flagged inline so they can be excluded
-from a player-facing design.
+State, Save/Load/Download Log). These are documented here rather than hidden, but
+they are **not part of the player-facing game**. In a mobile redesign they should
+become their own separate, dedicated screens (a developer/debug screen reachable
+from a menu), not panels and overlays crowded into the live gameplay screens.
+They are flagged inline wherever they appear.
 
 ---
 
-## Dreamcaller Selection (Quest Start)
+# Dreamcaller Selection (Quest Start)
 
 ![Dreamcaller selection screen](images/01-dreamcaller-selection.png)
 
 **What it does.** This is the first screen of a run. The player picks 1 of 3
-offered Dreamcallers; the pick performs all run bootstrap (starter deck, starting
-essence, draft/dreamsign pools, the initial atlas) and drops the player into
+offered Dreamcallers; the pick performs all run bootstrap (adds the fixed starter
+deck, grants starting essence, builds the draft and dreamsign pools from the
+Dreamcaller's tides, generates the initial atlas) and drops the player into
 Firstlight Meadow. It is the only place the Dreamcaller is chosen, and the choice
-defines the entire run.
+defines the entire run, so the screen's job is to let the player compare three
+distinct play identities at a glance and commit.
 
-> **Reaching it:** in the prototype this screen is preceded by a developer "room
-> gate" landing page (a "Dreamtides / Quest Multiplayer" splash with a **Create
-> Game** button and a **Load Quest** dropdown). That gate is multiplayer/debug
-> plumbing, not part of the intended player flow, and should be ignored for the
-> redesign.
+> **Developer surface (separate mobile screen):** in the prototype this screen is
+> preceded by a "room gate" landing page — a centered "Dreamtides / Quest
+> Multiplayer" splash with a glowing **Create Game** button and a **Load Quest ▾**
+> dropdown in the top-right. That gate is multiplayer/debug plumbing for creating
+> or rejoining a shared room. For a player-facing design it should be replaced by
+> a normal title/menu screen (or skipped entirely); the saved-run loading belongs
+> on a dedicated developer screen.
 
-**Layout.** A large gradient "Dreamtides" wordmark and a "Choose Your
-Dreamcaller" subtitle sit at the top center. Below them, three Dreamcaller cards
-are laid out in a single horizontal row (they stack vertically in portrait). The
-cards animate in from below on load.
+**Overall layout.** Centered, vertically-stacked composition on a near-black
+backdrop with a faint purple vignette:
 
-**Each Dreamcaller card, top to bottom, contains:**
+1. A large gradient **"Dreamtides"** wordmark (purple, glowing) at top center.
+2. A **"Choose Your Dreamcaller"** subtitle beneath it.
+3. A single horizontal **row of three Dreamcaller cards**, equal width, centered.
+   On load the title drops in from above, the subtitle fades in, and the three
+   cards rise into place with a slight stagger. On mobile/portrait the three
+   cards stack vertically instead of sitting in a row.
 
-- **Name** (e.g. "Seld Rakor") and **title/epithet** (e.g. "Standing Orders") in
-  the header.
-- A **portrait panel** — a tall framed image of the Dreamcaller (intended to be a
-  live 3D model with an idle animation).
-- **Rules text** — the Dreamcaller's ongoing/triggered ability, rendered with
-  inline keyword styling (e.g. "reclaim" shown as a styled term).
-- **Starting Essence** value (e.g. "200" with the essence glyph).
-- Below the card body, a **"Tides:" row** (for the default tides4 algorithm) —
-  a vertical list of colored, icon-tagged tide pills naming the card pools this
-  Dreamcaller will draft from. (When tides are present they replace a
-  **"Signature Cards:"** list, which is shown instead for non-tides algorithms —
-  a star-bulleted list of named signature cards.)
+**Anatomy of a single Dreamcaller card** (top to bottom — every card is
+identical in structure):
+
+- **Header:** the Dreamcaller's **name** (e.g. "Seld Rakor") in bold, with its
+  **title/epithet** (e.g. "Standing Orders") in italic beneath it.
+- **Portrait panel:** a tall, rounded, framed image of the Dreamcaller filling
+  most of the card. This is intended to be a live 3D character model performing an
+  idle animation; in the current build it renders as a framed portrait.
+- **Ability (rules text):** the Dreamcaller's ongoing/triggered ability, rendered
+  with the app's shared rules-text styling — keyword terms (e.g. "reclaim") are
+  visually highlighted inline exactly as they appear on cards.
+- **Starting Essence:** a small labelled line ("STARTING ESSENCE") with the value
+  (e.g. "200") shown using the essence glyph/styling used everywhere essence
+  appears.
+- **Draft direction:** below the card body, a **"Tides:" row** — a small label
+  with an info icon, then a vertical list of **colored, icon-tagged tide pills**
+  naming the card pools this Dreamcaller will draft from (up to 4 shown, largest
+  first). This is how the player reads what kind of deck this Dreamcaller steers
+  toward. (For non-tides draft algorithms this is replaced by a **"Signature
+  Cards:"** list — a star-bulleted vertical list of named signature cards. Only
+  one of the two appears.)
 
 **What you can click:**
 
-- **The Dreamcaller card itself** is the primary action — the entire card is a
-  button. Clicking it selects that Dreamcaller and starts the run. (There is no
-  separate "Select" button; the whole card is the hit target.) On hover the card
-  lifts slightly and its border/glow brighten.
+- **The whole Dreamcaller card is a single large button.** There is no separate
+  "Select" control — clicking anywhere on the card selects that Dreamcaller and
+  immediately starts the run. On hover the card lifts a few pixels and its border
+  and outer glow brighten to signal it is the active target; on press it scales
+  down slightly. This makes the entire card a generous hit target, which is
+  good for touch, but it also means there is no distinct confirm step — a single
+  tap commits the entire run, which a mobile design may want to gate behind an
+  explicit confirm.
 
-**What you can hover (these reveal information, important for the redesign):**
+**What you can hover / long-press (these reveal information that exists *only* on
+hover today — important to re-home for touch):**
 
-- **The rules-text block** — hovering reveals a popover defining any glossary
-  terms used in the ability text (the same term-definition panel used beside
-  cards elsewhere).
-- **The "Tides:" / "Signature Cards:" label** has a small **ⓘ info icon** —
-  hovering it explains what tides / signature cards are ("Pools of cards you will
-  see during the quest. Different tides are used every time you play." /
-  "These signature cards define this Dreamcaller's strategy and steer the draft
-  pool toward them.").
-- **Each tide pill** — hovering shows a tooltip describing that tide's theme /
-  contents.
+- **The ability text block** → a popover that defines any glossary terms used in
+  the ability (the same term-definition panel shown beside cards elsewhere). So
+  the full meaning of the ability is only available on hover.
+- **The "Tides:" / "Signature Cards:" label's ⓘ info icon** → a tooltip
+  explaining the concept ("Pools of cards you will see during the quest.
+  Different tides are used every time you play." / "These signature cards define
+  this Dreamcaller's strategy and steer the draft pool toward them.").
+- **Each individual tide pill** → a tooltip describing that specific tide's theme
+  and contents (its summary/description).
 
-**Redesign notes.** The core information hierarchy per Dreamcaller is: identity
-(name + portrait + epithet) → power (ability text) → economy (starting essence) →
-draft direction (tides). The whole card is the tap target, which on mobile may
-want an explicit confirm step. A large amount of secondary information (tide
-descriptions, glossary terms) lives only in hover popovers and will need a
-touch-friendly equivalent (long-press / tap-to-expand) on mobile.
+**Redesign notes.** The information hierarchy per Dreamcaller is: identity (name
++ portrait + epithet) → power (ability text) → economy (starting essence) →
+draft direction (tides). Three of these cards must be comparable side-by-side,
+which the portrait-heavy layout makes hard on a narrow screen — vertical stacking
+forces scrolling and loses the at-a-glance comparison. A large amount of
+secondary, decision-relevant detail (each tide's meaning, glossary terms) lives
+exclusively in hover popovers and needs a first-class touch equivalent
+(tap-to-expand / long-press / detail sheet). Consider whether "tap card = start
+run" should become "tap card = expand detail, then confirm."
 
 ---
 
-## Dream Atlas
+# Dream Atlas
 
 ![Dream Atlas screen](images/02-dream-atlas.png)
 
-**What it does.** The Dream Atlas is the between-dreamscapes world map. It shows
-the full 7-layer branching path from Firstlight Meadow to the final boss in
-Limbo, tracks the player's progress, and is where the player chooses which
-dreamscape to enter next. The player threads one node per layer toward the boss.
+**What it does.** The Dream Atlas is the between-dreamscapes world map and the
+hub the player returns to after every battle. It renders the entire run as a
+7-layer branching graph from Firstlight Meadow (left) to the final boss in Limbo
+(right), shows how far the player has progressed, and is where the player chooses
+which dreamscape to enter next. The player threads exactly one node per layer
+toward the boss; the map is never pruned, so the chosen and forgone routes both
+stay visible.
 
-**Layout.** The whole map is a fixed 1920×1080 stage that uniformly scales to fit
-the viewport (letterboxed), over a dark, drifting "dream mote" particle
-background.
+**Stage and framing.** The whole map is a fixed 1920×1080 "stage" that uniformly
+scales to fit the viewport and is letterboxed (it never reflows — it just shrinks
+to fit, which on a tall phone leaves large empty bands). The background is a dark
+purple "dream" wash with ~26 slowly drifting glowing "mote" particles for
+atmosphere. Fixed overlays sit on top of the scaling stage:
 
-- **Top-left title block:** "Dream Atlas" heading and a subtitle that reads
-  "Layer <N> · Choose your next dream" (or "Seven layers to the final dream").
-- **Layer numerals I–VII** are watermarked across the top, one per column.
-- **The node graph** fills the center: circular nodes arranged in 7 vertical
-  columns (layers), joined by glowing connection lines (edges). Firstlight Meadow
-  is the single node on the far left; the red boss node (Limbo) is on the far
-  right and is always revealed.
-- **Persistent bottom HUD** (rendered app-wide; see HUD section) shows essence,
-  deck size, Dreamcaller portrait, dreamsigns, "Battles won N/7", and the View
-  Deck / Glossary / utility buttons.
-- **Top-right:** a **"🔄 Debug: Regenerate Atlas"** button — *developer only,
-  ignore for redesign.*
+- **Top-left title block:** a "Dream Atlas" heading and a subtitle reading
+  "Layer <N> · Choose your next dream" (or "Seven layers to the final dream" when
+  nothing is selectable).
+- **Layer numerals I–VII** are drawn as large faint watermarks across the top,
+  one centered over each column, so the player can read which layer is which.
+- **The node graph** fills the center (see below).
+- **Persistent bottom HUD** (rendered app-wide; see the HUD section) runs along
+  the bottom edge with essence, deck size, Dreamcaller portrait, dreamsigns,
+  "Battles won N/7", and the View Deck / Glossary / utility buttons.
+- **Top-right "🔄 Debug: Regenerate Atlas" button.** *Developer surface —
+  on mobile this belongs on the separate developer screen, not on the map.* It
+  discards and rebuilds the atlas at the current progress depth for live
+  iteration on map generation.
 
-**Node states are visually distinct** (this is central to the screen and must be
-preserved): unrevealed (empty gray frame), revealed-but-locked (shows its
-dreamscape icon, future layer), available (reachable now — its incoming edge is
-drawn as a bright animated "open" line), completed (visited/won), and forgone
-(dimmed; the route not taken). Edges originating at or before the current layer
-are solid; edges reaching into still-locked layers are dotted.
+**The node graph.** Circular nodes are arranged in 7 vertical columns (one per
+layer), connected by glowing lines (edges). Firstlight Meadow is the single
+larger node on the far left; the red boss node (Limbo) is the larger node on the
+far right and is **always revealed** from the start so the destination is visible.
+Node and edge appearance encode the run's state and are the screen's core visual
+language:
 
-**Node faces** show: the starter shows a meadow icon with subtle "you started
-here" emphasis; the boss shows a skull/boss icon in a red frame; a revealed
-dreamscape shows its circular scene icon plus a small **signature-site badge
-icon** (the enhanced site it guarantees). A node carrying a **known dreamsign**
-also shows that dreamsign in its corner.
+**Node states** (each visually distinct, and this distinction is the whole point
+of the screen):
+- **Unrevealed** — an empty gray round frame (dreamscape not yet known).
+- **Revealed-locked** — shows its dreamscape's circular scene icon, but sits in a
+  future layer that can't be chosen yet.
+- **Available** — reachable from the just-completed node; selectable now. Its
+  incoming edge is drawn as a bright, animated "open" flow line.
+- **Completed** — a dreamscape already visited and won.
+- **Forgone** — was revealed/reachable but the player took a different route;
+  rendered dimmed, can never be visited.
+
+**Node faces:**
+- The **starter** shows a meadow/flag icon with subtle "you started here"
+  emphasis.
+- The **boss** shows a skull/boss icon in a red frame.
+- A **revealed dreamscape** shows its circular scene icon plus a small
+  **signature-site badge icon** in the corner — the enhanced site that dreamscape
+  is guaranteed to offer (this, plus the name, is how the player reads what a
+  dreamscape specializes in before entering).
+- A node carrying a **known dreamsign** additionally shows that dreamsign's icon
+  in its corner.
+
+**Edge styles:** edges originating at or before the current choice layer are
+drawn **solid** (routes the player can already reason about); edges reaching
+forward into still-locked layers are **dotted** (speculative). Completed→completed
+edges read as "traveled"; completed→available edges get the animated "open" flow.
+Edges never cross.
 
 **What you can click:**
 
 - **An "available" node** — clicking it sets that dreamscape as the current
-  destination and enters its Dreamscape screen. Only available nodes respond to
-  clicks; all other states are non-interactive.
+  destination and navigates to its Dreamscape screen. Only `available` nodes are
+  clickable; nodes in every other state are inert.
+- *(Developer)* the "Debug: Regenerate Atlas" button.
 
-**What you can hover / long-press (reveals a floating preview card beside the
-node):**
+**What you can hover / long-press — the heart of this screen's information.**
+Hovering a node pops a large **floating preview card** that auto-flips to whichever
+side of the node has room and is vertically clamped to stay on stage. There are
+three preview variants plus an optional companion card:
 
-- **A revealed dreamscape node** → a rich preview card showing: the dreamscape's
-  **scene art** and **name**, the **resident Dream Guide** (name + portrait), the
-  **signature Site**, the guide's home-specialty **Bonus** text, and the
-  **Affiliation** pill. The preview auto-flips to whichever side has room.
-- **The boss node** → a red "Final Battle" preview naming Apollyon and describing
-  the run's specific incarnation (title + deck description).
-- **An unrevealed node** → a compact "An Unseen Dream" placeholder card.
-- **A node carrying a known dreamsign** → an additional dreamsign card appears
-  next to the preview, showing the dreamsign art, name, and full rules text.
-- **Firstlight Meadow** → a short "a quiet place where every dream quest begins"
-  preview (no guide/affiliation).
+- **Revealed dreamscape → full preview** (≈560px wide): the dreamscape's **scene
+  art** banner with its **name**; the resident **Dream Guide**'s name and
+  portrait figure; and three info rows — **Site** (the signature site name +
+  icon), **Bonus** (the guide's home-specialty text), and **Affiliation** (a
+  named pill, or "None — a neutral on-ramp"). This is where the player learns
+  what a dreamscape actually offers.
+- **Boss node → red "Final Battle" preview**: Limbo's scene art, the boss figure,
+  and rows naming **Apollyon** and describing the run's specific **incarnation**
+  (its title and short deck description), so the player can scout the final fight.
+- **Unrevealed node → compact "An Unseen Dream" card**: a short placeholder
+  explaining the node is revealed only as the player draws near.
+- **Firstlight Meadow → a short "a quiet place where every dream quest begins"
+  note** (no guide/affiliation rows).
+- **Known-dreamsign companion card** (≈308px): when a hovered node carries a known
+  dreamsign, a second card appears beside the preview showing the dreamsign's art,
+  name, and full rules text.
 
-**Redesign notes.** This screen is information-dense and relies heavily on
-hover previews to convey what each node offers; on mobile that detail needs a
-tap/long-press treatment, and the previews are large (up to ~560px wide plus a
-~308px dreamsign card) so they will not fit beside a node on a phone. The node
-state vocabulary (5 states + 4 edge styles) is the screen's core visual language
-and must remain legible at small sizes. The 7-column horizontal layout is
-inherently wide and is the biggest portrait-orientation challenge.
+**Redesign notes.** This is the most information-dense navigation screen, and
+nearly all of its decision-relevant content (what each dreamscape offers: guide,
+site, bonus, affiliation, any known dreamsign) lives only in hover previews that
+are far too large (up to ~560 + ~308 px wide) to sit beside a node on a phone.
+The 7-column horizontal graph is inherently wide and is the single biggest
+portrait-orientation challenge in the app — letterbox-scaling it to a tall screen
+would make nodes tiny. The five node states and four edge styles are a rich
+visual vocabulary that must survive at small sizes. A mobile design likely needs
+a fundamentally different presentation of the same graph (e.g. vertical scroll
+layer-by-layer, tap-a-node-to-open-a-detail-sheet) rather than a scaled-down copy
+of the desktop map.
 
 ---
 
-## Battle Mode
-
-Battle Mode is the core card-game match against an AI opponent. It has two
-distinct screens: the **Battle Start** intro and the **in-battle board**.
-
-### Battle Start (pre-battle intro)
+# Battle Start (Pre-Battle Intro)
 
 ![Battle Start screen](images/03a-battle-start.png)
 
-**What it does.** Shown when the player arrives at a Battle site, before the
-match begins. It introduces the opposing Dreamcaller so the player can read its
-abilities and deck before committing.
+**What it does.** Shown when the player arrives at a Battle site, before the match
+begins. Its job is to introduce the opposing Dreamcaller — its abilities,
+signature cards, and any dreamsigns — and state the stakes (score to win, essence
+reward) so the player can scout the fight before committing to it. Clicking
+through starts the match.
 
-**Layout.** A cinematic split layout over the dreamscape's scene art: the enemy
-Dreamcaller's full-body figure stands on the left; a text column on the right
-holds, top to bottom:
+**Layout.** A cinematic split composition rendered over the dreamscape's scene
+art, dimmed for contrast:
 
-- The enemy Dreamcaller's **name** (e.g. "Seraveth") and **title** ("Twice-
-  Mourned").
-- An **Ability** block with the Dreamcaller's rules text (keyword-styled).
-- A **Signature Cards** row of 3 face-up card thumbnails.
-- A stats line: the **score-to-win** for the battle (e.g. "10 to win") and the
-  **essence reward** (e.g. "100 essence").
-- A primary **"Begin Battle"** button.
+- **Left:** the enemy Dreamcaller's **full-body figure**, lit with ambient
+  particle/glow effects, occupying the left half (intended to be the animated 3D
+  model in its "card" presentation).
+- **Right:** a text column, top to bottom:
+  - the enemy Dreamcaller's **name** (e.g. "Seraveth", large serif) and
+    **title/subtitle** beneath it (e.g. "Twice-Mourned", italic);
+  - an **"ABILITY"** label and the Dreamcaller's **rules text**, with keyword
+    terms (e.g. "reclaim") highlighted inline;
+  - a **"SIGNATURE CARDS"** label and a **row of 3 face-up card thumbnails**;
+  - a stats line pairing the **score to win** for this battle (e.g. "10 to win")
+    with the **essence reward** (e.g. "100 essence"), each with its glyph;
+  - a primary **"Begin Battle"** button (purple, glowing) below the stats.
+- If the opponent carries **dreamsigns** (from the run's midpoint onward), those
+  are surfaced here as well so the player can see the opponent's passive effects.
 
-If the opponent carries dreamsigns (mid-run onward), those are shown here too.
+In portrait the figure moves to the top and the text column flows beneath it.
 
 **What you can click:**
 
-- **Begin Battle** — starts the match: the camera transitions to the board, both
-  Dreamcallers take their battle positions, decks animate in, and opening hands
-  are dealt.
+- **Begin Battle** — starts the match. The camera transitions from this intro to
+  the battle board: the enemy Dreamcaller animates to its battle position (small
+  head-only card), both decks and the player's Dreamcaller animate to their
+  starting spots, and opening hands are dealt to both sides. This is the single
+  forward action on the screen.
 
-**What you can hover:** the ability text and signature card thumbnails surface
-term definitions / card detail, as elsewhere in the app.
+**What you can hover / long-press:**
 
-### In-Battle Board
+- **The ability text** → glossary term definitions, as on the Dreamcaller select
+  screen and on cards.
+- **Each signature card thumbnail** → an enlarged card preview with full art and
+  rules text.
+- **Any opponent dreamsign** (when present) → the full dreamsign card on hover.
+
+**Redesign notes.** This screen is mostly presentational and translates to mobile
+relatively cleanly (figure on top, scouting info + a single big "Begin Battle"
+button below). The key content to preserve is the *scouting* function — ability,
+signature cards, dreamsigns, and the win/reward stakes must all be legible before
+the player commits, and the card/dreamsign detail currently locked behind hover
+needs a tap equivalent.
+
+---
+
+# Battle Board (In-Battle)
 
 ![In-battle board](images/03b-battle-play.png)
 
 **What it does.** The live card match, played under the rules in
-[battle_rules.md](../../battle_rules/battle_rules.md). The board is symmetric
-(enemy at top, player at bottom) with shared zones in the middle.
+[battle_rules.md](../../battle_rules/battle_rules.md). The board is **symmetric**:
+the two sides mirror each other around a central battlefield, with the local
+player anchored at the bottom and the opponent at the top. By default a local AI
+drives the opponent and "Basic Automation" handles routine rules bookkeeping, so
+the player mostly plays cards and advances phases. This is by far the most complex
+and information-dense screen in the app.
 
-**Layout.** The board occupies the full screen. Key regions:
+> **Screenshot note:** the capture above has the developer **Inspector** open
+> along the right edge, which compresses the board. The Inspector is a debug
+> surface (detailed at the end of this section) and is **not part of the
+> player-facing battle** — picture the board widened to fill the space it
+> occupies.
 
-- **Turn / phase indicator** (top-left "Turn 1") and a **phase rail** across the
-  top — DREAMWELL · DAY · DUSK · NIGHT · CHALLENGE — marking the current phase of
-  the turn.
-- **Battlefield lanes** in the center where characters are played; each side has
-  a row of card slots, arranged as opposing front ranks for the Challenge phase.
-- **Per-side status clusters** showing **score** (points toward the win
-  threshold), **energy** (the resource for playing cards), the **Dreamwell**, and
-  zone counters for **Void** and **Banished**, plus a **Draw Card** affordance.
-- **The player's hand** is a fan/row of face-up cards along the bottom.
-- A **card detail popup** appears when a card is focused, showing its full art
-  and rules text (e.g. the "Sign of Arrival" event card in the screenshot).
-- **Bottom-left tabs:** Deck / Stream / Log controls for inspecting battle state.
+**Top chrome — the Status Bar.** A bar across the very top carries the global
+match state: the **turn / round number** ("Turn 1"), a **phase rail** naming the
+turn's phases — **DREAMWELL · DAY · DUSK · NIGHT · CHALLENGE** — with the current
+phase highlighted, and both sides' **scores** (points toward the win threshold).
+The active phase advances through this sequence; in manual mode the phase names
+act as controls to set the phase. A screen-reader live region (not visible)
+announces "<side> Turn N <Phase>" as state changes.
 
-**What you can click / interact with:**
+**AI proposal banner.** Just under the status bar, a slim banner appears while the
+AI opponent holds an un-approved move ("AI proposes: …") or is computing one
+("AI · Thinking…"). While a proposal is held, the player's own board controls are
+locked and the human acts only through the approve/reject icons in the phase
+cluster (see below). The banner renders nothing on the human's own turn.
 
-- **Cards in hand** — select/play a card (paying its energy cost).
-- **Board characters** — select, reposition, and declare challengers per the
-  battle rules.
-- **Phase / Draw / advance controls** — move the turn forward (much routine
-  bookkeeping is handled by "Basic Automation" by default).
-- **Score/energy/zone clusters** — clicking the Void/Banished counters opens
-  those zones for inspection.
+**Central battlefield (top → bottom).** The middle of the screen is the shared
+battlefield, stacked as opposing ranks:
 
-> **Developer panel — ignore for redesign:** the right-hand **Inspector** panel
-> (battle state dump, "No active AI proposal", Pool Viewer / Show enemy hand /
-> Hide player hand toggles, "Skip to rewards" / "Force reload" / "Reset battle"
-> actions, energy/score/draw debug steppers) is a debug surface, not part of the
-> player-facing battle. The intended battle UI is the board, hand, phase rail,
-> and per-side status clusters only.
+- **Enemy back rank**, then **enemy front rank** (the opponent's character slots);
+- a **judgment divider** line across the middle that lights up ("active") during
+  the **Challenge** phase, when opposing front ranks fight;
+- **player front rank**, then **player back rank** (the local player's slots).
 
-**Redesign notes.** This is by far the most complex screen and the hardest to fit
-to portrait: it must show two symmetric boards, multiple shared zones, a phase
-timeline, per-side resources, and the hand simultaneously. The debug Inspector
-currently eats roughly a third of the horizontal space and should be removed from
-design consideration entirely. The phase rail and the score/energy/Dreamwell
-clusters are the persistent "chrome" a mobile layout will need to keep glanceable
-while maximizing room for the board and hand.
+Each rank is a row of card slots; characters are played into slots and can be
+repositioned. Above the battlefield, during the Dreamwell phase (turn 2+), the
+current **Dreamwell card** for the active side is shown centered (the card that
+ramps energy / draws for the turn).
+
+**Side columns (flanking the battlefield).** To the left and right of the
+battlefield sit two **side-zone columns**, one per side, each containing:
+
+- a **Void** and a **Banished** small-zone button, each showing a count; clicking
+  one opens that zone's full **card browser**, and cards can be dragged onto them;
+- a **Status Strip** for that side showing the side's **Dreamcaller portrait**
+  (name + title), **energy** (current/max — the resource for playing cards),
+  **score**, and a **Draw Card** control, with the active side highlighted.
+  Clicking the portrait opens that side's **summary popover** (Dreamcaller ability
+  + dreamsigns). The strip also exposes per-side energy/score/draw steppers used
+  for manual play and debugging.
+
+There is also a **Stack zone** (labeled "Stack") used while a card/effect is
+resolving, with per-entry "Void" / "Banish" resolution buttons, and it accepts
+dropped cards.
+
+**The player's hand.** A **hand tray** runs along the bottom: the local player's
+cards fanned/rowed face-up, showing each card's cost and art. (A debug mode can
+hide the player's hand and/or reveal the opponent's hand in a tray at top.)
+
+**Bottom Action Bar.** Below the hand, a row of controls: **Undo / Redo**, a
+**Basic Automation** on/off gear toggle, a **Battle Log** toggle (opens a
+side drawer of the full command history), a **Dreamwell History** toggle (the
+drawer of revealed Dreamwell cards), and the **Inspector** toggle.
+
+**What you can click / interact with (player actions):**
+
+- **Cards in hand** — double-click (or drag) plays a card to the battlefield,
+  paying its energy cost (automation routes events to the void and spends energy);
+  right-click opens a context menu of card actions; hover shows an enlarged
+  preview.
+- **Battlefield characters** — drag to reposition/swap slots; drag cross-side or
+  to a zone to move; right-click for the context menu; hover for the enlarged
+  card preview.
+- **Phase controls / phase rail** — advance the turn. Much routine work
+  (spending energy, ramping/drawing at start of turn, clearing exhaustion at
+  Dawn, resolving the Challenge, enforcing the hand limit, advancing bookend
+  phases) is handled automatically by Basic Automation; with it off, every step
+  is manual.
+- **The AI approve / reject icons** (in the phase cluster) — when the AI holds a
+  proposal, a check **approves** it (committing it to shared state) and a cross
+  **rejects** a proposed card play.
+- **Void / Banished / Stack zones** — click to open a zone's card browser; drop
+  cards onto them to move cards there.
+- **Side Status Strip portrait** — opens the side's Dreamcaller/dreamsign summary.
+- **Action Bar buttons** — Undo, Redo, toggle Automation, Battle Log, Dreamwell
+  History, Inspector.
+
+**Overlays this screen can raise** (each a modal/drawer over the board): the
+**zone browser** (full contents of a void/banished/deck zone), a **card picker**
+and a **choice prompt** (for effects that ask the player to pick cards or choose
+an option), a **Foresee** overlay (look at / reorder the top of a deck), a
+**deck-order picker**, the **side summary** popover, the **Dreamcaller panel**,
+the **Battle Log** and **Dreamwell History** drawers, and finally the
+**result/reward overlay** when the battle ends (Victory shows the reward surface;
+Defeat shows the result overlay with a reset path — see the Victory/Defeat
+screen).
+
+> **Developer surfaces (each should be its own separate screen on mobile, not an
+> inline panel):**
+> - **Inspector** (right-edge drawer, open by default on wide desktop): a live
+>   dump of battle state plus debug tools — AI-proposal status, "Show enemy hand"
+>   / "Hide player hand" toggles, **Pool Viewer**, **Foresee**, **Figment
+>   creator**, **Erode**, **Reset battle**, and per-side energy/score/draw editors.
+> - The **right-click card context menu** (per-card debug actions, card notes).
+> - The board's manual energy/score/phase steppers in the status strips, which
+>   exist for hand-driven/debug play.
+>
+> The intended player-facing battle is the status bar + phase rail, the symmetric
+> battlefield, the side status strips (score/energy), the hand tray, and the
+> minimal action bar — everything else is developer tooling.
+
+**Redesign notes.** This is the hardest screen to fit to portrait: it must
+simultaneously present two mirrored multi-rank boards, two side columns of
+resources and zones, a phase timeline, a stack, the hand, and an action bar.
+The developer Inspector currently consumes roughly a third of the width and
+should be removed from gameplay-layout consideration entirely (re-homed to a
+separate debug screen). The persistent "chrome" a mobile layout must keep
+glanceable is small but essential: whose turn / which phase, both scores, and the
+active side's energy and hand. The biggest spatial tension is that a symmetric
+top-vs-bottom board plus a bottom hand and bottom action bar all compete for
+vertical space on a phone; the side columns (zones + status strips) have no
+natural home in a narrow layout and will likely need to collapse into
+tap-to-open chips.
