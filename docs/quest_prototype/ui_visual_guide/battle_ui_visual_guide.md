@@ -16,10 +16,13 @@ should become their own separate screens in a mobile redesign rather than panels
 crowded onto the live board.
 
 A battle has two top-level screens — **Battle Start** (the pre-match intro) and
-the **Battle Board** (the live match) — plus a family of overlays and panels the
-board raises (card browsers, the Foresee overlay, card pickers, the right-click
-context menu, side-summary hovers, and the developer Inspector), each documented
-in its own section below.
+the **Battle Board** (the live match) — plus a family of overlays, drawers, and
+panels the board raises: the Dreamwell card display, the card zone browser, the
+card picker and choice prompt, the Foresee overlay, the deck-order picker, the
+right-click context menu, the battle-log and Dreamwell-history drawers, the
+card-hover preview, the Dreamcaller/dreamsign hovers and panel, and the
+developer surfaces (Inspector, Figment creator, card-note editor). Each is
+documented in its own section below.
 
 ---
 
@@ -424,6 +427,213 @@ the same hover card used by the dreamsign row on the quest HUD.
 so it needs a touch-first equivalent (tap-to-open the side summary; tap a dreamsign
 to expand it). The side-summary popover is essentially a per-side "passives sheet"
 and is a natural fit for a tap-to-open panel on mobile.
+
+---
+
+# Choice Prompt Overlay
+
+**What it does.** The choice prompt is the **yes/no-or-pick-an-option** modal
+raised by card and Dreamwell-card effects that offer a decision rather than a card
+selection — for example "Discard 2 cards, then draw 2?", "Abandon a character to
+draw 2?", "Play a character from your void?", or "Discard your hand and redraw?".
+It is the sibling of the [Card Picker](#card-picker-choose--discard-a-card): the
+Card Picker asks *which cards*, the Choice Prompt asks *whether / which option*.
+Like the Card Picker it blocks the board until resolved, and (because a choice is
+required) Escape and backdrop clicks do nothing.
+
+> **Note:** this overlay is raised only by specific "may"-style Dreamwell/card
+> effects whose appearance depends on the shuffled Dreamwell order, so it was not
+> reliably reproducible to screenshot in a QA session. Its layout is the same
+> modal family as the captured Card Picker above (source card at the head, then
+> the prompt), differing only in the body.
+
+**Layout.** A centered modal over a dimmed board. At the head sits the **source
+card** that triggered the prompt (the Dreamwell/card driving the choice), then the
+**prompt title** (the question), then a vertical stack of **option buttons** — for
+a yes/no effect, the options are the two outcomes; for a multi-way effect, one
+button per option. There is no separate cancel/confirm: choosing an option *is*
+the resolution.
+
+**What you can click:** exactly one **option button**, which commits that choice
+and applies the effect.
+
+**Redesign notes.** This is a small, blocking decision and is among the easiest
+surfaces to bring to mobile: source card on top, a question, and a short column of
+big tap targets. The "no escape / a choice is required" behavior should be
+preserved so the game state cannot be left mid-resolution.
+
+---
+
+# Deck Order Picker
+
+![Deck order picker](images/b12-deck-order-picker.png)
+
+**What it does.** The deck-order picker is the modal for arranging cards into a
+specific order — either the **full deck** ("Reorder Full Deck" from the zone
+browser) or the **revealed subset** from a Foresee ("Reorder All…"). It commits
+the new order as a single history entry.
+
+**Layout.** A modal headed "DECK ORDER" with a scope title ("Reorder Revealed of
+Player Deck" / "Reorder Full …") and the instruction "Use Move Up / Move Down to
+set a new deck order. Confirm commits a single history entry." Below is a numbered
+**ordered list of cards** (each row: position number, card name, type/spark) with
+**MOVE UP** and **MOVE DOWN** buttons (disabled at the ends), and a **CANCEL** /
+**CONFIRM** pair at the bottom.
+
+**What you can click:**
+
+- **MOVE UP / MOVE DOWN** on a row — shift that card one position.
+- **CONFIRM** — apply the new order (one history entry).
+- **CANCEL** — discard changes.
+
+**Redesign notes.** Move-up/move-down reordering is verbose; a mobile design might
+prefer drag-to-reorder. The scope label (full vs. revealed) matters and should
+stay visible so the player knows how much of the deck they are arranging.
+
+---
+
+# Battle Log Drawer
+
+![Battle log drawer](images/b10-battle-log.png)
+
+**What it does.** The Battle Log drawer is a chronological record of everything
+that has happened in the match — the command/event history that backs Undo/Redo.
+It is opened from the Action Bar's **Log** toggle and is primarily a
+debugging/inspection surface.
+
+**Layout.** A panel headed "Battle log" with a **Close**, a row of **category
+filter chips** (numeric-state, card-instance, zone-move, battlefield-position,
+visibility, battle-flow, result) that toggle which event kinds are shown, and the
+log itself grouped by turn ("TURN 1 … COLLAPSE") with one row per event (a
+human-readable description plus its category tag, e.g. "Draw Dreamwell Card for
+Player — ZONE-MOVE"). A **RAW EVENTS / EXPAND** section at the bottom exposes the
+underlying raw event stream.
+
+**What you can click:** the **category chips** (filter), the per-turn
+**COLLAPSE/EXPAND** toggles, the **RAW EVENTS Expand**, and **Close**.
+
+**Redesign notes.** This is an inspection tool, not core play; on mobile it should
+be a separate, openable panel/sheet rather than always-present chrome. The
+category filters and turn grouping are the useful structure to keep.
+
+---
+
+# Dreamwell History Drawer
+
+![Dreamwell history drawer](images/b11-dreamwell-history.png)
+
+**What it does.** A scrollable history of every Dreamwell card drawn so far this
+battle, most-recent-first. Both sides draw from one shared, pre-shuffled Dreamwell
+deck, so this is the record of what has been revealed. Opened from the Action
+Bar's **Dreamwell** toggle.
+
+**Layout.** A panel headed "Dreamwell" with a **Close**, then a vertical list of
+the revealed Dreamwell cards (each shown as its card with name, effect, and energy
+badge). Because it tracks live state, Undo/Redo grows/shrinks the list in lockstep
+with the board.
+
+**What you can click / hover:** **Close**; each card can be hovered for a larger
+view.
+
+**Redesign notes.** A simple reference list; maps cleanly to a mobile sheet. Its
+value is letting the player reason about the shared Dreamwell sequence, so keeping
+draw order and energy values legible is what matters.
+
+---
+
+# Card Hover Preview
+
+![Card hover preview with term definitions](images/b15-card-hover-preview.png)
+
+**What it does.** Hovering (or long-pressing) any card on the battlefield, in the
+stack, or in a zone browser raises an enlarged **card preview** floating near the
+pointer, alongside a **term-definitions panel** that explains the glossary
+keywords in that card's rules text. This is the pervasive "read this card closely"
+affordance used throughout the battle.
+
+**Layout.** A large rendering of the card (full art, cost, spark, name, type, and
+rules text) with, to one side, a small panel listing each glossary term the card
+uses and its definition (e.g. "▸Dawn — Triggers at the start of your turn"). It
+follows the pointer and flips to stay on screen.
+
+**What you can hover:** any battlefield/stack/zone card. (Hand cards have their own
+in-tray enlarge-on-hover behavior.)
+
+**Redesign notes.** This is the primary way players read card detail mid-battle, so
+a touch equivalent (tap-and-hold, or tap-to-open a card sheet) is essential. The
+paired term-definitions panel is a strong feature worth preserving — it puts rules
+clarifications right next to the card instead of in a separate glossary.
+
+---
+
+# Dreamcaller Panel
+
+**What it does.** A full-panel view of a battle side's Dreamcaller — its portrait,
+ability text, and the side's dreamsigns (with bane badges). It is a larger,
+dedicated counterpart to the hover side-summary popover (see
+[Dreamcaller & Dreamsign Hovers](#dreamcaller--dreamsign-hovers)).
+
+> **Note:** this component exists in the battle code but is **not currently wired
+> to any open trigger** in the running UI (no on-screen control opens it), so it
+> could not be captured live. It is documented here for completeness; functionally
+> it duplicates the side-summary popover at a larger size.
+
+**Layout.** A centered floating panel over a scrim, headed "Battle Side / <name> /
+<title> / Close", with a large **Dreamcaller card** (portrait + full ability text)
+and a **Dreamsigns** section listing each dreamsign (name + effect, with a "Bane"
+badge for banes; "No active Dreamsigns" when empty).
+
+**What you can click:** **Close** (or the scrim) to dismiss.
+
+**Redesign notes.** Since the hover side-summary already covers this content, a
+mobile design likely wants one canonical "side detail" surface rather than both;
+this panel's larger card-forward layout is the better starting point for a
+tap-to-open sheet.
+
+---
+
+# Figment Creator (Developer)
+
+![Figment creator](images/b13-figment-creator.png)
+
+**What it does.** A **developer** overlay to synthesize a figment token directly
+onto the board — for setting up board states and testing. Opened from the
+Inspector's per-side "Create Figment". Not part of the player-facing game.
+
+**Layout.** A modal headed "CREATE FIGMENT / Synthesize a figment token" with a
+helper line, then fields: **Name**, **Figment Type** (a dropdown of the figment
+types, each seeding a base spark and implicit keyword), **Spark** (editable),
+**Side** (Player/Enemy), **Zone** (Hand / Back Rank / Front Rank / Void / Banished
+/ Deck), and **Slot** (B0–B3), with **Cancel** / **Create Figment** actions.
+
+**What you can click:** the type dropdown, the spark stepper, the side/zone/slot
+radio options, and Cancel / Create Figment.
+
+**Redesign notes.** Developer tooling — should live on a separate developer screen
+on mobile, not in the battle UI.
+
+---
+
+# Card Note Editor (Developer)
+
+![Card note editor](images/b14-card-note-editor.png)
+
+**What it does.** A **developer** overlay to attach a short note to a specific
+card; notes render as chips on the card and in the Inspector. Opened from the card
+context menu's "Add Note…" (see
+[Card Context Menu](#card-context-menu-right-click)). Not part of the
+player-facing game.
+
+**Layout.** A modal headed "ADD NOTE / Annotate <card name>" with a **Note Text**
+field (max 200 chars) and an **Expiry** choice (Expire end of next turn [default],
+Expire end of this turn, Expire after N turns, or Manual until dismissed), plus
+**Cancel** / **Add Note**.
+
+**What you can click:** the text field, the expiry radio options (and the turns
+spinner), and Cancel / Add Note.
+
+**Redesign notes.** Developer tooling — belongs on a separate developer screen, not
+the player-facing battle.
 
 ---
 
