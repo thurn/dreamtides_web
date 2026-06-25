@@ -313,10 +313,12 @@ function DeckEntryEditor({
           defaultValue={seedTransfiguration ?? "none"}
           onChange={(event) => {
             const value = event.target.value;
+            // transfigureCard's `effectDescription` argument doubles as the log
+            // source, so we pass an explicit descriptive string here.
             mutations.transfigureCard(
               entryId,
               value === "none" ? null : (value as TransfigurationType),
-              SOURCE,
+              "quest_debug_editor:transfigure",
               {},
             );
           }}
@@ -526,7 +528,18 @@ export default function QuestDebugDeckSection() {
                 </div>
                 {expanded && (
                   <DeckEntryEditor
-                    key={entry.entryId}
+                    // Re-mount (and therefore re-seed the draft inputs) whenever
+                    // a committed mutation changes this entry's resolved data, so
+                    // the displayed Spark/type/subtype/keyword draft values never
+                    // drift from the live entry. The expand/collapse state is held
+                    // by the parent keyed by entryId, so this remount keeps the
+                    // row expanded.
+                    key={`${entry.entryId}:${JSON.stringify({
+                      t: entry.transfiguration,
+                      s: entry.statOverride ?? null,
+                      tc: entry.typeChange ?? null,
+                      k: entry.keywordModification ?? null,
+                    })}`}
                     entryId={entry.entryId}
                     eff={eff}
                     seedTransfiguration={entry.transfiguration}
