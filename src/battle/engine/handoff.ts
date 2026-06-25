@@ -1,4 +1,5 @@
 import type { BattleDebugEdit } from "../debug/commands";
+import { drawsAtStartOfTurn } from "../state/turn-utils";
 import type { BattleMutableState, BattleResult, BattleSide } from "../types";
 import { rankSlotIds } from "../types";
 
@@ -30,7 +31,7 @@ export interface HandoffPlan {
    * alongside the incoming side's draw.
    */
   dawnClearEdits: BattleDebugEdit[];
-  drawEdits: BattleDebugEdit[];       // DRAW_CARD for the next side (empty on the very first turn)
+  drawEdits: BattleDebugEdit[];       // DRAW_CARD for the next side (empty on the first player's first turn)
 }
 
 /**
@@ -151,9 +152,10 @@ function advanceTurnPair(
  * A non-null result is still accompanied by a valid flowEdit; callers gate
  * on result to decide whether to continue the game loop.
  *
- * Draw skip: drawEdits is empty when nextTurnNumber === 1 (the very first
- * turn of the game). All subsequent turns receive a DRAW_CARD for the
- * incoming side.
+ * Draw skip: drawEdits is empty only for the first player's very first turn
+ * (the second player draws normally on their first turn even though it shares
+ * turnNumber 1). See `drawsAtStartOfTurn`. All other turns receive a DRAW_CARD
+ * for the incoming side.
  */
 export function planHandoff(input: HandoffInput): HandoffPlan {
   const { state, scoreToWin, turnLimit } = input;
@@ -184,11 +186,16 @@ export function planHandoff(input: HandoffInput): HandoffPlan {
     turnNumber: next.turnNumber,
   };
 
-  // --- drawEdits: skip only on turn 1 (the very first turn) ---
-  const drawEdits: BattleDebugEdit[] =
-    next.turnNumber === 1
-      ? []
-      : [{ kind: "DRAW_CARD", side: next.activeSide }];
+  // --- drawEdits: the incoming side draws unless it is the first player on the
+  // battle's first turn (see `drawsAtStartOfTurn`). Checking turnNumber alone is
+  // wrong: a player→enemy handoff keeps turnNumber at 1, so the enemy's first
+  // turn would otherwise be skipped. ---
+  const drawEdits: BattleDebugEdit[] = drawsAtStartOfTurn(
+    next.activeSide,
+    next.turnNumber,
+  )
+    ? [{ kind: "DRAW_CARD", side: next.activeSide }]
+    : [];
 
   // --- Ending (outgoing) and Dawn (incoming) bookend edits ---
   const banishEdits = endingBanishEdits(state, state.activeSide);

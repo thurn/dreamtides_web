@@ -7,6 +7,7 @@ import { dreamwellEnergyEdits } from "../engine/energy";
 import { dawnClearEdits, endingBanishEdits } from "../engine/handoff";
 import { collectDawnTriggerEdits } from "./battle-card-effects-table";
 import { selectBattleCardLocation } from "../state/selectors";
+import { drawsAtStartOfTurn } from "../state/turn-utils";
 import type {
   BattleMutableState,
   BattlePhase,
@@ -301,8 +302,9 @@ function planTurnHandoff(
     commands.push(autoCommand(clearEdit));
   }
 
-  // Draw for the incoming side, skipping the very first turn of the battle.
-  if (edit.turnNumber > 1) {
+  // Draw for the incoming side, skipping only the first player's first turn
+  // (see `drawsAtStartOfTurn`).
+  if (drawsAtStartOfTurn(incomingSide, edit.turnNumber)) {
     commands.push(autoCommand({ kind: "DRAW_CARD", side: incomingSide }));
   }
 
@@ -382,7 +384,8 @@ function nextSurfaceableTarget(phase: BattlePhase): BattlePhase {
  * The deterministic effect edits a single bookend phase folds in when entered
  * (rules §Turn Structure). Pure: it only reads `state`.
  *
- *  - **Draw:** draw one card for the active side, skipping the very first turn.
+ *  - **Draw:** draw one card for the active side, skipping only the first
+ *    player's first turn (see `drawsAtStartOfTurn`).
  *  - **Dawn:** clear the active side's exhausted characters, then fold in the
  *    edits from its in-play ▸Dawn characters (e.g. Driftcaller Sovereign's
  *    energy gain). Dawn triggers are computed here, inside the bookend
@@ -400,7 +403,9 @@ function bookendEffectEdits(
 ): BattleDebugEdit[] {
   switch (phase) {
     case "draw":
-      return turnNumber > 1 ? [{ kind: "DRAW_CARD", side }] : [];
+      return drawsAtStartOfTurn(side, turnNumber)
+        ? [{ kind: "DRAW_CARD", side }]
+        : [];
     case "dawn":
       return [
         ...dawnClearEdits(state, side),

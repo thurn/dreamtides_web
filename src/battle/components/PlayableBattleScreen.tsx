@@ -27,6 +27,7 @@ import {
   selectBattlefieldSlotOccupant,
   selectFailureOverlayResult,
 } from "../state/selectors";
+import { drawsAtStartOfTurn } from "../state/turn-utils";
 import { formatPhaseLabel, formatSideLabel } from "../ui/format";
 import type {
   BattleCommandSourceSurface,
@@ -1525,9 +1526,11 @@ function PlayableBattleScreenInner({
                           sourceSurface: "phase-controls",
                         });
                       }
-                      // Mirror the handoff draw rule: the very first turn of the
-                      // game (turn 1) skips the draw; every later turn draws.
-                      if (target.turnNumber > 1) {
+                      // Mirror the handoff draw rule (see `drawsAtStartOfTurn`):
+                      // only the first player's first turn skips the draw. A
+                      // player→enemy handoff keeps turnNumber at 1, so the enemy
+                      // (second player) still draws on its first turn.
+                      if (drawsAtStartOfTurn("enemy", target.turnNumber)) {
                         handleCommand({
                           id: "DEBUG_EDIT",
                           edit: { kind: "DRAW_CARD", side: "enemy" },

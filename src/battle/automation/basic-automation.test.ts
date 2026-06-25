@@ -302,7 +302,9 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     expect(result).toContainEqual({ kind: "DRAW_CARD", side: "enemy" });
   });
 
-  it("skips the draw on the very first turn of the battle", () => {
+  it("draws for the second player (enemy) on their first turn, which shares turnNumber 1", () => {
+    // The opening player→enemy handoff keeps turnNumber at 1; only the first
+    // player's first turn skips the draw, so the enemy still draws here.
     const state = makeState({
       activeSide: "player",
       turnNumber: 1,
@@ -315,7 +317,7 @@ describe("planBasicAutomationCommands — turn handoff", () => {
     };
 
     const result = edits(planBasicAutomationCommands(state, handoff, CAPS));
-    expect(result.some((edit) => edit.kind === "DRAW_CARD")).toBe(false);
+    expect(result).toContainEqual({ kind: "DRAW_CARD", side: "enemy" });
   });
 
   it("discards the outgoing side down to the hand limit", () => {
@@ -635,6 +637,23 @@ describe("planBasicAutomationCommands — Dreamwell reveal", () => {
     // A draw gesture does not re-apply the dreamwell ramp.
     expect(result.some((edit) => edit.kind === "SET_MAX_ENERGY")).toBe(false);
     expect(result[result.length - 1]).toEqual({ kind: "SET_PHASE", phase: "day" });
+  });
+
+  it("skips the draw when the first player (player) enters their turn-1 draw phase", () => {
+    const state = makeState({
+      activeSide: "player",
+      turnNumber: 1,
+      player: { deck: ["d0"] },
+    });
+    const gesture: BattleCommand = {
+      id: "DEBUG_EDIT",
+      edit: { kind: "SET_PHASE", phase: "draw" },
+      sourceSurface: "phase-controls",
+    };
+
+    const result = edits(planBasicAutomationCommands(state, gesture, CAPS));
+    expect(result[0]).toEqual({ kind: "SET_PHASE", phase: "draw" });
+    expect(result.some((edit) => edit.kind === "DRAW_CARD")).toBe(false);
   });
 
   it("expands a dawn gesture into the exhaust-clear landing in day", () => {

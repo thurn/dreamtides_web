@@ -200,13 +200,14 @@ describe("planHandoff", () => {
       expect(plan.drawEdits[0]).toMatchObject({ kind: "DRAW_CARD", side: "player" });
     });
 
-    it("skips draw on the very first turn (nextTurnNumber === 1)", () => {
-      // active=enemy at turn 0 would advance to player at turn 1,
-      // but the canonical first-turn case: active=player at turn 1 advances to enemy at turn 1.
+    it("draws for the second player (enemy) on their first turn", () => {
+      // active=player at turn 1 advances to enemy at turn 1 (a player→enemy
+      // handoff keeps the turnNumber). The enemy is the second player, so their
+      // first turn still draws — only the first player's first turn is skipped.
       const state = makeHandoffState({ activeSide: "player", turnNumber: 1 });
       const plan = planHandoff({ state, ...DEFAULT_CONFIG });
-      // next is enemy at turn 1 — first turn, no draw
-      expect(plan.drawEdits).toHaveLength(0);
+      expect(plan.drawEdits).toHaveLength(1);
+      expect(plan.drawEdits[0]).toMatchObject({ kind: "DRAW_CARD", side: "enemy" });
     });
 
     it("does draw on turn 2 (no longer first turn)", () => {
