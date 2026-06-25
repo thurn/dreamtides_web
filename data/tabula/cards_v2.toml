@@ -3447,7 +3447,7 @@ art-owned = false
 card-number = 185
 
 [[cards]]
-name = "Cloaked Sentinel"
+name = "Nullifier"
 mtg-name = "Thalia, Guardian of Thraben"
 id = "6da831c8-6fda-4078-9f2b-873db2416aad"
 rendered-text = "Events cost 1● more."
@@ -3458,10 +3458,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = 2
-tags = ["Art Rework", "June26", "Art Duplicate"]
-image-number = 1295291155
+tags = ["Art Rework", "June26", "Art Duplicate", "Art OK"]
+image-number = 2025883244
 art-owned = true
 card-number = 186
+art = { x = 0, y = -0.29, scale = 1.77 }
 
 [[cards]]
 name = "Veil Crosser"

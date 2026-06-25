@@ -115,7 +115,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Whisper of the Past
 - 1× Call to the Unknown
 - 1× Desperation
-- 1× Cloaked Sentinel
+- 1× Nullifier
 - 1× Reclaimer of Lost Paths
 - 1× Shatterpoint Agent
 - 1× Apocalypse
@@ -1994,7 +1994,7 @@ Tide-sig-20 is an almost entirely character-based warrior tide (102 of 110 copie
 - 1× Bloomweaver
 - 1× Aspiring Guardian
 - 1× Chronicle Reclaimer
-- 1× Cloaked Sentinel
+- 1× Nullifier
 - 1× First Encounter
 - 1× Radiants' Captain
 - 1× Wake the Fallen
