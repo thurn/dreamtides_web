@@ -68,6 +68,46 @@ The `begunEntryKey` bug class dies the same way: "battle has begun" becomes a
 `useState` may never gate game-flow; anything both players must agree on is a
 fold of the log.**
 
+## Concurrency semantics: when both players act in the same window
+
+The log answers *how* concurrent actions stay consistent (they serialize into
+one order; the reducer folds each against the state produced by the previous
+one). What *should* happen when both players act in the same window — player A
+plays card A while player B plays card B — is a separate, game-design
+question, and the reducer is where the answer gets encoded, deterministically,
+per event type. Note the window is not just the network round-trip: a partner
+acting 400 ms before you click produces the same "the board changed under my
+decision" experience with no concurrency involved. The policy below governs
+both cases uniformly.
+
+Four policies, selectable per event type:
+
+1. **Free-run** — both events apply, in log order. Correct for actions that
+   do not interact (each player rearranging their own side, adding notes).
+2. **Scoped preconditions** — the event declares the specific facts it
+   depended on ("the stack is empty", "I have 3 energy", "prompt #41 is
+   open"); the reducer no-ops the event if that dependency broke. The action
+   bounces only when what it *actually relied on* changed, not when anything
+   anywhere changed.
+3. **Strict compare-and-swap** — the event no-ops unless its `basedOnSeq`
+   is still the head, i.e. nothing at all intervened. Maximum protection, but
+   hostile in coop: a partner's unrelated action bounces yours.
+4. **Serialized resolution stack** — playing a card *enqueues* it rather than
+   resolving it. Concurrent plays land on the stack in log order and resolve
+   one at a time, each against the state the previous resolution produced;
+   the reducer may open a confirmation prompt when a queued play's context
+   materially changed before it resolves. No action is silently lost, and
+   card interactions occur in one well-defined order — the digital analogue
+   of how physical card games sequence "we both acted at once."
+
+Recommended defaults: scoped preconditions as the baseline, the resolution
+stack for card plays, strict CAS reserved for genuinely exclusive one-shot
+decisions (prompt resolution — already scoped via `promptId` — and
+`BEGIN_BATTLE`). Whatever mix is chosen, the property that matters is that
+the policy lives in exactly one place (the reducer) and is deterministic;
+the snapshot-sync model has no mechanism to enforce any policy, so the
+outcome of a concurrent pair of writes is an accident of write timing.
+
 ## Data model
 
 ```
