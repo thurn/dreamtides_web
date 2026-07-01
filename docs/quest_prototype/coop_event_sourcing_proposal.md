@@ -58,7 +58,7 @@ fan-out (`onValue`) for delivery.
 | Requirement | Why it holds |
 |---|---|
 | No authoritative server | Ordering comes from an RTDB transaction; folding happens on each client. Nothing else exists. |
-| Any action, any time, simultaneously | Events are always appendable. *Meaning* is decided by the reducer at the event's position in the log: a stale or conflicting intent folds to a recorded **no-op**. Two players clicking "advance Dreamwell" simultaneously produce two log entries; the first advances, the second no-ops. |
+| Any action, any time, simultaneously | Events are always appendable. *Meaning* is decided by the reducer at the event's position in the log under strict compare-and-swap (see below): an intent based on a state a partner has since changed folds to a recorded **no-op** with a visible bounce. Two players clicking "advance Dreamwell" simultaneously produce two log entries; the first advances, the second no-ops. |
 | Impossible to corrupt state via UI | There is no code path by which a UI action writes state. State is not stored (snapshots are pure caches of the fold, see below). A client can at worst append an event the reducer ignores. |
 | Double-simulation architecturally impossible | Simulation is not an *action that runs*; it is a pure computation every client performs identically while folding. There is nothing to run twice, no gate to misjudge, no follow-up write to race. |
 
@@ -68,45 +68,59 @@ The `begunEntryKey` bug class dies the same way: "battle has begun" becomes a
 `useState` may never gate game-flow; anything both players must agree on is a
 fold of the log.**
 
-## Concurrency semantics: when both players act in the same window
+## Concurrency semantics: strict compare-and-swap
 
 The log answers *how* concurrent actions stay consistent (they serialize into
 one order; the reducer folds each against the state produced by the previous
-one). What *should* happen when both players act in the same window — player A
-plays card A while player B plays card B — is a separate, game-design
-question, and the reducer is where the answer gets encoded, deterministically,
-per event type. Note the window is not just the network round-trip: a partner
-acting 400 ms before you click produces the same "the board changed under my
-decision" experience with no concurrency involved. The policy below governs
-both cases uniformly.
+one). The policy for what happens when both players act in the same window is
+**strict compare-and-swap**: an action takes effect only if it was decided
+against the current state; otherwise it bounces and the player re-decides.
 
-Four policies, selectable per event type:
+Every game event carries `basedOnSeq`: the seq of the newest event folded
+into the state the acting player was looking at when they committed to the
+action. The reducer applies an event at seq *n* only if every seq in
+`(basedOnSeq, n)` belongs to the **same actor** (see the self-chain rule
+below); if any partner event intervened, the event folds to a recorded
+no-op and the actor's client surfaces an explicit bounce ("your partner
+acted first — the board has changed").
 
-1. **Free-run** — both events apply, in log order. Correct for actions that
-   do not interact (each player rearranging their own side, adding notes).
-2. **Scoped preconditions** — the event declares the specific facts it
-   depended on ("the stack is empty", "I have 3 energy", "prompt #41 is
-   open"); the reducer no-ops the event if that dependency broke. The action
-   bounces only when what it *actually relied on* changed, not when anything
-   anywhere changed.
-3. **Strict compare-and-swap** — the event no-ops unless its `basedOnSeq`
-   is still the head, i.e. nothing at all intervened. Maximum protection, but
-   hostile in coop: a partner's unrelated action bounces yours.
-4. **Serialized resolution stack** — playing a card *enqueues* it rather than
-   resolving it. Concurrent plays land on the stack in log order and resolve
-   one at a time, each against the state the previous resolution produced;
-   the reducer may open a confirmation prompt when a queued play's context
-   materially changed before it resolves. No action is silently lost, and
-   card interactions occur in one well-defined order — the digital analogue
-   of how physical card games sequence "we both acted at once."
+Consequences:
 
-Recommended defaults: scoped preconditions as the baseline, the resolution
-stack for card plays, strict CAS reserved for genuinely exclusive one-shot
-decisions (prompt resolution — already scoped via `promptId` — and
-`BEGIN_BATTLE`). Whatever mix is chosen, the property that matters is that
-the policy lives in exactly one place (the reducer) and is deterministic;
-the snapshot-sync model has no mechanism to enforce any policy, so the
-outcome of a concurrent pair of writes is an accident of write timing.
+- **An action only ever resolves against the exact state its player saw.**
+  Player A plays card A while player B plays card B: the first append
+  applies; the second bounces; the losing player re-decides with the board
+  that now contains the winning card. Two decisions made against divergent
+  views of the board can never both apply.
+- **Self-chain exemption.** A player's own in-flight events never invalidate
+  their subsequent events: each was based on that player's optimistic fold,
+  which already included their own prior intents. This lets one player act
+  rapidly in succession without gating every click on a network round-trip.
+  Only *partner* events break the chain — which is precisely the "state I
+  decided on changed" condition the policy exists to catch.
+- **Prompts are the head of the decision queue.** While `pendingPrompt` is
+  open, the reducer no-ops every intent except a `RESOLVE_PROMPT` whose
+  `promptId` matches. Both players racing to answer the same prompt with
+  different choices: first resolution applies, second bounces.
+- **Duplicate-click bugs vanish uniformly.** Both players hitting "advance
+  Dreamwell" or "Begin Battle" simultaneously is just the general case:
+  first applies, second is a recorded no-op — one policy, not per-feature
+  special cases.
+- **Undo is CAS'd like everything else** — an undo decided against a stale
+  board bounces rather than yanking state out from under a partner's action.
+
+UX contract: the optimistic local echo applies immediately; a bounce rolls
+it back visibly with a notification, never silently. The bounce window is
+one network round-trip (~100–300 ms) plus true simultaneity, so at human
+coop rates bounces are rare — and when they happen, the player sees why and
+re-decides, which is the desired behavior rather than a failure.
+
+Escape hatch: an event type with no rules meaning and no ability to change
+any decision context (card notes, cosmetic annotations) may be marked
+CAS-exempt and free-run in log order. Everything that touches game state
+goes through CAS, no exceptions — the reducer is the single place the policy
+lives, and it is deterministic; the snapshot-sync model has no mechanism to
+enforce any policy at all, so the outcome of a concurrent pair of writes is
+an accident of write timing.
 
 ## Data model
 
@@ -127,7 +141,7 @@ interface GameEvent {
   payload: Record<string, unknown>;   // UUIDs, choice indices, drag targets
   actor: string;                // clientId, for display/telemetry
   clientTimestamp: string;      // display data only; stamped by the appender
-  basedOnSeq: number;           // what the appender had folded when it acted (UX/telemetry)
+  basedOnSeq: number;           // newest seq folded into the state the actor saw — the CAS guard
   stateHashAfter?: string;      // appender's local fold hash — divergence tripwire
 }
 ```
@@ -180,8 +194,10 @@ pure and the state is ~tens of KB.
 
 On click, the client folds its own intent locally and renders immediately,
 then reconciles when the transaction commits. If a partner event won the race
-for that seq, re-fold from the confirmed log. Pure folds make this a cheap
-recompute with no bespoke rollback code.
+for that seq, re-fold from the confirmed log — the CAS rule folds the local
+intent to a no-op, so the echo rolls back and the client shows the bounce
+notification. Pure folds make this a cheap recompute with no bespoke
+rollback code.
 
 ## Where the simulation goes
 
@@ -290,6 +306,12 @@ legacy `questState`; the boundary is the existing battle-entry/exit seam.
 - Phase 2 is a substantive rewrite of the automation orchestration layer,
   and prompt lifecycle in particular (React refs → reducer state) is the
   hardest single piece.
+- Strict CAS serializes decision-making globally: a partner action in flight
+  bounces yours even when the two are causally unrelated (they play a card
+  on their side while your drag is mid-air). At two-player human rates this
+  is rare and self-explaining, but it is a deliberate trade of fluidity for
+  the guarantee that an action never resolves against a state its player
+  did not see.
 - Both clients must run the same reducer build; version skew becomes a
   visible "please reload" state rather than something that limps along.
 - Reducer bugs now hit both players identically. This is a trade *up*: a bug
