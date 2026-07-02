@@ -1,0 +1,444 @@
+/* Tango design tokens.
+   ================================================================
+   Source of truth: the Claude Design "Dreamtides Mobile" project
+   (projectId 10fa84a8-cdc2-4e83-80af-47df24d1c247), tokens/*.css.
+   Every custom-property declaration below is copied verbatim from that
+   project — values are never renamed or edited here, and trailing
+   `@kind` comments are preserved because a later generator reads them
+   to group tokens by kind for the Primitives section.
+
+   Each source file's top-level `:root { ... }` block is rescoped to
+   `.tango { ... }` so these tokens only apply within the Tango
+   subtree and never leak onto the rest of the app.
+
+   Two of the six source files contribute no rules here:
+     - tokens/base.css declares element/class resets (body, h1, button,
+       .dt-keyword, .hud-outline, scrollbars, …), not custom properties,
+       so it has nothing to import for a tokens file.
+     - tokens/fonts.css only contains a Google Fonts `@import` for
+       Anton, EB Garamond, Fira Sans Condensed, Inter, and JetBrains
+       Mono. The app already loads all five of those families itself
+       (see the `<link>` tag in index.html and src/runtime/verify-fonts.ts),
+       so this file intentionally does not add a second, CDN-based
+       font load. The `--font-*` custom properties that reference those
+       families still come through below, via typography.css. */
+
+/* ---- tokens/colors.css ----
+   Dreamtides Mobile — Color System
+   ================================================================
+   NORMALIZED to the parent Dreamtides Design System: the base hues
+   (backgrounds, purple accent, the two card resources, the essence/
+   omens currencies, ownership) match the parent's token VALUES so any
+   shared element — above all the game card — renders identically. The
+   token NAMES stay mobile-flavored; only the resolved colors are pinned
+   to the parent. Mobile-only roles (sale, category pills) sit on top.
+
+   Base values are raw colors. Semantic aliases below map them to roles
+   so product code never references a raw hex. */
+
+.tango {
+  /* ---- Base: dream backgrounds (darkest -> lifted) ----
+     Anchored to the parent ramp: void-800 = parent --dt-bg-0,
+     void-700 = bg-1, plum-700 = bg-2/surface, plum-500 = surface-light. */
+  --void-900: #060410;   /* the deepest backdrop, behind everything */
+  --void-800: #0a0612;   /* default app background (parent --dt-bg-0) */
+  --void-700: #14101f;   /* raised background band   (parent --dt-bg-1) */
+  --plum-700: #1a1525;   /* card / sheet surface      (parent --dt-bg-2) */
+  --plum-600: #221a31;   /* elevated surface, popover */
+  --plum-500: #2a2040;   /* hover / pressed surface  (parent surface-light) */
+  --plum-400: #3a3050;   /* hairline-lifted, chip fill (parent --dt-border) */
+
+  /* ---- Base: violet accent (the brand glow) — matches parent ---- */
+  --violet-700: #6d28d9;
+  --violet-600: #7c3aed;  /* parent --dt-primary */
+  --violet-500: #9333ea;
+  --violet-400: #a855f7;  /* primary accent (parent --dt-primary-light) */
+  --violet-300: #c084fc;  /* bright glow / highlight (parent --dt-accent-strong) */
+  --violet-200: #d8b4fe;  /* parent --dt-essence */
+
+  /* ---- Base: gold (omens, reward, victory) — matches parent ---- */
+  --gold-600: #d4a017;    /* parent --dt-gold */
+  --gold-500: #e0a82a;
+  --gold-400: #fbbf24;    /* parent --dt-gold-light (omens value) */
+  --gold-300: #ffd34d;
+
+  /* ---- Base: card resources — matches parent ---- */
+  --energy-600: #0c4a6e;  /* energy droplet deep / border (parent --dt-energy-border) */
+  --energy-400: #0ea5e9;  /* energy droplet (parent --dt-energy) */
+  --energy-300: #38bdf8;
+  --spark-500: #f3c33f;   /* spark sparkle — production SPARK_ICON_COLOR (parent --dt-spark) */
+  --spark-600: #854d0e;   /* spark border (parent --dt-spark-border) */
+  --ember-500: #ef4444;   /* danger / boss / purge / close (parent --dt-enemy) */
+  --ember-400: #f87171;
+  --ember-600: #c0341f;
+  --sap-500: #16a34a;     /* deep player/grant green */
+  --sap-400: #22c55e;     /* grant / player green (parent --dt-player) */
+  --coral-400: #fb7185;   /* sale tag (mobile-only) */
+  --rust-500: #b9622f;    /* tide / earthy affiliation */
+  --orange-500: #f97316;  /* default selection ring — production SELECTION_DEFAULT_COLOR */
+
+  /* ---- Base: text on dark ---- */
+  --ink-100: #f6f1ff;     /* primary, a warm near-white */
+  --ink-300: #cabbe2;     /* secondary */
+  --ink-400: #9c8db8;     /* muted */
+  --ink-500: #6f6388;     /* faint label / disabled */
+
+  /* ---- Base: lines & scrims ---- */
+  --line-soft: rgba(255, 255, 255, 0.07);
+  --line-mid:  rgba(255, 255, 255, 0.12);
+  --line-violet: rgba(168, 85, 247, 0.40);
+  --scrim-700: rgba(5, 3, 10, 0.72);   /* modal backdrop */
+  --scrim-900: rgba(5, 3, 10, 0.90);
+
+  /* ================================================================
+     SEMANTIC ALIASES — reference these in product code
+     ================================================================ */
+
+  /* Backgrounds & surfaces */
+  --bg-app: var(--void-800);
+  --bg-sunken: var(--void-900);
+  --bg-band: var(--void-700);
+  --surface-card: var(--plum-700);
+  --surface-raised: var(--plum-600);
+  --surface-hover: var(--plum-500);
+  --surface-chip: var(--plum-400);
+  --surface-glass: #191423;   /* solid raised chrome (HUD/popovers/windows) */
+  --surface-glass-strong: #120e1c;  /* solid, deeper chrome for windows */
+
+  /* Text */
+  --text-primary: var(--ink-100);
+  --text-secondary: var(--ink-300);
+  --text-muted: var(--ink-400);
+  --text-faint: var(--ink-500);
+  --text-on-accent: #ffffff;
+  --text-on-card: #f6f6f5;   /* card name on dark card chrome (parent value) */
+
+  /* Accent / primary action */
+  --accent: var(--violet-400);
+  --accent-strong: var(--violet-600);
+  --accent-bright: var(--violet-300);
+  --accent-tint: rgba(168, 85, 247, 0.16);   /* low-alpha fill behind accents */
+
+  /* Resource roles (game economy) — match the parent's resource marks */
+  --energy: var(--energy-400);    /* blue droplet  (bxf bx-fire-alt) */
+  --spark: var(--spark-500);      /* gold sparkle  (bxf bx-sparkles) */
+  --essence: var(--violet-400);   /* violet, unified with accent  (bxf bx-crypto) */
+  --points: var(--essence);       /* points share the essence hue */
+  --danger: var(--ember-500);
+  --positive: var(--sap-400);     /* player / grant green (parent --dt-player) */
+  --sale: var(--coral-400);
+  --selected: var(--orange-500);  /* default card selection ring */
+
+  /* Lines / borders */
+  --border-soft: var(--line-soft);
+  --border-mid: var(--line-mid);
+  --border-accent: var(--line-violet);
+
+  /* Status / category colors (offer pills, tags) */
+  --cat-grant: var(--sap-400);
+  --cat-improve: var(--violet-300);
+  --cat-remove: var(--ember-400);
+  --cat-dreamsign: var(--gold-300);
+
+  /* ================================================================
+     PRODUCTION ALIASES — cross-system bridge
+     ================================================================
+     The desktop/production codebase references its resources through
+     three other namespaces: --dt-* (atlas, atlas.css), --cv-* (card
+     chrome, index.css) and --color-* (global). The mobile DS holds the
+     same VALUES under mobile-flavored names; these aliases re-export them
+     under the production names so a shared element (above all the game
+     card) resolves identically in either system. Add to these as more
+     production token names surface (the --color-* global set is pending
+     index.css).
+
+     NOTE: --dt-spark / --cv-rules-spark-color resolve to #f3c33f to match
+     production SPARK_ICON_COLOR. */
+
+  /* --dt-* — atlas / shared (values authoritative from atlas.css `.dream-atlas`).
+     The extra --dt-bg-* / -spark/-enemy/-player names are the parent ramp the
+     atlas reads from; the overlapping names are pinned to atlas.css. */
+  --dt-bg-0: var(--void-800);
+  --dt-bg-1: var(--void-700);
+  --dt-bg-2: var(--plum-700);
+  --dt-surface: var(--plum-700);          /* atlas #1a1525 */
+  --dt-surface-light: var(--plum-500);
+  /* purple-tinted hairline (was a stray neutral slate rgba(148,163,184,.28)
+     that leaked into the warm atlas palette — now a plum-lifted line). */
+  --dt-border: rgba(168, 85, 247, 0.22);
+  --dt-line: rgba(168, 85, 247, 0.18);
+  --dt-line-strong: rgba(168, 85, 247, 0.42);
+  --dt-accent-soft: rgba(168, 85, 247, 0.12); /* atlas low-alpha accent fill */
+  --dt-primary: var(--violet-600);        /* #7c3aed */
+  --dt-primary-light: var(--violet-400);
+  --dt-accent-strong: var(--violet-400);  /* atlas #a855f7 */
+  --dt-essence: var(--violet-300);        /* atlas #c084fc */
+  --dt-energy: var(--violet-300);         /* atlas reuses #c084fc here */
+  --dt-energy-border: var(--energy-600);
+  --dt-gold: var(--gold-600);             /* #d4a017 — completed/traveled */
+  --dt-gold-light: var(--gold-400);       /* #fbbf24 */
+  --dt-spark: var(--spark-500);           /* #f3c33f */
+  --dt-spark-border: var(--spark-600);
+  --dt-enemy: var(--ember-500);
+  --dt-player: var(--sap-400);
+  --dt-text: #ece7f5;
+  --dt-text-dim: #b3aac8;
+  --dt-text-faint: #7b7299;
+
+  /* Atlas-specific gradients & washes (atlas.css `.dream-atlas`) */
+  --dt-wash-journey: radial-gradient(120% 95% at 50% 30%, #241a3a, #140e22 55%, #0a0612); /* @kind other */
+  --dt-gradient-title: linear-gradient(90deg, #f3eefb, #c084fc); /* @kind other */
+
+  /* --color-* — global (index.css :root), production literals so desktop code
+     referencing them resolves to the exact same values. */
+  --color-bg: #0a0612;
+  --color-surface: #1a1525;
+  --color-surface-light: #2a2040;
+  --color-border: #3a3050;
+  --color-primary: #7c3aed;
+  --color-primary-light: #a855f7;
+  --color-gold: #d4a017;
+  --color-gold-light: #fbbf24;
+  --color-essence: #a855f7;
+  --color-essence-glow-strong: rgba(168, 85, 247, 0.5);
+  --color-essence-glow-soft: rgba(168, 85, 247, 0.2);
+  --color-essence-bg: rgba(168, 85, 247, 0.1);
+  --color-essence-border: rgba(168, 85, 247, 0.35);
+  --color-text: #e2e8f0;
+  --color-text-dim: #94a3b8;
+
+  /* --cv-* — card chrome / rules text (index.css) */
+  --cv-rules-energy-color: var(--energy-400);     /* #0ea5e9 */
+  --cv-rules-spark-color: var(--spark-500);       /* #f3c33f */
+  --cv-rules-highlight-color: var(--spark-500);   /* glossary-term amber */
+  --cv-selection-color: var(--orange-500);        /* #f97316 default ring */
+  --cv-paragraph-gap: 0.4em;                       /* index.css — gap between ability blocks */
+
+  /* ================================================================
+     SHARED CANONICAL LAYER — the one set every surface converges on
+     ================================================================
+     Production today re-declares text / line / spark per surface: the
+     BATTLE shell scopes its own neutral-slate `--text/-dim/-faint/-line`
+     + `--spark` and falls back to system fonts, so battle reads as a
+     different game from the warm, serif-led atlas / card surfaces.
+
+     These SHORT canonical names are the single layer battle (and atlas,
+     and the card) should reference instead of forking. They resolve to
+     the warm, purple-tinted brand values — never neutral gray. Migrating
+     battle = delete its local `--text/-dim/-faint/-line/-spark` and point
+     these names at this layer; swap `system-ui` -> `--font-sans`,
+     `ui-monospace` -> `--font-mono`, and use `--font-serif` for titles
+     and card names.
+
+     (`--accent`, `--spark`, `--energy`, `--danger`, `--essence` already
+     live in the semantic block above; the `--font-*` faces live in
+     typography.css. Listed here as the canonical contract.) */
+  --text: var(--dt-text);             /* #ece7f5 warm near-white (NOT slate #e2e8f0) */
+  --text-dim: var(--dt-text-dim);     /* #b3aac8 warm (NOT slate #94a3b8) */
+  --text-faint: var(--dt-text-faint); /* #7b7299 purple (NOT neutral gray #6b7280) */
+  --surface: var(--surface-card);     /* #1a1525 plum */
+  --line: var(--dt-line);             /* rgba(168,85,247,.18) — purple hairline */
+  --line-strong: var(--dt-line-strong);/* rgba(168,85,247,.42) */
+  --gold: var(--gold-600);            /* #d4a017 reward / completed / victory */
+  /* canonical font faces (authoritative in typography.css) */
+  --font-serif-canon: var(--font-serif);  /* EB Garamond — titles, names */
+  --font-sans-canon: var(--font-sans);    /* Inter — body, HUD, buttons */
+  --font-mono-canon: var(--font-mono);    /* JetBrains Mono — eyebrows */
+  --font-rules-canon: var(--font-rules);  /* Fira Sans Condensed — rules text */
+}
+
+/* ---- tokens/typography.css ----
+   Dreamtides Mobile — Typography
+   ================================================================
+   NORMALIZED to the parent Dreamtides Design System's type voices so
+   shared elements (above all the game card) render identically:
+
+     1. UI / chrome  — Inter (production --dt-font-ui). Buttons, labels,
+                       HUD, body. Falls back to system-ui.
+     1b. Mono        — JetBrains Mono (production --dt-font-mono). Eyebrows.
+     2. Serif        — EB Garamond. Card names, screen titles, place
+                       names, Dreamcaller names, italic flavor. The
+                       "dream" voice.
+     3. Rules        — Fira Sans Condensed. Dense card rules-text body.
+     4. Mono         — ui-monospace. Eyebrows, counters, pills (upcased,
+                       letter-spaced).
+     5. Display num  — Anton. The heavy numeral inside spark / energy
+                       stat orbs.
+
+   Type sizes stay tuned for the iPhone canvas (390pt wide); body text
+   never goes below 13px and tap-target labels sit at 15–17px.
+
+   All five font families referenced below (EB Garamond, Inter, Fira
+   Sans Condensed, Anton, JetBrains Mono) are already loaded by the app
+   (see the Google Fonts `<link>` in index.html), so no separate font
+   load is added here — see tokens/fonts.css above. */
+
+.tango {
+  /* ---- Families (match the parent) ---- */
+  --font-serif: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --font-rules: 'Fira Sans Condensed', 'Inter', system-ui, sans-serif;
+  --font-display: 'Anton', Impact, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+  --font-logo: var(--font-serif);   /* wordmark = serif + violet title gradient */
+
+  /* ---- Weights ---- */
+  --w-regular: 400;   /* @kind font */
+  --w-medium: 500;    /* @kind font */
+  --w-semibold: 600;  /* @kind font */
+  --w-bold: 700;      /* @kind font */
+  --w-extrabold: 800; /* @kind font */
+
+  /* ---- Display / serif scale (titles, place names) ---- */
+  --t-display: 600 40px/1.04 var(--font-serif);    /* screen hero title */
+  --t-title: 600 30px/1.08 var(--font-serif);      /* place / screen name */
+  --t-title-sm: 600 23px/1.12 var(--font-serif);   /* card-detail name, section */
+  --t-serif-body: 500 17px/1.4 var(--font-serif);  /* quotes, flavor */
+
+  /* ---- Sans / UI scale ---- */
+  --t-lead: 600 19px/1.3 var(--font-sans);         /* prominent UI heading */
+  --t-body: 500 15px/1.45 var(--font-sans);        /* default body */
+  --t-body-sm: 500 13px/1.45 var(--font-sans);     /* dense UI body */
+  --t-rules: 500 14px/1.32 var(--font-rules);      /* card / ability rules text */
+  --t-button: 700 16px/1 var(--font-sans);         /* button face */
+  --t-button-sm: 700 14px/1 var(--font-sans);
+  --t-caption: 600 12px/1.35 var(--font-sans);     /* metadata */
+
+  /* ---- InfoCard popover scale (R-16) ----
+     The ONE type scale every press-reveal popover uses, formalized from the
+     shipped InfoCard: a serif headline, rules-face body, mono meta. */
+  --t-popover-headline: 600 19px/1.18 var(--font-serif);  /* letter-spacing: -0.01em */
+  --t-popover-body: 500 14px/1.45 var(--font-rules);
+  --t-popover-meta: 700 10.5px/1 var(--font-mono);        /* .12em uppercase */
+
+  /* ---- Eyebrow / overline (mono, letter-spaced, uppercase) ---- */
+  --t-eyebrow: 700 11px/1.2 var(--font-mono);
+  --tracking-eyebrow: 0.14em;   /* @kind other */
+  --tracking-wordmark: 0.01em;  /* @kind other */
+
+  /* numeric chips (essence/score values) read best in tabular sans;
+     card stat ORBS use --font-display (Anton) directly. */
+  --t-numeral: 800 17px/1 var(--font-sans);
+}
+
+/* ---- tokens/spacing.css ----
+   Dreamtides Mobile — Spacing & Layout
+   ================================================================
+   An 8pt-based scale with a couple of half-steps for dense card chrome.
+   Mobile-first: safe-area insets, fixed bottom HUD height, and the
+   minimum 44pt touch target are all tokens so every surface agrees. */
+
+.tango {
+  /* ---- Spacing scale (8pt base, with 2/4/6 half-steps) ---- */
+  --space-0: 0;
+  --space-1: 2px;
+  --space-2: 4px;
+  --space-3: 6px;
+  --space-4: 8px;
+  --space-5: 12px;
+  --space-6: 16px;
+  --space-7: 20px;
+  --space-8: 24px;
+  --space-9: 32px;
+  --space-10: 40px;
+  --space-11: 48px;
+  --space-12: 64px;
+
+  /* ---- Screen gutters (the breathing room on a phone edge) ---- */
+  --gutter: 18px;          /* default horizontal page padding */
+  --gutter-tight: 12px;    /* dense grids */
+
+  /* ---- Touch & control sizing ---- */
+  --touch-min: 44px;       /* never smaller — Apple HIG floor */
+  --control-h: 52px;       /* default primary button / row height */
+  --control-h-sm: 40px;    /* secondary / inline */
+  --hud-h: 64px;           /* persistent bottom resource bar */
+  --sheet-grab: 36px;      /* drag handle width on bottom sheets */
+
+  /* ---- Device frame (iPhone canvas the kit designs against) ---- */
+  --device-w: 390px;       /* iPhone logical width */
+  --device-h: 844px;       /* iPhone logical height */
+  --safe-top: 59px;        /* status bar + Dynamic Island region */
+  --safe-bottom: 34px;     /* home indicator inset */
+
+  /* ---- Card aspect (the game card) — production CARD_ASPECT_RATIO = 5/7 ---- */
+  --card-aspect: 5 / 7; /* @kind other */
+}
+
+/* ---- tokens/effects.css ----
+   Dreamtides Mobile — Effects: radii, shadows, glow, motion
+   ================================================================
+   The dream look is carried by soft elevation + violet glow on
+   interactive elements over solid dark surfaces, and gentle eased
+   motion (no harsh bounces). These tokens encode all of it. */
+
+.tango {
+  /* ---- Corner radii ---- */
+  --r-xs: 6px;
+  --r-sm: 10px;
+  --r-md: 14px;     /* default control / chip */
+  --r-lg: 18px;     /* cards, tiles */
+  --r-xl: 24px;     /* sheets, large surfaces */
+  --r-2xl: 30px;    /* hero panels */
+  --r-pill: 999px;  /* pills, fully-round buttons */
+  --r-card: 16px;   /* the game card corner */
+  --r-popover: 8px; /* @kind radius */
+
+  /* ---- The one press-down factor (R-03 / R-14) ----
+     Every control — JS <Pressable>/usePress AND CSS-only controls via :active —
+     compresses by EXACTLY this on touch-down. Always < 1 (compress, never
+     enlarge). Was 0.965 in the old guide; reconciled to the shipped 0.94. */
+  --press-scale: 0.94; /* @kind other */
+
+  /* ---- Elevation shadows (cool, purple-black — never neutral gray) ---- */
+  --shadow-sm: 0 1px 3px rgba(4, 2, 10, 0.5);
+  --shadow-md: 0 6px 18px rgba(4, 2, 10, 0.55);
+  --shadow-lg: 0 16px 40px rgba(3, 1, 8, 0.62);
+  --shadow-card: 0 10px 26px rgba(3, 1, 8, 0.55), 0 2px 6px rgba(3, 1, 8, 0.4);
+  --shadow-sheet: 0 -12px 40px rgba(3, 1, 8, 0.6);
+
+  /* ---- Violet glow (the signature accent halo) ---- */
+  --glow-accent: 0 0 0 1px rgba(168, 85, 247, 0.35), 0 6px 22px rgba(147, 51, 234, 0.45);
+  --glow-accent-soft: 0 0 24px rgba(147, 51, 234, 0.35);
+  --glow-accent-strong: 0 0 0 1px rgba(192, 132, 252, 0.6), 0 8px 30px rgba(147, 51, 234, 0.6);
+  --glow-gold: 0 0 18px rgba(250, 204, 21, 0.5);
+  --glow-danger: 0 0 0 1px rgba(239, 68, 68, 0.5), 0 6px 22px rgba(239, 68, 68, 0.4);
+  --glow-text: 0 0 26px rgba(168, 85, 247, 0.7);  /* for the wordmark / hero title */
+
+  /* ---- Inset / inner detail (card frame bevel, pressed states) ---- */
+  --inset-top: inset 0 1px 0 rgba(255, 255, 255, 0.08);  /* @kind shadow */
+  --inset-press: inset 0 2px 8px rgba(3, 1, 8, 0.5);  /* @kind shadow */
+
+  /* ---- Object materials (kept — a thing's OWN surface, never a legibility
+     overlay). The energy orb fill, the wordmark gradient, the reward gold. ---- */
+  --gradient-accent: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); /* @kind other */
+  --gradient-gold: linear-gradient(135deg, #ffd34d 0%, #e0a82a 100%);   /* @kind other */
+  --gradient-energy: linear-gradient(160deg, #38bdf8 0%, #0ea5e9 100%); /* @kind other */
+
+  /* ---- Atmospheric mote tints (R-07 / R-16) ----
+     The ONLY sanctioned use of opacity animation: drifting particles, tinted by
+     context. Violet over chrome, warm gold over scene art. NOT a legibility or
+     mood overlay — depth is carried by the art + these motes, never by a scrim. */
+  --mote-warm: rgba(255, 238, 200, 0.55);    /* @kind color */
+  --mote-warm-glow: rgba(255, 224, 160, 0.7);/* @kind color */
+  --mote-violet: rgba(216, 180, 254, 0.6);   /* @kind color */
+  --mote-violet-glow: rgba(192, 132, 252, 0.7);/* @kind color */
+
+  /* ---- Motion ---- */
+  --ease-dream: cubic-bezier(0.22, 0.61, 0.36, 1);  /* @kind other */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);  /* @kind other */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);  /* @kind other */
+  --dur-fast: 140ms;  /* @kind other */
+  --dur-base: 240ms;  /* @kind other */
+  --dur-slow: 420ms;  /* @kind other */
+
+  /* ---- Material-continuity motion (R-01) ----
+     The two canonical transitions every component specs its enter/change/exit
+     against, so timing + easing can't diverge per surface. Nothing fades in;
+     objects TRAVEL and EXPAND, and reverse on the way out.
+       object-travel     — a value / card moving between two anchors
+       container-transform — an object expanding into its detail view */
+  --motion-object-travel: 420ms var(--ease-out);        /* @kind other */
+  --motion-container-transform: 320ms var(--ease-dream);/* @kind other */
+  --stagger-travel: 55ms;  /* @kind other */
+}
