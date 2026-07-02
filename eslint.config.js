@@ -1,5 +1,6 @@
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
+import tangoNoExternalUiImports from "./eslint-rules/no-external-ui-imports.js";
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -27,10 +28,18 @@ export default tseslint.config(
     },
   },
   {
+    files: ["src/tango/**/*.{ts,tsx}"],
+    plugins: {
+      tango: { rules: { "no-external-ui-imports": tangoNoExternalUiImports } },
+    },
+    rules: { "tango/no-external-ui-imports": "error" },
+  },
+  {
     ignores: [
       "node_modules/",
       "dist/",
       ".claude/worktrees/",
+      "eslint-rules/",
       "eslint.config.js",
       "vite.config.ts",
     ],
