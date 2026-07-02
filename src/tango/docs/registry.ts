@@ -9,6 +9,7 @@
 // while it is.
 
 import type { ComponentType, ReactNode } from "react";
+import { buttonDemo } from "./demos/button";
 import { pressableDemo } from "./demos/pressable";
 import { resourceChipDemo } from "./demos/resource-chip";
 
@@ -56,6 +57,7 @@ export interface TangoComponent {
 export const TANGO_COMPONENTS: TangoComponent[] = [
   pressableDemo,
   resourceChipDemo,
+  buttonDemo,
 ];
 
 /** Look up a registry entry by its route id. */
