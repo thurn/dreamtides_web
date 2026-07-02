@@ -29,10 +29,6 @@ Card data lives in data/tabula/cards_v2.toml
 
 Dreamcallers live in data/tabula/dreamcallers_v2.toml
 
-Ignore all metadata systems on cards like "tides", "tags",
-"archetypes", etc. These are all legacy. Tides no longer
-exist.
-
 Please always identify cards by UUID, *never* by card name.
 
 Card names ARE NOT UNIQUE. Creating a map or set keyed by card name
