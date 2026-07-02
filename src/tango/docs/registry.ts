@@ -10,6 +10,7 @@
 
 import type { ComponentType, ReactNode } from "react";
 import { pressableDemo } from "./demos/pressable";
+import { resourceChipDemo } from "./demos/resource-chip";
 
 /**
  * A single documented entry in the Tango catalog.
@@ -52,7 +53,10 @@ export interface TangoComponent {
  * The Tango component catalog. Append one object literal per component. Order
  * within a group is preserved; TangoApp groups entries by `group` for the TOC.
  */
-export const TANGO_COMPONENTS: TangoComponent[] = [pressableDemo];
+export const TANGO_COMPONENTS: TangoComponent[] = [
+  pressableDemo,
+  resourceChipDemo,
+];
 
 /** Look up a registry entry by its route id. */
 export function getComponent(id: string): TangoComponent | undefined {

@@ -211,5 +211,61 @@
       "defaultValue": null,
       "description": "Content rendered inside the pressable element."
     }
+  ],
+  "ResourceChip": [
+    {
+      "name": "kind",
+      "tsType": "ResourceKind",
+      "unionMembers": [
+        "essence",
+        "energy",
+        "spark",
+        "points",
+        "counter"
+      ],
+      "required": false,
+      "defaultValue": "essence",
+      "description": "Which economy value: essence, energy, spark, points, counter. Rendered as\nthe parent's filled-Boxicon mark (bx-crypto / bx-fire-alt / bx-sparkles /\nbx-star-circle / bx-hourglass), colored by role."
+    },
+    {
+      "name": "value",
+      "tsType": "string | number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "The numeric value to show. Omit to render the mark alone."
+    },
+    {
+      "name": "size",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "16",
+      "description": "Pixel font-size; everything scales from it."
+    },
+    {
+      "name": "chip",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Render as a solid pill badge (for HUD/over-art) instead of inline text."
+    },
+    {
+      "name": "gap",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "0",
+      "description": "Space between the value and its mark. Default 0 — a tight pairing (200◆)."
+    },
+    {
+      "name": "style",
+      "tsType": "CSSProperties",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "{}",
+      "description": ""
+    }
   ]
 }
