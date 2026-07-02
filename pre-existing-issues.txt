@@ -24,6 +24,29 @@ The bake preserves any hand-edited annotations by tide id (tides4) / tide name
 (tides5) on the next re-bake.
 
 
+Pre-existing: /tango ComponentPage layout does not collapse on mobile viewports
+================================================================================
+
+src/tango/docs/ComponentPage.tsx lays out the Demo and Controls sections with a
+fixed two-column CSS grid (`gridTemplateColumns: "minmax(0, 1fr) minmax(220px,
+320px)"`, no responsive media/container query), and PropsTable.tsx renders an
+unwrapped `<table>` with no horizontal-scroll container. At narrow viewports
+(e.g. the 390x844 iPhone frame used for Tango's mobile-first QA), the Controls
+panel does not stack below the Demo panel — it overlaps it — and the props
+table's right-hand columns (Default, Description) run off the viewport edge
+with no way to scroll to them.
+
+This predates any single component's import: it was latent while
+TANGO_COMPONENTS was empty (Phase 1) and first became visible once Pressable
+(Phase 2's first real component) gave the page real content to lay out during
+mobile QA. It will affect every subsequent component's doc page equally.
+Fixing it means adding a narrow-viewport breakpoint to ComponentPage's grid
+(stack to one column) and wrapping PropsTable's `<table>` in a horizontally
+scrollable container — a change to the shared harness, not to any one
+component, so it should land as its own harness task rather than inside a
+per-component import.
+
+
 Pre-existing: spine-redundancy-experiment.mjs port is not faithful
 ==================================================================
 
