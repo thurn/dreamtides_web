@@ -154,6 +154,10 @@ function normalizeProp(prop) {
  *
  * Heuristic: the name must start with an uppercase letter AND contain at
  * least one lowercase letter (which rules out ALL-CAPS constants).
+ *
+ * Known limitation: a component named as a pure all-caps acronym (e.g. `FAQ`)
+ * has no lowercase letter and would be dropped by this rule. Our components
+ * are all normal PascalCase, so this is acceptable in practice.
  */
 function isComponentName(name) {
   if (typeof name !== "string" || name.length === 0) return false;

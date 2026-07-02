@@ -64,7 +64,12 @@ export function usePress(handlers?: Partial<PressBind>): UsePressResult {
   const [pressed, setPressed] = useState(false);
 
   const down = (event: React.PointerEvent<HTMLElement>): void => {
-    setPressed(true);
+    // Only the PRIMARY button begins a press, matching native `:active`:
+    // right-click / middle-click (button !== 0) must not trigger the
+    // scale-down. The consumer's own onPointerDown still runs regardless.
+    if (event.button === 0) {
+      setPressed(true);
+    }
     handlers?.onPointerDown?.(event);
   };
 
@@ -178,6 +183,14 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
         {...typeProp}
         {...(disabled ? {} : bind)}
         {...rest}
+        // `disabled` must make the element genuinely inert to interaction, not
+        // just visually. Pressable is polymorphic via `as`, so forwarding a
+        // native `disabled` attribute is wrong (invalid on a non-button and
+        // wouldn't stop an onClick passed through `...rest`). Instead, block
+        // pointer-driven clicks for any `as` with `pointerEvents: "none"` and
+        // announce the state with `aria-disabled`. Placed after `...rest` so a
+        // disabled Pressable can't have these overridden by passthrough props.
+        {...(disabled ? { "aria-disabled": true } : {})}
         style={{
           cursor: disabled ? "default" : "pointer",
           WebkitTapHighlightColor: "transparent",
@@ -187,6 +200,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
             : `transform var(--dur-fast) var(--ease-out)`,
           transform: pressed && !disabled ? `scale(${scale})` : "none",
           ...style,
+          ...(disabled ? { pointerEvents: "none" } : {}),
         }}
       >
         {children}
