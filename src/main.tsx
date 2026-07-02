@@ -85,6 +85,9 @@ if (pathname === "/editor" || pathname === "/cards") {
     "./debug/SignatureDecksApp"
   );
   renderStrict(<SignatureDecksApp />);
+} else if (pathname === "/tango") {
+  const { default: TangoApp } = await import("./tango/docs/TangoApp");
+  renderStrict(<TangoApp />);
 } else {
   // The dev card/figment/config data hot-reload plugins (see vite.config.ts)
   // emit targeted custom HMR events instead of a full reload, so that saving in
