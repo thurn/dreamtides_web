@@ -36,7 +36,14 @@ import { withCustomConfig } from "react-docgen-typescript";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const TSCONFIG_PATH = resolve(ROOT, "tsconfig.json");
-const COMPONENTS_DIR = resolve(ROOT, "src/tango");
+// Only these two directories hold real design-system components/primitives.
+// The rest of src/tango (docs/ chrome like ComponentPage, ControlPanel,
+// DemoStage, PropsTable; metadata/; assets/) is the doc-site harness itself,
+// not something the doc site should document about itself.
+const COMPONENT_ROOTS = [
+  resolve(ROOT, "src/tango/components"),
+  resolve(ROOT, "src/tango/primitives"),
+];
 const OUT_PATH = resolve(ROOT, "src/tango/metadata/tango-metadata.json");
 
 // Options shared by every parse. `shouldExtractLiteralValuesFromEnum` makes
@@ -137,9 +144,30 @@ function normalizeProp(prop) {
 }
 
 /**
+ * True for names that look like a component (PascalCase, e.g. `Pressable`,
+ * `ComponentPage`) and false for anything else react-docgen-typescript may
+ * emit from the same file: camelCase hooks/helpers (`usePress`) and
+ * SCREAMING_CASE constants (`PRESS_SCALE`). A component file frequently
+ * co-locates a hook or an exported constant with the component it backs
+ * (see Pressable.tsx, which exports `PRESS_SCALE` and `usePress` alongside
+ * `Pressable`); only the component itself belongs in the docgen metadata.
+ *
+ * Heuristic: the name must start with an uppercase letter AND contain at
+ * least one lowercase letter (which rules out ALL-CAPS constants).
+ */
+function isComponentName(name) {
+  if (typeof name !== "string" || name.length === 0) return false;
+  const firstChar = name[0];
+  if (firstChar < "A" || firstChar > "Z") return false;
+  return /[a-z]/.test(name);
+}
+
+/**
  * PURE core: run react-docgen-typescript over the given `.tsx` files and
  * normalize the result into `Record<displayName, PropMeta[]>`. Independent of
  * which real components exist, so the test can call it on a fixture directly.
+ * Entries whose display name doesn't look like a component (see
+ * `isComponentName`) are dropped — e.g. a co-located hook or constant.
  */
 export function extractPropMeta(filePaths) {
   if (!filePaths || filePaths.length === 0) return {};
@@ -147,6 +175,7 @@ export function extractPropMeta(filePaths) {
   const docs = parser.parse(filePaths);
   const out = {};
   for (const doc of docs) {
+    if (!isComponentName(doc.displayName)) continue;
     const props = Object.values(doc.props ?? {}).map(normalizeProp);
     out[doc.displayName] = props;
   }
@@ -180,7 +209,7 @@ function collectComponentFiles(dir) {
 }
 
 function main() {
-  const files = collectComponentFiles(COMPONENTS_DIR).sort();
+  const files = COMPONENT_ROOTS.flatMap((dir) => collectComponentFiles(dir)).sort();
   const metadata = extractPropMeta(files);
 
   // Emit component names in a stable (alphabetical) order for a clean diff.

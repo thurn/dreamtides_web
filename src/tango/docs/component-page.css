@@ -1,0 +1,23 @@
+/* Responsive Demo/Controls layout for a Tango component's doc page (see
+   ComponentPage.tsx). A CSS media query — not JS — decides the breakpoint, so
+   there's no layout-thrashing resize listener and no flash of the wrong
+   layout on first paint.
+
+   Below the breakpoint (e.g. the 390px iPhone frame used for Tango's
+   mobile-first QA) there is only one column, so Demo and Controls simply
+   stack top-to-bottom in source order — nothing overlaps. At/above the
+   breakpoint there's enough room for the fixed-width Controls rail
+   (220-320px) to sit beside a still-readable Demo column, so it switches to
+   two columns. */
+.tango-component-page__layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-8);
+  align-items: start;
+}
+
+@media (min-width: 720px) {
+  .tango-component-page__layout {
+    grid-template-columns: minmax(0, 1fr) minmax(220px, 320px);
+  }
+}

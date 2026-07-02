@@ -14,6 +14,10 @@ import { extractPropMeta } from "./generate-tango-metadata.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const FIXTURE = resolve(ROOT, "src/tango/components/__docgen_fixture__.tsx");
+const NAME_FILTER_FIXTURE = resolve(
+  ROOT,
+  "src/tango/components/__docgen_name_filter_fixture__.tsx",
+);
 
 // Extract once; every test inspects the fixture component's PropMeta array.
 const result = extractPropMeta([FIXTURE]);
@@ -82,5 +86,26 @@ describe("extractPropMeta (Tango docgen)", () => {
     expect(names).not.toContain("className");
     expect(names).not.toContain("onClick");
     expect(names).not.toContain("style");
+  });
+
+  it("documents only the component in a file that also exports a hook and a constant", () => {
+    // Mirrors Pressable.tsx, which co-locates the `Pressable` component with
+    // the `usePress` hook and the `PRESS_SCALE` constant in the same file —
+    // react-docgen-typescript happily emits doc entries for all three, but
+    // only the PascalCase component should end up in the metadata. Without
+    // the isComponentName filter, `useNameFilterFixtureThing` (camelCase) and
+    // `FILTER_FIXTURE_DELAY_MS` (ALL-CAPS) would leak in alongside it.
+    const filtered = extractPropMeta([NAME_FILTER_FIXTURE]);
+    expect(Object.keys(filtered)).toEqual(["NameFilterFixture"]);
+    expect(filtered["NameFilterFixture"]).toEqual([
+      {
+        name: "children",
+        tsType: "ReactNode",
+        unionMembers: [],
+        required: false,
+        defaultValue: null,
+        description: "Content rendered inside the fixture.",
+      },
+    ]);
   });
 });

@@ -41,50 +41,57 @@ export function PropsTable({ docName }: { docName: string }) {
   }
 
   return (
-    <table
-      style={{
-        width: "100%",
-        borderCollapse: "collapse",
-        font: token("--t-body-sm"),
-        color: token("--text-secondary"),
-      }}
-    >
-      <thead>
-        <tr>
-          <th style={headerCellStyle}>Prop</th>
-          <th style={headerCellStyle}>Type</th>
-          <th style={headerCellStyle}>Required</th>
-          <th style={headerCellStyle}>Default</th>
-          <th style={headerCellStyle}>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        {metas.map((meta) => (
-          <tr key={meta.name}>
-            <td style={{ ...cellStyle, color: token("--text-primary") }}>
-              <code style={codeStyle}>{meta.name}</code>
-            </td>
-            <td style={cellStyle}>
-              <code style={codeStyle}>{meta.tsType}</code>
-            </td>
-            <td style={cellStyle}>{meta.required ? "yes" : "no"}</td>
-            <td style={cellStyle}>
-              {meta.defaultValue === null ? (
-                <span style={{ color: token("--text-faint") }}>—</span>
-              ) : (
-                <code style={codeStyle}>{meta.defaultValue}</code>
-              )}
-            </td>
-            <td style={cellStyle}>
-              {meta.description === "" ? (
-                <span style={{ color: token("--text-faint") }}>—</span>
-              ) : (
-                meta.description
-              )}
-            </td>
+    // Horizontally scrollable so the trailing columns (Default, Description)
+    // stay reachable instead of running off-screen on narrow viewports —
+    // the table itself keeps a sane minimum width rather than squeezing its
+    // columns unreadably thin.
+    <div style={{ overflowX: "auto" }}>
+      <table
+        style={{
+          width: "100%",
+          minWidth: "480px",
+          borderCollapse: "collapse",
+          font: token("--t-body-sm"),
+          color: token("--text-secondary"),
+        }}
+      >
+        <thead>
+          <tr>
+            <th style={headerCellStyle}>Prop</th>
+            <th style={headerCellStyle}>Type</th>
+            <th style={headerCellStyle}>Required</th>
+            <th style={headerCellStyle}>Default</th>
+            <th style={headerCellStyle}>Description</th>
           </tr>
-        ))}
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          {metas.map((meta) => (
+            <tr key={meta.name}>
+              <td style={{ ...cellStyle, color: token("--text-primary") }}>
+                <code style={codeStyle}>{meta.name}</code>
+              </td>
+              <td style={cellStyle}>
+                <code style={codeStyle}>{meta.tsType}</code>
+              </td>
+              <td style={cellStyle}>{meta.required ? "yes" : "no"}</td>
+              <td style={cellStyle}>
+                {meta.defaultValue === null ? (
+                  <span style={{ color: token("--text-faint") }}>—</span>
+                ) : (
+                  <code style={codeStyle}>{meta.defaultValue}</code>
+                )}
+              </td>
+              <td style={cellStyle}>
+                {meta.description === "" ? (
+                  <span style={{ color: token("--text-faint") }}>—</span>
+                ) : (
+                  meta.description
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }

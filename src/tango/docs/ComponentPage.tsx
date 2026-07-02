@@ -5,6 +5,7 @@
 // re-renders. An unknown id renders a graceful not-found state.
 
 import { useState } from "react";
+import "./component-page.css";
 import { token } from "../primitives/tokens";
 import { getComponent } from "./registry";
 import { metasFor } from "./metadata";
@@ -55,14 +56,7 @@ export function ComponentPage({ id }: { id: string }) {
         </h1>
       </header>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1fr) minmax(220px, 320px)",
-          gap: token("--space-8"),
-          alignItems: "start",
-        }}
-      >
+      <div className="tango-component-page__layout">
         <section>
           <h2 style={sectionHeadingStyle}>Demo</h2>
           <DemoStage
