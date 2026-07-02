@@ -329,5 +329,58 @@
       "defaultValue": "{}",
       "description": ""
     }
+  ],
+  "SegmentedControl": [
+    {
+      "name": "options",
+      "tsType": "(string | SegmentedOption)[]",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Segments to render: plain strings (value === label), or `{ value, label }` pairs."
+    },
+    {
+      "name": "value",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The currently-selected segment's value."
+    },
+    {
+      "name": "onChange",
+      "tsType": "((value: string) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires with the newly-selected segment's value when the user switches."
+    },
+    {
+      "name": "size",
+      "tsType": "SegmentedControlSize",
+      "unionMembers": [
+        "sm",
+        "md"
+      ],
+      "required": false,
+      "defaultValue": "md",
+      "description": "Height/scale. Default 'md'."
+    },
+    {
+      "name": "full",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Stretch to fill the container width, each segment sharing it equally."
+    },
+    {
+      "name": "style",
+      "tsType": "CSSProperties",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "{}",
+      "description": ""
+    }
   ]
 }
