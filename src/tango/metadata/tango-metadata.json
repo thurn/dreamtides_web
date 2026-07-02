@@ -424,5 +424,66 @@
       "defaultValue": "{}",
       "description": ""
     }
+  ],
+  "TidePill": [
+    {
+      "name": "children",
+      "tsType": "ReactNode",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "The tide/affiliation name (and any other inline content)."
+    },
+    {
+      "name": "tone",
+      "tsType": "\"violet\" | \"blue\" | \"gold\" | \"green\" | \"rust\" | \"red\" | \"neutral\"",
+      "unionMembers": [
+        "violet",
+        "blue",
+        "gold",
+        "green",
+        "rust",
+        "red",
+        "neutral"
+      ],
+      "required": false,
+      "defaultValue": "violet",
+      "description": "Tide color."
+    },
+    {
+      "name": "icon",
+      "tsType": "ReactNode",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "null",
+      "description": "Leading icon node (a boxicon `<i>` element or a glyph)."
+    },
+    {
+      "name": "size",
+      "tsType": "TidePillSize",
+      "unionMembers": [
+        "sm",
+        "md"
+      ],
+      "required": false,
+      "defaultValue": "md",
+      "description": "Height/scale. Default 'md'."
+    },
+    {
+      "name": "onPress",
+      "tsType": "(() => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires on press. When set, the pill renders as a button with press feedback."
+    },
+    {
+      "name": "style",
+      "tsType": "CSSProperties",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "{}",
+      "description": ""
+    }
   ]
 }

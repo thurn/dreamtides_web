@@ -14,6 +14,7 @@ import { pressableDemo } from "./demos/pressable";
 import { resourceChipDemo } from "./demos/resource-chip";
 import { segmentedControlDemo } from "./demos/segmented-control";
 import { statTileDemo } from "./demos/stat-tile";
+import { tidePillDemo } from "./demos/tide-pill";
 
 /**
  * A single documented entry in the Tango catalog.
@@ -62,6 +63,7 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   buttonDemo,
   segmentedControlDemo,
   statTileDemo,
+  tidePillDemo,
 ];
 
 /** Look up a registry entry by its route id. */
