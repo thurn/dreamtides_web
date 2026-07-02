@@ -126,7 +126,14 @@ export default function TangoApp() {
     <div className="tango" style={pageStyle}>
       <div style={contentStyle}>
         {route.view === "overview" && <Overview />}
-        {route.view === "component" && <ComponentPage id={route.id} />}
+        {route.view === "component" && (
+          // key on the route id so a direct component→component hash change
+          // (both `{view:"component"}`, no intervening overview) remounts the
+          // page and re-seeds its args from the new component's defaultArgs —
+          // otherwise React reconciles it as the same element and stale args
+          // leak onto the new component.
+          <ComponentPage key={route.id} id={route.id} />
+        )}
         {route.view === "mockup" && <MockupPlaceholder id={route.id} />}
       </div>
     </div>

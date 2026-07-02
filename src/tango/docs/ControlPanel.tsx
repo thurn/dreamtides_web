@@ -82,20 +82,32 @@ export function ControlPanel({ metas, args, onChange }: ControlPanelProps) {
                 style={{ alignSelf: "flex-start" }}
               />
             )}
-            {spec.kind === "select" && (
-              <select
-                id={id}
-                value={asString(args[meta.name])}
-                onChange={(event) => onChange(meta.name, event.target.value)}
-                style={inputStyle}
-              >
-                {spec.options.map((option) => (
-                  <option key={option} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-            )}
+            {spec.kind === "select" &&
+              (() => {
+                // If the current arg value isn't one of the options (e.g.
+                // defaultArgs omits the prop), fall back to the first option so
+                // the rendered value matches what the native <select> shows —
+                // otherwise the browser displays option[0] while the controlled
+                // value stays "" and UI/state diverge.
+                const current = asString(args[meta.name]);
+                const value = spec.options.includes(current)
+                  ? current
+                  : (spec.options[0] ?? "");
+                return (
+                  <select
+                    id={id}
+                    value={value}
+                    onChange={(event) => onChange(meta.name, event.target.value)}
+                    style={inputStyle}
+                  >
+                    {spec.options.map((option) => (
+                      <option key={option} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                );
+              })()}
             {spec.kind === "number" && (
               <input
                 id={id}
