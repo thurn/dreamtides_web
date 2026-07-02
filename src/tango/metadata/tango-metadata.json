@@ -382,5 +382,47 @@
       "defaultValue": "{}",
       "description": ""
     }
+  ],
+  "StatTile": [
+    {
+      "name": "label",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Small uppercase caption above the value."
+    },
+    {
+      "name": "value",
+      "tsType": "ReactNode",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The headline figure. Any node (string, number, or richer markup)."
+    },
+    {
+      "name": "sub",
+      "tsType": "ReactNode",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "null",
+      "description": "Optional secondary line under the value."
+    },
+    {
+      "name": "accent",
+      "tsType": "string | null",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "null",
+      "description": "Tint color for the value."
+    },
+    {
+      "name": "style",
+      "tsType": "CSSProperties",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "{}",
+      "description": ""
+    }
   ]
 }
