@@ -27,8 +27,10 @@ const ALLOWED_PREFIXES = [
 ];
 
 /**
- * Repo-relative POSIX file paths Tango may import, ignoring any extension.
- * The single non-UI infrastructure file is `src/logging.ts`.
+ * Repo-relative POSIX file paths Tango may import, ignoring any extension. To
+ * extend: add the EXTENSIONLESS repo-relative path (e.g. `"src/logging"`, NOT
+ * `"src/logging.ts"`). Matched exactly (not as a prefix). The single non-UI
+ * infrastructure file allowed is `src/logging.ts`.
  */
 const ALLOWED_FILES = ["src/logging"];
 
@@ -38,18 +40,16 @@ function stripExtension(relativePath) {
 }
 
 /**
- * Convert an OS path to a repo-relative POSIX path. The repo root is derived by
- * finding the first `src/` segment in the (already absolute or resolved) path.
+ * Convert an OS file path to a repo-relative POSIX path, using ESLint's project
+ * root (`cwd`) as the base. Pure and exported so it can be unit-tested directly.
+ *
+ * Deriving the root from `cwd` (rather than a substring heuristic like
+ * `indexOf("/src/")`) is critical: a checkout under a path that itself contains
+ * a `src` segment (e.g. `~/src/quest_prototype`) would otherwise resolve to the
+ * wrong `src/` and silently disable this fail-closed rule.
  */
-function toRepoRelativePosix(absolutePath) {
-  const posix = absolutePath.split(path.sep).join("/");
-  const marker = "/src/";
-  const index = posix.indexOf(marker);
-  if (index !== -1) {
-    return posix.slice(index + 1);
-  }
-  // Already repo-relative (e.g. "src/tango/..."), or no src/ segment at all.
-  return posix.startsWith("src/") ? posix : posix.replace(/^\.?\//, "");
+export function toRepoRelativePosix(absolutePath, cwd) {
+  return path.relative(cwd, absolutePath).split(path.sep).join("/");
 }
 
 /** True if a resolved repo-relative POSIX path is permitted for a Tango file. */
@@ -81,7 +81,11 @@ const rule = {
       typeof context.filename === "string"
         ? context.filename
         : context.getFilename();
-    const fileRelative = toRepoRelativePosix(rawFilename);
+    // In flat config ESLint runs from the repo root and exposes it as
+    // `context.cwd`; fall back to `process.cwd()` for older ESLint.
+    const cwd =
+      typeof context.cwd === "string" ? context.cwd : process.cwd();
+    const fileRelative = toRepoRelativePosix(rawFilename, cwd);
 
     // Only act on files under src/tango/. Elsewhere the rule is inert.
     if (!fileRelative.startsWith("src/tango/")) {

@@ -1,7 +1,30 @@
 import { RuleTester } from "eslint";
 import tsParser from "@typescript-eslint/parser";
-import { describe, it } from "vitest";
-import rule from "./no-external-ui-imports.js";
+import { describe, it, expect } from "vitest";
+import rule, { toRepoRelativePosix } from "./no-external-ui-imports.js";
+
+describe("toRepoRelativePosix", () => {
+  it("returns a clean repo-relative path for a normal checkout", () => {
+    expect(
+      toRepoRelativePosix(
+        "/Users/x/quest_prototype/src/tango/components/Foo.tsx",
+        "/Users/x/quest_prototype",
+      ),
+    ).toBe("src/tango/components/Foo.tsx");
+  });
+
+  it("is not fooled by a checkout prefix that itself contains /src/", () => {
+    // Regression: a substring `indexOf("/src/")` heuristic would return
+    // "src/quest_prototype/src/tango/components/Foo.tsx" here, which no longer
+    // looks like it is under src/tango/ and would silently disable the rule.
+    expect(
+      toRepoRelativePosix(
+        "/Users/x/src/quest_prototype/src/tango/components/Foo.tsx",
+        "/Users/x/src/quest_prototype",
+      ),
+    ).toBe("src/tango/components/Foo.tsx");
+  });
+});
 
 // RuleTester in ESLint 9 exposes `describe`/`it` hooks; wire them to vitest so
 // each RuleTester case shows up as an individual vitest test.
@@ -108,6 +131,22 @@ ruleTester.run("no-external-ui-imports", rule, {
       name: "forbidden dynamic import (ImportExpression)",
       filename: "src/tango/docs/TangoApp.tsx",
       code: `const s = import("../../screens/AtlasScreen");`,
+      errors: [{ messageId: "externalImport" }],
+    },
+    {
+      // Locks the trailing slash on the "src/data/" prefix: a sibling directory
+      // sharing the prefix (src/data-evil/) must NOT be allowed.
+      name: "prefix boundary: src/data-evil is not src/data/",
+      filename: "src/tango/components/Foo.tsx",
+      code: `import { x } from "../../data-evil/x";`,
+      errors: [{ messageId: "externalImport" }],
+    },
+    {
+      // Locks exact-match on the src/logging file: a sibling sharing the prefix
+      // (src/logging-ui/) must NOT be allowed.
+      name: "file boundary: src/logging-ui is not src/logging",
+      filename: "src/tango/components/Foo.tsx",
+      code: `import { x } from "../../logging-ui/x";`,
       errors: [{ messageId: "externalImport" }],
     },
   ],
