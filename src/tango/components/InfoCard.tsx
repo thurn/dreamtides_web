@@ -337,7 +337,7 @@ function InfoCardComponent({
             <i
               className={glyph}
               aria-hidden="true"
-              style={{ fontSize: 21, color: "#fff", ...glyphStyle }}
+              style={{ fontSize: 21, color: token("--text-on-accent"), ...glyphStyle }}
             />
           </span>
           <div style={tHeadline}>{title}</div>
