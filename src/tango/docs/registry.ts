@@ -10,6 +10,7 @@
 
 import type { ComponentType, ReactNode } from "react";
 import { buttonDemo } from "./demos/button";
+import { motesDemo } from "./demos/motes";
 import { pressableDemo } from "./demos/pressable";
 import { resourceChipDemo } from "./demos/resource-chip";
 import { segmentedControlDemo } from "./demos/segmented-control";
@@ -64,6 +65,7 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   segmentedControlDemo,
   statTileDemo,
   tidePillDemo,
+  motesDemo,
 ];
 
 /** Look up a registry entry by its route id. */

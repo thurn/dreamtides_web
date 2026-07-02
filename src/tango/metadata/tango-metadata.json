@@ -61,6 +61,59 @@
       "description": "Content rendered inside the button."
     }
   ],
+  "Motes": [
+    {
+      "name": "on",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "true",
+      "description": "Toggles the layer on/off. Renders nothing when false."
+    },
+    {
+      "name": "tint",
+      "tsType": "MoteTint",
+      "unionMembers": [
+        "warm",
+        "violet"
+      ],
+      "required": false,
+      "defaultValue": "warm",
+      "description": "Context tint: 'warm' over scene art (default), 'violet' over chrome."
+    },
+    {
+      "name": "count",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "14",
+      "description": "Particle density — how many motes to render."
+    },
+    {
+      "name": "seed",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "0",
+      "description": "Offset the deterministic layout so two Motes layers differ."
+    },
+    {
+      "name": "zIndex",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "2",
+      "description": "Stacking order within the positioned parent."
+    },
+    {
+      "name": "style",
+      "tsType": "CSSProperties",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "{}",
+      "description": ""
+    }
+  ],
   "Pressable": [
     {
       "name": "as",
