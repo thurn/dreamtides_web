@@ -67,6 +67,26 @@ describe("parseCssTokens", () => {
     expect("kind" in tokens[1]).toBe(false);
   });
 
+  it("fails safe on a @kind marker placed inside the value (in-value @kind)", () => {
+    // A @kind-shaped comment before the terminating `;` must be stripped like
+    // any other comment: no leaked sentinel/text in the value, and no kind.
+    const css = `.tango {
+  --foo: 10px /* @kind radius */;
+}`;
+
+    const tokens = parseCssTokens(css);
+    expect(tokens).toEqual([{ name: "foo", value: "10px" }]);
+    expect("kind" in tokens[0]).toBe(false);
+    expect(tokens[0].value.includes("\0")).toBe(false);
+  });
+
+  it("returns a final declaration whose trailing ; is omitted (optional terminator)", () => {
+    // Valid CSS allows dropping the last `;` before `}`.
+    const css = `.t { --foo: 10px }`;
+
+    expect(parseCssTokens(css)).toEqual([{ name: "foo", value: "10px" }]);
+  });
+
   it("preserves duplicate names in source order (duplicate names preserved)", () => {
     // Mirrors the real file: --text-faint is declared twice, and the
     // downstream generator needs to see both to apply last-wins itself.
