@@ -1,0 +1,40 @@
+/*
+ * Self-hosted Phosphor Fill icon face, vendored from `@phosphor-icons/web`
+ * (v2.1.2, MIT) for the single glyph Tango pins as a fallback: `ph-cards`
+ * (deck/hand affordances). Boxicons 3 (filled) is the primary icon set,
+ * already loaded globally in src/main.tsx; this file exists only because
+ * Boxicons has no equivalent "cards" glyph.
+ *
+ * The @font-face below loads the co-located .woff2 — no CDN, no
+ * node_modules path. Only the base `.ph-fill` rule and the `ph-cards`
+ * glyph mapping are included (not the full ~1300-glyph Phosphor Fill
+ * stylesheet) since this is the only icon Tango uses from this face.
+ */
+@font-face {
+  font-family: "Phosphor-Fill";
+  src: url("./Phosphor-Fill.woff2") format("woff2");
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+.ph-fill {
+  font-family: "Phosphor-Fill" !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  letter-spacing: 0;
+  -webkit-font-feature-settings: "liga";
+  -moz-font-feature-settings: "liga";
+  font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  display: inline-block;
+}
+
+.ph-fill.ph-cards:before {
+  content: "\e0f8";
+}
