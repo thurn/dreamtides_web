@@ -15,11 +15,13 @@ export type AtlasEdgeKind = "traveled" | "open" | "dim" | "locked";
 interface AtlasEdgeProps {
   /** Which connector treatment to draw. */
   kind: AtlasEdgeKind;
-  /** Start point, in the atlas svg's coordinate space. */
+  /** Start x, in the atlas svg's coordinate space. */
   x1: number;
+  /** Start y, in the atlas svg's coordinate space. */
   y1: number;
-  /** End point, in the atlas svg's coordinate space. */
+  /** End x, in the atlas svg's coordinate space. */
   x2: number;
+  /** End y, in the atlas svg's coordinate space. */
   y2: number;
 }
 

@@ -19,7 +19,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Start point, in the atlas svg's coordinate space."
+      "description": "Start x, in the atlas svg's coordinate space."
     },
     {
       "name": "y1",
@@ -27,7 +27,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": ""
+      "description": "Start y, in the atlas svg's coordinate space."
     },
     {
       "name": "x2",
@@ -35,7 +35,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "End point, in the atlas svg's coordinate space."
+      "description": "End x, in the atlas svg's coordinate space."
     },
     {
       "name": "y2",
@@ -43,7 +43,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": ""
+      "description": "End y, in the atlas svg's coordinate space."
     }
   ],
   "AtlasEdgeDefs": [],
