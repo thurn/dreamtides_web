@@ -1,4 +1,4 @@
-// Full-screen mockup for Button — the ONE button (R-02/R-13), composed into a
+// Full-screen mockup for Button — the ONE button, composed into a
 // realistic Merchant site screen: a few purchase rows at 'sm'/'md' with a
 // leading icon and an inline essence cost, one row priced beyond the player's
 // current essence (disabled, per real affordability), and the 'lg' commit

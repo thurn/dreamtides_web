@@ -1,9 +1,11 @@
 // Standalone documentation endpoint for the Tango design system, reachable at
 // `/tango` (see the route branch in `src/main.tsx`). Switches on the hash route
-// (see route.ts) between the overview table of contents, a component's doc page,
-// and a component's full-screen mockup — a realistic full-bleed scene composing
-// the component with real content. The chrome is styled lightly with Tango
-// tokens — dogfooding the design system it documents.
+// (see route.ts) between the overview gallery — which embeds each component's
+// live, interactive mockup inline and links out to its docs page and its
+// full-screen mockup — a component's doc page, and a component's full-screen
+// mockup: a realistic full-bleed scene composing the component with real
+// content. The chrome is styled lightly with Tango tokens — dogfooding the
+// design system it documents.
 import "../primitives/tango-tokens.css";
 import "../assets/phosphor.css";
 
@@ -13,6 +15,7 @@ import { TANGO_COMPONENTS, type TangoComponent } from "./registry";
 import { getComponent } from "./registry";
 import { getMockup } from "./mockups/registry";
 import { ComponentPage } from "./ComponentPage";
+import { ComponentShowcase } from "./ComponentShowcase";
 import { IntroSection } from "./IntroSection";
 import { PrimitivesSection } from "./PrimitivesSection";
 import { token } from "../primitives/tokens";
@@ -75,7 +78,7 @@ function Overview() {
           Components coming soon.
         </p>
       ) : (
-        <nav style={{ display: "flex", flexDirection: "column", gap: token("--space-9") }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: token("--space-10") }}>
           {groups.map(({ group, entries }) => (
             <section key={group}>
               <h2
@@ -84,35 +87,19 @@ function Overview() {
                   letterSpacing: token("--tracking-eyebrow"),
                   textTransform: "uppercase",
                   color: token("--text-muted"),
-                  margin: `0 0 ${token("--space-5")}`,
+                  margin: `0 0 ${token("--space-6")}`,
                 }}
               >
                 {group}
               </h2>
-              <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: token("--space-3") }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: token("--space-9") }}>
                 {entries.map((entry) => (
-                  <li key={entry.id}>
-                    <a
-                      href={`#/${entry.id}`}
-                      style={{
-                        display: "block",
-                        padding: `${token("--space-4")} ${token("--space-6")}`,
-                        background: token("--surface-card"),
-                        border: `1px solid ${token("--border-soft")}`,
-                        borderRadius: token("--r-md"),
-                        color: token("--text-primary"),
-                        font: token("--t-lead"),
-                        textDecoration: "none",
-                      }}
-                    >
-                      {entry.title}
-                    </a>
-                  </li>
+                  <ComponentShowcase key={entry.id} entry={entry} />
                 ))}
-              </ul>
+              </div>
             </section>
           ))}
-        </nav>
+        </div>
       )}
     </div>
   );

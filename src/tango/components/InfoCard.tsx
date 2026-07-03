@@ -1,4 +1,4 @@
-// InfoCard — the ONE press-to-reveal information card for Tango (R-04). Every
+// InfoCard — the ONE press-to-reveal information card for Tango. Every
 // reveal-on-interaction popup — tide descriptions, the Dreamcaller profile,
 // dreamsign abilities, site descriptions, essence — renders through this single
 // component so the vocabulary is identical everywhere.
@@ -15,11 +15,11 @@
 //   - icon   — a glyph disc beside the title
 //   - text   — an optional small lead glyph + title
 //
-// The placement / timing engine ships alongside it (R-05) and is attached as
+// The placement / timing engine ships alongside it and is attached as
 // statics: `InfoCard.PressPopover / PressInfo / usePressReveal / anchorRect /
 // setRevealDelay / SITE_DISC`.
 //
-// ── The reveal contract (R-05 / R-17) ──────────────────────────────────────
+// ── The reveal contract ──────────────────────────────────────────────────
 //   - no close button, no scrim; anchored to the trigger/pointer (never
 //     centered, never under the finger), clamped fully on-screen, and
 //     pointerEvents:none on the popover so it can't eat the release.
@@ -381,7 +381,7 @@ export interface AnchorRect {
 }
 
 /**
- * The R-17 tap-vs-hold discriminator. PURE. A press released strictly WITHIN
+ * The tap-vs-hold discriminator. PURE. A press released strictly WITHIN
  * `clickWindow` of the down time is a TAP (returns false → the child's onClick
  * is allowed to fire); a press whose duration reaches or exceeds the window is
  * a HOLD (returns true → reveal only, the child click is swallowed on touch).
@@ -391,7 +391,7 @@ export function isHold(downT: number, upT: number, clickWindow: number): boolean
 }
 
 /**
- * The R-05 on-screen clamp. PURE. Places a `width`×`height` popover a uniform
+ * The on-screen clamp. PURE. Places a `width`×`height` popover a uniform
  * `gap` from `anchor`, preferring above then below, and clamps it to stay at
  * least `edge` px from every viewport side (the viewport dims travel on the
  * anchor as `w`/`h`). Returns the popover's { left, top } in stage-native px.

@@ -1,4 +1,4 @@
-// Dreamsign — the unified dreamsign entity for Tango (R-10). A dreamsign is a
+// Dreamsign — the unified dreamsign entity for Tango. A dreamsign is a
 // minor passive collectible; it shows as a small square art tile (boon dreamsigns
 // carry a violet ring, banes a red ring plus a desaturation so the warning reads
 // before the art does). Pressing / hovering the tile reveals its full detail —

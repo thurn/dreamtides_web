@@ -26,10 +26,9 @@ green on `npm run lint`, `npm run typecheck`, and `npm test`.
 - Real content is shown wherever it exists (real card UUIDs, real atlas
   fixtures), not faked placeholders.
 
-Tango generalizes the source system (authored mobile-only, 390×844) to **any
-screen**. Components are token-scaled and responsive; the mockup pages render
-full-screen against the real viewport (sized via browser DevTools device
-emulation), not inside an in-app device frame.
+Tango works on **any screen**. Components are token-scaled and responsive; the
+mockup pages render full-screen against the real viewport (sized via browser
+DevTools device emulation), not inside an in-app device frame.
 
 ---
 
@@ -173,9 +172,11 @@ Table of contents, then:
    principles: *material continuity* (objects persist and travel, never fade in;
    the four entities — cards, dreamsigns, essence, Dreamcallers — always obey
    it), *the legibility ladder* (render on the media with `.hud-outline`; group
-   related info in a `GroupPanel`; never a scrim/wash/vignette), the *popup rule
-   R-17* (touch-down reveals, release dismisses, no close button, no scrim,
-   anchored to the pointer), and the content voice (second-person, literary;
+   related info in a `GroupPanel`; never a scrim/wash/vignette), *always in
+   motion* (tangible entities float; readout chrome may rest), the *popup rule*
+   (one InfoCard contract — hover-to-reveal on a fine pointer, hold-to-reveal on
+   touch — no close button, no scrim, anchored to the pointer or trigger), and
+   the content voice (second-person, literary;
    Title Case titles, uppercase-mono eyebrows; no emoji). The verbose README
    framing is cut.
 2. **Primitives** — color, typography, corner radius, spacing, iconography,
@@ -209,15 +210,16 @@ radius) but stays deliberately restrained so the components are the focus.
 | **SiteNode** | `components/` | Unify local `DreamscapeSiteNode` with the design's `SiteNode`; route its press-reveal through `InfoCard` |
 | **Atlas Node / Edge / Defs** | `components/` | Port local `AtlasNode` + `atlas-display` (+ the edge connectors and their shared SVG `<defs>`: gradients / markers / flow). Clean up for reuse. Local atlas is authoritative, not the design's reconstruction |
 
-### Interaction model (input-adaptive press-reveal)
+### Interaction model (input-adaptive reveal)
 
-The design's engine is touch-first; Tango generalizes it to any input:
+One reveal contract, expressed through whichever gesture is native to the
+device. Neither input is the primary one:
 
 - **Desktop / fine pointer:** hover reveals the `InfoCard`; mouse-down applies
   the `Pressable` scale-down (0.94). Nothing reveals on press.
 - **Touch / coarse pointer:** touch-down reveals the `InfoCard` (and scales);
-  release dismisses (design rule R-17: no long-press, no close button, no
-  scrim, anchored to the touch).
+  release dismisses. No long-press, no close button, no scrim, anchored to the
+  touch.
 
 ### Demo & mockup content
 
@@ -298,6 +300,4 @@ reference, not by a from-scratch subagent rewrite.
 
 - Design-system access is authorized via `/design-login`; the `claude_design`
   MCP `get_file` calls used in Phase 1+ require it to remain authorized.
-- `CLAUDE.md` currently states "Tides no longer exist"; tides are an active
-  concept again (hence `TidePill` keeps its name). Reconciling that doc is
-  tracked separately from this plan.
+- Tides are an active concept, so `TidePill` keeps its name.

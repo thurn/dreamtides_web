@@ -2,7 +2,7 @@
 // engine — factored into pure functions so they can be verified directly
 // without mounting React or driving a live pointer stream.
 //
-//   1. isHold(downT, upT, clickWindow) — the R-17 tap-vs-hold discriminator.
+//   1. isHold(downT, upT, clickWindow) — the tap-vs-hold discriminator.
 //      A press released WITHIN the click window is a TAP (the child's onClick
 //      is allowed to fire); a press that OUTLASTS the window is a HOLD (reveal
 //      only, the click is swallowed on touch). Bug class guarded: a regression
@@ -25,7 +25,7 @@ import {
   type AnchorRect,
 } from "./InfoCard";
 
-describe("isHold — tap vs hold discrimination (R-17)", () => {
+describe("isHold — tap vs hold discrimination", () => {
   const W = CLICK_WINDOW; // the engine default click window (ms)
 
   it("treats an instant press/release as a TAP", () => {
@@ -52,7 +52,7 @@ describe("isHold — tap vs hold discrimination (R-17)", () => {
   });
 });
 
-describe("computePopoverPosition — on-screen clamp (R-05)", () => {
+describe("computePopoverPosition — on-screen clamp", () => {
   const WIDTH = 248; // CARD_W
   const HEIGHT = 120; // a representative measured card height
   const VP_W = 390; // device viewport

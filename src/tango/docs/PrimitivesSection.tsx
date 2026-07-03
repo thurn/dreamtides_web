@@ -736,7 +736,7 @@ export function PrimitivesSection(): ReactElement {
 
       <PrimitiveGroup
         title={BUCKET_TITLES.motion}
-        description="Durations, easings, and the two canonical object-travel / container-transform combos (R-01), dogfooded as a drifting dot. Respects prefers-reduced-motion — the dot holds still if your system requests it."
+        description="Durations, easings, and the two canonical object-travel / container-transform combos, dogfooded as a drifting dot. Respects prefers-reduced-motion — the dot holds still if your system requests it."
       >
         {renderMotionEntries(BUCKETS.motion)}
       </PrimitiveGroup>

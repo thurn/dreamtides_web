@@ -5,7 +5,7 @@
 
    The file carries two things:
      1. `.hud-outline` — the on-media legibility utility (rung 1 of the
-        legibility ladder, R-15 / Principle two), ported VERBATIM from the
+        legibility ladder, Principle two), ported VERBATIM from the
         design source's tokens/base.css. Text and glyphs rendered DIRECTLY
         on scene art / a portrait carry their own black outline instead of a
         plate, scrim, or blur behind them: a dense 16-direction black

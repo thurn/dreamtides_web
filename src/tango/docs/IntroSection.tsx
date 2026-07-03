@@ -1,6 +1,6 @@
 // IntroSection — the Introduction / Design Philosophy section of the /tango
-// overview (Task 6.1, spec §6). Condenses the design's governing principles —
-// material continuity, the legibility ladder, the popup rule (R-17), and the
+// overview (spec §6). Condenses the design's governing principles — material
+// continuity, always-in-motion, the legibility ladder, the popup rule, and the
 // content voice — into prose, so a reader gets the "why" before the component
 // catalog below it. Renders above the component table of contents in
 // `TangoApp.tsx`'s `Overview`.
@@ -41,13 +41,6 @@ const principleTitleStyle: CSSProperties = {
   margin: `0 0 ${token("--space-3")}`,
 };
 
-const ruleTagStyle: CSSProperties = {
-  font: token("--t-popover-meta"),
-  letterSpacing: token("--tracking-eyebrow"),
-  color: token("--text-muted"),
-  marginLeft: token("--space-3"),
-};
-
 const bodyStyle: CSSProperties = {
   font: token("--t-body"),
   color: token("--text-secondary"),
@@ -66,17 +59,13 @@ const principleListStyle: CSSProperties = {
 
 interface PrincipleProps {
   title: string;
-  rule?: string;
   children: ReactElement | ReactElement[];
 }
 
-function Principle({ title, rule, children }: PrincipleProps): ReactElement {
+function Principle({ title, children }: PrincipleProps): ReactElement {
   return (
     <section>
-      <h3 style={principleTitleStyle}>
-        {title}
-        {rule ? <span style={ruleTagStyle}>{rule}</span> : null}
-      </h3>
+      <h3 style={principleTitleStyle}>{title}</h3>
       {children}
     </section>
   );
@@ -123,10 +112,11 @@ function GroupPanelExample(): ReactElement {
 
 /**
  * The Introduction / Design Philosophy section of the /tango overview.
- * Condensed prose covering material continuity, the legibility ladder, the
- * popup rule (R-17), and the content voice — the governing principles every
- * Tango component is built against. Pure prose content; dogfoods Tango tokens
- * for its own chrome, including one live `GroupPanel` worked example.
+ * Condensed prose covering material continuity, always-in-motion, the
+ * legibility ladder, the popup rule, and the content voice — the governing
+ * principles every Tango component is built against. Pure prose content;
+ * dogfoods Tango tokens for its own chrome, including one live `GroupPanel`
+ * worked example.
  */
 export function IntroSection(): ReactElement {
   return (
@@ -136,16 +126,17 @@ export function IntroSection(): ReactElement {
         Design Philosophy
       </h2>
       <p style={leadStyle}>
-        Tango generalizes a mobile-only source design to any screen, but the
-        rules underneath travel unchanged: objects persist rather than
-        appear, information earns a backdrop instead of being handed one, and
-        every reveal-on-interaction popup speaks the same contract. The four
+        Tango is token-scaled and responsive, and reads the same on any
+        screen. The rules underneath every component hold constant: objects
+        persist rather than appear, tangible things are always in gentle
+        motion, information earns a backdrop instead of being handed one, and
+        every reveal-on-interaction popup speaks the same contract. The
         principles below are what every component in the catalog is built
         against.
       </p>
 
       <div style={principleListStyle}>
-        <Principle title="Material Continuity" rule="R-01">
+        <Principle title="Material Continuity">
           <p style={bodyStyle}>
             Nothing in Tango fades into existence. The four entities that
             carry meaning across screens — cards, dreamsigns, essence, and
@@ -156,6 +147,21 @@ export function IntroSection(): ReactElement {
             own detail view. Every component specs its enter, change, and
             exit against one of these two, so timing and easing never diverge
             by surface.
+          </p>
+        </Principle>
+
+        <Principle title="Always in Motion">
+          <p style={bodyStyle}>
+            Dreamtides is a video game, and it honors the genre&rsquo;s
+            conventions. Physical game entities — a card or a dreamsign resting
+            in a shop display, a resource waiting to be spent — are always in
+            gentle motion, floating up and down rather than sitting inert, so
+            the world reads as alive rather than as a static document. Motion
+            is a property of the object, not the screen: chrome meant for
+            reviewing already-seen values, like the <strong>QuestStatusBar</strong>{" "}
+            or a deck viewer, is allowed to hold still, because its job is
+            legibility, not presence. When in doubt, a tangible object drifts;
+            a readout rests.
           </p>
         </Principle>
 
@@ -175,20 +181,24 @@ export function IntroSection(): ReactElement {
           <GroupPanelExample />
         </Principle>
 
-        <Principle title="The Popup Rule" rule="R-17">
+        <Principle title="The Popup Rule">
           <p style={bodyStyle}>
             Every reveal-on-interaction popup — a tide description, the
             Dreamcaller profile, a dreamsign&rsquo;s ability text, a site
             description, essence — renders through the single{" "}
             <strong>InfoCard</strong> engine, so the vocabulary and timing
-            cannot diverge by screen. Touch-down reveals the card; release
-            dismisses it. There is no close button and no scrim; the card is
-            anchored to the pointer or trigger, never centered, and a short
-            click window (about 300ms) separates a tap that enters a screen
-            from a hold that reads a popup. On a fine pointer (mouse,
-            trackpad) the same contract generalizes to hover-reveals with
-            press only compressing the target, so desktop reads identically
-            to touch.
+            cannot diverge by screen or by input. The card is anchored to the
+            pointer or trigger, never centered, and there is no close button
+            and no scrim. The reveal is a single contract expressed through
+            whichever gesture is native to the device, and neither input is the
+            primary one. On a fine pointer — a mouse or trackpad — hovering a
+            trigger reveals the card and a press only compresses the target. On
+            touch, touch-down reveals the card and release dismisses it, with a
+            short click window (about 300ms) separating a tap that enters a
+            screen from a hold that reads a popup. Hover-to-reveal and
+            hold-to-reveal are the same behavior: a desktop reader and a touch
+            reader get the identical card, each by the gesture their device
+            already speaks.
           </p>
         </Principle>
 

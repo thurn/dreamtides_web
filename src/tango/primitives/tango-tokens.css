@@ -29,9 +29,9 @@
    NORMALIZED to the parent Dreamtides Design System: the base hues
    (backgrounds, purple accent, the two card resources, the essence/
    omens currencies, ownership) match the parent's token VALUES so any
-   shared element — above all the game card — renders identically. The
-   token NAMES stay mobile-flavored; only the resolved colors are pinned
-   to the parent. Mobile-only roles (sale, category pills) sit on top.
+   shared element — above all the game card — renders identically. Only
+   the resolved colors are pinned to the parent; supplemental roles
+   (sale, category pills) sit on top.
 
    Base values are raw colors. Semantic aliases below map them to roles
    so product code never references a raw hex. */
@@ -73,7 +73,7 @@
   --ember-600: #c0341f;
   --sap-500: #16a34a;     /* deep player/grant green */
   --sap-400: #22c55e;     /* grant / player green (parent --dt-player) */
-  --coral-400: #fb7185;   /* sale tag (mobile-only) */
+  --coral-400: #fb7185;   /* sale tag */
   --rust-500: #b9622f;    /* tide / earthy affiliation */
   --orange-500: #f97316;  /* default selection ring — production SELECTION_DEFAULT_COLOR */
 
@@ -304,7 +304,7 @@
   --t-button-sm: 700 14px/1 var(--font-sans);
   --t-caption: 600 12px/1.35 var(--font-sans);     /* metadata */
 
-  /* ---- InfoCard popover scale (R-16) ----
+  /* ---- InfoCard popover scale ----
      The ONE type scale every press-reveal popover uses, formalized from the
      shipped InfoCard: a serif headline, rules-face body, mono meta. */
   --t-popover-headline: 600 19px/1.18 var(--font-serif);  /* letter-spacing: -0.01em */
@@ -384,7 +384,7 @@
   --r-card: 16px;   /* the game card corner */
   --r-popover: 8px; /* @kind radius */
 
-  /* ---- The one press-down factor (R-03 / R-14) ----
+  /* ---- The one press-down factor ----
      Every control — JS <Pressable>/usePress AND CSS-only controls via :active —
      compresses by EXACTLY this on touch-down. Always < 1 (compress, never
      enlarge). Was 0.965 in the old guide; reconciled to the shipped 0.94. */
@@ -415,7 +415,7 @@
   --gradient-gold: linear-gradient(135deg, #ffd34d 0%, #e0a82a 100%);   /* @kind other */
   --gradient-energy: linear-gradient(160deg, #38bdf8 0%, #0ea5e9 100%); /* @kind other */
 
-  /* ---- Atmospheric mote tints (R-07 / R-16) ----
+  /* ---- Atmospheric mote tints ----
      The ONLY sanctioned use of opacity animation: drifting particles, tinted by
      context. Violet over chrome, warm gold over scene art. NOT a legibility or
      mood overlay — depth is carried by the art + these motes, never by a scrim. */
@@ -432,7 +432,7 @@
   --dur-base: 240ms;  /* @kind other */
   --dur-slow: 420ms;  /* @kind other */
 
-  /* ---- Material-continuity motion (R-01) ----
+  /* ---- Material-continuity motion ----
      The two canonical transitions every component specs its enter/change/exit
      against, so timing + easing can't diverge per surface. Nothing fades in;
      objects TRAVEL and EXPAND, and reverse on the way out.

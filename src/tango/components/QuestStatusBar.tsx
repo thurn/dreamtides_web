@@ -1,10 +1,10 @@
 // QuestStatusBar — the persistent, TRANSPARENT bottom HUD for quest screens
-// (dreamscape, atlas, site views). Replaces the old ResourceBar (R-11).
+// (dreamscape, atlas, site views).
 //
 // It is a TRANSPARENT HUD — no background, no border, no top rule (Principle
 // two): the essence total, deck sprite, Dreamcaller bust, and docked dreamsign
 // strip sit DIRECTLY on the scene art, made legible by the `.hud-outline` glyph
-// dilation (R-15, ported into quest-status-bar.css), not by a bar behind them.
+// dilation (ported into quest-status-bar.css), not by a bar behind them.
 // There is no menu-dots button — the menu lives in a top-left menu button on
 // the screen.
 //
@@ -620,8 +620,8 @@ function QsbHudBar({
 }
 
 /**
- * QuestStatusBar — the persistent, TRANSPARENT bottom HUD for quest screens
- * (replaces ResourceBar). Essence total, deck sprite, Dreamcaller bust, and a
+ * QuestStatusBar — the persistent, TRANSPARENT bottom HUD for quest screens.
+ * Essence total, deck sprite, Dreamcaller bust, and a
  * docked dreamsign strip sit directly on scene art (legible via `.hud-outline`),
  * all press-revealing through the shared InfoCard engine. No menu-dots button.
  */

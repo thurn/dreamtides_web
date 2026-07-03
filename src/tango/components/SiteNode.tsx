@@ -1,4 +1,4 @@
-// SiteNode — the dreamscape site disc (R-06). A floating circular node over a
+// SiteNode — the dreamscape site disc. A floating circular node over a
 // dreamscape's scene art: a dark radial disc with a white glyph and a soft accent
 // ring. Battle guardians loom a little larger and carry a pulsing ring; visited
 // and locked nodes dim and show a status badge. The disc carries no text label —

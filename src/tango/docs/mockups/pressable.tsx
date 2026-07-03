@@ -1,4 +1,4 @@
-// Full-screen mockup for Pressable — the ONE press-feedback primitive (R-03).
+// Full-screen mockup for Pressable — the ONE press-feedback primitive.
 // Pressable has no visual language of its own (it forwards `as` and applies
 // the shared scale-down), so the most honest showcase is several DIFFERENT
 // pressable surfaces sharing the identical press feel: a home-screen menu of

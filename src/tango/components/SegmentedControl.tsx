@@ -10,7 +10,7 @@
 // in the parent design system and is copied verbatim from the source.
 //
 // Each segment routes its press feedback through the shared `usePress` hook
-// (R-03) rather than hand-rolling a scale: a segment already needs to
+// rather than hand-rolling a scale: a segment already needs to
 // combine the press transform with its `active` (selected) background/
 // color/shadow on the very same element, which is exactly the composition
 // case Pressable.tsx's own doc comment calls out for the hook form (see

@@ -1,4 +1,4 @@
-// Full-screen mockup for Motes — the atmospheric particle layer (R-07). A
+// Full-screen mockup for Motes — the atmospheric particle layer. A
 // Dream Atlas backdrop with the 'warm' tint drifting over the scene art
 // (its default, documented context), and a translucent bottom console — a
 // GroupPanel-styled glass pane, chrome rather than scene art — carrying the

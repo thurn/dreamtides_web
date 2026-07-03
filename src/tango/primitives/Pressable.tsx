@@ -1,4 +1,4 @@
-// Pressable — the ONE press-feedback primitive for Tango (R-03).
+// Pressable — the ONE press-feedback primitive for Tango.
 //
 // Every interactive Tango control routes its touch feedback through this one
 // primitive so the gesture feels identical everywhere:

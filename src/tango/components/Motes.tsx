@@ -1,4 +1,4 @@
-// Motes — the atmospheric particle layer (R-07).
+// Motes — the atmospheric particle layer.
 //
 // Drifting dust motes over a scene or chrome. This is the ONE sanctioned use
 // of opacity animation in the system (Principle two): atmosphere, never

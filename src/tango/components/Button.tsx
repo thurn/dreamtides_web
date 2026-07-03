@@ -1,4 +1,4 @@
-// Button — the ONE button in Tango (R-02 / R-13).
+// Button — the ONE button in Tango.
 //
 // The game uses a single button: the beveled purple sprite
 // (Button_Purple.png) drawn as a scalable CSS 9-patch (border-image). There
@@ -12,7 +12,7 @@
 //     crisp.
 //   - the commit action ("Begin Your Dream") is THE SAME BUTTON, taller —
 //     `size="lg"`. Commit is a size, not a variant.
-//   - press feedback routes through the shared press primitive (R-03): a
+//   - press feedback routes through the shared press primitive: a
 //     scale-DOWN by --press-scale (0.94), plus a slight brighten. Button
 //     uses the `usePress` hook (not the `<Pressable>` wrapper component)
 //     because it needs to combine the press transform with the brighten

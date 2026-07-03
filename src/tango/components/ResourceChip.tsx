@@ -5,7 +5,7 @@
 // sparkle for spark, a violet crypto-mark for essence/points, an hourglass
 // for generic counters.
 //
-// The value and its mark are paired TIGHT (R-08, see the parent design
+// The value and its mark are paired TIGHT (see the parent design
 // system's rules): the default `gap` is 0 so a value reads as one unit —
 // `200◆`, the mark hugging the number — matching the game's HUD. Pass `gap`
 // to loosen it if a specific layout needs air.

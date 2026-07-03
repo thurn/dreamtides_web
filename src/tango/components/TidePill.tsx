@@ -26,7 +26,7 @@
 // a future token rename/reband still propagates.
 //
 // Press feedback (when `onPress` is passed) routes through the shared
-// `usePress` hook (R-03) rather than a bare onClick/:active, matching the
+// `usePress` hook rather than a bare onClick/:active, matching the
 // rest of Tango's interactive controls.
 //
 // Ported from the Claude Design "Dreamtides Mobile" project
