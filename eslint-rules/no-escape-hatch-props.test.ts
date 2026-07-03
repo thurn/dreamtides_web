@@ -143,6 +143,11 @@ ruleTester.run("no-escape-hatch-props", rule, {
       code: `interface RowProps { style?: React.CSSProperties; className?: string; [k: string]: unknown; }`,
     },
     {
+      name: "a strict screen-local *Props is fine",
+      filename: "src/tango/screens/HomeScreen.tsx",
+      code: `interface RowProps { label: string; onSelect?: () => void; }`,
+    },
+    {
       name: "tango docs/mockups are not the component surface",
       filename: "src/tango/docs/mockups/scene.tsx",
       code: `interface DemoProps { style?: React.CSSProperties; }`,
@@ -218,6 +223,12 @@ ruleTester.run("no-escape-hatch-props", rule, {
       name: "style ban still applies to an allowlisted container",
       filename: "src/tango/components/GroupPanel.tsx",
       code: `interface GroupPanelProps { children?: ReactNode; style?: React.CSSProperties; }`,
+      errors: [{ messageId: "styleMember" }],
+    },
+    {
+      name: "a screen-local *Props escape hatch is now caught too",
+      filename: "src/tango/screens/HomeScreen.tsx",
+      code: `interface RowProps { style?: React.CSSProperties; }`,
       errors: [{ messageId: "styleMember" }],
     },
   ],

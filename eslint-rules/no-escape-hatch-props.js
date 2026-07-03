@@ -1,4 +1,5 @@
 import path from "node:path";
+import { CONTAINER_COMPONENTS } from "./tango-containers.js";
 
 /**
  * Keeps Tango component APIs strict (see commit a7cd8d76 and the "Strict,
@@ -50,8 +51,15 @@ import path from "node:path";
  * shapes are banned. Files outside `src/tango/components/` are a no-op.
  */
 
-/** Repo-relative POSIX dir prefix that holds the styled public component APIs. */
-const SURFACE_PREFIXES = ["src/tango/components/"];
+/**
+ * Repo-relative POSIX dir prefixes that hold `*Props` types the strict-API bans
+ * apply to. `components/` is the styled public component surface. `screens/` is
+ * the migrated product-UI tier: a screen-local component's `*Props` gets the
+ * same strict treatment, so a screen can't quietly re-open an escape hatch on
+ * its own sub-components. `primitives/` is deliberately excluded (a primitive is
+ * a transparent DOM-forwarding mechanism; it is guarded by the contract test).
+ */
+const SURFACE_PREFIXES = ["src/tango/components/", "src/tango/screens/"];
 
 /** Member names that are an arbitrary-style/appearance passthrough. */
 const BANNED_MEMBER_NAMES = new Set(["style", "className"]);
@@ -63,19 +71,16 @@ const BANNED_MEMBER_NAMES = new Set(["style", "className"]);
  * render its copy from strict, typed props. Keyed by the exact type name so a
  * file that declares both a container and a leaf `*Props` (e.g. InfoCard.tsx,
  * which owns both the leaf `InfoCardProps` and the wrapper `PressPopoverProps` /
- * `PressInfoProps`) is judged per-declaration. Add a NEW entry only for a
- * genuine wrapper — the point is to force that to be a deliberate decision.
- * `src/tango/primitives/` (e.g. `Pressable`) is out of this rule's scope
- * entirely; primitives are transparent DOM-forwarding mechanisms and are guarded
- * by scripts/tango-strict-api.contract.test.mjs instead.
+ * `PressInfoProps`) is judged per-declaration. The membership lives in
+ * `tango-containers.js` (shared with the contract test so the two can't drift);
+ * add a NEW entry there only for a genuine wrapper — the point is to force that
+ * to be a deliberate decision. `src/tango/primitives/` (e.g. `Pressable`) is out
+ * of this rule's scope entirely; primitives are transparent DOM-forwarding
+ * mechanisms and are guarded by scripts/tango-strict-api.contract.test.mjs.
  */
-const CONTAINER_PROPS_TYPES = new Set([
-  "GroupPanelProps",
-  "HoverPopoverProps",
-  "HoverZoomCardProps",
-  "PressPopoverProps",
-  "PressInfoProps",
-]);
+export const CONTAINER_PROPS_TYPES = new Set(
+  CONTAINER_COMPONENTS.map((name) => `${name}Props`),
+);
 
 /** True when a bare type-reference name is a React-node family type. */
 function isReactNodeTypeName(name) {

@@ -16,6 +16,10 @@ import { dirname, join, resolve } from "node:path";
 import { readdirSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { extractPropMeta } from "./generate-tango-metadata.mjs";
+import {
+  CONTAINER_COMPONENTS,
+  CONTAINER_PRIMITIVES,
+} from "../eslint-rules/tango-containers.js";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -57,20 +61,15 @@ const BANNED_PROP_NAMES = new Set(["style", "className"]);
 /**
  * The CONTAINER components — a card / pressable / panel wrapper whose job is to
  * hold and frame caller-supplied content — that may legitimately take `children`
- * and raw node slots. Keyed by react-docgen DISPLAY NAME (the AST rule's
- * CONTAINER_PROPS_TYPES is the same allowlist keyed by `*Props` type name). This
- * list additionally covers `Pressable`, a primitive the AST rule doesn't scan:
- * a transparent interaction mechanism that forwards `children` onto the element
- * it wraps. Every other component must render copy from strict, typed props.
+ * and raw node slots. Keyed by react-docgen DISPLAY NAME. The membership is
+ * shared with the AST rule via `eslint-rules/tango-containers.js` (the rule keys
+ * the same allowlist by `*Props` type name) so the two can't drift. The
+ * primitive `Pressable` — a transparent interaction mechanism that forwards
+ * `children` onto the element it wraps — is covered here (the resolved surface
+ * includes primitives) though the components-scoped AST rule never scans it.
+ * Every other component must render copy from strict, typed props.
  */
-const CONTAINER_COMPONENTS = new Set([
-  "GroupPanel",
-  "HoverPopover",
-  "HoverZoomCard",
-  "PressPopover",
-  "PressInfo",
-  "Pressable",
-]);
+const CONTAINERS = new Set([...CONTAINER_COMPONENTS, ...CONTAINER_PRIMITIVES]);
 
 /** Matches a React-node family type anywhere in a resolved tsType string. */
 const REACT_NODE_TYPE = /\b(ReactNode|ReactElement|ReactChild|ReactPortal)\b|JSX\.Element/;
@@ -115,7 +114,7 @@ describe("Tango strict-API contract (resolved surface)", () => {
     // any prop whose type is a bare arrow/function signature.
     const offenders = [];
     for (const [component, props] of Object.entries(surface)) {
-      if (CONTAINER_COMPONENTS.has(component)) {
+      if (CONTAINERS.has(component)) {
         continue;
       }
       for (const prop of props ?? []) {
