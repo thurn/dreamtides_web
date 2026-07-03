@@ -8,13 +8,18 @@
 
 import { useRef } from "react";
 import { QuestStatusBar } from "../../components/QuestStatusBar";
-import {
-  dreamscapeSceneUrl,
-  dreamsignIconUrl,
-  guidePortraitUrl,
-} from "../../components/atlas-display";
+import { dreamscapeSceneUrl, dreamsignIconUrl } from "../../components/atlas-display";
+import { assetUrl } from "../../../runtime/asset-url";
 import { token } from "../../primitives/tokens";
 import { SceneCaption, sceneRoot } from "./scene";
+
+/** A Dreamcaller's character render, resolved the same way `assetUrl` resolves
+ * every other binary art asset (see `src/components/DreamcallerPortrait.tsx`
+ * for the production equivalent — reimplemented locally here so this
+ * tango-isolated mockup never imports from `src/components/`). */
+function dreamcallerPortraitUrl(imageNumber: string): string {
+  return assetUrl(`/dreamcallers/${imageNumber}.png`);
+}
 
 export function QuestStatusBarMockup() {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -54,31 +59,31 @@ export function QuestStatusBarMockup() {
         elevation={12}
         signElevation={12}
         dreamcaller={{
-          name: "Aldric",
-          epithet: "the Seer",
-          portrait: guidePortraitUrl("aldric_the_seer"),
-          ability:
-            "Whenever you foresee, draw a card. ▸ Dawn: Gain 2 essence.",
+          name: "Threxan",
+          epithet: "the Resounding Wrath",
+          portrait: dreamcallerPortraitUrl("0025"),
+          ability: "At the start of your first turn, draw a card.",
         }}
         dreamsigns={[
           {
-            id: "sign-acorn",
+            id: "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
             name: "Amplified Acorn",
             art: dreamsignIconUrl("acorn_gold.png"),
             ability:
               "Once per turn, when you discard a card, your next card this turn costs 2● less.",
           },
           {
-            id: "sign-relic",
+            id: "278EC1AB-F532-4862-84AE-63DF5E49548C",
             name: "Pyramid Relic",
             art: dreamsignIconUrl("aertfact.png"),
             ability: "The second character you play each turn costs 1● less.",
           },
           {
-            id: "sign-bell",
-            name: "Ringing Bell",
+            id: "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5",
+            name: "Bell",
             art: dreamsignIconUrl("bell.png"),
-            ability: "▸ Dawn: Foresee 1.",
+            ability:
+              "When you play a character from your void, rematerialize it.",
           },
         ]}
       />

@@ -3,17 +3,23 @@
 // hover reveal engine (InfoCard.PressInfo + the four variants on one shell).
 // Each trigger anchors its card to the full-viewport stageRef so the cards clamp
 // against the real screen edges. The object/hero media resolve from real assets
-// in `public/` (a Dream Guide portrait, a dreamscape scene); the icon and text
+// in `public/` (a Dreamcaller portrait, a dreamscape scene); the icon and text
 // variants use tokenized glyphs.
 
 import { useRef } from "react";
 import { InfoCard } from "../../components/InfoCard";
-import {
-  dreamscapeSceneUrl,
-  guidePortraitUrl,
-} from "../../components/atlas-display";
+import { dreamscapeSceneUrl } from "../../components/atlas-display";
+import { assetUrl } from "../../../runtime/asset-url";
 import { token } from "../../primitives/tokens";
 import { SceneCaption, sceneRoot } from "./scene";
+
+/** A Dreamcaller's character render, resolved the same way `assetUrl` resolves
+ * every other binary art asset (see `src/components/DreamcallerPortrait.tsx`
+ * for the production equivalent — reimplemented locally here so this
+ * tango-isolated mockup never imports from `src/components/`). */
+function dreamcallerPortraitUrl(imageNumber: string): string {
+  return assetUrl(`/dreamcallers/${imageNumber}.png`);
+}
 
 interface TriggerProps {
   stageRef: React.RefObject<HTMLDivElement | null>;
@@ -134,9 +140,9 @@ export function InfoCardMockup() {
             <InfoCard
               variant="object"
               frame
-              image={guidePortraitUrl("amunet_the_tomb_keeper")}
-              title="Amunet, the Tomb Keeper"
-              body="Whenever an ally dissolves, foresee 1."
+              image={dreamcallerPortraitUrl("0025")}
+              title="Threxan, the Resounding Wrath"
+              body="At the start of your first turn, draw a card."
             />
           }
         />

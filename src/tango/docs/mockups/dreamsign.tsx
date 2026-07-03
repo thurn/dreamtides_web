@@ -32,28 +32,29 @@ const GALLERY: DreamsignData[] = [
     isBane: false,
   },
   {
-    id: "5A2C0F1E-9B44-4D77-8E21-11C0AA33BB90",
-    name: "Ringing Bell",
+    id: "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5",
+    name: "Bell",
     imageName: "bell.png",
     imageAlt: "A brass bell.",
-    effectDescription: "▸ Dawn: Foresee 1.",
+    effectDescription:
+      "When you play a character from your void, rematerialize it.",
     isBane: false,
   },
   {
-    id: "9F13D8A7-6C22-4E55-9A03-77B22DD44CE1",
-    name: "Tidal Bloom",
+    id: "49990864-1DB0-4C08-91AE-40A1F04223E4",
+    name: "Algae",
     imageName: "algae.png",
     imageAlt: "Green tangled algae fronds.",
     effectDescription:
-      "Whenever a tide rises, your first character next turn has +1✦.",
+      "Once per turn, when you draw a character, reduce its cost by 1● until end of turn.",
     isBane: false,
   },
   {
-    id: "3D7E2B95-4411-42AA-B6C8-88E01133FA22",
-    name: "Bright Apple",
+    id: "D2A916C1-321A-4AE3-9A50-0B7F13C5EFF6",
+    name: "Worm Apple",
     imageName: "apple.png",
     imageAlt: "A polished red apple.",
-    effectDescription: "▸ Dawn: Gain 2 essence.",
+    effectDescription: "You may play ❖ and ❖❖ events for 1●.",
     isBane: false,
   },
   {
