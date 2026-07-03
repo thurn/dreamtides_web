@@ -255,7 +255,13 @@ export function HoverPopover({
         createPortal(
           <div
             ref={popoverRef}
-            className="pointer-events-none fixed z-[1000]"
+            // `tango` re-establishes the design-system token scope: this content
+            // is portaled to `document.body`, outside any `.tango` ancestor, so
+            // without it a Tango surface (e.g. a `DreamsignInfoCard`) rendered
+            // here resolves its `--surface-raised` / `--radius-*` / `--text-*`
+            // tokens to nothing and shows no background. The class only declares
+            // custom properties, so it contributes no styling itself.
+            className="tango pointer-events-none fixed z-[1000]"
             style={popoverStyle}
             role="tooltip"
             data-popover-side={resolved?.side ?? "pending"}

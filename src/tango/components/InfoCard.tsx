@@ -623,8 +623,15 @@ export function PressPopover({
   }, [anchor, gap, width]);
 
   return (
+    // `.tango` re-establishes the design-system token scope. The popover portals
+    // OUT of its trigger's subtree (into a screen root or `document.body`), which
+    // in the production app is not under a `.tango` ancestor, so without this the
+    // InfoCard shell's `--surface-raised` / `--radius-popover` / `--shadow-lg` /
+    // `--text-*` tokens resolve to nothing and the card renders with no surface.
+    // The class only declares custom properties, so it adds no styling of its own.
     <div
       ref={ref}
+      className="tango"
       style={{
         position: "absolute",
         width,
