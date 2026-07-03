@@ -46,7 +46,7 @@ function resolve(database: Map<number, CardData>): Resolved {
 const panelStyle = {
   background: token("--surface-card"),
   border: `1px solid ${token("--border-soft")}`,
-  borderRadius: token("--r-lg"),
+  borderRadius: token("--radius-panel"),
   padding: token("--space-6"),
 } as const;
 

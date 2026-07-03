@@ -86,7 +86,7 @@ export function ResourceChip({
         display: "inline-flex",
         alignItems: "center",
         gap,
-        font: `800 ${String(size)}px/1 var(--font-sans)`,
+        font: `800 ${String(size)}px/1 var(--font-ui)`,
         color: token("--text-primary"),
         fontVariantNumeric: "tabular-nums",
         ...(chip
@@ -94,7 +94,7 @@ export function ResourceChip({
               padding: `${String(size * 0.34)}px ${String(size * 0.6)}px`,
               background: token("--surface-glass"),
               border: `1px solid ${token("--border-soft")}`,
-              borderRadius: token("--r-pill"),
+              borderRadius: token("--radius-pill"),
             }
           : {}),
         ...style,

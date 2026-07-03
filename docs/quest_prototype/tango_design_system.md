@@ -112,27 +112,64 @@ The design ships tokens as CSS custom properties (`tokens/colors.css`,
 adopts these values verbatim.
 
 - **Source of truth:** a `src/tango/primitives/tango-tokens.css` scoped under a
-  `.tango` root class, holding the imported custom properties.
+  `.tango` root class, holding the custom properties.
 - **Typed mirror:** a generated `src/tango/primitives/tokens.ts` of typed
   constants for TS/inline-style use and for the demo harness. Generation is
   wired into `scripts/regenerate-assets.sh`.
 
-Token groups documented in the Primitives section:
+### Two tiers: primitive and semantic
 
-- **Color** — the base ramps (void / plum / violet / gold / energy / spark /
-  ember / sap) and the semantic aliases (`--accent`, `--surface-*`, `--text-*`,
-  resource roles, category colors). The Shared Canonical Layer (`--text`,
-  `--surface`, `--line`, `--gold`, `--font-*`) is shown as the one set surfaces
-  converge on.
-- **Typography** — EB Garamond (serif titles/names), Inter (functional), Fira
-  Sans Condensed (rules text), Anton (stat-orb numerals), JetBrains Mono
-  (eyebrows), plus the wordmark treatment.
-- **Corner radius** — `--r-xs … --r-2xl`, `--r-pill`, `--r-card`, `--r-popover`.
-- **Spacing** — the spacing scale + touch-floor tokens (`--safe-*`, 44pt floor).
+The token sheet is organized into two tiers, and this distinction governs what
+UI code is allowed to reference.
+
+- **Primitives — `--primitive-*`.** A primitive names a raw *value*: a point on
+  a color ramp (`--primitive-violet-500`), a step on the radius scale
+  (`--primitive-radius-lg`), a font face (`--primitive-font-sans`), a weight.
+  Primitives are the raw material the semantic layer is built from.
+- **Semantic tokens — everything else.** A semantic token names a *use*:
+  `--surface-card`, `--text-primary`, `--accent`, `--radius-control`,
+  `--font-ui`. Each resolves through a primitive (or a literal where no ramp step
+  fits), so the whole system re-skins by editing the primitive layer alone.
+
+**Write UI code against semantic tokens — never a primitive.** A semantic token
+describes what it is *for*, not what its value *is*; that indirection is the
+entire point of the token system. Primitives may be referenced **only** inside
+`src/tango/primitives/` (where the semantic layer is defined) and
+`src/tango/components/` (leaf components that occasionally need a raw ramp step
+with no semantic role, e.g. a specific tide-tone). Referencing a `--primitive-*`
+token anywhere else — a doc page, a demo, a mockup, any future product screen —
+is a lint error (see the `no-primitive-tokens` rule in §9). No exceptions.
+
+The spacing scale (`--space-*`), the layout constants, the type scale (`--t-*`),
+the motion tokens, and the elevation/glow shadows carry no `--primitive-` prefix:
+they are sanctioned semantic scales, role/intent named, and UI code uses them
+directly.
+
+### Token groups documented in the Tokens section
+
+The `/tango` Tokens section renders every token as a specimen, split into a
+**Semantic Tokens** tier (shown first, the vocabulary UI code writes against) and
+a **Primitives** tier below it, each grouped by kind and name-prefix family.
+
+- **Color** — semantic surface / text / accent / resource / status / category
+  roles (`--surface-*`, `--text-*`, `--accent`, `--energy`, `--danger`,
+  `--tide-earthy`, `--scrim`, …) over the primitive ramps (void / plum / violet /
+  gold / energy / spark / ember / sap / …). The Shared Canonical Layer (`--text`,
+  `--surface`, `--line`, `--gold`) and the production bridge (`--dt-*`,
+  `--color-*`, `--cv-*`) are semantic re-exports.
+- **Typography** — the type scale (`--t-*`) and font roles (`--font-ui` = Inter,
+  `--font-title` = EB Garamond, `--font-rules-text` = Fira Sans Condensed,
+  `--font-numeral` = Anton, `--font-meta` = JetBrains Mono) over the primitive
+  font faces (`--primitive-font-*`) and weights (`--primitive-weight-*`).
+- **Corner radius** — semantic roles `--radius-inset / -control / -card / -panel
+  / -sheet / -hero / -pill / -popover` over the primitive scale
+  (`--primitive-radius-xs … -2xl`, `-pill`, `-card`, `-popover`).
+- **Spacing** — the `--space-*` scale + touch-floor tokens (`--safe-*`, 44pt
+  floor), used directly.
 - **Iconography** — Boxicons v3.0.8 **filled** (`bxf bx-*`) is the set, already
   self-hosted in the app; the game's resource marks; and the two pinned
   fallbacks (`fa-solid fa-hammer`, already present, and `ph-fill ph-cards`, the
-  one new glyph — self-host the single Phosphor fill face).
+  one self-hosted Phosphor fill face).
 - **Motion** — `--ease-dream / -out / -in-out`, `--dur-fast/base/slow`,
   `--press-scale` (0.94), and the two material-continuity tokens
   (`--motion-object-travel`, `--motion-container-transform`).
@@ -254,10 +291,12 @@ reference, not by a from-scratch subagent rewrite.
 
 ## 9. Testing & verification
 
-- `npm run lint` (including the new fail-closed boundary rule), `npm run
-  typecheck`, and `npm test` stay green.
-- Unit tests for the non-visual machinery: the docgen metadata extractor and the
-  hash router.
+- `npm run lint` (including the fail-closed import-boundary rule
+  `no-external-ui-imports` and the token-tier rule `no-primitive-tokens`, which
+  errors on any `--primitive-*` reference outside `primitives/` + `components/`),
+  `npm run typecheck`, and `npm test` stay green.
+- Unit tests for the non-visual machinery: the docgen metadata extractor, the
+  hash router, and both Tango ESLint rules (`eslint-rules/*.test.ts`).
 - Moved production components keep their existing tests (tests move with them —
   e.g. `CardView`, `RulesText`).
 - No brittle snapshot or token-value tests on demos (tokens and design data

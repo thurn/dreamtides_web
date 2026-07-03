@@ -19,7 +19,7 @@ const targetStyle: CSSProperties = {
   alignItems: "center",
   justifyContent: "center",
   padding: `${token("--space-4")} ${token("--space-8")}`,
-  borderRadius: token("--r-md"),
+  borderRadius: token("--radius-control"),
   border: `1px solid ${token("--border-soft")}`,
   background: token("--surface-raised"),
   color: token("--text-primary"),

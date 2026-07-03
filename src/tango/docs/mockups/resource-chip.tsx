@@ -62,7 +62,7 @@ export function ResourceChipMockup() {
             padding: `${token("--space-9")} ${token("--space-10")}`,
             background: token("--surface-glass"),
             border: `1px solid ${token("--border-soft")}`,
-            borderRadius: token("--r-xl"),
+            borderRadius: token("--radius-sheet"),
             boxShadow: token("--shadow-lg"),
           }}
         >

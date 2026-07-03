@@ -68,9 +68,20 @@ const BUCKET_TITLES: Record<Bucket, string> = {
  * a plain length/keyword. */
 const COLOR_VALUE_RE = /^(#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\()/;
 
-/** Strips the leading `--` so prefix checks read as plain name segments. */
+/** Strips the leading `--` and, for a primitive, its `primitive-` tier prefix,
+ * so family/bucket checks read the same segments whether a token is a primitive
+ * (`--primitive-radius-lg` -> `radius-lg`) or a semantic (`--radius-panel` ->
+ * `radius-panel`). The tier itself is detected separately via {@link isPrimitive}. */
 function shortName(name: string): string {
-  return name.startsWith("--") ? name.slice(2) : name;
+  const withoutDashes = name.startsWith("--") ? name.slice(2) : name;
+  return withoutDashes.startsWith("primitive-")
+    ? withoutDashes.slice("primitive-".length)
+    : withoutDashes;
+}
+
+/** True for a raw-value primitive token (the `--primitive-*` tier). */
+function isPrimitive(name: string): boolean {
+  return name.startsWith("--primitive-");
 }
 
 /** The token's family: its name's first `-`-delimited segment (e.g.
@@ -111,7 +122,7 @@ function isColorValue(value: string): boolean {
  * radius / shadow / font) wins outright. The CSS's own `@kind` vocabulary
  * only distinguishes color / radius / shadow / font / other, so a token
  * marked `other` — and the much larger set of tokens with no marker at all,
- * since a name like `--violet-400` or `--r-lg` never needed one — falls
+ * since a name like `--primitive-violet-400` or `--radius-panel` never needed one — falls
  * through to a name-prefix check, and failing that, a check of the value's
  * own shape (a bare hex/rgb/hsl literal reads as color regardless of name).
  */
@@ -122,7 +133,7 @@ function bucketOf(name: string, entry: TokenEntry): Bucket {
   if (entry.kind === "color") return "color";
 
   const short = shortName(name);
-  if (short.startsWith("r-")) return "radius";
+  if (short.startsWith("radius-")) return "radius";
   if (
     short.startsWith("shadow-") ||
     short.startsWith("glow-") ||
@@ -142,7 +153,7 @@ function bucketOf(name: string, entry: TokenEntry): Bucket {
   if (
     short.startsWith("t-") ||
     short.startsWith("font-") ||
-    short.startsWith("w-") ||
+    short.startsWith("weight-") ||
     short.startsWith("tracking-")
   ) {
     return "typography";
@@ -172,18 +183,33 @@ function groupByFamily(entries: [string, TokenEntry][]): FamilyGroup[] {
   return groups;
 }
 
-const BUCKETS: Record<Bucket, [string, TokenEntry][]> = {
-  color: [],
-  typography: [],
-  radius: [],
-  spacing: [],
-  motion: [],
-  shadow: [],
-  other: [],
-};
-for (const [name, entry] of TOKEN_ENTRIES) {
-  BUCKETS[bucketOf(name, entry)].push([name, entry]);
+type Buckets = Record<Bucket, [string, TokenEntry][]>;
+
+/** Sorts a list of token entries into specimen buckets, preserving source
+ * order within each bucket. */
+function bucketize(entries: [string, TokenEntry][]): Buckets {
+  const buckets: Buckets = {
+    color: [],
+    typography: [],
+    radius: [],
+    spacing: [],
+    motion: [],
+    shadow: [],
+    other: [],
+  };
+  for (const [name, entry] of entries) {
+    buckets[bucketOf(name, entry)].push([name, entry]);
+  }
+  return buckets;
 }
+
+/** The two token tiers, each bucketized. Semantic tokens (the encouraged
+ * layer) render first; the raw `--primitive-*` tier renders below under its
+ * own heading, so the page reads the way code should be written. */
+const SEMANTIC_BUCKETS = bucketize(TOKEN_ENTRIES.filter(([name]) => !isPrimitive(name)));
+const PRIMITIVE_BUCKETS = bucketize(TOKEN_ENTRIES.filter(([name]) => isPrimitive(name)));
+const PRIMITIVE_COUNT = TOKEN_ENTRIES.filter(([name]) => isPrimitive(name)).length;
+const SEMANTIC_COUNT = TOKEN_ENTRIES.length - PRIMITIVE_COUNT;
 
 // ---------------------------------------------------------------------------
 // Shared chrome (dogfooding Tango tokens), matching IntroSection.tsx's style.
@@ -252,7 +278,7 @@ const specimenTileStyle: CSSProperties = {
   padding: token("--space-5"),
   background: token("--surface-card"),
   border: `1px solid ${token("--border-soft")}`,
-  borderRadius: token("--r-md"),
+  borderRadius: token("--radius-control"),
   minWidth: 0,
 };
 
@@ -333,7 +359,7 @@ function FamilyGrid({
 const colorSwatchStyle: CSSProperties = {
   width: "100%",
   height: "56px",
-  borderRadius: token("--r-sm"),
+  borderRadius: token("--radius-inset"),
   border: `1px solid ${token("--border-mid")}`,
   boxShadow: token("--shadow-sm"),
 };
@@ -374,7 +400,7 @@ function TypographySpecimen(name: string, entry: TokenEntry): ReactElement {
       <p
         style={{
           ...typeSampleStyle,
-          fontFamily: token("--font-sans"),
+          fontFamily: token("--font-ui"),
           fontSize: "19px",
           fontWeight: `var(${name})`,
         }}
@@ -443,7 +469,7 @@ function SpacingSpecimen(name: string, entry: TokenEntry): ReactElement {
           width: `var(${name})`,
           minWidth: "2px",
           background: token("--accent"),
-          borderRadius: token("--r-pill"),
+          borderRadius: token("--radius-pill"),
         }}
       />
       <p style={specimenNameStyle}>{name}</p>
@@ -493,7 +519,7 @@ const motionTrackStyle: CSSProperties = {
   width: "100%",
   height: token("--space-8"),
   background: token("--surface-chip"),
-  borderRadius: token("--r-pill"),
+  borderRadius: token("--radius-pill"),
   overflow: "hidden",
 };
 
@@ -607,7 +633,7 @@ function ShadowSpecimen(name: string, entry: TokenEntry): ReactElement {
           height: "56px",
           margin: token("--space-3"),
           background: token("--surface-card"),
-          borderRadius: token("--r-md"),
+          borderRadius: token("--radius-control"),
           boxShadow: `var(${name})`,
         }}
       />
@@ -675,22 +701,149 @@ function OtherSpecimen(name: string, entry: TokenEntry): ReactElement {
 }
 
 // ---------------------------------------------------------------------------
+// Tier headings, guidance note, and the shared gallery body
+// ---------------------------------------------------------------------------
+
+const tierHeadingStyle: CSSProperties = {
+  font: token("--t-title-sm"),
+  color: token("--text-primary"),
+  margin: `${token("--space-9")} 0 ${token("--space-2")}`,
+  paddingTop: token("--space-6"),
+  borderTop: `1px solid ${token("--border-mid")}`,
+};
+
+const tierLeadStyle: CSSProperties = {
+  font: token("--t-body"),
+  color: token("--text-secondary"),
+  margin: `0 0 ${token("--space-8")}`,
+  maxWidth: "68ch",
+};
+
+const noteStyle: CSSProperties = {
+  font: token("--t-body-sm"),
+  color: token("--text-secondary"),
+  margin: `0 0 ${token("--space-9")}`,
+  padding: token("--space-6"),
+  background: token("--accent-tint"),
+  border: `1px solid ${token("--border-accent")}`,
+  borderRadius: token("--radius-panel"),
+  maxWidth: "72ch",
+};
+
+const codeTokenStyle: CSSProperties = {
+  font: token("--t-popover-meta"),
+  color: token("--accent-bright"),
+};
+
+/**
+ * The rule every reader needs before the gallery: write UI code against
+ * semantic tokens; primitives are the restricted raw layer beneath them.
+ */
+function TokenGuidance(): ReactElement {
+  return (
+    <p style={noteStyle}>
+      <strong style={{ color: token("--text-primary") }}>Write UI code against semantic tokens.</strong>{" "}
+      A semantic token names <em>what it is for</em> — <code style={codeTokenStyle}>--surface-card</code>,{" "}
+      <code style={codeTokenStyle}>--radius-control</code>, <code style={codeTokenStyle}>--font-ui</code> — so the
+      system re-skins from one place. A <strong style={{ color: token("--text-primary") }}>primitive</strong>{" "}
+      (<code style={codeTokenStyle}>--primitive-*</code>) names a raw <em>value</em> — a ramp step, a font face —
+      and exists only as material for the semantic layer. Referencing a{" "}
+      <code style={codeTokenStyle}>--primitive-*</code> token anywhere outside{" "}
+      <code style={codeTokenStyle}>src/tango/primitives/</code> or <code style={codeTokenStyle}>src/tango/components/</code>{" "}
+      fails <code style={codeTokenStyle}>npm run lint</code> — no exceptions. The spacing scale (
+      <code style={codeTokenStyle}>--space-*</code>), the type scale, motion, and elevation shadows are sanctioned
+      semantic scales you use directly.
+    </p>
+  );
+}
+
+/** Renders one tier's bucketized specimens, skipping any empty bucket so the
+ * primitive tier (color / typography / radius only) omits the sections it has
+ * nothing for. */
+function TokenGallery({ buckets }: { buckets: Buckets }): ReactElement {
+  return (
+    <>
+      {buckets.color.length > 0 && (
+        <PrimitiveGroup
+          title={BUCKET_TITLES.color}
+          description="Grouped by family. Each swatch resolves the token's own var() chain, so a semantic token shows the primitive hex it points at."
+        >
+          <FamilyGrid entries={buckets.color} renderSpecimen={ColorSpecimen} />
+        </PrimitiveGroup>
+      )}
+
+      {buckets.typography.length > 0 && (
+        <PrimitiveGroup
+          title={BUCKET_TITLES.typography}
+          description="The type scale (--t-*), font roles, families, weights, and letter-tracking that make it up."
+        >
+          <FamilyGrid entries={buckets.typography} renderSpecimen={TypographySpecimen} />
+        </PrimitiveGroup>
+      )}
+
+      {buckets.radius.length > 0 && (
+        <PrimitiveGroup title={BUCKET_TITLES.radius} description="Corner radii, from the tightest inset to a fully round pill.">
+          <FamilyGrid entries={buckets.radius} renderSpecimen={RadiusSpecimen} />
+        </PrimitiveGroup>
+      )}
+
+      {buckets.spacing.length > 0 && (
+        <PrimitiveGroup title={BUCKET_TITLES.spacing} description="The 8pt-based spacing scale, shown as proportional bars.">
+          <FamilyGrid entries={buckets.spacing} renderSpecimen={SpacingSpecimen} />
+        </PrimitiveGroup>
+      )}
+
+      {buckets.motion.length > 0 && (
+        <PrimitiveGroup
+          title={BUCKET_TITLES.motion}
+          description="Durations, easings, and the two canonical object-travel / container-transform combos, dogfooded as a drifting dot. Respects prefers-reduced-motion — the dot holds still if your system requests it."
+        >
+          {renderMotionEntries(buckets.motion)}
+        </PrimitiveGroup>
+      )}
+
+      {buckets.shadow.length > 0 && (
+        <PrimitiveGroup
+          title={BUCKET_TITLES.shadow}
+          description="Elevation shadows and the signature violet glow, applied to a plain surface tile."
+        >
+          <FamilyGrid entries={buckets.shadow} renderSpecimen={ShadowSpecimen} />
+        </PrimitiveGroup>
+      )}
+
+      {buckets.other.length > 0 && (
+        <PrimitiveGroup
+          title={BUCKET_TITLES.other}
+          description="Everything else the token sheet declares — layout constants, gradients, and atlas-specific washes — with no specimen shape of its own."
+        >
+          <div>
+            {buckets.other.map(([name, entry]) => (
+              <div key={name}>{OtherSpecimen(name, entry)}</div>
+            ))}
+          </div>
+        </PrimitiveGroup>
+      )}
+    </>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // PrimitivesSection
 // ---------------------------------------------------------------------------
 
 /**
- * The Primitives section of the /tango overview: a specimen gallery for
- * every design token in tango-tokens.css, grouped by `@kind` (color / radius
- * / shadow / typography / other) and then by name-prefix family, plus a
- * small curated iconography sample. Generated from `../primitives/tokens`
- * (itself generated from the CSS by the one shared parser), so it can never
- * drift from the token sheet by hand.
+ * The Design Tokens section of the /tango overview. Presents the token system
+ * as its two tiers: the semantic tokens UI code writes against first, then the
+ * raw `--primitive-*` layer beneath them, each a specimen gallery grouped by
+ * `@kind` and name-prefix family, plus a curated iconography sample. Generated
+ * from `../primitives/tokens` (itself generated from the CSS by the one shared
+ * parser), so it can never drift from the token sheet by hand.
  */
 export function PrimitivesSection(): ReactElement {
   useMotionKeyframes();
   return (
     <section aria-labelledby="tango-primitives-heading" style={{ marginBottom: token("--space-10") }}>
-      <p style={eyebrowStyle}>Primitives</p>
+      <p style={eyebrowStyle}>Tokens</p>
       <h2 id="tango-primitives-heading" style={sectionTitleStyle}>
         Design Tokens
       </h2>
@@ -701,27 +854,13 @@ export function PrimitivesSection(): ReactElement {
         <code>npm run tango-tokens</code>, and this gallery updates with it.
       </p>
 
-      <PrimitiveGroup
-        title={BUCKET_TITLES.color}
-        description="Every color token, grouped by family. Each swatch resolves the token's own var() chain, so an alias like --dt-gold shows the base --gold-600 hex it points at."
-      >
-        <FamilyGrid entries={BUCKETS.color} renderSpecimen={ColorSpecimen} />
-      </PrimitiveGroup>
+      <TokenGuidance />
 
-      <PrimitiveGroup
-        title={BUCKET_TITLES.typography}
-        description="The type scale (--t-*), font families, weights, and letter-tracking that make it up."
-      >
-        <FamilyGrid entries={BUCKETS.typography} renderSpecimen={TypographySpecimen} />
-      </PrimitiveGroup>
-
-      <PrimitiveGroup title={BUCKET_TITLES.radius} description="Corner radii, from the tightest control to a fully round pill.">
-        <FamilyGrid entries={BUCKETS.radius} renderSpecimen={RadiusSpecimen} />
-      </PrimitiveGroup>
-
-      <PrimitiveGroup title={BUCKET_TITLES.spacing} description="The 8pt-based spacing scale, shown as proportional bars.">
-        <FamilyGrid entries={BUCKETS.spacing} renderSpecimen={SpacingSpecimen} />
-      </PrimitiveGroup>
+      <h3 style={tierHeadingStyle}>Semantic Tokens</h3>
+      <p style={tierLeadStyle}>
+        {SEMANTIC_COUNT} tokens that name a use. This is the vocabulary UI code writes against.
+      </p>
+      <TokenGallery buckets={SEMANTIC_BUCKETS} />
 
       <PrimitiveGroup
         title="Iconography"
@@ -734,32 +873,12 @@ export function PrimitivesSection(): ReactElement {
         </div>
       </PrimitiveGroup>
 
-      <PrimitiveGroup
-        title={BUCKET_TITLES.motion}
-        description="Durations, easings, and the two canonical object-travel / container-transform combos, dogfooded as a drifting dot. Respects prefers-reduced-motion — the dot holds still if your system requests it."
-      >
-        {renderMotionEntries(BUCKETS.motion)}
-      </PrimitiveGroup>
-
-      <PrimitiveGroup
-        title={BUCKET_TITLES.shadow}
-        description="Elevation shadows and the signature violet glow, applied to a plain surface tile."
-      >
-        <FamilyGrid entries={BUCKETS.shadow} renderSpecimen={ShadowSpecimen} />
-      </PrimitiveGroup>
-
-      {BUCKETS.other.length > 0 && (
-        <PrimitiveGroup
-          title={BUCKET_TITLES.other}
-          description="Everything else the token sheet declares — layout constants, gradients, and atlas-specific washes — with no specimen shape of its own."
-        >
-          <div>
-            {BUCKETS.other.map(([name, entry]) => (
-              <div key={name}>{OtherSpecimen(name, entry)}</div>
-            ))}
-          </div>
-        </PrimitiveGroup>
-      )}
+      <h3 style={tierHeadingStyle}>Primitives</h3>
+      <p style={tierLeadStyle}>
+        {PRIMITIVE_COUNT} raw-value tokens the semantic layer is built from. Reference them only inside{" "}
+        <code>primitives/</code> and <code>components/</code>; UI code uses the semantic tokens above.
+      </p>
+      <TokenGallery buckets={PRIMITIVE_BUCKETS} />
     </section>
   );
 }

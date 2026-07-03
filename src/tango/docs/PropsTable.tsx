@@ -24,7 +24,7 @@ const headerCellStyle: React.CSSProperties = {
 };
 
 const codeStyle: React.CSSProperties = {
-  fontFamily: token("--font-mono"),
+  fontFamily: token("--font-meta"),
   fontSize: "12px",
   color: token("--accent-bright"),
 };

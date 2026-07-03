@@ -6,7 +6,7 @@
 // The shell is fixed and shared (a clean solid ground, not a scrim):
 //   - no colored border, no arrow / caret pointing back at the origin
 //   - one solid surface        — --surface-raised
-//   - one corner radius         — --r-popover
+//   - one corner radius         — --radius-popover
 //   - one shadow                — --shadow-lg
 //   - one type scale            — headline (serif) / body (rules) / meta (mono)
 // Only the MEDIA treatment varies by content, via `variant`:
@@ -79,7 +79,7 @@ const shell: React.CSSProperties = {
   textAlign: "left",
   overflow: "hidden",
   background: token("--surface-raised"), // solid, no transparency, no scrim
-  borderRadius: token("--r-popover"),
+  borderRadius: token("--radius-popover"),
   boxShadow: token("--shadow-lg"), // no border
 };
 const tHeadline: React.CSSProperties = {
@@ -202,7 +202,7 @@ function InfoCardComponent({
           flex: "none",
           position: "relative",
           overflow: "hidden",
-          borderRadius: token("--r-md"),
+          borderRadius: token("--radius-control"),
           // shadow token + a faithfully-copied inset hairline highlight
           boxShadow: `${token("--shadow-md")}, inset 0 0 0 1px rgba(255,255,255,0.08)`,
         }}

@@ -49,7 +49,7 @@ function QuestStatusBarDemo(args: Omit<QuestStatusBarProps, "stageRef">) {
         width: 390,
         height: 300,
         overflow: "hidden",
-        borderRadius: token("--r-xl"),
+        borderRadius: token("--radius-sheet"),
         // A dark, scene-like backdrop so the transparent HUD sits on "art"
         // and the .hud-outline glyph dilation is visibly earning its keep.
         background:

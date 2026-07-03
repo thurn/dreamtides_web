@@ -61,7 +61,7 @@ const frameStyle: CSSProperties = {
   position: "relative",
   width: "100%",
   height: "clamp(360px, 52vh, 500px)",
-  borderRadius: token("--r-lg"),
+  borderRadius: token("--radius-panel"),
   overflow: "hidden",
   border: `1px solid ${token("--border-mid")}`,
   boxShadow: token("--shadow-lg"),

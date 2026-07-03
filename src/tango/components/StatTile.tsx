@@ -2,8 +2,8 @@
 // results). A solid raised card with a big value over a small uppercase
 // label. Pass `accent` to tint the value (e.g. essence remaining in violet).
 //
-// Colors are token-driven (`--surface-raised` / `--border-soft` / `--r-md` /
-// `--text-muted` / `--text-primary` / `--font-sans`), never a raw hex, so a
+// Colors are token-driven (`--surface-raised` / `--border-soft` / `--radius-control` /
+// `--text-muted` / `--text-primary` / `--font-ui`), never a raw hex, so a
 // future token rename/reband propagates automatically. `accent` is the one
 // prop that intentionally accepts a raw color string (a `var(--...)`
 // reference passed by the caller, e.g. `var(--essence)`) so any resource
@@ -49,13 +49,13 @@ export function StatTile({
         padding: "14px 16px",
         background: token("--surface-raised"),
         border: `1px solid ${token("--border-soft")}`,
-        borderRadius: token("--r-md"),
+        borderRadius: token("--radius-control"),
         ...style,
       }}
     >
       <span
         style={{
-          font: `700 11px/1 ${token("--font-sans")}`,
+          font: `700 11px/1 ${token("--font-ui")}`,
           letterSpacing: "0.13em",
           textTransform: "uppercase",
           color: token("--text-muted"),
@@ -65,7 +65,7 @@ export function StatTile({
       </span>
       <span
         style={{
-          font: `800 24px/1 ${token("--font-sans")}`,
+          font: `800 24px/1 ${token("--font-ui")}`,
           fontVariantNumeric: "tabular-nums",
           color: accent ?? token("--text-primary"),
         }}
@@ -75,7 +75,7 @@ export function StatTile({
       {sub && (
         <span
           style={{
-            font: `500 12px/1.3 ${token("--font-sans")}`,
+            font: `500 12px/1.3 ${token("--font-ui")}`,
             color: token("--text-muted"),
           }}
         >

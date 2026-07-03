@@ -18,7 +18,7 @@ function MotesDemo(args: MotesProps) {
         width: 320,
         height: 220,
         overflow: "hidden",
-        borderRadius: token("--r-md"),
+        borderRadius: token("--radius-control"),
         background: token("--bg-sunken"),
         border: `1px solid ${token("--border-soft")}`,
       }}

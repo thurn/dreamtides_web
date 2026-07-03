@@ -140,7 +140,7 @@ export function Button({
         borderImageSlice: `${String(SLICE)} fill`,
         borderImageWidth: `${String(borderWidth)}px`,
         borderImageRepeat: "stretch",
-        font: `700 ${String(spec.font)}px/1.1 ${token("--font-sans")}`,
+        font: `700 ${String(spec.font)}px/1.1 ${token("--font-ui")}`,
         letterSpacing: "0.01em",
         color: token("--text-on-accent"),
         textShadow: "0 1px 3px rgba(20, 2, 38, 0.85)",

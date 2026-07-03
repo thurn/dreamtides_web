@@ -23,7 +23,7 @@
 // refraction), so it is safe on iOS Safari. Tuned to stay legible over a
 // painterly portrait, not to distract.
 //
-// Only the edge (--border-soft), corner radius (--r-popover default) and
+// Only the edge (--border-soft), corner radius (--radius-popover default) and
 // padding (--space-6 default) are Tango tokens — the translucent chrome fill,
 // specular sheen gradient, blur/saturate backdrop and layered rim/wash/drop
 // shadow have no design-system token and are the panel's own bespoke glass
@@ -41,7 +41,7 @@ import { token } from "../primitives/tokens";
  * pass the function itself.
  */
 export function groupPanelStyle(
-  radius: string | number = token("--r-popover"),
+  radius: string | number = token("--radius-popover"),
 ): React.CSSProperties {
   return {
     // Deep chrome tint at reduced alpha so the backdrop blur reads as glass —
@@ -64,7 +64,7 @@ export function groupPanelStyle(
 }
 
 export interface GroupPanelProps extends React.HTMLAttributes<HTMLElement> {
-  /** Corner radius (token or px). Default var(--r-popover) (8px), matching the shipped console. */
+  /** Corner radius (token or px). Default var(--radius-popover) (8px), matching the shipped console. */
   radius?: string | number;
   as?: React.ElementType;
   padding?: string | number;
@@ -84,7 +84,7 @@ interface GroupPanelStatics {
  */
 function GroupPanelComponent({
   children,
-  radius = token("--r-popover"),
+  radius = token("--radius-popover"),
   as = "div",
   padding = token("--space-6"),
   style = {},

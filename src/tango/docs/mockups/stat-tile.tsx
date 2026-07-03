@@ -41,7 +41,7 @@ export function StatTileMockup() {
           style={{
             width: 84,
             height: 84,
-            borderRadius: token("--r-lg"),
+            borderRadius: token("--radius-panel"),
             border: `1px solid ${token("--border-accent")}`,
             backgroundImage: `url(${dreamscapeSceneUrl("rust_expanse")})`,
             backgroundSize: "cover",

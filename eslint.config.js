@@ -1,6 +1,7 @@
 import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 import tangoNoExternalUiImports from "./eslint-rules/no-external-ui-imports.js";
+import tangoNoPrimitiveTokens from "./eslint-rules/no-primitive-tokens.js";
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -30,9 +31,17 @@ export default tseslint.config(
   {
     files: ["src/tango/**/*.{ts,tsx}"],
     plugins: {
-      tango: { rules: { "no-external-ui-imports": tangoNoExternalUiImports } },
+      tango: {
+        rules: {
+          "no-external-ui-imports": tangoNoExternalUiImports,
+          "no-primitive-tokens": tangoNoPrimitiveTokens,
+        },
+      },
     },
-    rules: { "tango/no-external-ui-imports": "error" },
+    rules: {
+      "tango/no-external-ui-imports": "error",
+      "tango/no-primitive-tokens": "error",
+    },
   },
   {
     ignores: [

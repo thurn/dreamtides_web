@@ -231,7 +231,7 @@ export function Dreamsign({
     alignItems: "center",
     justifyContent: "center",
     overflow: "hidden",
-    borderRadius: token("--r-md"),
+    borderRadius: token("--radius-control"),
     background: "rgba(10, 6, 18, 0.65)",
     border: `1px solid ${borderColor}`,
     boxShadow: `0 0 6px ${glow}`,

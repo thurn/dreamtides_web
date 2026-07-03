@@ -14,7 +14,7 @@ export const sceneRoot: CSSProperties = {
   height: "100%",
   overflow: "hidden",
   boxSizing: "border-box",
-  fontFamily: token("--font-sans"),
+  fontFamily: token("--font-ui"),
   color: token("--text-primary"),
 };
 
@@ -52,7 +52,7 @@ export function SceneCaption({
         padding: `${token("--space-3")} ${token("--space-5")}`,
         background: "rgba(12, 8, 22, 0.62)",
         border: `1px solid ${token("--border-soft")}`,
-        borderRadius: token("--r-md"),
+        borderRadius: token("--radius-control"),
         backdropFilter: "blur(6px)",
         pointerEvents: "none",
         ...anchor,

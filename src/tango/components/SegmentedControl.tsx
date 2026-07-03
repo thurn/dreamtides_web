@@ -3,9 +3,9 @@
 // active segment carries the violet accent-gradient fill; the track is a
 // subtle inset pill.
 //
-// Colors and shape are token-driven (`--border-soft`, `--r-pill`,
+// Colors and shape are token-driven (`--border-soft`, `--radius-pill`,
 // `--gradient-accent`, `--glow-accent-soft`, `--text-muted`,
-// `--text-on-accent`, `--font-sans`), never a raw hex duplicating a token.
+// `--text-on-accent`, `--font-ui`), never a raw hex duplicating a token.
 // The track background (`rgba(255, 255, 255, 0.05)`) has no dedicated token
 // in the parent design system and is copied verbatim from the source.
 //
@@ -94,9 +94,9 @@ function Segment({ option, active, full, font, onSelect }: SegmentProps): ReactE
         gap: 6,
         padding: "0 16px",
         height: "100%",
-        borderRadius: token("--r-pill"),
+        borderRadius: token("--radius-pill"),
         border: "none",
-        font: `${active ? 700 : 600} ${String(font)}px/1 ${token("--font-sans")}`,
+        font: `${active ? 700 : 600} ${String(font)}px/1 ${token("--font-ui")}`,
         color: active ? token("--text-on-accent") : token("--text-muted"),
         background: active ? token("--gradient-accent") : "transparent",
         boxShadow: active ? token("--glow-accent-soft") : "none",
@@ -141,7 +141,7 @@ export function SegmentedControl({
         height: spec.height,
         background: "rgba(255, 255, 255, 0.05)",
         border: `1px solid ${token("--border-soft")}`,
-        borderRadius: token("--r-pill"),
+        borderRadius: token("--radius-pill"),
         ...style,
       }}
     >

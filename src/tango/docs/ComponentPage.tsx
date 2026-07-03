@@ -89,7 +89,7 @@ export function ComponentPage({ id }: { id: string }) {
             padding: token("--space-6"),
             background: token("--surface-card"),
             border: `1px solid ${token("--border-soft")}`,
-            borderRadius: token("--r-md"),
+            borderRadius: token("--radius-control"),
           }}
         >
           <h2 style={sectionHeadingStyle}>Controls</h2>

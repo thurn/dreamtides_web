@@ -39,7 +39,7 @@ function Tile({ icon, label, sub, emphasis = false }: TileSpec) {
         gap: token("--space-4"),
         width: "clamp(140px, 20vw, 190px)",
         padding: `${token("--space-8")} ${token("--space-5")}`,
-        borderRadius: token("--r-lg"),
+        borderRadius: token("--radius-panel"),
         border: `1px solid ${emphasis ? token("--border-accent") : token("--border-soft")}`,
         background: emphasis ? token("--gradient-accent") : token("--surface-glass"),
         boxShadow: emphasis ? token("--glow-accent-soft") : token("--shadow-md"),

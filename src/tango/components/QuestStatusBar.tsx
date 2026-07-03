@@ -336,7 +336,7 @@ function QsbDreamsignWindow({
         display: "grid",
         placeItems: "center",
         padding: token("--gutter"),
-        background: token("--scrim-700"),
+        background: token("--scrim"),
         animation: `qsbCardIn ${token("--dur-fast")} ${token("--ease-out")} both`,
       }}
     >
@@ -348,7 +348,7 @@ function QsbDreamsignWindow({
           padding: "20px 20px 24px",
           background: token("--surface-glass-strong"),
           border: `1px solid ${token("--border-soft")}`,
-          borderRadius: token("--r-2xl"),
+          borderRadius: token("--radius-hero"),
           boxShadow: token("--shadow-lg"),
         }}
       >
@@ -360,7 +360,7 @@ function QsbDreamsignWindow({
             marginBottom: 16,
           }}
         >
-          <h2 style={{ margin: 0, font: `600 21px/1 ${token("--font-serif")}`, color: token("--text-primary") }}>
+          <h2 style={{ margin: 0, font: `600 21px/1 ${token("--font-title")}`, color: token("--text-primary") }}>
             Dreamsigns
           </h2>
           <button
@@ -370,7 +370,7 @@ function QsbDreamsignWindow({
             style={{
               width: 34,
               height: 34,
-              borderRadius: token("--r-md"),
+              borderRadius: token("--radius-control"),
               display: "grid",
               placeItems: "center",
               color: token("--text-secondary"),
@@ -437,14 +437,14 @@ function QsbDreamcallerBust({
         width: 66,
         height: 66,
         flex: "none",
-        borderRadius: token("--r-md"),
+        borderRadius: token("--radius-control"),
         overflow: "hidden",
         border: `2px solid ${token("--border-accent")}`,
         boxShadow: token("--glow-accent-soft"),
         // Faithfully-copied bespoke gradient literal: the first stop #2a2140 has
-        // NO exact token equivalent (--plum-500 is #2a2040, off by one digit),
+        // NO exact token equivalent (--primitive-plum-500 is #2a2040, off by one digit),
         // so it stays a literal rather than silently shifting the design color.
-        background: `radial-gradient(circle at 50% 30%, #2a2140, ${token("--void-700")})`,
+        background: `radial-gradient(circle at 50% 30%, #2a2140, ${token("--primitive-void-700")})`,
         padding: 0,
         cursor: "pointer",
         touchAction: "none",
@@ -521,7 +521,7 @@ function QsbEssence({
         display: "inline-flex",
         alignItems: "center",
         gap: 0,
-        font: `800 22px/1 ${token("--font-sans")}`,
+        font: `800 22px/1 ${token("--font-ui")}`,
         fontVariantNumeric: "tabular-nums",
         color: token("--text-primary"),
         cursor: "pointer",

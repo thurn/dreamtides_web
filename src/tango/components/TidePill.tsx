@@ -11,13 +11,13 @@
 // identically; TidePill never floats its own bespoke popup.
 //
 // Colors are token-driven, never a raw hex duplicating a token:
-//   - violet -> --accent-bright / --violet-400 (also the source of
+//   - violet -> --accent-bright / --primitive-violet-400 (also the source of
 //     --accent-tint / --border-accent, whose alpha values these washes match)
-//   - blue   -> --energy / --energy-300 (the game's blue resource role)
-//   - gold   -> --gold-300 / --gold-500
-//   - green  -> --positive (== --sap-400, the player/grant green)
-//   - rust   -> --rust-500 (already documented as "tide / earthy affiliation")
-//   - red    -> --danger (== --ember-500) / --ember-400
+//   - blue   -> --energy / --primitive-energy-300 (the game's blue resource role)
+//   - gold   -> --primitive-gold-300 / --primitive-gold-500
+//   - green  -> --positive (== --primitive-sap-400, the player/grant green)
+//   - rust   -> --primitive-rust-500 (already documented as "tide / earthy affiliation")
+//   - red    -> --danger (== --primitive-ember-500) / --primitive-ember-400
 //   - neutral -> a muted surface (--text-secondary / --border-mid), with an
 //     alpha wash that has no dedicated token and is copied verbatim from the
 //     source, matching SegmentedControl's track-background precedent
@@ -54,13 +54,13 @@ const TONES: Record<string, ToneSpec> = {
   },
   blue: {
     bg: `color-mix(in srgb, ${token("--energy")} 18%, transparent)`,
-    fg: token("--energy-300"),
+    fg: token("--primitive-energy-300"),
     bd: `color-mix(in srgb, ${token("--energy")} 45%, transparent)`,
   },
   gold: {
-    bg: `color-mix(in srgb, ${token("--gold-500")} 18%, transparent)`,
-    fg: token("--gold-300"),
-    bd: `color-mix(in srgb, ${token("--gold-500")} 45%, transparent)`,
+    bg: `color-mix(in srgb, ${token("--primitive-gold-500")} 18%, transparent)`,
+    fg: token("--primitive-gold-300"),
+    bd: `color-mix(in srgb, ${token("--primitive-gold-500")} 45%, transparent)`,
   },
   green: {
     bg: `color-mix(in srgb, ${token("--positive")} 18%, transparent)`,
@@ -68,13 +68,13 @@ const TONES: Record<string, ToneSpec> = {
     bd: `color-mix(in srgb, ${token("--positive")} 45%, transparent)`,
   },
   rust: {
-    bg: `color-mix(in srgb, ${token("--rust-500")} 20%, transparent)`,
-    fg: `color-mix(in srgb, ${token("--rust-500")} 45%, white)`,
-    bd: `color-mix(in srgb, ${token("--rust-500")} 50%, transparent)`,
+    bg: `color-mix(in srgb, ${token("--primitive-rust-500")} 20%, transparent)`,
+    fg: `color-mix(in srgb, ${token("--primitive-rust-500")} 45%, white)`,
+    bd: `color-mix(in srgb, ${token("--primitive-rust-500")} 50%, transparent)`,
   },
   red: {
     bg: `color-mix(in srgb, ${token("--danger")} 18%, transparent)`,
-    fg: token("--ember-400"),
+    fg: token("--primitive-ember-400"),
     bd: `color-mix(in srgb, ${token("--danger")} 45%, transparent)`,
   },
   // No dedicated wash token for this washed-out neutral fill; copied verbatim
@@ -141,11 +141,11 @@ export function TidePill({
         gap: 6,
         flex: "none",
         padding: pad,
-        borderRadius: token("--r-pill"),
+        borderRadius: token("--radius-pill"),
         background: spec.bg,
         border: `1px solid ${spec.bd}`,
         color: spec.fg,
-        font: `600 ${size === "sm" ? 12 : 13}px/1 ${token("--font-sans")}`,
+        font: `600 ${size === "sm" ? 12 : 13}px/1 ${token("--font-ui")}`,
         letterSpacing: "0.005em",
         whiteSpace: "nowrap",
         cursor: onPress ? "pointer" : "default",

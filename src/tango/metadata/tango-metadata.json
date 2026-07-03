@@ -541,7 +541,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Corner radius (token or px). Default var(--r-popover) (8px), matching the shipped console."
+      "description": "Corner radius (token or px). Default var(--radius-popover) (8px), matching the shipped console."
     },
     {
       "name": "as",

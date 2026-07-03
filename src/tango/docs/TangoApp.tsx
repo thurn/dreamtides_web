@@ -24,7 +24,7 @@ const pageStyle: CSSProperties = {
   minHeight: "100vh",
   background: token("--bg-app"),
   color: token("--text-primary"),
-  fontFamily: token("--font-sans"),
+  fontFamily: token("--font-ui"),
   padding: token("--space-9"),
   boxSizing: "border-box",
 };
@@ -121,7 +121,7 @@ function MockupBackLink({ id, label }: { id: string; label: string }) {
         padding: `${token("--space-2")} ${token("--space-4")}`,
         background: "rgba(12, 8, 22, 0.72)",
         border: `1px solid ${token("--border-soft")}`,
-        borderRadius: token("--r-pill"),
+        borderRadius: token("--radius-pill"),
         backdropFilter: "blur(8px)",
         color: token("--text-primary"),
         font: token("--t-button-sm"),

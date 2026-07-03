@@ -23,7 +23,7 @@ export function DemoStage({ Component, args, sampleContent }: DemoStageProps) {
         padding: token("--space-9"),
         background: token("--bg-sunken"),
         border: `1px solid ${token("--border-mid")}`,
-        borderRadius: token("--r-lg"),
+        borderRadius: token("--radius-panel"),
       }}
     >
       <Component {...args} {...sampleContent} />

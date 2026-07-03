@@ -16,7 +16,7 @@ export const groupPanelDemo: TangoComponent = {
   Component: GroupPanel,
   demo: {
     defaultArgs: {
-      radius: "var(--r-popover)",
+      radius: "var(--radius-popover)",
       padding: "var(--space-6)",
     },
     sampleContent: {

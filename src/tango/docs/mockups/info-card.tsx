@@ -49,7 +49,7 @@ function Trigger({ stageRef, label, variant, glyph, card }: TriggerProps) {
           padding: `${token("--space-5")} ${token("--space-4")}`,
           background: token("--surface-glass"),
           border: `1px solid ${token("--border-soft")}`,
-          borderRadius: token("--r-lg"),
+          borderRadius: token("--radius-panel"),
           cursor: "pointer",
         }}
       >

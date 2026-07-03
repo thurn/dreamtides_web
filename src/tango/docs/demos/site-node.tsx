@@ -95,7 +95,7 @@ function SiteNodeDemo({ size = 60, motion = true }: SiteNodeDemoArgs) {
         width: 390,
         height: 320,
         overflow: "hidden",
-        borderRadius: token("--r-xl"),
+        borderRadius: token("--radius-sheet"),
         // A dark, scene-like backdrop so the discs sit over "scene art".
         background:
           "radial-gradient(120% 90% at 40% 25%, #2c2450 0%, #160f2a 50%, #080512 100%)",

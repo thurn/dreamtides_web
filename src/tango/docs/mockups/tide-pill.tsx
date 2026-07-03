@@ -102,7 +102,7 @@ export function TidePillMockup() {
               padding: token("--space-6"),
               background: token("--surface-glass"),
               border: `1px solid ${token("--border-soft")}`,
-              borderRadius: token("--r-lg"),
+              borderRadius: token("--radius-panel"),
             }}
           >
             <div style={{ display: "flex", alignItems: "baseline", gap: token("--space-4"), marginBottom: token("--space-4") }}>

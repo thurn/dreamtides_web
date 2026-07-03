@@ -2,143 +2,215 @@
    ================================================================
    Source of truth: the Claude Design "Dreamtides Mobile" project
    (projectId 10fa84a8-cdc2-4e83-80af-47df24d1c247), tokens/*.css.
-   Every custom-property declaration below is copied verbatim from that
-   project — values are never renamed or edited here, and trailing
-   `@kind` comments are preserved because a later generator reads them
-   to group tokens by kind for the Primitives section.
+   Every value below is copied verbatim from that project — the hexes,
+   sizes, shadows, and easings are never edited here.
 
    Each source file's top-level `:root { ... }` block is rescoped to
-   `.tango { ... }` so these tokens only apply within the Tango
-   subtree and never leak onto the rest of the app.
+   `.tango { ... }` so these tokens only apply within the Tango subtree
+   and never leak onto the rest of the app.
 
-   Two of the six source files contribute no rules here:
-     - tokens/base.css declares element/class resets (body, h1, button,
-       .dt-keyword, .hud-outline, scrollbars, …), not custom properties,
-       so it has nothing to import for a tokens file.
-     - tokens/fonts.css only contains a Google Fonts `@import` for
-       Anton, EB Garamond, Fira Sans Condensed, Inter, and JetBrains
-       Mono. The app already loads all five of those families itself
-       (see the `<link>` tag in index.html and src/runtime/verify-fonts.ts),
-       so this file intentionally does not add a second, CDN-based
-       font load. The `--font-*` custom properties that reference those
-       families still come through below, via typography.css. */
+   ----------------------------------------------------------------
+   TWO TIERS. Read this before adding or using a token.
+   ----------------------------------------------------------------
+   1. PRIMITIVES — `--primitive-*`. A primitive names a raw VALUE: a
+      point on the color ramp (`--primitive-violet-500`), a step on the
+      radius scale (`--primitive-radius-lg`), a font face, a weight.
+      Primitives are the raw material the semantic layer is built from.
+      They may be referenced ONLY inside `src/tango/primitives/` (this
+      sheet) and `src/tango/components/` (leaf components). A lint rule
+      (eslint-rules/no-primitive-tokens.js) fails the build on any
+      `--primitive-*` reference elsewhere. No exceptions.
 
-/* ---- tokens/colors.css ----
-   Dreamtides Mobile — Color System
-   ================================================================
-   NORMALIZED to the parent Dreamtides Design System: the base hues
-   (backgrounds, purple accent, the two card resources, the essence/
-   omens currencies, ownership) match the parent's token VALUES so any
-   shared element — above all the game card — renders identically. Only
-   the resolved colors are pinned to the parent; supplemental roles
-   (sale, category pills) sit on top.
+   2. SEMANTIC TOKENS — everything else. A semantic token names a USE:
+      `--surface-card`, `--text-primary`, `--accent`, `--radius-control`,
+      `--font-ui`. UI/product/doc code writes against THESE, never a
+      primitive. A semantic token resolves through a primitive (or,
+      where no ramp step fits, a literal) so the whole system re-skins
+      by editing the primitive layer alone.
 
-   Base values are raw colors. Semantic aliases below map them to roles
-   so product code never references a raw hex. */
+      The spacing scale (`--space-*`), the layout constants, the type
+      scale (`--t-*`), the motion tokens, and the elevation/glow shadows
+      are sanctioned semantic scales: they are role/intent named and used
+      directly by any code. They carry no `--primitive-` prefix and the
+      lint rule does not touch them.
+
+   3. PRODUCTION BRIDGE — `--dt-*`, `--color-*`, `--cv-*`. Re-exports of
+      the same values under the production codebase's token names, so a
+      shared element (above all the game card) resolves identically in
+      either system. Semantic in nature; not lint-restricted.
+
+   Trailing `/* @kind ... *\/` comments are preserved because the
+   Primitives doc section reads them to group tokens for display.
+
+   Two of the six source files contribute no custom properties here:
+     - tokens/base.css declares element/class resets, not custom
+       properties.
+     - tokens/fonts.css only contains a Google Fonts `@import`; the app
+       already loads all five families itself (see index.html and
+       src/runtime/verify-fonts.ts), so the `--primitive-font-*` faces
+       below reference those already-loaded families. */
+
+/* ================================================================
+   PRIMITIVES — raw values. Reference only within primitives/ + components/.
+   ================================================================ */
 
 .tango {
-  /* ---- Base: dream backgrounds (darkest -> lifted) ----
+  /* ---- Color: dream backgrounds (darkest -> lifted) ----
      Anchored to the parent ramp: void-800 = parent --dt-bg-0,
      void-700 = bg-1, plum-700 = bg-2/surface, plum-500 = surface-light. */
-  --void-900: #060410;   /* the deepest backdrop, behind everything */
-  --void-800: #0a0612;   /* default app background (parent --dt-bg-0) */
-  --void-700: #14101f;   /* raised background band   (parent --dt-bg-1) */
-  --plum-700: #1a1525;   /* card / sheet surface      (parent --dt-bg-2) */
-  --plum-600: #221a31;   /* elevated surface, popover */
-  --plum-500: #2a2040;   /* hover / pressed surface  (parent surface-light) */
-  --plum-400: #3a3050;   /* hairline-lifted, chip fill (parent --dt-border) */
+  --primitive-void-900: #060410;   /* the deepest backdrop, behind everything */
+  --primitive-void-800: #0a0612;   /* default app background (parent --dt-bg-0) */
+  --primitive-void-700: #14101f;   /* raised background band   (parent --dt-bg-1) */
+  --primitive-plum-700: #1a1525;   /* card / sheet surface      (parent --dt-bg-2) */
+  --primitive-plum-600: #221a31;   /* elevated surface, popover */
+  --primitive-plum-500: #2a2040;   /* hover / pressed surface  (parent surface-light) */
+  --primitive-plum-400: #3a3050;   /* hairline-lifted, chip fill (parent --dt-border) */
 
-  /* ---- Base: violet accent (the brand glow) — matches parent ---- */
-  --violet-700: #6d28d9;
-  --violet-600: #7c3aed;  /* parent --dt-primary */
-  --violet-500: #9333ea;
-  --violet-400: #a855f7;  /* primary accent (parent --dt-primary-light) */
-  --violet-300: #c084fc;  /* bright glow / highlight (parent --dt-accent-strong) */
-  --violet-200: #d8b4fe;  /* parent --dt-essence */
+  /* ---- Color: violet accent (the brand glow) — matches parent ---- */
+  --primitive-violet-700: #6d28d9;
+  --primitive-violet-600: #7c3aed;  /* parent --dt-primary */
+  --primitive-violet-500: #9333ea;
+  --primitive-violet-400: #a855f7;  /* primary accent (parent --dt-primary-light) */
+  --primitive-violet-300: #c084fc;  /* bright glow / highlight (parent --dt-accent-strong) */
+  --primitive-violet-200: #d8b4fe;  /* parent --dt-essence */
 
-  /* ---- Base: gold (omens, reward, victory) — matches parent ---- */
-  --gold-600: #d4a017;    /* parent --dt-gold */
-  --gold-500: #e0a82a;
-  --gold-400: #fbbf24;    /* parent --dt-gold-light (omens value) */
-  --gold-300: #ffd34d;
+  /* ---- Color: gold (omens, reward, victory) — matches parent ---- */
+  --primitive-gold-600: #d4a017;    /* parent --dt-gold */
+  --primitive-gold-500: #e0a82a;
+  --primitive-gold-400: #fbbf24;    /* parent --dt-gold-light (omens value) */
+  --primitive-gold-300: #ffd34d;
 
-  /* ---- Base: card resources — matches parent ---- */
-  --energy-600: #0c4a6e;  /* energy droplet deep / border (parent --dt-energy-border) */
-  --energy-400: #0ea5e9;  /* energy droplet (parent --dt-energy) */
-  --energy-300: #38bdf8;
-  --spark-500: #f3c33f;   /* spark sparkle — production SPARK_ICON_COLOR (parent --dt-spark) */
-  --spark-600: #854d0e;   /* spark border (parent --dt-spark-border) */
-  --ember-500: #ef4444;   /* danger / boss / purge / close (parent --dt-enemy) */
-  --ember-400: #f87171;
-  --ember-600: #c0341f;
-  --sap-500: #16a34a;     /* deep player/grant green */
-  --sap-400: #22c55e;     /* grant / player green (parent --dt-player) */
-  --coral-400: #fb7185;   /* sale tag */
-  --rust-500: #b9622f;    /* tide / earthy affiliation */
-  --orange-500: #f97316;  /* default selection ring — production SELECTION_DEFAULT_COLOR */
+  /* ---- Color: card resources — matches parent ---- */
+  --primitive-energy-600: #0c4a6e;  /* energy droplet deep / border (parent --dt-energy-border) */
+  --primitive-energy-400: #0ea5e9;  /* energy droplet (parent --dt-energy) */
+  --primitive-energy-300: #38bdf8;
+  --primitive-spark-500: #f3c33f;   /* spark sparkle — production SPARK_ICON_COLOR (parent --dt-spark) */
+  --primitive-spark-600: #854d0e;   /* spark border (parent --dt-spark-border) */
+  --primitive-ember-500: #ef4444;   /* danger / boss / purge / close (parent --dt-enemy) */
+  --primitive-ember-400: #f87171;
+  --primitive-ember-600: #c0341f;
+  --primitive-sap-500: #16a34a;     /* deep player/grant green */
+  --primitive-sap-400: #22c55e;     /* grant / player green (parent --dt-player) */
+  --primitive-coral-400: #fb7185;   /* sale tag */
+  --primitive-rust-500: #b9622f;    /* tide / earthy affiliation */
+  --primitive-orange-500: #f97316;  /* default selection ring — production SELECTION_DEFAULT_COLOR */
 
-  /* ---- Base: text on dark ---- */
-  --ink-100: #f6f1ff;     /* primary, a warm near-white */
-  --ink-300: #cabbe2;     /* secondary */
-  --ink-400: #9c8db8;     /* muted */
-  --ink-500: #6f6388;     /* faint label / disabled */
+  /* ---- Color: text on dark ---- */
+  --primitive-ink-100: #f6f1ff;     /* primary, a warm near-white */
+  --primitive-ink-300: #cabbe2;     /* secondary */
+  --primitive-ink-400: #9c8db8;     /* muted */
+  --primitive-ink-500: #6f6388;     /* faint label / disabled */
 
-  /* ---- Base: lines & scrims ---- */
-  --line-soft: rgba(255, 255, 255, 0.07);
-  --line-mid:  rgba(255, 255, 255, 0.12);
-  --line-violet: rgba(168, 85, 247, 0.40);
-  --scrim-700: rgba(5, 3, 10, 0.72);   /* modal backdrop */
-  --scrim-900: rgba(5, 3, 10, 0.90);
+  /* ---- Color: lines & scrims ---- */
+  --primitive-line-soft: rgba(255, 255, 255, 0.07);
+  --primitive-line-mid:  rgba(255, 255, 255, 0.12);
+  --primitive-line-violet: rgba(168, 85, 247, 0.40);
+  --primitive-scrim-700: rgba(5, 3, 10, 0.72);   /* modal backdrop */
+  --primitive-scrim-900: rgba(5, 3, 10, 0.90);
 
-  /* ================================================================
-     SEMANTIC ALIASES — reference these in product code
-     ================================================================ */
+  /* ---- Font faces (match the parent) ---- */
+  --primitive-font-serif: 'EB Garamond', Georgia, 'Times New Roman', serif;
+  --primitive-font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --primitive-font-rules: 'Fira Sans Condensed', 'Inter', system-ui, sans-serif;
+  --primitive-font-display: 'Anton', Impact, sans-serif;
+  --primitive-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* Backgrounds & surfaces */
-  --bg-app: var(--void-800);
-  --bg-sunken: var(--void-900);
-  --bg-band: var(--void-700);
-  --surface-card: var(--plum-700);
-  --surface-raised: var(--plum-600);
-  --surface-hover: var(--plum-500);
-  --surface-chip: var(--plum-400);
+  /* ---- Font weights ---- */
+  --primitive-weight-regular: 400;   /* @kind font */
+  --primitive-weight-medium: 500;    /* @kind font */
+  --primitive-weight-semibold: 600;  /* @kind font */
+  --primitive-weight-bold: 700;      /* @kind font */
+  --primitive-weight-extrabold: 800; /* @kind font */
+
+  /* ---- Corner radius scale ---- */
+  --primitive-radius-xs: 6px;
+  --primitive-radius-sm: 10px;
+  --primitive-radius-md: 14px;     /* default control / chip */
+  --primitive-radius-lg: 18px;     /* cards, tiles */
+  --primitive-radius-xl: 24px;     /* sheets, large surfaces */
+  --primitive-radius-2xl: 30px;    /* hero panels */
+  --primitive-radius-pill: 999px;  /* pills, fully-round buttons */
+  --primitive-radius-card: 16px;   /* the game card corner */
+  --primitive-radius-popover: 8px; /* @kind radius */
+}
+
+/* ================================================================
+   SEMANTIC TOKENS — name a use. Write UI code against these.
+   ================================================================ */
+
+.tango {
+  /* ---- Backgrounds & surfaces ---- */
+  --bg-app: var(--primitive-void-800);
+  --bg-sunken: var(--primitive-void-900);
+  --bg-band: var(--primitive-void-700);
+  --surface-card: var(--primitive-plum-700);
+  --surface-raised: var(--primitive-plum-600);
+  --surface-hover: var(--primitive-plum-500);
+  --surface-chip: var(--primitive-plum-400);
   --surface-glass: #191423;   /* solid raised chrome (HUD/popovers/windows) */
   --surface-glass-strong: #120e1c;  /* solid, deeper chrome for windows */
 
-  /* Text */
-  --text-primary: var(--ink-100);
-  --text-secondary: var(--ink-300);
-  --text-muted: var(--ink-400);
-  --text-faint: var(--ink-500);
+  /* ---- Text ---- */
+  --text-primary: var(--primitive-ink-100);
+  --text-secondary: var(--primitive-ink-300);
+  --text-muted: var(--primitive-ink-400);
+  --text-faint: var(--dt-text-faint);
   --text-on-accent: #ffffff;
   --text-on-card: #f6f6f5;   /* card name on dark card chrome (parent value) */
 
-  /* Accent / primary action */
-  --accent: var(--violet-400);
-  --accent-strong: var(--violet-600);
-  --accent-bright: var(--violet-300);
+  /* ---- Accent / primary action ---- */
+  --accent: var(--primitive-violet-400);
+  --accent-strong: var(--primitive-violet-600);
+  --accent-bright: var(--primitive-violet-300);
   --accent-tint: rgba(168, 85, 247, 0.16);   /* low-alpha fill behind accents */
 
-  /* Resource roles (game economy) — match the parent's resource marks */
-  --energy: var(--energy-400);    /* blue droplet  (bxf bx-fire-alt) */
-  --spark: var(--spark-500);      /* gold sparkle  (bxf bx-sparkles) */
-  --essence: var(--violet-400);   /* violet, unified with accent  (bxf bx-crypto) */
+  /* ---- Resource roles (game economy) — match the parent's resource marks ---- */
+  --energy: var(--primitive-energy-400);    /* blue droplet  (bxf bx-fire-alt) */
+  --energy-bright: var(--primitive-energy-300);  /* lifted energy highlight */
+  --spark: var(--primitive-spark-500);      /* gold sparkle  (bxf bx-sparkles) */
+  --essence: var(--primitive-violet-400);   /* violet, unified with accent  (bxf bx-crypto) */
   --points: var(--essence);       /* points share the essence hue */
-  --danger: var(--ember-500);
-  --positive: var(--sap-400);     /* player / grant green (parent --dt-player) */
-  --sale: var(--coral-400);
-  --selected: var(--orange-500);  /* default card selection ring */
+  --danger: var(--primitive-ember-500);
+  --positive: var(--primitive-sap-400);     /* player / grant green (parent --dt-player) */
+  --sale: var(--primitive-coral-400);
+  --selected: var(--primitive-orange-500);  /* default card selection ring */
+  --tide-earthy: var(--primitive-rust-500); /* earthy tide / affiliation mark */
 
-  /* Lines / borders */
-  --border-soft: var(--line-soft);
-  --border-mid: var(--line-mid);
-  --border-accent: var(--line-violet);
+  /* ---- Lines / borders ---- */
+  --border-soft: var(--primitive-line-soft);
+  --border-mid: var(--primitive-line-mid);
+  --border-accent: var(--primitive-line-violet);
 
-  /* Status / category colors (offer pills, tags) */
-  --cat-grant: var(--sap-400);
-  --cat-improve: var(--violet-300);
-  --cat-remove: var(--ember-400);
-  --cat-dreamsign: var(--gold-300);
+  /* ---- Scrims (full-surface darkening behind a focused element) ---- */
+  --scrim: var(--primitive-scrim-700);          /* modal / sheet backdrop */
+  --scrim-strong: var(--primitive-scrim-900);   /* full-screen focus (held zoom) */
+
+  /* ---- Status / category colors (offer pills, tags) ---- */
+  --cat-grant: var(--primitive-sap-400);
+  --cat-improve: var(--primitive-violet-300);
+  --cat-remove: var(--primitive-ember-400);
+  --cat-dreamsign: var(--primitive-gold-300);
+
+  /* ---- Corner radius, by role. UI code sizes corners by what the
+     element IS, not by a scale step. ---- */
+  --radius-inset: var(--primitive-radius-sm);       /* small nested chips / swatches */
+  --radius-control: var(--primitive-radius-md);     /* buttons, chips, inputs, menus */
+  --radius-card: var(--primitive-radius-card);      /* the game card */
+  --radius-panel: var(--primitive-radius-lg);       /* cards, tiles, group panels */
+  --radius-sheet: var(--primitive-radius-xl);       /* bottom sheets, large surfaces */
+  --radius-hero: var(--primitive-radius-2xl);       /* hero banners / panels */
+  --radius-pill: var(--primitive-radius-pill);      /* pills, fully-round buttons */
+  --radius-popover: var(--primitive-radius-popover);/* InfoCard / press-reveal popover */
+
+  /* ---- Font, by role. The type scale (--t-*) below bundles size +
+     weight + face; these bare faces are for the cases that need only a
+     family. ---- */
+  --font-ui: var(--primitive-font-sans);        /* body, chrome, buttons, HUD */
+  --font-title: var(--primitive-font-serif);    /* titles, names, display */
+  --font-rules-text: var(--primitive-font-rules); /* card / ability rules text */
+  --font-numeral: var(--primitive-font-display);/* stat-orb numerals (Anton) */
+  --font-meta: var(--primitive-font-mono);      /* eyebrows, counters, meta */
+  --font-logo: var(--primitive-font-serif);     /* wordmark = serif + violet title gradient */
 
   /* ================================================================
      PRODUCTION ALIASES — cross-system bridge
@@ -158,29 +230,28 @@
   /* --dt-* — atlas / shared (values authoritative from atlas.css `.dream-atlas`).
      The extra --dt-bg-* / -spark/-enemy/-player names are the parent ramp the
      atlas reads from; the overlapping names are pinned to atlas.css. */
-  --dt-bg-0: var(--void-800);
-  --dt-bg-1: var(--void-700);
-  --dt-bg-2: var(--plum-700);
-  --dt-surface: var(--plum-700);          /* atlas #1a1525 */
-  --dt-surface-light: var(--plum-500);
-  /* purple-tinted hairline (was a stray neutral slate rgba(148,163,184,.28)
-     that leaked into the warm atlas palette — now a plum-lifted line). */
+  --dt-bg-0: var(--primitive-void-800);
+  --dt-bg-1: var(--primitive-void-700);
+  --dt-bg-2: var(--primitive-plum-700);
+  --dt-surface: var(--primitive-plum-700);          /* atlas #1a1525 */
+  --dt-surface-light: var(--primitive-plum-500);
+  /* purple-tinted hairline (a plum-lifted line, not a neutral slate). */
   --dt-border: rgba(168, 85, 247, 0.22);
   --dt-line: rgba(168, 85, 247, 0.18);
   --dt-line-strong: rgba(168, 85, 247, 0.42);
   --dt-accent-soft: rgba(168, 85, 247, 0.12); /* atlas low-alpha accent fill */
-  --dt-primary: var(--violet-600);        /* #7c3aed */
-  --dt-primary-light: var(--violet-400);
-  --dt-accent-strong: var(--violet-400);  /* atlas #a855f7 */
-  --dt-essence: var(--violet-300);        /* atlas #c084fc */
-  --dt-energy: var(--violet-300);         /* atlas reuses #c084fc here */
-  --dt-energy-border: var(--energy-600);
-  --dt-gold: var(--gold-600);             /* #d4a017 — completed/traveled */
-  --dt-gold-light: var(--gold-400);       /* #fbbf24 */
-  --dt-spark: var(--spark-500);           /* #f3c33f */
-  --dt-spark-border: var(--spark-600);
-  --dt-enemy: var(--ember-500);
-  --dt-player: var(--sap-400);
+  --dt-primary: var(--primitive-violet-600);        /* #7c3aed */
+  --dt-primary-light: var(--primitive-violet-400);
+  --dt-accent-strong: var(--primitive-violet-400);  /* atlas #a855f7 */
+  --dt-essence: var(--primitive-violet-300);        /* atlas #c084fc */
+  --dt-energy: var(--primitive-violet-300);         /* atlas reuses #c084fc here */
+  --dt-energy-border: var(--primitive-energy-600);
+  --dt-gold: var(--primitive-gold-600);             /* #d4a017 — completed/traveled */
+  --dt-gold-light: var(--primitive-gold-400);       /* #fbbf24 */
+  --dt-spark: var(--primitive-spark-500);           /* #f3c33f */
+  --dt-spark-border: var(--primitive-spark-600);
+  --dt-enemy: var(--primitive-ember-500);
+  --dt-player: var(--primitive-sap-400);
   --dt-text: #ece7f5;
   --dt-text-dim: #b3aac8;
   --dt-text-faint: #7b7299;
@@ -208,125 +279,98 @@
   --color-text-dim: #94a3b8;
 
   /* --cv-* — card chrome / rules text (index.css) */
-  --cv-rules-energy-color: var(--energy-400);     /* #0ea5e9 */
-  --cv-rules-spark-color: var(--spark-500);       /* #f3c33f */
-  --cv-rules-highlight-color: var(--spark-500);   /* glossary-term amber */
-  --cv-selection-color: var(--orange-500);        /* #f97316 default ring */
+  --cv-rules-energy-color: var(--primitive-energy-400);     /* #0ea5e9 */
+  --cv-rules-spark-color: var(--primitive-spark-500);       /* #f3c33f */
+  --cv-rules-highlight-color: var(--primitive-spark-500);   /* glossary-term amber */
+  --cv-selection-color: var(--primitive-orange-500);        /* #f97316 default ring */
   --cv-paragraph-gap: 0.4em;                       /* index.css — gap between ability blocks */
 
   /* ================================================================
      SHARED CANONICAL LAYER — the one set every surface converges on
      ================================================================
-     Production today re-declares text / line / spark per surface: the
-     BATTLE shell scopes its own neutral-slate `--text/-dim/-faint/-line`
-     + `--spark` and falls back to system fonts, so battle reads as a
-     different game from the warm, serif-led atlas / card surfaces.
-
      These SHORT canonical names are the single layer battle (and atlas,
-     and the card) should reference instead of forking. They resolve to
-     the warm, purple-tinted brand values — never neutral gray. Migrating
-     battle = delete its local `--text/-dim/-faint/-line/-spark` and point
-     these names at this layer; swap `system-ui` -> `--font-sans`,
-     `ui-monospace` -> `--font-mono`, and use `--font-serif` for titles
-     and card names.
+     and the card) reference so text / line / spark can't diverge per
+     surface. They resolve to the warm, purple-tinted brand values.
 
-     (`--accent`, `--spark`, `--energy`, `--danger`, `--essence` already
-     live in the semantic block above; the `--font-*` faces live in
-     typography.css. Listed here as the canonical contract.) */
-  --text: var(--dt-text);             /* #ece7f5 warm near-white (NOT slate #e2e8f0) */
-  --text-dim: var(--dt-text-dim);     /* #b3aac8 warm (NOT slate #94a3b8) */
-  --text-faint: var(--dt-text-faint); /* #7b7299 purple (NOT neutral gray #6b7280) */
+     (`--accent`, `--spark`, `--energy`, `--danger`, `--essence` live in
+     the semantic block above; the `--font-*` roles live there too. Listed
+     here as the canonical contract.) */
+  --text: var(--dt-text);             /* #ece7f5 warm near-white */
+  --text-dim: var(--dt-text-dim);     /* #b3aac8 warm */
+  --text-faint: var(--dt-text-faint); /* #7b7299 purple */
   --surface: var(--surface-card);     /* #1a1525 plum */
   --line: var(--dt-line);             /* rgba(168,85,247,.18) — purple hairline */
   --line-strong: var(--dt-line-strong);/* rgba(168,85,247,.42) */
-  --gold: var(--gold-600);            /* #d4a017 reward / completed / victory */
-  /* canonical font faces (authoritative in typography.css) */
-  --font-serif-canon: var(--font-serif);  /* EB Garamond — titles, names */
-  --font-sans-canon: var(--font-sans);    /* Inter — body, HUD, buttons */
-  --font-mono-canon: var(--font-mono);    /* JetBrains Mono — eyebrows */
-  --font-rules-canon: var(--font-rules);  /* Fira Sans Condensed — rules text */
+  --gold: var(--primitive-gold-600);  /* #d4a017 reward / completed / victory */
+  /* canonical font faces (same faces as the --font-* roles above) */
+  --font-serif-canon: var(--primitive-font-serif);  /* EB Garamond — titles, names */
+  --font-sans-canon: var(--primitive-font-sans);    /* Inter — body, HUD, buttons */
+  --font-mono-canon: var(--primitive-font-mono);    /* JetBrains Mono — eyebrows */
+  --font-rules-canon: var(--primitive-font-rules);  /* Fira Sans Condensed — rules text */
 }
 
-/* ---- tokens/typography.css ----
-   Dreamtides Mobile — Typography
+/* ================================================================
+   TYPOGRAPHY SCALE — sanctioned semantic scale (--t-*)
    ================================================================
    NORMALIZED to the parent Dreamtides Design System's type voices so
    shared elements (above all the game card) render identically:
 
-     1. UI / chrome  — Inter (production --dt-font-ui). Buttons, labels,
-                       HUD, body. Falls back to system-ui.
-     1b. Mono        — JetBrains Mono (production --dt-font-mono). Eyebrows.
+     1. UI / chrome  — Inter. Buttons, labels, HUD, body.
+     1b. Mono        — JetBrains Mono. Eyebrows.
      2. Serif        — EB Garamond. Card names, screen titles, place
-                       names, Dreamcaller names, italic flavor. The
-                       "dream" voice.
+                       names, Dreamcaller names, italic flavor.
      3. Rules        — Fira Sans Condensed. Dense card rules-text body.
-     4. Mono         — ui-monospace. Eyebrows, counters, pills (upcased,
-                       letter-spaced).
-     5. Display num  — Anton. The heavy numeral inside spark / energy
+     4. Display num  — Anton. The heavy numeral inside spark / energy
                        stat orbs.
 
    Type sizes stay tuned for the iPhone canvas (390pt wide); body text
    never goes below 13px and tap-target labels sit at 15–17px.
 
-   All five font families referenced below (EB Garamond, Inter, Fira
-   Sans Condensed, Anton, JetBrains Mono) are already loaded by the app
-   (see the Google Fonts `<link>` in index.html), so no separate font
-   load is added here — see tokens/fonts.css above. */
+   Each --t-* bundles weight + size/line-height + face. UI code applies a
+   voice with one token (`font: var(--t-body)`), never by composing a
+   family + weight by hand. */
 
 .tango {
-  /* ---- Families (match the parent) ---- */
-  --font-serif: 'EB Garamond', Georgia, 'Times New Roman', serif;
-  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-  --font-rules: 'Fira Sans Condensed', 'Inter', system-ui, sans-serif;
-  --font-display: 'Anton', Impact, sans-serif;
-  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
-  --font-logo: var(--font-serif);   /* wordmark = serif + violet title gradient */
-
-  /* ---- Weights ---- */
-  --w-regular: 400;   /* @kind font */
-  --w-medium: 500;    /* @kind font */
-  --w-semibold: 600;  /* @kind font */
-  --w-bold: 700;      /* @kind font */
-  --w-extrabold: 800; /* @kind font */
-
   /* ---- Display / serif scale (titles, place names) ---- */
-  --t-display: 600 40px/1.04 var(--font-serif);    /* screen hero title */
-  --t-title: 600 30px/1.08 var(--font-serif);      /* place / screen name */
-  --t-title-sm: 600 23px/1.12 var(--font-serif);   /* card-detail name, section */
-  --t-serif-body: 500 17px/1.4 var(--font-serif);  /* quotes, flavor */
+  --t-display: 600 40px/1.04 var(--primitive-font-serif);    /* screen hero title */
+  --t-title: 600 30px/1.08 var(--primitive-font-serif);      /* place / screen name */
+  --t-title-sm: 600 23px/1.12 var(--primitive-font-serif);   /* card-detail name, section */
+  --t-serif-body: 500 17px/1.4 var(--primitive-font-serif);  /* quotes, flavor */
 
   /* ---- Sans / UI scale ---- */
-  --t-lead: 600 19px/1.3 var(--font-sans);         /* prominent UI heading */
-  --t-body: 500 15px/1.45 var(--font-sans);        /* default body */
-  --t-body-sm: 500 13px/1.45 var(--font-sans);     /* dense UI body */
-  --t-rules: 500 14px/1.32 var(--font-rules);      /* card / ability rules text */
-  --t-button: 700 16px/1 var(--font-sans);         /* button face */
-  --t-button-sm: 700 14px/1 var(--font-sans);
-  --t-caption: 600 12px/1.35 var(--font-sans);     /* metadata */
+  --t-lead: 600 19px/1.3 var(--primitive-font-sans);         /* prominent UI heading */
+  --t-body: 500 15px/1.45 var(--primitive-font-sans);        /* default body */
+  --t-body-sm: 500 13px/1.45 var(--primitive-font-sans);     /* dense UI body */
+  --t-rules: 500 14px/1.32 var(--primitive-font-rules);      /* card / ability rules text */
+  --t-button: 700 16px/1 var(--primitive-font-sans);         /* button face */
+  --t-button-sm: 700 14px/1 var(--primitive-font-sans);
+  --t-caption: 600 12px/1.35 var(--primitive-font-sans);     /* metadata */
 
   /* ---- InfoCard popover scale ----
      The ONE type scale every press-reveal popover uses, formalized from the
      shipped InfoCard: a serif headline, rules-face body, mono meta. */
-  --t-popover-headline: 600 19px/1.18 var(--font-serif);  /* letter-spacing: -0.01em */
-  --t-popover-body: 500 14px/1.45 var(--font-rules);
-  --t-popover-meta: 700 10.5px/1 var(--font-mono);        /* .12em uppercase */
+  --t-popover-headline: 600 19px/1.18 var(--primitive-font-serif);  /* letter-spacing: -0.01em */
+  --t-popover-body: 500 14px/1.45 var(--primitive-font-rules);
+  --t-popover-meta: 700 10.5px/1 var(--primitive-font-mono);        /* .12em uppercase */
 
   /* ---- Eyebrow / overline (mono, letter-spaced, uppercase) ---- */
-  --t-eyebrow: 700 11px/1.2 var(--font-mono);
+  --t-eyebrow: 700 11px/1.2 var(--primitive-font-mono);
   --tracking-eyebrow: 0.14em;   /* @kind other */
   --tracking-wordmark: 0.01em;  /* @kind other */
 
   /* numeric chips (essence/score values) read best in tabular sans;
-     card stat ORBS use --font-display (Anton) directly. */
-  --t-numeral: 800 17px/1 var(--font-sans);
+     card stat ORBS use --font-numeral (Anton) directly. */
+  --t-numeral: 800 17px/1 var(--primitive-font-sans);
 }
 
-/* ---- tokens/spacing.css ----
-   Dreamtides Mobile — Spacing & Layout
+/* ================================================================
+   SPACING & LAYOUT — sanctioned semantic scale
    ================================================================
    An 8pt-based scale with a couple of half-steps for dense card chrome.
-   Mobile-first: safe-area insets, fixed bottom HUD height, and the
-   minimum 44pt touch target are all tokens so every surface agrees. */
+   The numeric --space-* scale is the approved spacing system: UI code
+   uses `var(--space-6)` directly. Mobile-first: safe-area insets, fixed
+   bottom HUD height, and the minimum 44pt touch target are all tokens so
+   every surface agrees. */
 
 .tango {
   /* ---- Spacing scale (8pt base, with 2/4/6 half-steps) ---- */
@@ -365,29 +409,19 @@
   --card-aspect: 5 / 7; /* @kind other */
 }
 
-/* ---- tokens/effects.css ----
-   Dreamtides Mobile — Effects: radii, shadows, glow, motion
+/* ================================================================
+   EFFECTS — sanctioned semantic scale: radii sit above; here are the
+   press factor, elevation shadows, glows, materials, and motion.
    ================================================================
    The dream look is carried by soft elevation + violet glow on
    interactive elements over solid dark surfaces, and gentle eased
-   motion (no harsh bounces). These tokens encode all of it. */
+   motion (no harsh bounces). */
 
 .tango {
-  /* ---- Corner radii ---- */
-  --r-xs: 6px;
-  --r-sm: 10px;
-  --r-md: 14px;     /* default control / chip */
-  --r-lg: 18px;     /* cards, tiles */
-  --r-xl: 24px;     /* sheets, large surfaces */
-  --r-2xl: 30px;    /* hero panels */
-  --r-pill: 999px;  /* pills, fully-round buttons */
-  --r-card: 16px;   /* the game card corner */
-  --r-popover: 8px; /* @kind radius */
-
   /* ---- The one press-down factor ----
      Every control — JS <Pressable>/usePress AND CSS-only controls via :active —
      compresses by EXACTLY this on touch-down. Always < 1 (compress, never
-     enlarge). Was 0.965 in the old guide; reconciled to the shipped 0.94. */
+     enlarge). Reconciled to the shipped 0.94. */
   --press-scale: 0.94; /* @kind other */
 
   /* ---- Elevation shadows (cool, purple-black — never neutral gray) ---- */
@@ -409,7 +443,7 @@
   --inset-top: inset 0 1px 0 rgba(255, 255, 255, 0.08);  /* @kind shadow */
   --inset-press: inset 0 2px 8px rgba(3, 1, 8, 0.5);  /* @kind shadow */
 
-  /* ---- Object materials (kept — a thing's OWN surface, never a legibility
+  /* ---- Object materials (a thing's OWN surface, never a legibility
      overlay). The energy orb fill, the wordmark gradient, the reward gold. ---- */
   --gradient-accent: linear-gradient(135deg, #a855f7 0%, #7c3aed 100%); /* @kind other */
   --gradient-gold: linear-gradient(135deg, #ffd34d 0%, #e0a82a 100%);   /* @kind other */
@@ -417,8 +451,7 @@
 
   /* ---- Atmospheric mote tints ----
      The ONLY sanctioned use of opacity animation: drifting particles, tinted by
-     context. Violet over chrome, warm gold over scene art. NOT a legibility or
-     mood overlay — depth is carried by the art + these motes, never by a scrim. */
+     context. Violet over chrome, warm gold over scene art. */
   --mote-warm: rgba(255, 238, 200, 0.55);    /* @kind color */
   --mote-warm-glow: rgba(255, 224, 160, 0.7);/* @kind color */
   --mote-violet: rgba(216, 180, 254, 0.6);   /* @kind color */
