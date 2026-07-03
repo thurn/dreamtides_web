@@ -10,6 +10,7 @@ import "../primitives/tango-tokens.css";
 import "../assets/phosphor.css";
 
 import type { CSSProperties } from "react";
+import { useLayoutEffect, useRef } from "react";
 import { useTangoRoute } from "./route";
 import { TANGO_COMPONENTS, type TangoComponent } from "./registry";
 import { getComponent } from "./registry";
@@ -178,6 +179,23 @@ function MockupView({ id }: { id: string }) {
 
 export default function TangoApp() {
   const route = useTangoRoute();
+
+  // Preserve the overview's scroll position across navigations. The overview
+  // gallery is tall; component and mockup pages are short, so leaving the
+  // overview clamps `window.scrollY` to 0 and returning would otherwise snap
+  // to the top. While the overview is shown we record the latest scroll offset,
+  // and on re-entry we restore it so "← Overview" lands the reader back where
+  // they were.
+  const overviewScrollRef = useRef(0);
+  useLayoutEffect(() => {
+    if (route.view !== "overview") return undefined;
+    window.scrollTo(0, overviewScrollRef.current);
+    const onScroll = () => {
+      overviewScrollRef.current = window.scrollY;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [route.view]);
 
   // The mockup view renders full-bleed, so it bypasses the centered, max-width
   // content column that the overview and component pages sit inside.
