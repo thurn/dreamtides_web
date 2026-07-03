@@ -195,12 +195,13 @@ export function JourneyCard({
         data-selected={selected ? "true" : undefined}
         data-hover-zoomed={zoom !== null ? "true" : undefined}
       >
-        <CardView
-          card={card}
-          suppressHoverHelp
-          transfiguration={usePreview ? object.transfiguration : undefined}
-          className="block w-full overflow-hidden rounded-[9px]"
-        />
+        <div className="block w-full overflow-hidden rounded-[9px]">
+          <CardView
+            card={card}
+            suppressHoverHelp
+            transfiguration={usePreview ? object.transfiguration : undefined}
+          />
+        </div>
       </div>
       {overlay}
       {zoom !== null &&
@@ -218,12 +219,13 @@ export function JourneyCard({
               filter: "drop-shadow(0 18px 40px rgba(0,0,0,.55))",
             }}
           >
-            <CardView
-              card={card}
-              suppressHoverHelp
-              transfiguration={usePreview ? object.transfiguration : undefined}
-              className="block w-full overflow-hidden rounded-[12px]"
-            />
+            <div className="block w-full overflow-hidden rounded-[12px]">
+              <CardView
+                card={card}
+                suppressHoverHelp
+                transfiguration={usePreview ? object.transfiguration : undefined}
+              />
+            </div>
           </div>,
           document.body,
         )}

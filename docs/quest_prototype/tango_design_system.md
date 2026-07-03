@@ -25,6 +25,18 @@ green on `npm run lint`, `npm run typecheck`, and `npm test`.
   the rest of the app imports them from there.
 - Real content is shown wherever it exists (real card UUIDs, real atlas
   fixtures), not faked placeholders.
+- **Strict, controlled component APIs.** Every component exposes a small,
+  strongly-typed surface — enumerated variants, sizes, and named content slots
+  — and nothing else. Components never accept a raw `className`, an inline
+  `style` object, or an arbitrary corner radius / padding / color / filter /
+  scale token override. **Adding arbitrary token customization to a component
+  is never acceptable** — those escape hatches let a caller silently drift from
+  the system. When a screen needs to size or position a component, it wraps the
+  component in its own element (layout is the caller's concern; the component's
+  fixed appearance is the system's). Adding a *new strict prop* — one more
+  enumerated variant — is fine when you are confident no existing variant can
+  express the need; widening an existing prop into an open value is not. When in
+  doubt, match how the other screens solve it rather than inventing a knob.
 
 Tango works on **any screen**. Components are token-scaled and responsive; the
 mockup pages render full-screen against the real viewport (sized via browser

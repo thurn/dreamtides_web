@@ -172,10 +172,6 @@ export function isHighlightedRulesTextTerm(word: string): boolean {
 interface RulesTextProps {
   /** The rules text to render. */
   text: string;
-  /** Optional override color for plain text. */
-  color?: string;
-  /** Optional scale for inline resource pips on small card surfaces. */
-  pipScale?: number;
 }
 
 interface RenderRulesTextOptions {
@@ -498,12 +494,6 @@ function renderParagraph(
  * `dreamcaller.renderedText`, or `dreamsign.effectDescription` raw — the
  * tokenizer handles the symbol substitution and glossary-term emphasis.
  */
-export function RulesText({ text, color, pipScale }: RulesTextProps) {
-  if (color !== undefined) {
-    // The renderer produces `<div>` paragraph blocks (see `renderRulesText`),
-    // so the color wrapper is also a `<div>` to keep block-in-block HTML
-    // nesting valid.
-    return <div style={{ color }}>{renderRulesText(text, { pipScale })}</div>;
-  }
-  return <>{renderRulesText(text, { pipScale })}</>;
+export function RulesText({ text }: RulesTextProps) {
+  return <>{renderRulesText(text)}</>;
 }

@@ -32,7 +32,7 @@
 // Ported from the Claude Design "Dreamtides Mobile" project
 // (components/pills/TidePill.jsx / .d.ts).
 
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { usePress, PRESS_SCALE } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
 
@@ -97,7 +97,6 @@ export interface TidePillProps {
   size?: TidePillSize;
   /** Fires on press. When set, the pill renders as a button with press feedback. */
   onPress?: () => void;
-  style?: CSSProperties;
 }
 
 /**
@@ -112,7 +111,6 @@ export function TidePill({
   icon = null,
   size = "md",
   onPress,
-  style = {},
 }: TidePillProps) {
   const spec = TONES[tone] ?? TONES.violet;
   const pad = size === "sm" ? "3px 9px" : "5px 12px";
@@ -154,7 +152,6 @@ export function TidePill({
         transformOrigin: "center",
         transform: on ? `scale(${String(PRESS_SCALE)})` : "none",
         transition: `transform ${token("--dur-fast")} ${token("--ease-out")}`,
-        ...style,
       }}
     >
       {icon && (

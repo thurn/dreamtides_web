@@ -4,16 +4,27 @@
 //
 // Colors are token-driven (`--surface-raised` / `--border-soft` / `--radius-control` /
 // `--text-muted` / `--text-primary` / `--font-ui`), never a raw hex, so a
-// future token rename/reband propagates automatically. `accent` is the one
-// prop that intentionally accepts a raw color string (a `var(--...)`
-// reference passed by the caller, e.g. `var(--essence)`) so any resource
-// role token can tint the value without StatTile hard-coding a closed set.
+// future token rename/reband propagates automatically. `accent` names a
+// resource-role token (essence / energy / spark / points) rather than taking a
+// raw color string, so the value can only ever be tinted with an approved role
+// hue — never an arbitrary color.
 //
 // Ported from the Claude Design "Dreamtides Mobile" project
 // (components/pills/StatTile.jsx / .d.ts).
 
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { token } from "../primitives/tokens";
+
+/** Resource-role tokens a StatTile value may be tinted with. */
+type StatTileAccent = "essence" | "energy" | "spark" | "points";
+
+/** Maps an accent role to its `var(--...)` role-color token. */
+const ACCENT_TOKENS: Record<StatTileAccent, string> = {
+  essence: token("--essence"),
+  energy: token("--energy"),
+  spark: token("--spark"),
+  points: token("--points"),
+};
 
 export interface StatTileProps {
   /** Small uppercase caption above the value. */
@@ -22,24 +33,23 @@ export interface StatTileProps {
   value: ReactNode;
   /** Optional secondary line under the value. */
   sub?: ReactNode;
-  /** Tint color for the value. */
-  accent?: string | null;
-  style?: CSSProperties;
+  /** Tint the value with a resource-role hue. Plain text when omitted. */
+  accent?: StatTileAccent;
 }
 
 /**
  * Displays a single labelled value cell for summary grids (deck stats, quest
  * results). `label` is the caption, `value` the headline figure, `sub` an
- * optional secondary line, `accent` tints the value (plain text when
- * omitted/null). Lay several out in a grid for a stats block.
+ * optional secondary line, `accent` tints the value with a resource-role hue
+ * (plain text when omitted). Lay several out in a grid for a stats block.
  */
 export function StatTile({
   label,
   value,
   sub = null,
-  accent = null,
-  style = {},
+  accent,
 }: StatTileProps) {
+  const accentColor = accent ? ACCENT_TOKENS[accent] : null;
   return (
     <div
       style={{
@@ -50,7 +60,6 @@ export function StatTile({
         background: token("--surface-raised"),
         border: `1px solid ${token("--border-soft")}`,
         borderRadius: token("--radius-control"),
-        ...style,
       }}
     >
       <span
@@ -67,7 +76,7 @@ export function StatTile({
         style={{
           font: `800 24px/1 ${token("--font-ui")}`,
           fontVariantNumeric: "tabular-nums",
-          color: accent ?? token("--text-primary"),
+          color: accentColor ?? token("--text-primary"),
         }}
       >
         {value}

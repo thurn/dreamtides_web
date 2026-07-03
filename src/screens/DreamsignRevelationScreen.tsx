@@ -196,9 +196,9 @@ function RevelationCard({
       style={{ "--i": index } as CSSProperties}
       data-testid={`dreamsign-revelation-option-${triggerId}`}
     >
+      <div className="flex">
       <HoverPopover
         triggerAs="div"
-        className="flex"
         delayMs={DREAMSIGN_HOVER_DELAY_MS}
         placement="left"
         maxWidthPx={null}
@@ -222,6 +222,7 @@ function RevelationCard({
           )}
         </div>
       </HoverPopover>
+      </div>
 
       <button
         type="button"

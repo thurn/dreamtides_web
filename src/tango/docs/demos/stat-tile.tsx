@@ -18,7 +18,7 @@ interface StatTileDemoArgs {
   label?: string;
   value?: ReactNode;
   sub?: ReactNode;
-  accent?: string | null;
+  accent?: "essence" | "energy" | "spark" | "points";
 }
 
 function StatTileDemo({
@@ -39,7 +39,7 @@ export const statTileDemo: TangoComponent = {
   demo: {
     defaultArgs: {
       label: "Essence",
-      accent: "var(--essence)",
+      accent: "essence",
     },
     sampleContent: {
       value: "240",

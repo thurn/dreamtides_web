@@ -898,18 +898,19 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
                       handleCardInspect(card);
                     }}
                   >
-                    <CardDisplay
-                      card={card}
-                      className="h-full w-full"
-                      large
-                      onClick={
-                        pickPhase === "idle"
-                          ? () => {
-                              handleCardPick(card.cardNumber);
-                            }
-                          : undefined
-                      }
-                    />
+                    <div className="h-full w-full">
+                      <CardDisplay
+                        card={card}
+                        large
+                        onClick={
+                          pickPhase === "idle"
+                            ? () => {
+                                handleCardPick(card.cardNumber);
+                              }
+                            : undefined
+                        }
+                      />
+                    </div>
                   </div>
                 </motion.div>
               );
@@ -1044,7 +1045,9 @@ export function DraftSiteScreen({ siteId }: { siteId: string }) {
             height: flyingCard.sourceRect.height,
           }}
         >
-          <CardDisplay card={flyingCard.card} className="h-full w-full" />
+          <div className="h-full w-full">
+            <CardDisplay card={flyingCard.card} />
+          </div>
         </motion.div>
       )}
 

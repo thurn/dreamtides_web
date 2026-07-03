@@ -211,6 +211,27 @@ export function IntroSection(): ReactElement {
             emoji appears anywhere in Tango&rsquo;s chrome or content.
           </p>
         </Principle>
+
+        <Principle title="Strict, Controlled APIs">
+          <p style={bodyStyle}>
+            Every component exposes a small, strongly-typed surface —
+            enumerated variants, sizes, and named content slots — and nothing
+            else. A component never accepts a raw <code>className</code>, an
+            inline <code>style</code> object, an arbitrary corner radius,
+            padding, color, filter, or any other free-form token override.
+            Those escape hatches let a caller silently drift from the system,
+            so they simply do not exist. <strong>Adding arbitrary token
+            customization to a component is never acceptable</strong> — not a
+            one-off color, not &ldquo;just this once&rdquo; padding. When a
+            screen needs to size or position a component it wraps it in its own
+            element: layout is the caller&rsquo;s concern, the component&rsquo;s
+            fixed appearance is the system&rsquo;s. Adding a new <em>strict</em>
+            prop — one more enumerated variant — is fine when you are confident
+            no existing variant can express what you need; widening an existing
+            prop into an open value is not. When in doubt, look at how the
+            other screens solve it and match them rather than inventing a knob.
+          </p>
+        </Principle>
       </div>
     </section>
   );

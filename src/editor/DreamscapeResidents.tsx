@@ -128,19 +128,20 @@ export default function DreamscapeResidents({
             }}
           >
             {resident.option !== null ? (
-              <HoverPopover
-                placement="left"
-                delayMs={150}
-                maxWidthPx={null}
-                style={{ flex: "0 0 auto", cursor: "help" }}
-                content={<DreamcallerPopover dreamcaller={resident.option} />}
-              >
-                <DreamcallerPortrait
-                  dreamcaller={resident.option}
-                  variant="thumb"
-                  style={{ width: `${String(thumb)}px`, height: `${String(thumb)}px` }}
-                />
-              </HoverPopover>
+              <div style={{ flex: "0 0 auto", cursor: "help" }}>
+                <HoverPopover
+                  placement="left"
+                  delayMs={150}
+                  maxWidthPx={null}
+                  content={<DreamcallerPopover dreamcaller={resident.option} />}
+                >
+                  <DreamcallerPortrait
+                    dreamcaller={resident.option}
+                    variant="thumb"
+                    style={{ width: `${String(thumb)}px`, height: `${String(thumb)}px` }}
+                  />
+                </HoverPopover>
+              </div>
             ) : (
               <span
                 style={{

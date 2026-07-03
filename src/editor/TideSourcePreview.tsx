@@ -57,19 +57,20 @@ export function TideSourcePreview({
     const dreamcaller = dreamcallerById.get(tide.dreamcallerId.toLowerCase());
     if (dreamcaller === undefined) return null;
     return (
-      <HoverPopover
-        triggerAs="div"
-        delayMs={150}
-        maxWidthPx={null}
-        content={dreamcallerHoverContent(dreamcaller)}
-        style={{ width: size, height: size, flex: `0 0 ${size}px` }}
-      >
-        <DreamcallerPortrait
-          dreamcaller={dreamcaller}
-          variant="thumb"
-          style={{ width: size, height: size }}
-        />
-      </HoverPopover>
+      <div style={{ width: size, height: size, flex: `0 0 ${size}px` }}>
+        <HoverPopover
+          triggerAs="div"
+          delayMs={150}
+          maxWidthPx={null}
+          content={dreamcallerHoverContent(dreamcaller)}
+        >
+          <DreamcallerPortrait
+            dreamcaller={dreamcaller}
+            variant="thumb"
+            style={{ width: size, height: size }}
+          />
+        </HoverPopover>
+      </div>
     );
   }
 
@@ -77,21 +78,22 @@ export function TideSourcePreview({
     const card = cardById.get(tide.leanCardId.toLowerCase());
     if (card === undefined) return null;
     return (
-      <HoverPopover
-        triggerAs="div"
-        delayMs={150}
-        maxWidthPx={null}
-        content={
-          <div style={{ width: HOVER_CARD_WIDTH }}>
-            <CardView card={card} large suppressHoverHelp />
+      <div style={{ width: size, flex: `0 0 ${size}px` }}>
+        <HoverPopover
+          triggerAs="div"
+          delayMs={150}
+          maxWidthPx={null}
+          content={
+            <div style={{ width: HOVER_CARD_WIDTH }}>
+              <CardView card={card} large suppressHoverHelp />
+            </div>
+          }
+        >
+          <div style={{ width: size }}>
+            <CardView card={card} suppressHoverHelp />
           </div>
-        }
-        style={{ width: size, flex: `0 0 ${size}px` }}
-      >
-        <div style={{ width: size }}>
-          <CardView card={card} suppressHoverHelp />
-        </div>
-      </HoverPopover>
+        </HoverPopover>
+      </div>
     );
   }
 

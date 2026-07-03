@@ -149,7 +149,6 @@ export interface InfoCardProps {
   frame?: boolean;
   /** icon variant: the boxicon class. */
   glyph?: string;
-  glyphStyle?: React.CSSProperties;
   /** icon variant: the disc style (defaults to SITE_DISC). */
   discStyle?: React.CSSProperties;
   /** text variant: a small leading glyph node. */
@@ -177,7 +176,6 @@ function InfoCardComponent({
   wash,
   frame = false,
   glyph,
-  glyphStyle,
   discStyle,
   leadGlyph,
 }: InfoCardProps): React.ReactElement {
@@ -337,7 +335,7 @@ function InfoCardComponent({
             <i
               className={glyph}
               aria-hidden="true"
-              style={{ fontSize: 21, color: token("--text-on-accent"), ...glyphStyle }}
+              style={{ fontSize: 21, color: token("--text-on-accent") }}
             />
           </span>
           <div style={tHeadline}>{title}</div>
@@ -653,7 +651,6 @@ export interface PressInfoProps {
   children?: React.ReactNode;
   style?: React.CSSProperties;
   as?: React.ElementType;
-  scale?: number;
   /** true = a touch hold still fires the child's click (menu / UI toggle). */
   holdStillClicks?: boolean;
 }
@@ -666,7 +663,6 @@ export function PressInfo({
   children,
   style,
   as = "span",
-  scale = PRESS_SCALE,
   holdStillClicks = false,
 }: PressInfoProps): React.ReactElement {
   const { shown, fine, begin, end, enter, leave, heldPastTap } =
@@ -694,7 +690,6 @@ export function PressInfo({
     <Pressable
       as={as}
       ref={elRef}
-      scale={scale}
       onPointerEnter={enter}
       onPointerDown={begin}
       onPointerUp={end}

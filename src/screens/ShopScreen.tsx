@@ -425,9 +425,9 @@ function ShopDreamsignArt({ dreamsign }: { dreamsign: Dreamsign }) {
   const [imageBroken, setImageBroken] = useState(false);
   const showImage = Boolean(dreamsign.imageName) && !imageBroken;
   return (
+    <div className="sh-sign-hover">
     <HoverPopover
       triggerAs="div"
-      className="sh-sign-hover"
       delayMs={DREAMSIGN_HOVER_DELAY_MS}
       maxWidthPx={null}
       content={<DreamsignInfoCard dreamsign={dreamsign} />}
@@ -454,5 +454,6 @@ function ShopDreamsignArt({ dreamsign }: { dreamsign: Dreamsign }) {
         )}
       </div>
     </HoverPopover>
+    </div>
   );
 }

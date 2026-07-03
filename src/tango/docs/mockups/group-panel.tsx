@@ -47,48 +47,52 @@ const CANDIDATES: DreamcallerCard[] = [
 ];
 
 function Candidate({ dreamcaller }: { dreamcaller: DreamcallerCard }) {
+  // GroupPanel is a fixed glass pane: the consumer sizes it (the wrapper) and
+  // lays out its content (the inner flex column), so the pane itself exposes no
+  // width / layout / radius knobs.
   return (
-    <GroupPanel
-      as="div"
-      style={{
-        width: "min(300px, 42vw)",
-        minWidth: 220,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: token("--space-4"),
-        textAlign: "center",
-      }}
-    >
-      <img
-        src={dreamcallerPortraitUrl(dreamcaller.imageNumber)}
-        alt={`${dreamcaller.name}, ${dreamcaller.title}`}
-        style={{
-          width: 92,
-          height: 92,
-          borderRadius: "50%",
-          objectFit: "cover",
-          border: `1px solid ${token("--border-accent")}`,
-        }}
-      />
-      <div>
-        <div style={{ font: token("--t-lead"), color: token("--text-primary") }}>{dreamcaller.name}</div>
-        <div style={{ font: token("--t-caption"), color: token("--text-secondary"), marginTop: 2 }}>
-          {dreamcaller.title}
+    <div style={{ width: "min(300px, 42vw)", minWidth: 220 }}>
+      <GroupPanel>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: token("--space-4"),
+            textAlign: "center",
+          }}
+        >
+          <img
+            src={dreamcallerPortraitUrl(dreamcaller.imageNumber)}
+            alt={`${dreamcaller.name}, ${dreamcaller.title}`}
+            style={{
+              width: 92,
+              height: 92,
+              borderRadius: "50%",
+              objectFit: "cover",
+              border: `1px solid ${token("--border-accent")}`,
+            }}
+          />
+          <div>
+            <div style={{ font: token("--t-lead"), color: token("--text-primary") }}>{dreamcaller.name}</div>
+            <div style={{ font: token("--t-caption"), color: token("--text-secondary"), marginTop: 2 }}>
+              {dreamcaller.title}
+            </div>
+          </div>
+          <div
+            style={{
+              height: 1,
+              width: "100%",
+              background:
+                "linear-gradient(90deg, transparent, var(--line-strong) 18%, var(--line-strong) 82%, transparent)",
+            }}
+          />
+          <p style={{ font: token("--t-rules"), fontSize: 15, lineHeight: 1.4, color: token("--text-primary"), margin: 0 }}>
+            {dreamcaller.ability}
+          </p>
         </div>
-      </div>
-      <div
-        style={{
-          height: 1,
-          width: "100%",
-          background:
-            "linear-gradient(90deg, transparent, var(--line-strong) 18%, var(--line-strong) 82%, transparent)",
-        }}
-      />
-      <p style={{ font: token("--t-rules"), fontSize: 15, lineHeight: 1.4, color: token("--text-primary"), margin: 0 }}>
-        {dreamcaller.ability}
-      </p>
-    </GroupPanel>
+      </GroupPanel>
+    </div>
   );
 }
 

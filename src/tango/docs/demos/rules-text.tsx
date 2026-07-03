@@ -26,12 +26,10 @@ const SAMPLE_RULES_TEXT = [
 
 interface RulesTextDemoArgs {
   text?: string;
-  color?: string;
-  pipScale?: number;
 }
 
-function RulesTextDemo({ text = SAMPLE_RULES_TEXT, color, pipScale }: RulesTextDemoArgs) {
-  return <RulesText text={text} color={color} pipScale={pipScale} />;
+function RulesTextDemo({ text = SAMPLE_RULES_TEXT }: RulesTextDemoArgs) {
+  return <RulesText text={text} />;
 }
 
 export const rulesTextDemo: TangoComponent = {

@@ -236,10 +236,11 @@ export function BattleCardPickerOverlay({
                     Just drawn
                   </span>
                 ) : null}
-                <CardDisplay
-                  card={battleCardDisplayFromInstance(instance)}
-                  className="w-full"
-                />
+                <div className="w-full">
+                  <CardDisplay
+                    card={battleCardDisplayFromInstance(instance)}
+                  />
+                </div>
               </article>
             );
           })}

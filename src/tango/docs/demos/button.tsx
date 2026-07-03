@@ -17,7 +17,6 @@ export const buttonDemo: TangoComponent = {
       full: false,
       disabled: false,
       cost: 100,
-      frameScale: 1,
     },
     sampleContent: {
       children: "Begin Battle",

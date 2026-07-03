@@ -48,12 +48,13 @@ export function BattleCardHoverPreview({
 
   const cardNode = (
     <div className="shrink-0" style={{ width: `${String(PREVIEW_WIDTH)}px` }}>
-      <CardDisplay
-        card={display}
-        className="h-full w-full"
-        large
-        suppressHoverHelp
-      />
+      <div className="h-full w-full">
+        <CardDisplay
+          card={display}
+          large
+          suppressHoverHelp
+        />
+      </div>
     </div>
   );
 

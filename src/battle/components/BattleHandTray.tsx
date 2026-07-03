@@ -217,14 +217,15 @@ export function BattleHandCard({
         glossaryText={displayCard.renderedText}
         className="h-full w-full"
       >
-        <CardDisplay
-          card={displayCard}
-          selected={selected}
-          selectionColor="#a855f7"
-          className="h-full w-full"
-          suppressHoverHelp
-          hideRulesText={compact}
-        />
+        <div className="h-full w-full">
+          <CardDisplay
+            card={displayCard}
+            selected={selected}
+            selectionColor="#a855f7"
+            suppressHoverHelp
+            hideRulesText={compact}
+          />
+        </div>
       </HoverZoomCard>
       {showAutomationGear ? (
         <AutomationGearIcon

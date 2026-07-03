@@ -200,18 +200,23 @@ export function QuestStartScreen() {
                 {/* Hovering the description reveals the definitions for any
                     glossary terms it uses (e.g. "ephemeral"), matching the
                     term-definition panel shown beside cards. */}
-                <HoverPopover
-                  triggerAs="div"
-                  className="flex flex-1 items-center justify-center px-2 text-center text-sm leading-relaxed opacity-80"
-                  style={{ color: "#e2e8f0" }}
-                  placement="top"
-                  maxWidthPx={null}
-                  content={
-                    <CardTermDefinitions text={dreamcaller.renderedText} />
-                  }
-                >
-                  <RulesText text={dreamcaller.renderedText} />
-                </HoverPopover>
+                <div className="flex flex-1 flex-col justify-center">
+                  <HoverPopover
+                    triggerAs="div"
+                    placement="top"
+                    maxWidthPx={null}
+                    content={
+                      <CardTermDefinitions text={dreamcaller.renderedText} />
+                    }
+                  >
+                    <div
+                      className="px-2 text-center text-sm leading-relaxed opacity-80"
+                      style={{ color: "#e2e8f0" }}
+                    >
+                      <RulesText text={dreamcaller.renderedText} />
+                    </div>
+                  </HoverPopover>
+                </div>
                 <div
                   className="mt-3 flex items-baseline justify-center gap-1.5 text-sm font-semibold"
                   data-starting-essence={dreamcaller.id}

@@ -84,10 +84,6 @@ interface HoverPopoverProps {
    * inline use within text. Pass `"div"` for block-level triggers.
    */
   triggerAs?: "span" | "div";
-  /** Additional class name for the trigger wrapper. */
-  className?: string;
-  /** Additional inline style for the trigger wrapper. */
-  style?: CSSProperties;
 }
 
 const DEFAULT_DELAY_MS = 500;
@@ -128,8 +124,6 @@ export function HoverPopover({
   placement = "top",
   maxWidthPx,
   triggerAs = "span",
-  className,
-  style,
 }: HoverPopoverProps) {
   const triggerRef = useRef<HTMLElement | null>(null);
   const popoverRef = useRef<HTMLDivElement | null>(null);
@@ -243,8 +237,6 @@ export function HoverPopover({
     ref: (element: HTMLElement | null) => {
       triggerRef.current = element;
     },
-    className,
-    style,
     onMouseEnter: show,
     onMouseLeave: hide,
     onFocus: show,

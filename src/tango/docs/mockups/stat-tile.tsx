@@ -76,12 +76,12 @@ export function StatTileMockup() {
           width: "min(760px, 92vw)",
         }}
       >
-        <StatTile label="Essence" value="240" sub="on hand" accent="var(--essence)" />
+        <StatTile label="Essence" value="240" sub="on hand" accent="essence" />
         <StatTile label="Essence Cap" value="300" sub="maximum held" />
         <StatTile label="Deck" value="23" sub="cards" />
-        <StatTile label="Layer" value="4 / 6" sub="atlas depth" accent="var(--accent-bright)" />
+        <StatTile label="Layer" value="4 / 6" sub="atlas depth" accent="points" />
         <StatTile label="Sites Visited" value="11" sub="this run" />
-        <StatTile label="Spark" value="12" sub="total" accent="var(--spark)" />
+        <StatTile label="Spark" value="12" sub="total" accent="spark" />
       </div>
 
       <SceneCaption

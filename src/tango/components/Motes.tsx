@@ -23,7 +23,7 @@
 // Ported from the Claude Design "Dreamtides Mobile" project
 // (components/quest/Motes.jsx / .d.ts).
 
-import { useEffect, useMemo, type CSSProperties } from "react";
+import { useEffect, useMemo } from "react";
 import { token } from "../primitives/tokens";
 
 /** id of the one-time <style> element carrying the drift keyframes + the
@@ -101,7 +101,6 @@ export interface MotesProps {
   seed?: number;
   /** Stacking order within the positioned parent. */
   zIndex?: number;
-  style?: CSSProperties;
 }
 
 /**
@@ -115,7 +114,6 @@ export function Motes({
   count = 14,
   seed = 0,
   zIndex = 2,
-  style = {},
 }: MotesProps) {
   useEffect(() => {
     ensureKeyframes();
@@ -137,7 +135,6 @@ export function Motes({
         overflow: "hidden",
         pointerEvents: "none",
         zIndex,
-        ...style,
       }}
     >
       {motes.map((mote, i) => (

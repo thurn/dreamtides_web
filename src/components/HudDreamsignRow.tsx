@@ -81,19 +81,19 @@ function HudDreamsignIcon({ dreamsign }: { dreamsign: Dreamsign }) {
   const imgAlt = dreamsign.imageAlt ?? dreamsign.name;
 
   return (
-    <HoverPopover
-      triggerAs="span"
-      delayMs={250}
-      maxWidthPx={null}
-      content={
-        <DreamsignInfoCard
-          dreamsign={dreamsign}
-          testid="hud-dreamsign-popover"
-        />
-      }
-      className="inline-block"
-    >
-      <span
+    <span className="inline-block">
+      <HoverPopover
+        triggerAs="span"
+        delayMs={250}
+        maxWidthPx={null}
+        content={
+          <DreamsignInfoCard
+            dreamsign={dreamsign}
+            testid="hud-dreamsign-popover"
+          />
+        }
+      >
+        <span
         data-testid="hud-dreamsign-icon"
         data-dreamsign-id={dreamsign.id ?? dreamsign.name}
         data-is-bane={String(dreamsign.isBane)}
@@ -125,7 +125,8 @@ function HudDreamsignIcon({ dreamsign }: { dreamsign: Dreamsign }) {
           </span>
         )}
       </span>
-    </HoverPopover>
+      </HoverPopover>
+    </span>
   );
 }
 

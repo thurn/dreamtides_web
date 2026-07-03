@@ -48,48 +48,32 @@ const SIZES: Record<ButtonSize, SizeSpec> = {
   lg: { height: 56, font: 17, padding: "0 26px", borderWidth: 16 },
 };
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps {
   /** Height/scale. 'lg' is the taller commit height ("Begin Your Dream") — commit is a size, not a variant. */
   size?: ButtonSize;
   /** Stretch to fill the container width. */
   full?: boolean;
+  /** Dims the button and detaches its click/press feedback. */
   disabled?: boolean;
   /** Leading icon node (a boxicon <i> element or a glyph). */
   icon?: React.ReactNode;
   /** Appends an inline essence price, e.g. cost={100} -> "… 100◆". */
   cost?: number | null;
-  /** Scales the rendered sprite bevel thickness. Default 1. */
-  frameScale?: number;
-  // The JSDoc comment below is load-bearing, not decorative: without it,
-  // react-docgen-typescript silently drops this `children` redeclaration
-  // (a known quirk when a props interface extends a DOM attributes type that
-  // already declares `children`), which would hide the prop from the doc
-  // site's props table entirely. Keep the comment if you touch this field.
+  /** Fires when the button is activated (no-op while disabled). */
+  onClick?: () => void;
+  /** Accessible label when the visible content is icon-only. */
+  ariaLabel?: string;
   /** Content rendered inside the button. */
   children?: React.ReactNode;
-}
-
-/**
- * usePress's `PressBind` is typed generically for `HTMLElement` handlers, but
- * a `<button>`'s own `onPointerDown`/etc. props are typed for the more
- * specific `HTMLButtonElement`. Both describe the exact same DOM node at
- * runtime, so this adapter narrows the event back down at the one call
- * boundary rather than widening ButtonProps' handler types (which would leak
- * the mismatch to every caller).
- */
-function adaptPointerHandler(
-  handler: React.PointerEventHandler<HTMLButtonElement> | undefined,
-): ((event: React.PointerEvent<HTMLElement>) => void) | undefined {
-  if (!handler) return undefined;
-  return (event) => handler(event as React.PointerEvent<HTMLButtonElement>);
 }
 
 /**
  * Button — the ONE button: the beveled purple sprite drawn as a scalable CSS
  * 9-patch. There is no variant / color-coded button language — secondary and
  * destructive actions are plain pressable text/icon affordances. Press
- * feedback routes through the shared --press-scale primitive.
+ * feedback routes through the shared --press-scale primitive. The button has no
+ * style / className / arbitrary-attribute escape hatch: its one appearance is
+ * fixed and only its typed props (size, full, disabled, icon, cost) shape it.
  */
 export function Button({
   size = "md",
@@ -97,29 +81,21 @@ export function Button({
   disabled = false,
   icon = null,
   cost = null,
-  frameScale = 1,
+  onClick,
+  ariaLabel,
   children,
-  style,
-  onPointerDown,
-  onPointerUp,
-  onPointerLeave,
-  onPointerCancel,
-  ...rest
 }: ButtonProps) {
   const spec = SIZES[size];
-  const borderWidth = Math.max(6, Math.round(spec.borderWidth * frameScale));
-  const { pressed, bind } = usePress({
-    onPointerDown: adaptPointerHandler(onPointerDown),
-    onPointerUp: adaptPointerHandler(onPointerUp),
-    onPointerLeave: adaptPointerHandler(onPointerLeave),
-    onPointerCancel: adaptPointerHandler(onPointerCancel),
-  });
+  const borderWidth = spec.borderWidth;
+  const { pressed, bind } = usePress();
   const on = pressed && !disabled;
 
   return (
     <button
       type="button"
       disabled={disabled}
+      aria-label={ariaLabel}
+      onClick={disabled ? undefined : onClick}
       {...(disabled ? {} : bind)}
       style={{
         position: "relative",
@@ -150,9 +126,7 @@ export function Button({
         transform: on ? `scale(${String(PRESS_SCALE)})` : "none",
         transition: `transform ${token("--dur-fast")} ${token("--ease-out")}, filter ${token("--dur-fast")} ${token("--ease-out")}`,
         WebkitTapHighlightColor: "transparent",
-        ...style,
       }}
-      {...rest}
     >
       {icon && (
         <span style={{ display: "inline-flex", fontSize: "1.1em" }}>

@@ -233,10 +233,11 @@ export function BattleForeseeOverlay({
                     Position {String(index + 1)}
                   </p>
                   <div data-battle-foresee-card-scroll="">
-                    <CardDisplay
-                      card={battleCardDisplayFromInstance(instance)}
-                      className="w-full"
-                    />
+                    <div className="w-full">
+                      <CardDisplay
+                        card={battleCardDisplayFromInstance(instance)}
+                      />
+                    </div>
                   </div>
                   <div className="mt-1 flex flex-wrap gap-2">
                     {isTop ? (

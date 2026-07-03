@@ -19,7 +19,7 @@
 // Ported from the Claude Design "Dreamtides Mobile" project
 // (components/pills/SegmentedControl.jsx / .d.ts).
 
-import type { CSSProperties, ReactElement } from "react";
+import type { ReactElement } from "react";
 import { PRESS_SCALE, usePress } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
 
@@ -43,7 +43,6 @@ export interface SegmentedControlProps {
   size?: SegmentedControlSize;
   /** Stretch to fill the container width, each segment sharing it equally. */
   full?: boolean;
-  style?: CSSProperties;
 }
 
 interface SizeSpec {
@@ -125,7 +124,6 @@ export function SegmentedControl({
   onChange,
   size = "md",
   full = false,
-  style = {},
 }: SegmentedControlProps): ReactElement {
   const normalized = options.map(normalizeOption);
   const spec = SIZES[size];
@@ -142,7 +140,6 @@ export function SegmentedControl({
         background: "rgba(255, 255, 255, 0.05)",
         border: `1px solid ${token("--border-soft")}`,
         borderRadius: token("--radius-pill"),
-        ...style,
       }}
     >
       {normalized.map((option) => (

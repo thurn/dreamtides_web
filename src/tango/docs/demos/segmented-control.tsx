@@ -6,7 +6,7 @@
 // `onChange`; `docName` still points at the real SegmentedControl, so the
 // props table stays accurate to its actual (undecorated) API.
 
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useState } from "react";
 import {
   SegmentedControl,
   type SegmentedOption,
@@ -31,7 +31,6 @@ interface SegmentedControlDemoArgs {
   value?: string;
   size?: "sm" | "md";
   full?: boolean;
-  style?: CSSProperties;
 }
 
 /**
@@ -46,7 +45,6 @@ function SegmentedControlDemo({
   value,
   size = "md",
   full = false,
-  style,
 }: SegmentedControlDemoArgs) {
   const [selected, setSelected] = useState(() => value ?? firstValue(options));
 
@@ -63,7 +61,6 @@ function SegmentedControlDemo({
       onChange={setSelected}
       size={size}
       full={full}
-      style={style}
     />
   );
 }

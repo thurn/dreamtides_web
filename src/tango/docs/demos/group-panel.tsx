@@ -1,9 +1,9 @@
 // Registry demo entry for GroupPanel — see info-card.tsx for the recipe this
-// follows. `radius` and `padding` are string|number props that seed as
-// editable controls via defaultArgs; `children` is a ReactNode slot with no
-// generated control, so it's seeded via sampleContent with a representative
-// "dense related info" grouping (a rules line, a hairline divider, and a
-// labelled value row) so the live pane has real content to organize.
+// follows. GroupPanel is a fixed-shape glass pane with no styling props, so it
+// seeds no editable controls; `children` is a ReactNode slot with no generated
+// control, so it's seeded via sampleContent with a representative "dense
+// related info" grouping (a rules line, a hairline divider, and a labelled
+// value row) so the live pane has real content to organize.
 
 import { GroupPanel } from "../../components/GroupPanel";
 import type { TangoComponent } from "../registry";
@@ -15,10 +15,7 @@ export const groupPanelDemo: TangoComponent = {
   docName: "GroupPanel",
   Component: GroupPanel,
   demo: {
-    defaultArgs: {
-      radius: "var(--radius-popover)",
-      padding: "var(--space-6)",
-    },
+    defaultArgs: {},
     sampleContent: {
       children: (
         <div style={{ width: 320 }}>

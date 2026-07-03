@@ -483,21 +483,23 @@ function DeckSection({
             Dreamcaller's ability. The popover self-sizes (280px), so the
             max-width cap is disabled; it portals to the body and is
             viewport-aware. */}
+        <div style={{ flex: 1, minWidth: 0 }}>
         <HoverPopover
           triggerAs="div"
           placement="top"
           delayMs={200}
           maxWidthPx={null}
           content={<DreamcallerPopover dreamcaller={dc} />}
-          style={{
-            display: "flex",
-            gap: 14,
-            alignItems: "center",
-            flex: 1,
-            minWidth: 0,
-            cursor: "help",
-          }}
         >
+          <div
+            style={{
+              display: "flex",
+              gap: 14,
+              alignItems: "center",
+              minWidth: 0,
+              cursor: "help",
+            }}
+          >
           <div style={{ width: 64, height: 64, flexShrink: 0 }}>
             <DreamcallerPortrait
               dreamcaller={{
@@ -522,7 +524,9 @@ function DeckSection({
               {deck.neighbors === 1 ? " deck" : " decks"} in pool
             </div>
           </div>
+          </div>
         </HoverPopover>
+        </div>
         <div
           style={{
             fontSize: 10,

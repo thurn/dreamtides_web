@@ -106,11 +106,11 @@ export function JourneyHoverCard({
           }}
         >
           {referencedCards.map((card) => (
-            <CardDisplay
-              key={card.id}
-              card={card}
-              className="w-36"
-            />
+            <div key={card.id} className="w-36">
+              <CardDisplay
+                card={card}
+              />
+            </div>
           ))}
         </div>
       )}

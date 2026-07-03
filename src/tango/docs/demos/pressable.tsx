@@ -35,7 +35,6 @@ export const pressableDemo: TangoComponent = {
   demo: {
     defaultArgs: {
       as: "button",
-      scale: 0.94,
       disabled: false,
     },
     sampleContent: {

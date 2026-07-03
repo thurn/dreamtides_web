@@ -18,7 +18,6 @@
 // (components/buttons/ResourceChip.jsx / .d.ts). Requires Boxicons v3's
 // filled stylesheet on the page (loaded globally for /tango by main.tsx).
 
-import type { CSSProperties } from "react";
 import { token } from "../primitives/tokens";
 
 /** Which economy value a ResourceChip renders. */
@@ -55,7 +54,6 @@ export interface ResourceChipProps {
   chip?: boolean;
   /** Space between the value and its mark. Default 0 — a tight pairing (200◆). */
   gap?: number;
-  style?: CSSProperties;
 }
 
 /**
@@ -70,7 +68,6 @@ export function ResourceChip({
   size = 16,
   chip = false,
   gap = 0,
-  style = {},
 }: ResourceChipProps) {
   const spec = SPECS[kind] ?? SPECS.essence;
   const glyph = (
@@ -97,7 +94,6 @@ export function ResourceChip({
               borderRadius: token("--radius-pill"),
             }
           : {}),
-        ...style,
       }}
     >
       {value != null && <span>{value}</span>}

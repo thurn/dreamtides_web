@@ -1109,13 +1109,11 @@ function TideDeckNav({
         );
         if (tide.displayDescription == null) return button;
         return (
-          <HoverPopover
-            key={tide.id}
-            style={{ display: "inline-flex" }}
-            content={<TideTooltipContent tide={tide} />}
-          >
-            {button}
-          </HoverPopover>
+          <span key={tide.id} style={{ display: "inline-flex" }}>
+            <HoverPopover content={<TideTooltipContent tide={tide} />}>
+              {button}
+            </HoverPopover>
+          </span>
         );
       })}
     </div>

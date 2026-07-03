@@ -223,7 +223,9 @@ function DuplicatePair({
           boxShadow: "0 12px 26px rgba(0,0,0,.55)",
         }}
       >
-        <CardView card={object.card} suppressHoverHelp className="block w-full" />
+        <div className="block w-full">
+          <CardView card={object.card} suppressHoverHelp />
+        </div>
       </div>
       <div
         style={{
@@ -236,7 +238,9 @@ function DuplicatePair({
           boxShadow: JOURNEY_RING_DUPLICATE,
         }}
       >
-        <CardView card={object.card} suppressHoverHelp className="block w-full" />
+        <div className="block w-full">
+          <CardView card={object.card} suppressHoverHelp />
+        </div>
       </div>
       <TwoBadge />
     </div>

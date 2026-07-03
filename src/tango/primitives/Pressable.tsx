@@ -120,8 +120,6 @@ function usePrefersReducedMotion(): boolean {
 export interface PressableProps extends React.HTMLAttributes<HTMLElement> {
   /** Element or component to render. Default 'button'. */
   as?: React.ElementType;
-  /** Override the compress factor. Default PRESS_SCALE (0.94). */
-  scale?: number;
   /** Disables press feedback and pointer handlers, and shows the default cursor. */
   disabled?: boolean;
   /** Content rendered inside the pressable element. */
@@ -143,7 +141,6 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
   function Pressable(
     {
       as = "button",
-      scale = PRESS_SCALE,
       disabled = false,
       style,
       onPointerDown,
@@ -198,7 +195,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
           transition: reducedMotion
             ? "none"
             : `transform var(--dur-fast) var(--ease-out)`,
-          transform: pressed && !disabled ? `scale(${scale})` : "none",
+          transform: pressed && !disabled ? `scale(${PRESS_SCALE})` : "none",
           ...style,
           ...(disabled ? { pointerEvents: "none" } : {}),
         }}

@@ -720,8 +720,6 @@ export interface CardViewProps {
    * `card` and `display` from `buildTransfigurationDisplay` together.
    */
   transfiguration?: CardTransfigurationDisplay;
-  /** Additional CSS class name for the root element. */
-  className?: string;
   /** Use larger text sizes for rules text, name, type line, and stats. */
   large?: boolean;
   /**
@@ -793,7 +791,6 @@ export function GameCard({
   selected = false,
   selectionColor = SELECTION_DEFAULT_COLOR,
   transfiguration,
-  className,
   large = false,
   figment = false,
   figmentTitleBar = false,
@@ -1252,7 +1249,7 @@ export function GameCard({
   return (
     <div
       ref={cardRef}
-      className={`card-view relative overflow-hidden rounded-lg transition-transform duration-200${large ? " card-view--large" : ""}${isInteractive ? " cursor-pointer hover:scale-[1.02]" : ""}${rarityClass}${className ? ` ${className}` : ""}`}
+      className={`card-view relative overflow-hidden rounded-lg transition-transform duration-200${large ? " card-view--large" : ""}${isInteractive ? " cursor-pointer hover:scale-[1.02]" : ""}${rarityClass}`}
       data-card-text-scale={textScale.toFixed(2)}
       data-rarity={rarityAttr}
       data-card-type={card.cardType}
