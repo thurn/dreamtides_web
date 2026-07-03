@@ -231,6 +231,16 @@ export function IntroSection(): ReactElement {
             prop into an open value is not. When in doubt, look at how the
             other screens solve it and match them rather than inventing a knob.
           </p>
+          <p style={bodyStyle}>
+            This is enforced, not just documented: the{" "}
+            <code>no-escape-hatch-props</code> ESLint rule errors when a
+            component or primitive <code>*Props</code> type grows a{" "}
+            <code>style</code>/<code>className</code> member, a{" "}
+            <code>CSSProperties</code>-typed prop, a DOM-attribute{" "}
+            <code>extends</code>, or an index signature, and a contract test
+            re-checks the resolved surface. So re-adding a knob fails lint or
+            the build, not code review.
+          </p>
         </Principle>
       </div>
     </section>

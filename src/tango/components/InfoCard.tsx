@@ -129,6 +129,19 @@ export const SITE_DISC: React.CSSProperties = {
   boxShadow: `inset 0 0 0 2.5px ${token("--accent")}, 0 0 14px 1px rgba(168,85,247,0.45)`,
 };
 
+/**
+ * The icon-variant disc tinted to a caller-supplied accent color, so a reveal
+ * disc can read as the same hue as the node it opens from (e.g. a dreamscape
+ * SiteNode). The gradient + glow recipe lives here in the design system; the
+ * caller supplies only the accent color via `InfoCardProps.discAccent`.
+ */
+function accentDiscStyle(accent: string): React.CSSProperties {
+  return {
+    background: "radial-gradient(120% 120% at 50% 28%, #1a1525, #070512)",
+    boxShadow: `inset 0 0 0 2px ${accent}73, 0 0 14px 1px ${accent}5c`,
+  };
+}
+
 /** Which media treatment an InfoCard renders. */
 export type InfoCardVariant = "object" | "hero" | "icon" | "text";
 
@@ -149,8 +162,11 @@ export interface InfoCardProps {
   frame?: boolean;
   /** icon variant: the boxicon class. */
   glyph?: string;
-  /** icon variant: the disc style (defaults to SITE_DISC). */
-  discStyle?: React.CSSProperties;
+  /**
+   * icon variant: tint the reveal disc to this accent color so it matches the
+   * node it opens from. Omit for the default violet-glow disc (SITE_DISC).
+   */
+  discAccent?: string;
   /** text variant: a small leading glyph node. */
   leadGlyph?: React.ReactNode;
 }
@@ -176,7 +192,7 @@ function InfoCardComponent({
   wash,
   frame = false,
   glyph,
-  discStyle,
+  discAccent,
   leadGlyph,
 }: InfoCardProps): React.ReactElement {
   const Body =
@@ -329,7 +345,9 @@ function InfoCardComponent({
               borderRadius: "50%",
               display: "grid",
               placeItems: "center",
-              ...(discStyle ?? SITE_DISC),
+              ...(discAccent !== undefined
+                ? accentDiscStyle(discAccent)
+                : SITE_DISC),
             }}
           >
             <i
@@ -649,7 +667,6 @@ export interface PressInfoProps {
   /** The InfoCard (or any node) to reveal while pressed/hovered. */
   card?: React.ReactNode;
   children?: React.ReactNode;
-  style?: React.CSSProperties;
   as?: React.ElementType;
   /** true = a touch hold still fires the child's click (menu / UI toggle). */
   holdStillClicks?: boolean;
@@ -661,7 +678,6 @@ export function PressInfo({
   width = CARD_W,
   card,
   children,
-  style,
   as = "span",
   holdStillClicks = false,
 }: PressInfoProps): React.ReactElement {
@@ -696,7 +712,7 @@ export function PressInfo({
       onPointerLeave={leave}
       onPointerCancel={end}
       onClickCapture={onClickCapture}
-      style={{ display: "inline-flex", ...style }}
+      style={{ display: "inline-flex" }}
     >
       {children}
       {anchor &&

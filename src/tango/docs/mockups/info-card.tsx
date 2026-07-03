@@ -33,12 +33,7 @@ interface TriggerProps {
 function Trigger({ stageRef, label, variant, glyph, card }: TriggerProps) {
   const { PressInfo } = InfoCard;
   return (
-    <PressInfo
-      stageRef={stageRef}
-      card={card}
-      holdStillClicks
-      style={{ display: "inline-flex" }}
-    >
+    <PressInfo stageRef={stageRef} card={card} holdStillClicks>
       <span
         style={{
           display: "inline-flex",

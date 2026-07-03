@@ -1,4 +1,3 @@
-import type { CSSProperties } from "react";
 import { ENERGY_PIP_COLOR } from "./PipBadge";
 
 /**
@@ -69,8 +68,6 @@ export interface GlowIconProps {
   glowFilter?: string;
   /** When true, adds the soft content-protection shadow beneath the glow. */
   shadow?: boolean;
-  className?: string;
-  style?: CSSProperties;
   /** Accessible label; the icon is hidden from assistive tech when unset. */
   title?: string;
 }
@@ -81,8 +78,6 @@ export function GlowIcon({
   size = "1em",
   glowFilter,
   shadow = false,
-  className,
-  style,
   title,
 }: GlowIconProps) {
   const filter = [shadow ? ICON_SHADOW_FILTER : null, glowFilter ?? null]
@@ -90,12 +85,12 @@ export function GlowIcon({
     .join(" ");
   return (
     <i
-      className={`${iconClass}${className !== undefined ? ` ${className}` : ""}`}
+      className={iconClass}
       role={title !== undefined ? "img" : undefined}
       aria-label={title}
       aria-hidden={title === undefined ? true : undefined}
       style={{
-        // Center the glyph in a square footprint so the corner stat's absolute
+        // Center the glyph in a square footprint so a caller's absolute
         // centering lands true.
         display: "inline-flex",
         alignItems: "center",
@@ -108,7 +103,6 @@ export function GlowIcon({
         lineHeight: 1,
         color,
         filter: filter !== "" ? filter : undefined,
-        ...style,
       }}
     />
   );

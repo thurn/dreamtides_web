@@ -510,22 +510,6 @@
       "description": "When true, adds the soft content-protection shadow beneath the glow."
     },
     {
-      "name": "className",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "style",
-      "tsType": "CSSProperties",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
       "name": "title",
       "tsType": "string",
       "unionMembers": [],
@@ -687,12 +671,12 @@
       "description": "icon variant: the boxicon class."
     },
     {
-      "name": "discStyle",
-      "tsType": "CSSProperties",
+      "name": "discAccent",
+      "tsType": "string",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "icon variant: the disc style (defaults to SITE_DISC)."
+      "description": "icon variant: tint the reveal disc to this accent color so it matches the\nnode it opens from. Omit for the default violet-glow disc (SITE_DISC)."
     },
     {
       "name": "leadGlyph",
@@ -836,14 +820,6 @@
       "required": false,
       "defaultValue": null,
       "description": "The InfoCard (or any node) to reveal while pressed/hovered."
-    },
-    {
-      "name": "style",
-      "tsType": "CSSProperties",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
     },
     {
       "name": "as",

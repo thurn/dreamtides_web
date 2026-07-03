@@ -304,11 +304,23 @@ reference, not by a from-scratch subagent rewrite.
 ## 9. Testing & verification
 
 - `npm run lint` (including the fail-closed import-boundary rule
-  `no-external-ui-imports` and the token-tier rule `no-primitive-tokens`, which
-  errors on any `--primitive-*` reference outside `primitives/` + `components/`),
-  `npm run typecheck`, and `npm test` stay green.
+  `no-external-ui-imports`; the token-tier rule `no-primitive-tokens`, which
+  errors on any `--primitive-*` reference outside `primitives/` + `components/`;
+  and the strict-API rule `no-escape-hatch-props`, which errors when a
+  `components/` `*Props` type re-opens an escape hatch — a `style`/`className`
+  member, a `CSSProperties`-typed prop, a DOM-attribute `extends`/intersection,
+  or an index signature), `npm run typecheck`, and `npm test` stay green.
+- The strict-API contract is enforced twice: `no-escape-hatch-props` catches it
+  in the styled `components/` source at authoring time, and
+  `scripts/tango-strict-api.contract.test.mjs` re-derives the resolved public
+  surface of both `components/` and `primitives/` via react-docgen and asserts
+  no component exposes a `style`/`className`/`CSSProperties` prop of its own — so
+  a hatch that leaks in through an aliased type still fails the build.
+  `primitives/` is excluded from the source rule because a mechanism like
+  `Pressable` deliberately forwards every DOM prop; react-docgen filters those
+  inherited props out, so the contract test still holds it to no *own* hatch.
 - Unit tests for the non-visual machinery: the docgen metadata extractor, the
-  hash router, and both Tango ESLint rules (`eslint-rules/*.test.ts`).
+  hash router, and every Tango ESLint rule (`eslint-rules/*.test.ts`).
 - Moved production components keep their existing tests (tests move with them —
   e.g. `CardView`, `RulesText`).
 - No brittle snapshot or token-value tests on demos (tokens and design data

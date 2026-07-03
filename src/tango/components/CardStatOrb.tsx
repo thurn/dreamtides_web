@@ -172,19 +172,24 @@ export function CardStatOrb({
     >
       {/* The glowing mark sits below the digit. Each Boxicons glyph leaves
           padding inside its 24×24 viewBox, so it is overscaled past the box
-          (centered) to reach the stat's footprint. */}
-      <GlowIcon
-        iconClass={icon.iconClass}
-        color={icon.color}
-        shadow
-        size={`calc(${sizeVar} * ${String(icon.overscale)})`}
+          (centered) to reach the stat's footprint. The wrapper owns the
+          absolute centering; GlowIcon paints only the glyph. */}
+      <span
         style={{
           position: "absolute",
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
+          display: "inline-flex",
         }}
-      />
+      >
+        <GlowIcon
+          iconClass={icon.iconClass}
+          color={icon.color}
+          shadow
+          size={`calc(${sizeVar} * ${String(icon.overscale)})`}
+        />
+      </span>
       <div
         ref={ref}
         style={{

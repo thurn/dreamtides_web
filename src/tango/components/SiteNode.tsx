@@ -67,15 +67,6 @@ function siteRevealNote(model: DreamscapeSiteModel): string | null {
   return null;
 }
 
-/** The `icon`-variant reveal disc, tinted to match this node's accent so the
- * disc reads identically in the node and in the card. */
-function revealDiscStyle(accent: string): CSSProperties {
-  return {
-    background: "radial-gradient(120% 120% at 50% 28%, #1a1525, #070512)",
-    boxShadow: `inset 0 0 0 2px ${accent}73, 0 0 14px 1px ${accent}5c`,
-  };
-}
-
 export interface SiteNodeProps {
   /** The placed-site model — position, label, accent, glyph, and state. */
   model: DreamscapeSiteModel;
@@ -233,7 +224,7 @@ export function SiteNode({
             <InfoCard
               variant="icon"
               glyph={model.icon}
-              discStyle={revealDiscStyle(accent)}
+              discAccent={accent}
               title={model.label}
               body={
                 <>

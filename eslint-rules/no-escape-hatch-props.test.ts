@@ -1,0 +1,138 @@
+import { RuleTester } from "eslint";
+import tsParser from "@typescript-eslint/parser";
+import { describe, it, expect } from "vitest";
+import rule, {
+  toRepoRelativePosix,
+  isDomAttributeTypeName,
+} from "./no-escape-hatch-props.js";
+
+describe("toRepoRelativePosix (no-escape-hatch-props)", () => {
+  it("returns a clean repo-relative path", () => {
+    expect(
+      toRepoRelativePosix(
+        "/Users/x/quest_prototype/src/tango/components/Button.tsx",
+        "/Users/x/quest_prototype",
+      ),
+    ).toBe("src/tango/components/Button.tsx");
+  });
+});
+
+describe("isDomAttributeTypeName (no-escape-hatch-props)", () => {
+  it("matches the HTML/SVG attribute grab-bags", () => {
+    for (const name of [
+      "HTMLAttributes",
+      "ButtonHTMLAttributes",
+      "AnchorHTMLAttributes",
+      "SVGProps",
+      "ComponentPropsWithoutRef",
+      "DetailedHTMLProps",
+      "IntrinsicElements",
+    ]) {
+      expect(isDomAttributeTypeName(name)).toBe(true);
+    }
+  });
+
+  it("does not match ordinary or Tango prop type names", () => {
+    for (const name of ["ButtonProps", "CSSProperties", "ReactNode", "string"]) {
+      expect(isDomAttributeTypeName(name)).toBe(false);
+    }
+  });
+});
+
+// RuleTester in ESLint 9 exposes `describe`/`it` hooks; wire them to vitest so
+// each RuleTester case shows up as an individual vitest test.
+RuleTester.describe = describe;
+RuleTester.it = it;
+
+const ruleTester = new RuleTester({
+  languageOptions: {
+    parser: tsParser,
+    ecmaVersion: 2022,
+    sourceType: "module",
+  },
+});
+
+const COMPONENT = "src/tango/components/Widget.tsx";
+
+ruleTester.run("no-escape-hatch-props", rule, {
+  valid: [
+    {
+      name: "a strict enumerated + slot API",
+      filename: COMPONENT,
+      code: `interface WidgetProps { size?: "sm" | "md"; children?: ReactNode; onClick?: () => void; }`,
+    },
+    {
+      name: "a single named data value (accent color) is fine",
+      filename: COMPONENT,
+      code: `interface WidgetProps { discAccent?: string; }`,
+    },
+    {
+      name: "internal CSSProperties locals/helpers are not the public API",
+      filename: COMPONENT,
+      code: `const shell: CSSProperties = { color: "red" }; function disc(a: string): React.CSSProperties { return { color: a }; }`,
+    },
+    {
+      name: "style/className on a non-Props type is not flagged",
+      filename: COMPONENT,
+      code: `interface InternalStyleBag { style?: React.CSSProperties; className?: string; }`,
+    },
+    {
+      name: "type alias Props with only strict members",
+      filename: COMPONENT,
+      code: `type WidgetProps = { variant?: "a" | "b"; label: string };`,
+    },
+    {
+      name: "outside the design-system surface: rule is inert",
+      filename: "src/screens/DraftSiteScreen.tsx",
+      code: `interface RowProps { style?: React.CSSProperties; className?: string; [k: string]: unknown; }`,
+    },
+    {
+      name: "tango docs/mockups are not the component surface",
+      filename: "src/tango/docs/mockups/scene.tsx",
+      code: `interface DemoProps { style?: React.CSSProperties; }`,
+    },
+    {
+      name: "primitives are transparent mechanisms — they may forward DOM props",
+      filename: "src/tango/primitives/Pressable.tsx",
+      code: `interface PressableProps extends React.HTMLAttributes<HTMLElement> { as?: React.ElementType; }`,
+    },
+  ],
+  invalid: [
+    {
+      name: "style member on a *Props interface (caught by name)",
+      filename: COMPONENT,
+      code: `interface WidgetProps { style?: React.CSSProperties; }`,
+      errors: [{ messageId: "styleMember" }],
+    },
+    {
+      name: "className member on a *Props interface",
+      filename: COMPONENT,
+      code: `interface WidgetProps { className?: string; }`,
+      errors: [{ messageId: "styleMember" }],
+    },
+    {
+      name: "CSSProperties passthrough under a different name",
+      filename: COMPONENT,
+      code: `interface WidgetProps { discStyle?: React.CSSProperties; }`,
+      errors: [{ messageId: "cssPropertiesMember" }],
+    },
+    {
+      name: "extends a DOM-attribute grab-bag",
+      filename: COMPONENT,
+      code: `interface WidgetProps extends React.ButtonHTMLAttributes<HTMLButtonElement> { size?: "sm"; }`,
+      errors: [{ messageId: "domAttributesHeritage" }],
+    },
+    {
+      name: "index signature accepts arbitrary keys",
+      filename: COMPONENT,
+      code: `interface WidgetProps { [key: string]: unknown; }`,
+      errors: [{ messageId: "indexSignature" }],
+    },
+    {
+      name: "type alias intersecting HTMLAttributes",
+      filename: COMPONENT,
+      code: `type WidgetProps = { size?: "sm" } & React.HTMLAttributes<HTMLDivElement>;`,
+      errors: [{ messageId: "domAttributesHeritage" }],
+    },
+  ],
+});
