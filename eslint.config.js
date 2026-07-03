@@ -3,6 +3,8 @@ import tseslint from "typescript-eslint";
 import tangoNoExternalUiImports from "./eslint-rules/no-external-ui-imports.js";
 import tangoNoPrimitiveTokens from "./eslint-rules/no-primitive-tokens.js";
 import tangoNoEscapeHatchProps from "./eslint-rules/no-escape-hatch-props.js";
+import tangoNoHardcodedValues from "./eslint-rules/no-hardcoded-values.js";
+import tangoNoRawInteractiveElements from "./eslint-rules/no-raw-interactive-elements.js";
 
 export default tseslint.config(
   eslint.configs.recommended,
@@ -37,6 +39,8 @@ export default tseslint.config(
           "no-external-ui-imports": tangoNoExternalUiImports,
           "no-primitive-tokens": tangoNoPrimitiveTokens,
           "no-escape-hatch-props": tangoNoEscapeHatchProps,
+          "no-hardcoded-values": tangoNoHardcodedValues,
+          "no-raw-interactive-elements": tangoNoRawInteractiveElements,
         },
       },
     },
@@ -44,6 +48,8 @@ export default tseslint.config(
       "tango/no-external-ui-imports": "error",
       "tango/no-primitive-tokens": "error",
       "tango/no-escape-hatch-props": "error",
+      "tango/no-hardcoded-values": "error",
+      "tango/no-raw-interactive-elements": "error",
     },
   },
   {

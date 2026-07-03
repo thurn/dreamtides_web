@@ -1,0 +1,112 @@
+import { RuleTester } from "eslint";
+import tsParser from "@typescript-eslint/parser";
+import { describe, it, expect } from "vitest";
+import rule, {
+  toRepoRelativePosix,
+  jsxTagName,
+} from "./no-raw-interactive-elements.js";
+
+describe("toRepoRelativePosix (no-raw-interactive-elements)", () => {
+  it("returns a clean repo-relative path", () => {
+    expect(
+      toRepoRelativePosix(
+        "/Users/x/quest_prototype/src/tango/screens/HomeScreen.tsx",
+        "/Users/x/quest_prototype",
+      ),
+    ).toBe("src/tango/screens/HomeScreen.tsx");
+  });
+});
+
+describe("jsxTagName", () => {
+  it("returns the tag for a lowercase intrinsic element", () => {
+    expect(jsxTagName({ name: { type: "JSXIdentifier", name: "button" } })).toBe(
+      "button",
+    );
+  });
+  it("returns null for a capitalized component", () => {
+    expect(jsxTagName({ name: { type: "JSXIdentifier", name: "Button" } })).toBeNull();
+  });
+  it("returns null for a member/namespaced element", () => {
+    expect(jsxTagName({ name: { type: "JSXMemberExpression" } })).toBeNull();
+  });
+});
+
+RuleTester.describe = describe;
+RuleTester.it = it;
+
+const ruleTester = new RuleTester({
+  languageOptions: {
+    parser: tsParser,
+    ecmaVersion: 2022,
+    sourceType: "module",
+    parserOptions: { ecmaFeatures: { jsx: true } },
+  },
+});
+
+const SCREEN = "src/tango/screens/HomeScreen.tsx";
+
+ruleTester.run("no-raw-interactive-elements", rule, {
+  valid: [
+    {
+      name: "composing Tango components is fine",
+      filename: SCREEN,
+      code: `const el = <Button size="md"><Pressable /></Button>;`,
+    },
+    {
+      name: "non-interactive intrinsic elements are fine",
+      filename: SCREEN,
+      code: `const el = <div><span>hi</span><img /><svg><circle /></svg></div>;`,
+    },
+    {
+      name: "an anchor without href (not a control) is fine",
+      filename: SCREEN,
+      code: `const el = <a id="anchor-target" />;`,
+    },
+    {
+      name: "components/ own native interactive elements",
+      filename: "src/tango/components/Button.tsx",
+      code: `const el = <button type="button" />;`,
+    },
+    {
+      name: "primitives/ forward to native elements",
+      filename: "src/tango/primitives/Pressable.tsx",
+      code: `const el = <button />;`,
+    },
+    {
+      name: "docs control panel may use native form controls",
+      filename: "src/tango/docs/ControlPanel.tsx",
+      code: `const el = <select><option /></select>;`,
+    },
+    {
+      name: "files outside src/tango are inert",
+      filename: "src/screens/LegacyScreen.tsx",
+      code: `const el = <button />;`,
+    },
+  ],
+  invalid: [
+    {
+      name: "raw <button> in a screen",
+      filename: SCREEN,
+      code: `const el = <button onClick={f}>Go</button>;`,
+      errors: [{ messageId: "rawInteractive" }],
+    },
+    {
+      name: "raw <input> in a screen",
+      filename: SCREEN,
+      code: `const el = <input value={v} />;`,
+      errors: [{ messageId: "rawInteractive" }],
+    },
+    {
+      name: "raw <select> in a screen",
+      filename: SCREEN,
+      code: `const el = <select />;`,
+      errors: [{ messageId: "rawInteractive" }],
+    },
+    {
+      name: "an <a href> link/button in a screen",
+      filename: SCREEN,
+      code: `const el = <a href="/next">Next</a>;`,
+      errors: [{ messageId: "rawAnchor" }],
+    },
+  ],
+});
