@@ -1,5 +1,5 @@
 import { useState, type CSSProperties } from "react";
-import { DreamsignHoverCard } from "./DreamsignHoverCard";
+import { DreamsignInfoCard } from "../tango/components/Dreamsign";
 import { HoverPopover } from "../tango/components/HoverPopover";
 import { RulesText } from "../tango/components/RulesText";
 import type { Dreamsign } from "../types/quest";
@@ -85,14 +85,12 @@ function HudDreamsignIcon({ dreamsign }: { dreamsign: Dreamsign }) {
       triggerAs="span"
       delayMs={250}
       maxWidthPx={null}
-      content={({ side, anchorRect }) => (
-        <DreamsignHoverCard
+      content={
+        <DreamsignInfoCard
           dreamsign={dreamsign}
           testid="hud-dreamsign-popover"
-          popoverSide={side}
-          anchorRect={anchorRect}
         />
-      )}
+      }
       className="inline-block"
     >
       <span

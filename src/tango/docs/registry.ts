@@ -12,6 +12,7 @@ import type { ComponentType, ReactNode } from "react";
 import { atlasEdgeDemo } from "./demos/atlas-edge";
 import { atlasNodeDemo } from "./demos/atlas-node";
 import { buttonDemo } from "./demos/button";
+import { dreamsignDemo } from "./demos/dreamsign";
 import { gameCardDemo } from "./demos/game-card";
 import { groupPanelDemo } from "./demos/group-panel";
 import { infoCardDemo } from "./demos/info-card";
@@ -21,6 +22,7 @@ import { questStatusBarDemo } from "./demos/quest-status-bar";
 import { resourceChipDemo } from "./demos/resource-chip";
 import { rulesTextDemo } from "./demos/rules-text";
 import { segmentedControlDemo } from "./demos/segmented-control";
+import { siteNodeDemo } from "./demos/site-node";
 import { statTileDemo } from "./demos/stat-tile";
 import { tidePillDemo } from "./demos/tide-pill";
 
@@ -80,6 +82,8 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   gameCardDemo,
   atlasNodeDemo,
   atlasEdgeDemo,
+  dreamsignDemo,
+  siteNodeDemo,
 ];
 
 /** Look up a registry entry by its route id. */

@@ -250,6 +250,84 @@
       "description": "Which side of the card the panel sits on, exposed for layout/tests."
     }
   ],
+  "DreamscapeMotes": [
+    {
+      "name": "on",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    }
+  ],
+  "Dreamsign": [
+    {
+      "name": "dreamsign",
+      "tsType": "Dreamsign",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The dreamsign to show. Identified by `id` (never by name)."
+    },
+    {
+      "name": "sizePx",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Square tile edge length in pixels."
+    },
+    {
+      "name": "stageRef",
+      "tsType": "RefObject<HTMLElement | null>",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Screen root the reveal anchors + clamps against. Pass it for the\nmaterial-continuity reveal (preferred); omit it and the reveal floats\ndirectly above the tile."
+    },
+    {
+      "name": "testid",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "dreamsign-art-tile",
+      "description": "Override the tile's `data-testid`. Defaults to `\"dreamsign-art-tile\"` so the\nshipped shop / reward / deck-viewer selectors keep working."
+    },
+    {
+      "name": "revealTestid",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Testid for the portalled reveal content (for stable selectors)."
+    },
+    {
+      "name": "onPress",
+      "tsType": "(() => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fired on a tap / click that was not a deliberate hold-to-read."
+    }
+  ],
+  "DreamsignInfoCard": [
+    {
+      "name": "dreamsign",
+      "tsType": "Dreamsign",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The dreamsign to render as the shared InfoCard `object` reveal."
+    },
+    {
+      "name": "testid",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional `data-testid` on the reveal wrapper, for stable selectors."
+    }
+  ],
   "GameCard": [
     {
       "name": "card",
@@ -1660,6 +1738,48 @@
       "required": false,
       "defaultValue": "{}",
       "description": ""
+    }
+  ],
+  "SiteNode": [
+    {
+      "name": "model",
+      "tsType": "DreamscapeSiteModel",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The placed-site model — position, label, accent, glyph, and state."
+    },
+    {
+      "name": "size",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Wayside disc diameter in px; battle guardians scale up from here."
+    },
+    {
+      "name": "motion",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Enable the calm floaty drift (disabled under reduced-motion via CSS)."
+    },
+    {
+      "name": "stageRef",
+      "tsType": "RefObject<HTMLElement | null>",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Screen root the reveal anchors + clamps against (for popover placement)."
+    },
+    {
+      "name": "onSelect",
+      "tsType": "(siteId: string) => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Enter the site; fired on a tap / click of an interactive node only."
     }
   ],
   "StatTile": [

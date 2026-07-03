@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import type { Dreamsign, SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
-import { DreamsignArtTile } from "../components/DreamsignArtTile";
+import { Dreamsign as DreamsignEntity } from "../tango/components/Dreamsign";
 import { EssenceGlyph } from "../components/EssenceValue";
 import { RulesText } from "../tango/components/RulesText";
 
@@ -239,7 +239,7 @@ function DreamsignRewardDisplay({ dreamsign }: { dreamsign: Dreamsign }) {
         boxShadow: "0 0 30px rgba(168, 85, 247, 0.12)",
       }}
     >
-      <DreamsignArtTile dreamsign={dreamsign} sizePx={96} />
+      <DreamsignEntity dreamsign={dreamsign} sizePx={96} />
       {dreamsign.isBane && (
         <span
           className="rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider"

@@ -9,8 +9,8 @@ import { HoverZoomCard } from "../components/HoverZoomCard";
 import { HoverPopover } from "../tango/components/HoverPopover";
 import {
   DREAMSIGN_HOVER_DELAY_MS,
-  DreamsignHoverCard,
-} from "../components/DreamsignHoverCard";
+  DreamsignInfoCard,
+} from "../tango/components/Dreamsign";
 import { dreamsignIconUrl } from "../tango/components/atlas-display";
 import { SiteCloseButton } from "../components/SiteCloseButton";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
@@ -430,13 +430,7 @@ function ShopDreamsignArt({ dreamsign }: { dreamsign: Dreamsign }) {
       className="sh-sign-hover"
       delayMs={DREAMSIGN_HOVER_DELAY_MS}
       maxWidthPx={null}
-      content={({ side, anchorRect }) => (
-        <DreamsignHoverCard
-          dreamsign={dreamsign}
-          popoverSide={side}
-          anchorRect={anchorRect}
-        />
-      )}
+      content={<DreamsignInfoCard dreamsign={dreamsign} />}
     >
       <div
         className={`sh-sign${dreamsign.isBane ? " is-bane" : ""}`}

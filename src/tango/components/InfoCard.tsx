@@ -452,13 +452,13 @@ const FINE_POINTER_QUERY = "(hover: hover) and (pointer: fine)";
 
 function useFinePointer(): boolean {
   const [fine, setFine] = React.useState<boolean>(() =>
-    typeof window === "undefined"
+    typeof window === "undefined" || typeof window.matchMedia !== "function"
       ? false
       : window.matchMedia(FINE_POINTER_QUERY).matches,
   );
 
   React.useEffect(() => {
-    if (typeof window === "undefined") {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
       return;
     }
     const query = window.matchMedia(FINE_POINTER_QUERY);

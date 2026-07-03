@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useQuest } from "../state/quest-context";
 import {
   siteTypeDescription,
@@ -9,10 +9,9 @@ import { dreamscapeSceneUrl } from "../tango/components/atlas-display";
 import { draftSitePickCount } from "../draft/draft-site-config";
 import {
   DreamscapeMotes,
-  DreamscapeSiteNode,
-  DreamscapeSitePopover,
+  SiteNode,
   type DreamscapeSiteModel,
-} from "../components/DreamscapeSiteNode";
+} from "../tango/components/SiteNode";
 import { scatterSites, seedFromString } from "../tango/components/dreamscape-scatter";
 import { logEvent } from "../logging";
 import "./dreamscape.css";
@@ -94,7 +93,9 @@ export function DreamscapeScreen() {
     });
   }, [node, allNonBattleVisited, completionLevel]);
 
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+  // The screen root; the site-node reveals portal into it so their placement +
+  // on-screen clamp use stage coordinates.
+  const stageRef = useRef<HTMLDivElement>(null);
 
   // Cross-fade the scene art in whenever the dreamscape changes.
   const dreamscapeId = node?.dreamscapeId ?? null;
@@ -157,10 +158,10 @@ export function DreamscapeScreen() {
 
   const sceneUrl = dreamscapeId !== null ? dreamscapeSceneUrl(dreamscapeId) : null;
   const title = node.biomeName.length > 0 ? node.biomeName : "An Unknown Dream";
-  const hoveredModel = hoveredIndex !== null ? (models[hoveredIndex] ?? null) : null;
 
   return (
     <div
+      ref={stageRef}
       className="dreamscape-detail"
       data-dreamscape-detail=""
       data-dreamscape-id={dreamscapeId ?? undefined}
@@ -191,18 +192,15 @@ export function DreamscapeScreen() {
       {models
         .filter((model) => !model.site.isVisited)
         .map((model) => (
-          <DreamscapeSiteNode
+          <SiteNode
             key={model.site.id}
             model={model}
             size={NODE_SIZE}
             motion
-            hovered={hoveredIndex === model.index}
-            onHover={setHoveredIndex}
+            stageRef={stageRef}
             onSelect={handleSiteClick}
           />
         ))}
-
-      {hoveredModel !== null && <DreamscapeSitePopover model={hoveredModel} />}
     </div>
   );
 }

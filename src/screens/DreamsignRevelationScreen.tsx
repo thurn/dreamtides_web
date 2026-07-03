@@ -8,8 +8,8 @@ import { SiteGuide } from "../components/SiteGuide";
 import { SiteCloseButton } from "../components/SiteCloseButton";
 import {
   DREAMSIGN_HOVER_DELAY_MS,
-  DreamsignHoverCard,
-} from "../components/DreamsignHoverCard";
+  DreamsignInfoCard,
+} from "../tango/components/Dreamsign";
 import { HoverPopover } from "../tango/components/HoverPopover";
 import { DreamsignPurgeOverlay } from "./DreamsignPurgeOverlay";
 import "./dreamsign-revelation.css";
@@ -202,13 +202,7 @@ function RevelationCard({
         delayMs={DREAMSIGN_HOVER_DELAY_MS}
         placement="left"
         maxWidthPx={null}
-        content={({ side, anchorRect }) => (
-          <DreamsignHoverCard
-            dreamsign={dreamsign}
-            popoverSide={side}
-            anchorRect={anchorRect}
-          />
-        )}
+        content={<DreamsignInfoCard dreamsign={dreamsign} />}
       >
         <div
           className={`dsr-art-wrap${dreamsign.isBane ? " bane" : ""}`}

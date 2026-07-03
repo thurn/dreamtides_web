@@ -28,8 +28,9 @@ vi.mock("../../components/CardHoverPreview", () => ({
   CardHoverPreview: () => null,
 }));
 
-vi.mock("../../components/DreamsignHoverCard", () => ({
-  DreamsignHoverCard: () => null,
+vi.mock("../../tango/components/Dreamsign", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../tango/components/Dreamsign")>()),
+  DreamsignInfoCard: () => null,
 }));
 
 const roots: Root[] = [];

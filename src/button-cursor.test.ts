@@ -24,7 +24,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const SRC_DIR = path.resolve(__dirname);
 const INDEX_CSS = path.join(SRC_DIR, "index.css");
-const SITE_NODE = path.join(SRC_DIR, "components", "DreamscapeSiteNode.tsx");
+const SITE_NODE = path.join(SRC_DIR, "tango", "components", "SiteNode.tsx");
 
 describe("button cursor affordance", () => {
   it("declares the global pointer cursor for enabled buttons", () => {

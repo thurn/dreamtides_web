@@ -2,22 +2,24 @@
 
 import { act } from "react";
 import { createRoot, type Root } from "react-dom/client";
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { DreamsignArtTile } from "./DreamsignArtTile";
-import type { Dreamsign } from "../types/quest";
+import { afterEach, beforeEach, describe, expect, it } from "vitest";
+import { Dreamsign } from "./Dreamsign";
+import type { Dreamsign as DreamsignData } from "../../types/quest";
 
 /**
- * Shared dreamsign artwork tile used on the Shop and Deck Viewer.
+ * The unified dreamsign entity (formerly `DreamsignArtTile` +
+ * `DreamsignHoverCard`).
  *
- * The tile renders the dreamsign's `imageName` artwork (sourced from
- * `/dreamsigns/<imageName>`) inside a sized square, conveys bane vs. boon
- * via a tinted border + desaturation filter, and exposes a hover popover
- * with the dreamsign's full name and effect text.
+ * The tile renders the dreamsign's `imageName` artwork (from
+ * `/dreamsigns/<imageName>`) inside a sized square, conveys bane vs. boon via a
+ * tinted border + desaturation filter, and reveals its full name + effect text
+ * through the shared InfoCard `object` variant. jsdom exposes no `matchMedia`, so
+ * `usePressReveal` treats it as a coarse pointer: a press-down reveals the card.
  */
 
 function makeDreamsign(
-  overrides: Partial<Dreamsign> & { name: string },
-): Dreamsign {
+  overrides: Partial<DreamsignData> & { name: string },
+): DreamsignData {
   return {
     name: overrides.name,
     effectDescription:
@@ -54,7 +56,7 @@ afterEach(() => {
   document.body.innerHTML = "";
 });
 
-describe("DreamsignArtTile", () => {
+describe("Dreamsign", () => {
   it("renders the dreamsign artwork from /dreamsigns/<imageName>", () => {
     const sign = makeDreamsign({
       name: "Black Horn",
@@ -62,7 +64,7 @@ describe("DreamsignArtTile", () => {
     });
 
     const { container, root } = mountInto(
-      <DreamsignArtTile dreamsign={sign} sizePx={64} />,
+      <Dreamsign dreamsign={sign} sizePx={64} />,
     );
 
     const img = container.querySelector("img");
@@ -83,7 +85,7 @@ describe("DreamsignArtTile", () => {
     });
 
     const { container, root } = mountInto(
-      <DreamsignArtTile dreamsign={sign} sizePx={48} />,
+      <Dreamsign dreamsign={sign} sizePx={48} />,
     );
 
     expect(container.querySelector("img")?.getAttribute("alt")).toBe(
@@ -103,7 +105,7 @@ describe("DreamsignArtTile", () => {
     });
 
     const { container, root } = mountInto(
-      <DreamsignArtTile dreamsign={sign} sizePx={48} />,
+      <Dreamsign dreamsign={sign} sizePx={48} />,
     );
 
     const tile = container.querySelector<HTMLElement>(
@@ -129,7 +131,7 @@ describe("DreamsignArtTile", () => {
     });
 
     const { container, root } = mountInto(
-      <DreamsignArtTile dreamsign={sign} sizePx={48} />,
+      <Dreamsign dreamsign={sign} sizePx={48} />,
     );
 
     const tile = container.querySelector<HTMLElement>(
@@ -149,7 +151,7 @@ describe("DreamsignArtTile", () => {
     const sign = makeDreamsign({ name: "Untextured" });
 
     const { container, root } = mountInto(
-      <DreamsignArtTile dreamsign={sign} sizePx={48} />,
+      <Dreamsign dreamsign={sign} sizePx={48} />,
     );
 
     expect(container.querySelector("img")).toBeNull();
@@ -161,59 +163,52 @@ describe("DreamsignArtTile", () => {
     });
   });
 
-  it("shows a hover popover with the dreamsign name and effect text on mouseenter", () => {
-    vi.useFakeTimers();
-    try {
-      const sign = makeDreamsign({
-        name: "Black Horn",
-        effectDescription:
-          "When you dissolve or banish an enemy, gain 1 essence.",
-        imageName: "black_horn.png",
-      });
+  it("reveals the dreamsign name and effect text through InfoCard on press", () => {
+    const sign = makeDreamsign({
+      name: "Black Horn",
+      effectDescription:
+        "When you dissolve or banish an enemy, gain 1 essence.",
+      imageName: "black_horn.png",
+    });
 
-      const { container, root } = mountInto(
-        <DreamsignArtTile dreamsign={sign} sizePx={64} />,
-      );
+    const { container, root } = mountInto(
+      <Dreamsign dreamsign={sign} sizePx={64} revealTestid="dreamsign-reveal" />,
+    );
 
-      // Popover is not in the DOM before hover.
-      expect(
-        document.body.querySelectorAll(
-          '[data-testid="dreamsign-art-popover"]',
-        ).length,
-      ).toBe(0);
+    // The reveal is not in the DOM before the press.
+    expect(
+      document.body.querySelectorAll('[data-testid="dreamsign-reveal"]').length,
+    ).toBe(0);
 
-      const tile = container.querySelector<HTMLElement>(
-        '[data-testid="dreamsign-art-tile"]',
-      );
-      expect(tile).not.toBeNull();
-      // HoverPopover wraps the child in a <span>; dispatch mouseover on the
-      // wrapper because React attaches its listeners there.
-      const triggerWrapper = tile?.parentElement ?? null;
-      expect(triggerWrapper).not.toBeNull();
+    const tile = container.querySelector<HTMLElement>(
+      '[data-testid="dreamsign-art-tile"]',
+    );
+    expect(tile).not.toBeNull();
 
-      act(() => {
-        triggerWrapper?.dispatchEvent(
-          new MouseEvent("mouseover", { bubbles: true }),
-        );
-      });
-      act(() => {
-        vi.advanceTimersByTime(400);
-      });
+    // Coarse pointer (jsdom has no matchMedia): press-down reveals.
+    act(() => {
+      tile?.dispatchEvent(new Event("pointerdown", { bubbles: true }));
+    });
 
-      const popover = document.body.querySelector(
-        '[data-testid="dreamsign-art-popover"]',
-      );
-      expect(popover).not.toBeNull();
-      expect(popover?.textContent).toContain("Black Horn");
-      expect(popover?.textContent).toContain(
-        "When you dissolve or banish an enemy",
-      );
+    const reveal = document.body.querySelector(
+      '[data-testid="dreamsign-reveal"]',
+    );
+    expect(reveal).not.toBeNull();
+    expect(reveal?.textContent).toContain("Black Horn");
+    expect(reveal?.textContent).toContain(
+      "When you dissolve or banish an enemy",
+    );
 
-      act(() => {
-        root.unmount();
-      });
-    } finally {
-      vi.useRealTimers();
-    }
+    // Release dismisses the reveal on a coarse pointer.
+    act(() => {
+      tile?.dispatchEvent(new Event("pointerup", { bubbles: true }));
+    });
+    expect(
+      document.body.querySelectorAll('[data-testid="dreamsign-reveal"]').length,
+    ).toBe(0);
+
+    act(() => {
+      root.unmount();
+    });
   });
 });

@@ -3,7 +3,7 @@ import {
   CARD_HOVER_PREVIEW_DELAY_MS,
   HoverPopover,
 } from "../../tango/components/HoverPopover";
-import { DreamsignHoverCard } from "../../components/DreamsignHoverCard";
+import { DreamsignInfoCard } from "../../tango/components/Dreamsign";
 import type { Dreamsign } from "../../types/quest";
 import type { JourneyDreamsignObject } from "./offerPresentation";
 import { assetUrl } from "../../runtime/asset-url";
@@ -157,14 +157,12 @@ export function JourneyDreamsignIcon({
       placement="top"
       delayMs={CARD_HOVER_PREVIEW_DELAY_MS}
       maxWidthPx={null}
-      content={({ anchorRect, side }) => (
-        <DreamsignHoverCard
+      content={
+        <DreamsignInfoCard
           dreamsign={dreamsign}
           testid={`journey-dreamsign-hover-${object.dreamsignId}`}
-          popoverSide={side}
-          anchorRect={anchorRect}
         />
-      )}
+      }
     >
       {body}
     </HoverPopover>

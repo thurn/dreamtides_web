@@ -8,7 +8,7 @@ import type {
 import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "./CardDisplay";
 import { CardOverlay } from "./CardOverlay";
-import { DreamsignArtTile } from "./DreamsignArtTile";
+import { Dreamsign } from "../tango/components/Dreamsign";
 import { HoverZoomCard } from "./HoverZoomCard";
 import {
   getPersistedCardSize,
@@ -671,7 +671,7 @@ export function DeckViewer({
                           border: `1px solid ${sign.isBane ? "rgba(239, 68, 68, 0.25)" : "rgba(124, 58, 237, 0.15)"}`,
                         }}
                       >
-                        <DreamsignArtTile dreamsign={sign} sizePx={36} />
+                        <Dreamsign dreamsign={sign} sizePx={36} />
                         <div className="flex flex-1 flex-col gap-1">
                           <div className="flex items-center gap-1.5">
                             <span
@@ -876,7 +876,7 @@ function MobileSidebar({
                         border: `1px solid ${sign.isBane ? "rgba(239, 68, 68, 0.25)" : "rgba(124, 58, 237, 0.15)"}`,
                       }}
                     >
-                      <DreamsignArtTile dreamsign={sign} sizePx={32} />
+                      <Dreamsign dreamsign={sign} sizePx={32} />
                       <div className="flex flex-1 flex-col gap-0.5">
                         <div className="flex items-center gap-1.5">
                           <span
