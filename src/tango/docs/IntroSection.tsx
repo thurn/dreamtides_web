@@ -120,7 +120,7 @@ function GroupPanelExample(): ReactElement {
  */
 export function IntroSection(): ReactElement {
   return (
-    <section aria-labelledby="tango-intro-heading" style={{ marginBottom: token("--space-10") }}>
+    <section id="tango-toc-philosophy" aria-labelledby="tango-intro-heading" style={{ marginBottom: token("--space-10") }}>
       <p style={eyebrowStyle}>Introduction</p>
       <h2 id="tango-intro-heading" style={sectionTitleStyle}>
         Design Philosophy

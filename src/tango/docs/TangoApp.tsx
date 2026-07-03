@@ -19,6 +19,7 @@ import { ComponentPage } from "./ComponentPage";
 import { ComponentShowcase } from "./ComponentShowcase";
 import { IntroSection } from "./IntroSection";
 import { PrimitivesSection } from "./PrimitivesSection";
+import { TableOfContents, type TocEntry } from "./TableOfContents";
 import { token } from "../primitives/tokens";
 
 const pageStyle: CSSProperties = {
@@ -51,10 +52,47 @@ function groupComponents(
   return groups;
 }
 
+/** Stable DOM-id slug for a component group's overview section, e.g.
+ * "Components" -> "tango-toc-group-components". */
+function groupAnchorId(group: string): string {
+  const slug = group.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return `tango-toc-group-${slug}`;
+}
+
+/** Stable DOM-id for a single component's showcase anchor. */
+function componentAnchorId(id: string): string {
+  return `tango-toc-component-${id}`;
+}
+
+/** Builds the table-of-contents entries in the exact top-to-bottom order the
+ * overview renders its sections: the two prose sections, then each component
+ * group with its components nested one rung in. */
+function buildTocEntries(
+  groups: { group: string; entries: TangoComponent[] }[],
+): TocEntry[] {
+  const entries: TocEntry[] = [
+    { id: "tango-toc-philosophy", label: "Design Philosophy", depth: 0 },
+    { id: "tango-toc-tokens", label: "Design Tokens", depth: 0 },
+  ];
+  for (const { group, entries: components } of groups) {
+    entries.push({ id: groupAnchorId(group), label: group, depth: 0 });
+    for (const component of components) {
+      entries.push({
+        id: componentAnchorId(component.id),
+        label: component.title,
+        depth: 1,
+      });
+    }
+  }
+  return entries;
+}
+
 function Overview() {
   const groups = groupComponents(TANGO_COMPONENTS);
+  const tocEntries = buildTocEntries(groups);
   return (
     <div>
+      <TableOfContents entries={tocEntries} />
       <header style={{ marginBottom: token("--space-10") }}>
         <p
           style={{
@@ -81,7 +119,7 @@ function Overview() {
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: token("--space-10") }}>
           {groups.map(({ group, entries }) => (
-            <section key={group}>
+            <section key={group} id={groupAnchorId(group)}>
               <h2
                 style={{
                   font: token("--t-eyebrow"),
@@ -95,7 +133,11 @@ function Overview() {
               </h2>
               <div style={{ display: "flex", flexDirection: "column", gap: token("--space-9") }}>
                 {entries.map((entry) => (
-                  <ComponentShowcase key={entry.id} entry={entry} />
+                  <ComponentShowcase
+                    key={entry.id}
+                    entry={entry}
+                    anchorId={componentAnchorId(entry.id)}
+                  />
                 ))}
               </div>
             </section>

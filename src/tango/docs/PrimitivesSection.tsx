@@ -842,7 +842,7 @@ function TokenGallery({ buckets }: { buckets: Buckets }): ReactElement {
 export function PrimitivesSection(): ReactElement {
   useMotionKeyframes();
   return (
-    <section aria-labelledby="tango-primitives-heading" style={{ marginBottom: token("--space-10") }}>
+    <section id="tango-toc-tokens" aria-labelledby="tango-primitives-heading" style={{ marginBottom: token("--space-10") }}>
       <p style={eyebrowStyle}>Tokens</p>
       <h2 id="tango-primitives-heading" style={sectionTitleStyle}>
         Design Tokens

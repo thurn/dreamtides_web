@@ -88,10 +88,18 @@ const frameStyle: CSSProperties = {
   background: token("--bg-sunken"),
 };
 
-export function ComponentShowcase({ entry }: { entry: TangoComponent }) {
+export function ComponentShowcase({
+  entry,
+  anchorId,
+}: {
+  entry: TangoComponent;
+  // DOM id the overview's table of contents scrolls to / tracks for this
+  // showcase. Optional so the showcase still renders standalone without a TOC.
+  anchorId?: string;
+}) {
   const Mockup = getMockup(entry.id);
   return (
-    <article style={articleStyle}>
+    <article id={anchorId} style={articleStyle}>
       <div style={headerStyle}>
         <a href={`#/${entry.id}`} style={titleLinkStyle}>
           {entry.title}
