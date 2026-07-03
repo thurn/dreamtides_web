@@ -914,6 +914,96 @@
       "description": "Content rendered inside the pressable element."
     }
   ],
+  "QuestStatusBar": [
+    {
+      "name": "stageRef",
+      "tsType": "RefObject<HTMLElement | null>",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Ref to the screen root (position:absolute inset:0 in the scaled frame). Required."
+    },
+    {
+      "name": "essence",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Essence total shown in the HUD."
+    },
+    {
+      "name": "dreamsigns",
+      "tsType": "QsbDreamsign[]",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "[]",
+      "description": "The dreamsigns to dock (≤ stackThreshold inline, more collapse to a stack + viewer)."
+    },
+    {
+      "name": "deck",
+      "tsType": "string | number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "",
+      "description": "Deck size (used in the deck button's aria-label)."
+    },
+    {
+      "name": "dreamcaller",
+      "tsType": "QsbDreamcaller",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "elevation",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "0",
+      "description": "Lift the essence cluster above the baseline (px)."
+    },
+    {
+      "name": "signElevation",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "0",
+      "description": "Independent elevation for the dreamsign strip (px)."
+    },
+    {
+      "name": "portraitScale",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "2.9",
+      "description": ""
+    },
+    {
+      "name": "portraitSize",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "66",
+      "description": ""
+    },
+    {
+      "name": "signGap",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "8",
+      "description": ""
+    },
+    {
+      "name": "stackThreshold",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "4",
+      "description": ""
+    }
+  ],
   "ResourceChip": [
     {
       "name": "kind",

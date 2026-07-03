@@ -1,0 +1,81 @@
+/* QuestStatusBar — component-owned styles.
+   ================================================================
+   Everything here is scoped under `.tango` so it never leaks onto the
+   rest of the app, matching how tango-tokens.css scopes its declarations.
+
+   The file carries two things:
+     1. `.hud-outline` — the on-media legibility utility (rung 1 of the
+        legibility ladder, R-15 / Principle two), ported VERBATIM from the
+        design source's tokens/base.css. Text and glyphs rendered DIRECTLY
+        on scene art / a portrait carry their own black outline instead of a
+        plate, scrim, or blur behind them: a dense 16-direction black
+        text-shadow dilation that hugs the contour (and keeps the essence
+        diamond's sharp top/bottom POINTS, which a -webkit-text-stroke would
+        bevel flat). NEVER pair with a scrim/wash/vignette — the outline IS
+        the legibility.
+     2. The QuestStatusBar's own structural rules (deck press, Dreamcaller
+        bust sizing, HUD baseline alignment, elevation transform, and the
+        overflow-window entrance keyframe), ported from the design source's
+        `<style id="qsb-styles">` injection. */
+
+/* ---- .hud-outline — the on-media legibility utility (source: tokens/base.css) ---- */
+.tango .hud-outline,
+.tango .hud-outline i,
+.tango .hud-outline span {
+  text-shadow:
+    1.7px 0 0 #000, 1.6px 0.7px 0 #000, 1.2px 1.2px 0 #000, 0.7px 1.6px 0 #000,
+    0 1.7px 0 #000, -0.7px 1.6px 0 #000, -1.2px 1.2px 0 #000, -1.6px 0.7px 0 #000,
+    -1.7px 0 0 #000, -1.6px -0.7px 0 #000, -1.2px -1.2px 0 #000, -0.7px -1.6px 0 #000,
+    0 -1.7px 0 #000, 0.7px -1.6px 0 #000, 1.2px -1.2px 0 #000, 1.6px -0.7px 0 #000,
+    0 2px 6px rgba(0, 0, 0, 0.7);
+}
+
+/* ---- The deck sprite compresses on touch-down by the one press factor ---- */
+.tango .qsbDeck {
+  transition: transform var(--dur-fast) var(--ease-out);
+  transform-origin: center bottom;
+}
+.tango .qsbDeck:active {
+  transform: scale(var(--press-scale, 0.94));
+}
+
+/* ---- Dreamcaller bust: size + inner portrait scale driven by component vars ---- */
+.tango .qsb button[aria-label="Dreamcaller"] {
+  width: var(--qsb-dc-size, 66px) !important;
+  height: var(--qsb-dc-size, 66px) !important;
+}
+.tango .qsb button[aria-label="Dreamcaller"] img {
+  object-position: 50% 0% !important;
+  transform: scale(var(--qsb-dc-scale, 2.9)) !important;
+  transform-origin: 50% 12% !important;
+}
+
+/* ---- HUD baseline: the essence mark hugs its number, and the cluster rests
+   on a shared baseline, lifted by the elevation var. ---- */
+.tango .qsbHud > div > div > span {
+  gap: 0 !important;
+}
+.tango .qsbHud > div {
+  align-items: flex-end !important;
+}
+.tango .qsbHud > div > div {
+  transform: translateY(calc(-1 * var(--qsb-elev, 0px)));
+}
+
+/* ---- Overflow dreamsign-window entrance ---- */
+@keyframes qsbCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tango .qsb * {
+    animation: none !important;
+  }
+}
