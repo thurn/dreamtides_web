@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import type { SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
 import { EssenceGlyph, EssenceValue } from "../components/EssenceValue";
-import { RulesText } from "../components/RulesText";
+import { RulesText } from "../tango/components/RulesText";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { dreamsignIconUrl } from "../atlas/atlas-display";

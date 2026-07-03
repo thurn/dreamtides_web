@@ -1,7 +1,7 @@
 import { useState, type CSSProperties } from "react";
 import { DreamsignHoverCard } from "./DreamsignHoverCard";
-import { HoverPopover } from "./HoverPopover";
-import { RulesText } from "./RulesText";
+import { HoverPopover } from "../tango/components/HoverPopover";
+import { RulesText } from "../tango/components/RulesText";
 import type { Dreamsign } from "../types/quest";
 import { assetUrl } from "../runtime/asset-url";
 

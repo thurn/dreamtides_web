@@ -10,7 +10,7 @@ import {
   DREAMSIGN_HOVER_DELAY_MS,
   DreamsignHoverCard,
 } from "../components/DreamsignHoverCard";
-import { HoverPopover } from "../components/HoverPopover";
+import { HoverPopover } from "../tango/components/HoverPopover";
 import { DreamsignPurgeOverlay } from "./DreamsignPurgeOverlay";
 import "./dreamsign-revelation.css";
 

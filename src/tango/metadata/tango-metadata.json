@@ -61,6 +61,72 @@
       "description": "Content rendered inside the button."
     }
   ],
+  "GlowIcon": [
+    {
+      "name": "iconClass",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Boxicons class(es) for the glyph (e.g. `SPARK_ICON_CLASS`)."
+    },
+    {
+      "name": "color",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Fill color — Boxicons paints via the element's text color."
+    },
+    {
+      "name": "size",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "1em",
+      "description": "Rendered width/height as any CSS length. Defaults to `1em` so an inline\nglyph tracks the surrounding text size. The icon's own `font-size` is\npinned to this value so the `em`-based glow and outline scale with it."
+    },
+    {
+      "name": "glowFilter",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Emitted-light bloom filter. Omit for no glow."
+    },
+    {
+      "name": "shadow",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "When true, adds the soft content-protection shadow beneath the glow."
+    },
+    {
+      "name": "className",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "style",
+      "tsType": "CSSProperties",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "title",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Accessible label; the icon is hidden from assistive tech when unset."
+    }
+  ],
   "GroupPanel": [
     {
       "name": "radius",
@@ -266,6 +332,78 @@
       "description": ""
     }
   ],
+  "HoverPopover": [
+    {
+      "name": "children",
+      "tsType": "ReactNode",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The element that triggers the popover on hover."
+    },
+    {
+      "name": "content",
+      "tsType": "ReactNode | ((context: HoverPopoverContentContext) => ReactNode)",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The popover body. Rendered into a portal when visible."
+    },
+    {
+      "name": "delayMs",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "500",
+      "description": "Delay before showing the popover (ms). Defaults to 500ms."
+    },
+    {
+      "name": "placement",
+      "tsType": "Placement",
+      "unionMembers": [
+        "top",
+        "left"
+      ],
+      "required": false,
+      "defaultValue": "top",
+      "description": "Preferred side to anchor the popover relative to the trigger.\n- `\"top\"` (default) centers the popover above the trigger and flips to\n  the bottom when the trigger sits near the top edge of the viewport.\n- `\"left\"` anchors the popover to the left of the trigger and flips to\n  the right when the trigger sits near the left edge of the viewport.\n  Useful for triggers on the right edge of the viewport (e.g. the\n  right-side deck sidebar) where the popover would otherwise appear\n  detached above or below the row.\n\nIn both cases the popover is shifted along the perpendicular axis as\nneeded so it stays fully inside the viewport."
+    },
+    {
+      "name": "maxWidthPx",
+      "tsType": "number | null",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Override the popover's max-width cap (px). Defaults to 260px, which\nsuits short glossary blurbs. Pass `null` to disable the cap entirely\nwhen `content` is a self-sizing element such as a card preview."
+    },
+    {
+      "name": "triggerAs",
+      "tsType": "\"div\" | \"span\"",
+      "unionMembers": [
+        "div",
+        "span"
+      ],
+      "required": false,
+      "defaultValue": "span",
+      "description": "The DOM element type for the trigger wrapper. Defaults to `\"span\"` for\ninline use within text. Pass `\"div\"` for block-level triggers."
+    },
+    {
+      "name": "className",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Additional class name for the trigger wrapper."
+    },
+    {
+      "name": "style",
+      "tsType": "CSSProperties",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Additional inline style for the trigger wrapper."
+    }
+  ],
   "InfoCard": [
     {
       "name": "variant",
@@ -428,6 +566,62 @@
       "required": false,
       "defaultValue": "{}",
       "description": ""
+    }
+  ],
+  "PipBadge": [
+    {
+      "name": "variant",
+      "tsType": "PipBadgeVariant",
+      "unionMembers": [
+        "spark",
+        "energy"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Which pip this is — picks the fill color."
+    },
+    {
+      "name": "value",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The displayed value (string so callers can pass `\"X\"` for variable cost)."
+    },
+    {
+      "name": "size",
+      "tsType": "\"sm\" | \"md\"",
+      "unionMembers": [
+        "sm",
+        "md"
+      ],
+      "required": false,
+      "defaultValue": "sm",
+      "description": "`\"sm\"` matches the small card stat row; `\"md\"` matches the larger\n`large` card variant in `CardDisplay`. Sizes are tuned so the number\nstays readable but the badge does not overpower adjacent text."
+    },
+    {
+      "name": "scale",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "1",
+      "description": "Multiplier for card renderers that need the pip to follow card text scale."
+    },
+    {
+      "name": "ariaLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional accessible label for screen readers. If omitted, the badge\nuses a sensible default for its variant."
+    },
+    {
+      "name": "tooltip",
+      "tsType": "ReactNode",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional hover/focus tooltip. When provided, the badge becomes its own\nhover anchor. Use a short plain-language description."
     }
   ],
   "PressInfo": [
@@ -1009,9 +1203,9 @@
       "name": "kind",
       "tsType": "ResourceKind",
       "unionMembers": [
-        "essence",
-        "energy",
         "spark",
+        "energy",
+        "essence",
         "points",
         "counter"
       ],
@@ -1058,6 +1252,32 @@
       "required": false,
       "defaultValue": "{}",
       "description": ""
+    }
+  ],
+  "RulesText": [
+    {
+      "name": "text",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The rules text to render."
+    },
+    {
+      "name": "color",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional override color for plain text."
+    },
+    {
+      "name": "pipScale",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional scale for inline resource pips on small card surfaces."
     }
   ],
   "SegmentedControl": [

@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import type { CSSProperties } from "react";
-import { RulesText } from "../components/RulesText";
+import { RulesText } from "../tango/components/RulesText";
 import CardTagEditor from "./CardTagEditor";
 import EditableField from "./EditableField";
 import { readableTextColor, tagColor } from "./tag-color";

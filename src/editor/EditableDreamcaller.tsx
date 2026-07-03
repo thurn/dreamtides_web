@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import type { CSSProperties } from "react";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
-import { RulesText } from "../components/RulesText";
+import { RulesText } from "../tango/components/RulesText";
 import EditableField from "./EditableField";
 import { TIDE_DOT_COLOR } from "./TidePoolModal";
 import type { EditableFieldSaveEntry, EditableFieldValue } from "./save-state";

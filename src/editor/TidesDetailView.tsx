@@ -5,7 +5,7 @@ import { SIZE_PRESETS } from "../components/card-size";
 import { CardView } from "../components/CardView";
 import CardBrowserGrid from "../components/card-browser/CardBrowserGrid";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
-import { RulesText } from "../components/RulesText";
+import { RulesText } from "../tango/components/RulesText";
 import { TIDE_ACCENT_COLOR, TIDE_COLOR_CHIP } from "../components/tide-visuals";
 import {
   TIDES4_COLORS,

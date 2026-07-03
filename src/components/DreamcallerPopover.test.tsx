@@ -11,7 +11,7 @@ vi.mock("./DreamcallerPortrait", () => ({
   DreamcallerPortrait: () => <div data-testid="dreamcaller-portrait" />,
 }));
 
-vi.mock("./RulesText", () => ({
+vi.mock("../tango/components/RulesText", () => ({
   RulesText: ({ text }: { text: string }) => <span>{text}</span>,
 }));
 

@@ -7,7 +7,7 @@ import type {
 } from "../types";
 import { rankSlotIds } from "../types";
 import { DreamcallerPortrait } from "../../components/DreamcallerPortrait";
-import { RulesText } from "../../components/RulesText";
+import { RulesText } from "../../tango/components/RulesText";
 
 export function BattleSideSummaryPopover({
   dreamcaller = null,

@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { RulesText } from "./RulesText";
+import { RulesText } from "../tango/components/RulesText";
 import { CardTermDefinitions } from "./CardTermDefinitions";
 import { definitionSideForCardHover } from "./CardHoverPreview";
 import { extractGlossaryTerms } from "../data/glossary-terms";
-import type { PopoverPlacementSide } from "./hover-popover-placement";
+import type { PopoverPlacementSide } from "../tango/components/hover-popover-placement";
 import type { Dreamsign } from "../types/quest";
 import { assetUrl } from "../runtime/asset-url";
 

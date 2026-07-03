@@ -3,7 +3,7 @@ import "./battle-start.css";
 import type { BattleInit } from "../types";
 import type { CardData } from "../../types/cards";
 import { CardView } from "../../components/CardView";
-import { RulesText } from "../../components/RulesText";
+import { RulesText } from "../../tango/components/RulesText";
 import { EssenceValue } from "../../components/EssenceValue";
 import { dreamcallerImageSrc } from "../../components/DreamcallerPortrait";
 import { dreamscapeSceneUrl } from "../../atlas/atlas-display";

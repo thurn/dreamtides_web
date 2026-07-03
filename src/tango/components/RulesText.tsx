@@ -3,7 +3,7 @@ import { tokenizeRulesText, type TextSegment } from "./card-text";
 import {
   TRANSFIGURE_MARK_END,
   TRANSFIGURE_MARK_START,
-} from "../transfiguration/transfiguration-logic";
+} from "../../runtime/transfigure-markers";
 import { PipBadge } from "./PipBadge";
 import {
   BOLT_ICON_CLASS,

@@ -13,13 +13,13 @@ import {
   CARD_ASPECT_RATIO,
   CARD_CORNER_RADIUS,
 } from "./card-aspect";
-import { formatTypeLine } from "./card-text";
+import { formatTypeLine } from "../tango/components/card-text";
 import { computeCardTextScale } from "./card-display-scale";
-import { BOLT_ICON_CLASS } from "./GlowIcon";
+import { BOLT_ICON_CLASS } from "../tango/components/GlowIcon";
 import { CardStatOrb } from "./CardStatOrb";
 import { TRANSFIGURATION_ICONS } from "../transfiguration/transfiguration-logic";
 import type { CardTransfigurationDisplay } from "../transfiguration/transfiguration-logic";
-import { renderRulesText } from "./RulesText";
+import { renderRulesText } from "../tango/components/RulesText";
 import { useCardTermPopover } from "./useCardTermPopover";
 import { useFitText } from "./useFitText";
 

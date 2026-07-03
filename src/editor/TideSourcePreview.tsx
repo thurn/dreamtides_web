@@ -1,8 +1,8 @@
 import type { CardData } from "../types/cards";
 import { CardView } from "../components/CardView";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
-import { HoverPopover } from "../components/HoverPopover";
-import { RulesText } from "../components/RulesText";
+import { HoverPopover } from "../tango/components/HoverPopover";
+import { RulesText } from "../tango/components/RulesText";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
 import type { EditorDreamcaller } from "./tides-types";
 

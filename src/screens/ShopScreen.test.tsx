@@ -49,7 +49,7 @@ vi.mock("../components/CardOverlay", () => ({
   CardOverlay: () => null,
 }));
 
-vi.mock("../components/RulesText", () => ({
+vi.mock("../tango/components/RulesText", () => ({
   RulesText: ({ text }: { text: string }) => <span>{text}</span>,
 }));
 

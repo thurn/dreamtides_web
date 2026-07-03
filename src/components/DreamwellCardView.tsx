@@ -13,7 +13,7 @@ import {
 } from "../data/card-database";
 import type { ArtCrop } from "../types/cards";
 import { CardStatOrb } from "./CardStatOrb";
-import { renderRulesText } from "./RulesText";
+import { renderRulesText } from "../tango/components/RulesText";
 import { useCardTermPopover } from "./useCardTermPopover";
 
 /**

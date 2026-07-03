@@ -1,5 +1,5 @@
 import type { GlossaryEntry } from "../data/glossary";
-import { RulesText } from "./RulesText";
+import { RulesText } from "../tango/components/RulesText";
 
 /**
  * Shared visual card used to render a single glossary entry as a

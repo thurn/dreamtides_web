@@ -17,7 +17,7 @@ import {
   DreamcallerPortrait,
   dreamcallerImageSrc,
 } from "../components/DreamcallerPortrait";
-import { HoverPopover } from "../components/HoverPopover";
+import { HoverPopover } from "../tango/components/HoverPopover";
 import { DreamcallerPopover } from "../components/DreamcallerPopover";
 import { extractGlossaryTerms } from "../data/glossary-terms";
 import { GlossaryDefinitionCard } from "../components/GlossaryDefinitionCard";

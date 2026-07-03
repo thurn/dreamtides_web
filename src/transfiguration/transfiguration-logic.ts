@@ -1,5 +1,9 @@
 import type { CardData } from "../types/cards";
 import type { TransfigurationType } from "../types/quest";
+import {
+  TRANSFIGURE_MARK_END,
+  TRANSFIGURE_MARK_START,
+} from "../runtime/transfigure-markers";
 
 /** Color hex value for each transfiguration type. */
 export const TRANSFIGURATION_COLORS: Readonly<
@@ -70,8 +74,7 @@ export const TRANSFIGURATION_ICONS: Readonly<
  * clause, a replaced phrase, or a bumped number — so only the modified text is
  * tinted, never the printed text that came with the card.
  */
-export const TRANSFIGURE_MARK_START = "\u{E000}";
-export const TRANSFIGURE_MARK_END = "\u{E001}";
+export { TRANSFIGURE_MARK_END, TRANSFIGURE_MARK_START };
 
 function mark(text: string): string {
   return TRANSFIGURE_MARK_START + text + TRANSFIGURE_MARK_END;

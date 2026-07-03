@@ -6,7 +6,7 @@ import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
 import { EssenceValue } from "../components/EssenceValue";
 import { HoverZoomCard } from "../components/HoverZoomCard";
-import { HoverPopover } from "../components/HoverPopover";
+import { HoverPopover } from "../tango/components/HoverPopover";
 import {
   DREAMSIGN_HOVER_DELAY_MS,
   DreamsignHoverCard,

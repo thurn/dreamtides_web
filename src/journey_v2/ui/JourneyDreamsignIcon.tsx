@@ -2,7 +2,7 @@ import type { CSSProperties, ReactNode } from "react";
 import {
   CARD_HOVER_PREVIEW_DELAY_MS,
   HoverPopover,
-} from "../../components/HoverPopover";
+} from "../../tango/components/HoverPopover";
 import { DreamsignHoverCard } from "../../components/DreamsignHoverCard";
 import type { Dreamsign } from "../../types/quest";
 import type { JourneyDreamsignObject } from "./offerPresentation";

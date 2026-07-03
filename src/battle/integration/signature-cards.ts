@@ -1,6 +1,6 @@
 import type { CardData } from "../../types/cards";
 import type { Rarity } from "../../types/cards";
-import { tokenizeRulesText, type TextSegment } from "../../components/card-text";
+import { tokenizeRulesText, type TextSegment } from "../../tango/components/card-text";
 
 /**
  * A card chosen to represent an opponent Dreamcaller's ability before battle.

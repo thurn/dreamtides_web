@@ -7,7 +7,7 @@ import {
   hasGlossaryTerm,
   lookupGlossaryTerm,
 } from "./glossary";
-import { tokenizeRulesText } from "../components/card-text";
+import { tokenizeRulesText } from "../tango/components/card-text";
 
 const SRC_DIR = join(__dirname, "..");
 
@@ -85,7 +85,7 @@ describe("glossary", () => {
   // import from it.
   it("is the single source of truth shared by the card-text tooltip and the glossary popup", () => {
     const cardText = readFileSync(
-      join(SRC_DIR, "components", "card-text.ts"),
+      join(SRC_DIR, "tango", "components", "card-text.ts"),
       "utf8",
     );
     const popup = readFileSync(
@@ -95,7 +95,7 @@ describe("glossary", () => {
     expect(
       cardText,
       "card-text.ts must look up terms from src/data/glossary",
-    ).toMatch(/from\s+"\.\.\/data\/glossary"/);
+    ).toMatch(/from\s+"\.\.\/\.\.\/data\/glossary"/);
     expect(
       popup,
       "GlossaryPopup.tsx must source its entries from src/data/glossary",

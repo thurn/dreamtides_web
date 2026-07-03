@@ -16,6 +16,7 @@ import { motesDemo } from "./demos/motes";
 import { pressableDemo } from "./demos/pressable";
 import { questStatusBarDemo } from "./demos/quest-status-bar";
 import { resourceChipDemo } from "./demos/resource-chip";
+import { rulesTextDemo } from "./demos/rules-text";
 import { segmentedControlDemo } from "./demos/segmented-control";
 import { statTileDemo } from "./demos/stat-tile";
 import { tidePillDemo } from "./demos/tide-pill";
@@ -72,6 +73,7 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   infoCardDemo,
   groupPanelDemo,
   questStatusBarDemo,
+  rulesTextDemo,
 ];
 
 /** Look up a registry entry by its route id. */

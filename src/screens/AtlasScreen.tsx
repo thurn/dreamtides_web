@@ -8,7 +8,7 @@ import {
 } from "react";
 import { useQuest } from "../state/quest-context";
 import { AtlasNode, type AtlasNodeView } from "../components/AtlasNode";
-import { RulesText } from "../components/RulesText";
+import { RulesText } from "../tango/components/RulesText";
 import {
   regenerateAtlasForProgress,
   revealedAtlasSite,

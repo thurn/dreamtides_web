@@ -5,7 +5,7 @@ import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { DreamsignArtTile } from "../components/DreamsignArtTile";
 import { EssenceGlyph } from "../components/EssenceValue";
-import { RulesText } from "../components/RulesText";
+import { RulesText } from "../tango/components/RulesText";
 
 /** Props for the RewardSiteScreen component. */
 interface RewardSiteScreenProps {

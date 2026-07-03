@@ -24,7 +24,7 @@ import {
 } from "../transfiguration/transfiguration-logic";
 import { computeDeckSummary } from "./deck-summary";
 import { DreamcallerPortrait } from "./DreamcallerPortrait";
-import { RulesText } from "./RulesText";
+import { RulesText } from "../tango/components/RulesText";
 import {
   applyCardStatOverride,
   applyDeckEntryCardModification,

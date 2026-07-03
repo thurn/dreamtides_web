@@ -9,13 +9,13 @@ import {
   CARD_HOVER_PREVIEW_DELAY_MS,
   CARD_HOVER_PREVIEW_WIDTH_PX,
   HoverPopover,
-} from "../components/HoverPopover";
+} from "../tango/components/HoverPopover";
 import {
   OFFERING_ACCENT,
   OfferingAcceptButton,
   OfferingScreenHeader,
 } from "../components/OfferingScreen";
-import { PipBadge } from "../components/PipBadge";
+import { PipBadge } from "../tango/components/PipBadge";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import {
   countRemainingCards,
