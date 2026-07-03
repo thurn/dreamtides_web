@@ -11,6 +11,7 @@ import type { CSSProperties } from "react";
 import { useTangoRoute } from "./route";
 import { TANGO_COMPONENTS, type TangoComponent } from "./registry";
 import { ComponentPage } from "./ComponentPage";
+import { IntroSection } from "./IntroSection";
 import { token } from "../primitives/tokens";
 
 const pageStyle: CSSProperties = {
@@ -61,6 +62,8 @@ function Overview() {
         </p>
         <h1 style={{ font: token("--t-display"), margin: 0 }}>Tango</h1>
       </header>
+
+      <IntroSection />
 
       {groups.length === 0 ? (
         <p style={{ color: token("--text-muted"), font: token("--t-body") }}>
