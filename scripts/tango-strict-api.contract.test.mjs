@@ -54,6 +54,28 @@ const surface = extractPropMeta(files);
 /** Props whose very presence re-opens an arbitrary-customization escape hatch. */
 const BANNED_PROP_NAMES = new Set(["style", "className"]);
 
+/**
+ * The CONTAINER components — a card / pressable / panel wrapper whose job is to
+ * hold and frame caller-supplied content — that may legitimately take `children`
+ * and raw node slots. Keyed by react-docgen DISPLAY NAME (the AST rule's
+ * CONTAINER_PROPS_TYPES is the same allowlist keyed by `*Props` type name). This
+ * list additionally covers `Pressable`, a primitive the AST rule doesn't scan:
+ * a transparent interaction mechanism that forwards `children` onto the element
+ * it wraps. Every other component must render copy from strict, typed props.
+ */
+const CONTAINER_COMPONENTS = new Set([
+  "Button",
+  "GroupPanel",
+  "HoverPopover",
+  "PressPopover",
+  "PressInfo",
+  "TidePill",
+  "Pressable",
+]);
+
+/** Matches a React-node family type anywhere in a resolved tsType string. */
+const REACT_NODE_TYPE = /\b(ReactNode|ReactElement|ReactChild|ReactPortal)\b|JSX\.Element/;
+
 describe("Tango strict-API contract (resolved surface)", () => {
   it("finds a non-trivial component surface to check", () => {
     // Guard against extractPropMeta silently returning nothing (which would make
@@ -79,6 +101,31 @@ describe("Tango strict-API contract (resolved surface)", () => {
       for (const prop of props ?? []) {
         if (/CSSProperties/.test(prop.tsType ?? "")) {
           offenders.push(`${component}.${prop.name}: ${prop.tsType}`);
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
+
+  it("only container components take `children` or a raw ReactNode slot", () => {
+    // The AST rule catches this on the source; this asserts on the RESOLVED
+    // surface, so a node slot that leaks in through an extended/aliased type
+    // (or a primitive the AST rule doesn't scan, like Pressable) still fails.
+    // A render prop that RETURNS a node is a function type, not a raw slot — its
+    // resolved tsType reads `(...) => ReactNode` at the top level, so we exempt
+    // any prop whose type is a bare arrow/function signature.
+    const offenders = [];
+    for (const [component, props] of Object.entries(surface)) {
+      if (CONTAINER_COMPONENTS.has(component)) {
+        continue;
+      }
+      for (const prop of props ?? []) {
+        const tsType = prop.tsType ?? "";
+        const isFunctionType = /=>/.test(tsType.split("|")[0]);
+        if (prop.name === "children") {
+          offenders.push(`${component}.children`);
+        } else if (REACT_NODE_TYPE.test(tsType) && !isFunctionType) {
+          offenders.push(`${component}.${prop.name}: ${tsType}`);
         }
       }
     }

@@ -1,6 +1,6 @@
 // Registry demo entry for StatTile — see resource-chip.tsx for the recipe
-// this follows. `value` and `sub` are ReactNode-slot props with no generated
-// control, so they're seeded via sampleContent instead of defaultArgs.
+// this follows. `value` and `sub` are plain strings, so they surface as text
+// controls and are seeded via defaultArgs.
 //
 // Unlike ResourceChip/Button, StatTile's own props (`label`, `value`) are
 // required, which the registry's `ComponentType<Record<string, unknown>>`
@@ -10,14 +10,13 @@
 // defaults them so `Component` type-checks; `docName` still points at the
 // real StatTile so the props table reports its actual (required) API.
 
-import type { ReactNode } from "react";
 import { StatTile } from "../../components/StatTile";
 import type { TangoComponent } from "../registry";
 
 interface StatTileDemoArgs {
   label?: string;
-  value?: ReactNode;
-  sub?: ReactNode;
+  value?: string;
+  sub?: string;
   accent?: "essence" | "energy" | "spark" | "points";
 }
 
@@ -47,11 +46,9 @@ export const statTileDemo: TangoComponent = {
   demo: {
     defaultArgs: {
       label: "Essence",
-      accent: "essence",
-    },
-    sampleContent: {
       value: "240",
       sub: "this run",
+      accent: "essence",
     },
   },
 };

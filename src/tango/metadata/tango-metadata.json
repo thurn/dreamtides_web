@@ -1512,18 +1512,18 @@
     },
     {
       "name": "value",
-      "tsType": "ReactNode",
+      "tsType": "string",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "The headline figure. Any node (string, number, or richer markup)."
+      "description": "The headline figure, already resolved to display text (e.g. \"240\", \"4 / 6\")."
     },
     {
       "name": "sub",
-      "tsType": "ReactNode",
+      "tsType": "string",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "null",
+      "defaultValue": null,
       "description": "Optional secondary line under the value."
     },
     {

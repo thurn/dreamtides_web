@@ -12,7 +12,6 @@
 // Ported from the Claude Design "Dreamtides Mobile" project
 // (components/pills/StatTile.jsx / .d.ts).
 
-import type { ReactNode } from "react";
 import { token } from "../primitives/tokens";
 
 /** Resource-role tokens a StatTile value may be tinted with. */
@@ -29,10 +28,10 @@ const ACCENT_TOKENS: Record<StatTileAccent, string> = {
 export interface StatTileProps {
   /** Small uppercase caption above the value. */
   label: string;
-  /** The headline figure. Any node (string, number, or richer markup). */
-  value: ReactNode;
+  /** The headline figure, already resolved to display text (e.g. "240", "4 / 6"). */
+  value: string;
   /** Optional secondary line under the value. */
-  sub?: ReactNode;
+  sub?: string;
   /** Tint the value with a resource-role hue. Plain text when omitted. */
   accent?: StatTileAccent;
 }
@@ -46,7 +45,7 @@ export interface StatTileProps {
 export function StatTile({
   label,
   value,
-  sub = null,
+  sub,
   accent,
 }: StatTileProps) {
   const accentColor = accent ? ACCENT_TOKENS[accent] : null;

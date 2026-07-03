@@ -17,6 +17,21 @@ import path from "node:path";
  *      `ButtonHTMLAttributes`, `ComponentPropsWithoutRef`, `JSX.Intrinsic
  *      Elements[...]`, …) — that spreads every HTML attribute back into the API.
  *   4. an index signature (`[k: string]: …`) — accepts arbitrary keys.
+ *   5. a `children` member — an open slot for arbitrary caller markup.
+ *   6. any member typed with a React-node family type (`ReactNode`,
+ *      `ReactElement`, `ReactChild`, `JSX.Element`, and their unions/arrays) —
+ *      a raw node content slot (e.g. `value: ReactNode`, `card: ReactNode`).
+ *
+ * Cases 5 and 6 are the exception to "every escape hatch is banned": a small
+ * allowlist of CONTAINER components — a card / pressable / panel wrapper whose
+ * whole job is to hold and frame caller-supplied content — legitimately take
+ * `children` and node slots. That allowlist is `CONTAINER_PROPS_TYPES` below,
+ * keyed by the exact `*Props` type name. Every other component must render its
+ * copy from strict, typed props (a `string` it resolves before display, a
+ * `RichText` model, an enumerated variant) rather than swallowing a node. A
+ * function-typed prop that RETURNS a node (a render prop, `(ctx) => ReactNode`)
+ * is not a raw node slot and is never flagged. Cases 1–4 are banned even on a
+ * container (a wrapper still owns its own appearance).
  *
  * The rule fires only on TYPE DECLARATIONS whose name ends in `Props`, so it
  * never touches the many internal `const s: CSSProperties = {…}` locals or
@@ -40,6 +55,74 @@ const SURFACE_PREFIXES = ["src/tango/components/"];
 
 /** Member names that are an arbitrary-style/appearance passthrough. */
 const BANNED_MEMBER_NAMES = new Set(["style", "className"]);
+
+/**
+ * `*Props` type names for the CONTAINER components — a card / pressable / panel
+ * wrapper — that are allowed to take `children` and raw node slots because their
+ * whole job is to hold and frame caller-supplied content. Everything else must
+ * render its copy from strict, typed props. Keyed by the exact type name so a
+ * file that declares both a container and a leaf `*Props` (e.g. InfoCard.tsx,
+ * which owns both the leaf `InfoCardProps` and the wrapper `PressPopoverProps` /
+ * `PressInfoProps`) is judged per-declaration. Add a NEW entry only for a
+ * genuine wrapper — the point is to force that to be a deliberate decision.
+ * `src/tango/primitives/` (e.g. `Pressable`) is out of this rule's scope
+ * entirely; primitives are transparent DOM-forwarding mechanisms and are guarded
+ * by scripts/tango-strict-api.contract.test.mjs instead.
+ */
+const CONTAINER_PROPS_TYPES = new Set([
+  "ButtonProps",
+  "GroupPanelProps",
+  "HoverPopoverProps",
+  "PressPopoverProps",
+  "PressInfoProps",
+  "TidePillProps",
+]);
+
+/** True when a bare type-reference name is a React-node family type. */
+function isReactNodeTypeName(name) {
+  return (
+    name === "ReactNode" ||
+    name === "ReactElement" ||
+    name === "ReactChild" ||
+    name === "ReactChildren" ||
+    name === "ReactNodeArray" ||
+    name === "ReactPortal"
+  );
+}
+
+/**
+ * True when a member's OWN type is a raw React-node content slot — a node
+ * family type, or a union / array whose members are. Does NOT descend into
+ * function types, so a render prop (`(ctx) => ReactNode`) is not flagged.
+ */
+export function isReactNodeType(typeNode) {
+  if (!typeNode) {
+    return false;
+  }
+  if (typeNode.type === "TSTypeReference") {
+    const tn = typeNode.typeName;
+    // `JSX.Element` — a TSQualifiedName with a `JSX` namespace.
+    if (
+      tn?.type === "TSQualifiedName" &&
+      tn.left?.type === "Identifier" &&
+      tn.left.name === "JSX" &&
+      tn.right?.name === "Element"
+    ) {
+      return true;
+    }
+    // `ReactNode`, `React.ReactNode`, `ReactElement`, …
+    return isReactNodeTypeName(entityRightName(tn));
+  }
+  // `ReactNode | undefined`, `ReactNode | ((ctx) => ReactNode)`, …
+  if (typeNode.type === "TSUnionType") {
+    return typeNode.types.some(isReactNodeType);
+  }
+  // `ReactNode[]`.
+  if (typeNode.type === "TSArrayType") {
+    return isReactNodeType(typeNode.elementType);
+  }
+  return false;
+}
 
 /** Convert an OS path to a repo-relative POSIX path against ESLint's cwd. */
 export function toRepoRelativePosix(absolutePath, cwd) {
@@ -126,6 +209,10 @@ const rule = {
         "A Tango *Props type must not extend or intersect the DOM-attribute type `{{type}}` — that spreads every HTML attribute back into the API. Enumerate the exact props you support.",
       indexSignature:
         "An index signature lets a Tango *Props type accept arbitrary keys. List the exact props instead.",
+      childrenProp:
+        "Only container components (a card / pressable / panel wrapper) may take `children`. `{{type}}` isn't in the container allowlist — render its content from strict, typed props (a resolved string, a RichText model, an enumerated variant), or add `{{type}}` to CONTAINER_PROPS_TYPES if it really is a wrapper.",
+      reactNodeProp:
+        "Prop `{{name}}` on `{{type}}` is a raw ReactNode content slot — an arbitrary-markup escape hatch. Take a strict model instead (a string you resolve before display, a RichText model, or an enumerated variant). Only container components in the allowlist may hold caller nodes.",
     },
   },
 
@@ -153,8 +240,14 @@ const rule = {
       return typeof name === "string" && /Props$/.test(name);
     }
 
-    /** Report banned property signatures / index signatures in a member list. */
-    function checkMembers(members) {
+    /**
+     * Report banned property signatures / index signatures in a member list.
+     * `propsName` is the enclosing `*Props` type name; when it names a container
+     * in CONTAINER_PROPS_TYPES the `children` / raw-node-slot bans are lifted
+     * (the style/CSS bans are not — a wrapper still owns its own appearance).
+     */
+    function checkMembers(members, propsName) {
+      const isContainer = CONTAINER_PROPS_TYPES.has(propsName);
       for (const member of members ?? []) {
         if (member.type === "TSIndexSignature") {
           context.report({ node: member, messageId: "indexSignature" });
@@ -183,6 +276,26 @@ const rule = {
             node: member,
             messageId: "cssPropertiesMember",
             data: { name: typeof keyName === "string" ? keyName : "?" },
+          });
+          continue;
+        }
+        if (isContainer) {
+          // A whitelisted wrapper may hold `children` and node slots.
+          continue;
+        }
+        if (keyName === "children") {
+          context.report({
+            node: member,
+            messageId: "childrenProp",
+            data: { type: propsName },
+          });
+          continue;
+        }
+        if (isReactNodeType(member.typeAnnotation?.typeAnnotation)) {
+          context.report({
+            node: member,
+            messageId: "reactNodeProp",
+            data: { name: typeof keyName === "string" ? keyName : "?", type: propsName },
           });
         }
       }
@@ -239,7 +352,7 @@ const rule = {
             });
           }
         }
-        checkMembers(node.body?.body);
+        checkMembers(node.body?.body, node.id.name);
       },
 
       TSTypeAliasDeclaration(node) {
@@ -251,13 +364,13 @@ const rule = {
           return;
         }
         if (t.type === "TSTypeLiteral") {
-          checkMembers(t.members);
+          checkMembers(t.members, node.id.name);
           return;
         }
         if (t.type === "TSIntersectionType") {
           for (const part of t.types) {
             if (part.type === "TSTypeLiteral") {
-              checkMembers(part.members);
+              checkMembers(part.members, node.id.name);
             } else {
               checkHeritageTypeRef(part);
             }
