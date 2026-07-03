@@ -34,6 +34,7 @@ import type { CSSProperties, ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { InfoCard } from "./InfoCard";
 import { RulesText } from "./RulesText";
+import { CardTermDefinitions } from "./CardTermDefinitions";
 import { token } from "../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
 import { assetUrl } from "../../runtime/asset-url";
@@ -107,14 +108,33 @@ export interface DreamsignInfoCardProps {
  * via `RulesText` so keywords highlight in place. Use it as the content of a
  * bespoke trigger / placement engine (e.g. a screen's own `HoverPopover`); the
  * `Dreamsign` tile below wires this same card to the input-adaptive engine.
+ *
+ * When the effect text references glossary keywords (e.g. "Reclaim", "Banish"),
+ * their definitions stack directly beneath the InfoCard object card via the
+ * shared `CardTermDefinitions` — the same term-detection helper
+ * (`extractGlossaryTerms`) that drives the card hover-help panel. The
+ * definitions render as part of THIS reveal so a player reads what a
+ * highlighted keyword MEANS with no extra interaction; they are pure display
+ * (the InfoCard reveal is `pointerEvents: none` and transient), never a nested
+ * interactive popover. `CardTermDefinitions` returns `null` for effect text
+ * with no glossary terms, so plain dreamsigns show the card alone.
  */
 export function DreamsignInfoCard({
   dreamsign,
   testid,
 }: DreamsignInfoCardProps): React.ReactElement {
   const showImage = Boolean(dreamsign.imageName);
+  const effect = dreamsign.effectDescription ?? "";
   return (
-    <div data-testid={testid}>
+    <div
+      data-testid={testid}
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 8,
+      }}
+    >
       <InfoCard
         variant="object"
         image={
@@ -126,11 +146,11 @@ export function DreamsignInfoCard({
           dreamsign.isBane ? `${OBJECT_SHADOW} grayscale(0.5)` : OBJECT_SHADOW
         }
         title={dreamsignTitle(dreamsign)}
-        body={
-          dreamsign.effectDescription ? (
-            <RulesText text={dreamsign.effectDescription} />
-          ) : null
-        }
+        body={effect ? <RulesText text={effect} /> : null}
+      />
+      <CardTermDefinitions
+        text={effect}
+        testId={testid ? `${testid}-definition-stack` : undefined}
       />
     </div>
   );

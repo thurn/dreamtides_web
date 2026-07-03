@@ -5,6 +5,8 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { Dreamsign } from "./Dreamsign";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
+import { GLOSSARY, type GlossaryEntry } from "../../data/glossary";
+import { extractGlossaryTerms } from "../../data/glossary-terms";
 
 /**
  * The unified dreamsign entity (formerly `DreamsignArtTile` +
@@ -157,6 +159,82 @@ describe("Dreamsign", () => {
     expect(container.querySelector("img")).toBeNull();
     // Some visible placeholder must still appear so the slot is not empty.
     expect(container.textContent).not.toBe("");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  /**
+   * A glossary fixture derived live from `GLOSSARY` so this test can never
+   * hardcode a term/definition string that a content edit would invalidate. We
+   * pick the first entry whose bare term is detected by `extractGlossaryTerms`
+   * inside a plausible effect sentence, and whose definition contains a word
+   * that does NOT already appear in that effect text (or in the term itself) —
+   * so asserting on it proves the DEFINITION rendered, not merely the effect
+   * text's colored keyword highlight.
+   */
+  function pickGlossaryFixture(): {
+    entry: GlossaryEntry;
+    effect: string;
+    definitionWord: string;
+  } {
+    for (const entry of GLOSSARY) {
+      const effect = `A dreamsign that lets you ${entry.term} things.`;
+      if (!extractGlossaryTerms(effect).includes(entry)) {
+        continue;
+      }
+      const effectWords = new Set(
+        (effect.toLowerCase().match(/[a-z]+/g) ?? []),
+      );
+      const definitionWord = (entry.definition.match(/[A-Za-z]{4,}/g) ?? []).find(
+        (word) => !effectWords.has(word.toLowerCase()),
+      );
+      if (definitionWord !== undefined) {
+        return { entry, effect, definitionWord };
+      }
+    }
+    throw new Error("No glossary entry yielded a usable definition fixture");
+  }
+
+  it("shows glossary term definitions in the reveal when the effect uses a keyword", () => {
+    const { effect, definitionWord } = pickGlossaryFixture();
+    const sign = makeDreamsign({
+      name: "Keyworded",
+      effectDescription: effect,
+      imageName: "keyworded.png",
+    });
+
+    const { container, root } = mountInto(
+      <Dreamsign dreamsign={sign} sizePx={64} revealTestid="dreamsign-reveal" />,
+    );
+
+    const tile = container.querySelector<HTMLElement>(
+      '[data-testid="dreamsign-art-tile"]',
+    );
+    // Coarse pointer (jsdom has no matchMedia): press-down reveals.
+    act(() => {
+      tile?.dispatchEvent(new Event("pointerdown", { bubbles: true }));
+    });
+
+    const reveal = document.body.querySelector(
+      '[data-testid="dreamsign-reveal"]',
+    );
+    expect(reveal).not.toBeNull();
+    // The definition stack is rendered as part of the reveal...
+    expect(
+      reveal?.querySelector('[data-testid="dreamsign-reveal-definition-stack"]'),
+    ).not.toBeNull();
+    // ...and it exposes the keyword's DEFINITION text, not just the highlight.
+    expect(reveal?.textContent).toContain(definitionWord);
+
+    act(() => {
+      tile?.dispatchEvent(new Event("pointerup", { bubbles: true }));
+    });
+    // Dismissing the reveal takes the definitions with it.
+    expect(
+      document.body.querySelectorAll('[data-testid="dreamsign-reveal"]').length,
+    ).toBe(0);
 
     act(() => {
       root.unmount();
