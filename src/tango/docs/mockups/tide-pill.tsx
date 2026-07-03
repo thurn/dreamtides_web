@@ -35,7 +35,7 @@ const GROUPS: RoleGroup[] = [
   },
   {
     role: "Theme",
-    blurb: "A random subset of your Dreamcaller's facet tides.",
+    blurb: "Facet tides carrying a Dreamcaller's themes.",
     tides: [
       { id: "tide-fac-03", displayName: "The Worldbreaker", tone: "gold" },
       { id: "tide-fac-05", displayName: "Teeming Thicket", tone: "green" },
@@ -44,11 +44,11 @@ const GROUPS: RoleGroup[] = [
   },
   {
     role: "Broad",
-    blurb: "Topped up with broad tides until the pool is full.",
+    blurb: "Neutral tides that top up any pool until it is full.",
     tides: [
       { id: "tide-neu-01", displayName: "The Undertow", tone: "blue" },
       { id: "tide-neu-03", displayName: "Rising Power", tone: "rust" },
-      { id: "tide-sig-18", displayName: "Drums of War", tone: "red" },
+      { id: "tide-neu-04", displayName: "March of the Mighty", tone: "red" },
     ],
   },
 ];
@@ -82,7 +82,7 @@ export function TidePillMockup() {
           Draft Pool
         </p>
         <h1 style={{ font: token("--t-display"), margin: `${token("--space-3")} 0 0`, color: token("--text-primary") }}>
-          Tides in This Run
+          Tides by Construction Role
         </h1>
       </div>
 
@@ -131,7 +131,7 @@ export function TidePillMockup() {
 
       <SceneCaption
         eyebrow="Tide Pill"
-        title="Real tide displayName values from data/tides4.jsonc, grouped by their real Signature/Theme/Broad pool role."
+        title="Real tide displayName values from data/tides4.jsonc, each shown under its real construction role: Signature, Theme (facet), or Broad (neutral)."
         corner="bottom-left"
       />
     </div>
