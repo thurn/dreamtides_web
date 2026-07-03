@@ -9,7 +9,7 @@ import {
 import { createPortal } from "react-dom";
 import { logEventOnce } from "../logging";
 import { extractGlossaryTerms } from "../data/glossary-terms";
-import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
+import { GlossaryDefinitionCard } from "../tango/components/GlossaryDefinitionCard";
 
 /**
  * Wraps a medium-size card so that hovering it grows the card itself in place

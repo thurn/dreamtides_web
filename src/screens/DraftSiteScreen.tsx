@@ -31,7 +31,7 @@ import { resolveNodeAffiliationWeights } from "../affiliations/affiliation-weigh
 import type { CardData } from "../types/cards";
 import type { DeckEntry } from "../types/quest";
 import { cardImageUrl } from "../data/card-database";
-import { CARD_ASPECT_RATIO } from "../components/card-aspect";
+import { CARD_ASPECT_RATIO } from "../tango/components/card-aspect";
 import { DRAFT_OFFER_CARD_WIDTH } from "../components/card-size";
 import { logEvent } from "../logging";
 

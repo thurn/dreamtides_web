@@ -1,4 +1,4 @@
-import { extractGlossaryTerms } from "../data/glossary-terms";
+import { extractGlossaryTerms } from "../../data/glossary-terms";
 import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
 
 /**

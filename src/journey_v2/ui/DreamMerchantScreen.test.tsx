@@ -16,7 +16,7 @@ import { makeMerchantTestCard } from "../testing/fixtures";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { DreamMerchantScreen } from "./DreamMerchantScreen";
 
-vi.mock("../../components/CardView", () => ({
+vi.mock("../../tango/components/CardView", () => ({
   CardView: ({ card }: { card: CardData }) => (
     <div data-testid="mock-card-view" data-card-number={card.cardNumber}>
       {card.name}

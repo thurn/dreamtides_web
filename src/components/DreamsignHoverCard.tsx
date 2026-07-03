@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { RulesText } from "../tango/components/RulesText";
-import { CardTermDefinitions } from "./CardTermDefinitions";
+import { CardTermDefinitions } from "../tango/components/CardTermDefinitions";
 import { definitionSideForCardHover } from "./CardHoverPreview";
 import { extractGlossaryTerms } from "../data/glossary-terms";
 import type { PopoverPlacementSide } from "../tango/components/hover-popover-placement";

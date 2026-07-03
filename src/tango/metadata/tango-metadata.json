@@ -61,6 +61,245 @@
       "description": "Content rendered inside the button."
     }
   ],
+  "CardStatOrb": [
+    {
+      "name": "variant",
+      "tsType": "CardStatOrbVariant",
+      "unionMembers": [
+        "energy",
+        "spark",
+        "dreamwellEnergy"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "value",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Displayed value (string so callers can pass `\"X\"` for variable cost)."
+    },
+    {
+      "name": "sizeVar",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "CSS length for the square orb diameter (e.g. `var(--cv-energy-orb-size)`)."
+    },
+    {
+      "name": "numberSizeVar",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "CSS length for the digit size — the single-digit ceiling, which doubles as\nthe digit box edge (e.g. `var(--cv-energy-orb-font-size)`). Multi-digit\nvalues auto-shrink below this to fit."
+    },
+    {
+      "name": "numberCapPx",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Upper bound (px) for the digit auto-shrink search. The displayed size is\nthe smaller of the CSS digit ceiling and the fitted size, so this only\nneeds to sit at or above the rendered digit size."
+    },
+    {
+      "name": "ariaLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "tooltip",
+      "tsType": "ReactNode",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "tintColor",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Tint applied to the digit when the stat has been changed by a\ntransfiguration (e.g. a bumped spark or halved energy cost). Only the number\npicks up the tint; the resource glyph behind it keeps its resource hue so a\nchanged stat still reads as the same kind of resource."
+    }
+  ],
+  "CardTermDefinitions": [
+    {
+      "name": "text",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The rules text to scan for glossary terms."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional test id for the stack container."
+    },
+    {
+      "name": "side",
+      "tsType": "\"left\" | \"right\"",
+      "unionMembers": [
+        "left",
+        "right"
+      ],
+      "required": false,
+      "defaultValue": null,
+      "description": "Which side of the card the panel sits on, exposed for layout/tests."
+    }
+  ],
+  "GameCard": [
+    {
+      "name": "card",
+      "tsType": "CardData | Readonly<CardData>",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "onClick",
+      "tsType": "(() => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "selected",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": ""
+    },
+    {
+      "name": "selectionColor",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "#f97316",
+      "description": ""
+    },
+    {
+      "name": "transfiguration",
+      "tsType": "CardTransfigurationDisplay",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "When set, paints the card as transfigured: a small colored gem follows the\nname, the changed corner stat(s) take the tint, and only the added/changed\nrules text is tinted (driven by the descriptor's marked text). The card\nitself should already carry the transfigured stats and rules text — pass the\n`card` and `display` from `buildTransfigurationDisplay` together."
+    },
+    {
+      "name": "className",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Additional CSS class name for the root element."
+    },
+    {
+      "name": "large",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Use larger text sizes for rules text, name, type line, and stats."
+    },
+    {
+      "name": "figment",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Render the figment frame (rules §Figments): no energy orb, the spark floats\nas a large mark in the top-right corner instead of inside a name bar, and\nthe rules box takes a black-on-light frosted treatment. A figment has no\nname bar by default; pass `figmentTitleBar` to show one (for a named figment\nlike a Legionnaire, or while its name is being edited)."
+    },
+    {
+      "name": "figmentTitleBar",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "In figment mode, render the top title bar holding the card name (left\naligned, dark character-card treatment). Ignored when `figment` is false."
+    },
+    {
+      "name": "hideRulesText",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Hide rules text for dense card surfaces that show identity and stats."
+    },
+    {
+      "name": "suppressHoverHelp",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "When true, the corner stat tooltips and the card's term-definition hover\npanel are suppressed. The card editor uses this to keep hover behavior calm\nacross a dense grid, and the card-preview surfaces\n(`CardHoverPreview` / `BattleCardHoverPreview`) use it on the enlarged card\nbecause they render their own definitions panel alongside the preview."
+    },
+    {
+      "name": "slots",
+      "tsType": "CardViewSlots",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "{}",
+      "description": "Optional editor wrappers for individual rendered card slots."
+    },
+    {
+      "name": "onRulesFontSizeChange",
+      "tsType": "((fontSizePx: number) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Called with the rules-text font size (in px) the auto-shrink fitter\ncomputed to fit the rules box, whenever it changes. The card editor uses\nthis to drive its font-size overlay and font-size sort."
+    },
+    {
+      "name": "onBoxTopFracChange",
+      "tsType": "((boxTopFrac: number | null) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Called with the rules text box's top as a fraction of card height (null when\nthe card has no rules box or it is not yet measured), whenever it changes.\nThe art-crop editor uses this to floor zoom-out and pan against the same\nbox-relative safe area the card renders with."
+    },
+    {
+      "name": "eagerRulesFit",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Measure the rules-text fit immediately instead of deferring until the card\nnears the viewport. The card editor sets this while sorting by font size so\nevery card reports a stable fitted size up front; without it the sort would\nreshuffle endlessly as off-screen cards measured only after being moved."
+    },
+    {
+      "name": "rulesTextboxExpanded",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Grow the rules text box to a taller editing height. The card editor sets\nthis while its rules-text field is open so the inline textarea has room to\nshow and edit several lines at once instead of being clipped to the\nthree-line display cap."
+    }
+  ],
+  "GlossaryDefinitionCard": [
+    {
+      "name": "entry",
+      "tsType": "GlossaryEntry",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
+    }
+  ],
   "GlowIcon": [
     {
       "name": "iconClass",
@@ -361,8 +600,8 @@
       "name": "placement",
       "tsType": "Placement",
       "unionMembers": [
-        "top",
-        "left"
+        "left",
+        "top"
       ],
       "required": false,
       "defaultValue": "top",
@@ -573,8 +812,8 @@
       "name": "variant",
       "tsType": "PipBadgeVariant",
       "unionMembers": [
-        "spark",
-        "energy"
+        "energy",
+        "spark"
       ],
       "required": true,
       "defaultValue": null,
@@ -1203,8 +1442,8 @@
       "name": "kind",
       "tsType": "ResourceKind",
       "unionMembers": [
-        "spark",
         "energy",
+        "spark",
         "essence",
         "points",
         "counter"

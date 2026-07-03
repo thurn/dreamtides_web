@@ -11,7 +11,7 @@ import type { CardData } from "../types/cards";
 import type { DreamcallerContent } from "../types/content";
 import { loadQuestContent, type QuestContent } from "../data/quest-content";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
-import { CardView } from "../components/CardView";
+import { CardView } from "../tango/components/CardView";
 import { HoverZoomCard } from "../components/HoverZoomCard";
 import {
   DreamcallerPortrait,
@@ -20,7 +20,7 @@ import {
 import { HoverPopover } from "../tango/components/HoverPopover";
 import { DreamcallerPopover } from "../components/DreamcallerPopover";
 import { extractGlossaryTerms } from "../data/glossary-terms";
-import { GlossaryDefinitionCard } from "../components/GlossaryDefinitionCard";
+import { GlossaryDefinitionCard } from "../tango/components/GlossaryDefinitionCard";
 import { logEvent } from "../logging";
 import { buildIdfStats, signatureFit } from "../draft/idf-fit.ts";
 import { idfCosine } from "../draft/pool/variant-idf.ts";

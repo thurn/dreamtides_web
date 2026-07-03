@@ -10,6 +10,7 @@
 
 import type { ComponentType, ReactNode } from "react";
 import { buttonDemo } from "./demos/button";
+import { gameCardDemo } from "./demos/game-card";
 import { groupPanelDemo } from "./demos/group-panel";
 import { infoCardDemo } from "./demos/info-card";
 import { motesDemo } from "./demos/motes";
@@ -74,6 +75,7 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   groupPanelDemo,
   questStatusBarDemo,
   rulesTextDemo,
+  gameCardDemo,
 ];
 
 /** Look up a registry entry by its route id. */

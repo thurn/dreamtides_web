@@ -1,5 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
-import { CardView } from "../../components/CardView";
+import { CardView } from "../../tango/components/CardView";
 import type { SiteType } from "../../types/quest";
 import type {
   MerchantChoiceCandidate,

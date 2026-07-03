@@ -10,9 +10,9 @@ import {
   type RefObject,
 } from "react";
 import { createPortal } from "react-dom";
-import { computePopoverPlacement } from "../tango/components/hover-popover-placement";
+import { computePopoverPlacement } from "./hover-popover-placement";
 import { CardTermDefinitions } from "./CardTermDefinitions";
-import { extractGlossaryTerms } from "../data/glossary-terms";
+import { extractGlossaryTerms } from "../../data/glossary-terms";
 
 /**
  * Delay (ms) before the term-definitions panel portals in beside a hovered

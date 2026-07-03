@@ -1,5 +1,5 @@
 import type { CardData } from "../types/cards";
-import { CardView } from "../components/CardView";
+import { CardView } from "../tango/components/CardView";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
 import { HoverPopover } from "../tango/components/HoverPopover";
 import { RulesText } from "../tango/components/RulesText";

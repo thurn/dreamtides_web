@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { GLOSSARY } from "../data/glossary";
-import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
+import { GlossaryDefinitionCard } from "../tango/components/GlossaryDefinitionCard";
 import { logEvent } from "../logging";
 
 /**

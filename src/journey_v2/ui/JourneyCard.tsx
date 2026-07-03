@@ -8,7 +8,7 @@ import {
 } from "react";
 import { createPortal } from "react-dom";
 import type { CardData } from "../../types/cards";
-import { CardView } from "../../components/CardView";
+import { CardView } from "../../tango/components/CardView";
 import { JOURNEY_SHADOW_IDLE } from "./journeyTheme";
 import type { JourneyCardObject } from "./offerPresentation";
 

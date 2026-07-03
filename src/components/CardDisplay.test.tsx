@@ -6,9 +6,9 @@ import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
-import { computeCardTextScale } from "./card-display-scale";
+import { computeCardTextScale } from "../tango/components/card-display-scale";
 import { CardDisplay } from "./CardDisplay";
-import { CardView } from "./CardView";
+import { CardView } from "../tango/components/CardView";
 
 function makeCard(overrides: Partial<CardData>): CardData {
   return {

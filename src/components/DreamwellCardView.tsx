@@ -12,9 +12,9 @@ import {
   hasAssignedImage,
 } from "../data/card-database";
 import type { ArtCrop } from "../types/cards";
-import { CardStatOrb } from "./CardStatOrb";
+import { CardStatOrb } from "../tango/components/CardStatOrb";
 import { renderRulesText } from "../tango/components/RulesText";
-import { useCardTermPopover } from "./useCardTermPopover";
+import { useCardTermPopover } from "../tango/components/useCardTermPopover";
 
 /**
  * Optional render overrides for the Dreamwell card's editable regions. Each slot
@@ -203,7 +203,7 @@ const ART_RISE_DEFAULT_CQW = 14.5;
 
 /**
  * A Dreamwell card, rendered in landscape (3:2) but wearing the same chrome as a
- * regular {@link import("./CardView").CardView}: full-bleed art under a floating,
+ * regular {@link import("../tango/components/CardView").CardView}: full-bleed art under a floating,
  * frosted panel. The Dreamwell energy orb (the energy flame in **purple**, white
  * number) floats in the top-right corner the way a regular card's energy cost orb
  * does; the `energy-added` value is the orb's number. A bottom-anchored frosted

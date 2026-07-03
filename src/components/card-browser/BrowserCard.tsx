@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import type { CardData } from "../../types/cards";
 import type { CardSizePreset } from "../card-size";
-import { CardView } from "../CardView";
+import { CardView } from "../../tango/components/CardView";
 import { MtgNameTooltip } from "./MtgNameTooltip";
 
 export interface BrowserCardProps {

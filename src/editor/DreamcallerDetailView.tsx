@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
-import { CardView } from "../components/CardView";
+import { CardView } from "../tango/components/CardView";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
 import { RulesText } from "../tango/components/RulesText";
 import { SIZE_PRESETS } from "../components/card-size";

@@ -7,7 +7,7 @@ import { generateQuestSeed } from "../state/quest-state-actions";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
 import { EssenceValue } from "../components/EssenceValue";
 import { HoverPopover } from "../tango/components/HoverPopover";
-import { CardTermDefinitions } from "../components/CardTermDefinitions";
+import { CardTermDefinitions } from "../tango/components/CardTermDefinitions";
 import { RulesText } from "../tango/components/RulesText";
 import { TIDE_COLOR_CHIP } from "../components/tide-visuals";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";

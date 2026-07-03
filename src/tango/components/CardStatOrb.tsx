@@ -1,12 +1,12 @@
 import { type CSSProperties, type ReactNode } from "react";
-import { HoverPopover } from "../tango/components/HoverPopover";
+import { HoverPopover } from "./HoverPopover";
 import {
   ENERGY_ICON_CLASS,
   ENERGY_ICON_COLOR,
   GlowIcon,
   SPARK_ICON_CLASS,
   SPARK_ICON_COLOR,
-} from "../tango/components/GlowIcon";
+} from "./GlowIcon";
 import { useFitText } from "./useFitText";
 
 export type CardStatOrbVariant = "energy" | "spark" | "dreamwellEnergy";

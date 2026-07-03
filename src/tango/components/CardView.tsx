@@ -1,25 +1,25 @@
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, RefObject } from "react";
-import type { CardData, FrozenCardData, Rarity } from "../types/cards";
+import type { CardData, FrozenCardData, Rarity } from "../../types/cards";
 import {
   cardIdenticonUri,
   cardImageUrl,
   hasAssignedImage,
-} from "../data/card-database";
-import { identiconsForced } from "../runtime/identicon-mode";
+} from "../../data/card-database";
+import { identiconsForced } from "../../runtime/identicon-mode";
 import {
   ART_EXTENSION_FRACTION,
   ART_REGION_ASPECT_RATIO_VALUE,
   CARD_ASPECT_RATIO,
   CARD_CORNER_RADIUS,
 } from "./card-aspect";
-import { formatTypeLine } from "../tango/components/card-text";
+import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
-import { BOLT_ICON_CLASS } from "../tango/components/GlowIcon";
+import { BOLT_ICON_CLASS } from "./GlowIcon";
 import { CardStatOrb } from "./CardStatOrb";
-import { TRANSFIGURATION_ICONS } from "../transfiguration/transfiguration-logic";
-import type { CardTransfigurationDisplay } from "../transfiguration/transfiguration-logic";
-import { renderRulesText } from "../tango/components/RulesText";
+import { TRANSFIGURATION_ICONS } from "../../runtime/transfiguration-display";
+import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
+import { renderRulesText } from "./RulesText";
 import { useCardTermPopover } from "./useCardTermPopover";
 import { useFitText } from "./useFitText";
 
@@ -787,7 +787,7 @@ export interface CardViewProps {
  * directly on the art at the card's bottom-right, just above a bottom-anchored
  * text box that holds the rules body and auto-sizes to the amount of rules text.
  */
-export function CardView({
+export function GameCard({
   card,
   onClick,
   selected = false,
@@ -1534,3 +1534,10 @@ export function CardView({
     </div>
   );
 }
+
+/**
+ * Legacy export name. The component is documented and consumed within Tango as
+ * {@link GameCard}; this alias keeps the many existing call sites that import
+ * `CardView` working without churning every usage.
+ */
+export { GameCard as CardView };

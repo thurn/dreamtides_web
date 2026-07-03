@@ -1,7 +1,7 @@
 import { asCardName } from "../types/card-identity";
 import { useCallback, useRef, useState, type ReactNode } from "react";
-import { CardView } from "../components/CardView";
-import type { CardViewSlots } from "../components/CardView";
+import { CardView } from "../tango/components/CardView";
+import type { CardViewSlots } from "../tango/components/CardView";
 import { MtgNameTooltip } from "../components/card-browser/MtgNameTooltip";
 import CardTagEditor from "./CardTagEditor";
 import EditableField from "./EditableField";

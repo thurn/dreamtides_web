@@ -2,7 +2,7 @@ import { useState } from "react";
 import type { CardData } from "../types/cards";
 import type { CardSizePreset } from "../components/card-size";
 import { SIZE_PRESETS } from "../components/card-size";
-import { CardView } from "../components/CardView";
+import { CardView } from "../tango/components/CardView";
 import CardBrowserGrid from "../components/card-browser/CardBrowserGrid";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
 import { RulesText } from "../tango/components/RulesText";
