@@ -13,6 +13,7 @@ import { metasFor } from "./metadata";
 import { DemoStage } from "./DemoStage";
 import { ControlPanel } from "./ControlPanel";
 import { PropsTable } from "./PropsTable";
+import { UsageSection } from "./UsageSection";
 
 const sectionHeadingStyle: React.CSSProperties = {
   font: token("--t-eyebrow"),
@@ -102,6 +103,11 @@ export function ComponentPage({ id }: { id: string }) {
           />
         </section>
       </div>
+
+      <section>
+        <h2 style={sectionHeadingStyle}>Usage</h2>
+        <UsageSection examples={entry.usage} />
+      </section>
 
       <section>
         <h2 style={sectionHeadingStyle}>Props</h2>

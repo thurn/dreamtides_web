@@ -32,6 +32,24 @@ export const pressableDemo: TangoComponent = {
   group: "Primitives",
   docName: "Pressable",
   Component: Pressable,
+  usage: [
+    {
+      label: "Wrap any element",
+      note: "Pressable adds the shared scale-down feedback and a pointer cursor to whatever it wraps. Pass the tag via `as`; extra HTML attributes (onClick, aria-*) forward to the rendered element.",
+      code: `import { Pressable } from "src/tango/primitives/Pressable";
+
+<Pressable as="button" onClick={handleActivate}>
+  <span className="my-target">Press me</span>
+</Pressable>`,
+    },
+    {
+      label: "Disabled",
+      note: "A disabled Pressable detaches its press feedback and shows the default cursor.",
+      code: `<Pressable as="div" disabled>
+  <span className="my-target">Unavailable</span>
+</Pressable>`,
+    },
+  ],
   demo: {
     defaultArgs: {
       as: "button",

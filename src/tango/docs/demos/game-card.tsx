@@ -137,6 +137,25 @@ export const gameCardDemo: TangoComponent = {
   group: "Components",
   docName: "GameCard",
   Component: GameCardDemo,
+  usage: [
+    {
+      label: "Render a card",
+      note: "Give it a resolved `CardData` (loaded by UUID from the card database — never by name). `large` switches to the bigger card + text sizing.",
+      code: `import { GameCard } from "src/tango/components/CardView";
+
+<GameCard card={card} large />`,
+    },
+    {
+      label: "Selected in a picker",
+      note: "Draw the selection ring with `selected`; `hideRulesText` gives the dense identity-only surface used in tight lists.",
+      code: `<GameCard
+  card={card}
+  selected
+  selectionColor="#f97316"
+  hideRulesText
+/>`,
+    },
+  ],
   demo: {
     defaultArgs: {
       large: false,

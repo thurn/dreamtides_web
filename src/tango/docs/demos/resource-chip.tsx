@@ -12,6 +12,20 @@ export const resourceChipDemo: TangoComponent = {
   group: "Components",
   docName: "ResourceChip",
   Component: ResourceChip,
+  usage: [
+    {
+      label: "Inline value",
+      note: "An icon + numeric value for a resource, sized to sit inline with text.",
+      code: `import { ResourceChip } from "src/tango/components/ResourceChip";
+
+<ResourceChip kind="essence" value={200} size={20} />`,
+    },
+    {
+      label: "Standalone chip",
+      note: "Set `chip` to draw the value on its own rounded surface instead of bare inline.",
+      code: `<ResourceChip kind="energy" value={3} size={20} chip />`,
+    },
+  ],
   demo: {
     defaultArgs: {
       kind: "essence",

@@ -122,6 +122,25 @@ export const siteNodeDemo: TangoComponent = {
   group: "Components",
   docName: "SiteNode",
   Component: SiteNodeDemo,
+  usage: [
+    {
+      note: "A dreamscape site disc that positions itself from `model.pos` inside a `position: relative` stage and reveals its description through InfoCard, anchored to the scene's `stageRef`. `size` is the wayside diameter (battle guardians scale up); `motion` enables the calm floaty drift.",
+      code: `import { SiteNode } from "src/tango/components/SiteNode";
+
+<div ref={stageRef} style={{ position: "relative" }}>
+  {models.map((model) => (
+    <SiteNode
+      key={model.site.id}
+      model={model}
+      size={60}
+      motion
+      stageRef={stageRef}
+      onSelect={() => visitSite(model.site)}
+    />
+  ))}
+</div>`,
+    },
+  ],
   demo: {
     defaultArgs: {
       size: 60,

@@ -14,6 +14,17 @@ export const groupPanelDemo: TangoComponent = {
   group: "Components",
   docName: "GroupPanel",
   Component: GroupPanel,
+  usage: [
+    {
+      note: "A fixed-shape liquid-glass pane that collects genuinely dense, related content (a heading, a body, a labelled value row) into one backdrop. It takes no styling props — only children.",
+      code: `import { GroupPanel } from "src/tango/components/GroupPanel";
+
+<GroupPanel>
+  <p className="eyebrow">Dreamcaller</p>
+  <p>Essence, Spark, and the run's docked dreamsigns.</p>
+</GroupPanel>`,
+    },
+  ],
   demo: {
     defaultArgs: {},
     sampleContent: {

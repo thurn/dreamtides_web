@@ -68,6 +68,26 @@ export const questStatusBarDemo: TangoComponent = {
   group: "Components",
   docName: "QuestStatusBar",
   Component: QuestStatusBarDemo,
+  usage: [
+    {
+      note: "A transparent HUD that positions itself against the screen root and reveals the Dreamcaller / dreamsign popups anchored to it, so pass the screen's `stageRef`. Render it inside a `position: relative` scene root.",
+      code: `import { useRef } from "react";
+import { QuestStatusBar } from "src/tango/components/QuestStatusBar";
+
+const stageRef = useRef<HTMLDivElement>(null);
+
+<div ref={stageRef} style={{ position: "relative" }}>
+  {/* scene art */}
+  <QuestStatusBar
+    stageRef={stageRef}
+    essence={200}
+    deck={22}
+    dreamcaller={dreamcaller}
+    dreamsigns={dreamsigns}
+  />
+</div>`,
+    },
+  ],
   demo: {
     defaultArgs: {
       essence: 200,

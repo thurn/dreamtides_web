@@ -16,15 +16,17 @@ import { DemoStage } from "./DemoStage";
 const articleStyle: CSSProperties = {
   display: "flex",
   flexDirection: "column",
-  gap: token("--space-4"),
+  gap: token("--space-5"),
 };
 
-const headerRowStyle: CSSProperties = {
+// Title on its own line, with the navigation affordances as clearly-visible
+// pills directly beneath it — rather than small low-contrast text pushed to the
+// far right of the title row, where they read as decorative and are easy to
+// miss.
+const headerStyle: CSSProperties = {
   display: "flex",
-  alignItems: "baseline",
-  justifyContent: "space-between",
+  flexDirection: "column",
   gap: token("--space-4"),
-  flexWrap: "wrap",
 };
 
 const titleLinkStyle: CSSProperties = {
@@ -36,21 +38,39 @@ const titleLinkStyle: CSSProperties = {
 
 const linksRowStyle: CSSProperties = {
   display: "flex",
-  alignItems: "baseline",
-  gap: token("--space-5"),
+  alignItems: "center",
+  gap: token("--space-4"),
   flexWrap: "wrap",
 };
 
-const docsLinkStyle: CSSProperties = {
-  font: token("--t-caption"),
-  color: token("--text-muted"),
+// A base pill: bordered, padded, on a raised surface, so it plainly reads as a
+// tappable control rather than incidental text.
+const pillBase: CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: token("--space-2"),
+  padding: `${token("--space-3")} ${token("--space-5")}`,
+  borderRadius: token("--radius-pill"),
+  font: token("--t-button-sm"),
   textDecoration: "none",
+  whiteSpace: "nowrap",
 };
 
-const mockupLinkStyle: CSSProperties = {
-  font: token("--t-caption"),
+// Primary route to the docs page: an accent-tinted filled pill.
+const docsLinkStyle: CSSProperties = {
+  ...pillBase,
+  background: token("--accent-tint"),
+  border: `1px solid ${token("--border-accent")}`,
   color: token("--accent-bright"),
-  textDecoration: "none",
+};
+
+// Secondary route to the full-screen mockup: an outlined pill on a raised
+// surface, so it reads as a control but sits a rung below the primary.
+const mockupLinkStyle: CSSProperties = {
+  ...pillBase,
+  background: token("--surface-raised"),
+  border: `1px solid ${token("--border-mid")}`,
+  color: token("--text-secondary"),
 };
 
 // The embedded example is screen-shaped and bounded so the overview stays a
@@ -72,7 +92,7 @@ export function ComponentShowcase({ entry }: { entry: TangoComponent }) {
   const Mockup = getMockup(entry.id);
   return (
     <article style={articleStyle}>
-      <div style={headerRowStyle}>
+      <div style={headerStyle}>
         <a href={`#/${entry.id}`} style={titleLinkStyle}>
           {entry.title}
         </a>

@@ -36,6 +36,14 @@ export const statTileDemo: TangoComponent = {
   group: "Components",
   docName: "StatTile",
   Component: StatTileDemo,
+  usage: [
+    {
+      note: "A labelled readout — `label` + `value`, an optional `sub` caption, and an `accent` that tints the value.",
+      code: `import { StatTile } from "src/tango/components/StatTile";
+
+<StatTile label="Essence" value="240" sub="this run" accent="essence" />`,
+    },
+  ],
   demo: {
     defaultArgs: {
       label: "Essence",

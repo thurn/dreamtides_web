@@ -27,6 +27,25 @@ import { statTileDemo } from "./demos/stat-tile";
 import { tidePillDemo } from "./demos/tide-pill";
 
 /**
+ * A single authored usage snippet shown on a component's doc page. The source
+ * is hand-written (not generated from `defaultArgs`) so it can show the real
+ * prop shapes exactly as a caller would type them — including complex object
+ * props (a full `card`, an `AtlasNodeView`, a `stageRef`) that the interactive
+ * control panel cannot model. Provide more than one entry only when a component
+ * has genuinely distinct usage variants (e.g. Button with vs. without a cost,
+ * InfoCard's four media variants); a component with one obvious call site
+ * carries a single snippet.
+ */
+export interface TangoUsageExample {
+  /** Short variant label, shown only when a component lists more than one. */
+  label?: string;
+  /** One-line note under the label explaining when to reach for this variant. */
+  note?: string;
+  /** The JSX/TSX source to display, verbatim. */
+  code: string;
+}
+
+/**
  * A single documented entry in the Tango catalog.
  */
 export interface TangoComponent {
@@ -51,6 +70,11 @@ export interface TangoComponent {
    * keeps the harness free of `any`/no-unsafe while callers stay type-checked.
    */
   Component: ComponentType<Record<string, unknown>>;
+  /**
+   * One or more authored usage snippets demonstrating how to call the
+   * component in real code, rendered in the doc page's "Usage" section.
+   */
+  usage: TangoUsageExample[];
   demo: {
     /** Initial control values, seeded into the ComponentPage's args state. */
     defaultArgs: Record<string, unknown>;

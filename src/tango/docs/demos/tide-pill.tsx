@@ -12,6 +12,24 @@ export const tidePillDemo: TangoComponent = {
   group: "Components",
   docName: "TidePill",
   Component: TidePill,
+  usage: [
+    {
+      label: "Presentational",
+      note: "A labelled tag for a tide / affiliation — a `tone` color, an optional leading `icon`, and the name as children.",
+      code: `import { TidePill } from "src/tango/components/TidePill";
+
+<TidePill tone="blue" icon={<i className="bxf bx-water" />}>
+  Singular Storm
+</TidePill>`,
+    },
+    {
+      label: "Pressable",
+      note: "Pass `onPress` and the pill renders as a button with press feedback.",
+      code: `<TidePill tone="gold" onPress={showTideInfo}>
+  Rising Sun
+</TidePill>`,
+    },
+  ],
   demo: {
     defaultArgs: {
       tone: "blue",

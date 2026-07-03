@@ -38,6 +38,14 @@ export const rulesTextDemo: TangoComponent = {
   group: "Components",
   docName: "RulesText",
   Component: RulesTextDemo,
+  usage: [
+    {
+      note: "Renders authored rules-text markup: energy / spark glyphs become inline pips, `▸` / `❖` markers become caret / bolt icons, and the curated keyword set is emphasized. Pass the card's rendered-text string as `text`.",
+      code: `import { RulesText } from "src/tango/components/RulesText";
+
+<RulesText text={"Support – Supported allies have +2✦ and unstoppable."} />`,
+    },
+  ],
   demo: {
     defaultArgs: {
       text: SAMPLE_RULES_TEXT,

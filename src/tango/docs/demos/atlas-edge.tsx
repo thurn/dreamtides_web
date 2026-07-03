@@ -65,6 +65,18 @@ export const atlasEdgeDemo: TangoComponent = {
   title: "Atlas Edge",
   group: "Components",
   docName: "AtlasEdge",
+  usage: [
+    {
+      note: "An atlas connector line. Each edge reads its stroke from the shared gradients in `AtlasEdgeDefs`, so render one `AtlasEdgeDefs` per `<svg>` and one `AtlasEdge` per connection, with the `kind` picking the treatment (traveled / open / dim / locked).",
+      code: `import { AtlasEdge } from "src/tango/components/AtlasEdge";
+import { AtlasEdgeDefs } from "src/tango/components/AtlasEdgeDefs";
+
+<svg className="dream-atlas">
+  <AtlasEdgeDefs />
+  <AtlasEdge kind="open" x1={140} y1={40} x2={452} y2={18} />
+</svg>`,
+    },
+  ],
   Component: AtlasEdgeDemo,
   demo: {
     defaultArgs: {},

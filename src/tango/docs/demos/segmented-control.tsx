@@ -71,6 +71,21 @@ export const segmentedControlDemo: TangoComponent = {
   group: "Components",
   docName: "SegmentedControl",
   Component: SegmentedControlDemo,
+  usage: [
+    {
+      note: "A controlled toggle: own the selected value and update it from `onChange`. `options` accepts plain strings or `{ value, label }` pairs.",
+      code: `import { useState } from "react";
+import { SegmentedControl } from "src/tango/components/SegmentedControl";
+
+const [filter, setFilter] = useState("All");
+
+<SegmentedControl
+  options={["All", "Characters", "Events"]}
+  value={filter}
+  onChange={setFilter}
+/>`,
+    },
+  ],
   demo: {
     defaultArgs: {
       options: OPTIONS,

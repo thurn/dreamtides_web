@@ -218,6 +218,24 @@ export const atlasNodeDemo: TangoComponent = {
   group: "Components",
   docName: "AtlasNode",
   Component: AtlasNodeDemo,
+  usage: [
+    {
+      note: "One node on the Dream Atlas. `view` is a fully-resolved `AtlasNodeView` (node lifecycle + resolved art URLs + placement) built by the atlas layout; the node reports hover / click through the callbacks and positions itself from `view.left` / `view.top` inside a `.dream-atlas .nodes` stage.",
+      code: `import { AtlasNode } from "src/tango/components/AtlasNode";
+
+<div className="dream-atlas">
+  <div className="nodes">
+    <AtlasNode
+      view={view}
+      hovered={hoveredId === view.node.id}
+      onEnter={() => setHoveredId(view.node.id)}
+      onLeave={() => setHoveredId(null)}
+      onClick={() => enterDreamscape(view.node)}
+    />
+  </div>
+</div>`,
+    },
+  ],
   demo: {
     defaultArgs: {
       hovered: false,

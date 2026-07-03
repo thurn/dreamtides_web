@@ -11,6 +11,34 @@ export const buttonDemo: TangoComponent = {
   group: "Components",
   docName: "Button",
   Component: Button,
+  usage: [
+    {
+      label: "With icon and cost",
+      note: "A leading `icon` node and an essence `cost` render inside the one purple button sprite.",
+      code: `import { Button } from "src/tango/components/Button";
+
+<Button
+  size="md"
+  cost={100}
+  icon={<i className="bxf bx-sword" />}
+  onClick={beginBattle}
+>
+  Begin Battle
+</Button>`,
+    },
+    {
+      label: "Commit action",
+      note: "`size=\"lg\"` is the taller commit height; `full` stretches the button to its container width.",
+      code: `<Button size="lg" full onClick={confirm}>
+  Begin Your Dream
+</Button>`,
+    },
+    {
+      label: "Disabled",
+      note: "Dims the button and detaches its click / press feedback.",
+      code: `<Button disabled>Not Ready</Button>`,
+    },
+  ],
   demo: {
     defaultArgs: {
       size: "md",
