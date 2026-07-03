@@ -23,7 +23,10 @@ import { PressableMockup } from "./pressable";
 import { QuestStatusBarMockup } from "./quest-status-bar";
 import { ResourceChipMockup } from "./resource-chip";
 import { RulesTextMockup } from "./rules-text";
+import { SegmentedControlMockup } from "./segmented-control";
 import { SiteNodeMockup } from "./site-node";
+import { StatTileMockup } from "./stat-tile";
+import { TidePillMockup } from "./tide-pill";
 
 /**
  * Route id → full-screen mockup component. The single place new mockups get
@@ -41,6 +44,9 @@ export const MOCKUPS: Record<string, ComponentType> = {
   pressable: PressableMockup,
   "resource-chip": ResourceChipMockup,
   button: ButtonMockup,
+  "segmented-control": SegmentedControlMockup,
+  "stat-tile": StatTileMockup,
+  "tide-pill": TidePillMockup,
 };
 
 /** True when a full-screen mockup is registered for the given route id. */
