@@ -55,8 +55,9 @@ export interface ButtonProps {
   full?: boolean;
   /** Dims the button and detaches its click/press feedback. */
   disabled?: boolean;
-  /** Leading icon node (a boxicon <i> element or a glyph). */
-  icon?: React.ReactNode;
+  /** Leading icon: a Boxicons class string (e.g. `"bxf bx-sword"`). The button
+   * renders the `<i>` itself at a fixed size so every button icon matches. */
+  icon?: string;
   /** Appends an inline essence price, e.g. cost={100} -> "… 100◆". */
   cost?: number | null;
   /** Fires when the button is activated (no-op while disabled). */
@@ -79,7 +80,7 @@ export function Button({
   size = "md",
   full = false,
   disabled = false,
-  icon = null,
+  icon,
   cost = null,
   onClick,
   ariaLabel,
@@ -130,7 +131,7 @@ export function Button({
     >
       {icon && (
         <span style={{ display: "inline-flex", fontSize: "1.1em" }}>
-          {icon}
+          <i className={icon} aria-hidden="true" />
         </span>
       )}
       <span>{children}</span>

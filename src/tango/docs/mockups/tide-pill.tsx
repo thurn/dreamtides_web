@@ -120,7 +120,7 @@ export function TidePillMockup() {
             </div>
             <div style={{ display: "flex", flexWrap: "wrap", gap: token("--space-3") }}>
               {group.tides.map((tide) => (
-                <TidePill key={tide.id} tone={tide.tone} icon={<i className="bxf bx-water" />}>
+                <TidePill key={tide.id} tone={tide.tone} icon="bxf bx-water">
                   {tide.displayName}
                 </TidePill>
               ))}

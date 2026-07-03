@@ -120,11 +120,11 @@
     },
     {
       "name": "icon",
-      "tsType": "ReactNode",
+      "tsType": "string",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "null",
-      "description": "Leading icon node (a boxicon <i> element or a glyph)."
+      "defaultValue": null,
+      "description": "Leading icon: a Boxicons class string (e.g. `\"bxf bx-sword\"`). The button\nrenders the `<i>` itself at a fixed size so every button icon matches."
     },
     {
       "name": "cost",
@@ -214,11 +214,11 @@
     },
     {
       "name": "tooltip",
-      "tsType": "ReactNode",
+      "tsType": "string",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": ""
+      "description": "Optional hover tooltip: a short plain-language description string."
     },
     {
       "name": "tintColor",
@@ -781,11 +781,11 @@
     },
     {
       "name": "tooltip",
-      "tsType": "ReactNode",
+      "tsType": "string",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Optional hover/focus tooltip. When provided, the badge becomes its own\nhover anchor. Use a short plain-language description."
+      "description": "Optional hover/focus tooltip. When provided, the badge becomes its own\nhover anchor. A short plain-language description string."
     }
   ],
   "PressInfo": [
@@ -1549,11 +1549,11 @@
     },
     {
       "name": "icon",
-      "tsType": "ReactNode",
+      "tsType": "string",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "null",
-      "description": "Leading icon node (a boxicon `<i>` element or a glyph)."
+      "defaultValue": null,
+      "description": "Leading icon: a Boxicons class string (e.g. `\"bxf bx-water\"`). The pill\nrenders the `<i>` itself at a fixed size so every tide icon matches."
     },
     {
       "name": "size",

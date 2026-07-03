@@ -1,4 +1,4 @@
-import { type CSSProperties, type ReactNode } from "react";
+import { type CSSProperties } from "react";
 import { HoverPopover } from "./HoverPopover";
 
 /**
@@ -42,9 +42,9 @@ interface PipBadgeProps {
   ariaLabel?: string;
   /**
    * Optional hover/focus tooltip. When provided, the badge becomes its own
-   * hover anchor. Use a short plain-language description.
+   * hover anchor. A short plain-language description string.
    */
-  tooltip?: ReactNode;
+  tooltip?: string;
 }
 
 /**

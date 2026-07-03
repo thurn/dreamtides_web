@@ -91,8 +91,9 @@ export interface TidePillProps {
   children?: ReactNode;
   /** Tide color. */
   tone?: "violet" | "blue" | "gold" | "green" | "rust" | "red" | "neutral";
-  /** Leading icon node (a boxicon `<i>` element or a glyph). */
-  icon?: ReactNode;
+  /** Leading icon: a Boxicons class string (e.g. `"bxf bx-water"`). The pill
+   * renders the `<i>` itself at a fixed size so every tide icon matches. */
+  icon?: string;
   /** Height/scale. Default 'md'. */
   size?: TidePillSize;
   /** Fires on press. When set, the pill renders as a button with press feedback. */
@@ -108,7 +109,7 @@ export interface TidePillProps {
 export function TidePill({
   children,
   tone = "violet",
-  icon = null,
+  icon,
   size = "md",
   onPress,
 }: TidePillProps) {
@@ -156,7 +157,7 @@ export function TidePill({
     >
       {icon && (
         <span style={{ display: "inline-flex", fontSize: "1.05em" }}>
-          {icon}
+          <i className={icon} aria-hidden="true" />
         </span>
       )}
       {children}

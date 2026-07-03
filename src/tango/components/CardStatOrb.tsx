@@ -1,4 +1,4 @@
-import { type CSSProperties, type ReactNode } from "react";
+import { type CSSProperties } from "react";
 import { HoverPopover } from "./HoverPopover";
 import {
   ENERGY_ICON_CLASS,
@@ -91,7 +91,8 @@ interface CardStatOrbProps {
    */
   numberCapPx: number;
   ariaLabel?: string;
-  tooltip?: ReactNode;
+  /** Optional hover tooltip: a short plain-language description string. */
+  tooltip?: string;
   /**
    * Tint applied to the digit when the stat has been changed by a
    * transfiguration (e.g. a bumped spark or halved energy cost). Only the number

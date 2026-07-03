@@ -63,7 +63,7 @@ function OfferRow({ icon, label, blurb, cost, size = "md" }: OfferRowProps) {
         size={size}
         cost={cost}
         disabled={!affordable}
-        icon={<i className="bxf bx-crypto" aria-hidden="true" />}
+        icon="bxf bx-crypto"
       >
         Buy
       </Button>

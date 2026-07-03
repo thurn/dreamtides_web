@@ -1,6 +1,6 @@
 // Registry demo entry for Button — see pressable.tsx for the recipe this
-// follows. `icon` is a ReactNode-slot prop (no generated control), so it
-// needs sampleContent; `children` is the button's label, also sampleContent.
+// follows. `icon` is a Boxicons class string; `children` is the button's
+// label, a ReactNode slot supplied via sampleContent.
 
 import { Button } from "../../components/Button";
 import type { TangoComponent } from "../registry";
@@ -20,7 +20,7 @@ export const buttonDemo: TangoComponent = {
 <Button
   size="md"
   cost={100}
-  icon={<i className="bxf bx-sword" />}
+  icon="bxf bx-sword"
   onClick={beginBattle}
 >
   Begin Battle
@@ -45,10 +45,10 @@ export const buttonDemo: TangoComponent = {
       full: false,
       disabled: false,
       cost: 100,
+      icon: "bxf bx-sword",
     },
     sampleContent: {
       children: "Begin Battle",
-      icon: <i className="bxf bx-sword" />,
     },
   },
 };
