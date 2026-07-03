@@ -6,7 +6,7 @@ import { EssenceGlyph, EssenceValue } from "../components/EssenceValue";
 import { RulesText } from "../tango/components/RulesText";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
-import { dreamsignIconUrl } from "../atlas/atlas-display";
+import { dreamsignIconUrl } from "../tango/components/atlas-display";
 import { SiteGuide } from "../components/SiteGuide";
 import { SiteCloseButton } from "../components/SiteCloseButton";
 import {

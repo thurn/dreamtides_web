@@ -6,7 +6,7 @@ import { CardView } from "../../tango/components/CardView";
 import { RulesText } from "../../tango/components/RulesText";
 import { EssenceValue } from "../../components/EssenceValue";
 import { dreamcallerImageSrc } from "../../components/DreamcallerPortrait";
-import { dreamscapeSceneUrl } from "../../atlas/atlas-display";
+import { dreamscapeSceneUrl } from "../../tango/components/atlas-display";
 import { assetUrl } from "../../runtime/asset-url";
 import {
   opponentCarriesDreamsign,

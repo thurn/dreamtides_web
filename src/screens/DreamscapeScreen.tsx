@@ -5,7 +5,7 @@ import {
   siteTypeIcon,
   siteTypeName,
 } from "../atlas/atlas-generator";
-import { dreamscapeSceneUrl } from "../atlas/atlas-display";
+import { dreamscapeSceneUrl } from "../tango/components/atlas-display";
 import { draftSitePickCount } from "../draft/draft-site-config";
 import {
   DreamscapeMotes,
@@ -13,7 +13,7 @@ import {
   DreamscapeSitePopover,
   type DreamscapeSiteModel,
 } from "../components/DreamscapeSiteNode";
-import { scatterSites, seedFromString } from "./dreamscape-scatter";
+import { scatterSites, seedFromString } from "../tango/components/dreamscape-scatter";
 import { logEvent } from "../logging";
 import "./dreamscape.css";
 

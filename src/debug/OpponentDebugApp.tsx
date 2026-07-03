@@ -20,7 +20,7 @@ import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import { CardView } from "../tango/components/CardView";
 import { HoverZoomCard } from "../components/HoverZoomCard";
 import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
-import { dreamsignIconUrl } from "../atlas/atlas-display";
+import { dreamsignIconUrl } from "../tango/components/atlas-display";
 import {
   getAlgorithm,
   OPPONENT_ALGORITHMS,

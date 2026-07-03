@@ -11,7 +11,7 @@ import {
   DREAMSIGN_HOVER_DELAY_MS,
   DreamsignHoverCard,
 } from "../components/DreamsignHoverCard";
-import { dreamsignIconUrl } from "../atlas/atlas-display";
+import { dreamsignIconUrl } from "../tango/components/atlas-display";
 import { SiteCloseButton } from "../components/SiteCloseButton";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";

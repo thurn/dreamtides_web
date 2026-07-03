@@ -1,13 +1,11 @@
-import type { SiteType } from "../types/quest";
-import { assetUrl } from "../runtime/asset-url";
-import { siteTypeIcon } from "./atlas-generator";
+import { assetUrl } from "../../runtime/asset-url";
 
 /**
  * Visual presentation data for the redesigned Dream Atlas screen. The Atlas
  * renders the run graph as circular dreamscape-icon nodes in an ornate frame,
  * with rich hover-preview cards (scene art + resident Dream Guide). The art
- * resolves directly from ids; this module centralises the id -> URL mapping, the
- * Atlas-specific site iconography, and the fixed Layer-VII final-dream copy.
+ * resolves directly from ids; this module centralises the id -> URL mapping and
+ * the fixed Layer-VII final-dream copy.
  *
  * Assets are produced by `scripts/setup-assets.mjs` and served from `public/`:
  *   - `/dreamscapes/<id>.png`       rectangular scene art (hover-card header)
@@ -41,16 +39,6 @@ export const ROUND_FRAME_URL = assetUrl("/atlas/Round_frame_main.png");
 
 /** Boxicons class used for the "Card Affiliation" row in the preview card. */
 export const AFFILIATION_ROW_ICON_CLASS = "bxf bx-rectangle-vertical";
-
-/**
- * Icon class for a site as shown on the Dream Atlas. The game's icon system is
- * Boxicons 3, filled variant (`bxf bx-*`); Transfiguration is the lone Font
- * Awesome exception because Boxicons has no hammer glyph. The Atlas and the
- * in-dreamscape site cards share the single {@link siteTypeIcon} mapping.
- */
-export function atlasSiteIcon(siteType: SiteType): string {
-  return siteTypeIcon(siteType);
-}
 
 /** Font Awesome flag glyph the starting dreamscape shows as its site mark. */
 export const STARTER_FLAG_ICON_CLASS = "fa-solid fa-flag";

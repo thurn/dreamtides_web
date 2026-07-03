@@ -7,11 +7,14 @@ import {
   useState,
 } from "react";
 import { useQuest } from "../state/quest-context";
-import { AtlasNode, type AtlasNodeView } from "../components/AtlasNode";
+import { AtlasNode, type AtlasNodeView } from "../tango/components/AtlasNode";
+import { AtlasEdge, type AtlasEdgeKind } from "../tango/components/AtlasEdge";
+import { AtlasEdgeDefs } from "../tango/components/AtlasEdgeDefs";
 import { RulesText } from "../tango/components/RulesText";
 import {
   regenerateAtlasForProgress,
   revealedAtlasSite,
+  siteTypeIcon,
   siteTypeName,
   type SiteGenerationContext,
 } from "../atlas/atlas-generator";
@@ -19,12 +22,11 @@ import {
   AFFILIATION_ROW_ICON_CLASS,
   BOSS_DISPLAY,
   STARTER_FLAG_ICON_CLASS,
-  atlasSiteIcon,
   dreamscapeIconUrl,
   dreamscapeSceneUrl,
   dreamsignIconUrl,
   guidePortraitUrl,
-} from "../atlas/atlas-display";
+} from "../tango/components/atlas-display";
 import type {
   AffiliationContent,
   ApollyonIncarnationContent,
@@ -192,7 +194,7 @@ function resolveAtlasNodes(
     const siteBadgeIconClass =
       isBoss || isStarter || dreamscape === null || revealedSite === null
         ? null
-        : atlasSiteIcon(dreamscape.signatureSite);
+        : siteTypeIcon(dreamscape.signatureSite);
 
     const knownDreamsignIconUrl =
       dreamsign?.imageName != null
@@ -223,7 +225,7 @@ function resolveAtlasNodes(
 }
 
 /** SVG edge styling derived from the two endpoints' lifecycle states. */
-type EdgeKind = "traveled" | "open" | "dim" | "locked";
+type EdgeKind = AtlasEdgeKind;
 
 /**
  * Picks an edge style from the endpoint states and how deep the edge sits
@@ -399,7 +401,7 @@ function Preview({ resolved }: PreviewProps) {
           <>
             <div className="info-row">
               <i
-                className={`${atlasSiteIcon(dreamscape.signatureSite)} row-ico`}
+                className={`${siteTypeIcon(dreamscape.signatureSite)} row-ico`}
                 aria-hidden="true"
               />
               <div>
@@ -757,41 +759,16 @@ export function AtlasScreen() {
             width={STAGE_W}
             height={STAGE_H}
           >
-            <defs>
-              <linearGradient id="dream-atlas-gold" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0" stopColor="#fbbf24" />
-                <stop offset="1" stopColor="#d4a017" />
-              </linearGradient>
-              <linearGradient
-                id="dream-atlas-openg"
-                x1="0"
-                y1="0"
-                x2="1"
-                y2="0"
-              >
-                <stop offset="0" stopColor="#a855f7" />
-                <stop offset="1" stopColor="#7c3aed" />
-              </linearGradient>
-            </defs>
+            <AtlasEdgeDefs />
             {edges.map((edge) => (
-              <g key={edge.key}>
-                <line
-                  className={`edge edge-${edge.kind}`}
-                  x1={edge.x1}
-                  y1={edge.y1}
-                  x2={edge.x2}
-                  y2={edge.y2}
-                />
-                {edge.kind === "open" && (
-                  <line
-                    className="edge-open-flow"
-                    x1={edge.x1}
-                    y1={edge.y1}
-                    x2={edge.x2}
-                    y2={edge.y2}
-                  />
-                )}
-              </g>
+              <AtlasEdge
+                key={edge.key}
+                kind={edge.kind}
+                x1={edge.x1}
+                y1={edge.y1}
+                x2={edge.x2}
+                y2={edge.y2}
+              />
             ))}
           </svg>
 

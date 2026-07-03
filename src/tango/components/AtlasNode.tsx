@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
-import type { DreamscapeNode } from "../types/quest";
-import { BOSS_DISPLAY, ROUND_FRAME_URL } from "../atlas/atlas-display";
+import type { DreamscapeNode } from "../../types/quest";
+import { BOSS_DISPLAY, ROUND_FRAME_URL } from "./atlas-display";
+import "./atlas.css";
 
 /**
  * Presentational data for one Dream Atlas node, resolved once by

@@ -9,6 +9,8 @@
 // while it is.
 
 import type { ComponentType, ReactNode } from "react";
+import { atlasEdgeDemo } from "./demos/atlas-edge";
+import { atlasNodeDemo } from "./demos/atlas-node";
 import { buttonDemo } from "./demos/button";
 import { gameCardDemo } from "./demos/game-card";
 import { groupPanelDemo } from "./demos/group-panel";
@@ -76,6 +78,8 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   questStatusBarDemo,
   rulesTextDemo,
   gameCardDemo,
+  atlasNodeDemo,
+  atlasEdgeDemo,
 ];
 
 /** Look up a registry entry by its route id. */

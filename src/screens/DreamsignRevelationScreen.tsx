@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import type { Dreamsign, SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
-import { dreamsignIconUrl } from "../atlas/atlas-display";
+import { dreamsignIconUrl } from "../tango/components/atlas-display";
 import { SiteGuide } from "../components/SiteGuide";
 import { SiteCloseButton } from "../components/SiteCloseButton";
 import {

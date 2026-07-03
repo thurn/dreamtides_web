@@ -1,11 +1,11 @@
 import { useRef, useState, type CSSProperties, type ReactNode } from "react";
 import EditableField from "./EditableField";
 import {
-  atlasSiteIcon,
   dreamscapeIconUrl,
   dreamscapeSceneUrl,
   guidePortraitUrl,
-} from "../atlas/atlas-display";
+} from "../tango/components/atlas-display";
+import { siteTypeIcon } from "../atlas/atlas-generator";
 import type { SiteType } from "../types/quest";
 import DreamscapeResidents, {
   type ResidentAssignmentStatus,
@@ -394,7 +394,7 @@ export default function EditableDreamscape({
           leading={
             signatureSite !== "" ? (
               <i
-                className={atlasSiteIcon(signatureSite as SiteType)}
+                className={siteTypeIcon(signatureSite as SiteType)}
                 aria-hidden="true"
                 style={{ fontSize: "1.1rem", color: "#8edbd1", width: "1.2rem" }}
               />

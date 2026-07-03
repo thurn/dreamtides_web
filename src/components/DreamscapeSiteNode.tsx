@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import type { CSSProperties } from "react";
 import type { SiteState } from "../types/quest";
-import { mulberry32, type ScatterPoint } from "../screens/dreamscape-scatter";
+import { mulberry32, type ScatterPoint } from "../tango/components/dreamscape-scatter";
 
 /**
  * One site placed in the dreamscape scene. The screen builds these models from
