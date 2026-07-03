@@ -12,6 +12,7 @@ import { useTangoRoute } from "./route";
 import { TANGO_COMPONENTS, type TangoComponent } from "./registry";
 import { ComponentPage } from "./ComponentPage";
 import { IntroSection } from "./IntroSection";
+import { PrimitivesSection } from "./PrimitivesSection";
 import { token } from "../primitives/tokens";
 
 const pageStyle: CSSProperties = {
@@ -64,6 +65,8 @@ function Overview() {
       </header>
 
       <IntroSection />
+
+      <PrimitivesSection />
 
       {groups.length === 0 ? (
         <p style={{ color: token("--text-muted"), font: token("--t-body") }}>

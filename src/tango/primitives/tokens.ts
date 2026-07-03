@@ -4,11 +4,14 @@
 //
 // Typed mirror of the CSS custom properties declared in
 // src/tango/primitives/tango-tokens.css, which remains the source of truth
-// for every token's value. Each entry carries both the `var(--name)`
-// reference string, for use in inline styles or CSS-in-JS, and the token's
-// raw declared value (which may itself be another `var(...)` reference,
-// matching how the CSS resolves it). A name declared more than once in the
-// source CSS is deduped last-wins, mirroring the CSS cascade.
+// for every token's value. Each entry carries the `var(--name)` reference
+// string, for use in inline styles or CSS-in-JS, the token's raw declared
+// value (which may itself be another `var(...)` reference, matching how the
+// CSS resolves it), and — where the source CSS annotates the declaration with
+// a trailing `/* @kind ... */` marker — that marker's value, read by the
+// Primitives doc section to group tokens for display. A name declared more
+// than once in the source CSS is deduped last-wins, mirroring the CSS
+// cascade (the `kind` of the last declaration wins too).
 
 export const TOKENS = {
   "--void-900": { var: "var(--void-900)", value: "#060410" },
@@ -108,8 +111,8 @@ export const TOKENS = {
   "--dt-text": { var: "var(--dt-text)", value: "#ece7f5" },
   "--dt-text-dim": { var: "var(--dt-text-dim)", value: "#b3aac8" },
   "--dt-text-faint": { var: "var(--dt-text-faint)", value: "#7b7299" },
-  "--dt-wash-journey": { var: "var(--dt-wash-journey)", value: "radial-gradient(120% 95% at 50% 30%, #241a3a, #140e22 55%, #0a0612)" },
-  "--dt-gradient-title": { var: "var(--dt-gradient-title)", value: "linear-gradient(90deg, #f3eefb, #c084fc)" },
+  "--dt-wash-journey": { var: "var(--dt-wash-journey)", value: "radial-gradient(120% 95% at 50% 30%, #241a3a, #140e22 55%, #0a0612)", kind: "other" },
+  "--dt-gradient-title": { var: "var(--dt-gradient-title)", value: "linear-gradient(90deg, #f3eefb, #c084fc)", kind: "other" },
   "--color-bg": { var: "var(--color-bg)", value: "#0a0612" },
   "--color-surface": { var: "var(--color-surface)", value: "#1a1525" },
   "--color-surface-light": { var: "var(--color-surface-light)", value: "#2a2040" },
@@ -146,11 +149,11 @@ export const TOKENS = {
   "--font-display": { var: "var(--font-display)", value: "'Anton', Impact, sans-serif" },
   "--font-mono": { var: "var(--font-mono)", value: "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace" },
   "--font-logo": { var: "var(--font-logo)", value: "var(--font-serif)" },
-  "--w-regular": { var: "var(--w-regular)", value: "400" },
-  "--w-medium": { var: "var(--w-medium)", value: "500" },
-  "--w-semibold": { var: "var(--w-semibold)", value: "600" },
-  "--w-bold": { var: "var(--w-bold)", value: "700" },
-  "--w-extrabold": { var: "var(--w-extrabold)", value: "800" },
+  "--w-regular": { var: "var(--w-regular)", value: "400", kind: "font" },
+  "--w-medium": { var: "var(--w-medium)", value: "500", kind: "font" },
+  "--w-semibold": { var: "var(--w-semibold)", value: "600", kind: "font" },
+  "--w-bold": { var: "var(--w-bold)", value: "700", kind: "font" },
+  "--w-extrabold": { var: "var(--w-extrabold)", value: "800", kind: "font" },
   "--t-display": { var: "var(--t-display)", value: "600 40px/1.04 var(--font-serif)" },
   "--t-title": { var: "var(--t-title)", value: "600 30px/1.08 var(--font-serif)" },
   "--t-title-sm": { var: "var(--t-title-sm)", value: "600 23px/1.12 var(--font-serif)" },
@@ -166,8 +169,8 @@ export const TOKENS = {
   "--t-popover-body": { var: "var(--t-popover-body)", value: "500 14px/1.45 var(--font-rules)" },
   "--t-popover-meta": { var: "var(--t-popover-meta)", value: "700 10.5px/1 var(--font-mono)" },
   "--t-eyebrow": { var: "var(--t-eyebrow)", value: "700 11px/1.2 var(--font-mono)" },
-  "--tracking-eyebrow": { var: "var(--tracking-eyebrow)", value: "0.14em" },
-  "--tracking-wordmark": { var: "var(--tracking-wordmark)", value: "0.01em" },
+  "--tracking-eyebrow": { var: "var(--tracking-eyebrow)", value: "0.14em", kind: "other" },
+  "--tracking-wordmark": { var: "var(--tracking-wordmark)", value: "0.01em", kind: "other" },
   "--t-numeral": { var: "var(--t-numeral)", value: "800 17px/1 var(--font-sans)" },
   "--space-0": { var: "var(--space-0)", value: "0" },
   "--space-1": { var: "var(--space-1)", value: "2px" },
@@ -193,7 +196,7 @@ export const TOKENS = {
   "--device-h": { var: "var(--device-h)", value: "844px" },
   "--safe-top": { var: "var(--safe-top)", value: "59px" },
   "--safe-bottom": { var: "var(--safe-bottom)", value: "34px" },
-  "--card-aspect": { var: "var(--card-aspect)", value: "5 / 7" },
+  "--card-aspect": { var: "var(--card-aspect)", value: "5 / 7", kind: "other" },
   "--r-xs": { var: "var(--r-xs)", value: "6px" },
   "--r-sm": { var: "var(--r-sm)", value: "10px" },
   "--r-md": { var: "var(--r-md)", value: "14px" },
@@ -202,8 +205,8 @@ export const TOKENS = {
   "--r-2xl": { var: "var(--r-2xl)", value: "30px" },
   "--r-pill": { var: "var(--r-pill)", value: "999px" },
   "--r-card": { var: "var(--r-card)", value: "16px" },
-  "--r-popover": { var: "var(--r-popover)", value: "8px" },
-  "--press-scale": { var: "var(--press-scale)", value: "0.94" },
+  "--r-popover": { var: "var(--r-popover)", value: "8px", kind: "radius" },
+  "--press-scale": { var: "var(--press-scale)", value: "0.94", kind: "other" },
   "--shadow-sm": { var: "var(--shadow-sm)", value: "0 1px 3px rgba(4, 2, 10, 0.5)" },
   "--shadow-md": { var: "var(--shadow-md)", value: "0 6px 18px rgba(4, 2, 10, 0.55)" },
   "--shadow-lg": { var: "var(--shadow-lg)", value: "0 16px 40px rgba(3, 1, 8, 0.62)" },
@@ -215,24 +218,24 @@ export const TOKENS = {
   "--glow-gold": { var: "var(--glow-gold)", value: "0 0 18px rgba(250, 204, 21, 0.5)" },
   "--glow-danger": { var: "var(--glow-danger)", value: "0 0 0 1px rgba(239, 68, 68, 0.5), 0 6px 22px rgba(239, 68, 68, 0.4)" },
   "--glow-text": { var: "var(--glow-text)", value: "0 0 26px rgba(168, 85, 247, 0.7)" },
-  "--inset-top": { var: "var(--inset-top)", value: "inset 0 1px 0 rgba(255, 255, 255, 0.08)" },
-  "--inset-press": { var: "var(--inset-press)", value: "inset 0 2px 8px rgba(3, 1, 8, 0.5)" },
-  "--gradient-accent": { var: "var(--gradient-accent)", value: "linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)" },
-  "--gradient-gold": { var: "var(--gradient-gold)", value: "linear-gradient(135deg, #ffd34d 0%, #e0a82a 100%)" },
-  "--gradient-energy": { var: "var(--gradient-energy)", value: "linear-gradient(160deg, #38bdf8 0%, #0ea5e9 100%)" },
-  "--mote-warm": { var: "var(--mote-warm)", value: "rgba(255, 238, 200, 0.55)" },
-  "--mote-warm-glow": { var: "var(--mote-warm-glow)", value: "rgba(255, 224, 160, 0.7)" },
-  "--mote-violet": { var: "var(--mote-violet)", value: "rgba(216, 180, 254, 0.6)" },
-  "--mote-violet-glow": { var: "var(--mote-violet-glow)", value: "rgba(192, 132, 252, 0.7)" },
-  "--ease-dream": { var: "var(--ease-dream)", value: "cubic-bezier(0.22, 0.61, 0.36, 1)" },
-  "--ease-out": { var: "var(--ease-out)", value: "cubic-bezier(0.16, 1, 0.3, 1)" },
-  "--ease-in-out": { var: "var(--ease-in-out)", value: "cubic-bezier(0.65, 0, 0.35, 1)" },
-  "--dur-fast": { var: "var(--dur-fast)", value: "140ms" },
-  "--dur-base": { var: "var(--dur-base)", value: "240ms" },
-  "--dur-slow": { var: "var(--dur-slow)", value: "420ms" },
-  "--motion-object-travel": { var: "var(--motion-object-travel)", value: "420ms var(--ease-out)" },
-  "--motion-container-transform": { var: "var(--motion-container-transform)", value: "320ms var(--ease-dream)" },
-  "--stagger-travel": { var: "var(--stagger-travel)", value: "55ms" },
+  "--inset-top": { var: "var(--inset-top)", value: "inset 0 1px 0 rgba(255, 255, 255, 0.08)", kind: "shadow" },
+  "--inset-press": { var: "var(--inset-press)", value: "inset 0 2px 8px rgba(3, 1, 8, 0.5)", kind: "shadow" },
+  "--gradient-accent": { var: "var(--gradient-accent)", value: "linear-gradient(135deg, #a855f7 0%, #7c3aed 100%)", kind: "other" },
+  "--gradient-gold": { var: "var(--gradient-gold)", value: "linear-gradient(135deg, #ffd34d 0%, #e0a82a 100%)", kind: "other" },
+  "--gradient-energy": { var: "var(--gradient-energy)", value: "linear-gradient(160deg, #38bdf8 0%, #0ea5e9 100%)", kind: "other" },
+  "--mote-warm": { var: "var(--mote-warm)", value: "rgba(255, 238, 200, 0.55)", kind: "color" },
+  "--mote-warm-glow": { var: "var(--mote-warm-glow)", value: "rgba(255, 224, 160, 0.7)", kind: "color" },
+  "--mote-violet": { var: "var(--mote-violet)", value: "rgba(216, 180, 254, 0.6)", kind: "color" },
+  "--mote-violet-glow": { var: "var(--mote-violet-glow)", value: "rgba(192, 132, 252, 0.7)", kind: "color" },
+  "--ease-dream": { var: "var(--ease-dream)", value: "cubic-bezier(0.22, 0.61, 0.36, 1)", kind: "other" },
+  "--ease-out": { var: "var(--ease-out)", value: "cubic-bezier(0.16, 1, 0.3, 1)", kind: "other" },
+  "--ease-in-out": { var: "var(--ease-in-out)", value: "cubic-bezier(0.65, 0, 0.35, 1)", kind: "other" },
+  "--dur-fast": { var: "var(--dur-fast)", value: "140ms", kind: "other" },
+  "--dur-base": { var: "var(--dur-base)", value: "240ms", kind: "other" },
+  "--dur-slow": { var: "var(--dur-slow)", value: "420ms", kind: "other" },
+  "--motion-object-travel": { var: "var(--motion-object-travel)", value: "420ms var(--ease-out)", kind: "other" },
+  "--motion-container-transform": { var: "var(--motion-container-transform)", value: "320ms var(--ease-dream)", kind: "other" },
+  "--stagger-travel": { var: "var(--stagger-travel)", value: "55ms", kind: "other" },
 } as const;
 
 export type TokenName = keyof typeof TOKENS;

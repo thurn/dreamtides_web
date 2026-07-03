@@ -21,7 +21,7 @@ describe("dedupeLastWins", () => {
 
     const byName = dedupeLastWins(tokens);
 
-    expect(byName.get("text-faint")).toBe("#7b7299");
+    expect(byName.get("text-faint")).toEqual({ value: "#7b7299", kind: undefined });
     expect(byName.size).toBe(1);
   });
 
@@ -36,7 +36,18 @@ describe("dedupeLastWins", () => {
     const byName = dedupeLastWins(tokens);
 
     expect([...byName.keys()]).toEqual(["a", "text-faint", "b"]);
-    expect(byName.get("text-faint")).toBe("#7b7299");
+    expect(byName.get("text-faint")?.value).toBe("#7b7299");
+  });
+
+  it("keeps the last declaration's kind, matching the CSS cascade (last-wins kind)", () => {
+    const tokens = [
+      { name: "r-popover", value: "8px" },
+      { name: "r-popover", value: "10px", kind: "radius" },
+    ];
+
+    const byName = dedupeLastWins(tokens);
+
+    expect(byName.get("r-popover")).toEqual({ value: "10px", kind: "radius" });
   });
 });
 
@@ -62,6 +73,20 @@ describe("buildTokensSource", () => {
     );
     expect(source).toContain("export const TOKENS = {");
     expect(source).toContain("} as const;");
+  });
+
+  it("emits a kind field when the parsed token carries one, and omits it otherwise (kind pass-through)", () => {
+    const source = buildTokensSource([
+      { name: "r-popover", value: "8px", kind: "radius" },
+      { name: "space-1", value: "2px" },
+    ]);
+
+    expect(source).toContain(
+      '"--r-popover": { var: "var(--r-popover)", value: "8px", kind: "radius" },',
+    );
+    expect(source).toContain(
+      '"--space-1": { var: "var(--space-1)", value: "2px" },',
+    );
   });
 
   it("dedupes a name declared twice in the source, keeping only the last value (last-wins in generated output)", () => {
