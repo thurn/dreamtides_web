@@ -39,6 +39,7 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 import { Pressable, PRESS_SCALE } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
+import { renderRichText, type RichText } from "./rich-text";
 
 /* ---- faithfully-copied layout literals from the design source (not tokens:
    these are the info-card's own fixed geometry, not design-system scale) ---- */
@@ -98,6 +99,18 @@ const tMeta: React.CSSProperties = {
   textTransform: "uppercase",
   color: token("--text-faint"),
 };
+/** A small warning-toned pill shown after a title (e.g. a dreamsign "Bane"). */
+const tTitleBadge: React.CSSProperties = {
+  borderRadius: 999,
+  padding: "1px 6px",
+  fontSize: 9,
+  fontWeight: 800,
+  letterSpacing: "0.08em",
+  textTransform: "uppercase",
+  color: "#fecaca",
+  background: "rgba(239, 68, 68, 0.18)",
+  border: "1px solid rgba(239, 68, 68, 0.45)",
+};
 
 /** id of the one-time <style> element carrying the entrance keyframe. Guarded so
  * multiple InfoCard/PressPopover instances never duplicate it. */
@@ -148,10 +161,17 @@ export type InfoCardVariant = "object" | "hero" | "icon" | "text";
 export interface InfoCardProps {
   /** Which media treatment. Default 'text'. */
   variant?: InfoCardVariant;
-  title?: React.ReactNode;
-  body?: React.ReactNode;
+  /** The card's headline. Plain text — resolve names before display. */
+  title?: string;
+  /**
+   * A small warning-toned pill shown right after the title (e.g. a dreamsign
+   * "Bane"). Omit for no badge.
+   */
+  titleBadge?: string;
+  /** The reveal copy, as a {@link RichText} value (plain / rules / note / stack). */
+  body?: RichText;
   /** Small mono/uppercase overline (hero + text variants). */
-  meta?: React.ReactNode;
+  meta?: string;
   /** Media source (object + hero variants). */
   image?: string;
   imagePos?: string;
@@ -167,8 +187,8 @@ export interface InfoCardProps {
    * node it opens from. Omit for the default violet-glow disc (SITE_DISC).
    */
   discAccent?: string;
-  /** text variant: a small leading glyph node. */
-  leadGlyph?: React.ReactNode;
+  /** text variant: a small leading glyph, as a Boxicons class string. */
+  leadGlyph?: string;
 }
 
 /* ================================================================
@@ -184,6 +204,7 @@ export interface InfoCardProps {
 function InfoCardComponent({
   variant = "text",
   title,
+  titleBadge,
   body,
   meta,
   image,
@@ -200,10 +221,28 @@ function InfoCardComponent({
       <div
         style={{ ...tBody, textAlign: variant === "object" ? "center" : "left" }}
       >
-        {body}
+        {renderRichText(body)}
       </div>
     );
   const Meta = meta ? <div style={{ ...tMeta, marginBottom: 7 }}>{meta}</div> : null;
+  // Title text plus an optional trailing badge, wrapped inline so the two stay
+  // on one baseline (and stay centered in the object variant's centered title).
+  const titleContent =
+    titleBadge === undefined ? (
+      title
+    ) : (
+      <span
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          flexWrap: "wrap",
+        }}
+      >
+        {title}
+        <span style={tTitleBadge}>{titleBadge}</span>
+      </span>
+    );
 
   /* --- object: a centered media block (framed portrait OR contained
      transparent object) above its name + text. --- */
@@ -266,7 +305,7 @@ function InfoCardComponent({
         }}
       >
         {media}
-        <div style={{ ...tHeadline, textAlign: "center" }}>{title}</div>
+        <div style={{ ...tHeadline, textAlign: "center" }}>{titleContent}</div>
         {Body}
       </div>
     );
@@ -325,8 +364,10 @@ function InfoCardComponent({
           }}
         >
           {Meta}
-          <div style={{ ...tHeadline, marginBottom: body ? 7 : 0 }}>{title}</div>
-          {body != null && <div style={{ ...tBody }}>{body}</div>}
+          <div style={{ ...tHeadline, marginBottom: body ? 7 : 0 }}>
+            {titleContent}
+          </div>
+          {body != null && <div style={{ ...tBody }}>{renderRichText(body)}</div>}
         </div>
       </div>
     );
@@ -356,9 +397,11 @@ function InfoCardComponent({
               style={{ fontSize: 21, color: token("--text-on-accent") }}
             />
           </span>
-          <div style={tHeadline}>{title}</div>
+          <div style={tHeadline}>{titleContent}</div>
         </div>
-        {body != null && <div style={{ ...tBody, marginTop: 11 }}>{body}</div>}
+        {body != null && (
+          <div style={{ ...tBody, marginTop: 11 }}>{renderRichText(body)}</div>
+        )}
       </div>
     );
   }
@@ -375,8 +418,14 @@ function InfoCardComponent({
           marginBottom: body ? 7 : 0,
         }}
       >
-        {leadGlyph}
-        <div style={tHeadline}>{title}</div>
+        {leadGlyph !== undefined && (
+          <i
+            className={leadGlyph}
+            aria-hidden="true"
+            style={{ fontSize: 20, color: token("--text-secondary") }}
+          />
+        )}
+        <div style={tHeadline}>{titleContent}</div>
       </div>
       {Body}
     </div>

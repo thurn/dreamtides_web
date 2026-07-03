@@ -1,0 +1,80 @@
+// RichText — the design system's model for a run of formatted copy.
+//
+// A caller describes WHAT a piece of text is; the component that renders it
+// owns HOW it looks (type scale, color, glossary-keyword emphasis, inline
+// resource glyphs, secondary-line treatment). This keeps rich copy inside the
+// design system: a screen states "this body is rules text" or "this is a muted
+// status note" as data, instead of hand-assembling a `<RulesText>` / `<div>`
+// subtree and passing it in as an arbitrary node. Slots that render copy (e.g.
+// `InfoCard.body`) take a `RichText`, never a `ReactNode`.
+
+import { Fragment, type ReactElement, type ReactNode } from "react";
+import { token } from "../primitives/tokens";
+import { renderRulesText } from "./RulesText";
+
+/**
+ * A piece of formatted copy the design system knows how to render.
+ *
+ *  - `plain` — a run of plain prose; no markup parsing.
+ *  - `rules` — Dreamtides rules text (see `RulesText`): glossary keywords gain
+ *    the spark-amber emphasis and resource symbols (`◆`, `●`, `⍏N`) render as
+ *    their inline glyphs. Use for card / dreamcaller / dreamsign ability text.
+ *  - `note`  — a de-emphasized secondary line (muted + italic), e.g. a
+ *    "Locked" / "Visited" status shown under a site blurb.
+ *  - `stack` — several parts laid out vertically as separate lines.
+ */
+export type RichText =
+  | { readonly kind: "plain"; readonly text: string }
+  | { readonly kind: "rules"; readonly text: string }
+  | { readonly kind: "note"; readonly text: string }
+  | { readonly kind: "stack"; readonly parts: readonly RichText[] };
+
+/** Ergonomic constructors for {@link RichText} values. */
+export const richText = {
+  plain: (text: string): RichText => ({ kind: "plain", text }),
+  rules: (text: string): RichText => ({ kind: "rules", text }),
+  note: (text: string): RichText => ({ kind: "note", text }),
+  stack: (...parts: RichText[]): RichText => ({ kind: "stack", parts }),
+};
+
+/** Vertical gap (px) between stacked rich-text parts. */
+const STACK_GAP = 8;
+
+/**
+ * Renders a {@link RichText} value to nodes. Pure. `key` is applied to the
+ * returned root so the result can sit directly in a React list (e.g. a stack).
+ */
+export function renderRichText(
+  value: RichText,
+  key: string | number = 0,
+): ReactNode {
+  switch (value.kind) {
+    case "plain":
+      return <span key={key}>{value.text}</span>;
+    case "rules":
+      return <Fragment key={key}>{renderRulesText(value.text)}</Fragment>;
+    case "note":
+      return (
+        <div
+          key={key}
+          style={{ color: token("--text-muted"), fontStyle: "italic" }}
+        >
+          {value.text}
+        </div>
+      );
+    case "stack":
+      return (
+        <div
+          key={key}
+          style={{ display: "flex", flexDirection: "column", gap: STACK_GAP }}
+        >
+          {value.parts.map((part, i) => renderRichText(part, i))}
+        </div>
+      );
+  }
+}
+
+/** Renders a {@link RichText} value inline. */
+export function RichTextView({ value }: { value: RichText }): ReactElement {
+  return <>{renderRichText(value)}</>;
+}

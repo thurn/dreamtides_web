@@ -25,9 +25,9 @@
 // Tango:
 //   - The design source resolves the shared engine + RulesText from a global
 //     DS bundle at render time; here it imports Tango's InfoCard engine
-//     directly. Dreamsign / Dreamcaller ability text renders as plain body
-//     text for now — RulesText's keyword highlighting lands with that
-//     component (a later import); the InfoCard body slot already accepts it.
+//     directly. Dreamsign / Dreamcaller ability text renders as `richText.rules`
+//     so glossary keywords highlight in place; UI copy (the essence blurb) uses
+//     `richText.plain`.
 //   - Each bespoke press target wires `onPointerEnter`/`onPointerLeave` to
 //     Tango's input-adaptive usePressReveal (hover reveals on a fine pointer,
 //     press reveals on touch), exactly as InfoCard.PressInfo does, so the HUD
@@ -41,6 +41,7 @@ import type { CSSProperties, ReactElement } from "react";
 import { createPortal } from "react-dom";
 import { InfoCard } from "./InfoCard";
 import type { AnchorRect } from "./InfoCard";
+import { richText } from "./rich-text";
 import { token } from "../primitives/tokens";
 import "./quest-status-bar.css";
 
@@ -164,7 +165,7 @@ function QsbSignObject({
               image={sign.art}
               imageFilter={DS_SHADOW}
               title={sign.name}
-              body={sign.ability ? sign.ability : null}
+              body={sign.ability ? richText.rules(sign.ability) : undefined}
             />
           </PressPopover>,
           stageRef.current,
@@ -477,7 +478,9 @@ function QsbDreamcallerBust({
               imagePos="50% 6%"
               wash={dreamcaller.wash}
               title={`${dreamcaller.name ?? ""}, ${dreamcaller.epithet ?? ""}`}
-              body={dreamcaller.ability ? dreamcaller.ability : null}
+              body={
+                dreamcaller.ability ? richText.rules(dreamcaller.ability) : undefined
+              }
             />
           </PressPopover>,
           stageRef.current,
@@ -545,7 +548,9 @@ function QsbEssence({
             <InfoCard
               variant="text"
               title="Essence Total"
-              body="A currency you use during quests to modify your deck."
+              body={richText.plain(
+                "A currency you use during quests to modify your deck.",
+              )}
             />
           </PressPopover>,
           stageRef.current,

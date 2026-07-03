@@ -8,7 +8,7 @@
 // consumes it. The array starts empty; TangoApp renders a "coming soon" note
 // while it is.
 
-import type { ComponentType, ReactNode } from "react";
+import type { ComponentType } from "react";
 import { atlasEdgeDemo } from "./demos/atlas-edge";
 import { atlasNodeDemo } from "./demos/atlas-node";
 import { buttonDemo } from "./demos/button";
@@ -79,11 +79,12 @@ export interface TangoComponent {
     /** Initial control values, seeded into the ComponentPage's args state. */
     defaultArgs: Record<string, unknown>;
     /**
-     * ReactNode props (children, icon slots, ...) that have no interactive
-     * control (controlForProp returns "none"). Keyed by prop name; spread into
-     * the demo alongside args so the live component has real content to render.
+     * Props that have no interactive control (controlForProp returns "none") —
+     * ReactNode children and structured model slots like a `RichText` body.
+     * Keyed by prop name; spread into the demo alongside args so the live
+     * component has real content to render.
      */
-    sampleContent?: Record<string, ReactNode>;
+    sampleContent?: Record<string, unknown>;
   };
 }
 

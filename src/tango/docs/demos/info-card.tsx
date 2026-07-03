@@ -1,8 +1,8 @@
 // Registry demo entry for InfoCard — see tide-pill.tsx for the recipe this
-// follows. `variant` is a string-literal union, so it becomes a select control
-// automatically. `title`, `body`, `meta` and `leadGlyph` are ReactNode-slot
-// props with no generated control, so they're seeded via sampleContent instead
-// of defaultArgs (same split TidePill/StatTile use).
+// follows. `variant` is a string-literal union (select control); `title`,
+// `meta` and `leadGlyph` are strings (text controls) seeded from defaultArgs.
+// `body` is a `RichText` model value with no generated control, so it is seeded
+// via sampleContent.
 //
 // InfoCard's props are all optional, so the raw component assigns directly to
 // the registry's `Component` slot (no all-optional wrapper needed, unlike
@@ -10,6 +10,7 @@
 // keyed under so the props table reports InfoCard's real API.
 
 import { InfoCard } from "../../components/InfoCard";
+import { richText } from "../../components/rich-text";
 import type { TangoComponent } from "../registry";
 
 export const infoCardDemo: TangoComponent = {
@@ -21,15 +22,16 @@ export const infoCardDemo: TangoComponent = {
   usage: [
     {
       label: "Text variant",
-      note: "The default: a `meta` overline, `title`, `body`, and an optional small `leadGlyph`.",
+      note: "The default: a `meta` overline, `title`, a `RichText` `body`, and an optional small `leadGlyph` boxicon class.",
       code: `import { InfoCard } from "src/tango/components/InfoCard";
+import { richText } from "src/tango/components/rich-text";
 
 <InfoCard
   variant="text"
   meta="Tide"
   title="Singular Storm"
-  body="A rising tide that floods the board with essence."
-  leadGlyph={<i className="bxf bx-water" />}
+  body={richText.plain("A rising tide that floods the board with essence.")}
+  leadGlyph="bxf bx-water"
 />`,
     },
     {
@@ -40,7 +42,8 @@ export const infoCardDemo: TangoComponent = {
   image={portraitUrl}
   frame
   title="Seld Rakor"
-  body="the Unbound"
+  titleBadge="Bane"
+  body={richText.rules("Whenever you Reclaim a card, deal 1 damage.")}
 />`,
     },
     {
@@ -50,7 +53,7 @@ export const infoCardDemo: TangoComponent = {
   variant="icon"
   glyph="bxf bx-store-alt-2"
   title="Merchant"
-  body="Spend essence on cards, dreamsigns, and services."
+  body={richText.plain("Spend essence on cards, dreamsigns, and services.")}
 />`,
     },
     {
@@ -58,7 +61,13 @@ export const infoCardDemo: TangoComponent = {
       note: "In real screens InfoCard is anchored to a trigger through the attached press engine (`InfoCard.PressInfo`): hover / touch-down reveals the `card` beside the wrapped trigger, measured against `stageRef`.",
       code: `<InfoCard.PressInfo
   stageRef={stageRef}
-  card={<InfoCard variant="text" title="Singular Storm" body="…" />}
+  card={
+    <InfoCard
+      variant="text"
+      title="Singular Storm"
+      body={richText.plain("…")}
+    />
+  }
 >
   <TidePill tone="blue">Singular Storm</TidePill>
 </InfoCard.PressInfo>`,
@@ -67,12 +76,14 @@ export const infoCardDemo: TangoComponent = {
   demo: {
     defaultArgs: {
       variant: "text",
-    },
-    sampleContent: {
       meta: "Tide",
       title: "Singular Storm",
-      body: "A rising tide that floods the board with essence, drowning weaker dreams beneath it.",
-      leadGlyph: <i className="bxf bx-water" style={{ color: "var(--accent)" }} />,
+      leadGlyph: "bxf bx-water",
+    },
+    sampleContent: {
+      body: richText.plain(
+        "A rising tide that floods the board with essence, drowning weaker dreams beneath it.",
+      ),
     },
   },
 };

@@ -1,15 +1,16 @@
 // The live preview surface on a Tango component's doc page. Renders the actual
-// component with the current control `args` plus any ReactNode `sampleContent`
-// (children, icon slots, ...) inside a token-styled panel. Re-renders whenever
-// the ComponentPage updates args, so control edits are reflected immediately.
+// component with the current control `args` plus any `sampleContent` (props
+// with no control — ReactNode children, structured model slots like a RichText
+// body) inside a token-styled panel. Re-renders whenever the ComponentPage
+// updates args, so control edits are reflected immediately.
 
-import type { ComponentType, ReactNode } from "react";
+import type { ComponentType } from "react";
 import { token } from "../primitives/tokens";
 
 interface DemoStageProps {
   Component: ComponentType<Record<string, unknown>>;
   args: Record<string, unknown>;
-  sampleContent?: Record<string, ReactNode>;
+  sampleContent?: Record<string, unknown>;
 }
 
 export function DemoStage({ Component, args, sampleContent }: DemoStageProps) {

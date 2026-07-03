@@ -30,10 +30,10 @@
 // input-adaptive engine is the Tango vocabulary the preview now speaks.
 
 import * as React from "react";
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { InfoCard } from "./InfoCard";
-import { RulesText } from "./RulesText";
+import { richText } from "./rich-text";
 import { CardTermDefinitions } from "./CardTermDefinitions";
 import { token } from "../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../types/quest";
@@ -66,35 +66,6 @@ export function dreamsignArtUrl(imageName: string): string {
   return assetUrl(`/dreamsigns/${imageName}`);
 }
 
-/** The InfoCard title for a dreamsign: its name, plus a Bane badge for banes. */
-function dreamsignTitle(dreamsign: DreamsignData): ReactNode {
-  if (!dreamsign.isBane) {
-    return dreamsign.name;
-  }
-  return (
-    <span
-      style={{ display: "inline-flex", alignItems: "center", gap: 6, justifyContent: "center" }}
-    >
-      {dreamsign.name}
-      <span
-        style={{
-          borderRadius: 999,
-          padding: "1px 6px",
-          fontSize: 9,
-          fontWeight: 800,
-          letterSpacing: "0.08em",
-          textTransform: "uppercase",
-          color: "#fecaca",
-          background: "rgba(239, 68, 68, 0.18)",
-          border: "1px solid rgba(239, 68, 68, 0.45)",
-        }}
-      >
-        Bane
-      </span>
-    </span>
-  );
-}
-
 export interface DreamsignInfoCardProps {
   /** The dreamsign to render as the shared InfoCard `object` reveal. */
   dreamsign: DreamsignData;
@@ -105,7 +76,7 @@ export interface DreamsignInfoCardProps {
 /**
  * The shared dreamsign reveal on its own — InfoCard's `object` variant showing
  * the enlarged art, the name (with a Bane badge for banes), and the effect text
- * via `RulesText` so keywords highlight in place. Use it as the content of a
+ * as `richText.rules` so keywords highlight in place. Use it as the content of a
  * bespoke trigger / placement engine (e.g. a screen's own `HoverPopover`); the
  * `Dreamsign` tile below wires this same card to the input-adaptive engine.
  *
@@ -145,8 +116,9 @@ export function DreamsignInfoCard({
         imageFilter={
           dreamsign.isBane ? `${OBJECT_SHADOW} grayscale(0.5)` : OBJECT_SHADOW
         }
-        title={dreamsignTitle(dreamsign)}
-        body={effect ? <RulesText text={effect} /> : null}
+        title={dreamsign.name}
+        titleBadge={dreamsign.isBane ? "Bane" : undefined}
+        body={effect ? richText.rules(effect) : undefined}
       />
       <CardTermDefinitions
         text={effect}

@@ -25,6 +25,7 @@ import * as React from "react";
 import type { CSSProperties } from "react";
 import { createPortal } from "react-dom";
 import { InfoCard } from "./InfoCard";
+import { richText, type RichText } from "./rich-text";
 import { mulberry32, type ScatterPoint } from "./dreamscape-scatter";
 import type { SiteState } from "../../types/quest";
 import "./site-node.css";
@@ -65,6 +66,14 @@ function siteRevealNote(model: DreamscapeSiteModel): string | null {
     return "Already visited.";
   }
   return null;
+}
+
+/** The InfoCard body for a site reveal: the mechanic blurb plus, when locked or
+ * visited, a muted status note under it. */
+function siteRevealBody(model: DreamscapeSiteModel): RichText {
+  const note = siteRevealNote(model);
+  const blurb = richText.plain(model.blurb);
+  return note === null ? blurb : richText.stack(blurb, richText.note(note));
 }
 
 export interface SiteNodeProps {
@@ -226,16 +235,7 @@ export function SiteNode({
               glyph={model.icon}
               discAccent={accent}
               title={model.label}
-              body={
-                <>
-                  {model.blurb}
-                  {siteRevealNote(model) !== null && (
-                    <div style={{ marginTop: 8, fontStyle: "italic" }}>
-                      {siteRevealNote(model)}
-                    </div>
-                  )}
-                </>
-              }
+              body={siteRevealBody(model)}
             />
           </PressPopover>,
           stageRef.current,

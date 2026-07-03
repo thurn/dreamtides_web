@@ -8,6 +8,7 @@
 
 import { useRef } from "react";
 import { InfoCard } from "../../components/InfoCard";
+import { richText } from "../../components/rich-text";
 import { dreamscapeSceneUrl } from "../../components/atlas-display";
 import { assetUrl } from "../../../runtime/asset-url";
 import { token } from "../../primitives/tokens";
@@ -137,7 +138,7 @@ export function InfoCardMockup() {
               frame
               image={dreamcallerPortraitUrl("0025")}
               title="Threxan, the Resounding Wrath"
-              body="At the start of your first turn, draw a card."
+              body={richText.rules("At the start of your first turn, draw a card.")}
             />
           }
         />
@@ -152,7 +153,9 @@ export function InfoCardMockup() {
               image={dreamscapeSceneUrl("pharaohs_gate")}
               meta="Layer IV"
               title="Pharaoh's Gate"
-              body="A sun-scoured dream of buried kings and restless sand."
+              body={richText.plain(
+                "A sun-scoured dream of buried kings and restless sand.",
+              )}
             />
           }
         />
@@ -166,7 +169,9 @@ export function InfoCardMockup() {
               variant="icon"
               glyph="bxf bx-store-alt-2"
               title="Merchant"
-              body="Spend essence on cards, dreamsigns, and services."
+              body={richText.plain(
+                "Spend essence on cards, dreamsigns, and services.",
+              )}
             />
           }
         />
@@ -180,10 +185,10 @@ export function InfoCardMockup() {
               variant="text"
               meta="Resource"
               title="Essence"
-              body="The dream's currency — spent to draft cards and buy from merchants."
-              leadGlyph={
-                <i className="bxf bx-water" style={{ color: token("--accent") }} />
-              }
+              body={richText.plain(
+                "The dream's currency — spent to draft cards and buy from merchants.",
+              )}
+              leadGlyph="bxf bx-water"
             />
           }
         />

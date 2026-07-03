@@ -600,23 +600,31 @@
     },
     {
       "name": "title",
-      "tsType": "ReactNode",
+      "tsType": "string",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": ""
+      "description": "The card's headline. Plain text — resolve names before display."
+    },
+    {
+      "name": "titleBadge",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "A small warning-toned pill shown right after the title (e.g. a dreamsign\n\"Bane\"). Omit for no badge."
     },
     {
       "name": "body",
-      "tsType": "ReactNode",
+      "tsType": "RichText",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": ""
+      "description": "The reveal copy, as a {@link RichText} value (plain / rules / note / stack)."
     },
     {
       "name": "meta",
-      "tsType": "ReactNode",
+      "tsType": "string",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
@@ -680,11 +688,11 @@
     },
     {
       "name": "leadGlyph",
-      "tsType": "ReactNode",
+      "tsType": "string",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "text variant: a small leading glyph node."
+      "description": "text variant: a small leading glyph, as a Boxicons class string."
     }
   ],
   "Motes": [
@@ -1384,6 +1392,16 @@
       "required": false,
       "defaultValue": "0",
       "description": "Space between the value and its mark. Default 0 — a tight pairing (200◆)."
+    }
+  ],
+  "RichTextView": [
+    {
+      "name": "value",
+      "tsType": "RichText",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": ""
     }
   ],
   "RulesText": [
