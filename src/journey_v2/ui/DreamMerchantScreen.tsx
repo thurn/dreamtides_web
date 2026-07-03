@@ -16,7 +16,7 @@ import {
 import { DreamJourneyMobile } from "./DreamJourneyMobile";
 import { DreamJourneyStage } from "./DreamJourneyStage";
 import { OfferColumn } from "./OfferColumn";
-import { SiteCloseButton } from "../../components/SiteCloseButton";
+import { LeaveSiteButton } from "../../tango/components/LeaveSiteButton";
 
 export interface DreamMerchantScreenProps {
   site: SiteState;
@@ -214,8 +214,8 @@ export function DreamMerchantScreen({
           onSelectCandidate={selectCandidate}
           onAccept={acceptOffer}
         />
-        <SiteCloseButton
-          onClose={declineEncounter}
+        <LeaveSiteButton
+          onLeave={declineEncounter}
           testId="merchant-walk-away"
           label="Walk on"
         />
@@ -286,8 +286,8 @@ export function DreamMerchantScreen({
           )
         }
       />
-      <SiteCloseButton
-        onClose={declineEncounter}
+      <LeaveSiteButton
+        onLeave={declineEncounter}
         testId="merchant-walk-away"
         label="Walk on"
       />

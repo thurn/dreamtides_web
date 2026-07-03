@@ -1,7 +1,7 @@
 import type { MouseEvent as ReactMouseEvent } from "react";
 
 import { CardDisplay } from "../../components/CardDisplay";
-import { HoverZoomCard } from "../../components/HoverZoomCard";
+import { HoverZoomCard } from "../../tango/components/HoverZoomCard";
 import type { BattleCommand } from "../debug/commands";
 import type { BattleCardInstance, BattleCommandSourceSurface, BattleMutableState } from "../types";
 import { battleCardAutomationStatus } from "../automation/battle-card-effects-table";
@@ -215,7 +215,7 @@ export function BattleHandCard({
         enabled={!compact}
         logSurface="battle_hand"
         glossaryText={displayCard.renderedText}
-        className="h-full w-full"
+        fill
       >
         <div className="h-full w-full">
           <CardDisplay

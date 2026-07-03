@@ -1,6 +1,6 @@
 import type { CardData } from "../types/cards";
 import { CardView } from "../tango/components/CardView";
-import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
+import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
 import { HoverPopover } from "../tango/components/HoverPopover";
 import { RulesText } from "../tango/components/RulesText";
 import type { Tides4DeckJson } from "../draft/pool/tides4-io";
@@ -67,7 +67,7 @@ export function TideSourcePreview({
           <DreamcallerPortrait
             dreamcaller={dreamcaller}
             variant="thumb"
-            style={{ width: size, height: size }}
+            size={size}
           />
         </HoverPopover>
       </div>

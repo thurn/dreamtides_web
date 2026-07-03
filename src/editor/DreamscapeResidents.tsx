@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react";
 import { DreamcallerPopover } from "../components/DreamcallerPopover";
-import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
+import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
 import { HoverPopover } from "../tango/components/HoverPopover";
 import type {
   DreamcallerAssignmentAction,
@@ -138,7 +138,7 @@ export default function DreamscapeResidents({
                   <DreamcallerPortrait
                     dreamcaller={resident.option}
                     variant="thumb"
-                    style={{ width: `${String(thumb)}px`, height: `${String(thumb)}px` }}
+                    size={thumb}
                   />
                 </HoverPopover>
               </div>

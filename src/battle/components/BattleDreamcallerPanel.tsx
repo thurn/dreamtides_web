@@ -2,7 +2,7 @@ import type {
   BattleDreamcallerSummary,
   BattleDreamsignSummary,
 } from "../types";
-import { DreamcallerPortrait } from "../../components/DreamcallerPortrait";
+import { DreamcallerPortrait } from "../../tango/components/DreamcallerPortrait";
 import { RulesText } from "../../tango/components/RulesText";
 
 export function BattleDreamcallerPanel({

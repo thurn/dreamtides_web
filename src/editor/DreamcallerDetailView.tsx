@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import { CardView } from "../tango/components/CardView";
-import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
+import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
 import { RulesText } from "../tango/components/RulesText";
 import { SIZE_PRESETS } from "../components/card-size";
 import type { CardData } from "../types/cards";
@@ -499,7 +499,6 @@ export default function DreamcallerDetailView({
               title: dreamcaller.title,
             }}
             variant="panel"
-            style={{ width: "100%" }}
           />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>

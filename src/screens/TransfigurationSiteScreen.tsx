@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import type { SiteState, DeckEntry, TransfigurationType } from "../types/quest";
 import type { CardData } from "../types/cards";
 import { CardDisplay } from "../components/CardDisplay";
-import { EssenceValue } from "../components/EssenceValue";
+import { EssenceValue } from "../tango/components/EssenceValue";
 import { SiteGuide } from "../components/SiteGuide";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
@@ -432,7 +432,7 @@ export function TransfigurationSiteScreen({
                         ) : (
                           <EssenceValue
                             amount={form.essenceCost}
-                            color="inherit"
+                            tone="inherit"
                           />
                         )}
                       </span>
@@ -475,7 +475,7 @@ export function TransfigurationSiteScreen({
                 activeAffordable &&
                 activeForm !== null &&
                 activeForm.essenceCost > 0 ? (
-                  <EssenceValue amount={activeForm.essenceCost} color="inherit" />
+                  <EssenceValue amount={activeForm.essenceCost} tone="inherit" />
                 ) : null}
               </button>
             </div>

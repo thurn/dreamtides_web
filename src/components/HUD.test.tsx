@@ -20,7 +20,7 @@ vi.mock("../logging", () => ({
   logEvent: vi.fn(),
 }));
 
-vi.mock("./DreamcallerPortrait", () => ({
+vi.mock("../tango/components/DreamcallerPortrait", () => ({
   DreamcallerPortrait: () => <div data-testid="dreamcaller-portrait" />,
 }));
 
@@ -408,12 +408,14 @@ describe("HUD", () => {
     expect(essenceBlock?.textContent).not.toContain("Essence");
 
     // The filled crypto glyph follows the number.
-    expect(essenceBlock?.querySelector("i.bx-crypto")).not.toBeNull();
+    const glyph = essenceBlock?.querySelector("i.bx-crypto");
+    expect(glyph).not.toBeNull();
 
-    // The value reads in the shared purple essence colour.
-    const valueSpan = essenceBlock?.querySelector("span");
+    // The value reads in the shared purple essence colour. The glyph sits inside
+    // the EssenceValue span that carries that colour.
+    const valueSpan = glyph?.parentElement;
     expect((valueSpan as HTMLElement | null)?.style.color).toBe(
-      "var(--color-essence)",
+      "var(--essence)",
     );
 
     act(() => {

@@ -4,7 +4,7 @@ import type { Dreamsign, SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { Dreamsign as DreamsignEntity } from "../tango/components/Dreamsign";
-import { EssenceGlyph } from "../components/EssenceValue";
+import { EssenceGlyph } from "../tango/components/EssenceValue";
 import { RulesText } from "../tango/components/RulesText";
 
 /** Props for the RewardSiteScreen component. */

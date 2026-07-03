@@ -12,11 +12,11 @@ import type { DreamcallerContent } from "../types/content";
 import { loadQuestContent, type QuestContent } from "../data/quest-content";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import { CardView } from "../tango/components/CardView";
-import { HoverZoomCard } from "../components/HoverZoomCard";
+import { HoverZoomCard } from "../tango/components/HoverZoomCard";
 import {
   DreamcallerPortrait,
   dreamcallerImageSrc,
-} from "../components/DreamcallerPortrait";
+} from "../tango/components/DreamcallerPortrait";
 import { HoverPopover } from "../tango/components/HoverPopover";
 import { DreamcallerPopover } from "../components/DreamcallerPopover";
 import { extractGlossaryTerms } from "../data/glossary-terms";

@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import type { CSSProperties } from "react";
-import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
+import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
 import { RulesText } from "../tango/components/RulesText";
 import EditableField from "./EditableField";
 import { TIDE_DOT_COLOR } from "./TidePoolModal";
@@ -165,7 +165,6 @@ export default function EditableDreamcaller({
               title: dreamcaller.title,
             }}
             variant="panel"
-            style={{ width: "100%" }}
           />
         </button>
       </div>

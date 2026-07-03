@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import type { SiteState } from "../types/quest";
-import { EssenceGlyph } from "../components/EssenceValue";
+import { EssenceGlyph } from "../tango/components/EssenceValue";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 

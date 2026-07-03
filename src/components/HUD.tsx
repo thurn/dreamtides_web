@@ -8,10 +8,10 @@ import {
   type SavedQuestSummary,
 } from "../state/saved-quests";
 import type { QuestState } from "../types/quest";
-import { DreamcallerPortrait } from "./DreamcallerPortrait";
+import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
 import { DreamcallerPopover } from "./DreamcallerPopover";
 import { HudDreamsignRow } from "./HudDreamsignRow";
-import { EssenceValue } from "./EssenceValue";
+import { EssenceValue } from "../tango/components/EssenceValue";
 import {
   HUD_BUTTON_BASE_CLASS,
   HUD_DREAMSIGN_DEBUG_SLOT_ID,
@@ -254,10 +254,9 @@ export function HUD({
           aria-label="Essence"
           data-hud-essence=""
         >
-          <EssenceValue
-            amount={String(animatedEssence)}
-            className="text-sm font-bold md:text-base"
-          />
+          <span className="text-sm font-bold md:text-base">
+            <EssenceValue amount={String(animatedEssence)} />
+          </span>
         </div>
 
         {/* Deck size */}
@@ -285,7 +284,7 @@ export function HUD({
                 <DreamcallerPortrait
                   dreamcaller={state.dreamcaller}
                   variant="thumb"
-                  style={{ height: 30, width: 30, flexShrink: 0 }}
+                  size={30}
                 />
                 {/* FIND-10-13 (Stage 4): only expose the dreamcaller text
                     beside the portrait at xl+ viewports. At 1024px only the

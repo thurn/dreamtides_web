@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { DreamcallerPortrait } from "../../components/DreamcallerPortrait";
+import { DreamcallerPortrait } from "../../tango/components/DreamcallerPortrait";
 import type {
   BattleDreamcallerSummary,
   BattleSide,

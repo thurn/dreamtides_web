@@ -4,8 +4,8 @@ import { useQuest } from "../state/quest-context";
 import { selectDreamcallerOffer } from "../data/dreamcaller-selection";
 import { selectedTides4Decks } from "../data/tides4-preview";
 import { generateQuestSeed } from "../state/quest-state-actions";
-import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
-import { EssenceValue } from "../components/EssenceValue";
+import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
+import { EssenceValue } from "../tango/components/EssenceValue";
 import { HoverPopover } from "../tango/components/HoverPopover";
 import { CardTermDefinitions } from "../tango/components/CardTermDefinitions";
 import { RulesText } from "../tango/components/RulesText";
@@ -186,17 +186,18 @@ export function QuestStartScreen() {
                     </p>
                   </div>
                 </div>
-                <DreamcallerPortrait
-                  dreamcaller={dreamcaller}
-                  variant="panel"
+                <div
                   style={{
-                    width: "100%",
-                    aspectRatio: "0.8 / 1",
                     marginBottom: 14,
                     borderRadius: 18,
                     boxShadow: `0 14px 28px ${accentColor}16`,
                   }}
-                />
+                >
+                  <DreamcallerPortrait
+                    dreamcaller={dreamcaller}
+                    variant="panel"
+                  />
+                </div>
                 {/* Hovering the description reveals the definitions for any
                     glossary terms it uses (e.g. "ephemeral"), matching the
                     term-definition panel shown beside cards. */}
@@ -227,11 +228,12 @@ export function QuestStartScreen() {
                   >
                     Starting Essence
                   </span>
-                  <EssenceValue
-                    amount={dreamcaller.startingEssence}
+                  <span
                     className="text-base font-bold md:text-lg"
                     data-starting-essence-value={dreamcaller.id}
-                  />
+                  >
+                    <EssenceValue amount={dreamcaller.startingEssence} />
+                  </span>
                 </div>
               </motion.button>
               {signatureCards.length > 0 && (

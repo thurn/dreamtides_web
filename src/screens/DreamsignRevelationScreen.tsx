@@ -5,7 +5,7 @@ import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { dreamsignIconUrl } from "../tango/components/atlas-display";
 import { SiteGuide } from "../components/SiteGuide";
-import { SiteCloseButton } from "../components/SiteCloseButton";
+import { LeaveSiteButton } from "../tango/components/LeaveSiteButton";
 import {
   DREAMSIGN_HOVER_DELAY_MS,
   DreamsignInfoCard,
@@ -149,8 +149,8 @@ export function DreamsignRevelationScreen({
 
       <SiteGuide siteType="DreamsignRevelation" isEnhanced={site.isEnhanced} />
 
-      <SiteCloseButton
-        onClose={handleSkip}
+      <LeaveSiteButton
+        onLeave={handleSkip}
         testId="dreamsign-revelation-skip"
         disabled={chosenIndex !== null}
       />

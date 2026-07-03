@@ -1,4 +1,4 @@
-import { DreamcallerPortrait } from "./DreamcallerPortrait";
+import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
 import { RulesText } from "../tango/components/RulesText";
 
 const ACCENT_COLOR = "#a855f7";
@@ -62,16 +62,7 @@ export function DreamcallerPopover({ dreamcaller }: DreamcallerPopoverProps) {
         </div>
 
         <div className="relative mt-4">
-          <DreamcallerPortrait
-            dreamcaller={dreamcaller}
-            variant="panel"
-            style={{
-              width: "100%",
-              background:
-                "linear-gradient(145deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.04) 45%, rgba(0, 0, 0, 0.18) 100%)",
-              border: "1px solid rgba(255, 255, 255, 0.16)",
-            }}
-          />
+          <DreamcallerPortrait dreamcaller={dreamcaller} variant="panel" />
         </div>
       </div>
 

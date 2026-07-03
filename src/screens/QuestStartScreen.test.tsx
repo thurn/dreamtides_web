@@ -388,8 +388,12 @@ describe("QuestStartScreen", () => {
       );
       expect(valueNode).not.toBeNull();
       expect(valueNode?.textContent).toBe(String(dreamcaller.startingEssence));
-      expect((valueNode as HTMLElement | null)?.style.color).toBe(
-        "var(--color-essence)",
+      // The value reads in the shared purple essence colour, carried by the
+      // EssenceValue span the crypto glyph sits inside.
+      const glyph = valueNode?.querySelector("i.bx-crypto");
+      expect(glyph).not.toBeNull();
+      expect((glyph?.parentElement as HTMLElement | null)?.style.color).toBe(
+        "var(--essence)",
       );
       const row = container.querySelector(
         `[data-starting-essence="${dreamcaller.id}"]`,

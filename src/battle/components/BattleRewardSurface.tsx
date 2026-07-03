@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { logEvent, logEventOnce } from "../../logging";
-import { EssenceGlyph } from "../../components/EssenceValue";
+import { EssenceGlyph } from "../../tango/components/EssenceValue";
 import { buttonVariant, typography } from "../design-tokens";
 
 // L-3 exception (bug-090): this module is a pure UI surface that only knows

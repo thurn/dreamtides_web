@@ -18,8 +18,8 @@ import { createBattleRngStreams, deriveBattleSeed } from "../battle/random";
 import { logEvent } from "../logging";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
 import { CardView } from "../tango/components/CardView";
-import { HoverZoomCard } from "../components/HoverZoomCard";
-import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
+import { HoverZoomCard } from "../tango/components/HoverZoomCard";
+import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
 import { dreamsignIconUrl } from "../tango/components/atlas-display";
 import {
   getAlgorithm,
@@ -546,15 +546,16 @@ export default function OpponentDebugApp() {
                   </div>
                 ) : (
                   <>
-                    <DreamcallerPortrait
-                      dreamcaller={{
-                        imageNumber: generation.dreamcaller.imageNumber,
-                        name: generation.dreamcaller.name,
-                        title: generation.dreamcaller.title,
-                      }}
-                      variant="panel"
-                      style={{ marginBottom: 10 }}
-                    />
+                    <div style={{ marginBottom: 10 }}>
+                      <DreamcallerPortrait
+                        dreamcaller={{
+                          imageNumber: generation.dreamcaller.imageNumber,
+                          name: generation.dreamcaller.name,
+                          title: generation.dreamcaller.title,
+                        }}
+                        variant="panel"
+                      />
+                    </div>
                     <div
                       style={{
                         fontSize: 16,

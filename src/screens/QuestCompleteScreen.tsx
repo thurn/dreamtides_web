@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useQuest } from "../state/quest-context";
 import { logEvent, downloadLog } from "../logging";
 import { CardDisplay } from "../components/CardDisplay";
-import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
-import { EssenceValue } from "../components/EssenceValue";
+import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
+import { EssenceValue } from "../tango/components/EssenceValue";
 import type { CardData } from "../types/cards";
 
 /** Final summary screen shown after winning 7 battles. */
@@ -104,7 +104,7 @@ export function QuestCompleteScreen() {
           <DreamcallerPortrait
             dreamcaller={state.dreamcaller}
             variant="panel"
-            style={{ width: 56, flexShrink: 0 }}
+            size={56}
           />
         ) : (
           <div
@@ -160,10 +160,9 @@ export function QuestCompleteScreen() {
               data-quest-complete-stat={stat.label}
             >
               {isEssenceStat ? (
-                <EssenceValue
-                  amount={stat.value}
-                  className="text-3xl font-bold md:text-4xl"
-                />
+                <span className="text-3xl font-bold md:text-4xl">
+                  <EssenceValue amount={stat.value} />
+                </span>
               ) : (
                 <span
                   className="text-3xl font-bold tabular-nums md:text-4xl"

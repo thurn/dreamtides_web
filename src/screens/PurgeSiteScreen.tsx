@@ -2,13 +2,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import type { SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
-import { EssenceGlyph, EssenceValue } from "../components/EssenceValue";
+import { EssenceGlyph, EssenceValue } from "../tango/components/EssenceValue";
 import { RulesText } from "../tango/components/RulesText";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { dreamsignIconUrl } from "../tango/components/atlas-display";
 import { SiteGuide } from "../components/SiteGuide";
-import { SiteCloseButton } from "../components/SiteCloseButton";
+import { LeaveSiteButton } from "../tango/components/LeaveSiteButton";
 import {
   MAX_PURGE_PER_VISIT,
   maxAffordablePurgeCount,
@@ -29,8 +29,6 @@ const PURGE_DISSOLVE_MS = 640;
 
 /** The width each card slot occupies in the deck grid, in pixels. */
 const CARD_SLOT_WIDTH = 148;
-
-const ESSENCE_COLOR = "var(--color-essence)";
 
 /**
  * The Purge site as an immersive, full-bleed scene. Master Takeshi opens the
@@ -272,7 +270,7 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
           <div className="pg-cell">
             <span className="pg-cell-k">Essence after</span>
             <span className="pg-cell-v">
-              <EssenceValue amount={essenceAfter} color="inherit" />
+              <EssenceValue amount={essenceAfter} tone="inherit" />
               <span className="unit">/ {essence}</span>
             </span>
           </div>
@@ -282,7 +280,7 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
               {atVisitLimit ? (
                 <span className="pg-cell-note">Visit limit reached</span>
               ) : canSelectMore ? (
-                <EssenceValue amount={nextCardPrice} color="inherit" />
+                <EssenceValue amount={nextCardPrice} tone="inherit" />
               ) : (
                 <span className="pg-cell-note">Not enough essence</span>
               )}
@@ -310,7 +308,7 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
           {selectedCount > 0 && (
             <span className="pg-purge-cost">
               {" · "}
-              <EssenceValue amount={totalCost} color={ESSENCE_COLOR} />
+              <EssenceValue amount={totalCost} />
             </span>
           )}
         </button>
@@ -444,8 +442,8 @@ export function PurgeSiteScreen({ site }: PurgeSiteScreenProps) {
       {/* Master Takeshi (shared SiteGuide), docked lower-left in landscape. */}
       <SiteGuide siteType="Purge" isEnhanced={site.isEnhanced} />
 
-      <SiteCloseButton
-        onClose={handleClose}
+      <LeaveSiteButton
+        onLeave={handleClose}
         testId="purge-walk-on"
         disabled={purging !== null}
       />

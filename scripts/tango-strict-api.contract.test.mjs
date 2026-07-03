@@ -67,6 +67,7 @@ const CONTAINER_COMPONENTS = new Set([
   "Button",
   "GroupPanel",
   "HoverPopover",
+  "HoverZoomCard",
   "PressPopover",
   "PressInfo",
   "TidePill",

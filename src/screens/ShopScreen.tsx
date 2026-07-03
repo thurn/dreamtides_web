@@ -4,15 +4,15 @@ import type { CardData } from "../types/cards";
 import type { Dreamsign, SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
-import { EssenceValue } from "../components/EssenceValue";
-import { HoverZoomCard } from "../components/HoverZoomCard";
+import { EssenceValue } from "../tango/components/EssenceValue";
+import { HoverZoomCard } from "../tango/components/HoverZoomCard";
 import { HoverPopover } from "../tango/components/HoverPopover";
 import {
   DREAMSIGN_HOVER_DELAY_MS,
   DreamsignInfoCard,
 } from "../tango/components/Dreamsign";
 import { dreamsignIconUrl } from "../tango/components/atlas-display";
-import { SiteCloseButton } from "../components/SiteCloseButton";
+import { LeaveSiteButton } from "../tango/components/LeaveSiteButton";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
@@ -196,8 +196,8 @@ export function ShopScreen({ site }: ShopScreenProps) {
       data-testid="shop-screen"
       data-shop-variant={site.type}
     >
-      <SiteCloseButton
-        onClose={handleLeave}
+      <LeaveSiteButton
+        onLeave={handleLeave}
         testId="shop-leave"
         label="Leave shop"
       />
@@ -283,11 +283,9 @@ function RerollTile({ state, cost, used, available, onClick }: RerollTileProps) 
         ) : (
           <>
             <span className="sh-buy-label">Restock</span>
-            <EssenceValue
-              amount={cost}
-              color="inherit"
-              data-shop-reroll-cost=""
-            />
+            <span data-shop-reroll-cost="">
+              <EssenceValue amount={cost} tone="inherit" />
+            </span>
           </>
         )}
       </button>
@@ -401,11 +399,9 @@ function BuyButton({
       {/* The essence price is part of the button label, so the value and its
           crypto glyph read in the button's own light text rather than the
           purple used for plain essence values elsewhere. */}
-      <EssenceValue
-        amount={price}
-        color="inherit"
-        data-shop-price=""
-      />
+      <span data-shop-price="">
+        <EssenceValue amount={price} tone="inherit" />
+      </span>
     </button>
   );
 }

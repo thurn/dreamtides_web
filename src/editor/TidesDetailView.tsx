@@ -4,7 +4,7 @@ import type { CardSizePreset } from "../components/card-size";
 import { SIZE_PRESETS } from "../components/card-size";
 import { CardView } from "../tango/components/CardView";
 import CardBrowserGrid from "../components/card-browser/CardBrowserGrid";
-import { DreamcallerPortrait } from "../components/DreamcallerPortrait";
+import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
 import { RulesText } from "../tango/components/RulesText";
 import { TIDE_ACCENT_COLOR, TIDE_COLOR_CHIP } from "../components/tide-visuals";
 import {
@@ -86,7 +86,7 @@ function FeaturedSource({
         <DreamcallerPortrait
           dreamcaller={dreamcaller}
           variant="panel"
-          style={{ width: 160, flex: "0 0 160px" }}
+          size={160}
         />
         <div style={{ minWidth: 0 }}>
           <div style={{ fontWeight: 800, fontSize: "1.1rem" }}>{dreamcaller.name}</div>

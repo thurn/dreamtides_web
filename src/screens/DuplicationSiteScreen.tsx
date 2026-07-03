@@ -6,7 +6,7 @@ import { CardDisplay } from "../components/CardDisplay";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { SiteGuide } from "../components/SiteGuide";
-import { SiteCloseButton } from "../components/SiteCloseButton";
+import { LeaveSiteButton } from "../tango/components/LeaveSiteButton";
 import "./duplication-site.css";
 
 /** Props for the DuplicationSiteScreen component. */
@@ -274,8 +274,8 @@ export function DuplicationSiteScreen({ site }: DuplicationSiteScreenProps) {
       {/* Deacon Holt (shared SiteGuide), docked lower-left in landscape. */}
       <SiteGuide siteType="Duplication" isEnhanced={site.isEnhanced} />
 
-      <SiteCloseButton
-        onClose={handleClose}
+      <LeaveSiteButton
+        onLeave={handleClose}
         testId="duplication-walk-on"
         disabled={copying || duplicated}
       />

@@ -3,13 +3,12 @@ import {
   useEffect,
   useRef,
   useState,
-  type CSSProperties,
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
-import { logEventOnce } from "../logging";
-import { extractGlossaryTerms } from "../data/glossary-terms";
-import { GlossaryDefinitionCard } from "../tango/components/GlossaryDefinitionCard";
+import { logEventOnce } from "../../logging";
+import { extractGlossaryTerms } from "../../data/glossary-terms";
+import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
 
 /**
  * Wraps a medium-size card so that hovering it grows the card itself in place
@@ -34,6 +33,11 @@ import { GlossaryDefinitionCard } from "../tango/components/GlossaryDefinitionCa
  * The original card underneath keeps all of its interactivity (clicks, drag,
  * term popovers) within its original footprint; the floating copy only mirrors
  * its appearance.
+ *
+ * Layout is the caller's: HoverZoomCard has no style/className escape hatch.
+ * Wrap it in your own sized element, and set `fill` when that wrapper gives the
+ * card a fixed box to fill (e.g. a battle-hand slot) rather than letting the
+ * card size itself.
  */
 
 /**
@@ -61,22 +65,22 @@ const MAX_VIEWPORT_HEIGHT_FRACTION = 0.92;
 /** Don't bother growing a card that is already nearly this large. */
 const MIN_USEFUL_SCALE = 1.02;
 
-interface HoverZoomCardProps {
-  /** The card to render (e.g. a `<CardDisplay />`). */
+export interface HoverZoomCardProps {
+  /** The card to render (e.g. a `<CardView />`). */
   children: ReactNode;
   /**
    * When false the wrapper is an inert pass-through that renders `children`
    * with no hover behaviour. Used to opt compact / tiny card surfaces out.
    */
   enabled?: boolean;
+  /**
+   * When true the slot fills its container (100% width and height) instead of
+   * shrinking to the card's own size. Set it when the caller's wrapper gives
+   * the card a fixed box to occupy (e.g. a battle-hand cell).
+   */
+  fill?: boolean;
   /** Width (px) the card grows to. Defaults to {@link TARGET_WIDTH_PX}. */
   targetWidthPx?: number;
-  /** Extra class for the slot element that holds the layout footprint. */
-  className?: string;
-  /** Extra style for the slot element. */
-  style?: CSSProperties;
-  /** Test id applied to the slot element. */
-  "data-testid"?: string;
   /**
    * Optional label recorded with the `card_hover_zoom` log event so behaviour
    * can be reconstructed per surface (deck viewer, shop, battle hand, ...).
@@ -91,6 +95,8 @@ interface HoverZoomCardProps {
    * with the enlarged card rather than the small original underneath.
    */
   glossaryText?: string;
+  /** `data-testid` applied to the slot element. */
+  testId?: string;
 }
 
 /** Gap (px) kept between the enlarged card and the viewport edges. */
@@ -202,12 +208,11 @@ interface ZoomState {
 export function HoverZoomCard({
   children,
   enabled = true,
+  fill = false,
   targetWidthPx = TARGET_WIDTH_PX,
-  className,
-  style,
-  "data-testid": dataTestId,
   logSurface,
   glossaryText,
+  testId,
 }: HoverZoomCardProps) {
   const slotRef = useRef<HTMLDivElement | null>(null);
   // The card snaps straight to its target size on hover and snaps back the
@@ -306,7 +311,10 @@ export function HoverZoomCard({
 
   if (!enabled) {
     return (
-      <div className={className} style={style} data-testid={dataTestId}>
+      <div
+        style={fill ? { width: "100%", height: "100%" } : undefined}
+        data-testid={testId}
+      >
         {children}
       </div>
     );
@@ -342,14 +350,16 @@ export function HoverZoomCard({
   return (
     <div
       ref={slotRef}
-      className={className}
-      style={{ position: "relative", ...style }}
+      style={{
+        position: "relative",
+        ...(fill ? { width: "100%", height: "100%" } : {}),
+      }}
       onMouseEnter={handleEnter}
       // Pressing the card to begin a drag snaps it back to its real size at
       // once, so the player drags the card's actual footprint rather than
       // aiming through the enlarged copy floating above it.
       onMouseDown={collapse}
-      data-testid={dataTestId}
+      data-testid={testId}
       data-hover-zoomed={zoom !== null ? "true" : undefined}
     >
       {/* The original card keeps its layout slot and full interactivity. The

@@ -11,7 +11,7 @@ function readScale(transform: string | undefined): number {
   return match ? Number(match[1]) : Number.NaN;
 }
 
-vi.mock("../logging", () => ({
+vi.mock("../../logging", () => ({
   logEventOnce: vi.fn(),
 }));
 
@@ -70,7 +70,7 @@ describe("HoverZoomCard", () => {
   it("grows the card into a portaled, pointer-events-none copy on hover", () => {
     mockRect({ width: 100, height: 140, left: 50, top: 50, right: 150, bottom: 190 });
     const { container, root } = mount(
-      <HoverZoomCard data-testid="slot" logSurface="test">
+      <HoverZoomCard testId="slot" logSurface="test">
         <div>CARD BODY</div>
       </HoverZoomCard>,
     );
@@ -102,7 +102,7 @@ describe("HoverZoomCard", () => {
   it("shows a glossary definition stack beside the card for terms in its rules text", () => {
     mockRect({ width: 100, height: 140, left: 50, top: 50, right: 150, bottom: 190 });
     const { container, root } = mount(
-      <HoverZoomCard data-testid="slot" glossaryText="Discard a bane.">
+      <HoverZoomCard testId="slot" glossaryText="Discard a bane.">
         <div>CARD BODY</div>
       </HoverZoomCard>,
     );
@@ -131,7 +131,7 @@ describe("HoverZoomCard", () => {
   it("renders no glossary stack when the rules text has no gameplay terms", () => {
     mockRect({ width: 100, height: 140, left: 50, top: 50, right: 150, bottom: 190 });
     const { container, root } = mount(
-      <HoverZoomCard data-testid="slot" glossaryText="Just some plain words.">
+      <HoverZoomCard testId="slot" glossaryText="Just some plain words.">
         <div>CARD BODY</div>
       </HoverZoomCard>,
     );
@@ -149,7 +149,7 @@ describe("HoverZoomCard", () => {
   it("keeps the card grown while the pointer stays inside the original footprint", () => {
     mockRect({ width: 100, height: 140, left: 50, top: 50, right: 150, bottom: 190 });
     const { container, root } = mount(
-      <HoverZoomCard data-testid="slot">
+      <HoverZoomCard testId="slot">
         <div>CARD BODY</div>
       </HoverZoomCard>,
     );
@@ -173,7 +173,7 @@ describe("HoverZoomCard", () => {
   it("shrinks the card as soon as the pointer leaves the original footprint", () => {
     mockRect({ width: 100, height: 140, left: 50, top: 50, right: 150, bottom: 190 });
     const { container, root } = mount(
-      <HoverZoomCard data-testid="slot">
+      <HoverZoomCard testId="slot">
         <div>CARD BODY</div>
       </HoverZoomCard>,
     );
@@ -198,7 +198,7 @@ describe("HoverZoomCard", () => {
   it("does nothing when disabled", () => {
     mockRect({ width: 100, height: 140, left: 50, top: 50, right: 150, bottom: 190 });
     const { container, root } = mount(
-      <HoverZoomCard data-testid="slot" enabled={false}>
+      <HoverZoomCard testId="slot" enabled={false}>
         <div>CARD BODY</div>
       </HoverZoomCard>,
     );
@@ -228,7 +228,7 @@ describe("HoverZoomCard", () => {
       bottom: 20 + tall,
     });
     const { container, root } = mount(
-      <HoverZoomCard data-testid="slot">
+      <HoverZoomCard testId="slot">
         <div>CARD BODY</div>
       </HoverZoomCard>,
     );

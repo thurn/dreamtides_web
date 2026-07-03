@@ -9,7 +9,7 @@ import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "./CardDisplay";
 import { CardOverlay } from "./CardOverlay";
 import { Dreamsign } from "../tango/components/Dreamsign";
-import { HoverZoomCard } from "./HoverZoomCard";
+import { HoverZoomCard } from "../tango/components/HoverZoomCard";
 import {
   getPersistedCardSize,
   persistCardSize,
@@ -23,7 +23,7 @@ import {
   type CardTransfigurationDisplay,
 } from "../transfiguration/transfiguration-logic";
 import { computeDeckSummary } from "./deck-summary";
-import { DreamcallerPortrait } from "./DreamcallerPortrait";
+import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
 import { RulesText } from "../tango/components/RulesText";
 import {
   applyCardStatOverride,
@@ -534,23 +534,24 @@ export function DeckViewer({
                     // already wide enough to read, so they neither grow nor
                     // suppress their term help.
                     const wrappedCardTile = (
-                      <HoverZoomCard
-                        enabled={cardSize !== "large"}
-                        logSurface="deck_viewer"
-                        glossaryText={resolved.card.renderedText}
-                        data-testid={`deck-viewer-row-${resolved.entry.entryId}`}
-                        style={cardTileBorderStyle}
-                      >
-                        <CardDisplay
-                          card={resolved.card}
-                          transfiguration={resolved.transfiguration}
-                          large={cardSize === "large"}
-                          suppressHoverHelp={cardSize !== "large"}
-                          onClick={() => {
-                            handleCardClick(resolved);
-                          }}
-                        />
-                      </HoverZoomCard>
+                      <div style={cardTileBorderStyle}>
+                        <HoverZoomCard
+                          enabled={cardSize !== "large"}
+                          logSurface="deck_viewer"
+                          glossaryText={resolved.card.renderedText}
+                          testId={`deck-viewer-row-${resolved.entry.entryId}`}
+                        >
+                          <CardDisplay
+                            card={resolved.card}
+                            transfiguration={resolved.transfiguration}
+                            large={cardSize === "large"}
+                            suppressHoverHelp={cardSize !== "large"}
+                            onClick={() => {
+                              handleCardClick(resolved);
+                            }}
+                          />
+                        </HoverZoomCard>
+                      </div>
                     );
                     return (
                       <div
@@ -615,7 +616,7 @@ export function DeckViewer({
                       <DreamcallerPortrait
                         dreamcaller={state.dreamcaller}
                         variant="panel"
-                        style={{ width: 68, flexShrink: 0 }}
+                        size={68}
                       />
                       <div>
                         <span
@@ -831,7 +832,7 @@ function MobileSidebar({
                     <DreamcallerPortrait
                       dreamcaller={dreamcaller}
                       variant="thumb"
-                      style={{ width: 42, flexShrink: 0 }}
+                      size={42}
                     />
                     <div>
                       <span

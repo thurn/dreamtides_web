@@ -258,6 +258,36 @@
       "description": "Which side of the card the panel sits on, exposed for layout/tests."
     }
   ],
+  "DreamcallerPortrait": [
+    {
+      "name": "dreamcaller",
+      "tsType": "DreamcallerVisual",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The dreamcaller whose art and identity the portrait shows."
+    },
+    {
+      "name": "variant",
+      "tsType": "DreamcallerPortraitVariant",
+      "unionMembers": [
+        "hero",
+        "panel",
+        "thumb"
+      ],
+      "required": false,
+      "defaultValue": "panel",
+      "description": "Framing: large `hero`, square `panel`, or small square `thumb`. Default `panel`."
+    },
+    {
+      "name": "size",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fixed pixel width. Panel/thumb stay square, so this also sets their height.\nA sized portrait never shrinks in a flex row. Omit to fill the container\nwidth."
+    }
+  ],
   "DreamscapeMotes": [
     {
       "name": "on",
@@ -334,6 +364,28 @@
       "required": false,
       "defaultValue": null,
       "description": "Optional `data-testid` on the reveal wrapper, for stable selectors."
+    }
+  ],
+  "EssenceGlyph": [],
+  "EssenceValue": [
+    {
+      "name": "amount",
+      "tsType": "string | number",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The essence amount."
+    },
+    {
+      "name": "tone",
+      "tsType": "EssenceTone",
+      "unionMembers": [
+        "value",
+        "inherit"
+      ],
+      "required": false,
+      "defaultValue": "value",
+      "description": "Color role. `value` (default) paints the amount and glyph in the essence\nviolet; `inherit` takes the surrounding text color, for a value that sits\ninside a button or other control whose label color already reads."
     }
   ],
   "GameCard": [
@@ -584,15 +636,73 @@
       "description": "The DOM element type for the trigger wrapper. Defaults to `\"span\"` for\ninline use within text. Pass `\"div\"` for block-level triggers."
     }
   ],
+  "HoverZoomCard": [
+    {
+      "name": "children",
+      "tsType": "ReactNode",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The card to render (e.g. a `<CardView />`)."
+    },
+    {
+      "name": "enabled",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "true",
+      "description": "When false the wrapper is an inert pass-through that renders `children`\nwith no hover behaviour. Used to opt compact / tiny card surfaces out."
+    },
+    {
+      "name": "fill",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "When true the slot fills its container (100% width and height) instead of\nshrinking to the card's own size. Set it when the caller's wrapper gives\nthe card a fixed box to occupy (e.g. a battle-hand cell)."
+    },
+    {
+      "name": "targetWidthPx",
+      "tsType": "number",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "340",
+      "description": "Width (px) the card grows to. Defaults to {@link TARGET_WIDTH_PX}."
+    },
+    {
+      "name": "logSurface",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional label recorded with the `card_hover_zoom` log event so behaviour\ncan be reconstructed per surface (deck viewer, shop, battle hand, ...)."
+    },
+    {
+      "name": "glossaryText",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "The card's rendered rules text. When provided, the glossary definitions\nfor any gameplay terms in the text are shown in a stack beside the\nenlarged card while it is zoomed — the same hover-help the old floating\npreview carried. The wrapped card should suppress its own inline term\npopover (`suppressHoverHelp`) so the definitions appear only here, aligned\nwith the enlarged card rather than the small original underneath."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "`data-testid` applied to the slot element."
+    }
+  ],
   "InfoCard": [
     {
       "name": "variant",
       "tsType": "InfoCardVariant",
       "unionMembers": [
         "object",
+        "hero",
         "text",
-        "icon",
-        "hero"
+        "icon"
       ],
       "required": false,
       "defaultValue": null,
@@ -693,6 +803,40 @@
       "required": false,
       "defaultValue": null,
       "description": "text variant: a small leading glyph, as a Boxicons class string."
+    }
+  ],
+  "LeaveSiteButton": [
+    {
+      "name": "onLeave",
+      "tsType": "() => void",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Invoked when the player leaves the site."
+    },
+    {
+      "name": "label",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "Leave site",
+      "description": "Accessible label / tooltip. Defaults to \"Leave site\"."
+    },
+    {
+      "name": "disabled",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Disables the button (e.g. while an animation is committing)."
+    },
+    {
+      "name": "testId",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "`data-testid` for the button."
     }
   ],
   "Motes": [

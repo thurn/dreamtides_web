@@ -73,6 +73,7 @@ const CONTAINER_PROPS_TYPES = new Set([
   "ButtonProps",
   "GroupPanelProps",
   "HoverPopoverProps",
+  "HoverZoomCardProps",
   "PressPopoverProps",
   "PressInfoProps",
   "TidePillProps",

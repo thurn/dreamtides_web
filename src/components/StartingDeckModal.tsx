@@ -4,7 +4,7 @@ import type { CardData } from "../types/cards";
 import type { DeckEntry } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "./CardDisplay";
-import { HoverZoomCard } from "./HoverZoomCard";
+import { HoverZoomCard } from "../tango/components/HoverZoomCard";
 import {
   applyCardStatOverride,
   applyDeckEntryCardModification,
@@ -192,7 +192,7 @@ export function StartingDeckModal({
                       key={resolved.entry.entryId}
                       logSurface="starting_deck"
                       glossaryText={resolved.card.renderedText}
-                      data-testid={`starting-deck-modal-card-${resolved.entry.entryId}`}
+                      testId={`starting-deck-modal-card-${resolved.entry.entryId}`}
                     >
                       <CardDisplay card={resolved.card} suppressHoverHelp />
                     </HoverZoomCard>

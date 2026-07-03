@@ -4,8 +4,8 @@ import type { BattleInit } from "../types";
 import type { CardData } from "../../types/cards";
 import { CardView } from "../../tango/components/CardView";
 import { RulesText } from "../../tango/components/RulesText";
-import { EssenceValue } from "../../components/EssenceValue";
-import { dreamcallerImageSrc } from "../../components/DreamcallerPortrait";
+import { EssenceValue } from "../../tango/components/EssenceValue";
+import { dreamcallerImageSrc } from "../../tango/components/DreamcallerPortrait";
 import { dreamscapeSceneUrl } from "../../tango/components/atlas-display";
 import { assetUrl } from "../../runtime/asset-url";
 import {
@@ -341,11 +341,9 @@ export function BattleStartScreen({
               </div>
               <div className="bs-obj-div" />
               <div className="bs-stat">
-                <EssenceValue
-                  amount={init.essenceReward}
-                  className="bs-stat-essence"
-                  data-battle-start-essence=""
-                />
+                <span className="bs-stat-essence" data-battle-start-essence="">
+                  <EssenceValue amount={init.essenceReward} />
+                </span>
                 <span className="bs-stat-lbl">reward</span>
               </div>
             </div>

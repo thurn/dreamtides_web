@@ -7,7 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { DreamcallerPopover } from "./DreamcallerPopover";
 import type { Dreamcaller } from "../types/quest";
 
-vi.mock("./DreamcallerPortrait", () => ({
+vi.mock("../tango/components/DreamcallerPortrait", () => ({
   DreamcallerPortrait: () => <div data-testid="dreamcaller-portrait" />,
 }));
 
