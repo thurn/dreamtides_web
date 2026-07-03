@@ -36,7 +36,9 @@ import * as React from "react";
 import { token } from "../primitives/tokens";
 
 /**
- * The grouping-card style object, if you need to spread it onto your own node.
+ * Returns the grouping-card style object for a given radius, if you need to
+ * spread it onto your own node. Call it — `GroupPanel.style(radius)` — do not
+ * pass the function itself.
  */
 export function groupPanelStyle(
   radius: string | number = token("--r-popover"),
@@ -66,7 +68,6 @@ export interface GroupPanelProps extends React.HTMLAttributes<HTMLElement> {
   radius?: string | number;
   as?: React.ElementType;
   padding?: string | number;
-  children?: React.ReactNode;
 }
 
 interface GroupPanelStatics {
@@ -95,6 +96,8 @@ function GroupPanelComponent({
       style={{
         ...groupPanelStyle(radius),
         padding,
+        // visible so a child action (badge, button) may deliberately overhang
+        // the rounded pane edge, per the design source.
         overflow: "visible",
         ...style,
       }}
