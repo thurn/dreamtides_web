@@ -8,6 +8,7 @@ import { useState } from "react";
 import "./component-page.css";
 import { token } from "../primitives/tokens";
 import { getComponent } from "./registry";
+import { hasMockup } from "./mockups/registry";
 import { metasFor } from "./metadata";
 import { DemoStage } from "./DemoStage";
 import { ControlPanel } from "./ControlPanel";
@@ -45,12 +46,30 @@ export function ComponentPage({ id }: { id: string }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("--space-9") }}>
       <header>
-        <a
-          href="#/"
-          style={{ font: token("--t-caption"), color: token("--text-muted") }}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "baseline",
+            gap: token("--space-4"),
+            flexWrap: "wrap",
+          }}
         >
-          ← Overview
-        </a>
+          <a
+            href="#/"
+            style={{ font: token("--t-caption"), color: token("--text-muted") }}
+          >
+            ← Overview
+          </a>
+          {hasMockup(entry.id) && (
+            <a
+              href={`#/${entry.id}/mockup`}
+              style={{ font: token("--t-caption"), color: token("--accent-bright") }}
+            >
+              View full-screen mockup →
+            </a>
+          )}
+        </div>
         <h1 style={{ font: token("--t-title"), color: token("--text-primary"), margin: `${token("--space-4")} 0 0` }}>
           {entry.title}
         </h1>

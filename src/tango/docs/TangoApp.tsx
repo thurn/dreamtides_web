@@ -1,15 +1,17 @@
 // Standalone documentation endpoint for the Tango design system, reachable at
 // `/tango` (see the route branch in `src/main.tsx`). Switches on the hash route
 // (see route.ts) between the overview table of contents, a component's doc page,
-// and a component's full-screen mockup placeholder (the real mockups land in
-// Task 6.3). The chrome is styled lightly with Tango tokens — dogfooding the
-// design system it documents.
+// and a component's full-screen mockup — a realistic full-bleed scene composing
+// the component with real content. The chrome is styled lightly with Tango
+// tokens — dogfooding the design system it documents.
 import "../primitives/tango-tokens.css";
 import "../assets/phosphor.css";
 
 import type { CSSProperties } from "react";
 import { useTangoRoute } from "./route";
 import { TANGO_COMPONENTS, type TangoComponent } from "./registry";
+import { getComponent } from "./registry";
+import { getMockup } from "./mockups/registry";
 import { ComponentPage } from "./ComponentPage";
 import { IntroSection } from "./IntroSection";
 import { PrimitivesSection } from "./PrimitivesSection";
@@ -116,19 +118,90 @@ function Overview() {
   );
 }
 
-function MockupPlaceholder({ id }: { id: string }) {
+/** Floating "← Back" affordance overlaid on a full-screen mockup. */
+function MockupBackLink({ id, label }: { id: string; label: string }) {
   return (
-    <div style={{ color: token("--text-secondary") }}>
-      <p>Mockup for {id} — coming in a later task.</p>
-      <a href={`#/${id}`} style={{ color: token("--accent-bright") }}>
-        Back to {id}
-      </a>
+    <a
+      href={`#/${id}`}
+      style={{
+        position: "fixed",
+        top: token("--space-5"),
+        left: token("--space-5"),
+        zIndex: 100,
+        display: "inline-flex",
+        alignItems: "center",
+        gap: token("--space-2"),
+        padding: `${token("--space-2")} ${token("--space-4")}`,
+        background: "rgba(12, 8, 22, 0.72)",
+        border: `1px solid ${token("--border-soft")}`,
+        borderRadius: token("--r-pill"),
+        backdropFilter: "blur(8px)",
+        color: token("--text-primary"),
+        font: token("--t-button-sm"),
+        textDecoration: "none",
+      }}
+    >
+      ← Back to {label}
+    </a>
+  );
+}
+
+/**
+ * Full-viewport host for a component's mockup. Bypasses the centered content
+ * column so the mockup renders full-bleed (100vw×100vh), and overlays a fixed
+ * back affordance to the component's doc page. Unknown / not-yet-built ids get a
+ * graceful centered note with the same back link.
+ */
+function MockupView({ id }: { id: string }) {
+  const Mockup = getMockup(id);
+  const title = getComponent(id)?.title ?? id;
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: "100vw",
+        height: "100vh",
+        overflow: "hidden",
+        background: token("--bg-app"),
+      }}
+    >
+      <MockupBackLink id={id} label={title} />
+      {Mockup ? (
+        <Mockup />
+      ) : (
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: token("--space-9"),
+            textAlign: "center",
+            color: token("--text-secondary"),
+            font: token("--t-lead"),
+          }}
+        >
+          <p>No full-screen mockup yet for {title}.</p>
+        </div>
+      )}
     </div>
   );
 }
 
 export default function TangoApp() {
   const route = useTangoRoute();
+
+  // The mockup view renders full-bleed, so it bypasses the centered, max-width
+  // content column that the overview and component pages sit inside.
+  if (route.view === "mockup") {
+    return (
+      <div className="tango">
+        <MockupView id={route.id} />
+      </div>
+    );
+  }
+
   return (
     <div className="tango" style={pageStyle}>
       <div style={contentStyle}>
@@ -141,7 +214,6 @@ export default function TangoApp() {
           // leak onto the new component.
           <ComponentPage key={route.id} id={route.id} />
         )}
-        {route.view === "mockup" && <MockupPlaceholder id={route.id} />}
       </div>
     </div>
   );
