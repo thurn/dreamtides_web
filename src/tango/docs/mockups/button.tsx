@@ -64,9 +64,8 @@ function OfferRow({ icon, label, blurb, cost, size = "md" }: OfferRowProps) {
         cost={cost}
         disabled={!affordable}
         icon="bxf bx-crypto"
-      >
-        Buy
-      </Button>
+        label="Buy"
+      />
     </div>
   );
 }
@@ -153,9 +152,7 @@ export function ButtonMockup() {
           />
 
           <div style={{ marginTop: token("--space-7") }}>
-            <Button size="lg" full>
-              Continue Your Dream
-            </Button>
+            <Button size="lg" full label="Continue Your Dream" />
           </div>
         </div>
       </div>

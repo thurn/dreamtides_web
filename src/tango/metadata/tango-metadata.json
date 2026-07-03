@@ -151,12 +151,12 @@
       "description": "Accessible label when the visible content is icon-only."
     },
     {
-      "name": "children",
-      "tsType": "ReactNode",
+      "name": "label",
+      "tsType": "string",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Content rendered inside the button."
+      "description": "The button's text label. Resolve any UUID/name to a plain string before\npassing it — the button renders copy, never arbitrary caller markup. Omit\nfor an icon-only button (supply `ariaLabel` instead)."
     }
   ],
   "CardStatOrb": [
@@ -1686,12 +1686,12 @@
   ],
   "TidePill": [
     {
-      "name": "children",
-      "tsType": "ReactNode",
+      "name": "label",
+      "tsType": "string",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
-      "description": "The tide/affiliation name (and any other inline content)."
+      "description": "The tide/affiliation name. Resolve any UUID to the display name before\npassing it — the pill renders copy from a plain string, not caller markup,\nso TidePill is a leaf, not a container."
     },
     {
       "name": "tone",

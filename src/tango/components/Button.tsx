@@ -22,7 +22,6 @@
 // Ported from the Claude Design "Dreamtides Mobile" project
 // (components/buttons/Button.jsx / .d.ts).
 
-import * as React from "react";
 import buttonPurple from "../assets/Button_Purple.png";
 import { PRESS_SCALE, usePress } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
@@ -64,8 +63,10 @@ export interface ButtonProps {
   onClick?: () => void;
   /** Accessible label when the visible content is icon-only. */
   ariaLabel?: string;
-  /** Content rendered inside the button. */
-  children?: React.ReactNode;
+  /** The button's text label. Resolve any UUID/name to a plain string before
+   * passing it — the button renders copy, never arbitrary caller markup. Omit
+   * for an icon-only button (supply `ariaLabel` instead). */
+  label?: string;
 }
 
 /**
@@ -73,8 +74,10 @@ export interface ButtonProps {
  * 9-patch. There is no variant / color-coded button language — secondary and
  * destructive actions are plain pressable text/icon affordances. Press
  * feedback routes through the shared --press-scale primitive. The button has no
- * style / className / arbitrary-attribute escape hatch: its one appearance is
- * fixed and only its typed props (size, full, disabled, icon, cost) shape it.
+ * style / className / arbitrary-attribute escape hatch and takes no `children`
+ * slot: its one appearance is fixed and only its typed props (size, full,
+ * disabled, icon, cost, label) shape it — the label is a resolved string, not
+ * caller markup, so Button is a leaf, not a container.
  */
 export function Button({
   size = "md",
@@ -84,7 +87,7 @@ export function Button({
   cost = null,
   onClick,
   ariaLabel,
-  children,
+  label,
 }: ButtonProps) {
   const spec = SIZES[size];
   const borderWidth = spec.borderWidth;
@@ -134,7 +137,7 @@ export function Button({
           <i className={icon} aria-hidden="true" />
         </span>
       )}
-      <span>{children}</span>
+      {label != null && <span>{label}</span>}
       {cost != null && (
         <ResourceChip kind="essence" value={cost} size={spec.font} gap={3} />
       )}

@@ -64,13 +64,11 @@ const BANNED_PROP_NAMES = new Set(["style", "className"]);
  * it wraps. Every other component must render copy from strict, typed props.
  */
 const CONTAINER_COMPONENTS = new Set([
-  "Button",
   "GroupPanel",
   "HoverPopover",
   "HoverZoomCard",
   "PressPopover",
   "PressInfo",
-  "TidePill",
   "Pressable",
 ]);
 

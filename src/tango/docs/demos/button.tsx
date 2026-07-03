@@ -1,6 +1,6 @@
-// Registry demo entry for Button — see pressable.tsx for the recipe this
-// follows. `icon` is a Boxicons class string; `children` is the button's
-// label, a ReactNode slot supplied via sampleContent.
+// Registry demo entry for Button — see resource-chip.tsx for the recipe this
+// follows. `icon` is a Boxicons class string; `label` is the button's text
+// (a plain string), so it surfaces as a text control seeded via defaultArgs.
 
 import { Button } from "../../components/Button";
 import type { TangoComponent } from "../registry";
@@ -21,22 +21,19 @@ export const buttonDemo: TangoComponent = {
   size="md"
   cost={100}
   icon="bxf bx-sword"
+  label="Begin Battle"
   onClick={beginBattle}
->
-  Begin Battle
-</Button>`,
+/>`,
     },
     {
       label: "Commit action",
       note: "`size=\"lg\"` is the taller commit height; `full` stretches the button to its container width.",
-      code: `<Button size="lg" full onClick={confirm}>
-  Begin Your Dream
-</Button>`,
+      code: `<Button size="lg" full label="Begin Your Dream" onClick={confirm} />`,
     },
     {
       label: "Disabled",
       note: "Dims the button and detaches its click / press feedback.",
-      code: `<Button disabled>Not Ready</Button>`,
+      code: `<Button disabled label="Not Ready" />`,
     },
   ],
   demo: {
@@ -46,9 +43,7 @@ export const buttonDemo: TangoComponent = {
       disabled: false,
       cost: 100,
       icon: "bxf bx-sword",
-    },
-    sampleContent: {
-      children: "Begin Battle",
+      label: "Begin Battle",
     },
   },
 };

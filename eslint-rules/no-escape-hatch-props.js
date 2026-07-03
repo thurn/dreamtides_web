@@ -70,13 +70,11 @@ const BANNED_MEMBER_NAMES = new Set(["style", "className"]);
  * by scripts/tango-strict-api.contract.test.mjs instead.
  */
 const CONTAINER_PROPS_TYPES = new Set([
-  "ButtonProps",
   "GroupPanelProps",
   "HoverPopoverProps",
   "HoverZoomCardProps",
   "PressPopoverProps",
   "PressInfoProps",
-  "TidePillProps",
 ]);
 
 /** True when a bare type-reference name is a React-node family type. */

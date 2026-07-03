@@ -109,8 +109,8 @@ ruleTester.run("no-escape-hatch-props", rule, {
     },
     {
       name: "a container in the allowlist may take children",
-      filename: "src/tango/components/Button.tsx",
-      code: `interface ButtonProps { size?: "sm" | "md"; children?: React.ReactNode; }`,
+      filename: "src/tango/components/GroupPanel.tsx",
+      code: `interface GroupPanelProps { size?: "sm" | "md"; children?: React.ReactNode; }`,
     },
     {
       name: "a container in the allowlist may take a raw node slot",
@@ -216,8 +216,8 @@ ruleTester.run("no-escape-hatch-props", rule, {
     },
     {
       name: "style ban still applies to an allowlisted container",
-      filename: "src/tango/components/Button.tsx",
-      code: `interface ButtonProps { children?: ReactNode; style?: React.CSSProperties; }`,
+      filename: "src/tango/components/GroupPanel.tsx",
+      code: `interface GroupPanelProps { children?: ReactNode; style?: React.CSSProperties; }`,
       errors: [{ messageId: "styleMember" }],
     },
   ],

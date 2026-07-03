@@ -69,7 +69,7 @@ import { richText } from "src/tango/components/rich-text";
     />
   }
 >
-  <TidePill tone="blue">Singular Storm</TidePill>
+  <TidePill tone="blue" label="Singular Storm" />
 </InfoCard.PressInfo>`,
     },
   ],

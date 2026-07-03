@@ -32,7 +32,6 @@
 // Ported from the Claude Design "Dreamtides Mobile" project
 // (components/pills/TidePill.jsx / .d.ts).
 
-import type { ReactNode } from "react";
 import { usePress, PRESS_SCALE } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
 
@@ -87,8 +86,10 @@ const TONES: Record<string, ToneSpec> = {
 };
 
 export interface TidePillProps {
-  /** The tide/affiliation name (and any other inline content). */
-  children?: ReactNode;
+  /** The tide/affiliation name. Resolve any UUID to the display name before
+   * passing it — the pill renders copy from a plain string, not caller markup,
+   * so TidePill is a leaf, not a container. */
+  label: string;
   /** Tide color. */
   tone?: "violet" | "blue" | "gold" | "green" | "rust" | "red" | "neutral";
   /** Leading icon: a Boxicons class string (e.g. `"bxf bx-water"`). The pill
@@ -107,7 +108,7 @@ export interface TidePillProps {
  * Tango.
  */
 export function TidePill({
-  children,
+  label,
   tone = "violet",
   icon,
   size = "md",
@@ -160,7 +161,7 @@ export function TidePill({
           <i className={icon} aria-hidden="true" />
         </span>
       )}
-      {children}
+      {label}
     </span>
   );
 }
