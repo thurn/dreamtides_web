@@ -944,7 +944,7 @@
       "tsType": "string | number",
       "unionMembers": [],
       "required": false,
-      "defaultValue": "",
+      "defaultValue": "0",
       "description": "Deck size (used in the deck button's aria-label)."
     },
     {
