@@ -15,10 +15,13 @@
 
 import type { ComponentType } from "react";
 import { AtlasMapMockup } from "./atlas-map";
+import { ButtonMockup } from "./button";
 import { DreamsignMockup } from "./dreamsign";
 import { GameCardMockup } from "./game-card";
 import { InfoCardMockup } from "./info-card";
+import { PressableMockup } from "./pressable";
 import { QuestStatusBarMockup } from "./quest-status-bar";
+import { ResourceChipMockup } from "./resource-chip";
 import { RulesTextMockup } from "./rules-text";
 import { SiteNodeMockup } from "./site-node";
 
@@ -35,6 +38,9 @@ export const MOCKUPS: Record<string, ComponentType> = {
   "site-node": SiteNodeMockup,
   dreamsign: DreamsignMockup,
   "info-card": InfoCardMockup,
+  pressable: PressableMockup,
+  "resource-chip": ResourceChipMockup,
+  button: ButtonMockup,
 };
 
 /** True when a full-screen mockup is registered for the given route id. */
