@@ -42,3 +42,19 @@ closer to the real algorithm, but the hand port still drifts from the live
 the build pipeline, lint, typecheck, or test suite). Resolving it means re-syncing
 the port with the current `decklists` variant or replacing it with a call into
 the real generator.
+
+
+Pre-existing: `bxf bx-refresh` is not a real Boxicons v3 filled class
+======================================================================
+
+`src/screens/ShopScreen.tsx:261` renders `<i className="bxf bx-refresh" ... />`
+for its reroll affordance. Boxicons v3's filled set (`src/vendor/boxicons/
+boxicons-filled.css`) has no bare `.bxf.bx-refresh` rule — only suffixed
+variants exist (`bx-refresh-cw`, `bx-refresh-ccw`, `bx-refresh-cw-alt`, etc.),
+so this class resolves to no `::before` content and the icon renders blank
+(confirmed via `getComputedStyle(el, '::before').content === "none"`).
+
+Found while building the Tango `button` mockup (`src/tango/docs/mockups/
+button.tsx`), which had copied the same class for its own reroll row; that copy
+was fixed there to `bxf bx-refresh-cw`. `ShopScreen.tsx`'s live reroll button
+still uses the blank class and should be updated the same way.

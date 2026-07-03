@@ -18,7 +18,9 @@ import { AtlasMapMockup } from "./atlas-map";
 import { ButtonMockup } from "./button";
 import { DreamsignMockup } from "./dreamsign";
 import { GameCardMockup } from "./game-card";
+import { GroupPanelMockup } from "./group-panel";
 import { InfoCardMockup } from "./info-card";
+import { MotesMockup } from "./motes";
 import { PressableMockup } from "./pressable";
 import { QuestStatusBarMockup } from "./quest-status-bar";
 import { ResourceChipMockup } from "./resource-chip";
@@ -47,6 +49,8 @@ export const MOCKUPS: Record<string, ComponentType> = {
   "segmented-control": SegmentedControlMockup,
   "stat-tile": StatTileMockup,
   "tide-pill": TidePillMockup,
+  motes: MotesMockup,
+  "group-panel": GroupPanelMockup,
 };
 
 /** True when a full-screen mockup is registered for the given route id. */
