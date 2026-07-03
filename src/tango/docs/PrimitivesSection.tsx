@@ -212,6 +212,45 @@ const PRIMITIVE_COUNT = TOKEN_ENTRIES.filter(([name]) => isPrimitive(name)).leng
 const SEMANTIC_COUNT = TOKEN_ENTRIES.length - PRIMITIVE_COUNT;
 
 // ---------------------------------------------------------------------------
+// Table-of-contents anchors. The semantic tier's categories are the canonical
+// token vocabulary, so each gets a stable DOM id the overview's table of
+// contents can nest under "Design Tokens" and scroll-track. The order here is
+// the order TokenGallery renders the buckets in, so the TOC reads top-to-bottom.
+// ---------------------------------------------------------------------------
+
+/** The buckets in the fixed order TokenGallery renders them. */
+const ORDERED_BUCKETS: Bucket[] = [
+  "color",
+  "typography",
+  "radius",
+  "spacing",
+  "motion",
+  "shadow",
+  "other",
+];
+
+/** Stable DOM id for a token category's section (Color, Typography, ...). */
+function tokenCategoryId(bucket: Bucket): string {
+  return `tango-toc-tokencat-${bucket}`;
+}
+
+/** DOM id of the Iconography section (not token-backed, so it isn't a bucket). */
+const ICONOGRAPHY_ANCHOR_ID = "tango-toc-tokencat-icon";
+
+/**
+ * The token-category sub-entries the overview's table of contents nests under
+ * "Design Tokens": every non-empty semantic category in render order, then
+ * Iconography. Derived from the same buckets the section renders, so it can
+ * never drift from the on-page headings.
+ */
+export const TOKEN_TOC_ENTRIES: { id: string; label: string }[] = [
+  ...ORDERED_BUCKETS.filter((bucket) => SEMANTIC_BUCKETS[bucket].length > 0).map(
+    (bucket) => ({ id: tokenCategoryId(bucket), label: BUCKET_TITLES[bucket] }),
+  ),
+  { id: ICONOGRAPHY_ANCHOR_ID, label: "Iconography" },
+];
+
+// ---------------------------------------------------------------------------
 // Shared chrome (dogfooding Tango tokens), matching IntroSection.tsx's style.
 // ---------------------------------------------------------------------------
 
@@ -297,18 +336,21 @@ const specimenValueStyle: CSSProperties = {
 };
 
 /** Wraps one top-level bucket ("Color", "Typography", ...) with a heading,
- * a one-line description, and its content. */
+ * a one-line description, and its content. `id`, when given, anchors the
+ * section so the overview's table of contents can scroll to and track it. */
 function PrimitiveGroup({
   title,
   description,
+  id,
   children,
 }: {
   title: string;
   description: string;
+  id?: string;
   children: ReactElement | ReactElement[];
 }): ReactElement {
   return (
-    <section style={groupWrapStyle}>
+    <section id={id} style={groupWrapStyle}>
       <h3 style={groupTitleStyle}>{title}</h3>
       <p style={groupDescriptionStyle}>{description}</p>
       {children}
@@ -759,12 +801,24 @@ function TokenGuidance(): ReactElement {
 
 /** Renders one tier's bucketized specimens, skipping any empty bucket so the
  * primitive tier (color / typography / radius only) omits the sections it has
- * nothing for. */
-function TokenGallery({ buckets }: { buckets: Buckets }): ReactElement {
+ * nothing for. When `anchored` is set (the semantic tier), each category
+ * section carries the DOM id the overview's table of contents scroll-tracks;
+ * the primitive tier renders the same categories unanchored so the ids stay
+ * unique to the canonical semantic vocabulary. */
+function TokenGallery({
+  buckets,
+  anchored = false,
+}: {
+  buckets: Buckets;
+  anchored?: boolean;
+}): ReactElement {
+  const idFor = (bucket: Bucket): string | undefined =>
+    anchored ? tokenCategoryId(bucket) : undefined;
   return (
     <>
       {buckets.color.length > 0 && (
         <PrimitiveGroup
+          id={idFor("color")}
           title={BUCKET_TITLES.color}
           description="Grouped by family. Each swatch resolves the token's own var() chain, so a semantic token shows the primitive hex it points at."
         >
@@ -774,6 +828,7 @@ function TokenGallery({ buckets }: { buckets: Buckets }): ReactElement {
 
       {buckets.typography.length > 0 && (
         <PrimitiveGroup
+          id={idFor("typography")}
           title={BUCKET_TITLES.typography}
           description="The type scale (--t-*), font roles, families, weights, and letter-tracking that make it up."
         >
@@ -782,19 +837,20 @@ function TokenGallery({ buckets }: { buckets: Buckets }): ReactElement {
       )}
 
       {buckets.radius.length > 0 && (
-        <PrimitiveGroup title={BUCKET_TITLES.radius} description="Corner radii, from the tightest inset to a fully round pill.">
+        <PrimitiveGroup id={idFor("radius")} title={BUCKET_TITLES.radius} description="Corner radii, from the tightest inset to a fully round pill.">
           <FamilyGrid entries={buckets.radius} renderSpecimen={RadiusSpecimen} />
         </PrimitiveGroup>
       )}
 
       {buckets.spacing.length > 0 && (
-        <PrimitiveGroup title={BUCKET_TITLES.spacing} description="The 8pt-based spacing scale, shown as proportional bars.">
+        <PrimitiveGroup id={idFor("spacing")} title={BUCKET_TITLES.spacing} description="The 8pt-based spacing scale, shown as proportional bars.">
           <FamilyGrid entries={buckets.spacing} renderSpecimen={SpacingSpecimen} />
         </PrimitiveGroup>
       )}
 
       {buckets.motion.length > 0 && (
         <PrimitiveGroup
+          id={idFor("motion")}
           title={BUCKET_TITLES.motion}
           description="Durations, easings, and the two canonical object-travel / container-transform combos, dogfooded as a drifting dot. Respects prefers-reduced-motion — the dot holds still if your system requests it."
         >
@@ -804,6 +860,7 @@ function TokenGallery({ buckets }: { buckets: Buckets }): ReactElement {
 
       {buckets.shadow.length > 0 && (
         <PrimitiveGroup
+          id={idFor("shadow")}
           title={BUCKET_TITLES.shadow}
           description="Elevation shadows and the signature violet glow, applied to a plain surface tile."
         >
@@ -813,6 +870,7 @@ function TokenGallery({ buckets }: { buckets: Buckets }): ReactElement {
 
       {buckets.other.length > 0 && (
         <PrimitiveGroup
+          id={idFor("other")}
           title={BUCKET_TITLES.other}
           description="Everything else the token sheet declares — layout constants, gradients, and atlas-specific washes — with no specimen shape of its own."
         >
@@ -860,9 +918,10 @@ export function PrimitivesSection(): ReactElement {
       <p style={tierLeadStyle}>
         {SEMANTIC_COUNT} tokens that name a use. This is the vocabulary UI code writes against.
       </p>
-      <TokenGallery buckets={SEMANTIC_BUCKETS} />
+      <TokenGallery buckets={SEMANTIC_BUCKETS} anchored />
 
       <PrimitiveGroup
+        id={ICONOGRAPHY_ANCHOR_ID}
         title="Iconography"
         description="A sample of the Boxicon (regular + filled) and vendored Phosphor-Fill glyphs the product actually uses — not generated from tokens, since glyphs aren't design tokens."
       >

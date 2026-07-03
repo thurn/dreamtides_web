@@ -18,7 +18,7 @@ import { getMockup } from "./mockups/registry";
 import { ComponentPage } from "./ComponentPage";
 import { ComponentShowcase } from "./ComponentShowcase";
 import { IntroSection } from "./IntroSection";
-import { PrimitivesSection } from "./PrimitivesSection";
+import { PrimitivesSection, TOKEN_TOC_ENTRIES } from "./PrimitivesSection";
 import { TableOfContents, type TocEntry } from "./TableOfContents";
 import { token } from "../primitives/tokens";
 
@@ -73,6 +73,9 @@ function buildTocEntries(
   const entries: TocEntry[] = [
     { id: "tango-toc-philosophy", label: "Design Philosophy", depth: 0 },
     { id: "tango-toc-tokens", label: "Design Tokens", depth: 0 },
+    // The token section's categories (Color, Typography, ...) nest one rung in,
+    // derived from the section itself so they can't drift from its headings.
+    ...TOKEN_TOC_ENTRIES.map((entry) => ({ ...entry, depth: 1 as const })),
   ];
   for (const { group, entries: components } of groups) {
     entries.push({ id: groupAnchorId(group), label: group, depth: 0 });
