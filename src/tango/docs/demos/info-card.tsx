@@ -10,9 +10,13 @@
 // Boxicons class (drives the icon-disc variant), the same production art the
 // full-screen mockup uses — the text default still leads with `leadGlyph`.
 //
-// InfoCard's props are all optional, so the raw component assigns directly to
-// the registry's `Component` slot (no all-optional wrapper needed, unlike
-// StatTile). `docName` points at the react-docgen display name the metadata is
+// InfoCardProps is a discriminated union on `variant` — each media variant
+// requires the media it renders (object/hero require `image`, icon requires
+// `glyph`) — so the demo seeds `image`, `frame` and `glyph` in defaultArgs and
+// every variant the reader selects renders a complete card. The raw component
+// assigns directly to the registry's `Component` slot (whose props are the
+// dynamic `Record<string, unknown>` the control panel builds), so no wrapper is
+// needed. `docName` points at the react-docgen display name the metadata is
 // keyed under so the props table reports InfoCard's real API.
 
 import { InfoCard } from "../../components/overlay/InfoCard";

@@ -67,7 +67,8 @@ export interface QsbDreamsign {
 export interface QsbDreamcaller {
   name: string;
   epithet?: string;
-  portrait?: string;
+  /** Resolved portrait art URL. Required — a docked Dreamcaller always has art. */
+  portrait: string;
   wash?: string;
   ability?: string;
 }
@@ -408,7 +409,8 @@ function QsbDreamcallerBust({
   dreamcaller,
   stageRef,
 }: {
-  dreamcaller: Partial<QsbDreamcaller>;
+  /** The docked Dreamcaller, or undefined for the empty placeholder frame. */
+  dreamcaller?: QsbDreamcaller;
   stageRef: React.RefObject<HTMLElement | null>;
 }): ReactElement {
   const ref = React.useRef<HTMLButtonElement>(null);
@@ -454,7 +456,7 @@ function QsbDreamcallerBust({
         transition: `transform ${token("--dur-fast")} ${token("--ease-out")}`,
       }}
     >
-      {dreamcaller.portrait && (
+      {dreamcaller && (
         <img
           src={dreamcaller.portrait}
           alt={dreamcaller.name}
@@ -468,7 +470,8 @@ function QsbDreamcallerBust({
           }}
         />
       )}
-      {anchor &&
+      {dreamcaller &&
+        anchor &&
         stageRef.current &&
         createPortal(
           <PressPopover anchor={anchor}>
@@ -477,7 +480,11 @@ function QsbDreamcallerBust({
               image={dreamcaller.portrait}
               imagePos="50% 6%"
               wash={dreamcaller.wash}
-              title={`${dreamcaller.name ?? ""}, ${dreamcaller.epithet ?? ""}`}
+              title={
+                dreamcaller.epithet
+                  ? `${dreamcaller.name}, ${dreamcaller.epithet}`
+                  : dreamcaller.name
+              }
               body={
                 dreamcaller.ability ? richText.rules(dreamcaller.ability) : undefined
               }
@@ -565,13 +572,13 @@ function QsbEssence({
 function QsbHudBar({
   essence = 0,
   deck = 0,
-  dreamcaller = {},
+  dreamcaller,
   stageRef,
   style = {},
 }: {
   essence?: number;
   deck?: number | string;
-  dreamcaller?: Partial<QsbDreamcaller>;
+  dreamcaller?: QsbDreamcaller;
   stageRef: React.RefObject<HTMLElement | null>;
   style?: CSSProperties;
 }): ReactElement {
@@ -644,7 +651,6 @@ export function QuestStatusBar({
   stackThreshold = 4,
 }: QuestStatusBarProps): ReactElement {
   const [signWindow, setSignWindow] = React.useState(false);
-  const dc: Partial<QsbDreamcaller> = dreamcaller ?? {};
 
   // The essence value and Dreamcaller bust each own their press-reveal
   // (QsbEssence / QsbDreamcallerBust) with per-element onPointerEnter/Leave, so
@@ -669,7 +675,7 @@ export function QuestStatusBar({
         <QsbHudBar
           essence={essence}
           deck={deck}
-          dreamcaller={dc}
+          dreamcaller={dreamcaller}
           stageRef={stageRef}
           style={{
             height: `calc(${token("--hud-h")} + ${token("--safe-bottom")})`,

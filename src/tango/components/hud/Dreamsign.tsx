@@ -94,6 +94,8 @@ export function DreamsignInfoCard({
 }: DreamsignInfoCardProps): React.ReactElement {
   const showImage = Boolean(dreamsign.imageName);
   const effect = dreamsign.effectDescription ?? "";
+  const badge = dreamsign.isBane ? "Bane" : undefined;
+  const body = effect ? richText.rules(effect) : undefined;
   return (
     <div
       data-testid={testid}
@@ -104,20 +106,28 @@ export function DreamsignInfoCard({
         gap: 8,
       }}
     >
-      <InfoCard
-        variant="object"
-        image={
-          showImage
-            ? dreamsignArtUrl(String(dreamsign.imageName))
-            : undefined
-        }
-        imageFilter={
-          dreamsign.isBane ? `${OBJECT_SHADOW} grayscale(0.5)` : OBJECT_SHADOW
-        }
-        title={dreamsign.name}
-        titleBadge={dreamsign.isBane ? "Bane" : undefined}
-        body={effect ? richText.rules(effect) : undefined}
-      />
+      {/* A dreamsign with art reveals through the media `object` variant; one
+          without art falls back to the media-free `text` variant so the reveal
+          is always a complete card, never an empty image frame. */}
+      {showImage ? (
+        <InfoCard
+          variant="object"
+          image={dreamsignArtUrl(String(dreamsign.imageName))}
+          imageFilter={
+            dreamsign.isBane ? `${OBJECT_SHADOW} grayscale(0.5)` : OBJECT_SHADOW
+          }
+          title={dreamsign.name}
+          titleBadge={badge}
+          body={body}
+        />
+      ) : (
+        <InfoCard
+          variant="text"
+          title={dreamsign.name}
+          titleBadge={badge}
+          body={body}
+        />
+      )}
       <CardTermDefinitions
         text={effect}
         testId={testid ? `${testid}-definition-stack` : undefined}

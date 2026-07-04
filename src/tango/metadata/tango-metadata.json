@@ -972,7 +972,7 @@
   "InfoCard": [
     {
       "name": "variant",
-      "tsType": "InfoCardVariant",
+      "tsType": "\"object\" | \"hero\" | \"text\" | \"icon\"",
       "unionMembers": [
         "object",
         "hero",
@@ -981,7 +981,47 @@
       ],
       "required": false,
       "defaultValue": null,
-      "description": "Which media treatment. Default 'text'."
+      "description": "Which media treatment. Omit — or pass 'text' — for the text variant."
+    },
+    {
+      "name": "image",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Media source. Required — the card is built around this image."
+    },
+    {
+      "name": "imagePos",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "`object-position` for the media crop. Default '50% 6%'."
+    },
+    {
+      "name": "imageFilter",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "A CSS `filter` on the media (e.g. a drop-shadow for a transparent object)."
+    },
+    {
+      "name": "wash",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "A CSS background painted over the media."
+    },
+    {
+      "name": "frame",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "true = framed portrait, false = contained transparent object. Default false."
     },
     {
       "name": "title",
@@ -1024,55 +1064,15 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Small mono/uppercase overline (hero + text variants)."
-    },
-    {
-      "name": "image",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Media source (object + hero variants)."
-    },
-    {
-      "name": "imagePos",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "imageFilter",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "wash",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "A CSS background painted over the media (object frame / hero)."
-    },
-    {
-      "name": "frame",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "object variant: true = framed portrait, false = contained transparent object."
+      "description": "Small mono/uppercase overline above the title."
     },
     {
       "name": "glyph",
       "tsType": "string",
       "unionMembers": [],
-      "required": false,
+      "required": true,
       "defaultValue": null,
-      "description": "icon variant: the boxicon class."
+      "description": "The boxicon class. Required — the disc renders this glyph."
     },
     {
       "name": "discAccent",
@@ -1080,7 +1080,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "icon variant: tint the reveal disc to this accent color so it matches the\nnode it opens from. Omit for the default violet-glow disc (SITE_DISC)."
+      "description": "Tint the reveal disc to this accent color so it matches the node it opens\nfrom. Omit for the default violet-glow disc (SITE_DISC)."
     },
     {
       "name": "leadGlyph",
@@ -1088,7 +1088,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "text variant: a small leading glyph, as a Boxicons class string."
+      "description": "A small leading glyph, as a Boxicons class string."
     }
   ],
   "LeaveSiteButton": [
@@ -1773,8 +1773,8 @@
           {
             "name": "portrait",
             "tsType": "string",
-            "optional": true,
-            "description": ""
+            "optional": false,
+            "description": "Resolved portrait art URL. Required — a docked Dreamcaller always has art."
           },
           {
             "name": "wash",

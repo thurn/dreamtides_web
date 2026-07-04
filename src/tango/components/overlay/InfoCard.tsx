@@ -168,9 +168,13 @@ function accentDiscStyle(accent: string): React.CSSProperties {
 /** Which media treatment an InfoCard renders. */
 export type InfoCardVariant = "object" | "hero" | "icon" | "text";
 
-export interface InfoCardProps {
-  /** Which media treatment. Default 'text'. */
-  variant?: InfoCardVariant;
+/**
+ * The copy every InfoCard carries, shared across all four media variants. The
+ * MEDIA a variant renders lives on the per-variant interfaces below, NEVER
+ * here — so the type can require the media that a given `variant` renders
+ * (see {@link InfoCardProps}).
+ */
+interface InfoCardCommonProps {
   /** The card's headline. Plain text — resolve names before display. */
   title?: string;
   /**
@@ -180,26 +184,86 @@ export interface InfoCardProps {
   titleBadge?: string;
   /** The reveal copy, as a {@link RichText} value (plain / rules / note / stack). */
   body?: RichText;
-  /** Small mono/uppercase overline (hero + text variants). */
-  meta?: string;
-  /** Media source (object + hero variants). */
-  image?: string;
+}
+
+/**
+ * object variant — a centered media block (a framed portrait OR a contained
+ * transparent object) above the title + body. An object card IS its media, so
+ * `image` is required: there is no object card without one.
+ */
+export interface InfoCardObjectProps extends InfoCardCommonProps {
+  variant: "object";
+  /** Media source. Required — the card is built around this image. */
+  image: string;
+  /** `object-position` for the media crop. Default '50% 6%'. */
   imagePos?: string;
+  /** A CSS `filter` on the media (e.g. a drop-shadow for a transparent object). */
   imageFilter?: string;
-  /** A CSS background painted over the media (object frame / hero). */
+  /** A CSS background painted over the media. */
   wash?: string;
-  /** object variant: true = framed portrait, false = contained transparent object. */
+  /** true = framed portrait, false = contained transparent object. Default false. */
   frame?: boolean;
-  /** icon variant: the boxicon class. */
-  glyph?: string;
+}
+
+/**
+ * hero variant — a full-bleed media banner across the top with the title +
+ * body below. The banner IS its media, so `image` is required.
+ */
+export interface InfoCardHeroProps extends InfoCardCommonProps {
+  variant: "hero";
+  /** Media source. Required — the card is built around this image. */
+  image: string;
+  /** `object-position` for the media crop. Default '50% 6%'. */
+  imagePos?: string;
+  /** A CSS `filter` on the media (e.g. a drop-shadow for a transparent object). */
+  imageFilter?: string;
+  /** A CSS background painted over the media. */
+  wash?: string;
+  /** Small mono/uppercase overline above the title. */
+  meta?: string;
+}
+
+/**
+ * icon variant — a glyph disc beside the title, body below. The disc IS its
+ * glyph, so `glyph` is required.
+ */
+export interface InfoCardIconProps extends InfoCardCommonProps {
+  variant: "icon";
+  /** The boxicon class. Required — the disc renders this glyph. */
+  glyph: string;
   /**
-   * icon variant: tint the reveal disc to this accent color so it matches the
-   * node it opens from. Omit for the default violet-glow disc (SITE_DISC).
+   * Tint the reveal disc to this accent color so it matches the node it opens
+   * from. Omit for the default violet-glow disc (SITE_DISC).
    */
   discAccent?: string;
-  /** text variant: a small leading glyph, as a Boxicons class string. */
+}
+
+/**
+ * text variant (the default) — an optional small lead glyph + title, body
+ * below. Carries no required media; its lead glyph is decorative.
+ */
+export interface InfoCardTextProps extends InfoCardCommonProps {
+  /** Which media treatment. Omit — or pass 'text' — for the text variant. */
+  variant?: "text";
+  /** Small mono/uppercase overline above the title. */
+  meta?: string;
+  /** A small leading glyph, as a Boxicons class string. */
   leadGlyph?: string;
 }
+
+/**
+ * InfoCard props — a discriminated union on `variant`. Each media variant
+ * carries (and REQUIRES) exactly the media it renders, so it is a compile
+ * error to construct an object/hero card without an `image` or an icon card
+ * without a `glyph`. An InfoCard can therefore never render an empty `<img>`
+ * or an empty disc — the type guarantees a valid, complete card. Narrow on
+ * `variant` to read a variant's media.
+ */
+export type InfoCardProps =
+  | InfoCardObjectProps
+  | InfoCardHeroProps
+  | InfoCardIconProps
+  | InfoCardTextProps;
 
 /* ================================================================
    InfoCard — content, four media variants, one shell.
@@ -211,21 +275,12 @@ export interface InfoCardProps {
  * `InfoCard.PressPopover / PressInfo / usePressReveal / anchorRect /
  * setRevealDelay / SITE_DISC`.
  */
-function InfoCardComponent({
-  variant = "text",
-  title,
-  titleBadge,
-  body,
-  meta,
-  image,
-  imagePos = "50% 6%",
-  imageFilter,
-  wash,
-  frame = false,
-  glyph,
-  discAccent,
-  leadGlyph,
-}: InfoCardProps): React.ReactElement {
+function InfoCardComponent(props: InfoCardProps): React.ReactElement {
+  const { title, titleBadge, body } = props;
+  // `variant` is optional only on the text member; resolve the default once for
+  // the shared body/title styling. The per-variant branches below narrow on the
+  // discriminant directly so each reads only the media its interface carries.
+  const variant: InfoCardVariant = props.variant ?? "text";
   const Body =
     body == null ? null : (
       <div
@@ -234,7 +289,6 @@ function InfoCardComponent({
         {renderRichText(body)}
       </div>
     );
-  const Meta = meta ? <div style={{ ...tMeta, marginBottom: 7 }}>{meta}</div> : null;
   // Title text plus an optional trailing badge, wrapped inline so the two stay
   // on one baseline (and stay centered in the object variant's centered title).
   const titleContent =
@@ -256,7 +310,8 @@ function InfoCardComponent({
 
   /* --- object: a centered media block (framed portrait OR contained
      transparent object) above its name + text. --- */
-  if (variant === "object") {
+  if (props.variant === "object") {
+    const { image, imagePos = "50% 6%", imageFilter, wash, frame = false } = props;
     const media = frame ? (
       <div
         style={{
@@ -324,7 +379,11 @@ function InfoCardComponent({
   /* --- hero: full-bleed media banner across the top, text at the bottom. A
      base gradient dissolves the media into the solid surface so the title/body
      sit on the card's own material, not a scrim over the scene. --- */
-  if (variant === "hero") {
+  if (props.variant === "hero") {
+    const { image, imagePos = "50% 6%", imageFilter, wash, meta } = props;
+    const Meta = meta ? (
+      <div style={{ ...tMeta, marginBottom: 7 }}>{meta}</div>
+    ) : null;
     return (
       <div style={{ ...shell }}>
         <div
@@ -384,7 +443,8 @@ function InfoCardComponent({
   }
 
   /* --- icon: a glyph disc beside the title, description below --- */
-  if (variant === "icon") {
+  if (props.variant === "icon") {
+    const { glyph, discAccent } = props;
     return (
       <div style={{ ...shell, padding: `${String(PADY)}px ${String(PADX)}px` }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -417,6 +477,10 @@ function InfoCardComponent({
   }
 
   /* --- text: optional small lead glyph + title, description below --- */
+  const { meta, leadGlyph } = props;
+  const Meta = meta ? (
+    <div style={{ ...tMeta, marginBottom: 7 }}>{meta}</div>
+  ) : null;
   return (
     <div style={{ ...shell, padding: `${String(PADY)}px ${String(PADX)}px` }}>
       {Meta}
