@@ -10,7 +10,7 @@ import type { CardData } from "../../../types/cards";
 import { loadCardDatabase } from "../../../data/card-database";
 import { GameCard } from "../../components/CardView";
 import { token } from "../../primitives/tokens";
-import { SceneCaption, sceneRoot } from "./scene";
+import { sceneRoot } from "./scene";
 
 // Curated real card UUIDs from data/tabula/cards_v2.toml (shared with the demo).
 // Split into a small "board" set (played characters) and a "hand" set so the
@@ -147,11 +147,6 @@ export function GameCardMockup() {
         </>
       )}
 
-      <SceneCaption
-        eyebrow="Game Card"
-        title="Board frontier over a fanned hand — real curated cards, resolved by UUID."
-        corner="top-left"
-      />
     </div>
   );
 }

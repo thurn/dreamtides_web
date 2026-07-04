@@ -134,6 +134,8 @@ function GameCardDemo({
 export const gameCardDemo: TangoComponent = {
   id: "game-card",
   title: "Game Card",
+  blurb:
+    "The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name.",
   group: "Components",
   docName: "GameCard",
   Component: GameCardDemo,

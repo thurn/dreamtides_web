@@ -86,6 +86,8 @@ function DreamsignDemo({ sizePx = 72 }: DreamsignDemoArgs) {
 export const dreamsignDemo: TangoComponent = {
   id: "dreamsign",
   title: "Dreamsign",
+  blurb:
+    "A dreamsign — a minor passive collectible — shown as its art floating on the scene. Hovering or pressing it reveals the full name and effect through the shared InfoCard.",
   group: "Components",
   docName: "Dreamsign",
   Component: DreamsignDemo,

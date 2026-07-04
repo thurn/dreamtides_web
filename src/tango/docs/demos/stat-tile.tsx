@@ -32,6 +32,8 @@ function StatTileDemo({
 export const statTileDemo: TangoComponent = {
   id: "stat-tile",
   title: "Stat Tile",
+  blurb:
+    "A labelled value cell for summary grids — a large value over a small uppercase label — used for deck stats and run-end results. Its value can be tinted to a resource role.",
   group: "Components",
   docName: "StatTile",
   Component: StatTileDemo,

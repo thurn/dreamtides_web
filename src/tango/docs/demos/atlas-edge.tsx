@@ -63,6 +63,8 @@ function AtlasEdgeDemo() {
 export const atlasEdgeDemo: TangoComponent = {
   id: "atlas-edge",
   title: "Atlas Edge",
+  blurb:
+    "The connector between two Atlas nodes, drawn inside the map's SVG. Its treatment reflects the endpoints' lifecycle relative to the layer the player is choosing into.",
   group: "Components",
   docName: "AtlasEdge",
   usage: [

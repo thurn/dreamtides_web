@@ -9,14 +9,16 @@
 // so each pill is assigned a distinct tone purely to demonstrate the full
 // palette, not to assert a fabricated color identity for that tide.
 
+import { useRef } from "react";
 import { dreamscapeSceneUrl } from "../../components/atlas-display";
 import { TidePill, type TidePillProps } from "../../components/TidePill";
 import { token } from "../../primitives/tokens";
-import { SceneCaption, sceneRoot } from "./scene";
+import { sceneRoot } from "./scene";
 
 interface TideEntry {
   id: string;
   displayName: string;
+  description: string;
   tone: NonNullable<TidePillProps["tone"]>;
 }
 
@@ -26,36 +28,83 @@ interface RoleGroup {
   tides: TideEntry[];
 }
 
-// Real tide records — id + displayName — from data/tides4.jsonc.
+// Real tide records — id + displayName — from data/tides4.jsonc. The
+// descriptions are illustrative flavor for the mockup's InfoCard reveals.
 const GROUPS: RoleGroup[] = [
   {
     role: "Signature",
     blurb: "Your Dreamcaller's own tide — always joined.",
-    tides: [{ id: "tide-sig-10", displayName: "Singular Storm", tone: "violet" }],
+    tides: [
+      {
+        id: "tide-sig-10",
+        displayName: "Singular Storm",
+        description:
+          "A tide of sudden, singular force — one overwhelming swell rather than a steady current.",
+        tone: "violet",
+      },
+    ],
   },
   {
     role: "Theme",
     blurb: "Facet tides carrying a Dreamcaller's themes.",
     tides: [
-      { id: "tide-fac-03", displayName: "The Worldbreaker", tone: "gold" },
-      { id: "tide-fac-05", displayName: "Teeming Thicket", tone: "green" },
-      { id: "tide-fac-06", displayName: "The Shifting Tide", tone: "neutral" },
+      {
+        id: "tide-fac-03",
+        displayName: "The Worldbreaker",
+        description:
+          "The tide of endings — cards and characters that trade the board away for a decisive break.",
+        tone: "gold",
+      },
+      {
+        id: "tide-fac-05",
+        displayName: "Teeming Thicket",
+        description:
+          "A verdant, crowding tide — wide, cheap swarms that fill the board faster than they can be cleared.",
+        tone: "green",
+      },
+      {
+        id: "tide-fac-06",
+        displayName: "The Shifting Tide",
+        description:
+          "A tide that never settles — cards that transform, relocate, and rewrite what is already in play.",
+        tone: "neutral",
+      },
     ],
   },
   {
     role: "Broad",
     blurb: "Neutral tides that top up any pool until it is full.",
     tides: [
-      { id: "tide-neu-01", displayName: "The Undertow", tone: "blue" },
-      { id: "tide-neu-03", displayName: "Rising Power", tone: "rust" },
-      { id: "tide-neu-04", displayName: "March of the Mighty", tone: "red" },
+      {
+        id: "tide-neu-01",
+        displayName: "The Undertow",
+        description:
+          "The quiet pull beneath the surface — value that accrues turn over turn until it drags the game under.",
+        tone: "blue",
+      },
+      {
+        id: "tide-neu-03",
+        displayName: "Rising Power",
+        description:
+          "A tide that only grows — each turn spent building leaves you stronger than the last.",
+        tone: "rust",
+      },
+      {
+        id: "tide-neu-04",
+        displayName: "March of the Mighty",
+        description:
+          "The advance of heavy things — expensive, unstoppable characters that close a game outright.",
+        tone: "red",
+      },
     ],
   },
 ];
 
 export function TidePillMockup() {
+  const stageRef = useRef<HTMLDivElement>(null);
   return (
     <div
+      ref={stageRef}
       style={{
         ...sceneRoot,
         backgroundImage: `linear-gradient(to bottom, rgba(8,5,17,0.55) 0%, rgba(8,5,17,0.72) 55%, rgba(8,5,17,0.95) 100%), url(${dreamscapeSceneUrl("tsukiren")})`,
@@ -125,6 +174,8 @@ export function TidePillMockup() {
                   tone={tide.tone}
                   icon="bxf bx-water"
                   label={tide.displayName}
+                  description={tide.description}
+                  stageRef={stageRef}
                 />
               ))}
             </div>
@@ -132,11 +183,6 @@ export function TidePillMockup() {
         ))}
       </div>
 
-      <SceneCaption
-        eyebrow="Tide Pill"
-        title="Real tide displayName values from data/tides4.jsonc, each shown under its real construction role: Signature, Theme (facet), or Broad (neutral)."
-        corner="bottom-left"
-      />
     </div>
   );
 }

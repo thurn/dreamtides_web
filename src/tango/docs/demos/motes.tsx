@@ -31,6 +31,8 @@ function MotesDemo(args: MotesProps) {
 export const motesDemo: TangoComponent = {
   id: "motes",
   title: "Motes",
+  blurb:
+    "The atmospheric particle layer — drifting dust that gives a surface its living shimmer. Its tint adapts to whether it sits over scene art or over chrome.",
   group: "Components",
   docName: "Motes",
   Component: MotesDemo,

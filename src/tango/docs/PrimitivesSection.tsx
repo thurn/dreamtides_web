@@ -93,6 +93,21 @@ function familyOf(name: string): string {
   return dash === -1 ? short : short.slice(0, dash);
 }
 
+/** Human-readable sub-heading for a token family whose raw segment is a cryptic
+ * abbreviation. Most families read fine uppercased (BG, TEXT, GOLD); only the
+ * ones spelled as initials need spelling out so the gallery is self-explaining.
+ * A family not listed here falls back to its raw segment. */
+const FAMILY_LABELS: Record<string, string> = {
+  cat: "Card Category",
+  dt: "Atlas Theme",
+  cv: "Card View",
+};
+
+/** The family sub-heading shown above a group of sibling tokens. */
+function familyLabel(family: string): string {
+  return FAMILY_LABELS[family] ?? family;
+}
+
 /** Follows a value that is *purely* a single `var(--x)` reference to the
  * token it points at, repeating until the value is no longer a bare var()
  * reference (or the alias chain runs out). Composite values — a shadow list,
@@ -382,7 +397,7 @@ function FamilyGrid({
     <>
       {families.map(({ family, entries: familyEntries }) => (
         <div key={family} style={familyBlockStyle}>
-          <p style={familyTitleStyle}>{family}</p>
+          <p style={familyTitleStyle}>{familyLabel(family)}</p>
           <div style={gridStyle}>
             {familyEntries.map(([name, entry]) => (
               <div key={name}>{renderSpecimen(name, entry)}</div>
@@ -651,7 +666,7 @@ function renderMotionEntries(entries: [string, TokenEntry][]): ReactElement {
     <>
       {families.map(({ family, entries: familyEntries }) => (
         <div key={family} style={familyBlockStyle}>
-          <p style={familyTitleStyle}>{family}</p>
+          <p style={familyTitleStyle}>{familyLabel(family)}</p>
           <div style={gridStyle}>
             {family === "stagger"
               ? familyEntries.map(([name]) => <div key={name}>{StaggerSpecimen(name)}</div>)

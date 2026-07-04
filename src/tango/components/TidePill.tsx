@@ -2,13 +2,17 @@
 // categories. `tone` picks one of the brand's tide colors; the pill shows the
 // tide's icon + name.
 //
-// TidePill is PURELY PRESENTATIONAL — it renders the chip (and, when `onPress`
-// is passed, its own press feedback) and nothing else. The mobile touch-down
-// preview (a tide's description, via `PressInfo` + `InfoCard`) is a later
-// composition, not baked into this component — InfoCard does not exist in
-// Tango yet (tracked separately). When it lands, callers wrap a TidePill in
-// `PressInfo`/`InfoCard` themselves so every popup in the system reads
-// identically; TidePill never floats its own bespoke popup.
+// A TidePill ALWAYS carries its tide description: hovering (fine pointer) or
+// pressing (touch) a pill reveals that copy through the ONE shared popover,
+// InfoCard, so a reader always learns what a tide means without leaving the
+// screen. The reveal is baked into the component (the `description` prop is
+// required) rather than left to each caller, so the pairing can never be
+// forgotten and every tide popup reads identically. The reveal routes through
+// InfoCard's `usePressReveal` + `anchorRect` + `PressPopover` engine — the same
+// input-adaptive contract the dreamsign strip and site discs use — so timing,
+// placement, and the on-screen clamp cannot diverge. Pass `stageRef` (the
+// screen root) for the anchored, clamped reveal; omit it and the card floats
+// directly above the pill (standalone / list use).
 //
 // Colors are token-driven, never a raw hex duplicating a token:
 //   - violet -> --accent-bright / --primitive-violet-400 (also the source of
@@ -20,20 +24,21 @@
 //   - red    -> --danger (== --primitive-ember-500) / --primitive-ember-400
 //   - neutral -> a muted surface (--text-secondary / --border-mid), with an
 //     alpha wash that has no dedicated token and is copied verbatim from the
-//     source, matching SegmentedControl's track-background precedent
+//     source
 // The alpha-tinted backgrounds/borders that have no dedicated wash token use
 // `color-mix()` against the base color token rather than a hardcoded rgba, so
 // a future token rename/reband still propagates.
 //
-// Press feedback (when `onPress` is passed) routes through the shared
-// `usePress` hook rather than a bare onClick/:active, matching the
-// rest of Tango's interactive controls.
-//
 // Ported from the Claude Design "Dreamtides Mobile" project
 // (components/pills/TidePill.jsx / .d.ts).
 
-import { usePress, PRESS_SCALE } from "../primitives/Pressable";
+import * as React from "react";
+import { createPortal } from "react-dom";
+import { InfoCard } from "./InfoCard";
+import { richText } from "./rich-text";
 import { token } from "../primitives/tokens";
+
+const { usePressReveal, anchorRect, PressPopover, PRESS_SCALE } = InfoCard;
 
 /** Height/scale variants. */
 type TidePillSize = "sm" | "md";
@@ -90,41 +95,98 @@ export interface TidePillProps {
    * passing it — the pill renders copy from a plain string, not caller markup,
    * so TidePill is a leaf, not a container. */
   label: string;
+  /** The tide's description, revealed through the shared InfoCard on hover /
+   * press. Required: a TidePill always carries its description so the reveal
+   * can never be forgotten. Plain prose — resolve before display. */
+  description: string;
   /** Tide color. */
   tone?: "violet" | "blue" | "gold" | "green" | "rust" | "red" | "neutral";
   /** Leading icon: a Boxicons class string (e.g. `"bxf bx-water"`). The pill
-   * renders the `<i>` itself at a fixed size so every tide icon matches. */
+   * renders the `<i>` itself at a fixed size so every tide icon matches, and it
+   * heads the InfoCard reveal as the tide's glyph disc. */
   icon?: string;
   /** Height/scale. Default 'md'. */
   size?: TidePillSize;
-  /** Fires on press. When set, the pill renders as a button with press feedback. */
+  /**
+   * Screen root the reveal anchors + clamps against. Pass it for the
+   * material-continuity reveal (preferred); omit it and the card floats
+   * directly above the pill.
+   */
+  stageRef?: React.RefObject<HTMLElement | null>;
+  /** Fires on a tap / click that was not a deliberate hold-to-read. */
   onPress?: () => void;
 }
 
 /**
  * TidePill — the labelled tag for a Dreamcaller's tides/affiliations/
- * categories (icon + name). Presentational only; wrap in `PressInfo` +
- * `InfoCard` for the touch-down description popup once InfoCard lands in
- * Tango.
+ * categories (icon + name). Hovering (fine pointer) or pressing (touch) the
+ * pill always reveals the tide's `description` through the ONE shared InfoCard;
+ * pass `stageRef` for the anchored, clamped reveal or omit it to float the card
+ * directly above the pill.
  */
 export function TidePill({
   label,
+  description,
   tone = "violet",
   icon,
   size = "md",
+  stageRef,
   onPress,
 }: TidePillProps) {
   const spec = TONES[tone] ?? TONES.violet;
   const pad = size === "sm" ? "3px 9px" : "5px 12px";
-  const { pressed, bind } = usePress();
-  const on = pressed && Boolean(onPress);
+  const ref = React.useRef<HTMLSpanElement>(null);
+  const { pressed, shown, begin, end, enter, leave, heldPastTap } =
+    usePressReveal();
+  const [anchor, setAnchor] = React.useState<ReturnType<
+    typeof anchorRect
+  > | null>(null);
+
+  const useStage = Boolean(stageRef?.current);
+
+  React.useLayoutEffect(() => {
+    if (shown && useStage && stageRef?.current && ref.current) {
+      setAnchor(anchorRect(stageRef.current, ref.current));
+    } else {
+      setAnchor(null);
+    }
+  }, [shown, useStage, stageRef]);
+
+  const onUp = (): void => {
+    const tap = !heldPastTap();
+    end();
+    if (tap && onPress) {
+      onPress();
+    }
+  };
+
+  // The reveal: the tide's icon heads an InfoCard `icon` disc tinted to its own
+  // tone; a tide without a glyph falls back to the plain `text` variant. The
+  // description renders as plain prose through the shared rich-text model.
+  const card =
+    icon !== undefined ? (
+      <InfoCard
+        variant="icon"
+        glyph={icon}
+        discAccent={spec.fg}
+        title={label}
+        body={richText.plain(description)}
+      />
+    ) : (
+      <InfoCard variant="text" title={label} body={richText.plain(description)} />
+    );
 
   return (
     <span
-      role={onPress ? "button" : undefined}
-      tabIndex={onPress ? 0 : undefined}
-      {...(onPress ? bind : {})}
-      onClick={onPress}
+      ref={ref}
+      role="button"
+      tabIndex={0}
+      aria-label={`Tide: ${label}`}
+      onPointerEnter={enter}
+      onPointerDown={begin}
+      onPointerUp={onUp}
+      onPointerLeave={leave}
+      onPointerCancel={end}
       onKeyDown={
         onPress
           ? (event) => {
@@ -136,6 +198,7 @@ export function TidePill({
           : undefined
       }
       style={{
+        position: "relative",
         display: "inline-flex",
         alignItems: "center",
         gap: 6,
@@ -148,11 +211,13 @@ export function TidePill({
         font: `600 ${size === "sm" ? 12 : 13}px/1 ${token("--font-ui")}`,
         letterSpacing: "0.005em",
         whiteSpace: "nowrap",
-        cursor: onPress ? "pointer" : "default",
+        cursor: "pointer",
+        touchAction: "none",
         WebkitTapHighlightColor: "transparent",
         userSelect: "none",
+        zIndex: pressed ? 60 : undefined,
         transformOrigin: "center",
-        transform: on ? `scale(${String(PRESS_SCALE)})` : "none",
+        transform: pressed ? `scale(${String(PRESS_SCALE)})` : "none",
         transition: `transform ${token("--dur-fast")} ${token("--ease-out")}`,
       }}
     >
@@ -162,6 +227,32 @@ export function TidePill({
         </span>
       )}
       {label}
+
+      {/* Anchored, clamped reveal through the shared engine (preferred). */}
+      {shown &&
+        useStage &&
+        anchor &&
+        stageRef?.current &&
+        createPortal(
+          <PressPopover anchor={anchor}>{card}</PressPopover>,
+          stageRef.current,
+        )}
+
+      {/* Standalone fallback: the same InfoCard floated directly above. */}
+      {shown && !useStage && (
+        <span
+          style={{
+            position: "absolute",
+            left: "50%",
+            bottom: "100%",
+            transform: "translate(-50%, -14px)",
+            zIndex: 90,
+            pointerEvents: "none",
+          }}
+        >
+          {card}
+        </span>
+      )}
     </span>
   );
 }

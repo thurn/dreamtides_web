@@ -9,6 +9,8 @@ import type { TangoComponent } from "../registry";
 export const resourceChipDemo: TangoComponent = {
   id: "resource-chip",
   title: "Resource Chip",
+  blurb:
+    "The canonical value-and-mark pairing for the game economy. Every essence, energy, spark, points, or counter number routes through it, so the mark and its role color read identically wherever a value appears.",
   group: "Components",
   docName: "ResourceChip",
   Component: ResourceChip,

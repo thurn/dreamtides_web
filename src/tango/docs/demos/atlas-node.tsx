@@ -215,6 +215,8 @@ function AtlasNodeDemo({ hovered = false }: AtlasNodeDemoArgs) {
 export const atlasNodeDemo: TangoComponent = {
   id: "atlas-node",
   title: "Atlas Node",
+  blurb:
+    "One dreamscape node on the Dream Atlas: a framed circular icon whose glow and badges track its state — revealed, known, visited, completed, or a looming boss.",
   group: "Components",
   docName: "AtlasNode",
   Component: AtlasNodeDemo,

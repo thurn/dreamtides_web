@@ -10,7 +10,7 @@
 import { Pressable } from "../../primitives/Pressable";
 import { dreamscapeSceneUrl } from "../../components/atlas-display";
 import { token } from "../../primitives/tokens";
-import { SceneCaption, sceneRoot } from "./scene";
+import { sceneRoot } from "./scene";
 
 interface TileSpec {
   icon: string;
@@ -134,11 +134,6 @@ export function PressableMockup() {
         ))}
       </div>
 
-      <SceneCaption
-        eyebrow="Pressable"
-        title="Four unrelated surfaces, one shared press-down feedback — click or hold any tile."
-        corner="bottom-left"
-      />
     </div>
   );
 }

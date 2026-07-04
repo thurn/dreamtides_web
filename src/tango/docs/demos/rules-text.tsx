@@ -35,6 +35,8 @@ function RulesTextDemo({ text = SAMPLE_RULES_TEXT }: RulesTextDemoArgs) {
 export const rulesTextDemo: TangoComponent = {
   id: "rules-text",
   title: "Rules Text",
+  blurb:
+    "Renders Dreamtides rules copy from card data — resource pips, ability carets, and glossary keywords styled in place — so ability text reads the same everywhere it appears.",
   group: "Components",
   docName: "RulesText",
   Component: RulesTextDemo,

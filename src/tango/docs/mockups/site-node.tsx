@@ -11,7 +11,7 @@ import { useRef } from "react";
 import { SiteNode, type DreamscapeSiteModel } from "../../components/SiteNode";
 import { dreamscapeSceneUrl } from "../../components/atlas-display";
 import { token } from "../../primitives/tokens";
-import { SceneCaption, sceneRoot } from "./scene";
+import { sceneRoot } from "./scene";
 
 /** Representative placed-site models, scattered across the scene (pos in %). */
 const SITE_MODELS: DreamscapeSiteModel[] = [
@@ -131,11 +131,6 @@ export function SiteNodeMockup() {
         </div>
       </div>
 
-      <SceneCaption
-        eyebrow="Site Node"
-        title="Wayside discs over real scene art; press-hold reveals each site's info card."
-        corner="bottom-left"
-      />
     </div>
   );
 }

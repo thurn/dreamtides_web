@@ -126,21 +126,23 @@ export function IntroSection(): ReactElement {
         Design Philosophy
       </h2>
       <p style={leadStyle}>
-        Tango is token-scaled and responsive, and reads the same on any
-        screen. The rules underneath every component hold constant: objects
-        persist rather than appear, tangible things are always in gentle
-        motion, information earns a backdrop instead of being handed one, and
-        every reveal-on-interaction popup speaks the same contract. The
-        principles below are what every component in the catalog is built
-        against.
+        Tango is the design system for Dreamtides — one small, strict catalog
+        of components that every screen is built from. Three ideas define it.
+        It is a game interface, not a document: tangible objects stay in gentle
+        motion and travel between states rather than blinking in and out. It is
+        legible by construction: content earns clarity through the way it is
+        rendered, never through a scrim or wash painted behind it. And it is
+        deliberately closed: each component exposes a tight, typed surface with
+        no style or className escape hatch, so no screen can quietly drift from
+        the system. The principles below expand on those ideas.
       </p>
 
       <div style={principleListStyle}>
         <Principle title="Material Continuity">
           <p style={bodyStyle}>
-            Nothing in Tango fades into existence. The four entities that
-            carry meaning across screens — cards, dreamsigns, essence, and
-            Dreamcallers — travel and expand between the states they occupy
+            Nothing in Tango fades into existence. The entities that carry
+            meaning — cards, dreamsigns, essence, and Dreamcallers — travel
+            and expand between the states they occupy
             rather than appearing or disappearing. Two canonical transitions
             cover every case: object-travel, when a value moves between two
             anchors, and container-transform, when an object expands into its

@@ -8,7 +8,7 @@
 import { dreamscapeSceneUrl } from "../../components/atlas-display";
 import { StatTile } from "../../components/StatTile";
 import { token } from "../../primitives/tokens";
-import { SceneCaption, sceneRoot } from "./scene";
+import { sceneRoot } from "./scene";
 
 export function StatTileMockup() {
   return (
@@ -84,11 +84,6 @@ export function StatTileMockup() {
         <StatTile label="Spark" value="12" sub="total" accent="spark" />
       </div>
 
-      <SceneCaption
-        eyebrow="Stat Tile"
-        title="A run-summary grid — labels name real persistent-run fields (essence, deck, layer, visited sites)."
-        corner="bottom-left"
-      />
     </div>
   );
 }

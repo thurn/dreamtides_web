@@ -36,6 +36,16 @@ const titleLinkStyle: CSSProperties = {
   margin: 0,
 };
 
+// A one-or-two-sentence description of what the component does, sitting under
+// the title so the reader knows the component's job before studying its live
+// example below — in place of a caption floated over the example itself.
+const blurbStyle: CSSProperties = {
+  font: token("--t-body-sm"),
+  color: token("--text-secondary"),
+  margin: 0,
+  maxWidth: "64ch",
+};
+
 const linksRowStyle: CSSProperties = {
   display: "flex",
   alignItems: "center",
@@ -104,6 +114,7 @@ export function ComponentShowcase({
         <a href={`#/${entry.id}`} style={titleLinkStyle}>
           {entry.title}
         </a>
+        <p style={blurbStyle}>{entry.blurb}</p>
         <div style={linksRowStyle}>
           <a href={`#/${entry.id}`} style={docsLinkStyle}>
             Docs &amp; props →

@@ -119,6 +119,8 @@ function SiteNodeDemo({ size = 60, motion = true }: SiteNodeDemoArgs) {
 export const siteNodeDemo: TangoComponent = {
   id: "site-node",
   title: "Site Node",
+  blurb:
+    "The dreamscape site disc: a floating circular node over scene art carrying a glyph and accent ring. It has no text label — pressing or hovering reveals the site's name and detail through the shared InfoCard.",
   group: "Components",
   docName: "SiteNode",
   Component: SiteNodeDemo,

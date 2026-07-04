@@ -11,7 +11,7 @@ import { dreamscapeSceneUrl } from "../../components/atlas-display";
 import { groupPanelStyle } from "../../components/GroupPanel";
 import { Motes } from "../../components/Motes";
 import { token } from "../../primitives/tokens";
-import { SceneCaption, sceneRoot } from "./scene";
+import { sceneRoot } from "./scene";
 
 export function MotesMockup() {
   return (
@@ -47,9 +47,8 @@ export function MotesMockup() {
       </div>
 
       {/* Chrome-only console anchored to the right, mid-height — clear of the
-          top title and the bottom-left SceneCaption at every viewport size —
-          carrying the 'violet' tint over its own glass pane rather than over
-          scene art. */}
+          top title at every viewport size — carrying the 'violet' tint over its
+          own glass pane rather than over scene art. */}
       <div
         style={{
           position: "absolute",
@@ -87,11 +86,6 @@ export function MotesMockup() {
         </div>
       </div>
 
-      <SceneCaption
-        eyebrow="Motes"
-        title="Warm tint over scene art (top), violet tint over chrome (right console) — same component, tint differs."
-        corner="bottom-left"
-      />
     </div>
   );
 }

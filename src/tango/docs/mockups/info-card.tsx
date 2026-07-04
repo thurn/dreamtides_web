@@ -12,7 +12,7 @@ import { richText } from "../../components/rich-text";
 import { dreamscapeSceneUrl } from "../../components/atlas-display";
 import { assetUrl } from "../../../runtime/asset-url";
 import { token } from "../../primitives/tokens";
-import { SceneCaption, sceneRoot } from "./scene";
+import { sceneRoot } from "./scene";
 
 /** A Dreamcaller's character render, resolved the same way `assetUrl` resolves
  * every other binary art asset (see `src/components/DreamcallerPortrait.tsx`
@@ -194,11 +194,6 @@ export function InfoCardMockup() {
         />
       </div>
 
-      <SceneCaption
-        eyebrow="Info Card"
-        title="Four objects, four media variants, one shell — press or hover any object."
-        corner="bottom-left"
-      />
     </div>
   );
 }

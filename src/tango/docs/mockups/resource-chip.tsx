@@ -9,7 +9,7 @@
 import { dreamscapeSceneUrl } from "../../components/atlas-display";
 import { ResourceChip } from "../../components/ResourceChip";
 import { token } from "../../primitives/tokens";
-import { SceneCaption, sceneRoot } from "./scene";
+import { sceneRoot } from "./scene";
 
 export function ResourceChipMockup() {
   return (
@@ -102,11 +102,6 @@ export function ResourceChipMockup() {
         </div>
       </div>
 
-      <SceneCaption
-        eyebrow="Resource Chip"
-        title="Docked HUD chips (essence, energy, spark, points, counter) plus the tight inline reward form."
-        corner="bottom-left"
-      />
     </div>
   );
 }

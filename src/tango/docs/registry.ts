@@ -53,6 +53,14 @@ export interface TangoComponent {
   id: string;
   /** Human-readable display title, e.g. "Pressable". */
   title: string;
+  /**
+   * A one-or-two-sentence description of what the component is and does, shown
+   * directly under the title on both the overview showcase and the component's
+   * doc page — so a reader learns the component's job before studying its live
+   * example. Plain prose; never quantifies how many objects a demo happens to
+   * show.
+   */
+  blurb: string;
   /** Table-of-contents grouping, e.g. "Primitives" | "Components". */
   group: string;
   /**

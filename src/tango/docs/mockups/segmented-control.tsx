@@ -16,7 +16,7 @@ import {
   type SegmentedOption,
 } from "../../components/SegmentedControl";
 import { token } from "../../primitives/tokens";
-import { SceneCaption, sceneRoot } from "./scene";
+import { sceneRoot } from "./scene";
 
 // Curated real card UUIDs from data/tabula/cards_v2.toml (a mix of Character
 // and Event so the filter has something to actually filter). Resolved and
@@ -127,11 +127,6 @@ export function SegmentedControlMockup() {
         )}
       </div>
 
-      <SceneCaption
-        eyebrow="Segmented Control"
-        title="All / Characters / Events actually filters the real card grid above."
-        corner="bottom-left"
-      />
     </div>
   );
 }

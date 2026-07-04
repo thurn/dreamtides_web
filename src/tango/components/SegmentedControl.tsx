@@ -1,13 +1,14 @@
 // SegmentedControl — the compact tab/filter switch used for type filters
 // (All / Characters / Events), sort direction, and small mode toggles. The
-// active segment carries the violet accent-gradient fill; the track is a
-// subtle inset pill.
+// active segment carries the violet accent-gradient fill; the track is the
+// same liquid-glass pane as GroupPanel, shaped as a pill.
 //
-// Colors and shape are token-driven (`--border-soft`, `--radius-pill`,
+// The track surface is GroupPanel's own glass recipe (`groupPanelStyle()`)
+// with the radius overridden to `--radius-pill`, so the switch shares the one
+// grouping-surface material rather than inventing its own inset. The active
+// segment's colors and shape are token-driven (`--radius-pill`,
 // `--gradient-accent`, `--glow-accent-soft`, `--text-muted`,
 // `--text-on-accent`, `--font-ui`), never a raw hex duplicating a token.
-// The track background (`rgba(255, 255, 255, 0.05)`) has no dedicated token
-// in the parent design system and is copied verbatim from the source.
 //
 // Each segment routes its press feedback through the shared `usePress` hook
 // rather than hand-rolling a scale: a segment already needs to
@@ -22,6 +23,7 @@
 import type { ReactElement } from "react";
 import { PRESS_SCALE, usePress } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
+import { groupPanelStyle } from "./GroupPanel";
 
 /** Height/scale variants. */
 type SegmentedControlSize = "sm" | "md";
@@ -132,14 +134,17 @@ export function SegmentedControl({
     <div
       role="tablist"
       style={{
+        // The track is the same liquid-glass material as GroupPanel — the one
+        // grouping surface — so a segmented switch reads as a member of the
+        // same family rather than its own ad-hoc inset. Only the radius differs:
+        // a segmented track is a pill, not a panel.
+        ...groupPanelStyle(),
+        borderRadius: token("--radius-pill"),
         display: "inline-flex",
         width: full ? "100%" : "auto",
         padding: 3,
         gap: 2,
         height: spec.height,
-        background: "rgba(255, 255, 255, 0.05)",
-        border: `1px solid ${token("--border-soft")}`,
-        borderRadius: token("--radius-pill"),
       }}
     >
       {normalized.map((option) => (

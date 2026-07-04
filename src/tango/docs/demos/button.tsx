@@ -1,6 +1,6 @@
 // Registry demo entry for Button — see resource-chip.tsx for the recipe this
-// follows. `icon` is a Boxicons class string; `label` is the button's text
-// (a plain string), so it surfaces as a text control seeded via defaultArgs.
+// follows. `label` is the button's text (a plain string) and `cost` its inline
+// essence price, both seeded via defaultArgs.
 
 import { Button } from "../../components/Button";
 import type { TangoComponent } from "../registry";
@@ -8,19 +8,20 @@ import type { TangoComponent } from "../registry";
 export const buttonDemo: TangoComponent = {
   id: "button",
   title: "Button",
+  blurb:
+    "The one button in Tango — the beveled purple sprite, scaled to any label and to a taller commit height. Low-emphasis and destructive actions are plain pressable text or icons, never a second button color.",
   group: "Components",
   docName: "Button",
   Component: Button,
   usage: [
     {
-      label: "With icon and cost",
-      note: "A leading `icon` node and an essence `cost` render inside the one purple button sprite.",
+      label: "With cost",
+      note: "An essence `cost` renders after the label, in white, inside the one purple button sprite.",
       code: `import { Button } from "src/tango/components/Button";
 
 <Button
   size="md"
   cost={100}
-  icon="bxf bx-sword"
   label="Begin Battle"
   onClick={beginBattle}
 />`,
@@ -42,7 +43,6 @@ export const buttonDemo: TangoComponent = {
       full: false,
       disabled: false,
       cost: 100,
-      icon: "bxf bx-sword",
       label: "Begin Battle",
     },
   },

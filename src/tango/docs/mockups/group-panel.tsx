@@ -10,7 +10,7 @@ import { GroupPanel } from "../../components/GroupPanel";
 import { dreamscapeSceneUrl } from "../../components/atlas-display";
 import { assetUrl } from "../../../runtime/asset-url";
 import { token } from "../../primitives/tokens";
-import { SceneCaption, sceneRoot } from "./scene";
+import { sceneRoot } from "./scene";
 
 /** A Dreamcaller's character render, resolved the same way `assetUrl` resolves
  * every other binary art asset (see `src/components/DreamcallerPortrait.tsx`
@@ -143,11 +143,6 @@ export function GroupPanelMockup() {
         ))}
       </div>
 
-      <SceneCaption
-        eyebrow="Group Panel"
-        title="Two liquid-glass panes over real scene art, each collecting a real Dreamcaller's portrait, name, and ability."
-        corner="bottom-left"
-      />
     </div>
   );
 }

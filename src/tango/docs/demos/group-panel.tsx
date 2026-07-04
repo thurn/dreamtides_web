@@ -11,6 +11,8 @@ import type { TangoComponent } from "../registry";
 export const groupPanelDemo: TangoComponent = {
   id: "group-panel",
   title: "Group Panel",
+  blurb:
+    "The information-grouping card: a liquid-glass pane that collects dense, related values into one unit. It earns its backdrop by organizing information, not by holding a lone label.",
   group: "Components",
   docName: "GroupPanel",
   Component: GroupPanel,

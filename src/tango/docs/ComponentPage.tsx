@@ -74,6 +74,16 @@ export function ComponentPage({ id }: { id: string }) {
         <h1 style={{ font: token("--t-title"), color: token("--text-primary"), margin: `${token("--space-4")} 0 0` }}>
           {entry.title}
         </h1>
+        <p
+          style={{
+            font: token("--t-lead"),
+            color: token("--text-secondary"),
+            margin: `${token("--space-4")} 0 0`,
+            maxWidth: "64ch",
+          }}
+        >
+          {entry.blurb}
+        </p>
       </header>
 
       <div className="tango-component-page__layout">

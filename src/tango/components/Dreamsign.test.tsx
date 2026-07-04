@@ -13,10 +13,11 @@ import { extractGlossaryTerms } from "../../data/glossary-terms";
  * `DreamsignHoverCard`).
  *
  * The tile renders the dreamsign's `imageName` artwork (from
- * `/dreamsigns/<imageName>`) inside a sized square, conveys bane vs. boon via a
- * tinted border + desaturation filter, and reveals its full name + effect text
- * through the shared InfoCard `object` variant. jsdom exposes no `matchMedia`, so
- * `usePressReveal` treats it as a coarse pointer: a press-down reveals the card.
+ * `/dreamsigns/<imageName>`) inside a sized square with no chrome — the art
+ * floats on the media — conveys a bane via a desaturation filter, and reveals
+ * its full name + effect text through the shared InfoCard `object` variant.
+ * jsdom exposes no `matchMedia`, so `usePressReveal` treats it as a coarse
+ * pointer: a press-down reveals the card.
  */
 
 function makeDreamsign(
@@ -99,7 +100,7 @@ describe("Dreamsign", () => {
     });
   });
 
-  it("applies a bane border tint and desaturation filter for bane dreamsigns", () => {
+  it("desaturates bane dreamsigns and renders no tile chrome", () => {
     const sign = makeDreamsign({
       name: "Skull",
       imageName: "skull.png",
@@ -115,17 +116,18 @@ describe("Dreamsign", () => {
     );
     expect(tile).not.toBeNull();
     expect(tile?.dataset.isBane).toBe("true");
-    // Bane art is desaturated so the red ring reads as a warning.
+    // Bane art is desaturated so the warning reads before the art does.
     expect(tile?.style.filter).toContain("grayscale");
-    // The bane ring uses a red-channel border colour.
-    expect(tile?.style.border).toContain("239");
+    // The art floats on the media with no chrome: no border or background.
+    expect(tile?.style.border).toBe("");
+    expect(tile?.style.background).toBe("");
 
     act(() => {
       root.unmount();
     });
   });
 
-  it("uses a purple boon border for non-bane dreamsigns and no grayscale", () => {
+  it("renders boon dreamsigns with no grayscale and no tile chrome", () => {
     const sign = makeDreamsign({
       name: "Moonstone",
       imageName: "moonstone.png",
@@ -141,8 +143,9 @@ describe("Dreamsign", () => {
     );
     expect(tile?.dataset.isBane).toBe("false");
     expect(tile?.style.filter).not.toContain("grayscale");
-    // Boon ring uses a purple-channel border colour (168, 85, 247 family).
-    expect(tile?.style.border).toContain("168");
+    // No chrome: the boon art floats with no border or background.
+    expect(tile?.style.border).toBe("");
+    expect(tile?.style.background).toBe("");
 
     act(() => {
       root.unmount();

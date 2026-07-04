@@ -65,6 +65,8 @@ function QuestStatusBarDemo(args: Omit<QuestStatusBarProps, "stageRef">) {
 export const questStatusBarDemo: TangoComponent = {
   id: "quest-status-bar",
   title: "Quest Status Bar",
+  blurb:
+    "The persistent, transparent bottom HUD for quest screens. The essence total, deck, Dreamcaller, and docked dreamsigns sit directly on the scene art, made legible by their own glyph outline.",
   group: "Components",
   docName: "QuestStatusBar",
   Component: QuestStatusBarDemo,

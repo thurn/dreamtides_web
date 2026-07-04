@@ -4,13 +4,13 @@
 // engine. Tiles are identified by id (never name — names are not unique) and the
 // art resolves from real dreamsign image assets in `public/dreamsigns/`, exactly
 // as the shop / reward / deck surfaces resolve it. One tile is shown in its bane
-// treatment (red ring + desaturation), a run-time state rather than data.
+// treatment (a desaturation), a run-time state rather than data.
 
 import { useRef } from "react";
 import { Dreamsign } from "../../components/Dreamsign";
 import type { Dreamsign as DreamsignData } from "../../../types/quest";
 import { token } from "../../primitives/tokens";
-import { SceneCaption, sceneRoot } from "./scene";
+import { sceneRoot } from "./scene";
 
 /** A gallery of real dreamsign art assets (by id), with authored-style effects. */
 const GALLERY: DreamsignData[] = [
@@ -123,11 +123,6 @@ export function DreamsignMockup() {
         ))}
       </div>
 
-      <SceneCaption
-        eyebrow="Dreamsign"
-        title="A dreamsign gallery over real art; press-hold any tile to read its effect."
-        corner="bottom-left"
-      />
     </div>
   );
 }

@@ -29,6 +29,8 @@ const targetStyle: CSSProperties = {
 export const pressableDemo: TangoComponent = {
   id: "pressable",
   title: "Pressable",
+  blurb:
+    "The one press-feedback primitive. Wrap any element in it and that element gains the shared press-down compression, so every interactive surface in Tango presses with the identical feel.",
   group: "Primitives",
   docName: "Pressable",
   Component: Pressable,

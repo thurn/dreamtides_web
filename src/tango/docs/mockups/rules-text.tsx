@@ -13,7 +13,7 @@ import { loadCardDatabase } from "../../../data/card-database";
 import { GameCard } from "../../components/CardView";
 import { RulesText } from "../../components/RulesText";
 import { token } from "../../primitives/tokens";
-import { SceneCaption, sceneRoot } from "./scene";
+import { sceneRoot } from "./scene";
 
 // The featured card and a few reference cards, all real UUIDs from
 // data/tabula/cards_v2.toml. The featured card carries multi-ability rules text
@@ -165,11 +165,6 @@ export function RulesTextMockup() {
         )}
       </div>
 
-      <SceneCaption
-        eyebrow="Rules Text"
-        title="Authored rules text with pips, carets, and keyword highlighting — from the live card data."
-        corner="bottom-left"
-      />
     </div>
   );
 }

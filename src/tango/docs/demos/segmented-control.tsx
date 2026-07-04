@@ -68,6 +68,8 @@ function SegmentedControlDemo({
 export const segmentedControlDemo: TangoComponent = {
   id: "segmented-control",
   title: "Segmented Control",
+  blurb:
+    "The compact tab and filter switch used for type filters, sort direction, and small mode toggles. The selected segment carries the violet accent fill on a liquid-glass track.",
   group: "Components",
   docName: "SegmentedControl",
   Component: SegmentedControlDemo,

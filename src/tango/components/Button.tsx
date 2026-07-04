@@ -25,7 +25,6 @@
 import buttonPurple from "../assets/Button_Purple.png";
 import { PRESS_SCALE, usePress } from "../primitives/Pressable";
 import { token } from "../primitives/tokens";
-import { ResourceChip } from "./ResourceChip";
 
 /** Height/scale variants. 'lg' is the taller commit height. */
 type ButtonSize = "sm" | "md" | "lg";
@@ -54,18 +53,16 @@ export interface ButtonProps {
   full?: boolean;
   /** Dims the button and detaches its click/press feedback. */
   disabled?: boolean;
-  /** Leading icon: a Boxicons class string (e.g. `"bxf bx-sword"`). The button
-   * renders the `<i>` itself at a fixed size so every button icon matches. */
-  icon?: string;
-  /** Appends an inline essence price, e.g. cost={100} -> "… 100◆". */
+  /** Appends an inline essence price, e.g. cost={100} -> "… 100◆", rendered in
+   * the button's own on-accent white so the price reads as part of the label. */
   cost?: number | null;
   /** Fires when the button is activated (no-op while disabled). */
   onClick?: () => void;
-  /** Accessible label when the visible content is icon-only. */
+  /** Accessible label when the visible content is a bare price with no text. */
   ariaLabel?: string;
   /** The button's text label. Resolve any UUID/name to a plain string before
    * passing it — the button renders copy, never arbitrary caller markup. Omit
-   * for an icon-only button (supply `ariaLabel` instead). */
+   * only for a price-only button (supply `ariaLabel` instead). */
   label?: string;
 }
 
@@ -76,14 +73,13 @@ export interface ButtonProps {
  * feedback routes through the shared --press-scale primitive. The button has no
  * style / className / arbitrary-attribute escape hatch and takes no `children`
  * slot: its one appearance is fixed and only its typed props (size, full,
- * disabled, icon, cost, label) shape it — the label is a resolved string, not
+ * disabled, cost, label) shape it — the label is a resolved string, not
  * caller markup, so Button is a leaf, not a container.
  */
 export function Button({
   size = "md",
   full = false,
   disabled = false,
-  icon,
   cost = null,
   onClick,
   ariaLabel,
@@ -132,14 +128,26 @@ export function Button({
         WebkitTapHighlightColor: "transparent",
       }}
     >
-      {icon && (
-        <span style={{ display: "inline-flex", fontSize: "1.1em" }}>
-          <i className={icon} aria-hidden="true" />
-        </span>
-      )}
       {label != null && <span>{label}</span>}
       {cost != null && (
-        <ResourceChip kind="essence" value={cost} size={spec.font} gap={3} />
+        // The price renders in the button's own on-accent white (inherited),
+        // not the violet essence-role color — inside the purple sprite the mark
+        // reads as part of the label, not a separate tinted chip.
+        <span
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 3,
+            fontVariantNumeric: "tabular-nums",
+          }}
+        >
+          {cost}
+          <i
+            className="bxf bx-crypto"
+            aria-hidden="true"
+            style={{ fontSize: "1.04em", lineHeight: 1 }}
+          />
+        </span>
       )}
     </button>
   );

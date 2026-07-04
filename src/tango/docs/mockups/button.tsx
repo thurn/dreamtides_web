@@ -1,6 +1,6 @@
 // Full-screen mockup for Button — the ONE button, composed into a
-// realistic Merchant site screen: a few purchase rows at 'sm'/'md' with a
-// leading icon and an inline essence cost, one row priced beyond the player's
+// realistic Merchant site screen: a few purchase rows at 'sm'/'md' with an
+// inline essence cost, one row priced beyond the player's
 // current essence (disabled, per real affordability), and the 'lg' commit
 // button ("Continue Your Dream") at the bottom — the same button, only
 // taller, exactly per the component's own doc comment ("commit is a size, not
@@ -12,7 +12,7 @@ import { dreamscapeSceneUrl } from "../../components/atlas-display";
 import { Button } from "../../components/Button";
 import { ResourceChip } from "../../components/ResourceChip";
 import { token } from "../../primitives/tokens";
-import { SceneCaption, sceneRoot } from "./scene";
+import { sceneRoot } from "./scene";
 
 const PLAYER_ESSENCE = 240;
 
@@ -59,13 +59,7 @@ function OfferRow({ icon, label, blurb, cost, size = "md" }: OfferRowProps) {
           </div>
         </div>
       </div>
-      <Button
-        size={size}
-        cost={cost}
-        disabled={!affordable}
-        icon="bxf bx-crypto"
-        label="Buy"
-      />
+      <Button size={size} cost={cost} disabled={!affordable} label="Buy" />
     </div>
   );
 }
@@ -82,10 +76,6 @@ export function ButtonMockup() {
         flexDirection: "column",
         alignItems: "center",
         padding: token("--space-8"),
-        // Extra bottom padding reserves room for the bottom-left SceneCaption
-        // so the centered panel never grows tall enough (on a narrow, tall
-        // viewport) to sit under it.
-        paddingBottom: "calc(72px + " + token("--space-8") + ")",
         boxSizing: "border-box",
       }}
     >
@@ -157,11 +147,6 @@ export function ButtonMockup() {
         </div>
       </div>
 
-      <SceneCaption
-        eyebrow="Button"
-        title="sm/md purchase rows with icon + cost, a disabled unaffordable row, and the lg commit height."
-        corner="bottom-left"
-      />
     </div>
   );
 }

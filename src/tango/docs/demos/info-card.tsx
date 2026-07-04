@@ -16,6 +16,8 @@ import type { TangoComponent } from "../registry";
 export const infoCardDemo: TangoComponent = {
   id: "info-card",
   title: "Info Card",
+  blurb:
+    "The one press-to-reveal information card. Its media treatment varies by content — object, hero, icon, or text — over a single fixed shell and reveal contract.",
   group: "Components",
   docName: "InfoCard",
   Component: InfoCard,
@@ -58,18 +60,19 @@ import { richText } from "src/tango/components/rich-text";
     },
     {
       label: "Reveal on interaction",
-      note: "In real screens InfoCard is anchored to a trigger through the attached press engine (`InfoCard.PressInfo`): hover / touch-down reveals the `card` beside the wrapped trigger, measured against `stageRef`.",
+      note: "In real screens InfoCard is anchored to a trigger through the attached press engine (`InfoCard.PressInfo`): hover / touch-down reveals the `card` beside the wrapped trigger, measured against `stageRef`. Use it to wrap a trigger that has no reveal of its own (an essence value, a menu button).",
       code: `<InfoCard.PressInfo
   stageRef={stageRef}
   card={
     <InfoCard
-      variant="text"
-      title="Singular Storm"
-      body={richText.plain("…")}
+      variant="icon"
+      glyph="bxf bx-crypto"
+      title="Essence"
+      body={richText.plain("Spend it on cards, dreamsigns, and services.")}
     />
   }
 >
-  <TidePill tone="blue" label="Singular Storm" />
+  <ResourceChip kind="essence" value={200} />
 </InfoCard.PressInfo>`,
     },
   ],

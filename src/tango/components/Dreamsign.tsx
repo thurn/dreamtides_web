@@ -1,8 +1,10 @@
 // Dreamsign — the unified dreamsign entity for Tango. A dreamsign is a
-// minor passive collectible; it shows as a small square art tile (boon dreamsigns
-// carry a violet ring, banes a red ring plus a desaturation so the warning reads
-// before the art does). Pressing / hovering the tile reveals its full detail —
-// name, optional Bane badge, and rules text — through the ONE shared popover,
+// minor passive collectible; its art floats directly on the media with no
+// chrome — no tile border, background, or frame — so the collectible reads as
+// an object in the world rather than a card in a slot. Bane dreamsigns carry a
+// desaturation so the warning reads before the art does, and their reveal is
+// tagged with a Bane badge. Pressing / hovering the art reveals its full detail
+// — name, optional Bane badge, and rules text — through the ONE shared popover,
 // InfoCard's `object` variant, so a dreamsign preview is literally the same
 // component the tides, sites, and Dreamcaller use.
 //
@@ -41,12 +43,8 @@ import { assetUrl } from "../../runtime/asset-url";
 
 const { usePressReveal, anchorRect, PressPopover, PRESS_SCALE } = InfoCard;
 
-/** Boon (violet) and bane (red) ring + glow colours for the tile border. */
-const BOON_BORDER = "rgba(168, 85, 247, 0.65)";
-const BOON_GLOW = "rgba(168, 85, 247, 0.30)";
-const BANE_BORDER = "rgba(239, 68, 68, 0.85)";
-const BANE_GLOW = "rgba(239, 68, 68, 0.40)";
-/** Desaturation applied to bane art so the red ring reads as a warning first. */
+/** Desaturation applied to bane art so a bane reads as a warning before its
+ * art does — the one signal that survives the chrome-free tile. */
 const BANE_FILTER = "grayscale(0.7)";
 /** Drop-shadow the reveal art carries so it lifts off the InfoCard surface. */
 const OBJECT_SHADOW =
@@ -183,8 +181,6 @@ export function Dreamsign({
   }, [shown, useStage, stageRef]);
 
   const showImage = Boolean(dreamsign.imageName) && !imageBroken;
-  const borderColor = dreamsign.isBane ? BANE_BORDER : BOON_BORDER;
-  const glow = dreamsign.isBane ? BANE_GLOW : BOON_GLOW;
   const imgAlt = dreamsign.imageAlt ?? dreamsign.name;
 
   const onUp = (): void => {
@@ -195,6 +191,8 @@ export function Dreamsign({
     }
   };
 
+  // No chrome: the art floats on the media with no tile border, background,
+  // frame, or radius. A bane's desaturation is the one carried-over signal.
   const tileStyle: CSSProperties = {
     height: sizePx,
     width: sizePx,
@@ -202,11 +200,6 @@ export function Dreamsign({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    overflow: "hidden",
-    borderRadius: token("--radius-control"),
-    background: "rgba(10, 6, 18, 0.65)",
-    border: `1px solid ${borderColor}`,
-    boxShadow: `0 0 6px ${glow}`,
     filter: dreamsign.isBane ? BANE_FILTER : "none",
     position: "relative",
     cursor: "pointer",

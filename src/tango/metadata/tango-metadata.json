@@ -119,20 +119,12 @@
       "description": "Dims the button and detaches its click/press feedback."
     },
     {
-      "name": "icon",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Leading icon: a Boxicons class string (e.g. `\"bxf bx-sword\"`). The button\nrenders the `<i>` itself at a fixed size so every button icon matches."
-    },
-    {
       "name": "cost",
       "tsType": "number | null",
       "unionMembers": [],
       "required": false,
       "defaultValue": "null",
-      "description": "Appends an inline essence price, e.g. cost={100} -> \"… 100◆\"."
+      "description": "Appends an inline essence price, e.g. cost={100} -> \"… 100◆\", rendered in\nthe button's own on-accent white so the price reads as part of the label."
     },
     {
       "name": "onClick",
@@ -148,7 +140,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Accessible label when the visible content is icon-only."
+      "description": "Accessible label when the visible content is a bare price with no text."
     },
     {
       "name": "label",
@@ -156,7 +148,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "The button's text label. Resolve any UUID/name to a plain string before\npassing it — the button renders copy, never arbitrary caller markup. Omit\nfor an icon-only button (supply `ariaLabel` instead)."
+      "description": "The button's text label. Resolve any UUID/name to a plain string before\npassing it — the button renders copy, never arbitrary caller markup. Omit\nonly for a price-only button (supply `ariaLabel` instead)."
     }
   ],
   "CardStatOrb": [
@@ -1694,6 +1686,14 @@
       "description": "The tide/affiliation name. Resolve any UUID to the display name before\npassing it — the pill renders copy from a plain string, not caller markup,\nso TidePill is a leaf, not a container."
     },
     {
+      "name": "description",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The tide's description, revealed through the shared InfoCard on hover /\npress. Required: a TidePill always carries its description so the reveal\ncan never be forgotten. Plain prose — resolve before display."
+    },
+    {
       "name": "tone",
       "tsType": "\"blue\" | \"gold\" | \"green\" | \"red\" | \"violet\" | \"rust\" | \"neutral\"",
       "unionMembers": [
@@ -1715,7 +1715,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Leading icon: a Boxicons class string (e.g. `\"bxf bx-water\"`). The pill\nrenders the `<i>` itself at a fixed size so every tide icon matches."
+      "description": "Leading icon: a Boxicons class string (e.g. `\"bxf bx-water\"`). The pill\nrenders the `<i>` itself at a fixed size so every tide icon matches, and it\nheads the InfoCard reveal as the tide's glyph disc."
     },
     {
       "name": "size",
@@ -1729,12 +1729,20 @@
       "description": "Height/scale. Default 'md'."
     },
     {
+      "name": "stageRef",
+      "tsType": "RefObject<HTMLElement | null>",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Screen root the reveal anchors + clamps against. Pass it for the\nmaterial-continuity reveal (preferred); omit it and the card floats\ndirectly above the pill."
+    },
+    {
       "name": "onPress",
       "tsType": "(() => void)",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Fires on press. When set, the pill renders as a button with press feedback."
+      "description": "Fires on a tap / click that was not a deliberate hold-to-read."
     }
   ]
 }

@@ -18,7 +18,7 @@ import { AtlasEdge, type AtlasEdgeKind } from "../../components/AtlasEdge";
 import { AtlasEdgeDefs } from "../../components/AtlasEdgeDefs";
 import { dreamscapeIconUrl, dreamsignIconUrl } from "../../components/atlas-display";
 import { token } from "../../primitives/tokens";
-import { SceneCaption, sceneRoot } from "./scene";
+import { sceneRoot } from "./scene";
 
 const CANVAS_W = 1280;
 const CANVAS_H = 800;
@@ -349,11 +349,6 @@ export function AtlasMapMockup() {
         </div>
       </div>
 
-      <SceneCaption
-        eyebrow="Atlas Node · Atlas Edge"
-        title="Every node state and edge treatment across a run graph, over real dreamscape art."
-        corner="bottom-left"
-      />
     </div>
   );
 }
