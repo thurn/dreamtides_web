@@ -434,7 +434,9 @@ export function QuestStartScreen({ dreamcallers, onPick }: QuestStartScreenProps
           letterSpacing: token("--tracking-eyebrow"),
           textTransform: "uppercase",
           color: token("--accent-bright"),
-          textShadow: token("--shadow-md"),
+          // The eyebrow sits directly on the portrait too, so it earns the same
+          // on-media outline dilation as the name rather than a soft shadow.
+          textShadow: token("--text-outline-media"),
         }}
       >
         Choose Your Dreamcaller
