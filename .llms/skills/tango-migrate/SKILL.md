@@ -1,13 +1,18 @@
+---
+name: tango-migrate
+description: Use when migrating an existing quest screen to the Tango design system, or building a new Tango product screen — the ordered screen/builder/adapter checklist plus the working idioms (adapter randomness minting, screen-test incantations, registry + QA steps). Companion to the tango skill. Triggers on migrate screen to tango, tango screen migration, screen builder adapter, view-model builder, FooScreenAdapter, tangoScreenFor, registry launch, ?ui=tango, ?ui=legacy.
+---
+
 # Migrating a quest screen to Tango — the checklist
 
 This is the step-by-step recipe for converting one screen to the Tango design
-system. The architecture and its rationale live in the `/tango` skill
-(`.llms/skills/tango/SKILL.md`) and
-[tango_design_system.md](tango_design_system.md); this document is the ordered
-checklist plus the working idioms the pilot screens established. Work the steps
-in order — registration (step 6) launches the screen to production, so it comes
-after tests and before browser QA only because `?ui=legacy` remains available
-as the rollback.
+system. The architecture and its rationale live in the companion
+[tango](../tango/SKILL.md) skill and
+[tango_design_system.md](../../../docs/quest_prototype/tango_design_system.md);
+this skill is the ordered checklist plus the working idioms the pilot screens
+established. Work the steps in order — registration (step 6) launches the
+screen to production, so it comes after tests and before browser QA only
+because `?ui=legacy` remains available as the rollback.
 
 Every convention here that can be machine-checked is enforced by the `tango/*`
 ESLint rules and the contract tests in `scripts/`; when lint blocks you, the
@@ -21,9 +26,10 @@ answer.
   what's shown** (→ view-model builder), **state/effects/navigation wiring**
   (→ adapter). A domain rule that other systems also need belongs in
   `src/data/` instead of the builder.
-- Check the component index in the skill for every UI element the screen
-  needs. If something has no Tango component, stop and raise it (rung 3/4 of
-  the customization ladder) rather than hand-rolling it in the screen.
+- Check the component index in the [tango](../tango/SKILL.md) skill for every
+  UI element the screen needs. If something has no Tango component, stop and
+  raise it (rung 3/4 of the customization ladder) rather than hand-rolling it
+  in the screen.
 
 ## 1. The Tango screen — `src/tango/screens/FooScreen.tsx`
 

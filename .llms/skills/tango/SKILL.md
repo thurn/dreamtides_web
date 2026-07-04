@@ -194,10 +194,10 @@ rethink the dependency; never widen the allowlist for UI code.
 A migrated quest screen is three files with strictly separated roles. Lint
 enforces the split (`thin-adapters`, the builder-purity import block, and the
 Tango boundary rules), so put each kind of code in its home from the start.
-**When migrating or building a screen, follow the ordered checklist in
-[docs/quest_prototype/tango_screen_migration.md](../../../docs/quest_prototype/tango_screen_migration.md)**
-— it carries the working idioms (adapter randomness minting, screen-test
-incantations, the registry/QA steps) that this overview compresses:
+**When migrating or building a screen, follow the ordered checklist in the
+companion [tango-migrate](../tango-migrate/SKILL.md) skill** — it carries the
+working idioms (adapter randomness minting, screen-test incantations, the
+registry/QA steps) that this overview compresses:
 
 - **Tango screen** (`src/tango/screens/FooScreen.tsx`) — pure: renders from a
   view-model, reports events through callbacks. No `useQuest()`, no
