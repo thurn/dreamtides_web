@@ -47,6 +47,9 @@ A horizontally swipeable carousel of the three offered Dreamcallers. Each page:
 - Full container-transform fidelity for the tides disc→pill reveal, promoted to
   a reusable Tango component.
 - A new full-bleed `DreamcallerPortrait` variant.
+- A new `KeywordCards` component (the InfoCard-based term-definition renderer)
+  and its adoption in the new ability reveal **and** in the Tango `Dreamsign`
+  and `GameCard`/`CardView` reveals (see "New design-system work → C").
 
 **Out of scope**
 
@@ -95,7 +98,7 @@ Presentation composed from Tango:
 | --- | --- |
 | "Choose {Name}" button | `Button` `size="lg" full label={`Choose ${name}`}` |
 | Ability text | `RulesText` |
-| Ability keyword reveal (touch-down) | `InfoCard.PressInfo` anchored to `stageRef` |
+| Ability keyword reveal (touch-down) | `InfoCard.PressInfo` with `card={<KeywordCards text/>}` (see C) |
 | Tide pills (expanded) | `TidePill` (`size="sm"`, `stageRef` reveal) |
 | Starting essence value + mark | `ResourceChip kind="essence"`, wrapped in `InfoCard.PressInfo` |
 | Frosted console surface | `GroupPanel` |
@@ -184,15 +187,68 @@ Deliverables: the component with per-prop JSDoc, a demo entry
 `src/tango/docs/registry.ts`, and regenerated docs. It must pass the strict-API
 contract test and the isolation-boundary lint.
 
-### Ability keyword reveal
+### C. `KeywordCards` — the InfoCard-based term-definition renderer
 
-Use `InfoCard.PressInfo` (the popup-rule-compliant path) to anchor the keyword
-definitions beside the ability text on touch-down / hover, rather than the legacy
-`HoverPopover` + `CardTermDefinitions` the current screen uses. The anchored card
-lists the glossary terms present in the ability. If InfoCard's single title/body
-shape cannot cleanly hold a multi-term list, the term list is rendered as the
-anchored card content (still through the `InfoCard.PressInfo` engine and
-`stageRef`), keeping every reveal on the InfoCard contract.
+A new Tango component (`src/tango/components/card/KeywordCards.tsx`) that renders
+a **vertical stack of individual `InfoCard`s — one per glossary keyword** in a
+stretch of rules text. It is the InfoCard-vocabulary replacement for the legacy
+`CardTermDefinitions` + `GlossaryDefinitionCard` tile (which is styled with
+hardcoded colors + Tailwind, outside the token system), adopted across the Tango
+term-reveal surfaces.
+
+- **Pure renderer, no trigger/portal of its own.** `<KeywordCards text={rules} />`
+  → a column (`gap: --space-3`) of `InfoCard variant="text"` tiles, each
+  `meta="Keyword"`, `title={entry.term}`, `body={richText.rules(entry.definition)}`.
+  Placement stays the consumer's, so each surface keeps its existing reveal
+  engine.
+- **Term extraction** via `extractGlossaryTerms(text)` from the allowlisted
+  `src/data/glossary-terms` — reading order, deduped.
+- **Empty passthrough:** no terms → renders nothing (like `CardTermDefinitions`
+  returning `null`), so callers place it unconditionally.
+- **No escape hatches** (no `className`/`style`/raw color/size). All values are
+  tokens; the tiles are ordinary `InfoCard`s, so they inherit the one shell,
+  radius, shadow, and type scale.
+- Optional `testid` on the stack container for stable selectors (mirrors
+  `CardTermDefinitions`).
+
+**Props (named values only):**
+
+```tsx
+interface KeywordCardsProps {
+  text: string;      // scanned for glossary terms
+  testid?: string;   // optional data-testid on the stack container
+}
+```
+
+**Adoption in this change (scope: screen + Dreamsign + GameCard):**
+
+1. **Dreamcaller ability reveal (this screen).** The ability text is wrapped in
+   `InfoCard.PressInfo` (the popup-rule-compliant press/hover engine, anchored +
+   clamped against `stageRef`) whose revealed `card` is `<KeywordCards text={
+   dreamcaller.renderedText} />`. There is no object card here, so the reveal is
+   just the keyword stack.
+2. **`Dreamsign` (`DreamsignInfoCard`).** Replace the `CardTermDefinitions`
+   stacked under the object `InfoCard` with `<KeywordCards>`, so the whole reveal
+   (object card + keyword cards below it) speaks one vocabulary. The existing
+   input-adaptive engine and `stageRef` anchoring are unchanged.
+3. **`GameCard`/`CardView`.** `useCardTermPopover` renders `<KeywordCards>`
+   beside the card instead of `CardTermDefinitions`; the existing side-placement
+   (`computePopoverPlacement`, left preferred, flipping right near the edge) and
+   the `pointer-events: none` informational-only contract are unchanged.
+
+**Left as-is** (separate future migration): the non-Tango legacy previews that
+also consume `CardTermDefinitions` / `GlossaryDefinitionCard` — `CardHoverPreview`,
+`BattleCardHoverPreview`, `DreamwellCardView`, `JourneyHoverCard`, and
+`GlossaryPopup`. `CardTermDefinitions` and `GlossaryDefinitionCard` remain for
+those consumers; this change does not touch them.
+
+**Deliverables:** the component with per-prop JSDoc; a demo entry
+(`src/tango/docs/demos/keyword-cards.tsx`) registered in
+`src/tango/docs/registry.ts`; `KeywordCards.test.tsx` (passthrough when no terms;
+N tiles for N terms; deterministic reading order); the `Dreamsign` and `CardView`
+edits with their existing tests updated for the new tile; regenerated
+`tango-metadata` + `tango-docs`. Must pass the strict-API contract test and the
+isolation-boundary lint.
 
 ## Tests
 
@@ -208,6 +264,13 @@ anchored card content (still through the `InfoCard.PressInfo` engine and
   renders the discs collapsed, toggles to pills, asserts the resting `TidePill`s
   appear. Animation timing is not asserted (reduced-motion path exercises the
   instant open/close).
+- **`KeywordCards` component test** (`src/tango/components/card/KeywordCards.test.tsx`):
+  renders nothing for term-free text; renders one InfoCard tile per distinct
+  glossary term in reading order for text with terms. Term fixtures derive from
+  the live glossary, never hardcoded copy (per `AGENTS.md`).
+- **`Dreamsign` / `CardView` tests**: update the existing tests for the swap
+  from `CardTermDefinitions` to `KeywordCards` (the definition content now
+  renders as InfoCard tiles), keeping the current reveal-behavior assertions.
 - **Contract tests**: `tango-strict-api.contract.test.mjs` (scans
   `src/tango/screens/` and components) and `tango-generated-docs-drift.test.mjs`
   must pass after regenerating metadata/docs.
