@@ -11,9 +11,11 @@ import {
   INDEX_END_MARKER,
   extractDemoDoc,
   extractRegistryOrder,
+  extractTokenNotes,
   firstSentence,
   renderComponentMarkdown,
   renderIndexSection,
+  renderTokensMarkdown,
   spliceGeneratedIndex,
 } from "./generate-tango-docs.mjs";
 
@@ -250,6 +252,86 @@ describe("index rendering and splicing", () => {
 
   it("throws when a marker is missing", () => {
     expect(() => spliceGeneratedIndex("# Skill", "index")).toThrow(/markers/);
+  });
+});
+
+describe("extractTokenNotes", () => {
+  it("captures trailing same-line comments, skipping @kind markers", () => {
+    const css = `
+.tango {
+  --gutter: 18px;   /* default horizontal page padding */
+  --inset-top: inset 0 1px 0 rgba(255, 255, 255, 0.08);  /* @kind shadow */
+  --space-6: 16px;
+
+  /* ---- a section banner comment, not a note ---- */
+  --accent: var(--primitive-violet-500);
+}
+`;
+    const notes = extractTokenNotes(css);
+    expect(notes.get("gutter")).toBe("default horizontal page padding");
+    expect(notes.has("inset-top")).toBe(false);
+    expect(notes.has("space-6")).toBe(false);
+    expect(notes.has("accent")).toBe(false);
+  });
+
+  it("keeps the last note for a name declared more than once", () => {
+    const css = `
+  --text-faint: #777; /* placeholder */
+  --text-faint: var(--x); /* the real alias */
+`;
+    expect(extractTokenNotes(css).get("text-faint")).toBe("the real alias");
+  });
+});
+
+describe("renderTokensMarkdown", () => {
+  const tokens = [
+    { name: "primitive-violet-500", value: "#9333ea" },
+    { name: "surface-card", value: "var(--primitive-plum-700)" },
+    { name: "accent-strong", value: "var(--primitive-violet-600)" },
+    { name: "space-6", value: "16px" },
+    { name: "t-body", value: "400 15px/1.55 var(--font-ui)" },
+    { name: "dt-surface", value: "var(--surface-card)" },
+    { name: "zz-unclassified", value: "1px" },
+  ];
+
+  it("filters primitives and groups the rest by role family", () => {
+    const markdown = renderTokensMarkdown(tokens, new Map());
+    expect(markdown).not.toContain("primitive-violet-500");
+    expect(markdown).toContain("## Backgrounds & surfaces");
+    expect(markdown).toContain("| `--surface-card` |");
+    // A bare family prefix covers hyphenated descendants (accent-strong).
+    expect(markdown.indexOf("| `--accent-strong` |")).toBeGreaterThan(
+      markdown.indexOf("## Color roles"),
+    );
+    expect(markdown.indexOf("| `--space-6` |")).toBeGreaterThan(
+      markdown.indexOf("## Spacing & layout"),
+    );
+    expect(markdown.indexOf("| `--dt-surface` |")).toBeGreaterThan(
+      markdown.indexOf("## Production bridge"),
+    );
+  });
+
+  it("puts an unrecognized family in a visible Other group", () => {
+    const markdown = renderTokensMarkdown(tokens, new Map());
+    expect(markdown.indexOf("| `--zz-unclassified` |")).toBeGreaterThan(
+      markdown.indexOf("## Other"),
+    );
+  });
+
+  it("omits the Other group when every token is classified", () => {
+    const markdown = renderTokensMarkdown(
+      tokens.filter((t) => t.name !== "zz-unclassified"),
+      new Map(),
+    );
+    expect(markdown).not.toContain("## Other");
+  });
+
+  it("carries notes into the token rows", () => {
+    const markdown = renderTokensMarkdown(
+      tokens,
+      new Map([["space-6", "the default gap"]]),
+    );
+    expect(markdown).toContain("| `--space-6` | `16px` | the default gap |");
   });
 });
 

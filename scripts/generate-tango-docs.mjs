@@ -3,15 +3,19 @@
 //   node scripts/generate-tango-docs.mjs   # also: npm run tango-docs
 //
 // Writes one markdown file per documented Tango component to
-// .llms/skills/tango/components/<id>.md, and splices a component index table
-// into .llms/skills/tango/SKILL.md between the GENERATED COMPONENT INDEX
-// markers. Both outputs are projections of the same sources the /tango doc
-// site renders, so the skill reference can never drift from the site:
+// .llms/skills/tango/components/<id>.md, a design-token reference to
+// .llms/skills/tango/tokens.md, and splices a component index table into
+// .llms/skills/tango/SKILL.md between the GENERATED COMPONENT INDEX markers.
+// All outputs are projections of the same sources the /tango doc site
+// renders, so the skill reference can never drift from the site:
 //
 //   - src/tango/docs/registry.ts          canonical component list + order
 //   - src/tango/docs/demos/<id>.tsx       authored prose: blurb, callout, usage
 //   - src/tango/metadata/tango-metadata.json  docgen props (run tango-metadata
 //                                             first; regenerate-assets does)
+//   - src/tango/primitives/tango-tokens.css   design tokens; only the semantic
+//                                             tier is published (--primitive-*
+//                                             is internal to tango and filtered)
 //
 // The demo prose (id, title, blurb, callout, group, docName, usage snippets)
 // is extracted statically from the demo files' object literals with the
@@ -37,14 +41,17 @@ import {
 import { fileURLToPath } from "node:url";
 import { dirname, join, relative, resolve } from "node:path";
 import ts from "typescript";
+import { parseCssTokens } from "./lib/tango-css-tokens.mjs";
+import { dedupeLastWins } from "./generate-tango-tokens.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const REGISTRY_PATH = resolve(ROOT, "src/tango/docs/registry.ts");
-const DEMOS_DIR = resolve(ROOT, "src/tango/docs/demos");
 const METADATA_PATH = resolve(ROOT, "src/tango/metadata/tango-metadata.json");
+const TOKENS_CSS_PATH = resolve(ROOT, "src/tango/primitives/tango-tokens.css");
 const SKILL_DIR = resolve(ROOT, ".llms/skills/tango");
 const COMPONENTS_OUT_DIR = join(SKILL_DIR, "components");
 const SKILL_PATH = join(SKILL_DIR, "SKILL.md");
+const TOKENS_OUT_PATH = join(SKILL_DIR, "tokens.md");
 
 export const INDEX_BEGIN_MARKER =
   "<!-- BEGIN GENERATED COMPONENT INDEX (npm run tango-docs) -->";
@@ -414,6 +421,186 @@ export function spliceGeneratedIndex(skillText, indexMarkdown) {
   return `${before}\n${indexMarkdown}\n${after}`;
 }
 
+/**
+ * PURE core: collect the trailing same-line documentation comments from the
+ * tokens CSS — `--name: value;  /* prose *\/` — keyed by token name.
+ * parseCssTokens strips ordinary comments (it only preserves `@kind` markers),
+ * so this line-based pass recovers the human notes that make the token list
+ * self-explanatory. `@kind` markers are display-grouping metadata, not prose,
+ * and are skipped. A name declared more than once keeps the last note seen,
+ * matching the cascade's last-wins value resolution.
+ */
+export function extractTokenNotes(cssText) {
+  const notes = new Map();
+  const lineRe = /^\s*--([a-zA-Z0-9_-]+)\s*:[^;]*;[ \t]*\/\*\s*(.+?)\s*\*\/\s*$/;
+  for (const line of cssText.split("\n")) {
+    const match = line.match(lineRe);
+    if (!match) continue;
+    const [, name, note] = match;
+    if (note.startsWith("@kind")) continue;
+    notes.set(name, note);
+  }
+  return notes;
+}
+
+/**
+ * Ordered grouping for the published token reference. First matching group
+ * wins; anything unmatched lands in the trailing "Other" group so a new token
+ * family is always visible in the output rather than silently dropped.
+ * `--primitive-*` never reaches this table (filtered upstream — primitives
+ * are tango-internal raw values, not part of the caller-facing vocabulary).
+ */
+export const TOKEN_GROUPS = [
+  {
+    title: "Backgrounds & surfaces",
+    note: "App backdrops, panes, and scrims, by role.",
+    prefixes: ["bg-", "surface-", "surface", "scrim"],
+  },
+  {
+    title: "Text",
+    note: "Text color roles and letter-spacing. Pick by role (primary/secondary/muted), never by hex.",
+    prefixes: ["text-", "text", "tracking-"],
+  },
+  {
+    title: "Color roles",
+    note: "Accent and game-semantic colors (resources, states, categories). A color prop on a component still takes a TangoColor role, not one of these vars.",
+    prefixes: [
+      "accent",
+      "energy",
+      "spark",
+      "essence",
+      "points",
+      "danger",
+      "positive",
+      "sale",
+      "selected",
+      "tide-",
+      "cat-",
+      "gold",
+      "gradient-",
+      "mote-",
+    ],
+  },
+  {
+    title: "Borders & lines",
+    note: "Hairlines and dividers.",
+    prefixes: ["border-", "line", "line-"],
+  },
+  {
+    title: "Radius",
+    note: "Corner radii by surface role (control, card, panel, sheet, …).",
+    prefixes: ["radius-"],
+  },
+  {
+    title: "Type scale & fonts",
+    note: "Each --t-* bundles face + weight + size/line-height: apply a voice with one token (font: var(--t-body)), never by composing size/weight/face by hand.",
+    prefixes: ["t-", "font-"],
+  },
+  {
+    title: "Spacing & layout",
+    note: "The --space-* scale is the approved spacing system for all layout (margins, padding, gaps) — including the wrapper elements callers use to size and place Tango components.",
+    prefixes: [
+      "space-",
+      "gutter",
+      "touch-",
+      "control-",
+      "hud-",
+      "sheet-",
+      "device-",
+      "safe-",
+      "card-",
+      "press-",
+    ],
+  },
+  {
+    title: "Shadows & glows",
+    note: "Elevation and glow treatments — always these, never an ad-hoc box-shadow.",
+    prefixes: ["shadow-", "glow-", "inset-"],
+  },
+  {
+    title: "Motion",
+    note: "Durations, easings, and the two material-continuity transitions (object-travel, container-transform). All animation timing comes from here.",
+    prefixes: ["ease-", "dur-", "motion-", "stagger-"],
+  },
+  {
+    title: "Production bridge",
+    note: "Re-exports under the production codebase's token names (--dt-*, --color-*, --cv-*) so shared elements (above all the game card) resolve identically in either system. In new Tango code prefer the semantic names above.",
+    prefixes: ["dt-", "color-", "cv-"],
+  },
+];
+
+function tokenGroupFor(name) {
+  for (const group of TOKEN_GROUPS) {
+    for (const prefix of group.prefixes) {
+      // A bare family name matches itself and any hyphenated descendant
+      // ("accent" covers --accent and --accent-strong); a prefix written with
+      // a trailing hyphen matches descendants only ("tide-" covers
+      // --tide-earthy but not a bare --tide).
+      const family = prefix.replace(/-$/, "");
+      if (name === prefix || name.startsWith(`${family}-`)) {
+        return group.title;
+      }
+    }
+  }
+  return "Other";
+}
+
+/**
+ * PURE core: render the semantic-token reference (tokens.md) from the deduped
+ * CSS token list and the trailing-comment notes. Primitives are filtered out;
+ * everything else is grouped per TOKEN_GROUPS, preserving source order within
+ * each group.
+ */
+export function renderTokensMarkdown(tokens, notes) {
+  const semantic = tokens.filter((t) => !t.name.startsWith("primitive-"));
+
+  const byGroup = new Map();
+  for (const token of semantic) {
+    const title = tokenGroupFor(token.name);
+    if (!byGroup.has(title)) byGroup.set(title, []);
+    byGroup.get(title).push(token);
+  }
+
+  const lines = [];
+  lines.push(`<!-- GENERATED by scripts/generate-tango-docs.mjs — do not edit by hand.
+     Source: src/tango/primitives/tango-tokens.css (the semantic tier;
+     --primitive-* raw values are tango-internal and not listed).
+     Regenerate: npm run tango-docs -->`);
+  lines.push("");
+  lines.push("# Tango design tokens");
+  lines.push("");
+  lines.push(
+    "Every visual value in UI code — spacing, color, type, radius, shadow, motion — comes from this vocabulary. In Tango TS/TSX reference a token with `token(\"--name\")` (`src/tango/primitives/tokens.ts`, typed; returns the `var(--name)` string); in CSS write `var(--name)`. Tokens apply within the `.tango` subtree. Pick tokens by *role*, not by value; when no role fits, raise a token-system change instead of writing a literal. Policy and tier rules: SKILL.md, \"Tokens\" section.",
+  );
+
+  const orderedTitles = [
+    ...TOKEN_GROUPS.map((g) => g.title),
+    ...(byGroup.has("Other") ? ["Other"] : []),
+  ];
+  for (const title of orderedTitles) {
+    const groupTokens = byGroup.get(title);
+    if (!groupTokens || groupTokens.length === 0) continue;
+    const groupNote = TOKEN_GROUPS.find((g) => g.title === title)?.note;
+    lines.push("");
+    lines.push(`## ${title}`);
+    lines.push("");
+    if (groupNote) {
+      lines.push(groupNote);
+      lines.push("");
+    }
+    lines.push("| Token | Value | Notes |");
+    lines.push("| --- | --- | --- |");
+    for (const token of groupTokens) {
+      const note = notes.get(token.name) ?? "";
+      lines.push(
+        `| ${codeSpan(`--${token.name}`)} | ${codeSpan(tableCell(token.value))} | ${tableCell(note)} |`,
+      );
+    }
+  }
+  lines.push("");
+  return lines.join("\n");
+}
+
 function main() {
   const registryEntries = extractRegistryOrder(
     readFileSync(REGISTRY_PATH, "utf8"),
@@ -470,10 +657,22 @@ function main() {
     spliceGeneratedIndex(skillText, renderIndexSection(docs)),
   );
 
+  const cssText = readFileSync(TOKENS_CSS_PATH, "utf8");
+  const dedupedTokens = [...dedupeLastWins(parseCssTokens(cssText))].map(
+    ([name, entry]) => ({ name, value: entry.value }),
+  );
+  writeFileSync(
+    TOKENS_OUT_PATH,
+    renderTokensMarkdown(dedupedTokens, extractTokenNotes(cssText)),
+  );
+
   console.log(
     `Wrote ${docs.length} component reference${docs.length === 1 ? "" : "s"} to ${relative(ROOT, COMPONENTS_OUT_DIR)}${sweptCount > 0 ? ` (swept ${sweptCount} stale)` : ""}`,
   );
   console.log(`Updated component index in ${relative(ROOT, SKILL_PATH)}`);
+  console.log(
+    `Wrote ${dedupedTokens.filter((t) => !t.name.startsWith("primitive-")).length} semantic tokens to ${relative(ROOT, TOKENS_OUT_PATH)}`,
+  );
 }
 
 const invokedPath = process.argv[1] ? resolve(process.argv[1]) : "";

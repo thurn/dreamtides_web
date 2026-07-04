@@ -255,10 +255,16 @@ these as plain string literals so no module execution is needed) and joins it
 with the docgen props to write one reference file per component to
 `.llms/skills/tango/components/<id>.md`, plus a component index spliced into
 `.llms/skills/tango/SKILL.md` between its GENERATED COMPONENT INDEX markers.
-The generator sweeps stale `.md` files from the output directory, so a renamed
-or unregistered component's reference disappears with it. SKILL.md itself is
-hand-authored (design philosophy, customization rules, pointers); everything
-factual about a component flows from the generator.
+It also renders `.llms/skills/tango/tokens.md`, the semantic-token reference:
+tango-tokens.css parsed with the shared `parseCssTokens` lib and deduped
+last-wins, `--primitive-*` filtered out (that tier is tango-internal), the
+rest grouped by role family with each declaration's trailing same-line
+comment carried through as its note.
+The generator sweeps stale `.md` files from the components output directory,
+so a renamed or unregistered component's reference disappears with it.
+SKILL.md itself is hand-authored (design philosophy, customization rules,
+token-usage policy, pointers); everything factual about a component or token
+flows from the generator.
 
 ---
 

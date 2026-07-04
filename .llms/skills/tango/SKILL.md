@@ -20,6 +20,9 @@ component past its typed surface is not an available move at all (see
   each component you touch; they are short.
 - **Component index** (generated): the table below — use it to pick the right
   component before writing any UI.
+- **Design tokens** (generated): [tokens.md](tokens.md) — every semantic
+  token, grouped by role, with values and notes. Usage rules are in the
+  "Tokens" section below.
 - **Live doc site**: `/tango` on the dev server (e.g.
   `http://localhost:5173/tango`), with `/tango#/<id>` per component —
   interactive demos and the same props tables, useful during browser QA.
@@ -110,11 +113,54 @@ A prop that carries anything other than free-form display text takes a
   (`art.ts`). Never a raw URL or path string.
 - A media filter or image crop is a named union from `media.ts`.
 
-Spacing, type, radius, and color values in UI code come from the token system
-(`token("--space-4")`, `src/tango/primitives/tokens.ts`, generated from
-`tango-tokens.css`). Inventing a raw px/hex value that has a token equivalent
-is drift; if no token fits, that is a token-system conversation, not a
-one-off literal.
+Spacing, type, radius, shadow, color, and motion values come from the token
+system — see "Tokens" below.
+
+## Tokens: how and when
+
+Every visual value you write in UI code — a margin, a color, a font, a corner
+radius, a shadow, an animation duration — comes from the token vocabulary in
+`src/tango/primitives/tango-tokens.css`. The full generated reference, grouped
+by role with values and notes, is [tokens.md](tokens.md); the live specimen
+view is the Primitives section of `/tango`.
+
+**How to reference a token.** In Tango TS/TSX, call `token("--space-6")` from
+`src/tango/primitives/tokens.ts` — it is typed against the real token names
+and returns the `var(--space-6)` string for inline styles. In CSS, write
+`var(--space-6)`. Tokens are scoped to the `.tango` subtree.
+
+**Two tiers — use the semantic one.** `--primitive-*` names a raw value (a
+color-ramp step, a radius step, a font face) and is the internal material the
+semantic layer is built from; the `no-primitive-tokens` ESLint rule errors on
+any `--primitive-*` reference outside `src/tango/primitives/` and
+`src/tango/components/`. Everything else is a semantic token that names a
+*use* — `--surface-card`, `--text-secondary`, `--radius-control` — and is
+what all UI code writes against. This split is what lets the whole system
+re-skin by editing the primitive layer alone.
+
+**When you use tokens directly.** Mostly in rung-2 layout wrappers (see the
+customization ladder): the wrapper you put around a Tango component to size,
+place, and space it uses `--space-*` for margins/padding/gaps, and layout
+constants like `--gutter`, `--touch-min`, `--control-h`, `--safe-top`. When
+authoring inside `src/tango/` itself: type is applied one voice at a time
+(`font: token("--t-body")` — a `--t-*` token bundles face, weight, and
+size/line-height; composing those by hand is drift), elevation comes from
+`--shadow-*`/`--glow-*`, and every transition's timing comes from the motion
+tokens (`--dur-*`, `--ease-*`, `--motion-object-travel`,
+`--motion-container-transform`).
+
+**Choosing a token.** Pick by role, never by resolved value — use
+`--text-secondary` because the text is secondary, not because you like its
+hex; `--space-6` because it is the scale step the neighboring UI uses, not
+because 16px looked right. If no existing token expresses the role, that is a
+token-system conversation (add a semantic token in `tango-tokens.css`,
+resolving through a primitive, then `npm run tango-tokens`) — never a raw
+px/hex literal in UI code, and never a reach into `--primitive-*`.
+
+The `--dt-*` / `--color-*` / `--cv-*` families are a production bridge: the
+same values re-exported under the production codebase's token names so shared
+elements (above all the game card) resolve identically in either system. In
+new Tango code prefer the semantic names.
 
 ## Structured models, not arbitrary ReactNode
 
