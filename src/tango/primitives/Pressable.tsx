@@ -191,6 +191,15 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
         style={{
           cursor: disabled ? "default" : "pointer",
           WebkitTapHighlightColor: "transparent",
+          // A press control is never a text selection: pressing-and-holding one
+          // (e.g. to reveal an InfoCard) must not let iOS Safari select the
+          // label or raise the callout menu. Paired with `touch-action:
+          // manipulation` so a tap registers immediately (no 300ms
+          // double-tap-zoom delay) and the press-scale reads on touch.
+          userSelect: "none",
+          WebkitUserSelect: "none",
+          WebkitTouchCallout: "none",
+          touchAction: "manipulation",
           transformOrigin: "center",
           transition: reducedMotion
             ? "none"

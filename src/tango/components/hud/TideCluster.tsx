@@ -255,24 +255,38 @@ export function TideCluster({
           border: "none",
           cursor: "pointer",
           WebkitTapHighlightColor: "transparent",
+          userSelect: "none",
+          WebkitUserSelect: "none",
+          WebkitTouchCallout: "none",
+          touchAction: "manipulation",
         }}
       >
+        {/* The label and its (i) sit as one unit — the info mark reads as an
+            immediate annotation on "Tides", not a third spaced item in the row. */}
         <span
           style={{
-            font: token("--t-eyebrow"),
-            letterSpacing: token("--tracking-eyebrow"),
-            textTransform: "uppercase",
-            color: token("--text-secondary"),
-            lineHeight: 1,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: token("--space-1"),
           }}
         >
-          Tides
+          <span
+            style={{
+              font: token("--t-eyebrow"),
+              letterSpacing: token("--tracking-eyebrow"),
+              textTransform: "uppercase",
+              color: token("--text-secondary"),
+              lineHeight: 1,
+            }}
+          >
+            Tides
+          </span>
+          <i
+            className={GLYPHS.infoFilled}
+            aria-hidden="true"
+            style={{ fontSize: 13, color: token("--text-muted") }}
+          />
         </span>
-        <i
-          className={GLYPHS.info}
-          aria-hidden="true"
-          style={{ fontSize: 13, color: token("--text-muted") }}
-        />
         <span
           style={{
             display: "flex",

@@ -279,15 +279,31 @@ function DreamcallerPage({
           textAlign: "center",
         }}
       >
-        <h1
-          style={{
-            margin: 0,
-            font: token("--t-title-sm"),
-            color: token("--text-primary"),
-            textShadow: token("--shadow-lg"),
-          }}
-        >
-          {dreamcaller.name}, {dreamcaller.title}
+        {/* The name sits directly on the portrait, so it earns legibility from
+            the on-media outline dilation (--text-outline-media) rather than a
+            plate — the name on its own line, the epithet smaller beneath it. */}
+        <h1 style={{ margin: 0 }}>
+          <span
+            style={{
+              display: "block",
+              font: token("--t-hero"),
+              color: token("--text-primary"),
+              textShadow: token("--text-outline-media"),
+            }}
+          >
+            {dreamcaller.name}
+          </span>
+          <span
+            style={{
+              display: "block",
+              marginTop: token("--space-1"),
+              font: token("--t-hero-epithet"),
+              color: token("--text-primary"),
+              textShadow: token("--text-outline-media"),
+            }}
+          >
+            {dreamcaller.title}
+          </span>
         </h1>
       </div>
 
@@ -319,7 +335,7 @@ function DreamcallerPage({
           <div
             style={{
               display: "flex",
-              alignItems: "flex-start",
+              alignItems: "center",
               justifyContent: "space-between",
               gap: token("--space-5"),
               marginTop: token("--space-3"),

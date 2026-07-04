@@ -69,6 +69,8 @@ export const GLYPHS = {
   closeFilled: g("bxf bx-x"),
   /** The (i) help mark, revealing an explanatory popover on hover / press. */
   info: g("bx bx-info-circle"),
+  /** The filled (i) help mark — the solid disc variant for on-media use. */
+  infoFilled: g("bxf bx-info-circle"),
   chevronLeft: g("bx bx-chevron-left"),
   chevronRight: g("bx bx-chevron-right"),
   /** The filled star that heads a curated / signature item. */

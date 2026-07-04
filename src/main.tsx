@@ -20,6 +20,7 @@ import "./index.css";
 // subtree (to a screen root or `document.body`) still resolve its surface,
 // radius, shadow, and text tokens.
 import "./tango/primitives/tango-tokens.css";
+import "./tango/primitives/legibility.css";
 import CardEditorApp from "./editor/CardEditorApp";
 import { verifyFonts } from "./runtime/verify-fonts";
 

@@ -333,6 +333,8 @@
 .tango {
   /* ---- Display / serif scale (titles, place names) ---- */
   --t-display: 600 40px/1.04 var(--primitive-font-serif);    /* screen hero title */
+  --t-hero: 600 46px/1.05 var(--primitive-font-serif);       /* dreamcaller-select hero name */
+  --t-hero-epithet: 500 21px/1.15 var(--primitive-font-serif); /* the epithet under the hero name */
   --t-title: 600 30px/1.08 var(--primitive-font-serif);      /* place / screen name */
   --t-title-sm: 600 23px/1.12 var(--primitive-font-serif);   /* card-detail name, section */
   --t-serif-body: 500 17px/1.4 var(--primitive-font-serif);  /* quotes, flavor */
@@ -430,6 +432,21 @@
   --shadow-lg: 0 16px 40px rgba(3, 1, 8, 0.62);
   --shadow-card: 0 10px 26px rgba(3, 1, 8, 0.55), 0 2px 6px rgba(3, 1, 8, 0.4);
   --shadow-sheet: 0 -12px 40px rgba(3, 1, 8, 0.6);
+
+  /* ---- On-media text outline (rung 1 of the legibility ladder) ----
+     A dense 16-direction black text-shadow dilation that hugs a glyph's
+     contour so text/glyphs sitting DIRECTLY on scene art stay legible without a
+     plate, scrim, or blur behind them (a `-webkit-text-stroke` would bevel a
+     glyph's sharp points flat). Apply as `text-shadow` — inline via
+     `token("--text-outline-media")`, or through the `.hud-outline` class which
+     also outlines an element's `<i>`/`<span>` descendants. NEVER pair with a
+     scrim/wash/vignette — the outline IS the legibility. */
+  --text-outline-media:
+    1.7px 0 0 #000, 1.6px 0.7px 0 #000, 1.2px 1.2px 0 #000, 0.7px 1.6px 0 #000,
+    0 1.7px 0 #000, -0.7px 1.6px 0 #000, -1.2px 1.2px 0 #000, -1.6px 0.7px 0 #000,
+    -1.7px 0 0 #000, -1.6px -0.7px 0 #000, -1.2px -1.2px 0 #000, -0.7px -1.6px 0 #000,
+    0 -1.7px 0 #000, 0.7px -1.6px 0 #000, 1.2px -1.2px 0 #000, 1.6px -0.7px 0 #000,
+    0 2px 6px rgba(0, 0, 0, 0.7); /* @kind shadow */
 
   /* ---- Violet glow (the signature accent halo) ---- */
   --glow-accent: 0 0 0 1px rgba(168, 85, 247, 0.35), 0 6px 22px rgba(147, 51, 234, 0.45);

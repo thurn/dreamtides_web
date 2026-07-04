@@ -42,6 +42,7 @@ Text color roles and letter-spacing. Pick by role (primary/secondary/muted), nev
 | `--text-dim` | `var(--dt-text-dim)` | #b3aac8 warm |
 | `--tracking-eyebrow` | `0.14em` |  |
 | `--tracking-wordmark` | `0.01em` |  |
+| `--text-outline-media` | `1.7px 0 0 #000, 1.6px 0.7px 0 #000, 1.2px 1.2px 0 #000, 0.7px 1.6px 0 #000, 0 1.7px 0 #000, -0.7px 1.6px 0 #000, -1.2px 1.2px 0 #000, -1.6px 0.7px 0 #000, -1.7px 0 0 #000, -1.6px -0.7px 0 #000, -1.2px -1.2px 0 #000, -0.7px -1.6px 0 #000, 0 -1.7px 0 #000, 0.7px -1.6px 0 #000, 1.2px -1.2px 0 #000, 1.6px -0.7px 0 #000, 0 2px 6px rgba(0, 0, 0, 0.7)` |  |
 
 ## Color roles
 
@@ -120,6 +121,8 @@ Each --t-* bundles face + weight + size/line-height: apply a voice with one toke
 | `--font-mono-canon` | `var(--primitive-font-mono)` | JetBrains Mono — eyebrows |
 | `--font-rules-canon` | `var(--primitive-font-rules)` | Fira Sans Condensed — rules text |
 | `--t-display` | `600 40px/1.04 var(--primitive-font-serif)` | screen hero title |
+| `--t-hero` | `600 46px/1.05 var(--primitive-font-serif)` | dreamcaller-select hero name |
+| `--t-hero-epithet` | `500 21px/1.15 var(--primitive-font-serif)` | the epithet under the hero name |
 | `--t-title` | `600 30px/1.08 var(--primitive-font-serif)` | place / screen name |
 | `--t-title-sm` | `600 23px/1.12 var(--primitive-font-serif)` | card-detail name, section |
 | `--t-serif-body` | `500 17px/1.4 var(--primitive-font-serif)` | quotes, flavor |

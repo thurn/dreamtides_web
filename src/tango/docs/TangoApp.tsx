@@ -7,6 +7,7 @@
 // content. The chrome is styled lightly with Tango tokens — dogfooding the
 // design system it documents.
 import "../primitives/tango-tokens.css";
+import "../primitives/legibility.css";
 import "../assets/phosphor.css";
 
 import type { CSSProperties } from "react";

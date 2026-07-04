@@ -3,32 +3,13 @@
    Everything here is scoped under `.tango` so it never leaks onto the
    rest of the app, matching how tango-tokens.css scopes its declarations.
 
-   The file carries two things:
-     1. `.hud-outline` — the on-media legibility utility (rung 1 of the
-        legibility ladder, Principle two), ported VERBATIM from the
-        design source's tokens/base.css. Text and glyphs rendered DIRECTLY
-        on scene art / a portrait carry their own black outline instead of a
-        plate, scrim, or blur behind them: a dense 16-direction black
-        text-shadow dilation that hugs the contour (and keeps the essence
-        diamond's sharp top/bottom POINTS, which a -webkit-text-stroke would
-        bevel flat). NEVER pair with a scrim/wash/vignette — the outline IS
-        the legibility.
-     2. The QuestStatusBar's own structural rules (deck press, Dreamcaller
-        bust sizing, HUD baseline alignment, elevation transform, and the
-        overflow-window entrance keyframe), ported from the design source's
-        `<style id="qsb-styles">` injection. */
-
-/* ---- .hud-outline — the on-media legibility utility (source: tokens/base.css) ---- */
-.tango .hud-outline,
-.tango .hud-outline i,
-.tango .hud-outline span {
-  text-shadow:
-    1.7px 0 0 #000, 1.6px 0.7px 0 #000, 1.2px 1.2px 0 #000, 0.7px 1.6px 0 #000,
-    0 1.7px 0 #000, -0.7px 1.6px 0 #000, -1.2px 1.2px 0 #000, -1.6px 0.7px 0 #000,
-    -1.7px 0 0 #000, -1.6px -0.7px 0 #000, -1.2px -1.2px 0 #000, -0.7px -1.6px 0 #000,
-    0 -1.7px 0 #000, 0.7px -1.6px 0 #000, 1.2px -1.2px 0 #000, 1.6px -0.7px 0 #000,
-    0 2px 6px rgba(0, 0, 0, 0.7);
-}
+   The `.hud-outline` on-media legibility utility this bar relies on lives in
+   the shared `src/tango/primitives/legibility.css` (loaded globally), so the
+   HUD text and dreamsign strip that sit directly on scene art are legible
+   wherever the bar renders. This file carries the QuestStatusBar's own
+   structural rules (deck press, Dreamcaller bust sizing, HUD baseline
+   alignment, elevation transform, and the overflow-window entrance keyframe),
+   ported from the design source's `<style id="qsb-styles">` injection. */
 
 /* ---- The deck sprite compresses on touch-down by the one press factor ---- */
 .tango .qsbDeck {
