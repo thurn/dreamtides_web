@@ -103,6 +103,33 @@ moves):
 - `AtlasNode` → `atlas-display`.
 - `DreamscapeSiteNode` → `dreamscape-scatter`.
 
+### Product screens & the `?ui=` migration toggle
+
+The quest app's screens migrate into Tango one at a time behind a `?ui=` toggle
+(`runtimeConfig.uiVariant`, default `tango`). Two roles keep the isolation
+boundary intact while a screen owns live quest state:
+
+- A **Tango screen** (`src/tango/screens/*.tsx`) is pure: it renders from a
+  view-model and reports events through callbacks, importing only Tango and the
+  allowlisted infra. It holds no `useQuest()`, no mutations, no navigation. Its
+  root carries `className="tango"` so the semantic tokens resolve (the adapter
+  mounts it outside any other `.tango` subtree). Screens inherit every strict
+  rule — semantic tokens only (they are absent from the `no-primitive-tokens` and
+  `no-hardcoded-values` exemptions), no raw interactive elements, no escape-hatch
+  props — so `npm run lint` is what proves a migrated screen conforms.
+- An **adapter** (`src/screens/tango/*Adapter.tsx`, *outside* Tango) owns
+  `useQuest()`, builds the view-model, wires callbacks to mutations, and renders
+  the Tango screen. External→Tango imports are allowed, so the adapter freely
+  imports both.
+
+`ScreenRouter` consults `src/screens/tango/registry.tsx` (`tangoScreenFor` /
+`tangoSiteScreenFor`): under `?ui=tango` it renders the registered adapter for a
+migrated screen and falls back to the legacy screen when the resolver returns
+null, so the app stays fully navigable throughout the migration. `?ui=legacy`
+forces the legacy screen everywhere. The end state registers every screen, then
+deletes the legacy `src/screens/` tree. The first migrated screen is Dreamcaller
+selection (`QuestStartScreen`).
+
 ---
 
 ## 3. Routing

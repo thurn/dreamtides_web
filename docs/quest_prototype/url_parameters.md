@@ -195,6 +195,22 @@ http://localhost:5173/?algo=fresh20&packsize=30 # fresh-pack draft with 30-card 
 Set to exactly `classic` to use the classic journey variant; any other value
 (including empty or absent) keeps `journeyVariant` at `"v2"`.
 
+## `ui`
+
+`parseRuntimeConfig` sets `runtimeConfig.uiVariant` to `"tango"` by default.
+Set to exactly `legacy` to force the legacy UI for every screen; any other value
+(including empty or absent) keeps `uiVariant` at `"tango"`.
+
+`uiVariant` drives a per-screen implementation swap in `ScreenRouter`. Under
+`"tango"`, each screen renders its Tango design-system implementation when one
+exists (resolved through `src/screens/tango/registry.tsx`) and falls back to the
+legacy screen for any screen not yet migrated, so the app stays fully navigable
+during the migration. Because `ui` is a query parameter, it survives the
+address-bar path reflection (`useQuestUrlSync` preserves the query string) and so
+persists as you navigate within a run. `ScreenRouter` emits a `screen_rendered`
+log event on each navigation recording the variant, the screen, and whether Tango
+served it.
+
 ## Dream Journey Debug Harness
 
 In local development, Dream Journey QA can force selected generation inputs:

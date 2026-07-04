@@ -67,6 +67,10 @@ export const GLYPHS = {
   lock: g("bx bx-lock"),
   close: g("bx bx-x"),
   closeFilled: g("bxf bx-x"),
+  /** The (i) help mark, revealing an explanatory popover on hover / press. */
+  info: g("bx bx-info-circle"),
+  /** The filled star that heads a curated / signature item. */
+  star: g("bxf bx-star"),
 } as const;
 
 /**

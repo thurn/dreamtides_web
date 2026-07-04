@@ -15,6 +15,16 @@ export interface RuntimeConfig {
   databaseMode: DatabaseMode;
   journeyVariant: JourneyVariant;
   /**
+   * Which UI implementation renders each quest screen, from `?ui=`. `"tango"`
+   * (the default) renders the Tango design-system screen where one exists and
+   * silently falls back to the legacy screen for any screen not yet migrated;
+   * `"legacy"` forces the legacy implementation everywhere. The value is a
+   * query param, so it survives the address-bar path reflection
+   * (`useQuestUrlSync` preserves the query string) and persists across
+   * navigation for the session. Drives the per-screen swap in `ScreenRouter`.
+   */
+  uiVariant: UiVariant;
+  /**
    * Draft-pool construction strategy from `?algo=`, resolved to a registered
    * `PoolVariant`. An absent `?algo=` uses `DEFAULT_POOL_VARIANT`; a draft-mode
    * value (`replay`/`fresh20`) also uses the default; any other value must name
@@ -77,6 +87,7 @@ export interface RuntimeConfig {
 
 export type DatabaseMode = "emulator" | "realtime";
 export type JourneyVariant = "classic" | "v2";
+export type UiVariant = "tango" | "legacy";
 
 export function parseRuntimeConfig(search: string): RuntimeConfig {
   const params = new URLSearchParams(search);
@@ -96,6 +107,7 @@ export function parseRuntimeConfig(search: string): RuntimeConfig {
     gameId: normalizeRoomId(params.get("game")),
     databaseMode: parseDatabaseMode(params.get("realtime")),
     journeyVariant: parseJourneyVariant(params.get("journey")),
+    uiVariant: parseUiVariant(params.get("ui")),
     poolVariant,
     draftMode,
     fresh20PackSize: parsePackSize(params.get("packsize")),
@@ -118,6 +130,15 @@ function parseGotoScene(rawScene: string | null): string | null {
 
 function parseJourneyVariant(rawJourney: string | null): JourneyVariant {
   return rawJourney === "classic" ? "classic" : "v2";
+}
+
+/**
+ * Resolves `?ui=`. Only the exact value `legacy` opts out of the Tango UI; any
+ * other value (including absent) defaults to `tango`, so the new UI is the
+ * default and un-migrated screens fall back per-screen inside `ScreenRouter`.
+ */
+function parseUiVariant(rawUi: string | null): UiVariant {
+  return rawUi === "legacy" ? "legacy" : "tango";
 }
 
 function parseDraftMode(rawAlgo: string | null): "pool" | "replay" | "fresh20" {

@@ -1,0 +1,37 @@
+// The Tango screen registry — the fallback resolver that `ScreenRouter` consults
+// when `runtimeConfig.uiVariant === "tango"`. It maps a quest screen (or site)
+// to its Tango adapter, or returns null when no Tango implementation exists yet,
+// which makes `ScreenRouter` fall back to the legacy screen for that route. This
+// is what lets the migration proceed one screen at a time while the app stays
+// fully navigable.
+//
+// Each entry renders an ADAPTER (a component outside `src/tango/` that owns
+// `useQuest()` and builds the Tango screen's view-model), never a Tango screen
+// directly — the Tango screens are pure and hold no state.
+
+import type { ReactNode } from "react";
+import type { Screen, SiteState } from "../../types/quest";
+import { QuestStartScreenAdapter } from "./QuestStartScreenAdapter";
+
+/**
+ * The Tango implementation of a top-level `Screen`, or null when none exists yet
+ * (the caller then renders the legacy screen). Only screens listed here are
+ * served by the Tango UI; every other screen falls back to legacy.
+ */
+export function tangoScreenFor(screen: Screen): ReactNode | null {
+  switch (screen.type) {
+    case "questStart":
+      return <QuestStartScreenAdapter />;
+    default:
+      return null;
+  }
+}
+
+/**
+ * The Tango implementation of a site screen, or null when none exists yet. No
+ * site screens are migrated yet, so this always returns null and `ScreenRouter`
+ * renders the legacy site screen.
+ */
+export function tangoSiteScreenFor(_site: SiteState): ReactNode | null {
+  return null;
+}

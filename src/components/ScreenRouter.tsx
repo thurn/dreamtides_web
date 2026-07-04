@@ -35,6 +35,7 @@ import {
   type MerchantGameObject,
 } from "../journey_v2";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
+import { tangoScreenFor, tangoSiteScreenFor } from "../screens/tango/registry";
 import type { QuestContent } from "../data/quest-content";
 import { siteTypeName } from "../atlas/atlas-generator";
 import { logEvent } from "../logging";
@@ -66,7 +67,30 @@ export function ScreenRouter({
   const { state } = useQuest();
   const { screen } = state;
 
+  // Prefer the Tango implementation of this screen when `?ui=tango` (the
+  // default); a screen not yet migrated resolves to null and falls through to
+  // the legacy switch below, so the app stays fully navigable during migration.
+  const tangoScreen =
+    runtimeConfig.uiVariant === "tango" ? tangoScreenFor(screen) : null;
+
+  // Record which UI served each screen, one entry per navigation, so a
+  // production run's screen-by-screen variant history is reconstructable from
+  // logs/quest-log.jsonl during the migration.
+  const siteId = screen.type === "site" ? screen.siteId : null;
+  const servedByTango = tangoScreen !== null;
+  useEffect(() => {
+    logEvent("screen_rendered", {
+      uiVariant: runtimeConfig.uiVariant,
+      screenType: screen.type,
+      siteId,
+      servedByTango,
+    });
+  }, [runtimeConfig.uiVariant, screen.type, siteId, servedByTango]);
+
   function renderScreen() {
+    if (tangoScreen !== null) {
+      return tangoScreen;
+    }
     switch (screen.type) {
       case "questStart":
         return <QuestStartScreen />;
@@ -152,8 +176,16 @@ function SiteScreen({
   }
 
   // Every other site is presented over its dreamscape's dimmed scene art.
+  // A Tango site screen, when one exists for this site type and `?ui=tango` is
+  // active, takes precedence over the legacy site screen while sharing the same
+  // dreamscape backdrop wrapper; an unmigrated site type resolves to null and
+  // falls through to the legacy screens below.
   let content: ReactNode;
-  if (site.type === "Draft") {
+  const tangoSite =
+    runtimeConfig.uiVariant === "tango" ? tangoSiteScreenFor(site) : null;
+  if (tangoSite !== null) {
+    content = tangoSite;
+  } else if (site.type === "Draft") {
     content = <DraftSiteScreen siteId={siteId} />;
   } else if (site.type === "Shop" || site.type === "DreamsignMarket") {
     // The Dreamsign Market shares the regular Shop UI; ShopScreen detects the

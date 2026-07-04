@@ -12,6 +12,7 @@ describe("parseRuntimeConfig", () => {
       gameId: null,
       databaseMode: "emulator",
       journeyVariant: "v2",
+      uiVariant: "tango",
       poolVariant: DEFAULT_POOL_VARIANT,
       draftMode: "pool",
       fresh20PackSize: undefined,
@@ -49,6 +50,20 @@ describe("parseRuntimeConfig", () => {
         "warriors draft",
       );
       expect(parseRuntimeConfig("?loadQuest=%20foo%20").loadQuestName).toBe("foo");
+    });
+  });
+
+  describe("uiVariant", () => {
+    it("defaults to tango when ui is absent or an unknown value", () => {
+      expect(parseRuntimeConfig("").uiVariant).toBe("tango");
+      expect(parseRuntimeConfig("?ui=").uiVariant).toBe("tango");
+      expect(parseRuntimeConfig("?ui=something").uiVariant).toBe("tango");
+    });
+
+    it("selects the legacy UI only for the exact value legacy", () => {
+      expect(parseRuntimeConfig("?ui=legacy").uiVariant).toBe("legacy");
+      expect(parseRuntimeConfig("?ui=tango").uiVariant).toBe("tango");
+      expect(parseRuntimeConfig("?ui=Legacy").uiVariant).toBe("tango");
     });
   });
 
