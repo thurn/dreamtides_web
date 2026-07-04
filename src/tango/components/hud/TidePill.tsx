@@ -77,6 +77,20 @@ const TIDES: Record<Tide, TideSpec> = {
   shadow: tideSpec(GLYPHS.tideShadow, "#c084fc"),
 };
 
+/**
+ * The fixed icon + tinted colors for a tide, so a sibling component (e.g. the
+ * collapsed {@link TideCluster}) can render a tide's disc / flying clone
+ * pixel-identically to the pill it becomes — without duplicating the tone table.
+ */
+export function tideVisual(tide: Tide): {
+  icon: Glyph;
+  bg: string;
+  fg: string;
+  bd: string;
+} {
+  return TIDES[tide];
+}
+
 export interface TidePillProps {
   /** The tide/affiliation name. Resolve any UUID to the display name before
    * passing it — the pill renders copy from a plain string, not caller markup,

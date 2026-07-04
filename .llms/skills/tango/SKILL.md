@@ -45,6 +45,7 @@ The reference files and the index are projections of the component sources
 | Segmented Control | Components | [components/segmented-control.md](components/segmented-control.md) | The compact tab and filter switch used for type filters, sort direction, and small mode toggles. |
 | Stat Tile | Components | [components/stat-tile.md](components/stat-tile.md) | A labelled value cell for summary grids — a large value over a small uppercase label — used for deck stats and run-end results. |
 | Tide Pill | Components | [components/tide-pill.md](components/tide-pill.md) | The labelled tag for a Dreamcaller's tides and affiliations. |
+| Tide Cluster | Components | [components/tide-cluster.md](components/tide-cluster.md) | The collapsed tide disclosure: overlapping colored glyph discs that expand, with a container-transform, into the full named tide pills. |
 | Motes | Components | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
 | Info Card | Components | [components/info-card.md](components/info-card.md) | The one press-to-reveal information card. |
 | Group Panel | Components | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a liquid-glass pane that collects dense, related values into one unit. |
