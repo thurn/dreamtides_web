@@ -8228,7 +8228,7 @@ art = { x = -0.353, y = 1, scale = 1.17 }
 name = "Barrage Specialist"
 mtg-name = "Signal Pest"
 id = "55340736-7fc5-4555-8f47-081d770a6e8d"
-rendered-text = "▸Challenge: Each challenging character you control gains +1✦."
+rendered-text = "▸Challenge: Each other challenging character gains +1✦."
 energy-cost = 1
 card-type = "Character"
 subtype = "Warrior"
