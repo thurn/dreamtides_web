@@ -4,6 +4,12 @@ The quest runtime reads query-string parameters from `window.location.search`
 once at page load via `parseRuntimeConfig` in `src/runtime/runtime-config.ts`.
 Quest runtime parameters are not reactive: changing them requires a page reload.
 
+These parameters configure *how a run boots and behaves* and ride in the query
+string. The address-bar **path** is a separate concern: it reflects *where the
+player is* (e.g. `/dreamscape/2-ember-wood/purge`, `/atlas`). See
+`url_structure.md` for the path grammar; the two compose (a path always carries
+the run's query string).
+
 ## `seed`
 
 Overrides the battle RNG seed. The value must be a non-negative integer literal

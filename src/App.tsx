@@ -32,6 +32,7 @@ import { getSavedQuest } from "./state/saved-quests";
 import { logEvent } from "./logging";
 import type { RuntimeConfig } from "./runtime/runtime-config";
 import { findQaScene } from "./runtime/qa-scenes";
+import { useQuestUrlSync } from "./runtime/use-quest-url-sync";
 import type { QuestState } from "./types/quest";
 import {
   JourneyExplanationOverlay,
@@ -47,6 +48,11 @@ export function QuestApp({
   runtimeConfig: RuntimeConfig;
 }) {
   const { state, mutations, questContent } = useQuest();
+  // Reflect the current screen into the address-bar path (e.g.
+  // `/dreamscape/ember-wood/purge`, `/atlas`) so the URL shows where the player
+  // is. Passive reflection via `history.replaceState`; the `?game=<roomId>`
+  // query param remains the resume key. See `useQuestUrlSync`.
+  useQuestUrlSync();
   // The starter-deck reveal popup is shown the first time a player picks a
   // Dreamcaller. Visibility is driven entirely by persisted quest state
   // (`dreamcaller` set + `hasSeenStartingDeckPopup` false) so a reload of the
