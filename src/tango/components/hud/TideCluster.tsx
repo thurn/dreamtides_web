@@ -301,13 +301,10 @@ export function TideCluster({
                 discRefs.current[t.id] = el;
               }}
               style={{
-                marginLeft: i === 0 ? 0 : `calc(-1 * ${token("--space-3")})`,
+                marginLeft: i === 0 ? 0 : token("--space-2"),
                 borderRadius: "50%",
-                background: token("--bg-app"),
-                boxShadow: i === 0 ? "none" : `0 0 0 2px ${token("--bg-app")}`,
                 display: "flex",
                 position: "relative",
-                zIndex: tides.length - i,
               }}
             >
               <TideDisc tide={t.tide} id={t.id} />
