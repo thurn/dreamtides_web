@@ -79,6 +79,16 @@ const shell: React.CSSProperties = {
   boxSizing: "border-box",
   textAlign: "left",
   overflow: "hidden",
+  // Reset text wrapping at the shell so an InfoCard ALWAYS wraps its copy to the
+  // fixed CARD_W, no matter what its trigger inherits down. A common trigger —
+  // TidePill, a HUD chip — is itself `white-space: nowrap`; without this reset
+  // that nowrap cascades into the standalone popover and the body clips at the
+  // card edge instead of wrapping. Making the shell authoritative means it is
+  // impossible to mount an InfoCard whose text doesn't wrap. Inline units that
+  // must stay on one line (essence `50◆`, an energy `2●`) set their own nowrap
+  // inside rich text and are unaffected.
+  whiteSpace: "normal",
+  overflowWrap: "break-word",
   background: token("--surface-raised"), // solid, no transparency, no scrim
   borderRadius: token("--radius-popover"),
   boxShadow: token("--shadow-lg"), // no border

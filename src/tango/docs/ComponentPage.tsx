@@ -23,6 +23,61 @@ const sectionHeadingStyle: React.CSSProperties = {
   margin: `0 0 ${token("--space-5")}`,
 };
 
+// The page-level nav row (← Overview / View full-screen mockup →) pinned to the
+// top of the viewport as the reader scrolls the tall doc page, so those exits
+// are always one reach away. Opaque background + a hairline underline so the
+// sections below scroll cleanly under it; a stacking context above the demo.
+const stickyNavStyle: React.CSSProperties = {
+  position: "sticky",
+  top: 0,
+  zIndex: 30,
+  display: "flex",
+  justifyContent: "space-between",
+  alignItems: "baseline",
+  gap: token("--space-4"),
+  flexWrap: "wrap",
+  padding: `${token("--space-4")} 0`,
+  background: token("--bg-app"),
+  borderBottom: `1px solid ${token("--border-soft")}`,
+};
+
+/**
+ * A guidance admonition shown under a component's blurb — used to steer readers
+ * (e.g. "prefer a higher-level component before reaching for this primitive").
+ * An accent-tinted box with an info mark so it reads as advice, not chrome.
+ */
+function Callout({ text }: { text: string }) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        gap: token("--space-3"),
+        marginTop: token("--space-6"),
+        maxWidth: "64ch",
+        padding: `${token("--space-4")} ${token("--space-5")}`,
+        background: token("--accent-tint"),
+        border: `1px solid ${token("--border-accent")}`,
+        borderRadius: token("--radius-control"),
+      }}
+    >
+      <i
+        className="bxf bx-info-circle"
+        aria-hidden="true"
+        style={{ color: token("--accent-bright"), fontSize: 18, lineHeight: 1.4 }}
+      />
+      <p
+        style={{
+          margin: 0,
+          font: token("--t-body-sm"),
+          color: token("--text-secondary"),
+        }}
+      >
+        {text}
+      </p>
+    </div>
+  );
+}
+
 export function ComponentPage({ id }: { id: string }) {
   const entry = getComponent(id);
   const [args, setArgs] = useState<Record<string, unknown>>(
@@ -46,32 +101,25 @@ export function ComponentPage({ id }: { id: string }) {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: token("--space-9") }}>
-      <header>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "baseline",
-            gap: token("--space-4"),
-            flexWrap: "wrap",
-          }}
+      <nav style={stickyNavStyle}>
+        <a
+          href="#/"
+          style={{ font: token("--t-caption"), color: token("--text-muted") }}
         >
+          ← Overview
+        </a>
+        {hasMockup(entry.id) && (
           <a
-            href="#/"
-            style={{ font: token("--t-caption"), color: token("--text-muted") }}
+            href={`#/${entry.id}/mockup`}
+            style={{ font: token("--t-caption"), color: token("--accent-bright") }}
           >
-            ← Overview
+            View full-screen mockup →
           </a>
-          {hasMockup(entry.id) && (
-            <a
-              href={`#/${entry.id}/mockup`}
-              style={{ font: token("--t-caption"), color: token("--accent-bright") }}
-            >
-              View full-screen mockup →
-            </a>
-          )}
-        </div>
-        <h1 style={{ font: token("--t-title"), color: token("--text-primary"), margin: `${token("--space-4")} 0 0` }}>
+        )}
+      </nav>
+
+      <header>
+        <h1 style={{ font: token("--t-title"), color: token("--text-primary"), margin: 0 }}>
           {entry.title}
         </h1>
         <p
@@ -84,6 +132,7 @@ export function ComponentPage({ id }: { id: string }) {
         >
           {entry.blurb}
         </p>
+        {entry.callout != null && <Callout text={entry.callout} />}
       </header>
 
       <div className="tango-component-page__layout">

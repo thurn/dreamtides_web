@@ -1,6 +1,7 @@
 // Registry demo entry for Button — see resource-chip.tsx for the recipe this
-// follows. `label` is the button's text (a plain string) and `cost` its inline
-// essence price, both seeded via defaultArgs.
+// follows. `label` is the button's text (a plain string), `cost` its inline
+// price and `costKind` the currency that price is denominated in (a select
+// control), all seeded via defaultArgs.
 
 import { Button } from "../../components/controls/Button";
 import type { TangoComponent } from "../registry";
@@ -16,7 +17,7 @@ export const buttonDemo: TangoComponent = {
   usage: [
     {
       label: "With cost",
-      note: "An essence `cost` renders after the label, in white, inside the one purple button sprite.",
+      note: "A `cost` renders after the label, in white, inside the one purple button sprite. It defaults to essence.",
       code: `import { Button } from "src/tango/components/controls/Button";
 
 <Button
@@ -24,6 +25,17 @@ export const buttonDemo: TangoComponent = {
   cost={100}
   label="Begin Battle"
   onClick={beginBattle}
+/>`,
+    },
+    {
+      label: "Other cost currencies",
+      note: "`costKind` denominates the price in any economy currency — energy, spark, points, or counter — swapping only the mark (the price stays on-accent white).",
+      code: `<Button
+  size="md"
+  cost={3}
+  costKind="energy"
+  label="Activate"
+  onClick={activate}
 />`,
     },
     {
@@ -43,6 +55,7 @@ export const buttonDemo: TangoComponent = {
       full: false,
       disabled: false,
       cost: 100,
+      costKind: "essence",
       label: "Begin Battle",
     },
   },

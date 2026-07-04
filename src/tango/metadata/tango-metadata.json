@@ -124,7 +124,21 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "null",
-      "description": "Appends an inline essence price, e.g. cost={100} -> \"… 100◆\", rendered in\nthe button's own on-accent white so the price reads as part of the label."
+      "description": "Appends an inline price, e.g. cost={100} -> \"… 100◆\", rendered in the\nbutton's own on-accent white so the price reads as part of the label. The\ncurrency is set by `costKind` (default essence)."
+    },
+    {
+      "name": "costKind",
+      "tsType": "ButtonCostKind",
+      "unionMembers": [
+        "energy",
+        "spark",
+        "essence",
+        "points",
+        "counter"
+      ],
+      "required": false,
+      "defaultValue": "essence",
+      "description": "Which currency the `cost` is denominated in — essence, energy, spark,\npoints, or counter. Picks the price mark (bx-crypto / bx-fire-alt /\nbx-sparkles / bx-star-circle / bx-hourglass); the mark stays on-accent\nwhite. Default essence. Ignored when `cost` is null."
     },
     {
       "name": "onClick",

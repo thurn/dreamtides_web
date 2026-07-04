@@ -31,6 +31,8 @@ export const pressableDemo: TangoComponent = {
   title: "Pressable",
   blurb:
     "The one press-feedback primitive. Wrap any element in it and that element gains the shared press-down compression, so every interactive surface in Tango presses with the identical feel.",
+  callout:
+    "Reach for a higher-level component first. Pressable is a low-level building block — before wrapping raw markup in it, look for an existing Tango component (Button, TidePill, SegmentedControl, SiteNode, …) that already bakes in the press feedback. Use Pressable only when you're building a genuinely new interactive surface no component covers.",
   group: "Primitives",
   docName: "Pressable",
   Component: Pressable,

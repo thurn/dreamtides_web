@@ -18,16 +18,31 @@
 //     because it needs to combine the press transform with the brighten
 //     filter on the very same element — exactly the composition case
 //     Pressable.tsx's own doc comment calls out for the hook form.
+//   - hover (fine pointer) lifts the button the opposite way — a small
+//     scale-UP plus a violet drop-shadow glow that follows the sprite's
+//     chamfered alpha — so the target invites the pointer before it's pressed.
+//   - the inline price can be denominated in any economy currency via
+//     `costKind` (essence / energy / spark / points / counter); the mark stays
+//     the button's on-accent white and only its glyph shape changes.
 //
 // Ported from the Claude Design "Dreamtides Mobile" project
 // (components/buttons/Button.jsx / .d.ts).
 
+import { useState } from "react";
 import buttonPurple from "../../assets/Button_Purple.png";
 import { PRESS_SCALE, usePress } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 
 /** Height/scale variants. 'lg' is the taller commit height. */
 type ButtonSize = "sm" | "md" | "lg";
+
+/**
+ * Which economy value a button's inline price is denominated in. Mirrors the
+ * ResourceChip economy (essence, energy, spark, points, counter) so a button
+ * price and a HUD chip read as the same currency. The mark stays the button's
+ * on-accent white — only the glyph shape changes with the cost kind.
+ */
+type ButtonCostKind = "essence" | "energy" | "spark" | "points" | "counter";
 
 interface SizeSpec {
   height: number;
@@ -40,11 +55,31 @@ interface SizeSpec {
 const SLICE = 56;
 
 const SIZES: Record<ButtonSize, SizeSpec> = {
-  sm: { height: 44, font: 15, padding: "0 18px", borderWidth: 13 },
-  md: { height: 52, font: 17, padding: "0 22px", borderWidth: 16 },
-  // The "commit" height — same button, taller.
-  lg: { height: 56, font: 17, padding: "0 26px", borderWidth: 16 },
+  sm: { height: 42, font: 15, padding: "0 18px", borderWidth: 13 },
+  md: { height: 50, font: 16, padding: "0 22px", borderWidth: 15 },
+  // The "commit" height — same button, distinctly taller and heavier so the
+  // commit action reads as the weightier choice, not a near-identical md.
+  lg: { height: 62, font: 19, padding: "0 30px", borderWidth: 18 },
 };
+
+/**
+ * The filled-Boxicon mark for each cost kind, matching the ResourceChip economy
+ * glyphs (bx-crypto / bx-fire-alt / bx-sparkles / bx-star-circle / bx-hourglass)
+ * so a button price reads as the same currency as its HUD chip. The mark is
+ * painted in the button's own on-accent white regardless of kind — inside the
+ * purple sprite it reads as part of the label, not a separate tinted chip.
+ */
+const COST_ICON_CLASSES: Record<ButtonCostKind, string> = {
+  essence: "bxf bx-crypto",
+  energy: "bxf bx-fire-alt",
+  spark: "bxf bx-sparkles",
+  points: "bxf bx-star-circle",
+  counter: "bxf bx-hourglass",
+};
+
+/** Scale-UP factor on hover (fine pointer) — the counterpart to the shared
+ * scale-DOWN press feedback: the button lifts slightly toward the pointer. */
+const HOVER_SCALE = 1.03;
 
 export interface ButtonProps {
   /** Height/scale. 'lg' is the taller commit height ("Begin Your Dream") — commit is a size, not a variant. */
@@ -53,9 +88,15 @@ export interface ButtonProps {
   full?: boolean;
   /** Dims the button and detaches its click/press feedback. */
   disabled?: boolean;
-  /** Appends an inline essence price, e.g. cost={100} -> "… 100◆", rendered in
-   * the button's own on-accent white so the price reads as part of the label. */
+  /** Appends an inline price, e.g. cost={100} -> "… 100◆", rendered in the
+   * button's own on-accent white so the price reads as part of the label. The
+   * currency is set by `costKind` (default essence). */
   cost?: number | null;
+  /** Which currency the `cost` is denominated in — essence, energy, spark,
+   * points, or counter. Picks the price mark (bx-crypto / bx-fire-alt /
+   * bx-sparkles / bx-star-circle / bx-hourglass); the mark stays on-accent
+   * white. Default essence. Ignored when `cost` is null. */
+  costKind?: ButtonCostKind;
   /** Fires when the button is activated (no-op while disabled). */
   onClick?: () => void;
   /** Accessible label when the visible content is a bare price with no text. */
@@ -73,22 +114,42 @@ export interface ButtonProps {
  * feedback routes through the shared --press-scale primitive. The button has no
  * style / className / arbitrary-attribute escape hatch and takes no `children`
  * slot: its one appearance is fixed and only its typed props (size, full,
- * disabled, cost, label) shape it — the label is a resolved string, not
- * caller markup, so Button is a leaf, not a container.
+ * disabled, cost, costKind, label) shape it — the label is a resolved string,
+ * not caller markup, so Button is a leaf, not a container.
  */
 export function Button({
   size = "md",
   full = false,
   disabled = false,
   cost = null,
+  costKind = "essence",
   onClick,
   ariaLabel,
   label,
 }: ButtonProps) {
   const spec = SIZES[size];
   const borderWidth = spec.borderWidth;
-  const { pressed, bind } = usePress();
+  // onPointerLeave clears the hover lift as well as the press state, so the two
+  // can never get stuck together (leave both while the pointer is off the
+  // button).
+  const [hovered, setHovered] = useState(false);
+  const { pressed, bind } = usePress({
+    onPointerLeave: () => setHovered(false),
+  });
   const on = pressed && !disabled;
+  const lifted = hovered && !on && !disabled;
+  // Hover glow (a violet drop-shadow that follows the sprite's chamfered alpha,
+  // unlike a rectangular box-shadow) plus a brighten; press keeps the stronger
+  // brighten. Composed into one filter so both effects can layer.
+  const filterParts = [
+    lifted ? "drop-shadow(0 0 12px rgba(168, 85, 247, 0.55))" : "",
+    on ? "brightness(1.12)" : lifted ? "brightness(1.06)" : "",
+  ].filter(Boolean);
+  const transform = on
+    ? `scale(${String(PRESS_SCALE)})`
+    : lifted
+      ? `scale(${String(HOVER_SCALE)})`
+      : "none";
 
   return (
     <button
@@ -96,6 +157,7 @@ export function Button({
       disabled={disabled}
       aria-label={ariaLabel}
       onClick={disabled ? undefined : onClick}
+      onPointerEnter={disabled ? undefined : () => setHovered(true)}
       {...(disabled ? {} : bind)}
       style={{
         position: "relative",
@@ -121,9 +183,9 @@ export function Button({
         color: token("--text-on-accent"),
         textShadow: "0 1px 3px rgba(20, 2, 38, 0.85)",
         opacity: disabled ? 0.5 : 1,
-        filter: on ? "brightness(1.12)" : "none",
+        filter: filterParts.length > 0 ? filterParts.join(" ") : "none",
         transformOrigin: "center",
-        transform: on ? `scale(${String(PRESS_SCALE)})` : "none",
+        transform,
         transition: `transform ${token("--dur-fast")} ${token("--ease-out")}, filter ${token("--dur-fast")} ${token("--ease-out")}`,
         WebkitTapHighlightColor: "transparent",
       }}
@@ -143,7 +205,7 @@ export function Button({
         >
           {cost}
           <i
-            className="bxf bx-crypto"
+            className={COST_ICON_CLASSES[costKind]}
             aria-hidden="true"
             style={{ fontSize: "1.04em", lineHeight: 1 }}
           />

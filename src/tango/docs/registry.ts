@@ -61,6 +61,13 @@ export interface TangoComponent {
    * show.
    */
   blurb: string;
+  /**
+   * Optional guidance admonition shown under the blurb on the component's doc
+   * page — steers the reader before they use it (e.g. "prefer a higher-level
+   * component before reaching for this primitive"). Omit when the blurb says
+   * enough.
+   */
+  callout?: string;
   /** Table-of-contents grouping, e.g. "Primitives" | "Components". */
   group: string;
   /**

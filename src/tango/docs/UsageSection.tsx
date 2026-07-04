@@ -1,7 +1,7 @@
 // UsageSection — the "Usage" block on a component's /tango doc page. Renders the
-// component's authored code snippets (registry entry `usage`) as syntax-neutral
-// monospace source in a sunken, bordered pane, each with a copy-to-clipboard
-// affordance. When a component lists more than one snippet (genuinely distinct
+// component's authored code snippets (registry entry `usage`) as syntax-
+// highlighted (see syntax-highlight.tsx) monospace source in a sunken, bordered
+// pane, each with a copy-to-clipboard affordance that copies the raw source. When a component lists more than one snippet (genuinely distinct
 // usage variants — e.g. Button with vs. without a cost, InfoCard's four media
 // variants), each snippet is introduced by its own label + optional note so the
 // reader can tell the variants apart; a single-snippet component renders just
@@ -9,6 +9,7 @@
 
 import { useState, type CSSProperties } from "react";
 import { token } from "../primitives/tokens";
+import { highlightTsx } from "./syntax-highlight";
 import type { TangoUsageExample } from "./registry";
 
 const listStyle: CSSProperties = {
@@ -98,7 +99,9 @@ function CodePane({ code }: { code: string }) {
         {copied ? "Copied" : "Copy"}
       </button>
       <pre style={preStyle}>
-        <code style={codeStyle}>{code}</code>
+        {/* The raw `code` string still backs the Copy button above; only the
+            displayed source is tokenized and colored. */}
+        <code style={codeStyle}>{highlightTsx(code)}</code>
       </pre>
     </div>
   );
