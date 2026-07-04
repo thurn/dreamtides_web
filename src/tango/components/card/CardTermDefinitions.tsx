@@ -1,19 +1,22 @@
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
-import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
+import { InfoCard } from "../overlay/InfoCard";
+import { richText } from "./rich-text";
+import { token } from "../../primitives/tokens";
 
 /**
- * Vertical stack of glossary definition tiles for every gameplay term that
- * appears in a stretch of rules text, in reading order with duplicates
- * collapsed.
+ * Vertical stack of glossary definitions for every gameplay term that appears in
+ * a stretch of rules text, in reading order with duplicates collapsed. Each term
+ * renders as its own {@link InfoCard} tile, so the definitions read in the same
+ * vocabulary as every other reveal (the object card they sit beside, the tide
+ * pill, the site disc) — one shell, one radius, one type scale.
  *
- * Rendered immediately beside a card so the player can read what every term
- * means without the card text itself carrying inline tooltips. Shared by the
- * full-card hover help (`CardView`), the compact-row card preview
- * (`CardHoverPreview`), and the battle card preview
- * (`BattleCardHoverPreview`) so all three present an identical panel.
+ * Rendered beside or beneath a card / dreamsign / ability so the player can read
+ * what every highlighted keyword means without inline tooltips. Shared by the
+ * card hover-help panel (`useCardTermPopover` → `CardView`/`GameCard`), the
+ * dreamsign reveal (`DreamsignInfoCard`), and the Dreamcaller ability reveal.
  *
- * Returns `null` when the text references no glossary terms, so callers can
- * place it unconditionally and it renders nothing for plain cards.
+ * Returns `null` when the text references no glossary terms, so callers place it
+ * unconditionally and it renders nothing for plain text.
  */
 export function CardTermDefinitions({
   text,
@@ -35,10 +38,26 @@ export function CardTermDefinitions({
     <div
       data-testid={testId}
       data-definition-side={side}
-      className="flex max-h-[min(70vh,360px)] w-56 flex-col gap-1 overflow-y-auto"
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        gap: token("--space-3"),
+        // Box measures (content-driven layout): cap height and scroll a long
+        // list, matching the prior panel behavior.
+        maxHeight: "min(70vh, 360px)",
+        overflowY: "auto",
+      }}
     >
       {terms.map((entry) => (
-        <GlossaryDefinitionCard key={entry.term} entry={entry} />
+        <InfoCard
+          key={entry.term}
+          variant="text"
+          meta="Keyword"
+          title={entry.term}
+          // `rules` so resource glyphs / keyword emphasis inside a definition
+          // render the same marks shown in card rules text.
+          body={richText.rules(entry.definition)}
+        />
       ))}
     </div>
   );
