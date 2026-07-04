@@ -100,6 +100,21 @@ export function token(name: TokenName): string {
 `;
 }
 
+/**
+ * The exact file content `npm run tango-tokens` writes to
+ * {@link TOKENS_TS_OUT_PATH}, computed from the live stylesheet without
+ * touching disk. The drift contract test compares this against the committed
+ * file, so a token edit that skips regeneration (leaving `token()`'s typed
+ * names stale) fails the build.
+ */
+export function computeTokensSource() {
+  const css = readFileSync(CSS_PATH, "utf8");
+  return buildTokensSource(parseCssTokens(css));
+}
+
+/** Where the generated typed-token module lives, for the drift test. */
+export const TOKENS_TS_OUT_PATH = OUT_PATH;
+
 function main() {
   const css = readFileSync(CSS_PATH, "utf8");
   const tokens = parseCssTokens(css);

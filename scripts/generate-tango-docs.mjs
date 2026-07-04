@@ -601,7 +601,16 @@ export function renderTokensMarkdown(tokens, notes) {
   return lines.join("\n");
 }
 
-function main() {
+/**
+ * Every file `npm run tango-docs` would write, as an absolute-path → content
+ * map, computed from the live sources without touching disk. `main()` writes
+ * this map (and sweeps stale component .md files not in it); the drift
+ * contract test compares it against the committed files, so "edited a demo or
+ * component but forgot to regenerate" fails the build. Note the SKILL.md
+ * entry is the CURRENT file with the generated index re-spliced — hand-edited
+ * prose passes through unchanged.
+ */
+export function computeDocOutputs() {
   const registryEntries = extractRegistryOrder(
     readFileSync(REGISTRY_PATH, "utf8"),
     relative(ROOT, REGISTRY_PATH),
@@ -630,41 +639,54 @@ function main() {
     throw new Error("duplicate component ids in the registry");
   }
 
-  // Write one reference file per component, then sweep stale ones: any .md in
-  // the output directory this run did not produce belongs to a renamed or
-  // unregistered component and must not survive as authoritative-looking docs.
-  mkdirSync(COMPONENTS_OUT_DIR, { recursive: true });
-  const writtenFiles = new Set();
+  const files = new Map();
   for (const doc of docs) {
-    const fileName = `${doc.id}.md`;
-    writeFileSync(
-      join(COMPONENTS_OUT_DIR, fileName),
+    files.set(
+      join(COMPONENTS_OUT_DIR, `${doc.id}.md`),
       renderComponentMarkdown(doc, metadata[doc.docName]),
     );
-    writtenFiles.add(fileName);
-  }
-  let sweptCount = 0;
-  for (const existing of readdirSync(COMPONENTS_OUT_DIR)) {
-    if (existing.endsWith(".md") && !writtenFiles.has(existing)) {
-      unlinkSync(join(COMPONENTS_OUT_DIR, existing));
-      sweptCount += 1;
-    }
   }
 
   const skillText = readFileSync(SKILL_PATH, "utf8");
-  writeFileSync(
-    SKILL_PATH,
-    spliceGeneratedIndex(skillText, renderIndexSection(docs)),
-  );
+  files.set(SKILL_PATH, spliceGeneratedIndex(skillText, renderIndexSection(docs)));
 
   const cssText = readFileSync(TOKENS_CSS_PATH, "utf8");
   const dedupedTokens = [...dedupeLastWins(parseCssTokens(cssText))].map(
     ([name, entry]) => ({ name, value: entry.value }),
   );
-  writeFileSync(
+  files.set(
     TOKENS_OUT_PATH,
     renderTokensMarkdown(dedupedTokens, extractTokenNotes(cssText)),
   );
+
+  return { files, docs, dedupedTokens };
+}
+
+/** Output locations, for the drift contract test. */
+export const DOC_OUTPUT_PATHS = {
+  componentsDir: COMPONENTS_OUT_DIR,
+  skillPath: SKILL_PATH,
+  tokensPath: TOKENS_OUT_PATH,
+};
+
+function main() {
+  const { files, docs, dedupedTokens } = computeDocOutputs();
+
+  // Write one reference file per component, then sweep stale ones: any .md in
+  // the output directory this run did not produce belongs to a renamed or
+  // unregistered component and must not survive as authoritative-looking docs.
+  mkdirSync(COMPONENTS_OUT_DIR, { recursive: true });
+  for (const [path, content] of files) {
+    writeFileSync(path, content);
+  }
+  let sweptCount = 0;
+  for (const existing of readdirSync(COMPONENTS_OUT_DIR)) {
+    const full = join(COMPONENTS_OUT_DIR, existing);
+    if (existing.endsWith(".md") && !files.has(full)) {
+      unlinkSync(full);
+      sweptCount += 1;
+    }
+  }
 
   console.log(
     `Wrote ${docs.length} component reference${docs.length === 1 ? "" : "s"} to ${relative(ROOT, COMPONENTS_OUT_DIR)}${sweptCount > 0 ? ` (swept ${sweptCount} stale)` : ""}`,

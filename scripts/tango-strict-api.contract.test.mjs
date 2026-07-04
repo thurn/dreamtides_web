@@ -23,11 +23,15 @@ import {
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 
-// The two directories that hold the real design-system surface, matching
-// generate-tango-metadata.mjs's COMPONENT_ROOTS.
+// The directories whose resolved component surfaces must stay strict: the
+// design-system surface (matching generate-tango-metadata.mjs's
+// COMPONENT_ROOTS) plus the migrated product screens — a screen-local helper
+// component with an inline props type is invisible to the AST rule (it keys on
+// `*Props` type names), so the resolved surface is the net that catches it.
 const COMPONENT_ROOTS = [
   resolve(ROOT, "src/tango/components"),
   resolve(ROOT, "src/tango/primitives"),
+  resolve(ROOT, "src/tango/screens"),
 ];
 
 /** Collect `.tsx` sources, skipping `__*__` fixtures (mirrors the generator). */

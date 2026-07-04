@@ -388,7 +388,13 @@ function collectComponentFiles(dir) {
   return files;
 }
 
-function main() {
+/**
+ * The exact file content `npm run tango-metadata` writes to
+ * {@link METADATA_OUT_PATH}, computed from the live component sources without
+ * touching disk. The drift contract test compares this against the committed
+ * file, so "edited a component but forgot to regenerate" fails the build.
+ */
+export function computeMetadataJson() {
   const files = COMPONENT_ROOTS.flatMap((dir) => collectComponentFiles(dir)).sort();
   const metadata = extractPropMeta(files);
 
@@ -397,9 +403,18 @@ function main() {
   for (const name of Object.keys(metadata).sort()) {
     sorted[name] = metadata[name];
   }
+  return `${JSON.stringify(sorted, null, 2)}\n`;
+}
+
+/** Where the generated metadata lives, for the drift contract test. */
+export const METADATA_OUT_PATH = OUT_PATH;
+
+function main() {
+  const json = computeMetadataJson();
+  const sorted = JSON.parse(json);
 
   mkdirSync(dirname(OUT_PATH), { recursive: true });
-  writeFileSync(OUT_PATH, `${JSON.stringify(sorted, null, 2)}\n`);
+  writeFileSync(OUT_PATH, json);
 
   const componentCount = Object.keys(sorted).length;
   const propCount = Object.values(sorted).reduce(
@@ -408,7 +423,7 @@ function main() {
   );
   console.log(`Wrote ${relative(ROOT, OUT_PATH)}`);
   console.log(
-    `Components: ${componentCount} (${propCount} prop${propCount === 1 ? "" : "s"} total) from ${files.length} source file${files.length === 1 ? "" : "s"}`,
+    `Components: ${componentCount} (${propCount} prop${propCount === 1 ? "" : "s"} total)`,
   );
 }
 
