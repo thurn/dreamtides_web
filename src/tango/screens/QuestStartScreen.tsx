@@ -106,7 +106,7 @@ function SectionHeading({
       <span
         {...{ [labelAttr]: dreamcallerId }}
         style={{
-          font: `500 ${token("--t-caption")} ${token("--font-ui")}`,
+          font: token("--t-caption"),
           color: token("--text-muted"),
         }}
       >
@@ -123,7 +123,7 @@ function SectionHeading({
               background: token("--surface-raised"),
               color: token("--text-primary"),
               padding: "8px 12px",
-              font: `400 ${token("--t-caption")} ${token("--font-ui")}`,
+              font: token("--t-caption"),
               lineHeight: 1.5,
               boxShadow: token("--shadow-md"),
             }}
@@ -200,7 +200,7 @@ function DreamcallerCard({
         <div style={{ marginBottom: 12, minHeight: 62 }}>
           <div
             style={{
-              font: `700 ${token("--t-title-sm")} ${token("--font-title")}`,
+              font: token("--t-title-sm"),
               color: token("--text-primary"),
               lineHeight: 1.15,
             }}
@@ -210,7 +210,8 @@ function DreamcallerCard({
           <div
             style={{
               marginTop: 4,
-              font: `400 italic ${token("--t-body-sm")} ${token("--font-ui")}`,
+              font: token("--t-body-sm"),
+              fontStyle: "italic",
               color: token("--text-secondary"),
             }}
           >
@@ -242,7 +243,7 @@ function DreamcallerCard({
               style={{
                 padding: "0 4px",
                 textAlign: "center",
-                font: `400 ${token("--t-body-sm")} ${token("--font-ui")}`,
+                font: token("--t-body-sm"),
                 color: token("--text-secondary"),
                 lineHeight: 1.55,
               }}
@@ -264,7 +265,7 @@ function DreamcallerCard({
         >
           <span
             style={{
-              font: `600 ${token("--t-eyebrow")} ${token("--font-ui")}`,
+              font: token("--t-eyebrow"),
               textTransform: "uppercase",
               letterSpacing: "0.06em",
               color: token("--text-muted"),
@@ -275,7 +276,7 @@ function DreamcallerCard({
           <span
             data-starting-essence-value={dreamcaller.id}
             style={{
-              font: `700 ${token("--t-body")} ${token("--font-numeral")}`,
+              font: token("--t-body"),
             }}
           >
             <EssenceValue amount={dreamcaller.startingEssence} />
@@ -313,7 +314,7 @@ function DreamcallerCard({
                   gap: 6,
                   minHeight: 30,
                   padding: "4px 4px",
-                  font: `500 ${token("--t-caption")} ${token("--font-ui")}`,
+                  font: token("--t-caption"),
                   color: token("--text-primary"),
                 }}
               >
@@ -408,7 +409,7 @@ export function QuestStartScreen({ dreamcallers, onPick }: QuestStartScreenProps
         style={{
           margin: 0,
           textAlign: "center",
-          font: `800 ${token("--t-display")} ${token("--font-title")}`,
+          font: token("--t-display"),
           letterSpacing: "0.02em",
           backgroundImage: token("--dt-gradient-title"),
           WebkitBackgroundClip: "text",
@@ -423,7 +424,7 @@ export function QuestStartScreen({ dreamcallers, onPick }: QuestStartScreenProps
         style={{
           margin: "0 0 20px",
           textAlign: "center",
-          font: `400 ${token("--t-lead")} ${token("--font-ui")}`,
+          font: token("--t-lead"),
           color: token("--text-secondary"),
         }}
       >
