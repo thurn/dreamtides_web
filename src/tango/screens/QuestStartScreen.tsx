@@ -335,7 +335,7 @@ function DreamcallerPage({
           <div
             style={{
               display: "flex",
-              alignItems: "center",
+              alignItems: "flex-start",
               justifyContent: "space-between",
               gap: token("--space-5"),
               marginTop: token("--space-3"),
@@ -348,19 +348,29 @@ function DreamcallerPage({
             ) : (
               <span />
             )}
-            <EssenceReveal dreamcaller={dreamcaller} stageRef={stageRef} />
+            {/* The essence aligns to the tides HEADER row, not the whole
+                cluster. When the tides expand, the pills grow below and the row
+                is top-aligned, so the essence would otherwise sit at the header,
+                already correct. This box carries the collapsed TideCluster
+                header's height (a 24px disc in space-2 padding) and centers the
+                chip within it, keeping "200" level with the "Tides" label in
+                both the collapsed and expanded states. */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                minHeight: `calc(24px + 2 * ${token("--space-2")})`,
+              }}
+            >
+              <EssenceReveal dreamcaller={dreamcaller} stageRef={stageRef} />
+            </div>
           </div>
 
           <div
             data-choose-dreamcaller={dreamcaller.id}
             style={{ marginTop: token("--space-6") }}
           >
-            <Button
-              size="lg"
-              full
-              label={`Choose ${dreamcaller.name}`}
-              onClick={onChoose}
-            />
+            <Button size="lg" full label="Choose" onClick={onChoose} />
           </div>
         </GroupPanel>
       </div>
