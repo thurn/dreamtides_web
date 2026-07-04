@@ -1,0 +1,47 @@
+/* Tango base — subtree-wide interaction defaults.
+   ================================================================
+   Tango treats a long press as its OWN gesture: the single reveal engine
+   (InfoCard's usePressReveal) shows a card while a finger is held down, and
+   several components lean on that hold. Mobile browsers, left to themselves,
+   attach their native long-press behaviour to the same gesture — iOS pops the
+   selection magnifier / callout sheet, Android raises the text-selection
+   toolbar or an image context menu — which fights the reveal and feels broken.
+
+   These rules turn that native behaviour off across the whole `.tango`
+   subtree. `-webkit-touch-callout`, `-webkit-user-select`, and `user-select`
+   all inherit, so declaring them on each `.tango` root cascades to every
+   descendant — including the InfoCard popovers that portal OUT of their
+   trigger and re-establish the token scope with their own `.tango` class.
+
+   This sheet ships with the game entry (imported from src/App.tsx), not on
+   every entry: the /tango doc site and the editor tools are reading surfaces
+   where selecting and copying text is wanted, so they keep the browser
+   default.
+
+   `touch-action` is deliberately left untouched here — scrolling and the Atlas
+   pan/zoom depend on the default, and the long-press behaviour above is what
+   actually needed disabling. */
+
+.tango {
+  /* No callout sheet, no selection magnifier, no blue tap flash on hold. */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Art must not ghost-drag or raise an image callout when pressed and held. */
+.tango img {
+  -webkit-user-drag: none;
+}
+
+/* Re-enable selection where the user genuinely reads or edits copy: form
+   fields and anything explicitly opted back in with `data-tango-selectable`. */
+.tango input,
+.tango textarea,
+.tango select,
+.tango [contenteditable="true"],
+.tango [data-tango-selectable] {
+  -webkit-user-select: text;
+  user-select: text;
+}

@@ -1,4 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+// Tango base interaction reset — disables native mobile long-press behaviour
+// (selection magnifier, iOS callout, Android context menu) across the `.tango`
+// subtree so it never fights Tango's own long-press-to-reveal gesture. Loaded
+// with the game entry only, so the /tango docs and editor tools keep normal
+// text selection. See src/tango/primitives/tango-base.css.
+import "./tango/primitives/tango-base.css";
 import type { Database } from "firebase/database";
 import type { CardData } from "./types/cards";
 import type { QuestContent } from "./data/quest-content";
@@ -569,6 +575,24 @@ export default function App({ runtimeConfig }: { runtimeConfig: RuntimeConfig })
   const [loadError, setLoadError] = useState<string | null>(null);
   const [database, setDatabase] = useState<Database | null>(null);
   const [firebaseError, setFirebaseError] = useState<string | null>(null);
+
+  // Long-press context-menu suppression for the Tango subtree. The CSS reset
+  // (tango-base.css) kills selection and the iOS callout, but Android raises a
+  // context menu when an image is held, and desktop shows the browser menu on
+  // right-click — neither is expressible in CSS. One delegated listener cancels
+  // it for any target inside a `.tango` element (cards, art, controls), leaving
+  // non-Tango surfaces untouched. Scoped to the game because this effect only
+  // mounts with the game app.
+  useEffect(() => {
+    const onContextMenu = (event: MouseEvent): void => {
+      const target = event.target;
+      if (target instanceof Element && target.closest(".tango")) {
+        event.preventDefault();
+      }
+    };
+    document.addEventListener("contextmenu", onContextMenu);
+    return () => document.removeEventListener("contextmenu", onContextMenu);
+  }, []);
 
   useEffect(() => {
     loadQuestContent(
