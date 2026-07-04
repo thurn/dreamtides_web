@@ -1,12 +1,14 @@
 // QuestStartScreen — the Tango rendering of Dreamcaller selection (the quest's
-// opening screen), as a full-bleed mobile swipe carousel: one Dreamcaller per
-// page (cinematic portrait + serif name/epithet + a frosted GroupPanel console
-// holding ability text, an expandable TideCluster, starting essence, and a
-// Choose action). PURE: it renders from a view-model and reports the chosen
-// Dreamcaller through `onPick`; the adapter owns state, the offer, the seed, and
-// startQuest.
+// opening screen). Two layouts share one view-model and switch on viewport:
+//   - Mobile (narrow): a full-bleed swipe carousel, one Dreamcaller per page.
+//   - Desktop (wide): all offered Dreamcallers side by side as full-bleed
+//     standalone portraits — no carousel — each with its own console.
+// Both show a cinematic portrait + serif name/epithet + a frosted GroupPanel
+// console holding ability text, tides, starting essence, and a Choose action.
+// PURE: it renders from a view-model and reports the chosen Dreamcaller through
+// `onPick`; the adapter owns state, the offer, the seed, and startQuest.
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Motes } from "../components/hud/Motes";
 import { GroupPanel } from "../components/controls/GroupPanel";
 import { Button } from "../components/controls/Button";
@@ -20,6 +22,7 @@ import {
   TideCluster,
   type TideClusterTideView,
 } from "../components/hud/TideCluster";
+import { TidePill } from "../components/hud/TidePill";
 import { Pressable } from "../primitives/Pressable";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
@@ -56,8 +59,39 @@ export interface QuestStartScreenProps {
   onPick: (dreamcallerId: string) => void;
 }
 
-/** The full-bleed cinematic portrait for one carousel page. Screen-local: it
- * fills the page and needs no frame, unlike the shared DreamcallerPortrait. */
+/** How wide the viewport must be to lay the offered Dreamcallers out side by
+ * side instead of as a one-per-page swipe carousel. Below this the screen is a
+ * mobile carousel; at or above it, a desktop triptych. */
+const DESKTOP_MIN_WIDTH = 900;
+const DESKTOP_QUERY = `(min-width: ${String(DESKTOP_MIN_WIDTH)}px)`;
+
+/** True when the viewport is wide enough for the side-by-side desktop layout.
+ * Live via matchMedia so rotating a tablet or resizing a window re-evaluates,
+ * mirroring InfoCard's `useFinePointer` idiom. */
+function useIsDesktop(): boolean {
+  const [desktop, setDesktop] = useState<boolean>(() =>
+    typeof window === "undefined" || typeof window.matchMedia !== "function"
+      ? false
+      : window.matchMedia(DESKTOP_QUERY).matches,
+  );
+
+  useEffect(() => {
+    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
+      return;
+    }
+    const query = window.matchMedia(DESKTOP_QUERY);
+    const onChange = (): void => setDesktop(query.matches);
+    onChange();
+    query.addEventListener("change", onChange);
+    return () => query.removeEventListener("change", onChange);
+  }, []);
+
+  return desktop;
+}
+
+/** The full-bleed cinematic portrait for one Dreamcaller. Screen-local: it
+ * fills its slot and needs no frame, unlike the shared DreamcallerPortrait —
+ * on the desktop layout it stands alone as a media element, uncontained. */
 function FullBleedPortrait({
   dreamcaller,
 }: {
@@ -198,6 +232,187 @@ function EssenceReveal({
   );
 }
 
+/** The desktop tides display: every tide as a full, always-visible pill (each
+ * carrying its own hover/press description reveal), wrapping to fill the
+ * console width — no collapsed disc cluster. */
+function TidePillsRow({
+  tides,
+  stageRef,
+}: {
+  tides: DreamcallerTideView[];
+  stageRef: React.RefObject<HTMLElement | null>;
+}) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        alignItems: "center",
+        gap: token("--space-2"),
+      }}
+    >
+      {tides.map((tide) => (
+        <TidePill
+          key={tide.id}
+          size="sm"
+          label={tide.label}
+          description={tide.description}
+          tide={tide.tide}
+          stageRef={stageRef}
+        />
+      ))}
+    </div>
+  );
+}
+
+/** The frosted-glass console beneath a portrait: ability text, a hairline, the
+ * tides + starting essence, and the Choose action. Shared by both layouts; the
+ * `layout` picks how the tides read — the mobile carousel collapses them into a
+ * TideCluster, the desktop triptych shows the full pills at all times. */
+function DreamcallerConsole({
+  dreamcaller,
+  stageRef,
+  layout,
+  onChoose,
+}: {
+  dreamcaller: DreamcallerOfferView;
+  stageRef: React.RefObject<HTMLElement | null>;
+  layout: "mobile" | "desktop";
+  onChoose: () => void;
+}) {
+  const hasTides = dreamcaller.tides.length > 0;
+  return (
+    <GroupPanel>
+      <AbilityReveal text={dreamcaller.renderedText} stageRef={stageRef} />
+
+      <ConsoleDivider />
+
+      <div
+        style={{
+          display: "flex",
+          // The essence aligns to the FIRST row of the tides (the mobile
+          // TideCluster's header, the desktop pills' first line), not the whole
+          // block, which grows downward as tides expand or wrap — so the row is
+          // top-aligned and the essence is centered within a header-height box
+          // below.
+          alignItems: "flex-start",
+          justifyContent: "space-between",
+          gap: token("--space-5"),
+          marginTop: token("--space-3"),
+        }}
+      >
+        {hasTides ? (
+          <span
+            data-dreamcaller-tides={dreamcaller.id}
+            style={layout === "desktop" ? { minWidth: 0, flex: "1 1 auto" } : undefined}
+          >
+            {layout === "desktop" ? (
+              <TidePillsRow tides={dreamcaller.tides} stageRef={stageRef} />
+            ) : (
+              <TideCluster tides={dreamcaller.tides} stageRef={stageRef} />
+            )}
+          </span>
+        ) : (
+          <span />
+        )}
+        {/* Center the essence within a box the height of the tides' first row,
+            keeping "200" level with the mobile "Tides" label (a 24px disc in
+            space-2 padding) / the desktop pills' first line, in every tide
+            state. Box measures are content-driven layout, so raw px is right. */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            minHeight:
+              layout === "desktop"
+                ? "20px"
+                : `calc(24px + 2 * ${token("--space-2")})`,
+          }}
+        >
+          <EssenceReveal dreamcaller={dreamcaller} stageRef={stageRef} />
+        </div>
+      </div>
+
+      <div
+        data-choose-dreamcaller={dreamcaller.id}
+        style={{ marginTop: token("--space-6") }}
+      >
+        <Button size="lg" full label="Choose" onClick={onChoose} />
+      </div>
+    </GroupPanel>
+  );
+}
+
+/** The Dreamcaller's name and epithet, sitting directly on the portrait so it
+ * earns legibility from the on-media outline dilation rather than a plate. */
+function DreamcallerTitle({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: token("--safe-top"),
+        left: 0,
+        right: 0,
+        padding: `${token("--space-10")} ${token("--gutter")} 0`,
+        zIndex: 4,
+        textAlign: "center",
+      }}
+    >
+      <h1 style={{ margin: 0 }}>
+        <span
+          style={{
+            display: "block",
+            font: token("--t-hero"),
+            color: token("--text-primary"),
+            textShadow: token("--text-outline-media"),
+          }}
+        >
+          {dreamcaller.name}
+        </span>
+        <span
+          style={{
+            display: "block",
+            marginTop: token("--space-1"),
+            font: token("--t-hero-epithet"),
+            color: token("--text-primary"),
+            textShadow: token("--text-outline-media"),
+          }}
+        >
+          {dreamcaller.title}
+        </span>
+      </h1>
+    </div>
+  );
+}
+
+/** The screen's uppercase eyebrow, painted on the portrait at top-center. It
+ * does not swipe on mobile and spans the full width on desktop. */
+function ScreenHeader() {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: token("--safe-top"),
+        left: 0,
+        right: 0,
+        zIndex: 6,
+        padding: `${token("--space-5")} ${token("--gutter")} 0`,
+        textAlign: "center",
+        pointerEvents: "none",
+        font: token("--t-eyebrow"),
+        letterSpacing: token("--tracking-eyebrow"),
+        textTransform: "uppercase",
+        color: token("--accent-bright"),
+        // The eyebrow sits directly on the portrait too, so it earns the same
+        // on-media outline dilation as the name rather than a soft shadow.
+        textShadow: token("--text-outline-media"),
+      }}
+    >
+      Choose Your Dreamcaller
+    </div>
+  );
+}
+
 /** A circular edge chevron that pages the carousel without swiping. */
 function EdgeChevron({
   dir,
@@ -240,7 +455,8 @@ function EdgeChevron({
   );
 }
 
-/** One Dreamcaller page: portrait + title + console. */
+/** One mobile carousel page: portrait + title + console, sized to a fraction of
+ * the swipe track and animated in as it becomes active. */
 function DreamcallerPage({
   dreamcaller,
   active,
@@ -267,45 +483,7 @@ function DreamcallerPage({
       <FullBleedPortrait dreamcaller={dreamcaller} />
       <Motes on={active} tint="warm" zIndex={1} />
 
-      {/* Title */}
-      <div
-        style={{
-          position: "absolute",
-          top: token("--safe-top"),
-          left: 0,
-          right: 0,
-          padding: `${token("--space-10")} ${token("--gutter")} 0`,
-          zIndex: 4,
-          textAlign: "center",
-        }}
-      >
-        {/* The name sits directly on the portrait, so it earns legibility from
-            the on-media outline dilation (--text-outline-media) rather than a
-            plate — the name on its own line, the epithet smaller beneath it. */}
-        <h1 style={{ margin: 0 }}>
-          <span
-            style={{
-              display: "block",
-              font: token("--t-hero"),
-              color: token("--text-primary"),
-              textShadow: token("--text-outline-media"),
-            }}
-          >
-            {dreamcaller.name}
-          </span>
-          <span
-            style={{
-              display: "block",
-              marginTop: token("--space-1"),
-              font: token("--t-hero-epithet"),
-              color: token("--text-primary"),
-              textShadow: token("--text-outline-media"),
-            }}
-          >
-            {dreamcaller.title}
-          </span>
-        </h1>
-      </div>
+      <DreamcallerTitle dreamcaller={dreamcaller} />
 
       {/* Console */}
       <div
@@ -327,64 +505,20 @@ function DreamcallerPage({
           transition: `transform ${token("--dur-base")} ${token("--ease-out")}`,
         }}
       >
-        <GroupPanel>
-          <AbilityReveal text={dreamcaller.renderedText} stageRef={stageRef} />
-
-          <ConsoleDivider />
-
-          <div
-            style={{
-              display: "flex",
-              alignItems: "flex-start",
-              justifyContent: "space-between",
-              gap: token("--space-5"),
-              marginTop: token("--space-3"),
-            }}
-          >
-            {dreamcaller.tides.length > 0 ? (
-              <span data-dreamcaller-tides={dreamcaller.id}>
-                <TideCluster tides={dreamcaller.tides} stageRef={stageRef} />
-              </span>
-            ) : (
-              <span />
-            )}
-            {/* The essence aligns to the tides HEADER row, not the whole
-                cluster. When the tides expand, the pills grow below and the row
-                is top-aligned, so the essence would otherwise sit at the header,
-                already correct. This box carries the collapsed TideCluster
-                header's height (a 24px disc in space-2 padding) and centers the
-                chip within it, keeping "200" level with the "Tides" label in
-                both the collapsed and expanded states. */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                minHeight: `calc(24px + 2 * ${token("--space-2")})`,
-              }}
-            >
-              <EssenceReveal dreamcaller={dreamcaller} stageRef={stageRef} />
-            </div>
-          </div>
-
-          <div
-            data-choose-dreamcaller={dreamcaller.id}
-            style={{ marginTop: token("--space-6") }}
-          >
-            <Button size="lg" full label="Choose" onClick={onChoose} />
-          </div>
-        </GroupPanel>
+        <DreamcallerConsole
+          dreamcaller={dreamcaller}
+          stageRef={stageRef}
+          layout="mobile"
+          onChoose={onChoose}
+        />
       </div>
     </div>
   );
 }
 
-/**
- * The Tango Dreamcaller-selection carousel: a full-bleed swipe carousel of the
- * offered Dreamcallers. Pure and props-driven — it renders {@link
- * QuestStartScreenProps.dreamcallers} and calls {@link
- * QuestStartScreenProps.onPick} with the chosen Dreamcaller's id.
- */
-export function QuestStartScreen({ dreamcallers, onPick }: QuestStartScreenProps) {
+/** The mobile Dreamcaller-selection carousel: a full-bleed swipe carousel of
+ * the offered Dreamcallers, one per page. */
+function CarouselSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
   const stageRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(0);
   const [dx, setDx] = useState(0);
@@ -429,28 +563,7 @@ export function QuestStartScreen({ dreamcallers, onPick }: QuestStartScreenProps
       onPointerUp={onPointerUp}
       onPointerCancel={onPointerUp}
     >
-      {/* Screen header — does not swipe. */}
-      <div
-        style={{
-          position: "absolute",
-          top: token("--safe-top"),
-          left: 0,
-          right: 0,
-          zIndex: 6,
-          padding: `${token("--space-5")} ${token("--gutter")} 0`,
-          textAlign: "center",
-          pointerEvents: "none",
-          font: token("--t-eyebrow"),
-          letterSpacing: token("--tracking-eyebrow"),
-          textTransform: "uppercase",
-          color: token("--accent-bright"),
-          // The eyebrow sits directly on the portrait too, so it earns the same
-          // on-media outline dilation as the name rather than a soft shadow.
-          textShadow: token("--text-outline-media"),
-        }}
-      >
-        Choose Your Dreamcaller
-      </div>
+      <ScreenHeader />
 
       {/* Track */}
       <div
@@ -487,4 +600,104 @@ export function QuestStartScreen({ dreamcallers, onPick }: QuestStartScreenProps
       )}
     </div>
   );
+}
+
+/** One desktop column: a full-bleed standalone portrait — no frame, no
+ * container — with its title on the art and its console anchored at the bottom.
+ * The column div is layout-only (an equal flex slice); the portrait is the
+ * media element and stands alone. */
+function DreamcallerColumn({
+  dreamcaller,
+  onChoose,
+  stageRef,
+}: {
+  dreamcaller: DreamcallerOfferView;
+  onChoose: () => void;
+  stageRef: React.RefObject<HTMLElement | null>;
+}) {
+  return (
+    <div
+      data-dreamcaller-column={dreamcaller.id}
+      style={{
+        position: "relative",
+        flex: "1 1 0",
+        minWidth: 0,
+        height: "100%",
+        overflow: "hidden",
+      }}
+    >
+      <FullBleedPortrait dreamcaller={dreamcaller} />
+      <Motes on tint="warm" zIndex={1} />
+
+      <DreamcallerTitle dreamcaller={dreamcaller} />
+
+      {/* Console — bottom-anchored so the three consoles align along their base
+          and grow upward with their ability text. */}
+      <div
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          zIndex: 4,
+          padding: `0 ${token("--gutter")} calc(${token("--safe-bottom")} + ${token("--space-5")})`,
+        }}
+      >
+        <DreamcallerConsole
+          dreamcaller={dreamcaller}
+          stageRef={stageRef}
+          layout="desktop"
+          onChoose={onChoose}
+        />
+      </div>
+    </div>
+  );
+}
+
+/** The desktop Dreamcaller-selection layout: all offered Dreamcallers side by
+ * side as full-bleed standalone portraits (no carousel), each with its own
+ * console. */
+function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
+  const stageRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <div
+      ref={stageRef}
+      className="tango"
+      style={{
+        position: "relative",
+        minHeight: "100vh",
+        height: "100dvh",
+        overflow: "hidden",
+        background: token("--bg-app"),
+      }}
+    >
+      <ScreenHeader />
+
+      <div style={{ position: "absolute", inset: 0, display: "flex" }}>
+        {dreamcallers.map((dreamcaller) => (
+          <DreamcallerColumn
+            key={dreamcaller.id}
+            dreamcaller={dreamcaller}
+            onChoose={() => {
+              onPick(dreamcaller.id);
+            }}
+            stageRef={stageRef}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The Tango Dreamcaller-selection screen. Pure and props-driven — it renders
+ * {@link QuestStartScreenProps.dreamcallers} and calls {@link
+ * QuestStartScreenProps.onPick} with the chosen Dreamcaller's id. The layout
+ * follows the viewport: a swipe carousel on mobile, a side-by-side triptych of
+ * standalone portraits on desktop.
+ */
+export function QuestStartScreen(props: QuestStartScreenProps) {
+  const isDesktop = useIsDesktop();
+  return isDesktop ? <DesktopSelect {...props} /> : <CarouselSelect {...props} />;
 }

@@ -35,22 +35,27 @@ const OFFERED: DreamcallerOfferView[] = [
   },
 ];
 
+/** Stub matchMedia so the desktop breakpoint (`min-width`) reports `desktop`,
+ * driving the screen onto its side-by-side layout. */
+function stubViewport(desktop: boolean): void {
+  window.matchMedia = ((query: string) => ({
+    matches: query.includes("min-width") ? desktop : false,
+    media: query,
+    onchange: null,
+    addEventListener: () => undefined,
+    removeEventListener: () => undefined,
+    addListener: () => undefined,
+    removeListener: () => undefined,
+    dispatchEvent: () => false,
+  })) as unknown as typeof window.matchMedia;
+}
+
 beforeEach(() => {
   (
     globalThis as typeof globalThis & { IS_REACT_ACT_ENVIRONMENT?: boolean }
   ).IS_REACT_ACT_ENVIRONMENT = true;
-  if (typeof window.matchMedia !== "function") {
-    window.matchMedia = ((query: string) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addEventListener: () => undefined,
-      removeEventListener: () => undefined,
-      addListener: () => undefined,
-      removeListener: () => undefined,
-      dispatchEvent: () => false,
-    })) as unknown as typeof window.matchMedia;
-  }
+  // Default to the mobile carousel; desktop tests opt in via stubViewport(true).
+  stubViewport(false);
 });
 
 afterEach(() => {
@@ -131,6 +136,63 @@ describe("Tango QuestStartScreen (carousel)", () => {
     });
 
     expect(onPick).toHaveBeenCalledWith("caller-2");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+});
+
+describe("Tango QuestStartScreen (desktop)", () => {
+  beforeEach(() => {
+    stubViewport(true);
+  });
+
+  it("renders every Dreamcaller as a standalone column, not a carousel", () => {
+    const { container, root } = mount(
+      <QuestStartScreen dreamcallers={OFFERED} onPick={vi.fn()} />,
+    );
+
+    expect(container.textContent).toContain("Choose Your Dreamcaller");
+    // No carousel pages on desktop.
+    expect(container.querySelector("[data-dreamcaller-page]")).toBeNull();
+    for (const dc of OFFERED) {
+      expect(
+        container.querySelector(`[data-dreamcaller-column="${dc.id}"]`),
+      ).not.toBeNull();
+      expect(
+        container.querySelector(`[data-choose-dreamcaller="${dc.id}"]`),
+      ).not.toBeNull();
+      const essence = container.querySelector(
+        `[data-starting-essence-value="${dc.id}"]`,
+      );
+      expect(essence?.textContent).toContain(String(dc.startingEssence));
+    }
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("shows full tide pills (never collapsed discs) for tided Dreamcallers", () => {
+    const { container, root } = mount(
+      <QuestStartScreen dreamcallers={OFFERED} onPick={vi.fn()} />,
+    );
+
+    // caller-1 has no tides → no tides node.
+    expect(
+      container.querySelector(`[data-dreamcaller-tides="caller-1"]`),
+    ).toBeNull();
+
+    // caller-2 has two tides → two full pills, and no collapsed cluster discs.
+    const tides = container.querySelector(
+      `[data-dreamcaller-tides="caller-2"]`,
+    );
+    expect(tides).not.toBeNull();
+    expect(tides?.querySelectorAll("[data-tide-disc]")).toHaveLength(0);
+    expect(
+      tides?.querySelectorAll('[aria-label^="Tide:"]'),
+    ).toHaveLength(2);
 
     act(() => {
       root.unmount();
