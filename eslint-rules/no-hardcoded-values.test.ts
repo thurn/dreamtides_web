@@ -165,5 +165,12 @@ ruleTester.run("no-hardcoded-values", rule, {
       output: `const el = <circle fill="var(${KNOWN_TOKEN})" />;`,
       errors: [{ messageId: "hardcodedColorWithToken" }],
     },
+    {
+      name: "the adapter/builder layer in src/screens/tango is covered too",
+      filename: "src/screens/tango/foo-view-model.ts",
+      code: `const s = { color: "${UNKNOWN_HEX}" };`,
+      output: null,
+      errors: [{ messageId: "hardcodedColorNoToken" }],
+    },
   ],
 });

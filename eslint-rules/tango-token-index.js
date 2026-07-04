@@ -136,6 +136,31 @@ function buildIndex() {
 
 const COLOR_TOKEN_INDEX = buildIndex();
 
+function buildNameSet() {
+  try {
+    const here = dirname(fileURLToPath(import.meta.url));
+    const css = readFileSync(
+      resolve(here, "../src/tango/primitives/tango-tokens.css"),
+      "utf8",
+    );
+    return new Set(parseDeclarations(css).keys());
+  } catch {
+    return new Set();
+  }
+}
+
+const TOKEN_NAME_SET = buildNameSet();
+
+/**
+ * Every custom-property name declared in tango-tokens.css (semantic, bridge,
+ * and primitive alike). `valid-token-references` checks literal `var(--x)`
+ * strings against this set; an empty set (stylesheet unreadable) makes that
+ * rule degrade to a no-op rather than flag everything.
+ */
+export function knownTokenNames() {
+  return TOKEN_NAME_SET;
+}
+
 /**
  * The semantic token whose value equals `literal`, or null if none matches.
  * Primitive/bridge tokens are only ever returned when no cleaner role token

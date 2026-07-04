@@ -89,5 +89,11 @@ ruleTester.run("no-primitive-tokens", rule, {
       code: "const s = { boxShadow: `0 0 0 1px var(--primitive-violet-300)` };",
       errors: [{ messageId: "primitiveInString" }],
     },
+    {
+      name: "the adapter/builder layer in src/screens/tango is covered too",
+      filename: "src/screens/tango/foo-view-model.ts",
+      code: `const s = { color: token("--primitive-violet-400") };`,
+      errors: [{ messageId: "primitiveToken" }],
+    },
   ],
 });

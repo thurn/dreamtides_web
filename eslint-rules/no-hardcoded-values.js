@@ -22,8 +22,9 @@ import { colorTokenFor } from "./tango-token-index.js";
  *     mockups intentionally show components against arbitrary sample colors and
  *     backdrops, and the doc chrome is tooling, not product UI.
  * Everywhere else under `src/tango/` — above all `src/tango/screens/`, the
- * migrated product screens — a hardcoded color is an error. Files outside
- * `src/tango/` are a no-op.
+ * migrated product screens — a hardcoded color is an error, and so is the
+ * adapter/builder layer in `src/screens/tango/` (a color minted in an adapter
+ * or view-model flows straight into the screen). All other files are a no-op.
  *
  * Only NUMERIC color literals (hex / `rgb(a)` / `hsl(a)`) are flagged: they are
  * unambiguous and each maps to a token. Named colors (`red`) and non-color
@@ -76,10 +77,10 @@ const rule = {
     const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
     const fileRelative = toRepoRelativePosix(rawFilename, cwd);
 
-    if (!fileRelative.startsWith("src/tango/")) {
-      return {};
-    }
-    if (EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix))) {
+    const inTango =
+      fileRelative.startsWith("src/tango/") &&
+      !EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix));
+    if (!inTango && !fileRelative.startsWith("src/screens/tango/")) {
       return {};
     }
 

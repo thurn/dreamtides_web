@@ -6,6 +6,10 @@ import tangoNoEscapeHatchProps from "./eslint-rules/no-escape-hatch-props.js";
 import tangoNoHardcodedValues from "./eslint-rules/no-hardcoded-values.js";
 import tangoNoRawInteractiveElements from "./eslint-rules/no-raw-interactive-elements.js";
 import tangoThinAdapters from "./eslint-rules/thin-adapters.js";
+import tangoValidTokenReferences from "./eslint-rules/valid-token-references.js";
+import tangoNoComposedTypeVoice from "./eslint-rules/no-composed-type-voice.js";
+import tangoNoClassnameInProductUi from "./eslint-rules/no-classname-in-product-ui.js";
+import tangoScreenFileTaxonomy from "./eslint-rules/screen-file-taxonomy.js";
 
 // One shared plugin object: flat config rejects two config blocks that bind the
 // same plugin name to different objects, and the tango rules apply to more than
@@ -18,6 +22,10 @@ const tangoPlugin = {
     "no-hardcoded-values": tangoNoHardcodedValues,
     "no-raw-interactive-elements": tangoNoRawInteractiveElements,
     "thin-adapters": tangoThinAdapters,
+    "valid-token-references": tangoValidTokenReferences,
+    "no-composed-type-voice": tangoNoComposedTypeVoice,
+    "no-classname-in-product-ui": tangoNoClassnameInProductUi,
+    "screen-file-taxonomy": tangoScreenFileTaxonomy,
   },
 };
 
@@ -47,7 +55,11 @@ export default tseslint.config(
     },
   },
   {
-    files: ["src/tango/**/*.{ts,tsx}"],
+    // The design-system tier plus the adapter/builder layer in
+    // src/screens/tango/. Each rule scopes itself further by path (e.g. the
+    // visual rules exempt primitives/components/docs; screen-file-taxonomy
+    // only acts on src/screens/tango/), so the block can bind them broadly.
+    files: ["src/tango/**/*.{ts,tsx}", "src/screens/tango/**/*.{ts,tsx}"],
     plugins: { tango: tangoPlugin },
     rules: {
       "tango/no-external-ui-imports": "error",
@@ -55,6 +67,10 @@ export default tseslint.config(
       "tango/no-escape-hatch-props": "error",
       "tango/no-hardcoded-values": "error",
       "tango/no-raw-interactive-elements": "error",
+      "tango/valid-token-references": "error",
+      "tango/no-composed-type-voice": "error",
+      "tango/no-classname-in-product-ui": "error",
+      "tango/screen-file-taxonomy": "error",
     },
   },
   {
@@ -62,7 +78,7 @@ export default tseslint.config(
     // callback wiring, one screen render. Mapping logic belongs in the pure
     // *-view-model module; `thin-adapters` enforces the shape and `max-lines`
     // is the backstop against logic hiding inside the component body.
-    files: ["src/screens/tango/*Adapter.tsx"],
+    files: ["src/screens/tango/**/*Adapter.tsx"],
     plugins: { tango: tangoPlugin },
     rules: {
       "tango/thin-adapters": "error",
@@ -76,7 +92,7 @@ export default tseslint.config(
     // View-model builders are pure functions from domain data to a screen's
     // view types: unit-testable with plain fixtures, no React, no live state.
     // The adapter acquires state and passes it in as arguments.
-    files: ["src/screens/tango/*-view-model.ts"],
+    files: ["src/screens/tango/**/*-view-model.ts"],
     rules: {
       "no-restricted-imports": [
         "error",
@@ -93,6 +109,16 @@ export default tseslint.config(
                 "View-model builders take domain data as arguments; acquiring live quest state is the adapter's job.",
             },
           ],
+        },
+      ],
+      // no-restricted-imports sees only static imports; close the dynamic
+      // channel too. A pure, synchronous builder never needs import().
+      "no-restricted-syntax": [
+        "error",
+        {
+          selector: "ImportExpression",
+          message:
+            "View-model builders are pure, synchronous functions — no dynamic import(). Anything a builder needs arrives as an argument or a static import.",
         },
       ],
     },

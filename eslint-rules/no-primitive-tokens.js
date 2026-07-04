@@ -16,8 +16,9 @@ import path from "node:path";
  *   - `src/tango/primitives/` — where the semantic layer is defined.
  *   - `src/tango/components/` — leaf components that occasionally need a raw
  *     ramp step with no semantic role (e.g. a specific tide-tone).
- * Everywhere else — doc pages, demos, mockups, any future product screen —
- * referencing a primitive is an error. No exceptions.
+ * Everywhere else — doc pages, demos, mockups, product screens, and the
+ * adapter/builder layer in `src/screens/tango/` — referencing a primitive is
+ * an error. No exceptions.
  *
  * To avoid false positives on prose or on code that merely INSPECTS token
  * names (e.g. `name.startsWith("--primitive-")`), the rule flags only the two
@@ -65,11 +66,12 @@ const rule = {
     const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
     const fileRelative = toRepoRelativePosix(rawFilename, cwd);
 
-    // Only act on files under src/tango/, and never on the two allowed dirs.
-    if (!fileRelative.startsWith("src/tango/")) {
-      return {};
-    }
-    if (ALLOWED_PREFIXES.some((prefix) => fileRelative.startsWith(prefix))) {
+    // Act on files under src/tango/ (never the two allowed dirs) and on the
+    // adapter/builder layer in src/screens/tango/.
+    const inTango =
+      fileRelative.startsWith("src/tango/") &&
+      !ALLOWED_PREFIXES.some((prefix) => fileRelative.startsWith(prefix));
+    if (!inTango && !fileRelative.startsWith("src/screens/tango/")) {
       return {};
     }
 

@@ -78,9 +78,24 @@ ruleTester.run("no-raw-interactive-elements", rule, {
       code: `const el = <select><option /></select>;`,
     },
     {
-      name: "files outside src/tango are inert",
+      name: "files outside the product tier are inert",
       filename: "src/screens/LegacyScreen.tsx",
       code: `const el = <button />;`,
+    },
+    {
+      name: "non-activating pointer handlers (hover, pan/zoom) are fine",
+      filename: SCREEN,
+      code: `const el = <div onPointerEnter={f} onPointerMove={g} onPointerLeave={h} />;`,
+    },
+    {
+      name: "a non-interactive role is fine",
+      filename: SCREEN,
+      code: `const el = <div role="list" />;`,
+    },
+    {
+      name: "activation handlers on components are the component's business",
+      filename: SCREEN,
+      code: `const el = <Pressable onClick={f} />;`,
     },
   ],
   invalid: [
@@ -107,6 +122,30 @@ ruleTester.run("no-raw-interactive-elements", rule, {
       filename: SCREEN,
       code: `const el = <a href="/next">Next</a>;`,
       errors: [{ messageId: "rawAnchor" }],
+    },
+    {
+      name: "a hand-rolled button: <div onClick>",
+      filename: SCREEN,
+      code: `const el = <div onClick={f}>Go</div>;`,
+      errors: [{ messageId: "handRolledButton" }],
+    },
+    {
+      name: "a hand-rolled button: interactive role",
+      filename: SCREEN,
+      code: `const el = <span role="button">Go</span>;`,
+      errors: [{ messageId: "handRolledButton" }],
+    },
+    {
+      name: "a hand-rolled button: tabIndex on a plain element",
+      filename: SCREEN,
+      code: `const el = <div tabIndex={0}>Go</div>;`,
+      errors: [{ messageId: "handRolledButton" }],
+    },
+    {
+      name: "the adapter layer is covered too",
+      filename: "src/screens/tango/HomeScreenAdapter.tsx",
+      code: `const el = <button />;`,
+      errors: [{ messageId: "rawInteractive" }],
     },
   ],
 });

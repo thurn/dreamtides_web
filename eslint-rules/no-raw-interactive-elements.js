@@ -20,8 +20,17 @@ import path from "node:path";
  *     genuinely needs native `<input>`/`<select>`, and its chrome uses plain
  *     `<button>`s.
  * Everywhere else under `src/tango/` — above all `src/tango/screens/` — a raw
- * interactive element is an error: compose `Button` / `SegmentedControl` /
- * `Pressable` instead. Files outside `src/tango/` are a no-op.
+ * interactive element is an error, and so is the adapter/builder layer in
+ * `src/screens/tango/`: compose `Button` / `SegmentedControl` / `Pressable`
+ * instead. All other files are a no-op.
+ *
+ * The rule also catches the hand-rolled button: a non-interactive intrinsic
+ * element (`div`, `span`, …) given `onClick`/`onDoubleClick`, an interactive
+ * `role`, or a `tabIndex`. That element re-implements Pressable minus its
+ * press mechanics, focus handling, and reduced-motion behavior — the most
+ * common way an interactive surface drifts out of the system. (Non-activating
+ * pointer handlers — `onPointerEnter`, `onPointerMove`, drag/pan surfaces —
+ * are deliberately not flagged.)
  */
 
 /** Repo-relative POSIX dir prefixes that may render native interactive tags. */
@@ -63,6 +72,51 @@ function hasHrefAttribute(node) {
   );
 }
 
+/** Activation handlers that make a plain element a de-facto button. */
+const ACTIVATION_ATTRIBUTES = new Set(["onClick", "onDoubleClick"]);
+
+/** ARIA roles that declare an element interactive. */
+const INTERACTIVE_ROLES = new Set([
+  "button",
+  "link",
+  "tab",
+  "menuitem",
+  "option",
+  "checkbox",
+  "radio",
+  "switch",
+  "slider",
+]);
+
+/**
+ * The attribute that marks this intrinsic element as a hand-rolled control
+ * (an activation handler, an interactive role, or tabIndex), or null when the
+ * element carries none.
+ */
+function handRolledButtonMarker(node) {
+  for (const attr of node.attributes ?? []) {
+    if (attr.type !== "JSXAttribute" || attr.name?.type !== "JSXIdentifier") {
+      continue;
+    }
+    const name = attr.name.name;
+    if (ACTIVATION_ATTRIBUTES.has(name)) {
+      return name;
+    }
+    if (name === "tabIndex") {
+      return name;
+    }
+    if (
+      name === "role" &&
+      attr.value?.type === "Literal" &&
+      typeof attr.value.value === "string" &&
+      INTERACTIVE_ROLES.has(attr.value.value)
+    ) {
+      return `role="${attr.value.value}"`;
+    }
+  }
+  return null;
+}
+
 /** @type {import("eslint").Rule.RuleModule} */
 const rule = {
   meta: {
@@ -77,6 +131,8 @@ const rule = {
         "`<{{tag}}>` is a raw interactive element. Compose {{use}} instead — the design system owns interactive surfaces so product UI doesn't re-implement them.",
       rawAnchor:
         "`<a href>` is a raw link/button. Use the Pressable primitive (or a Tango button) so press mechanics and styling stay in the design system.",
+      handRolledButton:
+        "`<{{tag}} {{marker}}>` hand-rolls an interactive control. Use the Pressable primitive (or a Tango button) instead — it owns press feedback, keyboard focus, and reduced-motion behavior that a bare element silently lacks.",
     },
   },
 
@@ -88,10 +144,10 @@ const rule = {
     const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
     const fileRelative = toRepoRelativePosix(rawFilename, cwd);
 
-    if (!fileRelative.startsWith("src/tango/")) {
-      return {};
-    }
-    if (EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix))) {
+    const inTango =
+      fileRelative.startsWith("src/tango/") &&
+      !EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix));
+    if (!inTango && !fileRelative.startsWith("src/screens/tango/")) {
       return {};
     }
 
@@ -111,6 +167,15 @@ const rule = {
             node: node.name,
             messageId: "rawInteractive",
             data: { tag, use },
+          });
+          return;
+        }
+        const marker = handRolledButtonMarker(node);
+        if (marker !== null) {
+          context.report({
+            node: node.name,
+            messageId: "handRolledButton",
+            data: { tag, marker },
           });
         }
       },

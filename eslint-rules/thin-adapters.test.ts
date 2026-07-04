@@ -119,6 +119,33 @@ export function FooScreenAdapter() {
       filename: "src/components/FooAdapter.tsx",
       code: `export const helper = () => 1; export function FooAdapter() { return null; }`,
     },
+    {
+      name: "wiring inputs (state/data/types/runtime/logging) are importable",
+      filename: ADAPTER,
+      code: `
+import { useQuest } from "../../state/quest-context";
+import { selectOffer } from "../../data/offer-selection";
+import type { Content } from "../../types/content";
+import { getRuntimeConfig } from "../../runtime/runtime-config";
+import { logEvent } from "../../logging";
+import { FooScreen } from "../../tango/screens/FooScreen";
+export function FooScreenAdapter() {
+  return <FooScreen />;
+}
+`,
+    },
+    {
+      name: "returning null while state is unavailable is fine",
+      filename: ADAPTER,
+      code: `
+import { FooScreen } from "../../tango/screens/FooScreen";
+export function FooScreenAdapter() {
+  const ready = useReady();
+  if (!ready) return null;
+  return <FooScreen />;
+}
+`,
+    },
   ],
   invalid: [
     {
@@ -202,6 +229,53 @@ export function FooScreenBridge() {
 }
 `,
       errors: [{ messageId: "missingComponent" }, { messageId: "extraExport" }],
+    },
+    {
+      name: "importing legacy UI (src/components/) is not wiring",
+      filename: ADAPTER,
+      code: `
+import { HUD } from "../../components/HUD";
+import { FooScreen } from "../../tango/screens/FooScreen";
+export function FooScreenAdapter() {
+  return <FooScreen />;
+}
+`,
+      errors: [{ messageId: "disallowedImport" }],
+    },
+    {
+      name: "importing a legacy screen (src/screens/ outside tango/) is not wiring",
+      filename: ADAPTER,
+      code: `
+import { LegacyFooScreen } from "../FooScreen";
+import { FooScreen } from "../../tango/screens/FooScreen";
+export function FooScreenAdapter() {
+  return <FooScreen />;
+}
+`,
+      errors: [{ messageId: "disallowedImport" }],
+    },
+    {
+      name: "importing an unlisted feature module is not wiring",
+      filename: ADAPTER,
+      code: `
+import { journey } from "../../journeys/journey";
+import { FooScreen } from "../../tango/screens/FooScreen";
+export function FooScreenAdapter() {
+  return <FooScreen />;
+}
+`,
+      errors: [{ messageId: "disallowedImport" }],
+    },
+    {
+      name: "rendering an intrinsic element (layout/chrome belongs in the screen)",
+      filename: ADAPTER,
+      code: `
+import { FooScreen } from "../../tango/screens/FooScreen";
+export function FooScreenAdapter() {
+  return <div className="wrap"><FooScreen /></div>;
+}
+`,
+      errors: [{ messageId: "intrinsicElement" }],
     },
   ],
 });

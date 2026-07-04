@@ -13,24 +13,43 @@ import path from "node:path";
  * moment an adapter grows a helper worth testing, that helper belongs in the
  * view-model module instead. This rule makes that convention structural:
  *
- *   1. IMPORTS. An adapter may import from `src/tango/` only under
- *      `src/tango/screens/` — it mounts a screen, never composes Tango
- *      components or primitives itself (composition is the screen's job; the
- *      builder module owns any component *types* the view-model references).
+ *   1. IMPORTS. Relative imports are fail-closed against {@link ALLOWED_IMPORT_PREFIXES}:
+ *      the wiring inputs (state, data, types, runtime, logging), the sibling
+ *      view-model module, and — within `src/tango/` — only `src/tango/screens/`.
+ *      An adapter mounts a screen; it never composes Tango components or
+ *      primitives itself (composition is the screen's job; the builder module
+ *      owns any component *types* the view-model references), and it never
+ *      wraps the screen in legacy UI from `src/components/` or `src/screens/`.
  *   2. SHAPE. The only things allowed at module top level are imports, the
  *      single exported `*Adapter` function component, primitive-literal
  *      `const`s, and local (non-exported) type declarations. Helper functions,
  *      mapping tables, and any other exported binding (including exported
  *      types — view types belong to the screen, builder types to the builder)
  *      are errors pointing at the view-model module.
+ *   3. RENDERING. An adapter renders the screen component (or null while
+ *      state is unavailable) — never intrinsic elements. A `<div>` in an
+ *      adapter is layout or chrome, and both belong in the Tango screen.
  *
  * SCOPE. Fires only on `src/screens/tango/` files whose basename ends in
  * `Adapter.tsx`. Everything else (the registry, view-model modules, tests,
  * legacy screens) is a no-op.
  */
 
-/** The only `src/tango/` subtree an adapter may import from. */
-const ALLOWED_TANGO_PREFIX = "src/tango/screens/";
+/**
+ * The only places an adapter's relative imports may resolve to: the wiring
+ * inputs, its own layer (the sibling view-model module), and the Tango screen
+ * it mounts. Fail-closed — anything else (legacy UI in `src/components/` or
+ * `src/screens/`, Tango components/primitives, feature modules) is an error.
+ */
+const ALLOWED_IMPORT_PREFIXES = [
+  "src/state/",
+  "src/data/",
+  "src/types/",
+  "src/runtime/",
+  "src/logging",
+  "src/screens/tango/",
+  "src/tango/screens/",
+];
 
 /** Convert an OS path to a repo-relative POSIX path against ESLint's cwd. */
 export function toRepoRelativePosix(absolutePath, cwd) {
@@ -133,6 +152,10 @@ const rule = {
         "Adapters use a single named export (the *Adapter component) so the registry imports them by name; no default export.",
       missingComponent:
         "An *Adapter.tsx file must export exactly one function component whose name ends in 'Adapter'.",
+      disallowedImport:
+        "Adapters import only their wiring inputs (src/state, src/data, src/types, src/runtime, src/logging), the sibling view-model module, and the Tango screen they mount ('{{source}}' resolves to '{{resolved}}'). Legacy UI and feature modules stay out — an adapter wires, it doesn't compose.",
+      intrinsicElement:
+        "Adapters render exactly the Tango screen component (or null while state is unavailable); a `<{{tag}}>` here is layout or chrome, and both belong in the Tango screen (src/tango/screens/).",
     },
   },
 
@@ -161,13 +184,15 @@ const rule = {
         return;
       }
       const resolved = path.posix.normalize(path.posix.join(fileDir, source));
-      if (
-        resolved.startsWith("src/tango/") &&
-        !resolved.startsWith(ALLOWED_TANGO_PREFIX)
-      ) {
+      const allowed = ALLOWED_IMPORT_PREFIXES.some((prefix) =>
+        resolved.startsWith(prefix),
+      );
+      if (!allowed) {
         context.report({
           node,
-          messageId: "tangoImport",
+          messageId: resolved.startsWith("src/tango/")
+            ? "tangoImport"
+            : "disallowedImport",
           data: { source, resolved },
         });
       }
@@ -222,6 +247,16 @@ const rule = {
       // Dynamic imports can appear anywhere in the file, not just at top level.
       ImportExpression(node) {
         checkImportSource(node.source);
+      },
+      JSXOpeningElement(node) {
+        const name = node.name;
+        if (name?.type === "JSXIdentifier" && /^[a-z]/.test(name.name)) {
+          context.report({
+            node: name,
+            messageId: "intrinsicElement",
+            data: { tag: name.name },
+          });
+        }
       },
     };
   },
