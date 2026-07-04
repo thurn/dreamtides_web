@@ -186,7 +186,16 @@ export function QuestStartScreen() {
                     </p>
                   </div>
                 </div>
+                {/* The portrait fills the space left between the header and
+                    the description/essence rather than dictating its own height
+                    from its width. The panel portrait is a full-width square, so
+                    on wide (xl) cards it is taller than the room available; the
+                    `flex-1 min-h-0 overflow-hidden` frame clips it to the free
+                    space (keeping the character's face, which sits high in the
+                    crop) so the fixed-height card never overflows and the
+                    Starting Essence rows stay aligned across all three cards. */}
                 <div
+                  className="min-h-0 flex-1 overflow-hidden"
                   style={{
                     marginBottom: 14,
                     borderRadius: 18,
@@ -201,7 +210,7 @@ export function QuestStartScreen() {
                 {/* Hovering the description reveals the definitions for any
                     glossary terms it uses (e.g. "ephemeral"), matching the
                     term-definition panel shown beside cards. */}
-                <div className="flex flex-1 flex-col justify-center">
+                <div className="flex flex-col justify-center">
                   <HoverPopover
                     triggerAs="div"
                     placement="top"
