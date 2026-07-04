@@ -218,6 +218,21 @@ The design's own `.d.ts` files already carry rich JSDoc (see the prop surfaces
 for `Button`, `InfoCard`, `TidePill`, `Motes`), so the Tango `.tsx` ports carry
 the same doc comments and the tables come out populated.
 
+### The agent-facing reference (`.llms/skills/tango/`)
+
+The same sources project into a second, markdown renderer for coding agents:
+`scripts/generate-tango-docs.mjs` (`npm run tango-docs`, wired into
+`regenerate-assets.sh` right after `tango-metadata`) statically extracts each
+registry entry's prose (blurb, callout, usage snippets — the demo files keep
+these as plain string literals so no module execution is needed) and joins it
+with the docgen props to write one reference file per component to
+`.llms/skills/tango/components/<id>.md`, plus a component index spliced into
+`.llms/skills/tango/SKILL.md` between its GENERATED COMPONENT INDEX markers.
+The generator sweeps stale `.md` files from the output directory, so a renamed
+or unregistered component's reference disappears with it. SKILL.md itself is
+hand-authored (design philosophy, customization rules, pointers); everything
+factual about a component flows from the generator.
+
 ---
 
 ## 6. Page structure

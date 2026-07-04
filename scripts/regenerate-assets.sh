@@ -20,9 +20,10 @@
 #    6. setup-assets         copy the fresh artifacts into public/
 #    7. generate-tango-tokens    src/tango/primitives/tokens.ts
 #    8. generate-tango-metadata  src/tango/metadata/tango-metadata.json
-#    9. check-tides4          confirm the tides4 freshness gate passes
-#   10. check-tides5          confirm the tides5 freshness gate passes
-#   11. check-tide-annotations  confirm each tide label matches its deck contents
+#    9. generate-tango-docs   .llms/skills/tango/ component reference + index
+#   10. check-tides4          confirm the tides4 freshness gate passes
+#   11. check-tides5          confirm the tides5 freshness gate passes
+#   12. check-tide-annotations  confirm each tide label matches its deck contents
 #
 # Scope is the actively-maintained, freshness-gated artifacts. The legacy tides /
 # tides2 / tides3 bakes and the upstream MTG draft-record import are intentionally
@@ -47,41 +48,44 @@ if [[ ! -d node_modules ]]; then
   npm install
 fi
 
-step "1/11  setup-assets — build public/ inputs from source"
+step "1/12  setup-assets — build public/ inputs from source"
 node scripts/setup-assets.mjs
 
-step "2/11  bake-merchant-corpus — data/merchant_corpus.json"
+step "2/12  bake-merchant-corpus — data/merchant_corpus.json"
 node scripts/bake-merchant-corpus.mjs
 
-step "3/11  bake-affinity-corpus — data/affinity_corpus.jsonc"
+step "3/12  bake-affinity-corpus — data/affinity_corpus.jsonc"
 node scripts/bake-affinity-corpus.mjs
 
-step "4/11  bake-tides4 — data/tides4.jsonc + markdown"
+step "4/12  bake-tides4 — data/tides4.jsonc + markdown"
 node scripts/bake-tides4.mjs
 
-step "5/11  bake-tides5 — data/tides5.jsonc + markdown"
+step "5/12  bake-tides5 — data/tides5.jsonc + markdown"
 node scripts/bake-tides5.mjs
 
-step "6/11  setup-assets — copy fresh artifacts into public/"
+step "6/12  setup-assets — copy fresh artifacts into public/"
 node scripts/setup-assets.mjs
 
-step "7/11  generate-tango-tokens — src/tango/primitives/tokens.ts"
+step "7/12  generate-tango-tokens — src/tango/primitives/tokens.ts"
 node scripts/generate-tango-tokens.mjs
 
-step "8/11  generate-tango-metadata — src/tango/metadata/tango-metadata.json"
+step "8/12  generate-tango-metadata — src/tango/metadata/tango-metadata.json"
 node scripts/generate-tango-metadata.mjs
 
-step "9/11  check-tides4 — verify the freshness gate"
+step "9/12  generate-tango-docs — .llms/skills/tango component reference"
+node scripts/generate-tango-docs.mjs
+
+step "10/12  check-tides4 — verify the freshness gate"
 node scripts/check-tides4.mjs
 
-step "10/11  check-tides5 — verify the freshness gate"
+step "11/12  check-tides5 — verify the freshness gate"
 node scripts/check-tides5.mjs
 
-step "11/11  check-tide-annotations — verify tide labels match their decks"
+step "12/12  check-tide-annotations — verify tide labels match their decks"
 node scripts/check-tide-annotations.mjs
 
 step "Done — git-tracked files changed by this run"
-git status --short -- data docs src/tango/primitives/tokens.ts src/tango/metadata/tango-metadata.json || true
+git status --short -- data docs src/tango/primitives/tokens.ts src/tango/metadata/tango-metadata.json .llms/skills/tango || true
 
 cat <<'EOF'
 

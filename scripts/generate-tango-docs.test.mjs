@@ -1,0 +1,266 @@
+// @vitest-environment node
+//
+// Unit tests for the pure core of the Tango agent-docs generator. Every
+// assertion runs against inline fixture source text rather than the real
+// registry/demo files, so these tests pin the extraction + rendering contract
+// independent of which components exist in the catalog at any given time.
+
+import { describe, expect, it } from "vitest";
+import {
+  INDEX_BEGIN_MARKER,
+  INDEX_END_MARKER,
+  extractDemoDoc,
+  extractRegistryOrder,
+  firstSentence,
+  renderComponentMarkdown,
+  renderIndexSection,
+  spliceGeneratedIndex,
+} from "./generate-tango-docs.mjs";
+
+const REGISTRY_FIXTURE = `
+import type { ComponentType } from "react";
+import { alphaDemo } from "./demos/alpha";
+import { betaDemo, gammaDemo } from "./demos/beta";
+
+export const TANGO_COMPONENTS = [betaDemo, alphaDemo, gammaDemo];
+`;
+
+const DEMO_FIXTURE = `
+import { Widget } from "../../components/Widget";
+import type { TangoComponent } from "../registry";
+
+const localStyle = { padding: \`\${token("--space-4")}\` };
+
+export const widgetDemo: TangoComponent = {
+  id: "widget",
+  title: "Widget",
+  blurb:
+    "A fixture widget. It exists only for tests.",
+  callout: "Prefer a real component.",
+  group: "Primitives",
+  docName: "Widget",
+  Component: Widget,
+  usage: [
+    {
+      label: "Basic",
+      note: "The default form.",
+      code: \`<Widget kind="plain" />\`,
+    },
+    {
+      code: "<Widget kind=\\"fancy\\" />",
+    },
+  ],
+  demo: { defaultArgs: { kind: "plain" } },
+};
+`;
+
+describe("extractRegistryOrder", () => {
+  it("returns entries in TANGO_COMPONENTS order with their import paths", () => {
+    const entries = extractRegistryOrder(REGISTRY_FIXTURE, "fixture.ts");
+    expect(entries).toEqual([
+      { exportName: "betaDemo", modulePath: "./demos/beta" },
+      { exportName: "alphaDemo", modulePath: "./demos/alpha" },
+      { exportName: "gammaDemo", modulePath: "./demos/beta" },
+    ]);
+  });
+
+  it("throws when an entry has no matching import", () => {
+    const source = `export const TANGO_COMPONENTS = [mysteryDemo];`;
+    expect(() => extractRegistryOrder(source, "fixture.ts")).toThrow(
+      /no matching import/,
+    );
+  });
+
+  it("throws when the array is missing", () => {
+    expect(() => extractRegistryOrder("export const x = 1;", "f.ts")).toThrow(
+      /TANGO_COMPONENTS/,
+    );
+  });
+});
+
+describe("extractDemoDoc", () => {
+  it("extracts id, title, blurb, callout, group, docName, and usage", () => {
+    const doc = extractDemoDoc(DEMO_FIXTURE, "fixture.tsx", "widgetDemo");
+    expect(doc).toEqual({
+      id: "widget",
+      title: "Widget",
+      blurb: "A fixture widget. It exists only for tests.",
+      callout: "Prefer a real component.",
+      group: "Primitives",
+      docName: "Widget",
+      usage: [
+        {
+          label: "Basic",
+          note: "The default form.",
+          code: '<Widget kind="plain" />',
+        },
+        { code: '<Widget kind="fancy" />' },
+      ],
+    });
+  });
+
+  it("omits callout when the demo has none", () => {
+    const source = DEMO_FIXTURE.replace(
+      `callout: "Prefer a real component.",\n`,
+      "",
+    );
+    const doc = extractDemoDoc(source, "fixture.tsx", "widgetDemo");
+    expect(doc.callout).toBeUndefined();
+  });
+
+  it("rejects a doc field built from a template substitution", () => {
+    const source = DEMO_FIXTURE.replace(
+      `blurb:\n    "A fixture widget. It exists only for tests.",`,
+      "blurb: `computed ${name}`,",
+    );
+    expect(() => extractDemoDoc(source, "fixture.tsx", "widgetDemo")).toThrow(
+      /substitution/,
+    );
+  });
+
+  it("throws when the named export is missing", () => {
+    expect(() => extractDemoDoc(DEMO_FIXTURE, "fixture.tsx", "nope")).toThrow(
+      /could not find/,
+    );
+  });
+});
+
+describe("renderComponentMarkdown", () => {
+  const doc = extractDemoDoc(DEMO_FIXTURE, "fixture.tsx", "widgetDemo");
+
+  it("renders blurb, callout, props table, and usage snippets", () => {
+    const markdown = renderComponentMarkdown(doc, [
+      {
+        name: "kind",
+        tsType: '"plain" | "fancy"',
+        unionMembers: ["plain", "fancy"],
+        required: true,
+        defaultValue: null,
+        description: "Which widget | treatment to draw.",
+      },
+      {
+        name: "view",
+        tsType: "WidgetView",
+        unionMembers: [],
+        required: false,
+        defaultValue: "undefined",
+        description: "",
+        nested: {
+          name: "WidgetView",
+          fields: [
+            { name: "left", tsType: "number", optional: false, description: "Stage x." },
+          ],
+        },
+      },
+    ]);
+    expect(markdown).toContain("# Widget");
+    expect(markdown).toContain("A fixture widget.");
+    expect(markdown).toContain("> **Guidance:** Prefer a real component.");
+    // Pipes inside type/description cells are escaped so the table row holds.
+    expect(markdown).toContain('`"plain" \\| "fancy"`');
+    expect(markdown).toContain("Which widget \\| treatment to draw.");
+    // Nested model gets its own field table.
+    expect(markdown).toContain("`WidgetView` model");
+    expect(markdown).toContain("| `left` | `number` | no | Stage x. |");
+    // Usage snippets render as fenced tsx blocks.
+    expect(markdown).toContain("### Basic");
+    expect(markdown).toContain('```tsx\n<Widget kind="plain" />\n```');
+    // The unlabeled second snippet gets a positional heading.
+    expect(markdown).toContain("### Variant 2");
+    expect(markdown).toContain("GENERATED by scripts/generate-tango-docs.mjs");
+  });
+
+  it("spells out union members hidden behind a named type alias", () => {
+    const markdown = renderComponentMarkdown(doc, [
+      {
+        name: "size",
+        tsType: "WidgetSize",
+        unionMembers: ["sm", "md"],
+        required: false,
+        defaultValue: "md",
+        description: "",
+      },
+    ]);
+    expect(markdown).toContain('| `WidgetSize` = `"sm" \\| "md"` |');
+  });
+
+  it("does not repeat members when the type already spells the literals", () => {
+    const markdown = renderComponentMarkdown(doc, [
+      {
+        name: "kind",
+        tsType: '"plain" | "fancy"',
+        unionMembers: ["plain", "fancy"],
+        required: true,
+        defaultValue: null,
+        description: "",
+      },
+    ]);
+    expect(markdown).toContain('| `"plain" \\| "fancy"` |');
+    expect(markdown).not.toContain("= `");
+  });
+
+  it("says so when a component takes no props", () => {
+    const markdown = renderComponentMarkdown(doc, []);
+    expect(markdown).toContain("This component takes no props.");
+  });
+
+  it("uses a wider code fence for values containing backticks", () => {
+    const markdown = renderComponentMarkdown(doc, [
+      {
+        name: "color",
+        tsType: "ColorRole | `#${string}`",
+        unionMembers: [],
+        required: true,
+        defaultValue: null,
+        description: "",
+      },
+    ]);
+    expect(markdown).toContain("`` ColorRole \\| `#${string}` ``");
+  });
+});
+
+describe("index rendering and splicing", () => {
+  const docs = [
+    {
+      id: "widget",
+      title: "Widget",
+      group: "Primitives",
+      blurb: "A fixture widget. It exists only for tests.",
+      usage: [],
+    },
+  ];
+
+  it("renders one index row per component with a first-sentence summary", () => {
+    const index = renderIndexSection(docs);
+    expect(index).toContain(
+      "| Widget | Primitives | [components/widget.md](components/widget.md) | A fixture widget. |",
+    );
+  });
+
+  it("replaces only the text between the markers, repeatably", () => {
+    const skill = `# Skill\n\n${INDEX_BEGIN_MARKER}\nold content\n${INDEX_END_MARKER}\n\nAfter.\n`;
+    const once = spliceGeneratedIndex(skill, renderIndexSection(docs));
+    const twice = spliceGeneratedIndex(once, renderIndexSection(docs));
+    expect(once).toBe(twice);
+    expect(once).not.toContain("old content");
+    expect(once).toContain("[components/widget.md](components/widget.md)");
+    expect(once).toContain("# Skill");
+    expect(once).toContain("After.");
+  });
+
+  it("throws when a marker is missing", () => {
+    expect(() => spliceGeneratedIndex("# Skill", "index")).toThrow(/markers/);
+  });
+});
+
+describe("firstSentence", () => {
+  it("cuts at the first sentence boundary and collapses whitespace", () => {
+    expect(firstSentence("One two.\n  Three four.")).toBe("One two.");
+    expect(firstSentence("No terminal punctuation")).toBe(
+      "No terminal punctuation",
+    );
+    // An abbreviation-free sentence ending mid-string is honored even before
+    // a newline.
+    expect(firstSentence("Ends here! And more.")).toBe("Ends here!");
+  });
+});

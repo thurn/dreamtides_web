@@ -23,6 +23,7 @@
     "setup-assets": "node scripts/setup-assets.mjs",
     "tango-tokens": "node scripts/generate-tango-tokens.mjs",
     "tango-metadata": "node scripts/generate-tango-metadata.mjs",
+    "tango-docs": "node scripts/generate-tango-docs.mjs",
     "upload-assets": "node scripts/upload-assets-to-storage.mjs",
     "regenerate-assets": "bash scripts/regenerate-assets.sh",
     "deploy": "bash scripts/deploy.sh",

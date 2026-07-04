@@ -1,0 +1,167 @@
+---
+name: tango
+description: Use when writing or changing any quest prototype UI — building screens, using or adding Tango design-system components, styling, spacing, colors, icons, or reviewing UI code. Triggers on tango, design system, UI component, component API, Pressable, Button, GroupPanel, InfoCard, GameCard, tokens, spacing, styling, /tango.
+---
+
+# Tango Design System
+
+Tango (`src/tango/`) is the design system every screen in the quest prototype
+is built from: one small, strict catalog of components with tightly typed
+APIs. All UI work starts here — first find the Tango component that does the
+job, then compose it. Writing bespoke UI is the last resort, and customizing a
+component past its typed surface is not an available move at all (see
+"Customization" below).
+
+## Where the component documentation lives
+
+- **Per-component reference** (generated): `components/<id>.md` in this skill
+  directory — blurb, usage guidance, full props table with types and
+  defaults, nested model shapes, and real usage snippets. Read the file for
+  each component you touch; they are short.
+- **Component index** (generated): the table below — use it to pick the right
+  component before writing any UI.
+- **Live doc site**: `/tango` on the dev server (e.g.
+  `http://localhost:5173/tango`), with `/tango#/<id>` per component —
+  interactive demos and the same props tables, useful during browser QA.
+- **Design philosophy in depth**:
+  [docs/quest_prototype/tango_design_system.md](../../../docs/quest_prototype/tango_design_system.md).
+
+The reference files and the index are projections of the component sources
+(prop JSDoc via `npm run tango-metadata`, prose via the demo entries in
+`src/tango/docs/demos/`). Regenerate with `npm run tango-docs` (included in
+`npm run regenerate-assets`); edit the sources, never the generated files.
+
+## Component index
+
+<!-- BEGIN GENERATED COMPONENT INDEX (npm run tango-docs) -->
+| Component | Group | Reference | What it is |
+| --- | --- | --- | --- |
+| Pressable | Primitives | [components/pressable.md](components/pressable.md) | The one press-feedback primitive. |
+| Resource Chip | Components | [components/resource-chip.md](components/resource-chip.md) | The canonical value-and-mark pairing for the game economy. |
+| Button | Components | [components/button.md](components/button.md) | The one button in Tango — the beveled purple sprite, scaled to any label and to a taller commit height. |
+| Segmented Control | Components | [components/segmented-control.md](components/segmented-control.md) | The compact tab and filter switch used for type filters, sort direction, and small mode toggles. |
+| Stat Tile | Components | [components/stat-tile.md](components/stat-tile.md) | A labelled value cell for summary grids — a large value over a small uppercase label — used for deck stats and run-end results. |
+| Tide Pill | Components | [components/tide-pill.md](components/tide-pill.md) | The labelled tag for a Dreamcaller's tides and affiliations. |
+| Motes | Components | [components/motes.md](components/motes.md) | The atmospheric particle layer — drifting dust that gives a surface its living shimmer. |
+| Info Card | Components | [components/info-card.md](components/info-card.md) | The one press-to-reveal information card. |
+| Group Panel | Components | [components/group-panel.md](components/group-panel.md) | The information-grouping card: a liquid-glass pane that collects dense, related values into one unit. |
+| Quest Status Bar | Components | [components/quest-status-bar.md](components/quest-status-bar.md) | The persistent, transparent bottom HUD for quest screens. |
+| Rules Text | Components | [components/rules-text.md](components/rules-text.md) | Renders Dreamtides rules copy from card data — resource pips, ability carets, and glossary keywords styled in place — so ability text reads the same everywhere it appears. |
+| Game Card | Components | [components/game-card.md](components/game-card.md) | The playable card object — art, cost, stats, and rules text — rendered at any size and always resolved by UUID, never by name. |
+| Atlas Node | Components | [components/atlas-node.md](components/atlas-node.md) | One dreamscape node on the Dream Atlas: a framed circular icon whose glow and badges track its state — revealed, known, visited, completed, or a looming boss. |
+| Atlas Edge | Components | [components/atlas-edge.md](components/atlas-edge.md) | The connector between two Atlas nodes, drawn inside the map's SVG. |
+| Dreamsign | Components | [components/dreamsign.md](components/dreamsign.md) | A dreamsign — a minor passive collectible — shown as its art floating on the scene. |
+| Site Node | Components | [components/site-node.md](components/site-node.md) | The dreamscape site disc: a floating circular node over scene art carrying a glyph and accent ring. |
+<!-- END GENERATED COMPONENT INDEX -->
+
+## Customization: step back before adding any knob
+
+The system's value is uniformity: a component reads identically on every
+screen, so no call site can drift on its own. When a component seems to need
+customizing, the correct response is to step back and think at the system
+level — "what does this screen need?" is the wrong altitude; ask "how does the
+system express this?" Work down this ladder and stop at the first rung that
+fits:
+
+1. **Use an existing component or variant as-is.** Check the index above and
+   the component's reference file — the variant you want usually exists.
+   Look at how other screens solve the same problem and match them.
+2. **Wrap it for layout.** Size, position, spacing, and arrangement are the
+   caller's concern: put the component inside your own wrapper element and
+   style the wrapper. The component's internal appearance is the system's
+   concern and stays fixed.
+3. **Add a new strict variant.** One more enumerated option on an existing
+   prop (or a new enumerated prop) is acceptable when you are confident no
+   existing variant expresses the need. Update the demo entry and regenerate
+   docs with it.
+4. **Propose a new component.** If the need is genuinely new, a new strict
+   component beats a loosened existing one. Flag it rather than improvising.
+
+**Never** widen a prop into an open value or thread a raw value through. The
+knobs that keep trying to sneak in each look harmless in isolation, and each
+is a "no":
+
+- A numeric `size`, `scale`, `gap`, `elevation`, `padding`, or `threshold` —
+  a pixel measurement is layout; wrap and size your own element (rung 2).
+- A per-instance `color` or `accent` so "this one instance" reads differently
+  — states that legitimately differ (a boss node looming larger, a locked
+  node dimmed) are decided *inside* the component from its semantic model,
+  never handed in as a raw value.
+- `className`, `style`, or a `CSSProperties` prop — these are escape hatches
+  that let a call site silently leave the system.
+- A decorative badge, wash, or filter toggle added for one screen.
+
+If you find yourself reaching for one of these, the component is being asked
+to do the caller's job — stop and wrap it instead. This is enforced, not just
+documented: the `no-escape-hatch-props` ESLint rule and API contract tests
+fail the build on escape hatches. When lint blocks you, the design is telling
+you to use a variant or wrap — do not disable the rule.
+
+## Values are named, not stringly typed
+
+A prop that carries anything other than free-form display text takes a
+*named* value type from `src/tango/primitives/`, never a bare string:
+
+- A color is a `TangoColor` — a palette role, or a `#hex` literal only for
+  genuinely data-driven color. Never a CSS color string or class name.
+- A glyph is a `Glyph` from the icon registry (`glyph.ts`). Never an icon
+  name string or inline SVG.
+- A piece of art is an `ArtRef` the component resolves to a URL itself
+  (`art.ts`). Never a raw URL or path string.
+- A media filter or image crop is a named union from `media.ts`.
+
+Spacing, type, radius, and color values in UI code come from the token system
+(`token("--space-4")`, `src/tango/primitives/tokens.ts`, generated from
+`tango-tokens.css`). Inventing a raw px/hex value that has a token equivalent
+is drift; if no token fits, that is a token-system conversation, not a
+one-off literal.
+
+## Structured models, not arbitrary ReactNode
+
+Components take structured model objects and named content slots, and decide
+their own rendering from them — a `GameCard` takes a card model, an
+`AtlasNode` takes an `AtlasNodeView`, rules text is a structured `RichText`
+body. When you are tempted to pass JSX into a component so it "renders what I
+built", check the component's reference file for the model it actually
+accepts and build that instead. Passing an arbitrary ReactNode where a model
+exists bypasses the component's rendering decisions and breaks the uniformity
+the model encodes. The few genuine ReactNode slots (e.g. `Pressable`
+children, `GroupPanel` content) are documented as such in the props tables.
+
+## The isolation boundary
+
+Code under `src/tango/` imports only other `src/tango/` code, `node_modules`,
+and an explicit allowlist of non-UI infrastructure (`src/data`, `src/types`,
+`src/logging`, `src/runtime`). Tango never imports UI from elsewhere; the
+rest of the app imports its UI from Tango. The boundary is a lint gate
+(fail-closed import allowlist) — when it blocks an import, move the code or
+rethink the dependency; never widen the allowlist for UI code.
+
+## Core rendering rules
+
+- **Material continuity**: meaningful objects travel or expand between
+  states (object-travel / container-transform); nothing pops in or out.
+- **Always in motion**: tangible game objects (cards, dreamsigns, resources)
+  drift gently; review chrome (status bars, deck viewers) holds still.
+- **Legibility ladder**: on-media text uses outline dilation; dense related
+  info goes in a `GroupPanel`. A scrim, wash, or vignette painted over scene
+  art to fake legibility is not on the ladder.
+- **Popup rule**: every reveal-on-interaction popup renders through
+  `InfoCard` — pointer-anchored, no close button, no scrim; hover reveals on
+  fine pointers, touch-hold on touch.
+- **Content voice**: second person, literary register; Title Case titles;
+  uppercase monospaced eyebrows; no emoji anywhere.
+
+## Adding or changing a component
+
+1. Component source lives in `src/tango/components/` (or `primitives/`).
+   Document every prop with JSDoc — the props tables and reference files are
+   generated from those comments, so the prop comment is the primary
+   documentation surface.
+2. Add or update the demo entry in `src/tango/docs/demos/<id>.tsx` (blurb,
+   callout guidance, usage snippets) and register it in
+   `src/tango/docs/registry.ts`. Keep doc fields as plain string literals —
+   the docs generator extracts them statically.
+3. Run `npm run tango-metadata && npm run tango-docs` (or
+   `npm run regenerate-assets`) and commit the regenerated files with the
+   change.
