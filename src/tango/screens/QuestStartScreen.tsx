@@ -88,6 +88,14 @@ function FullBleedPortrait({
       src={dreamcallerImageSrc(dreamcaller.imageNumber)}
       alt={`${dreamcaller.name}, ${dreamcaller.title}`}
       draggable={false}
+      // The portrait is the scene the console's frosted glass blurs through, so
+      // it must paint as early as possible: a late-arriving portrait leaves the
+      // GroupPanel's `backdrop-filter` with nothing to refract, then "pops" the
+      // blur in once the art finally paints. Fetch it eagerly at high priority
+      // and decode async so it lands with the first frame of the screen.
+      fetchPriority="high"
+      loading="eager"
+      decoding="async"
       onError={() => {
         setBroken(true);
       }}
@@ -292,9 +300,15 @@ function DreamcallerPage({
           bottom: 0,
           zIndex: 4,
           padding: `0 ${token("--gutter")} calc(${token("--safe-bottom")} + ${token("--space-5")})`,
-          opacity: active ? 1 : 0,
+          // The console slides up into place, but its opacity is NOT animated:
+          // the GroupPanel's frosted glass uses `backdrop-filter`, and an
+          // ancestor at `opacity < 1` flattens this subtree into a group the
+          // filter cannot sample the scene through — so a fade would leave the
+          // glass washed-out until opacity reached exactly 1, then "pop" the
+          // blur in. Revealing by transform alone keeps the backdrop live the
+          // whole time.
           transform: active ? "translateY(0)" : "translateY(16px)",
-          transition: `opacity ${token("--dur-base")} ${token("--ease-out")}, transform ${token("--dur-base")} ${token("--ease-out")}`,
+          transition: `transform ${token("--dur-base")} ${token("--ease-out")}`,
         }}
       >
         <GroupPanel>
