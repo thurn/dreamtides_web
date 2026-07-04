@@ -322,6 +322,26 @@ describe("ScreenRouter DreamAugury routing", () => {
     expect(container.querySelector('[data-testid="classic-journey-screen"]')).toBeNull();
   });
 
+  it("logs screen_rendered exactly once per navigation under strict mode", () => {
+    const site = makeSite("DreamAugury");
+    const state = makeStateFor(site);
+    renderWithQuest({
+      state,
+      questContent: merchantContent(),
+      children: <ScreenRouter runtimeConfig={parseRuntimeConfig("?journey=v2")} />,
+      strict: true,
+    });
+
+    // StrictMode double-invokes effects in dev; the dedupe guard must keep this
+    // to one entry for the single navigation.
+    const screenLogs = getLogEntries().filter(
+      (entry) => entry.event === "screen_rendered",
+    );
+    expect(screenLogs).toHaveLength(1);
+    expect(screenLogs[0]?.screenType).toBe("site");
+    expect(screenLogs[0]?.siteId).toBe(site.id);
+  });
+
   it("logs the generated encounter debug once per encounter signature under strict mode", () => {
     const site = makeSite("DreamAugury");
     const state = makeStateFor(site);

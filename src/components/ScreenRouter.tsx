@@ -75,10 +75,22 @@ export function ScreenRouter({
 
   // Record which UI served each screen, one entry per navigation, so a
   // production run's screen-by-screen variant history is reconstructable from
-  // logs/quest-log.jsonl during the migration.
+  // logs/quest-log.jsonl during the migration. Deduped against the last logged
+  // navigation so the entry fires exactly once per screen change: the effect
+  // itself runs more than once for a single navigation (React StrictMode
+  // double-invokes effects in dev, and unrelated re-renders re-run it), which
+  // would otherwise emit a duplicate `screen_rendered` line each time. The
+  // signature only re-fires the log when the visible navigation actually
+  // changes — the same guard idiom `useQuestUrlSync` uses for `quest_url_synced`.
   const siteId = screen.type === "site" ? screen.siteId : null;
   const servedByTango = tangoScreen !== null;
+  const lastLoggedNavigationRef = useRef<string | null>(null);
   useEffect(() => {
+    const signature = `${runtimeConfig.uiVariant}|${screen.type}|${siteId ?? ""}|${String(servedByTango)}`;
+    if (lastLoggedNavigationRef.current === signature) {
+      return;
+    }
+    lastLoggedNavigationRef.current = signature;
     logEvent("screen_rendered", {
       uiVariant: runtimeConfig.uiVariant,
       screenType: screen.type,
