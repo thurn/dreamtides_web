@@ -21,8 +21,8 @@
 // (components/pills/SegmentedControl.jsx / .d.ts).
 
 import type { ReactElement } from "react";
-import { PRESS_SCALE, usePress } from "../primitives/Pressable";
-import { token } from "../primitives/tokens";
+import { PRESS_SCALE, usePress } from "../../primitives/Pressable";
+import { token } from "../../primitives/tokens";
 import { groupPanelStyle } from "./GroupPanel";
 
 /** Height/scale variants. */

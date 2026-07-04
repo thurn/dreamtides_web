@@ -8,8 +8,8 @@ import type {
 import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "./CardDisplay";
 import { CardOverlay } from "./CardOverlay";
-import { Dreamsign } from "../tango/components/Dreamsign";
-import { HoverZoomCard } from "../tango/components/HoverZoomCard";
+import { Dreamsign } from "../tango/components/hud/Dreamsign";
+import { HoverZoomCard } from "../tango/components/card/HoverZoomCard";
 import {
   getPersistedCardSize,
   persistCardSize,
@@ -23,8 +23,8 @@ import {
   type CardTransfigurationDisplay,
 } from "../transfiguration/transfiguration-logic";
 import { computeDeckSummary } from "./deck-summary";
-import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
-import { RulesText } from "../tango/components/RulesText";
+import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
+import { RulesText } from "../tango/components/card/RulesText";
 import {
   applyCardStatOverride,
   applyDeckEntryCardModification,

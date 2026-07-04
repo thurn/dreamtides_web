@@ -1,13 +1,13 @@
 import { type CSSProperties } from "react";
-import { HoverPopover } from "./HoverPopover";
+import { HoverPopover } from "../overlay/HoverPopover";
 import {
   ENERGY_ICON_CLASS,
   ENERGY_ICON_COLOR,
   GlowIcon,
   SPARK_ICON_CLASS,
   SPARK_ICON_COLOR,
-} from "./GlowIcon";
-import { useFitText } from "./useFitText";
+} from "../controls/GlowIcon";
+import { useFitText } from "../controls/useFitText";
 
 export type CardStatOrbVariant = "energy" | "spark" | "dreamwellEnergy";
 

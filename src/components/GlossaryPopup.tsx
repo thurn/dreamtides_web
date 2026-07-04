@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { GLOSSARY } from "../data/glossary";
-import { GlossaryDefinitionCard } from "../tango/components/GlossaryDefinitionCard";
+import { GlossaryDefinitionCard } from "../tango/components/card/GlossaryDefinitionCard";
 import { logEvent } from "../logging";
 
 /**
@@ -9,7 +9,7 @@ import { logEvent } from "../logging";
  * definition.
  *
  * Sourced from `GLOSSARY` in `src/data/glossary.ts` — the same data the
- * card-text tokenizer (`src/tango/components/card-text.ts`) uses to wrap
+ * card-text tokenizer (`src/tango/components/card/card-text.ts`) uses to wrap
  * matching words in hover popovers. There is exactly one place that
  * names the terms and writes their definitions; this popup and the
  * in-card tooltip both consume that single source.

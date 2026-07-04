@@ -18,7 +18,7 @@
 // (components/buttons/ResourceChip.jsx / .d.ts). Requires Boxicons v3's
 // filled stylesheet on the page (loaded globally for /tango by main.tsx).
 
-import { token } from "../primitives/tokens";
+import { token } from "../../primitives/tokens";
 
 /** Which economy value a ResourceChip renders. */
 type ResourceKind = "essence" | "energy" | "spark" | "points" | "counter";

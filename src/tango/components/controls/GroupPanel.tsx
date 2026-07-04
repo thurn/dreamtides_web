@@ -35,7 +35,7 @@
 // (components/surfaces/GroupPanel.jsx / .d.ts).
 
 import * as React from "react";
-import { token } from "../primitives/tokens";
+import { token } from "../../primitives/tokens";
 
 /**
  * The grouping-card glass style object, if you need to spread it onto your own

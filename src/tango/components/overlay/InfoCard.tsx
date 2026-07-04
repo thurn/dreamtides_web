@@ -37,9 +37,9 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { Pressable, PRESS_SCALE } from "../primitives/Pressable";
-import { token } from "../primitives/tokens";
-import { renderRichText, type RichText } from "./rich-text";
+import { Pressable, PRESS_SCALE } from "../../primitives/Pressable";
+import { token } from "../../primitives/tokens";
+import { renderRichText, type RichText } from "../card/rich-text";
 
 /* ---- faithfully-copied layout literals from the design source (not tokens:
    these are the info-card's own fixed geometry, not design-system scale) ---- */

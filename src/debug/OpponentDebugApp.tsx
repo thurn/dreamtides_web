@@ -17,10 +17,10 @@ import {
 import { createBattleRngStreams, deriveBattleSeed } from "../battle/random";
 import { logEvent } from "../logging";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
-import { CardView } from "../tango/components/CardView";
-import { HoverZoomCard } from "../tango/components/HoverZoomCard";
-import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
-import { dreamsignIconUrl } from "../tango/components/atlas-display";
+import { CardView } from "../tango/components/card/CardView";
+import { HoverZoomCard } from "../tango/components/card/HoverZoomCard";
+import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
+import { dreamsignIconUrl } from "../tango/components/atlas/atlas-display";
 import {
   getAlgorithm,
   OPPONENT_ALGORITHMS,

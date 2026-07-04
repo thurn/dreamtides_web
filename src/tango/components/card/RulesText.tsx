@@ -3,15 +3,15 @@ import { tokenizeRulesText, type TextSegment } from "./card-text";
 import {
   TRANSFIGURE_MARK_END,
   TRANSFIGURE_MARK_START,
-} from "../../runtime/transfigure-markers";
-import { PipBadge } from "./PipBadge";
+} from "../../../runtime/transfigure-markers";
+import { PipBadge } from "../controls/PipBadge";
 import {
   BOLT_ICON_CLASS,
   ENERGY_ICON_CLASS,
   ENERGY_ICON_COLOR,
   SPARK_ICON_COLOR,
   SPARK_INLINE_ICON_CLASS,
-} from "./GlowIcon";
+} from "../controls/GlowIcon";
 
 /**
  * Renders rules text with:

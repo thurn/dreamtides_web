@@ -7,9 +7,9 @@
 // internally (its `dt-mote` class's media rule) and holds the motes at a
 // fixed mid-opacity instead of drifting, so no extra handling is needed here.
 
-import { dreamscapeSceneUrl } from "../../components/atlas-display";
-import { groupPanelStyle } from "../../components/GroupPanel";
-import { Motes } from "../../components/Motes";
+import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
+import { groupPanelStyle } from "../../components/controls/GroupPanel";
+import { Motes } from "../../components/hud/Motes";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 

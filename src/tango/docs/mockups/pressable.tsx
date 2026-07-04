@@ -8,7 +8,7 @@
 // UI chrome (menu affordances), not game entities, so no TOML lookup applies.
 
 import { Pressable } from "../../primitives/Pressable";
-import { dreamscapeSceneUrl } from "../../components/atlas-display";
+import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 

@@ -4,9 +4,9 @@ import {
   formatTypeLine,
   type TextSegment,
 } from "./card-text";
-import { GLOSSARY } from "../../data/glossary";
-import type { CardData } from "../../types/cards";
-import { asCardId, asCardName } from "../../types/card-identity";
+import { GLOSSARY } from "../../../data/glossary";
+import type { CardData } from "../../../types/cards";
+import { asCardId, asCardName } from "../../../types/card-identity";
 
 // Representative live glossary entries, so the term-dependent tokenizer tests
 // track the data instead of hardcoding names that change as the glossary

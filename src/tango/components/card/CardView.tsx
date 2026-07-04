@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, ReactNode, RefObject } from "react";
-import type { CardData, FrozenCardData, Rarity } from "../../types/cards";
+import type { CardData, FrozenCardData, Rarity } from "../../../types/cards";
 import {
   cardIdenticonUri,
   cardImageUrl,
   hasAssignedImage,
-} from "../../data/card-database";
-import { identiconsForced } from "../../runtime/identicon-mode";
+} from "../../../data/card-database";
+import { identiconsForced } from "../../../runtime/identicon-mode";
 import {
   ART_EXTENSION_FRACTION,
   ART_REGION_ASPECT_RATIO_VALUE,
@@ -15,13 +15,13 @@ import {
 } from "./card-aspect";
 import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
-import { BOLT_ICON_CLASS } from "./GlowIcon";
+import { BOLT_ICON_CLASS } from "../controls/GlowIcon";
 import { CardStatOrb } from "./CardStatOrb";
-import { TRANSFIGURATION_ICONS } from "../../runtime/transfiguration-display";
-import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
+import { TRANSFIGURATION_ICONS } from "../../../runtime/transfiguration-display";
+import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
 import { renderRulesText } from "./RulesText";
 import { useCardTermPopover } from "./useCardTermPopover";
-import { useFitText } from "./useFitText";
+import { useFitText } from "../controls/useFitText";
 
 /**
  * Default chrome accent used for the selection ring fallback. The card's type

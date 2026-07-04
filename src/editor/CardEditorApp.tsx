@@ -19,7 +19,7 @@ import CardEditorToolbar from "./CardEditorToolbar";
 import FocusedCardEditor from "./FocusedCardEditor";
 import type { FocusedSaveStatus } from "./FocusedCardEditor";
 import ManageTagsModal from "./ManageTagsModal";
-import { CardView, DEFAULT_ART_CROP } from "../tango/components/CardView";
+import { CardView, DEFAULT_ART_CROP } from "../tango/components/card/CardView";
 import type { ArtCrop, CardData } from "../types/cards";
 import {
   parseEditorDisplayState,

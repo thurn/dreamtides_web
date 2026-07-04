@@ -4,7 +4,7 @@ import { act } from "react";
 import type { ReactElement } from "react";
 import { createRoot, type Root } from "react-dom/client";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { ENERGY_PIP_COLOR } from "./PipBadge";
+import { ENERGY_PIP_COLOR } from "../controls/PipBadge";
 import { RulesText } from "./RulesText";
 
 function mount(element: ReactElement): {

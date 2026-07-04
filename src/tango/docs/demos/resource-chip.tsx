@@ -3,7 +3,7 @@
 // are all primitives with generated controls), so this demo needs only
 // defaultArgs, no sampleContent.
 
-import { ResourceChip } from "../../components/ResourceChip";
+import { ResourceChip } from "../../components/hud/ResourceChip";
 import type { TangoComponent } from "../registry";
 
 export const resourceChipDemo: TangoComponent = {
@@ -18,7 +18,7 @@ export const resourceChipDemo: TangoComponent = {
     {
       label: "Inline value",
       note: "An icon + numeric value for a resource, sized to sit inline with text.",
-      code: `import { ResourceChip } from "src/tango/components/ResourceChip";
+      code: `import { ResourceChip } from "src/tango/components/hud/ResourceChip";
 
 <ResourceChip kind="essence" value={200} size={20} />`,
     },

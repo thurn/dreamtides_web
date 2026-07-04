@@ -20,7 +20,7 @@ vi.mock("../logging", () => ({
   logEvent: vi.fn(),
 }));
 
-vi.mock("../tango/components/DreamcallerPortrait", () => ({
+vi.mock("../tango/components/hud/DreamcallerPortrait", () => ({
   DreamcallerPortrait: () => <div data-testid="dreamcaller-portrait" />,
 }));
 

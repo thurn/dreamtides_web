@@ -4,15 +4,15 @@ import type { CardData } from "../types/cards";
 import type { Dreamsign, SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
 import { CardOverlay } from "../components/CardOverlay";
-import { EssenceValue } from "../tango/components/EssenceValue";
-import { HoverZoomCard } from "../tango/components/HoverZoomCard";
-import { HoverPopover } from "../tango/components/HoverPopover";
+import { EssenceValue } from "../tango/components/hud/EssenceValue";
+import { HoverZoomCard } from "../tango/components/card/HoverZoomCard";
+import { HoverPopover } from "../tango/components/overlay/HoverPopover";
 import {
   DREAMSIGN_HOVER_DELAY_MS,
   DreamsignInfoCard,
-} from "../tango/components/Dreamsign";
-import { dreamsignIconUrl } from "../tango/components/atlas-display";
-import { LeaveSiteButton } from "../tango/components/LeaveSiteButton";
+} from "../tango/components/hud/Dreamsign";
+import { dreamsignIconUrl } from "../tango/components/atlas/atlas-display";
+import { LeaveSiteButton } from "../tango/components/hud/LeaveSiteButton";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";

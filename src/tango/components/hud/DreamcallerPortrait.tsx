@@ -14,8 +14,8 @@
 // (margins, decorative glow), wrap the portrait in your own element.
 
 import { useState, type CSSProperties } from "react";
-import { assetUrl } from "../../runtime/asset-url";
-import { token } from "../primitives/tokens";
+import { assetUrl } from "../../../runtime/asset-url";
+import { token } from "../../primitives/tokens";
 
 /** The minimal dreamcaller shape a portrait needs: which art to load and the
  * name/title that back the alt text and the fallback monogram. */

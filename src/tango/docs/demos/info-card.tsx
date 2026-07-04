@@ -9,8 +9,8 @@
 // StatTile). `docName` points at the react-docgen display name the metadata is
 // keyed under so the props table reports InfoCard's real API.
 
-import { InfoCard } from "../../components/InfoCard";
-import { richText } from "../../components/rich-text";
+import { InfoCard } from "../../components/overlay/InfoCard";
+import { richText } from "../../components/card/rich-text";
 import type { TangoComponent } from "../registry";
 
 export const infoCardDemo: TangoComponent = {
@@ -25,8 +25,8 @@ export const infoCardDemo: TangoComponent = {
     {
       label: "Text variant",
       note: "The default: a `meta` overline, `title`, a `RichText` `body`, and an optional small `leadGlyph` boxicon class.",
-      code: `import { InfoCard } from "src/tango/components/InfoCard";
-import { richText } from "src/tango/components/rich-text";
+      code: `import { InfoCard } from "src/tango/components/overlay/InfoCard";
+import { richText } from "src/tango/components/card/rich-text";
 
 <InfoCard
   variant="text"

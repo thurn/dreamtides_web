@@ -1,5 +1,5 @@
-import type { CardData } from "../../types/cards";
-import { lookupGlossaryTerm, type GlossaryEntry } from "../../data/glossary";
+import type { CardData } from "../../../types/cards";
+import { lookupGlossaryTerm, type GlossaryEntry } from "../../../data/glossary";
 
 /** Symbol types recognized in card rules text. */
 export type SymbolType =

@@ -9,7 +9,7 @@
 // `InfoCard.body`) take a `RichText`, never a `ReactNode`.
 
 import { Fragment, type ReactElement, type ReactNode } from "react";
-import { token } from "../primitives/tokens";
+import { token } from "../../primitives/tokens";
 import { renderRulesText } from "./RulesText";
 
 /**

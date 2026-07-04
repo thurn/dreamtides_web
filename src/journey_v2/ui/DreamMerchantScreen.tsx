@@ -16,7 +16,7 @@ import {
 import { DreamJourneyMobile } from "./DreamJourneyMobile";
 import { DreamJourneyStage } from "./DreamJourneyStage";
 import { OfferColumn } from "./OfferColumn";
-import { LeaveSiteButton } from "../../tango/components/LeaveSiteButton";
+import { LeaveSiteButton } from "../../tango/components/hud/LeaveSiteButton";
 
 export interface DreamMerchantScreenProps {
   site: SiteState;

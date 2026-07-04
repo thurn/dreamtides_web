@@ -4,7 +4,7 @@ import type { CardData } from "../types/cards";
 import type { DeckEntry } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { CardDisplay } from "./CardDisplay";
-import { HoverZoomCard } from "../tango/components/HoverZoomCard";
+import { HoverZoomCard } from "../tango/components/card/HoverZoomCard";
 import {
   applyCardStatOverride,
   applyDeckEntryCardModification,

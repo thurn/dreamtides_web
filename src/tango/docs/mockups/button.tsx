@@ -8,9 +8,9 @@
 // balance in the header uses ResourceChip, matching how the game pairs the
 // two components everywhere a price appears.
 
-import { dreamscapeSceneUrl } from "../../components/atlas-display";
-import { Button } from "../../components/Button";
-import { ResourceChip } from "../../components/ResourceChip";
+import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
+import { Button } from "../../components/controls/Button";
+import { ResourceChip } from "../../components/hud/ResourceChip";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 

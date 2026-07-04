@@ -2,7 +2,7 @@ export type CardSizePreset = "small" | "medium" | "large";
 
 const CARD_SIZE_STORAGE_KEY = "quest-prototype-card-size";
 
-import { DRAFT_OFFER_CARD_WIDTH } from "../tango/components/card-aspect";
+import { DRAFT_OFFER_CARD_WIDTH } from "../tango/components/card/card-aspect";
 
 export { DRAFT_OFFER_CARD_WIDTH };
 

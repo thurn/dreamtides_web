@@ -24,7 +24,7 @@
 // (components/quest/Motes.jsx / .d.ts).
 
 import { useEffect, useMemo } from "react";
-import { token } from "../primitives/tokens";
+import { token } from "../../primitives/tokens";
 
 /** id of the one-time <style> element carrying the drift keyframes + the
  * prefers-reduced-motion override. Guarded so multiple Motes instances (or

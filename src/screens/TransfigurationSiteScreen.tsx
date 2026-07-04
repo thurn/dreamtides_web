@@ -3,7 +3,7 @@ import type { CSSProperties } from "react";
 import type { SiteState, DeckEntry, TransfigurationType } from "../types/quest";
 import type { CardData } from "../types/cards";
 import { CardDisplay } from "../components/CardDisplay";
-import { EssenceValue } from "../tango/components/EssenceValue";
+import { EssenceValue } from "../tango/components/hud/EssenceValue";
 import { SiteGuide } from "../components/SiteGuide";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";

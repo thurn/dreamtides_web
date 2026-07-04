@@ -7,8 +7,8 @@
 // Dreamcaller portrait and dreamsign art resolve from real assets in `public/`.
 
 import { useRef } from "react";
-import { QuestStatusBar } from "../../components/QuestStatusBar";
-import { dreamscapeSceneUrl, dreamsignIconUrl } from "../../components/atlas-display";
+import { QuestStatusBar } from "../../components/hud/QuestStatusBar";
+import { dreamscapeSceneUrl, dreamsignIconUrl } from "../../components/atlas/atlas-display";
 import { assetUrl } from "../../../runtime/asset-url";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";

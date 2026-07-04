@@ -13,8 +13,8 @@
 // `dreamcaller` are ReactNode-free object props seeded via defaultArgs.
 
 import { useRef } from "react";
-import { QuestStatusBar } from "../../components/QuestStatusBar";
-import type { QuestStatusBarProps } from "../../components/QuestStatusBar";
+import { QuestStatusBar } from "../../components/hud/QuestStatusBar";
+import type { QuestStatusBarProps } from "../../components/hud/QuestStatusBar";
 import { token } from "../../primitives/tokens";
 import type { TangoComponent } from "../registry";
 
@@ -74,7 +74,7 @@ export const questStatusBarDemo: TangoComponent = {
     {
       note: "A transparent HUD that positions itself against the screen root and reveals the Dreamcaller / dreamsign popups anchored to it, so pass the screen's `stageRef`. Render it inside a `position: relative` scene root.",
       code: `import { useRef } from "react";
-import { QuestStatusBar } from "src/tango/components/QuestStatusBar";
+import { QuestStatusBar } from "src/tango/components/hud/QuestStatusBar";
 
 const stageRef = useRef<HTMLDivElement>(null);
 

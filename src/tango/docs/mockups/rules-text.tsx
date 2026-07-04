@@ -10,8 +10,8 @@
 import { useEffect, useState } from "react";
 import type { CardData } from "../../../types/cards";
 import { loadCardDatabase } from "../../../data/card-database";
-import { GameCard } from "../../components/CardView";
-import { RulesText } from "../../components/RulesText";
+import { GameCard } from "../../components/card/CardView";
+import { RulesText } from "../../components/card/RulesText";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 

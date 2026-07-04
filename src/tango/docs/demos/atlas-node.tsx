@@ -10,11 +10,11 @@
 // points at the real AtlasNode so the props table reports its actual API.
 
 import type { DreamscapeNode } from "../../../types/quest";
-import { AtlasNode, type AtlasNodeView } from "../../components/AtlasNode";
+import { AtlasNode, type AtlasNodeView } from "../../components/atlas/AtlasNode";
 import {
   dreamscapeIconUrl,
   dreamsignIconUrl,
-} from "../../components/atlas-display";
+} from "../../components/atlas/atlas-display";
 import type { TangoComponent } from "../registry";
 
 /** Builds a revealed atlas node in the given lifecycle state. */
@@ -223,7 +223,7 @@ export const atlasNodeDemo: TangoComponent = {
   usage: [
     {
       note: "One node on the Dream Atlas. `view` is a fully-resolved `AtlasNodeView` (node lifecycle + resolved art URLs + placement) built by the atlas layout; the node reports hover / click through the callbacks and positions itself from `view.left` / `view.top` inside a `.dream-atlas .nodes` stage.",
-      code: `import { AtlasNode } from "src/tango/components/AtlasNode";
+      code: `import { AtlasNode } from "src/tango/components/atlas/AtlasNode";
 
 <div className="dream-atlas">
   <div className="nodes">

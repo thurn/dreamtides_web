@@ -6,8 +6,8 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
-import { logEventOnce } from "../../logging";
-import { extractGlossaryTerms } from "../../data/glossary-terms";
+import { logEventOnce } from "../../../logging";
+import { extractGlossaryTerms } from "../../../data/glossary-terms";
 import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
 
 /**

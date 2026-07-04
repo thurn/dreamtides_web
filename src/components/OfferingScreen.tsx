@@ -1,7 +1,7 @@
 import { useState, type CSSProperties, type ReactNode } from "react";
 import { motion } from "framer-motion";
 import type { Dreamsign } from "../types/quest";
-import { RulesText } from "../tango/components/RulesText";
+import { RulesText } from "../tango/components/card/RulesText";
 import { assetUrl } from "../runtime/asset-url";
 
 /**

@@ -6,7 +6,7 @@ import { CardDisplay } from "../components/CardDisplay";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
 import { SiteGuide } from "../components/SiteGuide";
-import { LeaveSiteButton } from "../tango/components/LeaveSiteButton";
+import { LeaveSiteButton } from "../tango/components/hud/LeaveSiteButton";
 import "./duplication-site.css";
 
 /** Props for the DuplicationSiteScreen component. */

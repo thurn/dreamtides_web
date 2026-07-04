@@ -2,10 +2,10 @@ import { useState } from "react";
 import type { CardData } from "../types/cards";
 import type { CardSizePreset } from "../components/card-size";
 import { SIZE_PRESETS } from "../components/card-size";
-import { CardView } from "../tango/components/CardView";
+import { CardView } from "../tango/components/card/CardView";
 import CardBrowserGrid from "../components/card-browser/CardBrowserGrid";
-import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
-import { RulesText } from "../tango/components/RulesText";
+import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
+import { RulesText } from "../tango/components/card/RulesText";
 import { TIDE_ACCENT_COLOR, TIDE_COLOR_CHIP } from "../components/tide-visuals";
 import {
   TIDES4_COLORS,

@@ -34,9 +34,9 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { InfoCard } from "./InfoCard";
-import { richText } from "./rich-text";
-import { token } from "../primitives/tokens";
+import { InfoCard } from "../overlay/InfoCard";
+import { richText } from "../card/rich-text";
+import { token } from "../../primitives/tokens";
 
 const { usePressReveal, anchorRect, PressPopover, PRESS_SCALE } = InfoCard;
 

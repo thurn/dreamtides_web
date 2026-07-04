@@ -9,13 +9,13 @@ import {
   CARD_HOVER_PREVIEW_DELAY_MS,
   CARD_HOVER_PREVIEW_WIDTH_PX,
   HoverPopover,
-} from "../tango/components/HoverPopover";
+} from "../tango/components/overlay/HoverPopover";
 import {
   OFFERING_ACCENT,
   OfferingAcceptButton,
   OfferingScreenHeader,
 } from "../components/OfferingScreen";
-import { PipBadge } from "../tango/components/PipBadge";
+import { PipBadge } from "../tango/components/controls/PipBadge";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
 import {
   countRemainingCards,
@@ -31,7 +31,7 @@ import { resolveNodeAffiliationWeights } from "../affiliations/affiliation-weigh
 import type { CardData } from "../types/cards";
 import type { DeckEntry } from "../types/quest";
 import { cardImageUrl } from "../data/card-database";
-import { CARD_ASPECT_RATIO } from "../tango/components/card-aspect";
+import { CARD_ASPECT_RATIO } from "../tango/components/card/card-aspect";
 import { DRAFT_OFFER_CARD_WIDTH } from "../components/card-size";
 import { logEvent } from "../logging";
 

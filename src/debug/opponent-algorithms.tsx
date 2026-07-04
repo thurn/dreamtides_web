@@ -29,8 +29,8 @@ import {
   type CorpusOpponentDeckBuild,
 } from "../battle/integration/corpus-opponent-deck";
 import { DEFAULT_POOL_VARIANT } from "../draft/pool/types";
-import { CardView } from "../tango/components/CardView";
-import { HoverZoomCard } from "../tango/components/HoverZoomCard";
+import { CardView } from "../tango/components/card/CardView";
+import { HoverZoomCard } from "../tango/components/card/HoverZoomCard";
 
 /** One stat tile shown in the left panel's 2-column grid. */
 export interface StatRow {

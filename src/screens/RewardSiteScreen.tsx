@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import type { Dreamsign, SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
-import { Dreamsign as DreamsignEntity } from "../tango/components/Dreamsign";
-import { EssenceGlyph } from "../tango/components/EssenceValue";
-import { RulesText } from "../tango/components/RulesText";
+import { Dreamsign as DreamsignEntity } from "../tango/components/hud/Dreamsign";
+import { EssenceGlyph } from "../tango/components/hud/EssenceValue";
+import { RulesText } from "../tango/components/card/RulesText";
 
 /** Props for the RewardSiteScreen component. */
 interface RewardSiteScreenProps {

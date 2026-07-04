@@ -2,8 +2,8 @@ import type { CSSProperties, ReactNode } from "react";
 import {
   CARD_HOVER_PREVIEW_DELAY_MS,
   HoverPopover,
-} from "../../tango/components/HoverPopover";
-import { DreamsignInfoCard } from "../../tango/components/Dreamsign";
+} from "../../tango/components/overlay/HoverPopover";
+import { DreamsignInfoCard } from "../../tango/components/hud/Dreamsign";
 import type { Dreamsign } from "../../types/quest";
 import type { JourneyDreamsignObject } from "./offerPresentation";
 import { assetUrl } from "../../runtime/asset-url";

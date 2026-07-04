@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import type { DreamscapeNode } from "../../types/quest";
+import type { DreamscapeNode } from "../../../types/quest";
 import { BOSS_DISPLAY, ROUND_FRAME_URL } from "./atlas-display";
 import "./atlas.css";
 

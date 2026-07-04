@@ -1,4 +1,4 @@
-import type { GlossaryEntry } from "../../data/glossary";
+import type { GlossaryEntry } from "../../../data/glossary";
 import { RulesText } from "./RulesText";
 
 /**

@@ -2,13 +2,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import type { CSSProperties } from "react";
 import type { SiteState } from "../types/quest";
 import { CardDisplay } from "../components/CardDisplay";
-import { EssenceGlyph, EssenceValue } from "../tango/components/EssenceValue";
-import { RulesText } from "../tango/components/RulesText";
+import { EssenceGlyph, EssenceValue } from "../tango/components/hud/EssenceValue";
+import { RulesText } from "../tango/components/card/RulesText";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
-import { dreamsignIconUrl } from "../tango/components/atlas-display";
+import { dreamsignIconUrl } from "../tango/components/atlas/atlas-display";
 import { SiteGuide } from "../components/SiteGuide";
-import { LeaveSiteButton } from "../tango/components/LeaveSiteButton";
+import { LeaveSiteButton } from "../tango/components/hud/LeaveSiteButton";
 import {
   MAX_PURGE_PER_VISIT,
   maxAffordablePurgeCount,

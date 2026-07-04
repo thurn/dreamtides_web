@@ -8,8 +8,8 @@
 // live dreamscape screen builds real ones from its site list and seeded scatter.
 
 import { useRef } from "react";
-import { SiteNode, type DreamscapeSiteModel } from "../../components/SiteNode";
-import { dreamscapeSceneUrl } from "../../components/atlas-display";
+import { SiteNode, type DreamscapeSiteModel } from "../../components/atlas/SiteNode";
+import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 

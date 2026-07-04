@@ -10,7 +10,7 @@
 // defaults them so `Component` type-checks; `docName` still points at the
 // real StatTile so the props table reports its actual (required) API.
 
-import { StatTile } from "../../components/StatTile";
+import { StatTile } from "../../components/controls/StatTile";
 import type { TangoComponent } from "../registry";
 
 interface StatTileDemoArgs {
@@ -40,7 +40,7 @@ export const statTileDemo: TangoComponent = {
   usage: [
     {
       note: "A labelled readout — `label` + `value`, an optional `sub` caption, and an `accent` that tints the value.",
-      code: `import { StatTile } from "src/tango/components/StatTile";
+      code: `import { StatTile } from "src/tango/components/controls/StatTile";
 
 <StatTile label="Essence" value="240" sub="this run" accent="essence" />`,
     },

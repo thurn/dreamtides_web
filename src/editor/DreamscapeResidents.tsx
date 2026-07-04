@@ -1,7 +1,7 @@
 import type { CSSProperties } from "react";
 import { DreamcallerPopover } from "../components/DreamcallerPopover";
-import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
-import { HoverPopover } from "../tango/components/HoverPopover";
+import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
+import { HoverPopover } from "../tango/components/overlay/HoverPopover";
 import type {
   DreamcallerAssignmentAction,
   DreamcallerOption,

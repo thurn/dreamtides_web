@@ -11,7 +11,7 @@ function readScale(transform: string | undefined): number {
   return match ? Number(match[1]) : Number.NaN;
 }
 
-vi.mock("../../logging", () => ({
+vi.mock("../../../logging", () => ({
   logEventOnce: vi.fn(),
 }));
 

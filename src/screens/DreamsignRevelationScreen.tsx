@@ -3,14 +3,14 @@ import type { CSSProperties } from "react";
 import type { Dreamsign, SiteState } from "../types/quest";
 import { useQuest } from "../state/quest-context";
 import { logEvent } from "../logging";
-import { dreamsignIconUrl } from "../tango/components/atlas-display";
+import { dreamsignIconUrl } from "../tango/components/atlas/atlas-display";
 import { SiteGuide } from "../components/SiteGuide";
-import { LeaveSiteButton } from "../tango/components/LeaveSiteButton";
+import { LeaveSiteButton } from "../tango/components/hud/LeaveSiteButton";
 import {
   DREAMSIGN_HOVER_DELAY_MS,
   DreamsignInfoCard,
-} from "../tango/components/Dreamsign";
-import { HoverPopover } from "../tango/components/HoverPopover";
+} from "../tango/components/hud/Dreamsign";
+import { HoverPopover } from "../tango/components/overlay/HoverPopover";
 import { DreamsignPurgeOverlay } from "./DreamsignPurgeOverlay";
 import "./dreamsign-revelation.css";
 

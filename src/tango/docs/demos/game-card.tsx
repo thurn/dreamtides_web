@@ -18,7 +18,7 @@
 import { useEffect, useState } from "react";
 import type { CardData } from "../../../types/cards";
 import { loadCardDatabase } from "../../../data/card-database";
-import { GameCard } from "../../components/CardView";
+import { GameCard } from "../../components/card/CardView";
 import type { TangoComponent } from "../registry";
 
 /**
@@ -143,7 +143,7 @@ export const gameCardDemo: TangoComponent = {
     {
       label: "Render a card",
       note: "Give it a resolved `CardData` (loaded by UUID from the card database — never by name). `large` switches to the bigger card + text sizing.",
-      code: `import { GameCard } from "src/tango/components/CardView";
+      code: `import { GameCard } from "src/tango/components/card/CardView";
 
 <GameCard card={card} large />`,
     },

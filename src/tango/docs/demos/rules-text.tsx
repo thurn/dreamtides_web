@@ -15,7 +15,7 @@
 // data/tabula/cards_v2.toml — a two-ability card that exercises keyword
 // highlighting, a `+2✦` spark pip, and an energy `3●` cost in one string.
 
-import { RulesText } from "../../components/RulesText";
+import { RulesText } from "../../components/card/RulesText";
 import type { TangoComponent } from "../registry";
 
 const SAMPLE_RULES_TEXT = [
@@ -43,7 +43,7 @@ export const rulesTextDemo: TangoComponent = {
   usage: [
     {
       note: "Renders authored rules-text markup: energy / spark glyphs become inline pips, `▸` / `❖` markers become caret / bolt icons, and the curated keyword set is emphasized. Pass the card's rendered-text string as `text`.",
-      code: `import { RulesText } from "src/tango/components/RulesText";
+      code: `import { RulesText } from "src/tango/components/card/RulesText";
 
 <RulesText text={"Support – Supported allies have +2✦ and unstoppable."} />`,
     },

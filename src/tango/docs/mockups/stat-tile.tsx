@@ -5,8 +5,8 @@
 // are illustrative (a run snapshot), matching how the QuestStatusBar mockup
 // already treats its own essence/deck numbers.
 
-import { dreamscapeSceneUrl } from "../../components/atlas-display";
-import { StatTile } from "../../components/StatTile";
+import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
+import { StatTile } from "../../components/controls/StatTile";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 

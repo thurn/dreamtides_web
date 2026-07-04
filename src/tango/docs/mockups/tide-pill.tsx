@@ -10,8 +10,8 @@
 // palette, not to assert a fabricated color identity for that tide.
 
 import { useRef } from "react";
-import { dreamscapeSceneUrl } from "../../components/atlas-display";
-import { TidePill, type TidePillProps } from "../../components/TidePill";
+import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
+import { TidePill, type TidePillProps } from "../../components/hud/TidePill";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 

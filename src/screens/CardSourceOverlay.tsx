@@ -14,7 +14,7 @@ import type {
   Tides4TideSummary,
 } from "../types/content";
 import { seedProvenanceVariantCopy } from "../draft/pool/seed-provenance-copy";
-import { HoverPopover } from "../tango/components/HoverPopover";
+import { HoverPopover } from "../tango/components/overlay/HoverPopover";
 
 interface CardSourceOverlayProps {
   cardSourceDebug: CardSourceDebugState | null;

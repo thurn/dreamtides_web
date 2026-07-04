@@ -34,12 +34,12 @@
 import * as React from "react";
 import type { CSSProperties } from "react";
 import { createPortal } from "react-dom";
-import { InfoCard } from "./InfoCard";
-import { richText } from "./rich-text";
-import { CardTermDefinitions } from "./CardTermDefinitions";
-import { token } from "../primitives/tokens";
-import type { Dreamsign as DreamsignData } from "../../types/quest";
-import { assetUrl } from "../../runtime/asset-url";
+import { InfoCard } from "../overlay/InfoCard";
+import { richText } from "../card/rich-text";
+import { CardTermDefinitions } from "../card/CardTermDefinitions";
+import { token } from "../../primitives/tokens";
+import type { Dreamsign as DreamsignData } from "../../../types/quest";
+import { assetUrl } from "../../../runtime/asset-url";
 
 const { usePressReveal, anchorRect, PressPopover, PRESS_SCALE } = InfoCard;
 

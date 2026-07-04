@@ -1,7 +1,7 @@
 import { asCardName } from "../types/card-identity";
 import { useRef, type ReactNode } from "react";
-import { CardView } from "../tango/components/CardView";
-import type { CardViewSlots } from "../tango/components/CardView";
+import { CardView } from "../tango/components/card/CardView";
+import type { CardViewSlots } from "../tango/components/card/CardView";
 import EditableField from "./EditableField";
 import { figmentHasTitleBar, figmentPreviewCard } from "./figment-types";
 import type {

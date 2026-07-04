@@ -13,7 +13,7 @@
 // surrounding text color and size — for the handful of surfaces that lay out the
 // glyph and its number by hand.
 
-import { token } from "../primitives/tokens";
+import { token } from "../../primitives/tokens";
 
 /** The filled Boxicons crypto glyph — the essence currency mark everywhere. */
 const ESSENCE_ICON_CLASS = "bxf bx-crypto";

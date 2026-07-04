@@ -6,8 +6,8 @@
 // Calvus), identified by id, with their real portraits and real ability text
 // (`rendered-text`) — never invented copy.
 
-import { GroupPanel } from "../../components/GroupPanel";
-import { dreamscapeSceneUrl } from "../../components/atlas-display";
+import { GroupPanel } from "../../components/controls/GroupPanel";
+import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
 import { assetUrl } from "../../../runtime/asset-url";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";

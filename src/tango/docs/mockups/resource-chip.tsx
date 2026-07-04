@@ -6,8 +6,8 @@
 // reward line. Values are illustrative numbers, matching the pattern the
 // QuestStatusBar mockup already uses for its own essence figure.
 
-import { dreamscapeSceneUrl } from "../../components/atlas-display";
-import { ResourceChip } from "../../components/ResourceChip";
+import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
+import { ResourceChip } from "../../components/hud/ResourceChip";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 

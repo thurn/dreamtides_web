@@ -39,10 +39,10 @@
 import * as React from "react";
 import type { CSSProperties, ReactElement } from "react";
 import { createPortal } from "react-dom";
-import { InfoCard } from "./InfoCard";
-import type { AnchorRect } from "./InfoCard";
-import { richText } from "./rich-text";
-import { token } from "../primitives/tokens";
+import { InfoCard } from "../overlay/InfoCard";
+import type { AnchorRect } from "../overlay/InfoCard";
+import { richText } from "../card/rich-text";
+import { token } from "../../primitives/tokens";
 import "./quest-status-bar.css";
 
 const { PressPopover, usePressReveal, anchorRect, PRESS_SCALE } = InfoCard;

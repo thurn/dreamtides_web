@@ -844,8 +844,8 @@
       "name": "tint",
       "tsType": "MoteTint",
       "unionMembers": [
-        "violet",
-        "warm"
+        "warm",
+        "violet"
       ],
       "required": false,
       "defaultValue": "warm",
@@ -971,6 +971,8 @@
       "unionMembers": [
         "symbol",
         "object",
+        "map",
+        "filter",
         "span",
         "div",
         "a",
@@ -1035,7 +1037,6 @@
         "li",
         "link",
         "main",
-        "map",
         "mark",
         "menu",
         "menuitem",
@@ -1123,7 +1124,6 @@
         "feSpotLight",
         "feTile",
         "feTurbulence",
-        "filter",
         "foreignObject",
         "g",
         "image",
@@ -1194,6 +1194,8 @@
       "unionMembers": [
         "symbol",
         "object",
+        "map",
+        "filter",
         "span",
         "div",
         "a",
@@ -1258,7 +1260,6 @@
         "li",
         "link",
         "main",
-        "map",
         "mark",
         "menu",
         "menuitem",
@@ -1346,7 +1347,6 @@
         "feSpotLight",
         "feTile",
         "feTurbulence",
-        "filter",
         "foreignObject",
         "g",
         "image",
@@ -1695,14 +1695,14 @@
     },
     {
       "name": "tone",
-      "tsType": "\"blue\" | \"gold\" | \"green\" | \"red\" | \"violet\" | \"rust\" | \"neutral\"",
+      "tsType": "\"violet\" | \"blue\" | \"gold\" | \"green\" | \"rust\" | \"red\" | \"neutral\"",
       "unionMembers": [
+        "violet",
         "blue",
         "gold",
         "green",
-        "red",
-        "violet",
         "rust",
+        "red",
         "neutral"
       ],
       "required": false,

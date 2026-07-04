@@ -7,9 +7,9 @@
 // variants use tokenized glyphs.
 
 import { useRef } from "react";
-import { InfoCard } from "../../components/InfoCard";
-import { richText } from "../../components/rich-text";
-import { dreamscapeSceneUrl } from "../../components/atlas-display";
+import { InfoCard } from "../../components/overlay/InfoCard";
+import { richText } from "../../components/card/rich-text";
+import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
 import { assetUrl } from "../../../runtime/asset-url";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";

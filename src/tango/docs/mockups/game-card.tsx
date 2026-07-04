@@ -8,7 +8,7 @@
 import { useEffect, useState } from "react";
 import type { CardData } from "../../../types/cards";
 import { loadCardDatabase } from "../../../data/card-database";
-import { GameCard } from "../../components/CardView";
+import { GameCard } from "../../components/card/CardView";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 

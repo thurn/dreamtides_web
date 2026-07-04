@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import {
   SegmentedControl,
   type SegmentedOption,
-} from "../../components/SegmentedControl";
+} from "../../components/controls/SegmentedControl";
 import type { TangoComponent } from "../registry";
 
 const OPTIONS: SegmentedOption[] = [
@@ -77,7 +77,7 @@ export const segmentedControlDemo: TangoComponent = {
     {
       note: "A controlled toggle: own the selected value and update it from `onChange`. `options` accepts plain strings or `{ value, label }` pairs.",
       code: `import { useState } from "react";
-import { SegmentedControl } from "src/tango/components/SegmentedControl";
+import { SegmentedControl } from "src/tango/components/controls/SegmentedControl";
 
 const [filter, setFilter] = useState("All");
 

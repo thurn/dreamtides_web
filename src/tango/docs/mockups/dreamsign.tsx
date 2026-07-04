@@ -7,7 +7,7 @@
 // treatment (a desaturation), a run-time state rather than data.
 
 import { useRef } from "react";
-import { Dreamsign } from "../../components/Dreamsign";
+import { Dreamsign } from "../../components/hud/Dreamsign";
 import type { Dreamsign as DreamsignData } from "../../../types/quest";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";

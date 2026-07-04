@@ -12,7 +12,7 @@
 // Ported from the Claude Design "Dreamtides Mobile" project
 // (components/pills/StatTile.jsx / .d.ts).
 
-import { token } from "../primitives/tokens";
+import { token } from "../../primitives/tokens";
 
 /** Resource-role tokens a StatTile value may be tinted with. */
 type StatTileAccent = "essence" | "energy" | "spark" | "points";

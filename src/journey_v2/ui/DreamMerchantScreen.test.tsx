@@ -16,7 +16,7 @@ import { makeMerchantTestCard } from "../testing/fixtures";
 import { asCardId, asCardName } from "../../types/card-identity";
 import { DreamMerchantScreen } from "./DreamMerchantScreen";
 
-vi.mock("../../tango/components/CardView", () => ({
+vi.mock("../../tango/components/card/CardView", () => ({
   CardView: ({ card }: { card: CardData }) => (
     <div data-testid="mock-card-view" data-card-number={card.cardNumber}>
       {card.name}
@@ -28,8 +28,8 @@ vi.mock("../../components/CardHoverPreview", () => ({
   CardHoverPreview: () => null,
 }));
 
-vi.mock("../../tango/components/Dreamsign", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("../../tango/components/Dreamsign")>()),
+vi.mock("../../tango/components/hud/Dreamsign", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("../../tango/components/hud/Dreamsign")>()),
   DreamsignInfoCard: () => null,
 }));
 

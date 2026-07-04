@@ -9,7 +9,7 @@
 // the asset pipeline, exactly as it does on the shop / reward / deck surfaces.
 
 import { useRef } from "react";
-import { Dreamsign } from "../../components/Dreamsign";
+import { Dreamsign } from "../../components/hud/Dreamsign";
 import type { Dreamsign as DreamsignData } from "../../../types/quest";
 import { token } from "../../primitives/tokens";
 import type { TangoComponent } from "../registry";
@@ -94,7 +94,7 @@ export const dreamsignDemo: TangoComponent = {
   usage: [
     {
       note: "A dreamsign entity tile whose hover / press reveals its ability through InfoCard, anchored to the screen root — so pass the scene's `stageRef`. `sizePx` sets the tile edge length. The tile reads its art / ability from the `dreamsign` data (identified by id, never name).",
-      code: `import { Dreamsign } from "src/tango/components/Dreamsign";
+      code: `import { Dreamsign } from "src/tango/components/hud/Dreamsign";
 
 <div ref={stageRef} style={{ position: "relative" }}>
   <Dreamsign dreamsign={dreamsign} sizePx={72} stageRef={stageRef} />

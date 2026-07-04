@@ -11,7 +11,7 @@ import FocusedCardEditor from "./FocusedCardEditor";
 import type { FocusedSaveStatus } from "./FocusedCardEditor";
 import EditableFigment from "./EditableFigment";
 import { figmentPreviewCard } from "./figment-types";
-import { CardView, DEFAULT_ART_CROP } from "../tango/components/CardView";
+import { CardView, DEFAULT_ART_CROP } from "../tango/components/card/CardView";
 import type { CardData } from "../types/cards";
 import {
   beginFieldEdit,

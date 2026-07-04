@@ -2,7 +2,7 @@
 // follows. `label` is the button's text (a plain string) and `cost` its inline
 // essence price, both seeded via defaultArgs.
 
-import { Button } from "../../components/Button";
+import { Button } from "../../components/controls/Button";
 import type { TangoComponent } from "../registry";
 
 export const buttonDemo: TangoComponent = {
@@ -17,7 +17,7 @@ export const buttonDemo: TangoComponent = {
     {
       label: "With cost",
       note: "An essence `cost` renders after the label, in white, inside the one purple button sprite.",
-      code: `import { Button } from "src/tango/components/Button";
+      code: `import { Button } from "src/tango/components/controls/Button";
 
 <Button
   size="md"

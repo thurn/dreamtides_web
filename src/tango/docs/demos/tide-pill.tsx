@@ -11,7 +11,7 @@
 // The demo pill floats its reveal above itself (no `stageRef` in the bounded
 // demo stage), which is the standalone reveal path.
 
-import { TidePill } from "../../components/TidePill";
+import { TidePill } from "../../components/hud/TidePill";
 import type { TangoComponent } from "../registry";
 
 interface TidePillDemoArgs {
@@ -55,7 +55,7 @@ export const tidePillDemo: TangoComponent = {
     {
       label: "Anchored reveal",
       note: "Pass `stageRef` (the screen root) and the tide's InfoCard reveal is anchored to the pill and clamped fully on-screen — the preferred, material-continuity path.",
-      code: `import { TidePill } from "src/tango/components/TidePill";
+      code: `import { TidePill } from "src/tango/components/hud/TidePill";
 
 <TidePill
   tone="blue"

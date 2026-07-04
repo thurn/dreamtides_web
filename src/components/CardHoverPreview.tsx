@@ -1,9 +1,9 @@
 import type { CardData, FrozenCardData } from "../types/cards";
 import { extractGlossaryTerms } from "../data/glossary-terms";
-import { GlossaryDefinitionCard } from "../tango/components/GlossaryDefinitionCard";
+import { GlossaryDefinitionCard } from "../tango/components/card/GlossaryDefinitionCard";
 import { CardDisplay } from "./CardDisplay";
 import type { CardTransfigurationDisplay } from "../transfiguration/transfiguration-logic";
-import type { PopoverPlacementSide } from "../tango/components/hover-popover-placement";
+import type { PopoverPlacementSide } from "../tango/components/overlay/hover-popover-placement";
 
 type DefinitionSide = "left" | "right";
 

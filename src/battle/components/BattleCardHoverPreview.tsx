@@ -1,5 +1,5 @@
 import { CardDisplay } from "../../components/CardDisplay";
-import { CardTermDefinitions } from "../../tango/components/CardTermDefinitions";
+import { CardTermDefinitions } from "../../tango/components/card/CardTermDefinitions";
 import { extractGlossaryTerms } from "../../data/glossary-terms";
 import type { BattleCardInstance } from "../types";
 import { battleCardDisplayFromInstance } from "./BattleCardView";

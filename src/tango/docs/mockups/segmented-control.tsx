@@ -9,12 +9,12 @@
 import { useEffect, useState } from "react";
 import type { CardData } from "../../../types/cards";
 import { loadCardDatabase } from "../../../data/card-database";
-import { GameCard } from "../../components/CardView";
-import { dreamscapeSceneUrl } from "../../components/atlas-display";
+import { GameCard } from "../../components/card/CardView";
+import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
 import {
   SegmentedControl,
   type SegmentedOption,
-} from "../../components/SegmentedControl";
+} from "../../components/controls/SegmentedControl";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 

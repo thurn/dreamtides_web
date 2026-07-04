@@ -13,10 +13,10 @@
 
 import { useEffect, useState } from "react";
 import type { DreamscapeNode } from "../../../types/quest";
-import { AtlasNode, type AtlasNodeView } from "../../components/AtlasNode";
-import { AtlasEdge, type AtlasEdgeKind } from "../../components/AtlasEdge";
-import { AtlasEdgeDefs } from "../../components/AtlasEdgeDefs";
-import { dreamscapeIconUrl, dreamsignIconUrl } from "../../components/atlas-display";
+import { AtlasNode, type AtlasNodeView } from "../../components/atlas/AtlasNode";
+import { AtlasEdge, type AtlasEdgeKind } from "../../components/atlas/AtlasEdge";
+import { AtlasEdgeDefs } from "../../components/atlas/AtlasEdgeDefs";
+import { dreamscapeIconUrl, dreamsignIconUrl } from "../../components/atlas/atlas-display";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 

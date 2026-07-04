@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useQuest } from "../state/quest-context";
 import { logEvent, downloadLog } from "../logging";
 import { CardDisplay } from "../components/CardDisplay";
-import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
-import { EssenceValue } from "../tango/components/EssenceValue";
+import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
+import { EssenceValue } from "../tango/components/hud/EssenceValue";
 import type { CardData } from "../types/cards";
 
 /** Final summary screen shown after winning 7 battles. */

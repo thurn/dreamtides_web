@@ -4,8 +4,8 @@
 // AtlasEdgeDefs and one AtlasEdge per kind inside a single `.dream-atlas` svg.
 // `docName` points at AtlasEdge so the props table reports its real API.
 
-import { AtlasEdge, type AtlasEdgeKind } from "../../components/AtlasEdge";
-import { AtlasEdgeDefs } from "../../components/AtlasEdgeDefs";
+import { AtlasEdge, type AtlasEdgeKind } from "../../components/atlas/AtlasEdge";
+import { AtlasEdgeDefs } from "../../components/atlas/AtlasEdgeDefs";
 import type { TangoComponent } from "../registry";
 
 const KINDS: Array<{ kind: AtlasEdgeKind; label: string }> = [
@@ -70,8 +70,8 @@ export const atlasEdgeDemo: TangoComponent = {
   usage: [
     {
       note: "An atlas connector line. Each edge reads its stroke from the shared gradients in `AtlasEdgeDefs`, so render one `AtlasEdgeDefs` per `<svg>` and one `AtlasEdge` per connection, with the `kind` picking the treatment (traveled / open / dim / locked).",
-      code: `import { AtlasEdge } from "src/tango/components/AtlasEdge";
-import { AtlasEdgeDefs } from "src/tango/components/AtlasEdgeDefs";
+      code: `import { AtlasEdge } from "src/tango/components/atlas/AtlasEdge";
+import { AtlasEdgeDefs } from "src/tango/components/atlas/AtlasEdgeDefs";
 
 <svg className="dream-atlas">
   <AtlasEdgeDefs />

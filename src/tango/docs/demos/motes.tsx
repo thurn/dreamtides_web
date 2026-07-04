@@ -6,7 +6,7 @@
 // renders `<Motes {...args} />` inside it. `docName` still points at the real
 // Motes so the props table reports its actual API.
 
-import { Motes, type MotesProps } from "../../components/Motes";
+import { Motes, type MotesProps } from "../../components/hud/Motes";
 import { token } from "../../primitives/tokens";
 import type { TangoComponent } from "../registry";
 
@@ -39,7 +39,7 @@ export const motesDemo: TangoComponent = {
   usage: [
     {
       note: "Drifting ambient motes that fill their positioned parent (absolute inset: 0), so give the container `position: relative` and `overflow: hidden`. `seed` makes the scatter deterministic.",
-      code: `import { Motes } from "src/tango/components/Motes";
+      code: `import { Motes } from "src/tango/components/hud/Motes";
 
 <div style={{ position: "relative", overflow: "hidden" }}>
   <Motes on tint="warm" count={14} seed={0} />

@@ -5,14 +5,14 @@ import {
   siteTypeIcon,
   siteTypeName,
 } from "../atlas/atlas-generator";
-import { dreamscapeSceneUrl } from "../tango/components/atlas-display";
+import { dreamscapeSceneUrl } from "../tango/components/atlas/atlas-display";
 import { draftSitePickCount } from "../draft/draft-site-config";
 import {
   DreamscapeMotes,
   SiteNode,
   type DreamscapeSiteModel,
-} from "../tango/components/SiteNode";
-import { scatterSites, seedFromString } from "../tango/components/dreamscape-scatter";
+} from "../tango/components/atlas/SiteNode";
+import { scatterSites, seedFromString } from "../tango/components/atlas/dreamscape-scatter";
 import { logEvent } from "../logging";
 import "./dreamscape.css";
 

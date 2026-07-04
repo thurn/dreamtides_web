@@ -1,4 +1,4 @@
-import { assetUrl } from "../../runtime/asset-url";
+import { assetUrl } from "../../../runtime/asset-url";
 
 /**
  * Visual presentation data for the redesigned Dream Atlas screen. The Atlas

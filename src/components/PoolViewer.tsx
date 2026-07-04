@@ -26,7 +26,7 @@ import {
   subtypeOptionsFromCards,
 } from "./card-browser/card-browser-filter";
 import { CardOverlay } from "./CardOverlay";
-import { HoverPopover } from "../tango/components/HoverPopover";
+import { HoverPopover } from "../tango/components/overlay/HoverPopover";
 
 type PoolViewerSource =
   | "run"

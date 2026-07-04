@@ -22,9 +22,9 @@
 // Ported from the Claude Design "Dreamtides Mobile" project
 // (components/buttons/Button.jsx / .d.ts).
 
-import buttonPurple from "../assets/Button_Purple.png";
-import { PRESS_SCALE, usePress } from "../primitives/Pressable";
-import { token } from "../primitives/tokens";
+import buttonPurple from "../../assets/Button_Purple.png";
+import { PRESS_SCALE, usePress } from "../../primitives/Pressable";
+import { token } from "../../primitives/tokens";
 
 /** Height/scale variants. 'lg' is the taller commit height. */
 type ButtonSize = "sm" | "md" | "lg";

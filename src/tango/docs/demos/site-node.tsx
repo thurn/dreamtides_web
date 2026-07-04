@@ -10,7 +10,7 @@
 // scatter.
 
 import { useRef } from "react";
-import { SiteNode, type DreamscapeSiteModel } from "../../components/SiteNode";
+import { SiteNode, type DreamscapeSiteModel } from "../../components/atlas/SiteNode";
 import { token } from "../../primitives/tokens";
 import type { TangoComponent } from "../registry";
 
@@ -127,7 +127,7 @@ export const siteNodeDemo: TangoComponent = {
   usage: [
     {
       note: "A dreamscape site disc that positions itself from `model.pos` inside a `position: relative` stage and reveals its description through InfoCard, anchored to the scene's `stageRef`. `size` is the wayside diameter (battle guardians scale up); `motion` enables the calm floaty drift.",
-      code: `import { SiteNode } from "src/tango/components/SiteNode";
+      code: `import { SiteNode } from "src/tango/components/atlas/SiteNode";
 
 <div ref={stageRef} style={{ position: "relative" }}>
   {models.map((model) => (

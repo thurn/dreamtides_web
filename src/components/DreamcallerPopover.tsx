@@ -1,5 +1,5 @@
-import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
-import { RulesText } from "../tango/components/RulesText";
+import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
+import { RulesText } from "../tango/components/card/RulesText";
 
 const ACCENT_COLOR = "#a855f7";
 

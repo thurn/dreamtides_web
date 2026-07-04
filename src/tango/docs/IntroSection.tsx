@@ -12,7 +12,7 @@
 
 import type { CSSProperties, ReactElement } from "react";
 import { token } from "../primitives/tokens";
-import { GroupPanel } from "../components/GroupPanel";
+import { GroupPanel } from "../components/controls/GroupPanel";
 
 const eyebrowStyle: CSSProperties = {
   font: token("--t-eyebrow"),

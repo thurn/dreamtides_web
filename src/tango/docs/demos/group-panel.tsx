@@ -5,7 +5,7 @@
 // related info" grouping (a rules line, a hairline divider, and a labelled
 // value row) so the live pane has real content to organize.
 
-import { GroupPanel } from "../../components/GroupPanel";
+import { GroupPanel } from "../../components/controls/GroupPanel";
 import type { TangoComponent } from "../registry";
 
 export const groupPanelDemo: TangoComponent = {
@@ -19,7 +19,7 @@ export const groupPanelDemo: TangoComponent = {
   usage: [
     {
       note: "A fixed-shape liquid-glass pane that collects genuinely dense, related content (a heading, a body, a labelled value row) into one backdrop. It takes no styling props — only children.",
-      code: `import { GroupPanel } from "src/tango/components/GroupPanel";
+      code: `import { GroupPanel } from "src/tango/components/controls/GroupPanel";
 
 <GroupPanel>
   <p className="eyebrow">Dreamcaller</p>

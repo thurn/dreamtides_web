@@ -24,10 +24,10 @@
 import * as React from "react";
 import type { CSSProperties } from "react";
 import { createPortal } from "react-dom";
-import { InfoCard } from "./InfoCard";
-import { richText, type RichText } from "./rich-text";
+import { InfoCard } from "../overlay/InfoCard";
+import { richText, type RichText } from "../card/rich-text";
 import { mulberry32, type ScatterPoint } from "./dreamscape-scatter";
-import type { SiteState } from "../../types/quest";
+import type { SiteState } from "../../../types/quest";
 import "./site-node.css";
 
 const { usePressReveal, anchorRect, PressPopover } = InfoCard;

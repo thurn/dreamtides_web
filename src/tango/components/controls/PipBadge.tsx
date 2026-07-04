@@ -1,5 +1,5 @@
 import { type CSSProperties } from "react";
-import { HoverPopover } from "./HoverPopover";
+import { HoverPopover } from "../overlay/HoverPopover";
 
 /**
  * A circular numeric badge ("pip") used on card corners for stats like

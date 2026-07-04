@@ -7,10 +7,10 @@ import {
   useState,
 } from "react";
 import { useQuest } from "../state/quest-context";
-import { AtlasNode, type AtlasNodeView } from "../tango/components/AtlasNode";
-import { AtlasEdge, type AtlasEdgeKind } from "../tango/components/AtlasEdge";
-import { AtlasEdgeDefs } from "../tango/components/AtlasEdgeDefs";
-import { RulesText } from "../tango/components/RulesText";
+import { AtlasNode, type AtlasNodeView } from "../tango/components/atlas/AtlasNode";
+import { AtlasEdge, type AtlasEdgeKind } from "../tango/components/atlas/AtlasEdge";
+import { AtlasEdgeDefs } from "../tango/components/atlas/AtlasEdgeDefs";
+import { RulesText } from "../tango/components/card/RulesText";
 import {
   regenerateAtlasForProgress,
   revealedAtlasSite,
@@ -26,7 +26,7 @@ import {
   dreamscapeSceneUrl,
   dreamsignIconUrl,
   guidePortraitUrl,
-} from "../tango/components/atlas-display";
+} from "../tango/components/atlas/atlas-display";
 import type {
   AffiliationContent,
   ApollyonIncarnationContent,

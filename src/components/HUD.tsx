@@ -8,10 +8,10 @@ import {
   type SavedQuestSummary,
 } from "../state/saved-quests";
 import type { QuestState } from "../types/quest";
-import { DreamcallerPortrait } from "../tango/components/DreamcallerPortrait";
+import { DreamcallerPortrait } from "../tango/components/hud/DreamcallerPortrait";
 import { DreamcallerPopover } from "./DreamcallerPopover";
 import { HudDreamsignRow } from "./HudDreamsignRow";
-import { EssenceValue } from "../tango/components/EssenceValue";
+import { EssenceValue } from "../tango/components/hud/EssenceValue";
 import {
   HUD_BUTTON_BASE_CLASS,
   HUD_DREAMSIGN_DEBUG_SLOT_ID,

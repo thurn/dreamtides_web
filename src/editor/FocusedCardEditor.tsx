@@ -13,7 +13,7 @@ import {
   artSafeAreaTarget,
   minArtOffsetY,
   minArtScale,
-} from "../tango/components/CardView";
+} from "../tango/components/card/CardView";
 import {
   DEFAULT_DREAMWELL_ART_CROP,
   DREAMWELL_ART_OFFSET_MAX,

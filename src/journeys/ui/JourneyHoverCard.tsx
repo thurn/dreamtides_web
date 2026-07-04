@@ -20,7 +20,7 @@
 import { motion } from "framer-motion";
 
 import { CardDisplay } from "../../components/CardDisplay";
-import { GlossaryDefinitionCard } from "../../tango/components/GlossaryDefinitionCard";
+import { GlossaryDefinitionCard } from "../../tango/components/card/GlossaryDefinitionCard";
 import { extractGlossaryTerms } from "../../data/glossary-terms";
 import type { CardData } from "../../types/cards";
 
