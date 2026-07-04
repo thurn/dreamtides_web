@@ -8,36 +8,27 @@
 // `docName` still points at the real QuestStatusBar so the props table reports
 // its actual API.
 //
-// The dreamsign `art` / Dreamcaller `portrait` are inline SVG data URIs so the
-// demo is self-contained (no external asset fetches), and `dreamsigns` /
-// `dreamcaller` are ReactNode-free object props seeded via defaultArgs.
+// The dreamsign `art` and Dreamcaller `portrait` resolve from real production
+// art in `public/` — the same assets the full-screen mockup uses — so the demo
+// shows genuine dreamsign icons and a real Dreamcaller bust rather than
+// stand-in glyphs. `dreamsigns` / `dreamcaller` are ReactNode-free object props
+// seeded via defaultArgs.
 
 import { useRef } from "react";
 import { QuestStatusBar } from "../../components/hud/QuestStatusBar";
 import type { QuestStatusBarProps } from "../../components/hud/QuestStatusBar";
+import { dreamsignIconUrl } from "../../components/atlas/atlas-display";
+import { assetUrl } from "../../../runtime/asset-url";
 import { token } from "../../primitives/tokens";
 import type { TangoComponent } from "../registry";
 
-/** A tiny self-contained diamond glyph, tinted, as a stand-in dreamsign art. */
-function signArt(fill: string): string {
-  const svg =
-    `<svg xmlns='http://www.w3.org/2000/svg' width='96' height='96' viewBox='0 0 96 96'>` +
-    `<defs><radialGradient id='g' cx='50%' cy='38%' r='65%'>` +
-    `<stop offset='0%' stop-color='${fill}'/><stop offset='100%' stop-color='#1a1525'/>` +
-    `</radialGradient></defs>` +
-    `<path d='M48 8 L84 48 L48 88 L12 48 Z' fill='url(#g)' stroke='${fill}' stroke-width='3'/>` +
-    `</svg>`;
-  return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+/** A Dreamcaller's character render, resolved the same way `assetUrl` resolves
+ * every other binary art asset (see `src/components/DreamcallerPortrait.tsx`
+ * for the production equivalent — reimplemented locally here so this
+ * tango-isolated demo never imports from `src/components/`). */
+function dreamcallerPortraitUrl(imageNumber: string): string {
+  return assetUrl(`/dreamcallers/${imageNumber}.png`);
 }
-
-/** A stand-in Dreamcaller portrait — a soft violet bust silhouette. */
-const PORTRAIT = `data:image/svg+xml;utf8,${encodeURIComponent(
-  `<svg xmlns='http://www.w3.org/2000/svg' width='200' height='260' viewBox='0 0 200 260'>` +
-    `<rect width='200' height='260' fill='#2a2140'/>` +
-    `<circle cx='100' cy='96' r='46' fill='#c084fc'/>` +
-    `<path d='M28 260 C28 190 172 190 172 260 Z' fill='#a855f7'/>` +
-    `</svg>`,
-)}`;
 
 function QuestStatusBarDemo(args: Omit<QuestStatusBarProps, "stageRef">) {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -97,30 +88,31 @@ const stageRef = useRef<HTMLDivElement>(null);
       elevation: 10,
       signElevation: 10,
       dreamcaller: {
-        name: "Seld Rakor",
-        epithet: "the Unbound",
-        portrait: PORTRAIT,
-        ability:
-          "Whenever you foresee, draw a card. ▸ Dawn: Gain 2 essence.",
+        name: "Threxan",
+        epithet: "the Resounding Wrath",
+        portrait: dreamcallerPortraitUrl("0025"),
+        ability: "At the start of your first turn, draw a card.",
       },
       dreamsigns: [
         {
-          id: "s1",
-          name: "Amulet of Waking",
-          art: signArt("#ffd34d"),
-          ability: "▸ Dawn: Gain 2 essence.",
+          id: "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
+          name: "Amplified Acorn",
+          art: dreamsignIconUrl("acorn_gold.png"),
+          ability:
+            "Once per turn, when you discard a card, your next card this turn costs 2● less.",
         },
         {
-          id: "s2",
-          name: "Black Rose",
-          art: signArt("#c084fc"),
-          ability: "Whenever a character dissolves, foresee 1.",
+          id: "278EC1AB-F532-4862-84AE-63DF5E49548C",
+          name: "Pyramid Relic",
+          art: dreamsignIconUrl("aertfact.png"),
+          ability: "The second character you play each turn costs 1● less.",
         },
         {
-          id: "s3",
-          name: "Waking Crystal",
-          art: signArt("#38bdf8"),
-          ability: "Your first foresee each turn is enhanced.",
+          id: "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5",
+          name: "Bell",
+          art: dreamsignIconUrl("bell.png"),
+          ability:
+            "When you play a character from your void, rematerialize it.",
         },
       ],
     },

@@ -4,6 +4,12 @@
 // `body` is a `RichText` model value with no generated control, so it is seeded
 // via sampleContent.
 //
+// The media props are seeded so that EVERY variant renders real content the
+// moment the reader switches the `variant` control: `image` is a real
+// Dreamcaller portrait (drives the object / hero media) and `glyph` is a real
+// Boxicons class (drives the icon-disc variant), the same production art the
+// full-screen mockup uses — the text default still leads with `leadGlyph`.
+//
 // InfoCard's props are all optional, so the raw component assigns directly to
 // the registry's `Component` slot (no all-optional wrapper needed, unlike
 // StatTile). `docName` points at the react-docgen display name the metadata is
@@ -11,7 +17,16 @@
 
 import { InfoCard } from "../../components/overlay/InfoCard";
 import { richText } from "../../components/card/rich-text";
+import { assetUrl } from "../../../runtime/asset-url";
 import type { TangoComponent } from "../registry";
+
+/** A Dreamcaller's character render, resolved the same way `assetUrl` resolves
+ * every other binary art asset (see `src/components/DreamcallerPortrait.tsx`
+ * for the production equivalent — reimplemented locally here so this
+ * tango-isolated demo never imports from `src/components/`). */
+function dreamcallerPortraitUrl(imageNumber: string): string {
+  return assetUrl(`/dreamcallers/${imageNumber}.png`);
+}
 
 export const infoCardDemo: TangoComponent = {
   id: "info-card",
@@ -82,6 +97,13 @@ import { richText } from "src/tango/components/card/rich-text";
       meta: "Tide",
       title: "Singular Storm",
       leadGlyph: "bxf bx-water",
+      // Real media so switching `variant` to object / hero / icon renders
+      // genuine art rather than an empty frame. `image` is a real Dreamcaller
+      // portrait (object / hero), `frame` gives the object variant its framed
+      // treatment, and `glyph` fills the icon-disc variant.
+      image: dreamcallerPortraitUrl("0025"),
+      frame: true,
+      glyph: "bxf bx-store-alt-2",
     },
     sampleContent: {
       body: richText.plain(
