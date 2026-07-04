@@ -40,11 +40,22 @@ export const GLYPHS = {
   sparkInline: g("bxf bx-sparkle"),
   points: g("bxf bx-star-circle"),
   counter: g("bxf bx-hourglass"),
-  lunar: g("bxf bx-moon"),
+  /** The exhaust / tap activation mark (the filled moon). */
+  exhaust: g("bxf bx-moon"),
   /** Activated-ability lightning bolt. */
   bolt: g("bxf bx-bolt"),
   /** Leading caret used before a resolved-ability clause in rules text. */
   caretRight: g("bxf bx-caret-right"),
+
+  // Tide marks (Boxicons v3 filled) — the closed set of five tide icons. These
+  // mirror the production per-color tide glyphs in `src/components/tide-visuals`
+  // (TIDE_COLOR_CHIP), the source of truth used by the Dreamcaller-select screen
+  // and the tides editor.
+  tideEmber: g("bxf bx-hot"),
+  tideValor: g("bxf bx-shield"),
+  tideVision: g("bxf bx-eye-alt"),
+  tideWild: g("bxf bx-leaf"),
+  tideShadow: g("bxf bx-skull"),
 
   // Domain / UI glyphs.
   water: g("bxf bx-water"),

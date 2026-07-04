@@ -40,17 +40,12 @@ import { createPortal } from "react-dom";
 import { Pressable, PRESS_SCALE } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { type Glyph } from "../../primitives/glyph";
-import { type TangoColor, withAlpha } from "../../primitives/color";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
 import {
   type ImageCrop,
   type MediaFilter,
-  type TitleBadge,
-  type Wash,
   resolveImageCrop,
   resolveMediaFilter,
-  resolveTitleBadge,
-  resolveWash,
 } from "../../primitives/media";
 import { renderRichText, type RichText } from "../card/rich-text";
 
@@ -122,18 +117,6 @@ const tMeta: React.CSSProperties = {
   textTransform: "uppercase",
   color: token("--text-faint"),
 };
-/** A small warning-toned pill shown after a title (e.g. a dreamsign "Bane"). */
-const tTitleBadge: React.CSSProperties = {
-  borderRadius: 999,
-  padding: "1px 6px",
-  fontSize: 9,
-  fontWeight: 800,
-  letterSpacing: "0.08em",
-  textTransform: "uppercase",
-  color: "#fecaca",
-  background: "rgba(239, 68, 68, 0.18)",
-  border: "1px solid rgba(239, 68, 68, 0.45)",
-};
 
 /** id of the one-time <style> element carrying the entrance keyframe. Guarded so
  * multiple InfoCard/PressPopover instances never duplicate it. */
@@ -165,22 +148,6 @@ export const SITE_DISC: React.CSSProperties = {
   boxShadow: `inset 0 0 0 2.5px ${token("--accent")}, 0 0 14px 1px rgba(168,85,247,0.45)`,
 };
 
-/**
- * The icon-variant disc tinted to a caller-supplied accent color, so a reveal
- * disc can read as the same hue as the node it opens from (e.g. a dreamscape
- * SiteNode). The gradient + glow recipe lives here in the design system; the
- * caller supplies only the accent color via `InfoCardProps.discAccent`.
- */
-function accentDiscStyle(accent: TangoColor): React.CSSProperties {
-  return {
-    background: "radial-gradient(120% 120% at 50% 28%, #1a1525, #070512)",
-    // Alpha via color-mix so the ring/glow are valid for a role token, a
-    // color-mix, or a hex accent alike (a `${hex}73` suffix would be invalid CSS
-    // for anything but a bare hex).
-    boxShadow: `inset 0 0 0 2px ${withAlpha(accent, 0.45)}, 0 0 14px 1px ${withAlpha(accent, 0.36)}`,
-  };
-}
-
 /** Which media treatment an InfoCard renders. */
 export type InfoCardVariant = "object" | "hero" | "icon" | "text";
 
@@ -193,11 +160,6 @@ export type InfoCardVariant = "object" | "hero" | "icon" | "text";
 interface InfoCardCommonProps {
   /** The card's headline. Plain text — resolve names before display. */
   title?: string;
-  /**
-   * A small warning-toned pill shown right after the title (e.g. a dreamsign
-   * {@link TitleBadge} `"bane"`). Omit for no badge.
-   */
-  titleBadge?: TitleBadge;
   /** The reveal copy, as a {@link RichText} value (plain / rules / note / stack). */
   body?: RichText;
 }
@@ -215,8 +177,6 @@ export interface InfoCardObjectProps extends InfoCardCommonProps {
   imageCrop?: ImageCrop;
   /** A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). */
   imageFilter?: MediaFilter;
-  /** A named {@link Wash} painted over the media. */
-  wash?: Wash;
   /** true = framed portrait, false = contained transparent object. Default false. */
   frame?: boolean;
 }
@@ -233,8 +193,6 @@ export interface InfoCardHeroProps extends InfoCardCommonProps {
   imageCrop?: ImageCrop;
   /** A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). */
   imageFilter?: MediaFilter;
-  /** A named {@link Wash} painted over the media. */
-  wash?: Wash;
   /** Small mono/uppercase overline above the title. */
   meta?: string;
 }
@@ -247,11 +205,6 @@ export interface InfoCardIconProps extends InfoCardCommonProps {
   variant: "icon";
   /** The {@link Glyph} the disc renders. Required. */
   glyph: Glyph;
-  /**
-   * Tint the reveal disc to this {@link TangoColor} so it matches the node it
-   * opens from. Omit for the default violet-glow disc (SITE_DISC).
-   */
-  discAccent?: TangoColor;
 }
 
 /**
@@ -292,7 +245,7 @@ export type InfoCardProps =
  * setRevealDelay / SITE_DISC`.
  */
 function InfoCardComponent(props: InfoCardProps): React.ReactElement {
-  const { title, titleBadge, body } = props;
+  const { title, body } = props;
   // `variant` is optional only on the text member; resolve the default once for
   // the shared body/title styling. The per-variant branches below narrow on the
   // discriminant directly so each reads only the media its interface carries.
@@ -305,29 +258,12 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
         {renderRichText(body)}
       </div>
     );
-  // Title text plus an optional trailing badge, wrapped inline so the two stay
-  // on one baseline (and stay centered in the object variant's centered title).
-  const titleContent =
-    titleBadge === undefined ? (
-      title
-    ) : (
-      <span
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 6,
-          flexWrap: "wrap",
-        }}
-      >
-        {title}
-        <span style={tTitleBadge}>{resolveTitleBadge(titleBadge)}</span>
-      </span>
-    );
+  const titleContent = title;
 
   /* --- object: a centered media block (framed portrait OR contained
      transparent object) above its name + text. --- */
   if (props.variant === "object") {
-    const { image, imageCrop = "top", imageFilter, wash, frame = false } = props;
+    const { image, imageCrop = "top", imageFilter, frame = false } = props;
     const imageUrl = resolveArtRef(image);
     const media = frame ? (
       <div
@@ -356,11 +292,6 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
             userSelect: "none",
           }}
         />
-        {wash && (
-          <div
-            style={{ position: "absolute", inset: 0, background: resolveWash(wash) }}
-          />
-        )}
       </div>
     ) : (
       <img
@@ -399,7 +330,7 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
      base gradient dissolves the media into the solid surface so the title/body
      sit on the card's own material, not a scrim over the scene. --- */
   if (props.variant === "hero") {
-    const { image, imageCrop = "top", imageFilter, wash, meta } = props;
+    const { image, imageCrop = "top", imageFilter, meta } = props;
     const Meta = meta ? (
       <div style={{ ...tMeta, marginBottom: 7 }}>{meta}</div>
     ) : null;
@@ -428,11 +359,6 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
               filter: imageFilter ? resolveMediaFilter(imageFilter) : undefined,
             }}
           />
-          {wash && (
-            <div
-              style={{ position: "absolute", inset: 0, background: resolveWash(wash) }}
-            />
-          )}
           <div
             style={{
               position: "absolute",
@@ -465,7 +391,7 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
 
   /* --- icon: a glyph disc beside the title, description below --- */
   if (props.variant === "icon") {
-    const { glyph, discAccent } = props;
+    const { glyph } = props;
     return (
       <div style={{ ...shell, padding: `${String(PADY)}px ${String(PADX)}px` }}>
         <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
@@ -477,9 +403,7 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
               borderRadius: "50%",
               display: "grid",
               placeItems: "center",
-              ...(discAccent !== undefined
-                ? accentDiscStyle(discAccent)
-                : SITE_DISC),
+              ...SITE_DISC,
             }}
           >
             <i

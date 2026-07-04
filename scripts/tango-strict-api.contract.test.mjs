@@ -130,8 +130,8 @@ describe("Tango strict-API contract (resolved surface)", () => {
     expect(offenders).toEqual([]);
   });
 
-  // A glyph, color, image, wash, or filter is a NAMED value (a Glyph from the
-  // registry, a TangoColor role / hex, an ArtRef, a Wash / MediaFilter), never
+  // A glyph, color, image, or filter is a NAMED value (a Glyph from the
+  // registry, a TangoColor role / hex, an ArtRef, a MediaFilter), never
   // an arbitrary class / CSS / URL string. This guards those props on the
   // RESOLVED surface so one can't regress to a bare `string` — the same escape
   // hatch as `style`, one value at a time. (Text props — title, label, blurb,
@@ -147,9 +147,7 @@ describe("Tango strict-API contract (resolved surface)", () => {
     "portrait",
     "iconRef",
     "knownDreamsignRef",
-    "wash",
     "accent",
-    "discAccent",
     "tintColor",
     "highlightColor",
     "selectionColor",
@@ -158,7 +156,7 @@ describe("Tango strict-API contract (resolved surface)", () => {
     "imageFilter",
   ]);
 
-  it("no glyph/color/image/wash/filter prop is a bare `string`", () => {
+  it("no glyph/color/image/filter prop is a bare `string`", () => {
     const offenders = [];
     for (const [component, props] of Object.entries(surface)) {
       for (const prop of props ?? []) {

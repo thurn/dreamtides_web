@@ -4,15 +4,14 @@
 // labels) grouping real tide `displayName` values pulled from
 // `data/tides4.jsonc` (the player-facing narrative name baked for each tide,
 // shown on the real Dreamcaller-select / pool-viewer / "why this card"
-// screens per that file's schema docs). `tone` is TidePill's own
-// presentation-only prop — there is no tide→tone mapping in production data,
-// so each pill is assigned a distinct tone purely to demonstrate the full
-// palette, not to assert a fabricated color identity for that tide.
+// screens per that file's schema docs). `tide` is TidePill's own
+// presentation prop naming one of the five tides — there is no tide→identity
+// mapping in production data, so each pill is assigned a tide purely to
+// demonstrate the palette, not to assert a fabricated identity for that record.
 
 import { useRef } from "react";
 import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
-import { TidePill, type TidePillProps } from "../../components/hud/TidePill";
-import { GLYPHS } from "../../primitives/glyph";
+import { TidePill, type Tide } from "../../components/hud/TidePill";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 
@@ -20,7 +19,7 @@ interface TideEntry {
   id: string;
   displayName: string;
   description: string;
-  tone: NonNullable<TidePillProps["tone"]>;
+  tide: Tide;
 }
 
 interface RoleGroup {
@@ -41,7 +40,7 @@ const GROUPS: RoleGroup[] = [
         displayName: "Singular Storm",
         description:
           "A tide of sudden, singular force — one overwhelming swell rather than a steady current.",
-        tone: "violet",
+        tide: "shadow",
       },
     ],
   },
@@ -54,21 +53,21 @@ const GROUPS: RoleGroup[] = [
         displayName: "The Worldbreaker",
         description:
           "The tide of endings — cards and characters that trade the board away for a decisive break.",
-        tone: "gold",
+        tide: "ember",
       },
       {
         id: "tide-fac-05",
         displayName: "Teeming Thicket",
         description:
           "A verdant, crowding tide — wide, cheap swarms that fill the board faster than they can be cleared.",
-        tone: "green",
+        tide: "wild",
       },
       {
         id: "tide-fac-06",
         displayName: "The Shifting Tide",
         description:
           "A tide that never settles — cards that transform, relocate, and rewrite what is already in play.",
-        tone: "neutral",
+        tide: "vision",
       },
     ],
   },
@@ -81,21 +80,21 @@ const GROUPS: RoleGroup[] = [
         displayName: "The Undertow",
         description:
           "The quiet pull beneath the surface — value that accrues turn over turn until it drags the game under.",
-        tone: "blue",
+        tide: "vision",
       },
       {
         id: "tide-neu-03",
         displayName: "Rising Power",
         description:
           "A tide that only grows — each turn spent building leaves you stronger than the last.",
-        tone: "rust",
+        tide: "valor",
       },
       {
         id: "tide-neu-04",
         displayName: "March of the Mighty",
         description:
           "The advance of heavy things — expensive, unstoppable characters that close a game outright.",
-        tone: "red",
+        tide: "ember",
       },
     ],
   },
@@ -172,8 +171,7 @@ export function TidePillMockup() {
               {group.tides.map((tide) => (
                 <TidePill
                   key={tide.id}
-                  tone={tide.tone}
-                  icon={GLYPHS.water}
+                  tide={tide.tide}
                   label={tide.displayName}
                   description={tide.description}
                   stageRef={stageRef}

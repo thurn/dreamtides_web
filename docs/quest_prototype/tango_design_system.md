@@ -33,7 +33,7 @@ green on `npm run lint`, `npm run typecheck`, and `npm test`.
   takes a *named* value, not a string: a color is a `TangoColor` (a palette
   role, or a `` `#${string}` `` hex for a genuinely data-driven one), a glyph is
   a `Glyph` from the icon registry, a piece of art is an `ArtRef` the component
-  resolves to a URL itself, and a wash / media filter / image crop / title badge
+  resolves to a URL itself, and a media filter / image crop
   is a named union. These value types live in `src/tango/primitives/`
   (`color.ts`, `glyph.ts`, `art.ts`, `media.ts`). **Adding arbitrary token
   customization to a component is never acceptable** — those escape hatches let
@@ -322,8 +322,8 @@ reference, not by a from-scratch subagent rewrite.
   `scripts/tango-strict-api.contract.test.mjs` re-derives the resolved public
   surface of both `components/` and `primitives/` via react-docgen and asserts
   no component exposes a `style`/`className`/`CSSProperties` prop of its own, and
-  that no glyph / color / image / wash / filter prop resolves to a bare `string`
-  (each must be a named value type — `Glyph`, `TangoColor`, `ArtRef`, `Wash`,
+  that no glyph / color / image / filter prop resolves to a bare `string`
+  (each must be a named value type — `Glyph`, `TangoColor`, `ArtRef`,
   `MediaFilter`) — so a hatch that leaks in through an aliased type still fails
   the build.
   `primitives/` is excluded from the source rule because a mechanism like

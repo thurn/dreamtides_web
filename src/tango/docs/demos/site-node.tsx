@@ -5,9 +5,8 @@
 // stage, owns the `stageRef`, and lays out one node per state (a plain site, a
 // larger battle guardian, a locked guardian, a visited site). `docName` still
 // points at the real SiteNode so the props table reports its actual API. The
-// models here are representative demo fixtures (glyphs, labels, accents), not game
-// data — the dreamscape screen builds real ones from its site list + seeded
-// scatter.
+// models here are representative demo fixtures (glyphs, labels), not game data —
+// the dreamscape screen builds real ones from its site list + seeded scatter.
 
 import { useRef } from "react";
 import { SiteNode, type DreamscapeSiteModel } from "../../components/atlas/SiteNode";
@@ -27,7 +26,6 @@ const DEMO_MODELS: DreamscapeSiteModel[] = [
     label: "Merchant",
     blurb: "Spend essence on cards, dreamsigns, and services.",
     icon: glyph("bxf bx-store-alt-2"),
-    accent: "#a855f7",
   },
   {
     site: { id: "s-reward", type: "Reward", isEnhanced: false, isVisited: false },
@@ -39,7 +37,6 @@ const DEMO_MODELS: DreamscapeSiteModel[] = [
     label: "Treasure",
     blurb: "Claim a reward carried by this site.",
     icon: glyph("bxf bx-treasure-chest"),
-    accent: "#a855f7",
   },
   {
     site: { id: "s-visited", type: "Draft", isEnhanced: false, isVisited: true },
@@ -51,7 +48,6 @@ const DEMO_MODELS: DreamscapeSiteModel[] = [
     label: "Draft 3x",
     blurb: "Draft new cards into your deck.",
     icon: glyph("bxf bx-copy"),
-    accent: "#a855f7",
   },
   {
     site: { id: "s-battle", type: "Battle", isEnhanced: false, isVisited: false },
@@ -63,7 +59,6 @@ const DEMO_MODELS: DreamscapeSiteModel[] = [
     label: "Battle",
     blurb: "The dreamscape's guardian awaits.",
     icon: glyph("bxf bx-sword-alt"),
-    accent: "#ef4444",
   },
   {
     site: { id: "s-locked", type: "Battle", isEnhanced: false, isVisited: false },
@@ -75,18 +70,15 @@ const DEMO_MODELS: DreamscapeSiteModel[] = [
     label: "Final Boss",
     blurb: "Visit the other sites in this dreamscape first.",
     icon: glyph("bxf bx-meteor"),
-    accent: "#6b7280",
   },
 ];
 
 interface SiteNodeDemoArgs {
-  /** Wayside disc diameter in px (battle guardians scale up from here). */
-  size?: number;
   /** Enable the calm floaty drift. */
   motion?: boolean;
 }
 
-function SiteNodeDemo({ size = 60, motion = true }: SiteNodeDemoArgs) {
+function SiteNodeDemo({ motion = true }: SiteNodeDemoArgs) {
   const stageRef = useRef<HTMLDivElement>(null);
   return (
     <div
@@ -107,7 +99,6 @@ function SiteNodeDemo({ size = 60, motion = true }: SiteNodeDemoArgs) {
         <SiteNode
           key={model.site.id}
           model={model}
-          size={size}
           motion={motion}
           stageRef={stageRef}
           onSelect={() => undefined}
@@ -121,13 +112,13 @@ export const siteNodeDemo: TangoComponent = {
   id: "site-node",
   title: "Site Node",
   blurb:
-    "The dreamscape site disc: a floating circular node over scene art carrying a glyph and accent ring. It has no text label — pressing or hovering reveals the site's name and detail through the shared InfoCard.",
+    "The dreamscape site disc: a floating circular node over scene art carrying a glyph and accent ring. It has no text label — pressing or hovering reveals the site's name and detail through the shared InfoCard. The screen positions each node (via `model.pos`); it does not resize or recolor it.",
   group: "Components",
   docName: "SiteNode",
   Component: SiteNodeDemo,
   usage: [
     {
-      note: "A dreamscape site disc that positions itself from `model.pos` inside a `position: relative` stage and reveals its description through InfoCard, anchored to the scene's `stageRef`. `size` is the wayside diameter (battle guardians scale up); `motion` enables the calm floaty drift.",
+      note: "A dreamscape site disc that positions itself from `model.pos` inside a `position: relative` stage and reveals its description through InfoCard, anchored to the scene's `stageRef`. The disc's size and accent are the system's (battle guardians scale up on their own); `motion` enables the calm floaty drift.",
       code: `import { SiteNode } from "src/tango/components/atlas/SiteNode";
 
 <div ref={stageRef} style={{ position: "relative" }}>
@@ -135,7 +126,6 @@ export const siteNodeDemo: TangoComponent = {
     <SiteNode
       key={model.site.id}
       model={model}
-      size={60}
       motion
       stageRef={stageRef}
       onSelect={() => visitSite(model.site)}
@@ -146,7 +136,6 @@ export const siteNodeDemo: TangoComponent = {
   ],
   demo: {
     defaultArgs: {
-      size: 60,
       motion: true,
     },
   },

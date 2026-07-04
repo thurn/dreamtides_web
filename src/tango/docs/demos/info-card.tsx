@@ -57,7 +57,6 @@ import { GLYPHS } from "src/tango/primitives/glyph";
   image={artRef.dreamcaller("0025")}
   frame
   title="Seld Rakor"
-  titleBadge="bane"
   body={richText.rules("Whenever you Reclaim a card, deal 1 damage.")}
 />`,
     },

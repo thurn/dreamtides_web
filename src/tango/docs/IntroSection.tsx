@@ -227,8 +227,8 @@ export function IntroSection(): ReactElement {
             <code>TangoColor</code> (a palette role, or a <code>#hex</code>{" "}
             literal for a genuinely data-driven one), a glyph is a{" "}
             <code>Glyph</code> from the icon registry, a piece of art is an{" "}
-            <code>ArtRef</code> the component resolves itself, and a wash, media
-            filter, or crop is a named union. So a prop that is really a color,
+            <code>ArtRef</code> the component resolves itself, and a media
+            filter or crop is a named union. So a prop that is really a color,
             icon, or image can never be an arbitrary CSS string, class, or URL.{" "}
             <strong>Adding arbitrary token customization to a component is never
             acceptable</strong> — not a one-off color, not &ldquo;just this
@@ -242,6 +242,23 @@ export function IntroSection(): ReactElement {
             other screens solve it and match them rather than inventing a knob.
           </p>
           <p style={bodyStyle}>
+            The knobs that keep trying to sneak back in are worth naming, because
+            each looks harmless in isolation: a numeric <code>size</code>,{" "}
+            <code>scale</code>, <code>elevation</code>, <code>gap</code>, or{" "}
+            <code>threshold</code>; a per-instance <code>accent</code> or{" "}
+            <code>color</code> so &ldquo;this one node&rdquo; can be a different
+            hue; a decorative badge or wash toggle. Every one of these is a
+            &ldquo;no.&rdquo; A pixel measurement is layout — the caller wraps and
+            sizes its own element. A per-instance color is the design system
+            drifting one call site at a time; a component reads the same
+            everywhere, and the handful of states that legitimately differ
+            (a battle node looming larger, a locked node dimmed) are decided{" "}
+            <em>inside</em> the component from its semantic model, never handed in
+            as a raw value. If you find yourself reaching for one of these, the
+            component is being asked to do the caller&rsquo;s job — stop and wrap
+            it instead.
+          </p>
+          <p style={bodyStyle}>
             This is enforced, not just documented: the{" "}
             <code>no-escape-hatch-props</code> ESLint rule errors when a
             component or primitive <code>*Props</code> type grows a{" "}
@@ -249,7 +266,7 @@ export function IntroSection(): ReactElement {
             <code>CSSProperties</code>-typed prop, a DOM-attribute{" "}
             <code>extends</code>, or an index signature, and a contract test
             re-checks the resolved surface — including a guard that a glyph,
-            color, image, wash, or filter prop never resolves to a bare{" "}
+            color, image, or filter prop never resolves to a bare{" "}
             <code>string</code>. So re-adding a knob fails lint or the build,
             not code review.
           </p>

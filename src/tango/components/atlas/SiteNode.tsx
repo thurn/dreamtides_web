@@ -15,8 +15,8 @@
 //
 // Unifies the local `DreamscapeSiteNode` / `DreamscapeSitePopover` pair with the
 // design source `components/quest/SiteNode.jsx`: the LOCAL node treatment + game
-// data (battle sizing, per-site accent, floaty drift, visited / locked badges,
-// the placed-site model, the deferred-cursor contract) is authoritative; the
+// data (battle sizing, floaty drift, visited / locked badges, the placed-site
+// model, the deferred-cursor contract) is authoritative; the
 // DESIGN InfoCard-icon reveal + the input-adaptive engine is the Tango vocabulary
 // the preview now speaks. The node measures against `stageRef` (the screen root)
 // to anchor its reveal.
@@ -34,10 +34,19 @@ import "./site-node.css";
 
 const { usePressReveal, anchorRect, PressPopover } = InfoCard;
 
+/** Wayside disc diameter in px; battle guardians scale up from here. The disc's
+ * size is the design system's, not a caller knob — the screen positions the node
+ * (via `model.pos`); it does not resize it. */
+const NODE_SIZE = 60;
+
+/** The node's fixed accent — the system's violet, not a per-node color. The ring
+ * and reveal disc derive their alpha from it via {@link withAlpha}. */
+const NODE_ACCENT: TangoColor = "accent";
+
 /**
  * One site placed in the dreamscape scene. The screen builds these models from
  * the node's sites + the seeded scatter so the node and its reveal share a
- * single source of truth for position, label, accent, and interaction state.
+ * single source of truth for position, label, and interaction state.
  */
 export interface DreamscapeSiteModel {
   site: SiteState;
@@ -55,9 +64,6 @@ export interface DreamscapeSiteModel {
   blurb: string;
   /** The site {@link Glyph}. */
   icon: Glyph;
-  /** Accent color, used for the node's ring + reveal disc — a {@link TangoColor}
-   * (typically a per-dreamscape `#rrggbb` hex). */
-  accent: TangoColor;
 }
 
 /** The status note (locked / visited) shown under the blurb in the reveal. */
@@ -80,10 +86,8 @@ function siteRevealBody(model: DreamscapeSiteModel): RichText {
 }
 
 export interface SiteNodeProps {
-  /** The placed-site model — position, label, accent, glyph, and state. */
+  /** The placed-site model — position, label, glyph, and state. */
   model: DreamscapeSiteModel;
-  /** Wayside disc diameter in px; battle guardians scale up from here. */
-  size: number;
   /** Enable the calm floaty drift (disabled under reduced-motion via CSS). */
   motion: boolean;
   /** Screen root the reveal anchors + clamps against (for popover placement). */
@@ -98,12 +102,11 @@ export interface SiteNodeProps {
  */
 export function SiteNode({
   model,
-  size,
   motion,
   stageRef,
   onSelect,
 }: SiteNodeProps): React.ReactElement {
-  const { site, pos, index, isBattle, isLocked, isInteractive, accent } = model;
+  const { site, pos, index, isBattle, isLocked, isInteractive } = model;
 
   const btnRef = React.useRef<HTMLButtonElement>(null);
   const { shown, fine, begin, end, enter, leave, heldPastTap } =
@@ -121,18 +124,18 @@ export function SiteNode({
   }, [shown, stageRef]);
 
   // Battle guardians loom a little larger than the wayside sites.
-  const diameter = isBattle ? Math.round(size * 1.22) : size;
+  const diameter = isBattle ? Math.round(NODE_SIZE * 1.22) : NODE_SIZE;
   // A locked guardian stays at full opacity but is desaturated to a clear,
   // readable "disabled" grey.
   const opacity = site.isVisited ? 0.42 : 1;
   const lockedFilter = isLocked ? "grayscale(1) brightness(0.62)" : undefined;
 
-  // Ring + border derive from the node's accent via color-mix alpha, so any
-  // TangoColor (a per-dreamscape hex, a role token) reads correctly. The bright
-  // ring shows while the reveal is up (hover on a fine pointer, press on touch).
+  // Ring + border derive from the node's fixed accent via color-mix alpha. The
+  // bright ring shows while the reveal is up (hover on a fine pointer, press on
+  // touch).
   const ring = shown
-    ? `0 0 0 2px ${withAlpha(accent, 0.9)}, 0 0 30px ${withAlpha(accent, 0.55)}, 0 14px 26px rgba(0,0,0,.55)`
-    : `0 0 0 1px ${withAlpha(accent, 0.35)}, 0 0 18px ${withAlpha(accent, 0.26)}, 0 8px 18px rgba(0,0,0,.5)`;
+    ? `0 0 0 2px ${withAlpha(NODE_ACCENT, 0.9)}, 0 0 30px ${withAlpha(NODE_ACCENT, 0.55)}, 0 14px 26px rgba(0,0,0,.55)`
+    : `0 0 0 1px ${withAlpha(NODE_ACCENT, 0.35)}, 0 0 18px ${withAlpha(NODE_ACCENT, 0.26)}, 0 8px 18px rgba(0,0,0,.5)`;
 
   const doSelect = (): void => {
     if (isInteractive) {
@@ -199,7 +202,7 @@ export function SiteNode({
     >
       <span
         className="ds-disc"
-        style={{ boxShadow: ring, borderColor: withAlpha(accent, 0.45) }}
+        style={{ boxShadow: ring, borderColor: withAlpha(NODE_ACCENT, 0.45) }}
       >
         <span
           className="ds-ico"
@@ -236,7 +239,6 @@ export function SiteNode({
             <InfoCard
               variant="icon"
               glyph={model.icon}
-              discAccent={accent}
               title={model.label}
               body={siteRevealBody(model)}
             />

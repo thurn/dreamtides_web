@@ -76,8 +76,6 @@ const stageRef = useRef<HTMLDivElement>(null);
     defaultArgs: {
       essence: 200,
       deck: 22,
-      elevation: 10,
-      signElevation: 10,
       dreamcaller: {
         name: "Threxan",
         epithet: "the Resounding Wrath",

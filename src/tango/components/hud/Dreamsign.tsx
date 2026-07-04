@@ -92,7 +92,6 @@ export function DreamsignInfoCard({
 }: DreamsignInfoCardProps): React.ReactElement {
   const showImage = Boolean(dreamsign.imageName);
   const effect = dreamsign.effectDescription ?? "";
-  const badge = dreamsign.isBane ? "bane" : undefined;
   const body = effect ? richText.rules(effect) : undefined;
   return (
     <div
@@ -115,16 +114,10 @@ export function DreamsignInfoCard({
             dreamsign.isBane ? "dreamsign-portrait-bane" : "dreamsign-portrait"
           }
           title={dreamsign.name}
-          titleBadge={badge}
           body={body}
         />
       ) : (
-        <InfoCard
-          variant="text"
-          title={dreamsign.name}
-          titleBadge={badge}
-          body={body}
-        />
+        <InfoCard variant="text" title={dreamsign.name} body={body} />
       )}
       <CardTermDefinitions
         text={effect}

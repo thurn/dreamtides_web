@@ -4,8 +4,8 @@
 // `model.pos` (stage percentages); the reveal anchors to the full-viewport
 // stageRef, so cards clamp against the real screen edges. The scene art is a real
 // dreamscape backdrop resolved by id from the atlas-display helpers. The site
-// models are representative presentation fixtures (glyphs, labels, accents) — the
-// live dreamscape screen builds real ones from its site list and seeded scatter.
+// models are representative presentation fixtures (glyphs, labels) — the live
+// dreamscape screen builds real ones from its site list and seeded scatter.
 
 import { useRef } from "react";
 import { SiteNode, type DreamscapeSiteModel } from "../../components/atlas/SiteNode";
@@ -26,7 +26,6 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     label: "Merchant",
     blurb: "Spend essence on cards, dreamsigns, and services.",
     icon: glyph("bxf bx-store-alt-2"),
-    accent: "#a855f7",
   },
   {
     site: { id: "s-reward", type: "Reward", isEnhanced: false, isVisited: false },
@@ -38,7 +37,6 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     label: "Treasure",
     blurb: "Claim a reward carried by this site.",
     icon: glyph("bxf bx-treasure-chest"),
-    accent: "#a855f7",
   },
   {
     site: { id: "s-draft", type: "Draft", isEnhanced: false, isVisited: true },
@@ -50,7 +48,6 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     label: "Draft 3x",
     blurb: "Draft new cards into your deck.",
     icon: glyph("bxf bx-copy"),
-    accent: "#a855f7",
   },
   {
     site: { id: "s-rest", type: "Reward", isEnhanced: true, isVisited: false },
@@ -61,8 +58,7 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     isInteractive: true,
     label: "Wellspring",
     blurb: "An enhanced site — rest and recover before the road ahead.",
-    icon: GLYPHS.lunar,
-    accent: "#38bdf8",
+    icon: GLYPHS.exhaust,
   },
   {
     site: { id: "s-battle", type: "Battle", isEnhanced: false, isVisited: false },
@@ -74,7 +70,6 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     label: "Battle",
     blurb: "The dreamscape's guardian awaits.",
     icon: glyph("bxf bx-sword-alt"),
-    accent: "#ef4444",
   },
   {
     site: { id: "s-boss", type: "Battle", isEnhanced: false, isVisited: false },
@@ -86,7 +81,6 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     label: "Final Boss",
     blurb: "Visit the other sites in this dreamscape first.",
     icon: glyph("bxf bx-meteor"),
-    accent: "#6b7280",
   },
 ];
 
@@ -107,7 +101,6 @@ export function SiteNodeMockup() {
         <SiteNode
           key={model.site.id}
           model={model}
-          size={64}
           motion
           stageRef={stageRef}
           onSelect={() => undefined}

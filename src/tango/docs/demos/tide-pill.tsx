@@ -1,7 +1,8 @@
 // Registry demo entry for TidePill — see resource-chip.tsx for the recipe
-// this follows. `icon` is a named `Glyph` from the design system's `GLYPHS`
-// vocabulary; `label` is the tide name (a plain string), surfaced as a text
-// control seeded via defaultArgs.
+// this follows. `tide` is a string-literal union (select control) naming one of
+// the five tides, which fixes the pill's icon and color; `label` is the tide's
+// display name (a plain string), surfaced as a text control seeded via
+// defaultArgs.
 //
 // TidePill's `label` and `description` are required, which the registry's
 // `ComponentType<Record<string, unknown>>` signature can't satisfy directly (a
@@ -11,15 +12,13 @@
 // The demo pill floats its reveal above itself (no `stageRef` in the bounded
 // demo stage), which is the standalone reveal path.
 
-import { TidePill } from "../../components/hud/TidePill";
-import { GLYPHS, type Glyph } from "../../primitives/glyph";
+import { TidePill, type Tide } from "../../components/hud/TidePill";
 import type { TangoComponent } from "../registry";
 
 interface TidePillDemoArgs {
   label?: string;
   description?: string;
-  tone?: "violet" | "blue" | "gold" | "green" | "rust" | "red" | "neutral";
-  icon?: Glyph;
+  tide?: Tide;
   size?: "sm" | "md";
   onPress?: () => void;
 }
@@ -27,8 +26,7 @@ interface TidePillDemoArgs {
 function TidePillDemo({
   label = "Singular Storm",
   description = "A tide of sudden, singular force — one overwhelming swell rather than a steady current.",
-  tone,
-  icon,
+  tide,
   size,
   onPress,
 }: TidePillDemoArgs) {
@@ -36,8 +34,7 @@ function TidePillDemo({
     <TidePill
       label={label}
       description={description}
-      tone={tone}
-      icon={icon}
+      tide={tide}
       size={size}
       onPress={onPress}
     />
@@ -57,11 +54,9 @@ export const tidePillDemo: TangoComponent = {
       label: "Anchored reveal",
       note: "Pass `stageRef` (the screen root) and the tide's InfoCard reveal is anchored to the pill and clamped fully on-screen — the preferred, material-continuity path.",
       code: `import { TidePill } from "src/tango/components/hud/TidePill";
-import { GLYPHS } from "src/tango/primitives/glyph";
 
 <TidePill
-  tone="blue"
-  icon={GLYPHS.water}
+  tide="vision"
   label="Singular Storm"
   description="A tide of sudden, singular force."
   stageRef={screenRef}
@@ -71,14 +66,13 @@ import { GLYPHS } from "src/tango/primitives/glyph";
     {
       label: "Standalone",
       note: "Omit `stageRef` and the same InfoCard floats directly above the pill — for list contexts with no positioned stage.",
-      code: `<TidePill tone="gold" label="Rising Sun" description="A tide that crests at dawn." />`,
+      code: `<TidePill tide="valor" label="Rising Sun" description="A tide that crests at dawn." />`,
     },
   ],
   demo: {
     defaultArgs: {
-      tone: "blue",
+      tide: "vision",
       size: "md",
-      icon: GLYPHS.water,
       label: "Singular Storm",
       description:
         "A tide of sudden, singular force — one overwhelming swell rather than a steady current.",

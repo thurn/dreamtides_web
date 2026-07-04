@@ -48,8 +48,6 @@ export function QuestStatusBarMockup() {
         stageRef={stageRef}
         essence={240}
         deck={23}
-        elevation={12}
-        signElevation={12}
         dreamcaller={{
           name: "Threxan",
           epithet: "the Resounding Wrath",

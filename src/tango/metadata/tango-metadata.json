@@ -1084,17 +1084,6 @@
       "description": "A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object)."
     },
     {
-      "name": "wash",
-      "tsType": "Wash",
-      "unionMembers": [
-        "journey",
-        "dusk"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "A named {@link Wash} painted over the media."
-    },
-    {
       "name": "frame",
       "tsType": "boolean",
       "unionMembers": [],
@@ -1109,16 +1098,6 @@
       "required": false,
       "defaultValue": null,
       "description": "The card's headline. Plain text — resolve names before display."
-    },
-    {
-      "name": "titleBadge",
-      "tsType": "\"bane\"",
-      "unionMembers": [
-        "bane"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "A small warning-toned pill shown right after the title (e.g. a dreamsign\n{@link TitleBadge} `\"bane\"`). Omit for no badge."
     },
     {
       "name": "body",
@@ -1154,35 +1133,6 @@
       "required": true,
       "defaultValue": null,
       "description": "The {@link Glyph} the disc renders. Required."
-    },
-    {
-      "name": "discAccent",
-      "tsType": "TangoColor",
-      "unionMembers": [
-        "accent",
-        "accent-bright",
-        "accent-strong",
-        "essence",
-        "energy",
-        "energy-bright",
-        "spark",
-        "points",
-        "danger",
-        "positive",
-        "selected",
-        "sale",
-        "gold",
-        "gold-light",
-        "text-primary",
-        "text-secondary",
-        "text-muted",
-        "text-faint",
-        "text-on-accent",
-        "white"
-      ],
-      "required": false,
-      "defaultValue": null,
-      "description": "Tint the reveal disc to this {@link TangoColor} so it matches the node it\nopens from. Omit for the default violet-glow disc (SITE_DISC)."
     },
     {
       "name": "leadGlyph",
@@ -1811,7 +1761,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "[]",
-      "description": "The dreamsigns to dock (≤ stackThreshold inline, more collapse to a stack + viewer).",
+      "description": "The dreamsigns to dock (a small set inline; more collapse to a stack + viewer).",
       "nested": {
         "name": "QsbDreamsign",
         "fields": [
@@ -1879,12 +1829,6 @@
             "description": "The portrait art as an {@link ArtRef}. Required — a docked Dreamcaller always has art."
           },
           {
-            "name": "wash",
-            "tsType": "Wash",
-            "optional": true,
-            "description": "A named {@link Wash} painted behind the hero-reveal portrait."
-          },
-          {
             "name": "ability",
             "tsType": "string",
             "optional": true,
@@ -1892,54 +1836,6 @@
           }
         ]
       }
-    },
-    {
-      "name": "elevation",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "0",
-      "description": "Lift the essence cluster above the baseline (px)."
-    },
-    {
-      "name": "signElevation",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "0",
-      "description": "Independent elevation for the dreamsign strip (px)."
-    },
-    {
-      "name": "portraitScale",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "2.9",
-      "description": ""
-    },
-    {
-      "name": "portraitSize",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "66",
-      "description": ""
-    },
-    {
-      "name": "signGap",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "8",
-      "description": ""
-    },
-    {
-      "name": "stackThreshold",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": "4",
-      "description": ""
     }
   ],
   "ResourceChip": [
@@ -2073,7 +1969,7 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "The placed-site model — position, label, accent, glyph, and state.",
+      "description": "The placed-site model — position, label, glyph, and state.",
       "nested": {
         "name": "DreamscapeSiteModel",
         "fields": [
@@ -2130,23 +2026,9 @@
             "tsType": "Glyph",
             "optional": false,
             "description": "The site {@link Glyph}."
-          },
-          {
-            "name": "accent",
-            "tsType": "TangoColor",
-            "optional": false,
-            "description": "Accent color, used for the node's ring + reveal disc — a {@link TangoColor}\n(typically a per-dreamscape `#rrggbb` hex)."
           }
         ]
       }
-    },
-    {
-      "name": "size",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Wayside disc diameter in px; battle guardians scale up from here."
     },
     {
       "name": "motion",
@@ -2230,28 +2112,18 @@
       "description": "The tide's description, revealed through the shared InfoCard on hover /\npress. Required: a TidePill always carries its description so the reveal\ncan never be forgotten. Plain prose — resolve before display."
     },
     {
-      "name": "tone",
-      "tsType": "\"gold\" | \"violet\" | \"blue\" | \"green\" | \"rust\" | \"red\" | \"neutral\"",
+      "name": "tide",
+      "tsType": "Tide",
       "unionMembers": [
-        "gold",
-        "violet",
-        "blue",
-        "green",
-        "rust",
-        "red",
-        "neutral"
+        "ember",
+        "valor",
+        "vision",
+        "wild",
+        "shadow"
       ],
       "required": false,
-      "defaultValue": "violet",
-      "description": "Tide color."
-    },
-    {
-      "name": "icon",
-      "tsType": "Glyph",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Leading icon: a {@link Glyph} (e.g. `GLYPHS.water`). The pill renders the\n`<i>` itself at a fixed size so every tide icon matches, and it heads the\nInfoCard reveal as the tide's glyph disc."
+      "defaultValue": "shadow",
+      "description": "Which of the five tides. Fixes the pill's icon and color. Default 'shadow'."
     },
     {
       "name": "size",

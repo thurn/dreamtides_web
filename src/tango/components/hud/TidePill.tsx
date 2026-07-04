@@ -1,6 +1,6 @@
-// TidePill — the labelled tag used for a Dreamcaller's tides/affiliations/
-// categories. `tone` picks one of the brand's tide colors; the pill shows the
-// tide's icon + name.
+// TidePill — the labelled tag used for one of the game's five tides. The `tide`
+// prop names the tide; the pill owns that tide's icon and color, so a caller
+// picks a tide, never a raw glyph or an arbitrary color.
 //
 // A TidePill ALWAYS carries its tide description: hovering (fine pointer) or
 // pressing (touch) a pill reveals that copy through the ONE shared popover,
@@ -14,20 +14,19 @@
 // screen root) for the anchored, clamped reveal; omit it and the card floats
 // directly above the pill (standalone / list use).
 //
-// Colors are token-driven, never a raw hex duplicating a token:
-//   - violet -> --accent-bright / --primitive-violet-400 (also the source of
-//     --accent-tint / --border-accent, whose alpha values these washes match)
-//   - blue   -> --energy / --primitive-energy-300 (the game's blue resource role)
-//   - gold   -> --primitive-gold-300 / --primitive-gold-500
-//   - green  -> --positive (== --primitive-sap-400, the player/grant green)
-//   - rust   -> --primitive-rust-500 (already documented as "tide / earthy affiliation")
-//   - red    -> --danger (== --primitive-ember-500) / --primitive-ember-400
-//   - neutral -> a muted surface (--text-secondary / --border-mid), with an
-//     alpha wash that has no dedicated token and is copied verbatim from the
-//     source
-// The alpha-tinted backgrounds/borders that have no dedicated wash token use
-// `color-mix()` against the base color token rather than a hardcoded rgba, so
-// a future token rename/reband still propagates.
+// The five tides, each with its fixed mark and color. The names, colors, and
+// glyphs mirror production's single source of truth,
+// `src/components/tide-visuals.ts` (TIDE_COLOR_CHIP / TIDE_ACCENT_COLOR, keyed
+// by the deck color), as shown on the Dreamcaller-select screen and the tides
+// editor — the Tango isolation boundary forbids importing it directly, so the
+// values are mirrored here with that file as the authority:
+//   - Ember  (orange #fb923c) — GLYPHS.tideEmber  / bx-hot
+//   - Valor  (gold   #facc15) — GLYPHS.tideValor  / bx-shield
+//   - Vision (blue   #60a5fa) — GLYPHS.tideVision / bx-eye-alt
+//   - Wild   (green  #4ade80) — GLYPHS.tideWild   / bx-leaf
+//   - Shadow (purple #c084fc) — GLYPHS.tideShadow / bx-skull
+// The tinted background/border have no dedicated token, so they derive from the
+// tide's accent via `color-mix()` rather than a hardcoded rgba.
 //
 // Ported from the Claude Design "Dreamtides Mobile" project
 // (components/pills/TidePill.jsx / .d.ts).
@@ -37,70 +36,45 @@ import { createPortal } from "react-dom";
 import { InfoCard } from "../overlay/InfoCard";
 import { richText } from "../card/rich-text";
 import { token } from "../../primitives/tokens";
-import { type Glyph } from "../../primitives/glyph";
-import { type TangoColor } from "../../primitives/color";
+import { GLYPHS, type Glyph } from "../../primitives/glyph";
 
 const { usePressReveal, anchorRect, PressPopover, PRESS_SCALE } = InfoCard;
 
 /** Height/scale variants. */
 type TidePillSize = "sm" | "md";
 
-interface ToneSpec {
+/** The game's five tides. Each owns a fixed icon + color (see {@link TIDES}). */
+export type Tide = "ember" | "valor" | "vision" | "wild" | "shadow";
+
+interface TideSpec {
+  /** The tide's fixed mark — one of the five filled tide glyphs. */
+  icon: Glyph;
   bg: string;
   fg: string;
   bd: string;
-  /** The tone's accent color for the reveal disc, as a strict {@link TangoColor}
-   * (the pill's own `fg` is a resolved color-mix / token string, which is not a
-   * valid disc accent — the disc derives its ring/glow alpha via color-mix). */
-  disc: TangoColor;
 }
 
-/** The parent design system's tide colors, normalized to Tango tokens. */
-const TONES: Record<string, ToneSpec> = {
-  violet: {
-    bg: token("--accent-tint"),
-    fg: token("--accent-bright"),
-    bd: token("--border-accent"),
-    disc: "accent-bright",
-  },
-  blue: {
-    bg: `color-mix(in srgb, ${token("--energy")} 18%, transparent)`,
-    fg: token("--primitive-energy-300"),
-    bd: `color-mix(in srgb, ${token("--energy")} 45%, transparent)`,
-    disc: "energy-bright",
-  },
-  gold: {
-    bg: `color-mix(in srgb, ${token("--primitive-gold-500")} 18%, transparent)`,
-    fg: token("--primitive-gold-300"),
-    bd: `color-mix(in srgb, ${token("--primitive-gold-500")} 45%, transparent)`,
-    disc: "gold-light",
-  },
-  green: {
-    bg: `color-mix(in srgb, ${token("--positive")} 18%, transparent)`,
-    fg: token("--positive"),
-    bd: `color-mix(in srgb, ${token("--positive")} 45%, transparent)`,
-    disc: "positive",
-  },
-  rust: {
-    bg: `color-mix(in srgb, ${token("--primitive-rust-500")} 20%, transparent)`,
-    fg: `color-mix(in srgb, ${token("--primitive-rust-500")} 45%, white)`,
-    bd: `color-mix(in srgb, ${token("--primitive-rust-500")} 50%, transparent)`,
-    disc: "#d8a98d",
-  },
-  red: {
-    bg: `color-mix(in srgb, ${token("--danger")} 18%, transparent)`,
-    fg: token("--primitive-ember-400"),
-    bd: `color-mix(in srgb, ${token("--danger")} 45%, transparent)`,
-    disc: "#f87171",
-  },
-  // No dedicated wash token for this washed-out neutral fill; copied verbatim
-  // from the source, matching SegmentedControl's track-background precedent.
-  neutral: {
-    bg: "rgba(255, 255, 255, 0.06)",
-    fg: token("--text-secondary"),
-    bd: token("--border-mid"),
-    disc: "text-secondary",
-  },
+/** Build a tide's tinted background/border from its bright accent color, so all
+ * five read as one hue family (mirrors the production chip treatment). */
+function tideSpec(icon: Glyph, accent: string): TideSpec {
+  return {
+    icon,
+    fg: accent,
+    bg: `color-mix(in srgb, ${accent} 18%, transparent)`,
+    bd: `color-mix(in srgb, ${accent} 45%, transparent)`,
+  };
+}
+
+/**
+ * The five tides, each with its fixed filled mark and accent color. The accent
+ * hexes are the production `TIDE_ACCENT_COLOR` values (see the file header).
+ */
+const TIDES: Record<Tide, TideSpec> = {
+  ember: tideSpec(GLYPHS.tideEmber, "#fb923c"),
+  valor: tideSpec(GLYPHS.tideValor, "#facc15"),
+  vision: tideSpec(GLYPHS.tideVision, "#60a5fa"),
+  wild: tideSpec(GLYPHS.tideWild, "#4ade80"),
+  shadow: tideSpec(GLYPHS.tideShadow, "#c084fc"),
 };
 
 export interface TidePillProps {
@@ -112,12 +86,8 @@ export interface TidePillProps {
    * press. Required: a TidePill always carries its description so the reveal
    * can never be forgotten. Plain prose — resolve before display. */
   description: string;
-  /** Tide color. */
-  tone?: "violet" | "blue" | "gold" | "green" | "rust" | "red" | "neutral";
-  /** Leading icon: a {@link Glyph} (e.g. `GLYPHS.water`). The pill renders the
-   * `<i>` itself at a fixed size so every tide icon matches, and it heads the
-   * InfoCard reveal as the tide's glyph disc. */
-  icon?: Glyph;
+  /** Which of the five tides. Fixes the pill's icon and color. Default 'shadow'. */
+  tide?: Tide;
   /** Height/scale. Default 'md'. */
   size?: TidePillSize;
   /**
@@ -131,22 +101,21 @@ export interface TidePillProps {
 }
 
 /**
- * TidePill — the labelled tag for a Dreamcaller's tides/affiliations/
- * categories (icon + name). Hovering (fine pointer) or pressing (touch) the
- * pill always reveals the tide's `description` through the ONE shared InfoCard;
- * pass `stageRef` for the anchored, clamped reveal or omit it to float the card
- * directly above the pill.
+ * TidePill — the labelled tag for one of the game's five tides (fixed icon +
+ * name). Hovering (fine pointer) or pressing (touch) the pill always reveals the
+ * tide's `description` through the ONE shared InfoCard; pass `stageRef` for the
+ * anchored, clamped reveal or omit it to float the card directly above the pill.
  */
 export function TidePill({
   label,
   description,
-  tone = "violet",
-  icon,
+  tide = "shadow",
   size = "md",
   stageRef,
   onPress,
 }: TidePillProps) {
-  const spec = TONES[tone] ?? TONES.violet;
+  const spec = TIDES[tide];
+  const icon = spec.icon;
   const pad = size === "sm" ? "3px 9px" : "5px 12px";
   const ref = React.useRef<HTMLSpanElement>(null);
   const { pressed, shown, begin, end, enter, leave, heldPastTap } =
@@ -173,21 +142,16 @@ export function TidePill({
     }
   };
 
-  // The reveal: the tide's icon heads an InfoCard `icon` disc tinted to its own
-  // tone; a tide without a glyph falls back to the plain `text` variant. The
+  // The reveal: the tide's fixed mark heads the shared InfoCard `icon` disc; the
   // description renders as plain prose through the shared rich-text model.
-  const card =
-    icon !== undefined ? (
-      <InfoCard
-        variant="icon"
-        glyph={icon}
-        discAccent={spec.disc}
-        title={label}
-        body={richText.plain(description)}
-      />
-    ) : (
-      <InfoCard variant="text" title={label} body={richText.plain(description)} />
-    );
+  const card = (
+    <InfoCard
+      variant="icon"
+      glyph={icon}
+      title={label}
+      body={richText.plain(description)}
+    />
+  );
 
   return (
     <span
@@ -234,11 +198,9 @@ export function TidePill({
         transition: `transform ${token("--dur-fast")} ${token("--ease-out")}`,
       }}
     >
-      {icon && (
-        <span style={{ display: "inline-flex", fontSize: "1.05em" }}>
-          <i className={icon} aria-hidden="true" />
-        </span>
-      )}
+      <span style={{ display: "inline-flex", fontSize: "1.05em" }}>
+        <i className={icon} aria-hidden="true" />
+      </span>
       {label}
 
       {/* Anchored, clamped reveal through the shared engine (preferred). */}

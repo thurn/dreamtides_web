@@ -13,8 +13,8 @@
 //   - the essence value           → InfoCard 'text'
 //   - the Dreamcaller bust (pops ABOVE the bar) → InfoCard 'hero'
 //   - each docked dreamsign        → InfoCard 'object'
-//   - >stackThreshold dreamsigns collapse into an overflow stack → a centered
-//     viewer window (not a bottom sheet)
+//   - beyond a fixed count, docked dreamsigns collapse into an overflow stack →
+//     a centered viewer window (not a bottom sheet)
 //
 // Pass `stageRef` — the screen root (position:absolute inset:0 in the scaled
 // frame); the press-reveal popovers portal into it so placement/clamping use
@@ -44,7 +44,6 @@ import type { AnchorRect } from "../overlay/InfoCard";
 import { richText } from "../card/rich-text";
 import { token } from "../../primitives/tokens";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
-import { type Wash } from "../../primitives/media";
 import "./quest-status-bar.css";
 
 const { PressPopover, usePressReveal, anchorRect, PRESS_SCALE } = InfoCard;
@@ -56,6 +55,13 @@ const DECK_SPRITE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAADpCAYAA
  * legibility overlay) — a faithfully-copied literal with no token equivalent. */
 const DS_SHADOW =
   "drop-shadow(0 3px 6px rgba(0,0,0,0.55)) drop-shadow(0 0 13px rgba(147,51,234,0.32))";
+
+/** Gap (px) between the docked dreamsign strip and the deck button. A fixed
+ * system value, not a caller knob. */
+const SIGN_GAP = 8;
+/** How many dreamsigns dock inline before the strip collapses into the overflow
+ * stack + centered viewer. A fixed system value, not a caller knob. */
+const STACK_THRESHOLD = 4;
 
 /** One docked dreamsign (icon + name + optional rules ability). */
 export interface QsbDreamsign {
@@ -72,8 +78,6 @@ export interface QsbDreamcaller {
   epithet?: string;
   /** The portrait art as an {@link ArtRef}. Required — a docked Dreamcaller always has art. */
   portrait: ArtRef;
-  /** A named {@link Wash} painted behind the hero-reveal portrait. */
-  wash?: Wash;
   ability?: string;
 }
 
@@ -82,19 +86,11 @@ export interface QuestStatusBarProps {
   stageRef: React.RefObject<HTMLElement | null>;
   /** Essence total shown in the HUD. */
   essence?: number;
-  /** The dreamsigns to dock (≤ stackThreshold inline, more collapse to a stack + viewer). */
+  /** The dreamsigns to dock (a small set inline; more collapse to a stack + viewer). */
   dreamsigns?: QsbDreamsign[];
   /** Deck size (used in the deck button's aria-label). */
   deck?: number | string;
   dreamcaller?: QsbDreamcaller;
-  /** Lift the essence cluster above the baseline (px). */
-  elevation?: number;
-  /** Independent elevation for the dreamsign strip (px). */
-  signElevation?: number;
-  portraitScale?: number;
-  portraitSize?: number;
-  signGap?: number;
-  stackThreshold?: number;
 }
 
 /* a single bare, pressable dreamsign object — raises its detail card through the
@@ -179,8 +175,8 @@ function QsbSignObject({
   );
 }
 
-/* OverflowStack — the >stackThreshold overlapping dreamsign stack. A press
-   compresses it; a tap opens the viewer window. */
+/* OverflowStack — the overlapping dreamsign stack shown past STACK_THRESHOLD. A
+   press compresses it; a tap opens the viewer window. */
 function QsbOverflowStack({
   signs,
   onOpenWindow,
@@ -241,16 +237,10 @@ function QsbDreamsignStrip({
   signs,
   stageRef,
   onOpenWindow,
-  gap = 8,
-  stackThreshold = 4,
-  signElevation = 0,
 }: {
   signs: QsbDreamsign[];
   stageRef: React.RefObject<HTMLElement | null>;
   onOpenWindow: () => void;
-  gap?: number;
-  stackThreshold?: number;
-  signElevation?: number;
 }): ReactElement | null {
   const [box, setBox] = React.useState<{ right: number; bottomY: number } | null>(
     null,
@@ -269,8 +259,8 @@ function QsbDreamsignStrip({
       const dr = deck.getBoundingClientRect();
       const k = stage.clientWidth / sr.width;
       setBox({
-        right: stage.clientWidth - (dr.left - sr.left) * k + gap,
-        bottomY: (dr.bottom - sr.top) * k - signElevation,
+        right: stage.clientWidth - (dr.left - sr.left) * k + SIGN_GAP,
+        bottomY: (dr.bottom - sr.top) * k,
       });
     };
     measure();
@@ -287,7 +277,7 @@ function QsbDreamsignStrip({
       }
       window.removeEventListener("resize", measure);
     };
-  }, [stageRef, signs.length, gap, signElevation]);
+  }, [stageRef, signs.length]);
 
   if (!signs.length || !box) {
     return null;
@@ -304,7 +294,7 @@ function QsbDreamsignStrip({
     touchAction: "none",
   };
 
-  if (signs.length <= stackThreshold) {
+  if (signs.length <= STACK_THRESHOLD) {
     return (
       <div style={{ ...wrap, gap: 2 }}>
         {signs.map((s) => (
@@ -438,9 +428,9 @@ function QsbDreamcallerBust({
       onPointerLeave={leave}
       onPointerCancel={end}
       style={{
-        // width/height are set by quest-status-bar.css (var(--qsb-dc-size),
-        // !important) so the bust tracks the portraitSize prop; kept here only
-        // as a same-value fallback for when that stylesheet has not loaded.
+        // width/height are fixed by quest-status-bar.css (var(--qsb-dc-size),
+        // !important, default 66px); kept here as a same-value fallback for when
+        // that stylesheet has not loaded.
         width: 66,
         height: 66,
         flex: "none",
@@ -483,7 +473,6 @@ function QsbDreamcallerBust({
               variant="hero"
               image={dreamcaller.portrait}
               imageCrop="top"
-              wash={dreamcaller.wash}
               title={
                 dreamcaller.epithet
                   ? `${dreamcaller.name}, ${dreamcaller.epithet}`
@@ -647,12 +636,6 @@ export function QuestStatusBar({
   dreamsigns = [],
   deck = 0,
   dreamcaller,
-  elevation = 0,
-  signElevation = 0,
-  portraitScale = 2.9,
-  portraitSize = 66,
-  signGap = 8,
-  stackThreshold = 4,
 }: QuestStatusBarProps): ReactElement {
   const [signWindow, setSignWindow] = React.useState(false);
 
@@ -662,16 +645,7 @@ export function QuestStatusBar({
   // level pointerenter can't drive this — native pointerenter does not refire
   // when the pointer moves between children of the same ancestor.
   return (
-    <div
-      className="qsb"
-      style={
-        {
-          "--qsb-elev": `${String(elevation)}px`,
-          "--qsb-dc-scale": portraitScale,
-          "--qsb-dc-size": `${String(portraitSize)}px`,
-        } as CSSProperties
-      }
-    >
+    <div className="qsb">
       <div
         className="qsbHud hud-outline"
         style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 40 }}
@@ -691,9 +665,6 @@ export function QuestStatusBar({
       <QsbDreamsignStrip
         signs={dreamsigns}
         stageRef={stageRef}
-        gap={signGap}
-        stackThreshold={stackThreshold}
-        signElevation={signElevation}
         onOpenWindow={() => setSignWindow(true)}
       />
       {signWindow && (

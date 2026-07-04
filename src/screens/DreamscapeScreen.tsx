@@ -14,27 +14,13 @@ import {
 } from "../tango/components/atlas/SiteNode";
 import { scatterSites, seedFromString } from "../tango/components/atlas/dreamscape-scatter";
 import { glyph } from "../tango/primitives/glyph";
-import type { HexColor } from "../tango/primitives/color";
 import { logEvent } from "../logging";
 import "./dreamscape.css";
-
-/** Diameter, in px, of a wayside site disc (battle guardians scale up from here). */
-const NODE_SIZE = 60;
-
-/** Default accent for an ordinary site node, as a `#rrggbb` hex. */
-const DEFAULT_ACCENT: HexColor = "#a855f7";
 
 /** Battle label by completion level: final boss or a plain battle. */
 function battleLabel(completionLevel: number): string {
   if (completionLevel === 6) return "Final Boss";
   return "Battle";
-}
-
-/** Battle accent (`#rrggbb`) by completion level + lock state. */
-function battleAccent(completionLevel: number, isLocked: boolean): HexColor {
-  if (isLocked) return "#6b7280";
-  if (completionLevel === 6) return "#fbbf24";
-  return "#ef4444";
 }
 
 /**
@@ -62,8 +48,8 @@ export function DreamscapeScreen() {
   }, [node]);
 
   // Build the placed-site models: stable seeded scatter + per-site label,
-  // blurb, accent, and interaction state. Battles are locked until every other
-  // site in the dreamscape has been visited.
+  // blurb, and interaction state. Battles are locked until every other site in
+  // the dreamscape has been visited.
   const models = useMemo<DreamscapeSiteModel[]>(() => {
     if (!node) return [];
     const positions = scatterSites(node.sites.length, seedFromString(node.id));
@@ -77,9 +63,6 @@ export function DreamscapeScreen() {
           ? `Draft ${String(draftSitePickCount(site))}x`
           : siteTypeName(site.type);
       const blurb = siteTypeDescription(site.type);
-      const accent = isBattle
-        ? battleAccent(completionLevel, isLocked)
-        : DEFAULT_ACCENT;
       return {
         site,
         pos: positions[index] ?? { x: 50, y: 58 },
@@ -90,7 +73,6 @@ export function DreamscapeScreen() {
         label,
         blurb,
         icon: glyph(siteTypeIcon(site.type)),
-        accent,
       };
     });
   }, [node, allNonBattleVisited, completionLevel]);
@@ -197,7 +179,6 @@ export function DreamscapeScreen() {
           <SiteNode
             key={model.site.id}
             model={model}
-            size={NODE_SIZE}
             motion
             stageRef={stageRef}
             onSelect={handleSiteClick}

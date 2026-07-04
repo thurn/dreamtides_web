@@ -1,12 +1,10 @@
 // Typed media-treatment values for the strict Tango API.
 //
 // The design system owns appearance, so the CSS knobs a media card exposes —
-// the filter over an image, the wash painted on it, how it is cropped, and the
-// warning pill after a title — are named, enumerated values rather than raw CSS
-// strings. Each type below is a small union; the string it resolves to lives in
-// one table here, so a treatment reads the same wherever it is used.
-
-import { token } from "./tokens";
+// the filter over an image and how it is cropped — are named, enumerated values
+// rather than raw CSS strings. Each type below is a small union; the string it
+// resolves to lives in one table here, so a treatment reads the same wherever it
+// is used.
 
 /* ── MediaFilter ─────────────────────────────────────────────────────────── */
 
@@ -37,25 +35,6 @@ export function resolveMediaFilter(filter: MediaFilter): string {
   return MEDIA_FILTERS[filter];
 }
 
-/* ── Wash ────────────────────────────────────────────────────────────────── */
-
-/**
- * A named CSS background painted over a media block to seat it in the card's
- * material. `journey` is the deep radial dream wash; `dusk` a soft top-down
- * darkening for legibility under overlaid text.
- */
-export type Wash = "journey" | "dusk";
-
-const WASHES: Record<Wash, string> = {
-  journey: token("--dt-wash-journey"),
-  dusk: "linear-gradient(to bottom, rgba(5,3,10,0) 0%, rgba(5,3,10,0.55) 100%)",
-};
-
-/** Resolve a {@link Wash} to its CSS background string. */
-export function resolveWash(wash: Wash): string {
-  return WASHES[wash];
-}
-
 /* ── ImageCrop ───────────────────────────────────────────────────────────── */
 
 /**
@@ -73,22 +52,4 @@ const IMAGE_CROP_POSITIONS: Record<ImageCrop, string> = {
 /** Resolve an {@link ImageCrop} to its CSS `object-position` string. */
 export function resolveImageCrop(crop: ImageCrop): string {
   return IMAGE_CROP_POSITIONS[crop];
-}
-
-/* ── TitleBadge ──────────────────────────────────────────────────────────── */
-
-/**
- * A named warning-toned pill shown right after a card title. `bane` marks a
- * dreamsign whose ability is a drawback. The label rendered for each badge
- * lives in one table so the wording stays consistent.
- */
-export type TitleBadge = "bane";
-
-const TITLE_BADGE_LABELS: Record<TitleBadge, string> = {
-  bane: "Bane",
-};
-
-/** Resolve a {@link TitleBadge} to the short label shown in its pill. */
-export function resolveTitleBadge(badge: TitleBadge): string {
-  return TITLE_BADGE_LABELS[badge];
 }
