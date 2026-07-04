@@ -46,10 +46,13 @@ A horizontally swipeable carousel of the three offered Dreamcallers. Each page:
 - The carousel select screen only.
 - Full container-transform fidelity for the tides disc→pill reveal, promoted to
   a reusable Tango component.
-- A new full-bleed `DreamcallerPortrait` variant.
-- A new `KeywordCards` component (the InfoCard-based term-definition renderer)
-  and its adoption in the new ability reveal **and** in the Tango `Dreamsign`
-  and `GameCard`/`CardView` reveals (see "New design-system work → C").
+- A screen-local full-bleed portrait component (`DreamcallerPortrait` is **not**
+  modified).
+- Evolving `CardTermDefinitions` in place to render `InfoCard` tiles (no new
+  parallel component), which updates the new ability reveal **and** — because
+  they already consume it — the Tango `Dreamsign` and `GameCard`/`CardView`
+  reveals, plus the two shared legacy consumers, automatically (see "New
+  design-system work → C").
 
 **Out of scope**
 
@@ -98,12 +101,12 @@ Presentation composed from Tango:
 | --- | --- |
 | "Choose {Name}" button | `Button` `size="lg" full label={`Choose ${name}`}` |
 | Ability text | `RulesText` |
-| Ability keyword reveal (touch-down) | `InfoCard.PressInfo` with `card={<KeywordCards text/>}` (see C) |
+| Ability keyword reveal (touch-down) | `InfoCard.PressInfo` with `card={<CardTermDefinitions text/>}` (see C) |
 | Tide pills (expanded) | `TidePill` (`size="sm"`, `stageRef` reveal) |
 | Starting essence value + mark | `ResourceChip kind="essence"`, wrapped in `InfoCard.PressInfo` |
 | Frosted console surface | `GroupPanel` |
 | Drifting motes | `Motes` `tint="warm"` on the active page |
-| Full-bleed portrait | `DreamcallerPortrait variant="cover"` (new) |
+| Full-bleed portrait | screen-local component (reuses `dreamcallerImageSrc`) |
 | Tides disc→pill reveal | `TideCluster` (new) |
 | Edge chevrons | `Pressable` |
 | Carousel track / swipe / page index | screen-local layout + state (rung-2 wrapper) |
@@ -145,19 +148,24 @@ follows the StrictMode-guarded-ref idiom.
 
 ## New design-system work
 
-### A. `DreamcallerPortrait` — new `variant="cover"`
+### A. Full-bleed portrait — a screen-local component (`DreamcallerPortrait` untouched)
 
-A frameless, full-bleed cinematic framing that fills its container's width **and**
-height with `object-fit: cover` and a cinematic crop (roughly `50% 10%`
-object-position, a modest upscale). No border, no radius, no sunken backing, no
-shadow — the caller's container defines the bounds (the screen gives it an
-absolute `inset: 0` page). The `size` prop does not apply to `cover` (it fills).
-The existing `hero` / `panel` / `thumb` variants are untouched.
+`DreamcallerPortrait` is **not modified**. The carousel needs a frameless,
+full-bleed cinematic portrait, which is screen-specific presentation, so it is a
+**screen-local component** defined with the screen (in `QuestStartScreen.tsx`, or
+a sibling module under `src/tango/screens/`), not a new shared variant on the
+shared portrait.
 
-Deliverables: the variant in `frameStyle`/`imageStyle`, its JSDoc, and — because
-the demo/docs are generated from source — an updated demo entry
-(`src/tango/docs/demos/dreamcaller-portrait.tsx` if present, else the relevant
-demo) plus regenerated `tango-metadata` / `tango-docs`.
+- Renders an `<img>` filling its container (`position: absolute; inset: 0;
+  width/height: 100%; object-fit: cover`) with a cinematic crop (roughly
+  `50% 10%` object-position, a modest upscale), no frame/border/radius.
+- **Reuses** the already-exported `dreamcallerImageSrc(imageNumber)` helper from
+  `DreamcallerPortrait` for URL resolution (import only — no change to that
+  file), and carries its own tinted-monogram fallback on image error, mirroring
+  the shared portrait's fallback so a missing asset never leaves a hole.
+- Box measures (100%/cover) are caller layout; any styling uses tokens.
+
+No demo/docs changes (it is not a catalog component).
 
 ### B. `TideCluster` — new component (`src/tango/components/hud/TideCluster.tsx`)
 
@@ -187,67 +195,62 @@ Deliverables: the component with per-prop JSDoc, a demo entry
 `src/tango/docs/registry.ts`, and regenerated docs. It must pass the strict-API
 contract test and the isolation-boundary lint.
 
-### C. `KeywordCards` — the InfoCard-based term-definition renderer
+### C. `CardTermDefinitions` — evolve it in place to render `InfoCard` tiles
 
-A new Tango component (`src/tango/components/card/KeywordCards.tsx`) that renders
-a **vertical stack of individual `InfoCard`s — one per glossary keyword** in a
-stretch of rules text. It is the InfoCard-vocabulary replacement for the legacy
-`CardTermDefinitions` + `GlossaryDefinitionCard` tile (which is styled with
-hardcoded colors + Tailwind, outside the token system), adopted across the Tango
-term-reveal surfaces.
+No new parallel component. The existing `CardTermDefinitions`
+(`src/tango/components/card/CardTermDefinitions.tsx`) is **modified in place** to
+render its stack as **individual `InfoCard` tiles** instead of the legacy
+`GlossaryDefinitionCard` (which is styled with hardcoded colors + Tailwind,
+outside the token system). Its name and prop surface (`text`, `testId`, `side`)
+are preserved so no consumer signature changes; only the internal rendering
+becomes InfoCard-vocabulary and fully tokenized.
 
-- **Pure renderer, no trigger/portal of its own.** `<KeywordCards text={rules} />`
-  → a column (`gap: --space-3`) of `InfoCard variant="text"` tiles, each
-  `meta="Keyword"`, `title={entry.term}`, `body={richText.rules(entry.definition)}`.
-  Placement stays the consumer's, so each surface keeps its existing reveal
-  engine.
-- **Term extraction** via `extractGlossaryTerms(text)` from the allowlisted
-  `src/data/glossary-terms` — reading order, deduped.
-- **Empty passthrough:** no terms → renders nothing (like `CardTermDefinitions`
-  returning `null`), so callers place it unconditionally.
-- **No escape hatches** (no `className`/`style`/raw color/size). All values are
-  tokens; the tiles are ordinary `InfoCard`s, so they inherit the one shell,
-  radius, shadow, and type scale.
-- Optional `testid` on the stack container for stable selectors (mirrors
-  `CardTermDefinitions`).
+- **The stack** becomes a token-styled flex column (`gap: --space-3`, keeping the
+  current scroll cap as a box measure — `maxHeight` + `overflowY: auto`) of
+  `InfoCard variant="text"` tiles, each `meta="Keyword"`, `title={entry.term}`,
+  `body={richText.rules(entry.definition)}` (rules so definition glyphs render,
+  matching today).
+- **Term extraction** via `extractGlossaryTerms(text)` is unchanged (reading
+  order, deduped); it still returns `null` for term-free text, so callers keep
+  placing it unconditionally.
+- After the swap the component is lint-clean (no `className`, no raw colors),
+  and the `.tango` token scope resolves because each `InfoCard` re-establishes
+  it (it already does for its portalled popover shell).
 
-**Props (named values only):**
+**Because the integration targets already consume `CardTermDefinitions`, their
+adoption is automatic — no per-consumer rewrite:**
 
-```tsx
-interface KeywordCardsProps {
-  text: string;      // scanned for glossary terms
-  testid?: string;   // optional data-testid on the stack container
-}
-```
+1. **`Dreamsign` (`DreamsignInfoCard`)** already stacks `CardTermDefinitions`
+   under the object `InfoCard`; it now renders the InfoCard tiles for free. Whole
+   reveal (object card + keyword cards) speaks one vocabulary.
+2. **`GameCard`/`CardView`** already render `CardTermDefinitions` beside the card
+   via `useCardTermPopover`; the side-placement (`computePopoverPlacement`, left
+   preferred, flipping right near the edge) and the `pointer-events: none`
+   informational-only contract are unchanged — only the tile look updates.
+3. **The two shared legacy consumers** — `BattleCardHoverPreview` and the
+   `?ui=legacy` `QuestStartScreen` — **inherit** the new InfoCard tiles too (a
+   deliberate, confirmed side effect of the in-place swap). No edits to those
+   files.
 
-**Adoption in this change (scope: screen + Dreamsign + GameCard):**
+**The one piece of NEW wiring** — the Dreamcaller ability reveal (this screen):
+the ability text is wrapped in `InfoCard.PressInfo` (the popup-rule-compliant
+press/hover engine, anchored + clamped against `stageRef`) whose revealed `card`
+is `<CardTermDefinitions text={dreamcaller.renderedText} />`. There is no object
+card here — just the keyword stack. Because `CardTermDefinitions` returns `null`
+for term-free ability text, the screen wraps in `InfoCard.PressInfo` only when
+`extractGlossaryTerms(renderedText)` is non-empty; otherwise it renders the plain
+`RulesText` with no reveal.
 
-1. **Dreamcaller ability reveal (this screen).** The ability text is wrapped in
-   `InfoCard.PressInfo` (the popup-rule-compliant press/hover engine, anchored +
-   clamped against `stageRef`) whose revealed `card` is `<KeywordCards text={
-   dreamcaller.renderedText} />`. There is no object card here, so the reveal is
-   just the keyword stack.
-2. **`Dreamsign` (`DreamsignInfoCard`).** Replace the `CardTermDefinitions`
-   stacked under the object `InfoCard` with `<KeywordCards>`, so the whole reveal
-   (object card + keyword cards below it) speaks one vocabulary. The existing
-   input-adaptive engine and `stageRef` anchoring are unchanged.
-3. **`GameCard`/`CardView`.** `useCardTermPopover` renders `<KeywordCards>`
-   beside the card instead of `CardTermDefinitions`; the existing side-placement
-   (`computePopoverPlacement`, left preferred, flipping right near the edge) and
-   the `pointer-events: none` informational-only contract are unchanged.
+**Left unchanged:** `GlossaryDefinitionCard` itself and its remaining direct
+consumers — Tango's `HoverZoomCard` and the legacy `CardHoverPreview`,
+`GlossaryPopup`, `JourneyHoverCard`, `SignatureDecksApp` — keep the existing
+tile; this change does not touch them.
 
-**Left as-is** (separate future migration): the non-Tango legacy previews that
-also consume `CardTermDefinitions` / `GlossaryDefinitionCard` — `CardHoverPreview`,
-`BattleCardHoverPreview`, `DreamwellCardView`, `JourneyHoverCard`, and
-`GlossaryPopup`. `CardTermDefinitions` and `GlossaryDefinitionCard` remain for
-those consumers; this change does not touch them.
-
-**Deliverables:** the component with per-prop JSDoc; a demo entry
-(`src/tango/docs/demos/keyword-cards.tsx`) registered in
-`src/tango/docs/registry.ts`; `KeywordCards.test.tsx` (passthrough when no terms;
-N tiles for N terms; deterministic reading order); the `Dreamsign` and `CardView`
-edits with their existing tests updated for the new tile; regenerated
-`tango-metadata` + `tango-docs`. Must pass the strict-API contract test and the
+**Deliverables:** the in-place `CardTermDefinitions` rewrite; updates to its
+existing test and to `Dreamsign` / `CardView` tests where they assert the old
+tile markup (behavior assertions kept); no new catalog component, so no new demo
+entry (regenerate `tango-metadata` / `tango-docs` only if a touched component's
+JSDoc/demo changed). Must pass the strict-API contract test and the
 isolation-boundary lint.
 
 ## Tests
@@ -264,13 +267,13 @@ isolation-boundary lint.
   renders the discs collapsed, toggles to pills, asserts the resting `TidePill`s
   appear. Animation timing is not asserted (reduced-motion path exercises the
   instant open/close).
-- **`KeywordCards` component test** (`src/tango/components/card/KeywordCards.test.tsx`):
-  renders nothing for term-free text; renders one InfoCard tile per distinct
-  glossary term in reading order for text with terms. Term fixtures derive from
-  the live glossary, never hardcoded copy (per `AGENTS.md`).
-- **`Dreamsign` / `CardView` tests**: update the existing tests for the swap
-  from `CardTermDefinitions` to `KeywordCards` (the definition content now
-  renders as InfoCard tiles), keeping the current reveal-behavior assertions.
+- **`CardTermDefinitions` test**: updated for the in-place swap — renders nothing
+  for term-free text; renders one `InfoCard` tile per distinct glossary term in
+  reading order for text with terms. Term fixtures derive from the live glossary,
+  never hardcoded copy (per `AGENTS.md`).
+- **`Dreamsign` / `CardView` tests**: update only where they assert the old
+  `GlossaryDefinitionCard` markup (the definition content now renders as InfoCard
+  tiles); keep the reveal-behavior assertions.
 - **Contract tests**: `tango-strict-api.contract.test.mjs` (scans
   `src/tango/screens/` and components) and `tango-generated-docs-drift.test.mjs`
   must pass after regenerating metadata/docs.
