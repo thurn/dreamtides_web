@@ -50,11 +50,10 @@ reads "✦" rather than "spark". The symbols are:
 - **–** — Marker preceding a keyword such as Reclaim or Support
 - **▸** — Marker preceding a named trigger such as ▸Dawn or ▸Challenge
 
-The terms "ally" and "allied" describe a character you control: "an ally" is a
-character you control, "an allied warrior" is a warrior you control, and
-multiples are written "allied characters" or "allied warriors". Conditions are
-phrased with "with", as in "With 3 allied warriors, draw a card." Card text does
-not use the word "control" to describe ownership.
+Card text describes ownership with the phrase "you control": "a character you
+control", "a warrior you control", and multiples as "characters you control" or
+"warriors you control". Conditions on how many characters you control are phrased
+with "if", as in "If you control 3 or more warriors, draw a card."
 
 The play area is referred to in card text simply as being "in play". A
 character's board position is described in terms of its front-rank or back-rank
@@ -264,9 +263,9 @@ character's controller's next turn, when it is cleared during the Dawn phase.
 - Characters enter play exhausted and therefore cannot challenge, defend, or pay
   ☪ costs on the turn they are played.
 - An **awakened** character enters play without the exhausted status. Awaken can
-  also be applied as an effect — for example "2●: Awaken an ally" clears the
-  exhausted status, allowing that character to challenge, defend, and pay ☪
-  costs.
+  also be applied as an effect — for example "2●: Awaken a character you
+  control" clears the exhausted status, allowing that character to challenge,
+  defend, and pay ☪ costs.
 - A character can be exhausted by an effect — for example "2●: Exhaust an
   enemy".
 - Paying a ☪ cost exhausts that character.
@@ -287,7 +286,7 @@ during the Night phase can change which characters hold these designations.
 A character "scores ⍟" when it converts its spark into victory points — that is,
 when an unpaired challenger scores during the Challenge phase, or when an
 Unstoppable character scores after winning a challenge. This is the event that
-abilities reading "When an allied X scores ⍟" respond to. By contrast, a flat
+abilities reading "When an X you control scores ⍟" respond to. By contrast, a flat
 "gain N⍟" effect (such as an Abandon-for-points ability, or Fatigue) awards
 victory points to a player without any character scoring, and does not count as
 a character scoring.
@@ -323,8 +322,8 @@ Spark can change in three distinct ways:
 - **Gained spark with a duration**, such as "gains +1✦ this turn", is removed
   when the duration expires, regardless of which zone the character is in at that
   time.
-- **Spark a character _has_** from a static ability, such as "Allied warriors
-  have +1✦", persists only while that static ability applies. It does not carry
+- **Spark a character _has_** from a static ability, such as "Warriors you
+  control have +1✦", persists only while that static ability applies. It does not carry
   across zones the way gained spark does.
 
 ## Playing Cards and the Stack
@@ -385,8 +384,8 @@ no effect merely to increase a card count. A card written with two costs, such a
 ## Targeting
 
 Effects choose targets using ownership and type predicates. Ownership predicates
-include allies (characters you control), enemies (characters the opponent
-controls), any card, or another card (not the source). Type predicates include
+include characters you control, enemies (characters the opponent controls), any
+card, or another card (not the source). Type predicates include
 character, event, a specific subtype, characters with a minimum spark, or cards
 with a specific energy cost.
 
@@ -423,8 +422,8 @@ you play" triggers.
 **Rematerialize** — Trigger an in-play character's materialization again, firing
 its ▸Materialized trigger and any "When you materialize" triggers.
 
-**Phasing** — ▸Materialized: Return another ally to hand, then move this
-character to that ally's position. Phasing is resolved through the normal
+**Phasing** — ▸Materialized: Return another character you control to hand, then
+move this character to that character's position. Phasing is resolved through the normal
 return-to-hand and repositioning tools.
 
 **Awakened** — A character with this keyword enters play without the exhausted
@@ -433,8 +432,9 @@ status. See [Exhaust and Awaken](#exhaust-and-awaken).
 **Support** — A back-rank character with Support provides a benefit to the
 front-rank characters in the positions it supports (up to two). Support has no
 effect on its own; the keyword text states the benefit, such as "Support –
-Supported allies have +1✦." Support is a non-figment mechanic: a [figment](#figments)
-neither grants Support to allies nor benefits from an ally's Support.
+Supported characters have +1✦." Support is a non-figment mechanic: a [figment](#figments)
+neither grants Support to characters you control nor benefits from another
+character's Support.
 
 **Veil N●** — While a character has Veil, it costs the opponent N additional ●
 to choose it as a target with an event, activated ability, or triggered ability.
@@ -552,7 +552,7 @@ Cards use counters (⧗) to track internal state.
   card, store 1⧗."
 - Counters are local to a card; each card has its own counter value.
 - Stored counters can be spent to pay costs, as in "1⧗, ☪: Draw a card", or
-  referenced by abilities, as in "Supported allies have +1✦ for each stored ⧗."
+  referenced by abilities, as in "Supported characters have +1✦ for each stored ⧗."
 - A card's counters reset to 0 when it leaves play.
 
 ## Zone Changes
@@ -604,12 +604,12 @@ token (a created card), not a figment.
 | Ethereal | 1✦ | — |
 | Ember | 1✦ | Awakened |
 | Outsider | 1✦ | — |
-| Legion | 1✦ per allied warrior | — |
+| Legion | 1✦ per warrior you control | — |
 
-A **Legion** is a Warrior whose spark equals the number of allied warriors,
+A **Legion** is a Warrior whose spark equals the number of warriors you control,
 counting itself. Because each figment counts individually toward subtype tallies
 (see [Spark and counting](#spark-and-counting)), three Legion figments alone are
-three allied warriors, so each is 3✦.
+three warriors you control, so each is 3✦.
 
 ### Stacks
 
@@ -636,12 +636,12 @@ set of **reserve** figments beneath it:
 ### Spark and counting
 
 - A figment counts **individually** as one member of its subtype, and as one
-  character, for every tally — "with 3 allied warriors", "+1✦ for each allied
-  warrior", and so on. A stack of three Warrior figments is three allied
-  warriors.
+  character, for every tally — "if you control 3 or more warriors", "+1✦ for each
+  warrior you control", and so on. A stack of three Warrior figments is three
+  warriors you control.
 - A targeted **spark gain** ("+2✦") applies to the **topmost** figment. It rides
   that figment and is gone when the topmost is removed.
-- An **anthem** — a static "allied X have +N✦" — applies to **each** figment in
+- An **anthem** — a static "X you control have +N✦" — applies to **each** figment in
   the stack, topmost and reserves alike. An anthem can therefore multiply a
   stack's total spark, and it persists as figments are removed.
 
@@ -704,5 +704,5 @@ For example:
 A figment removed by a **dissolve**, an **Abandon**, or a lost challenge fires
 dissolved triggers, once per figment removed; the figment then ceases to exist. A
 figment removed by **banish** does not fire dissolved triggers. Support does not
-interact with figments — a figment neither grants Support to allies nor benefits
-from an ally's Support.
+interact with figments — a figment neither grants Support to characters you
+control nor benefits from another character's Support.
