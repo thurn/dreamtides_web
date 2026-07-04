@@ -155,7 +155,13 @@ hex; `--space-6` because it is the scale step the neighboring UI uses, not
 because 16px looked right. If no existing token expresses the role, that is a
 token-system conversation (add a semantic token in `tango-tokens.css`,
 resolving through a primitive, then `npm run tango-tokens`) — never a raw
-px/hex literal in UI code, and never a reach into `--primitive-*`.
+px/hex literal in UI code, and never a reach into `--primitive-*`. This is
+lint-enforced in product UI: `no-hardcoded-values` catches raw colors,
+`no-untokenized-lengths` catches raw px spacing and radii,
+`no-composed-type-voice` catches hand-assembled font shorthands, and
+`valid-token-references` catches `var(--…)` names that don't exist. Box
+*measures* (width/height/min/max constraints) are content-driven layout and
+stay the caller's numbers.
 
 The `--dt-*` / `--color-*` / `--cv-*` families are a production bridge: the
 same values re-exported under the production codebase's token names so shared

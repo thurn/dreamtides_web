@@ -173,3 +173,44 @@ export function colorTokenFor(literal) {
   }
   return COLOR_TOKEN_INDEX.get(key) ?? null;
 }
+
+function buildSpaceIndex() {
+  const index = new Map();
+  let css;
+  try {
+    const here = dirname(fileURLToPath(import.meta.url));
+    css = readFileSync(
+      resolve(here, "../src/tango/primitives/tango-tokens.css"),
+      "utf8",
+    );
+  } catch {
+    return index;
+  }
+  for (const [name, value] of parseDeclarations(css)) {
+    if (!name.startsWith("--space-")) {
+      continue;
+    }
+    const px = /^(\d+(?:\.\d+)?)px$/.exec(value.trim());
+    if (px) {
+      index.set(Number(px[1]), name);
+    } else if (value.trim() === "0") {
+      index.set(0, name);
+    }
+  }
+  return index;
+}
+
+const SPACE_TOKEN_INDEX = buildSpaceIndex();
+
+/**
+ * The `--space-*` token whose value is exactly `px` pixels, or null when the
+ * length is off the spacing scale. `no-untokenized-lengths` uses this both to
+ * suggest/autofix the matching step and to tell an author their value needs
+ * snapping to the scale.
+ */
+export function spaceTokenFor(px) {
+  if (typeof px !== "number" || Number.isNaN(px)) {
+    return null;
+  }
+  return SPACE_TOKEN_INDEX.get(px) ?? null;
+}

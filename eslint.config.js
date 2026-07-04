@@ -10,6 +10,7 @@ import tangoValidTokenReferences from "./eslint-rules/valid-token-references.js"
 import tangoNoComposedTypeVoice from "./eslint-rules/no-composed-type-voice.js";
 import tangoNoClassnameInProductUi from "./eslint-rules/no-classname-in-product-ui.js";
 import tangoScreenFileTaxonomy from "./eslint-rules/screen-file-taxonomy.js";
+import tangoNoUntokenizedLengths from "./eslint-rules/no-untokenized-lengths.js";
 
 // One shared plugin object: flat config rejects two config blocks that bind the
 // same plugin name to different objects, and the tango rules apply to more than
@@ -26,6 +27,7 @@ const tangoPlugin = {
     "no-composed-type-voice": tangoNoComposedTypeVoice,
     "no-classname-in-product-ui": tangoNoClassnameInProductUi,
     "screen-file-taxonomy": tangoScreenFileTaxonomy,
+    "no-untokenized-lengths": tangoNoUntokenizedLengths,
   },
 };
 
@@ -71,6 +73,7 @@ export default tseslint.config(
       "tango/no-composed-type-voice": "error",
       "tango/no-classname-in-product-ui": "error",
       "tango/screen-file-taxonomy": "error",
+      "tango/no-untokenized-lengths": "error",
     },
   },
   {

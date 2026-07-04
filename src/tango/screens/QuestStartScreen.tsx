@@ -101,7 +101,7 @@ function SectionHeading({
   return (
     <span
       {...{ [wrapperAttr]: dreamcallerId }}
-      style={{ display: "inline-flex", alignItems: "center", gap: 6 }}
+      style={{ display: "inline-flex", alignItems: "center", gap: "var(--space-3)" }}
     >
       <span
         {...{ [labelAttr]: dreamcallerId }}
@@ -122,7 +122,7 @@ function SectionHeading({
               border: `1px solid ${token("--border-mid")}`,
               background: token("--surface-raised"),
               color: token("--text-primary"),
-              padding: "8px 12px",
+              padding: "var(--space-4) var(--space-5)",
               font: token("--t-caption"),
               lineHeight: 1.5,
               boxShadow: token("--shadow-md"),
@@ -164,7 +164,7 @@ function DreamcallerCard({
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: 12,
+        gap: "var(--space-5)",
         width: "100%",
         maxWidth: 340,
         flex: 1,
@@ -186,7 +186,7 @@ function DreamcallerCard({
           flexDirection: "column",
           width: "100%",
           textAlign: "left",
-          padding: "16px 18px 20px",
+          padding: "var(--space-6) var(--space-7) var(--space-7)",
           borderRadius: token("--radius-card"),
           background: token("--surface-card"),
           border: `2px solid ${withAlpha("accent", hovered ? 0.7 : 0.28)}`,
@@ -197,7 +197,7 @@ function DreamcallerCard({
           transition: `border-color ${token("--dur-fast")} ${token("--ease-out")}, box-shadow ${token("--dur-fast")} ${token("--ease-out")}`,
         }}
       >
-        <div style={{ marginBottom: 12, minHeight: 62 }}>
+        <div style={{ marginBottom: "var(--space-5)", minHeight: 62 }}>
           <div
             style={{
               font: token("--t-title-sm"),
@@ -209,7 +209,7 @@ function DreamcallerCard({
           </div>
           <div
             style={{
-              marginTop: 4,
+              marginTop: "var(--space-2)",
               font: token("--t-body-sm"),
               fontStyle: "italic",
               color: token("--text-secondary"),
@@ -219,7 +219,7 @@ function DreamcallerCard({
           </div>
         </div>
 
-        <div style={{ marginBottom: 14, borderRadius: token("--radius-panel") }}>
+        <div style={{ marginBottom: "var(--space-5)", borderRadius: token("--radius-panel") }}>
           <DreamcallerPortrait dreamcaller={dreamcaller} variant="panel" />
         </div>
 
@@ -241,7 +241,7 @@ function DreamcallerCard({
           >
             <div
               style={{
-                padding: "0 4px",
+                padding: "0 var(--space-2)",
                 textAlign: "center",
                 font: token("--t-body-sm"),
                 color: token("--text-secondary"),
@@ -256,11 +256,11 @@ function DreamcallerCard({
         <div
           data-starting-essence={dreamcaller.id}
           style={{
-            marginTop: 14,
+            marginTop: "var(--space-5)",
             display: "flex",
             alignItems: "baseline",
             justifyContent: "center",
-            gap: 6,
+            gap: "var(--space-3)",
           }}
         >
           <span
@@ -289,9 +289,9 @@ function DreamcallerCard({
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: 8,
+            gap: "var(--space-4)",
             width: "100%",
-            padding: "0 4px",
+            padding: "0 var(--space-2)",
           }}
         >
           <SectionHeading
@@ -303,7 +303,7 @@ function DreamcallerCard({
             infoAttr="data-signature-cards-info-icon"
             tooltipAttr="data-signature-cards-label-tooltip"
           />
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }}>
             {dreamcaller.signatureCards.map((card) => (
               <span
                 key={`${dreamcaller.id}-${card.id}`}
@@ -311,9 +311,9 @@ function DreamcallerCard({
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: 6,
+                  gap: "var(--space-3)",
                   minHeight: 30,
-                  padding: "4px 4px",
+                  padding: "var(--space-2) var(--space-2)",
                   font: token("--t-caption"),
                   color: token("--text-primary"),
                 }}
@@ -336,9 +336,9 @@ function DreamcallerCard({
           style={{
             display: "flex",
             flexDirection: "column",
-            gap: 8,
+            gap: "var(--space-4)",
             width: "100%",
-            padding: "0 4px",
+            padding: "0 var(--space-2)",
           }}
         >
           <SectionHeading
@@ -355,7 +355,7 @@ function DreamcallerCard({
               display: "flex",
               flexDirection: "column",
               alignItems: "flex-start",
-              gap: 6,
+              gap: "var(--space-3)",
             }}
           >
             {dreamcaller.tides.map((tide) => (
@@ -401,8 +401,8 @@ export function QuestStartScreen({ dreamcallers, onPick }: QuestStartScreenProps
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "flex-start",
-        gap: 6,
-        padding: "40px 16px 48px",
+        gap: "var(--space-3)",
+        padding: "var(--space-10) var(--space-6) var(--space-11)",
       }}
     >
       <h1
@@ -422,7 +422,7 @@ export function QuestStartScreen({ dreamcallers, onPick }: QuestStartScreenProps
       </h1>
       <p
         style={{
-          margin: "0 0 20px",
+          margin: "0 0 var(--space-7)",
           textAlign: "center",
           font: token("--t-lead"),
           color: token("--text-secondary"),
@@ -439,8 +439,8 @@ export function QuestStartScreen({ dreamcallers, onPick }: QuestStartScreenProps
           flexWrap: "wrap",
           alignItems: "flex-start",
           justifyContent: "center",
-          gap: 24,
-          padding: "0 8px",
+          gap: "var(--space-8)",
+          padding: "0 var(--space-4)",
         }}
       >
         {dreamcallers.map((dreamcaller) => (
