@@ -42,6 +42,37 @@ const FLY_DUR = 420;
 const FLY_STAGGER = 55;
 const DISC_PX = 24;
 
+// The resting sm TidePill's own metrics. The flyer must land pixel-identical on
+// the pill it becomes, so it mirrors these rather than diverging and clipping
+// its own (wider) label under `overflow: hidden` right before the swap. Source
+// of truth is TidePill (size="sm"): 12px font, "3px 9px" padding, 6px gap.
+const PILL_FONT_PX = 12;
+const PILL_PAD_X = 9;
+const PILL_GAP = 6;
+const DISC_PAD_L = 6; // centers the glyph inside the collapsed disc
+
+/**
+ * The flyer's fill for a tide at a given pose. A translucent tint (an inset
+ * box-shadow) is painted over an opaque `--bg-app` backing that only shows at
+ * the disc pose — so a closing clone lands on the same opaque, ringed disc it
+ * becomes instead of a translucent blob that snaps solid at the swap. `ring`
+ * adds the disc's separating outline; the leftmost disc omits it, matching the
+ * resting cluster. `backgroundColor` and `box-shadow` both tween, so the
+ * backing and ring fade in/out in step with the flight.
+ */
+function flyerFill(
+  v: { bg: string },
+  pill: boolean,
+  ring: boolean,
+): { backgroundColor: string; boxShadow: string } {
+  const bgApp = token("--bg-app");
+  const ringPx = !pill && ring ? 2 : 0;
+  return {
+    backgroundColor: pill ? "transparent" : bgApp,
+    boxShadow: `inset 0 0 0 999px ${v.bg}, 0 0 0 ${ringPx}px ${bgApp}`,
+  };
+}
+
 type Phase = "closed" | "opening" | "open" | "closing";
 
 /** A single collapsed tide mark — a colored disc carrying the tide glyph. */
@@ -164,28 +195,37 @@ export function TideCluster({
       lab: HTMLElement | null,
       pill: boolean,
       box: Box,
+      v: { bg: string },
+      ring: boolean,
     ): void => {
       el.style.left = box.left + "px";
       el.style.top = box.top + "px";
       el.style.width = (pill ? box.width : DISC_PX) + "px";
       el.style.height = (pill ? box.height : DISC_PX) + "px";
-      el.style.paddingLeft = (pill ? 12 : 6) + "px";
-      el.style.paddingRight = (pill ? 12 : 0) + "px";
-      el.style.gap = (pill ? 6 : 0) + "px";
+      el.style.paddingLeft = (pill ? PILL_PAD_X : DISC_PAD_L) + "px";
+      el.style.paddingRight = (pill ? PILL_PAD_X : 0) + "px";
+      el.style.gap = (pill ? PILL_GAP : 0) + "px";
+      const fill = flyerFill(v, pill, ring);
+      el.style.backgroundColor = fill.backgroundColor;
+      el.style.boxShadow = fill.boxShadow;
       if (lab) lab.style.opacity = pill ? "1" : "0";
     };
-    flyers.forEach((f) => {
+    flyers.forEach((f, i) => {
       const el = flyerRefs.current[f.id];
-      if (el) setPose(el, labelRefs.current[f.id], startPill, startPill ? f.pill : f.disc);
+      const v = tideVisual(f.tide);
+      if (el)
+        setPose(el, labelRefs.current[f.id], startPill, startPill ? f.pill : f.disc, v, i > 0);
     });
     const raf = requestAnimationFrame(() => {
       const c = containerRef.current;
       if (c) void c.offsetHeight;
       const ob = openRef.current;
       if (ob) ob.style.height = (opening ? ob.scrollHeight : 0) + "px";
-      flyers.forEach((f) => {
+      flyers.forEach((f, i) => {
         const el = flyerRefs.current[f.id];
-        if (el) setPose(el, labelRefs.current[f.id], endPill, endPill ? f.pill : f.disc);
+        const v = tideVisual(f.tide);
+        if (el)
+          setPose(el, labelRefs.current[f.id], endPill, endPill ? f.pill : f.disc, v, i > 0);
       });
     });
     const maxDelay = (flyers.length - 1) * FLY_STAGGER;
@@ -315,6 +355,7 @@ export function TideCluster({
             const delay = (opening ? i : flyers.length - 1 - i) * FLY_STAGGER;
             const move = `${FLY_DUR}ms ${easing} ${delay}ms`;
             const labDelay = delay + (opening ? Math.round(FLY_DUR * 0.35) : 0);
+            const fill = flyerFill(v, endPill, i > 0);
             return (
               <span
                 key={f.id}
@@ -328,20 +369,24 @@ export function TideCluster({
                   alignItems: "center",
                   overflow: "hidden",
                   whiteSpace: "nowrap",
-                  background: v.bg,
+                  backgroundColor: fill.backgroundColor,
+                  boxShadow: fill.boxShadow,
                   border: `1px solid ${v.bd}`,
                   color: v.fg,
                   borderRadius: token("--radius-pill"),
-                  font: `600 13px/1 ${token("--font-ui")}`,
+                  font: `600 ${PILL_FONT_PX}px/1 ${token("--font-ui")}`,
                   letterSpacing: "0.005em",
+                  // Match the resting cluster's disc stacking (leftmost on top)
+                  // so overlapping flyers layer identically to the discs they land on.
+                  zIndex: flyers.length - i,
                   left: end.left,
                   top: end.top,
                   width: endPill ? end.width : DISC_PX,
                   height: endPill ? end.height : DISC_PX,
-                  paddingLeft: endPill ? token("--space-5") : token("--space-3"),
-                  paddingRight: endPill ? token("--space-5") : token("--space-0"),
-                  gap: endPill ? token("--space-3") : token("--space-0"),
-                  transition: `left ${move}, top ${move}, width ${move}, height ${move}, padding ${move}`,
+                  paddingLeft: endPill ? PILL_PAD_X : DISC_PAD_L,
+                  paddingRight: endPill ? PILL_PAD_X : 0,
+                  gap: endPill ? PILL_GAP : 0,
+                  transition: `left ${move}, top ${move}, width ${move}, height ${move}, padding ${move}, background-color ${move}, box-shadow ${move}`,
                   willChange: "left, top, width, height",
                 }}
               >
