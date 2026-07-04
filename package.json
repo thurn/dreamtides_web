@@ -25,6 +25,7 @@
     "tango-metadata": "node scripts/generate-tango-metadata.mjs",
     "tango-docs": "node scripts/generate-tango-docs.mjs",
     "upload-assets": "node scripts/upload-assets-to-storage.mjs",
+    "send-screenshots": "node scripts/send-screenshots-to-discord.mjs",
     "regenerate-assets": "bash scripts/regenerate-assets.sh",
     "deploy": "bash scripts/deploy.sh",
     "kill-dev-servers": "bash scripts/kill-dev-servers.sh",
