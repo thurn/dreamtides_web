@@ -155,7 +155,8 @@ export const GLOSSARY: readonly GlossaryEntry[] = [
   },
   {
     term: "Veil",
-    definition: "Costs the opponent extra ● to target this character.",
+    definition:
+      "If this character would be dissolved by an effect the opponent controls, instead it loses Veil.",
     variants: ["veiled"],
   },
   {

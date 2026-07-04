@@ -408,15 +408,10 @@ export function BattleContextMenu({
       });
       items.push({ divider: true });
 
-      for (const value of [0, 1, 2, 3]) {
-        if (value === status.veil) {
-          continue;
-        }
-        items.push({
-          label: value === 0 ? "Clear Veil" : `Veil ${String(value)}●`,
-          action: () => setStatus({ veil: value }),
-        });
-      }
+      items.push({
+        label: status.veil ? "Clear Veil" : "Mark Veil",
+        action: () => setStatus({ veil: !status.veil }),
+      });
       items.push({ divider: true });
 
       items.push(grantedKeywordItem("Unstoppable", "grantedUnstoppable", status.grantedUnstoppable));

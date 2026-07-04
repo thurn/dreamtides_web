@@ -427,7 +427,7 @@ name = "Scrap Reclaimer"
 mtg-name = "Life from the Loam"
 id = "975f49d3-213a-43fc-8079-5fe40f126a7b"
 rendered-text = """
-Awakened, Veil 2●
+Awakened, Veil
 
 2●, ☪, Discard a card: Return up to 2 ≤2● cost characters from your void to your hand."""
 energy-cost = 0
@@ -573,7 +573,7 @@ name = "Cloudstrider"
 mtg-name = "Fastbond"
 id = "bbf316f6-1fd4-40f5-aacd-d9ed8a5c58ea"
 rendered-text = """
-Veil 2●
+Veil
 
 When you play a ≤2● cost character, gain 1●."""
 energy-cost = 1
@@ -673,7 +673,7 @@ name = "Curio Dealer"
 mtg-name = "Survival of the Fittest"
 id = "4f0f0811-1a4c-4d42-a804-77dba8707792"
 rendered-text = """
-Veil 2●
+Veil
 
 1●, Discard a character with cost X●: Discover a character with cost X●."""
 energy-cost = 2
@@ -1444,7 +1444,7 @@ name = "Saltless Mariner"
 mtg-name = "Goblin Bombardment"
 id = "7ffb1179-6c94-4f80-9613-ece2b799f19d"
 rendered-text = """
-Veil 2●
+Veil
 
 Abandon a character: Gain 1⍟."""
 energy-cost = 2
@@ -1834,7 +1834,7 @@ name = "Amythest Aurelia"
 mtg-name = "Avacyn's Pilgrim"
 id = "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c"
 rendered-text = '''
-Veil 2●
+Veil
 
 ▸Dawn: Gain 1●.'''
 energy-cost = 1
@@ -2055,7 +2055,7 @@ name = "Silent Gatherer"
 mtg-name = "Insidious Roots"
 id = "01298848-1ebb-48a1-b00b-d7e0af890870"
 rendered-text = """
-Veil 2●
+Veil
 
 ▸Dawn: Gain 1● for each figment you control."""
 energy-cost = 2
@@ -4986,7 +4986,7 @@ name = "Heavenward Penitent"
 mtg-name = "Exploration"
 id = "f9c66b3e-4771-4a3c-8577-9d2f1c987bc7"
 rendered-text = """
-Veil 2●
+Veil
 
 The first ≤2● cost character you play each turn costs you 0●."""
 energy-cost = 1
@@ -7229,7 +7229,7 @@ name = "Angel of the Eclipse"
 mtg-name = "Earthcraft"
 id = "bc1c7ea9-e47d-49b8-a93a-8185b9cb40f2"
 rendered-text = """
-Veil 2●
+Veil
 
 When you play a character, gain 1●."""
 energy-cost = 2
@@ -7893,7 +7893,7 @@ name = "Futuresight Host"
 mtg-name = "Wall of Omens"
 id = "4b20e66e-2466-4518-8ef9-67f580bd6f14"
 rendered-text = '''
-Veil 2●
+Veil
 
 ▸Materialized: Draw a card.'''
 energy-cost = 2
@@ -9042,7 +9042,7 @@ name = "Lumin-Gate Seer"
 mtg-name = "Ineffable Blessing"
 id = "33cf7dca-d8d2-42b7-854a-b3f503b03488"
 rendered-text = """
-Veil 2●
+Veil
 
 When you materialize a character with cost X●, draw a card."""
 energy-cost = "2,X"

@@ -436,11 +436,8 @@ Supported characters have +1✦." Support is a non-figment mechanic: a [figment]
 neither grants Support to characters you control nor benefits from another
 character's Support.
 
-**Veil N●** — While a character has Veil, it costs the opponent N additional ●
-to choose it as a target with an event, activated ability, or triggered ability.
-The Veil cost is paid by the opponent at the moment the veiled character is
-chosen as a target; if the opponent cannot pay it, the character cannot be
-chosen. The controller does not pay to target their own veiled character.
+**Veil** — If a character with Veil would be dissolved by an effect the
+opponent controls, instead it loses Veil.
 
 **Reclaim** / **Reclaim N●** — A card with Reclaim may be played from the void
 instead of from hand. With plain Reclaim it is played for its normal ● cost; with

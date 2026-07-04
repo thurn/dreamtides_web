@@ -402,8 +402,11 @@ export interface BattleCardStatus {
   reclaimed: boolean;
   offering: boolean;
   ephemeral: boolean;
-  /** Veil N● targeting tax; 0 = no veil. */
-  veil: number;
+  /**
+   * Whether the character has Veil: if it would be dissolved by an effect the
+   * opponent controls, it instead loses Veil.
+   */
+  veil: boolean;
   grantedUnstoppable: boolean;
   grantedVengeful: boolean;
   grantedPreeminence: boolean;

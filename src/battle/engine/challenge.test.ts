@@ -560,7 +560,7 @@ describe("hasCombatKeyword — detection precedence", () => {
     ).toBe(true);
     expect(
       hasCombatKeyword(
-        makeInstance("d", { owner: "player", renderedText: "Awakened, Veil 2●" }),
+        makeInstance("d", { owner: "player", renderedText: "Awakened, Veil" }),
         "awakened",
       ),
     ).toBe(true);

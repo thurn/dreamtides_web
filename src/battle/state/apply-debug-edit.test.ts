@@ -350,14 +350,14 @@ describe("SET_CARD_STATUS", () => {
     const state = createBattle();
     const cardId = state.mutable.sides.player.hand[0];
     state.mutable.cardInstances[cardId].status.counters = 3;
-    state.mutable.cardInstances[cardId].status.veil = 2;
+    state.mutable.cardInstances[cardId].status.veil = true;
 
     const result = setCardStatus(state, cardId, { reclaimed: true });
 
     expect(result.mutable.cardInstances[cardId].status.reclaimed).toBe(true);
     // Toggling reclaimed leaves counters and veil intact.
     expect(result.mutable.cardInstances[cardId].status.counters).toBe(3);
-    expect(result.mutable.cardInstances[cardId].status.veil).toBe(2);
+    expect(result.mutable.cardInstances[cardId].status.veil).toBe(true);
   });
 });
 
@@ -485,13 +485,13 @@ describe("SET_COUNTERS", () => {
   it("leaves sibling status fields untouched", () => {
     const state = createBattle();
     const cardId = state.mutable.sides.player.hand[0];
-    state.mutable.cardInstances[cardId].status.veil = 2;
+    state.mutable.cardInstances[cardId].status.veil = true;
     state.mutable.cardInstances[cardId].status.reclaimed = true;
 
     const result = setCounters(state, cardId, 5);
 
     expect(result.mutable.cardInstances[cardId].status.counters).toBe(5);
-    expect(result.mutable.cardInstances[cardId].status.veil).toBe(2);
+    expect(result.mutable.cardInstances[cardId].status.veil).toBe(true);
     expect(result.mutable.cardInstances[cardId].status.reclaimed).toBe(true);
   });
 

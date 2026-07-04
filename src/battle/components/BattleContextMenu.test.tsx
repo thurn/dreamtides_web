@@ -204,16 +204,16 @@ describe("BattleContextMenu status toggles", () => {
     });
   });
 
-  it("emits a veil value and a granted-keyword toggle", () => {
+  it("emits a veil toggle and a granted-keyword toggle", () => {
     const state = createState();
     const battleCardId = placeCharacter(state, "backRank", "B0");
     const { container, onCommand, root } = mount(state, battleCardId);
 
     openSubmenu(container, "Status");
-    clickItem(container, "Veil 2●");
+    clickItem(container, "Mark Veil");
     expect(onCommand).toHaveBeenCalledWith({
       id: "DEBUG_EDIT",
-      edit: { kind: "SET_CARD_STATUS", battleCardId, status: { veil: 2 } },
+      edit: { kind: "SET_CARD_STATUS", battleCardId, status: { veil: true } },
       sourceSurface: "inspector",
     });
 

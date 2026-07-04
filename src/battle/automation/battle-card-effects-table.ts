@@ -127,12 +127,12 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
     steps: [{ kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 1) }],
   },
 
-  // Starchaser — "Veil 2●\n\n▸Dawn: Gain 1●." The script automates only the
+  // Starchaser — "Veil\n\n▸Dawn: Gain 1●." The script automates only the
   // ▸Dawn energy gain; the Veil keyword is resolved manually.
   "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c": {
     id: "cea847ef-2d1f-45d2-a0e0-fe9ce3fec55c",
     trigger: "dawn",
-    textHash: "25db0d09",
+    textHash: "b5d9f20e",
     steps: [{ kind: "edits", build: (ctx) => gainEnergyEdits(ctx.side, 1) }],
   },
 
@@ -275,13 +275,13 @@ export const BATTLE_CARD_EFFECTS: Record<string, BattleCardEffectScript> = {
     steps: [{ kind: "edits", build: (ctx) => drawEdits(ctx.side, 1) }],
   },
 
-  // Looming Oracle — "Veil 2●\n\n▸Materialized: Draw a card." The script
+  // Looming Oracle — "Veil\n\n▸Materialized: Draw a card." The script
   // automates only the ▸Materialized draw; the Veil keyword is resolved
   // manually.
   "4b20e66e-2466-4518-8ef9-67f580bd6f14": {
     id: "4b20e66e-2466-4518-8ef9-67f580bd6f14",
     trigger: "materialized",
-    textHash: "ef3b6d38",
+    textHash: "6f02926b",
     steps: [{ kind: "edits", build: (ctx) => drawEdits(ctx.side, 1) }],
   },
 

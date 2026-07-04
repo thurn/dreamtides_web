@@ -112,7 +112,7 @@ function makeCharacter(
       reclaimed: false,
       offering: false,
       ephemeral: false,
-      veil: 0,
+      veil: false,
       grantedUnstoppable: false,
       grantedVengeful: false,
       grantedPreeminence: false,
