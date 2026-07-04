@@ -5,9 +5,9 @@
 // is what lets the migration proceed one screen at a time while the app stays
 // fully navigable.
 //
-// Each entry renders an ADAPTER (a component outside `src/tango/` that owns
-// `useQuest()` and builds the Tango screen's view-model), never a Tango screen
-// directly — the Tango screens are pure and hold no state.
+// Each entry renders an ADAPTER (a wiring-only component outside `src/tango/`
+// that owns `useQuest()` and calls the screen's pure `*-view-model` builder),
+// never a Tango screen directly — the Tango screens are pure and hold no state.
 
 import type { ReactNode } from "react";
 import type { Screen, SiteState } from "../../types/quest";

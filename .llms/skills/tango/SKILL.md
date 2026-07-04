@@ -183,6 +183,45 @@ rest of the app imports its UI from Tango. The boundary is a lint gate
 (fail-closed import allowlist) — when it blocks an import, move the code or
 rethink the dependency; never widen the allowlist for UI code.
 
+## Building a product screen: screen / builder / adapter
+
+A migrated quest screen is three files with strictly separated roles. Lint
+enforces the split (`thin-adapters`, the builder-purity import block, and the
+Tango boundary rules), so put each kind of code in its home from the start:
+
+- **Tango screen** (`src/tango/screens/FooScreen.tsx`) — pure: renders from a
+  view-model, reports events through callbacks. No `useQuest()`, no
+  mutations, no navigation. The screen **owns and exports its view types**
+  (`FooView`, `FooScreenProps`). Presentation logic and local UI state
+  (hover, selection, pan/zoom, animation phase) belong here — most of the
+  screen's code, by volume, is this file.
+- **View-model builder** (`src/screens/tango/foo-view-model.ts`) — pure,
+  exported, unit-tested functions mapping domain data to the screen's view
+  types (`buildFooViewModel(...)`). Every mapping rule — capping,
+  suppression, display-copy fallbacks, color→variant tables — lives here,
+  tested with plain fixtures. Deterministic in its arguments; no `react`, no
+  `src/state` (lint-enforced). A rule that is really a *domain* rule belongs
+  in `src/data/` instead, which both the builder and Tango may import.
+- **Adapter** (`src/screens/tango/FooScreenAdapter.tsx`) — wiring only:
+  acquire state, mint per-mount randomness (offers, seeds), call the builder
+  inside `useMemo`, wire callbacks to mutations, render the screen. The
+  `thin-adapters` rule errors on module-level helpers, mapping tables, extra
+  exports, and any `src/tango/` import other than `src/tango/screens/`. If
+  adapter code seems worth testing, it belongs in the builder.
+
+Register the adapter in `src/screens/tango/registry.tsx`. **Registration is
+launch**: `?ui=tango` is the default variant, so a registry entry serves the
+screen to production immediately — QA to the production bar first
+(`?ui=legacy` is the rollback flag).
+
+For big screens (Atlas-sized): keep one view-model at the root; when the tree
+is deep, re-expose it through a screen-scoped React context defined inside
+`src/tango/screens/` (still plain data + callbacks from props — never state
+hooks). Split the builder into per-region functions
+(`buildAtlasNodeViews`, `buildAtlasEdgeViews`, …) and memoize each in the
+adapter against its own inputs. Full rationale:
+[docs/quest_prototype/tango_design_system.md](../../../docs/quest_prototype/tango_design_system.md) §2.
+
 ## Core rendering rules
 
 - **Material continuity**: meaningful objects travel or expand between

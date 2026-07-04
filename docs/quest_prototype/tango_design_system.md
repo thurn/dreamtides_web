@@ -106,29 +106,88 @@ moves):
 ### Product screens & the `?ui=` migration toggle
 
 The quest app's screens migrate into Tango one at a time behind a `?ui=` toggle
-(`runtimeConfig.uiVariant`, default `tango`). Two roles keep the isolation
-boundary intact while a screen owns live quest state:
+(`runtimeConfig.uiVariant`, default `tango`). A migrated screen splits into
+**three roles** — a pure screen, a pure view-model builder, and a thin adapter.
+The bulk of a screen's code lives in the first two, which are both
+plain-data-in / plain-data-out and trivially unit-testable; the adapter is
+deliberately skeletal, because it is the one layer hooks make hard to test.
 
 - A **Tango screen** (`src/tango/screens/*.tsx`) is pure: it renders from a
   view-model and reports events through callbacks, importing only Tango and the
-  allowlisted infra. It holds no `useQuest()`, no mutations, no navigation. Its
-  root carries `className="tango"` so the semantic tokens resolve (the adapter
-  mounts it outside any other `.tango` subtree). Screens inherit every strict
-  rule — semantic tokens only (they are absent from the `no-primitive-tokens` and
-  `no-hardcoded-values` exemptions), no raw interactive elements, no escape-hatch
-  props — so `npm run lint` is what proves a migrated screen conforms.
-- An **adapter** (`src/screens/tango/*Adapter.tsx`, *outside* Tango) owns
-  `useQuest()`, builds the view-model, wires callbacks to mutations, and renders
-  the Tango screen. External→Tango imports are allowed, so the adapter freely
-  imports both.
+  allowlisted infra. It holds no `useQuest()`, no mutations, no navigation. It
+  **owns and exports its view-model types** (`DreamcallerOfferView`, …) — the
+  consumer defines the contract, and the builder maps into it. Purity does not
+  mean logic-free: layout, conditional rendering, formatting, and *local UI
+  state* (hover, selection-in-progress, pan/zoom, animation phase) are all
+  screen code, because none of it touches quest state. Its root carries
+  `className="tango"` so the semantic tokens resolve (the adapter mounts it
+  outside any other `.tango` subtree). Screens inherit every strict rule —
+  semantic tokens only (they are absent from the `no-primitive-tokens` and
+  `no-hardcoded-values` exemptions), no raw interactive elements, no
+  escape-hatch props — so `npm run lint` is what proves a migrated screen
+  conforms.
+- A **view-model builder** (`src/screens/tango/*-view-model.ts`) is a module of
+  pure, exported, unit-tested functions mapping domain data to the screen's
+  view types (e.g. `buildDreamcallerOfferViews` in
+  `quest-start-view-model.ts`). Every non-trivial mapping rule — capping,
+  suppression, display-copy resolution, color→variant tables — lives here, in
+  functions tested with plain fixtures. Builders are deterministic in their
+  arguments: randomness (offers, seeds) is minted by the adapter and passed in.
+  A lint block bans `react` and `src/state` imports in builder modules, so a
+  builder can never quietly become a component or acquire state itself. A
+  mapping rule that is genuinely a *domain* rule rather than a display rule
+  belongs one level lower, in `src/data/` — which is on Tango's allowlist, so
+  both the builder and Tango itself may use it.
+- An **adapter** (`src/screens/tango/*Adapter.tsx`, *outside* Tango) is
+  **wiring only**: it acquires state (`useQuest()`), mints any per-mount
+  randomness, calls the builder, wires callbacks to mutations, and renders the
+  Tango screen — nothing else. The `thin-adapters` lint rule enforces this
+  structurally (see §9): the only Tango import an adapter may hold is its
+  screen, the only export is the single `*Adapter` component, and module-level
+  helpers, mapping tables, and exported types are errors pointing at the
+  view-model module. The moment adapter code is worth testing, it belongs in
+  the builder — that is the convention the rule encodes.
+
+Deciding where a piece of code goes reduces to one question each: does it read
+live state or perform an effect (adapter)? Does it transform domain data into
+view shape (builder — or `src/data` if it is a domain rule)? Does it decide how
+things look and behave on screen (screen)?
+
+#### Big screens (Atlas, Dreamscape)
+
+The same three roles scale to the largest screens; what changes is how the
+view-model is plumbed and built:
+
+- **One view-model at the root, context below it.** The adapter still hands the
+  screen a single view-model. When the screen's component tree is deep (the
+  Atlas node/edge tree), the screen re-exposes that view-model — plain data and
+  callbacks received via props — through a screen-scoped React context defined
+  inside `src/tango/screens/`, so mid-tree components read it without
+  prop-drilling. That context is still pure: it carries the view-model, never
+  state hooks.
+- **Builders split per region.** A big screen's builder module exports several
+  functions (`buildAtlasNodeViews`, `buildAtlasEdgeViews`, …) and the adapter
+  memoizes each against its own inputs, so one quest-state change rebuilds only
+  the affected slice of the view-model rather than the world.
+- **Local UI state stays in the screen.** Pan/zoom, the hovered node, an open
+  preview — anything that resets harmlessly on remount is screen state. Only
+  facts that must survive the screen (or the session) travel through the
+  adapter to quest state.
+
+#### Registry & rollout
 
 `ScreenRouter` consults `src/screens/tango/registry.tsx` (`tangoScreenFor` /
 `tangoSiteScreenFor`): under `?ui=tango` it renders the registered adapter for a
 migrated screen and falls back to the legacy screen when the resolver returns
 null, so the app stays fully navigable throughout the migration. `?ui=legacy`
-forces the legacy screen everywhere. The end state registers every screen, then
-deletes the legacy `src/screens/` tree. The first migrated screen is Dreamcaller
-selection (`QuestStartScreen`).
+forces the legacy screen everywhere. **Registration is launch**: with `tango`
+the default variant, adding a registry entry serves that screen to every player
+immediately — there is no registered-but-dark state — so a screen is QA'd to
+the production bar *before* its registry entry lands, and `?ui=legacy` is the
+triage escape hatch afterwards. The end state registers every screen and
+deletes the legacy screen components; the adapters, view-model builders, and
+registry under `src/screens/tango/` remain as the app's permanent state-wiring
+layer. The first migrated screen is Dreamcaller selection (`QuestStartScreen`).
 
 ---
 
@@ -365,6 +424,15 @@ reference, not by a from-scratch subagent rewrite.
   `components/` `*Props` type re-opens an escape hatch — a `style`/`className`
   member, a `CSSProperties`-typed prop, a DOM-attribute `extends`/intersection,
   or an index signature), `npm run typecheck`, and `npm test` stay green.
+- The migration layer (§2) is lint-enforced too: the `thin-adapters` rule keeps
+  `src/screens/tango/*Adapter.tsx` wiring-only (one exported `*Adapter`
+  component, no module-level helpers/tables/exported types, Tango imports
+  limited to `src/tango/screens/`), backed by a `max-lines` ceiling on adapter
+  files as the tripwire against logic hiding inside the component body; and a
+  `no-restricted-imports` block keeps `*-view-model.ts` builder modules pure
+  (no `react`, no `src/state`). What lint cannot judge — whether a view-model
+  is genuinely display-shaped, whether a mapping rule is semantically right —
+  stays a review concern.
 - The strict-API contract is enforced twice: `no-escape-hatch-props` catches it
   in the styled `components/` source at authoring time, and
   `scripts/tango-strict-api.contract.test.mjs` re-derives the resolved public
