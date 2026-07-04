@@ -3,6 +3,10 @@
 # Managed by the card editor's "Manage tags" panel.
 
 [[tags]]
+name = "Ally Audit"
+color = "#ea580c"
+
+[[tags]]
 name = "Art OK"
 color = "#15803d"
 

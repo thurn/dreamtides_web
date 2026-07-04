@@ -59,14 +59,14 @@ name = "Ossian"
 title = "the Reckoning Blade"
 id = "B9BF6D4B-907C-4750-B51C-811AFF29DE59"
 image-number = "0022"
-rendered-text = "2●, ☪, Abandon an ally with 1✦: Draw a card."
+rendered-text = "2●, ☪, Abandon a character with 1✦: Draw a card."
 
 [[dreamcaller]]
 name = "Kaleth"
 title = "The Dreaming"
 id = "3C4773E4-F8E1-4686-86CB-B407A42489D4"
 image-number = "0026"
-rendered-text = "2●, ☪: Awaken an ally."
+rendered-text = "2●, ☪: Awaken a character you control."
 
 [[dreamcaller]]
 name = "Calloway Flint"
@@ -108,7 +108,7 @@ name = "Korrax"
 title = "Iron Sovereign"
 id = "6029BE40-75B9-4C07-912F-9718B6C5C747"
 image-number = "0003"
-rendered-text = "▸Night: Give an ally +1✦."
+rendered-text = "▸Night: Give a character you control +1✦."
 
 [[dreamcaller]]
 name = "Kell Tarn"
@@ -131,7 +131,7 @@ name = "Caedryn"
 title = "Shrouded Inquisitor"
 id = "9D64A4A2-3DC7-456E-9EB2-5FE3A48883C4"
 image-number = "0112"
-rendered-text = "2●, ☪, Abandon an ally: Materialize a random character with cost 1● higher from your deck."
+rendered-text = "2●, ☪, Abandon a character: Materialize a random character with cost 1● higher from your deck."
 mtg-name = "Viscera Seer"
 signature-cards = [
   "4644db03-fbcd-4af5-a229-17962ce093d5", # Duskreaper
@@ -146,7 +146,7 @@ name = "Kragg"
 title = "Spent-Blood Chieftain"
 id = "16B579FE-C15B-4DF6-8262-D45CE44732AE"
 image-number = "0064"
-rendered-text = "Once per turn, when you abandon an ally, the next character you play this turn costs 2● less."
+rendered-text = "Once per turn, when you abandon a character, the next character you play this turn costs 2● less."
 mtg-name = "Phyrexian Altar"
 signature-cards = [
   "cf173b05-7bf2-465b-91e2-41f213c536d1", # Phantasmal Recruiter
@@ -318,7 +318,7 @@ name = "Yveth Coravel"
 title = "Scion of the Returning Tide"
 id = "FE2510D9-BFEE-4C35-97F9-30E0CD2E2851"
 image-number = "0084"
-rendered-text = "2●, ☪: Return an ally to hand. Its cost is reduced by 1●."
+rendered-text = "2●, ☪: Return a character you control to hand. Its cost is reduced by 1●."
 # Original hand-picked signature set; not derived from the card_associations.md
 # archetype mapping.
 signature-cards = [
@@ -334,7 +334,7 @@ name = "Grath"
 title = "Packmaster"
 id = "94E7C651-25E9-4A62-9DE4-EAF5BA20542C"
 image-number = "0095"
-rendered-text = "4●, ☪: Gain 1● for each allied spirit animal."
+rendered-text = "4●, ☪: Gain 1● for each spirit animal you control."
 mtg-name = "Priest of Titania"
 signature-cards = [
   "61060827-8bed-4b63-b63d-6c3b0536e941", # Sunshadow Eagle
@@ -350,7 +350,7 @@ name = "Radulf"
 title = "Hegemon of Shattered Thrones"
 id = "3EBABA62-9000-429D-B203-2A5A9724389A"
 image-number = "0045"
-rendered-text = "With 3 or more allied characters, the first character you play each turn costs 1● less."
+rendered-text = "If you control 3 or more characters, the first character you play each turn costs 1● less."
 mtg-name = "Aluren"
 signature-cards = [
   "f38ab9b6-bea7-4c6e-b5db-2609796ba46b", # Dawnprowler Panther

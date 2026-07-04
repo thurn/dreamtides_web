@@ -19,8 +19,8 @@ id = "6E20E6C7-295A-48B1-B252-B8B00D6902C9"
 name = "Amanita"
 image_name = "amanita.png"
 tides = ["leave_play_enablers", "cost_reduction", "big_energy", "finishers"]
-rendered-text = "Once per turn, when an ally leaves play, your next character this turn costs 2● less."
-tags = ["Tag OK"]
+rendered-text = "Once per turn, when a character you control leaves play, your next character this turn costs 2● less."
+tags = ["Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "49990864-1DB0-4C08-91AE-40A1F04223E4"
@@ -64,16 +64,16 @@ id = "12EC9625-CBFB-4056-9C3E-98ED8C8BEA70"
 name = "Charm Bracelet"
 image_name = "necklace.png"
 tides = ["materialize_tempo", "bounce_blink_tools", "leave_play_enablers", "materialized_staples", "cost_reduction"]
-rendered-text = "Once per turn, when you return an ally to hand, your next character this turn costs 1● less."
-tags = ["Tag OK"]
+rendered-text = "Once per turn, when you return a character you control to hand, your next character this turn costs 1● less."
+tags = ["Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "95F0F483-9A76-47C6-A839-01A1D9122945"
 name = "Oak Leaf"
 image_name = "oak_leaf.png"
 tides = ["materialize_tempo", "bounce_blink_tools", "cost_reduction"]
-rendered-text = "When you return an ally to hand, it gains +2✦."
-tags = ["Tag OK"]
+rendered-text = "When you return a character you control to hand, it gains +2✦."
+tags = ["Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "553D2317-32F9-47BC-BAE0-5018CA26D56A"
@@ -104,16 +104,16 @@ id = "3380C657-79CA-400B-ABB7-4B56FBB92AF4"
 name = "Leather Satchel"
 image_name = "bag_2.png"
 tides = ["abandon_value", "materialize_value", "trigger_reuse", "leave_play_enablers", "materialized_staples"]
-rendered-text = "When you abandon an ally, trigger its ▸Materialized and ▸Dawn abilities."
-tags = ["Tag OK"]
+rendered-text = "When you abandon a character, trigger its ▸Materialized and ▸Dawn abilities."
+tags = ["Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "2EBF0BBB-440C-4DBA-8E48-228DAADC0A1E"
 name = "Attuned Petals"
 image_name = "rose_petals.png"
 tides = ["abandon_value", "materialize_value", "copy_effects", "leave_play_enablers"]
-rendered-text = "Once per turn, when you abandon an ally, materialize a 0✦ figment copy of it."
-tags = ["Tag OK"]
+rendered-text = "Once per turn, when you abandon a character, materialize a 0✦ figment copy of it."
+tags = ["Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "2D4EB3EE-0931-45ED-8365-69F18096EAD5"
@@ -144,8 +144,8 @@ id = "D76684C3-797E-44AE-A2BA-333E77D46A4D"
 name = "Belladonna"
 image_name = "belladonna.png"
 tides = ["materialize_value", "trigger_reuse", "character_chain", "materialized_staples"]
-rendered-text = "At the end of your turn, if you materialized 2 allies this turn, rematerialize the last one."
-tags = ["Tag OK"]
+rendered-text = "At the end of your turn, if you materialized 2 characters this turn, rematerialize the last one."
+tags = ["Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "00CC7E7F-4245-4447-B9DC-F647DC6241A2"
@@ -184,8 +184,8 @@ id = "94E5683D-A24C-4F89-8AFA-652D7C6C79AA"
 name = "Black Attuned"
 image_name = "black_rose.png"
 tides = ["warrior_pressure", "warrior_bastion", "event_chain", "copy_effects"]
-rendered-text = "When you play an event with ≥3 allied warriors, copy it."
-tags = ["Tag OK"]
+rendered-text = "When you play an event while you control 3 or more warriors, copy it."
+tags = ["Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "4409A691-49B4-4FB0-82F6-4F45AE86D8C2"
@@ -208,40 +208,40 @@ id = "59D44948-210A-4703-B031-CB938C917150"
 name = "Carved Stick"
 image_name = "stick.png"
 tides = ["warrior_pressure", "warrior_bastion", "spark_growth"]
-rendered-text = "Allied warriors have preeminence."
-tags = ["Tag OK"]
+rendered-text = "Warriors you control have preeminence."
+tags = ["Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "DBBADE86-9FB6-4283-B2DC-9C1EF66FD531"
 name = "Skull Drum"
 image_name = "drum.png"
 tides = ["warrior_pressure", "warrior_bastion", "event_chain", "cost_reduction", "resource_burst"]
-rendered-text = "When you play an event with ≥3 allied spirit animals, it costs 1● less."
-tags = ["Tag OK"]
+rendered-text = "When you play an event while you control 3 or more spirit animals, it costs 1● less."
+tags = ["Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "21AE8473-AFA7-4384-B7D4-AFBF1D84E691"
 name = "Ivory Claw"
 image_name = "claw.png"
 tides = ["warrior_pressure", "warrior_bastion", "judgment_engines", "card_flow"]
-rendered-text = "▸Dawn: With ≥3 allied warriors, draw a card."
-tags = ["Tag OK"]
+rendered-text = "▸Dawn: If you control 3 or more warriors, draw a card."
+tags = ["Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "6B5C0F18-198C-44E7-92E8-D639298B8CF6"
 name = "Sealed Scroll"
 image_name = "scroll_3.png"
 tides = ["warrior_bastion", "spark_growth", "warrior_pressure", "character_curve"]
-rendered-text = "Once per turn, when an allied spirit animal is dissolved, draw a card."
-tags = ["Tag OK"]
+rendered-text = "Once per turn, when a spirit animal you control is dissolved, draw a card."
+tags = ["Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "246AC924-74DD-4387-9FD6-5BC8E563907A"
 name = "Curved Blade"
 image_name = "knife.png"
 tides = ["warrior_pressure", "warrior_bastion", "cost_reduction", "spark_growth"]
-rendered-text = "Allied warriors cost 1● less."
-tags = ["Tag OK"]
+rendered-text = "Warriors you control cost 1● less."
+tags = ["Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "1ECE0E16-08DE-4C99-8552-2D1D3A2BD517"
@@ -264,16 +264,16 @@ id = "DEC81FA2-7865-448C-95BC-622B884CEA9E"
 name = "Rune Stone"
 image_name = "rune.png"
 tides = ["figment_swarm", "judgment_engines", "spark_growth", "ally_wide"]
-rendered-text = "Allied figments have +1✦."
-tags = ["J10", "Tag OK"]
+rendered-text = "Figments you control have +1✦."
+tags = ["J10", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "4DC47625-73BD-4518-A4EF-29DDA2171594"
 name = "Rune Sack"
 image_name = "runes.png"
 tides = ["figment_swarm", "judgment_engines", "big_energy", "ally_wide"]
-rendered-text = "▸Dawn: With ≥3 allied figments, gain 2●."
-tags = ["J10", "Tag OK"]
+rendered-text = "▸Dawn: If you control 3 or more figments, gain 2●."
+tags = ["J10", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "4A91C56C-D828-482A-A46C-1299D69FA011"
@@ -344,8 +344,8 @@ id = "C75CD943-5E8B-4A56-8C09-D975571570D4"
 name = "Butterfly Wings"
 image_name = "butterfly_wings.png"
 tides = ["judgment_engines", "judgment_repeaters", "trigger_reuse", "judgment_bodies"]
-rendered-text = "A random ally's ▸Dawn ability triggers an additional time each turn."
-tags = ["J10", "Tag OK"]
+rendered-text = "The ▸Dawn ability of a random character you control triggers an additional time each turn."
+tags = ["J10", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "7EC00DA2-2B2D-4613-9A2A-8611D38199CA"
@@ -408,8 +408,8 @@ id = "56523397-6C48-4DF6-846B-9E4F15D7FDEE"
 name = "Clover"
 image_name = "clover.png"
 tides = ["event_chain", "copy_effects", "finishers", "event_setup"]
-rendered-text = "Once per turn, when you play an event while you have no allies in play, copy it."
-tags = ["J10", "Tag OK"]
+rendered-text = "Once per turn, when you play an event while you control no characters, copy it."
+tags = ["J10", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "6DAC6BFF-AF3A-4749-8547-01FDED1C81C9"
@@ -496,8 +496,8 @@ id = "10F27800-99F8-4504-9D94-26BCB3C32788"
 name = "Essence Vial"
 image_name = "essence.png"
 tides = ["abandon_value", "reclaim_characters", "void_recursion", "leave_play_enablers"]
-rendered-text = "Once per turn, when you abandon an ally or discard a character, that card gains reclaim."
-tags = ["J11", "Tag OK"]
+rendered-text = "Once per turn, when you abandon a character or discard a character, that card gains reclaim."
+tags = ["J11", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "946DBB36-0A90-495A-BF0F-17351C93D74B"
@@ -512,40 +512,40 @@ id = "89C83D7E-5617-49B4-B6CD-214680FE0627"
 name = "Candle"
 image_name = "candle.png"
 tides = ["event_chain", "spark_growth", "event_setup", "card_flow"]
-rendered-text = "When you play an event, the ally with the highest ✦ gains +1✦."
-tags = ["J11", "Tag OK"]
+rendered-text = "When you play an event, the character you control with the highest ✦ gains +1✦."
+tags = ["J11", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "8B87B0C7-E7D5-4C53-B99B-B1E2407CB519"
 name = "Red Heart"
 image_name = "heart.png"
 tides = ["void_setup", "spark_growth", "recursion_fuel", "void_threshold"]
-rendered-text = "When you erode a card, a random ally gains +1✦."
-tags = ["J11", "Tag OK"]
+rendered-text = "When you erode a card, a random character you control gains +1✦."
+tags = ["J11", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "73EFD845-6009-4686-860C-01C7F5B1C074"
 name = "Black Feather"
 image_name = "feather.png"
 tides = ["abandon_value", "spark_tall", "leave_play_enablers", "spark_growth"]
-rendered-text = "When you abandon an ally, a random ally gains +X✦ where X is the abandoned character's ✦."
-tags = ["J11", "Tag OK"]
+rendered-text = "When you abandon a character, a random character you control gains +X✦ where X is the abandoned character's ✦."
+tags = ["J11", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "ADC23870-55F8-4F23-B973-A358FC257414"
 name = "Gold Feather"
 image_name = "feather_gold.png"
 tides = ["abandon_value", "leave_play_enablers", "spark_growth", "point_pressure"]
-rendered-text = "When you abandon a character, a random ally gains +1✦."
-tags = ["J11", "Tag OK"]
+rendered-text = "When you abandon a character, a random character you control gains +1✦."
+tags = ["J11", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "1A21186C-CAFD-4E0F-9304-1AC0EF55340A"
 name = "Gray Feather"
 image_name = "feathers.png"
 tides = ["spark_tall", "spark_growth", "point_pressure", "finishers"]
-rendered-text = "When an ally gains ✦, it gains 1 additional ✦."
-tags = ["J11", "Tag OK"]
+rendered-text = "When a character you control gains ✦, it gains 1 additional ✦."
+tags = ["J11", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "FF8D8D4A-FE7B-4511-8192-E6E2E7712DAF"
@@ -632,32 +632,32 @@ id = "B3403800-7004-4775-915B-A19840E416B0"
 name = "Sea Tome"
 image_name = "book_11.png"
 tides = ["judgment_engines", "judgment_bodies", "spark_growth", "spark_tall", "judgment_repeaters"]
-rendered-text = "Allied characters with ▸Dawn abilities have +1✦."
-tags = ["J11", "Tag OK"]
+rendered-text = "Characters you control with ▸Dawn abilities have +1✦."
+tags = ["J11", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "989B55BD-139F-40DC-B1FD-EB2F7B1C091A"
 name = "Trinket Necklace"
 image_name = "amulet_5.png"
 tides = ["ally_formation", "spark_growth", "point_pressure", "ally_wide"]
-rendered-text = "Allied challengers have +1✦."
-tags = ["J11", "Tag OK"]
+rendered-text = "Challengers you control have +1✦."
+tags = ["J11", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "6103508C-4991-4B80-9DC1-F30122957296"
 name = "Pig Nose"
 image_name = "pig_nouse.png"
 tides = ["survivor_dissolve", "spark_growth", "defensive_curve", "character_curve"]
-rendered-text = "Allied survivors have +2✦."
-tags = ["J11", "Tag OK"]
+rendered-text = "Survivors you control have +2✦."
+tags = ["J11", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "7A37386D-6E7C-4F08-B07F-E92A1FD69893"
 name = "Bead Charm"
 image_name = "amulet_6.png"
 tides = ["ally_formation", "spark_growth", "point_pressure", "ally_wide"]
-rendered-text = "Allied challengers that share a character type with another allied challenger have +2✦."
-tags = ["J12", "Tag OK"]
+rendered-text = "Challengers you control that share a character type with another challenger you control have +2✦."
+tags = ["J12", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "15FD5A22-A786-48E3-99B0-919E810B3EBA"
@@ -678,8 +678,8 @@ tags = ["J12", "Tag OK"]
 id = "EB6A5C19-26A6-41EF-AC7A-CE1152557B5C"
 name = "Eye Amulet"
 image_name = "amulet_7.png"
-rendered-text = "When all allied characters are challengers, they have +2✦."
-tags = ["J12", "Tag OK"]
+rendered-text = "When all characters you control are challengers, they have +2✦."
+tags = ["J12", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "87239E3F-04F7-45BD-9B73-944EF36AD445"
@@ -709,40 +709,40 @@ id = "2788CDAD-2735-4CDF-89A8-DCECACA87369"
 name = "Phoenix Feather"
 image_name = "phoenix_feather.png"
 tides = ["leave_play_enablers", "materialize_tempo", "materialize_value", "spark_growth"]
-rendered-text = "When you play a character, it gains +1✦ for each ally that left play this turn."
-tags = ["J12", "Tag OK"]
+rendered-text = "When you play a character, it gains +1✦ for each character you control that left play this turn."
+tags = ["J12", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "4F5BDCAC-64CB-4A45-8121-E37F5E4D3074"
 name = "Notes"
 image_name = "note_2.png"
 tides = ["bounce_blink_tools", "materialize_tempo", "spark_growth", "leave_play_enablers", "materialize_value"]
-rendered-text = "Allied spirit animals have +1✦."
-tags = ["J12", "Tag OK"]
+rendered-text = "Spirit animals you control have +1✦."
+tags = ["J12", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "1CCD8D69-E14C-4788-BE1D-CB6A1B703225"
 name = "Wolf Sigil"
 image_name = "amulet_4.png"
 tides = ["warrior_bastion", "judgment_engines", "spark_growth", "spark_tall"]
-rendered-text = "When an allied character dissolves an enemy in a challenge, it gains +2✦."
-tags = ["J12", "Tag OK"]
+rendered-text = "When a character you control dissolves an enemy in a challenge, it gains +2✦."
+tags = ["J12", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "6B51E477-352C-489B-8D5F-049BC378FDE9"
 name = "Piranha"
 image_name = "piranha.png"
 tides = ["point_pressure", "finishers", "fast_tempo"]
-rendered-text = "When an allied character scores ⍟ in a challenge, it scores 1 additional ⍟."
-tags = ["J12", "Tag OK"]
+rendered-text = "When a character you control scores ⍟ in a challenge, it scores 1 additional ⍟."
+tags = ["J12", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "4D762FAE-AE9F-4C35-A03B-051D7ECC3532"
 name = "Blazing Orb"
 image_name = "magic_ball.png"
 tides = ["spark_tall", "point_pressure", "spark_growth", "finishers"]
-rendered-text = "The allied character with the most ✦ has unstoppable."
-tags = ["J12", "Tag OK"]
+rendered-text = "The character you control with the most ✦ has unstoppable."
+tags = ["J12", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "C92438FC-8E1F-4F97-9DCF-8CA0EDAA8607"
@@ -765,32 +765,32 @@ id = "BB8BB233-7CB1-43B3-AF30-E71AB9E832C5"
 name = "Sealed Letter"
 image_name = "letter_2.png"
 tides = ["abandon_value", "trigger_reuse", "survivor_dissolve", "leave_play_enablers"]
-rendered-text = "When you abandon an ally, its ▸Dissolved ability triggers an additional time."
-tags = ["J12", "Tag OK"]
+rendered-text = "When you abandon a character, its ▸Dissolved ability triggers an additional time."
+tags = ["J12", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "FDFBD522-C2BE-4B77-A63F-E9A64CA3DE3B"
 name = "Parchment"
 image_name = "parchment.png"
 tides = ["survivor_dissolve", "attrition_trade", "card_flow", "defensive_curve"]
-rendered-text = "Once per turn, when an ally is dissolved, draw a card."
-tags = ["J12", "Tag OK"]
+rendered-text = "Once per turn, when a character you control is dissolved, draw a card."
+tags = ["J12", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "293A610D-EA75-4974-88DA-13E4C86F248F"
 name = "Mandrake Root"
 image_name = "mandragora.png"
 tides = ["survivor_dissolve", "void_recursion", "reclaim_characters", "attrition_trade"]
-rendered-text = "Once per turn, when an ally is dissolved, return a random character with lower cost from your void to hand."
-tags = ["J12", "Tag OK"]
+rendered-text = "Once per turn, when a character you control is dissolved, return a random character with lower cost from your void to hand."
+tags = ["J12", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "4A9F95D5-B72D-4EE8-8D29-B05646EDC23D"
 name = "Herb Mortar"
 image_name = "mortar_pestle.png"
 tides = ["survivor_dissolve", "void_recursion", "materialize_value", "attrition_trade"]
-rendered-text = "Once per turn, when an ally is dissolved, materialize a random character with lower cost from your void."
-tags = ["J12", "Tag OK"]
+rendered-text = "Once per turn, when a character you control is dissolved, materialize a random character with lower cost from your void."
+tags = ["J12", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "B765F6BB-0B8A-4847-ADA4-477B9493E3AD"
@@ -837,8 +837,8 @@ id = "9204FBC8-BA40-4E33-9FBC-F62CCC4A43D1"
 name = "Powder Bowl"
 image_name = "powder_magic.png"
 tides = ["point_pressure", "cost_rfeduction", "character_curve", "finishers"]
-rendered-text = "The first character you play each turn costs 2● less if an ally scored ⍟ last turn."
-tags = ["J12", "Tag OK"]
+rendered-text = "The first character you play each turn costs 2● less if a character you control scored ⍟ last turn."
+tags = ["J12", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "FB87262C-5BDE-409E-92F1-58CC7A4E5491"
@@ -861,8 +861,8 @@ id = "4BB408A8-7941-42DC-9FF6-DBC1400C99ED"
 name = "Crystal Wand"
 image_name = "magic_stick_2.png"
 tides = ["point_pressure", "judgment_engines", "card_flow", "finishers"]
-rendered-text = "When one or more allies score ⍟, draw a card."
-tags = ["J15", "Tag OK"]
+rendered-text = "When one or more characters you control score ⍟, draw a card."
+tags = ["J15", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "FDD2FFE4-40F4-49CF-BC2E-2496E1042F76"
@@ -891,8 +891,8 @@ id = "055F211D-AA51-49EB-9162-190A946B1614"
 name = "Root Staff"
 image_name = "magic_stick_3.png"
 tides = ["ally_wide", "point_pressure", "hand_cycling", "card_flow"]
-rendered-text = "When 2 or more allies score ⍟, draw a card, then discard a card."
-tags = ["J15", "Tag OK"]
+rendered-text = "When 2 or more characters you control score ⍟, draw a card, then discard a card."
+tags = ["J15", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "CD4BB1F4-66BB-45EA-ABFE-CE0C66E4EC4F"
@@ -1176,8 +1176,8 @@ tags = ["J16", "Tag OK"]
 id = "EB55B141-82F8-4BA4-B319-420F762E9EE4"
 name = "Mortal Skull"
 image_name = "skull_2.png"
-rendered-text = "When an ally dissolves an enemy during a challenge, gain 10 essence."
-tags = ["J16", "Tag OK"]
+rendered-text = "When a character you control dissolves an enemy during a challenge, gain 10 essence."
+tags = ["J16", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "1CD25B9A-B176-4C51-8349-BB4DF35CBF05"
@@ -1187,8 +1187,8 @@ tides = ["big_energy", "cost_reduction", "finishers"]
 rendered-text = '''
 When you gain this dreamsign, add 5 Nightmare cards to your deck.
 
-Allied characters have +1✦.'''
-tags = ["J16", "Tag OK"]
+Characters you control have +1✦.'''
+tags = ["J16", "Tag OK", "Ally Audit"]
 
 [[dreamsign]]
 id = "B8590328-CA72-4869-A795-C7F4B6802BED"
