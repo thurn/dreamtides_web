@@ -9,6 +9,29 @@
 // redeclaring it.
 
 /**
+ * One field of a nested model object, as expanded one level by
+ * `extractPropMeta` in scripts/generate-tango-metadata.mjs.
+ */
+export interface NestedField {
+  name: string;
+  /** e.g. "number", "string | null", "DreamscapeNode". */
+  tsType: string;
+  optional: boolean;
+  description: string;
+}
+
+/**
+ * The one-level shape of a prop whose type is a named project model object
+ * (e.g. `view: AtlasNodeView`), so the props table can document the fields the
+ * caller must supply rather than only the opaque type name.
+ */
+export interface NestedTypeDoc {
+  /** The model type's name, e.g. "AtlasNodeView". */
+  name: string;
+  fields: NestedField[];
+}
+
+/**
  * Flat, normalized description of a single component prop, as produced by
  * `extractPropMeta` in scripts/generate-tango-metadata.mjs.
  */
@@ -21,6 +44,11 @@ export interface PropMeta {
   required: boolean;
   defaultValue: string | null;
   description: string;
+  /**
+   * Present only when `tsType` names a project model object (or an array of
+   * one): its one-level field list, for the props table to expand.
+   */
+  nested?: NestedTypeDoc;
 }
 
 /**

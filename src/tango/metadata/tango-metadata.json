@@ -54,7 +54,66 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": ""
+      "description": "",
+      "nested": {
+        "name": "AtlasNodeView",
+        "fields": [
+          {
+            "name": "node",
+            "tsType": "DreamscapeNode",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "left",
+            "tsType": "number",
+            "optional": false,
+            "description": "Stage-space centre of the node (1920x1080 coordinate system)."
+          },
+          {
+            "name": "top",
+            "tsType": "number",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "size",
+            "tsType": "number",
+            "optional": false,
+            "description": "Rendered node diameter in stage pixels."
+          },
+          {
+            "name": "isStarter",
+            "tsType": "boolean",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "isBoss",
+            "tsType": "boolean",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "iconUrl",
+            "tsType": "string | null",
+            "optional": false,
+            "description": "Resolved dreamscape icon URL, or `null` while unrevealed."
+          },
+          {
+            "name": "siteBadgeIconClass",
+            "tsType": "string | null",
+            "optional": false,
+            "description": "Boxicons/Font Awesome class for the signature-site badge, or `null`."
+          },
+          {
+            "name": "knownDreamsignIconUrl",
+            "tsType": "string | null",
+            "optional": false,
+            "description": "Pre-revealed known dreamsign icon URL, or `null` when the node carries none."
+          }
+        ]
+      }
     },
     {
       "name": "hovered",
@@ -271,7 +330,30 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "The dreamcaller whose art and identity the portrait shows."
+      "description": "The dreamcaller whose art and identity the portrait shows.",
+      "nested": {
+        "name": "DreamcallerVisual",
+        "fields": [
+          {
+            "name": "imageNumber",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "name",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "title",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          }
+        ]
+      }
     },
     {
       "name": "variant",
@@ -311,7 +393,48 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "The dreamsign to show. Identified by `id` (never by name)."
+      "description": "The dreamsign to show. Identified by `id` (never by name).",
+      "nested": {
+        "name": "Dreamsign",
+        "fields": [
+          {
+            "name": "id",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "name",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "effectDescription",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "imageName",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "imageAlt",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "isBane",
+            "tsType": "boolean",
+            "optional": false,
+            "description": ""
+          }
+        ]
+      }
     },
     {
       "name": "sizePx",
@@ -361,7 +484,48 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "The dreamsign to render as the shared InfoCard `object` reveal."
+      "description": "The dreamsign to render as the shared InfoCard `object` reveal.",
+      "nested": {
+        "name": "Dreamsign",
+        "fields": [
+          {
+            "name": "id",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "name",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "effectDescription",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "imageName",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "imageAlt",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "isBane",
+            "tsType": "boolean",
+            "optional": false,
+            "description": ""
+          }
+        ]
+      }
     },
     {
       "name": "testid",
@@ -433,7 +597,48 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "When set, paints the card as transfigured: a small colored gem follows the\nname, the changed corner stat(s) take the tint, and only the added/changed\nrules text is tinted (driven by the descriptor's marked text). The card\nitself should already carry the transfigured stats and rules text — pass the\n`card` and `display` from `buildTransfigurationDisplay` together."
+      "description": "When set, paints the card as transfigured: a small colored gem follows the\nname, the changed corner stat(s) take the tint, and only the added/changed\nrules text is tinted (driven by the descriptor's marked text). The card\nitself should already carry the transfigured stats and rules text — pass the\n`card` and `display` from `buildTransfigurationDisplay` together.",
+      "nested": {
+        "name": "CardTransfigurationDisplay",
+        "fields": [
+          {
+            "name": "type",
+            "tsType": "TransfigurationType",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "color",
+            "tsType": "string",
+            "optional": false,
+            "description": "Light tint for the name gem, changed stat orb(s), and changed text."
+          },
+          {
+            "name": "markedText",
+            "tsType": "string",
+            "optional": false,
+            "description": "Rules text with the changed/added spans wrapped in transfigure markers."
+          },
+          {
+            "name": "energyChanged",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "True when the energy cost changed (Empowered); tints the energy orb."
+          },
+          {
+            "name": "sparkChanged",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "True when the spark changed (Kindled); tints the spark orb."
+          },
+          {
+            "name": "fastChanged",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "True when the card gained Fast (Hastened); tints the speed bolt."
+          }
+        ]
+      }
     },
     {
       "name": "large",
@@ -481,7 +686,48 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "{}",
-      "description": "Optional editor wrappers for individual rendered card slots."
+      "description": "Optional editor wrappers for individual rendered card slots.",
+      "nested": {
+        "name": "CardViewSlots",
+        "fields": [
+          {
+            "name": "energy",
+            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "name",
+            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "typeLineContent",
+            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "typeLine",
+            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "rulesText",
+            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "spark",
+            "tsType": "((context: CardViewSlotContext, defaultNode: ReactNode) => ReactNode)",
+            "optional": true,
+            "description": ""
+          }
+        ]
+      }
     },
     {
       "name": "onRulesFontSizeChange",
@@ -523,7 +769,30 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": ""
+      "description": "",
+      "nested": {
+        "name": "GlossaryEntry",
+        "fields": [
+          {
+            "name": "term",
+            "tsType": "string",
+            "optional": false,
+            "description": "Canonical term shown as the popover heading. The term itself is matched\ndirectly (case-insensitively), so it does not need to be repeated in\n`variants`."
+          },
+          {
+            "name": "definition",
+            "tsType": "string",
+            "optional": false,
+            "description": "Short, plain-language definition."
+          },
+          {
+            "name": "variants",
+            "tsType": "readonly string[]",
+            "optional": true,
+            "description": "Extra word forms that should match this entry beyond the term itself, such\nas plurals and past-tense forms (e.g. `banes`, `transfigured`). Omit when\nthe term is the only form. Matching is case-insensitive."
+          }
+        ]
+      }
     }
   ],
   "GlowIcon": [
@@ -736,7 +1005,18 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "The reveal copy, as a {@link RichText} value (plain / rules / note / stack)."
+      "description": "The reveal copy, as a {@link RichText} value (plain / rules / note / stack).",
+      "nested": {
+        "name": "RichText",
+        "fields": [
+          {
+            "name": "kind",
+            "tsType": "\"plain\" | \"rules\" | \"note\" | \"stack\"",
+            "optional": false,
+            "description": ""
+          }
+        ]
+      }
     },
     {
       "name": "meta",
@@ -1429,7 +1709,36 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": "[]",
-      "description": "The dreamsigns to dock (≤ stackThreshold inline, more collapse to a stack + viewer)."
+      "description": "The dreamsigns to dock (≤ stackThreshold inline, more collapse to a stack + viewer).",
+      "nested": {
+        "name": "QsbDreamsign",
+        "fields": [
+          {
+            "name": "id",
+            "tsType": "string | number",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "name",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "art",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "ability",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          }
+        ]
+      }
     },
     {
       "name": "deck",
@@ -1445,7 +1754,42 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": ""
+      "description": "",
+      "nested": {
+        "name": "QsbDreamcaller",
+        "fields": [
+          {
+            "name": "name",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "epithet",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "portrait",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "wash",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          },
+          {
+            "name": "ability",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
+          }
+        ]
+      }
     },
     {
       "name": "elevation",
@@ -1551,7 +1895,18 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": ""
+      "description": "",
+      "nested": {
+        "name": "RichText",
+        "fields": [
+          {
+            "name": "kind",
+            "tsType": "\"plain\" | \"rules\" | \"note\" | \"stack\"",
+            "optional": false,
+            "description": ""
+          }
+        ]
+      }
     }
   ],
   "RulesText": [
@@ -1616,7 +1971,72 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "The placed-site model — position, label, accent, glyph, and state."
+      "description": "The placed-site model — position, label, accent, glyph, and state.",
+      "nested": {
+        "name": "DreamscapeSiteModel",
+        "fields": [
+          {
+            "name": "site",
+            "tsType": "SiteState",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "pos",
+            "tsType": "ScatterPoint",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "index",
+            "tsType": "number",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "isBattle",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "This site is the dreamscape's guardian battle."
+          },
+          {
+            "name": "isLocked",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "A battle gated behind the dreamscape's other, unvisited sites."
+          },
+          {
+            "name": "isInteractive",
+            "tsType": "boolean",
+            "optional": false,
+            "description": "Clickable: not visited and not locked."
+          },
+          {
+            "name": "label",
+            "tsType": "string",
+            "optional": false,
+            "description": "Display label (battle tier / `Draft Nx` / site type name)."
+          },
+          {
+            "name": "blurb",
+            "tsType": "string",
+            "optional": false,
+            "description": "One-line mechanic blurb shown in the reveal."
+          },
+          {
+            "name": "icon",
+            "tsType": "string",
+            "optional": false,
+            "description": "Boxicons (v3 filled) / Font Awesome class for the site glyph."
+          },
+          {
+            "name": "accent",
+            "tsType": "string",
+            "optional": false,
+            "description": "Accent colour as a `#rrggbb` hex, used for the node's ring + reveal disc."
+          }
+        ]
+      }
     },
     {
       "name": "size",

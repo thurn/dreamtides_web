@@ -18,6 +18,10 @@ const NAME_FILTER_FIXTURE = resolve(
   ROOT,
   "src/tango/components/__docgen_name_filter_fixture__.tsx",
 );
+const NESTED_FIXTURE = resolve(
+  ROOT,
+  "src/tango/components/__docgen_nested_fixture__.tsx",
+);
 
 // Extract once; every test inspects the fixture component's PropMeta array.
 const result = extractPropMeta([FIXTURE]);
@@ -86,6 +90,50 @@ describe("extractPropMeta (Tango docgen)", () => {
     expect(names).not.toContain("className");
     expect(names).not.toContain("onClick");
     expect(names).not.toContain("style");
+  });
+
+  it("expands a prop whose type is a project model object into nested fields", () => {
+    // A prop like `model: NestedFixtureModel` arrives from react-docgen as the
+    // bare type name; buildNestedResolver must attach its one-level field list
+    // so the props table can document the required shape.
+    const nested = extractPropMeta([NESTED_FIXTURE])["NestedFixture"];
+    const model = (nested ?? []).find((p) => p.name === "model");
+    expect(model).toBeTruthy();
+    expect(model.nested).toBeTruthy();
+    expect(model.nested.name).toBe("NestedFixtureModel");
+    expect(model.nested.fields.map((f) => f.name)).toEqual([
+      "label",
+      "count",
+      "tone",
+    ]);
+    const byField = (name) => model.nested.fields.find((f) => f.name === name);
+    // Required vs optional members, member types, and JSDoc all survive.
+    expect(byField("label").optional).toBe(false);
+    expect(byField("label").tsType).toBe("string");
+    expect(byField("label").description).toBe("How the widget is labelled.");
+    expect(byField("count").optional).toBe(true);
+    expect(byField("count").tsType).toBe("number");
+    // A string-literal union member keeps its readable type string.
+    expect(byField("tone").tsType).toBe('"calm" | "loud"');
+  });
+
+  it("expands an array-of-model prop using the element model", () => {
+    // `models: NestedFixtureModel[]` should resolve to the element type's
+    // fields, not be skipped because of the trailing [].
+    const nested = extractPropMeta([NESTED_FIXTURE])["NestedFixture"];
+    const models = (nested ?? []).find((p) => p.name === "models");
+    expect(models.nested).toBeTruthy();
+    expect(models.nested.name).toBe("NestedFixtureModel");
+    expect(models.nested.fields.length).toBe(3);
+  });
+
+  it("leaves a non-model prop without a nested field list", () => {
+    // A plain boolean carries no nested shape; the key must be absent rather
+    // than an empty object so downstream `meta.nested ? ...` checks stay simple.
+    const nested = extractPropMeta([NESTED_FIXTURE])["NestedFixture"];
+    const active = (nested ?? []).find((p) => p.name === "active");
+    expect(active).toBeTruthy();
+    expect(active.nested).toBeUndefined();
   });
 
   it("documents only the component in a file that also exports a hook and a constant", () => {

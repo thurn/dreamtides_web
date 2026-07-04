@@ -16,11 +16,30 @@
 //     required: boolean;
 //     defaultValue: string | null;
 //     description: string;     // JSDoc text; "" if none
+//     nested?: {               // present only when tsType names a project
+//       name: string;          //   object type (an interface/model); the props
+//       fields: {              //   table expands one level to show its fields.
+//         name: string;
+//         tsType: string;
+//         optional: boolean;
+//         description: string;
+//       }[];
+//     };
 //   }
 //
 // react-docgen-typescript represents a string-literal union in `prop.type.value`
 // as an array of `{ value: '"sm"' }` entries; we strip the surrounding quotes to
 // yield `unionMembers: ["sm","md","lg"]`. Non-union props get [].
+//
+// react-docgen-typescript reports a prop whose type is a named model object
+// (e.g. `view: AtlasNodeView`) as the bare type name, with no window into the
+// object's shape. To document these, a second TypeScript-compiler pass
+// (`buildNestedResolver`) indexes every interface / object-type alias declared
+// in the parsed sources and, for a prop whose tsType is a single such name (or a
+// `Name[]` array of one), attaches that type's one-level field list as
+// `PropMeta.nested`. Nesting stops after one level so the table stays readable;
+// primitives, React types, functions, and node_modules types are never
+// expanded.
 //
 // The pure `extractPropMeta(filePaths)` core is exported so the test can drive
 // it directly against a fixture; `main()` globs the real Tango sources (skipping
@@ -33,6 +52,7 @@ import { readdirSync, writeFileSync, mkdirSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join, relative, resolve } from "node:path";
 import { withCustomConfig } from "react-docgen-typescript";
+import ts from "typescript";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const TSCONFIG_PATH = resolve(ROOT, "tsconfig.json");
@@ -122,10 +142,136 @@ function normalizeTsType(type) {
   return typeof type.name === "string" ? type.name : "";
 }
 
+// Type names that are primitives, React building blocks, or other leaves we
+// never want to expand into a nested field list — even if a same-named
+// declaration happened to exist in the parsed program.
+const NON_MODEL_TYPE_NAMES = new Set([
+  "string",
+  "number",
+  "boolean",
+  "bigint",
+  "symbol",
+  "any",
+  "unknown",
+  "never",
+  "void",
+  "null",
+  "undefined",
+  "object",
+  "Date",
+  "ReactNode",
+  "ReactElement",
+  "ReactChild",
+  "CSSProperties",
+  "RefObject",
+  "MutableRefObject",
+  "HTMLElement",
+]);
+
 /**
- * Normalize a single react-docgen-typescript PropItem into a PropMeta.
+ * If a tsType string denotes a single named type we might expand into a nested
+ * field list, return that bare name; otherwise null. Accepts a plain identifier
+ * (`AtlasNodeView`) or an array of one (`QsbDreamsign[]`), and rejects unions,
+ * generics with arguments, functions, and the primitive/React leaves above.
  */
-function normalizeProp(prop) {
+function nestedTypeNameFor(tsType) {
+  let name = typeof tsType === "string" ? tsType.trim() : "";
+  if (name.endsWith("[]")) name = name.slice(0, -2).trim();
+  if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(name)) return null;
+  if (NON_MODEL_TYPE_NAMES.has(name)) return null;
+  return name;
+}
+
+/**
+ * Build a resolver that expands a project type name into its one-level field
+ * list, using a fresh TypeScript program over the same sources react-docgen
+ * parsed. Returns `resolveNested(typeName) -> field[] | null`. The program is
+ * built once and closed over, so per-prop resolution is a cheap map lookup plus
+ * a checker query.
+ */
+function buildNestedResolver(filePaths) {
+  const configFile = ts.readConfigFile(TSCONFIG_PATH, ts.sys.readFile);
+  const parsed = ts.parseJsonConfigFileContent(
+    configFile.config ?? {},
+    ts.sys,
+    dirname(TSCONFIG_PATH),
+  );
+  const program = ts.createProgram(filePaths, {
+    ...parsed.options,
+    noEmit: true,
+  });
+  const checker = program.getTypeChecker();
+
+  // Index interface / object-type-alias declarations by name across every
+  // non-library source file in the program (createProgram pulls in imported
+  // files, so a prop can reference a model declared in another module). First
+  // declaration of a given name wins, for a stable, deterministic result.
+  const declByName = new Map();
+  for (const source of program.getSourceFiles()) {
+    if (source.isDeclarationFile) continue;
+    if (source.fileName.includes("node_modules")) continue;
+    ts.forEachChild(source, (node) => {
+      if (
+        (ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node)) &&
+        node.name &&
+        !declByName.has(node.name.text)
+      ) {
+        declByName.set(node.name.text, node);
+      }
+    });
+  }
+
+  function resolveNested(typeName) {
+    const node = declByName.get(typeName);
+    if (!node) return null;
+    const type = checker.getTypeAtLocation(node);
+    // Only object-like types have documentable members; a union / mapped alias
+    // (e.g. a string-literal union type alias) yields nothing useful here.
+    const properties = checker.getPropertiesOfType(type);
+    if (!properties || properties.length === 0) return null;
+    const fields = [];
+    for (const symbol of properties) {
+      const declaration = symbol.valueDeclaration ?? symbol.declarations?.[0];
+      const symbolType = checker.getTypeOfSymbolAtLocation(
+        symbol,
+        declaration ?? node,
+      );
+      const optional = Boolean(symbol.getFlags() & ts.SymbolFlags.Optional);
+      const rendered = checker.typeToString(
+        symbolType,
+        node,
+        ts.TypeFormatFlags.NoTruncation,
+      );
+      fields.push({
+        name: symbol.getName(),
+        tsType: stripUndefinedMember(rendered),
+        optional,
+        description: ts
+          .displayPartsToString(symbol.getDocumentationComment(checker))
+          .trim(),
+      });
+    }
+    return fields;
+  }
+
+  return resolveNested;
+}
+
+/** Drop a synthetic trailing `| undefined` that optional members pick up. */
+function stripUndefinedMember(rendered) {
+  const parts = rendered
+    .split("|")
+    .map((part) => part.trim())
+    .filter((part) => part.length > 0 && part !== "undefined");
+  return parts.length > 0 ? parts.join(" | ") : rendered;
+}
+
+/**
+ * Normalize a single react-docgen-typescript PropItem into a PropMeta. When
+ * `resolveNested` is supplied and the prop's type names a project model object,
+ * the resolved one-level field list is attached as `nested`.
+ */
+function normalizeProp(prop, resolveNested) {
   const type = prop.type ?? {};
   const defaultValue =
     prop.defaultValue &&
@@ -133,14 +279,27 @@ function normalizeProp(prop) {
     prop.defaultValue.value !== null
       ? String(prop.defaultValue.value)
       : null;
-  return {
+  const tsType = normalizeTsType(type);
+  const unionMembers = normalizeUnionMembers(type);
+  const meta = {
     name: prop.name,
-    tsType: normalizeTsType(type),
-    unionMembers: normalizeUnionMembers(type),
+    tsType,
+    unionMembers,
     required: Boolean(prop.required),
     defaultValue,
     description: typeof prop.description === "string" ? prop.description : "",
   };
+  // A string-literal union is documented by its members, not by expansion.
+  if (resolveNested && unionMembers.length === 0) {
+    const typeName = nestedTypeNameFor(tsType);
+    if (typeName) {
+      const fields = resolveNested(typeName);
+      if (fields && fields.length > 0) {
+        meta.nested = { name: typeName, fields };
+      }
+    }
+  }
+  return meta;
 }
 
 /**
@@ -177,10 +336,13 @@ export function extractPropMeta(filePaths) {
   if (!filePaths || filePaths.length === 0) return {};
   const parser = withCustomConfig(TSCONFIG_PATH, PARSER_OPTIONS);
   const docs = parser.parse(filePaths);
+  const resolveNested = buildNestedResolver(filePaths);
   const out = {};
   for (const doc of docs) {
     if (!isComponentName(doc.displayName)) continue;
-    const props = Object.values(doc.props ?? {}).map(normalizeProp);
+    const props = Object.values(doc.props ?? {}).map((prop) =>
+      normalizeProp(prop, resolveNested),
+    );
     out[doc.displayName] = props;
   }
   return out;
