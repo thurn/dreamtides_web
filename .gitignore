@@ -43,3 +43,5 @@ logs/
 .worktrees/
 merchant-metric-report.json
 .superpowers/
+# Default output directory for scripts/mobile-screenshot.mjs
+screenshots/
