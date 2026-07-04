@@ -135,7 +135,7 @@ function CardChooserInner({
                 <CardDisplay
                   card={candidate.card}
                   selected={selected}
-                  selectionColor={OFFERING_ACCENT.borderStrong}
+                  selectionColor="accent"
                 />
               ) : (
                 <span className="block min-h-28 p-2">

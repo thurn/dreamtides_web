@@ -95,22 +95,22 @@
             "description": ""
           },
           {
-            "name": "iconUrl",
-            "tsType": "string | null",
+            "name": "iconRef",
+            "tsType": "ArtRef | null",
             "optional": false,
-            "description": "Resolved dreamscape icon URL, or `null` while unrevealed."
+            "description": "The dreamscape icon art as an {@link ArtRef}, or `null` while unrevealed."
           },
           {
-            "name": "siteBadgeIconClass",
-            "tsType": "string | null",
+            "name": "siteBadgeGlyph",
+            "tsType": "Glyph | null",
             "optional": false,
-            "description": "Boxicons/Font Awesome class for the signature-site badge, or `null`."
+            "description": "The signature-site badge {@link Glyph}, or `null`."
           },
           {
-            "name": "knownDreamsignIconUrl",
-            "tsType": "string | null",
+            "name": "knownDreamsignRef",
+            "tsType": "ArtRef | null",
             "optional": false,
-            "description": "Pre-revealed known dreamsign icon URL, or `null` when the node carries none."
+            "description": "The pre-revealed known dreamsign icon as an {@link ArtRef}, or `null`."
           }
         ]
       }
@@ -189,9 +189,9 @@
       "name": "costKind",
       "tsType": "ButtonCostKind",
       "unionMembers": [
+        "essence",
         "energy",
         "spark",
-        "essence",
         "points",
         "counter"
       ],
@@ -287,8 +287,29 @@
     },
     {
       "name": "tintColor",
-      "tsType": "string",
-      "unionMembers": [],
+      "tsType": "TangoColor",
+      "unionMembers": [
+        "accent",
+        "accent-bright",
+        "accent-strong",
+        "essence",
+        "energy",
+        "energy-bright",
+        "spark",
+        "points",
+        "danger",
+        "positive",
+        "selected",
+        "sale",
+        "gold",
+        "gold-light",
+        "text-primary",
+        "text-secondary",
+        "text-muted",
+        "text-faint",
+        "text-on-accent",
+        "white"
+      ],
       "required": false,
       "defaultValue": null,
       "description": "Tint applied to the digit when the stat has been changed by a\ntransfiguration (e.g. a bumped spark or halved energy cost). Only the number\npicks up the tint; the resource glyph behind it keeps its resource hue so a\nchanged stat still reads as the same kind of resource."
@@ -585,11 +606,32 @@
     },
     {
       "name": "selectionColor",
-      "tsType": "string",
-      "unionMembers": [],
+      "tsType": "TangoColor",
+      "unionMembers": [
+        "accent",
+        "accent-bright",
+        "accent-strong",
+        "essence",
+        "energy",
+        "energy-bright",
+        "spark",
+        "points",
+        "danger",
+        "positive",
+        "selected",
+        "sale",
+        "gold",
+        "gold-light",
+        "text-primary",
+        "text-secondary",
+        "text-muted",
+        "text-faint",
+        "text-on-accent",
+        "white"
+      ],
       "required": false,
-      "defaultValue": "#f97316",
-      "description": ""
+      "defaultValue": "selected",
+      "description": "The selection-ring {@link TangoColor}. Default the `\"selected\"` role."
     },
     {
       "name": "transfiguration",
@@ -609,9 +651,9 @@
           },
           {
             "name": "color",
-            "tsType": "string",
+            "tsType": "`#${string}`",
             "optional": false,
-            "description": "Light tint for the name gem, changed stat orb(s), and changed text."
+            "description": "Light tint for the name gem, changed stat orb(s), and changed text. A\n`#${string}` hex, matching Tango's `HexColor`."
           },
           {
             "name": "markedText",
@@ -798,19 +840,40 @@
   "GlowIcon": [
     {
       "name": "iconClass",
-      "tsType": "string",
+      "tsType": "Glyph",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Boxicons class(es) for the glyph (e.g. `SPARK_ICON_CLASS`)."
+      "description": "The {@link Glyph} to render (e.g. `SPARK_ICON_CLASS` / `GLYPHS.spark`)."
     },
     {
       "name": "color",
-      "tsType": "string",
-      "unionMembers": [],
+      "tsType": "TangoColor",
+      "unionMembers": [
+        "accent",
+        "accent-bright",
+        "accent-strong",
+        "essence",
+        "energy",
+        "energy-bright",
+        "spark",
+        "points",
+        "danger",
+        "positive",
+        "selected",
+        "sale",
+        "gold",
+        "gold-light",
+        "text-primary",
+        "text-secondary",
+        "text-muted",
+        "text-faint",
+        "text-on-accent",
+        "white"
+      ],
       "required": true,
       "defaultValue": null,
-      "description": "Fill color — Boxicons paints via the element's text color."
+      "description": "Fill {@link TangoColor} — Boxicons paints via the element's text color."
     },
     {
       "name": "size",
@@ -822,11 +885,16 @@
     },
     {
       "name": "glowFilter",
-      "tsType": "string",
-      "unionMembers": [],
+      "tsType": "MediaFilter",
+      "unionMembers": [
+        "dreamsign-portrait",
+        "dreamsign-portrait-bane",
+        "spark-glow",
+        "energy-glow"
+      ],
       "required": false,
       "defaultValue": null,
-      "description": "Emitted-light bloom filter. Omit for no glow."
+      "description": "Emitted-light bloom {@link MediaFilter}. Omit for no glow."
     },
     {
       "name": "shadow",
@@ -985,35 +1053,46 @@
     },
     {
       "name": "image",
-      "tsType": "string",
+      "tsType": "ArtRef",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Media source. Required — the card is built around this image."
+      "description": "The media the card is built around, as an {@link ArtRef}. Required."
     },
     {
-      "name": "imagePos",
-      "tsType": "string",
-      "unionMembers": [],
+      "name": "imageCrop",
+      "tsType": "ImageCrop",
+      "unionMembers": [
+        "top",
+        "center"
+      ],
       "required": false,
       "defaultValue": null,
-      "description": "`object-position` for the media crop. Default '50% 6%'."
+      "description": "How the media is cropped. Default `\"top\"`."
     },
     {
       "name": "imageFilter",
-      "tsType": "string",
-      "unionMembers": [],
+      "tsType": "MediaFilter",
+      "unionMembers": [
+        "dreamsign-portrait",
+        "dreamsign-portrait-bane",
+        "spark-glow",
+        "energy-glow"
+      ],
       "required": false,
       "defaultValue": null,
-      "description": "A CSS `filter` on the media (e.g. a drop-shadow for a transparent object)."
+      "description": "A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object)."
     },
     {
       "name": "wash",
-      "tsType": "string",
-      "unionMembers": [],
+      "tsType": "Wash",
+      "unionMembers": [
+        "journey",
+        "dusk"
+      ],
       "required": false,
       "defaultValue": null,
-      "description": "A CSS background painted over the media."
+      "description": "A named {@link Wash} painted over the media."
     },
     {
       "name": "frame",
@@ -1033,11 +1112,13 @@
     },
     {
       "name": "titleBadge",
-      "tsType": "string",
-      "unionMembers": [],
+      "tsType": "\"bane\"",
+      "unionMembers": [
+        "bane"
+      ],
       "required": false,
       "defaultValue": null,
-      "description": "A small warning-toned pill shown right after the title (e.g. a dreamsign\n\"Bane\"). Omit for no badge."
+      "description": "A small warning-toned pill shown right after the title (e.g. a dreamsign\n{@link TitleBadge} `\"bane\"`). Omit for no badge."
     },
     {
       "name": "body",
@@ -1068,27 +1149,48 @@
     },
     {
       "name": "glyph",
-      "tsType": "string",
+      "tsType": "Glyph",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "The boxicon class. Required — the disc renders this glyph."
+      "description": "The {@link Glyph} the disc renders. Required."
     },
     {
       "name": "discAccent",
-      "tsType": "string",
-      "unionMembers": [],
+      "tsType": "TangoColor",
+      "unionMembers": [
+        "accent",
+        "accent-bright",
+        "accent-strong",
+        "essence",
+        "energy",
+        "energy-bright",
+        "spark",
+        "points",
+        "danger",
+        "positive",
+        "selected",
+        "sale",
+        "gold",
+        "gold-light",
+        "text-primary",
+        "text-secondary",
+        "text-muted",
+        "text-faint",
+        "text-on-accent",
+        "white"
+      ],
       "required": false,
       "defaultValue": null,
-      "description": "Tint the reveal disc to this accent color so it matches the node it opens\nfrom. Omit for the default violet-glow disc (SITE_DISC)."
+      "description": "Tint the reveal disc to this {@link TangoColor} so it matches the node it\nopens from. Omit for the default violet-glow disc (SITE_DISC)."
     },
     {
       "name": "leadGlyph",
-      "tsType": "string",
+      "tsType": "Glyph",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "A small leading glyph, as a Boxicons class string."
+      "description": "A small leading {@link Glyph}."
     }
   ],
   "LeaveSiteButton": [
@@ -1727,9 +1829,9 @@
           },
           {
             "name": "art",
-            "tsType": "string",
+            "tsType": "ArtRef",
             "optional": false,
-            "description": ""
+            "description": "The dreamsign art, as an {@link ArtRef}."
           },
           {
             "name": "ability",
@@ -1772,15 +1874,15 @@
           },
           {
             "name": "portrait",
-            "tsType": "string",
+            "tsType": "ArtRef",
             "optional": false,
-            "description": "Resolved portrait art URL. Required — a docked Dreamcaller always has art."
+            "description": "The portrait art as an {@link ArtRef}. Required — a docked Dreamcaller always has art."
           },
           {
             "name": "wash",
-            "tsType": "string",
+            "tsType": "Wash",
             "optional": true,
-            "description": ""
+            "description": "A named {@link Wash} painted behind the hero-reveal portrait."
           },
           {
             "name": "ability",
@@ -1845,9 +1947,9 @@
       "name": "kind",
       "tsType": "ResourceKind",
       "unionMembers": [
+        "essence",
         "energy",
         "spark",
-        "essence",
         "points",
         "counter"
       ],
@@ -2025,15 +2127,15 @@
           },
           {
             "name": "icon",
-            "tsType": "string",
+            "tsType": "Glyph",
             "optional": false,
-            "description": "Boxicons (v3 filled) / Font Awesome class for the site glyph."
+            "description": "The site {@link Glyph}."
           },
           {
             "name": "accent",
-            "tsType": "string",
+            "tsType": "TangoColor",
             "optional": false,
-            "description": "Accent colour as a `#rrggbb` hex, used for the node's ring + reveal disc."
+            "description": "Accent color, used for the node's ring + reveal disc — a {@link TangoColor}\n(typically a per-dreamscape `#rrggbb` hex)."
           }
         ]
       }
@@ -2100,9 +2202,9 @@
       "name": "accent",
       "tsType": "StatTileAccent",
       "unionMembers": [
+        "essence",
         "energy",
         "spark",
-        "essence",
         "points"
       ],
       "required": false,
@@ -2129,11 +2231,11 @@
     },
     {
       "name": "tone",
-      "tsType": "\"violet\" | \"blue\" | \"gold\" | \"green\" | \"rust\" | \"red\" | \"neutral\"",
+      "tsType": "\"gold\" | \"violet\" | \"blue\" | \"green\" | \"rust\" | \"red\" | \"neutral\"",
       "unionMembers": [
+        "gold",
         "violet",
         "blue",
-        "gold",
         "green",
         "rust",
         "red",
@@ -2145,11 +2247,11 @@
     },
     {
       "name": "icon",
-      "tsType": "string",
+      "tsType": "Glyph",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Leading icon: a Boxicons class string (e.g. `\"bxf bx-water\"`). The pill\nrenders the `<i>` itself at a fixed size so every tide icon matches, and it\nheads the InfoCard reveal as the tide's glyph disc."
+      "description": "Leading icon: a {@link Glyph} (e.g. `GLYPHS.water`). The pill renders the\n`<i>` itself at a fixed size so every tide icon matches, and it heads the\nInfoCard reveal as the tide's glyph disc."
     },
     {
       "name": "size",

@@ -9,18 +9,10 @@
 import { useRef } from "react";
 import { InfoCard } from "../../components/overlay/InfoCard";
 import { richText } from "../../components/card/rich-text";
-import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
-import { assetUrl } from "../../../runtime/asset-url";
+import { artRef } from "../../primitives/art";
+import { GLYPHS, glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
-
-/** A Dreamcaller's character render, resolved the same way `assetUrl` resolves
- * every other binary art asset (see `src/components/DreamcallerPortrait.tsx`
- * for the production equivalent — reimplemented locally here so this
- * tango-isolated mockup never imports from `src/components/`). */
-function dreamcallerPortraitUrl(imageNumber: string): string {
-  return assetUrl(`/dreamcallers/${imageNumber}.png`);
-}
 
 interface TriggerProps {
   stageRef: React.RefObject<HTMLDivElement | null>;
@@ -136,7 +128,7 @@ export function InfoCardMockup() {
             <InfoCard
               variant="object"
               frame
-              image={dreamcallerPortraitUrl("0025")}
+              image={artRef.dreamcaller("0025")}
               title="Threxan, the Resounding Wrath"
               body={richText.rules("At the start of your first turn, draw a card.")}
             />
@@ -150,7 +142,7 @@ export function InfoCardMockup() {
           card={
             <InfoCard
               variant="hero"
-              image={dreamscapeSceneUrl("pharaohs_gate")}
+              image={artRef.dreamscapeScene("pharaohs_gate")}
               meta="Layer IV"
               title="Pharaoh's Gate"
               body={richText.plain(
@@ -167,7 +159,7 @@ export function InfoCardMockup() {
           card={
             <InfoCard
               variant="icon"
-              glyph="bxf bx-store-alt-2"
+              glyph={glyph("bxf bx-store-alt-2")}
               title="Merchant"
               body={richText.plain(
                 "Spend essence on cards, dreamsigns, and services.",
@@ -188,7 +180,7 @@ export function InfoCardMockup() {
               body={richText.plain(
                 "The dream's currency — spent to draft cards and buy from merchants.",
               )}
-              leadGlyph="bxf bx-water"
+              leadGlyph={GLYPHS.water}
             />
           }
         />

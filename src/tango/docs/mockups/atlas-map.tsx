@@ -16,7 +16,8 @@ import type { DreamscapeNode } from "../../../types/quest";
 import { AtlasNode, type AtlasNodeView } from "../../components/atlas/AtlasNode";
 import { AtlasEdge, type AtlasEdgeKind } from "../../components/atlas/AtlasEdge";
 import { AtlasEdgeDefs } from "../../components/atlas/AtlasEdgeDefs";
-import { dreamscapeIconUrl, dreamsignIconUrl } from "../../components/atlas/atlas-display";
+import { artRef } from "../../primitives/art";
+import { glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 
@@ -24,8 +25,8 @@ const CANVAS_W = 1280;
 const CANVAS_H = 800;
 
 /** Boxicon class for a signature-site badge (static presentation, not game data). */
-const SHOP_BADGE = "bxf bx-store-alt-2";
-const DRAFT_BADGE = "bxf bx-copy";
+const SHOP_BADGE = glyph("bxf bx-store-alt-2");
+const DRAFT_BADGE = glyph("bxf bx-copy");
 
 /** Builds a DreamscapeNode in the given lifecycle state. */
 function makeNode(
@@ -75,9 +76,9 @@ const NODE_SPECS: NodeSpec[] = [
       size: 150,
       isStarter: true,
       isBoss: false,
-      iconUrl: dreamscapeIconUrl("firstlight_meadow"),
-      siteBadgeIconClass: null,
-      knownDreamsignIconUrl: null,
+      iconRef: artRef.dreamscapeIcon("firstlight_meadow"),
+      siteBadgeGlyph: null,
+      knownDreamsignRef: null,
     },
   },
   {
@@ -91,9 +92,9 @@ const NODE_SPECS: NodeSpec[] = [
       size: 132,
       isStarter: false,
       isBoss: false,
-      iconUrl: dreamscapeIconUrl("frostforge"),
-      siteBadgeIconClass: SHOP_BADGE,
-      knownDreamsignIconUrl: null,
+      iconRef: artRef.dreamscapeIcon("frostforge"),
+      siteBadgeGlyph: SHOP_BADGE,
+      knownDreamsignRef: null,
     },
   },
   {
@@ -107,9 +108,9 @@ const NODE_SPECS: NodeSpec[] = [
       size: 132,
       isStarter: false,
       isBoss: false,
-      iconUrl: dreamscapeIconUrl("tumbleleaf_village"),
-      siteBadgeIconClass: DRAFT_BADGE,
-      knownDreamsignIconUrl: null,
+      iconRef: artRef.dreamscapeIcon("tumbleleaf_village"),
+      siteBadgeGlyph: DRAFT_BADGE,
+      knownDreamsignRef: null,
     },
   },
   {
@@ -123,9 +124,9 @@ const NODE_SPECS: NodeSpec[] = [
       size: 132,
       isStarter: false,
       isBoss: false,
-      iconUrl: dreamscapeIconUrl("hopes_end"),
-      siteBadgeIconClass: SHOP_BADGE,
-      knownDreamsignIconUrl: null,
+      iconRef: artRef.dreamscapeIcon("hopes_end"),
+      siteBadgeGlyph: SHOP_BADGE,
+      knownDreamsignRef: null,
     },
   },
   {
@@ -140,9 +141,9 @@ const NODE_SPECS: NodeSpec[] = [
       size: 132,
       isStarter: false,
       isBoss: false,
-      iconUrl: dreamscapeIconUrl("grid_city"),
-      siteBadgeIconClass: DRAFT_BADGE,
-      knownDreamsignIconUrl: dreamsignIconUrl("acorn_gold.png"),
+      iconRef: artRef.dreamscapeIcon("grid_city"),
+      siteBadgeGlyph: DRAFT_BADGE,
+      knownDreamsignRef: artRef.dreamsign("acorn_gold.png"),
     },
   },
   {
@@ -156,9 +157,9 @@ const NODE_SPECS: NodeSpec[] = [
       size: 132,
       isStarter: false,
       isBoss: false,
-      iconUrl: dreamscapeIconUrl("wilderveil"),
-      siteBadgeIconClass: SHOP_BADGE,
-      knownDreamsignIconUrl: null,
+      iconRef: artRef.dreamscapeIcon("wilderveil"),
+      siteBadgeGlyph: SHOP_BADGE,
+      knownDreamsignRef: null,
     },
   },
   {
@@ -172,9 +173,9 @@ const NODE_SPECS: NodeSpec[] = [
       size: 132,
       isStarter: false,
       isBoss: false,
-      iconUrl: null,
-      siteBadgeIconClass: null,
-      knownDreamsignIconUrl: null,
+      iconRef: null,
+      siteBadgeGlyph: null,
+      knownDreamsignRef: null,
     },
   },
   {
@@ -188,9 +189,9 @@ const NODE_SPECS: NodeSpec[] = [
       size: 132,
       isStarter: false,
       isBoss: false,
-      iconUrl: dreamscapeIconUrl("pharaohs_gate"),
-      siteBadgeIconClass: SHOP_BADGE,
-      knownDreamsignIconUrl: null,
+      iconRef: artRef.dreamscapeIcon("pharaohs_gate"),
+      siteBadgeGlyph: SHOP_BADGE,
+      knownDreamsignRef: null,
     },
   },
   {
@@ -204,9 +205,9 @@ const NODE_SPECS: NodeSpec[] = [
       size: 132,
       isStarter: false,
       isBoss: false,
-      iconUrl: dreamscapeIconUrl("rust_expanse"),
-      siteBadgeIconClass: DRAFT_BADGE,
-      knownDreamsignIconUrl: null,
+      iconRef: artRef.dreamscapeIcon("rust_expanse"),
+      siteBadgeGlyph: DRAFT_BADGE,
+      knownDreamsignRef: null,
     },
   },
   {
@@ -220,9 +221,9 @@ const NODE_SPECS: NodeSpec[] = [
       size: 150,
       isStarter: false,
       isBoss: true,
-      iconUrl: null,
-      siteBadgeIconClass: null,
-      knownDreamsignIconUrl: null,
+      iconRef: null,
+      siteBadgeGlyph: null,
+      knownDreamsignRef: null,
     },
   },
 ];

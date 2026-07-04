@@ -28,6 +28,8 @@ import { InfoCard } from "../overlay/InfoCard";
 import { richText, type RichText } from "../card/rich-text";
 import { mulberry32, type ScatterPoint } from "./dreamscape-scatter";
 import type { SiteState } from "../../../types/quest";
+import { type Glyph } from "../../primitives/glyph";
+import { type TangoColor, withAlpha } from "../../primitives/color";
 import "./site-node.css";
 
 const { usePressReveal, anchorRect, PressPopover } = InfoCard;
@@ -51,10 +53,11 @@ export interface DreamscapeSiteModel {
   label: string;
   /** One-line mechanic blurb shown in the reveal. */
   blurb: string;
-  /** Boxicons (v3 filled) / Font Awesome class for the site glyph. */
-  icon: string;
-  /** Accent colour as a `#rrggbb` hex, used for the node's ring + reveal disc. */
-  accent: string;
+  /** The site {@link Glyph}. */
+  icon: Glyph;
+  /** Accent color, used for the node's ring + reveal disc — a {@link TangoColor}
+   * (typically a per-dreamscape `#rrggbb` hex). */
+  accent: TangoColor;
 }
 
 /** The status note (locked / visited) shown under the blurb in the reveal. */
@@ -124,12 +127,12 @@ export function SiteNode({
   const opacity = site.isVisited ? 0.42 : 1;
   const lockedFilter = isLocked ? "grayscale(1) brightness(0.62)" : undefined;
 
-  // Ring + border derive from the node's `#rrggbb` accent with alpha suffixes.
-  // The bright ring shows while the reveal is up (hover on a fine pointer, press
-  // on touch).
+  // Ring + border derive from the node's accent via color-mix alpha, so any
+  // TangoColor (a per-dreamscape hex, a role token) reads correctly. The bright
+  // ring shows while the reveal is up (hover on a fine pointer, press on touch).
   const ring = shown
-    ? `0 0 0 2px ${accent}e6, 0 0 30px ${accent}8c, 0 14px 26px rgba(0,0,0,.55)`
-    : `0 0 0 1px ${accent}59, 0 0 18px ${accent}42, 0 8px 18px rgba(0,0,0,.5)`;
+    ? `0 0 0 2px ${withAlpha(accent, 0.9)}, 0 0 30px ${withAlpha(accent, 0.55)}, 0 14px 26px rgba(0,0,0,.55)`
+    : `0 0 0 1px ${withAlpha(accent, 0.35)}, 0 0 18px ${withAlpha(accent, 0.26)}, 0 8px 18px rgba(0,0,0,.5)`;
 
   const doSelect = (): void => {
     if (isInteractive) {
@@ -196,7 +199,7 @@ export function SiteNode({
     >
       <span
         className="ds-disc"
-        style={{ boxShadow: ring, borderColor: `${accent}73` }}
+        style={{ boxShadow: ring, borderColor: withAlpha(accent, 0.45) }}
       >
         <span
           className="ds-ico"

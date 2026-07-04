@@ -19,6 +19,7 @@ import { useEffect, useState } from "react";
 import type { CardData } from "../../../types/cards";
 import { loadCardDatabase } from "../../../data/card-database";
 import { GameCard } from "../../components/card/CardView";
+import { type TangoColor } from "../../primitives/color";
 import type { TangoComponent } from "../registry";
 
 /**
@@ -45,7 +46,7 @@ interface GameCardDemoArgs {
   /** Draw the selection ring. */
   selected?: boolean;
   /** Selection ring color. */
-  selectionColor?: string;
+  selectionColor?: TangoColor;
   /** Dense/compact surface: hide the rules text, keep identity + stats. */
   hideRulesText?: boolean;
   /** Render the full-bleed figment frame. */

@@ -10,6 +10,7 @@
 import { useRef } from "react";
 import { SiteNode, type DreamscapeSiteModel } from "../../components/atlas/SiteNode";
 import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
+import { GLYPHS, glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 
@@ -24,7 +25,7 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     isInteractive: true,
     label: "Merchant",
     blurb: "Spend essence on cards, dreamsigns, and services.",
-    icon: "bxf bx-store-alt-2",
+    icon: glyph("bxf bx-store-alt-2"),
     accent: "#a855f7",
   },
   {
@@ -36,7 +37,7 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     isInteractive: true,
     label: "Treasure",
     blurb: "Claim a reward carried by this site.",
-    icon: "bxf bx-treasure-chest",
+    icon: glyph("bxf bx-treasure-chest"),
     accent: "#a855f7",
   },
   {
@@ -48,7 +49,7 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     isInteractive: false,
     label: "Draft 3x",
     blurb: "Draft new cards into your deck.",
-    icon: "bxf bx-copy",
+    icon: glyph("bxf bx-copy"),
     accent: "#a855f7",
   },
   {
@@ -60,7 +61,7 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     isInteractive: true,
     label: "Wellspring",
     blurb: "An enhanced site — rest and recover before the road ahead.",
-    icon: "bxf bx-moon",
+    icon: GLYPHS.lunar,
     accent: "#38bdf8",
   },
   {
@@ -72,7 +73,7 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     isInteractive: true,
     label: "Battle",
     blurb: "The dreamscape's guardian awaits.",
-    icon: "bxf bx-sword-alt",
+    icon: glyph("bxf bx-sword-alt"),
     accent: "#ef4444",
   },
   {
@@ -84,7 +85,7 @@ const SITE_MODELS: DreamscapeSiteModel[] = [
     isInteractive: false,
     label: "Final Boss",
     blurb: "Visit the other sites in this dreamscape first.",
-    icon: "bxf bx-meteor",
+    icon: glyph("bxf bx-meteor"),
     accent: "#6b7280",
   },
 ];

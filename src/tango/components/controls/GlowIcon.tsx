@@ -1,4 +1,7 @@
 import { ENERGY_PIP_COLOR } from "./PipBadge";
+import { type Glyph, GLYPHS } from "../../primitives/glyph";
+import { type TangoColor, resolveColor } from "../../primitives/color";
+import { type MediaFilter, resolveMediaFilter } from "../../primitives/media";
 
 /**
  * A Boxicons glyph used for the card resource marks. Boxicons paints via the
@@ -15,17 +18,17 @@ import { ENERGY_PIP_COLOR } from "./PipBadge";
  */
 
 /** Solid amber-gold fill for the spark mark. */
-export const SPARK_ICON_COLOR = "#f3c33f";
+export const SPARK_ICON_COLOR: TangoColor = "#f3c33f";
 /**
  * Blue fill for the energy mark. Pulled from the shared resource token so the
  * inline energy glyph and the corner energy orb read as the exact same blue
  * and cannot drift apart.
  */
-export const ENERGY_ICON_COLOR = ENERGY_PIP_COLOR;
+export const ENERGY_ICON_COLOR: TangoColor = ENERGY_PIP_COLOR;
 
-/** Boxicons filled classes for each resource mark. */
-export const SPARK_ICON_CLASS = "bxf bx-sparkles";
-export const ENERGY_ICON_CLASS = "bxf bx-fire-alt";
+/** Boxicons filled classes for each resource mark, from the shared glyph registry. */
+export const SPARK_ICON_CLASS: Glyph = GLYPHS.spark;
+export const ENERGY_ICON_CLASS: Glyph = GLYPHS.energy;
 
 /**
  * Filled lightning-bolt mark for activated abilities. Shared by the card
@@ -33,14 +36,14 @@ export const ENERGY_ICON_CLASS = "bxf bx-fire-alt";
  * activated-ability markers in rules text (`RulesText`) so both read as the
  * same glyph.
  */
-export const BOLT_ICON_CLASS = "bxf bx-bolt";
+export const BOLT_ICON_CLASS: Glyph = GLYPHS.bolt;
 
 /**
  * Spark glyph for inline rules text. The single "sparkle" star reads more
  * cleanly than the busier multi-star "sparkles" at the small inline size,
  * while the corner spark stat keeps `SPARK_ICON_CLASS` at its larger size.
  */
-export const SPARK_INLINE_ICON_CLASS = "bxf bx-sparkle";
+export const SPARK_INLINE_ICON_CLASS: Glyph = GLYPHS.sparkInline;
 
 /**
  * Soft content-protection shadow that grounds the glyph against the art behind
@@ -54,18 +57,18 @@ export const ICON_SHADOW_FILTER =
   "drop-shadow(0 0 0.03em rgba(0, 0, 0, 0.45))";
 
 export interface GlowIconProps {
-  /** Boxicons class(es) for the glyph (e.g. `SPARK_ICON_CLASS`). */
-  iconClass: string;
-  /** Fill color — Boxicons paints via the element's text color. */
-  color: string;
+  /** The {@link Glyph} to render (e.g. `SPARK_ICON_CLASS` / `GLYPHS.spark`). */
+  iconClass: Glyph;
+  /** Fill {@link TangoColor} — Boxicons paints via the element's text color. */
+  color: TangoColor;
   /**
    * Rendered width/height as any CSS length. Defaults to `1em` so an inline
    * glyph tracks the surrounding text size. The icon's own `font-size` is
    * pinned to this value so the `em`-based glow and outline scale with it.
    */
   size?: string;
-  /** Emitted-light bloom filter. Omit for no glow. */
-  glowFilter?: string;
+  /** Emitted-light bloom {@link MediaFilter}. Omit for no glow. */
+  glowFilter?: MediaFilter;
   /** When true, adds the soft content-protection shadow beneath the glow. */
   shadow?: boolean;
   /** Accessible label; the icon is hidden from assistive tech when unset. */
@@ -80,7 +83,10 @@ export function GlowIcon({
   shadow = false,
   title,
 }: GlowIconProps) {
-  const filter = [shadow ? ICON_SHADOW_FILTER : null, glowFilter ?? null]
+  const filter = [
+    shadow ? ICON_SHADOW_FILTER : null,
+    glowFilter ? resolveMediaFilter(glowFilter) : null,
+  ]
     .filter((layer): layer is string => layer !== null)
     .join(" ");
   return (
@@ -101,7 +107,7 @@ export function GlowIcon({
         // `em`-based glow and outline track it.
         fontSize: size,
         lineHeight: 1,
-        color,
+        color: resolveColor(color),
         filter: filter !== "" ? filter : undefined,
       }}
     />

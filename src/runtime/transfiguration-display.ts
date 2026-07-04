@@ -12,9 +12,10 @@
 
 import type { TransfigurationType } from "../types/quest";
 
-/** Color hex value for each transfiguration type. */
+/** Color hex value for each transfiguration type. The `#${string}` type matches
+ * Tango's `HexColor`, so these feed a strict `TangoColor` prop directly. */
 export const TRANSFIGURATION_COLORS: Readonly<
-  Record<TransfigurationType, string>
+  Record<TransfigurationType, `#${string}`>
 > = {
   Empowered: "#10b981",
   Amplified: "#f59e0b",
@@ -36,7 +37,7 @@ export const TRANSFIGURATION_COLORS: Readonly<
  * color family. Each value is the Tailwind 300-level pastel of its type's hue.
  */
 export const TRANSFIGURATION_TINT_COLORS: Readonly<
-  Record<TransfigurationType, string>
+  Record<TransfigurationType, `#${string}`>
 > = {
   Empowered: "#6ee7b7",
   Amplified: "#fcd34d",
@@ -81,8 +82,9 @@ export const TRANSFIGURATION_ICONS: Readonly<
  */
 export interface CardTransfigurationDisplay {
   type: TransfigurationType;
-  /** Light tint for the name gem, changed stat orb(s), and changed text. */
-  color: string;
+  /** Light tint for the name gem, changed stat orb(s), and changed text. A
+   * `#${string}` hex, matching Tango's `HexColor`. */
+  color: `#${string}`;
   /** Rules text with the changed/added spans wrapped in transfigure markers. */
   markedText: string;
   /** True when the energy cost changed (Empowered); tints the energy orb. */

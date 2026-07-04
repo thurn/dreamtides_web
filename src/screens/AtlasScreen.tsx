@@ -22,11 +22,12 @@ import {
   AFFILIATION_ROW_ICON_CLASS,
   BOSS_DISPLAY,
   STARTER_FLAG_ICON_CLASS,
-  dreamscapeIconUrl,
   dreamscapeSceneUrl,
   dreamsignIconUrl,
   guidePortraitUrl,
 } from "../tango/components/atlas/atlas-display";
+import { glyph } from "../tango/primitives/glyph";
+import { artRef } from "../tango/primitives/art";
 import type {
   AffiliationContent,
   ApollyonIncarnationContent,
@@ -185,20 +186,22 @@ function resolveAtlasNodes(
 
     // The node face: the boss is always the icon; a revealed dreamscape shows
     // its circular icon; an unrevealed node shows the empty round frame.
-    const iconUrl =
-      isBoss || dreamscape === null ? null : dreamscapeIconUrl(dreamscape.id);
+    const iconRef =
+      isBoss || dreamscape === null
+        ? null
+        : artRef.dreamscapeIcon(dreamscape.id);
 
     // The signature-site badge is shown only for non-starter, non-boss revealed
     // dreamscapes; the starter shows just its meadow icon, the boss its skull.
     const revealedSite = revealedAtlasSite(node);
-    const siteBadgeIconClass =
+    const siteBadgeGlyph =
       isBoss || isStarter || dreamscape === null || revealedSite === null
         ? null
-        : siteTypeIcon(dreamscape.signatureSite);
+        : glyph(siteTypeIcon(dreamscape.signatureSite));
 
-    const knownDreamsignIconUrl =
+    const knownDreamsignRef =
       dreamsign?.imageName != null
-        ? dreamsignIconUrl(dreamsign.imageName)
+        ? artRef.dreamsign(dreamsign.imageName)
         : null;
 
     resolved.set(node.id, {
@@ -209,9 +212,9 @@ function resolveAtlasNodes(
         size: isBoss || isStarter ? 150 : 132,
         isStarter,
         isBoss,
-        iconUrl,
-        siteBadgeIconClass,
-        knownDreamsignIconUrl,
+        iconRef,
+        siteBadgeGlyph,
+        knownDreamsignRef,
       },
       dreamscape,
       guide,

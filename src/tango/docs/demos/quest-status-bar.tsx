@@ -17,18 +17,9 @@
 import { useRef } from "react";
 import { QuestStatusBar } from "../../components/hud/QuestStatusBar";
 import type { QuestStatusBarProps } from "../../components/hud/QuestStatusBar";
-import { dreamsignIconUrl } from "../../components/atlas/atlas-display";
-import { assetUrl } from "../../../runtime/asset-url";
+import { artRef } from "../../primitives/art";
 import { token } from "../../primitives/tokens";
 import type { TangoComponent } from "../registry";
-
-/** A Dreamcaller's character render, resolved the same way `assetUrl` resolves
- * every other binary art asset (see `src/components/DreamcallerPortrait.tsx`
- * for the production equivalent — reimplemented locally here so this
- * tango-isolated demo never imports from `src/components/`). */
-function dreamcallerPortraitUrl(imageNumber: string): string {
-  return assetUrl(`/dreamcallers/${imageNumber}.png`);
-}
 
 function QuestStatusBarDemo(args: Omit<QuestStatusBarProps, "stageRef">) {
   const stageRef = useRef<HTMLDivElement>(null);
@@ -90,27 +81,27 @@ const stageRef = useRef<HTMLDivElement>(null);
       dreamcaller: {
         name: "Threxan",
         epithet: "the Resounding Wrath",
-        portrait: dreamcallerPortraitUrl("0025"),
+        portrait: artRef.dreamcaller("0025"),
         ability: "At the start of your first turn, draw a card.",
       },
       dreamsigns: [
         {
           id: "C706D0BA-2F41-4B14-95D8-DB168AC6246C",
           name: "Amplified Acorn",
-          art: dreamsignIconUrl("acorn_gold.png"),
+          art: artRef.dreamsign("acorn_gold.png"),
           ability:
             "Once per turn, when you discard a card, your next card this turn costs 2● less.",
         },
         {
           id: "278EC1AB-F532-4862-84AE-63DF5E49548C",
           name: "Pyramid Relic",
-          art: dreamsignIconUrl("aertfact.png"),
+          art: artRef.dreamsign("aertfact.png"),
           ability: "The second character you play each turn costs 1● less.",
         },
         {
           id: "D1FDBE21-56F6-43C0-AAAC-1E4683964DA5",
           name: "Bell",
-          art: dreamsignIconUrl("bell.png"),
+          art: artRef.dreamsign("bell.png"),
           ability:
             "When you play a character from your void, rematerialize it.",
         },

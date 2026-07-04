@@ -12,6 +12,7 @@ import {
   SPARK_ICON_COLOR,
   SPARK_INLINE_ICON_CLASS,
 } from "../controls/GlowIcon";
+import { type TangoColor, resolveColor } from "../../primitives/color";
 
 /**
  * Renders rules text with:
@@ -182,7 +183,7 @@ interface RenderRulesTextOptions {
    * and given a slightly heavier weight, so only the transfigured span of a
    * card's rules text is tinted. Text outside the markers renders normally.
    */
-  highlightColor?: string;
+  highlightColor?: TangoColor;
 }
 
 /** One run of a paragraph, flagged for whether it is a transfigured span. */
@@ -466,6 +467,9 @@ function renderParagraph(
       renderSegment(segment, `${p}-${i}`, options),
     );
   }
+  // Narrowed to defined here; hoist to a const so it stays typed inside the map
+  // closure (property-access narrowing does not persist across closures).
+  const highlightColor = resolveColor(options.highlightColor);
   const chunks = splitOnMarkers(paragraph);
   return chunks.map((chunk, c) => {
     const segments = tokenizeRulesText(chunk.text);
@@ -479,7 +483,7 @@ function renderParagraph(
       <span
         key={`${p}-${c}`}
         data-transfigured=""
-        style={{ color: options.highlightColor, fontWeight: 600 }}
+        style={{ color: highlightColor, fontWeight: 600 }}
       >
         {nodes}
       </span>

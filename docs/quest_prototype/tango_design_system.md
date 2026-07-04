@@ -29,9 +29,16 @@ green on `npm run lint`, `npm run typecheck`, and `npm test`.
   strongly-typed surface — enumerated variants, sizes, and named content slots
   — and nothing else. Components never accept a raw `className`, an inline
   `style` object, or an arbitrary corner radius / padding / color / filter /
-  scale token override. **Adding arbitrary token customization to a component
-  is never acceptable** — those escape hatches let a caller silently drift from
-  the system. When a screen needs to size or position a component, it wraps the
+  scale token override. A prop that carries a value which is not free-form text
+  takes a *named* value, not a string: a color is a `TangoColor` (a palette
+  role, or a `` `#${string}` `` hex for a genuinely data-driven one), a glyph is
+  a `Glyph` from the icon registry, a piece of art is an `ArtRef` the component
+  resolves to a URL itself, and a wash / media filter / image crop / title badge
+  is a named union. These value types live in `src/tango/primitives/`
+  (`color.ts`, `glyph.ts`, `art.ts`, `media.ts`). **Adding arbitrary token
+  customization to a component is never acceptable** — those escape hatches let
+  a caller silently drift from the system. When a screen needs to size or
+  position a component, it wraps the
   component in its own element (layout is the caller's concern; the component's
   fixed appearance is the system's). Adding a *new strict prop* — one more
   enumerated variant — is fine when you are confident no existing variant can
@@ -314,8 +321,11 @@ reference, not by a from-scratch subagent rewrite.
   in the styled `components/` source at authoring time, and
   `scripts/tango-strict-api.contract.test.mjs` re-derives the resolved public
   surface of both `components/` and `primitives/` via react-docgen and asserts
-  no component exposes a `style`/`className`/`CSSProperties` prop of its own — so
-  a hatch that leaks in through an aliased type still fails the build.
+  no component exposes a `style`/`className`/`CSSProperties` prop of its own, and
+  that no glyph / color / image / wash / filter prop resolves to a bare `string`
+  (each must be a named value type — `Glyph`, `TangoColor`, `ArtRef`, `Wash`,
+  `MediaFilter`) — so a hatch that leaks in through an aliased type still fails
+  the build.
   `primitives/` is excluded from the source rule because a mechanism like
   `Pressable` deliberately forwards every DOM prop; react-docgen filters those
   inherited props out, so the contract test still holds it to no *own* hatch.

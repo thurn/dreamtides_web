@@ -13,6 +13,8 @@ import {
   type DreamscapeSiteModel,
 } from "../tango/components/atlas/SiteNode";
 import { scatterSites, seedFromString } from "../tango/components/atlas/dreamscape-scatter";
+import { glyph } from "../tango/primitives/glyph";
+import type { HexColor } from "../tango/primitives/color";
 import { logEvent } from "../logging";
 import "./dreamscape.css";
 
@@ -20,7 +22,7 @@ import "./dreamscape.css";
 const NODE_SIZE = 60;
 
 /** Default accent for an ordinary site node, as a `#rrggbb` hex. */
-const DEFAULT_ACCENT = "#a855f7";
+const DEFAULT_ACCENT: HexColor = "#a855f7";
 
 /** Battle label by completion level: final boss or a plain battle. */
 function battleLabel(completionLevel: number): string {
@@ -29,7 +31,7 @@ function battleLabel(completionLevel: number): string {
 }
 
 /** Battle accent (`#rrggbb`) by completion level + lock state. */
-function battleAccent(completionLevel: number, isLocked: boolean): string {
+function battleAccent(completionLevel: number, isLocked: boolean): HexColor {
   if (isLocked) return "#6b7280";
   if (completionLevel === 6) return "#fbbf24";
   return "#ef4444";
@@ -87,7 +89,7 @@ export function DreamscapeScreen() {
         isInteractive,
         label,
         blurb,
-        icon: siteTypeIcon(site.type),
+        icon: glyph(siteTypeIcon(site.type)),
         accent,
       };
     });

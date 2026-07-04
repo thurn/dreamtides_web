@@ -40,15 +40,13 @@ import { CardTermDefinitions } from "../card/CardTermDefinitions";
 import { token } from "../../primitives/tokens";
 import type { Dreamsign as DreamsignData } from "../../../types/quest";
 import { assetUrl } from "../../../runtime/asset-url";
+import { artRef } from "../../primitives/art";
 
 const { usePressReveal, anchorRect, PressPopover, PRESS_SCALE } = InfoCard;
 
 /** Desaturation applied to bane art so a bane reads as a warning before its
  * art does — the one signal that survives the chrome-free tile. */
 const BANE_FILTER = "grayscale(0.7)";
-/** Drop-shadow the reveal art carries so it lifts off the InfoCard surface. */
-const OBJECT_SHADOW =
-  "drop-shadow(0 3px 6px rgba(0,0,0,0.55)) drop-shadow(0 0 14px rgba(147,51,234,0.30))";
 
 /**
  * Delay before a dreamsign preview opens on an offering / draft card. Tighter
@@ -94,7 +92,7 @@ export function DreamsignInfoCard({
 }: DreamsignInfoCardProps): React.ReactElement {
   const showImage = Boolean(dreamsign.imageName);
   const effect = dreamsign.effectDescription ?? "";
-  const badge = dreamsign.isBane ? "Bane" : undefined;
+  const badge = dreamsign.isBane ? "bane" : undefined;
   const body = effect ? richText.rules(effect) : undefined;
   return (
     <div
@@ -112,9 +110,9 @@ export function DreamsignInfoCard({
       {showImage ? (
         <InfoCard
           variant="object"
-          image={dreamsignArtUrl(String(dreamsign.imageName))}
+          image={artRef.dreamsign(String(dreamsign.imageName))}
           imageFilter={
-            dreamsign.isBane ? `${OBJECT_SHADOW} grayscale(0.5)` : OBJECT_SHADOW
+            dreamsign.isBane ? "dreamsign-portrait-bane" : "dreamsign-portrait"
           }
           title={dreamsign.name}
           titleBadge={badge}

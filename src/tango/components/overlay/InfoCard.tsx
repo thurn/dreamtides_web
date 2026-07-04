@@ -39,6 +39,19 @@ import * as React from "react";
 import { createPortal } from "react-dom";
 import { Pressable, PRESS_SCALE } from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
+import { type Glyph } from "../../primitives/glyph";
+import { type TangoColor, withAlpha } from "../../primitives/color";
+import { type ArtRef, resolveArtRef } from "../../primitives/art";
+import {
+  type ImageCrop,
+  type MediaFilter,
+  type TitleBadge,
+  type Wash,
+  resolveImageCrop,
+  resolveMediaFilter,
+  resolveTitleBadge,
+  resolveWash,
+} from "../../primitives/media";
 import { renderRichText, type RichText } from "../card/rich-text";
 
 /* ---- faithfully-copied layout literals from the design source (not tokens:
@@ -158,10 +171,13 @@ export const SITE_DISC: React.CSSProperties = {
  * SiteNode). The gradient + glow recipe lives here in the design system; the
  * caller supplies only the accent color via `InfoCardProps.discAccent`.
  */
-function accentDiscStyle(accent: string): React.CSSProperties {
+function accentDiscStyle(accent: TangoColor): React.CSSProperties {
   return {
     background: "radial-gradient(120% 120% at 50% 28%, #1a1525, #070512)",
-    boxShadow: `inset 0 0 0 2px ${accent}73, 0 0 14px 1px ${accent}5c`,
+    // Alpha via color-mix so the ring/glow are valid for a role token, a
+    // color-mix, or a hex accent alike (a `${hex}73` suffix would be invalid CSS
+    // for anything but a bare hex).
+    boxShadow: `inset 0 0 0 2px ${withAlpha(accent, 0.45)}, 0 0 14px 1px ${withAlpha(accent, 0.36)}`,
   };
 }
 
@@ -179,9 +195,9 @@ interface InfoCardCommonProps {
   title?: string;
   /**
    * A small warning-toned pill shown right after the title (e.g. a dreamsign
-   * "Bane"). Omit for no badge.
+   * {@link TitleBadge} `"bane"`). Omit for no badge.
    */
-  titleBadge?: string;
+  titleBadge?: TitleBadge;
   /** The reveal copy, as a {@link RichText} value (plain / rules / note / stack). */
   body?: RichText;
 }
@@ -193,14 +209,14 @@ interface InfoCardCommonProps {
  */
 export interface InfoCardObjectProps extends InfoCardCommonProps {
   variant: "object";
-  /** Media source. Required — the card is built around this image. */
-  image: string;
-  /** `object-position` for the media crop. Default '50% 6%'. */
-  imagePos?: string;
-  /** A CSS `filter` on the media (e.g. a drop-shadow for a transparent object). */
-  imageFilter?: string;
-  /** A CSS background painted over the media. */
-  wash?: string;
+  /** The media the card is built around, as an {@link ArtRef}. Required. */
+  image: ArtRef;
+  /** How the media is cropped. Default `"top"`. */
+  imageCrop?: ImageCrop;
+  /** A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). */
+  imageFilter?: MediaFilter;
+  /** A named {@link Wash} painted over the media. */
+  wash?: Wash;
   /** true = framed portrait, false = contained transparent object. Default false. */
   frame?: boolean;
 }
@@ -211,14 +227,14 @@ export interface InfoCardObjectProps extends InfoCardCommonProps {
  */
 export interface InfoCardHeroProps extends InfoCardCommonProps {
   variant: "hero";
-  /** Media source. Required — the card is built around this image. */
-  image: string;
-  /** `object-position` for the media crop. Default '50% 6%'. */
-  imagePos?: string;
-  /** A CSS `filter` on the media (e.g. a drop-shadow for a transparent object). */
-  imageFilter?: string;
-  /** A CSS background painted over the media. */
-  wash?: string;
+  /** The media the card is built around, as an {@link ArtRef}. Required. */
+  image: ArtRef;
+  /** How the media is cropped. Default `"top"`. */
+  imageCrop?: ImageCrop;
+  /** A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). */
+  imageFilter?: MediaFilter;
+  /** A named {@link Wash} painted over the media. */
+  wash?: Wash;
   /** Small mono/uppercase overline above the title. */
   meta?: string;
 }
@@ -229,13 +245,13 @@ export interface InfoCardHeroProps extends InfoCardCommonProps {
  */
 export interface InfoCardIconProps extends InfoCardCommonProps {
   variant: "icon";
-  /** The boxicon class. Required — the disc renders this glyph. */
-  glyph: string;
+  /** The {@link Glyph} the disc renders. Required. */
+  glyph: Glyph;
   /**
-   * Tint the reveal disc to this accent color so it matches the node it opens
-   * from. Omit for the default violet-glow disc (SITE_DISC).
+   * Tint the reveal disc to this {@link TangoColor} so it matches the node it
+   * opens from. Omit for the default violet-glow disc (SITE_DISC).
    */
-  discAccent?: string;
+  discAccent?: TangoColor;
 }
 
 /**
@@ -247,8 +263,8 @@ export interface InfoCardTextProps extends InfoCardCommonProps {
   variant?: "text";
   /** Small mono/uppercase overline above the title. */
   meta?: string;
-  /** A small leading glyph, as a Boxicons class string. */
-  leadGlyph?: string;
+  /** A small leading {@link Glyph}. */
+  leadGlyph?: Glyph;
 }
 
 /**
@@ -304,14 +320,15 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
         }}
       >
         {title}
-        <span style={tTitleBadge}>{titleBadge}</span>
+        <span style={tTitleBadge}>{resolveTitleBadge(titleBadge)}</span>
       </span>
     );
 
   /* --- object: a centered media block (framed portrait OR contained
      transparent object) above its name + text. --- */
   if (props.variant === "object") {
-    const { image, imagePos = "50% 6%", imageFilter, wash, frame = false } = props;
+    const { image, imageCrop = "top", imageFilter, wash, frame = false } = props;
+    const imageUrl = resolveArtRef(image);
     const media = frame ? (
       <div
         style={{
@@ -326,7 +343,7 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
         }}
       >
         <img
-          src={image}
+          src={imageUrl}
           alt=""
           draggable={false}
           style={{
@@ -335,17 +352,19 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
             width: "100%",
             height: "100%",
             objectFit: "cover",
-            objectPosition: imagePos,
+            objectPosition: resolveImageCrop(imageCrop),
             userSelect: "none",
           }}
         />
         {wash && (
-          <div style={{ position: "absolute", inset: 0, background: wash }} />
+          <div
+            style={{ position: "absolute", inset: 0, background: resolveWash(wash) }}
+          />
         )}
       </div>
     ) : (
       <img
-        src={image}
+        src={imageUrl}
         alt=""
         draggable={false}
         style={{
@@ -353,7 +372,7 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
           height: 96,
           objectFit: "contain",
           display: "block",
-          filter: imageFilter,
+          filter: imageFilter ? resolveMediaFilter(imageFilter) : undefined,
         }}
       />
     );
@@ -380,7 +399,7 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
      base gradient dissolves the media into the solid surface so the title/body
      sit on the card's own material, not a scrim over the scene. --- */
   if (props.variant === "hero") {
-    const { image, imagePos = "50% 6%", imageFilter, wash, meta } = props;
+    const { image, imageCrop = "top", imageFilter, wash, meta } = props;
     const Meta = meta ? (
       <div style={{ ...tMeta, marginBottom: 7 }}>{meta}</div>
     ) : null;
@@ -395,7 +414,7 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
           }}
         >
           <img
-            src={image}
+            src={resolveArtRef(image)}
             alt=""
             draggable={false}
             style={{
@@ -404,13 +423,15 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
               width: "100%",
               height: "100%",
               objectFit: "cover",
-              objectPosition: imagePos,
+              objectPosition: resolveImageCrop(imageCrop),
               userSelect: "none",
-              filter: imageFilter,
+              filter: imageFilter ? resolveMediaFilter(imageFilter) : undefined,
             }}
           />
           {wash && (
-            <div style={{ position: "absolute", inset: 0, background: wash }} />
+            <div
+              style={{ position: "absolute", inset: 0, background: resolveWash(wash) }}
+            />
           )}
           <div
             style={{

@@ -222,9 +222,17 @@ export function IntroSection(): ReactElement {
             inline <code>style</code> object, an arbitrary corner radius,
             padding, color, filter, or any other free-form token override.
             Those escape hatches let a caller silently drift from the system,
-            so they simply do not exist. <strong>Adding arbitrary token
-            customization to a component is never acceptable</strong> — not a
-            one-off color, not &ldquo;just this once&rdquo; padding. When a
+            so they simply do not exist. A value that is not free-form text is a{" "}
+            <em>named</em> value, not a string: a color is a{" "}
+            <code>TangoColor</code> (a palette role, or a <code>#hex</code>{" "}
+            literal for a genuinely data-driven one), a glyph is a{" "}
+            <code>Glyph</code> from the icon registry, a piece of art is an{" "}
+            <code>ArtRef</code> the component resolves itself, and a wash, media
+            filter, or crop is a named union. So a prop that is really a color,
+            icon, or image can never be an arbitrary CSS string, class, or URL.{" "}
+            <strong>Adding arbitrary token customization to a component is never
+            acceptable</strong> — not a one-off color, not &ldquo;just this
+            once&rdquo; padding. When a
             screen needs to size or position a component it wraps it in its own
             element: layout is the caller&rsquo;s concern, the component&rsquo;s
             fixed appearance is the system&rsquo;s. Adding a new <em>strict</em>
@@ -240,8 +248,10 @@ export function IntroSection(): ReactElement {
             <code>style</code>/<code>className</code> member, a{" "}
             <code>CSSProperties</code>-typed prop, a DOM-attribute{" "}
             <code>extends</code>, or an index signature, and a contract test
-            re-checks the resolved surface. So re-adding a knob fails lint or
-            the build, not code review.
+            re-checks the resolved surface — including a guard that a glyph,
+            color, image, wash, or filter prop never resolves to a bare{" "}
+            <code>string</code>. So re-adding a knob fails lint or the build,
+            not code review.
           </p>
         </Principle>
       </div>

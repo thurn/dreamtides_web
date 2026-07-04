@@ -1,7 +1,7 @@
 // Registry demo entry for TidePill — see resource-chip.tsx for the recipe
-// this follows. `icon` is a Boxicons class string (a generated text control);
-// `label` is the tide name (a plain string), surfaced as a text control seeded
-// via defaultArgs.
+// this follows. `icon` is a named `Glyph` from the design system's `GLYPHS`
+// vocabulary; `label` is the tide name (a plain string), surfaced as a text
+// control seeded via defaultArgs.
 //
 // TidePill's `label` and `description` are required, which the registry's
 // `ComponentType<Record<string, unknown>>` signature can't satisfy directly (a
@@ -12,13 +12,14 @@
 // demo stage), which is the standalone reveal path.
 
 import { TidePill } from "../../components/hud/TidePill";
+import { GLYPHS, type Glyph } from "../../primitives/glyph";
 import type { TangoComponent } from "../registry";
 
 interface TidePillDemoArgs {
   label?: string;
   description?: string;
   tone?: "violet" | "blue" | "gold" | "green" | "rust" | "red" | "neutral";
-  icon?: string;
+  icon?: Glyph;
   size?: "sm" | "md";
   onPress?: () => void;
 }
@@ -56,10 +57,11 @@ export const tidePillDemo: TangoComponent = {
       label: "Anchored reveal",
       note: "Pass `stageRef` (the screen root) and the tide's InfoCard reveal is anchored to the pill and clamped fully on-screen — the preferred, material-continuity path.",
       code: `import { TidePill } from "src/tango/components/hud/TidePill";
+import { GLYPHS } from "src/tango/primitives/glyph";
 
 <TidePill
   tone="blue"
-  icon="bxf bx-water"
+  icon={GLYPHS.water}
   label="Singular Storm"
   description="A tide of sudden, singular force."
   stageRef={screenRef}
@@ -76,7 +78,7 @@ export const tidePillDemo: TangoComponent = {
     defaultArgs: {
       tone: "blue",
       size: "md",
-      icon: "bxf bx-water",
+      icon: GLYPHS.water,
       label: "Singular Storm",
       description:
         "A tide of sudden, singular force — one overwhelming swell rather than a steady current.",

@@ -166,6 +166,20 @@ const NON_MODEL_TYPE_NAMES = new Set([
   "RefObject",
   "MutableRefObject",
   "HTMLElement",
+  // Tango's strict value types (src/tango/primitives/*): each is a leaf value
+  // whose NAME is the documentation, not a model to drill into. `Glyph` is a
+  // branded string (expanding it lists every String method); `ArtRef` is a
+  // discriminated union (expanding it shows only the shared discriminant); the
+  // color/media unions are string literals. Render the type name as-is.
+  "Glyph",
+  "ArtRef",
+  "TangoColor",
+  "HexColor",
+  "ColorRole",
+  "Wash",
+  "MediaFilter",
+  "ImageCrop",
+  "TitleBadge",
 ]);
 
 /**

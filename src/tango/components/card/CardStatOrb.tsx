@@ -8,11 +8,13 @@ import {
   SPARK_ICON_COLOR,
 } from "../controls/GlowIcon";
 import { useFitText } from "../controls/useFitText";
+import { type Glyph } from "../../primitives/glyph";
+import { type TangoColor, resolveColor } from "../../primitives/color";
 
 export type CardStatOrbVariant = "energy" | "spark" | "dreamwellEnergy";
 
 /** Purple fill for the Dreamwell energy mark; the number stays white. */
-export const DREAMWELL_ENERGY_ICON_COLOR = "#a855f7";
+export const DREAMWELL_ENERGY_ICON_COLOR: TangoColor = "#a855f7";
 
 const DEFAULT_LABEL: Readonly<Record<CardStatOrbVariant, string>> = {
   energy: "energy cost",
@@ -38,8 +40,8 @@ const ICON_BY_VARIANT: Readonly<
   Record<
     CardStatOrbVariant,
     {
-      iconClass: string;
-      color: string;
+      iconClass: Glyph;
+      color: TangoColor;
       overscale: number;
       /** Vertical nudge of the digit, in `em` of the digit size. */
       numberShiftEm: number;
@@ -99,7 +101,7 @@ interface CardStatOrbProps {
    * picks up the tint; the resource glyph behind it keeps its resource hue so a
    * changed stat still reads as the same kind of resource.
    */
-  tintColor?: string;
+  tintColor?: TangoColor;
 }
 
 /**
@@ -140,7 +142,7 @@ export function CardStatOrb({
   const numberStyle: CSSProperties = {
     fontFamily: '"Anton", system-ui, sans-serif',
     fontWeight: 400,
-    color: tintColor ?? "#ffffff",
+    color: resolveColor(tintColor ?? "white"),
     lineHeight: 1,
     textAlign: "center",
     whiteSpace: "nowrap",

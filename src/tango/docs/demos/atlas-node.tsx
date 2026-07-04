@@ -11,10 +11,8 @@
 
 import type { DreamscapeNode } from "../../../types/quest";
 import { AtlasNode, type AtlasNodeView } from "../../components/atlas/AtlasNode";
-import {
-  dreamscapeIconUrl,
-  dreamsignIconUrl,
-} from "../../components/atlas/atlas-display";
+import { artRef } from "../../primitives/art";
+import { glyph } from "../../primitives/glyph";
 import type { TangoComponent } from "../registry";
 
 /** Builds a revealed atlas node in the given lifecycle state. */
@@ -52,7 +50,7 @@ function demoNodes(hoverAvailable: boolean): DemoNode[] {
   const bossSize = 112;
   // A signature-site badge glyph (Boxicons filled). Static presentation, not
   // game data — the atlas resolves these per site type at render time.
-  const shopBadge = "bxf bx-store-alt-2";
+  const shopBadge = glyph("bxf bx-store-alt-2");
 
   const specs: Array<{
     view: AtlasNodeView;
@@ -69,9 +67,9 @@ function demoNodes(hoverAvailable: boolean): DemoNode[] {
         size,
         isStarter: false,
         isBoss: false,
-        iconUrl: null,
-        siteBadgeIconClass: null,
-        knownDreamsignIconUrl: null,
+        iconRef: null,
+        siteBadgeGlyph: null,
+        knownDreamsignRef: null,
       },
     },
     {
@@ -82,9 +80,9 @@ function demoNodes(hoverAvailable: boolean): DemoNode[] {
         size,
         isStarter: false,
         isBoss: false,
-        iconUrl: dreamscapeIconUrl("hopes_end"),
-        siteBadgeIconClass: shopBadge,
-        knownDreamsignIconUrl: null,
+        iconRef: artRef.dreamscapeIcon("hopes_end"),
+        siteBadgeGlyph: shopBadge,
+        knownDreamsignRef: null,
       },
     },
     {
@@ -95,9 +93,9 @@ function demoNodes(hoverAvailable: boolean): DemoNode[] {
         size,
         isStarter: false,
         isBoss: false,
-        iconUrl: dreamscapeIconUrl("frostforge"),
-        siteBadgeIconClass: shopBadge,
-        knownDreamsignIconUrl: dreamsignIconUrl("acorn_gold.png"),
+        iconRef: artRef.dreamscapeIcon("frostforge"),
+        siteBadgeGlyph: shopBadge,
+        knownDreamsignRef: artRef.dreamsign("acorn_gold.png"),
       },
       hovered: hoverAvailable,
     },
@@ -109,9 +107,9 @@ function demoNodes(hoverAvailable: boolean): DemoNode[] {
         size,
         isStarter: false,
         isBoss: false,
-        iconUrl: dreamscapeIconUrl("tumbleleaf_village"),
-        siteBadgeIconClass: shopBadge,
-        knownDreamsignIconUrl: null,
+        iconRef: artRef.dreamscapeIcon("tumbleleaf_village"),
+        siteBadgeGlyph: shopBadge,
+        knownDreamsignRef: null,
       },
     },
     {
@@ -122,9 +120,9 @@ function demoNodes(hoverAvailable: boolean): DemoNode[] {
         size,
         isStarter: false,
         isBoss: false,
-        iconUrl: dreamscapeIconUrl("grid_city"),
-        siteBadgeIconClass: shopBadge,
-        knownDreamsignIconUrl: null,
+        iconRef: artRef.dreamscapeIcon("grid_city"),
+        siteBadgeGlyph: shopBadge,
+        knownDreamsignRef: null,
       },
     },
     {
@@ -135,9 +133,9 @@ function demoNodes(hoverAvailable: boolean): DemoNode[] {
         size: bossSize,
         isStarter: true,
         isBoss: false,
-        iconUrl: dreamscapeIconUrl("firstlight_meadow"),
-        siteBadgeIconClass: null,
-        knownDreamsignIconUrl: null,
+        iconRef: artRef.dreamscapeIcon("firstlight_meadow"),
+        siteBadgeGlyph: null,
+        knownDreamsignRef: null,
       },
     },
     {
@@ -148,9 +146,9 @@ function demoNodes(hoverAvailable: boolean): DemoNode[] {
         size: bossSize,
         isStarter: false,
         isBoss: true,
-        iconUrl: null,
-        siteBadgeIconClass: null,
-        knownDreamsignIconUrl: null,
+        iconRef: null,
+        siteBadgeGlyph: null,
+        knownDreamsignRef: null,
       },
     },
   ];

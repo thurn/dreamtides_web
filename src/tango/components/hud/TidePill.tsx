@@ -37,6 +37,8 @@ import { createPortal } from "react-dom";
 import { InfoCard } from "../overlay/InfoCard";
 import { richText } from "../card/rich-text";
 import { token } from "../../primitives/tokens";
+import { type Glyph } from "../../primitives/glyph";
+import { type TangoColor } from "../../primitives/color";
 
 const { usePressReveal, anchorRect, PressPopover, PRESS_SCALE } = InfoCard;
 
@@ -47,6 +49,10 @@ interface ToneSpec {
   bg: string;
   fg: string;
   bd: string;
+  /** The tone's accent color for the reveal disc, as a strict {@link TangoColor}
+   * (the pill's own `fg` is a resolved color-mix / token string, which is not a
+   * valid disc accent — the disc derives its ring/glow alpha via color-mix). */
+  disc: TangoColor;
 }
 
 /** The parent design system's tide colors, normalized to Tango tokens. */
@@ -55,31 +61,37 @@ const TONES: Record<string, ToneSpec> = {
     bg: token("--accent-tint"),
     fg: token("--accent-bright"),
     bd: token("--border-accent"),
+    disc: "accent-bright",
   },
   blue: {
     bg: `color-mix(in srgb, ${token("--energy")} 18%, transparent)`,
     fg: token("--primitive-energy-300"),
     bd: `color-mix(in srgb, ${token("--energy")} 45%, transparent)`,
+    disc: "energy-bright",
   },
   gold: {
     bg: `color-mix(in srgb, ${token("--primitive-gold-500")} 18%, transparent)`,
     fg: token("--primitive-gold-300"),
     bd: `color-mix(in srgb, ${token("--primitive-gold-500")} 45%, transparent)`,
+    disc: "gold-light",
   },
   green: {
     bg: `color-mix(in srgb, ${token("--positive")} 18%, transparent)`,
     fg: token("--positive"),
     bd: `color-mix(in srgb, ${token("--positive")} 45%, transparent)`,
+    disc: "positive",
   },
   rust: {
     bg: `color-mix(in srgb, ${token("--primitive-rust-500")} 20%, transparent)`,
     fg: `color-mix(in srgb, ${token("--primitive-rust-500")} 45%, white)`,
     bd: `color-mix(in srgb, ${token("--primitive-rust-500")} 50%, transparent)`,
+    disc: "#d8a98d",
   },
   red: {
     bg: `color-mix(in srgb, ${token("--danger")} 18%, transparent)`,
     fg: token("--primitive-ember-400"),
     bd: `color-mix(in srgb, ${token("--danger")} 45%, transparent)`,
+    disc: "#f87171",
   },
   // No dedicated wash token for this washed-out neutral fill; copied verbatim
   // from the source, matching SegmentedControl's track-background precedent.
@@ -87,6 +99,7 @@ const TONES: Record<string, ToneSpec> = {
     bg: "rgba(255, 255, 255, 0.06)",
     fg: token("--text-secondary"),
     bd: token("--border-mid"),
+    disc: "text-secondary",
   },
 };
 
@@ -101,10 +114,10 @@ export interface TidePillProps {
   description: string;
   /** Tide color. */
   tone?: "violet" | "blue" | "gold" | "green" | "rust" | "red" | "neutral";
-  /** Leading icon: a Boxicons class string (e.g. `"bxf bx-water"`). The pill
-   * renders the `<i>` itself at a fixed size so every tide icon matches, and it
-   * heads the InfoCard reveal as the tide's glyph disc. */
-  icon?: string;
+  /** Leading icon: a {@link Glyph} (e.g. `GLYPHS.water`). The pill renders the
+   * `<i>` itself at a fixed size so every tide icon matches, and it heads the
+   * InfoCard reveal as the tide's glyph disc. */
+  icon?: Glyph;
   /** Height/scale. Default 'md'. */
   size?: TidePillSize;
   /**
@@ -168,7 +181,7 @@ export function TidePill({
       <InfoCard
         variant="icon"
         glyph={icon}
-        discAccent={spec.fg}
+        discAccent={spec.disc}
         title={label}
         body={richText.plain(description)}
       />

@@ -1,0 +1,69 @@
+// Typed glyph values for the strict Tango API.
+//
+// A glyph is an icon-font class (Boxicons v3 `bxf bx-…` / `bx bx-…`, or a
+// Font-Awesome `fa-…`). Its value space is genuinely open — an icon font ships
+// thousands of classes — so, unlike a color, no closed union can name every
+// possible glyph. Strictness here means: a component takes a `Glyph`, not a
+// `string`, and a `Glyph` is obtained in exactly two ways —
+//
+//   - `GLYPHS.<name>` — the design system's own named vocabulary (the resource
+//     marks, the UI affordance icons). This is what tango components and their
+//     callers use; it carries no raw class strings into call sites.
+//   - `glyph(className)` — the single documented boundary for a class that
+//     arrives from GAME DATA (a site-type icon defined in the atlas generator's
+//     metadata table, resolved per node). Used only where such a string crosses
+//     into the design system, never as a general-purpose wrapper.
+//
+// A `Glyph` IS its class string at runtime (a branded string), so it drops
+// straight onto `className={glyph}` / `<i className={glyph} />`.
+
+/** An icon-font class string that names a glyph. Obtain via {@link GLYPHS} or {@link glyph}. */
+export type Glyph = string & { readonly __tangoGlyph: unique symbol };
+
+/** Brand a raw icon-font class string as a {@link Glyph} (internal helper). */
+function g(className: string): Glyph {
+  return className as unknown as Glyph;
+}
+
+/**
+ * The design system's named glyph vocabulary. Consolidates the icon-font
+ * classes that were previously duplicated as loose `*_ICON_CLASS` constants
+ * across GlowIcon / RulesText / ResourceChip / Button so a mark reads the same
+ * everywhere. Reference these by name; do not pass a raw class.
+ */
+export const GLYPHS = {
+  // Resource marks (Boxicons v3 filled).
+  essence: g("bxf bx-crypto"),
+  energy: g("bxf bx-fire-alt"),
+  spark: g("bxf bx-sparkles"),
+  /** The single-star spark, cleaner than `spark` at small inline sizes. */
+  sparkInline: g("bxf bx-sparkle"),
+  points: g("bxf bx-star-circle"),
+  counter: g("bxf bx-hourglass"),
+  lunar: g("bxf bx-moon"),
+  /** Activated-ability lightning bolt. */
+  bolt: g("bxf bx-bolt"),
+  /** Leading caret used before a resolved-ability clause in rules text. */
+  caretRight: g("bxf bx-caret-right"),
+
+  // Domain / UI glyphs.
+  water: g("bxf bx-water"),
+  affiliationRow: g("bxf bx-rectangle-vertical"),
+  starterFlag: g("fa-solid fa-flag"),
+
+  // Affordance glyphs.
+  check: g("bx bx-check"),
+  lock: g("bx bx-lock"),
+  close: g("bx bx-x"),
+  closeFilled: g("bxf bx-x"),
+} as const;
+
+/**
+ * Brand a glyph class that arrives from GAME DATA (e.g. a site-type icon from
+ * the atlas generator's metadata table) as a {@link Glyph}. This is the one
+ * sanctioned boundary between untyped game-data icon strings and the typed UI;
+ * prefer a {@link GLYPHS} name for the design system's own marks.
+ */
+export function glyph(className: string): Glyph {
+  return g(className);
+}

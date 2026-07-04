@@ -129,4 +129,52 @@ describe("Tango strict-API contract (resolved surface)", () => {
     }
     expect(offenders).toEqual([]);
   });
+
+  // A glyph, color, image, wash, or filter is a NAMED value (a Glyph from the
+  // registry, a TangoColor role / hex, an ArtRef, a Wash / MediaFilter), never
+  // an arbitrary class / CSS / URL string. This guards those props on the
+  // RESOLVED surface so one can't regress to a bare `string` — the same escape
+  // hatch as `style`, one value at a time. (Text props — title, label, blurb,
+  // meta, value — are legitimately strings and are not in this set.)
+  const VALUE_PROP_NAMES = new Set([
+    "glyph",
+    "leadGlyph",
+    "icon",
+    "iconClass",
+    "siteBadgeGlyph",
+    "image",
+    "art",
+    "portrait",
+    "iconRef",
+    "knownDreamsignRef",
+    "wash",
+    "accent",
+    "discAccent",
+    "tintColor",
+    "highlightColor",
+    "selectionColor",
+    "color",
+    "glowFilter",
+    "imageFilter",
+  ]);
+
+  it("no glyph/color/image/wash/filter prop is a bare `string`", () => {
+    const offenders = [];
+    for (const [component, props] of Object.entries(surface)) {
+      for (const prop of props ?? []) {
+        if (!VALUE_PROP_NAMES.has(prop.name)) {
+          continue;
+        }
+        // Strip a trailing `| undefined` so an optional typed prop still reads
+        // as its value type, and flag only a resolved bare `string`.
+        const resolved = (prop.tsType ?? "")
+          .replace(/\s*\|\s*undefined\s*$/, "")
+          .trim();
+        if (resolved === "string") {
+          offenders.push(`${component}.${prop.name}`);
+        }
+      }
+    }
+    expect(offenders).toEqual([]);
+  });
 });

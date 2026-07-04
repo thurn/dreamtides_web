@@ -43,6 +43,8 @@ import { InfoCard } from "../overlay/InfoCard";
 import type { AnchorRect } from "../overlay/InfoCard";
 import { richText } from "../card/rich-text";
 import { token } from "../../primitives/tokens";
+import { type ArtRef, resolveArtRef } from "../../primitives/art";
+import { type Wash } from "../../primitives/media";
 import "./quest-status-bar.css";
 
 const { PressPopover, usePressReveal, anchorRect, PRESS_SCALE } = InfoCard;
@@ -59,7 +61,8 @@ const DS_SHADOW =
 export interface QsbDreamsign {
   id: string | number;
   name: string;
-  art: string;
+  /** The dreamsign art, as an {@link ArtRef}. */
+  art: ArtRef;
   ability?: string;
 }
 
@@ -67,9 +70,10 @@ export interface QsbDreamsign {
 export interface QsbDreamcaller {
   name: string;
   epithet?: string;
-  /** Resolved portrait art URL. Required — a docked Dreamcaller always has art. */
-  portrait: string;
-  wash?: string;
+  /** The portrait art as an {@link ArtRef}. Required — a docked Dreamcaller always has art. */
+  portrait: ArtRef;
+  /** A named {@link Wash} painted behind the hero-reveal portrait. */
+  wash?: Wash;
   ability?: string;
 }
 
@@ -144,7 +148,7 @@ function QsbSignObject({
       }}
     >
       <img
-        src={sign.art}
+        src={resolveArtRef(sign.art)}
         alt=""
         draggable={false}
         style={{
@@ -164,7 +168,7 @@ function QsbSignObject({
             <InfoCard
               variant="object"
               image={sign.art}
-              imageFilter={DS_SHADOW}
+              imageFilter="dreamsign-portrait"
               title={sign.name}
               body={sign.ability ? richText.rules(sign.ability) : undefined}
             />
@@ -214,7 +218,7 @@ function QsbOverflowStack({
       {signs.map((s, i) => (
         <img
           key={s.id}
-          src={s.art}
+          src={resolveArtRef(s.art)}
           alt=""
           draggable={false}
           style={{
@@ -458,7 +462,7 @@ function QsbDreamcallerBust({
     >
       {dreamcaller && (
         <img
-          src={dreamcaller.portrait}
+          src={resolveArtRef(dreamcaller.portrait)}
           alt={dreamcaller.name}
           style={{
             width: "100%",
@@ -478,7 +482,7 @@ function QsbDreamcallerBust({
             <InfoCard
               variant="hero"
               image={dreamcaller.portrait}
-              imagePos="50% 6%"
+              imageCrop="top"
               wash={dreamcaller.wash}
               title={
                 dreamcaller.epithet

@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import type { DreamscapeNode } from "../../../types/quest";
 import { BOSS_DISPLAY, ROUND_FRAME_URL } from "./atlas-display";
+import { type Glyph } from "../../primitives/glyph";
+import { type ArtRef, resolveArtRef } from "../../primitives/art";
 import "./atlas.css";
 
 /**
@@ -17,12 +19,12 @@ export interface AtlasNodeView {
   size: number;
   isStarter: boolean;
   isBoss: boolean;
-  /** Resolved dreamscape icon URL, or `null` while unrevealed. */
-  iconUrl: string | null;
-  /** Boxicons/Font Awesome class for the signature-site badge, or `null`. */
-  siteBadgeIconClass: string | null;
-  /** Pre-revealed known dreamsign icon URL, or `null` when the node carries none. */
-  knownDreamsignIconUrl: string | null;
+  /** The dreamscape icon art as an {@link ArtRef}, or `null` while unrevealed. */
+  iconRef: ArtRef | null;
+  /** The signature-site badge {@link Glyph}, or `null`. */
+  siteBadgeGlyph: Glyph | null;
+  /** The pre-revealed known dreamsign icon as an {@link ArtRef}, or `null`. */
+  knownDreamsignRef: ArtRef | null;
 }
 
 interface AtlasNodeProps {
@@ -62,11 +64,11 @@ export function AtlasNode({
         draggable={false}
       />
     );
-  } else if (view.iconUrl !== null) {
+  } else if (view.iconRef !== null) {
     face = (
       <img
         className="frame-img"
-        src={view.iconUrl}
+        src={resolveArtRef(view.iconRef)}
         alt={node.biomeName}
         draggable={false}
       />
@@ -89,7 +91,7 @@ export function AtlasNode({
     `${node.biomeName === "" ? (isBoss ? BOSS_DISPLAY.place : "Unrevealed dreamscape") : node.biomeName} - ${node.state}` +
     (isStarter ? " - starting dreamscape" : "") +
     (isBoss ? " - final boss" : "") +
-    (view.knownDreamsignIconUrl !== null ? " - known dreamsign here" : "");
+    (view.knownDreamsignRef !== null ? " - known dreamsign here" : "");
 
   return (
     <div
@@ -101,7 +103,7 @@ export function AtlasNode({
       data-node-state={node.state}
       data-node-boss={isBoss ? "true" : undefined}
       data-node-starting={isStarter ? "true" : undefined}
-      data-node-known-dreamsign={view.knownDreamsignIconUrl !== null ? "true" : undefined}
+      data-node-known-dreamsign={view.knownDreamsignRef !== null ? "true" : undefined}
       onMouseEnter={() => {
         onEnter(node.id);
       }}
@@ -123,10 +125,10 @@ export function AtlasNode({
       <div className="node-glow" />
       <div className="node-art">{face}</div>
 
-      {view.siteBadgeIconClass !== null && (
+      {view.siteBadgeGlyph !== null && (
         <div className="site-badges">
           <div className="site-badge">
-            <i className={`${view.siteBadgeIconClass} site-badge-glyph`} aria-hidden="true" />
+            <i className={`${view.siteBadgeGlyph} site-badge-glyph`} aria-hidden="true" />
           </div>
         </div>
       )}
@@ -143,9 +145,9 @@ export function AtlasNode({
         </div>
       )}
 
-      {view.knownDreamsignIconUrl !== null && (
+      {view.knownDreamsignRef !== null && (
         <div className="known-badge" title="Known dreamsign">
-          <img src={view.knownDreamsignIconUrl} alt="" draggable={false} />
+          <img src={resolveArtRef(view.knownDreamsignRef)} alt="" draggable={false} />
         </div>
       )}
     </div>

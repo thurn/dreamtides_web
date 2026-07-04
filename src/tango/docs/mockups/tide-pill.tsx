@@ -12,6 +12,7 @@
 import { useRef } from "react";
 import { dreamscapeSceneUrl } from "../../components/atlas/atlas-display";
 import { TidePill, type TidePillProps } from "../../components/hud/TidePill";
+import { GLYPHS } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
 import { sceneRoot } from "./scene";
 
@@ -172,7 +173,7 @@ export function TidePillMockup() {
                 <TidePill
                   key={tide.id}
                   tone={tide.tone}
-                  icon="bxf bx-water"
+                  icon={GLYPHS.water}
                   label={tide.displayName}
                   description={tide.description}
                   stageRef={stageRef}

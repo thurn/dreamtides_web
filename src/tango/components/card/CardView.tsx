@@ -16,6 +16,7 @@ import {
 import { formatTypeLine } from "./card-text";
 import { computeCardTextScale } from "./card-display-scale";
 import { BOLT_ICON_CLASS } from "../controls/GlowIcon";
+import { type TangoColor, resolveColor } from "../../primitives/color";
 import { CardStatOrb } from "./CardStatOrb";
 import { TRANSFIGURATION_ICONS } from "../../../runtime/transfiguration-display";
 import type { CardTransfigurationDisplay } from "../../../runtime/transfiguration-display";
@@ -28,7 +29,7 @@ import { useFitText } from "../controls/useFitText";
  * is conveyed by the text-box accent (neutral black chrome for characters, a
  * purple accent for events) rather than a colored border.
  */
-const SELECTION_DEFAULT_COLOR = "#f97316";
+const SELECTION_DEFAULT_COLOR: TangoColor = "selected";
 
 /**
  * Tints for a transfiguration-changed corner stat digit. These are chosen for
@@ -711,7 +712,8 @@ export interface CardViewProps {
   card: CardData | FrozenCardData;
   onClick?: () => void;
   selected?: boolean;
-  selectionColor?: string;
+  /** The selection-ring {@link TangoColor}. Default the `"selected"` role. */
+  selectionColor?: TangoColor;
   /**
    * When set, paints the card as transfigured: a small colored gem follows the
    * name, the changed corner stat(s) take the tint, and only the added/changed
@@ -872,9 +874,10 @@ export function GameCard({
   // corners.
   const shadowLayers: string[] = ["0 4px 14px rgba(0, 0, 0, 0.55)"];
   if (selected) {
+    const selectionCss = resolveColor(selectionColor);
     shadowLayers.unshift(
-      `0 0 0 3px ${selectionColor}`,
-      `0 0 12px ${selectionColor}`,
+      `0 0 0 3px ${selectionCss}`,
+      `0 0 12px ${selectionCss}`,
     );
   }
 

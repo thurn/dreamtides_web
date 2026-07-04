@@ -1,5 +1,6 @@
 import { type CSSProperties } from "react";
 import { HoverPopover } from "../overlay/HoverPopover";
+import { type HexColor } from "../../primitives/color";
 
 /**
  * A circular numeric badge ("pip") used on card corners for stats like
@@ -58,8 +59,8 @@ interface PipBadgeProps {
  * - `ENERGY_PIP_COLOR`: teal/cyan, distinct from gold so the two badges
  *   read as different stats at a glance.
  */
-export const SPARK_PIP_COLOR = "#facc15";
-export const ENERGY_PIP_COLOR = "#0ea5e9";
+export const SPARK_PIP_COLOR: HexColor = "#facc15";
+export const ENERGY_PIP_COLOR: HexColor = "#0ea5e9";
 
 /**
  * Background fill per variant. Read from the shared resource color tokens
