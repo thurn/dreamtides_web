@@ -14,7 +14,7 @@ import tangoNoUntokenizedLengths from "./eslint-rules/no-untokenized-lengths.js"
 
 // One shared plugin object: flat config rejects two config blocks that bind the
 // same plugin name to different objects, and the tango rules apply to more than
-// one file scope (src/tango/** and the adapter layer in src/screens/tango/**).
+// one file scope (src/tango/** and the adapter layer in src/screens/tango_adapters/**).
 const tangoPlugin = {
   rules: {
     "no-external-ui-imports": tangoNoExternalUiImports,
@@ -58,10 +58,10 @@ export default tseslint.config(
   },
   {
     // The design-system tier plus the adapter/builder layer in
-    // src/screens/tango/. Each rule scopes itself further by path (e.g. the
+    // src/screens/tango_adapters/. Each rule scopes itself further by path (e.g. the
     // visual rules exempt primitives/components/docs; screen-file-taxonomy
-    // only acts on src/screens/tango/), so the block can bind them broadly.
-    files: ["src/tango/**/*.{ts,tsx}", "src/screens/tango/**/*.{ts,tsx}"],
+    // only acts on src/screens/tango_adapters/), so the block can bind them broadly.
+    files: ["src/tango/**/*.{ts,tsx}", "src/screens/tango_adapters/**/*.{ts,tsx}"],
     plugins: { tango: tangoPlugin },
     rules: {
       "tango/no-external-ui-imports": "error",
@@ -81,7 +81,7 @@ export default tseslint.config(
     // callback wiring, one screen render. Mapping logic belongs in the pure
     // *-view-model module; `thin-adapters` enforces the shape and `max-lines`
     // is the backstop against logic hiding inside the component body.
-    files: ["src/screens/tango/**/*Adapter.tsx"],
+    files: ["src/screens/tango_adapters/**/*Adapter.tsx"],
     plugins: { tango: tangoPlugin },
     rules: {
       "tango/thin-adapters": "error",
@@ -95,7 +95,7 @@ export default tseslint.config(
     // View-model builders are pure functions from domain data to a screen's
     // view types: unit-testable with plain fixtures, no React, no live state.
     // The adapter acquires state and passes it in as arguments.
-    files: ["src/screens/tango/**/*-view-model.ts"],
+    files: ["src/screens/tango_adapters/**/*-view-model.ts"],
     rules: {
       "no-restricted-imports": [
         "error",

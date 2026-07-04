@@ -10,10 +10,10 @@ describe("toRepoRelativePosix (screen-file-taxonomy)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/screens/tango/registry.tsx",
+        "/Users/x/quest_prototype/src/screens/tango_adapters/registry.tsx",
         "/Users/x/quest_prototype",
       ),
-    ).toBe("src/screens/tango/registry.tsx");
+    ).toBe("src/screens/tango_adapters/registry.tsx");
   });
 });
 
@@ -53,26 +53,26 @@ ruleTester.run("screen-file-taxonomy", rule, {
   valid: [
     {
       name: "the registry",
-      filename: "src/screens/tango/registry.tsx",
+      filename: "src/screens/tango_adapters/registry.tsx",
       code: `export const x = 1;`,
     },
     {
       name: "an adapter",
-      filename: "src/screens/tango/HomeScreenAdapter.tsx",
+      filename: "src/screens/tango_adapters/HomeScreenAdapter.tsx",
       code: `export const x = 1;`,
     },
     {
       name: "a view-model builder and its test",
-      filename: "src/screens/tango/home-view-model.ts",
+      filename: "src/screens/tango_adapters/home-view-model.ts",
       code: `export const x = 1;`,
     },
     {
       name: "nested dirs follow the same taxonomy",
-      filename: "src/screens/tango/atlas/atlas-view-model.test.ts",
+      filename: "src/screens/tango_adapters/atlas/atlas-view-model.test.ts",
       code: `export const x = 1;`,
     },
     {
-      name: "files outside src/screens/tango are inert",
+      name: "files outside src/screens/tango_adapters are inert",
       filename: "src/screens/LegacyScreen.tsx",
       code: `export const x = 1;`,
     },
@@ -80,25 +80,25 @@ ruleTester.run("screen-file-taxonomy", rule, {
   invalid: [
     {
       name: "a helpers module has no sanctioned role",
-      filename: "src/screens/tango/home-helpers.ts",
+      filename: "src/screens/tango_adapters/home-helpers.ts",
       code: `export const x = 1;`,
       errors: [{ messageId: "unknownRole" }],
     },
     {
       name: "a shared component beside the adapters",
-      filename: "src/screens/tango/SharedPanel.tsx",
+      filename: "src/screens/tango_adapters/SharedPanel.tsx",
       code: `export const x = 1;`,
       errors: [{ messageId: "unknownRole" }],
     },
     {
       name: "a .tsx view-model dodges the purity block's .ts glob",
-      filename: "src/screens/tango/home-view-model.tsx",
+      filename: "src/screens/tango_adapters/home-view-model.tsx",
       code: `export const x = 1;`,
       errors: [{ messageId: "unknownRole" }],
     },
     {
       name: "nested unsanctioned files are caught too",
-      filename: "src/screens/tango/atlas/format.ts",
+      filename: "src/screens/tango_adapters/atlas/format.ts",
       code: `export const x = 1;`,
       errors: [{ messageId: "unknownRole" }],
     },

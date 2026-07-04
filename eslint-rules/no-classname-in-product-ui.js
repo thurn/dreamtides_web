@@ -16,7 +16,7 @@ import path from "node:path";
  * its subtree; that exact value is allowed.
  *
  * SCOPE. Files under `src/tango/` outside {@link EXEMPT_PREFIXES}, plus the
- * adapter layer in `src/screens/tango/` (an adapter renders no chrome of its
+ * adapter layer in `src/screens/tango_adapters/` (an adapter renders no chrome of its
  * own, so it has no business classing anything). Components, primitives, and
  * the doc site legitimately author class-based styling and are exempt.
  */
@@ -38,7 +38,7 @@ export function toRepoRelativePosix(absolutePath, cwd) {
 
 /** True when this rule governs the given repo-relative POSIX path. */
 export function isProductUiFile(fileRelative) {
-  if (fileRelative.startsWith("src/screens/tango/")) {
+  if (fileRelative.startsWith("src/screens/tango_adapters/")) {
     return true;
   }
   return (

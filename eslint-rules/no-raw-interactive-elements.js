@@ -21,7 +21,7 @@ import path from "node:path";
  *     `<button>`s.
  * Everywhere else under `src/tango/` — above all `src/tango/screens/` — a raw
  * interactive element is an error, and so is the adapter/builder layer in
- * `src/screens/tango/`: compose `Button` / `SegmentedControl` / `Pressable`
+ * `src/screens/tango_adapters/`: compose `Button` / `SegmentedControl` / `Pressable`
  * instead. All other files are a no-op.
  *
  * The rule also catches the hand-rolled button: a non-interactive intrinsic
@@ -147,7 +147,7 @@ const rule = {
     const inTango =
       fileRelative.startsWith("src/tango/") &&
       !EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix));
-    if (!inTango && !fileRelative.startsWith("src/screens/tango/")) {
+    if (!inTango && !fileRelative.startsWith("src/screens/tango_adapters/")) {
       return {};
     }
 

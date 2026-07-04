@@ -21,7 +21,7 @@ describe("toRepoRelativePosix (no-untokenized-lengths)", () => {
 describe("isProductUiFile (no-untokenized-lengths)", () => {
   it("covers the product tier and the adapter layer", () => {
     expect(isProductUiFile("src/tango/screens/HomeScreen.tsx")).toBe(true);
-    expect(isProductUiFile("src/screens/tango/HomeScreenAdapter.tsx")).toBe(
+    expect(isProductUiFile("src/screens/tango_adapters/HomeScreenAdapter.tsx")).toBe(
       true,
     );
   });
@@ -93,7 +93,7 @@ ruleTester.run("no-untokenized-lengths", rule, {
     },
     {
       name: "view-model data with CSS-ish field names is not a style object",
-      filename: "src/screens/tango/atlas-view-model.ts",
+      filename: "src/screens/tango_adapters/atlas-view-model.ts",
       code: `export function build() { return { top: ${ON_SCALE}, left: 340, gap: 3 }; }`,
     },
     {
@@ -160,7 +160,7 @@ ruleTester.run("no-untokenized-lengths", rule, {
     },
     {
       name: "adapters are covered too",
-      filename: "src/screens/tango/HomeScreenAdapter.tsx",
+      filename: "src/screens/tango_adapters/HomeScreenAdapter.tsx",
       code: `const el = <div style={{ gap: ${ON_SCALE} }} />;`,
       output: `const el = <div style={{ gap: "var(${ON_SCALE_TOKEN})" }} />;`,
       errors: [{ messageId: "rawSpacingWithToken" }],

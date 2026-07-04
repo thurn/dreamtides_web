@@ -25,7 +25,7 @@ import path from "node:path";
  *
  * SCOPE. The product-UI tier: files under `src/tango/` outside
  * {@link EXEMPT_PREFIXES}, plus the adapter/builder layer in
- * `src/screens/tango/`, mirroring `no-hardcoded-values`.
+ * `src/screens/tango_adapters/`, mirroring `no-hardcoded-values`.
  */
 
 /** Repo-relative POSIX dir prefixes exempt from the check. */
@@ -45,7 +45,7 @@ export function toRepoRelativePosix(absolutePath, cwd) {
 
 /** True when this rule governs the given repo-relative POSIX path. */
 export function isProductUiFile(fileRelative) {
-  if (fileRelative.startsWith("src/screens/tango/")) {
+  if (fileRelative.startsWith("src/screens/tango_adapters/")) {
     return true;
   }
   return (

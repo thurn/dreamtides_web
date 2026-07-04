@@ -21,10 +21,10 @@ describe("toRepoRelativePosix (valid-token-references)", () => {
 describe("isProductUiFile", () => {
   it("covers screens, composition files, and the adapter layer", () => {
     expect(isProductUiFile("src/tango/screens/HomeScreen.tsx")).toBe(true);
-    expect(isProductUiFile("src/screens/tango/HomeScreenAdapter.tsx")).toBe(
+    expect(isProductUiFile("src/screens/tango_adapters/HomeScreenAdapter.tsx")).toBe(
       true,
     );
-    expect(isProductUiFile("src/screens/tango/home-view-model.ts")).toBe(true);
+    expect(isProductUiFile("src/screens/tango_adapters/home-view-model.ts")).toBe(true);
   });
   it("exempts primitives, components, docs, and non-tango files", () => {
     expect(isProductUiFile("src/tango/primitives/tokens.ts")).toBe(false);
@@ -55,7 +55,7 @@ const ruleTester = new RuleTester({
 });
 
 const SCREEN = "src/tango/screens/HomeScreen.tsx";
-const ADAPTER = "src/screens/tango/HomeScreenAdapter.tsx";
+const ADAPTER = "src/screens/tango_adapters/HomeScreenAdapter.tsx";
 
 // Derive a real token from the live stylesheet so the tests never pin a
 // specific token NAME (token vocabulary is design data, subject to change).

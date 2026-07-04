@@ -90,8 +90,8 @@ ruleTester.run("no-primitive-tokens", rule, {
       errors: [{ messageId: "primitiveInString" }],
     },
     {
-      name: "the adapter/builder layer in src/screens/tango is covered too",
-      filename: "src/screens/tango/foo-view-model.ts",
+      name: "the adapter/builder layer in src/screens/tango_adapters is covered too",
+      filename: "src/screens/tango_adapters/foo-view-model.ts",
       code: `const s = { color: token("--primitive-violet-400") };`,
       errors: [{ messageId: "primitiveToken" }],
     },

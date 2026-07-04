@@ -205,21 +205,21 @@ incantations, the registry/QA steps) that this overview compresses:
   (`FooView`, `FooScreenProps`). Presentation logic and local UI state
   (hover, selection, pan/zoom, animation phase) belong here — most of the
   screen's code, by volume, is this file.
-- **View-model builder** (`src/screens/tango/foo-view-model.ts`) — pure,
+- **View-model builder** (`src/screens/tango_adapters/foo-view-model.ts`) — pure,
   exported, unit-tested functions mapping domain data to the screen's view
   types (`buildFooViewModel(...)`). Every mapping rule — capping,
   suppression, display-copy fallbacks, color→variant tables — lives here,
   tested with plain fixtures. Deterministic in its arguments; no `react`, no
   `src/state` (lint-enforced). A rule that is really a *domain* rule belongs
   in `src/data/` instead, which both the builder and Tango may import.
-- **Adapter** (`src/screens/tango/FooScreenAdapter.tsx`) — wiring only:
+- **Adapter** (`src/screens/tango_adapters/FooScreenAdapter.tsx`) — wiring only:
   acquire state, mint per-mount randomness (offers, seeds), call the builder
   inside `useMemo`, wire callbacks to mutations, render the screen. The
   `thin-adapters` rule errors on module-level helpers, mapping tables, extra
   exports, and any `src/tango/` import other than `src/tango/screens/`. If
   adapter code seems worth testing, it belongs in the builder.
 
-Register the adapter in `src/screens/tango/registry.tsx`. **Registration is
+Register the adapter in `src/screens/tango_adapters/registry.tsx`. **Registration is
 launch**: `?ui=tango` is the default variant, so a registry entry serves the
 screen to production immediately — QA to the production bar first
 (`?ui=legacy` is the rollback flag).

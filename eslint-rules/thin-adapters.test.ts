@@ -11,27 +11,27 @@ describe("toRepoRelativePosix (thin-adapters)", () => {
   it("returns a clean repo-relative path", () => {
     expect(
       toRepoRelativePosix(
-        "/Users/x/quest_prototype/src/screens/tango/FooAdapter.tsx",
+        "/Users/x/quest_prototype/src/screens/tango_adapters/FooAdapter.tsx",
         "/Users/x/quest_prototype",
       ),
-    ).toBe("src/screens/tango/FooAdapter.tsx");
+    ).toBe("src/screens/tango_adapters/FooAdapter.tsx");
   });
 });
 
 describe("isAdapterFile", () => {
-  it("matches *Adapter.tsx under src/screens/tango/", () => {
-    expect(isAdapterFile("src/screens/tango/AtlasScreenAdapter.tsx")).toBe(true);
+  it("matches *Adapter.tsx under src/screens/tango_adapters/", () => {
+    expect(isAdapterFile("src/screens/tango_adapters/AtlasScreenAdapter.tsx")).toBe(true);
   });
   it("ignores the registry, view-model modules, and tests", () => {
-    expect(isAdapterFile("src/screens/tango/registry.tsx")).toBe(false);
-    expect(isAdapterFile("src/screens/tango/quest-start-view-model.ts")).toBe(
+    expect(isAdapterFile("src/screens/tango_adapters/registry.tsx")).toBe(false);
+    expect(isAdapterFile("src/screens/tango_adapters/quest-start-view-model.ts")).toBe(
       false,
     );
     expect(
-      isAdapterFile("src/screens/tango/QuestStartScreenAdapter.test.tsx"),
+      isAdapterFile("src/screens/tango_adapters/QuestStartScreenAdapter.test.tsx"),
     ).toBe(false);
   });
-  it("ignores Adapter-named files outside src/screens/tango/", () => {
+  it("ignores Adapter-named files outside src/screens/tango_adapters/", () => {
     expect(isAdapterFile("src/components/FooAdapter.tsx")).toBe(false);
   });
 });
@@ -65,7 +65,7 @@ const ruleTester = new RuleTester({
   },
 });
 
-const ADAPTER = "src/screens/tango/FooScreenAdapter.tsx";
+const ADAPTER = "src/screens/tango_adapters/FooScreenAdapter.tsx";
 
 const MINIMAL_ADAPTER = `
 import { useQuest } from "../../state/quest-context";
@@ -106,16 +106,16 @@ export function FooScreenAdapter() {
     },
     {
       name: "non-adapter files in the directory are inert",
-      filename: "src/screens/tango/registry.tsx",
+      filename: "src/screens/tango_adapters/registry.tsx",
       code: `export const table = { a: () => 1 };`,
     },
     {
       name: "view-model modules are inert (helpers belong there)",
-      filename: "src/screens/tango/foo-view-model.ts",
+      filename: "src/screens/tango_adapters/foo-view-model.ts",
       code: `export function buildFooViewModel(x: number) { return { x }; }`,
     },
     {
-      name: "files outside src/screens/tango are inert",
+      name: "files outside src/screens/tango_adapters are inert",
       filename: "src/components/FooAdapter.tsx",
       code: `export const helper = () => 1; export function FooAdapter() { return null; }`,
     },

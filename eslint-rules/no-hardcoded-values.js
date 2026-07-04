@@ -23,7 +23,7 @@ import { colorTokenFor } from "./tango-token-index.js";
  *     backdrops, and the doc chrome is tooling, not product UI.
  * Everywhere else under `src/tango/` — above all `src/tango/screens/`, the
  * migrated product screens — a hardcoded color is an error, and so is the
- * adapter/builder layer in `src/screens/tango/` (a color minted in an adapter
+ * adapter/builder layer in `src/screens/tango_adapters/` (a color minted in an adapter
  * or view-model flows straight into the screen). All other files are a no-op.
  *
  * Only NUMERIC color literals (hex / `rgb(a)` / `hsl(a)`) are flagged: they are
@@ -80,7 +80,7 @@ const rule = {
     const inTango =
       fileRelative.startsWith("src/tango/") &&
       !EXEMPT_PREFIXES.some((prefix) => fileRelative.startsWith(prefix));
-    if (!inTango && !fileRelative.startsWith("src/screens/tango/")) {
+    if (!inTango && !fileRelative.startsWith("src/screens/tango_adapters/")) {
       return {};
     }
 

@@ -52,7 +52,7 @@ state (hover, selection, animation phase) lives here.
   infrastructure (`src/data`, `src/types`, `src/logging`, `src/runtime`) —
   the boundary is lint-enforced.
 
-## 2. The view-model builder — `src/screens/tango/foo-view-model.ts`
+## 2. The view-model builder — `src/screens/tango_adapters/foo-view-model.ts`
 
 Pure, exported, React-free functions mapping domain data to the screen's view
 types: `buildFooViewModel(...)`. Every mapping rule — capping, suppression,
@@ -62,14 +62,14 @@ its arguments. Lint bans `react` and `src/state` imports; the file must be
 
 Export every non-trivial helper individually so the test can hit it directly.
 
-## 3. Builder tests — `src/screens/tango/foo-view-model.test.ts`
+## 3. Builder tests — `src/screens/tango_adapters/foo-view-model.test.ts`
 
 Plain-fixture vitest unit tests beside the builder (see
 `quest-start-view-model.test.ts` for the style). Build fixtures by hand or
 derive them from live content; per AGENTS.md, never assert specific
 production TOML values.
 
-## 4. The adapter — `src/screens/tango/FooScreenAdapter.tsx`
+## 4. The adapter — `src/screens/tango_adapters/FooScreenAdapter.tsx`
 
 Wiring only, ≤120 lines (lint-enforced): acquire state with `useQuest()`,
 call the builder inside `useMemo` keyed on exactly its arguments, wire
@@ -111,8 +111,8 @@ testing-library). Two required incantations, copied from
 
 - Add the case to `tangoScreenFor` (or `tangoSiteScreenFor`, which receives
   the `SiteState` and passes it to the adapter as a prop) in
-  `src/screens/tango/registry.tsx`.
-- Update `src/screens/tango/registry.test.tsx`: the migrated screen moves
+  `src/screens/tango_adapters/registry.tsx`.
+- Update `src/screens/tango_adapters/registry.test.tsx`: the migrated screen moves
   from the asserted-null list to an asserted-non-null case. This test breaks
   on every migration **by design** — it is the reminder that a registry entry
   ships the screen.

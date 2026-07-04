@@ -3,7 +3,7 @@
 // reports the chosen Dreamcaller through `onPick`, holding no quest state and
 // touching no navigation. The adapter that owns `useQuest()` — building the
 // offer, minting the run seed, and starting the quest — lives OUTSIDE Tango
-// (`src/screens/tango/QuestStartScreenAdapter.tsx`); the Tango isolation
+// (`src/screens/tango_adapters/QuestStartScreenAdapter.tsx`); the Tango isolation
 // boundary forbids a screen here from reaching app state directly.
 //
 // Composed entirely from Tango: the pickable card is the `Pressable` primitive,

@@ -1,7 +1,7 @@
 import path from "node:path";
 
 /**
- * Every file in `src/screens/tango/` must be one of the roles the migrated
+ * Every file in `src/screens/tango_adapters/` must be one of the roles the migrated
  * screen architecture defines, because the OTHER rules select their targets
  * by filename: `thin-adapters` + `max-lines` fire on `*Adapter.tsx`, and the
  * builder-purity import block fires on `*-view-model.ts`. Without this rule
@@ -46,12 +46,12 @@ const rule = {
     type: "problem",
     docs: {
       description:
-        "src/screens/tango/ holds only registry, *Adapter.tsx, and *-view-model.ts files (plus their tests); the screen architecture's rules select targets by filename, so any other file escapes them.",
+        "src/screens/tango_adapters/ holds only registry, *Adapter.tsx, and *-view-model.ts files (plus their tests); the screen architecture's rules select targets by filename, so any other file escapes them.",
     },
     schema: [],
     messages: {
       unknownRole:
-        "'{{basename}}' is not a sanctioned file role in src/screens/tango/ (registry.tsx, *Adapter.tsx, *-view-model.ts, or their tests). Pure mapping belongs in a *-view-model.ts module, presentation in the Tango screen (src/tango/screens/), and domain rules in src/data/.",
+        "'{{basename}}' is not a sanctioned file role in src/screens/tango_adapters/ (registry.tsx, *Adapter.tsx, *-view-model.ts, or their tests). Pure mapping belongs in a *-view-model.ts module, presentation in the Tango screen (src/tango/screens/), and domain rules in src/data/.",
     },
   },
 
@@ -63,7 +63,7 @@ const rule = {
     const cwd = typeof context.cwd === "string" ? context.cwd : process.cwd();
     const fileRelative = toRepoRelativePosix(rawFilename, cwd);
 
-    if (!fileRelative.startsWith("src/screens/tango/")) {
+    if (!fileRelative.startsWith("src/screens/tango_adapters/")) {
       return {};
     }
     const basename = path.posix.basename(fileRelative);

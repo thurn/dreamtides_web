@@ -1,11 +1,11 @@
 import path from "node:path";
 
 /**
- * Keeps Tango screen adapters (`src/screens/tango/*Adapter.tsx`) wiring-only.
+ * Keeps Tango screen adapters (`src/screens/tango_adapters/*Adapter.tsx`) wiring-only.
  *
  * A migrated screen splits three ways: the pure Tango screen
  * (`src/tango/screens/`) renders a view-model; the pure view-model builder
- * (`src/screens/tango/*-view-model.ts`) maps domain data into the screen's
+ * (`src/screens/tango_adapters/*-view-model.ts`) maps domain data into the screen's
  * view types; and the adapter acquires live state, mints any per-mount
  * randomness, wires callbacks to mutations, and renders the screen. The
  * adapter is the one layer that is hard to unit test (hooks, refs, mount
@@ -30,7 +30,7 @@ import path from "node:path";
  *      state is unavailable) — never intrinsic elements. A `<div>` in an
  *      adapter is layout or chrome, and both belong in the Tango screen.
  *
- * SCOPE. Fires only on `src/screens/tango/` files whose basename ends in
+ * SCOPE. Fires only on `src/screens/tango_adapters/` files whose basename ends in
  * `Adapter.tsx`. Everything else (the registry, view-model modules, tests,
  * legacy screens) is a no-op.
  */
@@ -47,7 +47,7 @@ const ALLOWED_IMPORT_PREFIXES = [
   "src/types/",
   "src/runtime/",
   "src/logging",
-  "src/screens/tango/",
+  "src/screens/tango_adapters/",
   "src/tango/screens/",
 ];
 
@@ -59,7 +59,7 @@ export function toRepoRelativePosix(absolutePath, cwd) {
 /** True when this rule governs the given repo-relative POSIX path. */
 export function isAdapterFile(fileRelative) {
   return (
-    fileRelative.startsWith("src/screens/tango/") &&
+    fileRelative.startsWith("src/screens/tango_adapters/") &&
     /Adapter\.tsx$/.test(fileRelative)
   );
 }

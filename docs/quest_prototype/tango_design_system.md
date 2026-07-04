@@ -126,7 +126,7 @@ deliberately skeletal, because it is the one layer hooks make hard to test.
   `no-hardcoded-values` exemptions), no raw interactive elements, no
   escape-hatch props — so `npm run lint` is what proves a migrated screen
   conforms.
-- A **view-model builder** (`src/screens/tango/*-view-model.ts`) is a module of
+- A **view-model builder** (`src/screens/tango_adapters/*-view-model.ts`) is a module of
   pure, exported, unit-tested functions mapping domain data to the screen's
   view types (e.g. `buildDreamcallerOfferViews` in
   `quest-start-view-model.ts`). Every non-trivial mapping rule — capping,
@@ -138,7 +138,7 @@ deliberately skeletal, because it is the one layer hooks make hard to test.
   mapping rule that is genuinely a *domain* rule rather than a display rule
   belongs one level lower, in `src/data/` — which is on Tango's allowlist, so
   both the builder and Tango itself may use it.
-- An **adapter** (`src/screens/tango/*Adapter.tsx`, *outside* Tango) is
+- An **adapter** (`src/screens/tango_adapters/*Adapter.tsx`, *outside* Tango) is
   **wiring only**: it acquires state (`useQuest()`), mints any per-mount
   randomness, calls the builder, wires callbacks to mutations, and renders the
   Tango screen — nothing else. The `thin-adapters` lint rule enforces this
@@ -176,7 +176,7 @@ view-model is plumbed and built:
 
 #### Registry & rollout
 
-`ScreenRouter` consults `src/screens/tango/registry.tsx` (`tangoScreenFor` /
+`ScreenRouter` consults `src/screens/tango_adapters/registry.tsx` (`tangoScreenFor` /
 `tangoSiteScreenFor`): under `?ui=tango` it renders the registered adapter for a
 migrated screen and falls back to the legacy screen when the resolver returns
 null, so the app stays fully navigable throughout the migration. `?ui=legacy`
@@ -186,7 +186,7 @@ immediately — there is no registered-but-dark state — so a screen is QA'd to
 the production bar *before* its registry entry lands, and `?ui=legacy` is the
 triage escape hatch afterwards. The end state registers every screen and
 deletes the legacy screen components; the adapters, view-model builders, and
-registry under `src/screens/tango/` remain as the app's permanent state-wiring
+registry under `src/screens/tango_adapters/` remain as the app's permanent state-wiring
 layer. The first migrated screen is Dreamcaller selection (`QuestStartScreen`).
 
 ---
@@ -425,7 +425,7 @@ reference, not by a from-scratch subagent rewrite.
   member, a `CSSProperties`-typed prop, a DOM-attribute `extends`/intersection,
   or an index signature), `npm run typecheck`, and `npm test` stay green.
 - The migration layer (§2) is lint-enforced too: the `thin-adapters` rule keeps
-  `src/screens/tango/*Adapter.tsx` wiring-only (one exported `*Adapter`
+  `src/screens/tango_adapters/*Adapter.tsx` wiring-only (one exported `*Adapter`
   component, no module-level helpers/tables/exported types, Tango imports
   limited to `src/tango/screens/`), backed by a `max-lines` ceiling on adapter
   files as the tripwire against logic hiding inside the component body; and a

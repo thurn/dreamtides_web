@@ -20,7 +20,7 @@ describe("toRepoRelativePosix (no-composed-type-voice)", () => {
 describe("isProductUiFile (no-composed-type-voice)", () => {
   it("covers the product tier and the adapter layer", () => {
     expect(isProductUiFile("src/tango/screens/HomeScreen.tsx")).toBe(true);
-    expect(isProductUiFile("src/screens/tango/home-view-model.ts")).toBe(true);
+    expect(isProductUiFile("src/screens/tango_adapters/home-view-model.ts")).toBe(true);
   });
   it("exempts primitives, components, docs, and non-tango files", () => {
     expect(isProductUiFile("src/tango/components/InfoCard.tsx")).toBe(false);
@@ -109,7 +109,7 @@ ruleTester.run("no-composed-type-voice", rule, {
     },
     {
       name: "adapters and view-models are covered too",
-      filename: "src/screens/tango/home-view-model.ts",
+      filename: "src/screens/tango_adapters/home-view-model.ts",
       code: `const font = "700 var(--t-title-sm)";`,
       errors: [{ messageId: "composedVoice" }],
     },

@@ -203,7 +203,7 @@ Set to exactly `legacy` to force the legacy UI for every screen; any other value
 
 `uiVariant` drives a per-screen implementation swap in `ScreenRouter`. Under
 `"tango"`, each screen renders its Tango design-system implementation when one
-exists (resolved through `src/screens/tango/registry.tsx`) and falls back to the
+exists (resolved through `src/screens/tango_adapters/registry.tsx`) and falls back to the
 legacy screen for any screen not yet migrated, so the app stays fully navigable
 during the migration. Because `ui` is a query parameter, it survives the
 address-bar path reflection (`useQuestUrlSync` preserves the query string) and so

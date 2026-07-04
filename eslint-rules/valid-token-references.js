@@ -15,7 +15,7 @@ import { knownTokenNames } from "./tango-token-index.js";
  *
  * SCOPE. The product-UI tier: files under `src/tango/` outside
  * {@link EXEMPT_PREFIXES}, plus the adapter/builder layer in
- * `src/screens/tango/`. The exempt dirs mirror `no-hardcoded-values`: the
+ * `src/screens/tango_adapters/`. The exempt dirs mirror `no-hardcoded-values`: the
  * primitive layer DEFINES the tokens, leaf components may bridge to
  * production token names, and the doc site's specimens intentionally print
  * token names that may not all resolve.
@@ -41,7 +41,7 @@ export function toRepoRelativePosix(absolutePath, cwd) {
 
 /** True when this rule governs the given repo-relative POSIX path. */
 export function isProductUiFile(fileRelative) {
-  if (fileRelative.startsWith("src/screens/tango/")) {
+  if (fileRelative.startsWith("src/screens/tango_adapters/")) {
     return true;
   }
   return (

@@ -143,7 +143,7 @@ ruleTester.run("no-raw-interactive-elements", rule, {
     },
     {
       name: "the adapter layer is covered too",
-      filename: "src/screens/tango/HomeScreenAdapter.tsx",
+      filename: "src/screens/tango_adapters/HomeScreenAdapter.tsx",
       code: `const el = <button />;`,
       errors: [{ messageId: "rawInteractive" }],
     },

@@ -35,7 +35,7 @@ import {
   type MerchantGameObject,
 } from "../journey_v2";
 import { buildCardSourceDebugState } from "../debug/card-source-debug";
-import { tangoScreenFor, tangoSiteScreenFor } from "../screens/tango/registry";
+import { tangoScreenFor, tangoSiteScreenFor } from "../screens/tango_adapters/registry";
 import type { QuestContent } from "../data/quest-content";
 import { siteTypeName } from "../atlas/atlas-generator";
 import { logEvent } from "../logging";

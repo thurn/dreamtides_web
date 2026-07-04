@@ -17,7 +17,7 @@ import path from "node:path";
  *   - `src/tango/components/` — leaf components that occasionally need a raw
  *     ramp step with no semantic role (e.g. a specific tide-tone).
  * Everywhere else — doc pages, demos, mockups, product screens, and the
- * adapter/builder layer in `src/screens/tango/` — referencing a primitive is
+ * adapter/builder layer in `src/screens/tango_adapters/` — referencing a primitive is
  * an error. No exceptions.
  *
  * To avoid false positives on prose or on code that merely INSPECTS token
@@ -67,11 +67,11 @@ const rule = {
     const fileRelative = toRepoRelativePosix(rawFilename, cwd);
 
     // Act on files under src/tango/ (never the two allowed dirs) and on the
-    // adapter/builder layer in src/screens/tango/.
+    // adapter/builder layer in src/screens/tango_adapters/.
     const inTango =
       fileRelative.startsWith("src/tango/") &&
       !ALLOWED_PREFIXES.some((prefix) => fileRelative.startsWith(prefix));
-    if (!inTango && !fileRelative.startsWith("src/screens/tango/")) {
+    if (!inTango && !fileRelative.startsWith("src/screens/tango_adapters/")) {
       return {};
     }
 

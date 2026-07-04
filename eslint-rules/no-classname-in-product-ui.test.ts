@@ -20,7 +20,7 @@ describe("toRepoRelativePosix (no-classname-in-product-ui)", () => {
 describe("isProductUiFile (no-classname-in-product-ui)", () => {
   it("covers the product tier and the adapter layer", () => {
     expect(isProductUiFile("src/tango/screens/HomeScreen.tsx")).toBe(true);
-    expect(isProductUiFile("src/screens/tango/HomeScreenAdapter.tsx")).toBe(
+    expect(isProductUiFile("src/screens/tango_adapters/HomeScreenAdapter.tsx")).toBe(
       true,
     );
   });
@@ -95,7 +95,7 @@ ruleTester.run("no-classname-in-product-ui", rule, {
     },
     {
       name: "adapters render no chrome and may not class anything",
-      filename: "src/screens/tango/HomeScreenAdapter.tsx",
+      filename: "src/screens/tango_adapters/HomeScreenAdapter.tsx",
       code: `const el = <Widget className="wrap" />;`,
       errors: [{ messageId: "classNameProp" }],
     },
