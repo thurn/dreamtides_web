@@ -77,3 +77,54 @@ reduced by it. Before the move the portrait carried an inline `aspectRatio:
 overflow (and overlap) was larger on the prior version. A proper fix reworks the
 card so the portrait flex-shrinks into the available space (or the card grows to
 fit its content) rather than letting the footer overflow a fixed height.
+
+Pre-existing: Tango readiness gaps found by the mass-production audit
+=====================================================================
+
+Found during the Tango readiness review (lint hardening + pilot font fix landed
+with this commit); these remain open and block "docs-only" mass production:
+
+1. Spacing-token three-way contradiction. SKILL.md says every visual value
+   (including spacing) comes from tokens; lint (`no-hardcoded-values`)
+   deliberately checks colors only; the pilot QuestStartScreen uses raw px
+   spacing throughout (~26 sites: gap: 12, maxWidth: 340, padding: "16px 18px
+   20px", ...). Decide the policy, then either tokenize the pilot + add a
+   `no-untokenized-lengths` rule, or soften the SKILL.md claim to match.
+
+2. ~9 exported Tango components have no demo entry and so no generated
+   reference: EssenceValue, LeaveSiteButton, HoverPopover, GlowIcon,
+   DreamcallerPortrait, CardTermDefinitions, HoverZoomCard,
+   GlossaryDefinitionCard, PipBadge, CardStatOrb. Several self-describe as
+   "the ONE way" to do something, and the pilot screen imports five of them —
+   an agent building from the index alone would improvise duplicates.
+
+3. Popup-rule conflict: SKILL.md mandates InfoCard for every
+   reveal-on-interaction popup, but the pilot uses HoverPopover with a
+   hand-styled tooltip (SectionHeading) and HoverPopover is undocumented.
+   Either bless HoverPopover in the docs with a decision rule vs InfoCard, or
+   migrate the pilot's tooltips to InfoCard.
+
+4. tango_design_system.md is a pre-build implementation plan (phases,
+   subagent orchestration, prerequisites) that SKILL.md links as "design
+   philosophy in depth"; the still-true architecture sections deserve
+   extraction into a current-state doc.
+
+5. Screen-composition guidance is missing from the docs: the 1920x1080
+   "stage/scaled frame" concept, per-screen Motes/backdrop policy,
+   QuestStatusBar wiring (no shared HUD view-model builder exists), z-index
+   conventions, target QA viewports, loading/error-state handling, and
+   screen-to-screen transition mechanics.
+
+6. No ?goto= QA scenes exist for Draft, Essence, Reward, or dreamscape
+   screens, so those migrations cannot be browser-QA'd without playing
+   forward.
+
+7. tangoSiteScreenFor's signature carries neither runtimeConfig nor
+   onJourneyExplanationChange, which the DreamAugury route needs
+   (ScreenRouter.tsx:212-222); that migration requires a registry signature
+   change.
+
+8. AGENTS.md declares name-keyed card maps ALWAYS A BUG, but no lint rule
+   enforces it; a typed `no-name-keyed-cards` rule (flag .name-keyed
+   Map/Set/object keys and name-equality comparisons on card types,
+   project-wide) would close the class.
