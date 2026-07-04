@@ -68,9 +68,11 @@ Target UI:
                       afterwards. Uses --port (default ${DEFAULT_PORT}).
 
 Appearance:
-      --frame         Draw a device body / bezel around the screen.
+      --frame         Draw a device body / bezel around the screen. Adds a
+                      small device-name caption above the frame.
       --no-cutout     Hide the Dynamic Island / camera punch-hole.
       --no-home       Hide the home indicator.
+      --no-caption    Omit the device-name caption in --frame mode.
       --backdrop <c>  CSS colour behind the screen's rounded corners.
                       Default: #0e0e12
       --dark          Prefer dark colour scheme (default).
@@ -120,8 +122,9 @@ function parse(argv) {
         query: { type: "string" },
         start: { type: "boolean" },
         frame: { type: "boolean" },
-        cutout: { type: "boolean", default: true },
-        home: { type: "boolean", default: true },
+        "no-cutout": { type: "boolean" },
+        "no-home": { type: "boolean" },
+        "no-caption": { type: "boolean" },
         backdrop: { type: "string", default: "#0e0e12" },
         dark: { type: "boolean" },
         light: { type: "boolean" },
@@ -321,12 +324,16 @@ async function main() {
       const scale = values.scale ? Number(values.scale) : device.dpr;
       if (!Number.isFinite(scale) || scale <= 0) fail(`invalid --scale "${values.scale}"`);
 
+      const framed = Boolean(values.frame);
+      const caption =
+        framed && !values["no-caption"] ? device.name : null;
       const { html, width, height } = renderWrapper(device, {
         appUrl,
-        frame: Boolean(values.frame),
-        showCutout: values.cutout,
-        showHome: values.home,
+        frame: framed,
+        showCutout: !values["no-cutout"],
+        showHome: !values["no-home"],
         backdrop: values.backdrop,
+        caption,
       });
       const wrapperPath = join(tmpDir, `${device.id}.html`);
       writeFileSync(wrapperPath, html, "utf8");

@@ -181,6 +181,7 @@ export function renderWrapper(device, options = {}) {
     showCutout = true,
     showHome = true,
     backdrop = "#0e0e12",
+    caption = null,
     margin = frame ? 40 : 0,
   } = options;
 
@@ -189,8 +190,10 @@ export function renderWrapper(device, options = {}) {
   const screenH = device.logicalHeight;
   const bodyW = screenW + bezel.left + bezel.right;
   const bodyH = screenH + bezel.top + bezel.bottom;
+  // Space reserved above the frame for the device-name caption.
+  const captionBand = caption ? 26 : 0;
   const pageW = bodyW + margin * 2;
-  const pageH = bodyH + margin * 2;
+  const pageH = bodyH + captionBand + margin * 2;
 
   // Outer body radius extends the screen radius by the bezel so the corners
   // stay concentric.
@@ -236,6 +239,27 @@ export function renderWrapper(device, options = {}) {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+  .mock {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .caption {
+    width: ${bodyW}px;
+    height: ${captionBand}px;
+    display: flex;
+    align-items: center;
+    padding-left: 4px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Helvetica, Arial, sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.2px;
+    color: rgba(236, 236, 241, 0.82);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   ${frameStyles}
   .screen {
@@ -312,15 +336,18 @@ export function renderWrapper(device, options = {}) {
 </head>
 <body>
   <div class="stage">
-    <div class="body">
-      <div class="screen">
-        <iframe src="${escapeHtml(appUrl)}" title="${escapeHtml(device.name)}" scrolling="no"></iframe>
-        <div class="chrome">
-          ${cutout}
-          ${home}
+    <div class="mock">
+      ${caption ? `<div class="caption">${escapeHtml(caption)}</div>` : ""}
+      <div class="body">
+        <div class="screen">
+          <iframe src="${escapeHtml(appUrl)}" title="${escapeHtml(device.name)}" scrolling="no"></iframe>
+          <div class="chrome">
+            ${cutout}
+            ${home}
+          </div>
         </div>
+        ${homeButton}
       </div>
-      ${homeButton}
     </div>
   </div>
 </body>

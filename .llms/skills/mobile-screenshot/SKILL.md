@@ -92,9 +92,11 @@ judge layout, not a pixel-perfect emulation.
 
 ## Appearance options
 
-- `--frame` — draw the device body/bezel (and the SE home button).
+- `--frame` — draw the device body/bezel (and the SE home button). Adds a
+  small device-name caption above the frame.
 - `--no-cutout` — hide the Dynamic Island / punch-hole.
 - `--no-home` — hide the home indicator.
+- `--no-caption` — omit the device-name caption in `--frame` mode.
 - `--backdrop <css>` — colour behind the screen's rounded corners
   (default `#0e0e12`).
 - `--light` / `--dark` — preferred colour scheme (default `--dark`).
