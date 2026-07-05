@@ -23,8 +23,11 @@ export interface DesktopSelectTweaks {
   abilityHeight: number;
   /** The standing figure's stage height, in px. */
   portraitHeight: number;
-  /** Column width — the figure stage AND the card share it — in px. */
+  /** Column width — the figure stage's width — in px. */
   columnWidth: number;
+  /** Console-card width, in px. May be narrower than the column (the card
+   * centers under the full-width figure stage). */
+  cardWidth: number;
   /** A floor on the console card's height, in px (0 = size to content). Extra
    * height pins the Choose button to the card's bottom edge. */
   cardMinHeight: number;
@@ -42,6 +45,7 @@ export const DEFAULT_TWEAKS: DesktopSelectTweaks = {
   abilityHeight: 58,
   portraitHeight: 560,
   columnWidth: 340,
+  cardWidth: 340,
   cardMinHeight: 0,
   cardOverlap: 190,
 };
@@ -268,6 +272,15 @@ export function TweaksPanel({
           max={540}
           onChange={(v) => {
             set("columnWidth", v);
+          }}
+        />
+        <TweakSlider
+          label="Card width"
+          value={tweaks.cardWidth}
+          min={180}
+          max={540}
+          onChange={(v) => {
+            set("cardWidth", v);
           }}
         />
         <TweakSlider

@@ -861,6 +861,10 @@ function DreamcallerCard({
         ...GroupPanel.style(),
         position: "relative",
         zIndex: 1,
+        // The card can be narrower than its column (the figure stage keeps the
+        // full column width); centering it leaves the portrait framing intact.
+        width: tweaks.cardWidth,
+        alignSelf: "center",
         marginTop: -tweaks.cardOverlap,
         minHeight: tweaks.cardMinHeight || undefined,
         // The vertical rhythm: `cardSpacing` top/bottom padding and the same
