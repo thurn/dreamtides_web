@@ -55,13 +55,13 @@ export const DEFAULT_TWEAKS: DesktopSelectTweaks = {
   showDivider: true,
   cardSpacing: 16,
   abilityHeight: 32,
-  equalCardHeight: true,
+  equalCardHeight: false,
   portraitHeight: 715,
   portraitScale: 1.2,
   columnWidth: 400,
   cardWidth: 320,
   cardMinHeight: 0,
-  cardOverlap: 380,
+  cardOverlap: 275,
 };
 
 /** One labeled range control in the tweaks panel. */
