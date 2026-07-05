@@ -121,3 +121,26 @@ with this commit); these remain open and block "docs-only" mass production:
    enforces it; a typed `no-name-keyed-cards` rule (flag .name-keyed
    Map/Set/object keys and name-equality comparisons on card types,
    project-wide) would close the class.
+
+Tide indicator: three hand-rolled renderings of the collapsed disc
+==================================================================
+
+The tide indicator's semantic layer is unified (tideVisual in TidePill.tsx
+supplies color/glyph everywhere), but the rendering layer is forked three
+ways with hand-synchronized numbers:
+
+  1. TidePill (src/tango/components/hud/TidePill.tsx) - the canonical pill.
+  2. TideCluster (src/tango/components/hud/TideCluster.tsx) - declares its
+     own DISC_PX = 24 (line 43) and hand-mirrors TidePill's sm metrics
+     (PILL_FONT_PX = 12, PILL_PAD_X = 9, PILL_GAP = 6) with a comment naming
+     TidePill as the source of truth it copies.
+  3. quest-start-desktop.tsx - a screen-local disc with its own
+     TIDE_DISC_PX = 24 (line 36), its own hover state and brightness
+     treatment, and a hand-rolled borderRadius:50% span.
+
+The two 24s and the mirrored pill metrics agree today only by coincidence of
+maintenance; resizing one silently desyncs the others. Fix: one collapsed-disc
+rendering in the Tide component family (a TidePill disc variant or a
+static/hover mode on TideCluster), sized by a single constant in the shared
+tide spec, consumed by both the HUD cluster and the desktop select. Context:
+docs/postmortems/2026-07-05-desktop-dreamcaller-select.md.
