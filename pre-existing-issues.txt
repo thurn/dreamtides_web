@@ -145,9 +145,3 @@ Tango mobile dreamscape redesign — follow-ups / known items
    nothing is blocked — but the corner reads cluttered in a shared room.
    Consider relocating the presence pill or folding connection state into the
    Tango chrome.
-
-3. Desktop dreamscape layout is deferred.
-   Per the task scope (mobile only), the Tango dreamscape serves the mobile
-   composition on every viewport once `?ui=tango` is active. A desktop-tuned
-   layout (denser controls, wider node scatter) is a follow-up; `?ui=legacy`
-   remains the rollback to the legacy dreamscape in the meantime.

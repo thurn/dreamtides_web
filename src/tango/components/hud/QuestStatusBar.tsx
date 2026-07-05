@@ -57,6 +57,13 @@ const DECK_SPRITE = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAADpCAYAA
 const DS_SHADOW =
   "drop-shadow(0 3px 6px rgba(0,0,0,0.55)) drop-shadow(0 0 13px rgba(147,51,234,0.32))";
 
+/** How much the `grand` (desktop) HUD scales up from the `compact` (mobile)
+ * one. Every HUD measure — the essence type, deck sprite, dreamsign discs, the
+ * Dreamcaller bust, and the bar's own height — multiplies by this, so the bar
+ * reads identically at desktop widths, just larger. The one factor keeps the
+ * whole HUD in proportion. */
+const GRAND_SCALE = 1.6;
+
 /** Gap (px) between the docked dreamsign strip and the deck button. A fixed
  * system value, not a caller knob. */
 const SIGN_GAP = 8;
@@ -92,6 +99,10 @@ export interface QuestStatusBarProps {
   /** Deck size (used in the deck button's aria-label). */
   deck?: number | string;
   dreamcaller?: QsbDreamcaller;
+  /** HUD size. `compact` (default) is the mobile / touch size; `grand` is the
+   * larger desktop size the dreamscape screen picks above the wide-viewport
+   * breakpoint. */
+  size?: "compact" | "grand";
 }
 
 /* a single bare, pressable dreamsign object — raises its detail card through the
@@ -237,10 +248,12 @@ function QsbOverflowStack({
 function QsbDreamsignStrip({
   signs,
   stageRef,
+  scale = 1,
   onOpenWindow,
 }: {
   signs: QsbDreamsign[];
   stageRef: React.RefObject<HTMLElement | null>;
+  scale?: number;
   onOpenWindow: () => void;
 }): ReactElement | null {
   const [box, setBox] = React.useState<{ right: number; centerY: number } | null>(
@@ -272,7 +285,7 @@ function QsbDreamsignStrip({
       const er = essence.getBoundingClientRect();
       const k = stage.clientWidth / sr.width;
       setBox({
-        right: stage.clientWidth - (dr.left - sr.left) * k + SIGN_GAP,
+        right: stage.clientWidth - (dr.left - sr.left) * k + SIGN_GAP * scale,
         centerY: (er.top + er.height / 2 - sr.top) * k,
       });
     };
@@ -290,13 +303,13 @@ function QsbDreamsignStrip({
       }
       window.removeEventListener("resize", measure);
     };
-  }, [stageRef, signs.length]);
+  }, [stageRef, signs.length, scale]);
 
   if (!signs.length || !box) {
     return null;
   }
 
-  const SIGN = 36;
+  const SIGN = Math.round(36 * scale);
   const wrap: CSSProperties = {
     position: "absolute",
     right: box.right,
@@ -509,9 +522,11 @@ function QsbDreamcallerBust({
 function QsbEssence({
   essence = 0,
   stageRef,
+  scale = 1,
 }: {
   essence?: number;
   stageRef: React.RefObject<HTMLElement | null>;
+  scale?: number;
 }): ReactElement {
   const ref = React.useRef<HTMLSpanElement>(null);
   const { pressed, shown, begin, end, enter, leave } = usePressReveal();
@@ -537,7 +552,7 @@ function QsbEssence({
         display: "inline-flex",
         alignItems: "center",
         gap: 0,
-        font: `800 22px/1 ${token("--font-ui")}`,
+        font: `800 ${String(Math.round(22 * scale))}px/1 ${token("--font-ui")}`,
         fontVariantNumeric: "tabular-nums",
         color: token("--text-primary"),
         cursor: "pointer",
@@ -552,7 +567,7 @@ function QsbEssence({
       <i
         className="bxf bx-crypto"
         aria-hidden="true"
-        style={{ color: token("--essence"), fontSize: 20 }}
+        style={{ color: token("--essence"), fontSize: Math.round(20 * scale) }}
       />
       {anchor &&
         stageRef.current &&
@@ -580,12 +595,14 @@ function QsbHudBar({
   deck = 0,
   dreamcaller,
   stageRef,
+  scale = 1,
   style = {},
 }: {
   essence?: number;
   deck?: number | string;
   dreamcaller?: QsbDreamcaller;
   stageRef: React.RefObject<HTMLElement | null>;
+  scale?: number;
   style?: CSSProperties;
 }): ReactElement {
   return (
@@ -593,23 +610,23 @@ function QsbHudBar({
       style={{
         display: "flex",
         alignItems: "center",
-        gap: 10,
+        gap: Math.round(10 * scale),
         height: token("--hud-h"),
-        padding: "0 12px",
+        padding: `0 ${String(Math.round(12 * scale))}px`,
         paddingBottom: "env(safe-area-inset-bottom, 0px)",
         ...style,
       }}
     >
       <QsbDreamcallerBust dreamcaller={dreamcaller} stageRef={stageRef} />
       <div style={{ display: "flex", flexDirection: "column", gap: 4, marginRight: "auto" }}>
-        <QsbEssence essence={essence} stageRef={stageRef} />
+        <QsbEssence essence={essence} stageRef={stageRef} scale={scale} />
       </div>
       <button
         type="button"
         className="qsbDeck"
         aria-label={`View deck — ${String(deck)} cards`}
         style={{
-          height: 66,
+          height: Math.round(66 * scale),
           flex: "none",
           padding: 0,
           border: "none",
@@ -625,7 +642,7 @@ function QsbHudBar({
           alt=""
           draggable={false}
           style={{
-            height: 63,
+            height: Math.round(63 * scale),
             width: "auto",
             display: "block",
             filter:
@@ -649,8 +666,22 @@ export function QuestStatusBar({
   dreamsigns = [],
   deck = 0,
   dreamcaller,
+  size = "compact",
 }: QuestStatusBarProps): ReactElement {
   const [signWindow, setSignWindow] = React.useState(false);
+  const scale = size === "grand" ? GRAND_SCALE : 1;
+  // The Dreamcaller bust, HUD height, and essence-cluster elevation are sized
+  // in quest-status-bar.css from these component vars; scaling them here grows
+  // that CSS-driven half of the bar in lockstep with the inline-sized half
+  // (essence type, deck sprite, dreamsigns) threaded through as `scale`.
+  const rootVars =
+    scale === 1
+      ? undefined
+      : ({
+          "--qsb-dc-size": `${String(Math.round(66 * scale))}px`,
+          "--hud-h": `${String(Math.round(64 * scale))}px`,
+          "--qsb-elev": `${String(Math.round(14 * scale))}px`,
+        } as CSSProperties);
 
   // The essence value and Dreamcaller bust each own their press-reveal
   // (QsbEssence / QsbDreamcallerBust) with per-element onPointerEnter/Leave, so
@@ -658,7 +689,7 @@ export function QuestStatusBar({
   // level pointerenter can't drive this — native pointerenter does not refire
   // when the pointer moves between children of the same ancestor.
   return (
-    <div className="qsb">
+    <div className="qsb" style={rootVars}>
       <div
         className="qsbHud hud-outline"
         style={{ position: "absolute", left: 0, right: 0, bottom: 0, zIndex: 40 }}
@@ -668,6 +699,7 @@ export function QuestStatusBar({
           deck={deck}
           dreamcaller={dreamcaller}
           stageRef={stageRef}
+          scale={scale}
           style={{
             height: `calc(${token("--hud-h")} + ${token("--safe-bottom")})`,
             paddingBottom: token("--safe-bottom"),
@@ -678,6 +710,7 @@ export function QuestStatusBar({
       <QsbDreamsignStrip
         signs={dreamsigns}
         stageRef={stageRef}
+        scale={scale}
         onOpenWindow={() => setSignWindow(true)}
       />
       {signWindow && (

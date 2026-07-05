@@ -5,7 +5,7 @@
 // on the glossary-keyword and essence-explanation behaviour a player relies on.
 // PURE: no state ownership; the adapter owns the offer, the seed, and startQuest.
 
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 import { ResourceChip } from "../components/hud/ResourceChip";
 import { RulesText } from "../components/card/RulesText";
 import { CardTermDefinitions } from "../components/card/CardTermDefinitions";
@@ -46,35 +46,10 @@ export interface QuestStartScreenProps {
   onPick: (dreamcallerId: string) => void;
 }
 
-/** How wide the viewport must be to lay the offered Dreamcallers out side by
- * side instead of as a one-per-page swipe carousel. Below this the screen is a
- * mobile carousel; at or above it, a desktop triptych. */
-const DESKTOP_MIN_WIDTH = 900;
-const DESKTOP_QUERY = `(min-width: ${String(DESKTOP_MIN_WIDTH)}px)`;
-
-/** True when the viewport is wide enough for the side-by-side desktop layout.
- * Live via matchMedia so rotating a tablet or resizing a window re-evaluates,
- * mirroring InfoCard's `useFinePointer` idiom. */
-export function useIsDesktop(): boolean {
-  const [desktop, setDesktop] = useState<boolean>(() =>
-    typeof window === "undefined" || typeof window.matchMedia !== "function"
-      ? false
-      : window.matchMedia(DESKTOP_QUERY).matches,
-  );
-
-  useEffect(() => {
-    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
-      return;
-    }
-    const query = window.matchMedia(DESKTOP_QUERY);
-    const onChange = (): void => setDesktop(query.matches);
-    onChange();
-    query.addEventListener("change", onChange);
-    return () => query.removeEventListener("change", onChange);
-  }, []);
-
-  return desktop;
-}
+/** The side-by-side Dreamcaller triptych is this screen's desktop idiom, so it
+ * flips to the desktop layout at the shared {@link useIsDesktop} breakpoint:
+ * below it a one-per-page swipe carousel, at or above it a desktop triptych. */
+export { useIsDesktop } from "./use-is-desktop";
 
 /** The brand-tinted hairline between ability text and the tides row. `flush`
  * drops the built-in top margin for callers (the desktop card) that own their

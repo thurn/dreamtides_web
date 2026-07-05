@@ -35,10 +35,15 @@ import "./site-node.css";
 
 const { usePressReveal, anchorRect, PressPopover } = InfoCard;
 
-/** Wayside disc diameter in px; battle guardians scale up from here. The disc's
- * size is the design system's, not a caller knob — the screen positions the node
- * (via `model.pos`); it does not resize it. */
+/** The two disc diameters (px), keyed by the `scale` variant. `wayside` is the
+ * mobile / touch size; `grand` is the desktop size — the disc grows so it holds
+ * comparable presence over the full-bleed scene at wide-viewport widths, where
+ * the wayside disc would read as a lost speck. Every derived measure (icon,
+ * badge, battle-pulse) scales from the chosen diameter, so the disc reads
+ * identically at both sizes — larger, not restyled. The screen positions the
+ * node (via `model.pos`) and picks the variant; it never hands in a raw px. */
 const NODE_SIZE = 60;
+const GRAND_NODE_SIZE = 112;
 
 /** The node's fixed accent — the system's violet, not a per-node color. The ring
  * and reveal disc derive their alpha from it via {@link withAlpha}. */
@@ -95,6 +100,10 @@ export interface SiteNodeProps {
   stageRef: React.RefObject<HTMLElement | null>;
   /** Enter the site; fired on a tap / click of an interactive node only. */
   onSelect: (siteId: string) => void;
+  /** Disc size. `wayside` (default) is the mobile / touch size; `grand` is the
+   * larger desktop size the dreamscape screen picks above the wide-viewport
+   * breakpoint. */
+  scale?: "wayside" | "grand";
 }
 
 /**
@@ -106,6 +115,7 @@ export function SiteNode({
   motion,
   stageRef,
   onSelect,
+  scale = "wayside",
 }: SiteNodeProps): React.ReactElement {
   const { site, pos, index, isBattle, isLocked, isInteractive } = model;
 
@@ -124,9 +134,19 @@ export function SiteNode({
     }
   }, [shown, stageRef]);
 
-  // Every site disc is the same size — the guardian battle reads as special
-  // through its pulsing ring and lock badge, not a larger disc.
-  const diameter = NODE_SIZE;
+  // Every site disc within a scale is the same size — the guardian battle reads
+  // as special through its pulsing ring and lock badge, not a larger disc. The
+  // `grand` desktop variant scales the whole disc (and everything derived from
+  // its diameter below) up uniformly.
+  const diameter = scale === "grand" ? GRAND_NODE_SIZE : NODE_SIZE;
+  // Ratio the disc grew by; the badge and battle-pulse — sized in the
+  // stylesheet at the wayside diameter — scale by it so they keep their
+  // proportions at `grand`.
+  const k = diameter / NODE_SIZE;
+  const badgeSize = Math.round(22 * k);
+  const badgeInset = Math.round(-2 * k);
+  const badgeFont = Math.round(12 * k);
+  const pulseInset = Math.round(-6 * k);
   // A locked guardian stays at full opacity but its disc is desaturated to a
   // clear, readable "disabled" grey. The dimming lands on the disc alone so the
   // lock badge stays crisp and legible.
@@ -226,15 +246,39 @@ export function SiteNode({
         </span>
       </span>
       {isBattle && !isLocked && !site.isVisited && (
-        <span className="ds-battle-pulse" aria-hidden="true" />
+        <span
+          className="ds-battle-pulse"
+          aria-hidden="true"
+          style={{ inset: pulseInset }}
+        />
       )}
       {site.isVisited && (
-        <span className="ds-node-badge visited" aria-hidden="true">
+        <span
+          className="ds-node-badge visited"
+          aria-hidden="true"
+          style={{
+            width: badgeSize,
+            height: badgeSize,
+            right: badgeInset,
+            bottom: badgeInset,
+            fontSize: badgeFont,
+          }}
+        >
           <i className="bx bx-check" />
         </span>
       )}
       {isLocked && !site.isVisited && (
-        <span className="ds-node-badge locked" aria-hidden="true">
+        <span
+          className="ds-node-badge locked"
+          aria-hidden="true"
+          style={{
+            width: badgeSize,
+            height: badgeSize,
+            right: badgeInset,
+            bottom: badgeInset,
+            fontSize: badgeFont,
+          }}
+        >
           <i className="bxf bx-lock" />
         </span>
       )}

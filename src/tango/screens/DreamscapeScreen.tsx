@@ -22,6 +22,7 @@ import {
 } from "../components/hud/QuestStatusBar";
 import { type ArtRef, resolveArtRef } from "../primitives/art";
 import { token } from "../primitives/tokens";
+import { useIsDesktop } from "./use-is-desktop";
 
 /** The bottom-HUD slice of the view-model — what the QuestStatusBar docks. */
 export interface DreamscapeHudView {
@@ -64,6 +65,10 @@ export function DreamscapeScreen({ view, onSelectSite }: DreamscapeScreenProps) 
   // their placement and on-screen clamp use stage coordinates.
   const stageRef = useRef<HTMLDivElement>(null);
   const sceneUrl = view.scene !== null ? resolveArtRef(view.scene) : null;
+  // Above the wide-viewport breakpoint the scene is the same, only larger: the
+  // site discs and the bottom HUD scale up so they hold their presence over the
+  // full-bleed art instead of stranding a phone-sized UI on a big screen.
+  const isDesktop = useIsDesktop();
 
   return (
     <div
@@ -107,6 +112,7 @@ export function DreamscapeScreen({ view, onSelectSite }: DreamscapeScreenProps) 
             motion
             stageRef={stageRef}
             onSelect={onSelectSite}
+            scale={isDesktop ? "grand" : "wayside"}
           />
         ))}
 
@@ -116,6 +122,7 @@ export function DreamscapeScreen({ view, onSelectSite }: DreamscapeScreenProps) 
         deck={view.hud.deck}
         dreamcaller={view.hud.dreamcaller}
         dreamsigns={view.hud.dreamsigns}
+        size={isDesktop ? "grand" : "compact"}
       />
     </div>
   );

@@ -76,9 +76,11 @@ const DEMO_MODELS: DreamscapeSiteModel[] = [
 interface SiteNodeDemoArgs {
   /** Enable the calm floaty drift. */
   motion?: boolean;
+  /** Disc size: `wayside` (mobile) or `grand` (desktop). */
+  scale?: "wayside" | "grand";
 }
 
-function SiteNodeDemo({ motion = true }: SiteNodeDemoArgs) {
+function SiteNodeDemo({ motion = true, scale = "wayside" }: SiteNodeDemoArgs) {
   const stageRef = useRef<HTMLDivElement>(null);
   return (
     <div
@@ -102,6 +104,7 @@ function SiteNodeDemo({ motion = true }: SiteNodeDemoArgs) {
           motion={motion}
           stageRef={stageRef}
           onSelect={() => undefined}
+          scale={scale}
         />
       ))}
     </div>
@@ -112,7 +115,7 @@ export const siteNodeDemo: TangoComponent = {
   id: "site-node",
   title: "Site Node",
   blurb:
-    "The dreamscape site disc: a floating circular node over scene art carrying a glyph and accent ring. It has no text label — pressing or hovering reveals the site's name and detail through the shared InfoCard. The screen positions each node (via `model.pos`); it does not resize or recolor it.",
+    "The dreamscape site disc: a floating circular node over scene art carrying a glyph and accent ring. It has no text label — pressing or hovering reveals the site's name and detail through the shared InfoCard. The screen positions each node (via `model.pos`) and picks its `scale` — `wayside` on mobile, `grand` on desktop — but does not resize or recolor it directly.",
   group: "Components",
   docName: "SiteNode",
   Component: SiteNodeDemo,
@@ -137,6 +140,7 @@ export const siteNodeDemo: TangoComponent = {
   demo: {
     defaultArgs: {
       motion: true,
+      scale: "wayside",
     },
   },
 };

@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/quest-status-bar`
 
-The persistent, transparent bottom HUD for quest screens. The essence total, deck, Dreamcaller, and docked dreamsigns sit directly on the scene art, made legible by their own glyph outline.
+The persistent, transparent bottom HUD for quest screens. The essence total, deck, Dreamcaller, and docked dreamsigns sit directly on the scene art, made legible by their own glyph outline. It docks at two sizes — `compact` on mobile, `grand` on desktop — scaling the whole bar up in proportion.
 
 ## Props
 
@@ -17,6 +17,7 @@ The persistent, transparent bottom HUD for quest screens. The essence total, dec
 | `dreamsigns` | `QsbDreamsign[]` | no | `[]` | The dreamsigns to dock (a small set inline; more collapse to a stack + viewer). |
 | `deck` | `string \| number` | no | `0` | Deck size (used in the deck button's aria-label). |
 | `dreamcaller` | `QsbDreamcaller` | no | — |  |
+| `size` | `"grand" \| "compact"` | no | `compact` | HUD size. `compact` (default) is the mobile / touch size; `grand` is the larger desktop size the dreamscape screen picks above the wide-viewport breakpoint. |
 
 ### `dreamsigns`: the `QsbDreamsign` model
 
