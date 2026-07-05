@@ -3,13 +3,15 @@
 //   - Mobile (narrow): a full-bleed swipe carousel, one Dreamcaller per page,
 //     with a cinematic portrait behind a frosted GroupPanel console.
 //   - Desktop (wide): one shared background carries the screen title and all
-//     offered Dreamcallers side by side as round portrait medallions, each over
-//     its own equal-height console card (ability text, a "Tides" header with
-//     full pills, a labelled starting essence, and a Choose action).
+//     offered Dreamcallers laid out on a grid — round portrait medallion, name,
+//     an equal-height console card (ability text, a labelled starting essence,
+//     and a Choose action), and, floating below the card, the "Tides" header
+//     with its full pills. The grid's row tracks equalize each element type's
+//     height across the three Dreamcallers.
 // PURE: it renders from a view-model and reports the chosen Dreamcaller through
 // `onPick`; the adapter owns state, the offer, the seed, and startQuest.
 
-import { useEffect, useRef, useState } from "react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { Motes } from "../components/hud/Motes";
 import { GroupPanel } from "../components/controls/GroupPanel";
 import { Button } from "../components/controls/Button";
@@ -670,7 +672,7 @@ function PortraitMedallion({
  * background (so it reads as a label, not on-media text). */
 function MedallionName({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
   return (
-    <div style={{ textAlign: "center", marginTop: token("--space-4") }}>
+    <div style={{ textAlign: "center" }}>
       <div
         style={{
           font: token("--t-title"),
@@ -809,12 +811,13 @@ function StartingEssenceLine({
   );
 }
 
-/** One desktop column: a round portrait medallion floating on the shared
- * background, the name/epithet beneath it, and an equal-height console card.
- * `align-items: stretch` on the row makes every column the same height, so the
- * flex:1 console cards all render at the same height with their Choose actions
- * on one line. */
-function DreamcallerColumn({
+/** The grid cells for one Dreamcaller: the medallion, the name, the console
+ * card, and — floating below the card on the shared background (outside the
+ * card) — the Tides header and pills. Returned as siblings (not wrapped) so
+ * each lands in its own grid-row track; the tracks then equalize each element
+ * type's height across the three Dreamcallers, keeping the cards the same
+ * height while the tides float free beneath them. */
+function DreamcallerColumnCells({
   dreamcaller,
   onChoose,
   stageRef,
@@ -825,32 +828,24 @@ function DreamcallerColumn({
 }) {
   const hasTides = dreamcaller.tides.length > 0;
   return (
-    <div
-      data-dreamcaller-column={dreamcaller.id}
-      style={{
-        position: "relative",
-        zIndex: 1,
-        flex: "1 1 0",
-        minWidth: 0,
-        maxWidth: 340,
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
-    >
-      <PortraitMedallion dreamcaller={dreamcaller} />
+    <>
+      {/* Medallion — centered within its column track. */}
+      <div style={{ justifySelf: "center" }}>
+        <PortraitMedallion dreamcaller={dreamcaller} />
+      </div>
+
+      {/* Name + epithet. */}
       <MedallionName dreamcaller={dreamcaller} />
 
-      {/* Equal-height console card. Spreading the GroupPanel glass onto our own
-          node (the sanctioned rung-2 way to size the pane) lets the card fill
-          the stretched column height and pin its Choose action to the base. */}
+      {/* Console card — the grid stretches it to fill the (equal-height) card
+          row and its inner flex column pins the Choose action to the base.
+          Spreading GroupPanel's glass onto our own node is the sanctioned
+          rung-2 way to size the pane. */}
       <div
+        data-dreamcaller-column={dreamcaller.id}
         style={{
           ...GroupPanel.style(),
-          marginTop: token("--space-5"),
           padding: token("--space-6"),
-          width: "100%",
-          flex: 1,
           display: "flex",
           flexDirection: "column",
           gap: token("--space-4"),
@@ -873,10 +868,6 @@ function DreamcallerColumn({
             }}
           />
 
-          {hasTides && (
-            <TidesSection dreamcaller={dreamcaller} stageRef={stageRef} />
-          )}
-
           <StartingEssenceLine dreamcaller={dreamcaller} stageRef={stageRef} />
         </div>
 
@@ -884,13 +875,21 @@ function DreamcallerColumn({
           <Button size="md" full label="Choose" onClick={onChoose} />
         </div>
       </div>
-    </div>
+
+      {/* Tides — floating below the card on the shared background, hugging the
+          top of the tides row so they sit just beneath the card. */}
+      <div style={{ alignSelf: "start" }}>
+        {hasTides && (
+          <TidesSection dreamcaller={dreamcaller} stageRef={stageRef} />
+        )}
+      </div>
+    </>
   );
 }
 
 /** The desktop Dreamcaller-selection layout: a shared background carrying the
- * screen title and all offered Dreamcallers side by side as round medallions,
- * each over its own equal-height console card. */
+ * screen title and, on a column-flowed grid, every offered Dreamcaller's
+ * medallion, name, equal-height console card, and floating tides. */
 function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
   const stageRef = useRef<HTMLDivElement>(null);
 
@@ -943,29 +942,35 @@ function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
         </h1>
       </div>
 
+      {/* Column-flowed grid: each Dreamcaller fills one column (medallion, name,
+          card, tides down the four rows). The row tracks equalize each element
+          type's height across columns, so the cards stay the same height while
+          the tides float in their own bottom row, outside the cards. */}
       <div
         style={{
           position: "relative",
           zIndex: 1,
-          display: "flex",
-          gap: token("--space-8"),
+          display: "grid",
+          gridAutoFlow: "column",
+          gridTemplateColumns: `repeat(${String(dreamcallers.length)}, minmax(0, 340px))`,
+          gridTemplateRows: "auto auto auto auto",
+          columnGap: token("--space-8"),
+          rowGap: token("--space-4"),
           justifyContent: "center",
-          alignItems: "stretch",
           width: "100%",
-          maxWidth: 1120,
-          margin: "0 auto",
           padding: `0 ${token("--gutter")}`,
         }}
       >
         {dreamcallers.map((dreamcaller) => (
-          <DreamcallerColumn
-            key={dreamcaller.id}
-            dreamcaller={dreamcaller}
-            onChoose={() => {
-              onPick(dreamcaller.id);
-            }}
-            stageRef={stageRef}
-          />
+          <Fragment key={dreamcaller.id}>
+            <DreamcallerColumnCells
+              dreamcaller={dreamcaller}
+              onChoose={() => {
+                onPick(dreamcaller.id);
+              }}
+              stageRef={stageRef}
+            />
+          </Fragment>
         ))}
       </div>
     </div>
