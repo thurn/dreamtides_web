@@ -564,7 +564,6 @@ function CarouselSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
 const COLUMN_W = 292; // narrower than the old medallion column
 const PORTRAIT_H = 404; // a tall rectangle crop of the standing figure
 const CARD_OVERLAP = 150; // how far the console card rides up over the legs
-const CARD_MIN_H = 264; // fixed card body height, so all cards lock equal
 const TIDE_DISC_PX = 30; // the hover-only tide discs (a touch bigger)
 
 /** What the "Tides (i)" reveal explains, mirroring the legacy select screen. */
@@ -803,12 +802,11 @@ function StaticTides({
   );
 }
 
-/** The locked-size console card for one Dreamcaller. It rides up over the
- * portrait's legs (negative top margin), and its inner flex column fills the
- * fixed height with flexible whitespace above the Choose button so all three
- * cards read identically regardless of ability-text length. Spreading
- * GroupPanel's glass onto our own node is the sanctioned rung-2 way to size
- * the pane. */
+/** The console card for one Dreamcaller. It rides up over the portrait's legs
+ * (negative top margin) and grows to fill its column, which is stretched to the
+ * tallest column — so all three cards lock to one height, with a modest bounded
+ * whitespace above the Choose button. Spreading GroupPanel's glass onto our own
+ * node is the sanctioned rung-2 way to size the pane. */
 function DreamcallerCard({
   dreamcaller,
   onChoose,
@@ -826,8 +824,8 @@ function DreamcallerCard({
         ...GroupPanel.style(),
         position: "relative",
         zIndex: 1,
+        flex: 1,
         marginTop: -CARD_OVERLAP,
-        minHeight: CARD_MIN_H,
         padding: token("--space-7"),
         display: "flex",
         flexDirection: "column",
@@ -866,9 +864,10 @@ function DreamcallerCard({
         </div>
       </div>
 
-      {/* Flexible whitespace below the tides / above the button, filling the
-          locked card height so all three cards read identically. */}
-      <div style={{ flex: 1, minHeight: token("--space-6") }} />
+      {/* A modest whitespace below the tides / above the button. It also flexes
+          to absorb the height difference when this column is stretched to match
+          the tallest card, so all three cards lock to one height. */}
+      <div style={{ flex: 1, minHeight: token("--space-8") }} />
 
       <div data-choose-dreamcaller={dreamcaller.id}>
         <Button size="lg" full label="Choose" onClick={onChoose} />
@@ -898,7 +897,9 @@ function DreamcallerColumn({
         flexDirection: "column",
       }}
     >
-      <div style={{ position: "relative", height: PORTRAIT_H }}>
+      <div
+        style={{ position: "relative", height: PORTRAIT_H, flex: "none" }}
+      >
         <PortraitRect dreamcaller={dreamcaller} />
         <PortraitName dreamcaller={dreamcaller} />
       </div>
@@ -957,7 +958,10 @@ function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
         <DesktopTitle />
       </div>
 
-      {/* The offered Dreamcallers, centered in the remaining space. */}
+      {/* The offered Dreamcallers, centered in the remaining space. The inner
+          triptych sizes to its content (the tallest column); `alignItems:
+          stretch` there equalizes the three columns to that tallest one, so all
+          cards lock to a single height without stretching to the viewport. */}
       <div
         style={{
           position: "relative",
@@ -966,21 +970,29 @@ function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          flexWrap: "wrap",
-          gap: token("--space-8"),
           padding: `${token("--space-8")} ${token("--gutter")}`,
         }}
       >
-        {dreamcallers.map((dreamcaller) => (
-          <DreamcallerColumn
-            key={dreamcaller.id}
-            dreamcaller={dreamcaller}
-            onChoose={() => {
-              onPick(dreamcaller.id);
-            }}
-            stageRef={stageRef}
-          />
-        ))}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "stretch",
+            justifyContent: "center",
+            flexWrap: "wrap",
+            gap: token("--space-8"),
+          }}
+        >
+          {dreamcallers.map((dreamcaller) => (
+            <DreamcallerColumn
+              key={dreamcaller.id}
+              dreamcaller={dreamcaller}
+              onChoose={() => {
+                onPick(dreamcaller.id);
+              }}
+              stageRef={stageRef}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
