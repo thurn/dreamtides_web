@@ -337,10 +337,14 @@ Proposed additions (a short "Verifying a screen" section in
 
 ## Action items
 
-- [ ] Add the "Verifying a screen" QA bar (items A1–A5) to
+- [x] Add the "Verifying a screen" QA bar (items A1–A5) to
       `.claude/skills/tango/SKILL.md`.
-- [ ] Name the tweaks-panel workflow + cleanup contract in the tango skill;
-      evaluate extracting a reusable devtools panel harness.
+- [x] Name the tweaks-panel workflow + cleanup contract in the tango skill.
+      Evaluated the reusable devtools panel harness and decided against
+      pre-building it: the panel is ~300 lines of schema-specific UI built
+      rarely, and a permanent harness would need a standing lint exemption
+      for raw inputs, whereas the documented contract keeps every exemption
+      temporary. Revisit if a third screen needs a panel.
 - [ ] Add the equal-height/variable-content guidance to the screen-composition
       docs.
 - [ ] Unify the collapsed tide disc into one component rendering with one

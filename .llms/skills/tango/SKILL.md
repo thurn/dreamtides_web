@@ -248,6 +248,83 @@ adapter against its own inputs. Full rationale:
 - **Content voice**: second person, literary register; Title Case titles;
   uppercase monospaced eyebrows; no emoji anywhere.
 
+## Verifying a screen: the visual QA bar
+
+Browser QA (the repo-level verification instructions cover the server, ports,
+and `?goto=` mechanics) confirms much more than "it renders". Walking the
+request and confirming each asked-for element exists is necessary but never
+sufficient — element presence is the floor, not the bar. A screen passes QA
+when it clears all five bars below.
+
+1. **Measure, don't adjectivize.** Every spacing or size judgment in a QA
+   conclusion is a number read from the DOM — `getBoundingClientRect()`
+   deltas via the browser's eval — not an impression formed from a
+   screenshot. State gaps in px. A gap that is not a `--space-*` step (or a
+   deliberate, commented box measure) is a finding. "Tasteful",
+   "comfortable", and "balanced" without an accompanying measurement are not
+   QA conclusions.
+2. **Sweep content variance.** Render the screen's worst cases, not whatever
+   data the current mint happens to produce: the longest and shortest copy in
+   every variable text slot (reload-mint until it appears, or inject it via
+   DOM eval), collections at their display cap, and each toggleable state.
+   Wherever a constraint exists — a cap, an auto-shrink, an overflow — drive
+   it to its limit and screenshot the limit. Verifying that the constraint's
+   code path computes something is not the same as seeing what it renders.
+3. **Exercise every knob.** A new prop, constant, or tunable must be
+   demonstrated at its extremes during QA; a screenshot of the default
+   proves nothing about the knob. This is what catches a knob wired to the
+   wrong property — a "portrait height" that adds empty space above the art
+   instead of scaling it reads fine until someone actually drags it.
+4. **Take one holistic pass, separate from the checklist pass.** After the
+   per-item checks, judge the composition cold: is the control scale right
+   for the platform (desktop is its own idiom — denser, smaller controls
+   than mobile, never mobile components stretched across a wide viewport)?
+   Is visual weight spent where the hierarchy wants it? Is the spacing
+   rhythm consistent? Is there anything you could remove without loss?
+   Literal per-item fixes accumulate into noise that no individual check
+   sees. A fresh-context subagent judging only the screenshot — without the
+   change list — gives an unanchored read cheaply.
+5. **A hedge is a stop sign.** If the pre-commit summary wants to say "but I
+   can tighten it if you'd prefer", the doubt is real and the reader will
+   agree with it. Resolve it before committing: measure it against bar 1,
+   fix it, or put a side-by-side in front of the user and ask.
+
+Case study for why these five exist:
+[docs/postmortems/2026-07-05-desktop-dreamcaller-select.md](../../../docs/postmortems/2026-07-05-desktop-dreamcaller-select.md).
+
+## Tuning taste values: the tweaks-panel loop
+
+Box measures — column widths, portrait heights, overlaps, min-heights — are
+caller numbers outside the token system, so lint cannot govern them; human
+eyes settle their values. When a screen has more than one or two of these to
+dial in, guessing a number, screenshotting, and asking is the slow path.
+Build a dev-only tweaks panel and let the user tune the real screen live:
+
+1. Define a schema object of the tunable values (numbers and booleans) with
+   the current values as defaults.
+2. Render a floating panel of sliders and toggles, gated on
+   `import.meta.env.DEV`, wired to the schema through React state, with a
+   live JSON readout of the current values for copy-paste.
+3. The panel is scaffolding and may use raw native inputs and hand-styled
+   markup: add its devtools path to the exemption lists in
+   `no-raw-interactive-elements`, `no-hardcoded-values`, and
+   `no-untokenized-lengths` for the duration.
+4. The user tunes in the browser and pastes the JSON back; bake those values
+   in as the new defaults and iterate until they stop moving.
+
+**The cleanup contract.** The task is unfinished until the same push that
+adopts the final values also:
+
+- deletes the panel file and all plumbing that threads tweak values through
+  the screen;
+- reverts every lint exemption added for the panel;
+- lands the final values as plain, commented module constants (box measures)
+  — or as tokens, if a value turns out to be spacing/color/type-shaped with a
+  genuine semantic role.
+
+The baked-in result must read as if the values were always design constants;
+the panel leaves no residue in the tree.
+
 ## Adding or changing a component
 
 1. Component source lives in `src/tango/components/` (or `primitives/`).
