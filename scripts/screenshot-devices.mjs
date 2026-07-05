@@ -1,13 +1,14 @@
 /**
- * Device registry + device-chrome wrapper renderer for the mobile screenshot
- * CLI (scripts/mobile-screenshot.mjs).
+ * Device registry + device-chrome wrapper renderer for the screenshot
+ * CLI (scripts/device-screenshots.mjs).
  *
- * Every device is described in *logical* (CSS) pixels plus a device pixel
+ * Every target is described in *logical* (CSS) pixels plus a device pixel
  * ratio. The physical resolution of a capture is therefore
  * `round(logical * dpr)` in each dimension, which is what a real device would
- * report. The numbers here are deliberate approximations of the real hardware:
+ * report. Phone numbers are deliberate approximations of the real hardware:
  * they reproduce each screen's aspect ratio, logical working area, and pixel
- * density closely enough for a layout mock-up, not a pixel-perfect emulation.
+ * density closely enough for a layout mock-up. Desktop targets use 1x density
+ * so the PNG dimensions match the named resolution exactly.
  *
  * Screen cut-outs (Dynamic Island / camera punch-holes) and the home
  * indicator are drawn *on top* of the rendered UI, exactly as they occlude the
@@ -31,9 +32,10 @@
  * @typedef {Object} Device
  * @property {string} id             Stable kebab-case identifier used on the CLI.
  * @property {string} name           Human-readable marketing name.
- * @property {string} os             "ios" | "android".
- * @property {number} logicalWidth   Portrait CSS width.
- * @property {number} logicalHeight  Portrait CSS height.
+ * @property {"phone"|"desktop"} kind
+ * @property {string} os             "ios" | "android" | "desktop".
+ * @property {number} logicalWidth   CSS width.
+ * @property {number} logicalHeight  CSS height.
  * @property {number} dpr            Device pixel ratio (deviceScaleFactor).
  * @property {number} radius         Screen corner radius in CSS px.
  * @property {Cutout} cutout
@@ -47,11 +49,28 @@
 
 const uniform = (n) => ({ top: n, right: n, bottom: n, left: n });
 
+const desktop = (id, width, height) => ({
+  id,
+  name: `${width} x ${height} Desktop`,
+  kind: "desktop",
+  os: "desktop",
+  logicalWidth: width,
+  logicalHeight: height,
+  dpr: 1,
+  radius: 0,
+  cutout: { type: "none" },
+  home: "none",
+  bezel: uniform(0),
+  body: "#000000",
+  note: "Desktop browser viewport.",
+});
+
 /** @type {Device[]} */
 export const DEVICES = [
   {
     id: "iphone-16",
     name: "iPhone 16",
+    kind: "phone",
     os: "ios",
     logicalWidth: 393,
     logicalHeight: 852,
@@ -65,6 +84,7 @@ export const DEVICES = [
   {
     id: "iphone-se-3",
     name: "iPhone SE (3rd gen)",
+    kind: "phone",
     os: "ios",
     logicalWidth: 375,
     logicalHeight: 667,
@@ -80,6 +100,7 @@ export const DEVICES = [
   {
     id: "galaxy-s25-ultra",
     name: "Samsung Galaxy S25 Ultra",
+    kind: "phone",
     os: "android",
     logicalWidth: 480,
     logicalHeight: 1040,
@@ -94,6 +115,7 @@ export const DEVICES = [
   {
     id: "galaxy-a16-5g",
     name: "Samsung Galaxy A16 5G",
+    kind: "phone",
     os: "android",
     logicalWidth: 393,
     logicalHeight: 851,
@@ -107,6 +129,7 @@ export const DEVICES = [
   {
     id: "razr-plus-2025",
     name: "Motorola Razr+ 2025",
+    kind: "phone",
     os: "android",
     logicalWidth: 393,
     logicalHeight: 960,
@@ -122,6 +145,7 @@ export const DEVICES = [
   {
     id: "galaxy-z-flip7",
     name: "Samsung Galaxy Z Flip7",
+    kind: "phone",
     os: "android",
     logicalWidth: 393,
     logicalHeight: 916,
@@ -134,6 +158,11 @@ export const DEVICES = [
     foldable: true,
     note: "Inner (unfolded) 6.9\" display.",
   },
+  desktop("desktop-1920x1080", 1920, 1080),
+  desktop("desktop-2560x1440", 2560, 1440),
+  desktop("desktop-2560x1600", 2560, 1600),
+  desktop("desktop-3440x1440", 3440, 1440),
+  desktop("desktop-2560x1080", 2560, 1080),
 ];
 
 /** Look up a device by id (case-insensitive). */

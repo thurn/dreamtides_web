@@ -1,15 +1,12 @@
 #!/usr/bin/env node
 /**
- * mobile-screenshot — fast mobile mock-ups of the quest prototype UI.
+ * device-screenshots - fast device mock-ups of the quest prototype UI.
  *
- * Renders the running quest prototype web app inside an emulated phone screen
- * (correct logical resolution, aspect ratio and pixel density) and captures a
- * PNG. This is a *mock-up*, not a real device: it never talks to a physical
- * phone, the iOS Simulator, or an Android emulator. It drives a headless
- * Chromium (via the `agent-browser` CLI) at the target device's viewport and
- * device-pixel-ratio, paints the screen cut-out (Dynamic Island / camera
- * punch-hole) and home indicator over the UI, and can wrap the whole thing in a
- * device frame.
+ * Renders the running quest prototype web app inside a selected phone or
+ * desktop viewport and captures a PNG. This is a *mock-up*, not real hardware:
+ * it drives a headless Chromium (via the `agent-browser` CLI) at the target
+ * viewport and device-pixel-ratio, paints phone screen cut-outs and home
+ * indicators when relevant, and can wrap phone captures in a device frame.
  *
  * The status bar (clock / battery / Wi-Fi) is intentionally omitted so the UI
  * renders truly full-screen, edge to edge.
@@ -33,27 +30,26 @@ import {
   findDevice,
   physicalResolution,
   renderWrapper,
-} from "./mobile-devices.mjs";
+} from "./screenshot-devices.mjs";
 
 const DEFAULT_PORT = 5178;
 const DEFAULT_WAIT_MS = 4500;
 
-const HELP = `mobile-screenshot — emulated mobile mock-ups of the quest prototype UI.
+const HELP = `device-screenshots - emulated device mock-ups of the quest prototype UI.
 
 Usage:
-  node scripts/mobile-screenshot.mjs [options]
-  npm run mobile-screenshot -- [options]
+  node scripts/device-screenshots.mjs [options]
+  npm run device-screenshots -- [options]
 
-Captures the running web app at a phone's resolution / aspect ratio / pixel
-density and writes a PNG per device. This is a rendered mock-up — no real
-device, simulator, or emulator is involved. The status bar is omitted (edge to
-edge UI); screen cut-outs and the home indicator are painted over the UI.
+Captures the running web app at a phone or desktop resolution / aspect ratio /
+pixel density and writes a PNG per target. Phone captures include edge-to-edge
+UI with screen cut-outs and the home indicator painted over the UI.
 
-Device selection:
-  -d, --device <id>   Device to capture (repeatable, or comma-separated).
+Target selection:
+  -d, --device <id>   Target to capture (repeatable, or comma-separated).
                       Defaults to iphone-16 if neither this nor --all is given.
-      --all           Capture every known device.
-      --list          List known devices (with resolutions) and exit.
+      --all           Capture every known target.
+      --list          List known targets (with resolutions) and exit.
 
 Target UI:
       --url <base>    Base URL of a running dev server.
@@ -68,10 +64,10 @@ Target UI:
                       afterwards. Uses --port (default ${DEFAULT_PORT}).
 
 Appearance:
-      --frame         Draw a device body / bezel around the screen. Adds a
-                      small device-name caption above the frame.
-      --no-cutout     Hide the Dynamic Island / camera punch-hole.
-      --no-home       Hide the home indicator.
+      --frame         Draw available target chrome around the screen. Adds a
+                      small target-name caption above the frame.
+      --no-cutout     Hide phone Dynamic Island / camera punch-hole.
+      --no-home       Hide phone home indicator.
       --no-caption    Omit the device-name caption in --frame mode.
       --backdrop <c>  CSS colour behind the screen's rounded corners.
                       Default: #0e0e12
@@ -79,11 +75,12 @@ Appearance:
       --light         Prefer light colour scheme.
 
 Capture:
-  -o, --out <path>    Output directory, or a .png file when one device is
+  -o, --out <path>    Output directory, or a .png file when one target is
                       selected. Default: ./screenshots
       --wait <ms>     Delay after load before capturing. Default: ${DEFAULT_WAIT_MS}
       --scale <n>     Override the device pixel ratio (e.g. 1 for a smaller
-                      file). Default: each device's true density.
+                      phone file, 2 for a denser desktop capture). Default:
+                      each target's configured density.
 
 Misc:
       --session <s>   agent-browser session name. Default: a per-run name.
@@ -92,17 +89,17 @@ Misc:
 
 Examples:
   # A running dev server on port 5178, default iPhone 16, default route:
-  node scripts/mobile-screenshot.mjs
+  node scripts/device-screenshots.mjs
 
-  # Every device, framed, jumping to the shop QA scene:
-  node scripts/mobile-screenshot.mjs --all --frame --scene shop
+  # Every target, jumping to the shop QA scene:
+  node scripts/device-screenshots.mjs --all --scene shop
 
-  # Auto-start a server, capture two devices into a folder:
-  node scripts/mobile-screenshot.mjs --start -d iphone-16 -d galaxy-z-flip7 -o ./out
+  # Auto-start a server, capture a phone and desktop viewport into a folder:
+  node scripts/device-screenshots.mjs --start -d iphone-16 -d desktop-1920x1080 -o ./out
 `;
 
 function fail(message) {
-  process.stderr.write(`mobile-screenshot: ${message}\n`);
+  process.stderr.write(`device-screenshots: ${message}\n`);
   process.exit(1);
 }
 
@@ -299,10 +296,10 @@ async function main() {
   const colorScheme = values.light ? "light" : "dark";
 
   const binary = resolveAgentBrowser();
-  const session = values.session ?? `mobilecap-${process.pid}`;
+  const session = values.session ?? `devicecap-${process.pid}`;
   const run = makeRunner(binary, session);
 
-  const tmpDir = mkdtempSync(join(tmpdir(), "mobile-screenshot-"));
+  const tmpDir = mkdtempSync(join(tmpdir(), "device-screenshots-"));
   let devServer = null;
 
   try {
