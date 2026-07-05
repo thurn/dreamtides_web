@@ -565,6 +565,11 @@ const COLUMN_W = 292; // narrower than the old medallion column
 const PORTRAIT_H = 404; // a tall rectangle crop of the standing figure
 const CARD_OVERLAP = 150; // how far the console card rides up over the legs
 const TIDE_DISC_PX = 30; // the hover-only tide discs (a touch bigger)
+// A floor for the ability-text region so cards with shorter abilities keep the
+// same layout as the common ~3-line ones — the height difference is absorbed
+// here (above the divider) rather than opening a chasm above the Choose button.
+// --t-rules is 14px at 1.36 line-height, so three lines ≈ 58px.
+const ABILITY_MIN_H = 58;
 
 /** What the "Tides (i)" reveal explains, mirroring the legacy select screen. */
 const TIDES_BLURB =
@@ -829,10 +834,14 @@ function DreamcallerCard({
         padding: token("--space-7"),
         display: "flex",
         flexDirection: "column",
-        gap: token("--space-5"),
       }}
     >
-      <AbilityReveal text={dreamcaller.renderedText} stageRef={stageRef} />
+      {/* Ability text, floored to a common height so a short ability doesn't
+          push its divider (and everything below) up out of line with the
+          others. */}
+      <div style={{ minHeight: ABILITY_MIN_H }}>
+        <AbilityReveal text={dreamcaller.renderedText} stageRef={stageRef} />
+      </div>
 
       <ConsoleDivider />
 
@@ -844,6 +853,7 @@ function DreamcallerCard({
           alignItems: "center",
           justifyContent: "space-between",
           gap: token("--space-4"),
+          marginTop: token("--space-4"),
         }}
       >
         {hasTides ? (
@@ -864,12 +874,15 @@ function DreamcallerCard({
         </div>
       </div>
 
-      {/* A modest whitespace below the tides / above the button. It also flexes
-          to absorb the height difference when this column is stretched to match
-          the tallest card, so all three cards lock to one height. */}
-      <div style={{ flex: 1, minHeight: token("--space-8") }} />
+      {/* A flex backstop that only grows when a rare long ability makes another
+          column taller; on the common case it is zero, so the gap above the
+          button is just the fixed margin below. */}
+      <div style={{ flex: 1 }} />
 
-      <div data-choose-dreamcaller={dreamcaller.id}>
+      <div
+        data-choose-dreamcaller={dreamcaller.id}
+        style={{ marginTop: token("--space-8") }}
+      >
         <Button size="lg" full label="Choose" onClick={onChoose} />
       </div>
     </div>
@@ -877,8 +890,9 @@ function DreamcallerCard({
 }
 
 /** One desktop Dreamcaller column: a tall rectangular portrait with the name
- * floating above the head, and the locked-size console card riding up over the
- * legs. Fixed width + fixed card height lock all three columns to one size. */
+ * floating above the head, and the console card riding up over the legs. Fixed
+ * width, a floored ability region, and stretch-to-tallest equalization lock all
+ * three columns to one size. */
 function DreamcallerColumn({
   dreamcaller,
   onChoose,
