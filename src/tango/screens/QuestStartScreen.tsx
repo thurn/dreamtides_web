@@ -186,23 +186,30 @@ function ConsoleDivider({ flush = false }: { flush?: boolean }) {
 }
 
 /** The smallest the ability text is allowed to auto-shrink to (fraction of its
- * natural size), so a long ability stays legible rather than scaling to nothing. */
-const ABILITY_MIN_SCALE = 0.7;
+ * natural size). A gentle floor: past two lines the box grows rather than
+ * cramming, so the shrink only ever nudges the font a little (never the harsh
+ * squeeze needed to force every ability into two lines). */
+const ABILITY_MIN_SCALE = 0.9;
 
-/** A fixed-height box that vertically centers its content and shrinks it (as a
- * uniform scale about its center) just enough to fit `height` when the content
- * would otherwise overflow. A transform reads as a smaller font while keeping
- * the rich-text pips/carets in proportion; `offsetHeight` is pre-transform, so
- * the natural size is measured directly with no reset dance. */
+/** A box that reserves `minHeight` (so short abilities align across columns and
+ * center within two lines) but GROWS for longer copy instead of clipping it.
+ * Content past the minimum is nudged down by a gentle uniform scale — floored
+ * at {@link ABILITY_MIN_SCALE} — and the box is sized to the scaled content so
+ * it stays tight with no clipping. The scale reads as a slightly smaller font
+ * while keeping the rich-text pips/carets in proportion; `offsetHeight` is
+ * pre-transform, so the natural size is measured directly with no reset dance. */
 function AutoShrinkText({
-  height,
+  minHeight,
   children,
 }: {
-  height: number;
+  minHeight: number;
   children: React.ReactNode;
 }) {
   const ref = useRef<HTMLDivElement>(null);
-  const [scale, setScale] = useState(1);
+  const [{ scale, boxHeight }, setFit] = useState({
+    scale: 1,
+    boxHeight: minHeight,
+  });
 
   useLayoutEffect(() => {
     const el = ref.current;
@@ -210,15 +217,20 @@ function AutoShrinkText({
     // offsetHeight ignores the visual transform, so it is always the content's
     // natural (unscaled) height regardless of the scale currently applied.
     const natural = el.offsetHeight;
-    const next =
-      natural > height ? Math.max(ABILITY_MIN_SCALE, height / natural) : 1;
-    setScale(next);
-  }, [children, height]);
+    const nextScale =
+      natural > minHeight
+        ? Math.max(ABILITY_MIN_SCALE, minHeight / natural)
+        : 1;
+    // Grow to fit the scaled content (never below the two-line minimum), so a
+    // long ability takes the room it needs at a gently reduced size.
+    const nextBox = Math.max(minHeight, Math.round(natural * nextScale));
+    setFit({ scale: nextScale, boxHeight: nextBox });
+  }, [children, minHeight]);
 
   return (
     <div
       style={{
-        height,
+        height: boxHeight,
         display: "flex",
         alignItems: "center",
         overflow: "hidden",
@@ -240,17 +252,17 @@ function AutoShrinkText({
 
 /** Ability text with a press/hover reveal of its glossary-keyword definitions.
  * When the text has no terms it renders plain, with no reveal wiring. When
- * `clampHeight` is set (the desktop card, whose columns share one height) the
- * text renders in a fixed-height, vertically-centered box and auto-shrinks to
- * fit; without it the text takes its natural height (the mobile console). */
+ * `minHeight` is set (the desktop card) the text renders in a two-line-minimum,
+ * vertically-centered box that grows for longer copy and gently auto-shrinks it;
+ * without it the text takes its natural height (the mobile console). */
 function AbilityReveal({
   text,
   stageRef,
-  clampHeight,
+  minHeight,
 }: {
   text: string;
   stageRef: React.RefObject<HTMLElement | null>;
-  clampHeight?: number;
+  minHeight?: number;
 }) {
   const body = (
     <div
@@ -275,10 +287,10 @@ function AbilityReveal({
         {body}
       </InfoCard.PressInfo>
     );
-  if (clampHeight == null) {
+  if (minHeight == null) {
     return content;
   }
-  return <AutoShrinkText height={clampHeight}>{content}</AutoShrinkText>;
+  return <AutoShrinkText minHeight={minHeight}>{content}</AutoShrinkText>;
 }
 
 /** The starting-essence value with a press/hover explanation. Informational —
@@ -662,12 +674,12 @@ const PORTRAIT_H = 715; // the standing figure's stage height
 const PORTRAIT_SCALE = 1.2; // grows the cutout art from the feet past the column
 const CARD_W = 320; // console-card width (narrower than the column, centered)
 const CARD_OVERLAP = 275; // how far the card's center rides up over the figure
-/** The fixed height of the desktop ability-text box — two lines of the rules
- * voice (14px × 1.36 ≈ 38px, rounded to a round 40). The ability text is
- * vertically centered in this box and auto-shrinks to fit, so every column's
- * ability region is exactly the same height regardless of copy length. Box
- * measures are content-driven layout, so this is a caller number. */
-const ABILITY_BOX_H = 40;
+/** The minimum height of the desktop ability-text box — two lines of the rules
+ * voice (14px × 1.36 ≈ 38px, rounded to a round 40). Short abilities center
+ * within this two-line floor so the common case aligns across columns; longer
+ * copy grows the box and is nudged down by a gentle scale rather than crammed.
+ * Box measures are content-driven layout, so this is a caller number. */
+const ABILITY_BOX_MIN_H = 40;
 
 /** What the "Tides (i)" reveal explains, mirroring the legacy select screen. */
 const TIDES_BLURB =
@@ -973,7 +985,7 @@ function DreamcallerCard({
       <AbilityReveal
         text={dreamcaller.renderedText}
         stageRef={stageRef}
-        clampHeight={ABILITY_BOX_H}
+        minHeight={ABILITY_BOX_MIN_H}
       />
 
       <div style={{ marginTop: token("--space-6") }}>
