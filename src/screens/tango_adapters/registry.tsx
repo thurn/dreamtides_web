@@ -12,6 +12,7 @@
 import type { ReactNode } from "react";
 import type { Screen, SiteState } from "../../types/quest";
 import { QuestStartScreenAdapter } from "./QuestStartScreenAdapter";
+import { DreamscapeScreenAdapter } from "./DreamscapeScreenAdapter";
 
 /**
  * The Tango implementation of a top-level `Screen`, or null when none exists yet
@@ -22,6 +23,8 @@ export function tangoScreenFor(screen: Screen): ReactNode | null {
   switch (screen.type) {
     case "questStart":
       return <QuestStartScreenAdapter />;
+    case "dreamscape":
+      return <DreamscapeScreenAdapter />;
     default:
       return null;
   }

@@ -70,6 +70,31 @@ const ATLAS_SCENE: QaScene = {
 };
 
 /**
+ * The inside-a-dreamscape overview, parked on the starter dreamscape with its
+ * scatter of sites. Otherwise reached only by winning the keeper battle and
+ * choosing a dreamscape; parking here lets the Tango dreamscape redesign (the
+ * scene, the site nodes, and the QuestStatusBar HUD) be QA'd from a URL.
+ */
+const DREAMSCAPE_SCENE: QaScene = {
+  id: "dreamscape",
+  label: "Dreamscape",
+  description:
+    "The inside-a-dreamscape overview with its floating site nodes and the " +
+    "persistent QuestStatusBar, parked on the dreamscape screen for UI QA.",
+  build: (questContent) => {
+    const foundation = createQaQuestFoundation(questContent);
+    if (foundation === null) {
+      return null;
+    }
+    return {
+      ...foundation.state,
+      currentDreamscape: foundation.starterNode.id,
+      screen: { type: "dreamscape" },
+    };
+  },
+};
+
+/**
  * Builds a scene parked directly on a site screen of `siteType`. Most site
  * screens are otherwise reachable only after winning the keeper battle and
  * choosing the dreamscape whose resident guide tends that site type, so this
@@ -196,6 +221,7 @@ function siteScene(
 export const QA_SCENES: readonly QaScene[] = [
   DREAMCALLER_SELECT_SCENE,
   ATLAS_SCENE,
+  DREAMSCAPE_SCENE,
   siteScene("transfiguration", "Transfiguration", "Transfiguration"),
   siteScene(
     "transfiguration-enhanced",

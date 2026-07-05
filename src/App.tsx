@@ -28,6 +28,7 @@ import { HUD } from "./components/HUD";
 import { DeckViewer } from "./components/DeckViewer";
 import { PoolViewer } from "./components/PoolViewer";
 import { StartingDeckModal } from "./components/StartingDeckModal";
+import { DreamscapeQuestMenu } from "./components/DreamscapeQuestMenu";
 import { GlossaryPopup } from "./components/GlossaryPopup";
 import { DebugScreen } from "./screens/DebugScreen";
 import QuestDebugEditor from "./screens/QuestDebugEditor";
@@ -69,9 +70,16 @@ export function QuestApp({
   // and interactive once dismissed.
   const showStarterDeckIntro =
     state.dreamcaller !== null && !state.hasSeenStartingDeckPopup;
+  // The Tango dreamscape re-homes the persistent bottom bar into its own
+  // in-screen QuestStatusBar and its utility menu into the top-left
+  // DreamscapeQuestMenu, so the app-shell legacy HUD is suppressed there to
+  // avoid a doubled bottom bar.
+  const dreamscapeUsesTango =
+    runtimeConfig.uiVariant === "tango" && state.screen.type === "dreamscape";
   const showHud =
     state.screen.type !== "questStart"
-    && !isBattleSiteHudHidden(state);
+    && !isBattleSiteHudHidden(state)
+    && !dreamscapeUsesTango;
   const [deckViewerOpen, setDeckViewerOpen] = useState(false);
   const [poolViewerOpen, setPoolViewerOpen] = useState(false);
   const [glossaryOpen, setGlossaryOpen] = useState(false);
@@ -435,6 +443,19 @@ export function QuestApp({
           runtimeConfig={runtimeConfig}
           onJourneyExplanationChange={setJourneyExplanation}
         />
+        {dreamscapeUsesTango && state.dreamcaller !== null && (
+          <ErrorBoundary scope="overlay:dreamscape-menu">
+            <DreamscapeQuestMenu
+              onOpenDeckViewer={handleOpenDeckViewer}
+              onOpenGlossary={handleOpenGlossary}
+              onOpenPoolViewer={handleOpenPoolViewer}
+              onOpenDebugScreen={handleOpenDebugScreen}
+              onOpenQuestEditor={handleOpenQuestEditor}
+              hasDraftData={hasDraftData}
+              onLoadQuestState={mutations.loadQuestState}
+            />
+          </ErrorBoundary>
+        )}
         {showHud && (
           <ErrorBoundary scope="overlay:hud">
             <HUD

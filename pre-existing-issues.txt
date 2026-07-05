@@ -121,3 +121,33 @@ with this commit); these remain open and block "docs-only" mass production:
    enforces it; a typed `no-name-keyed-cards` rule (flag .name-keyed
    Map/Set/object keys and name-equality comparisons on card types,
    project-wide) would close the class.
+
+
+Tango mobile dreamscape redesign — follow-ups / known items
+===========================================================
+
+1. Utility-menu consolidation debt (requested-divergence convergence decision).
+   `src/components/DreamscapeQuestMenu.tsx` re-implements the same utility-menu
+   actions and Save/Load flow that `src/components/HUD.tsx` renders (the root
+   action list, the `window.prompt` save, and the fetched Load-Quest submenu).
+   The Tango dreamscape suppresses the legacy app-shell HUD, so its menu had to
+   live somewhere; it was built screen-locally rather than blocked on a refactor.
+   DECISION: converge later by extracting one shared `QuestUtilityMenu` component
+   (owning the open/submenu/save-load state) that both the legacy HUD and the
+   dreamscape's top-left menu render at their respective placements. Until then
+   the two action lists are kept in agreement by hand.
+
+2. Top-left menu button overlaps the multiplayer presence pill.
+   The mockup homes the utility menu at the top-left corner. The pre-existing
+   "N CONNECTED" presence indicator (App.tsx, `fixed top-1 left-2 z-40`,
+   pointer-events-none) sits in the same corner, so the new `z-60` menu button
+   now paints over it. Cosmetic only — the pill is pointer-events-none, so
+   nothing is blocked — but the corner reads cluttered in a shared room.
+   Consider relocating the presence pill or folding connection state into the
+   Tango chrome.
+
+3. Desktop dreamscape layout is deferred.
+   Per the task scope (mobile only), the Tango dreamscape serves the mobile
+   composition on every viewport once `?ui=tango` is active. A desktop-tuned
+   layout (denser controls, wider node scatter) is a follow-up; `?ui=legacy`
+   remains the rollback to the legacy dreamscape in the meantime.
