@@ -36,60 +36,18 @@ import { createPortal } from "react-dom";
 import { InfoCard } from "../overlay/InfoCard";
 import { richText } from "../card/rich-text";
 import { token } from "../../primitives/tokens";
-import { GLYPHS, type Glyph } from "../../primitives/glyph";
+import { TIDES, type Tide } from "./tide-spec";
+
+// The tide icon + color table lives in `tide-spec` so the shared InfoCard can
+// derive a tide's colored disc from it too without a circular import; it is
+// re-exported here so long-standing callers keep importing `Tide` / `tideVisual`
+// from TidePill.
+export { tideVisual, type Tide } from "./tide-spec";
 
 const { usePressReveal, anchorRect, PressPopover, PRESS_SCALE } = InfoCard;
 
 /** Height/scale variants. */
 type TidePillSize = "sm" | "md";
-
-/** The game's five tides. Each owns a fixed icon + color (see {@link TIDES}). */
-export type Tide = "ember" | "valor" | "vision" | "wild" | "shadow";
-
-interface TideSpec {
-  /** The tide's fixed mark — one of the five filled tide glyphs. */
-  icon: Glyph;
-  bg: string;
-  fg: string;
-  bd: string;
-}
-
-/** Build a tide's tinted background/border from its bright accent color, so all
- * five read as one hue family (mirrors the production chip treatment). */
-function tideSpec(icon: Glyph, accent: string): TideSpec {
-  return {
-    icon,
-    fg: accent,
-    bg: `color-mix(in srgb, ${accent} 18%, transparent)`,
-    bd: `color-mix(in srgb, ${accent} 45%, transparent)`,
-  };
-}
-
-/**
- * The five tides, each with its fixed filled mark and accent color. The accent
- * hexes are the production `TIDE_ACCENT_COLOR` values (see the file header).
- */
-const TIDES: Record<Tide, TideSpec> = {
-  ember: tideSpec(GLYPHS.tideEmber, "#fb923c"),
-  valor: tideSpec(GLYPHS.tideValor, "#facc15"),
-  vision: tideSpec(GLYPHS.tideVision, "#60a5fa"),
-  wild: tideSpec(GLYPHS.tideWild, "#4ade80"),
-  shadow: tideSpec(GLYPHS.tideShadow, "#c084fc"),
-};
-
-/**
- * The fixed icon + tinted colors for a tide, so a sibling component (e.g. the
- * collapsed {@link TideCluster}) can render a tide's disc / flying clone
- * pixel-identically to the pill it becomes — without duplicating the tone table.
- */
-export function tideVisual(tide: Tide): {
-  icon: Glyph;
-  bg: string;
-  fg: string;
-  bd: string;
-} {
-  return TIDES[tide];
-}
 
 export interface TidePillProps {
   /** The tide/affiliation name. Resolve any UUID to the display name before

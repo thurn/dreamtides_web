@@ -12,7 +12,7 @@
 // PURE: it renders from a view-model and reports the chosen Dreamcaller through
 // `onPick`; the adapter owns state, the offer, the seed, and startQuest.
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Motes } from "../components/hud/Motes";
 import { GroupPanel } from "../components/controls/GroupPanel";
 import { Button } from "../components/controls/Button";
@@ -185,14 +185,72 @@ function ConsoleDivider({ flush = false }: { flush?: boolean }) {
   );
 }
 
+/** The smallest the ability text is allowed to auto-shrink to (fraction of its
+ * natural size), so a long ability stays legible rather than scaling to nothing. */
+const ABILITY_MIN_SCALE = 0.7;
+
+/** A fixed-height box that vertically centers its content and shrinks it (as a
+ * uniform scale about its center) just enough to fit `height` when the content
+ * would otherwise overflow. A transform reads as a smaller font while keeping
+ * the rich-text pips/carets in proportion; `offsetHeight` is pre-transform, so
+ * the natural size is measured directly with no reset dance. */
+function AutoShrinkText({
+  height,
+  children,
+}: {
+  height: number;
+  children: React.ReactNode;
+}) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    // offsetHeight ignores the visual transform, so it is always the content's
+    // natural (unscaled) height regardless of the scale currently applied.
+    const natural = el.offsetHeight;
+    const next =
+      natural > height ? Math.max(ABILITY_MIN_SCALE, height / natural) : 1;
+    setScale(next);
+  }, [children, height]);
+
+  return (
+    <div
+      style={{
+        height,
+        display: "flex",
+        alignItems: "center",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        ref={ref}
+        style={{
+          width: "100%",
+          transform: scale < 1 ? `scale(${String(scale)})` : undefined,
+          transformOrigin: "left center",
+        }}
+      >
+        {children}
+      </div>
+    </div>
+  );
+}
+
 /** Ability text with a press/hover reveal of its glossary-keyword definitions.
- * When the text has no terms it renders plain, with no reveal wiring. */
+ * When the text has no terms it renders plain, with no reveal wiring. When
+ * `clampHeight` is set (the desktop card, whose columns share one height) the
+ * text renders in a fixed-height, vertically-centered box and auto-shrinks to
+ * fit; without it the text takes its natural height (the mobile console). */
 function AbilityReveal({
   text,
   stageRef,
+  clampHeight,
 }: {
   text: string;
   stageRef: React.RefObject<HTMLElement | null>;
+  clampHeight?: number;
 }) {
   const body = (
     <div
@@ -205,21 +263,27 @@ function AbilityReveal({
       <RulesText text={text} />
     </div>
   );
-  if (extractGlossaryTerms(text).length === 0) {
-    return body;
+  const content =
+    extractGlossaryTerms(text).length === 0 ? (
+      body
+    ) : (
+      <InfoCard.PressInfo
+        stageRef={stageRef}
+        as="div"
+        card={<CardTermDefinitions text={text} />}
+      >
+        {body}
+      </InfoCard.PressInfo>
+    );
+  if (clampHeight == null) {
+    return content;
   }
-  return (
-    <InfoCard.PressInfo
-      stageRef={stageRef}
-      as="div"
-      card={<CardTermDefinitions text={text} />}
-    >
-      {body}
-    </InfoCard.PressInfo>
-  );
+  return <AutoShrinkText height={clampHeight}>{content}</AutoShrinkText>;
 }
 
-/** The starting-essence value with a press/hover explanation. */
+/** The starting-essence value with a press/hover explanation. Informational —
+ * hovering brightens it subtly but a press does not compress it (there is no
+ * action to press). */
 function EssenceReveal({
   dreamcaller,
   stageRef,
@@ -227,9 +291,11 @@ function EssenceReveal({
   dreamcaller: DreamcallerOfferView;
   stageRef: React.RefObject<HTMLElement | null>;
 }) {
+  const [hovered, setHovered] = useState(false);
   return (
     <InfoCard.PressInfo
       stageRef={stageRef}
+      compress={false}
       card={
         <InfoCard
           variant="icon"
@@ -243,11 +309,15 @@ function EssenceReveal({
     >
       <span
         data-starting-essence-value={dreamcaller.id}
+        onPointerEnter={() => setHovered(true)}
+        onPointerLeave={() => setHovered(false)}
         style={{
           display: "inline-flex",
           alignItems: "center",
           font: token("--t-body"),
           color: token("--text-primary"),
+          filter: hovered ? "brightness(1.18)" : "none",
+          transition: `filter ${token("--dur-fast")} ${token("--ease-out")}`,
         }}
       >
         <ResourceChip kind="essence" value={dreamcaller.startingEssence} />
@@ -592,6 +662,12 @@ const PORTRAIT_H = 715; // the standing figure's stage height
 const PORTRAIT_SCALE = 1.2; // grows the cutout art from the feet past the column
 const CARD_W = 320; // console-card width (narrower than the column, centered)
 const CARD_OVERLAP = 275; // how far the card's center rides up over the figure
+/** The fixed height of the desktop ability-text box — two lines of the rules
+ * voice (14px × 1.36 ≈ 38px, rounded to a round 40). The ability text is
+ * vertically centered in this box and auto-shrinks to fit, so every column's
+ * ability region is exactly the same height regardless of copy length. Box
+ * measures are content-driven layout, so this is a caller number. */
+const ABILITY_BOX_H = 40;
 
 /** What the "Tides (i)" reveal explains, mirroring the legacy select screen. */
 const TIDES_BLURB =
@@ -744,10 +820,12 @@ function PortraitName({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
   );
 }
 
-/** One hover-only tide mark: a colored disc carrying the tide's glyph that
- * reveals the tide's name + description through the shared InfoCard on hover /
- * press. Uses `tideVisual` — the sanctioned tide-disc palette — so the disc
- * reads identically to that tide's pill elsewhere. */
+/** One hover-only tide mark: a colored disc carrying the tide's glyph. On hover
+ * / press it reveals, through the shared InfoCard, what tides are (the general
+ * blurb) stacked ABOVE this specific tide's own colored card. Informational —
+ * hovering brightens the disc but a press does not compress it (there is no
+ * action to press). Uses `tideVisual` — the sanctioned tide-disc palette — so
+ * the disc reads identically to that tide's card and pill elsewhere. */
 function TideDiscReveal({
   tide,
   stageRef,
@@ -756,21 +834,39 @@ function TideDiscReveal({
   stageRef: React.RefObject<HTMLElement | null>;
 }) {
   const v = tideVisual(tide.tide);
+  const [hovered, setHovered] = useState(false);
   return (
     <InfoCard.PressInfo
       stageRef={stageRef}
+      compress={false}
       card={
-        <InfoCard
-          variant="icon"
-          glyph={v.icon}
-          title={tide.label}
-          body={richText.plain(tide.description)}
-        />
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: token("--space-3"),
+          }}
+        >
+          <InfoCard
+            variant="icon"
+            glyph={GLYPHS.water}
+            title="Tides"
+            body={richText.plain(TIDES_BLURB)}
+          />
+          <InfoCard
+            variant="tide"
+            tide={tide.tide}
+            title={tide.label}
+            body={richText.plain(tide.description)}
+          />
+        </div>
       }
     >
       <span
         data-tide-disc={tide.id}
         aria-label={`Tide: ${tide.label}`}
+        onPointerEnter={() => setHovered(true)}
+        onPointerLeave={() => setHovered(false)}
         style={{
           width: TIDE_DISC_PX,
           height: TIDE_DISC_PX,
@@ -780,6 +876,8 @@ function TideDiscReveal({
           background: v.bg,
           border: `1px solid ${v.bd}`,
           cursor: "pointer",
+          filter: hovered ? "brightness(1.25)" : "none",
+          transition: `filter ${token("--dur-fast")} ${token("--ease-out")}`,
         }}
       >
         <GlowIcon
@@ -792,10 +890,10 @@ function TideDiscReveal({
   );
 }
 
-/** The desktop tides display: a "Tides:" label whose text reveals what tides
- * are on hover / press, followed by a row of hover-only tide discs (capped at
- * {@link MAX_TIDE_DISCS}). Nothing expands — each disc reveals its own tide on
- * hover, mirroring the legacy select UI. */
+/** The desktop tides display: a plain "Tides:" label, followed by a row of
+ * hover-only tide discs (capped at {@link MAX_TIDE_DISCS}). Nothing expands —
+ * each disc reveals, on hover, what tides are plus its own tide's card. The
+ * label itself is a static caption, not a reveal trigger. */
 function StaticTides({
   tides,
   stageRef,
@@ -807,30 +905,17 @@ function StaticTides({
     <div
       style={{ display: "flex", alignItems: "center", gap: token("--space-4") }}
     >
-      <InfoCard.PressInfo
-        stageRef={stageRef}
-        card={
-          <InfoCard
-            variant="icon"
-            glyph={GLYPHS.water}
-            title="Tides"
-            body={richText.plain(TIDES_BLURB)}
-          />
-        }
+      <span
+        style={{
+          font: token("--t-eyebrow"),
+          letterSpacing: token("--tracking-eyebrow"),
+          textTransform: "uppercase",
+          color: token("--text-secondary"),
+          lineHeight: 1,
+        }}
       >
-        <span
-          style={{
-            font: token("--t-eyebrow"),
-            letterSpacing: token("--tracking-eyebrow"),
-            textTransform: "uppercase",
-            color: token("--text-secondary"),
-            lineHeight: 1,
-            cursor: "pointer",
-          }}
-        >
-          Tides:
-        </span>
-      </InfoCard.PressInfo>
+        Tides:
+      </span>
 
       <span
         style={{ display: "flex", alignItems: "center", gap: token("--space-2") }}
@@ -885,7 +970,11 @@ function DreamcallerCard({
         flexDirection: "column",
       }}
     >
-      <AbilityReveal text={dreamcaller.renderedText} stageRef={stageRef} />
+      <AbilityReveal
+        text={dreamcaller.renderedText}
+        stageRef={stageRef}
+        clampHeight={ABILITY_BOX_H}
+      />
 
       <div style={{ marginTop: token("--space-6") }}>
         <ConsoleDivider flush />

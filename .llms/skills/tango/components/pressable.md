@@ -16,6 +16,7 @@ The one press-feedback primitive. Wrap any element in it and that element gains 
 | --- | --- | --- | --- | --- |
 | `as` | `ElementType<any, keyof IntrinsicElements>` = `"symbol" \| "object" \| "map" \| "filter" \| "span" \| "div" \| "a" \| "abbr" \| "address" \| "area" \| "article" \| "aside" \| "audio" \| "b" \| "base" \| "bdi" \| "bdo" \| "big" \| "blockquote" \| "body" \| "br" \| "button" \| "canvas" \| "caption" \| "center" \| "cite" \| "code" \| "col" \| "colgroup" \| "data" \| "datalist" \| "dd" \| "del" \| "details" \| "dfn" \| "dialog" \| "dl" \| "dt" \| "em" \| "embed" \| "fieldset" \| "figcaption" \| "figure" \| "footer" \| "form" \| "h1" \| "h2" \| "h3" \| "h4" \| "h5" \| "h6" \| "head" \| "header" \| "hgroup" \| "hr" \| "html" \| "i" \| "iframe" \| "img" \| "input" \| "ins" \| "kbd" \| "keygen" \| "label" \| "legend" \| "li" \| "link" \| "main" \| "mark" \| "menu" \| "menuitem" \| "meta" \| "meter" \| "nav" \| "noindex" \| "noscript" \| "ol" \| "optgroup" \| "option" \| "output" \| "p" \| "param" \| "picture" \| "pre" \| "progress" \| "q" \| "rp" \| "rt" \| "ruby" \| "s" \| "samp" \| "search" \| "slot" \| "script" \| "section" \| "select" \| "small" \| "source" \| "strong" \| "style" \| "sub" \| "summary" \| "sup" \| "table" \| "template" \| "tbody" \| "td" \| "textarea" \| "tfoot" \| "th" \| "thead" \| "time" \| "title" \| "tr" \| "track" \| "u" \| "ul" \| "var" \| "video" \| "wbr" \| "webview" \| "svg" \| "animate" \| "animateMotion" \| "animateTransform" \| "circle" \| "clipPath" \| "defs" \| "desc" \| "ellipse" \| "feBlend" \| "feColorMatrix" \| "feComponentTransfer" \| "feComposite" \| "feConvolveMatrix" \| "feDiffuseLighting" \| "feDisplacementMap" \| "feDistantLight" \| "feDropShadow" \| "feFlood" \| "feFuncA" \| "feFuncB" \| "feFuncG" \| "feFuncR" \| "feGaussianBlur" \| "feImage" \| "feMerge" \| "feMergeNode" \| "feMorphology" \| "feOffset" \| "fePointLight" \| "feSpecularLighting" \| "feSpotLight" \| "feTile" \| "feTurbulence" \| "foreignObject" \| "g" \| "image" \| "line" \| "linearGradient" \| "marker" \| "mask" \| "metadata" \| "mpath" \| "path" \| "pattern" \| "polygon" \| "polyline" \| "radialGradient" \| "rect" \| "set" \| "stop" \| "switch" \| "text" \| "textPath" \| "tspan" \| "use" \| "view"` | no | `button` | Element or component to render. Default 'button'. |
 | `disabled` | `boolean` | no | `false` | Disables press feedback and pointer handlers, and shows the default cursor. |
+| `compress` | `boolean` | no | `true` | Whether the element compresses (scale-down) while pressed. Default true. Set false for a surface you hover to reveal information but cannot act on (a tide disc, an essence value): its pointer handlers, cursor, and tap-highlight suppression stay, but a press must not read as an actionable button by shrinking. This is a behavioral variant of the one press feedback, not a style escape hatch. |
 | `children` | `ReactNode` | no | — | Content rendered inside the pressable element. |
 
 ## Usage
@@ -39,5 +40,15 @@ A disabled Pressable detaches its press feedback and shows the default cursor.
 ```tsx
 <Pressable as="div" disabled>
   <span className="my-target">Unavailable</span>
+</Pressable>
+```
+
+### No compression (hover-only)
+
+Set `compress={false}` for a surface you hover to reveal information but cannot act on — its pointer handlers and cursor stay, but a press does not scale it down, so it never reads as an actionable button.
+
+```tsx
+<Pressable as="span" compress={false}>
+  <span className="my-target">Reveal on hover</span>
 </Pressable>
 ```

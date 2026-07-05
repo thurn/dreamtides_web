@@ -53,11 +53,19 @@ export const pressableDemo: TangoComponent = {
   <span className="my-target">Unavailable</span>
 </Pressable>`,
     },
+    {
+      label: "No compression (hover-only)",
+      note: "Set `compress={false}` for a surface you hover to reveal information but cannot act on — its pointer handlers and cursor stay, but a press does not scale it down, so it never reads as an actionable button.",
+      code: `<Pressable as="span" compress={false}>
+  <span className="my-target">Reveal on hover</span>
+</Pressable>`,
+    },
   ],
   demo: {
     defaultArgs: {
       as: "button",
       disabled: false,
+      compress: true,
     },
     sampleContent: {
       children: <span style={targetStyle}>Press me</span>,

@@ -122,6 +122,15 @@ export interface PressableProps extends React.HTMLAttributes<HTMLElement> {
   as?: React.ElementType;
   /** Disables press feedback and pointer handlers, and shows the default cursor. */
   disabled?: boolean;
+  /**
+   * Whether the element compresses (scale-down) while pressed. Default true.
+   * Set false for a surface you hover to reveal information but cannot act on
+   * (a tide disc, an essence value): its pointer handlers, cursor, and
+   * tap-highlight suppression stay, but a press must not read as an actionable
+   * button by shrinking. This is a behavioral variant of the one press
+   * feedback, not a style escape hatch.
+   */
+  compress?: boolean;
   /** Content rendered inside the pressable element. */
   children?: React.ReactNode;
 }
@@ -142,6 +151,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
     {
       as = "button",
       disabled = false,
+      compress = true,
       style,
       onPointerDown,
       onPointerUp,
@@ -204,7 +214,8 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
           transition: reducedMotion
             ? "none"
             : `transform var(--dur-fast) var(--ease-out)`,
-          transform: pressed && !disabled ? `scale(${PRESS_SCALE})` : "none",
+          transform:
+            pressed && !disabled && compress ? `scale(${PRESS_SCALE})` : "none",
           ...style,
           ...(disabled ? { pointerEvents: "none" } : {}),
         }}

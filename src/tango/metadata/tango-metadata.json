@@ -1040,12 +1040,13 @@
   "InfoCard": [
     {
       "name": "variant",
-      "tsType": "\"object\" | \"hero\" | \"text\" | \"icon\"",
+      "tsType": "\"object\" | \"hero\" | \"text\" | \"icon\" | \"tide\"",
       "unionMembers": [
         "object",
         "hero",
         "text",
-        "icon"
+        "icon",
+        "tide"
       ],
       "required": false,
       "defaultValue": null,
@@ -1133,6 +1134,20 @@
       "required": true,
       "defaultValue": null,
       "description": "The {@link Glyph} the disc renders. Required."
+    },
+    {
+      "name": "tide",
+      "tsType": "Tide",
+      "unionMembers": [
+        "ember",
+        "valor",
+        "vision",
+        "wild",
+        "shadow"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Which of the five tides. Fixes the disc color/mark and the alignment label."
     },
     {
       "name": "leadGlyph",
@@ -1505,6 +1520,14 @@
       "required": false,
       "defaultValue": "false",
       "description": "true = a touch hold still fires the child's click (menu / UI toggle)."
+    },
+    {
+      "name": "compress",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "true",
+      "description": "Whether the trigger compresses (scale-down) while pressed. Default true.\nSet false when the trigger only reveals information and has no action of\nits own (a tide disc, an essence value) so a press does not read as an\nactionable button."
     }
   ],
   "PressPopover": [
@@ -1728,6 +1751,14 @@
       "required": false,
       "defaultValue": "false",
       "description": "Disables press feedback and pointer handlers, and shows the default cursor."
+    },
+    {
+      "name": "compress",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "true",
+      "description": "Whether the element compresses (scale-down) while pressed. Default true.\nSet false for a surface you hover to reveal information but cannot act on\n(a tide disc, an essence value): its pointer handlers, cursor, and\ntap-highlight suppression stay, but a press must not read as an actionable\nbutton by shrinking. This is a behavioral variant of the one press\nfeedback, not a style escape hatch."
     },
     {
       "name": "children",
@@ -2094,6 +2125,7 @@
       "description": "Tint the value with a resource-role hue. Plain text when omitted."
     }
   ],
+  "Tide": [],
   "TideCluster": [
     {
       "name": "tides",

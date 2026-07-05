@@ -12,7 +12,7 @@ The one press-to-reveal information card. Its media treatment varies by content 
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `variant` | `"object" \| "hero" \| "text" \| "icon"` | no | — | Which media treatment. Omit — or pass 'text' — for the text variant. |
+| `variant` | `"object" \| "hero" \| "text" \| "icon" \| "tide"` | no | — | Which media treatment. Omit — or pass 'text' — for the text variant. |
 | `image` | `ArtRef` | yes | — | The media the card is built around, as an {@link ArtRef}. Required. |
 | `imageCrop` | `ImageCrop` = `"top" \| "center"` | no | — | How the media is cropped. Default `"top"`. |
 | `imageFilter` | `MediaFilter` = `"dreamsign-portrait" \| "dreamsign-portrait-bane" \| "spark-glow" \| "energy-glow"` | no | — | A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). |
@@ -21,6 +21,7 @@ The one press-to-reveal information card. Its media treatment varies by content 
 | `body` | `RichText` | no | — | The reveal copy, as a {@link RichText} value (plain / rules / note / stack). |
 | `meta` | `string` | no | — | Small mono/uppercase overline above the title. |
 | `glyph` | `Glyph` | yes | — | The {@link Glyph} the disc renders. Required. |
+| `tide` | `Tide` = `"ember" \| "valor" \| "vision" \| "wild" \| "shadow"` | yes | — | Which of the five tides. Fixes the disc color/mark and the alignment label. |
 | `leadGlyph` | `Glyph` | no | — | A small leading {@link Glyph}. |
 
 ### `body`: the `RichText` model
@@ -73,6 +74,19 @@ A `glyph` on a disc — used for site / place descriptions.
   glyph={glyph("bxf bx-store-alt-2")}
   title="Merchant"
   body={richText.plain("Spend essence on cards, dreamsigns, and services.")}
+/>
+```
+
+### Tide variant
+
+A named `tide` on its OWN colored disc, with the tide's alignment name (Valor, Shadow, …) in that tide's color below the title. The color comes from the named tide, never a raw value, so the card reads identically to that tide's disc on screen.
+
+```tsx
+<InfoCard
+  variant="tide"
+  tide="valor"
+  title="Rising Valor"
+  body={richText.plain("A tide of steadfast courage that rewards holding the line.")}
 />
 ```
 

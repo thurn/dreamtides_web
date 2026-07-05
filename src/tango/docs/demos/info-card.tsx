@@ -71,6 +71,16 @@ import { GLYPHS } from "src/tango/primitives/glyph";
 />`,
     },
     {
+      label: "Tide variant",
+      note: "A named `tide` on its OWN colored disc, with the tide's alignment name (Valor, Shadow, …) in that tide's color below the title. The color comes from the named tide, never a raw value, so the card reads identically to that tide's disc on screen.",
+      code: `<InfoCard
+  variant="tide"
+  tide="valor"
+  title="Rising Valor"
+  body={richText.plain("A tide of steadfast courage that rewards holding the line.")}
+/>`,
+    },
+    {
       label: "Reveal on interaction",
       note: "In real screens InfoCard is anchored to a trigger through the attached press engine (`InfoCard.PressInfo`): hover / touch-down reveals the `card` beside the wrapped trigger, measured against `stageRef`. Use it to wrap a trigger that has no reveal of its own (an essence value, a menu button).",
       code: `<InfoCard.PressInfo
@@ -101,6 +111,9 @@ import { GLYPHS } from "src/tango/primitives/glyph";
       image: artRef.dreamcaller("0025"),
       frame: true,
       glyph: glyph("bxf bx-store-alt-2"),
+      // Seeds the tide-disc variant so switching `variant` to tide renders a
+      // real colored disc + alignment label rather than an empty card.
+      tide: "valor",
     },
     sampleContent: {
       body: richText.plain(

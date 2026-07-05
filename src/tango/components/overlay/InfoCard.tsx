@@ -48,6 +48,7 @@ import {
   resolveMediaFilter,
 } from "../../primitives/media";
 import { renderRichText, type RichText } from "../card/rich-text";
+import { tideVisual, tideAlignmentLabel, type Tide } from "../hud/tide-spec";
 
 /* ---- faithfully-copied layout literals from the design source (not tokens:
    these are the info-card's own fixed geometry, not design-system scale) ---- */
@@ -149,7 +150,7 @@ export const SITE_DISC: React.CSSProperties = {
 };
 
 /** Which media treatment an InfoCard renders. */
-export type InfoCardVariant = "object" | "hero" | "icon" | "text";
+export type InfoCardVariant = "object" | "hero" | "icon" | "tide" | "text";
 
 /**
  * The copy every InfoCard carries, shared across all four media variants. The
@@ -208,6 +209,19 @@ export interface InfoCardIconProps extends InfoCardCommonProps {
 }
 
 /**
+ * tide variant — a tide's own colored disc beside the title, the tide's
+ * alignment name (Valor, Shadow, …) in that tide's color below the title, then
+ * the body. The named `tide` fixes the disc color, mark, and alignment label —
+ * the caller picks a tide, never a raw color — so every tide reveal reads
+ * identically to that tide's disc on screen.
+ */
+export interface InfoCardTideProps extends InfoCardCommonProps {
+  variant: "tide";
+  /** Which of the five tides. Fixes the disc color/mark and the alignment label. */
+  tide: Tide;
+}
+
+/**
  * text variant (the default) — an optional small lead glyph + title, body
  * below. Carries no required media; its lead glyph is decorative.
  */
@@ -232,6 +246,7 @@ export type InfoCardProps =
   | InfoCardObjectProps
   | InfoCardHeroProps
   | InfoCardIconProps
+  | InfoCardTideProps
   | InfoCardTextProps;
 
 /* ================================================================
@@ -413,6 +428,46 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
             />
           </span>
           <div style={tHeadline}>{titleContent}</div>
+        </div>
+        {body != null && (
+          <div style={{ ...tBody, marginTop: 11 }}>{renderRichText(body)}</div>
+        )}
+      </div>
+    );
+  }
+
+  /* --- tide: the tide's OWN colored disc + mark beside the title, the tide's
+     alignment name in its color below, description below that --- */
+  if (props.variant === "tide") {
+    const { tide } = props;
+    const v = tideVisual(tide);
+    return (
+      <div style={{ ...shell, padding: `${String(PADY)}px ${String(PADX)}px` }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <span
+            style={{
+              width: 44,
+              height: 44,
+              flex: "none",
+              borderRadius: "50%",
+              display: "grid",
+              placeItems: "center",
+              background: v.bg,
+              border: `1px solid ${v.bd}`,
+            }}
+          >
+            <i
+              className={v.icon}
+              aria-hidden="true"
+              style={{ fontSize: 21, color: v.fg }}
+            />
+          </span>
+          <div>
+            <div style={tHeadline}>{titleContent}</div>
+            <div style={{ ...tMeta, color: v.fg, marginTop: 3 }}>
+              {tideAlignmentLabel(tide)}
+            </div>
+          </div>
         </div>
         {body != null && (
           <div style={{ ...tBody, marginTop: 11 }}>{renderRichText(body)}</div>
@@ -745,6 +800,13 @@ export interface PressInfoProps {
   as?: React.ElementType;
   /** true = a touch hold still fires the child's click (menu / UI toggle). */
   holdStillClicks?: boolean;
+  /**
+   * Whether the trigger compresses (scale-down) while pressed. Default true.
+   * Set false when the trigger only reveals information and has no action of
+   * its own (a tide disc, an essence value) so a press does not read as an
+   * actionable button.
+   */
+  compress?: boolean;
 }
 
 export function PressInfo({
@@ -755,6 +817,7 @@ export function PressInfo({
   children,
   as = "span",
   holdStillClicks = false,
+  compress = true,
 }: PressInfoProps): React.ReactElement {
   const { shown, fine, begin, end, enter, leave, heldPastTap } =
     usePressReveal();
@@ -781,6 +844,7 @@ export function PressInfo({
     <Pressable
       as={as}
       ref={elRef}
+      compress={compress}
       onPointerEnter={enter}
       onPointerDown={begin}
       onPointerUp={end}
