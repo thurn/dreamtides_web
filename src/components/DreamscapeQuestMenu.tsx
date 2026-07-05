@@ -23,6 +23,7 @@ import {
 import type { QuestState } from "../types/quest";
 import { Pressable } from "../tango/primitives/Pressable";
 import { token } from "../tango/primitives/tokens";
+import { useIsDesktop } from "../tango/screens/use-is-desktop";
 
 /** The App-shell overlay handlers the menu triggers. */
 interface DreamscapeQuestMenuProps {
@@ -94,6 +95,14 @@ export function DreamscapeQuestMenu({
   onLoadQuestState,
 }: DreamscapeQuestMenuProps) {
   const { state } = useQuest();
+  const isDesktop = useIsDesktop();
+  // Trigger sizing. The button clears the 44px touch floor on mobile and grows
+  // again on desktop to sit alongside the larger dreamscape chrome; the edge
+  // inset keeps it clear of the screen corner (more so on desktop, where there
+  // is no safe-area inset doing that job).
+  const menuBtnSize = isDesktop ? 56 : 48;
+  const menuGlyphSize = isDesktop ? 30 : 26;
+  const menuEdgeInset = isDesktop ? 22 : 18;
   const [open, setOpen] = useState(false);
   const [menuView, setMenuView] = useState<MenuView>("root");
   const [loadStatus, setLoadStatus] = useState<LoadStatus>("idle");
@@ -224,8 +233,8 @@ export function DreamscapeQuestMenu({
       data-dreamscape-menu=""
       style={{
         position: "fixed",
-        top: "max(env(safe-area-inset-top), 12px)",
-        left: "max(env(safe-area-inset-left), 12px)",
+        top: `max(env(safe-area-inset-top), ${String(menuEdgeInset)}px)`,
+        left: `max(env(safe-area-inset-left), ${String(menuEdgeInset)}px)`,
         zIndex: 60,
       }}
     >
@@ -239,8 +248,8 @@ export function DreamscapeQuestMenu({
         aria-expanded={open}
         data-testid="dreamscape-menu-button"
         style={{
-          width: 40,
-          height: 40,
+          width: menuBtnSize,
+          height: menuBtnSize,
           borderRadius: token("--radius-control"),
           display: "grid",
           placeItems: "center",
@@ -248,7 +257,7 @@ export function DreamscapeQuestMenu({
           background: token("--surface-glass-strong"),
           border: `1px solid ${token("--border-soft")}`,
           boxShadow: token("--shadow-md"),
-          fontSize: 21,
+          fontSize: menuGlyphSize,
           cursor: "pointer",
         }}
       >
