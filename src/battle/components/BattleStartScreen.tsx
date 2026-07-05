@@ -5,7 +5,7 @@ import type { CardData } from "../../types/cards";
 import { CardView } from "../../tango/components/card/CardView";
 import { RulesText } from "../../tango/components/card/RulesText";
 import { EssenceValue } from "../../tango/components/hud/EssenceValue";
-import { dreamcallerImageSrc } from "../../tango/components/hud/DreamcallerPortrait";
+import { dreamcallerCutoutSrc } from "../../tango/components/hud/DreamcallerPortrait";
 import { dreamscapeSceneUrl } from "../../tango/components/atlas/atlas-display";
 import { assetUrl } from "../../runtime/asset-url";
 import {
@@ -184,7 +184,7 @@ export function BattleStartScreen({
   );
   const hasDreamsigns = dreamsigns.length > 0;
   const hasSignatureCards = signatureCards.length > 0;
-  const portraitSrc = dreamcallerImageSrc(enemy.imageNumber ?? "001");
+  const portraitSrc = dreamcallerCutoutSrc(enemy.imageNumber ?? "001");
 
   function handleBegin() {
     logEvent("battle_start_screen_begin_clicked", {

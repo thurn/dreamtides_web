@@ -1,13 +1,14 @@
 // QuestStartScreen — the Tango rendering of Dreamcaller selection (the quest's
 // opening screen). Two layouts share one view-model and switch on viewport:
 //   - Mobile (narrow): a full-bleed swipe carousel, one Dreamcaller per page,
-//     with a cinematic portrait behind a frosted GroupPanel console.
+//     with the full-body character cutout standing on an ambient backdrop
+//     behind a frosted GroupPanel console.
 //   - Desktop (wide): a small purple eyebrow title near the top of a shared
-//     background, then the offered Dreamcallers side by side — each a tall
-//     rectangular portrait crop with the name floating above the head and a
-//     locked-size console card riding up over the legs (ability text, a row of
-//     hover-only tide discs + starting-essence chip, and a full-width Button).
-//     All three columns render at exactly the same fixed size.
+//     background, then the offered Dreamcallers side by side — each the
+//     standing full-body cutout over a soft glow, the name floating above the
+//     head, and a locked-size console card riding up over the legs (ability
+//     text, a row of hover-only tide discs + starting-essence chip, and a
+//     full-width Button). All three columns render at exactly the same size.
 // PURE: it renders from a view-model and reports the chosen Dreamcaller through
 // `onPick`; the adapter owns state, the offer, the seed, and startQuest.
 
@@ -30,7 +31,7 @@ import { Pressable } from "../primitives/Pressable";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { TangoColor } from "../primitives/color";
-import { dreamcallerImageSrc } from "../components/hud/DreamcallerPortrait";
+import { dreamcallerCutoutSrc } from "../components/hud/DreamcallerPortrait";
 import { extractGlossaryTerms } from "../../data/glossary-terms";
 
 /** One tide shown on a Dreamcaller, already resolved to display copy. It is
@@ -93,62 +94,79 @@ function useIsDesktop(): boolean {
   return desktop;
 }
 
-/** The full-bleed cinematic portrait for one Dreamcaller. Screen-local: it
- * fills its slot and needs no frame, unlike the shared DreamcallerPortrait —
- * on the desktop layout it stands alone as a media element, uncontained. */
+/** The full-bleed cinematic figure for one Dreamcaller: the transparent
+ * full-body cutout standing on an ambient tinted backdrop, feet anchored to
+ * the bottom of the page so the legs sink behind the console's glass. */
 function FullBleedPortrait({
   dreamcaller,
 }: {
   dreamcaller: DreamcallerOfferView;
 }) {
   const [broken, setBroken] = useState(false);
-  if (broken) {
-    return (
-      <div
-        style={{
-          position: "absolute",
-          inset: 0,
-          display: "grid",
-          placeItems: "center",
-          background: `radial-gradient(circle at 50% 20%, color-mix(in srgb, ${token("--gold")} 24%, transparent) 0%, color-mix(in srgb, ${token("--accent")} 24%, transparent) 38%, ${token("--bg-sunken")} 100%)`,
-          color: token("--text-primary"),
-          fontWeight: 800,
-          fontSize: 64,
-          letterSpacing: "0.08em",
-        }}
-      >
-        {dreamcaller.name.charAt(0)}
-      </div>
-    );
-  }
-  return (
-    <img
-      src={dreamcallerImageSrc(dreamcaller.imageNumber)}
-      alt={`${dreamcaller.name}, ${dreamcaller.title}`}
-      draggable={false}
-      // The portrait is the scene the console's frosted glass blurs through, so
-      // it must paint as early as possible: a late-arriving portrait leaves the
-      // GroupPanel's `backdrop-filter` with nothing to refract, then "pops" the
-      // blur in once the art finally paints. Fetch it eagerly at high priority
-      // and decode async so it lands with the first frame of the screen.
-      fetchPriority="high"
-      loading="eager"
-      decoding="async"
-      onError={() => {
-        setBroken(true);
-      }}
+  const backdrop = (
+    <div
+      aria-hidden="true"
       style={{
         position: "absolute",
         inset: 0,
-        width: "100%",
-        height: "100%",
-        objectFit: "cover",
-        objectPosition: "50% 10%",
-        transform: "scale(1.5)",
-        transformOrigin: "50% 0%",
-        userSelect: "none",
+        background: `radial-gradient(120% 85% at 50% 24%, color-mix(in srgb, ${token("--gold")} 16%, transparent) 0%, color-mix(in srgb, ${token("--accent")} 22%, transparent) 46%, ${token("--bg-sunken")} 100%)`,
       }}
     />
+  );
+  if (broken) {
+    return (
+      <>
+        {backdrop}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            display: "grid",
+            placeItems: "center",
+            color: token("--text-primary"),
+            fontWeight: 800,
+            fontSize: 64,
+            letterSpacing: "0.08em",
+          }}
+        >
+          {dreamcaller.name.charAt(0)}
+        </div>
+      </>
+    );
+  }
+  return (
+    <>
+      {backdrop}
+      <img
+        src={dreamcallerCutoutSrc(dreamcaller.imageNumber)}
+        alt={`${dreamcaller.name}, ${dreamcaller.title}`}
+        draggable={false}
+        // The figure is the scene the console's frosted glass blurs through, so
+        // it must paint as early as possible: a late-arriving figure leaves the
+        // GroupPanel's `backdrop-filter` with nothing to refract, then "pops"
+        // the blur in once the art finally paints. Fetch it eagerly at high
+        // priority and decode async so it lands with the first frame.
+        fetchPriority="high"
+        loading="eager"
+        decoding="async"
+        onError={() => {
+          setBroken(true);
+        }}
+        style={{
+          position: "absolute",
+          // Slightly wider than the page so the width-limited `contain` fit
+          // renders the figure large: on a phone the head rises to just below
+          // the title instead of leaving a dead band of backdrop between them.
+          left: "-6%",
+          bottom: 0,
+          width: "112%",
+          height: "96%",
+          objectFit: "contain",
+          objectPosition: "50% 100%",
+          userSelect: "none",
+        }}
+      />
+    </>
   );
 }
 
@@ -561,9 +579,9 @@ function CarouselSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
 /** Desktop column metrics. Box measures are content-driven layout, so these
  * are caller numbers — locked so all three Dreamcaller columns render at
  * exactly the same fixed size. */
-const COLUMN_W = 292; // narrower than the old medallion column
-const PORTRAIT_H = 404; // a tall rectangle crop of the standing figure
-const CARD_OVERLAP = 150; // how far the console card rides up over the legs
+const COLUMN_W = 320; // wide enough for the full-body cutout to read large
+const PORTRAIT_H = 500; // the standing figure's stage (cutout is 2:3, so ~480)
+const CARD_OVERLAP = 120; // how far the console card rides up over the legs
 const TIDE_DISC_PX = 30; // the hover-only tide discs (a touch bigger)
 // A floor for the ability-text region so cards with shorter abilities keep the
 // same layout as the common ~3-line ones — the height difference is absorbed
@@ -593,67 +611,84 @@ function DesktopTitle() {
   );
 }
 
-/** A tall rectangle crop of the Dreamcaller's character art, standing on the
- * screen's shared background. Screen-local framing: the console card rides up
- * over its lower crop (the legs). Falls back to a tinted monogram on a 404. */
-function PortraitRect({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
+/** The Dreamcaller's transparent full-body cutout, standing unframed on the
+ * screen's shared background over a soft ambient glow. Feet anchor to the
+ * bottom of the stage, where the console card rides up over the legs and its
+ * glass blurs them. Falls back to a tinted monogram disc on a 404. */
+function StandingFigure({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
   const [broken, setBroken] = useState(false);
-  return (
+  const glow = (
     <div
+      aria-hidden="true"
       style={{
         position: "absolute",
         inset: 0,
-        borderRadius: token("--radius-panel"),
-        overflow: "hidden",
-        background: token("--bg-sunken"),
-        border: `1px solid ${token("--border-mid")}`,
-        boxShadow: token("--shadow-card"),
+        background: `radial-gradient(72% 56% at 50% 62%, color-mix(in srgb, ${token("--accent")} 26%, transparent) 0%, color-mix(in srgb, ${token("--gold")} 10%, transparent) 46%, transparent 72%)`,
+        pointerEvents: "none",
       }}
-    >
-      {broken ? (
+    />
+  );
+  if (broken) {
+    return (
+      <>
+        {glow}
         <div
           style={{
             position: "absolute",
             inset: 0,
             display: "grid",
             placeItems: "center",
-            background: `radial-gradient(circle at 50% 20%, color-mix(in srgb, ${token("--gold")} 24%, transparent) 0%, color-mix(in srgb, ${token("--accent")} 24%, transparent) 38%, ${token("--bg-sunken")} 100%)`,
-            color: token("--text-primary"),
-            fontWeight: 800,
-            fontSize: 56,
-            letterSpacing: "0.08em",
           }}
         >
-          {dreamcaller.name.charAt(0)}
+          <div
+            style={{
+              width: 160,
+              height: 160,
+              borderRadius: "50%",
+              display: "grid",
+              placeItems: "center",
+              background: `radial-gradient(circle at 50% 20%, color-mix(in srgb, ${token("--gold")} 24%, transparent) 0%, color-mix(in srgb, ${token("--accent")} 24%, transparent) 38%, ${token("--bg-sunken")} 100%)`,
+              color: token("--text-primary"),
+              fontWeight: 800,
+              fontSize: 56,
+              letterSpacing: "0.08em",
+            }}
+          >
+            {dreamcaller.name.charAt(0)}
+          </div>
         </div>
-      ) : (
-        <img
-          src={dreamcallerImageSrc(dreamcaller.imageNumber)}
-          alt={`${dreamcaller.name}, ${dreamcaller.title}`}
-          draggable={false}
-          fetchPriority="high"
-          loading="eager"
-          decoding="async"
-          onError={() => {
-            setBroken(true);
-          }}
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            // Anchor the crop near the top so the head sits high in the frame,
-            // leaving headroom above it for the name and dropping the legs to
-            // the bottom where the console card rides over them.
-            objectPosition: "50% 6%",
-            transform: "scale(1.04)",
-            transformOrigin: "50% 0%",
-            userSelect: "none",
-          }}
-        />
-      )}
-    </div>
+      </>
+    );
+  }
+  return (
+    <>
+      {glow}
+      <img
+        src={dreamcallerCutoutSrc(dreamcaller.imageNumber)}
+        alt={`${dreamcaller.name}, ${dreamcaller.title}`}
+        draggable={false}
+        fetchPriority="high"
+        loading="eager"
+        decoding="async"
+        onError={() => {
+          setBroken(true);
+        }}
+        style={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          bottom: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "contain",
+          // Feet on the floor of the stage: the head keeps the cutout's own
+          // headroom for the floating name, and the legs drop to the bottom
+          // where the console card rides over them.
+          objectPosition: "50% 100%",
+          userSelect: "none",
+        }}
+      />
+    </>
   );
 }
 
@@ -889,7 +924,7 @@ function DreamcallerCard({
   );
 }
 
-/** One desktop Dreamcaller column: a tall rectangular portrait with the name
+/** One desktop Dreamcaller column: the standing full-body cutout with the name
  * floating above the head, and the console card riding up over the legs. Fixed
  * width, a floored ability region, and stretch-to-tallest equalization lock all
  * three columns to one size. */
@@ -914,7 +949,7 @@ function DreamcallerColumn({
       <div
         style={{ position: "relative", height: PORTRAIT_H, flex: "none" }}
       >
-        <PortraitRect dreamcaller={dreamcaller} />
+        <StandingFigure dreamcaller={dreamcaller} />
         <PortraitName dreamcaller={dreamcaller} />
       </div>
       <DreamcallerCard

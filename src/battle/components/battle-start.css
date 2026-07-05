@@ -114,10 +114,10 @@
   transform: translateX(-50%);
   width: 1010px;
   height: 1010px;
-  object-fit: cover;
-  object-position: 50% 16%;
-  -webkit-mask-image: radial-gradient(52% 56% at 50% 42%, #000 50%, transparent 84%);
-  mask-image: radial-gradient(52% 56% at 50% 42%, #000 50%, transparent 84%);
+  /* the render is a transparent full-body cutout: stand it on the floor of
+     the wrap, full figure visible, no feathering mask needed */
+  object-fit: contain;
+  object-position: 50% 100%;
   filter: drop-shadow(0 24px 60px rgba(0, 0, 0, 0.6)) brightness(1.04) saturate(1.05);
   animation: bs-rise 1s cubic-bezier(0.18, 0.7, 0.2, 1) both;
 }
