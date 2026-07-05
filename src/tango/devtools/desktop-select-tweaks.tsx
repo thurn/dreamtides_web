@@ -41,19 +41,20 @@ export interface DesktopSelectTweaks {
 }
 
 /** The shipping desktop proportions — the screen's production config, and what
- * the tweaks panel resets to. `abilityHeight` reserves three lines of --t-rules
- * (14px at 1.36 line-height ≈ 58px); `cardSpacing` is one --space-6 (16px). */
+ * the tweaks panel resets to. `abilityHeight` is the fixed height reserved for
+ * the ability text (centered within it); `cardSpacing` is one --space-6 (16px);
+ * `portraitScale` grows the figure art from the feet past the column edge. */
 export const DEFAULT_TWEAKS: DesktopSelectTweaks = {
   buttonSize: "md",
   showDivider: true,
   cardSpacing: 16,
-  abilityHeight: 58,
-  portraitHeight: 560,
-  portraitScale: 1,
+  abilityHeight: 32,
+  portraitHeight: 715,
+  portraitScale: 1.2,
   columnWidth: 400,
   cardWidth: 320,
   cardMinHeight: 0,
-  cardOverlap: 256,
+  cardOverlap: 380,
 };
 
 /** One labeled range control in the tweaks panel. */
