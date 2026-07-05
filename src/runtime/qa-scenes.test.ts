@@ -86,6 +86,20 @@ describe("QA scenes", () => {
   });
 });
 
+describe('the "dreamcaller-select" QA scene', () => {
+  it("parks the run on the questStart Dreamcaller selection screen", () => {
+    const state = buildQaScene("dreamcaller-select", makeQuestContent());
+
+    expect(state).not.toBeNull();
+    expect(state?.screen.type).toBe("questStart");
+    // The selection screen is shown before a Dreamcaller is chosen, so no
+    // Dreamcaller, package, or draft state has been resolved yet.
+    expect(state?.dreamcaller).toBeNull();
+    expect(state?.resolvedPackage).toBeNull();
+    expect(state?.draftState).toBeNull();
+  });
+});
+
 describe('the "atlas" QA scene', () => {
   it("parks the run on the atlas screen with a generated boss node", () => {
     const state = buildQaScene("atlas", makeQuestContent());

@@ -1,5 +1,6 @@
 import type { QuestContent } from "../data/quest-content";
 import type { QuestState, SiteState, SiteType } from "../types/quest";
+import { createDefaultState } from "../state/quest-context";
 import { createQaQuestFoundation } from "./start-in-battle-state";
 
 /**
@@ -22,11 +23,36 @@ export interface QaScene {
   /** What the scene shows and why it is otherwise hard to reach. */
   description: string;
   /**
+   * When true, this scene's destination is the Dreamcaller-selection
+   * (`questStart`) screen the fresh room already opens on — i.e. its built
+   * state keeps `dreamcaller: null`. App must not hold the "Opening QA scene…"
+   * loading gate for such a scene: that gate waits for a Dreamcaller to be
+   * selected and would otherwise spin forever.
+   */
+  landsOnQuestStart?: boolean;
+  /**
    * Builds the parked quest state from current quest content, or returns null
    * when required content is missing (mirrors `createStartInBattleState`).
    */
   build: (questContent: QuestContent) => QuestState | null;
 }
+
+/**
+ * The Dreamcaller selection screen a run opens on. This is the fresh-room
+ * `questStart` state ({@link createDefaultState}, `dreamcaller: null`), which
+ * the "Create Game" lobby button also lands on — parking a room directly on it
+ * lets the choose-your-Dreamcaller UI be QA'd from a `?goto=` URL without
+ * clicking through the lobby first.
+ */
+const DREAMCALLER_SELECT_SCENE: QaScene = {
+  id: "dreamcaller-select",
+  label: "Dreamcaller Select",
+  description:
+    "The choose-your-Dreamcaller screen a run opens on, parked directly on " +
+    "questStart for UI QA without creating a game from the lobby.",
+  landsOnQuestStart: true,
+  build: () => createDefaultState(),
+};
 
 /**
  * The Dream Atlas resting screen, generated with a real boss node and its
@@ -168,6 +194,7 @@ function siteScene(
 
 /** All registered QA scenes, keyed by `id`. */
 export const QA_SCENES: readonly QaScene[] = [
+  DREAMCALLER_SELECT_SCENE,
   ATLAS_SCENE,
   siteScene("transfiguration", "Transfiguration", "Transfiguration"),
   siteScene(

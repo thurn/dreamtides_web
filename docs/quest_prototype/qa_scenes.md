@@ -50,6 +50,7 @@ The source of truth is `QA_SCENES` in `src/runtime/qa-scenes.ts`.
 
 | `?goto=` id              | Screen                                                            |
 | ------------------------ | ---------------------------------------------------------------- |
+| `dreamcaller-select`     | Choose-your-Dreamcaller screen a run opens on (`questStart`), without the lobby |
 | `atlas`                  | Dream Atlas resting screen with a generated boss node and Apollyon incarnation (boss-preview QA) |
 | `transfiguration`        | Transfiguration site                                             |
 | `transfiguration-enhanced` | Transfiguration site, enhanced                                |

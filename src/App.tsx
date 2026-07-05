@@ -374,11 +374,15 @@ export function QuestApp({
 
   // `?goto=<scene>`: hold a loading screen — rather than the Dreamcaller
   // selection screen — until `bootstrapQaScene` round-trips through Firebase,
-  // so QA lands directly on the requested scene (e.g. the Dream Atlas).
+  // so QA lands directly on the requested scene (e.g. the Dream Atlas). Scenes
+  // whose destination *is* the Dreamcaller selection screen (`landsOnQuestStart`)
+  // are exempt: their state keeps `dreamcaller` null, so this gate — which waits
+  // for a Dreamcaller to be selected — would otherwise spin forever.
   const gotoSceneName = runtimeConfig.gotoScene ?? null;
+  const gotoScene = gotoSceneName === null ? null : findQaScene(gotoSceneName);
   if (
-    gotoSceneName !== null &&
-    findQaScene(gotoSceneName) !== null &&
+    gotoScene !== null &&
+    gotoScene.landsOnQuestStart !== true &&
     state.dreamcaller === null
   ) {
     return (
