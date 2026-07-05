@@ -345,9 +345,13 @@ Proposed additions (a short "Verifying a screen" section in
       rarely, and a permanent harness would need a standing lint exemption
       for raw inputs, whereas the documented contract keeps every exemption
       temporary. Revisit if a third screen needs a panel.
-- [ ] Add the equal-height/variable-content guidance to the screen-composition
-      docs.
+- [x] Add the equal-height/variable-content guidance to the screen-composition
+      docs (a "Variable-content siblings" rule under the tango skill's Core
+      rendering rules).
+- [x] Add the convergence trigger (recommendation C10) to the tango skill's
+      Customization section ("Requested divergence must converge").
 - [ ] Unify the collapsed tide disc into one component rendering with one
       size constant (filed in `pre-existing-issues.txt`).
-- [ ] Delete `.worktrees/dreamcaller-desktop-redesign{,-2}` and the
-      `wt/dreamcaller-desktop-redesign-2` branch on `origin`.
+- [x] Delete `.worktrees/dreamcaller-desktop-redesign{,-2}` and the
+      `wt/dreamcaller-desktop-redesign-2` branch on `origin` (the fully-merged
+      `wt/dreamcaller-cutout-art` remote branch went with them).

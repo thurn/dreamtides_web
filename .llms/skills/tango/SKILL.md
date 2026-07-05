@@ -101,6 +101,23 @@ documented: the `no-escape-hatch-props` ESLint rule and API contract tests
 fail the build on escape hatches. When lint blocks you, the design is telling
 you to use a variant or wrap — do not disable the rule.
 
+### Requested divergence must converge
+
+While a design is in motion, a screen sometimes legitimately needs its own
+take on an existing component concept — exploration moves faster in a
+screen-local rendering than in a shared component, and the user may ask for
+exactly that. Build it locally, keep lint green, iterate freely. But the fork
+is a loan, not a home: **the push that stabilizes the design ends with an
+explicit decision** — either promote the screen-local rendering into the
+component family (rung 3 or 4 above), or file the consolidation in
+`pre-existing-issues.txt`. The decision is the required step; the
+consolidation itself can be deferred. A fork that skips the decision ages
+into a parallel implementation whose duplicated constants are kept in
+agreement only by hand — the case study is the collapsed tide disc in
+[docs/postmortems/2026-07-05-desktop-dreamcaller-select.md](../../../docs/postmortems/2026-07-05-desktop-dreamcaller-select.md),
+which reached three independent declarations of the same diameter across
+three files.
+
 ## Values are named, not stringly typed
 
 A prop that carries anything other than free-form display text takes a
@@ -247,6 +264,14 @@ adapter against its own inputs. Full rationale:
   fine pointers, touch-hold on touch.
 - **Content voice**: second person, literary register; Title Case titles;
   uppercase monospaced eyebrows; no emoji anywhere.
+- **Variable-content siblings**: side-by-side cards or columns whose copy
+  varies in length (ability text, names) get natural height with cross-axis
+  centering, plus at most a small commented min-height floor so the common
+  case aligns. A fixed shared height, or stretch-equalization to the tallest
+  sibling, parks the leftover space in whichever flex spacer is nearest — and
+  that slack reads as a broken gap on every shorter sibling. If heights must
+  match exactly, assign the slack to one deliberate region and measure the
+  result (see the QA bar below).
 
 ## Verifying a screen: the visual QA bar
 
