@@ -19,8 +19,14 @@ export interface DesktopSelectTweaks {
   showDivider: boolean;
   /** The internal vertical rhythm unit, in px (top/bottom padding + every gap). */
   cardSpacing: number;
-  /** Fixed height of the reserved ability-text region, in px. */
+  /** Fixed height of the reserved ability-text region, in px. Ignored when
+   * {@link equalCardHeight} is false. */
   abilityHeight: number;
+  /** When true, the ability region is locked to {@link abilityHeight} so every
+   * card is the same height (top- and bottom-aligned). When false, the ability
+   * area is its natural height and the cards — now varying in height — are
+   * aligned by their vertical centers instead. */
+  equalCardHeight: boolean;
   /** The standing figure's stage height, in px. */
   portraitHeight: number;
   /** A multiplier on the rendered figure art, anchored at the feet. The cutout
@@ -49,6 +55,7 @@ export const DEFAULT_TWEAKS: DesktopSelectTweaks = {
   showDivider: true,
   cardSpacing: 16,
   abilityHeight: 32,
+  equalCardHeight: true,
   portraitHeight: 715,
   portraitScale: 1.2,
   columnWidth: 400,
@@ -243,6 +250,25 @@ export function TweaksPanel({
             }}
           />
           Show divider
+        </label>
+
+        <label
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            fontSize: 11,
+            cursor: "pointer",
+          }}
+        >
+          <input
+            type="checkbox"
+            checked={tweaks.equalCardHeight}
+            onChange={(event) => {
+              set("equalCardHeight", event.target.checked);
+            }}
+          />
+          Equal card height
         </label>
 
         <TweakSlider

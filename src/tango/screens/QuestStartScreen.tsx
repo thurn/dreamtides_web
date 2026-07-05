@@ -846,13 +846,15 @@ function StaticTides({
 }
 
 /** The console card for one Dreamcaller. It rides up over the portrait's legs
- * (negative top margin) so its top edge sits near the waist, and its interior
- * is an even {@link CARD_RHYTHM} stack: top padding, a fixed-height ability
- * region, the divider, the tides row, and the Choose button are each separated
- * by exactly one rhythm unit, with matching padding at top and bottom. The
- * ability region is a fixed height so every column locks to the same size
- * regardless of ability length. Spreading GroupPanel's glass onto our own node
- * is the sanctioned rung-2 way to size the pane. */
+ * (negative top margin), and its interior is an even rhythm stack: top padding,
+ * the ability region, the divider, the tides row, and the Choose button are
+ * each separated by exactly one `cardSpacing` unit, with matching padding at
+ * top and bottom. When `equalCardHeight` is set the ability region is a fixed
+ * height so every card locks to one size (top- and bottom-aligned); otherwise
+ * the ability region is natural height and the card is pulled up by half its
+ * own height (`translateY(-50%)`) so cards of different heights share one
+ * vertical center line. Spreading GroupPanel's glass onto our own node is the
+ * sanctioned rung-2 way to size the pane. */
 function DreamcallerCard({
   dreamcaller,
   onChoose,
@@ -879,6 +881,12 @@ function DreamcallerCard({
         alignSelf: "center",
         marginTop: -tweaks.cardOverlap,
         minHeight: tweaks.cardMinHeight || undefined,
+        // In natural-height mode, pull the card up by half its own height so
+        // its vertical CENTER lands on the flow anchor (the same line for every
+        // column), center-aligning cards that differ in height. In equal-height
+        // mode the ability box already locks every card to one size, so no
+        // shift is needed.
+        transform: tweaks.equalCardHeight ? undefined : "translateY(-50%)",
         // The vertical rhythm: `cardSpacing` top/bottom padding and the same
         // gap above every stacked child (applied as margins, not a flex `gap`,
         // so the flex backstop below can grow without doubling a gap around
@@ -888,12 +896,13 @@ function DreamcallerCard({
         flexDirection: "column",
       }}
     >
-      {/* Ability text, in a fixed region with the copy vertically centered — so
-          the divider (and everything below) lands on the same baseline across
-          all columns no matter how long each ability is. */}
+      {/* Ability text. In equal-height mode it sits in a fixed region (copy
+          vertically centered) so the divider and everything below land on one
+          baseline across all cards; otherwise the region is its natural
+          height. */}
       <div
         style={{
-          height: tweaks.abilityHeight,
+          height: tweaks.equalCardHeight ? tweaks.abilityHeight : undefined,
           display: "flex",
           alignItems: "center",
         }}
@@ -952,9 +961,10 @@ function DreamcallerCard({
 }
 
 /** One desktop Dreamcaller column: the standing full-body cutout with the name
- * floating above the head, and the console card riding up over the legs. Fixed
- * width, a floored ability region, and stretch-to-tallest equalization lock all
- * three columns to one size. */
+ * floating above the head, and the console card riding up over the legs. The
+ * column is a fixed-width stack of the portrait stage and the card; in
+ * equal-height mode the card's fixed ability region locks all columns to one
+ * size, and otherwise each card takes its natural height. */
 function DreamcallerColumn({
   dreamcaller,
   onChoose,
