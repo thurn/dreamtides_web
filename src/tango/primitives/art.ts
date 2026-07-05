@@ -27,6 +27,13 @@ export type ArtRef =
       readonly imageNumber: string;
     }
   | {
+      /** A dreamcaller's transparent full-body cutout (the character render
+       * with the scene background removed), keyed by its zero-padded image
+       * number. */
+      readonly kind: "dreamcaller-cutout";
+      readonly imageNumber: string;
+    }
+  | {
       /** A dreamscape's circular node icon, keyed by its dreamscape id. */
       readonly kind: "dreamscape-icon";
       readonly dreamscapeId: string;
@@ -44,6 +51,8 @@ export function resolveArtRef(ref: ArtRef): string {
       return assetUrl(`/dreamsigns/${ref.imageName}`);
     case "dreamcaller":
       return assetUrl(`/dreamcallers/${ref.imageNumber}.png`);
+    case "dreamcaller-cutout":
+      return assetUrl(`/dreamcallers/cutout/${ref.imageNumber}.png`);
     case "dreamscape-icon":
       return assetUrl(`/dreamscape-icons/${ref.dreamscapeId}.png`);
     case "dreamscape-scene":
@@ -56,6 +65,10 @@ export const artRef = {
   dreamsign: (imageName: string): ArtRef => ({ kind: "dreamsign", imageName }),
   dreamcaller: (imageNumber: string): ArtRef => ({
     kind: "dreamcaller",
+    imageNumber,
+  }),
+  dreamcallerCutout: (imageNumber: string): ArtRef => ({
+    kind: "dreamcaller-cutout",
     imageNumber,
   }),
   dreamscapeIcon: (dreamscapeId: string): ArtRef => ({

@@ -1,7 +1,8 @@
 // DreamcallerPortrait — the ONE way to render a dreamcaller's character art.
 // Three fixed framings (`variant`): a large `hero` showcase, a square `panel`
 // for profile cards / popovers, and a small square `thumb` for HUD rows and
-// resident lists. The frame (radius, border, sunken backing, shadow) and the
+// resident lists. The art is the transparent full-body cutout standing on a
+// tinted radial backdrop. The frame (radius, border, backdrop, shadow) and the
 // per-variant image crop ARE the design system's; a caller supplies only the
 // dreamcaller data, the variant, and an optional pixel `size`.
 //
@@ -41,14 +42,20 @@ export interface DreamcallerPortraitProps {
   size?: number;
 }
 
-/** Per-variant frame chrome (radius / border / sunken backing / shadow). */
+/** The tinted radial scene the transparent cutout stands on. Shared with the
+ * monogram fallback so a portrait reads the same whether the art loads. */
+function portraitBackdrop(): string {
+  return `radial-gradient(circle at 50% 20%, color-mix(in srgb, ${token("--gold")} 24%, transparent) 0%, color-mix(in srgb, ${token("--accent")} 24%, transparent) 38%, ${token("--bg-sunken")} 100%)`;
+}
+
+/** Per-variant frame chrome (radius / border / tinted backing / shadow). */
 function frameStyle(variant: DreamcallerPortraitVariant): CSSProperties {
   switch (variant) {
     case "hero":
       return {
         overflow: "hidden",
         borderRadius: token("--radius-panel"),
-        background: token("--bg-sunken"),
+        background: portraitBackdrop(),
         border: `1px solid ${token("--border-mid")}`,
         boxShadow: token("--shadow-card"),
       };
@@ -57,7 +64,7 @@ function frameStyle(variant: DreamcallerPortraitVariant): CSSProperties {
         overflow: "hidden",
         borderRadius: token("--radius-control"),
         aspectRatio: "1 / 1",
-        background: token("--bg-sunken"),
+        background: portraitBackdrop(),
         border: `1px solid ${token("--border-mid")}`,
       };
     case "thumb":
@@ -65,7 +72,7 @@ function frameStyle(variant: DreamcallerPortraitVariant): CSSProperties {
         overflow: "hidden",
         borderRadius: token("--radius-inset"),
         aspectRatio: "1 / 1",
-        background: token("--bg-sunken"),
+        background: portraitBackdrop(),
         border: `1px solid ${token("--border-mid")}`,
       };
   }
@@ -122,9 +129,14 @@ function fallbackStyle(variant: DreamcallerPortraitVariant): CSSProperties {
   };
 }
 
-/** Resolve the hosted art URL for a dreamcaller's image number. */
+/** Resolve the hosted URL of a dreamcaller's full scene render. */
 export function dreamcallerImageSrc(imageNumber: string): string {
   return assetUrl(`/dreamcallers/${imageNumber}.png`);
+}
+
+/** Resolve the hosted URL of a dreamcaller's transparent full-body cutout. */
+export function dreamcallerCutoutSrc(imageNumber: string): string {
+  return assetUrl(`/dreamcallers/cutout/${imageNumber}.png`);
 }
 
 export function DreamcallerPortrait({
@@ -155,7 +167,7 @@ export function DreamcallerPortrait({
         </div>
       ) : (
         <img
-          src={dreamcallerImageSrc(dreamcaller.imageNumber)}
+          src={dreamcallerCutoutSrc(dreamcaller.imageNumber)}
           alt={alt}
           style={imageStyle(variant)}
           onError={() => {

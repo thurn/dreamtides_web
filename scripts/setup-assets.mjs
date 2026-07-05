@@ -1593,6 +1593,35 @@ export function setupAssets({
     `Linked ${linkedDreamcallerArt} of ${dreamcallerArtByImageNumber.size} dreamcaller portraits (${missingDreamcallerArt} missing)`,
   );
 
+  // Link the transparent full-body cutouts (`cutout/<imageNumber>.png` in the
+  // art source dir) to `public/dreamcallers/cutout/`. These are the character
+  // renders with the scene background removed, used wherever the Dreamcaller
+  // stands directly on UI chrome (Dreamcaller selection, portraits). Same
+  // warn-and-continue policy as the scene portraits above.
+  const dreamcallerCutoutSourceDir = join(dreamcallerArtDir, "cutout");
+  const dreamcallerCutoutsDir = join(dreamcallersDir, "cutout");
+  mkdirSync(dreamcallerCutoutsDir, { recursive: true });
+  let linkedDreamcallerCutouts = 0;
+  let missingDreamcallerCutouts = 0;
+  for (const [imageNumber, name] of dreamcallerArtByImageNumber) {
+    const filename = `${imageNumber}.png`;
+    const sourcePath = join(dreamcallerCutoutSourceDir, filename);
+    const symlinkPath = join(dreamcallerCutoutsDir, filename);
+
+    if (existsSync(sourcePath)) {
+      symlinkSync(sourcePath, symlinkPath);
+      linkedDreamcallerCutouts++;
+    } else {
+      console.warn(
+        `  Warning: missing dreamcaller cutout for ${name} (${imageNumber})`,
+      );
+      missingDreamcallerCutouts++;
+    }
+  }
+  console.log(
+    `Linked ${linkedDreamcallerCutouts} of ${dreamcallerArtByImageNumber.size} dreamcaller cutouts (${missingDreamcallerCutouts} missing)`,
+  );
+
   recreateDir(dreamsignsDir);
   let linkedDreamsignArt = 0;
   let missingDreamsignArt = 0;
