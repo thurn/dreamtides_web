@@ -12,13 +12,11 @@ import { useRef, useState } from "react";
 import { Motes } from "../components/hud/Motes";
 import { GroupPanel } from "../components/controls/GroupPanel";
 import { Button } from "../components/controls/Button";
-import { GlowIcon } from "../components/controls/GlowIcon";
+import { TideDisc, TIDE_DISC_PX } from "../components/hud/TideDisc";
 import { InfoCard } from "../components/overlay/InfoCard";
 import { richText } from "../components/card/rich-text";
-import { tideVisual } from "../components/hud/TidePill";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
-import type { TangoColor } from "../primitives/color";
 import { dreamcallerCutoutSrc } from "../components/hud/DreamcallerPortrait";
 import {
   AbilityReveal,
@@ -32,8 +30,6 @@ import {
 /** How many tide discs render at most; a Dreamcaller with more shows the first
  * few (the rest are the same pools, just less prominent). */
 const MAX_TIDE_DISCS = 4;
-/** The hover-only tide discs' diameter, in px. */
-const TIDE_DISC_PX = 24;
 
 /** Desktop column metrics. Box measures are content-driven layout, so these are
  * caller numbers. Each column is a fixed-width figure stage with a narrower,
@@ -201,12 +197,11 @@ function PortraitName({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
   );
 }
 
-/** One hover-only tide mark: a colored disc carrying the tide's glyph. On hover
- * / press it reveals, through the shared InfoCard, what tides are (the general
- * blurb) stacked ABOVE this specific tide's own colored card. Informational —
- * hovering brightens the disc but a press does not compress it (there is no
- * action to press). Uses `tideVisual` — the sanctioned tide-disc palette — so
- * the disc reads identically to that tide's card and pill elsewhere. */
+/** One hover-only tide mark: the shared TideDisc, wired up as a reveal
+ * trigger. On hover / press it reveals, through the shared InfoCard, what
+ * tides are (the general blurb) stacked ABOVE this specific tide's own colored
+ * card. Informational — the disc brightens on hover (TideDisc's `interactive`
+ * state) but a press does not compress it (there is no action to press). */
 function TideDiscReveal({
   tide,
   stageRef,
@@ -214,8 +209,6 @@ function TideDiscReveal({
   tide: DreamcallerTideView;
   stageRef: React.RefObject<HTMLElement | null>;
 }) {
-  const v = tideVisual(tide.tide);
-  const [hovered, setHovered] = useState(false);
   return (
     <InfoCard.PressInfo
       stageRef={stageRef}
@@ -243,30 +236,12 @@ function TideDiscReveal({
         </div>
       }
     >
-      <span
-        data-tide-disc={tide.id}
-        aria-label={`Tide: ${tide.label}`}
-        onPointerEnter={() => setHovered(true)}
-        onPointerLeave={() => setHovered(false)}
-        style={{
-          width: TIDE_DISC_PX,
-          height: TIDE_DISC_PX,
-          borderRadius: "50%",
-          display: "grid",
-          placeItems: "center",
-          background: v.bg,
-          border: `1px solid ${v.bd}`,
-          cursor: "pointer",
-          filter: hovered ? "brightness(1.25)" : "none",
-          transition: `filter ${token("--dur-fast")} ${token("--ease-out")}`,
-        }}
-      >
-        <GlowIcon
-          iconClass={v.icon}
-          color={v.fg as TangoColor}
-          size={`${String(Math.round(TIDE_DISC_PX * 0.5))}px`}
-        />
-      </span>
+      <TideDisc
+        tide={tide.tide}
+        id={tide.id}
+        label={`Tide: ${tide.label}`}
+        interactive
+      />
     </InfoCard.PressInfo>
   );
 }

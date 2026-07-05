@@ -2173,6 +2173,46 @@
       "description": "Screen root the pill reveals anchor + clamp against (preferred)."
     }
   ],
+  "TideDisc": [
+    {
+      "name": "tide",
+      "tsType": "Tide",
+      "unionMembers": [
+        "ember",
+        "valor",
+        "vision",
+        "wild",
+        "shadow"
+      ],
+      "required": true,
+      "defaultValue": null,
+      "description": "Which of the five tides. Fixes the disc's color and glyph."
+    },
+    {
+      "name": "id",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Stable id (a tide deck id) for the `data-tide-disc` QA hook."
+    },
+    {
+      "name": "label",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Accessible label (e.g. \"Tide: Valor\"). When unset the disc is decorative\nand hidden from assistive tech — the resting cluster's discs, whose parent\ntoggle button carries the semantics."
+    },
+    {
+      "name": "interactive",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Interactive discs brighten on hover and show a pointer cursor — set this\nwhen the caller wires the disc up as a reveal trigger. Default false: a\nresting-cluster disc is inert."
+    }
+  ],
   "TidePill": [
     {
       "name": "label",

@@ -13,7 +13,15 @@
 // pixel-identical on the pill it becomes.
 
 import * as React from "react";
-import { TidePill, tideVisual, type Tide } from "./TidePill";
+import {
+  TidePill,
+  tideVisual,
+  PILL_SM_FONT_PX,
+  PILL_SM_PAD_X,
+  PILL_ICON_GAP_PX,
+  type Tide,
+} from "./TidePill";
+import { TideDisc, TIDE_DISC_PX } from "./TideDisc";
 import { token } from "../../primitives/tokens";
 import { GLYPHS } from "../../primitives/glyph";
 
@@ -40,16 +48,12 @@ export interface TideClusterProps {
  * lengths). Kept in step with the sheet-height tween below. */
 const FLY_DUR = 420;
 const FLY_STAGGER = 55;
-const DISC_PX = 24;
 
-// The resting sm TidePill's own metrics. The flyer must land pixel-identical on
-// the pill it becomes, so it mirrors these rather than diverging and clipping
-// its own (wider) label under `overflow: hidden` right before the swap. Source
-// of truth is TidePill (size="sm"): 12px font, "3px 9px" padding, 6px gap.
-const PILL_FONT_PX = 12;
-const PILL_PAD_X = 9;
-const PILL_GAP = 6;
-const DISC_PAD_L = 6; // centers the glyph inside the collapsed disc
+// The flyer's poses read their sizing from the components they morph between:
+// the disc pose from TideDisc (`TIDE_DISC_PX`) and the pill pose from the sm
+// TidePill's exported metrics — so a clone lands pixel-identical on the thing
+// it becomes, and neither size can drift from its source.
+const DISC_PAD_L = 6; // flyer-only: centers the glyph inside the disc pose
 
 /**
  * The flyer's fill for a tide at a given pose. A translucent tint (an inset
@@ -74,30 +78,6 @@ function flyerFill(
 }
 
 type Phase = "closed" | "opening" | "open" | "closing";
-
-/** A single collapsed tide mark — a colored disc carrying the tide glyph. */
-function TideDisc({ tide, id }: { tide: Tide; id: string }): React.ReactElement {
-  const v = tideVisual(tide);
-  return (
-    <span
-      data-tide-disc={id}
-      style={{
-        width: DISC_PX,
-        height: DISC_PX,
-        borderRadius: "50%",
-        flex: "none",
-        display: "grid",
-        placeItems: "center",
-        background: v.bg,
-        border: `1px solid ${v.bd}`,
-        color: v.fg,
-        fontSize: DISC_PX * 0.52,
-      }}
-    >
-      <i className={v.icon} aria-hidden="true" />
-    </span>
-  );
-}
 
 export function TideCluster({
   tides,
@@ -200,11 +180,11 @@ export function TideCluster({
     ): void => {
       el.style.left = box.left + "px";
       el.style.top = box.top + "px";
-      el.style.width = (pill ? box.width : DISC_PX) + "px";
-      el.style.height = (pill ? box.height : DISC_PX) + "px";
-      el.style.paddingLeft = (pill ? PILL_PAD_X : DISC_PAD_L) + "px";
-      el.style.paddingRight = (pill ? PILL_PAD_X : 0) + "px";
-      el.style.gap = (pill ? PILL_GAP : 0) + "px";
+      el.style.width = (pill ? box.width : TIDE_DISC_PX) + "px";
+      el.style.height = (pill ? box.height : TIDE_DISC_PX) + "px";
+      el.style.paddingLeft = (pill ? PILL_SM_PAD_X : DISC_PAD_L) + "px";
+      el.style.paddingRight = (pill ? PILL_SM_PAD_X : 0) + "px";
+      el.style.gap = (pill ? PILL_ICON_GAP_PX : 0) + "px";
       const fill = flyerFill(v, pill, ring);
       el.style.backgroundColor = fill.backgroundColor;
       el.style.boxShadow = fill.boxShadow;
@@ -385,18 +365,18 @@ export function TideCluster({
                   border: `1px solid ${v.bd}`,
                   color: v.fg,
                   borderRadius: token("--radius-pill"),
-                  font: `600 ${PILL_FONT_PX}px/1 ${token("--font-ui")}`,
+                  font: `600 ${PILL_SM_FONT_PX}px/1 ${token("--font-ui")}`,
                   letterSpacing: "0.005em",
                   // Match the resting cluster's disc stacking (leftmost on top)
                   // so overlapping flyers layer identically to the discs they land on.
                   zIndex: flyers.length - i,
                   left: end.left,
                   top: end.top,
-                  width: endPill ? end.width : DISC_PX,
-                  height: endPill ? end.height : DISC_PX,
-                  paddingLeft: endPill ? PILL_PAD_X : DISC_PAD_L,
-                  paddingRight: endPill ? PILL_PAD_X : 0,
-                  gap: endPill ? PILL_GAP : 0,
+                  width: endPill ? end.width : TIDE_DISC_PX,
+                  height: endPill ? end.height : TIDE_DISC_PX,
+                  paddingLeft: endPill ? PILL_SM_PAD_X : DISC_PAD_L,
+                  paddingRight: endPill ? PILL_SM_PAD_X : 0,
+                  gap: endPill ? PILL_ICON_GAP_PX : 0,
                   transition: `left ${move}, top ${move}, width ${move}, height ${move}, padding ${move}, background-color ${move}, box-shadow ${move}`,
                   willChange: "left, top, width, height",
                 }}

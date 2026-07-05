@@ -350,8 +350,11 @@ Proposed additions (a short "Verifying a screen" section in
       rendering rules).
 - [x] Add the convergence trigger (recommendation C10) to the tango skill's
       Customization section ("Requested divergence must converge").
-- [ ] Unify the collapsed tide disc into one component rendering with one
-      size constant (filed in `pre-existing-issues.txt`).
+- [x] Unify the collapsed tide disc into one component rendering with one
+      size constant: `TideDisc` (`src/tango/components/hud/TideDisc.tsx`)
+      exports the single disc rendering and `TIDE_DISC_PX`; TideCluster and
+      the desktop select both consume it, and TideCluster's flyer reads the
+      sm pill metrics exported by TidePill instead of re-declaring them.
 - [x] Delete `.worktrees/dreamcaller-desktop-redesign{,-2}` and the
       `wt/dreamcaller-desktop-redesign-2` branch on `origin` (the fully-merged
       `wt/dreamcaller-cutout-art` remote branch went with them).

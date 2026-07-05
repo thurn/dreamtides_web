@@ -49,6 +49,15 @@ const { usePressReveal, anchorRect, PressPopover, PRESS_SCALE } = InfoCard;
 /** Height/scale variants. */
 type TidePillSize = "sm" | "md";
 
+/** The sm pill's own text/box metrics. TideCluster's flying clones must land
+ * pixel-identical on the sm pills they become, so the flyer reads these same
+ * constants — sizing is shared through this export, never re-declared. */
+export const PILL_SM_FONT_PX = 12;
+export const PILL_SM_PAD_Y = 3;
+export const PILL_SM_PAD_X = 9;
+/** Gap between the pill's icon and its label, both sizes. */
+export const PILL_ICON_GAP_PX = 6;
+
 export interface TidePillProps {
   /** The tide/affiliation name. Resolve any UUID to the display name before
    * passing it — the pill renders copy from a plain string, not caller markup,
@@ -88,7 +97,10 @@ export function TidePill({
 }: TidePillProps) {
   const spec = TIDES[tide];
   const icon = spec.icon;
-  const pad = size === "sm" ? "3px 9px" : "5px 12px";
+  const pad =
+    size === "sm"
+      ? `${String(PILL_SM_PAD_Y)}px ${String(PILL_SM_PAD_X)}px`
+      : "5px 12px";
   const ref = React.useRef<HTMLSpanElement>(null);
   const { pressed, shown, begin, end, enter, leave, heldPastTap } =
     usePressReveal();
@@ -150,14 +162,14 @@ export function TidePill({
         position: "relative",
         display: "inline-flex",
         alignItems: "center",
-        gap: 6,
+        gap: PILL_ICON_GAP_PX,
         flex: "none",
         padding: pad,
         borderRadius: token("--radius-pill"),
         background: spec.bg,
         border: `1px solid ${spec.bd}`,
         color: spec.fg,
-        font: `600 ${size === "sm" ? 12 : 13}px/1 ${token("--font-ui")}`,
+        font: `600 ${size === "sm" ? PILL_SM_FONT_PX : 13}px/1 ${token("--font-ui")}`,
         letterSpacing: "0.005em",
         whiteSpace: "nowrap",
         cursor: "pointer",
