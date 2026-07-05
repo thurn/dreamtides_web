@@ -23,6 +23,11 @@ export interface DesktopSelectTweaks {
   abilityHeight: number;
   /** The standing figure's stage height, in px. */
   portraitHeight: number;
+  /** A multiplier on the rendered figure art, anchored at the feet. The cutout
+   * is contained within the column width, so this is how the art grows larger
+   * (overflowing the column) while the name, card, and column spacing stay put;
+   * 1 = fit-to-column. */
+  portraitScale: number;
   /** Column width — the figure stage's width — in px. */
   columnWidth: number;
   /** Console-card width, in px. May be narrower than the column (the card
@@ -44,6 +49,7 @@ export const DEFAULT_TWEAKS: DesktopSelectTweaks = {
   cardSpacing: 16,
   abilityHeight: 58,
   portraitHeight: 560,
+  portraitScale: 1,
   columnWidth: 400,
   cardWidth: 320,
   cardMinHeight: 0,
@@ -263,6 +269,16 @@ export function TweaksPanel({
           max={820}
           onChange={(v) => {
             set("portraitHeight", v);
+          }}
+        />
+        <TweakSlider
+          label="Portrait scale"
+          value={tweaks.portraitScale}
+          min={0.8}
+          max={2.4}
+          step={0.05}
+          onChange={(v) => {
+            set("portraitScale", v);
           }}
         />
         <TweakSlider

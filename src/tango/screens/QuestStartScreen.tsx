@@ -618,7 +618,13 @@ function DesktopTitle() {
  * screen's shared background over a soft ambient glow. Feet anchor to the
  * bottom of the stage, where the console card rides up over the legs and its
  * glass blurs them. Falls back to a tinted monogram disc on a 404. */
-function StandingFigure({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
+function StandingFigure({
+  dreamcaller,
+  scale,
+}: {
+  dreamcaller: DreamcallerOfferView;
+  scale: number;
+}) {
   const [broken, setBroken] = useState(false);
   const glow = (
     <div
@@ -688,6 +694,12 @@ function StandingFigure({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) 
           // headroom for the floating name, and the legs drop to the bottom
           // where the console card rides over them.
           objectPosition: "50% 100%",
+          // Grow the art from the feet: the cutout is contained within the
+          // column width, so scaling here is how it reads larger (overflowing
+          // the column) while the feet — and thus the card that rides over the
+          // legs — stay anchored to the stage floor.
+          transform: `scale(${String(scale)})`,
+          transformOrigin: "50% 100%",
           userSelect: "none",
         }}
       />
@@ -970,7 +982,7 @@ function DreamcallerColumn({
           flex: "none",
         }}
       >
-        <StandingFigure dreamcaller={dreamcaller} />
+        <StandingFigure dreamcaller={dreamcaller} scale={tweaks.portraitScale} />
         <PortraitName dreamcaller={dreamcaller} />
       </div>
       <DreamcallerCard
