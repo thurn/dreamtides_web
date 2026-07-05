@@ -26,7 +26,17 @@ const DREAMCALLER_ART_DIR_CANDIDATES = [
   join(homedir(), "Documents", "synty", "dreamcallers"),
   join(homedir(), "Documents", "sytny", "dreamcallers"),
 ];
-const DREAMSIGN_ART_DIR = join(homedir(), "Documents", "dreamsigns", "filtered");
+// Dreamsign art is sourced exclusively from the `outlined` variants — every
+// sign carries its own glyph outline for on-scene legibility. The shared
+// `alt_text.txt` metadata lives one level up in `filtered`, so the alt-text
+// reader falls back to the parent directory.
+const DREAMSIGN_ART_DIR = join(
+  homedir(),
+  "Documents",
+  "dreamsigns",
+  "filtered",
+  "outlined",
+);
 const JOURNEY_ART_DIR = join(homedir(), "Documents", "shutterstock", "images_journeys");
 
 // Dream Atlas art. Each dreamscape ships a rectangular scene image
@@ -675,7 +685,13 @@ function defaultDreamcallerArtDir() {
 }
 
 function readDreamsignAltText(dreamsignArtDir) {
-  const altTextPath = join(dreamsignArtDir, "alt_text.txt");
+  // Prefer alt text sitting alongside the images; the outlined variant folder
+  // shares the `alt_text.txt` catalog kept one level up in `filtered`, so fall
+  // back to the parent directory when the file is not local.
+  let altTextPath = join(dreamsignArtDir, "alt_text.txt");
+  if (!existsSync(altTextPath)) {
+    altTextPath = join(dreamsignArtDir, "..", "alt_text.txt");
+  }
   if (!existsSync(altTextPath)) {
     return new Map();
   }
