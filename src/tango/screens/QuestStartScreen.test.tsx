@@ -174,7 +174,7 @@ describe("Tango QuestStartScreen (desktop)", () => {
     });
   });
 
-  it("shows full tide pills (never collapsed discs) for tided Dreamcallers", () => {
+  it("shows the collapsed tides cluster for tided Dreamcallers", () => {
     const { container, root } = mount(
       <QuestStartScreen dreamcallers={OFFERED} onPick={vi.fn()} />,
     );
@@ -184,15 +184,13 @@ describe("Tango QuestStartScreen (desktop)", () => {
       container.querySelector(`[data-dreamcaller-tides="caller-1"]`),
     ).toBeNull();
 
-    // caller-2 has two tides → two full pills, and no collapsed cluster discs.
+    // caller-2 has two tides → the collapsed cluster with two discs (the pills
+    // only materialize when the cluster is expanded).
     const tides = container.querySelector(
       `[data-dreamcaller-tides="caller-2"]`,
     );
     expect(tides).not.toBeNull();
-    expect(tides?.querySelectorAll("[data-tide-disc]")).toHaveLength(0);
-    expect(
-      tides?.querySelectorAll('[aria-label^="Tide:"]'),
-    ).toHaveLength(2);
+    expect(tides?.querySelectorAll("[data-tide-disc]")).toHaveLength(2);
 
     act(() => {
       root.unmount();

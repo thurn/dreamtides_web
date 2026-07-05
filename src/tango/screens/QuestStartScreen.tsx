@@ -3,11 +3,11 @@
 //   - Mobile (narrow): a full-bleed swipe carousel, one Dreamcaller per page,
 //     with a cinematic portrait behind a frosted GroupPanel console.
 //   - Desktop (wide): one shared background carries the screen title and all
-//     offered Dreamcallers laid out on a grid — round portrait medallion, name,
-//     an equal-height console card (ability text, a labelled starting essence,
-//     and a Choose action), and, floating below the card, the "Tides" header
-//     with its full pills. The grid's row tracks equalize each element type's
-//     height across the three Dreamcallers.
+//     offered Dreamcallers laid out on a grid — name at the top, a round
+//     portrait medallion, then an equal-height console card (ability text, the
+//     collapsed tides cluster + starting-essence chip, and a small "Choose"
+//     text action). The grid's row tracks equalize the card height across the
+//     three Dreamcallers.
 // PURE: it renders from a view-model and reports the chosen Dreamcaller through
 // `onPick`; the adapter owns state, the offer, the seed, and startQuest.
 
@@ -25,7 +25,6 @@ import {
   TideCluster,
   type TideClusterTideView,
 } from "../components/hud/TideCluster";
-import { TidePill } from "../components/hud/TidePill";
 import { Pressable } from "../primitives/Pressable";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
@@ -232,39 +231,6 @@ function EssenceReveal({
         <ResourceChip kind="essence" value={dreamcaller.startingEssence} />
       </span>
     </InfoCard.PressInfo>
-  );
-}
-
-/** The desktop tides display: every tide as a full, always-visible pill (each
- * carrying its own hover/press description reveal), wrapping to fill the
- * console width — no collapsed disc cluster. */
-function TidePillsRow({
-  tides,
-  stageRef,
-}: {
-  tides: DreamcallerTideView[];
-  stageRef: React.RefObject<HTMLElement | null>;
-}) {
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        alignItems: "center",
-        gap: token("--space-2"),
-      }}
-    >
-      {tides.map((tide) => (
-        <TidePill
-          key={tide.id}
-          size="sm"
-          label={tide.label}
-          description={tide.description}
-          tide={tide.tide}
-          stageRef={stageRef}
-        />
-      ))}
-    </div>
   );
 }
 
@@ -595,11 +561,6 @@ function CarouselSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
  * measures are content-driven layout, so this is a caller number. */
 const MEDALLION_PX = 208;
 
-/** The general "what is a tide" explanation, revealed from the desktop tides
- * header (matching the legacy select screen's tides info card). */
-const TIDES_ABOUT_BLURB =
-  "Pools of cards you will see during the quest. Different tides are used every time you play.";
-
 /** A dreamcaller's character art cropped to a round medallion that floats on
  * the screen's shared background. Screen-local: the circle, ring, and face
  * crop are this screen's framing, distinct from the shared DreamcallerPortrait
@@ -695,119 +656,26 @@ function MedallionName({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
   );
 }
 
-/** The "Tides" section header: the uppercase label + an info mark that reveals
- * what tides are through the shared InfoCard (hover on fine pointers, press on
- * touch), matching the legacy select screen's tides info card. */
-function TidesHeader({
-  stageRef,
-}: {
-  stageRef: React.RefObject<HTMLElement | null>;
-}) {
+/** The desktop commit action: a small, purple "Choose" text button — a light
+ * accent-colored affordance rather than the heavy beveled Button sprite, to
+ * keep the desktop card quiet. Built on the Pressable press primitive. */
+function ChooseText({ onClick }: { onClick: () => void }) {
   return (
-    <InfoCard.PressInfo
-      stageRef={stageRef}
-      as="span"
-      card={
-        <InfoCard
-          variant="icon"
-          glyph={GLYPHS.infoFilled}
-          title="Tides"
-          body={richText.plain(TIDES_ABOUT_BLURB)}
-        />
-      }
+    <Pressable
+      as="button"
+      onClick={onClick}
+      style={{
+        background: "none",
+        border: "none",
+        padding: `${token("--space-2")} ${token("--space-3")}`,
+        cursor: "pointer",
+        font: token("--t-button-sm"),
+        color: token("--accent-bright"),
+        letterSpacing: token("--tracking-wordmark"),
+      }}
     >
-      <span
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: token("--space-1"),
-          cursor: "help",
-        }}
-      >
-        <span
-          style={{
-            font: token("--t-eyebrow"),
-            letterSpacing: token("--tracking-eyebrow"),
-            textTransform: "uppercase",
-            color: token("--text-secondary"),
-            lineHeight: 1,
-          }}
-        >
-          Tides
-        </span>
-        <span style={{ display: "inline-flex", fontSize: 13 }}>
-          <GlowIcon iconClass={GLYPHS.infoFilled} color="text-muted" size="1em" />
-        </span>
-      </span>
-    </InfoCard.PressInfo>
-  );
-}
-
-/** The desktop tides block: a "Tides" header (with its explanation reveal) over
- * the full, always-visible tide pills. */
-function TidesSection({
-  dreamcaller,
-  stageRef,
-}: {
-  dreamcaller: DreamcallerOfferView;
-  stageRef: React.RefObject<HTMLElement | null>;
-}) {
-  return (
-    <div data-dreamcaller-tides={dreamcaller.id}>
-      <TidesHeader stageRef={stageRef} />
-      <div style={{ marginTop: token("--space-2") }}>
-        <TidePillsRow tides={dreamcaller.tides} stageRef={stageRef} />
-      </div>
-    </div>
-  );
-}
-
-/** The desktop starting-essence line: an explicit "Starting Essence" label and
- * the value chip, together revealing what starting essence is on hover/press. */
-function StartingEssenceLine({
-  dreamcaller,
-  stageRef,
-}: {
-  dreamcaller: DreamcallerOfferView;
-  stageRef: React.RefObject<HTMLElement | null>;
-}) {
-  return (
-    <InfoCard.PressInfo
-      stageRef={stageRef}
-      as="div"
-      card={
-        <InfoCard
-          variant="icon"
-          glyph={GLYPHS.essence}
-          title="Starting Essence"
-          body={richText.plain(
-            "The essence this Dreamcaller begins the quest with, spent at sites this run.",
-          )}
-        />
-      }
-    >
-      <div
-        data-starting-essence-value={dreamcaller.id}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: token("--space-4"),
-        }}
-      >
-        <span
-          style={{
-            font: token("--t-eyebrow"),
-            letterSpacing: token("--tracking-eyebrow"),
-            textTransform: "uppercase",
-            color: token("--text-secondary"),
-          }}
-        >
-          Starting Essence
-        </span>
-        <ResourceChip kind="essence" value={dreamcaller.startingEssence} />
-      </div>
-    </InfoCard.PressInfo>
+      Choose
+    </Pressable>
   );
 }
 
@@ -815,8 +683,7 @@ function StartingEssenceLine({
  * card, and — floating below the card on the shared background (outside the
  * card) — the Tides header and pills. Returned as siblings (not wrapped) so
  * each lands in its own grid-row track; the tracks then equalize each element
- * type's height across the three Dreamcallers, keeping the cards the same
- * height while the tides float free beneath them. */
+ * height across the three Dreamcallers. */
 function DreamcallerColumnCells({
   dreamcaller,
   onChoose,
@@ -829,13 +696,13 @@ function DreamcallerColumnCells({
   const hasTides = dreamcaller.tides.length > 0;
   return (
     <>
-      {/* Medallion — centered within its column track. */}
+      {/* Name + epithet at the top of the column. */}
+      <MedallionName dreamcaller={dreamcaller} />
+
+      {/* Circle-cutout medallion, centered within its column track. */}
       <div style={{ justifySelf: "center" }}>
         <PortraitMedallion dreamcaller={dreamcaller} />
       </div>
-
-      {/* Name + epithet. */}
-      <MedallionName dreamcaller={dreamcaller} />
 
       {/* Console card — the grid stretches it to fill the (equal-height) card
           row and its inner flex column pins the Choose action to the base.
@@ -851,45 +718,56 @@ function DreamcallerColumnCells({
           gap: token("--space-4"),
         }}
       >
-        <div
-          style={{
-            flex: 1,
-            display: "flex",
-            flexDirection: "column",
-            gap: token("--space-4"),
-          }}
-        >
+        <div style={{ flex: 1 }}>
           <AbilityReveal text={dreamcaller.renderedText} stageRef={stageRef} />
 
+          <ConsoleDivider />
+
+          {/* Collapsed tides cluster + the starting-essence chip (no label),
+              mirroring the mobile console. The essence sits in a box the height
+              of the tides' first row so it lines up with the "Tides" label. */}
           <div
             style={{
-              height: 1,
-              background: `linear-gradient(90deg, transparent, ${token("--line-strong")} 18%, ${token("--line-strong")} 82%, transparent)`,
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "space-between",
+              gap: token("--space-5"),
+              marginTop: token("--space-4"),
             }}
-          />
-
-          <StartingEssenceLine dreamcaller={dreamcaller} stageRef={stageRef} />
+          >
+            {hasTides ? (
+              <span data-dreamcaller-tides={dreamcaller.id}>
+                <TideCluster tides={dreamcaller.tides} stageRef={stageRef} />
+              </span>
+            ) : (
+              <span />
+            )}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                minHeight: `calc(24px + 2 * ${token("--space-2")})`,
+              }}
+            >
+              <EssenceReveal dreamcaller={dreamcaller} stageRef={stageRef} />
+            </div>
+          </div>
         </div>
 
-        <div data-choose-dreamcaller={dreamcaller.id}>
-          <Button size="md" full label="Choose" onClick={onChoose} />
+        <div
+          data-choose-dreamcaller={dreamcaller.id}
+          style={{ textAlign: "center", marginTop: token("--space-2") }}
+        >
+          <ChooseText onClick={onChoose} />
         </div>
-      </div>
-
-      {/* Tides — floating below the card on the shared background, hugging the
-          top of the tides row so they sit just beneath the card. */}
-      <div style={{ alignSelf: "start" }}>
-        {hasTides && (
-          <TidesSection dreamcaller={dreamcaller} stageRef={stageRef} />
-        )}
       </div>
     </>
   );
 }
 
 /** The desktop Dreamcaller-selection layout: a shared background carrying the
- * screen title and, on a column-flowed grid, every offered Dreamcaller's
- * medallion, name, equal-height console card, and floating tides. */
+ * screen title and, on a column-flowed grid, every offered Dreamcaller's name,
+ * medallion, and equal-height console card. */
 function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
   const stageRef = useRef<HTMLDivElement>(null);
 
@@ -942,10 +820,9 @@ function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
         </h1>
       </div>
 
-      {/* Column-flowed grid: each Dreamcaller fills one column (medallion, name,
-          card, tides down the four rows). The row tracks equalize each element
-          type's height across columns, so the cards stay the same height while
-          the tides float in their own bottom row, outside the cards. */}
+      {/* Column-flowed grid: each Dreamcaller fills one column (name, medallion,
+          card down the three rows). The card row track sizes to the tallest
+          card, so all three cards render at the same height. */}
       <div
         style={{
           position: "relative",
@@ -953,7 +830,7 @@ function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
           display: "grid",
           gridAutoFlow: "column",
           gridTemplateColumns: `repeat(${String(dreamcallers.length)}, minmax(0, 340px))`,
-          gridTemplateRows: "auto auto auto auto",
+          gridTemplateRows: "auto auto auto",
           columnGap: token("--space-8"),
           rowGap: token("--space-4"),
           justifyContent: "center",
