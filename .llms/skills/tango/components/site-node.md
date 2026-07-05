@@ -33,7 +33,7 @@ The dreamscape site disc: a floating circular node over scene art carrying a gly
 
 ## Usage
 
-A dreamscape site disc that positions itself from `model.pos` inside a `position: relative` stage and reveals its description through InfoCard, anchored to the scene's `stageRef`. The disc's size and accent are the system's (battle guardians scale up on their own); `motion` enables the calm floaty drift.
+A dreamscape site disc that positions itself from `model.pos` inside a `position: relative` stage and reveals its description through InfoCard, anchored to the scene's `stageRef`. Every disc is one system size and accent — the guardian battle reads as special through its pulsing ring and lock badge, not a larger disc; `motion` enables the calm floaty drift.
 
 ```tsx
 import { SiteNode } from "src/tango/components/atlas/SiteNode";

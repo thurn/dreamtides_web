@@ -242,7 +242,7 @@ function QsbDreamsignStrip({
   stageRef: React.RefObject<HTMLElement | null>;
   onOpenWindow: () => void;
 }): ReactElement | null {
-  const [box, setBox] = React.useState<{ right: number; bottomY: number } | null>(
+  const [box, setBox] = React.useState<{ right: number; centerY: number } | null>(
     null,
   );
 
@@ -251,16 +251,28 @@ function QsbDreamsignStrip({
     const measure = (): void => {
       const stage = stageRef.current;
       const deck = stage?.querySelector('button[aria-label^="View deck"]');
+      // The dreamsign row shares one line with the essence value — centered on
+      // it — so it is placed against the essence element's vertical center
+      // rather than the deck's baseline.
+      const essence = stage?.querySelector('[aria-label="Essence Total"]');
       const sr = stage?.getBoundingClientRect();
-      if (!stage || !deck || !sr || sr.width === 0 || deck.getBoundingClientRect().width === 0) {
+      if (
+        !stage ||
+        !deck ||
+        !essence ||
+        !sr ||
+        sr.width === 0 ||
+        deck.getBoundingClientRect().width === 0
+      ) {
         raf = requestAnimationFrame(measure);
         return;
       }
       const dr = deck.getBoundingClientRect();
+      const er = essence.getBoundingClientRect();
       const k = stage.clientWidth / sr.width;
       setBox({
         right: stage.clientWidth - (dr.left - sr.left) * k + SIGN_GAP,
-        bottomY: (dr.bottom - sr.top) * k,
+        centerY: (er.top + er.height / 2 - sr.top) * k,
       });
     };
     measure();
@@ -287,9 +299,9 @@ function QsbDreamsignStrip({
   const wrap: CSSProperties = {
     position: "absolute",
     right: box.right,
-    top: box.bottomY - SIGN,
+    top: box.centerY - SIGN / 2,
     display: "flex",
-    alignItems: "flex-end",
+    alignItems: "center",
     zIndex: 41,
     touchAction: "none",
   };

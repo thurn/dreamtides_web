@@ -1,6 +1,7 @@
 import type { QuestContent } from "../data/quest-content";
 import type { QuestState, SiteState, SiteType } from "../types/quest";
 import { createDefaultState } from "../state/quest-context";
+import { createDreamsign } from "../data/dreamsigns";
 import { createQaQuestFoundation } from "./start-in-battle-state";
 
 /**
@@ -70,10 +71,36 @@ const ATLAS_SCENE: QaScene = {
 };
 
 /**
+ * Builds the inside-a-dreamscape overview parked on the starter dreamscape,
+ * seeded with `dreamsignCount` owned dreamsigns so the QuestStatusBar's docked
+ * dreamsign strip is exercised (inline up to four, an overflow stack beyond).
+ */
+function dreamscapeSceneState(
+  dreamsignCount: number,
+): QaScene["build"] {
+  return (questContent) => {
+    const foundation = createQaQuestFoundation(questContent);
+    if (foundation === null) {
+      return null;
+    }
+    const dreamsigns = questContent.dreamsignTemplates
+      .slice(0, dreamsignCount)
+      .map((template) => createDreamsign(template));
+    return {
+      ...foundation.state,
+      currentDreamscape: foundation.starterNode.id,
+      screen: { type: "dreamscape" },
+      dreamsigns,
+    };
+  };
+}
+
+/**
  * The inside-a-dreamscape overview, parked on the starter dreamscape with its
- * scatter of sites. Otherwise reached only by winning the keeper battle and
- * choosing a dreamscape; parking here lets the Tango dreamscape redesign (the
- * scene, the site nodes, and the QuestStatusBar HUD) be QA'd from a URL.
+ * scatter of sites and a few docked dreamsigns. Otherwise reached only by
+ * winning the keeper battle and choosing a dreamscape; parking here lets the
+ * Tango dreamscape redesign (the scene, the site nodes, and the QuestStatusBar
+ * HUD) be QA'd from a URL.
  */
 const DREAMSCAPE_SCENE: QaScene = {
   id: "dreamscape",
@@ -81,17 +108,7 @@ const DREAMSCAPE_SCENE: QaScene = {
   description:
     "The inside-a-dreamscape overview with its floating site nodes and the " +
     "persistent QuestStatusBar, parked on the dreamscape screen for UI QA.",
-  build: (questContent) => {
-    const foundation = createQaQuestFoundation(questContent);
-    if (foundation === null) {
-      return null;
-    }
-    return {
-      ...foundation.state,
-      currentDreamscape: foundation.starterNode.id,
-      screen: { type: "dreamscape" },
-    };
-  },
+  build: dreamscapeSceneState(3),
 };
 
 /**

@@ -31,8 +31,11 @@
   transform-origin: 50% 12% !important;
 }
 
-/* ---- HUD baseline: the essence mark hugs its number, and the cluster rests
-   on a shared baseline, lifted by the elevation var. ---- */
+/* ---- HUD baseline: the essence mark hugs its number. The portrait bust and
+   deck sprite rest on the shared bottom baseline (so they don't look wrong
+   flush against the screen's rounded corners), while the essence value is
+   lifted into a raised row — up to about where the portrait's corner radius
+   starts — that the dreamsign strip vertically centers on. ---- */
 .tango .qsbHud > div > div > span {
   gap: 0 !important;
 }
@@ -40,7 +43,9 @@
   align-items: flex-end !important;
 }
 .tango .qsbHud > div > div {
-  transform: translateY(calc(-1 * var(--qsb-elev, 0px)));
+  /* --qsb-elev raises the essence cluster off the baseline; 14px seats it
+     around the portrait's corner-radius start. */
+  transform: translateY(calc(-1 * var(--qsb-elev, 14px)));
 }
 
 /* ---- Overflow dreamsign-window entrance ---- */

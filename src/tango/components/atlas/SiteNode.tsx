@@ -1,7 +1,8 @@
 // SiteNode — the dreamscape site disc. A floating circular node over a
 // dreamscape's scene art: a dark radial disc with a white glyph and a soft accent
-// ring. Battle guardians loom a little larger and carry a pulsing ring; visited
-// and locked nodes dim and show a status badge. The disc carries no text label —
+// ring. Every site disc is the same size; the guardian battle carries a pulsing
+// ring, and visited and locked nodes dim and show a status badge. The disc
+// carries no text label —
 // pressing / hovering it reveals the site name + detail through the ONE shared
 // popover, InfoCard's `icon` variant, whose disc is styled to read identically to
 // the node it rose from.
@@ -123,10 +124,12 @@ export function SiteNode({
     }
   }, [shown, stageRef]);
 
-  // Battle guardians loom a little larger than the wayside sites.
-  const diameter = isBattle ? Math.round(NODE_SIZE * 1.22) : NODE_SIZE;
-  // A locked guardian stays at full opacity but is desaturated to a clear,
-  // readable "disabled" grey.
+  // Every site disc is the same size — the guardian battle reads as special
+  // through its pulsing ring and lock badge, not a larger disc.
+  const diameter = NODE_SIZE;
+  // A locked guardian stays at full opacity but its disc is desaturated to a
+  // clear, readable "disabled" grey. The dimming lands on the disc alone so the
+  // lock badge stays crisp and legible.
   const opacity = site.isVisited ? 0.42 : 1;
   const lockedFilter = isLocked ? "grayscale(1) brightness(0.62)" : undefined;
 
@@ -171,7 +174,6 @@ export function SiteNode({
     marginTop: -diameter / 2,
     animationDelay: `${String(index * -1.37)}s`,
     opacity,
-    ...(lockedFilter !== undefined ? { filter: lockedFilter } : {}),
     zIndex: shown ? 40 : 10,
     transform: shown && isInteractive ? "scale(1.08)" : "scale(1)",
     touchAction: "none",
@@ -202,7 +204,11 @@ export function SiteNode({
     >
       <span
         className="ds-disc"
-        style={{ boxShadow: ring, borderColor: withAlpha(NODE_ACCENT, 0.45) }}
+        style={{
+          boxShadow: ring,
+          borderColor: withAlpha(NODE_ACCENT, 0.45),
+          ...(lockedFilter !== undefined ? { filter: lockedFilter } : {}),
+        }}
       >
         <span
           className="ds-ico"
@@ -229,7 +235,7 @@ export function SiteNode({
       )}
       {isLocked && !site.isVisited && (
         <span className="ds-node-badge locked" aria-hidden="true">
-          <i className="bx bx-lock" />
+          <i className="bxf bx-lock" />
         </span>
       )}
       {anchor &&
