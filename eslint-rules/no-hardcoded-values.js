@@ -21,8 +21,6 @@ import { colorTokenFor } from "./tango-token-index.js";
  *   - `src/tango/docs/` — the design-system's own documentation site: demos and
  *     mockups intentionally show components against arbitrary sample colors and
  *     backdrops, and the doc chrome is tooling, not product UI.
- *   - `src/tango/devtools/` — dev-only tuning panels are tooling like the docs
- *     site: their sample chrome colors are not product UI.
  * Everywhere else under `src/tango/` — above all `src/tango/screens/`, the
  * migrated product screens — a hardcoded color is an error, and so is the
  * adapter/builder layer in `src/screens/tango_adapters/` (a color minted in an adapter
@@ -37,7 +35,6 @@ import { colorTokenFor } from "./tango-token-index.js";
 
 /** Repo-relative POSIX dir prefixes that may author raw color values. */
 const EXEMPT_PREFIXES = [
-  "src/tango/devtools/",
   "src/tango/primitives/",
   "src/tango/components/",
   "src/tango/docs/",

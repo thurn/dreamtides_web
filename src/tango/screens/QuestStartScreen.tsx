@@ -32,11 +32,6 @@ import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { TangoColor } from "../primitives/color";
 import { dreamcallerCutoutSrc } from "../components/hud/DreamcallerPortrait";
-import {
-  DEFAULT_TWEAKS,
-  TweaksPanel,
-  type DesktopSelectTweaks,
-} from "../devtools/desktop-select-tweaks";
 import { extractGlossaryTerms } from "../../data/glossary-terms";
 
 /** One tide shown on a Dreamcaller, already resolved to display copy. It is
@@ -589,6 +584,15 @@ const MAX_TIDE_DISCS = 4;
 /** The hover-only tide discs' diameter, in px. */
 const TIDE_DISC_PX = 24;
 
+/** Desktop column metrics. Box measures are content-driven layout, so these are
+ * caller numbers. Each column is a fixed-width figure stage with a narrower,
+ * center-aligned console card riding up over the legs. */
+const COLUMN_W = 400; // the figure stage's width
+const PORTRAIT_H = 715; // the standing figure's stage height
+const PORTRAIT_SCALE = 1.2; // grows the cutout art from the feet past the column
+const CARD_W = 320; // console-card width (narrower than the column, centered)
+const CARD_OVERLAP = 275; // how far the card's center rides up over the figure
+
 /** What the "Tides (i)" reveal explains, mirroring the legacy select screen. */
 const TIDES_BLURB =
   "Pools of cards you will see during the quest. Different tides are used every time you play.";
@@ -618,13 +622,7 @@ function DesktopTitle() {
  * screen's shared background over a soft ambient glow. Feet anchor to the
  * bottom of the stage, where the console card rides up over the legs and its
  * glass blurs them. Falls back to a tinted monogram disc on a 404. */
-function StandingFigure({
-  dreamcaller,
-  scale,
-}: {
-  dreamcaller: DreamcallerOfferView;
-  scale: number;
-}) {
+function StandingFigure({ dreamcaller }: { dreamcaller: DreamcallerOfferView }) {
   const [broken, setBroken] = useState(false);
   const glow = (
     <div
@@ -698,7 +696,7 @@ function StandingFigure({
           // column width, so scaling here is how it reads larger (overflowing
           // the column) while the feet — and thus the card that rides over the
           // legs — stay anchored to the stage floor.
-          transform: `scale(${String(scale)})`,
+          transform: `scale(${String(PORTRAIT_SCALE)})`,
           transformOrigin: "50% 100%",
           userSelect: "none",
         }}
@@ -845,29 +843,24 @@ function StaticTides({
   );
 }
 
-/** The console card for one Dreamcaller. It rides up over the portrait's legs
- * (negative top margin), and its interior is an even rhythm stack: top padding,
- * the ability region, the divider, the tides row, and the Choose button are
- * each separated by exactly one `cardSpacing` unit, with matching padding at
- * top and bottom. When `equalCardHeight` is set the ability region is a fixed
- * height so every card locks to one size (top- and bottom-aligned); otherwise
- * the ability region is natural height and the card is pulled up by half its
- * own height (`translateY(-50%)`) so cards of different heights share one
- * vertical center line. Spreading GroupPanel's glass onto our own node is the
- * sanctioned rung-2 way to size the pane. */
+/** The console card for one Dreamcaller. It is narrower than its column and
+ * center-aligned under the figure, riding up over the legs; its interior is an
+ * even --space-6 rhythm stack — padding, then the ability text, divider, tides
+ * row, and Choose button each separated by one step. The ability region takes
+ * its natural height, and the card is pulled up by half its own height
+ * (`translateY(-50%)`) so cards of different heights share one vertical center
+ * line, positioned by {@link CARD_OVERLAP}. Spreading GroupPanel's glass onto
+ * our own node is the sanctioned rung-2 way to size the pane. */
 function DreamcallerCard({
   dreamcaller,
   onChoose,
   stageRef,
-  tweaks,
 }: {
   dreamcaller: DreamcallerOfferView;
   onChoose: () => void;
   stageRef: React.RefObject<HTMLElement | null>;
-  tweaks: DesktopSelectTweaks;
 }) {
   const hasTides = dreamcaller.tides.length > 0;
-  const gap = `${String(tweaks.cardSpacing)}px`;
   return (
     <div
       data-dreamcaller-column={dreamcaller.id}
@@ -875,46 +868,28 @@ function DreamcallerCard({
         ...GroupPanel.style(),
         position: "relative",
         zIndex: 1,
-        // The card can be narrower than its column (the figure stage keeps the
-        // full column width); centering it leaves the portrait framing intact.
-        width: tweaks.cardWidth,
+        // Narrower than its column (the figure stage keeps the full column
+        // width); centering it leaves the portrait framing intact.
+        width: CARD_W,
         alignSelf: "center",
-        marginTop: -tweaks.cardOverlap,
-        minHeight: tweaks.cardMinHeight || undefined,
-        // In natural-height mode, pull the card up by half its own height so
-        // its vertical CENTER lands on the flow anchor (the same line for every
-        // column), center-aligning cards that differ in height. In equal-height
-        // mode the ability box already locks every card to one size, so no
-        // shift is needed.
-        transform: tweaks.equalCardHeight ? undefined : "translateY(-50%)",
-        // The vertical rhythm: `cardSpacing` top/bottom padding and the same
-        // gap above every stacked child (applied as margins, not a flex `gap`,
-        // so the flex backstop below can grow without doubling a gap around
-        // it). Horizontal padding is roomier so text and button breathe.
-        padding: `${gap} ${token("--space-6")}`,
+        marginTop: -CARD_OVERLAP,
+        // Pull the card up by half its own height so its vertical CENTER lands
+        // on the flow anchor (the same line for every column), center-aligning
+        // cards that differ in height.
+        transform: "translateY(-50%)",
+        // The vertical rhythm: one --space-6 of padding on every side and the
+        // same step above each stacked child (applied as margins so the layout
+        // reads as an even stack).
+        padding: token("--space-6"),
         display: "flex",
         flexDirection: "column",
       }}
     >
-      {/* Ability text. In equal-height mode it sits in a fixed region (copy
-          vertically centered) so the divider and everything below land on one
-          baseline across all cards; otherwise the region is its natural
-          height. */}
-      <div
-        style={{
-          height: tweaks.equalCardHeight ? tweaks.abilityHeight : undefined,
-          display: "flex",
-          alignItems: "center",
-        }}
-      >
-        <AbilityReveal text={dreamcaller.renderedText} stageRef={stageRef} />
-      </div>
+      <AbilityReveal text={dreamcaller.renderedText} stageRef={stageRef} />
 
-      {tweaks.showDivider && (
-        <div style={{ marginTop: gap }}>
-          <ConsoleDivider flush />
-        </div>
-      )}
+      <div style={{ marginTop: token("--space-6") }}>
+        <ConsoleDivider flush />
+      </div>
 
       {/* Tides row: the "Tides:" label + hover discs on the left, the
           starting-essence chip on the right. */}
@@ -924,7 +899,7 @@ function DreamcallerCard({
           alignItems: "center",
           justifyContent: "space-between",
           gap: token("--space-4"),
-          marginTop: gap,
+          marginTop: token("--space-6"),
         }}
       >
         {hasTides ? (
@@ -945,41 +920,35 @@ function DreamcallerCard({
         </div>
       </div>
 
-      {/* A flex backstop: zero on the common (content-sized) case, so the
-          rhythm above is exact; it only grows to pin the button to the bottom
-          when `cardMinHeight` (or a taller neighbour) makes the card taller. */}
-      <div style={{ flex: 1 }} />
-
-      <div data-choose-dreamcaller={dreamcaller.id} style={{ marginTop: gap }}>
-        {/* Defaults to the responsive `md` height — the `lg` commit height
-            belongs to the mobile carousel, where the button is the page's
-            single full-width action. */}
-        <Button size={tweaks.buttonSize} full label="Choose" onClick={onChoose} />
+      <div
+        data-choose-dreamcaller={dreamcaller.id}
+        style={{ marginTop: token("--space-6") }}
+      >
+        {/* The responsive `md` height — the `lg` commit height belongs to the
+            mobile carousel, where the button is the page's single full-width
+            action. */}
+        <Button size="md" full label="Choose" onClick={onChoose} />
       </div>
     </div>
   );
 }
 
-/** One desktop Dreamcaller column: the standing full-body cutout with the name
- * floating above the head, and the console card riding up over the legs. The
- * column is a fixed-width stack of the portrait stage and the card; in
- * equal-height mode the card's fixed ability region locks all columns to one
- * size, and otherwise each card takes its natural height. */
+/** One desktop Dreamcaller column: a fixed-width stack of the portrait stage
+ * (the standing cutout with the name floating above the head) and the console
+ * card, which rides up over the legs and takes its natural height. */
 function DreamcallerColumn({
   dreamcaller,
   onChoose,
   stageRef,
-  tweaks,
 }: {
   dreamcaller: DreamcallerOfferView;
   onChoose: () => void;
   stageRef: React.RefObject<HTMLElement | null>;
-  tweaks: DesktopSelectTweaks;
 }) {
   return (
     <div
       style={{
-        width: tweaks.columnWidth,
+        width: COLUMN_W,
         flex: "none",
         display: "flex",
         flexDirection: "column",
@@ -988,18 +957,17 @@ function DreamcallerColumn({
       <div
         style={{
           position: "relative",
-          height: tweaks.portraitHeight,
+          height: PORTRAIT_H,
           flex: "none",
         }}
       >
-        <StandingFigure dreamcaller={dreamcaller} scale={tweaks.portraitScale} />
+        <StandingFigure dreamcaller={dreamcaller} />
         <PortraitName dreamcaller={dreamcaller} />
       </div>
       <DreamcallerCard
         dreamcaller={dreamcaller}
         onChoose={onChoose}
         stageRef={stageRef}
-        tweaks={tweaks}
       />
     </div>
   );
@@ -1007,11 +975,9 @@ function DreamcallerColumn({
 
 /** The desktop Dreamcaller-selection layout: a small purple eyebrow title near
  * the top of a shared background, then the offered Dreamcallers side by side as
- * locked-size portrait columns. In dev, a floating {@link TweaksPanel} drives
- * the live proportions. */
+ * fixed-width portrait columns. */
 function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
   const stageRef = useRef<HTMLDivElement>(null);
-  const [tweaks, setTweaks] = useState<DesktopSelectTweaks>(DEFAULT_TWEAKS);
 
   return (
     <div
@@ -1054,9 +1020,9 @@ function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
       </div>
 
       {/* The offered Dreamcallers, centered in the remaining space. The inner
-          triptych sizes to its content (the tallest column); `alignItems:
-          stretch` there equalizes the three columns to that tallest one, so all
-          cards lock to a single height without stretching to the viewport. */}
+          triptych aligns the columns at the top (`alignItems: flex-start`) so
+          the fixed-height figure stages keep their feet on one line; each card
+          then center-aligns itself within its own footprint. */}
       <div
         style={{
           position: "relative",
@@ -1071,7 +1037,7 @@ function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
         <div
           style={{
             display: "flex",
-            alignItems: "stretch",
+            alignItems: "flex-start",
             justifyContent: "center",
             flexWrap: "wrap",
             gap: token("--space-8"),
@@ -1085,15 +1051,10 @@ function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
                 onPick(dreamcaller.id);
               }}
               stageRef={stageRef}
-              tweaks={tweaks}
             />
           ))}
         </div>
       </div>
-
-      {import.meta.env.DEV && (
-        <TweaksPanel tweaks={tweaks} onChange={setTweaks} />
-      )}
     </div>
   );
 }
