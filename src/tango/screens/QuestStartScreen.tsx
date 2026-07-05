@@ -170,13 +170,15 @@ function FullBleedPortrait({
   );
 }
 
-/** The brand-tinted hairline between ability text and the tides row. */
-function ConsoleDivider() {
+/** The brand-tinted hairline between ability text and the tides row. `flush`
+ * drops the built-in top margin for callers (the desktop card) that own their
+ * own spacing rhythm through a flex `gap`. */
+function ConsoleDivider({ flush = false }: { flush?: boolean }) {
   return (
     <div
       style={{
         height: 1,
-        marginTop: token("--space-4"),
+        marginTop: flush ? 0 : token("--space-4"),
         background: `linear-gradient(90deg, transparent, ${token("--line-strong")} 18%, ${token("--line-strong")} 82%, transparent)`,
       }}
     />
@@ -579,15 +581,24 @@ function CarouselSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
 /** Desktop column metrics. Box measures are content-driven layout, so these
  * are caller numbers — locked so all three Dreamcaller columns render at
  * exactly the same fixed size. */
-const COLUMN_W = 320; // wide enough for the full-body cutout to read large
-const PORTRAIT_H = 500; // the standing figure's stage (cutout is 2:3, so ~480)
-const CARD_OVERLAP = 120; // how far the console card rides up over the legs
-const TIDE_DISC_PX = 30; // the hover-only tide discs (a touch bigger)
-// A floor for the ability-text region so cards with shorter abilities keep the
-// same layout as the common ~3-line ones — the height difference is absorbed
-// here (above the divider) rather than opening a chasm above the Choose button.
-// --t-rules is 14px at 1.36 line-height, so three lines ≈ 58px.
-const ABILITY_MIN_H = 58;
+const COLUMN_W = 340; // wide enough for the full-body cutout to read large
+const PORTRAIT_H = 560; // the standing figure's stage (cutout is 2:3, so ~480)
+const CARD_OVERLAP = 190; // rides up so the card's top edge sits near the waist
+const TIDE_DISC_PX = 24; // the hover-only tide discs
+// At most this many tide discs render; a Dreamcaller with more shows the first
+// few (the rest are the same pools, just less prominent).
+const MAX_TIDE_DISCS = 4;
+// The internal vertical rhythm unit. Every gap inside the console card — top
+// padding, ability→divider, divider→tides, tides→button, button→bottom — is
+// exactly this, so the card reads as an even stack rather than a set of
+// arbitrary spacings.
+const CARD_RHYTHM = token("--space-4"); // 8px
+// A FIXED region reserved for ability text: three lines, with the ability
+// vertically centered within it. Locking the height (rather than flooring it)
+// keeps every column's divider, tides, and button on the same baseline no
+// matter how long each ability is. --t-rules is 14px at 1.36 line-height, so
+// three lines ≈ 58px.
+const ABILITY_BOX_H = 58;
 
 /** What the "Tides (i)" reveal explains, mirroring the legacy select screen. */
 const TIDES_BLURB =
@@ -599,7 +610,10 @@ function DesktopTitle() {
   return (
     <div
       style={{
+        // The mobile ScreenHeader's uppercase accent eyebrow, scaled up so the
+        // screen's one title carries real presence at desktop widths.
         font: token("--t-eyebrow"),
+        fontSize: 18,
         letterSpacing: token("--tracking-eyebrow"),
         textTransform: "uppercase",
         color: token("--accent-bright"),
@@ -779,9 +793,10 @@ function TideDiscReveal({
   );
 }
 
-/** The desktop tides display: a "Tides (i)" eyebrow whose (i) reveals what
- * tides are, followed by a row of hover-only tide discs. Nothing expands —
- * each disc reveals its own tide on hover, mirroring the legacy select UI. */
+/** The desktop tides display: a "Tides:" label whose text reveals what tides
+ * are on hover / press, followed by a row of hover-only tide discs (capped at
+ * {@link MAX_TIDE_DISCS}). Nothing expands — each disc reveals its own tide on
+ * hover, mirroring the legacy select UI. */
 function StaticTides({
   tides,
   stageRef,
@@ -806,35 +821,22 @@ function StaticTides({
       >
         <span
           style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: token("--space-1"),
+            font: token("--t-eyebrow"),
+            letterSpacing: token("--tracking-eyebrow"),
+            textTransform: "uppercase",
+            color: token("--text-secondary"),
+            lineHeight: 1,
             cursor: "pointer",
           }}
         >
-          <span
-            style={{
-              font: token("--t-eyebrow"),
-              letterSpacing: token("--tracking-eyebrow"),
-              textTransform: "uppercase",
-              color: token("--text-secondary"),
-              lineHeight: 1,
-            }}
-          >
-            Tides
-          </span>
-          <GlowIcon
-            iconClass={GLYPHS.infoFilled}
-            color="text-muted"
-            size="13px"
-          />
+          Tides:
         </span>
       </InfoCard.PressInfo>
 
       <span
         style={{ display: "flex", alignItems: "center", gap: token("--space-2") }}
       >
-        {tides.map((tide) => (
+        {tides.slice(0, MAX_TIDE_DISCS).map((tide) => (
           <TideDiscReveal key={tide.id} tide={tide} stageRef={stageRef} />
         ))}
       </span>
@@ -843,10 +845,13 @@ function StaticTides({
 }
 
 /** The console card for one Dreamcaller. It rides up over the portrait's legs
- * (negative top margin) and grows to fill its column, which is stretched to the
- * tallest column — so all three cards lock to one height, with a modest bounded
- * whitespace above the Choose button. Spreading GroupPanel's glass onto our own
- * node is the sanctioned rung-2 way to size the pane. */
+ * (negative top margin) so its top edge sits near the waist, and its interior
+ * is an even {@link CARD_RHYTHM} stack: top padding, a fixed-height ability
+ * region, the divider, the tides row, and the Choose button are each separated
+ * by exactly one rhythm unit, with matching padding at top and bottom. The
+ * ability region is a fixed height so every column locks to the same size
+ * regardless of ability length. Spreading GroupPanel's glass onto our own node
+ * is the sanctioned rung-2 way to size the pane. */
 function DreamcallerCard({
   dreamcaller,
   onChoose,
@@ -864,23 +869,32 @@ function DreamcallerCard({
         ...GroupPanel.style(),
         position: "relative",
         zIndex: 1,
-        flex: 1,
         marginTop: -CARD_OVERLAP,
-        padding: token("--space-7"),
+        // The vertical rhythm: CARD_RHYTHM top/bottom padding and the same gap
+        // between every stacked child. Horizontal padding is roomier so the
+        // ability text and button breathe within the column.
+        padding: `${CARD_RHYTHM} ${token("--space-6")}`,
         display: "flex",
         flexDirection: "column",
+        gap: CARD_RHYTHM,
       }}
     >
-      {/* Ability text, floored to a common height so a short ability doesn't
-          push its divider (and everything below) up out of line with the
-          others. */}
-      <div style={{ minHeight: ABILITY_MIN_H }}>
+      {/* Ability text, in a fixed three-line region with the copy vertically
+          centered — so the divider (and everything below) lands on the same
+          baseline across all columns no matter how long each ability is. */}
+      <div
+        style={{
+          height: ABILITY_BOX_H,
+          display: "flex",
+          alignItems: "center",
+        }}
+      >
         <AbilityReveal text={dreamcaller.renderedText} stageRef={stageRef} />
       </div>
 
-      <ConsoleDivider />
+      <ConsoleDivider flush />
 
-      {/* Tides row: the "Tides (i)" eyebrow + hover discs on the left, the
+      {/* Tides row: the "Tides:" label + hover discs on the left, the
           starting-essence chip on the right. */}
       <div
         style={{
@@ -888,7 +902,6 @@ function DreamcallerCard({
           alignItems: "center",
           justifyContent: "space-between",
           gap: token("--space-4"),
-          marginTop: token("--space-4"),
         }}
       >
         {hasTides ? (
@@ -909,16 +922,10 @@ function DreamcallerCard({
         </div>
       </div>
 
-      {/* A flex backstop that only grows when a rare long ability makes another
-          column taller; on the common case it is zero, so the gap above the
-          button is just the fixed margin below. */}
-      <div style={{ flex: 1 }} />
-
-      <div
-        data-choose-dreamcaller={dreamcaller.id}
-        style={{ marginTop: token("--space-8") }}
-      >
-        <Button size="lg" full label="Choose" onClick={onChoose} />
+      <div data-choose-dreamcaller={dreamcaller.id}>
+        {/* `md` on desktop — the `lg` commit height belongs to the mobile
+            carousel, where the button is the page's single full-width action. */}
+        <Button size="md" full label="Choose" onClick={onChoose} />
       </div>
     </div>
   );
