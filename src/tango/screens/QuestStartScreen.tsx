@@ -32,6 +32,11 @@ import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import type { TangoColor } from "../primitives/color";
 import { dreamcallerCutoutSrc } from "../components/hud/DreamcallerPortrait";
+import {
+  DEFAULT_TWEAKS,
+  TweaksPanel,
+  type DesktopSelectTweaks,
+} from "../devtools/desktop-select-tweaks";
 import { extractGlossaryTerms } from "../../data/glossary-terms";
 
 /** One tide shown on a Dreamcaller, already resolved to display copy. It is
@@ -578,27 +583,11 @@ function CarouselSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
   );
 }
 
-/** Desktop column metrics. Box measures are content-driven layout, so these
- * are caller numbers — locked so all three Dreamcaller columns render at
- * exactly the same fixed size. */
-const COLUMN_W = 340; // wide enough for the full-body cutout to read large
-const PORTRAIT_H = 560; // the standing figure's stage (cutout is 2:3, so ~480)
-const CARD_OVERLAP = 190; // rides up so the card's top edge sits near the waist
-const TIDE_DISC_PX = 24; // the hover-only tide discs
-// At most this many tide discs render; a Dreamcaller with more shows the first
-// few (the rest are the same pools, just less prominent).
+/** How many tide discs render at most; a Dreamcaller with more shows the first
+ * few (the rest are the same pools, just less prominent). */
 const MAX_TIDE_DISCS = 4;
-// The internal vertical rhythm unit. Every gap inside the console card — top
-// padding, ability→divider, divider→tides, tides→button, button→bottom — is
-// exactly this, so the card reads as an even stack rather than a set of
-// arbitrary spacings.
-const CARD_RHYTHM = token("--space-4"); // 8px
-// A FIXED region reserved for ability text: three lines, with the ability
-// vertically centered within it. Locking the height (rather than flooring it)
-// keeps every column's divider, tides, and button on the same baseline no
-// matter how long each ability is. --t-rules is 14px at 1.36 line-height, so
-// three lines ≈ 58px.
-const ABILITY_BOX_H = 58;
+/** The hover-only tide discs' diameter, in px. */
+const TIDE_DISC_PX = 24;
 
 /** What the "Tides (i)" reveal explains, mirroring the legacy select screen. */
 const TIDES_BLURB =
@@ -856,12 +845,15 @@ function DreamcallerCard({
   dreamcaller,
   onChoose,
   stageRef,
+  tweaks,
 }: {
   dreamcaller: DreamcallerOfferView;
   onChoose: () => void;
   stageRef: React.RefObject<HTMLElement | null>;
+  tweaks: DesktopSelectTweaks;
 }) {
   const hasTides = dreamcaller.tides.length > 0;
+  const gap = `${String(tweaks.cardSpacing)}px`;
   return (
     <div
       data-dreamcaller-column={dreamcaller.id}
@@ -869,22 +861,23 @@ function DreamcallerCard({
         ...GroupPanel.style(),
         position: "relative",
         zIndex: 1,
-        marginTop: -CARD_OVERLAP,
-        // The vertical rhythm: CARD_RHYTHM top/bottom padding and the same gap
-        // between every stacked child. Horizontal padding is roomier so the
-        // ability text and button breathe within the column.
-        padding: `${CARD_RHYTHM} ${token("--space-6")}`,
+        marginTop: -tweaks.cardOverlap,
+        minHeight: tweaks.cardMinHeight || undefined,
+        // The vertical rhythm: `cardSpacing` top/bottom padding and the same
+        // gap above every stacked child (applied as margins, not a flex `gap`,
+        // so the flex backstop below can grow without doubling a gap around
+        // it). Horizontal padding is roomier so text and button breathe.
+        padding: `${gap} ${token("--space-6")}`,
         display: "flex",
         flexDirection: "column",
-        gap: CARD_RHYTHM,
       }}
     >
-      {/* Ability text, in a fixed three-line region with the copy vertically
-          centered — so the divider (and everything below) lands on the same
-          baseline across all columns no matter how long each ability is. */}
+      {/* Ability text, in a fixed region with the copy vertically centered — so
+          the divider (and everything below) lands on the same baseline across
+          all columns no matter how long each ability is. */}
       <div
         style={{
-          height: ABILITY_BOX_H,
+          height: tweaks.abilityHeight,
           display: "flex",
           alignItems: "center",
         }}
@@ -892,7 +885,11 @@ function DreamcallerCard({
         <AbilityReveal text={dreamcaller.renderedText} stageRef={stageRef} />
       </div>
 
-      <ConsoleDivider flush />
+      {tweaks.showDivider && (
+        <div style={{ marginTop: gap }}>
+          <ConsoleDivider flush />
+        </div>
+      )}
 
       {/* Tides row: the "Tides:" label + hover discs on the left, the
           starting-essence chip on the right. */}
@@ -902,6 +899,7 @@ function DreamcallerCard({
           alignItems: "center",
           justifyContent: "space-between",
           gap: token("--space-4"),
+          marginTop: gap,
         }}
       >
         {hasTides ? (
@@ -922,10 +920,16 @@ function DreamcallerCard({
         </div>
       </div>
 
-      <div data-choose-dreamcaller={dreamcaller.id}>
-        {/* `md` on desktop — the `lg` commit height belongs to the mobile
-            carousel, where the button is the page's single full-width action. */}
-        <Button size="md" full label="Choose" onClick={onChoose} />
+      {/* A flex backstop: zero on the common (content-sized) case, so the
+          rhythm above is exact; it only grows to pin the button to the bottom
+          when `cardMinHeight` (or a taller neighbour) makes the card taller. */}
+      <div style={{ flex: 1 }} />
+
+      <div data-choose-dreamcaller={dreamcaller.id} style={{ marginTop: gap }}>
+        {/* Defaults to the responsive `md` height — the `lg` commit height
+            belongs to the mobile carousel, where the button is the page's
+            single full-width action. */}
+        <Button size={tweaks.buttonSize} full label="Choose" onClick={onChoose} />
       </div>
     </div>
   );
@@ -939,22 +943,28 @@ function DreamcallerColumn({
   dreamcaller,
   onChoose,
   stageRef,
+  tweaks,
 }: {
   dreamcaller: DreamcallerOfferView;
   onChoose: () => void;
   stageRef: React.RefObject<HTMLElement | null>;
+  tweaks: DesktopSelectTweaks;
 }) {
   return (
     <div
       style={{
-        width: COLUMN_W,
+        width: tweaks.columnWidth,
         flex: "none",
         display: "flex",
         flexDirection: "column",
       }}
     >
       <div
-        style={{ position: "relative", height: PORTRAIT_H, flex: "none" }}
+        style={{
+          position: "relative",
+          height: tweaks.portraitHeight,
+          flex: "none",
+        }}
       >
         <StandingFigure dreamcaller={dreamcaller} />
         <PortraitName dreamcaller={dreamcaller} />
@@ -963,6 +973,7 @@ function DreamcallerColumn({
         dreamcaller={dreamcaller}
         onChoose={onChoose}
         stageRef={stageRef}
+        tweaks={tweaks}
       />
     </div>
   );
@@ -970,9 +981,11 @@ function DreamcallerColumn({
 
 /** The desktop Dreamcaller-selection layout: a small purple eyebrow title near
  * the top of a shared background, then the offered Dreamcallers side by side as
- * locked-size portrait columns. */
+ * locked-size portrait columns. In dev, a floating {@link TweaksPanel} drives
+ * the live proportions. */
 function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
   const stageRef = useRef<HTMLDivElement>(null);
+  const [tweaks, setTweaks] = useState<DesktopSelectTweaks>(DEFAULT_TWEAKS);
 
   return (
     <div
@@ -1046,10 +1059,15 @@ function DesktopSelect({ dreamcallers, onPick }: QuestStartScreenProps) {
                 onPick(dreamcaller.id);
               }}
               stageRef={stageRef}
+              tweaks={tweaks}
             />
           ))}
         </div>
       </div>
+
+      {import.meta.env.DEV && (
+        <TweaksPanel tweaks={tweaks} onChange={setTweaks} />
+      )}
     </div>
   );
 }

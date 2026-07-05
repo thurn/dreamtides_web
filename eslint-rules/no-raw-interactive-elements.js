@@ -19,6 +19,9 @@ import path from "node:path";
  *   - `src/tango/docs/` — the documentation site is tooling: its control panel
  *     genuinely needs native `<input>`/`<select>`, and its chrome uses plain
  *     `<button>`s.
+ *   - `src/tango/devtools/` — dev-only tuning panels (rendered under
+ *     `import.meta.env.DEV`) are tooling like the docs site: they wire raw
+ *     range/checkbox inputs to dial in values, not product surfaces.
  * Everywhere else under `src/tango/` — above all `src/tango/screens/` — a raw
  * interactive element is an error, and so is the adapter/builder layer in
  * `src/screens/tango_adapters/`: compose `Button` / `SegmentedControl` / `Pressable`
@@ -35,6 +38,7 @@ import path from "node:path";
 
 /** Repo-relative POSIX dir prefixes that may render native interactive tags. */
 const EXEMPT_PREFIXES = [
+  "src/tango/devtools/",
   "src/tango/primitives/",
   "src/tango/components/",
   "src/tango/docs/",
