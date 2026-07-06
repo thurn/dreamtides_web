@@ -28,7 +28,7 @@ import { token } from "../tango/primitives/tokens";
 import { useIsDesktop } from "../tango/screens/use-is-desktop";
 import {
   glassIconButtonChrome,
-  glassTrack,
+  neutralGlassButtonChrome,
 } from "../tango/components/controls/control-treatment";
 
 /** The App-shell overlay handlers the menu triggers. */
@@ -289,11 +289,10 @@ export function DreamscapeQuestMenu({
           font: isDesktop ? token("--t-body") : undefined,
           fontSize: menuGlyphSize,
           cursor: "pointer",
-          // Mobile keeps the compact circular icon affordance. Desktop uses the
-          // same glass material as a labeled control with an 8px corner radius.
-          ...(isDesktop
-            ? { ...glassTrack(), borderRadius: token("--radius-popover") }
-            : glassIconButtonChrome()),
+          // Mobile uses the compact circular icon affordance. Desktop uses a
+          // neutral glass surface with an 8px corner radius and a gray-olive
+          // read at the larger labeled size.
+          ...(isDesktop ? neutralGlassButtonChrome() : glassIconButtonChrome()),
         }}
       >
         <i className={isDesktop ? "bxf bx-cog" : "bxf bx-menu"} aria-hidden="true" />
