@@ -176,11 +176,13 @@
 /* ---- Node badges ----
    Badge diameters and glyph sizes are a fixed fraction of the node's own
    diameter (`--atlas-node-size`, set inline per node by AtlasNode), so every
-   badge scales in lock-step with its node. The mobile atlas draws larger nodes
-   than desktop, and this keeps the site / dreamsign icons legibly large there
-   without a per-platform badge rule — grow the node and the icons grow with
-   it. The multipliers are the desktop badge sizes divided by the desktop node
-   diameter (132px), so desktop badges are pixel-unchanged. */
+   badge scales in lock-step with its node, then times `--atlas-badge-scale`
+   (also set inline per node) so a profile can enlarge the badges on top of
+   that. The base fractions are the desktop badge sizes divided by the desktop
+   node diameter (132px); with the desktop scale of 1 desktop badges are
+   pixel-unchanged. The mobile profile draws larger nodes *and* sets a larger
+   badge scale, so the site / dreamsign icons stay legibly large once the
+   portrait viewport scales the whole stage down. */
 .dream-atlas .site-badges {
   position: absolute;
   bottom: -3px;
@@ -191,8 +193,8 @@
   gap: 5px;
 }
 .dream-atlas .site-badge {
-  width: calc(var(--atlas-node-size) * 0.27);
-  height: calc(var(--atlas-node-size) * 0.27);
+  width: calc(var(--atlas-node-size) * 0.27 * var(--atlas-badge-scale, 1));
+  height: calc(var(--atlas-node-size) * 0.27 * var(--atlas-badge-scale, 1));
   border-radius: 50%;
   background: linear-gradient(180deg, #2a2040, #14101f);
   border: 1px solid var(--dt-line-strong);
@@ -203,24 +205,8 @@
   box-shadow: 0 2px 7px rgba(0, 0, 0, 0.55);
 }
 .dream-atlas .site-badge-glyph {
-  font-size: calc(var(--atlas-node-size) * 0.16);
+  font-size: calc(var(--atlas-node-size) * 0.16 * var(--atlas-badge-scale, 1));
   line-height: 1;
-}
-.dream-atlas .check-badge {
-  position: absolute;
-  top: 3px;
-  right: 3px;
-  width: calc(var(--atlas-node-size) * 0.23);
-  height: calc(var(--atlas-node-size) * 0.23);
-  border-radius: 50%;
-  z-index: 6;
-  background: linear-gradient(180deg, #fbbf24, #d4a017);
-  color: #1a1525;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(var(--atlas-node-size) * 0.16);
-  border: 2px solid #0a0612;
 }
 .dream-atlas .boss-badge {
   position: absolute;
@@ -243,8 +229,8 @@
   position: absolute;
   top: -6px;
   right: -6px;
-  width: calc(var(--atlas-node-size) * 0.35);
-  height: calc(var(--atlas-node-size) * 0.35);
+  width: calc(var(--atlas-node-size) * 0.35 * var(--atlas-badge-scale, 1));
+  height: calc(var(--atlas-node-size) * 0.35 * var(--atlas-badge-scale, 1));
   border-radius: 50%;
   z-index: 7;
   background: radial-gradient(closest-side, #2a2040, #14101f);
@@ -255,8 +241,8 @@
   box-shadow: 0 0 14px rgba(250, 204, 21, 0.6);
 }
 .dream-atlas .known-badge img {
-  width: calc(var(--atlas-node-size) * 0.26);
-  height: calc(var(--atlas-node-size) * 0.26);
+  width: calc(var(--atlas-node-size) * 0.26 * var(--atlas-badge-scale, 1));
+  height: calc(var(--atlas-node-size) * 0.26 * var(--atlas-badge-scale, 1));
   object-fit: contain;
   filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6));
   pointer-events: none;

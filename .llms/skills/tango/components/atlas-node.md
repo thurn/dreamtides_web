@@ -31,6 +31,7 @@ One dreamscape node on the Dream Atlas: a framed circular icon whose glow and ba
 | `iconRef` | `ArtRef \| null` | no | The dreamscape icon art as an {@link ArtRef}, or `null` while unrevealed. |
 | `siteBadgeGlyph` | `Glyph \| null` | no | The signature-site badge {@link Glyph}, or `null`. |
 | `knownDreamsignRef` | `ArtRef \| null` | no | The pre-revealed known dreamsign icon as an {@link ArtRef}, or `null`. |
+| `badgeScale` | `number` | yes | Multiplier applied to the site / dreamsign badge sizes (the mobile atlas enlarges them). Defaults to 1 — the desktop size. |
 
 ## Usage
 

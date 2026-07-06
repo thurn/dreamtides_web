@@ -69,6 +69,10 @@ export interface AtlasLayoutProfile {
   nodeSize: number;
   anchorNodeSize: number;
   edgeAnchorHorizontal?: boolean;
+  /** Multiplier applied to the site / dreamsign badge sizes on top of their
+   * node-relative fraction. Mobile enlarges the badges so they stay legible
+   * once the narrow portrait viewport scales the whole stage down. */
+  badgeScale: number;
 }
 
 /**
@@ -83,6 +87,7 @@ export const ATLAS_LAYOUT_DESKTOP: AtlasLayoutProfile = {
   contentRect: { top: 200, bottom: 1670, left: 120, right: 960 },
   nodeSize: 132,
   anchorNodeSize: 150,
+  badgeScale: 1,
 };
 
 /** Mobile: larger nodes drawn together, so icons stay legible once the narrow
@@ -93,6 +98,10 @@ export const ATLAS_LAYOUT_MOBILE: AtlasLayoutProfile = {
   nodeSize: 200,
   anchorNodeSize: 224,
   edgeAnchorHorizontal: true,
+  // Enlarge the site / dreamsign badges by half again so they read clearly on
+  // the phone atlas, where the whole stage is scaled down to fit the portrait
+  // viewport.
+  badgeScale: 1.5,
 };
 
 /** Picks the layout profile for the viewport class. */
@@ -372,6 +381,7 @@ export function buildAtlasMapNodes(
         iconRef,
         siteBadgeGlyph,
         knownDreamsignRef,
+        badgeScale: profile.badgeScale,
       },
       preview: buildPreviewModel(node, geo, questContent, atlas),
       dreamsign: buildDreamsignModel(node, geo, questContent),

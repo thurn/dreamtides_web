@@ -285,6 +285,12 @@
             "tsType": "ArtRef | null",
             "optional": false,
             "description": "The pre-revealed known dreamsign icon as an {@link ArtRef}, or `null`."
+          },
+          {
+            "name": "badgeScale",
+            "tsType": "number",
+            "optional": true,
+            "description": "Multiplier applied to the site / dreamsign badge sizes (the mobile atlas\nenlarges them). Defaults to 1 — the desktop size."
           }
         ]
       }
