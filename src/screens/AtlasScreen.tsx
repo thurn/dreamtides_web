@@ -11,6 +11,7 @@ import { AtlasNode, type AtlasNodeView } from "../tango/components/atlas/AtlasNo
 import { AtlasEdge, type AtlasEdgeKind } from "../tango/components/atlas/AtlasEdge";
 import { RulesText } from "../tango/components/card/RulesText";
 import {
+  reachableAtlasNodeIds,
   regenerateAtlasForProgress,
   revealedAtlasSite,
   siteTypeIcon,
@@ -126,6 +127,9 @@ function resolveAtlasNodes(
   if (positioned.length === 0) {
     return resolved;
   }
+  // Nodes the player can no longer reach are faded and never reveal their site
+  // (see the per-node `isReachable` handling below).
+  const reachable = reachableAtlasNodeIds(atlas);
 
   let minX = Infinity;
   let maxX = -Infinity;
@@ -152,8 +156,12 @@ function resolveAtlasNodes(
   for (const node of positioned) {
     const isStarter = node.id === atlas.startingNodeId;
     const isBoss = node.id === atlas.bossNodeId;
+    const isReachable = reachable.has(node.id);
+    // An unreachable node forgets whatever dreamscape it was revealed as: its
+    // face falls back to the empty frame and it carries no site or dreamsign
+    // content.
     const dreamscape =
-      node.dreamscapeId !== null
+      isReachable && node.dreamscapeId !== null
         ? (questContent.dreamscapes.find((d) => d.id === node.dreamscapeId) ??
           null)
         : null;
@@ -168,7 +176,7 @@ function resolveAtlasNodes(
           ) ?? null)
         : null;
     const dreamsign =
-      node.knownDreamsignId !== null
+      isReachable && node.knownDreamsignId !== null
         ? (questContent.dreamsignTemplates.find(
             (t) => t.id === node.knownDreamsignId,
           ) ?? null)
@@ -210,6 +218,7 @@ function resolveAtlasNodes(
         size: isBoss || isStarter ? 150 : 132,
         isStarter,
         isBoss,
+        isReachable,
         iconRef,
         siteBadgeGlyph,
         knownDreamsignRef,
@@ -274,7 +283,9 @@ function Preview({ resolved }: PreviewProps) {
   const { view, dreamscape, guide, affiliation, bossIncarnation } = resolved;
   const node = view.node;
   const isBoss = view.isBoss;
-  const isUnrevealed = node.state === "unrevealed" && !isBoss;
+  // An unreachable node presents the compact "unseen dream" card rather than
+  // leaking the dreamscape it was briefly revealed as.
+  const isUnrevealed = (node.state === "unrevealed" || !view.isReachable) && !isBoss;
   const ref = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState<{ left: number; top: number; ready: boolean }>(
     {
@@ -628,6 +639,9 @@ export function AtlasScreen() {
       y2: number;
       kind: EdgeKind;
     }> = [];
+    // An edge touching a node the player can no longer reach is drawn dim, to
+    // match the faded treatment of the unreachable node itself.
+    const reachable = reachableAtlasNodeIds(atlas);
     for (const from of Object.values(atlas.nodes)) {
       const fromView = resolved.get(from.id);
       if (fromView === undefined) continue;
@@ -635,13 +649,14 @@ export function AtlasScreen() {
         const to = atlas.nodes[toId];
         const toView = resolved.get(toId);
         if (to === undefined || toView === undefined) continue;
+        const unreachable = !reachable.has(from.id) || !reachable.has(toId);
         list.push({
           key: `${from.id}-${toId}`,
           x1: fromView.view.left,
           y1: fromView.view.top,
           x2: toView.view.left,
           y2: toView.view.top,
-          kind: edgeKind(from, to, choiceLayer),
+          kind: unreachable ? "dim" : edgeKind(from, to, choiceLayer),
         });
       }
     }

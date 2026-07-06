@@ -1588,3 +1588,56 @@ export function revealedAtlasSite(node: DreamscapeNode): SiteState | null {
 export function rewardPreviewLabel(_site: SiteState): string | null {
   return null;
 }
+
+/**
+ * The set of node ids that can still lie on the player's path and should
+ * therefore render on the Dream Atlas. Every other node has been left behind
+ * for good and is hidden. A node is reachable iff:
+ *
+ * - it is `completed` — part of the traveled path behind the player, which is
+ *   always shown; or
+ * - it is forward-reachable from the current `available` frontier by following
+ *   `forwardIds` (the available nodes themselves count as reachable).
+ *
+ * This hides the `forgone` siblings the player passed by in the current and
+ * previous layers, and any deeper node whose every route in runs through a node
+ * that has already been passed by — i.e. a future node that can no longer be
+ * reached from where the player now stands. `forwardIds` only point to the next
+ * layer, so a node behind the frontier can never be re-reached by the forward
+ * walk; before the first choice the entire graph is reachable from the starter
+ * `available` node, so nothing is hidden.
+ */
+export function reachableAtlasNodeIds(atlas: DreamAtlas): Set<string> {
+  const reachable = new Set<string>();
+  const frontier: string[] = [];
+  for (const node of Object.values(atlas.nodes)) {
+    // The traveled path is always kept.
+    if (node.state === "completed") {
+      reachable.add(node.id);
+    }
+    // The available frontier seeds the forward walk into still-locked layers.
+    if (node.state === "available") {
+      reachable.add(node.id);
+      frontier.push(node.id);
+    }
+  }
+
+  while (frontier.length > 0) {
+    const id = frontier.pop();
+    if (id === undefined) {
+      continue;
+    }
+    const node = atlas.nodes[id];
+    if (node === undefined) {
+      continue;
+    }
+    for (const toId of node.forwardIds ?? []) {
+      if (!reachable.has(toId) && atlas.nodes[toId] !== undefined) {
+        reachable.add(toId);
+        frontier.push(toId);
+      }
+    }
+  }
+
+  return reachable;
+}

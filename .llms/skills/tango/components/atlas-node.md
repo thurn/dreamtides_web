@@ -28,6 +28,7 @@ One dreamscape node on the Dream Atlas: a framed circular icon whose glow and ba
 | `size` | `number` | no | Rendered node diameter in stage pixels. |
 | `isStarter` | `boolean` | no |  |
 | `isBoss` | `boolean` | no |  |
+| `isReachable` | `boolean` | yes | Whether the player can still reach this node from where they now stand. Only an explicit `false` fades the node (drawing it as a dimmed, unrevealed frame — its builder already blanks the icon and badges); omitting the field renders the node normally, which suits the design-system demos that show a lone node in isolation. |
 | `iconRef` | `ArtRef \| null` | no | The dreamscape icon art as an {@link ArtRef}, or `null` while unrevealed. |
 | `siteBadgeGlyph` | `Glyph \| null` | no | The signature-site badge {@link Glyph}, or `null`. |
 | `knownDreamsignRef` | `ArtRef \| null` | no | The pre-revealed known dreamsign icon as an {@link ArtRef}, or `null`. |

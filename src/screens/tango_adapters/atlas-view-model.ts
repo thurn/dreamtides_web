@@ -11,6 +11,7 @@
 // within-layer spread runs horizontally.
 
 import {
+  reachableAtlasNodeIds,
   revealedAtlasSite,
   siteTypeIcon,
   siteTypeName,
@@ -228,6 +229,9 @@ export function buildAtlasMapEdges(
 ): AtlasMapEdge[] {
   const geometry = resolveAtlasNodeGeometry(atlas, profile);
   const choiceLayer = atlasChoiceLayer(atlas);
+  // An edge touching a node the player can no longer reach is drawn dim, matching
+  // the faded treatment of the unreachable node itself.
+  const reachable = reachableAtlasNodeIds(atlas);
   const edges: AtlasMapEdge[] = [];
   for (const from of Object.values(atlas.nodes)) {
     const fromGeo = geometry.get(from.id);
@@ -240,13 +244,14 @@ export function buildAtlasMapEdges(
       if (to === undefined || toGeo === undefined) {
         continue;
       }
+      const unreachable = !reachable.has(from.id) || !reachable.has(toId);
       edges.push({
         key: `${from.id}-${toId}`,
         x1: fromGeo.left,
         y1: fromGeo.top,
         x2: toGeo.left,
         y2: toGeo.top,
-        kind: atlasEdgeKind(from, to, choiceLayer),
+        kind: unreachable ? "dim" : atlasEdgeKind(from, to, choiceLayer),
       });
     }
   }
@@ -259,10 +264,13 @@ function buildPreviewModel(
   geo: NodeGeometry,
   questContent: QuestContent,
   atlas: DreamAtlas,
+  isReachable: boolean,
 ): AtlasPreviewModel {
   const isBoss = geo.isBoss;
+  // An unreachable node presents the compact "unseen dream" card rather than
+  // leaking the dreamscape it was briefly revealed as.
   const dreamscape =
-    node.dreamscapeId !== null
+    isReachable && node.dreamscapeId !== null
       ? (questContent.dreamscapes.find((d) => d.id === node.dreamscapeId) ?? null)
       : null;
   const guide =
@@ -284,7 +292,7 @@ function buildPreviewModel(
   return {
     anchorLeft: geo.left,
     anchorTop: geo.top,
-    isUnrevealed: node.state === "unrevealed" && !isBoss,
+    isUnrevealed: (node.state === "unrevealed" || !isReachable) && !isBoss,
     isBoss,
     bossSubtitle: bossIncarnation?.title ?? null,
     bossDescription: bossIncarnation?.description ?? null,
@@ -305,8 +313,11 @@ function buildDreamsignModel(
   node: DreamscapeNode,
   geo: NodeGeometry,
   questContent: QuestContent,
+  isReachable: boolean,
 ): AtlasDreamsignModel | null {
-  if (node.knownDreamsignId === null) {
+  // An unreachable node hides its known-dreamsign card along with the rest of
+  // its revealed content.
+  if (!isReachable || node.knownDreamsignId === null) {
     return null;
   }
   const dreamsign =
@@ -332,14 +343,24 @@ export function buildAtlasMapNodes(
   profile: AtlasLayoutProfile = ATLAS_LAYOUT_DESKTOP,
 ): AtlasMapNode[] {
   const geometry = resolveAtlasNodeGeometry(atlas, profile);
+  // A node the player can no longer reach is faded and never reveals its site:
+  // it renders as a dimmed, unrevealed frame regardless of what the generator
+  // revealed while it was still on a possible route. `reachableAtlasNodeIds`
+  // covers the passed-by siblings in the current and previous layers and any
+  // deeper node cut off from the frontier.
+  const reachable = reachableAtlasNodeIds(atlas);
   const items: AtlasMapNode[] = [];
   for (const node of Object.values(atlas.nodes)) {
     const geo = geometry.get(node.id);
     if (geo === undefined) {
       continue;
     }
+    const isReachable = reachable.has(node.id);
+    // An unreachable node forgets whatever dreamscape it was revealed as, so its
+    // face falls back to the empty frame and it carries no site or dreamsign
+    // badge.
     const dreamscape =
-      node.dreamscapeId !== null
+      isReachable && node.dreamscapeId !== null
         ? (questContent.dreamscapes.find((d) => d.id === node.dreamscapeId) ??
           null)
         : null;
@@ -360,7 +381,7 @@ export function buildAtlasMapNodes(
         : glyph(siteTypeIcon(dreamscape.signatureSite));
 
     const dreamsignTemplate =
-      node.knownDreamsignId !== null
+      isReachable && node.knownDreamsignId !== null
         ? (questContent.dreamsignTemplates.find(
             (t) => t.id === node.knownDreamsignId,
           ) ?? null)
@@ -378,13 +399,14 @@ export function buildAtlasMapNodes(
         size: geo.size,
         isStarter: geo.isStarter,
         isBoss: geo.isBoss,
+        isReachable,
         iconRef,
         siteBadgeGlyph,
         knownDreamsignRef,
         badgeScale: profile.badgeScale,
       },
-      preview: buildPreviewModel(node, geo, questContent, atlas),
-      dreamsign: buildDreamsignModel(node, geo, questContent),
+      preview: buildPreviewModel(node, geo, questContent, atlas, isReachable),
+      dreamsign: buildDreamsignModel(node, geo, questContent, isReachable),
     });
   }
   return items;

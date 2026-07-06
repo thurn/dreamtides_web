@@ -269,6 +269,12 @@
             "description": ""
           },
           {
+            "name": "isReachable",
+            "tsType": "boolean",
+            "optional": true,
+            "description": "Whether the player can still reach this node from where they now stand.\nOnly an explicit `false` fades the node (drawing it as a dimmed, unrevealed\nframe — its builder already blanks the icon and badges); omitting the field\nrenders the node normally, which suits the design-system demos that show a\nlone node in isolation."
+          },
+          {
             "name": "iconRef",
             "tsType": "ArtRef | null",
             "optional": false,

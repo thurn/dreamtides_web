@@ -19,6 +19,14 @@ export interface AtlasNodeView {
   size: number;
   isStarter: boolean;
   isBoss: boolean;
+  /**
+   * Whether the player can still reach this node from where they now stand.
+   * Only an explicit `false` fades the node (drawing it as a dimmed, unrevealed
+   * frame — its builder already blanks the icon and badges); omitting the field
+   * renders the node normally, which suits the design-system demos that show a
+   * lone node in isolation.
+   */
+  isReachable?: boolean;
   /** The dreamscape icon art as an {@link ArtRef}, or `null` while unrevealed. */
   iconRef: ArtRef | null;
   /** The signature-site badge {@link Glyph}, or `null`. */
@@ -87,6 +95,7 @@ export function AtlasNode({
 
   const className =
     `node node-${node.state}` +
+    (view.isReachable === false ? " node-unreachable" : "") +
     (hovered ? " is-hover" : "") +
     (isBoss ? " node-boss" : "") +
     (isStarter ? " node-start" : "");

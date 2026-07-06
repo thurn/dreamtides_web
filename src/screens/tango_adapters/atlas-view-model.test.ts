@@ -15,6 +15,7 @@ import {
   atlasChoiceLayer,
   atlasEdgeKind,
   buildAtlasHudView,
+  buildAtlasMapEdges,
   buildAtlasMapNodes,
   buildAtlasView,
   resolveAtlasNodeGeometry,
@@ -75,6 +76,41 @@ function makeVerticalAtlas(): DreamAtlas {
   return {
     layers: [["starter"], ["middle"], [], [], [], [], ["boss"]],
     nodes: { starter, middle, boss },
+    startingNodeId: "starter",
+    bossNodeId: "boss",
+    currentNodeId: null,
+    knownDreamsignCarrierIds: [],
+  };
+}
+
+/**
+ * A run where the player, at the layer-two frontier, chose `chosen` over its
+ * sibling `passed`; both wire forward to the boss. `passed` is therefore
+ * unreachable, so the builders fade it and blank its revealed content.
+ */
+function makeForgoneAtlas(): DreamAtlas {
+  const starter = makeNode("starter", LayerName.One, { x: 0, y: 0 }, {
+    state: "completed",
+    forwardIds: ["chosen", "passed"],
+  });
+  const chosen = makeNode("chosen", LayerName.Two, { x: 100, y: -40 }, {
+    state: "available",
+    forwardIds: ["boss"],
+    dreamscapeId: "ds_chosen",
+    knownDreamsignId: "sign_chosen",
+  });
+  const passed = makeNode("passed", LayerName.Two, { x: 100, y: 40 }, {
+    state: "forgone",
+    forwardIds: ["boss"],
+    dreamscapeId: "ds_passed",
+    knownDreamsignId: "sign_passed",
+  });
+  const boss = makeNode("boss", LayerName.Seven, { x: 600, y: 0 }, {
+    state: "revealedLocked",
+  });
+  return {
+    layers: [["starter"], ["chosen", "passed"], [], [], [], [], ["boss"]],
+    nodes: { starter, chosen, passed, boss },
     startingNodeId: "starter",
     bossNodeId: "boss",
     currentNodeId: null,
@@ -196,6 +232,37 @@ describe("buildAtlasMapNodes", () => {
     // An unrevealed non-boss node's preview reads as unrevealed.
     const middle = items.find((item) => item.view.node.id === "middle");
     expect(middle?.preview.isUnrevealed).toBe(false); // available, not unrevealed
+  });
+
+  it("fades a forgone sibling and renders it as an unrevealed, badge-free frame", () => {
+    const items = buildAtlasMapNodes(makeForgoneAtlas(), EMPTY_CONTENT);
+    const chosen = items.find((item) => item.view.node.id === "chosen");
+    const passed = items.find((item) => item.view.node.id === "passed");
+    // Every positioned node still renders — the passed-by sibling is faded, not
+    // dropped.
+    expect(items).toHaveLength(4);
+    expect(chosen?.view.isReachable).toBe(true);
+    expect(passed?.view.isReachable).toBe(false);
+    // The unreachable node reveals nothing: no dreamscape icon, no site badge,
+    // no known-dreamsign card, and its hover preview reads as unrevealed.
+    expect(passed?.view.iconRef).toBeNull();
+    expect(passed?.view.siteBadgeGlyph).toBeNull();
+    expect(passed?.view.knownDreamsignRef).toBeNull();
+    expect(passed?.dreamsign).toBeNull();
+    expect(passed?.preview.isUnrevealed).toBe(true);
+  });
+});
+
+describe("buildAtlasMapEdges", () => {
+  it("draws every connector touching an unreachable node dim", () => {
+    const edges = buildAtlasMapEdges(makeForgoneAtlas());
+    const kindOf = (key: string) =>
+      edges.find((edge) => edge.key === key)?.kind;
+    // Both edges touching the forgone `passed` node are forced dim; the open
+    // route into the node the player is still on keeps its lively styling.
+    expect(kindOf("starter-passed")).toBe("dim");
+    expect(kindOf("passed-boss")).toBe("dim");
+    expect(kindOf("starter-chosen")).toBe("open");
   });
 });
 
