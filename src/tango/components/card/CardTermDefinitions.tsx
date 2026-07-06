@@ -1,14 +1,15 @@
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
-import { InfoCard } from "../overlay/InfoCard";
-import { richText } from "./rich-text";
+import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
 import { token } from "../../primitives/tokens";
 
 /**
  * Vertical stack of glossary definitions for every gameplay term that appears in
  * a stretch of rules text, in reading order with duplicates collapsed. Each term
- * renders as its own {@link InfoCard} tile, so the definitions read in the same
- * vocabulary as every other reveal (the object card they sit beside, the tide
- * pill, the site disc) — one shell, one radius, one type scale.
+ * renders as a {@link GlossaryDefinitionCard} — the one keyword-definition tile,
+ * an {@link InfoCard} carrying the keyword name and its rules text — so the
+ * definitions read in the same vocabulary as every other reveal (the object card
+ * they sit beside, the tide pill, the site disc): one shell, one radius, one
+ * type scale.
  *
  * Rendered beside or beneath a card / dreamsign / ability so the player can read
  * what every highlighted keyword means without inline tooltips. Shared by the
@@ -35,7 +36,12 @@ export function CardTermDefinitions({
     return null;
   }
   return (
+    // `.tango` so the container's own `--space-*` gap token resolves even when
+    // this stack is portalled outside a Tango subtree (e.g. the card hover-help
+    // popover into `document.body`). Each `GlossaryDefinitionCard` re-scopes its
+    // own tokens too, so the tiles render correctly regardless.
     <div
+      className="tango"
       data-testid={testId}
       data-definition-side={side}
       style={{
@@ -49,15 +55,7 @@ export function CardTermDefinitions({
       }}
     >
       {terms.map((entry) => (
-        <InfoCard
-          key={entry.term}
-          variant="text"
-          meta="Keyword"
-          title={entry.term}
-          // `rules` so resource glyphs / keyword emphasis inside a definition
-          // render the same marks shown in card rules text.
-          body={richText.rules(entry.definition)}
-        />
+        <GlossaryDefinitionCard key={entry.term} entry={entry} />
       ))}
     </div>
   );

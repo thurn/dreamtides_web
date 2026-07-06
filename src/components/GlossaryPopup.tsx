@@ -2,7 +2,14 @@ import { useCallback, useEffect, useRef } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { GLOSSARY } from "../data/glossary";
 import { GlossaryDefinitionCard } from "../tango/components/card/GlossaryDefinitionCard";
+import { INFO_CARD_WIDTH } from "../tango/components/overlay/InfoCard";
 import { logEvent } from "../logging";
+
+/**
+ * Modal width: the fixed-width InfoCard column plus the body's horizontal
+ * padding (`px-4` = 16px a side), so the reference list hugs its cards.
+ */
+const GLOSSARY_PANEL_WIDTH_PX = INFO_CARD_WIDTH + 32;
 
 /**
  * Quick-reference popup that lists every glossary term and its
@@ -84,8 +91,9 @@ export function GlossaryPopup({ isOpen, onClose }: GlossaryPopupProps) {
             role="dialog"
             aria-modal="true"
             aria-label="Glossary"
-            className="flex max-h-[80vh] w-full max-w-md flex-col overflow-hidden rounded-lg"
+            className="flex max-h-[80vh] w-full flex-col overflow-hidden rounded-lg"
             style={{
+              maxWidth: GLOSSARY_PANEL_WIDTH_PX,
               background: "rgba(10, 6, 18, 0.98)",
               border: "1px solid rgba(124, 58, 237, 0.45)",
               boxShadow: "0 24px 60px rgba(0, 0, 0, 0.65)",

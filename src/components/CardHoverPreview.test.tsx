@@ -73,9 +73,11 @@ describe("CardHoverPreview", () => {
     );
     expect(stack).not.toBeNull();
     expect(stack?.getAttribute("data-definition-side")).toBe("left");
+    // Each definition tile carries its canonical keyword on
+    // `data-glossary-term`, decoupled from the InfoCard's internal markup.
     const terms = Array.from(
-      stack?.querySelectorAll("p:first-child") ?? [],
-    ).map((term) => term.textContent);
+      stack?.querySelectorAll("[data-glossary-term]") ?? [],
+    ).map((tile) => tile.getAttribute("data-glossary-term"));
     expect(terms).toEqual(["Bane", "Reclaim", "Materialize"]);
 
     act(() => {

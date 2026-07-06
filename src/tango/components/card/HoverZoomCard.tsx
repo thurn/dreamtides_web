@@ -9,6 +9,7 @@ import { createPortal } from "react-dom";
 import { logEventOnce } from "../../../logging";
 import { extractGlossaryTerms } from "../../../data/glossary-terms";
 import { GlossaryDefinitionCard } from "./GlossaryDefinitionCard";
+import { INFO_CARD_WIDTH } from "../overlay/InfoCard";
 
 /**
  * Wraps a medium-size card so that hovering it grows the card itself in place
@@ -102,8 +103,11 @@ export interface HoverZoomCardProps {
 /** Gap (px) kept between the enlarged card and the viewport edges. */
 const VIEWPORT_MARGIN_PX = 8;
 
-/** Width (px) of the glossary definition stack shown beside a zoomed card. */
-const GLOSSARY_STACK_WIDTH_PX = 224;
+/**
+ * Width (px) of the glossary definition stack shown beside a zoomed card. Each
+ * tile is a fixed-width {@link InfoCard}, so the stack hugs that one width.
+ */
+const GLOSSARY_STACK_WIDTH_PX = INFO_CARD_WIDTH;
 
 /** Gap (px) between the enlarged card and its glossary stack. */
 const GLOSSARY_STACK_GAP_PX = 10;

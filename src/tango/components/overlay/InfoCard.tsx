@@ -62,6 +62,14 @@ const PADY = 14;
 const INFO_CARD_GLASS_FILL = "rgba(18,14,28,0.5)";
 const INFO_CARD_GLASS_BACKGROUND = `linear-gradient(150deg, rgba(255,255,255,0.07), rgba(255,255,255,0) 42%), ${INFO_CARD_GLASS_FILL}`;
 
+/**
+ * The fixed width (px) of every InfoCard — its own geometry, not a design-system
+ * scale step. Exported so a surface that stacks InfoCards (a glossary-definition
+ * column) can size its container to hug the cards exactly, reading the one width
+ * from here instead of re-declaring the literal.
+ */
+export const INFO_CARD_WIDTH = CARD_W;
+
 /** Screen inset (px): the popover is clamped to never come within this of any
  * viewport edge. Exported for the clamp tests. */
 export const EDGE = EDGE_PX;

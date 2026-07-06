@@ -21,6 +21,7 @@ import { HoverPopover } from "../tango/components/overlay/HoverPopover";
 import { DreamcallerPopover } from "../components/DreamcallerPopover";
 import { extractGlossaryTerms } from "../data/glossary-terms";
 import { GlossaryDefinitionCard } from "../tango/components/card/GlossaryDefinitionCard";
+import { INFO_CARD_WIDTH } from "../tango/components/overlay/InfoCard";
 import { logEvent } from "../logging";
 import { buildIdfStats, signatureFit } from "../draft/idf-fit.ts";
 import { idfCosine } from "../draft/pool/variant-idf.ts";
@@ -429,7 +430,7 @@ function CardLightbox({
       {terms.length > 0 && (
         <div
           style={{
-            width: "min(86vw, 360px)",
+            width: `min(86vw, ${String(INFO_CARD_WIDTH)}px)`,
             display: "flex",
             flexDirection: "column",
             gap: 6,

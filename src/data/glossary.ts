@@ -3,9 +3,11 @@
  *
  * Each entry is a short, plain-language definition of a term that may appear
  * in card, Dreamcaller, or Dreamsign rules text. The card-text tokenizer
- * (`src/tango/components/card/card-text.ts`) consults this list to wrap matching
- * words in interactive `term` segments, and the rules-text renderer
- * (`src/tango/components/card/RulesText.tsx`) shows the definition in a hover popover.
+ * (`src/tango/components/card/card-text.ts`) consults this list to mark matching
+ * words as `term` segments, which the rules-text renderer
+ * (`src/tango/components/card/RulesText.tsx`) emphasizes in place; the definition
+ * itself surfaces beside the card in its hover-help panel, one
+ * `GlossaryDefinitionCard` per referenced term.
  *
  * Style rules for definitions:
  *   * One sentence each.

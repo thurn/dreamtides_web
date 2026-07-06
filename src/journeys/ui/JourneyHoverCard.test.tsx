@@ -69,11 +69,11 @@ function queryGlossaryStack(container: HTMLElement): HTMLElement | null {
 function queryTermHeadings(container: HTMLElement): string[] {
   const stack = queryGlossaryStack(container);
   if (stack === null) return [];
-  // The stack contains one `GlossaryDefinitionCard` per term. The first `<p>`
-  // inside each card renders the canonical term name (styled uppercase via
-  // CSS, but the underlying textContent matches `entry.term`).
+  // The stack contains one `GlossaryDefinitionCard` per term. Each tile carries
+  // its canonical term name on `data-glossary-term`, decoupled from the
+  // InfoCard's internal markup.
   return Array.from(stack.children)
-    .map((panel) => panel.querySelector("p")?.textContent ?? "")
+    .map((panel) => panel.getAttribute("data-glossary-term") ?? "")
     .filter((text) => text.length > 0);
 }
 

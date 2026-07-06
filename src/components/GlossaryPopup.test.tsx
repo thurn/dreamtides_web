@@ -71,8 +71,11 @@ describe("GlossaryPopup", () => {
     );
     expect(entries.length).toBe(GLOSSARY.length);
 
-    const renderedHeadings = Array.from(entries).map((el) =>
-      el.querySelector("p")?.textContent?.trim() ?? "",
+    const renderedHeadings = Array.from(entries).map(
+      (el) =>
+        el
+          .querySelector("[data-glossary-term]")
+          ?.getAttribute("data-glossary-term") ?? "",
     );
     const expectedHeadings = GLOSSARY.map((entry) => entry.term);
     expect(renderedHeadings).toEqual(expectedHeadings);
@@ -151,17 +154,20 @@ describe("GlossaryPopup", () => {
     });
   });
 
-  it("renders entry headings with natural capitalization and normal tracking", () => {
+  it("renders entry headings with the term's natural capitalization", () => {
     const { container, root } = mount(
       <GlossaryPopup isOpen={true} onClose={vi.fn()} />,
     );
-    const firstHeading = container.querySelector(
-      '[data-testid="glossary-popup-entry"] p',
+    // The keyword name is the InfoCard headline, in the term's own case — no
+    // uppercase "KEYWORD" overline. `data-glossary-term` carries the canonical
+    // term so the assertion is decoupled from the tile's internal markup.
+    const firstEntry = container.querySelector(
+      '[data-testid="glossary-popup-entry"] [data-glossary-term]',
     );
-    expect(firstHeading).not.toBeNull();
-    expect(firstHeading?.textContent).toBe(GLOSSARY[0]?.term);
-    expect(firstHeading?.className).not.toContain("uppercase");
-    expect(firstHeading?.className).not.toContain("tracking-");
+    expect(firstEntry).not.toBeNull();
+    expect(firstEntry?.getAttribute("data-glossary-term")).toBe(
+      GLOSSARY[0]?.term,
+    );
 
     act(() => {
       root.unmount();

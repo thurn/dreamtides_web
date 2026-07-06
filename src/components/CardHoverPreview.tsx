@@ -1,6 +1,7 @@
 import type { CardData, FrozenCardData } from "../types/cards";
 import { extractGlossaryTerms } from "../data/glossary-terms";
 import { GlossaryDefinitionCard } from "../tango/components/card/GlossaryDefinitionCard";
+import { INFO_CARD_WIDTH } from "../tango/components/overlay/InfoCard";
 import { CardDisplay } from "./CardDisplay";
 import type { CardTransfigurationDisplay } from "../transfiguration/transfiguration-logic";
 import type { PopoverPlacementSide } from "../tango/components/overlay/hover-popover-placement";
@@ -70,7 +71,10 @@ export function CardHoverPreview({
   const stack = (
     <div
       data-testid={`${testId}-definition-stack`}
-      className="flex max-h-[min(70vh,360px)] w-56 flex-col gap-1 overflow-y-auto"
+      className="flex max-h-[min(70vh,360px)] flex-col gap-1 overflow-y-auto"
+      // Hug the fixed-width InfoCard tiles so the stack neither clips nor leaves
+      // slack beside them.
+      style={{ width: INFO_CARD_WIDTH }}
       data-definition-side={definitionSide}
     >
       {terms.map((entry) => (

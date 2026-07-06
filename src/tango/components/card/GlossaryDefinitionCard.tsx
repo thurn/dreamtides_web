@@ -1,20 +1,29 @@
 import type { GlossaryEntry } from "../../../data/glossary";
-import { RulesText } from "./RulesText";
+import { InfoCard } from "../overlay/InfoCard";
+import { richText } from "./rich-text";
 
 /**
- * Shared visual card used to render a single glossary entry as a
- * term-and-definition tile.
+ * The one keyword-definition tile: a single glossary entry rendered as an
+ * {@link InfoCard} (text variant) whose headline is the keyword and whose body
+ * is the keyword's rules text. No overline — the reveal beside a keyword is
+ * self-evidently a keyword, so it carries the name and the rules text and
+ * nothing else.
  *
- * Several surfaces consume this component so they stay visually consistent:
+ * Every surface that reveals what a keyword means renders this one tile, so the
+ * definition reads in the same vocabulary as every other reveal (the object
+ * card it sits beside, the tide pill, the site disc) — one glass shell, one
+ * radius, one type scale:
  *   * `CardTermDefinitions` stacks one per gameplay term in the hover-help
- *     panel that appears beside a card (full cards, compact-row previews, and
- *     the battle card preview).
- *   * `GlossaryPopup.tsx` shows it once per entry in the glossary popup
- *     opened from the HUD.
+ *     panel beside a card (full cards, compact-row previews, dreamsign and
+ *     Dreamcaller ability reveals, and the battle card preview).
+ *   * `GlossaryPopup` shows one per entry in the glossary reference opened from
+ *     the HUD.
  *   * `JourneyHoverCard` lists the terms referenced by a journey tooltip.
  *
- * Keeping the card here means tweaks to typography or chrome propagate
- * to every surface automatically.
+ * The tile establishes its own `.tango` token scope so it renders correctly on
+ * any surface, including popovers portalled outside a Tango subtree. The body is
+ * `richText.rules` so resource glyphs and keyword emphasis inside a definition
+ * render the same inline marks shown in card rules text.
  */
 export function GlossaryDefinitionCard({
   entry,
@@ -22,28 +31,17 @@ export function GlossaryDefinitionCard({
   entry: GlossaryEntry;
 }) {
   return (
-    <div
-      className="rounded-md px-3 py-2 text-xs leading-snug shadow-lg"
-      style={{
-        background: "rgba(15, 10, 24, 0.96)",
-        border: "1px solid rgba(168, 85, 247, 0.55)",
-        color: "#e2e8f0",
-        boxShadow: "0 8px 22px rgba(0, 0, 0, 0.55)",
-      }}
-    >
-      <p
-        className="text-xs font-bold"
-        style={{ color: "#c4b5fd" }}
-      >
-        {entry.term}
-      </p>
-      {/* Render through the shared rules-text renderer so glyphs in a
-          definition (the lunar ☪ in "Awakened", the spark ✦, energy ●, etc.)
-          are swapped for the same Boxicons marks shown in card rules text,
-          instead of printing the raw Unicode character. */}
-      <div className="mt-1" style={{ color: "#f8fafc" }}>
-        <RulesText text={entry.definition} />
-      </div>
+    // `.tango` re-establishes the design-system token scope so the InfoCard
+    // shell's glass, radius, and type tokens resolve wherever this tile is
+    // dropped — including a hover popover portalled into `document.body`, which
+    // is not under a `.tango` ancestor. `data-glossary-term` exposes the keyword
+    // for surfaces and tests without reaching into the InfoCard's markup.
+    <div className="tango" data-glossary-term={entry.term}>
+      <InfoCard
+        variant="text"
+        title={entry.term}
+        body={richText.rules(entry.definition)}
+      />
     </div>
   );
 }
