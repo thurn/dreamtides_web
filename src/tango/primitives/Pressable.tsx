@@ -2,9 +2,18 @@
 //
 // Every interactive Tango control routes its touch feedback through this one
 // primitive so the gesture feels identical everywhere:
-//   - a single scale-DOWN factor (PRESS_SCALE = 0.94, the --press-scale
-//     token) — controls compress under the finger/pointer, they never
-//     balloon outward while pressed
+//   - a press ALWAYS animates the surface, so every press is acknowledged —
+//     including on touch, where there is no hover to fall back on. Which
+//     animation is chosen by `pressFeedback`:
+//       - "compress" — scale-DOWN by PRESS_SCALE (0.94, the --press-scale
+//         token): an actionable control compresses under the finger, never
+//         ballooning outward.
+//       - "enlarge"  — scale-UP by HOVER_SCALE (1.03): an info-only surface
+//         you press to REVEAL but cannot act on (a tide disc, an essence
+//         value) grows to acknowledge the press — the same enlarge a
+//         hover-capable pointer already gets — without reading as a button.
+//     There is deliberately no un-animated press: a reveal trigger that did
+//     nothing on touch-down would leave a touch user with no feedback at all.
 //   - a single hover scale-UP factor (HOVER_SCALE = 1.03, the --hover-scale
 //     token) — on a hover-capable pointer (mouse/pen), every pressable or
 //     info-revealing surface slightly enlarges under the cursor, so "this
@@ -50,6 +59,16 @@ export const PRESS_SCALE = 0.94;
  * rules stay identical. Press wins while both apply.
  */
 export const HOVER_SCALE = 1.03;
+
+/**
+ * How a press animates a {@link Pressable}. Both values animate on EVERY
+ * pointer — touch included — so a press is always acknowledged; there is no
+ * un-animated option:
+ *   - "compress" — the button scale-DOWN (PRESS_SCALE): a control being pushed.
+ *   - "enlarge"  — the scale-UP (HOVER_SCALE): an info-only surface you press to
+ *     reveal, growing to acknowledge the press without reading as a button.
+ */
+export type PressFeedback = "compress" | "enlarge";
 
 /** The five pointer handlers usePress binds to drive its `pressed` and `hovered` state. */
 export interface PressBind {
@@ -160,14 +179,20 @@ export interface PressableProps extends React.HTMLAttributes<HTMLElement> {
   /** Disables press feedback and pointer handlers, and shows the default cursor. */
   disabled?: boolean;
   /**
-   * Whether the element compresses (scale-down) while pressed. Default true.
-   * Set false for a surface you hover to reveal information but cannot act on
-   * (a tide disc, an essence value): its pointer handlers, cursor,
-   * hover-enlarge, and tap-highlight suppression stay, but a press must not
-   * read as an actionable button by shrinking. This is a behavioral variant of
-   * the one press feedback, not a style escape hatch.
+   * How a press animates this surface. Default "compress". Every value animates
+   * on every pointer (touch included), so a press is always acknowledged:
+   *   - "compress" — the button scale-DOWN (PRESS_SCALE): for a surface with an
+   *     ACTION; the shrink reads as "pushed".
+   *   - "enlarge" — the scale-UP (HOVER_SCALE), matching the hover-enlarge: for
+   *     an info-only surface you press to REVEAL but cannot act on (a tide disc,
+   *     an essence value); it grows to acknowledge the press without reading as
+   *     an actionable button.
+   * There is deliberately no "none" — a reveal trigger with no press animation
+   * would give a touch user no feedback at all, so the type does not permit it.
+   * This is a behavioral variant of the one press feedback, not a style escape
+   * hatch.
    */
-  compress?: boolean;
+  pressFeedback?: PressFeedback;
   /** Content rendered inside the pressable element. */
   children?: React.ReactNode;
 }
@@ -189,7 +214,7 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
     {
       as = "button",
       disabled = false,
-      compress = true,
+      pressFeedback = "compress",
       style,
       onPointerEnter,
       onPointerDown,
@@ -254,13 +279,15 @@ export const Pressable = forwardRef<HTMLElement, PressableProps>(
           transition: reducedMotion
             ? "none"
             : `transform var(--dur-fast) var(--ease-out)`,
-          // Press wins over hover; hover-enlarge applies even when
-          // compress=false (an info-reveal surface still invites the cursor),
-          // and disabled suppresses both.
+          // A press always animates: "compress" shrinks (PRESS_SCALE), "enlarge"
+          // grows (HOVER_SCALE) — so a touch press is acknowledged either way,
+          // with no un-animated state. Press wins over hover; a resting
+          // hover-capable pointer still gets the hover-enlarge; disabled
+          // suppresses both.
           transform: disabled
             ? "none"
-            : pressed && compress
-              ? `scale(${PRESS_SCALE})`
+            : pressed
+              ? `scale(${pressFeedback === "compress" ? PRESS_SCALE : HOVER_SCALE})`
               : hovered
                 ? `scale(${HOVER_SCALE})`
                 : "none",

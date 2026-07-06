@@ -194,7 +194,8 @@ export function IntroSection(): ReactElement {
             and no scrim. The reveal is a single contract expressed through
             whichever gesture is native to the device, and neither input is the
             primary one. On a fine pointer — a mouse or trackpad — hovering a
-            trigger reveals the card and a press only compresses the target. On
+            trigger reveals the card; a press does not reveal, it only gives the
+            target its press feedback. On
             touch, touch-down reveals the card and release dismisses it, with a
             short click window (about 300ms) separating a tap that enters a
             screen from a hold that reads a popup. Hover-to-reveal and

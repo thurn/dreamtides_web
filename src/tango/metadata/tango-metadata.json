@@ -1522,12 +1522,15 @@
       "description": "true = a touch hold still fires the child's click (menu / UI toggle)."
     },
     {
-      "name": "compress",
-      "tsType": "boolean",
-      "unionMembers": [],
+      "name": "pressFeedback",
+      "tsType": "PressFeedback",
+      "unionMembers": [
+        "compress",
+        "enlarge"
+      ],
       "required": false,
-      "defaultValue": "true",
-      "description": "Whether the trigger compresses (scale-down) while pressed. Default true.\nSet false when the trigger only reveals information and has no action of\nits own (a tide disc, an essence value) so a press does not read as an\nactionable button."
+      "defaultValue": "compress",
+      "description": "How a press animates the trigger — forwarded to {@link Pressable}'s\n`pressFeedback`. \"compress\" (default) for a trigger with an action;\n\"enlarge\" for an info-only trigger (a tide disc, an essence value) so a\ntouch press still animates — growing to acknowledge the press — without\nreading as an actionable button. There is no un-animated option, so an\nInfoCard reveal always acknowledges a touch press."
     }
   ],
   "PressPopover": [
@@ -1753,12 +1756,15 @@
       "description": "Disables press feedback and pointer handlers, and shows the default cursor."
     },
     {
-      "name": "compress",
-      "tsType": "boolean",
-      "unionMembers": [],
+      "name": "pressFeedback",
+      "tsType": "PressFeedback",
+      "unionMembers": [
+        "compress",
+        "enlarge"
+      ],
       "required": false,
-      "defaultValue": "true",
-      "description": "Whether the element compresses (scale-down) while pressed. Default true.\nSet false for a surface you hover to reveal information but cannot act on\n(a tide disc, an essence value): its pointer handlers, cursor,\nhover-enlarge, and tap-highlight suppression stay, but a press must not\nread as an actionable button by shrinking. This is a behavioral variant of\nthe one press feedback, not a style escape hatch."
+      "defaultValue": "compress",
+      "description": "How a press animates this surface. Default \"compress\". Every value animates\non every pointer (touch included), so a press is always acknowledged:\n  - \"compress\" — the button scale-DOWN (PRESS_SCALE): for a surface with an\n    ACTION; the shrink reads as \"pushed\".\n  - \"enlarge\" — the scale-UP (HOVER_SCALE), matching the hover-enlarge: for\n    an info-only surface you press to REVEAL but cannot act on (a tide disc,\n    an essence value); it grows to acknowledge the press without reading as\n    an actionable button.\nThere is deliberately no \"none\" — a reveal trigger with no press animation\nwould give a touch user no feedback at all, so the type does not permit it.\nThis is a behavioral variant of the one press feedback, not a style escape\nhatch."
     },
     {
       "name": "children",

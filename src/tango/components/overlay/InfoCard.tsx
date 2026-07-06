@@ -27,9 +27,9 @@
 //
 // THE ONE DELIBERATE GENERALIZATION from the touch-first design source is the
 // input-adaptive reveal (see `useFinePointer` / `usePressReveal`): on a fine
-// pointer (mouse/desktop) HOVER reveals and press only compresses; on a coarse
-// pointer (touch) press-down reveals and release dismisses. The popover
-// contract above is identical in both modes.
+// pointer (mouse/desktop) HOVER reveals and a press only gives its press
+// feedback (never reveals); on a coarse pointer (touch) press-down reveals and
+// release dismisses. The popover contract above is identical in both modes.
 //
 // Ported from the Claude Design "Dreamtides Mobile" project
 // (components/overlays/InfoCard.jsx / .d.ts), generalized from touch-only to
@@ -37,7 +37,12 @@
 
 import * as React from "react";
 import { createPortal } from "react-dom";
-import { Pressable, PRESS_SCALE, HOVER_SCALE } from "../../primitives/Pressable";
+import {
+  Pressable,
+  PRESS_SCALE,
+  HOVER_SCALE,
+  type PressFeedback,
+} from "../../primitives/Pressable";
 import { token } from "../../primitives/tokens";
 import { type Glyph } from "../../primitives/glyph";
 import { type ArtRef, resolveArtRef } from "../../primitives/art";
@@ -810,12 +815,14 @@ export interface PressInfoProps {
   /** true = a touch hold still fires the child's click (menu / UI toggle). */
   holdStillClicks?: boolean;
   /**
-   * Whether the trigger compresses (scale-down) while pressed. Default true.
-   * Set false when the trigger only reveals information and has no action of
-   * its own (a tide disc, an essence value) so a press does not read as an
-   * actionable button.
+   * How a press animates the trigger — forwarded to {@link Pressable}'s
+   * `pressFeedback`. "compress" (default) for a trigger with an action;
+   * "enlarge" for an info-only trigger (a tide disc, an essence value) so a
+   * touch press still animates — growing to acknowledge the press — without
+   * reading as an actionable button. There is no un-animated option, so an
+   * InfoCard reveal always acknowledges a touch press.
    */
-  compress?: boolean;
+  pressFeedback?: PressFeedback;
 }
 
 export function PressInfo({
@@ -826,7 +833,7 @@ export function PressInfo({
   children,
   as = "span",
   holdStillClicks = false,
-  compress = true,
+  pressFeedback = "compress",
 }: PressInfoProps): React.ReactElement {
   const { shown, fine, begin, end, enter, leave, heldPastTap } =
     usePressReveal();
@@ -853,7 +860,7 @@ export function PressInfo({
     <Pressable
       as={as}
       ref={elRef}
-      compress={compress}
+      pressFeedback={pressFeedback}
       onPointerEnter={enter}
       onPointerDown={begin}
       onPointerUp={end}

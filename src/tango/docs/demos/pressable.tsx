@@ -54,10 +54,10 @@ export const pressableDemo: TangoComponent = {
 </Pressable>`,
     },
     {
-      label: "No compression (hover-only)",
-      note: "Set `compress={false}` for a surface you hover to reveal information but cannot act on — its pointer handlers, cursor, and hover-enlarge stay, but a press does not scale it down, so it never reads as an actionable button.",
-      code: `<Pressable as="span" compress={false}>
-  <span className="my-target">Reveal on hover</span>
+      label: "Enlarge feedback (info-only surface)",
+      note: "Set `pressFeedback=\"enlarge\"` for a surface you press to reveal information but cannot act on — a press grows it (matching the hover-enlarge) rather than compressing it, so it acknowledges the press on touch without reading as an actionable button. There is no un-animated option: every press animates.",
+      code: `<Pressable as="span" pressFeedback="enlarge">
+  <span className="my-target">Reveal on press</span>
 </Pressable>`,
     },
   ],
@@ -65,7 +65,7 @@ export const pressableDemo: TangoComponent = {
     defaultArgs: {
       as: "button",
       disabled: false,
-      compress: true,
+      pressFeedback: "compress",
     },
     sampleContent: {
       children: <span style={targetStyle}>Press me</span>,

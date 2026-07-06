@@ -43,9 +43,10 @@ const TIDES_BLURB =
 /** One tide mark wired up as a reveal trigger: the shared {@link TideDisc}, at
  * the given {@link TideDiscSize}, that reveals — through the shared InfoCard —
  * what tides are (the general blurb) stacked ABOVE this specific tide's own
- * colored card. Informational: the disc brightens on hover but a press does not
- * compress it (there is no action to press). Both Dreamcaller-select layouts
- * render their tide rows from this, so the reveal reads identically on each.
+ * colored card. Informational: the disc brightens on hover and, having no
+ * action to press, ENLARGES on press (rather than compressing like a button) to
+ * acknowledge a touch. Both Dreamcaller-select layouts render their tide rows
+ * from this, so the reveal reads identically on each.
  *
  * `hitSlop` pads the pressable around the disc (mobile touch targets) without
  * growing the disc itself; the caller reabsorbs the padding with negative
@@ -73,7 +74,7 @@ export function TideDiscReveal({
   return (
     <InfoCard.PressInfo
       stageRef={stageRef}
-      compress={false}
+      pressFeedback="enlarge"
       card={
         <div
           style={{
@@ -279,8 +280,8 @@ export function AbilityReveal({
 }
 
 /** The starting-essence value with a press/hover explanation. Informational —
- * hovering brightens it subtly but a press does not compress it (there is no
- * action to press). */
+ * hovering brightens it subtly and, having no action to press, a press ENLARGES
+ * it (rather than compressing like a button) to acknowledge a touch. */
 export function EssenceReveal({
   dreamcaller,
   stageRef,
@@ -292,7 +293,7 @@ export function EssenceReveal({
   return (
     <InfoCard.PressInfo
       stageRef={stageRef}
-      compress={false}
+      pressFeedback="enlarge"
       card={
         <InfoCard
           variant="icon"
