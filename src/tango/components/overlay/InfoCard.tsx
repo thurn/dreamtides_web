@@ -122,25 +122,6 @@ const tMeta: React.CSSProperties = {
   color: token("--text-faint"),
 };
 
-/** id of the one-time <style> element carrying the entrance keyframe. Guarded so
- * multiple InfoCard/PressPopover instances never duplicate it. */
-const KEYFRAME_STYLE_ID = "info-card-kf";
-
-/** Inserts the shared entrance keyframe into document.head, once per document. */
-function ensureKeyframes(): void {
-  if (typeof document === "undefined") {
-    return;
-  }
-  if (document.getElementById(KEYFRAME_STYLE_ID) !== null) {
-    return;
-  }
-  const styleElement = document.createElement("style");
-  styleElement.id = KEYFRAME_STYLE_ID;
-  styleElement.textContent =
-    "@keyframes infoCardIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}";
-  document.head.appendChild(styleElement);
-}
-
 /**
  * The violet-glow disc shared by the icon variant AND the dreamscape SiteNode,
  * so the disc reads identically in both. The gradient stops and glow are the
@@ -745,10 +726,6 @@ export function PressPopover({
     null,
   );
 
-  React.useEffect(() => {
-    ensureKeyframes();
-  }, []);
-
   React.useLayoutEffect(() => {
     const el = ref.current;
     if (!el || !anchor) {
@@ -774,8 +751,9 @@ export function PressPopover({
         pointerEvents: "none",
         left: pos ? pos.left : anchor ? anchor.x - width / 2 : 0,
         top: pos ? pos.top : 0,
-        opacity: pos ? 1 : 0,
-        animation: pos ? `infoCardIn 150ms ${token("--ease-out")} both` : "none",
+        // Keep the portal wrapper out of opacity/transform animation layers so
+        // the InfoCard shell's backdrop-filter samples the scene like GroupPanel.
+        visibility: pos ? "visible" : "hidden",
       }}
     >
       {children}
