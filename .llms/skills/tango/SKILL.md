@@ -43,7 +43,7 @@ The reference files and the index are projections of the component sources
 | Resource Chip | Components | [components/resource-chip.md](components/resource-chip.md) | The canonical value-and-mark pairing for the game economy. |
 | Button | Components | [components/button.md](components/button.md) | The one button in Tango — the beveled purple sprite, scaled to any label and to a taller commit height. |
 | Segmented Control | Components | [components/segmented-control.md](components/segmented-control.md) | The compact tab and filter switch used for type filters, sort direction, and small mode toggles. |
-| Select | Components | [components/select.md](components/select.md) | The compact dropdown control: one resting trigger that names the current choice and reveals the rest in a menu on tap. |
+| Select | Components | [components/select.md](components/select.md) | The compact dropdown control, and Tango's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. |
 | Stat Tile | Components | [components/stat-tile.md](components/stat-tile.md) | A labelled value cell for summary grids — a large value over a small uppercase label — used for deck stats and run-end results. |
 | Tide Pill | Components | [components/tide-pill.md](components/tide-pill.md) | The labelled tag for a Dreamcaller's tides and affiliations. |
 | Tide Disc | Components | [components/tide-disc.md](components/tide-disc.md) | The single tide mark: a colored disc carrying the tide's glyph, sized 'sm' (desktop select) or 'lg' (mobile select) — the atom both Dreamcaller-select tide rows render from. |

@@ -46,6 +46,8 @@ export const DEFAULT_DECK_FILTER_SORT: DeckFilterSort = {
 export interface DeckControlOption<T extends string> {
   value: T;
   label: string;
+  /** Compact form for the collapsed dropdown button; falls back to `label`. */
+  triggerLabel?: string;
 }
 
 /** The type-filter segments, in display order. */
@@ -56,16 +58,24 @@ export const DECK_TYPE_FILTER_OPTIONS: readonly DeckControlOption<DeckTypeFilter
     { value: "Event", label: "Events" },
   ] as const;
 
-/** The sort-menu options, in display order. */
+/**
+ * The sort-menu options, in display order. Each carries a compact `triggerLabel`
+ * (with a direction arrow) so the collapsed sort button stays narrow enough to
+ * share one line with the filter button, while the menu shows the full phrase.
+ */
 export const DECK_SORT_OPTIONS: readonly DeckControlOption<DeckSortId>[] = [
-  { value: "deck", label: "Deck Order" },
-  { value: "cost-asc", label: "Cost (Low to High)" },
-  { value: "cost-desc", label: "Cost (High to Low)" },
-  { value: "spark-desc", label: "Spark (High to Low)" },
-  { value: "name-asc", label: "Name (A to Z)" },
+  { value: "deck", label: "Deck Order", triggerLabel: "Deck" },
+  { value: "cost-asc", label: "Cost (Low to High)", triggerLabel: "Cost ↑" },
+  { value: "cost-desc", label: "Cost (High to Low)", triggerLabel: "Cost ↓" },
+  {
+    value: "spark-desc",
+    label: "Spark (High to Low)",
+    triggerLabel: "Spark ↓",
+  },
+  { value: "name-asc", label: "Name (A to Z)", triggerLabel: "Name" },
 ] as const;
 
-/** The label for the currently-selected sort, for the Select trigger. */
+/** The full label for the currently-selected sort (for an accessible name). */
 export function deckSortLabel(sort: DeckSortId): string {
   return DECK_SORT_OPTIONS.find((option) => option.value === sort)?.label ?? "";
 }

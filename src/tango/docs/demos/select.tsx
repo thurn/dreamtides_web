@@ -11,18 +11,17 @@ import { GLYPHS } from "../../primitives/glyph";
 import type { TangoComponent } from "../registry";
 
 const OPTIONS: SelectOption[] = [
-  { value: "deck", label: "Deck Order" },
-  { value: "cost-asc", label: "Cost (Low to High)" },
-  { value: "cost-desc", label: "Cost (High to Low)" },
-  { value: "spark-desc", label: "Spark (High to Low)" },
-  { value: "name-asc", label: "Name (A to Z)" },
+  { value: "deck", label: "Deck Order", triggerLabel: "Deck" },
+  { value: "cost-asc", label: "Cost (Low to High)", triggerLabel: "Cost ↑" },
+  { value: "cost-desc", label: "Cost (High to Low)", triggerLabel: "Cost ↓" },
+  { value: "spark-desc", label: "Spark (High to Low)", triggerLabel: "Spark ↓" },
+  { value: "name-asc", label: "Name (A to Z)", triggerLabel: "Name" },
 ];
 
 interface SelectDemoArgs {
   options?: SelectOption[];
   /** Seeds (and, if edited via the control panel, re-seeds) the chosen value. */
   value?: string;
-  eyebrow?: string;
   size?: "sm" | "md";
   full?: boolean;
   align?: "start" | "end";
@@ -38,7 +37,6 @@ interface SelectDemoArgs {
 function SelectDemo({
   options = OPTIONS,
   value,
-  eyebrow = "Sort",
   size = "md",
   full = false,
   align = "start",
@@ -59,7 +57,6 @@ function SelectDemo({
       options={options}
       value={selected}
       onChange={setSelected}
-      eyebrow={eyebrow}
       leadingGlyph={GLYPHS.sort}
       size={size}
       full={full}
@@ -73,26 +70,27 @@ export const selectDemo: TangoComponent = {
   id: "select",
   title: "Select",
   blurb:
-    "The compact dropdown control: one resting trigger that names the current choice and reveals the rest in a menu on tap. Use it for a longer list — a sort order with several modes, a filter with many values — where laying every option out at once (SegmentedControl) would not fit.",
+    "The compact dropdown control, and Tango's standard mobile filter/sort control: a button that shows a leading glyph and the current selection, and opens a menu on tap. Two of them share a single line where a segmented control would not fit.",
   callout:
-    "The trigger wears the shared control `treatment`, so a Select and a SegmentedControl placed together read as one cluster. The menu stays a solid raised popover in every treatment so it is legible over scene art.",
+    "The trigger is single-font by construction — one leading glyph, one selection label, one chevron — so a caller cannot mix two type voices in a button. Give a menu entry a compact `triggerLabel` to keep the collapsed button narrow while the menu shows the full phrase. The trigger wears the shared control `treatment`; the menu stays a solid raised popover.",
   group: "Components",
   docName: "Select",
   Component: SelectDemo,
   usage: [
     {
-      note: "A controlled dropdown: own the chosen value and update it from `onChange`. The `eyebrow` names what the dropdown controls.",
+      note: "A controlled dropdown: own the chosen value and update it from `onChange`. `leadingGlyph` gives the button its identity (a funnel for a filter, up/down arrows for a sort).",
       code: `import { useState } from "react";
 import { Select } from "src/tango/components/controls/Select";
+import { GLYPHS } from "src/tango/primitives/glyph";
 
 const [sort, setSort] = useState("deck");
 
 <Select
-  eyebrow="Sort"
+  leadingGlyph={GLYPHS.sort}
   options={[
-    { value: "deck", label: "Deck Order" },
-    { value: "cost-asc", label: "Cost (Low to High)" },
-    { value: "name-asc", label: "Name (A to Z)" },
+    { value: "deck", label: "Deck Order", triggerLabel: "Deck" },
+    { value: "cost-asc", label: "Cost (Low to High)", triggerLabel: "Cost ↑" },
+    { value: "name-asc", label: "Name (A to Z)", triggerLabel: "Name" },
   ]}
   value={sort}
   onChange={setSort}
@@ -102,9 +100,9 @@ const [sort, setSort] = useState("deck");
       label: "Right-aligned in a bar",
       note: "Set `align=\"end\"` when the Select sits against the trailing edge so its menu stays on-screen.",
       code: `<Select
-  eyebrow="Sort"
+  leadingGlyph={GLYPHS.sort}
   align="end"
-  treatment="glass"
+  treatment="sprite"
   options={sortOptions}
   value={sort}
   onChange={setSort}
@@ -115,7 +113,6 @@ const [sort, setSort] = useState("deck");
     defaultArgs: {
       options: OPTIONS,
       value: "deck",
-      eyebrow: "Sort",
       size: "md",
       full: false,
       align: "start",

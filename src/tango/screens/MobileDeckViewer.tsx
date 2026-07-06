@@ -10,10 +10,10 @@
 // fight.
 //
 // The top of the screen holds a control band — the title, the card count, the
-// close control, and the filter/sort controls: a type filter (All / Characters
-// / Events) and a sort dropdown (deck order, cost, spark, name). Filter and sort
-// are local presentation state; the pure `mobile-deck-filter` module derives the
-// visible grid from the full deck and that state.
+// close control, and two dropdown buttons on one line: a filter button (type:
+// All / Characters / Events) and a sort button (deck order, cost, spark, name).
+// Filter and sort are local presentation state; the pure `mobile-deck-filter`
+// module derives the visible grid from the full deck and that state.
 //
 // PURE: renders from a view-model and reports dismissal through `onClose`. All
 // state here is local presentation state (which card is being peeked, the
@@ -132,14 +132,12 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
   const [filterSort, setFilterSort] = useState<DeckFilterSort>(
     DEFAULT_DECK_FILTER_SORT,
   );
-  // Exploration knobs (dev only): the control surface material and the control
-  // layout. The floating switcher below flips these live so the treatment
-  // options can be compared on the real screen. `DEFAULT_CONTROL_TREATMENT` is
-  // what production renders.
+  // Exploration knob (dev only): the control surface material. The floating
+  // switcher below flips it live so the treatment options can be compared on the
+  // real screen. `DEFAULT_CONTROL_TREATMENT` is what production renders.
   const [treatment, setTreatment] = useState<ControlTreatment>(
     DEFAULT_CONTROL_TREATMENT,
   );
-  const [structure, setStructure] = useState<ControlStructure>("stacked");
 
   const visibleCards = useMemo(
     () => filterAndSortDeckCards(view.cards, filterSort),
@@ -248,7 +246,6 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
             filterSort={filterSort}
             onFilterSortChange={setFilterSort}
             treatment={treatment}
-            structure={structure}
           />
         }
       />
@@ -295,9 +292,7 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
       {import.meta.env.DEV && (
         <ControlTreatmentSwitcher
           treatment={treatment}
-          structure={structure}
           onTreatmentChange={setTreatment}
-          onStructureChange={setStructure}
         />
       )}
     </div>
@@ -481,123 +476,70 @@ function TopBand({
   );
 }
 
-/** How the filter/sort controls are laid out within the band. */
-type ControlStructure = "stacked" | "inline";
-
 /** The control treatment production renders (the switcher previews the rest). */
-const DEFAULT_CONTROL_TREATMENT: ControlTreatment = "accent";
+const DEFAULT_CONTROL_TREATMENT: ControlTreatment = "sprite";
 
 /**
- * The deck's filter + sort controls: a type filter (All / Characters / Events)
- * and a sort dropdown, both wearing the chosen control `treatment`.
- *
- * The sprite treatment is button-shaped, so it expresses BOTH controls as sprite
- * dropdown buttons ("Show ▾", "Sort ▾") sitting in a row — a sprite deck has no
- * segmented slider. The other treatments use a segmented type filter plus a sort
- * dropdown, laid out by `structure`: 'stacked' gives the filter its own
- * full-width row above the sort dropdown; 'inline' sets them side by side.
+ * The deck's filter + sort controls: two dropdown buttons on a single line — a
+ * filter button (a funnel glyph and the current type) at the leading edge and a
+ * sort button (up/down arrows and the current order) at the trailing edge. Both
+ * wear the chosen control `treatment`. There is no segmented slider: a mobile
+ * band has room for two compact buttons, not a three-way switch plus a
+ * dropdown, so every treatment renders the same button pair.
  */
 function DeckControls({
   filterSort,
   onFilterSortChange,
   treatment,
-  structure,
 }: {
   filterSort: DeckFilterSort;
   onFilterSortChange: (next: DeckFilterSort) => void;
   treatment: ControlTreatment;
-  structure: ControlStructure;
 }) {
-  const sort = (
-    <Select
-      eyebrow="Sort"
-      leadingGlyph={GLYPHS.sort}
-      treatment={treatment}
-      align={treatment === "sprite" ? "start" : "end"}
-      ariaLabel={`Sort: ${deckSortLabel(filterSort.sort)}`}
-      options={DECK_SORT_OPTIONS.map((option) => ({
-        value: option.value,
-        label: option.label,
-      }))}
-      value={filterSort.sort}
-      onChange={(value) =>
-        onFilterSortChange({ ...filterSort, sort: value as DeckSortId })
-      }
-    />
-  );
-
-  // The sprite treatment is buttons-with-dropdowns: the type filter becomes a
-  // dropdown button too, and the two buttons share a wrapping row.
-  if (treatment === "sprite") {
-    return (
-      <div
-        style={{
-          display: "flex",
-          flexWrap: "wrap",
-          alignItems: "center",
-          gap: token("--space-3"),
-        }}
-      >
-        <Select
-          eyebrow="Show"
-          leadingGlyph={GLYPHS.filter}
-          treatment={treatment}
-          align="start"
-          ariaLabel={`Show: ${filterSort.typeFilter}`}
-          options={DECK_TYPE_FILTER_OPTIONS.map((option) => ({
-            value: option.value,
-            label: option.label,
-          }))}
-          value={filterSort.typeFilter}
-          onChange={(value) =>
-            onFilterSortChange({
-              ...filterSort,
-              typeFilter: value as DeckTypeFilter,
-            })
-          }
-        />
-        {sort}
-      </div>
-    );
-  }
-
-  const typeFilter = (
-    <SegmentedControl
-      full={structure === "stacked"}
-      treatment={treatment}
-      options={DECK_TYPE_FILTER_OPTIONS.map((option) => ({
-        value: option.value,
-        label: option.label,
-      }))}
-      value={filterSort.typeFilter}
-      onChange={(value) =>
-        onFilterSortChange({
-          ...filterSort,
-          typeFilter: value as DeckTypeFilter,
-        })
-      }
-    />
-  );
-
-  if (structure === "inline") {
-    return (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: token("--space-3"),
-        }}
-      >
-        <div style={{ flex: 1, minWidth: 0 }}>{typeFilter}</div>
-        {sort}
-      </div>
-    );
-  }
-
   return (
-    <div style={{ display: "grid", gap: token("--space-3") }}>
-      {typeFilter}
-      <div style={{ display: "flex", justifyContent: "flex-end" }}>{sort}</div>
+    <div
+      style={{
+        display: "flex",
+        flexWrap: "nowrap",
+        alignItems: "center",
+        justifyContent: "space-between",
+        gap: token("--space-3"),
+      }}
+    >
+      <Select
+        size="sm"
+        leadingGlyph={GLYPHS.filter}
+        treatment={treatment}
+        align="start"
+        ariaLabel={`Filter: ${filterSort.typeFilter}`}
+        options={DECK_TYPE_FILTER_OPTIONS.map((option) => ({
+          value: option.value,
+          label: option.label,
+        }))}
+        value={filterSort.typeFilter}
+        onChange={(value) =>
+          onFilterSortChange({
+            ...filterSort,
+            typeFilter: value as DeckTypeFilter,
+          })
+        }
+      />
+      <Select
+        size="sm"
+        leadingGlyph={GLYPHS.sort}
+        treatment={treatment}
+        align="end"
+        ariaLabel={`Sort: ${deckSortLabel(filterSort.sort)}`}
+        options={DECK_SORT_OPTIONS.map((option) => ({
+          value: option.value,
+          label: option.label,
+          triggerLabel: option.triggerLabel,
+        }))}
+        value={filterSort.sort}
+        onChange={(value) =>
+          onFilterSortChange({ ...filterSort, sort: value as DeckSortId })
+        }
+      />
     </div>
   );
 }
@@ -728,22 +670,18 @@ const TREATMENT_LABELS: Record<ControlTreatment, string> = {
 };
 
 /**
- * Dev-only floating switcher that flips the control treatment and layout live,
- * so the treatment options can be compared on the real deck screen. Rendered
- * only under `import.meta.env.DEV`; it is exploration scaffolding, removed once
- * a treatment is chosen. Built from Tango's own SegmentedControl so it needs no
- * raw-element lint exemptions.
+ * Dev-only floating switcher that flips the control treatment live, so the
+ * treatment options can be compared on the real deck screen. Rendered only under
+ * `import.meta.env.DEV`; it is exploration scaffolding, removed once a treatment
+ * is chosen. Built from Tango's own SegmentedControl so it needs no raw-element
+ * lint exemptions.
  */
 function ControlTreatmentSwitcher({
   treatment,
-  structure,
   onTreatmentChange,
-  onStructureChange,
 }: {
   treatment: ControlTreatment;
-  structure: ControlStructure;
   onTreatmentChange: (next: ControlTreatment) => void;
-  onStructureChange: (next: ControlStructure) => void;
 }) {
   return (
     <div
@@ -786,16 +724,6 @@ function ControlTreatmentSwitcher({
           onChange={(value) => onTreatmentChange(value as ControlTreatment)}
         />
       </div>
-      <SegmentedControl
-        size="sm"
-        treatment="flat"
-        options={[
-          { value: "stacked", label: "Stacked" },
-          { value: "inline", label: "Inline" },
-        ]}
-        value={structure}
-        onChange={(value) => onStructureChange(value as ControlStructure)}
-      />
     </div>
   );
 }

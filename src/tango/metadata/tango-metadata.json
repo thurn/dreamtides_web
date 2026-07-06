@@ -2048,6 +2048,12 @@
             "tsType": "string",
             "optional": false,
             "description": ""
+          },
+          {
+            "name": "triggerLabel",
+            "tsType": "string",
+            "optional": true,
+            "description": ""
           }
         ]
       }
@@ -2069,20 +2075,12 @@
       "description": "Fires with the newly-selected value when the user picks a menu item."
     },
     {
-      "name": "eyebrow",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Small uppercase eyebrow shown before the current label inside the trigger\n(e.g. \"SORT\"), naming what the dropdown controls. Omit for a bare value."
-    },
-    {
       "name": "leadingGlyph",
       "tsType": "Glyph",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Optional leading glyph drawn at the start of the trigger."
+      "description": "Leading glyph drawn at the start of the trigger — the control's identity\n(a filled funnel for a filter, filled up/down arrows for a sort). It stands\nin for a text label, keeping the trigger to a single font."
     },
     {
       "name": "size",
@@ -2134,7 +2132,7 @@
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
-      "description": "Accessible label for the trigger (defaults to the eyebrow when present)."
+      "description": "Accessible label for the trigger."
     }
   ],
   "SiteNode": [

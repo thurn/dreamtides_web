@@ -137,10 +137,10 @@ const SPRITE_SLICE = 56;
 /**
  * Bevel thickness (px) of the sprite button's frame — the border region where
  * the chamfered metal edge is drawn, with the sprite's center slice filling
- * behind the label. Matches Button's small size (a 42px-tall sprite button), so
- * a control-height sprite button reads as a member of the same button family.
+ * behind the label. Kept slim so the sprite dropdown button stays compact next
+ * to its sibling on one line, while the beveled corners still read as metal.
  */
-const SPRITE_BORDER_WIDTH = 13;
+const SPRITE_BORDER_WIDTH = 9;
 
 /**
  * The gray RPG sprite drawn as a FILLED 9-patch button surface: the beveled

@@ -1,15 +1,21 @@
-// Select — the compact dropdown control in Tango.
+// Select — the compact dropdown control in Tango, and the standard mobile
+// filter/sort control: a button that names the current choice and opens a menu.
 //
-// Where SegmentedControl lays every choice out at once (best for 2–4 options),
-// Select collapses a longer list — a sort order with five modes, a filter with
-// many values — into one resting trigger that opens a menu on tap. It is the
-// control the deck viewer's sort order rides on: one line of chrome that names
-// the current order and reveals the rest only when asked.
+// Where a full choice list would eat a whole row, Select collapses it to one
+// resting trigger — a leading glyph (a filled funnel for a filter, filled
+// up/down arrows for a sort), the current selection's label, and a dropdown
+// chevron — that reveals the rest on tap. Two of them sit on a single line
+// where a segmented control could not.
+//
+// The trigger is single-font BY CONSTRUCTION: it renders exactly one text run,
+// the selection label (glyph and chevron are icons, not a second type voice).
+// There is no eyebrow or secondary-text slot, so a caller cannot mix two font
+// styles in one button. A menu entry may carry a compact `triggerLabel` for the
+// collapsed trigger while the menu itself shows the fuller `label`.
 //
 // The trigger's surface is the shared control material, chosen by `treatment`
 // (sprite / flat / glass / accent / outline) from control-treatment.ts — the
-// SAME vocabulary SegmentedControl renders from, so a Select and a segmented
-// filter placed side by side read as one cluster. The dropdown MENU is a solid
+// SAME vocabulary SegmentedControl renders from. The dropdown MENU is a solid
 // raised popover in every treatment: a menu must stay legible over scene art
 // and dense card grids, so it does not take on the translucent or outline
 // materials the resting trigger may use.
@@ -41,10 +47,16 @@ import {
 /** Height/scale variants, matching SegmentedControl's. */
 type SelectSize = "sm" | "md";
 
-/** One choice in the menu: an explicit `{ value, label }` pair. */
+/**
+ * One choice in the menu. `label` is shown in the menu; `triggerLabel`, when
+ * given, is the compact form shown on the collapsed trigger (e.g. menu "Cost
+ * (High to Low)" → trigger "Cost ↓"), so a long menu entry stays readable while
+ * the button stays narrow enough to share a line.
+ */
 export interface SelectOption {
   value: string;
   label: string;
+  triggerLabel?: string;
 }
 
 export interface SelectProps {
@@ -55,11 +67,10 @@ export interface SelectProps {
   /** Fires with the newly-selected value when the user picks a menu item. */
   onChange?: (value: string) => void;
   /**
-   * Small uppercase eyebrow shown before the current label inside the trigger
-   * (e.g. "SORT"), naming what the dropdown controls. Omit for a bare value.
+   * Leading glyph drawn at the start of the trigger — the control's identity
+   * (a filled funnel for a filter, filled up/down arrows for a sort). It stands
+   * in for a text label, keeping the trigger to a single font.
    */
-  eyebrow?: string;
-  /** Optional leading glyph drawn at the start of the trigger. */
   leadingGlyph?: Glyph;
   /** Height/scale. Default 'md'. */
   size?: SelectSize;
@@ -76,7 +87,7 @@ export interface SelectProps {
    * Default 'accent'. The menu stays a solid raised popover regardless.
    */
   treatment?: ControlTreatment;
-  /** Accessible label for the trigger (defaults to the eyebrow when present). */
+  /** Accessible label for the trigger. */
   ariaLabel?: string;
 }
 
@@ -111,7 +122,6 @@ export function Select({
   options,
   value,
   onChange,
-  eyebrow,
   leadingGlyph,
   size = "md",
   full = false,
@@ -129,7 +139,9 @@ export function Select({
   const menuRef = useRef<HTMLDivElement>(null);
 
   const selected = options.find((option) => option.value === value);
-  const label = selected?.label ?? "";
+  // The trigger shows the compact form when the option supplies one, so a long
+  // menu entry stays narrow on the collapsed button.
+  const label = selected?.triggerLabel ?? selected?.label ?? "";
 
   const close = useCallback(() => setOpen(false), []);
 
@@ -184,7 +196,7 @@ export function Select({
         type="button"
         aria-haspopup="listbox"
         aria-expanded={open}
-        aria-label={ariaLabel ?? eyebrow}
+        aria-label={ariaLabel}
         onClick={() => (open ? close() : openMenu())}
         {...bind}
         style={{
@@ -220,25 +232,14 @@ export function Select({
             size="1.1em"
           />
         )}
-        {eyebrow !== undefined && (
-          <span
-            style={{
-              font: token("--t-eyebrow"),
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-              // Inherit the flat ink when the treatment sets one; else the
-              // muted eyebrow color.
-              color:
-                chrome.triggerText !== undefined
-                  ? "inherit"
-                  : token("--text-muted"),
-            }}
-          >
-            {eyebrow}
-          </span>
-        )}
+        {/* The one and only text run on the trigger — a single font by
+            construction, so a caller cannot mix two type voices in one button. */}
         <span
           style={{
+            flex: full ? 1 : undefined,
+            textAlign: "left",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
             color:
               chrome.triggerText !== undefined
                 ? "inherit"
