@@ -156,3 +156,17 @@ Tango mobile dreamscape redesign — follow-ups / known items
      `fontVariantNumeric`, drawing the same warning for `font`.
    Both are cosmetic (dev-mode only, no runtime effect). Fix by splitting the
    shorthand into longhand properties on the offending elements.
+
+4. Deck viewer control treatment is a pending design decision (converge).
+   The Mobile Deck Viewer's filter/sort controls ship with five selectable
+   surface treatments (sprite / flat / glass / accent / outline) resolved by
+   `controlChrome` in src/tango/components/controls/control-treatment.ts, plus a
+   dev-only floating switcher in MobileDeckViewer that flips the treatment and
+   the stacked/inline layout live. This is a deliberate exploration so the
+   options can be compared on the real screen. Per the Tango "requested
+   divergence must converge" rule, the push that stabilizes this design must
+   end with a decision: keep the single chosen treatment as the fixed default,
+   collapse the `ControlTreatment` enum down to it (or keep the enum only if
+   more than one treatment is genuinely wanted across screens), and delete the
+   dev switcher. The inline structure is cramped at 402px (the third filter
+   segment clips), so stacked is the intended mobile default.
