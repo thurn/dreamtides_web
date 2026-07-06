@@ -88,7 +88,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Herald of the Last Light
 - 1× Standard Bearer
 - 1× Fathomless Maw
-- 1× Dreaming Groves
+- 1× Call of Corruption
 - 1× Duneguard Captain
 - 1× Wreckheap Lookout
 - 1× Blood Sun Oppressor
@@ -128,7 +128,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× Saltless Mariner
 - 1× Cinderheart
 - 1× Plunge into the Abyss
-- 1× Together Against the Tide
+- 1× Cost of Victory
 - 1× Burning Pursuit
 - 1× Planetgazer
 - 1× Paradox Corps Enforcer
@@ -149,7 +149,7 @@ Tide-sig-01 is a heavily character-weighted deck (84 characters, 26 events) buil
 - 1× The Calling Night
 - 1× Flagbearer of Decay
 - 1× Obliterator of Worlds
-- 1× Standoff
+- 1× Soul Channeling
 - 1× Carrion Shepherd
 - 1× Moonlit Voyage
 - 1× Break the Veil
@@ -190,7 +190,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× Silent Avenger
 - 1× Herald of the Last Light
 - 1× Fathomless Maw
-- 1× Dreaming Groves
+- 1× Call of Corruption
 - 1× Duneguard Captain
 - 1× Blood Sun Oppressor
 - 1× Emberwatch Rescuer
@@ -229,7 +229,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× Saltless Mariner
 - 1× Fractured Vessel
 - 1× Cinderheart
-- 1× Together Against the Tide
+- 1× Cost of Victory
 - 1× Urban Cipher
 - 1× Pyrokinetic Surge
 - 1× Titan of Forgotten Echoes
@@ -242,7 +242,7 @@ Tide-sig-02 is a heavily character-weighted deck (87 of 110 copies) built around
 - 1× Scrapyard Custodian
 - 1× The Calling Night
 - 1× Obliterator of Worlds
-- 1× Standoff
+- 1× Soul Channeling
 - 1× Carrion Shepherd
 - 1× Moonlit Voyage
 - 1× Break the Veil
@@ -279,7 +279,7 @@ This tide is overwhelmingly character-heavy (94 of 110 copies) and built around 
 - 1× Cloudmantle Ray
 - 1× Dustborn Veteran
 - 1× Luminwings
-- 1× Radiant Trio
+- 1× Ethereal Army
 - 1× Stargazer Adrift
 - 1× Nocturne
 - 1× Petal-Seer
@@ -386,7 +386,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Fell the Mighty
 - 1× Dustborn Veteran
 - 1× Woodland Apparition
-- 1× Dreaming Groves
+- 1× Call of Corruption
 - 1× Duneguard Captain
 - 1× Fell Swoop
 - 1× Emberwatch Rescuer
@@ -428,7 +428,7 @@ Tide-sig-04 is built around Vrakmoth's loop of discarding cards to refill, treat
 - 1× Cinderheart
 - 1× Gleamharvester
 - 1× Eruption
-- 1× Together Against the Tide
+- 1× Cost of Victory
 - 1× Urban Cipher
 - 1× Ash Sower
 - 1× Seek Answers
@@ -479,7 +479,7 @@ Tide-sig-05 is built around an unusually deep void-filling engine and the payoff
 - 1× Unleash Ruin
 - 1× Fathomless Maw
 - 1× Wistful Angler
-- 1× Radiant Trio
+- 1× Ethereal Army
 - 1× Stargazer Adrift
 - 1× Duneguard Captain
 - 1× Blazing Emberwing
@@ -637,7 +637,7 @@ Tide-sig-06 is a heavily character-weighted deck (84 of 110 copies are character
 - 1× Cinderheart
 - 1× Gleamharvester
 - 1× Eruption
-- 1× Together Against the Tide
+- 1× Cost of Victory
 - 1× Keeper of Forgotten Light
 - 1× Burning Pursuit
 - 1× Ash Sower
@@ -698,7 +698,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Herald of the Last Light
 - 1× Ridge Vortex Explorer
 - 1× Fathomless Maw
-- 1× Dreaming Groves
+- 1× Call of Corruption
 - 1× Duneguard Captain
 - 1× Unquenched
 - 1× Wreckheap Lookout
@@ -739,7 +739,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Resilient Wanderer
 - 1× Fractured Vessel
 - 1× Cinderheart
-- 1× Together Against the Tide
+- 1× Cost of Victory
 - 1× Urban Cipher
 - 1× Keeper of Forgotten Light
 - 1× Burning Pursuit
@@ -765,7 +765,7 @@ Tide-sig-07 is a character-dense survivor tribal deck with 92 characters and 18 
 - 1× Pinnacle Ascendant
 - 1× Scrapyard Custodian
 - 1× Flagbearer of Decay
-- 1× Standoff
+- 1× Soul Channeling
 - 1× Carrion Shepherd
 - 1× Forgotten Sleeper
 - 1× Moonlit Voyage
@@ -812,7 +812,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Silent Avenger
 - 1× Herald of the Last Light
 - 1× Fathomless Maw
-- 1× Dreaming Groves
+- 1× Call of Corruption
 - 1× Duneguard Captain
 - 1× Blood Sun Oppressor
 - 1× Sunrise Strummer
@@ -846,7 +846,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Collapse Protocol
 - 1× Saltless Mariner
 - 1× Fractured Vessel
-- 1× Together Against the Tide
+- 1× Cost of Victory
 - 1× Pyrokinetic Surge
 - 1× Titan of Forgotten Echoes
 - 1× Dawnrunner
@@ -862,7 +862,7 @@ Tide-sig-08 is built almost entirely on Characters (89 of 110 copies), with a de
 - 1× Scrapyard Custodian
 - 1× The Calling Night
 - 1× Obliterator of Worlds
-- 1× Standoff
+- 1× Soul Channeling
 - 1× Carrion Shepherd
 - 1× Moonlit Voyage
 - 1× Break the Veil
@@ -887,12 +887,12 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 2× Last Beacon
 - 2× Abyssal Deputy
 - 2× Secrets of the Deep
-- 2× Standoff
+- 2× Soul Channeling
 - 1× Scorched Reckoning
 - 1× Nightmare Manifest
 - 1× Fractured Veil
 - 1× Echoing Denial
-- 1× Dreaming Groves
+- 1× Call of Corruption
 - 1× Defiant Parry
 - 1× Threadbreaker
 - 1× Stargazer Adrift
@@ -941,7 +941,7 @@ Tide-sig-09 is an outsider-tempo tide built around phasing evaders that reward c
 - 1× Resilient Wanderer
 - 1× Fargazer
 - 1× Breach Artist
-- 1× Together Against the Tide
+- 1× Cost of Victory
 - 1× Burning Pursuit
 - 1× Duskshore Virtuoso
 - 1× Paradox Corps Enforcer
@@ -990,7 +990,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 2× Last Beacon
 - 2× Abyssal Deputy
 - 2× Secrets of the Deep
-- 2× Standoff
+- 2× Soul Channeling
 - 1× Sanctum Awakened
 - 1× Gloomantler
 - 1× Nightmare Manifest
@@ -999,7 +999,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Toll of Passage
 - 1× Dustborn Veteran
 - 1× Echoing Denial
-- 1× Dreaming Groves
+- 1× Call of Corruption
 - 1× Threadbreaker
 - 1× Wreckheap Lookout
 - 1× Blood Sun Oppressor
@@ -1049,7 +1049,7 @@ Tide-sig-10 is a high-event deck (69 events, 41 characters) built around a centr
 - 1× Genesis Burst
 - 1× Fargazer
 - 1× Breach Artist
-- 1× Together Against the Tide
+- 1× Cost of Victory
 - 1× Burning Pursuit
 - 1× Paradox Corps Enforcer
 - 1× Pyrokinetic Surge
@@ -1091,7 +1091,7 @@ Tide-sig-11 is built around a core trio of event-copying payoffs — Echo Archit
 - 2× Echo Architect
 - 2× Call the Lost
 - 2× Sunken Radiance
-- 2× Hatching Ground
+- 2× Blooming Horror
 - 2× Twice-Lit Portal
 - 2× Abandon Constraints
 - 2× Genesis Burst
@@ -1217,7 +1217,7 @@ Tide-sig-12 is built around stacking event-copying effects to turn a single chea
 - 1× Sworn Defender
 - 1× Sunken Radiance
 - 1× Architect of Memory
-- 1× Hatching Ground
+- 1× Blooming Horror
 - 1× Weight of Memory
 - 1× Angel of the Eclipse
 - 1× Fallen One
@@ -1322,7 +1322,7 @@ Tide-sig-13 is an event-heavy deck (roughly 60% events) built around two interlo
 - 1× Call the Lost
 - 1× Sunken Radiance
 - 1× Architect of Memory
-- 1× Hatching Ground
+- 1× Blooming Horror
 - 1× Weight of Memory
 - 1× Angel of the Eclipse
 - 1× Fallen One
@@ -1428,7 +1428,7 @@ Tide-sig-14 is built almost entirely on Characters (93 of 110 copies), with a de
 - 1× Inferno's Herald
 - 1× Stoneborn Leviathan
 - 1× Luminwings
-- 1× Radiant Trio
+- 1× Ethereal Army
 - 1× Nocturne
 - 1× Cindermarch
 - 1× Conduit of Resonance
@@ -1534,7 +1534,7 @@ Tide-sig-15 is overwhelmingly a spirit animal deck: over 85% of its copies are c
 - 2× Lord of Hidden Paths
 - 2× Scrap Reclaimer
 - 1× Wistful Angler
-- 1× Radiant Trio
+- 1× Ethereal Army
 - 1× Cindermarch
 - 1× Conduit of Resonance
 - 1× Packcaller of Shadows
@@ -1618,7 +1618,7 @@ This tide is overwhelmingly character-heavy (93 of 110 copies), anchored in chea
 - 2× Augur Crow
 - 1× Unleash Ruin
 - 1× Wistful Angler
-- 1× Radiant Trio
+- 1× Ethereal Army
 - 1× Cindermarch
 - 1× Conduit of Resonance
 - 1× Packcaller of Shadows
@@ -1696,7 +1696,7 @@ Tide-sig-17 is built almost entirely around spirit animals, with over 80% of its
 - 2× Scrap Reclaimer
 - 1× Unleash Ruin
 - 1× Wistful Angler
-- 1× Radiant Trio
+- 1× Ethereal Army
 - 1× Cindermarch
 - 1× Conduit of Resonance
 - 1× Packcaller of Shadows
@@ -2076,7 +2076,7 @@ Tide-fac-01 is an almost entirely character-based (40 of 45 copies) midrange eng
 - 1× Avatar of Cosmic Reckoning
 - 1× Scrapyard Custodian
 - 1× Obliterator of Worlds
-- 1× Standoff
+- 1× Soul Channeling
 - 1× Vigil Keeper
 - 1× Carrion Shepherd
 - 1× Skull Weaver
@@ -2140,7 +2140,7 @@ Tide-fac-02 is built almost entirely of characters (41 of 45 cards) and operates
 Tide-fac-03 is an event-heavy (34 events, 11 characters) tide built around assembling and then firing a single high-power turn. The energy ramp layer comes from cheap events like Arc Gate Opening (1-cost, gain 4●), Canopy of Stars, Genesis Burst (double current ●), and the character Starcatcher (gain 1● per event played), which together allow a mid-to-late turn to generate far more energy than normal. That energy is then multiplied through event-copy effects: Echo Architect (2x) copies every event you play at a 1● premium, Cascade of Reflections (2x) copies each event until end of turn, and Cascading Detonation (2x) copies the next event played twice and can be reclaimed for 5● to set up another chain — these three together form the core combo-engine. The payoff events cash in the volume of spells played: Hatching Ground erodes X equal to cards played this turn, and Echoes of the Journey draws a free ephemeral card for each card already played, extending the chain mid-storm. A void-reclaim sub-package (From the Barrow granting mass-reclaim to all void events, Archive of the Forgotten, Weblight Waif returning events from the void) and void-scaling threats like Minstrel of Falling Light and Weight of Memory give the tide a secondary dimension of depth-over-time. Compared to its nearest sibling tide-fac-20, which shares the event-copy infrastructure but distinguishes itself with Broadcast Array's ⍟ payoff, sustained draw filtering through Spiral Offering and Desperation, and a stronger token-production angle via Call of the Lost at 2x, tide-fac-03 instead doubles down on Cascading Detonation as its signature finisher and features Genesis Burst plus Reunion as turn-reset/storm enablers — making it a bigger-swing, fewer-boards, combo-oriented version of the same event-heavy archetype.
 
 - 2× Echo Architect
-- 2× Hatching Ground
+- 2× Blooming Horror
 - 2× Starcatcher
 - 2× Iconoclast
 - 2× Arc Gate Opening
@@ -2290,7 +2290,7 @@ This tide splits evenly between characters and events, with its central engine b
 - 2× Abyssal Deputy
 - 1× Fractured Veil
 - 1× Consumed Berserker
-- 1× Dreaming Groves
+- 1× Call of Corruption
 - 1× Blood Sun Oppressor
 - 1× Emberwatch Rescuer
 - 1× Lanternhearted
@@ -2311,7 +2311,7 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Terminus
 - 1× Pilgrim of Old Stones
 - 1× Resilient Wanderer
-- 1× Together Against the Tide
+- 1× Cost of Victory
 - 1× Burning Pursuit
 - 1× Last Beacon
 - 1× Paradox Corps Enforcer
@@ -2322,7 +2322,7 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Secrets of the Deep
 - 1× Scrapyard Custodian
 - 1× The Power Within
-- 1× Standoff
+- 1× Soul Channeling
 - 1× Moonlit Voyage
 - 1× Break the Veil
 
@@ -2336,7 +2336,7 @@ This tide splits evenly between characters and events, with its central engine b
 - 2× Planetgazer
 - 2× Last Beacon
 - 2× Abyssal Deputy
-- 2× Standoff
+- 2× Soul Channeling
 - 1× Scorched Reckoning
 - 1× Echoing Denial
 - 1× Defiant Parry
@@ -2358,7 +2358,7 @@ This tide splits evenly between characters and events, with its central engine b
 - 1× Collapse Protocol
 - 1× Resilient Wanderer
 - 1× Breach Artist
-- 1× Together Against the Tide
+- 1× Cost of Victory
 - 1× Burning Pursuit
 - 1× Paradox Corps Enforcer
 - 1× Keeper of the Tides
@@ -2433,7 +2433,7 @@ Tide-fac-07 runs an even split of events and characters (22/23) built around two
 - 1× Unleash Ruin
 - 1× Wistful Angler
 - 1× Cloudmantle Ray
-- 1× Radiant Trio
+- 1× Ethereal Army
 - 1× Packcaller of Shadows
 - 1× Beacon of Tomorrow
 - 1× Lumin-Gate Seer
@@ -2581,7 +2581,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 
 - 2× Forsaken Skyline
 - 1× Fell the Mighty
-- 1× Dreaming Groves
+- 1× Call of Corruption
 - 1× Duneguard Captain
 - 1× Unquenched
 - 1× Fell Swoop
@@ -2607,7 +2607,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Saltless Mariner
 - 1× Gleamharvester
 - 1× Eruption
-- 1× Together Against the Tide
+- 1× Cost of Victory
 - 1× Urban Cipher
 - 1× Ash Harbinger
 - 1× Pattern Seeker
@@ -2688,7 +2688,7 @@ Tide-fac-31 is almost entirely characters (41 of 45 cards), built around a dense
 - 2× Sunshadow Eagle
 - 1× Stoneborn Leviathan
 - 1× Luminwings
-- 1× Radiant Trio
+- 1× Ethereal Army
 - 1× Petal-Seer
 - 1× Beacon of Tomorrow
 - 1× Lumin-Gate Seer
@@ -3038,7 +3038,7 @@ Tide-fac-20 is an event-heavy combo tide (34 events, 11 characters) built around
 - 1× Call the Lost
 - 1× Sunken Radiance
 - 1× Architect of Memory
-- 1× Hatching Ground
+- 1× Blooming Horror
 - 1× Soulbinder
 - 1× Weblight Waif
 - 1× From the Barrow
@@ -3078,7 +3078,7 @@ Tide-fac-20 is an event-heavy combo tide (34 events, 11 characters) built around
 - 2× Celestial Reverie
 - 2× Sunshadow Eagle
 - 1× Stoneborn Leviathan
-- 1× Radiant Trio
+- 1× Ethereal Army
 - 1× Blazing Emberwing
 - 1× Cindermarch
 - 1× Conduit of Resonance
@@ -3170,7 +3170,7 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 2× Abyssal Deputy
 - 1× Fractured Veil
 - 1× Consumed Berserker
-- 1× Dreaming Groves
+- 1× Call of Corruption
 - 1× Blood Sun Oppressor
 - 1× Emberwatch Rescuer
 - 1× Lanternhearted
@@ -3191,7 +3191,7 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 1× Terminus
 - 1× Pilgrim of Old Stones
 - 1× Resilient Wanderer
-- 1× Together Against the Tide
+- 1× Cost of Victory
 - 1× Burning Pursuit
 - 1× Last Beacon
 - 1× Paradox Corps Enforcer
@@ -3202,7 +3202,7 @@ Tide-fac-22 is a character-dense spirit animal swarm built around layered spark 
 - 1× Secrets of the Deep
 - 1× Scrapyard Custodian
 - 1× The Power Within
-- 1× Standoff
+- 1× Soul Channeling
 - 1× Moonlit Voyage
 - 1× Break the Veil
 
@@ -3222,11 +3222,11 @@ This tide runs an even split of characters and events, with its mechanical ident
 - 2× Last Beacon
 - 2× Abyssal Deputy
 - 2× Secrets of the Deep
-- 2× Standoff
+- 2× Soul Channeling
 - 1× Fractured Veil
 - 1× Consumed Berserker
 - 1× Echoing Denial
-- 1× Dreaming Groves
+- 1× Call of Corruption
 - 1× Defiant Parry
 - 1× Threadbreaker
 - 1× Blood Sun Oppressor
@@ -3241,7 +3241,7 @@ This tide runs an even split of characters and events, with its mechanical ident
 - 1× Momentum of the Fallen
 - 1× Pilgrim of Old Stones
 - 1× Resilient Wanderer
-- 1× Together Against the Tide
+- 1× Cost of Victory
 - 1× Burning Pursuit
 - 1× Paradox Corps Enforcer
 - 1× Keeper of the Tides
@@ -3345,7 +3345,7 @@ Tide-fac-27 runs a heavier event count (16 of 45 cards) than either of its neare
 - 1× Wasteland Arbitrator
 - 1× Shadowcaller
 - 1× Avatar of Cosmic Reckoning
-- 1× Standoff
+- 1× Soul Channeling
 - 1× Vigil Keeper
 - 1× Carrion Shepherd
 - 1× Skull Weaver
@@ -3405,7 +3405,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 
 - 2× Forsaken Skyline
 - 1× Fell the Mighty
-- 1× Dreaming Groves
+- 1× Call of Corruption
 - 1× Duneguard Captain
 - 1× Unquenched
 - 1× Fell Swoop
@@ -3430,7 +3430,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 1× Saltless Mariner
 - 1× Gleamharvester
 - 1× Eruption
-- 1× Together Against the Tide
+- 1× Cost of Victory
 - 1× Urban Cipher
 - 1× Ash Harbinger
 - 1× Pattern Seeker
@@ -3504,7 +3504,7 @@ This tide is built almost entirely of warriors (43 of 45 cards) and runs two cop
 - 2× Sunshadow Eagle
 - 1× Stoneborn Leviathan
 - 1× Luminwings
-- 1× Radiant Trio
+- 1× Ethereal Army
 - 1× Petal-Seer
 - 1× Beacon of Tomorrow
 - 1× Lumin-Gate Seer
@@ -3793,12 +3793,12 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Ethereal Trailblazer
 - 1× Tranquil Duelist
 
-## Broad: Echo Architect / Hatching Ground
+## Broad: Echo Architect / Blooming Horror
 
 `tide-neu-07` — neutral tide, 26 distinct cards, 30 copies
 
 - 2× Echo Architect
-- 2× Hatching Ground
+- 2× Blooming Horror
 - 2× Arc Gate Opening
 - 2× Flash of Power
 - 1× Path to Redemption
@@ -3834,7 +3834,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 2× Last Beacon
 - 1× Fractured Veil
 - 1× Consumed Berserker
-- 1× Dreaming Groves
+- 1× Call of Corruption
 - 1× Blood Sun Oppressor
 - 1× Rift Pilgrim
 - 1× Sunrise Strummer
@@ -3853,7 +3853,7 @@ Tide-fac-32 is a character-heavy (34 characters, 11 events) discard engine built
 - 1× Miraculous Arrival
 - 1× Abyssal Deputy
 - 1× Secrets of the Deep
-- 1× Standoff
+- 1× Soul Channeling
 
 ## Broad: Harbor Warden / Lurking Regent
 

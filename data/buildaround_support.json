@@ -1087,7 +1087,7 @@
       ]
     },
     "13c45db4-ebab-4364-a14a-59a2e9c52bb5": {
-      "name": "Dreaming Groves",
+      "name": "Call of Corruption",
       "needs": [],
       "supports": [
         "events"
@@ -1979,7 +1979,7 @@
       ]
     },
     "29d25251-8b42-4d3d-97e6-6c3abaabd9a2": {
-      "name": "Hatching Ground",
+      "name": "Blooming Horror",
       "needs": [
         {
           "theme": "storm",
@@ -3036,7 +3036,7 @@
       ]
     },
     "151b80b1-0a3f-48d4-9c85-99a9c274fd7f": {
-      "name": "Radiant Trio",
+      "name": "Ethereal Army",
       "needs": [],
       "supports": [
         "figments",
@@ -3912,7 +3912,7 @@
       ]
     },
     "f4c570d4-c500-4b66-ad97-e8ccbef19392": {
-      "name": "Standoff",
+      "name": "Soul Channeling",
       "needs": [],
       "supports": [
         "events"
@@ -4343,7 +4343,7 @@
       ]
     },
     "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a": {
-      "name": "Together Against the Tide",
+      "name": "Cost of Victory",
       "needs": [
         {
           "theme": "abandon",

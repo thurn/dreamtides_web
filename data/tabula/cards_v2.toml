@@ -2541,7 +2541,7 @@ card-number = 136
 art = { x = 0.042, y = 0.839, scale = 1.17 }
 
 [[cards]]
-name = "Together Against the Tide"
+name = "Cost of Victory"
 mtg-name = "Fatal Push"
 id = "8a971ba7-9dfb-45be-bfbb-bf5e4f11974a"
 rendered-text = "You may discard a card as an additional cost to play this event. Dissolve a ≤2● cost enemy. If the additional cost was paid, dissolve any enemy instead."
@@ -2552,10 +2552,11 @@ rarity = ""
 is-fast = true
 is-interrupt = true
 spark = ""
-tags = ["Removal", "Art Rework", "July6"]
-image-number = 1621160806
+tags = ["Removal", "Art Rework", "July6", "Art OK"]
+image-number = 2123360840
 art-owned = true
 card-number = 137
+art = { x = 0.126, y = 0, scale = 1.17 }
 
 [[cards]]
 name = "Fargazer"
@@ -2913,7 +2914,7 @@ art-owned = false
 card-number = 156
 
 [[cards]]
-name = "Dreaming Groves"
+name = "Call of Corruption"
 mtg-name = "Duress"
 id = "13c45db4-ebab-4364-a14a-59a2e9c52bb5"
 rendered-text = "Discard a chosen event from the opponent's hand."
@@ -2924,10 +2925,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Thoughtseize", "Art Rework", "July6"]
-image-number = 503461558
+tags = ["Thoughtseize", "Art Rework", "July6", "Art OK"]
+image-number = 2033123270
 art-owned = false
 card-number = 157
+art = { x = 0, y = 0.48, scale = 1.37 }
 
 [[cards]]
 name = "Dreamvale Monarch"
@@ -5089,7 +5091,7 @@ rarity = ""
 is-fast = true
 is-interrupt = false
 spark = ""
-tags = ["Removal", "Art Rework", "July6"]
+tags = ["Removal", "Art Rework", "July6", "Art OK"]
 image-number = 2027158295
 art-owned = true
 card-number = 275
@@ -5297,7 +5299,7 @@ art-owned = false
 card-number = 286
 
 [[cards]]
-name = "Radiant Trio"
+name = "Ethereal Army"
 mtg-name = "Pest Infestation"
 id = "151b80b1-0a3f-48d4-9c85-99a9c274fd7f"
 rendered-text = "Materialize X 1✦ ethereal figments."
@@ -5308,7 +5310,7 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Figment Maker", "Art Rework", "July6"]
+tags = ["Figment Maker", "Art Rework", "July6", "Art OK"]
 image-number = 1785274679
 art-owned = false
 card-number = 287
@@ -6195,7 +6197,7 @@ card-number = 334
 art = { x = -0.504, y = 1, scale = 1.17 }
 
 [[cards]]
-name = "Hatching Ground"
+name = "Blooming Horror"
 mtg-name = "Brain Freeze"
 id = "29d25251-8b42-4d3d-97e6-6c3abaabd9a2"
 rendered-text = "For each card you've played this turn, chosen player erodes X."
@@ -6206,10 +6208,11 @@ rarity = ""
 is-fast = false
 is-interrupt = false
 spark = ""
-tags = ["Art Rework", "July6"]
-image-number = 515170900
+tags = ["Art Rework", "July6", "Art OK"]
+image-number = 1225878706
 art-owned = false
 card-number = 335
+art = { x = 0.322, y = 1, scale = 1.11 }
 
 [[cards]]
 name = "Fury of the Clan"
@@ -6612,7 +6615,7 @@ art-owned = false
 card-number = 356
 
 [[cards]]
-name = "Standoff"
+name = "Soul Channeling"
 mtg-name = "Snuff Out"
 id = "f4c570d4-c500-4b66-ad97-e8ccbef19392"
 rendered-text = "To play this event, pay 2⍟. Dissolve an enemy."
@@ -6623,11 +6626,11 @@ rarity = ""
 is-fast = true
 is-interrupt = true
 spark = ""
-tags = ["Removal", "Art Rework", "July6"]
-image-number = 2123360840
+tags = ["Removal", "Art Rework", "July6", "Art OK"]
+image-number = 2018848967
 art-owned = false
 card-number = 357
-art = { x = 0.126, y = 1, scale = 1.17 }
+art = { x = -0.046, y = 1, scale = 1.16 }
 
 [[cards]]
 name = "Break the Veil"
@@ -9459,7 +9462,7 @@ art = { x = -0.342, y = 0.032, scale = 1.17 }
 name = "Lithic Severance"
 mtg-name = "Swift Reconfiguration"
 id = "9e9efbc0-d438-48a9-9551-85c93fb33f3e"
-rendered-text = '''An enemy loses all abilities and gains "3●: Restore this character's abilities."'''
+rendered-text = "An enemy loses all abilities  until the opponent pays 3●."
 energy-cost = 1
 card-type = "Event"
 subtype = ""
