@@ -1,10 +1,10 @@
 // Full-screen mockup for InfoCard — a mock HUD where several pressable objects
-// each reveal one of InfoCard's four media variants through the shared press /
-// hover reveal engine (InfoCard.PressInfo + the four variants on one shell).
+// each reveal one of InfoCard's media variants through the shared press /
+// hover reveal engine (InfoCard.PressInfo + the variants on one shell).
 // Each trigger anchors its card to the full-viewport stageRef so the cards clamp
-// against the real screen edges. The object/hero media resolve from real assets
-// in `public/` (a Dreamcaller portrait, a dreamscape scene); the icon and text
-// variants use tokenized glyphs.
+// against the real screen edges. The object media resolves from a real asset in
+// `public/` (a Dreamcaller portrait); the icon and text variants use tokenized
+// glyphs, and the epithet trigger shows the text variant's name/epithet pairing.
 
 import { useRef } from "react";
 import { InfoCard } from "../../components/overlay/InfoCard";
@@ -103,7 +103,7 @@ export function InfoCardMockup() {
             margin: 0,
           }}
         >
-          One shell, four media variants
+          One shell, many media variants
         </p>
         <h1 style={{ font: token("--t-display"), margin: `${token("--space-3")} 0 0`, color: token("--text-primary") }}>
           Press to reveal
@@ -136,17 +136,16 @@ export function InfoCardMockup() {
         />
         <Trigger
           stageRef={stageRef}
-          label="Dreamscape"
-          variant="hero"
-          glyph="bxf bx-map"
+          label="Dreamcaller"
+          variant="text"
+          glyph="bxf bx-user-circle"
           card={
             <InfoCard
-              variant="hero"
-              image={artRef.dreamscapeScene("pharaohs_gate")}
-              meta="Layer IV"
-              title="Pharaoh's Gate"
-              body={richText.plain(
-                "A sun-scoured dream of buried kings and restless sand.",
+              variant="text"
+              title="Kragg"
+              subtitle="Spent-Blood Chieftain"
+              body={richText.rules(
+                "At the start of your first turn, gain 1 essence.",
               )}
             />
           }

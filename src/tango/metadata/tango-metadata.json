@@ -1349,10 +1349,9 @@
   "InfoCard": [
     {
       "name": "variant",
-      "tsType": "\"object\" | \"hero\" | \"text\" | \"icon\" | \"tide\"",
+      "tsType": "\"object\" | \"text\" | \"icon\" | \"tide\"",
       "unionMembers": [
         "object",
-        "hero",
         "text",
         "icon",
         "tide"
@@ -1429,14 +1428,6 @@
       }
     },
     {
-      "name": "meta",
-      "tsType": "string",
-      "unionMembers": [],
-      "required": false,
-      "defaultValue": null,
-      "description": "Small mono/uppercase overline above the title."
-    },
-    {
       "name": "glyph",
       "tsType": "Glyph",
       "unionMembers": [],
@@ -1459,12 +1450,28 @@
       "description": "Which of the five tides. Fixes the disc color/mark and the alignment label."
     },
     {
+      "name": "meta",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Small mono/uppercase overline above the title."
+    },
+    {
       "name": "leadGlyph",
       "tsType": "Glyph",
       "unionMembers": [],
       "required": false,
       "defaultValue": null,
       "description": "A small leading {@link Glyph}."
+    },
+    {
+      "name": "subtitle",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "An epithet under the name — a smaller serif subtitle in white, mirroring\nthe Dreamcaller-select name/epithet pairing. Plain text; resolve before\ndisplay."
     }
   ],
   "LeaveSiteButton": [

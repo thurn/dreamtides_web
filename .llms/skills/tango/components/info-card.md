@@ -6,23 +6,24 @@
 
 Components · Live demo & interactive props: `/tango#/info-card`
 
-The one press-to-reveal information card. Its media treatment varies by content — object, hero, icon, or text — over a single fixed liquid-glass shell and reveal contract.
+The one press-to-reveal information card. Its media treatment varies by content — object, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `variant` | `"object" \| "hero" \| "text" \| "icon" \| "tide"` | no | — | Which media treatment. Omit — or pass 'text' — for the text variant. |
+| `variant` | `"object" \| "text" \| "icon" \| "tide"` | no | — | Which media treatment. Omit — or pass 'text' — for the text variant. |
 | `image` | `ArtRef` | yes | — | The media the card is built around, as an {@link ArtRef}. Required. |
 | `imageCrop` | `ImageCrop` = `"top" \| "center"` | no | — | How the media is cropped. Default `"top"`. |
 | `imageFilter` | `MediaFilter` = `"dreamsign-portrait" \| "dreamsign-portrait-bane" \| "spark-glow" \| "energy-glow"` | no | — | A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). |
 | `frame` | `boolean` | no | — | true = framed portrait, false = contained transparent object. Default false. |
 | `title` | `string` | no | — | The card's headline. Plain text — resolve names before display. |
 | `body` | `RichText` | no | — | The reveal copy, as a {@link RichText} value (plain / rules / note / stack). |
-| `meta` | `string` | no | — | Small mono/uppercase overline above the title. |
 | `glyph` | `Glyph` | yes | — | The {@link Glyph} the disc renders. Required. |
 | `tide` | `Tide` = `"ember" \| "valor" \| "vision" \| "wild" \| "shadow"` | yes | — | Which of the five tides. Fixes the disc color/mark and the alignment label. |
+| `meta` | `string` | no | — | Small mono/uppercase overline above the title. |
 | `leadGlyph` | `Glyph` | no | — | A small leading {@link Glyph}. |
+| `subtitle` | `string` | no | — | An epithet under the name — a smaller serif subtitle in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. |
 
 ### `body`: the `RichText` model
 
@@ -47,6 +48,19 @@ import { GLYPHS } from "src/tango/primitives/glyph";
   title="Singular Storm"
   body={richText.plain("A rising tide that floods the board with essence.")}
   leadGlyph={GLYPHS.water}
+/>
+```
+
+### Text variant with epithet
+
+Pass a `subtitle` to render an epithet under the name — a smaller serif line in white, mirroring the Dreamcaller-select name/epithet pairing. Used for the Dreamcaller profile reveal.
+
+```tsx
+<InfoCard
+  variant="text"
+  title="Kragg"
+  subtitle="Spent-Blood Chieftain"
+  body={richText.rules("At the start of your first turn, gain 1 essence.")}
 />
 ```
 

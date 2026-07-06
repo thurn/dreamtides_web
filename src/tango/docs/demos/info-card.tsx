@@ -1,17 +1,17 @@
 // Registry demo entry for InfoCard — see tide-pill.tsx for the recipe this
-// follows. `variant` is a string-literal union (select control); `title` and
-// `meta` are strings (text controls) seeded from defaultArgs; `leadGlyph` is a
-// named `Glyph`. `body` is a `RichText` model value with no generated control,
-// so it is seeded via sampleContent.
+// follows. `variant` is a string-literal union (select control); `title`,
+// `meta` and `subtitle` are strings (text controls) seeded from defaultArgs;
+// `leadGlyph` is a named `Glyph`. `body` is a `RichText` model value with no
+// generated control, so it is seeded via sampleContent.
 //
 // The media props are seeded so that EVERY variant renders real content the
 // moment the reader switches the `variant` control: `image` is a real
-// Dreamcaller `ArtRef` (drives the object / hero media) and `glyph` is a named
+// Dreamcaller `ArtRef` (drives the object media) and `glyph` is a named
 // `Glyph` (drives the icon-disc variant), the same production art the
 // full-screen mockup uses — the text default still leads with `leadGlyph`.
 //
 // InfoCardProps is a discriminated union on `variant` — each media variant
-// requires the media it renders (object/hero require `image`, icon requires
+// requires the media it renders (object requires `image`, icon requires
 // `glyph`) — so the demo seeds `image`, `frame` and `glyph` in defaultArgs and
 // every variant the reader selects renders a complete card. The raw component
 // assigns directly to the registry's `Component` slot (whose props are the
@@ -29,7 +29,7 @@ export const infoCardDemo: TangoComponent = {
   id: "info-card",
   title: "Info Card",
   blurb:
-    "The one press-to-reveal information card. Its media treatment varies by content — object, hero, icon, or text — over a single fixed liquid-glass shell and reveal contract.",
+    "The one press-to-reveal information card. Its media treatment varies by content — object, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract.",
   group: "Components",
   docName: "InfoCard",
   Component: InfoCard,
@@ -47,6 +47,16 @@ import { GLYPHS } from "src/tango/primitives/glyph";
   title="Singular Storm"
   body={richText.plain("A rising tide that floods the board with essence.")}
   leadGlyph={GLYPHS.water}
+/>`,
+    },
+    {
+      label: "Text variant with epithet",
+      note: "Pass a `subtitle` to render an epithet under the name — a smaller serif line in white, mirroring the Dreamcaller-select name/epithet pairing. Used for the Dreamcaller profile reveal.",
+      code: `<InfoCard
+  variant="text"
+  title="Kragg"
+  subtitle="Spent-Blood Chieftain"
+  body={richText.rules("At the start of your first turn, gain 1 essence.")}
 />`,
     },
     {
@@ -104,10 +114,10 @@ import { GLYPHS } from "src/tango/primitives/glyph";
       meta: "Tide",
       title: "Singular Storm",
       leadGlyph: GLYPHS.water,
-      // Real media so switching `variant` to object / hero / icon renders
-      // genuine art rather than an empty frame. `image` is a real Dreamcaller
-      // portrait (object / hero), `frame` gives the object variant its framed
-      // treatment, and `glyph` fills the icon-disc variant.
+      // Real media so switching `variant` to object / icon renders genuine art
+      // rather than an empty frame. `image` is a real Dreamcaller portrait,
+      // `frame` gives the object variant its framed treatment, and `glyph`
+      // fills the icon-disc variant.
       image: artRef.dreamcaller("0025"),
       frame: true,
       glyph: glyph("bxf bx-store-alt-2"),

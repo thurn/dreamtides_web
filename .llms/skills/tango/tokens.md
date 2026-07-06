@@ -135,6 +135,7 @@ Each --t-* bundles face + weight + size/line-height: apply a voice with one toke
 | `--t-button-sm` | `700 14px/1 var(--primitive-font-sans)` |  |
 | `--t-caption` | `600 12px/1.35 var(--primitive-font-sans)` | metadata |
 | `--t-popover-headline` | `600 19px/1.18 var(--primitive-font-serif)` | letter-spacing: -0.01em |
+| `--t-popover-epithet` | `500 14px/1.25 var(--primitive-font-serif)` | a name's epithet under a popover headline |
 | `--t-popover-body` | `500 14px/1.45 var(--primitive-font-rules)` |  |
 | `--t-popover-meta` | `700 10.5px/1 var(--primitive-font-mono)` | .12em uppercase |
 | `--t-eyebrow` | `700 11px/1.2 var(--primitive-font-mono)` |  |

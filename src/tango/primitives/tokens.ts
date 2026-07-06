@@ -196,6 +196,7 @@ export const TOKENS = {
   "--t-button-sm": { var: "var(--t-button-sm)", value: "700 14px/1 var(--primitive-font-sans)" },
   "--t-caption": { var: "var(--t-caption)", value: "600 12px/1.35 var(--primitive-font-sans)" },
   "--t-popover-headline": { var: "var(--t-popover-headline)", value: "600 19px/1.18 var(--primitive-font-serif)" },
+  "--t-popover-epithet": { var: "var(--t-popover-epithet)", value: "500 14px/1.25 var(--primitive-font-serif)" },
   "--t-popover-body": { var: "var(--t-popover-body)", value: "500 14px/1.45 var(--primitive-font-rules)" },
   "--t-popover-meta": { var: "var(--t-popover-meta)", value: "700 10.5px/1 var(--primitive-font-mono)" },
   "--t-eyebrow": { var: "var(--t-eyebrow)", value: "700 11px/1.2 var(--primitive-font-mono)" },

@@ -511,14 +511,9 @@ function QsbDreamcallerBust({
         createPortal(
           <PressPopover anchor={anchor}>
             <InfoCard
-              variant="hero"
-              image={dreamcaller.portrait}
-              imageCrop="top"
-              title={
-                dreamcaller.epithet
-                  ? `${dreamcaller.name}, ${dreamcaller.epithet}`
-                  : dreamcaller.name
-              }
+              variant="text"
+              title={dreamcaller.name}
+              subtitle={dreamcaller.epithet}
               body={
                 dreamcaller.ability ? richText.rules(dreamcaller.ability) : undefined
               }

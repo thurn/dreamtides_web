@@ -11,9 +11,10 @@
 //   - one type scale            — headline (serif) / body (rules) / meta (mono)
 // Only the MEDIA treatment varies by content, via `variant`:
 //   - object — a centered framed portrait OR contained transparent object
-//   - hero   — a full-bleed media banner across the top, text below
 //   - icon   — a glyph disc beside the title
-//   - text   — an optional small lead glyph + title
+//   - tide   — a tide's own colored disc + alignment label
+//   - text   — an optional small lead glyph + title, with an optional epithet
+//              (a smaller serif subtitle in white) under the name
 //
 // The placement / timing engine ships alongside it and is attached as
 // statics: `InfoCard.PressPopover / PressInfo / usePressReveal / anchorRect /
@@ -118,6 +119,11 @@ const tHeadline: React.CSSProperties = {
   color: token("--text-primary"),
   letterSpacing: "-0.01em",
 };
+const tEpithet: React.CSSProperties = {
+  margin: 0,
+  font: token("--t-popover-epithet"),
+  color: token("--text-primary"),
+};
 const tBody: React.CSSProperties = {
   font: token("--t-popover-body"),
   color: token("--text-primary"),
@@ -141,10 +147,10 @@ export const SITE_DISC: React.CSSProperties = {
 };
 
 /** Which media treatment an InfoCard renders. */
-export type InfoCardVariant = "object" | "hero" | "icon" | "tide" | "text";
+export type InfoCardVariant = "object" | "icon" | "tide" | "text";
 
 /**
- * The copy every InfoCard carries, shared across all four media variants. The
+ * The copy every InfoCard carries, shared across all media variants. The
  * MEDIA a variant renders lives on the per-variant interfaces below, NEVER
  * here — so the type can require the media that a given `variant` renders
  * (see {@link InfoCardProps}).
@@ -174,22 +180,6 @@ export interface InfoCardObjectProps extends InfoCardCommonProps {
 }
 
 /**
- * hero variant — a full-bleed media banner across the top with the title +
- * body below. The banner IS its media, so `image` is required.
- */
-export interface InfoCardHeroProps extends InfoCardCommonProps {
-  variant: "hero";
-  /** The media the card is built around, as an {@link ArtRef}. Required. */
-  image: ArtRef;
-  /** How the media is cropped. Default `"top"`. */
-  imageCrop?: ImageCrop;
-  /** A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). */
-  imageFilter?: MediaFilter;
-  /** Small mono/uppercase overline above the title. */
-  meta?: string;
-}
-
-/**
  * icon variant — a glyph disc beside the title, body below. The disc IS its
  * glyph, so `glyph` is required.
  */
@@ -213,8 +203,9 @@ export interface InfoCardTideProps extends InfoCardCommonProps {
 }
 
 /**
- * text variant (the default) — an optional small lead glyph + title, body
- * below. Carries no required media; its lead glyph is decorative.
+ * text variant (the default) — an optional small lead glyph + title, an
+ * optional epithet under the name, then the body. Carries no required media;
+ * its lead glyph is decorative.
  */
 export interface InfoCardTextProps extends InfoCardCommonProps {
   /** Which media treatment. Omit — or pass 'text' — for the text variant. */
@@ -223,30 +214,36 @@ export interface InfoCardTextProps extends InfoCardCommonProps {
   meta?: string;
   /** A small leading {@link Glyph}. */
   leadGlyph?: Glyph;
+  /**
+   * An epithet under the name — a smaller serif subtitle in white, mirroring
+   * the Dreamcaller-select name/epithet pairing. Plain text; resolve before
+   * display.
+   */
+  subtitle?: string;
 }
 
 /**
  * InfoCard props — a discriminated union on `variant`. Each media variant
  * carries (and REQUIRES) exactly the media it renders, so it is a compile
- * error to construct an object/hero card without an `image` or an icon card
+ * error to construct an object card without an `image` or an icon card
  * without a `glyph`. An InfoCard can therefore never render an empty `<img>`
  * or an empty disc — the type guarantees a valid, complete card. Narrow on
  * `variant` to read a variant's media.
  */
 export type InfoCardProps =
   | InfoCardObjectProps
-  | InfoCardHeroProps
   | InfoCardIconProps
   | InfoCardTideProps
   | InfoCardTextProps;
 
 /* ================================================================
-   InfoCard — content, four media variants, one shell.
+   InfoCard — content, media variants, one shell.
    ================================================================ */
 /**
- * InfoCard — the one press-to-reveal information card. Four media variants on
- * one fixed liquid-glass shell (no caret, one GroupPanel material + type
- * scale). The placement/timing engine is attached as statics:
+ * InfoCard — the one press-to-reveal information card. Its media treatment
+ * varies (object / icon / tide / text) on one fixed liquid-glass shell (no
+ * caret, one GroupPanel material + type scale). The placement/timing engine is
+ * attached as statics:
  * `InfoCard.PressPopover / PressInfo / usePressReveal / anchorRect /
  * setRevealDelay / SITE_DISC`.
  */
@@ -332,69 +329,6 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
     );
   }
 
-  /* --- hero: full-bleed media banner across the top, text at the bottom. A
-     base gradient dissolves the media into the glass fill so the title/body
-     sit on the card's own material, not a scrim over the scene. --- */
-  if (props.variant === "hero") {
-    const { image, imageCrop = "top", imageFilter, meta } = props;
-    const Meta = meta ? (
-      <div style={{ ...tMeta, marginBottom: 7 }}>{meta}</div>
-    ) : null;
-    return (
-      <div style={{ ...shell }}>
-        <div
-          style={{
-            position: "relative",
-            width: "100%",
-            height: 210,
-            overflow: "hidden",
-          }}
-        >
-          <img
-            src={resolveArtRef(image)}
-            alt=""
-            draggable={false}
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: resolveImageCrop(imageCrop),
-              userSelect: "none",
-              filter: imageFilter ? resolveMediaFilter(imageFilter) : undefined,
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              left: 0,
-              right: 0,
-              bottom: -1,
-              height: 120,
-              // The hero image fades into the same translucent chrome fill as
-              // the GroupPanel glass recipe, preserving the liquid material.
-              background: `linear-gradient(to bottom, rgba(34,26,49,0) 0%, rgba(34,26,49,0.7) 60%, ${INFO_CARD_GLASS_FILL} 100%)`,
-            }}
-          />
-        </div>
-        <div
-          style={{
-            position: "relative",
-            marginTop: -16,
-            padding: "0 16px 16px",
-          }}
-        >
-          {Meta}
-          <div style={{ ...tHeadline, marginBottom: body ? 7 : 0 }}>
-            {titleContent}
-          </div>
-          {body != null && <div style={{ ...tBody }}>{renderRichText(body)}</div>}
-        </div>
-      </div>
-    );
-  }
-
   /* --- icon: a glyph disc beside the title, description below --- */
   if (props.variant === "icon") {
     const { glyph } = props;
@@ -467,8 +401,9 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
     );
   }
 
-  /* --- text: optional small lead glyph + title, description below --- */
-  const { meta, leadGlyph } = props;
+  /* --- text: optional small lead glyph + title, an optional epithet under the
+     name, description below --- */
+  const { meta, leadGlyph, subtitle } = props;
   const Meta = meta ? (
     <div style={{ ...tMeta, marginBottom: 7 }}>{meta}</div>
   ) : null;
@@ -480,7 +415,7 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
           display: "flex",
           alignItems: "center",
           gap: 9,
-          marginBottom: body ? 7 : 0,
+          marginBottom: subtitle ? 2 : body ? 7 : 0,
         }}
       >
         {leadGlyph !== undefined && (
@@ -492,6 +427,9 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
         )}
         <div style={tHeadline}>{titleContent}</div>
       </div>
+      {subtitle !== undefined && subtitle !== "" && (
+        <div style={{ ...tEpithet, marginBottom: body ? 7 : 0 }}>{subtitle}</div>
+      )}
       {Body}
     </div>
   );
@@ -875,7 +813,7 @@ interface InfoCardStatics {
 /**
  * InfoCard — the component plus its engine statics. Attaching the engine with a
  * single typed `Object.assign` (no `any`) means the exported symbol both renders
- * the four variants and exposes `InfoCard.PressPopover / PressInfo /
+ * the variants and exposes `InfoCard.PressPopover / PressInfo /
  * usePressReveal / anchorRect / setRevealDelay / SITE_DISC` to callers.
  */
 export const InfoCard: typeof InfoCardComponent & InfoCardStatics =
