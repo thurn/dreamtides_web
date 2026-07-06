@@ -141,23 +141,25 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
   return (
     <div
       className="tango"
-      // The liquid-glass surface fills the whole viewport, so its frosted blur
-      // covers everything behind it. An outside press — on the blurred margin
-      // around the centered content — dismisses the viewer.
+      // A transparent host: the frosted glass is a separate sibling backdrop
+      // layer (GlassBackdrop) so the filter/sort controls, which are its
+      // siblings, sample the raw scene through their own backdrop-filter and
+      // frost it once — matching the mobile viewer. An ancestor glass surface
+      // would double-frost the controls (its plum tint stacked twice), reading
+      // as a deep-plum fill instead of the warm scene-tinted glass. An outside
+      // press — on the blurred margin around the centered content — dismisses
+      // the viewer.
       onPointerDown={onClose}
       style={{
-        ...glassSurfaceStyle(),
-        // Edge-to-edge: no floating rim radius when the glass IS the viewport.
         position: "fixed",
         inset: 0,
-        borderRadius: 0,
-        border: "none",
         zIndex: 60,
         display: "grid",
         placeItems: "center",
         padding: token("--space-7"),
       }}
     >
+      <GlassBackdrop />
       <div
         role="dialog"
         aria-modal="true"
@@ -168,6 +170,10 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
           e.stopPropagation();
         }}
         style={{
+          // Lift the content above the z0 backdrop layer so it is not itself
+          // frosted by the backdrop.
+          position: "relative",
+          zIndex: 1,
           // Group the content toward the center inside a width cap so it stays
           // readable rather than stretching edge-to-edge on an ultrawide display.
           width: `min(${String(CONTENT_MAX_WIDTH_PX)}px, 100%)`,
@@ -206,6 +212,31 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
         </div>
       </div>
     </div>
+  );
+}
+
+/**
+ * The full-bleed frosted-glass backdrop behind the deck. Takes only the fill
+ * and blur/saturate backdrop from the shared liquid-glass recipe — the rim,
+ * radius, and drop shadow are dropped for an edge-to-edge surface. Kept a
+ * separate z0 sibling of the content (rather than a style on the host
+ * container) so the filter/sort controls frost the scene directly instead of
+ * double-frosting an ancestor glass surface.
+ */
+function GlassBackdrop() {
+  const glass = glassSurfaceStyle();
+  return (
+    <div
+      aria-hidden="true"
+      style={{
+        position: "absolute",
+        inset: 0,
+        zIndex: 0,
+        background: glass.background,
+        backdropFilter: glass.backdropFilter,
+        WebkitBackdropFilter: glass.WebkitBackdropFilter,
+      }}
+    />
   );
 }
 
