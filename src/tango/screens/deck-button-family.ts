@@ -71,23 +71,30 @@ export function familyControlTreatment(
  * surface (fill, border, radius, elevation) so the caller supplies only layout
  * (size, centering, glyph color); `glass` and `sprite` reuse the exact control
  * recipes so the corner square is the same material as its inline sibling.
+ *
+ * The corner buttons are square, so a fully-round radius (`--radius-pill`) makes
+ * them circles — reading as "fully round" alongside the pill-shaped filter/sort
+ * controls (a fixed `--radius-control` looks near-pill on the short dropdown but
+ * only gently rounded on the taller square, so the two would not match). `sprite`
+ * keeps its beveled metal silhouette: its 9-patch frame is the shape, and a
+ * border-radius cannot round a border-image.
  */
 export function cornerButtonChrome(family: DeckButtonFamily): CSSProperties {
   switch (family) {
     case "glass":
-      return { ...glassTrack(), borderRadius: token("--radius-control") };
+      return { ...glassTrack(), borderRadius: token("--radius-pill") };
     case "flat":
       return {
         background: token("--surface-raised"),
         border: `1px solid ${token("--border-soft")}`,
-        borderRadius: token("--radius-control"),
+        borderRadius: token("--radius-pill"),
         boxShadow: token("--shadow-sm"),
       };
     case "outline":
       return {
         background: "transparent",
         border: `1px solid ${token("--border-soft")}`,
-        borderRadius: token("--radius-control"),
+        borderRadius: token("--radius-pill"),
       };
     case "sprite":
       return spriteButton();
