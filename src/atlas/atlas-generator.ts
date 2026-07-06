@@ -1235,40 +1235,92 @@ export function advanceAtlas(
 }
 
 /**
- * Chooses which node a progress replay should complete next. Prefers an
- * `available` node, because the live game only ever lets the player enter
- * available dreamscapes; when none is available yet (the very first step off a
- * fresh atlas before any advance) it falls back to the first node that is not
- * already completed. Returns `null` only when every node is already completed.
- * Iteration order is insertion order, so the choice is deterministic for a
- * given atlas.
+ * Chooses the next node a progress replay advances into after completing
+ * `completedNodeId`: the topmost of that node's forward-connected successors
+ * that {@link advanceAtlas} just made `available`. This mirrors the live game's
+ * movement rule — the player can only enter a dreamscape their current node
+ * connects forward to — so following this pick keeps the completed path a
+ * connected chain. Returns `null` when the completed node has no available
+ * forward successor (the boss layer, or a malformed atlas), signalling the
+ * replay to stop rather than jump to an unreachable node.
  */
-function pickReplayCompletionNode(atlas: DreamAtlas): string | null {
-  let fallback: string | null = null;
-  for (const node of Object.values(atlas.nodes)) {
-    if (node.state === "available") {
-      return node.id;
-    }
-    if (node.state !== "completed" && fallback === null) {
-      fallback = node.id;
+function pickForwardFrontierNode(
+  atlas: DreamAtlas,
+  completedNodeId: string,
+): string | null {
+  const node = atlas.nodes[completedNodeId];
+  if (node === undefined) {
+    return null;
+  }
+  const forwardIds = Array.isArray(node.forwardIds) ? node.forwardIds : [];
+  const available = forwardIds
+    .map((id) => atlas.nodes[id])
+    .filter(
+      (candidate): candidate is DreamscapeNode =>
+        candidate !== undefined && candidate.state === "available",
+    );
+  if (available.length === 0) {
+    return null;
+  }
+  // Deterministic pick: the topmost reachable successor (lowest layer ordinal,
+  // then lowest column index). Ordering by the node's own layer/column — not by
+  // `atlas.nodes` key iteration order — keeps the replayed route stable and
+  // independent of how the node map happens to be keyed. (A persisted atlas read
+  // back from Realtime Database returns its nodes in lexicographic key order,
+  // e.g. `dreamscape-10` before `dreamscape-2`; a picker that trusted iteration
+  // order would wander off the frontier there.)
+  const [next] = [...available].sort(
+    (a, b) =>
+      layerOrdinal(a.layer) - layerOrdinal(b.layer) ||
+      a.indexInLayer - b.indexInLayer,
+  );
+  return next.id;
+}
+
+/**
+ * Verifies that `path` is a single connected chain: every node is a forward
+ * neighbour of the one before it. The replay guarantees this by construction, so
+ * a `false` here is a generation regression, not a data condition; it is
+ * recorded in the completion log so a log read can confirm the invariant held.
+ */
+function completedPathIsConnected(
+  atlas: DreamAtlas,
+  path: readonly string[],
+): boolean {
+  for (let i = 0; i < path.length - 1; i++) {
+    const node = atlas.nodes[path[i]];
+    const forwardIds = Array.isArray(node?.forwardIds) ? node.forwardIds : [];
+    if (!forwardIds.includes(path[i + 1])) {
+      return false;
     }
   }
-  return fallback;
+  return true;
 }
 
 /**
  * Rebuilds an atlas that reflects a player who has completed
- * `completedDreamscapes` dreamscapes, by replaying the live generation
- * algorithm rather than restoring a persisted layout. It starts from a fresh
- * initial atlas at Completion Level 0 and applies one {@link advanceAtlas}
- * expansion per completed dreamscape, advancing the Completion Level on each
- * step exactly as a battle victory does (the first expansion runs at level 1,
- * matching `battle-completion-bridge`). At each step the current frontier's
- * available node is completed, so the result is a brand-new layout whose
- * progress depth — completed nodes, the available frontier two layers behind
- * the reveal edge, and the `revealedLocked` nodes ahead — matches the player's
- * place in the run. A debug "regenerate" therefore picks up the latest
- * generation logic while preserving the player's current layer experience.
+ * `completedDreamscapes` dreamscapes, by replaying the live progression rather
+ * than restoring a persisted layout. It starts from a fresh initial atlas at
+ * Completion Level 0 and applies one {@link advanceAtlas} expansion per
+ * completed dreamscape — the exact same primitive the post-victory
+ * `battle-completion-bridge` drives — advancing the Completion Level on each
+ * step as a battle victory does (the first expansion runs at level 1). The
+ * result is a brand-new layout whose progress depth — completed nodes, the
+ * available frontier two layers behind the reveal edge, and the
+ * `revealedLocked` nodes ahead — matches the player's place in the run, so a
+ * debug "regenerate" or a `?goto=atlasN` jump picks up the latest generation
+ * logic while reproducing the player's current layer experience.
+ *
+ * The replay obeys the same movement rule the live game enforces on the player:
+ * you begin inside the starter dreamscape (the only `available` node on a fresh
+ * atlas) and may only ever advance into a node your current node connects
+ * *forward* to. Each completion is therefore a forward successor of the previous
+ * one, so the completed nodes form a connected chain by construction. The
+ * frontier is walked edge by edge from the starter — never by scanning for "some
+ * available node" — so the replay cannot fabricate an impossible layout with
+ * disconnected `completed` segments. If the forward frontier runs dry before the
+ * requested depth (e.g. the boss layer is reached), the replay stops rather than
+ * jumping to an unreachable node.
  */
 export function regenerateAtlasForProgress(
   completedDreamscapes: number,
@@ -1276,10 +1328,22 @@ export function regenerateAtlasForProgress(
   build: AtlasBuildContext,
   options: AtlasGenerationOptions = {},
 ): DreamAtlas {
+  const logEvents = options.logEvents !== false;
   let atlas = generateInitialAtlas(0, context, build, options);
+
+  // The player always starts inside the starter dreamscape; the replay begins
+  // by completing it, then follows forward edges to the next node to enter.
+  let nodeToComplete: string | null = atlas.startingNodeId;
+  const completedPath: string[] = [];
   for (let completion = 1; completion <= completedDreamscapes; completion++) {
-    const nodeToComplete = pickReplayCompletionNode(atlas);
     if (nodeToComplete === null) {
+      if (logEvents) {
+        logEvent("atlas_replay_frontier_exhausted", {
+          requestedCompletions: completedDreamscapes,
+          reachedCompletions: completion - 1,
+          completedPath: [...completedPath],
+        });
+      }
       break;
     }
     atlas = advanceAtlas(
@@ -1290,7 +1354,22 @@ export function regenerateAtlasForProgress(
       build,
       options,
     );
+    completedPath.push(nodeToComplete);
+    nodeToComplete = pickForwardFrontierNode(atlas, nodeToComplete);
   }
+
+  if (logEvents) {
+    logEvent("atlas_replay_completed", {
+      requestedCompletions: completedDreamscapes,
+      reachedCompletions: completedPath.length,
+      completedPath: [...completedPath],
+      // Connectivity invariant, recorded so a log read can confirm the replay
+      // produced a single connected chain (each node forward-linked to the
+      // next), matching what the live game guarantees.
+      connected: completedPathIsConnected(atlas, completedPath),
+    });
+  }
+
   return atlas;
 }
 

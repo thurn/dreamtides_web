@@ -1023,6 +1023,67 @@ describe("regenerateAtlasForProgress", () => {
       Object.keys(atlas.nodes).length,
     );
   });
+
+  // The invariant the `?goto=atlasN` jump and the Debug Regenerate button both
+  // depend on: a replayed atlas must look like a real playthrough, where the
+  // completed dreamscapes form a single connected route the player actually
+  // walked. A layout with disconnected `completed` segments is unreachable in
+  // the live game, so the replay must never produce one — at any depth, on any
+  // random roll. This is a structural check (edges and lifecycle states only);
+  // it makes no assumptions about which dreamscapes the production TOML defines.
+  describe("completed path is always a connected route", () => {
+    /**
+     * Walks forward edges from the starter, hopping to the single completed
+     * successor at each step, and returns the ids reached. If the completed
+     * nodes form one connected chain, this visits every completed node.
+     */
+    const walkCompletedChainFromStart = (atlas: DreamAtlas): string[] => {
+      const visited: string[] = [];
+      let current: string | null = atlas.startingNodeId;
+      while (current !== null) {
+        const node: DreamscapeNode | undefined = atlas.nodes[current];
+        if (node === undefined || node.state !== "completed") {
+          break;
+        }
+        visited.push(current);
+        const forwardIds: readonly string[] = node.forwardIds ?? [];
+        current =
+          forwardIds.find((id) => atlas.nodes[id]?.state === "completed") ??
+          null;
+      }
+      return visited;
+    };
+
+    it("connects every completed node in one chain from the starter", () => {
+      for (let trial = 0; trial < 100; trial++) {
+        for (const depth of [1, 2, 3, 4, 5, 6]) {
+          const atlas = regenerateAtlasForProgress(
+            depth,
+            defaultContext(),
+            buildContext(),
+            { logEvents: false },
+          );
+          const completedIds = Object.values(atlas.nodes)
+            .filter((node) => node.state === "completed")
+            .map((node) => node.id);
+          const reachedByWalk = walkCompletedChainFromStart(atlas);
+          // Every completed node is reached by walking forward edges from the
+          // starter: no orphaned `completed` node sits off the traversed route.
+          expect(reachedByWalk.slice().sort()).toEqual(
+            completedIds.slice().sort(),
+          );
+          // The chain starts at the starter and holds exactly one completed
+          // node per layer it passes through (the player never completes two
+          // dreamscapes in the same layer).
+          expect(reachedByWalk[0]).toBe(atlas.startingNodeId);
+          const layersOnChain = reachedByWalk.map((id) =>
+            layerOrdinal(atlas.nodes[id].layer),
+          );
+          expect(new Set(layersOnChain).size).toBe(layersOnChain.length);
+        }
+      }
+    });
+  });
 });
 
 describe("edgesCross", () => {
