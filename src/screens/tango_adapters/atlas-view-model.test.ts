@@ -8,6 +8,8 @@ import type {
 import type { QuestContent } from "../../data/quest-content";
 import { MINIMAL_ATLAS_CONFIG } from "../../__test-helpers__/atlas-fixtures";
 import {
+  ATLAS_LAYOUT_DESKTOP,
+  ATLAS_LAYOUT_MOBILE,
   ATLAS_STAGE_HEIGHT,
   ATLAS_STAGE_WIDTH,
   atlasChoiceLayer,
@@ -110,6 +112,18 @@ describe("resolveAtlasNodeGeometry", () => {
   it("returns an empty map for an atlas with no positioned nodes", () => {
     const atlas = makeVerticalAtlas();
     expect(resolveAtlasNodeGeometry({ ...atlas, nodes: {} }).size).toBe(0);
+  });
+
+  it("draws larger nodes on mobile than on desktop so icons stay legible once the narrow viewport scales the stage down", () => {
+    const atlas = makeVerticalAtlas();
+    const mobile = resolveAtlasNodeGeometry(atlas, ATLAS_LAYOUT_MOBILE);
+    const desktop = resolveAtlasNodeGeometry(atlas, ATLAS_LAYOUT_DESKTOP);
+    expect(mobile.get("middle")!.size).toBeGreaterThan(
+      desktop.get("middle")!.size,
+    );
+    expect(mobile.get("starter")!.size).toBeGreaterThan(
+      desktop.get("starter")!.size,
+    );
   });
 });
 

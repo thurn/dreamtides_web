@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import type { DreamscapeNode } from "../../../types/quest";
 import { BOSS_DISPLAY, ROUND_FRAME_URL } from "./atlas-display";
 import { type Glyph } from "../../primitives/glyph";
@@ -96,7 +96,17 @@ export function AtlasNode({
   return (
     <div
       className={className}
-      style={{ left: view.left, top: view.top, width: view.size, height: view.size }}
+      style={
+        {
+          left: view.left,
+          top: view.top,
+          width: view.size,
+          height: view.size,
+          // Drives the badge sizing in atlas.css — every badge is a fraction of
+          // this so they scale together with the node's diameter.
+          "--atlas-node-size": `${String(view.size)}px`,
+        } as CSSProperties
+      }
       role={isAvailable ? "button" : "img"}
       tabIndex={isAvailable ? 0 : undefined}
       aria-label={ariaLabel}

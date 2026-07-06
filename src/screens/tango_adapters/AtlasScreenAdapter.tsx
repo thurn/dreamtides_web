@@ -11,6 +11,7 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import { useQuest } from "../../state/quest-context";
 import { logEvent } from "../../logging";
 import { AtlasScreen } from "../../tango/screens/AtlasScreen";
+import { useIsDesktop } from "../../tango/screens/use-is-desktop";
 import { buildAtlasView, atlasChoiceLayer } from "./atlas-view-model";
 
 /**
@@ -25,10 +26,11 @@ export function AtlasScreenAdapter({
 }) {
   const { state, mutations, questContent } = useQuest();
   const { atlas } = state;
+  const isDesktop = useIsDesktop();
 
   const view = useMemo(
-    () => buildAtlasView(atlas, questContent, state),
-    [atlas, questContent, state],
+    () => buildAtlasView(atlas, questContent, state, isDesktop),
+    [atlas, questContent, state, isDesktop],
   );
 
   // Reconstruction log: which atlas was presented, its current frontier, and

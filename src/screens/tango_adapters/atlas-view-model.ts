@@ -42,17 +42,46 @@ export const ATLAS_STAGE_WIDTH = 1080;
 export const ATLAS_STAGE_HEIGHT = 1920;
 
 /**
- * Stage-space rectangle the run graph is fitted into. The vertical span leaves
- * room at the top for the app-shell menu button (and the boss node that sits
- * there) and at the bottom for the persistent QuestStatusBar (and the starter
- * node); the horizontal span keeps the within-layer spread clear of the stage
- * edges.
+ * The platform-varying geometry of the run graph. The whole stage scales
+ * uniformly to fit the viewport, so a phone (narrow) fits by width at a small
+ * scale and a desktop fits at a larger one. To read well on both, the map is
+ * denser and larger on mobile and airier on desktop:
+ *
+ * - `contentRect` is the stage-space rectangle the graph is fitted into. Its
+ *   vertical span leaves room at the top for the app-shell menu button (and the
+ *   boss node) and at the bottom for the persistent QuestStatusBar (and the
+ *   starter node); the horizontal span is the within-layer spread — wider on
+ *   desktop spreads the nodes out, tighter on mobile draws them together.
+ * - `nodeSize` / `anchorNodeSize` are node diameters in stage pixels. Mobile
+ *   draws larger nodes so that, once the smaller mobile fit-scale is applied,
+ *   the on-screen node and its badges stay comfortably above the 48px touch
+ *   floor; the starter and boss read a touch larger than a regular node.
  */
-const CONTENT_RECT = { top: 210, bottom: 1660, left: 150, right: 930 };
+export interface AtlasLayoutProfile {
+  contentRect: { top: number; bottom: number; left: number; right: number };
+  nodeSize: number;
+  anchorNodeSize: number;
+}
 
-/** Node diameter in stage pixels: the starter and boss read a touch larger. */
-const NODE_SIZE = 132;
-const ANCHOR_NODE_SIZE = 150;
+/** Desktop: smaller nodes spread across a wide content rectangle. */
+export const ATLAS_LAYOUT_DESKTOP: AtlasLayoutProfile = {
+  contentRect: { top: 200, bottom: 1670, left: 120, right: 960 },
+  nodeSize: 132,
+  anchorNodeSize: 150,
+};
+
+/** Mobile: larger nodes drawn together, so icons stay legible once the narrow
+ * portrait viewport scales the whole stage down. */
+export const ATLAS_LAYOUT_MOBILE: AtlasLayoutProfile = {
+  contentRect: { top: 250, bottom: 1630, left: 165, right: 915 },
+  nodeSize: 200,
+  anchorNodeSize: 224,
+};
+
+/** Picks the layout profile for the viewport class. */
+export function atlasLayoutProfile(isDesktop: boolean): AtlasLayoutProfile {
+  return isDesktop ? ATLAS_LAYOUT_DESKTOP : ATLAS_LAYOUT_MOBILE;
+}
 
 /** The resolved stage geometry for one node, shared by its face and edges. */
 interface NodeGeometry {
@@ -70,7 +99,9 @@ interface NodeGeometry {
  */
 export function resolveAtlasNodeGeometry(
   atlas: DreamAtlas,
+  profile: AtlasLayoutProfile = ATLAS_LAYOUT_DESKTOP,
 ): Map<string, NodeGeometry> {
+  const { contentRect, nodeSize, anchorNodeSize } = profile;
   const positioned = Object.values(atlas.nodes).filter((node) =>
     Boolean(node.position),
   );
@@ -95,15 +126,15 @@ export function resolveAtlasNodeGeometry(
   // deeper layer rises toward the boss (max x) at the top.
   const mapVertical = (x: number): number =>
     maxX === minX
-      ? (CONTENT_RECT.top + CONTENT_RECT.bottom) / 2
-      : CONTENT_RECT.bottom -
-        ((x - minX) / (maxX - minX)) * (CONTENT_RECT.bottom - CONTENT_RECT.top);
+      ? (contentRect.top + contentRect.bottom) / 2
+      : contentRect.bottom -
+        ((x - minX) / (maxX - minX)) * (contentRect.bottom - contentRect.top);
   // Horizontal (left): the within-layer spread (generator `position.y`), centred.
   const mapHorizontal = (y: number): number =>
     maxY === minY
-      ? (CONTENT_RECT.left + CONTENT_RECT.right) / 2
-      : CONTENT_RECT.left +
-        ((y - minY) / (maxY - minY)) * (CONTENT_RECT.right - CONTENT_RECT.left);
+      ? (contentRect.left + contentRect.right) / 2
+      : contentRect.left +
+        ((y - minY) / (maxY - minY)) * (contentRect.right - contentRect.left);
 
   for (const node of positioned) {
     const isStarter = node.id === atlas.startingNodeId;
@@ -111,7 +142,7 @@ export function resolveAtlasNodeGeometry(
     geometry.set(node.id, {
       left: mapHorizontal(node.position.y),
       top: mapVertical(node.position.x),
-      size: isStarter || isBoss ? ANCHOR_NODE_SIZE : NODE_SIZE,
+      size: isStarter || isBoss ? anchorNodeSize : nodeSize,
       isStarter,
       isBoss,
     });
@@ -155,8 +186,11 @@ export function atlasEdgeKind(
 }
 
 /** Builds the forward connectors, styled from the endpoint states. */
-export function buildAtlasMapEdges(atlas: DreamAtlas): AtlasMapEdge[] {
-  const geometry = resolveAtlasNodeGeometry(atlas);
+export function buildAtlasMapEdges(
+  atlas: DreamAtlas,
+  profile: AtlasLayoutProfile = ATLAS_LAYOUT_DESKTOP,
+): AtlasMapEdge[] {
+  const geometry = resolveAtlasNodeGeometry(atlas, profile);
   const choiceLayer = atlasChoiceLayer(atlas);
   const edges: AtlasMapEdge[] = [];
   for (const from of Object.values(atlas.nodes)) {
@@ -259,8 +293,9 @@ function buildDreamsignModel(
 export function buildAtlasMapNodes(
   atlas: DreamAtlas,
   questContent: QuestContent,
+  profile: AtlasLayoutProfile = ATLAS_LAYOUT_DESKTOP,
 ): AtlasMapNode[] {
-  const geometry = resolveAtlasNodeGeometry(atlas);
+  const geometry = resolveAtlasNodeGeometry(atlas, profile);
   const items: AtlasMapNode[] = [];
   for (const node of Object.values(atlas.nodes)) {
     const geo = geometry.get(node.id);
@@ -337,12 +372,14 @@ export function buildAtlasView(
   atlas: DreamAtlas,
   questContent: QuestContent,
   state: QuestState,
+  isDesktop = false,
 ): AtlasView {
+  const profile = atlasLayoutProfile(isDesktop);
   return {
     stageWidth: ATLAS_STAGE_WIDTH,
     stageHeight: ATLAS_STAGE_HEIGHT,
-    nodes: buildAtlasMapNodes(atlas, questContent),
-    edges: buildAtlasMapEdges(atlas),
+    nodes: buildAtlasMapNodes(atlas, questContent, profile),
+    edges: buildAtlasMapEdges(atlas, profile),
     hud: buildAtlasHudView(state),
   };
 }
