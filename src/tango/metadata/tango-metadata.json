@@ -2010,6 +2010,131 @@
       "required": false,
       "defaultValue": "false",
       "description": "Stretch to fill the container width, each segment sharing it equally."
+    },
+    {
+      "name": "treatment",
+      "tsType": "ControlTreatment",
+      "unionMembers": [
+        "accent",
+        "flat",
+        "sprite",
+        "glass",
+        "outline"
+      ],
+      "required": false,
+      "defaultValue": "accent",
+      "description": "Surface material for the track and its segments — one of the shared control\ntreatments (sprite / flat / glass / accent / outline). Default 'accent':\nthe liquid-glass track with a violet accent-gradient selected segment."
+    }
+  ],
+  "Select": [
+    {
+      "name": "options",
+      "tsType": "SelectOption[]",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The choices shown in the menu.",
+      "nested": {
+        "name": "SelectOption",
+        "fields": [
+          {
+            "name": "value",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          },
+          {
+            "name": "label",
+            "tsType": "string",
+            "optional": false,
+            "description": ""
+          }
+        ]
+      }
+    },
+    {
+      "name": "value",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "The currently-selected option's value."
+    },
+    {
+      "name": "onChange",
+      "tsType": "((value: string) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Fires with the newly-selected value when the user picks a menu item."
+    },
+    {
+      "name": "eyebrow",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Small uppercase eyebrow shown before the current label inside the trigger\n(e.g. \"SORT\"), naming what the dropdown controls. Omit for a bare value."
+    },
+    {
+      "name": "leadingGlyph",
+      "tsType": "Glyph",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Optional leading glyph drawn at the start of the trigger."
+    },
+    {
+      "name": "size",
+      "tsType": "SelectSize",
+      "unionMembers": [
+        "sm",
+        "md"
+      ],
+      "required": false,
+      "defaultValue": "md",
+      "description": "Height/scale. Default 'md'."
+    },
+    {
+      "name": "full",
+      "tsType": "boolean",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": "false",
+      "description": "Stretch the trigger to fill the container width."
+    },
+    {
+      "name": "align",
+      "tsType": "\"start\" | \"end\"",
+      "unionMembers": [
+        "start",
+        "end"
+      ],
+      "required": false,
+      "defaultValue": "start",
+      "description": "Which trigger edge the menu aligns to. 'start' (default) opens flush to the\nleading edge; 'end' opens flush to the trailing edge — use it when the\nSelect sits against the right side of a bar so the menu stays on-screen."
+    },
+    {
+      "name": "treatment",
+      "tsType": "ControlTreatment",
+      "unionMembers": [
+        "accent",
+        "flat",
+        "sprite",
+        "glass",
+        "outline"
+      ],
+      "required": false,
+      "defaultValue": "accent",
+      "description": "Surface material for the trigger — one of the shared control treatments.\nDefault 'accent'. The menu stays a solid raised popover regardless."
+    },
+    {
+      "name": "ariaLabel",
+      "tsType": "string",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Accessible label for the trigger (defaults to the eyebrow when present)."
     }
   ],
   "SiteNode": [

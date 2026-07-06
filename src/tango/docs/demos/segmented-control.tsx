@@ -11,6 +11,7 @@ import {
   SegmentedControl,
   type SegmentedOption,
 } from "../../components/controls/SegmentedControl";
+import type { ControlTreatment } from "../../components/controls/control-treatment";
 import type { TangoComponent } from "../registry";
 
 const OPTIONS: SegmentedOption[] = [
@@ -31,6 +32,7 @@ interface SegmentedControlDemoArgs {
   value?: string;
   size?: "sm" | "md";
   full?: boolean;
+  treatment?: ControlTreatment;
 }
 
 /**
@@ -45,6 +47,7 @@ function SegmentedControlDemo({
   value,
   size = "md",
   full = false,
+  treatment = "accent",
 }: SegmentedControlDemoArgs) {
   const [selected, setSelected] = useState(() => value ?? firstValue(options));
 
@@ -61,6 +64,7 @@ function SegmentedControlDemo({
       onChange={setSelected}
       size={size}
       full={full}
+      treatment={treatment}
     />
   );
 }
@@ -69,7 +73,9 @@ export const segmentedControlDemo: TangoComponent = {
   id: "segmented-control",
   title: "Segmented Control",
   blurb:
-    "The compact tab and filter switch used for type filters, sort direction, and small mode toggles. The selected segment carries the violet accent fill on a liquid-glass track.",
+    "The compact tab and filter switch used for type filters, sort direction, and small mode toggles. The `treatment` prop picks its surface material from the shared control vocabulary — the same one Select renders from — so a filter and a sort dropdown side by side read as one cluster.",
+  callout:
+    "Choose the `treatment` once for a whole control cluster, not per control. The default 'accent' is the liquid-glass pill with a violet selected segment; sprite / flat / glass / outline are the sibling materials.",
   group: "Components",
   docName: "SegmentedControl",
   Component: SegmentedControlDemo,
@@ -87,6 +93,16 @@ const [filter, setFilter] = useState("All");
   onChange={setFilter}
 />`,
     },
+    {
+      label: "With a treatment",
+      note: "Pass the shared surface material chosen for the control cluster.",
+      code: `<SegmentedControl
+  treatment="sprite"
+  options={["All", "Characters", "Events"]}
+  value={filter}
+  onChange={setFilter}
+/>`,
+    },
   ],
   demo: {
     defaultArgs: {
@@ -94,6 +110,7 @@ const [filter, setFilter] = useState("All");
       value: "All",
       size: "md",
       full: false,
+      treatment: "accent",
     },
   },
 };

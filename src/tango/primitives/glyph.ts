@@ -73,6 +73,12 @@ export const GLYPHS = {
   infoFilled: g("bxf bx-info-circle"),
   chevronLeft: g("bx bx-chevron-left"),
   chevronRight: g("bx bx-chevron-right"),
+  /** The downward chevron on a closed Select trigger; rotates open on reveal. */
+  chevronDown: g("bx bx-chevron-down"),
+  /** The two-way sort mark used as the Select eyebrow on a sort control. */
+  sort: g("bx bx-sort-alt-2"),
+  /** The funnel mark used as the eyebrow / leading glyph on a filter control. */
+  filter: g("bx bx-filter"),
   /** The filled star that heads a curated / signature item. */
   star: g("bxf bx-star"),
 } as const;

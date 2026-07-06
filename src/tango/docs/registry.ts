@@ -22,6 +22,7 @@ import { questStatusBarDemo } from "./demos/quest-status-bar";
 import { resourceChipDemo } from "./demos/resource-chip";
 import { rulesTextDemo } from "./demos/rules-text";
 import { segmentedControlDemo } from "./demos/segmented-control";
+import { selectDemo } from "./demos/select";
 import { siteNodeDemo } from "./demos/site-node";
 import { statTileDemo } from "./demos/stat-tile";
 import { tideClusterDemo } from "./demos/tide-cluster";
@@ -114,6 +115,7 @@ export const TANGO_COMPONENTS: TangoComponent[] = [
   resourceChipDemo,
   buttonDemo,
   segmentedControlDemo,
+  selectDemo,
   statTileDemo,
   tidePillDemo,
   tideDiscDemo,

@@ -6,7 +6,9 @@
 
 Components · Live demo & interactive props: `/tango#/segmented-control`
 
-The compact tab and filter switch used for type filters, sort direction, and small mode toggles. The selected segment carries the violet accent fill on a liquid-glass track.
+The compact tab and filter switch used for type filters, sort direction, and small mode toggles. The `treatment` prop picks its surface material from the shared control vocabulary — the same one Select renders from — so a filter and a sort dropdown side by side read as one cluster.
+
+> **Guidance:** Choose the `treatment` once for a whole control cluster, not per control. The default 'accent' is the liquid-glass pill with a violet selected segment; sprite / flat / glass / outline are the sibling materials.
 
 ## Props
 
@@ -17,8 +19,11 @@ The compact tab and filter switch used for type filters, sort direction, and sma
 | `onChange` | `((value: string) => void)` | no | — | Fires with the newly-selected segment's value when the user switches. |
 | `size` | `SegmentedControlSize` = `"sm" \| "md"` | no | `md` | Height/scale. Default 'md'. |
 | `full` | `boolean` | no | `false` | Stretch to fill the container width, each segment sharing it equally. |
+| `treatment` | `ControlTreatment` = `"accent" \| "flat" \| "sprite" \| "glass" \| "outline"` | no | `accent` | Surface material for the track and its segments — one of the shared control treatments (sprite / flat / glass / accent / outline). Default 'accent': the liquid-glass track with a violet accent-gradient selected segment. |
 
 ## Usage
+
+### Variant 1
 
 A controlled toggle: own the selected value and update it from `onChange`. `options` accepts plain strings or `{ value, label }` pairs.
 
@@ -29,6 +34,19 @@ import { SegmentedControl } from "src/tango/components/controls/SegmentedControl
 const [filter, setFilter] = useState("All");
 
 <SegmentedControl
+  options={["All", "Characters", "Events"]}
+  value={filter}
+  onChange={setFilter}
+/>
+```
+
+### With a treatment
+
+Pass the shared surface material chosen for the control cluster.
+
+```tsx
+<SegmentedControl
+  treatment="sprite"
   options={["All", "Characters", "Events"]}
   value={filter}
   onChange={setFilter}

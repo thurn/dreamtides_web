@@ -9,17 +9,20 @@
 // dismisses the zoom so the grid scrolls, so browsing and inspecting never
 // fight.
 //
-// The top of the screen keeps a reserved band for the filtering/searching
-// controls a later pass will add; this first pass renders only the title, the
-// card count, and the close control there.
+// The top of the screen holds a control band — the title, the card count, the
+// close control, and the filter/sort controls: a type filter (All / Characters
+// / Events) and a sort dropdown (deck order, cost, spark, name). Filter and sort
+// are local presentation state; the pure `mobile-deck-filter` module derives the
+// visible grid from the full deck and that state.
 //
 // PURE: renders from a view-model and reports dismissal through `onClose`. All
-// state here is local presentation state (which card is being peeked). The
+// state here is local presentation state (which card is being peeked, the
+// filter/sort selection). The
 // finger-clearing placement math lives in the unit-tested `mobile-deck-peek`
 // module, whose guarantee is proven over a full touch-point sweep by
 // scripts/deck-peek-clearance-analysis.mjs.
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import type { CardData } from "../../types/cards";
 import type { CardTransfigurationDisplay } from "../../runtime/transfiguration-display";
@@ -27,6 +30,12 @@ import { GameCard } from "../components/card/CardView";
 import { Pressable } from "../primitives/Pressable";
 import { groupPanelStyle } from "../components/controls/GroupPanel";
 import { GlowIcon } from "../components/controls/GlowIcon";
+import { SegmentedControl } from "../components/controls/SegmentedControl";
+import { Select } from "../components/controls/Select";
+import {
+  type ControlTreatment,
+  CONTROL_TREATMENTS,
+} from "../components/controls/control-treatment";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
@@ -35,6 +44,16 @@ import {
   peekWidthForViewport,
   type PeekRect,
 } from "./mobile-deck-peek";
+import {
+  type DeckFilterSort,
+  type DeckSortId,
+  type DeckTypeFilter,
+  DECK_SORT_OPTIONS,
+  DECK_TYPE_FILTER_OPTIONS,
+  DEFAULT_DECK_FILTER_SORT,
+  deckSortLabel,
+  filterAndSortDeckCards,
+} from "./mobile-deck-filter";
 
 /** One deck card, resolved for display (transfiguration/type/stat applied). */
 export interface DeckCardView {
@@ -105,11 +124,27 @@ interface PeekState {
 }
 
 /**
- * The narrow-viewport deck viewer: a reserved control band, then a
- * press-to-zoom grid of the deck's cards.
+ * The narrow-viewport deck viewer: a control band (title, count, close, and the
+ * filter/sort controls), then a press-to-zoom grid of the deck's cards.
  */
 export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
   const [peek, setPeek] = useState<PeekState | null>(null);
+  const [filterSort, setFilterSort] = useState<DeckFilterSort>(
+    DEFAULT_DECK_FILTER_SORT,
+  );
+  // Exploration knobs (dev only): the control surface material and the control
+  // layout. The floating switcher below flips these live so the treatment
+  // options can be compared on the real screen. `DEFAULT_CONTROL_TREATMENT` is
+  // what production renders.
+  const [treatment, setTreatment] = useState<ControlTreatment>(
+    DEFAULT_CONTROL_TREATMENT,
+  );
+  const [structure, setStructure] = useState<ControlStructure>("stacked");
+
+  const visibleCards = useMemo(
+    () => filterAndSortDeckCards(view.cards, filterSort),
+    [view.cards, filterSort],
+  );
 
   const dismissPeek = useCallback(() => {
     setPeek(null);
@@ -208,6 +243,14 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
         title={view.title}
         count={view.cards.length}
         onClose={onClose}
+        controls={
+          <DeckControls
+            filterSort={filterSort}
+            onFilterSortChange={setFilterSort}
+            treatment={treatment}
+            structure={structure}
+          />
+        }
       />
 
       <div
@@ -226,6 +269,8 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
       >
         {view.cards.length === 0 ? (
           <EmptyDeck />
+        ) : visibleCards.length === 0 ? (
+          <NoMatches />
         ) : (
           <div
             style={{
@@ -234,7 +279,7 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
               gap: token("--space-4"),
             }}
           >
-            {view.cards.map((cardView) => (
+            {visibleCards.map((cardView) => (
               <DeckTile
                 key={cardView.entryId}
                 cardView={cardView}
@@ -246,6 +291,15 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
       </div>
 
       {peek !== null && <PeekOverlay peek={peek} />}
+
+      {import.meta.env.DEV && (
+        <ControlTreatmentSwitcher
+          treatment={treatment}
+          structure={structure}
+          onTreatmentChange={setTreatment}
+          onStructureChange={setStructure}
+        />
+      )}
     </div>
   );
 }
@@ -301,22 +355,23 @@ const CONTROL_BUTTON_PX = 48;
 
 /**
  * The top band: the corner controls, a centered "Deck" title, the card count,
- * and the reserved searching/filtering slot. The top-left corner is left clear
- * for the dreamscape utility menu, which lifts above this overlay while it is
- * open (see `DreamscapeQuestMenu`'s `elevated`); the close control on the right
- * mirrors that menu button's look. The title sits in line with the corner
- * controls, and only drops below them on screens whose center cutout (notch /
- * Dynamic Island) it would otherwise collide with. The band keeps a fixed
- * height so the grid below it does not shift when the real controls arrive.
+ * and the filter/sort `controls` row. The top-left corner is left clear for the
+ * dreamscape utility menu, which lifts above this overlay while it is open (see
+ * `DreamscapeQuestMenu`'s `elevated`); the close control on the right mirrors
+ * that menu button's look. The title sits in line with the corner controls, and
+ * only drops below them on screens whose center cutout (notch / Dynamic Island)
+ * it would otherwise collide with.
  */
 function TopBand({
   title,
   count,
   onClose,
+  controls,
 }: {
   title: string;
   count: number;
   onClose: () => void;
+  controls: React.ReactNode;
 }) {
   const { inset: topInset, probeRef } = useTopSafeInset();
   const hasCenterCutout = topInset >= CENTER_CUTOUT_MIN_INSET_PX;
@@ -420,27 +475,90 @@ function TopBand({
         </div>
       </div>
 
-      {/* Reserved control slot: the searching/filtering controls land here in a
-          later pass. Rendered as a visible field so the space reads as a control
-          slot, and held at a fixed height so the grid start point stays put. */}
+      {/* The filter/sort control row. */}
+      <div style={{ marginTop: token("--space-5") }}>{controls}</div>
+    </div>
+  );
+}
+
+/** How the filter/sort controls are laid out within the band. */
+type ControlStructure = "stacked" | "inline";
+
+/** The control treatment production renders (the switcher previews the rest). */
+const DEFAULT_CONTROL_TREATMENT: ControlTreatment = "accent";
+
+/**
+ * The deck's filter + sort controls: a type filter (All / Characters / Events)
+ * and a sort dropdown, both wearing the chosen control `treatment`. `structure`
+ * chooses the layout — 'stacked' gives the filter its own full-width row above
+ * the sort dropdown; 'inline' sets the filter and the sort side by side.
+ */
+function DeckControls({
+  filterSort,
+  onFilterSortChange,
+  treatment,
+  structure,
+}: {
+  filterSort: DeckFilterSort;
+  onFilterSortChange: (next: DeckFilterSort) => void;
+  treatment: ControlTreatment;
+  structure: ControlStructure;
+}) {
+  const typeFilter = (
+    <SegmentedControl
+      full={structure === "stacked"}
+      treatment={treatment}
+      options={DECK_TYPE_FILTER_OPTIONS.map((option) => ({
+        value: option.value,
+        label: option.label,
+      }))}
+      value={filterSort.typeFilter}
+      onChange={(value) =>
+        onFilterSortChange({
+          ...filterSort,
+          typeFilter: value as DeckTypeFilter,
+        })
+      }
+    />
+  );
+
+  const sort = (
+    <Select
+      eyebrow="Sort"
+      leadingGlyph={GLYPHS.sort}
+      treatment={treatment}
+      align="end"
+      ariaLabel={`Sort: ${deckSortLabel(filterSort.sort)}`}
+      options={DECK_SORT_OPTIONS.map((option) => ({
+        value: option.value,
+        label: option.label,
+      }))}
+      value={filterSort.sort}
+      onChange={(value) =>
+        onFilterSortChange({ ...filterSort, sort: value as DeckSortId })
+      }
+    />
+  );
+
+  if (structure === "inline") {
+    return (
       <div
-        aria-hidden="true"
         style={{
-          marginTop: token("--space-5"),
-          height: token("--control-h"),
-          borderRadius: token("--radius-control"),
-          background: token("--surface-glass-strong"),
-          border: `1px solid ${token("--border-soft")}`,
           display: "flex",
           alignItems: "center",
-          paddingLeft: token("--space-6"),
-          paddingRight: token("--space-6"),
-          font: token("--t-body"),
-          color: token("--text-muted"),
+          gap: token("--space-3"),
         }}
       >
-        Search &amp; Filter
+        <div style={{ flex: 1, minWidth: 0 }}>{typeFilter}</div>
+        {sort}
       </div>
+    );
+  }
+
+  return (
+    <div style={{ display: "grid", gap: token("--space-3") }}>
+      {typeFilter}
+      <div style={{ display: "flex", justifyContent: "flex-end" }}>{sort}</div>
     </div>
   );
 }
@@ -535,6 +653,16 @@ function PeekOverlay({ peek }: { peek: PeekState }) {
 
 /** Shown when the deck has no cards. */
 function EmptyDeck() {
+  return <GridPlaceholder message="Your deck is empty." />;
+}
+
+/** Shown when a filter hides every card in a non-empty deck. */
+function NoMatches() {
+  return <GridPlaceholder message="No cards match this filter." />;
+}
+
+/** The centered muted message shared by the empty / no-match grid states. */
+function GridPlaceholder({ message }: { message: string }) {
   return (
     <div
       style={{
@@ -546,7 +674,89 @@ function EmptyDeck() {
         textAlign: "center",
       }}
     >
-      Your deck is empty.
+      {message}
+    </div>
+  );
+}
+
+/** Human labels for the treatment segments in the dev switcher. */
+const TREATMENT_LABELS: Record<ControlTreatment, string> = {
+  sprite: "Sprite",
+  flat: "Flat",
+  glass: "Glass",
+  accent: "Accent",
+  outline: "Outline",
+};
+
+/**
+ * Dev-only floating switcher that flips the control treatment and layout live,
+ * so the treatment options can be compared on the real deck screen. Rendered
+ * only under `import.meta.env.DEV`; it is exploration scaffolding, removed once
+ * a treatment is chosen. Built from Tango's own SegmentedControl so it needs no
+ * raw-element lint exemptions.
+ */
+function ControlTreatmentSwitcher({
+  treatment,
+  structure,
+  onTreatmentChange,
+  onStructureChange,
+}: {
+  treatment: ControlTreatment;
+  structure: ControlStructure;
+  onTreatmentChange: (next: ControlTreatment) => void;
+  onStructureChange: (next: ControlStructure) => void;
+}) {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        left: "50%",
+        transform: "translateX(-50%)",
+        bottom: `calc(${token("--safe-bottom")} + ${token("--space-3")})`,
+        zIndex: 70,
+        display: "grid",
+        gap: token("--space-2"),
+        justifyItems: "center",
+        maxWidth: `calc(100vw - ${token("--space-6")})`,
+        padding: `${token("--space-2")} ${token("--space-3")}`,
+        borderRadius: token("--radius-panel"),
+        background: token("--surface-glass-strong"),
+        border: `1px solid ${token("--border-soft")}`,
+        boxShadow: token("--shadow-lg"),
+      }}
+    >
+      <div
+        style={{
+          font: token("--t-eyebrow"),
+          letterSpacing: "0.12em",
+          textTransform: "uppercase",
+          color: token("--text-muted"),
+        }}
+      >
+        Treatment (dev)
+      </div>
+      <div style={{ maxWidth: "100%", overflowX: "auto" }}>
+        <SegmentedControl
+          size="sm"
+          treatment="flat"
+          options={CONTROL_TREATMENTS.map((value) => ({
+            value,
+            label: TREATMENT_LABELS[value],
+          }))}
+          value={treatment}
+          onChange={(value) => onTreatmentChange(value as ControlTreatment)}
+        />
+      </div>
+      <SegmentedControl
+        size="sm"
+        treatment="flat"
+        options={[
+          { value: "stacked", label: "Stacked" },
+          { value: "inline", label: "Inline" },
+        ]}
+        value={structure}
+        onChange={(value) => onStructureChange(value as ControlStructure)}
+      />
     </div>
   );
 }
