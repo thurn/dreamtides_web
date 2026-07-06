@@ -99,7 +99,10 @@ const CONTENT_MAX_WIDTH_PX = 1180;
 const SIDEBAR_WIDTH_PX = 268;
 
 /** Edge length of a collected-dreamsign art tile in the sidebar. */
-const DREAMSIGN_TILE_PX = 96;
+const DREAMSIGN_TILE_PX = 62;
+
+/** Fixed width of the Dreamcaller portrait in the sidebar profile. */
+const DREAMCALLER_PORTRAIT_PX = 196;
 
 /** Edge length of the corner close disc, matching the glass control height. */
 const CLOSE_BUTTON_PX = 40;
@@ -200,6 +203,7 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
           <Sidebar
             dreamcaller={view.dreamcaller}
             dreamsigns={view.dreamsigns}
+            maxDreamsigns={view.maxDreamsigns}
             stageRef={stageRef}
           />
           <main
@@ -253,17 +257,50 @@ function GlassBackdrop() {
 }
 
 /** A small uppercase monospaced section eyebrow. */
-function Eyebrow({ children }: { children: ReactNode }) {
+function Eyebrow({
+  children,
+  tone = "primary",
+}: {
+  children: ReactNode;
+  tone?: "primary" | "secondary";
+}) {
   return (
     <div
       style={{
         font: token("--t-eyebrow"),
         letterSpacing: token("--tracking-eyebrow"),
         textTransform: "uppercase",
-        color: token("--text-on-accent"),
+        color: token(tone === "primary" ? "--text-on-accent" : "--text-secondary"),
       }}
     >
       {children}
+    </div>
+  );
+}
+
+/** The sidebar's consistent section header: label first, metadata tucked right. */
+function SidebarSectionHeader({
+  label,
+  meta,
+}: {
+  label: string;
+  meta?: string;
+}) {
+  return (
+    <div
+      style={{
+        display: "flex",
+        alignItems: "baseline",
+        justifyContent: "space-between",
+        gap: token("--space-3"),
+      }}
+    >
+      <Eyebrow>{label}</Eyebrow>
+      {meta !== undefined && (
+        <div style={{ font: token("--t-caption"), color: token("--text-secondary") }}>
+          {meta}
+        </div>
+      )}
     </div>
   );
 }
@@ -324,10 +361,12 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
 function Sidebar({
   dreamcaller,
   dreamsigns,
+  maxDreamsigns,
   stageRef,
 }: {
   dreamcaller: DeckDreamcallerView | null;
   dreamsigns: DreamsignData[];
+  maxDreamsigns: number;
   stageRef: RefObject<HTMLDivElement | null>;
 }) {
   return (
@@ -339,11 +378,15 @@ function Sidebar({
         padding: token("--space-6"),
         display: "flex",
         flexDirection: "column",
-        gap: token("--space-8"),
+        gap: token("--space-7"),
       }}
     >
       {dreamcaller !== null && <DreamcallerBlock dreamcaller={dreamcaller} />}
-      <DreamsignsBlock dreamsigns={dreamsigns} stageRef={stageRef} />
+      <DreamsignsBlock
+        dreamsigns={dreamsigns}
+        maxDreamsigns={maxDreamsigns}
+        stageRef={stageRef}
+      />
     </aside>
   );
 }
@@ -352,17 +395,23 @@ function Sidebar({
 function DreamcallerBlock({ dreamcaller }: { dreamcaller: DeckDreamcallerView }) {
   return (
     <section
-      style={{ display: "flex", flexDirection: "column", gap: token("--space-4") }}
+      style={{ display: "flex", flexDirection: "column", gap: token("--space-3") }}
     >
-      <Eyebrow>Dreamcaller</Eyebrow>
-      <DreamcallerPortrait dreamcaller={dreamcaller} variant="panel" />
+      <SidebarSectionHeader label="Dreamcaller" />
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <DreamcallerPortrait
+          dreamcaller={dreamcaller}
+          variant="panel"
+          size={DREAMCALLER_PORTRAIT_PX}
+        />
+      </div>
       <div
         style={{ display: "flex", flexDirection: "column", gap: token("--space-1") }}
       >
         <div style={{ font: token("--t-title-sm"), color: token("--text-primary") }}>
           {dreamcaller.name}
         </div>
-        <div style={{ font: token("--t-body-sm"), color: token("--text-on-accent") }}>
+        <div style={{ font: token("--t-caption"), color: token("--text-secondary") }}>
           {dreamcaller.title}
         </div>
       </div>
@@ -378,16 +427,21 @@ function DreamcallerBlock({ dreamcaller }: { dreamcaller: DeckDreamcallerView })
 /** The collected dreamsigns as hoverable art tiles. */
 function DreamsignsBlock({
   dreamsigns,
+  maxDreamsigns,
   stageRef,
 }: {
   dreamsigns: DreamsignData[];
+  maxDreamsigns: number;
   stageRef: RefObject<HTMLDivElement | null>;
 }) {
   return (
     <section
       style={{ display: "flex", flexDirection: "column", gap: token("--space-4") }}
     >
-      <Eyebrow>Dreamsigns</Eyebrow>
+      <SidebarSectionHeader
+        label="Dreamsigns"
+        meta={`${String(dreamsigns.length)} / ${String(maxDreamsigns)}`}
+      />
       {dreamsigns.length === 0 ? (
         <div style={{ font: token("--t-body-sm"), color: token("--text-muted") }}>
           None collected yet.
@@ -396,8 +450,9 @@ function DreamsignsBlock({
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(2, 1fr)",
-            gap: token("--space-4"),
+            gridTemplateColumns: `repeat(3, ${String(DREAMSIGN_TILE_PX)}px)`,
+            gap: token("--space-3"),
+            justifyContent: "center",
             justifyItems: "center",
           }}
         >

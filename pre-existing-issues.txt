@@ -182,3 +182,14 @@ Running `npm install` in a fresh worktree reports 15 vulnerabilities in the
 current dependency tree: 2 low, 6 moderate, and 7 high. The install succeeds,
 but the audit output recommends `npm audit fix` for non-breaking updates and
 `npm audit fix --force` for the remaining breaking-change path.
+
+Pre-existing: Desktop deck viewer open logging repeated while mounted
+=====================================================================
+
+Found while QAing the Tango desktop deck viewer sidebar. The
+`desktop_deck_viewer_opened` event was emitted every few seconds while the
+overlay stayed open because the adapter effect depended on reminted view-model
+objects from quest state refreshes. The branch that recorded this issue gates
+the event on the closed-to-open transition; if this regresses, the browser
+console shows repeated `desktop_deck_viewer_opened` records for one overlay
+session.

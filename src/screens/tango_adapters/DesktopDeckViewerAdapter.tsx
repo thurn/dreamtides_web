@@ -5,7 +5,7 @@
 // logic lives in the pure builder (`desktop-deck-view-model.ts`); the screen
 // itself stays pure.
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { useQuest } from "../../state/quest-context";
 import { logEvent } from "../../logging";
 import { DesktopDeckViewer } from "../../tango/screens/DesktopDeckViewer";
@@ -26,6 +26,7 @@ export function DesktopDeckViewerAdapter({
   onClose,
 }: DesktopDeckViewerAdapterProps) {
   const { state, questContent } = useQuest();
+  const wasOpenRef = useRef(false);
 
   const view = useMemo(
     () =>
@@ -46,18 +47,15 @@ export function DesktopDeckViewerAdapter({
   );
 
   useEffect(() => {
-    if (!isOpen) return;
+    const wasOpen = wasOpenRef.current;
+    wasOpenRef.current = isOpen;
+    if (!isOpen || wasOpen) return;
     logEvent("desktop_deck_viewer_opened", {
       cardCount: view.cards.length,
       dreamsignCount: view.dreamsigns.length,
       hasDreamcaller: view.dreamcaller !== null,
     });
-  }, [
-    isOpen,
-    view.cards.length,
-    view.dreamsigns.length,
-    view.dreamcaller,
-  ]);
+  }, [isOpen, view.cards.length, view.dreamsigns.length, view.dreamcaller]);
 
   if (!isOpen) return null;
   return <DesktopDeckViewer view={view} onClose={onClose} />;
