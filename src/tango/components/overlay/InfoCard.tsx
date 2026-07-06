@@ -367,9 +367,11 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
             height: 150,
             marginBottom: 12,
             overflow: "hidden",
-            borderRadius: token("--radius-control"),
-            // faithfully-copied inset hairline highlight, matching the object
-            // variant's framed portrait so both media frames read identically.
+            // Match the shell's own corner radius so the inset image and the
+            // card read as concentric rounded rectangles, not two mismatched
+            // radii.
+            borderRadius: token("--radius-popover"),
+            // faithfully-copied inset hairline highlight for the media frame.
             boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.08)",
           }}
         >
