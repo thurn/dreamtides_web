@@ -33,8 +33,9 @@ import { token } from "../../primitives/tokens";
  *                highest-contrast treatment; reads as flat modern UI.
  *  - `glass`   — a liquid-glass pane that blurs and refracts the scene behind
  *                it, with a neutral frosted selected segment (no brand violet).
- *  - `accent`  — the same liquid glass, but the selected segment carries the
- *                violet accent gradient and glow. The brand-forward treatment.
+ *  - `accent`  — the brand-forward treatment: a segmented track keeps the glass
+ *                pane with a violet selected segment, while a lone dropdown
+ *                button wears the violet accent gradient itself (white label).
  *  - `outline` — no track at all; each segment is an individually outlined
  *                pill floating over the art. The lightest-chrome treatment.
  */
@@ -236,14 +237,22 @@ export function controlChrome(treatment: ControlTreatment): ControlChrome {
       };
     }
     case "accent": {
-      const track: CSSProperties = {
-        ...glassTrack(),
-        borderRadius: token("--radius-pill"),
-      };
+      // The segmented track is liquid glass (the selected segment carries the
+      // brand violet); a lone Select trigger, which has no selected segment to
+      // color, instead wears the violet accent gradient itself so it reads as
+      // the brand button — clearly apart from the neutral `glass` trigger.
       return {
-        track,
-        trigger: track,
-        triggerGlyphColor: "text-secondary",
+        track: { ...glassTrack(), borderRadius: token("--radius-pill") },
+        trigger: {
+          ...accentActive(),
+          border: "none",
+          borderRadius: token("--radius-pill"),
+        },
+        triggerText: {
+          color: token("--text-on-accent"),
+          textShadow: "0 1px 2px rgba(20, 2, 38, 0.55)",
+        },
+        triggerGlyphColor: "text-on-accent",
         trackPadding: 3,
         segmentGap: 2,
         segmentRadius: token("--radius-pill"),
