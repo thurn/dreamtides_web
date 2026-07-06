@@ -69,8 +69,18 @@ describe("peekWidthForViewport", () => {
 });
 
 describe("computePeekBox", () => {
-  it("pins the card to the top of the safe area", () => {
-    const box = computePeekBox(layout({ width: 393, height: 852 }, { x: 150, y: 460 }, widthFor(393)));
+  it("sits just above the finger for a low press, not up at the top", () => {
+    const width = widthFor(393);
+    const box = computePeekBox(layout({ width: 393, height: 852 }, { x: 150, y: 700 }, width));
+    // The card is placed just above the finger (well below the safe-area top),
+    // so a bottom-of-deck card pops up near the thumb rather than at the top.
+    expect(box.top).toBeGreaterThan(ENV.safeTop + 100);
+    // Its bottom edge (the rules text) clears the top of the finger circle.
+    expect(box.top + box.height).toBeLessThanOrEqual(700 - FINGER_RADIUS_PX + 0.5);
+  });
+
+  it("pins the card to the top when the finger is too high to fit above it", () => {
+    const box = computePeekBox(layout({ width: 393, height: 852 }, { x: 60, y: 215 }, widthFor(393)));
     expect(box.top).toBeCloseTo(ENV.safeTop, 5);
   });
 
