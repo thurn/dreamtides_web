@@ -16,52 +16,83 @@ function baseInput(tile: PeekRect): PeekLayoutInput {
     gap: 20,
     sideMargin: 18,
     aspect: 5 / 7,
+    targetWidth: 230,
   };
 }
 
 describe("computePeekBox", () => {
-  it("places the enlarged card above a tile pressed low on the screen", () => {
-    // A tile near the bottom leaves far more room above than below.
-    const peek = computePeekBox(baseInput({ left: 100, top: 700, width: 83, height: 116 }));
-    expect(peek.top + peek.height).toBeLessThanOrEqual(700 - 20);
+  it("enlarges every card to the same fixed size regardless of position", () => {
+    // The size is a property of the target width, not of where the tile sits,
+    // so a card near the top and a card near the bottom pop to the same scale.
+    const high = computePeekBox(baseInput({ left: 155, top: 90, width: 83, height: 116 }));
+    const low = computePeekBox(baseInput({ left: 155, top: 700, width: 83, height: 116 }));
+    expect(high.width).toBeCloseTo(low.width, 5);
+    expect(high.height).toBeCloseTo(low.height, 5);
+    expect(high.width).toBeCloseTo(230, 5);
   });
 
-  it("places the enlarged card below a tile pressed high on the screen", () => {
-    const peek = computePeekBox(baseInput({ left: 100, top: 90, width: 83, height: 116 }));
-    expect(peek.top).toBeGreaterThanOrEqual(90 + 116 + 20);
+  it("caps the card to the viewport width when the target will not fit", () => {
+    const narrow: PeekLayoutInput = {
+      ...baseInput({ left: 10, top: 400, width: 60, height: 84 }),
+      viewport: { width: 260, height: 852 },
+    };
+    const peek = computePeekBox(narrow);
+    // 260 - 2*18 = 224 available; the 230 target clamps down to it.
+    expect(peek.width).toBeCloseTo(224, 5);
   });
 
-  it("never overlaps the gap-padded band around the finger", () => {
-    // Sweep the tile down the screen; the enlarged card must always clear the
-    // padded tile band, so the finger stays uncovered wherever it presses.
+  it("rises fully above a tile pressed low, clearing the finger", () => {
+    const tile = { left: 155, top: 700, width: 83, height: 116 };
+    const peek = computePeekBox(baseInput(tile));
+    // The whole enlarged card (rules text and all) sits above the tile band.
+    expect(peek.top + peek.height).toBeLessThanOrEqual(tile.top - 20 + 0.5);
+  });
+
+  it("never moves the card below the pressed tile", () => {
+    // Sweep the tile down the screen; the enlarged card's top edge must never
+    // drop below the tile's top edge — pressing a card only ever pops it up (or
+    // sideways), never down.
     for (let top = 80; top <= 760; top += 20) {
       const tile = { left: 155, top, width: 83, height: 116 };
       const peek = computePeekBox(baseInput(tile));
-      const clearsAbove = peek.top + peek.height <= tile.top - 20 + 0.5;
-      const clearsBelow = peek.top >= tile.top + tile.height + 20 - 0.5;
-      expect(clearsAbove || clearsBelow).toBe(true);
+      expect(peek.top).toBeLessThanOrEqual(tile.top + 0.5);
     }
   });
 
-  it("keeps the card within the horizontal safe margins, centered", () => {
-    const input = baseInput({ left: 0, top: 400, width: 83, height: 116 });
-    const peek = computePeekBox(input);
-    expect(peek.left).toBeGreaterThanOrEqual(18 - 0.5);
-    expect(peek.left + peek.width).toBeLessThanOrEqual(393 - 18 + 0.5);
-    // Centered: equal margin on both sides.
-    expect(peek.left).toBeCloseTo(393 - (peek.left + peek.width), 3);
+  it("shifts a top-third card to the right when the finger is on the left", () => {
+    const tile = { left: 40, top: 90, width: 83, height: 116 };
+    const peek = computePeekBox(baseInput(tile));
+    // No room to rise, so it holds at the top and slides toward the right edge,
+    // away from the finger.
+    expect(peek.top).toBeCloseTo(59, 5);
+    expect(peek.left).toBeCloseTo(393 - 18 - peek.width, 5);
+  });
+
+  it("shifts a top-third card to the left when the finger is on the right", () => {
+    const tile = { left: 270, top: 90, width: 83, height: 116 };
+    const peek = computePeekBox(baseInput(tile));
+    expect(peek.top).toBeCloseTo(59, 5);
+    expect(peek.left).toBeCloseTo(18, 5);
+  });
+
+  it("keeps the card within the horizontal safe margins", () => {
+    for (let left = 0; left <= 310; left += 20) {
+      const peek = computePeekBox(baseInput({ left, top: 500, width: 83, height: 116 }));
+      expect(peek.left).toBeGreaterThanOrEqual(18 - 0.5);
+      expect(peek.left + peek.width).toBeLessThanOrEqual(393 - 18 + 0.5);
+    }
   });
 
   it("keeps the card inside the vertical safe area", () => {
-    const input = baseInput({ left: 155, top: 420, width: 83, height: 116 });
-    const peek = computePeekBox(input);
-    expect(peek.top).toBeGreaterThanOrEqual(59 - 0.5);
-    expect(peek.top + peek.height).toBeLessThanOrEqual(852 - 34 + 0.5);
+    for (let top = 80; top <= 760; top += 20) {
+      const peek = computePeekBox(baseInput({ left: 155, top, width: 83, height: 116 }));
+      expect(peek.top).toBeGreaterThanOrEqual(59 - 0.5);
+      expect(peek.top + peek.height).toBeLessThanOrEqual(852 - 34 + 0.5);
+    }
   });
 
   it("preserves the card's aspect ratio", () => {
-    const input = baseInput({ left: 155, top: 300, width: 83, height: 116 });
-    const peek = computePeekBox(input);
+    const peek = computePeekBox(baseInput({ left: 155, top: 300, width: 83, height: 116 }));
     expect(peek.width / peek.height).toBeCloseTo(5 / 7, 5);
   });
 

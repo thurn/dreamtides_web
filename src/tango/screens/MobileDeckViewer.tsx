@@ -2,11 +2,12 @@
 //
 // The deck is shown as a scrolling grid of full cards, four across. At that
 // size the cards' rules text is present but small, so the screen's whole job is
-// the press-and-hold
-// zoom: hold a card and a large, fully legible copy expands out of the tile
-// into the half of the screen the finger is NOT covering, over a focus scrim;
-// release and it collapses back. A quick flick still scrolls the grid — the
-// zoom only arms after a short hold — so browsing and inspecting never fight.
+// the press-and-hold zoom: hold a card and a fixed-size, fully legible copy
+// pops out of the tile — rising above the finger, or shifting beside it for
+// cards near the top — and snaps away on release. The rest of the screen is
+// left untouched (no scrim, no dimming). A quick flick still scrolls the grid —
+// the zoom only arms after a short hold — so browsing and inspecting never
+// fight.
 //
 // The top of the screen keeps a reserved band for the filtering/searching
 // controls a later pass will add; this first pass renders only the title, the
@@ -28,6 +29,7 @@ import { GlowIcon } from "../components/controls/GlowIcon";
 import { GLYPHS } from "../primitives/glyph";
 import { token } from "../primitives/tokens";
 import { CARD_ASPECT_RATIO_VALUE } from "../components/card/card-aspect";
+import { LARGE_CARD_TEXT_BASE_WIDTH } from "../components/card/card-display-scale";
 import {
   computePeekBox,
   peekOriginTransform,
@@ -76,6 +78,24 @@ const HOLD_MS = 150;
  * is reclassified as a scroll and the zoom is cancelled.
  */
 const MOVE_SLOP_PX = 10;
+
+/**
+ * The fixed width (px) every pressed card enlarges to. Pinned to the width at
+ * which a `large` card's rules text saturates at full scale, so the card grows
+ * exactly until its text is comfortably readable and no further — past this the
+ * text would not get any bigger, only the frame would. Held constant so every
+ * card pops to the same scale; clamped smaller only when the viewport is too
+ * narrow to hold it inside the side margins.
+ */
+const PEEK_WIDTH_PX = LARGE_CARD_TEXT_BASE_WIDTH;
+
+/**
+ * Minimum real top safe-area inset (px) that counts as a center screen cutout
+ * (a notch / Dynamic Island). Only then is the centered title dropped below the
+ * corner controls to clear the cutout; on flat-top screens it stays up in line
+ * with the controls rather than floating down between them.
+ */
+const CENTER_CUTOUT_MIN_INSET_PX = 24;
 
 /**
  * Reads a length token's resolved pixel value off the `.tango` root, for the
@@ -174,6 +194,7 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
       gap: readLengthToken("--space-7"),
       sideMargin: readLengthToken("--gutter"),
       aspect: CARD_ASPECT_RATIO_VALUE,
+      targetWidth: PEEK_WIDTH_PX,
     });
     setExpanded(false);
     setPeek({
@@ -265,7 +286,6 @@ export function MobileDeckViewer({ view, onClose }: MobileDeckViewerProps) {
               <DeckTile
                 key={cardView.entryId}
                 cardView={cardView}
-                dimmed={peek !== null && peek.view.entryId !== cardView.entryId}
                 onPointerDown={handleTilePointerDown}
               />
             ))}
@@ -305,12 +325,39 @@ function GlassBackdrop() {
 }
 
 /**
- * The top band: a centered "Deck" title beneath the corner controls, the card
- * count, and the reserved searching/filtering slot. The top-left corner is left
- * clear for the dreamscape utility menu, which lifts above this overlay while it
- * is open (see `DreamscapeQuestMenu`'s `elevated`); the close control on the
- * right mirrors that menu button's look. The band keeps a fixed height so the
- * grid below it does not shift when the real controls arrive.
+ * Reads the device's real top safe-area inset (px) off a hidden probe. Zero on
+ * flat-top screens; a notch / Dynamic Island reports its height here. Measured
+ * rather than assumed so the title only drops below the controls when a genuine
+ * center cutout is present. Returns the inset and the ref to mount on the probe.
+ */
+function useTopSafeInset(): {
+  inset: number;
+  probeRef: React.RefObject<HTMLDivElement | null>;
+} {
+  const probeRef = useRef<HTMLDivElement>(null);
+  const [inset, setInset] = useState(0);
+  useEffect(() => {
+    if (probeRef.current === null) return;
+    const measured = Number.parseFloat(
+      getComputedStyle(probeRef.current).paddingTop,
+    );
+    if (!Number.isNaN(measured)) setInset(measured);
+  }, []);
+  return { inset, probeRef };
+}
+
+/** Height reserved for a corner control button, matching the close control. */
+const CONTROL_BUTTON_PX = 48;
+
+/**
+ * The top band: the corner controls, a centered "Deck" title, the card count,
+ * and the reserved searching/filtering slot. The top-left corner is left clear
+ * for the dreamscape utility menu, which lifts above this overlay while it is
+ * open (see `DreamscapeQuestMenu`'s `elevated`); the close control on the right
+ * mirrors that menu button's look. The title sits in line with the corner
+ * controls, and only drops below them on screens whose center cutout (notch /
+ * Dynamic Island) it would otherwise collide with. The band keeps a fixed
+ * height so the grid below it does not shift when the real controls arrive.
  */
 function TopBand({
   title,
@@ -321,6 +368,8 @@ function TopBand({
   count: number;
   onClose: () => void;
 }) {
+  const { inset: topInset, probeRef } = useTopSafeInset();
+  const hasCenterCutout = topInset >= CENTER_CUTOUT_MIN_INSET_PX;
   return (
     <div
       style={{
@@ -339,23 +388,36 @@ function TopBand({
         borderBottom: `1px solid ${token("--border-soft")}`,
       }}
     >
-      {/* Corner control row: the top-left is left empty for the elevated
-          dreamscape menu; the close button sits at the right, matching that
-          menu button's rounded-glass look. */}
+      {/* Hidden probe reading the raw top inset, so the cutout test uses the
+          device's real safe area rather than the band's own clamped padding. */}
       <div
+        ref={probeRef}
+        aria-hidden="true"
         style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          minHeight: 48,
+          position: "absolute",
+          top: 0,
+          height: 0,
+          paddingTop: "env(safe-area-inset-top, 0px)",
+          pointerEvents: "none",
+          visibility: "hidden",
         }}
-      >
+      />
+
+      {/* Header row: the close button anchored at the right corner (the left is
+          left empty for the elevated dreamscape menu), with the centered title
+          and count sharing the row — dropped below the controls only to clear a
+          center cutout. */}
+      <div style={{ position: "relative", minHeight: CONTROL_BUTTON_PX }}>
         <Pressable
           as="button"
           aria-label="Close deck"
           onClick={onClose}
           style={{
-            width: 48,
-            height: 48,
+            position: "absolute",
+            top: 0,
+            right: 0,
+            width: CONTROL_BUTTON_PX,
+            height: CONTROL_BUTTON_PX,
             borderRadius: token("--radius-control"),
             background: token("--surface-glass-strong"),
             border: `1px solid ${token("--border-soft")}`,
@@ -369,29 +431,42 @@ function TopBand({
         >
           <GlowIcon iconClass={GLYPHS.close} color="text-primary" size="1em" />
         </Pressable>
-      </div>
 
-      {/* Centered title, shifted below the corner controls, with the count as a
-          quiet subtitle. */}
-      <div style={{ textAlign: "center", marginTop: token("--space-2") }}>
         <div
           style={{
-            font: token("--t-title"),
-            color: token("--text-primary"),
-            textShadow: token("--text-outline-media"),
+            textAlign: "center",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            minHeight: CONTROL_BUTTON_PX,
+            // Drop below the corner controls only when a center cutout would
+            // otherwise sit behind the title; on flat-top screens it stays in
+            // line with the controls instead of floating down between them.
+            paddingTop: hasCenterCutout
+              ? `calc(${String(CONTROL_BUTTON_PX)}px + ${token("--space-2")})`
+              : 0,
           }}
         >
-          {title}
-        </div>
-        <div
-          style={{
-            marginTop: token("--space-1"),
-            font: token("--t-body-sm"),
-            color: token("--text-muted"),
-            textShadow: token("--text-outline-media"),
-          }}
-        >
-          {String(count)} {count === 1 ? "card" : "cards"}
+          <div
+            style={{
+              font: token("--t-title"),
+              color: token("--text-primary"),
+              textShadow: token("--text-outline-media"),
+            }}
+          >
+            {title}
+          </div>
+          <div
+            style={{
+              marginTop: token("--space-1"),
+              font: token("--t-body-sm"),
+              color: token("--text-muted"),
+              textShadow: token("--text-outline-media"),
+            }}
+          >
+            {String(count)} {count === 1 ? "card" : "cards"}
+          </div>
         </div>
       </div>
 
@@ -424,11 +499,9 @@ function TopBand({
  *  press-and-hold, where it enlarges to a comfortably legible size. */
 function DeckTile({
   cardView,
-  dimmed,
   onPointerDown,
 }: {
   cardView: DeckCardView;
-  dimmed: boolean;
   onPointerDown: (
     e: React.PointerEvent<HTMLElement>,
     cardView: DeckCardView,
@@ -455,10 +528,6 @@ function DeckTile({
         boxShadow: cardView.isBane
           ? `0 0 0 2px ${token("--danger")}`
           : "none",
-        // The finger stays on the touched card while its zoom is up, so the
-        // touched tile keeps full opacity and the rest recede.
-        opacity: dimmed ? 0.5 : 1,
-        transition: `opacity ${token("--dur-fast")} ${token("--ease-out")}`,
         WebkitTouchCallout: "none",
         WebkitUserSelect: "none",
         userSelect: "none",
@@ -475,10 +544,11 @@ function DeckTile({
 }
 
 /**
- * The held zoom: a focus scrim plus the enlarged card, portaled above the grid
- * and grown out of the pressed tile via a container transform. Purely visual —
- * `pointer-events: none` — so the finger that summoned it is never intercepted;
- * the press is tracked entirely on the grid underneath.
+ * The held zoom: just the enlarged card, portaled above the grid and grown out
+ * of the pressed tile via a snappy container transform. Nothing else on screen
+ * is touched — no scrim, no dimming — so the deck stays fully visible behind it.
+ * Purely visual (`pointer-events: none`) so the finger that summoned it is never
+ * intercepted; the press is tracked entirely on the grid underneath.
  */
 function PeekOverlay({ peek, expanded }: { peek: PeekState; expanded: boolean }) {
   return createPortal(
@@ -495,21 +565,12 @@ function PeekOverlay({ peek, expanded }: { peek: PeekState; expanded: boolean })
       <div
         style={{
           position: "absolute",
-          inset: 0,
-          background: token("--scrim-strong"),
-          opacity: expanded ? 1 : 0,
-          transition: `opacity ${token("--dur-fast")} ${token("--ease-out")}`,
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
           left: peek.box.left,
           top: peek.box.top,
           width: peek.box.width,
           transformOrigin: "top left",
           transform: expanded ? "none" : peek.originTransform,
-          transition: `transform ${token("--motion-container-transform")}`,
+          transition: `transform ${token("--dur-snappy")} ${token("--ease-out")}`,
           filter: `drop-shadow(${token("--shadow-card")})`,
         }}
       >
