@@ -301,7 +301,22 @@ export function DreamscapeQuestMenu({
             : glassIconButtonChrome()),
         }}
       >
-        <i className={isDesktop ? "bxf bx-cog" : "bxf bx-menu"} aria-hidden="true" />
+        <i
+          className={isDesktop ? "bxf bx-cog" : "bxf bx-menu"}
+          aria-hidden="true"
+          // Cast a shadow of the gear's own contour on desktop, so the bare glyph
+          // lifts off the scene art. Two stacked `drop-shadow` filters (not a
+          // text-shadow, which the legibility outline already owns) compound into
+          // a denser, clearly-visible cast shadow that hugs the glyph shape rather
+          // than its bounding box: a larger diffuse halo plus a tighter core.
+          style={
+            isDesktop
+              ? {
+                  filter: `drop-shadow(${token("--shadow-lg")}) drop-shadow(${token("--shadow-md")})`,
+                }
+              : undefined
+          }
+        />
       </Pressable>
 
       {open && (
