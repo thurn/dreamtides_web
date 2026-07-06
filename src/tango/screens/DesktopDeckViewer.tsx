@@ -419,7 +419,7 @@ function Sidebar({
 /**
  * The Dreamcaller profile: a bare portrait alone, with its name, title, and
  * ability tucked into a hover / press reveal instead of laid out beneath it.
- * The reveal is the shared InfoCard `portrait` variant driven by the one
+ * The reveal is the shared InfoCard `fullBleed` variant driven by the one
  * press-reveal engine (hover on a fine pointer, press-hold on touch) and
  * portalled into the screen stage — the same reveal the quest status bar's
  * Dreamcaller bust uses, so the two read identically.
@@ -481,7 +481,7 @@ function DreamcallerBlock({
         createPortal(
           <PressPopover anchor={anchor}>
             <InfoCard
-              variant="portrait"
+              variant="fullBleed"
               image={artRef.dreamcaller(dreamcaller.imageNumber)}
               imageCrop="top"
               title={dreamcaller.name}
