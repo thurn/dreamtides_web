@@ -59,8 +59,7 @@ const GAP_PX = 14; // uniform distance from the pressed object
 const CLICK_WINDOW_MS = 300; // release within this → still counts as a tap/click
 const PADX = 15;
 const PADY = 14;
-const INFO_CARD_GLASS_ALPHA = "var(--tango-infocard-glass-alpha, 0.58)";
-const INFO_CARD_GLASS_FILL = `rgba(18,14,28,${INFO_CARD_GLASS_ALPHA})`;
+const INFO_CARD_GLASS_FILL = "rgba(18,14,28,0.5)";
 const INFO_CARD_GLASS_BACKGROUND = `linear-gradient(150deg, rgba(255,255,255,0.07), rgba(255,255,255,0) 42%), ${INFO_CARD_GLASS_FILL}`;
 
 /** Screen inset (px): the popover is clamped to never come within this of any

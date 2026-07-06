@@ -49,7 +49,7 @@ export function groupPanelStyle(): React.CSSProperties {
     // topped with a faint top-left specular sheen. Bespoke glass literals: no
     // design-system token maps to the translucent fill or sheen gradient.
     background:
-      "linear-gradient(150deg, rgba(255,255,255,0.07), rgba(255,255,255,0) 42%), rgba(18,14,28,0.58)",
+      "linear-gradient(150deg, rgba(255,255,255,0.07), rgba(255,255,255,0) 42%), rgba(18,14,28,0.5)",
     backdropFilter: "blur(22px) saturate(1.5)",
     WebkitBackdropFilter: "blur(22px) saturate(1.5)",
     border: `1px solid ${token("--border-soft")}`,

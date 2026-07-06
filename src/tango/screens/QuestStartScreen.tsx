@@ -13,7 +13,6 @@
 
 import { DesktopSelect } from "./quest-start-desktop";
 import { CarouselSelect } from "./quest-start-mobile";
-import { useInfoCardOpacityTweaks } from "./devtools/InfoCardOpacityTweakPanel";
 import { useIsDesktop, type QuestStartScreenProps } from "./quest-start-shared";
 
 export type {
@@ -32,11 +31,9 @@ export type {
  */
 export function QuestStartScreen(props: QuestStartScreenProps) {
   const isDesktop = useIsDesktop();
-  const infoCardTweaks = useInfoCardOpacityTweaks();
   return (
-    <div className="tango" style={infoCardTweaks.style}>
+    <div className="tango">
       {isDesktop ? <DesktopSelect {...props} /> : <CarouselSelect {...props} />}
-      {infoCardTweaks.panel}
     </div>
   );
 }
