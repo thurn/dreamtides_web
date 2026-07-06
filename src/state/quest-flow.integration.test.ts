@@ -25,6 +25,7 @@ import {
   startQuestFromDreamcaller,
 } from "./quest-state-actions";
 import type { CardData } from "../types/cards";
+import { layerOrdinal } from "../types/layer-name";
 import { asCardId, asCardName } from "../types/card-identity";
 import type { DreamcallerContent } from "../types/content";
 import type {
@@ -288,8 +289,8 @@ describe("quest flow (end to end)", () => {
     for (let step = 0; step < layerCount + 2; step += 1) {
       const node = currentNode(state);
       // One node per layer: we must not have already visited this layer.
-      expect(visitedByLayer.has(node.layer)).toBe(false);
-      visitedByLayer.set(node.layer, node.id);
+      expect(visitedByLayer.has(layerOrdinal(node.layer))).toBe(false);
+      visitedByLayer.set(layerOrdinal(node.layer), node.id);
 
       state = completeNonBattleSites(state);
       const { next, wasFinalBoss } = winBattleAndAdvance(state, content);
@@ -298,7 +299,7 @@ describe("quest flow (end to end)", () => {
       // The just-completed node is `completed`, and its layer siblings are now
       // `forgone` (the take-one-forgo-the-rest invariant).
       expect(state.atlas.nodes[node.id].state).toBe("completed");
-      for (const siblingId of state.atlas.layers[node.layer]) {
+      for (const siblingId of state.atlas.layers[layerOrdinal(node.layer)]) {
         if (siblingId !== node.id) {
           expect(state.atlas.nodes[siblingId].state).toBe("forgone");
         }

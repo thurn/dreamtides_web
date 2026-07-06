@@ -1,4 +1,5 @@
 import type { QuestState, SiteType } from "../types/quest";
+import { layerOrdinal } from "../types/layer-name";
 
 /**
  * Maps the quest's current screen to a human-readable address-bar path, so the
@@ -65,7 +66,7 @@ function dreamscapeSlug(state: QuestState): string | null {
   const node = state.atlas.nodes[nodeId];
   if (node === undefined) return null;
   const name = slugify(node.biomeName) || slugify(node.id);
-  return `${node.layer}-${name}`;
+  return `${String(layerOrdinal(node.layer))}-${name}`;
 }
 
 /** Resolves the site occupied on a `site` screen, or `undefined` if missing. */

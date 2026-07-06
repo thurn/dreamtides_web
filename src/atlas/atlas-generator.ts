@@ -10,6 +10,12 @@ import type {
   ApollyonIncarnationContent,
   DreamscapeContent,
 } from "../types/content";
+import {
+  LAYER_COUNT,
+  LayerName,
+  layerAtOrdinal,
+  layerOrdinal,
+} from "../types/layer-name";
 import { otherGuideSignatureSites } from "../data/dreamscapes";
 import { draftSiteData } from "../draft/draft-site-config";
 import { logEvent } from "../logging";
@@ -230,58 +236,60 @@ function applySiteAppearanceBoosts(
 }
 
 /**
- * Mandatory draft count for a dreamscape by its 0-indexed atlas layer. Early
- * layers seed the deck with two drafts, the middle layers offer one, and the
- * late layers offer none (the deck is built; later layers favour engine and
- * payoff sites). Layer 0 is the starter and uses its fixed site list instead.
+ * Mandatory draft count for a dreamscape on the given atlas layer. The early
+ * layers (I–II) seed the deck with two drafts, the middle layers (III–IV) offer
+ * one, and the late layers (V–VII) offer none (the deck is built; later layers
+ * favour engine and payoff sites). {@link LayerName.One} is the starter and uses
+ * its fixed site list instead.
  */
-function draftCountForLayer(layer: number): number {
-  if (layer <= 1) {
+function draftCountForLayer(layer: LayerName): number {
+  const ordinal = layerOrdinal(layer);
+  if (ordinal <= 1) {
     return 2;
   }
-  if (layer <= 3) {
+  if (ordinal <= 3) {
     return 1;
   }
   return 0;
 }
 
 /**
- * Whether Purge is a *mandatory* site for a dreamscape at the given 0-indexed
- * atlas layer. Purge is guaranteed in the early layers so deck-thinning is
- * always available while the deck is still forming; from the later layers it is
- * not guaranteed but can still appear in the random fill. The starter (layer 0)
+ * Whether Purge is a *mandatory* site for a dreamscape on the given atlas layer.
+ * Purge is guaranteed in the early layers so deck-thinning is always available
+ * while the deck is still forming; from the later layers it is not guaranteed
+ * but can still appear in the random fill. The starter ({@link LayerName.One})
  * carries its own Purge in its fixed site list, so mandatory placement covers
- * 0-indexed layers 1 and 2 (the doc's layers 2 and 3).
+ * Layers II and III.
  */
-function purgeMandatoryForLayer(layer: number): boolean {
-  return layer === 1 || layer === 2;
+function purgeMandatoryForLayer(layer: LayerName): boolean {
+  return layer === LayerName.Two || layer === LayerName.Three;
 }
 
 /**
- * Whether Dream Augury is a *mandatory* site for a dreamscape at the given
- * 0-indexed atlas layer. An Augury is guaranteed somewhere in Layer II (0-indexed
- * layer 1) so the player always meets the seer once early in the run; in other
- * layers it can still appear through the random fill. The mandatory Augury is a
- * plain fill-style site (not the enhanced signature site).
+ * Whether Dream Augury is a *mandatory* site for a dreamscape on the given atlas
+ * layer. An Augury is guaranteed somewhere in {@link LayerName.Two} so the
+ * player always meets the seer once early in the run; in other layers it can
+ * still appear through the random fill. The mandatory Augury is a plain
+ * fill-style site (not the enhanced signature site).
  */
-function auguryMandatoryForLayer(layer: number): boolean {
-  return layer === 1;
+function auguryMandatoryForLayer(layer: LayerName): boolean {
+  return layer === LayerName.Two;
 }
 
 /**
  * The base weighted fill pool for a dreamscape whose own enhanced site is
- * `homeSite`, at the given 0-indexed atlas layer. The fill draws from the other
+ * `homeSite`, on the given atlas layer. The fill draws from the other
  * dreamscapes' signature sites plus a generic Essence site. Transfiguration and
  * Duplication — the late-game card-shaping sites — are weighted up in the later
  * layers so deck refinement shows up once the deck is built. Bane removal is
  * handled at the Purge site, which appears in the mandatory early-layer slots.
  */
 function buildFillPool(
-  layer: number,
+  layer: LayerName,
   homeSite: SiteType,
   dreamscapes: readonly DreamscapeContent[],
 ): Array<[SiteType, number]> {
-  const lateGame = layer >= 4;
+  const lateGame = layerOrdinal(layer) >= 4;
   const pool: Array<[SiteType, number]> = [];
 
   for (const siteType of otherGuideSignatureSites(dreamscapes, homeSite)) {
@@ -300,13 +308,13 @@ function buildFillPool(
 }
 
 /**
- * Returns the fill site types eligible for a dreamscape at the given 0-indexed
+ * Returns the fill site types eligible for a dreamscape on the given atlas
  * layer, after applying active site-removal modifiers. `homeSite` is the
  * dreamscape's own enhanced signature site, excluded from the fill so it is
  * never duplicated.
  */
 export function additionalSiteTypesForLevel(
-  layer: number,
+  layer: LayerName,
   homeSite: SiteType,
   dreamscapes: readonly DreamscapeContent[],
   context: SiteGenerationContext,
@@ -319,8 +327,8 @@ export function additionalSiteTypesForLevel(
 
 /** Inputs to {@link generateSiteComposition}. */
 export interface SiteCompositionInput {
-  /** 0-indexed atlas layer of the node (0 = starter, 6 = boss). */
-  layer: number;
+  /** The node's atlas layer (`LayerName.One` = starter, `Seven` = boss). */
+  layer: LayerName;
   /** The dreamscape assigned to the node, or `null` if none is assigned. */
   dreamscape: DreamscapeContent | null;
   /** Every dreamscape definition, used to source the fill pool. */
@@ -357,8 +365,9 @@ function makeSite(type: SiteType, isEnhanced: boolean): SiteState {
  * doc's named-dreamscape rules. Total sites stay within 3-6 and the Battle is
  * always last in visit order.
  *
- * The starter dreamscape (layer 0, `isStarter`) returns its fixed site list with
- * no enhancement and no fill. Every other dreamscape is built from:
+ * The starter dreamscape ({@link LayerName.One}, `isStarter`) returns its fixed
+ * site list with no enhancement and no fill. Every other dreamscape is built
+ * from:
  *
  * - **Mandatory** sites: the home guide's signature site, marked enhanced; a
  *   Purge in the early layers (see {@link purgeMandatoryForLayer}); Draft sites
@@ -565,18 +574,21 @@ interface AtlasState {
   logEvents: boolean;
 }
 
-/** Rolls each layer's width from its spec. Layers 0 and 6 are always width 1. */
+/** Rolls each layer's width from its spec. Layers I and VII are always width 1. */
 function rollLayerWidths(config: AtlasConfig): number[] {
   return config.layerSpecs.map((spec) => randomInt(spec.min, spec.max));
 }
 
-/** Computes the (x, y) position of a node given its layer and column slot. */
+/**
+ * Computes the (x, y) position of a node given its 0-based layer ordinal and
+ * column slot.
+ */
 function nodePosition(
-  layer: number,
+  layerOrdinalValue: number,
   indexInLayer: number,
   layerWidth: number,
 ): { x: number; y: number } {
-  const x = layer * LAYER_X_SPACING;
+  const x = layerOrdinalValue * LAYER_X_SPACING;
   // Centre the column vertically: a width-1 layer sits at y=0, wider layers
   // spread symmetrically around it.
   const y = (indexInLayer - (layerWidth - 1) / 2) * LAYER_Y_SPACING;
@@ -675,7 +687,7 @@ function drawDreamscapeForNode(
   // No two nodes in the same layer may carry the same dreamscape. Same-layer
   // siblings are not necessarily connected to one another, so exclude every
   // already-assigned same-layer dreamscape explicitly, not just connected ones.
-  const sameLayerIds = state.atlas.layers[node.layer] ?? [];
+  const sameLayerIds = state.atlas.layers[layerOrdinal(node.layer)] ?? [];
   for (const siblingId of sameLayerIds) {
     if (siblingId === node.id) {
       continue;
@@ -713,10 +725,10 @@ function discourageRepeat(state: AtlasState, dreamscapeId: string): void {
 }
 
 /**
- * Assigns a dreamscape to a node and builds its sites. The layer-0 node always
- * receives the starter dreamscape; the layer-6 node and every interior node draw
- * from the non-starter dreamscapes. Idempotent: a node that already carries a
- * dreamscape is returned unchanged.
+ * Assigns a dreamscape to a node and builds its sites. The {@link LayerName.One}
+ * node always receives the starter dreamscape; the {@link LayerName.Seven} node
+ * and every interior node draw from the non-starter dreamscapes. Idempotent: a
+ * node that already carries a dreamscape is returned unchanged.
  */
 function revealNodeDreamscape(state: AtlasState, nodeId: string): void {
   const node = state.atlas.nodes[nodeId];
@@ -730,7 +742,7 @@ function revealNodeDreamscape(state: AtlasState, nodeId: string): void {
     return;
   }
 
-  const isFirstDreamscape = node.layer === 0;
+  const isFirstDreamscape = node.layer === LayerName.One;
   const starter = state.context.dreamscapes.find((d) => d.isStarter);
   let dreamscape: DreamscapeContent | null;
   if (isFirstDreamscape && starter !== undefined) {
@@ -745,7 +757,8 @@ function revealNodeDreamscape(state: AtlasState, nodeId: string): void {
   // Composition is keyed off the node's atlas layer (not the run-wide
   // completion level), since a node can be revealed ahead of the player's
   // progress (the boss and bonus reveals) and the doc's draft/Purge rules are
-  // per-layer. The starter (layer 0) returns its fixed list and no enhancement.
+  // per-layer. The starter (LayerName.One) returns its fixed list and no
+  // enhancement.
   const { sites, enhancedSiteType } = generateSiteComposition(
     {
       layer: node.layer,
@@ -823,17 +836,19 @@ function placeKnownDreamsigns(
     return;
   }
 
-  // 0-indexed eligible layers from the (1-indexed) config.
-  const eligibleLayers = cfg.eligibleLayers
-    .map((layer) => layer - 1)
-    .filter((layer) => layer >= 0 && layer < state.atlas.layers.length);
+  // `eligible-layers` in the config lists 1-based, player-facing layer numbers
+  // (`3` = Layer III); convert each to the 0-based ordinal used to index the
+  // `layers` array, dropping any that fall outside the generated layers.
+  const eligibleOrdinals = cfg.eligibleLayers
+    .map((displayNumber) => displayNumber - 1)
+    .filter((ordinal) => ordinal >= 0 && ordinal < state.atlas.layers.length);
 
   // Candidate nodes, biased toward earlier layers and toward the start-reveal
   // set so a known dreamsign tends to be visible from the start.
   const candidates: Array<[string, number]> = [];
-  for (const layer of eligibleLayers) {
-    for (const nodeId of state.atlas.layers[layer]) {
-      const earlierWeight = 1 + cfg.earlyRevealBias / (layer + 1);
+  for (const ordinal of eligibleOrdinals) {
+    for (const nodeId of state.atlas.layers[ordinal]) {
+      const earlierWeight = 1 + cfg.earlyRevealBias / (ordinal + 1);
       const revealBoost = startRevealedNodeIds.has(nodeId)
         ? 1 + cfg.earlyRevealBias
         : 1;
@@ -884,11 +899,12 @@ function placeKnownDreamsigns(
 }
 
 /**
- * Builds a fresh 7-layer Atlas. The starter (layer 0) is `available` so the
- * player enters it directly; the boss (layer 6) plus a bell-curve sample of
- * bonus nodes from the deepest two layers are revealed (`revealedLocked`); every
- * other node starts `unrevealed`. Dreamscapes are assigned lazily as nodes are
- * revealed, except the starter and boss which are assigned eagerly.
+ * Builds a fresh 7-layer Atlas. The starter ({@link LayerName.One}) is
+ * `available` so the player enters it directly; the boss
+ * ({@link LayerName.Seven}) plus a bell-curve sample of bonus nodes from the
+ * deepest two layers are revealed (`revealedLocked`); every other node starts
+ * `unrevealed`. Dreamscapes are assigned lazily as nodes are revealed, except
+ * the starter and boss which are assigned eagerly.
  */
 export function generateInitialAtlas(
   completionLevel: number,
@@ -903,19 +919,26 @@ export function generateInitialAtlas(
   const layers: string[][] = [];
   const nodes: Record<string, DreamscapeNode> = {};
 
-  for (let layer = 0; layer < widths.length; layer++) {
+  for (let ordinal = 0; ordinal < widths.length; ordinal++) {
+    const layerName = layerAtOrdinal(ordinal);
+    if (layerName === undefined) {
+      throw new Error(
+        `Atlas layer ordinal ${String(ordinal)} has no LayerName; ` +
+          `atlas-config layer-specs must define at most ${String(LAYER_COUNT)} layers.`,
+      );
+    }
     const layerIds: string[] = [];
-    for (let indexInLayer = 0; indexInLayer < widths[layer]; indexInLayer++) {
+    for (let indexInLayer = 0; indexInLayer < widths[ordinal]; indexInLayer++) {
       const id = nextNodeId();
       nodes[id] = {
         id,
-        layer,
+        layer: layerName,
         indexInLayer,
         dreamscapeId: null,
         biomeName: "",
         biomeColor: UNREVEALED_NODE_COLOR,
         sites: [],
-        position: nodePosition(layer, indexInLayer, widths[layer]),
+        position: nodePosition(ordinal, indexInLayer, widths[ordinal]),
         state: "unrevealed",
         enhancedSiteType: null,
         forwardIds: [],
@@ -928,9 +951,9 @@ export function generateInitialAtlas(
   }
 
   // Wire forward connections layer by layer.
-  for (let layer = 0; layer < layers.length - 1; layer++) {
-    const fromNodes = layers[layer].map((id) => nodes[id]);
-    const toNodes = layers[layer + 1].map((id) => nodes[id]);
+  for (let ordinal = 0; ordinal < layers.length - 1; ordinal++) {
+    const fromNodes = layers[ordinal].map((id) => nodes[id]);
+    const toNodes = layers[ordinal + 1].map((id) => nodes[id]);
     wireLayerConnections(
       fromNodes,
       toNodes,
@@ -985,9 +1008,9 @@ export function generateInitialAtlas(
     const edges: Array<{
       from: string;
       to: string;
-      fromLayer: number;
+      fromLayer: LayerName;
       fromIndex: number;
-      toLayer: number;
+      toLayer: LayerName;
       toIndex: number;
     }> = [];
     for (const node of Object.values(nodes)) {
@@ -1037,16 +1060,16 @@ export function generateInitialAtlas(
   }
 
   // Bonus reveals: a bell-curve count of nodes from the deepest two interior
-  // layers (0-indexed 4 and 5) revealed at the start of the run.
+  // layers (Layers V and VI, ordinals 4 and 5) revealed at the start of the run.
   const bonusCount = triangularInt(
     build.atlasConfig.bonusReveal.min,
     build.atlasConfig.bonusReveal.max,
     build.atlasConfig.bonusReveal.mode,
   );
   const bonusPool: string[] = [];
-  for (const layer of [4, 5]) {
-    if (layer < layers.length - 1) {
-      bonusPool.push(...layers[layer]);
+  for (const ordinal of [4, 5]) {
+    if (ordinal < layers.length - 1) {
+      bonusPool.push(...layers[ordinal]);
     }
   }
   const bonusReveals: string[] = [];
@@ -1157,7 +1180,7 @@ export function advanceAtlas(
   // advancing — the boss node carries `forwardIds: []` and the starting node
   // carries `backwardIds: []`, and unrevealed layers may be missing entirely.
   const atlasLayers = Array.isArray(atlas.layers) ? atlas.layers : [];
-  const completedLayer = atlasLayers[completedNode.layer];
+  const completedLayer = atlasLayers[layerOrdinal(completedNode.layer)];
   // Forgo the sibling choices in the completed node's layer.
   for (const siblingId of Array.isArray(completedLayer) ? completedLayer : []) {
     if (siblingId === completedNodeId) {
@@ -1182,9 +1205,9 @@ export function advanceAtlas(
 
   // Reveal the layer two ahead of the completed layer.
   const nextLayers = Array.isArray(nextAtlas.layers) ? nextAtlas.layers : [];
-  const revealLayer = completedNode.layer + 2;
-  if (revealLayer < nextLayers.length) {
-    const revealLayerNodes = nextLayers[revealLayer];
+  const revealOrdinal = layerOrdinal(completedNode.layer) + 2;
+  if (revealOrdinal < nextLayers.length) {
+    const revealLayerNodes = nextLayers[revealOrdinal];
     for (const nodeId of Array.isArray(revealLayerNodes)
       ? revealLayerNodes
       : []) {
@@ -1200,7 +1223,10 @@ export function advanceAtlas(
       completedNodeId,
       completedLayer: completedNode.layer,
       forwardTargets: forwardIds,
-      revealedLayer: revealLayer < nextLayers.length ? revealLayer : null,
+      revealedLayer:
+        revealOrdinal < nextLayers.length
+          ? (layerAtOrdinal(revealOrdinal) ?? null)
+          : null,
       completionLevel,
     });
   }

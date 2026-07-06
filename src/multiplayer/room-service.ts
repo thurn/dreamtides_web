@@ -46,6 +46,7 @@ import type {
   SiteRuntimeState,
   SiteState,
 } from "../types/quest";
+import { toLayerName } from "../types/layer-name";
 
 export type RoomSubscriptionSnapshot =
   | { status: "ready"; room: MultiplayerRoom }
@@ -90,6 +91,10 @@ function coerceArray<T>(value: unknown): T[] {
 function normalizeDreamscapeNode(node: DreamscapeNode): DreamscapeNode {
   return {
     ...node,
+    // Revive the layer to a `LayerName`. Current snapshots already store the
+    // string form; a snapshot from an earlier build stored a 0-based number,
+    // which `toLayerName` maps back (`0` -> `LayerName.One`).
+    layer: toLayerName(node.layer),
     // RTDB drops empty arrays and null on write and stores non-empty arrays as
     // numeric-keyed objects; coerce each array field back to a real array (empty
     // when missing) so the new node shape always round-trips intact and

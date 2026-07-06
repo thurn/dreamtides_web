@@ -14,6 +14,7 @@ import type { QuestContent } from "../data/quest-content";
 import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
 import type { CardSourceDebugState, QuestState, SiteState } from "../types/quest";
+import { LayerName } from "../types/layer-name";
 import {
   makeMerchantTestCard,
   makeMerchantTestContent,
@@ -227,7 +228,7 @@ function makeStateFor(site: SiteState): QuestState {
       nodes: {
         "dreamscape-router": {
           id: "dreamscape-router",
-          layer: 0,
+          layer: LayerName.One,
           indexInLayer: 0,
           dreamscapeId: "test_dreamscape",
           biomeName: "Router Dreamscape",

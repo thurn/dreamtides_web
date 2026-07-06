@@ -11,6 +11,7 @@ import type { CardData } from "../types/cards";
 import { asCardId, asCardName } from "../types/card-identity";
 import type { DreamcallerContent, DreamsignTemplate } from "../types/content";
 import type { CardTypeChange, Dreamsign, QuestState, SiteState } from "../types/quest";
+import { LayerName } from "../types/layer-name";
 import {
   buildMerchantContext,
   generateMerchantEncounter,
@@ -225,7 +226,7 @@ function makeNode(
 ): QuestState["atlas"]["nodes"][string] {
   return {
     id,
-    layer: 0,
+    layer: LayerName.One,
     indexInLayer: 0,
     dreamscapeId: "candle_mire",
     biomeName: "Candle Mire",
@@ -356,7 +357,7 @@ function makeMerchantProviderFixture(): {
       nodes: {
         "dreamscape-a": {
           id: "dreamscape-a",
-          layer: 0,
+          layer: LayerName.One,
           indexInLayer: 0,
           dreamscapeId: "candle_mire",
           biomeName: "Fixture",
@@ -1905,7 +1906,7 @@ describe("MultiplayerQuestProvider", () => {
         nodes: {
           "node-1": {
             id: "node-1",
-            layer: 0,
+            layer: LayerName.One,
             indexInLayer: 0,
             dreamscapeId: "candle_mire",
             biomeName: "Candle Mire",
@@ -1999,7 +2000,7 @@ describe("MultiplayerQuestProvider", () => {
         nodes: {
           "node-1": {
             id: "node-1",
-            layer: 0,
+            layer: LayerName.One,
             indexInLayer: 0,
             dreamscapeId: "candle_mire",
             biomeName: "Candle Mire",
@@ -2613,7 +2614,7 @@ describe("MultiplayerQuestProvider", () => {
         nodes: {
           "node-1": {
             id: "node-1",
-            layer: 0,
+            layer: LayerName.One,
             indexInLayer: 0,
             dreamscapeId: "candle_mire",
             biomeName: "Candle Mire",
@@ -2919,7 +2920,7 @@ describe("MultiplayerQuestProvider", () => {
           nodes: {
             "node-1": {
               id: "node-1",
-              layer: 0,
+              layer: LayerName.One,
               indexInLayer: 0,
               dreamscapeId: "candle_mire",
               biomeName: "Candle Mire",

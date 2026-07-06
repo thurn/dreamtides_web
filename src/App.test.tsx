@@ -11,6 +11,7 @@ import { getFirebaseDatabase } from "./firebase/app-config";
 import type { CardData } from "./types/cards";
 import type { QuestMutations } from "./state/quest-context";
 import type { QuestState } from "./types/quest";
+import { LayerName } from "./types/layer-name";
 import type { RoomSession } from "./multiplayer/room-types";
 import App, { QuestApp } from "./App";
 import { useQuest } from "./state/quest-context";
@@ -712,7 +713,7 @@ describe("QuestApp", () => {
           nodes: {
             "dreamscape-1": {
               id: "dreamscape-1",
-              layer: 0,
+              layer: LayerName.One,
               indexInLayer: 0,
               dreamscapeId: "test_dreamscape",
               biomeName: "Test Dreamscape",

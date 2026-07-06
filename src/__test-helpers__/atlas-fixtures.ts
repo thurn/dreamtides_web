@@ -11,6 +11,7 @@ import type {
   DreamscapeNode,
   SiteState,
 } from "../types/quest";
+import { LayerName } from "../types/layer-name";
 
 /**
  * Shared atlas test fixtures. These read the live compiled bundles
@@ -86,7 +87,7 @@ export function makeTestAtlasNode(
 ): DreamscapeNode {
   return {
     id,
-    layer: 0,
+    layer: LayerName.One,
     indexInLayer: 0,
     dreamscapeId: "test_dreamscape",
     biomeName: "Test Dreamscape",

@@ -13,6 +13,7 @@
 
 import { useEffect, useState } from "react";
 import type { DreamscapeNode } from "../../../types/quest";
+import { LayerName } from "../../../types/layer-name";
 import { AtlasNode, type AtlasNodeView } from "../../components/atlas/AtlasNode";
 import { AtlasEdge, type AtlasEdgeKind } from "../../components/atlas/AtlasEdge";
 import { AtlasEdgeDefs } from "../../components/atlas/AtlasEdgeDefs";
@@ -36,7 +37,7 @@ function makeNode(
 ): DreamscapeNode {
   return {
     id,
-    layer: 0,
+    layer: LayerName.One,
     indexInLayer: 0,
     dreamscapeId: id,
     biomeName: id,
@@ -183,7 +184,7 @@ const NODE_SPECS: NodeSpec[] = [
     left: 920,
     top: 350,
     view: {
-      node: makeNode("pharaohs_gate", "revealedLocked", { biomeName: "Pharaoh's Gate", layer: 3 }),
+      node: makeNode("pharaohs_gate", "revealedLocked", { biomeName: "Pharaoh's Gate", layer: LayerName.Four }),
       left: 920,
       top: 350,
       size: 132,
@@ -199,7 +200,7 @@ const NODE_SPECS: NodeSpec[] = [
     left: 920,
     top: 590,
     view: {
-      node: makeNode("rust_expanse", "revealedLocked", { biomeName: "Rust Expanse", layer: 3 }),
+      node: makeNode("rust_expanse", "revealedLocked", { biomeName: "Rust Expanse", layer: LayerName.Four }),
       left: 920,
       top: 590,
       size: 132,
@@ -215,7 +216,7 @@ const NODE_SPECS: NodeSpec[] = [
     left: 1150,
     top: 400,
     view: {
-      node: makeNode("boss", "revealedLocked", { biomeName: "", layer: 4 }),
+      node: makeNode("boss", "revealedLocked", { biomeName: "", layer: LayerName.Five }),
       left: 1150,
       top: 400,
       size: 150,

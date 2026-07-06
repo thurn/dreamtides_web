@@ -1,6 +1,7 @@
 import type { ResolvedDreamcallerPackage } from "./content";
 import type { CardData, CardType } from "./cards";
 import type { DraftState } from "./draft";
+import type { LayerName } from "./layer-name";
 
 /** Badge applied to a card via a Transfiguration site. */
 export type TransfigurationType =
@@ -164,8 +165,9 @@ export interface SiteState {
 
 /**
  * A node on the Dream Atlas representing one dreamscape slot in a fixed 7-layer
- * directed graph. The player travels forward from the layer-0 starter to the
- * layer-6 boss. A node holds a column position within its layer (`layer`,
+ * directed graph. The player travels forward from the {@link LayerName.One}
+ * starter to the {@link LayerName.Seven} boss. A node holds a column position
+ * within its layer (`layer`,
  * `indexInLayer`), the dreamscape assigned to it (`dreamscapeId`, lazily drawn
  * at reveal; `null` while unrevealed), its forward/backward connections, its
  * lifecycle `state`, and an optional pre-revealed known dreamsign carried by
@@ -173,8 +175,8 @@ export interface SiteState {
  */
 export interface DreamscapeNode {
   id: string;
-  /** Layer index, 0 (starter) through 6 (boss). */
-  layer: number;
+  /** The layer this node sits on, from `LayerName.One` (starter) to `Seven` (boss). */
+  layer: LayerName;
   /** Column index of this node within its layer. */
   indexInLayer: number;
   /** The dreamscape assigned to this node, or `null` while unrevealed. */
@@ -202,19 +204,24 @@ export interface DreamscapeNode {
 
 /**
  * The Dream Atlas: a fixed 7-layer directed graph the player traverses from the
- * layer-0 starter dreamscape to the layer-6 boss. `layers` lists the node ids in
- * each layer (index 0..6); connections derive from each node's `forwardIds`.
+ * {@link LayerName.One} starter dreamscape to the {@link LayerName.Seven} boss.
+ * `layers` lists the node ids in each layer, ordered like {@link LAYER_ORDER}
+ * (index 0..6); connections derive from each node's `forwardIds`.
  */
 export interface DreamAtlas {
-  /** Node ids per layer, index 0 (starter) through 6 (boss). */
+  /**
+   * Node ids per layer, ordered like {@link LAYER_ORDER}: index 0 holds the
+   * {@link LayerName.One} nodes, index 6 the {@link LayerName.Seven} boss.
+   */
   layers: string[][];
   nodes: Record<string, DreamscapeNode>;
   /**
-   * The layer-0 starter dreamscape the player begins the run in. Anchors the
-   * left edge of the Atlas and is the player's "you started here" marker.
+   * The {@link LayerName.One} starter dreamscape the player begins the run in.
+   * Anchors the left edge of the Atlas and is the player's "you started here"
+   * marker.
    */
   startingNodeId: string;
-  /** The layer-6 boss node, always revealed from the start of the run. */
+  /** The {@link LayerName.Seven} boss node, always revealed from the start of the run. */
   bossNodeId: string;
   /**
    * The Apollyon incarnation chosen for this run, identifying which guise the

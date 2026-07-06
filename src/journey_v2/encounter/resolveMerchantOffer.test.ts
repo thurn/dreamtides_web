@@ -5,6 +5,7 @@ import type { CardData } from "../../types/cards";
 import type { MerchantCorpusCard } from "../../data/merchant-corpus";
 import type { DreamsignProfile } from "../../data/dreamsign-profiles";
 import type { QuestState, SiteState } from "../../types/quest";
+import { LayerName } from "../../types/layer-name";
 import { buildMerchantContext } from "../context/buildMerchantContext";
 import {
   makeMerchantTestCard,
@@ -88,7 +89,7 @@ function makeFixture(overrides: { seed?: string } = {}): {
       nodes: {
         "dreamscape-a": {
           id: "dreamscape-a",
-          layer: 0,
+          layer: LayerName.One,
           indexInLayer: 0,
           dreamscapeId: "test_dreamscape",
           biomeName: "Fixture",

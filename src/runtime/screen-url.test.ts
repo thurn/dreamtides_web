@@ -8,6 +8,7 @@ import type {
   SiteType,
 } from "../types/quest";
 import { screenToQuestPath, siteTypeSlug, slugify } from "./screen-url";
+import { LayerName, layerAtOrdinal } from "../types/layer-name";
 
 function makeSite(id: string, type: SiteType): SiteState {
   return { id, type, isEnhanced: false, isVisited: false };
@@ -17,11 +18,11 @@ function makeNode(
   id: string,
   biomeName: string,
   sites: SiteState[],
-  layer = 2,
+  layerOrdinal = 2,
 ): DreamscapeNode {
   return {
     id,
-    layer,
+    layer: layerAtOrdinal(layerOrdinal) ?? LayerName.One,
     indexInLayer: 0,
     dreamscapeId: "biome-1",
     biomeName,

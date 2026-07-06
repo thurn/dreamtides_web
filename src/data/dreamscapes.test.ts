@@ -9,6 +9,7 @@ import {
 } from "./dreamscapes";
 import { loadAtlasConfig } from "./atlas-config";
 import { generateSiteComposition } from "../atlas/atlas-generator";
+import { LayerName } from "../types/layer-name";
 import type { DreamscapeContent } from "../types/content";
 
 // Referential-integrity test for the dreamscape / guide / affiliation / atlas
@@ -170,7 +171,7 @@ describe("dreamscape content referential integrity", () => {
 
       // Composing the home dreamscape always marks its signature site enhanced.
       const homeComposition = generateSiteComposition({
-        layer: 3,
+        layer: LayerName.Four,
         dreamscape: home,
         dreamscapes,
         context,
@@ -191,7 +192,7 @@ describe("dreamscape content referential integrity", () => {
       expect(elsewhere).toBeDefined();
       if (elsewhere === undefined) continue;
       const elsewhereComposition = generateSiteComposition({
-        layer: 3,
+        layer: LayerName.Four,
         dreamscape: elsewhere,
         dreamscapes,
         context,

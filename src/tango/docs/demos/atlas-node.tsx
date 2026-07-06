@@ -10,6 +10,7 @@
 // points at the real AtlasNode so the props table reports its actual API.
 
 import type { DreamscapeNode } from "../../../types/quest";
+import { LayerName } from "../../../types/layer-name";
 import { AtlasNode, type AtlasNodeView } from "../../components/atlas/AtlasNode";
 import { artRef } from "../../primitives/art";
 import { glyph } from "../../primitives/glyph";
@@ -23,7 +24,7 @@ function makeNode(
 ): DreamscapeNode {
   return {
     id,
-    layer: 0,
+    layer: LayerName.One,
     indexInLayer: 0,
     dreamscapeId: "demo_dreamscape",
     biomeName: "Demo Dreamscape",

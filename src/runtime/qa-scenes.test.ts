@@ -4,6 +4,7 @@ import {
   MINIMAL_DREAMSCAPES,
 } from "../__test-helpers__/atlas-fixtures";
 import type { CardData } from "../types/cards";
+import { layerOrdinal } from "../types/layer-name";
 import type { QuestContent } from "../data/quest-content";
 import type {
   ApollyonIncarnationContent,
@@ -136,7 +137,7 @@ describe('the "atlas" QA scene', () => {
       (node) => node.state === "available",
     );
     expect(available.length).toBeGreaterThan(0);
-    expect(available.every((node) => node.layer === 1)).toBe(true);
+    expect(available.every((node) => layerOrdinal(node.layer) === 1)).toBe(true);
   });
 });
 
@@ -165,7 +166,9 @@ describe("the atlas layer QA scenes", () => {
       // The available frontier sits on the 0-indexed layer the UI shows as N.
       const available = nodes.filter((node) => node.state === "available");
       expect(available.length).toBeGreaterThan(0);
-      expect(available.every((node) => node.layer === frontierLayer)).toBe(true);
+      expect(
+        available.every((node) => layerOrdinal(node.layer) === frontierLayer),
+      ).toBe(true);
     });
   }
 

@@ -36,6 +36,12 @@ import type {
   DreamsignTemplate,
 } from "../types/content";
 import type { DreamAtlas, DreamscapeNode } from "../types/quest";
+import {
+  type LayerName,
+  layerAtOrdinal,
+  layerOrdinal,
+  layerRoman,
+} from "../types/layer-name";
 import type { QuestContent } from "../data/quest-content";
 import { logEvent } from "../logging";
 import "../atlas/atlas.css";
@@ -89,13 +95,6 @@ function clampCardTop(
  * title block and layer numerals, and below for the persistent bottom HUD.
  */
 const CONTENT_RECT = { left: 180, right: 1748, top: 256, bottom: 838 };
-
-const ROMAN = ["I", "II", "III", "IV", "V", "VI", "VII"];
-
-/** Roman numeral for a 0-indexed atlas layer (0 -> "I"). */
-function romanForLayer(layer: number): string {
-  return ROMAN[layer] ?? String(layer + 1);
-}
 
 /**
  * Everything one node needs across the node face and its hover preview,
@@ -243,7 +242,7 @@ type EdgeKind = AtlasEdgeKind;
 function edgeKind(
   from: DreamscapeNode,
   to: DreamscapeNode,
-  choiceLayer: number | null,
+  choiceLayer: LayerName | null,
 ): EdgeKind {
   if (from.state === "completed" && to.state === "completed") {
     return "traveled";
@@ -251,7 +250,10 @@ function edgeKind(
   if (from.state === "completed" && to.state === "available") {
     return "open";
   }
-  if (choiceLayer !== null && from.layer > choiceLayer) {
+  if (
+    choiceLayer !== null &&
+    layerOrdinal(from.layer) > layerOrdinal(choiceLayer)
+  ) {
     return "locked";
   }
   return "dim";
@@ -649,8 +651,10 @@ export function AtlasScreen() {
 
   // Layer numerals: one watermark per layer, centred on that layer's column.
   const layerHeads = useMemo(() => {
-    const heads: Array<{ layer: number; x: number }> = [];
-    atlas.layers.forEach((layerIds, layer) => {
+    const heads: Array<{ layer: LayerName; x: number }> = [];
+    atlas.layers.forEach((layerIds, ordinal) => {
+      const layer = layerAtOrdinal(ordinal);
+      if (layer === undefined) return;
       const first = layerIds.map((id) => resolved.get(id)).find(Boolean);
       if (first !== undefined) {
         heads.push({ layer, x: first.view.left });
@@ -782,7 +786,7 @@ export function AtlasScreen() {
                 key={head.layer}
                 style={{ left: head.x, top: 120 }}
               >
-                {romanForLayer(head.layer)}
+                {layerRoman(head.layer)}
               </div>
             ))}
           </div>
@@ -811,7 +815,7 @@ export function AtlasScreen() {
             <div className="atlas-title">Dream Atlas</div>
             <div className="atlas-sub">
               {choiceLayer !== null
-                ? `Layer ${romanForLayer(choiceLayer)} · Choose your next dream`
+                ? `Layer ${layerRoman(choiceLayer)} · Choose your next dream`
                 : "Seven layers to the final dream"}
             </div>
           </div>

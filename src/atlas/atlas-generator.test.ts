@@ -28,6 +28,11 @@ import type {
   SiteState,
   SiteType,
 } from "../types/quest";
+import {
+  LayerName,
+  layerAtOrdinal,
+  layerOrdinal,
+} from "../types/layer-name";
 
 function defaultContext(
   overrides?: Partial<SiteGenerationContext>,
@@ -106,7 +111,7 @@ function composeFor(
 ): SiteState[] {
   resetAtlasGenerator();
   return generateSiteComposition({
-    layer,
+    layer: layerAtOrdinal(layer) ?? LayerName.One,
     dreamscape,
     dreamscapes: TEST_DREAMSCAPES,
     context: defaultContext(),
@@ -315,7 +320,7 @@ describe("generateSiteComposition", () => {
     for (let i = 0; i < 20; i++) {
       resetAtlasGenerator();
       const { sites, enhancedSiteType } = generateSiteComposition({
-        layer: 0,
+        layer: LayerName.One,
         dreamscape: STARTER_DREAMSCAPE,
         dreamscapes: TEST_DREAMSCAPES,
         context: defaultContext(),
@@ -452,7 +457,7 @@ describe("generateInitialAtlas structural invariants", () => {
       for (const carrierId of carriers) {
         const node = atlas.nodes[carrierId];
         expect(node.knownDreamsignId).not.toBeNull();
-        expect(eligibleLayers.has(node.layer)).toBe(true);
+        expect(eligibleLayers.has(layerOrdinal(node.layer))).toBe(true);
         expect(TEST_DREAMSIGN_POOL).toContain(node.knownDreamsignId);
         // Unique per atlas.
         expect(grantedIds.has(node.knownDreamsignId ?? "")).toBe(false);
@@ -991,11 +996,11 @@ describe("regenerateAtlasForProgress", () => {
     // that gives the player a glimpse of what is coming.
     const completedLayers = Object.values(atlas.nodes)
       .filter((node) => node.state === "completed")
-      .map((node) => node.layer);
+      .map((node) => layerOrdinal(node.layer));
     const deepestCompleted = Math.max(...completedLayers);
     const availableLayers = Object.values(atlas.nodes)
       .filter((node) => node.state === "available")
-      .map((node) => node.layer);
+      .map((node) => layerOrdinal(node.layer));
     expect(Math.min(...availableLayers)).toBeGreaterThan(deepestCompleted);
     expect(
       Object.values(atlas.nodes).some(
@@ -1213,7 +1218,7 @@ describe("additionalSiteTypesForLevel", () => {
   it("returns the fill candidate site types for a dreamscape layer", () => {
     const dreamscape = NON_STARTER_DREAMSCAPES[0];
     const types = additionalSiteTypesForLevel(
-      3,
+      LayerName.Four,
       dreamscape.signatureSite,
       TEST_DREAMSCAPES,
       defaultContext(),

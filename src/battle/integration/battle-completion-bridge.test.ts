@@ -4,6 +4,7 @@ import {
   resetBattleCompletionBridge,
   type CompleteBattleSiteVictoryInput,
 } from "./battle-completion-bridge";
+import { LayerName } from "../../types/layer-name";
 
 const mocks = vi.hoisted(() => ({
   advanceAtlas: vi.fn(),
@@ -58,7 +59,7 @@ function makeInput(
       nodes: {
         "dreamscape-1": {
           id: "dreamscape-1",
-          layer: 0,
+          layer: LayerName.One,
           indexInLayer: 0,
           dreamscapeId: "test_dreamscape",
           biomeName: "Luminous Reaches",

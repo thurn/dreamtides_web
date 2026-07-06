@@ -9,6 +9,7 @@ import {
   makeMerchantTestSite,
 } from "../testing/fixtures";
 import type { QuestState } from "../../types/quest";
+import { LayerName } from "../../types/layer-name";
 import type { MerchantContext } from "../types";
 import { asCardId } from "../../types/card-identity";
 import { addSiteBuilder, MERCHANT_PLACEABLE_SITE_TYPES } from "./site";
@@ -23,7 +24,7 @@ function makeDreamscapeState(overrides: Partial<QuestState> = {}): QuestState {
       nodes: {
         "node-1": {
           id: "node-1",
-          layer: 0,
+          layer: LayerName.One,
           indexInLayer: 0,
           dreamscapeId: "test_dreamscape",
           biomeName: "Fixture Biome",
@@ -51,7 +52,7 @@ function makeDreamscapeState(overrides: Partial<QuestState> = {}): QuestState {
         },
         "node-2": {
           id: "node-2",
-          layer: 0,
+          layer: LayerName.One,
           indexInLayer: 0,
           dreamscapeId: "test_dreamscape",
           biomeName: "Other Biome",

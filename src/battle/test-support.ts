@@ -2,6 +2,7 @@ import { asCardId, asCardName } from "../types/card-identity";
 import type { CardData } from "../types/cards";
 import type { DreamcallerContent, ResolvedDreamcallerPackage } from "../types/content";
 import type { DeckEntry, Dreamcaller, Dreamsign, QuestState, SiteState } from "../types/quest";
+import { LayerName } from "../types/layer-name";
 import { backRankSlotIds, createEmptySlotRecord, frontRankSlotIds } from "./types";
 import type { BackRankSlotId, FrontRankSlotId } from "./types";
 
@@ -136,7 +137,7 @@ export function makeBattleTestState(): Pick<
       nodes: {
         "dreamscape-2": {
           id: "dreamscape-2",
-          layer: 0,
+          layer: LayerName.One,
           indexInLayer: 0,
           dreamscapeId: "test_dreamscape",
           biomeName: "Test Biome",
