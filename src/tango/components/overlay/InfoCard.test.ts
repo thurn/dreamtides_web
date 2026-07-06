@@ -23,6 +23,7 @@ import {
   CLICK_WINDOW,
   computePopoverPosition,
   EDGE,
+  FINGER_RADIUS,
   GAP,
   InfoCard,
   isHold,
@@ -182,6 +183,51 @@ describe("computePopoverPosition — on-screen clamp", () => {
         assertFullyOnScreen(pos, WIDTH, HEIGHT);
       }
     }
+  });
+
+  it("keeps the fingertip disc clear when the press lands near a large trigger's top edge", () => {
+    // A big node (200px) pressed near its TOP edge: the finger disc pokes above
+    // the node's top, so the card placed above must clear the disc, not just the
+    // node box. Without the press point it would sit GAP above the node top and
+    // overlap the finger.
+    const big = anchor({ top: 300, bottom: 500, pointerY: 312 });
+    const pos = computePopoverPosition(big, WIDTH, HEIGHT, GAP, EDGE);
+    // The card's bottom clears the top of the finger disc (pointerY - radius) by
+    // at least the gap.
+    expect(pos.top + HEIGHT).toBeLessThanOrEqual(312 - FINGER_RADIUS - GAP + 0.001);
+    assertFullyOnScreen(pos, WIDTH, HEIGHT);
+  });
+
+  it("keeps the fingertip disc clear when the card flips below the press point", () => {
+    // A top-edge node with no room above flips below; the card top must clear the
+    // BOTTOM of the finger disc, so a press near the node's low edge still leaves
+    // the finger uncovered.
+    const near = anchor({ top: 20, bottom: 120, pointerY: 118 });
+    const pos = computePopoverPosition(near, WIDTH, HEIGHT, GAP, EDGE);
+    expect(pos.top).toBeGreaterThanOrEqual(118 + FINGER_RADIUS + GAP - 0.001);
+    assertFullyOnScreen(pos, WIDTH, HEIGHT);
+  });
+
+  it("ignores the press point on a fine-pointer hover (no pointerY)", () => {
+    // Without pointerY the placement is anchor-only — identical to the hover
+    // path, so a mouse hover is never pushed away by a phantom finger.
+    const withPointer = computePopoverPosition(
+      anchor({ top: 400, bottom: 440, pointerY: 402 }),
+      WIDTH,
+      HEIGHT,
+      GAP,
+      EDGE,
+    );
+    const withoutPointer = computePopoverPosition(
+      anchor({ top: 400, bottom: 440 }),
+      WIDTH,
+      HEIGHT,
+      GAP,
+      EDGE,
+    );
+    // The finger disc (radius 18) pokes above top=400, so the pointer case sits
+    // strictly higher than the anchor-only case.
+    expect(withPointer.top).toBeLessThan(withoutPointer.top);
   });
 
   it("pins an oversized card to the top-left inset rather than clipping wildly", () => {

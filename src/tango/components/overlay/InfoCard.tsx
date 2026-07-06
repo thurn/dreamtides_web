@@ -60,6 +60,14 @@ const CARD_W = 248; // every info card is this wide
 const EDGE_PX = 12; // never within 12px of a screen edge
 const GAP_PX = 14; // uniform distance from the pressed object
 const CLICK_WINDOW_MS = 300; // release within this → still counts as a tap/click
+// Radius (px) of the fingertip disc kept clear of the card on touch. A press
+// reveals beside — never under — the finger, so a 36px-diameter disc centered on
+// the actual press point must not overlap the popover. The clamp treats that
+// disc as part of the obstacle the card clears, so pressing near a large node's
+// top edge still pushes the card fully clear of the finger. Fine-pointer hover
+// has no finger, so it never applies (the press point is only captured on a
+// touch press-down).
+const FINGER_RADIUS_PX = 18;
 const PADX = 15;
 const PADY = 14;
 const INFO_CARD_GLASS_FILL = "rgba(18,14,28,0.5)";
@@ -82,6 +90,9 @@ export const GAP = GAP_PX;
 /** Default click window (ms) separating a tap from a hold. Exported for the
  * tap-vs-hold tests. */
 export const CLICK_WINDOW = CLICK_WINDOW_MS;
+/** Radius (px) of the fingertip disc a touch reveal keeps clear of the card.
+ * Exported for the finger-clearance clamp tests. */
+export const FINGER_RADIUS = FINGER_RADIUS_PX;
 
 /**
  * The ONE global reveal delay (ms). Module-scoped (NOT a per-call prop) and read
@@ -517,6 +528,13 @@ export interface AnchorRect {
   bottom: number;
   w: number;
   h: number;
+  /**
+   * The actual press point's Y in stage-native px, captured on a touch
+   * press-down. When present, the clamp keeps a fingertip disc around it clear
+   * of the card so the finger holding the trigger down never occludes the
+   * reveal. Absent on a fine-pointer hover (no finger to clear).
+   */
+  pointerY?: number;
 }
 
 /**
@@ -537,6 +555,12 @@ export function isHold(downT: number, upT: number, clickWindow: number): boolean
  *
  * A card larger than the viewport cannot satisfy every edge; it is pinned to
  * the leading (top-left) inset so at least its title/corner stays reachable.
+ *
+ * When `anchor.pointerY` is set (a touch press-down captured the press point),
+ * the vertical obstacle the card clears is the UNION of the anchor box and a
+ * `FINGER_RADIUS_PX` disc around the press point, so the finger never occludes
+ * the reveal — even when the press lands near the top or bottom edge of a large
+ * trigger.
  */
 export function computePopoverPosition(
   anchor: AnchorRect,
@@ -545,10 +569,14 @@ export function computePopoverPosition(
   gap: number,
   edge: number,
 ): { left: number; top: number } {
-  const { x, top, bottom, w, h } = anchor;
+  const { x, top, bottom, w, h, pointerY } = anchor;
   const left = Math.max(edge, Math.min(x - width / 2, w - width - edge));
-  const aboveTop = top - gap - height;
-  const belowTop = bottom + gap;
+  const obstacleTop =
+    pointerY == null ? top : Math.min(top, pointerY - FINGER_RADIUS_PX);
+  const obstacleBottom =
+    pointerY == null ? bottom : Math.max(bottom, pointerY + FINGER_RADIUS_PX);
+  const aboveTop = obstacleTop - gap - height;
+  const belowTop = obstacleBottom + gap;
   let t: number;
   if (aboveTop >= edge) {
     t = aboveTop; // fits above
@@ -568,6 +596,7 @@ export function computePopoverPosition(
 export function anchorRect(
   stageEl: HTMLElement,
   targetEl: HTMLElement,
+  pointer?: { clientX: number; clientY: number } | null,
 ): AnchorRect {
   const sr = stageEl.getBoundingClientRect();
   const r = targetEl.getBoundingClientRect();
@@ -578,6 +607,9 @@ export function anchorRect(
     bottom: (r.bottom - sr.top) * k,
     w: stageEl.clientWidth,
     h: stageEl.clientHeight,
+    // The press point (touch only) in the same stage-native space, so the clamp
+    // can keep the fingertip disc clear of the card.
+    ...(pointer != null ? { pointerY: (pointer.clientY - sr.top) * k } : {}),
   };
 }
 
@@ -631,6 +663,13 @@ export interface UsePressRevealResult {
   leave: () => void;
   /** true once the press has outlasted the click window (a deliberate hold). */
   heldPastTap: () => boolean;
+  /**
+   * The live press point captured on the last touch press-down (`begin(event)`),
+   * or null on a fine-pointer hover. Pass it to `anchorRect` so the popover
+   * clamp keeps the fingertip disc clear of the card. A ref, so reading it in a
+   * layout effect never lags a render.
+   */
+  pointerRef: React.MutableRefObject<{ clientX: number; clientY: number } | null>;
 }
 
 /* ================================================================
@@ -656,6 +695,9 @@ export function usePressReveal(
   const [shown, setShown] = React.useState(false);
   const timer = React.useRef<ReturnType<typeof setTimeout> | null>(null);
   const downAt = React.useRef(0);
+  const pointerRef = React.useRef<{ clientX: number; clientY: number } | null>(
+    null,
+  );
 
   const clear = (): void => {
     if (timer.current) {
@@ -675,6 +717,13 @@ export function usePressReveal(
 
   const begin = (event?: React.PointerEvent): void => {
     event?.stopPropagation();
+    // Capture the actual press point so the popover clamp can keep a fingertip
+    // disc around it clear of the card (touch only — a fine pointer reveals on
+    // hover, with no finger to occlude the reveal).
+    pointerRef.current =
+      event && !fine
+        ? { clientX: event.clientX, clientY: event.clientY }
+        : null;
     downAt.current = Date.now();
     setPressed(true);
     // Touch: press-down reveals. Fine pointer: press only compresses (hover
@@ -699,6 +748,8 @@ export function usePressReveal(
     // right before down and must NOT double-drive the reveal (or leave the
     // trigger stuck enlarged after the finger lifts).
     if (fine) {
+      // A hover has no finger to clear, so drop any stale touch press point.
+      pointerRef.current = null;
       setHovered(true);
       reveal();
     }
@@ -715,7 +766,18 @@ export function usePressReveal(
 
   React.useEffect(() => clear, []);
 
-  return { pressed, hovered, shown, fine, begin, end, enter, leave, heldPastTap };
+  return {
+    pressed,
+    hovered,
+    shown,
+    fine,
+    begin,
+    end,
+    enter,
+    leave,
+    heldPastTap,
+    pointerRef,
+  };
 }
 
 /* ================================================================
@@ -817,18 +879,18 @@ export function PressInfo({
   as = "span",
   holdStillClicks = false,
 }: PressInfoProps): React.ReactElement {
-  const { shown, fine, begin, end, enter, leave, heldPastTap } =
+  const { shown, fine, begin, end, enter, leave, heldPastTap, pointerRef } =
     usePressReveal();
   const elRef = React.useRef<HTMLElement>(null);
   const [anchor, setAnchor] = React.useState<AnchorRect | null>(null);
 
   React.useLayoutEffect(() => {
     if (shown && stageRef.current && elRef.current) {
-      setAnchor(anchorRect(stageRef.current, elRef.current));
+      setAnchor(anchorRect(stageRef.current, elRef.current, pointerRef.current));
     } else {
       setAnchor(null);
     }
-  }, [shown, stageRef]);
+  }, [shown, stageRef, pointerRef]);
 
   const onClickCapture = (event: React.MouseEvent): void => {
     // Only a TOUCH hold swallows the click; a mouse click is always a click.

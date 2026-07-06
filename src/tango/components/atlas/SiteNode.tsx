@@ -110,7 +110,7 @@ export function SiteNode({
   const { site, pos, index, isBattle, isLocked, isInteractive } = model;
 
   const btnRef = React.useRef<HTMLButtonElement>(null);
-  const { shown, fine, begin, end, enter, leave, heldPastTap } =
+  const { shown, fine, begin, end, enter, leave, heldPastTap, pointerRef } =
     usePressReveal();
   const [anchor, setAnchor] = React.useState<ReturnType<
     typeof anchorRect
@@ -118,11 +118,11 @@ export function SiteNode({
 
   React.useLayoutEffect(() => {
     if (shown && stageRef.current && btnRef.current) {
-      setAnchor(anchorRect(stageRef.current, btnRef.current));
+      setAnchor(anchorRect(stageRef.current, btnRef.current, pointerRef.current));
     } else {
       setAnchor(null);
     }
-  }, [shown, stageRef]);
+  }, [shown, stageRef, pointerRef]);
 
   // Every site disc is the same size — the guardian battle reads as special
   // through its pulsing ring and lock badge, not a larger disc.

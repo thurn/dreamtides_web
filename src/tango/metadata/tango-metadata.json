@@ -1,73 +1,4 @@
 {
-  "AtlasDreamsignCard": [
-    {
-      "name": "model",
-      "tsType": "AtlasDreamsignModel",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "",
-      "nested": {
-        "name": "AtlasDreamsignModel",
-        "fields": [
-          {
-            "name": "name",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "iconUrl",
-            "tsType": "string | null",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "rulesText",
-            "tsType": "string",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "anchorLeft",
-            "tsType": "number",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "anchorTop",
-            "tsType": "number",
-            "optional": false,
-            "description": ""
-          }
-        ]
-      }
-    },
-    {
-      "name": "previewIsMini",
-      "tsType": "boolean",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": "Whether the companion preview is the compact (unrevealed) width."
-    },
-    {
-      "name": "stageWidth",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "stageHeight",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": ""
-    }
-  ],
   "AtlasEdge": [
     {
       "name": "kind",
@@ -146,19 +77,13 @@
             "name": "view",
             "tsType": "AtlasNodeView",
             "optional": false,
-            "description": "Presentational data for the {@link AtlasNode} face."
+            "description": "Presentational data for the {@link AtlasNode } face."
           },
           {
-            "name": "preview",
-            "tsType": "AtlasPreviewModel",
+            "name": "card",
+            "tsType": "AtlasNodeCard",
             "optional": false,
-            "description": "The floating detail card shown while this node is hovered."
-          },
-          {
-            "name": "dreamsign",
-            "tsType": "AtlasDreamsignModel | null",
-            "optional": false,
-            "description": "The companion known-dreamsign card, or null when the node carries none."
+            "description": "The InfoCard reveal content shown while this node is pressed / hovered."
           }
         ]
       }
@@ -219,6 +144,14 @@
       "required": true,
       "defaultValue": null,
       "description": "Enter a node's dreamscape; fired on a tap / click of an available node."
+    },
+    {
+      "name": "stageRef",
+      "tsType": "RefObject<HTMLElement | null>",
+      "unionMembers": [],
+      "required": true,
+      "defaultValue": null,
+      "description": "Screen root the node reveals anchor + clamp against (viewport coordinates)."
     }
   ],
   "AtlasNode": [
@@ -307,154 +240,122 @@
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": ""
+      "description": "Draws the node in its revealed/hover glow + scale-up state."
+    },
+    {
+      "name": "rootRef",
+      "tsType": "Ref<HTMLDivElement>",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Ref to the node's root element, so a caller can anchor an input-adaptive\npress-reveal (InfoCard) to it and measure it against the stage."
     },
     {
       "name": "onEnter",
-      "tsType": "(nodeId: string) => void",
+      "tsType": "((nodeId: string) => void)",
       "unionMembers": [],
-      "required": true,
+      "required": false,
       "defaultValue": null,
-      "description": ""
+      "description": "Mouse/focus reveal driver: fired with the node id when the pointer or\nkeyboard focus enters the node. Optional — a caller driving the reveal\nthrough the pointer handlers below omits it."
     },
     {
       "name": "onLeave",
-      "tsType": "() => void",
+      "tsType": "(() => void)",
       "unionMembers": [],
-      "required": true,
+      "required": false,
+      "defaultValue": null,
+      "description": "Paired with {@link onEnter}: fired on mouse leave / blur."
+    },
+    {
+      "name": "onClick",
+      "tsType": "((nodeId: string) => void)",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Activation: fired with the node id on click and on Enter / Space."
+    },
+    {
+      "name": "onPointerEnter",
+      "tsType": "PointerEventHandler<HTMLDivElement>",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": "Input-adaptive press-reveal handlers, wired to the node's root so the\nInfoCard engine (`usePressReveal`) can reveal on touch press-down and on\nfine-pointer hover. A caller either wires these OR the {@link onEnter} /\n{@link onLeave} mouse pair, never both."
+    },
+    {
+      "name": "onPointerDown",
+      "tsType": "PointerEventHandler<HTMLDivElement>",
+      "unionMembers": [],
+      "required": false,
       "defaultValue": null,
       "description": ""
     },
     {
-      "name": "onClick",
-      "tsType": "(nodeId: string) => void",
+      "name": "onPointerUp",
+      "tsType": "PointerEventHandler<HTMLDivElement>",
       "unionMembers": [],
-      "required": true,
+      "required": false,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "onPointerLeave",
+      "tsType": "PointerEventHandler<HTMLDivElement>",
+      "unionMembers": [],
+      "required": false,
+      "defaultValue": null,
+      "description": ""
+    },
+    {
+      "name": "onPointerCancel",
+      "tsType": "PointerEventHandler<HTMLDivElement>",
+      "unionMembers": [],
+      "required": false,
       "defaultValue": null,
       "description": ""
     }
   ],
-  "AtlasPreview": [
+  "AtlasNodeReveal": [
     {
-      "name": "model",
-      "tsType": "AtlasPreviewModel",
+      "name": "item",
+      "tsType": "AtlasNodeRevealItem",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "",
+      "description": "The placed node and its reveal content.",
       "nested": {
-        "name": "AtlasPreviewModel",
+        "name": "AtlasNodeRevealItem",
         "fields": [
           {
-            "name": "anchorLeft",
-            "tsType": "number",
+            "name": "view",
+            "tsType": "AtlasNodeView",
             "optional": false,
-            "description": "Node centre in stage coordinates — the card anchors beside it."
+            "description": "Presentational data for the {@link AtlasNode} face."
           },
           {
-            "name": "anchorTop",
-            "tsType": "number",
+            "name": "card",
+            "tsType": "AtlasNodeCard",
             "optional": false,
-            "description": ""
-          },
-          {
-            "name": "isUnrevealed",
-            "tsType": "boolean",
-            "optional": false,
-            "description": "An unrevealed non-boss node shows the compact \"unseen dream\" card."
-          },
-          {
-            "name": "isBoss",
-            "tsType": "boolean",
-            "optional": false,
-            "description": "The boss node shows the red Final Dream card."
-          },
-          {
-            "name": "bossSubtitle",
-            "tsType": "string | null",
-            "optional": false,
-            "description": "Boss incarnation title / short deck description (boss card only)."
-          },
-          {
-            "name": "bossDescription",
-            "tsType": "string | null",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "dreamscapeName",
-            "tsType": "string | null",
-            "optional": false,
-            "description": "Revealed dreamscape name (header title)."
-          },
-          {
-            "name": "sceneUrl",
-            "tsType": "string | null",
-            "optional": false,
-            "description": "Rectangular scene art URL for the header."
-          },
-          {
-            "name": "guideName",
-            "tsType": "string | null",
-            "optional": false,
-            "description": "Resident guide name + portrait URL, or null for the starter."
-          },
-          {
-            "name": "guidePortraitUrl",
-            "tsType": "string | null",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "siteName",
-            "tsType": "string | null",
-            "optional": false,
-            "description": "Signature-site display name and its glyph class."
-          },
-          {
-            "name": "siteIconClass",
-            "tsType": "string | null",
-            "optional": false,
-            "description": ""
-          },
-          {
-            "name": "bonusText",
-            "tsType": "string | null",
-            "optional": false,
-            "description": "The guide's home-site bonus copy."
-          },
-          {
-            "name": "affiliationName",
-            "tsType": "string | null",
-            "optional": false,
-            "description": "Card affiliation name, or null for a neutral on-ramp."
+            "description": "The InfoCard reveal content for this node."
           }
         ]
       }
     },
     {
-      "name": "hasDreamsign",
-      "tsType": "boolean",
+      "name": "stageRef",
+      "tsType": "RefObject<HTMLElement | null>",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": "Whether the hovered node also carries a known dreamsign (widens the flip)."
+      "description": "Screen root the reveal anchors + clamps against (for popover placement)."
     },
     {
-      "name": "stageWidth",
-      "tsType": "number",
+      "name": "onEnterNode",
+      "tsType": "(nodeId: string) => void",
       "unionMembers": [],
       "required": true,
       "defaultValue": null,
-      "description": ""
-    },
-    {
-      "name": "stageHeight",
-      "tsType": "number",
-      "unionMembers": [],
-      "required": true,
-      "defaultValue": null,
-      "description": ""
+      "description": "Enter a node's dreamscape; fired on a tap / click of an available node."
     }
   ],
   "Button": [
