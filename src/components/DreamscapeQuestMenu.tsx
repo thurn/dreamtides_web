@@ -112,15 +112,14 @@ export function DreamscapeQuestMenu({
 }: DreamscapeQuestMenuProps) {
   const { state } = useQuest();
   const isDesktop = useIsDesktop();
-  // Trigger sizing. On mobile it is a compact circular glass icon button that
-  // clears the 44px touch floor and anchors the top-left corner. On desktop it
-  // is a bare, containerless gear glyph anchored top-right: no plate or
-  // background, sized large, and made legible directly on the scene art by the
-  // on-media outline dilation (rung 1 of the legibility ladder). The edge inset
-  // keeps it clear of the screen corner (more so on desktop, where there is no
-  // safe-area inset doing that job).
+  // Trigger sizing. Both platforms wear the same compact circular glass icon
+  // button that clears the 44px touch floor; only the corner and glyph differ.
+  // Mobile anchors the menu glyph to the top-left corner; desktop anchors the
+  // gear glyph to the top-right. The edge inset keeps the disc clear of the
+  // screen corner (more so on desktop, where there is no safe-area inset doing
+  // that job).
   const menuBtnSize = 48;
-  const menuGlyphSize = isDesktop ? 36 : 26;
+  const menuGlyphSize = 26;
   const menuEdgeInset = isDesktop ? 22 : 18;
   const [open, setOpen] = useState(false);
   const [menuView, setMenuView] = useState<MenuView>("root");
@@ -264,8 +263,8 @@ export function DreamscapeQuestMenu({
       style={{
         position: "fixed",
         top: `max(env(safe-area-inset-top), ${String(menuEdgeInset)}px)`,
-        // Desktop anchors the bare gear to the top-right corner; mobile keeps the
-        // circular icon button in the top-left.
+        // Desktop anchors the glass gear button to the top-right corner; mobile
+        // keeps the glass menu button in the top-left.
         ...(isDesktop
           ? { right: `max(env(safe-area-inset-right), ${String(menuEdgeInset)}px)` }
           : { left: `max(env(safe-area-inset-left), ${String(menuEdgeInset)}px)` }),
@@ -293,29 +292,14 @@ export function DreamscapeQuestMenu({
           color: token("--text-on-accent"),
           fontSize: menuGlyphSize,
           cursor: "pointer",
-          // Mobile uses the compact circular glass icon affordance. Desktop is a
-          // bare gear with no container: the white glyph earns its legibility on
-          // scene art from the on-media outline dilation, not a plate.
-          ...(isDesktop
-            ? { textShadow: token("--text-outline-media") }
-            : glassIconButtonChrome()),
+          // Both platforms wear the shared circular glass icon affordance; only
+          // the glyph and corner differ.
+          ...glassIconButtonChrome(),
         }}
       >
         <i
           className={isDesktop ? "bxf bx-cog" : "bxf bx-menu"}
           aria-hidden="true"
-          // Cast a shadow of the gear's own contour on desktop, so the bare glyph
-          // lifts off the scene art. Two stacked `drop-shadow` filters (not a
-          // text-shadow, which the legibility outline already owns) compound into
-          // a denser, clearly-visible cast shadow that hugs the glyph shape rather
-          // than its bounding box: a larger diffuse halo plus a tighter core.
-          style={
-            isDesktop
-              ? {
-                  filter: `drop-shadow(${token("--shadow-lg")}) drop-shadow(${token("--shadow-md")})`,
-                }
-              : undefined
-          }
         />
       </Pressable>
 

@@ -73,7 +73,7 @@ afterEach(() => {
 });
 
 describe("DreamscapeQuestMenu", () => {
-  it("renders a bare gear menu trigger on desktop", () => {
+  it("renders a glass gear menu trigger on desktop", () => {
     mockDesktop(true);
     const { container, root } = renderMenu();
 
@@ -81,7 +81,7 @@ describe("DreamscapeQuestMenu", () => {
       '[data-testid="dreamscape-menu-button"]',
     );
 
-    // The desktop trigger is the containerless gear glyph alone — no label.
+    // The desktop trigger is the circular glass gear button — icon only, no label.
     expect(menuButton?.textContent).toBe("");
     expect(menuButton?.querySelector("i")?.className).toBe("bxf bx-cog");
 
