@@ -61,13 +61,13 @@ describe("buildDesktopDeckView", () => {
       makeEntry({ entryId: "e1", cardNumber: 1 }),
     ];
 
-    const view = buildDesktopDeckView(deck, database(a, b), null, [], 12);
+    const view = buildDesktopDeckView(deck, database(a, b), null, []);
 
     expect(view.cards.map((c) => c.entryId)).toEqual(["e2", "e1"]);
   });
 
   it("maps the Dreamcaller to the sidebar view (portrait visual + rules text)", () => {
-    const view = buildDesktopDeckView([], database(), dreamcaller, [], 12);
+    const view = buildDesktopDeckView([], database(), dreamcaller, []);
 
     expect(view.dreamcaller).toEqual({
       imageNumber: "12",
@@ -78,17 +78,16 @@ describe("buildDesktopDeckView", () => {
   });
 
   it("carries a null Dreamcaller through as null", () => {
-    const view = buildDesktopDeckView([], database(), null, [], 12);
+    const view = buildDesktopDeckView([], database(), null, []);
     expect(view.dreamcaller).toBeNull();
   });
 
-  it("copies the dreamsigns and the cap", () => {
+  it("copies the dreamsigns into the view", () => {
     const signs = [dreamsign];
-    const view = buildDesktopDeckView([], database(), null, signs, 8);
+    const view = buildDesktopDeckView([], database(), null, signs);
 
     expect(view.dreamsigns).toEqual(signs);
     // A copy, not the caller's array, so the view cannot alias live state.
     expect(view.dreamsigns).not.toBe(signs);
-    expect(view.maxDreamsigns).toBe(8);
   });
 });

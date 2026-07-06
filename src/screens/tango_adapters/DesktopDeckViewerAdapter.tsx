@@ -35,14 +35,12 @@ export function DesktopDeckViewerAdapter({
         questContent.cardDatabase,
         state.dreamcaller,
         state.dreamsigns,
-        state.maxDreamsigns,
       ),
     [
       state.deck,
       questContent.cardDatabase,
       state.dreamcaller,
       state.dreamsigns,
-      state.maxDreamsigns,
     ],
   );
 

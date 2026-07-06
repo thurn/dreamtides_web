@@ -90,8 +90,6 @@ export interface DesktopDeckView {
   dreamcaller: DeckDreamcallerView | null;
   /** The dreamsigns collected so far, in collection order. */
   dreamsigns: DreamsignData[];
-  /** The run's dreamsign cap. */
-  maxDreamsigns: number;
 }
 
 /** Props for {@link DesktopDeckViewer}. */
@@ -113,12 +111,11 @@ const CONTENT_MAX_WIDTH_PX = 1180;
 const SIDEBAR_WIDTH_PX = 268;
 
 /**
- * Edge length of a collected-dreamsign art tile in the sidebar. Sized so that
- * two tiles sit side by side in one row of the two-column grid: the sidebar's
- * content width (SIDEBAR_WIDTH_PX less its --space-6 padding on each side) minus
- * the inter-tile --space-3 gap, halved.
+ * Edge length of a collected-dreamsign art tile in the sidebar. Two tiles sit
+ * side by side in one row of the left-aligned two-column grid, hugging the
+ * sidebar's left edge with room to spare.
  */
-const DREAMSIGN_TILE_PX = 112;
+const DREAMSIGN_TILE_PX = 92;
 
 /**
  * Edge length of the Dreamcaller portrait in the sidebar. Matched to a
@@ -131,13 +128,17 @@ const DREAMCALLER_PORTRAIT_PX = DREAMSIGN_TILE_PX;
 const CLOSE_BUTTON_PX = 40;
 
 /**
- * Hover target widths (px) for each card-size preset. Small keeps the original
- * target so tiny cards still enlarge enough to read; medium steps down to keep
- * MacBook-sized desktop cards from jumping to the max scale.
+ * Hover target widths (px) for each card-size preset — the width a hovered card
+ * grows toward before HoverZoomCard's MAX_SCALE (1.5x) and the viewport limits
+ * cap it. Small and large keep a generous 340 target (small stays pinned at the
+ * 1.5x cap, large lands ~1.42x from its larger tile). Medium's target must sit
+ * BELOW its tile width x MAX_SCALE (190px x 1.5 = 285px) to actually govern the
+ * scale rather than being clamped to the cap: 250px yields ~1.32x, a gentler pop
+ * than small/large, which is the intent for the mid preset.
  */
 const HOVER_TARGET_WIDTH_PX: Readonly<Record<DeckCardSize, number>> = {
   small: 340,
-  medium: 300,
+  medium: 250,
   large: 340,
 };
 
@@ -217,6 +218,12 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
           // readable rather than stretching edge-to-edge on an ultrawide display.
           width: `min(${String(CONTENT_MAX_WIDTH_PX)}px, 100%)`,
           height: "100%",
+          // Override the flex/grid automatic min-height (min-content) so the
+          // full-height content honours `height: 100%` instead of growing to fit
+          // the whole deck — that overflow pushed the card grid past the viewport
+          // bottom and left it unable to scroll. With this the inner grid is
+          // bounded and scrolls within the viewport.
+          minHeight: 0,
           display: "flex",
           flexDirection: "column",
         }}
@@ -226,7 +233,6 @@ export function DesktopDeckViewer({ view, onClose }: DesktopDeckViewerProps) {
           <Sidebar
             dreamcaller={view.dreamcaller}
             dreamsigns={view.dreamsigns}
-            maxDreamsigns={view.maxDreamsigns}
             stageRef={stageRef}
           />
           <main
@@ -301,31 +307,9 @@ function Eyebrow({
   );
 }
 
-/** The sidebar's consistent section header: label first, metadata tucked right. */
-function SidebarSectionHeader({
-  label,
-  meta,
-}: {
-  label: string;
-  meta?: string;
-}) {
-  return (
-    <div
-      style={{
-        display: "flex",
-        alignItems: "baseline",
-        justifyContent: "space-between",
-        gap: token("--space-3"),
-      }}
-    >
-      <Eyebrow>{label}</Eyebrow>
-      {meta !== undefined && (
-        <div style={{ font: token("--t-caption"), color: token("--text-secondary") }}>
-          {meta}
-        </div>
-      )}
-    </div>
-  );
+/** The sidebar's consistent section header: an uppercase eyebrow label. */
+function SidebarSectionHeader({ label }: { label: string }) {
+  return <Eyebrow>{label}</Eyebrow>;
 }
 
 /**
@@ -384,12 +368,10 @@ function Header({ count, onClose }: { count: number; onClose: () => void }) {
 function Sidebar({
   dreamcaller,
   dreamsigns,
-  maxDreamsigns,
   stageRef,
 }: {
   dreamcaller: DeckDreamcallerView | null;
   dreamsigns: DreamsignData[];
-  maxDreamsigns: number;
   stageRef: RefObject<HTMLDivElement | null>;
 }) {
   return (
@@ -407,11 +389,7 @@ function Sidebar({
       {dreamcaller !== null && (
         <DreamcallerBlock dreamcaller={dreamcaller} stageRef={stageRef} />
       )}
-      <DreamsignsBlock
-        dreamsigns={dreamsigns}
-        maxDreamsigns={maxDreamsigns}
-        stageRef={stageRef}
-      />
+      <DreamsignsBlock dreamsigns={dreamsigns} stageRef={stageRef} />
     </aside>
   );
 }
@@ -445,13 +423,17 @@ function DreamcallerBlock({
   const ability = dreamcaller.renderedText.trim();
   return (
     <section
-      style={{ display: "flex", flexDirection: "column", gap: token("--space-3") }}
+      style={{ display: "flex", flexDirection: "column", gap: token("--space-6") }}
     >
       <SidebarSectionHeader label="Dreamcaller" />
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div style={{ display: "flex", justifyContent: "flex-start" }}>
         {/* The portrait itself is the reveal trigger: Pressable owns the one
             shared press/hover scale, while usePressReveal (its pointer handlers
-            chained through) owns the show/hide of the portalled InfoCard. */}
+            chained through) owns the show/hide of the portalled InfoCard. The
+            button carries the accent frame — the same 2px violet border, glow,
+            and control radius the quest status bar's Dreamcaller bust wears — so
+            the two portraits read as the same object; `overflow: hidden` clips
+            the art to that rounded frame. */}
         <Pressable
           as="button"
           ref={ref}
@@ -462,10 +444,13 @@ function DreamcallerBlock({
           onPointerLeave={leave}
           onPointerCancel={end}
           style={{
-            width: DREAMCALLER_PORTRAIT_PX,
             padding: 0,
-            border: "none",
             background: "none",
+            borderRadius: token("--radius-control"),
+            border: `2px solid ${token("--border-accent")}`,
+            boxShadow: token("--glow-accent-soft"),
+            overflow: "hidden",
+            lineHeight: 0,
           }}
         >
           <DreamcallerPortrait
@@ -498,21 +483,16 @@ function DreamcallerBlock({
 /** The collected dreamsigns as hoverable art tiles. */
 function DreamsignsBlock({
   dreamsigns,
-  maxDreamsigns,
   stageRef,
 }: {
   dreamsigns: DreamsignData[];
-  maxDreamsigns: number;
   stageRef: RefObject<HTMLDivElement | null>;
 }) {
   return (
     <section
-      style={{ display: "flex", flexDirection: "column", gap: token("--space-4") }}
+      style={{ display: "flex", flexDirection: "column", gap: token("--space-6") }}
     >
-      <SidebarSectionHeader
-        label="Dreamsigns"
-        meta={`${String(dreamsigns.length)} / ${String(maxDreamsigns)}`}
-      />
+      <SidebarSectionHeader label="Dreamsigns" />
       {dreamsigns.length === 0 ? (
         <div style={{ font: token("--t-body-sm"), color: token("--text-muted") }}>
           None collected yet.
@@ -523,8 +503,8 @@ function DreamsignsBlock({
             display: "grid",
             gridTemplateColumns: `repeat(2, ${String(DREAMSIGN_TILE_PX)}px)`,
             gap: token("--space-3"),
-            justifyContent: "center",
-            justifyItems: "center",
+            justifyContent: "start",
+            justifyItems: "start",
           }}
         >
           {dreamsigns.map((sign, index) => (

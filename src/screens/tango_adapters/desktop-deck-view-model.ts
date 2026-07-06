@@ -36,12 +36,10 @@ export function buildDesktopDeckView(
   cardDatabase: Map<number, CardData>,
   dreamcaller: Dreamcaller | null,
   dreamsigns: readonly Dreamsign[],
-  maxDreamsigns: number,
 ): DesktopDeckView {
   return {
     cards: buildMobileDeckView(deck, cardDatabase).cards,
     dreamcaller: toDreamcallerView(dreamcaller),
     dreamsigns: [...dreamsigns],
-    maxDreamsigns,
   };
 }
