@@ -6,12 +6,11 @@
 // click, or Enter/Space) enters its dreamscape; a deliberate hold-to-read never
 // navigates.
 //
-// The reveal replaces the legacy atlas hover card with the design system's
-// InfoCard, cut down for mobile: a scene-art hero with the dreamscape name, its
-// resident guide as the eyebrow, and the home-site bonus as the body — the
-// labelled "Site / Bonus / Affiliation" rows of the old desktop card are
-// dropped. A node carrying a pre-revealed known dreamsign shows a second,
-// stacked object card for it.
+// The reveal renders through the design system's InfoCard, cut down for mobile:
+// a full-bleed scene-art hero with the resident guide's name and the home-site
+// bonus as the glass text card laid on top of it — the labelled "Site / Bonus /
+// Affiliation" rows of the desktop card are dropped. A node carrying a
+// pre-revealed known dreamsign shows a second, stacked object card for it.
 //
 // It routes through InfoCard's `usePressReveal` + `anchorRect` + `PressPopover`,
 // so timing, placement, and the on-screen clamp match every other Tango reveal;
@@ -42,23 +41,20 @@ export interface AtlasDreamsignCard {
  * component picks the InfoCard variant from `isUnrevealed` / `isBoss` and which
  * media is present.
  *
- * A revealed dreamscape's reveal FEATURES its resident Dream Guide, composited
- * on top of the dreamscape scene (the scene deemphasized behind them), with the
- * guide's name as the (white, serif) headline — the dreamscape's own name,
- * decorative on mobile, is dropped. The boss superimposes Apollyon on Limbo the
- * same way; an unrevealed node is a compact text card.
+ * A revealed dreamscape's reveal shows its scene as a full-bleed hero image with
+ * a glass text card laid on top — the resident guide's name as the (white,
+ * serif) headline and the home-site bonus as the body; the dreamscape's own
+ * name, decorative on mobile, is dropped. The boss uses Limbo's scene the same
+ * way; an unrevealed node is a compact text card.
  */
 export interface AtlasNodeCard {
   /** An unrevealed / unreachable node: the compact "unseen dream" text card. */
   isUnrevealed: boolean;
   /** The looming boss node. */
   isBoss: boolean;
-  /** Scene art (banner): the dreamscape scene, or Limbo for the boss; null while unrevealed. */
+  /** Scene art (the full-bleed hero image): the dreamscape scene, or Limbo for
+   * the boss; null while unrevealed. */
   sceneArt: ArtRef | null;
-  /** The character render composited on top of the scene — the resident guide,
-   * or Apollyon for the boss; null when there is no figure to feature (the
-   * starter). */
-  figureArt: ArtRef | null;
   /** Uppercase eyebrow — the boss's "Final Dream"; null otherwise. */
   eyebrow: string | null;
   /** Headline: the resident guide's name, the boss place, or "An Unseen Dream". */
@@ -80,31 +76,18 @@ export interface AtlasNodeRevealItem {
 /** Vertical gap (px) between the node card and its companion dreamsign card. */
 const CARD_STACK_GAP = 10;
 
-/** The main reveal card for a node: a figure-on-scene, a plain scene, or text. */
+/** The main reveal card for a node: a full-bleed scene hero, or a text card. */
 function AtlasMainCard({ card }: { card: AtlasNodeCard }): React.ReactElement {
   const body = richText.plain(card.body);
-  // A revealed dreamscape (guide) or the boss (Apollyon): the character figure
-  // composited on top of the scene, with the featured name as the headline.
-  if (card.sceneArt !== null && card.figureArt !== null) {
-    return (
-      <InfoCard
-        variant="scene"
-        image={card.sceneArt}
-        figure={card.figureArt}
-        imageCrop="center"
-        meta={card.eyebrow ?? undefined}
-        title={card.title}
-        body={body}
-      />
-    );
-  }
-  // A guideless revealed place (the starter): the scene alone.
+  // A revealed dreamscape or the boss: the scene as a full-bleed hero image with
+  // the featured name / bonus laid on top as the glass text card.
   if (card.sceneArt !== null) {
     return (
       <InfoCard
-        variant="portrait"
+        variant="fullBleed"
         image={card.sceneArt}
         imageCrop="center"
+        meta={card.eyebrow ?? undefined}
         title={card.title}
         body={body}
       />

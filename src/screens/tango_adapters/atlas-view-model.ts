@@ -18,7 +18,6 @@ import {
 import {
   BOSS_DISPLAY,
   BOSS_DREAMSCAPE_ID,
-  BOSS_FIGURE_ID,
 } from "../../tango/components/atlas/atlas-display";
 import type { AtlasEdgeKind } from "../../tango/components/atlas/AtlasEdge";
 import type {
@@ -291,12 +290,12 @@ function buildDreamsignCard(
  * Resolves the InfoCard reveal content for one node — the mobile-cut card the
  * atlas node reveals on press / hover.
  *
- * A revealed dreamscape FEATURES its resident Dream Guide, composited on top of
- * the dreamscape scene, with the guide's name as the headline — the dreamscape's
- * own name (decorative on mobile) is dropped. The boss superimposes Apollyon on
- * Limbo the same way. A guideless revealed place (the starter) shows the scene
- * alone. An unreachable / unrevealed node shows the compact "unseen dream" text
- * card. A pre-revealed known dreamsign is carried as its own companion card. The
+ * A revealed dreamscape shows its scene as a full-bleed hero image with the
+ * resident guide's name as the headline — the dreamscape's own name (decorative
+ * on mobile) is dropped. The boss shows Limbo's scene the same way. A guideless
+ * revealed place (the starter) shows the scene with an empty headline. An
+ * unreachable / unrevealed node shows the compact "unseen dream" text card. A
+ * pre-revealed known dreamsign is carried as its own companion card. The
  * labelled site / bonus / affiliation rows of the legacy desktop card are cut.
  */
 function buildNodeCard(
@@ -319,7 +318,6 @@ function buildNodeCard(
       isUnrevealed: false,
       isBoss: true,
       sceneArt: artRef.dreamscapeScene(BOSS_DREAMSCAPE_ID),
-      figureArt: artRef.dreamGuide(BOSS_FIGURE_ID),
       eyebrow: "Final Dream",
       title: BOSS_DISPLAY.place,
       body: bossIncarnation?.description ?? BOSS_DISPLAY.intro,
@@ -339,7 +337,6 @@ function buildNodeCard(
       isUnrevealed: true,
       isBoss: false,
       sceneArt: null,
-      figureArt: null,
       eyebrow: null,
       title: "An Unseen Dream",
       body: UNSEEN_DREAM_BODY,
@@ -352,14 +349,13 @@ function buildNodeCard(
       ? (questContent.guides.find((g) => g.id === dreamscape.guideId) ?? null)
       : null;
 
-  // With a resident guide, feature the guide composited on the dreamscape scene,
-  // their name as the headline. A guideless place (the starter) shows the scene
-  // alone.
+  // Show the dreamscape scene as the full-bleed hero, with the resident guide's
+  // name as the headline (a guideless starter shows the scene with an empty
+  // headline) and the home-site bonus as the body.
   return {
     isUnrevealed: false,
     isBoss: false,
     sceneArt: artRef.dreamscapeScene(dreamscape.id),
-    figureArt: guide !== null ? artRef.dreamGuide(guide.id) : null,
     eyebrow: null,
     title: guide?.name ?? "",
     body: guide?.homeSpecialty ?? STARTER_BODY,

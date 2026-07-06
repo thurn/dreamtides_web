@@ -10,14 +10,14 @@
 //   - one shadow/rim treatment  — glassSurfaceStyle's layered glass edge
 //   - one type scale            — headline (serif) / body (rules) / meta (mono)
 // Only the MEDIA treatment varies by content, via `variant`:
-//   - object   — a centered framed portrait OR contained transparent object
-//   - portrait — a full-width contained rectangular image across the top, with
-//                the name, an optional epithet, and body below
-//   - scene    — a character figure composited on top of a scene banner
-//   - icon     — a glyph disc beside the title
-//   - tide     — a tide's own colored disc + alignment label
-//   - text     — an optional small lead glyph + title, with an optional epithet
-//                (a smaller serif subtitle in white) under the name
+//   - object    — a centered framed portrait OR contained transparent object
+//   - fullBleed — a square hero image with a glass text card laid on TOP of it:
+//                 the image IS the card, with meta / name / epithet / body
+//                 revealed on the shared glass, floating over the lower image
+//   - icon      — a glyph disc beside the title
+//   - tide      — a tide's own colored disc + alignment label
+//   - text      — an optional small lead glyph + title, with an optional epithet
+//                 (a smaller serif subtitle in white) under the name
 //
 // The placement / timing engine ships alongside it and is attached as
 // statics: `InfoCard.PressPopover / PressInfo / usePressReveal / anchorRect /
@@ -71,6 +71,10 @@ const CLICK_WINDOW_MS = 300; // release within this → still counts as a tap/cl
 const FINGER_RADIUS_PX = 18;
 const PADX = 15;
 const PADY = 14;
+// Inset (px) of the fullBleed variant's floating glass text card from the square
+// hero image's edges — how much of the image shows around the card. Its own
+// fixed geometry, not a design-system scale step.
+const FULL_BLEED_INSET = 12;
 const INFO_CARD_GLASS_FILL = "rgba(18,14,28,0.5)";
 const INFO_CARD_GLASS_BACKGROUND = `linear-gradient(150deg, rgba(255,255,255,0.07), rgba(255,255,255,0) 42%), ${INFO_CARD_GLASS_FILL}`;
 
@@ -163,8 +167,7 @@ export const SITE_DISC: React.CSSProperties = {
 /** Which media treatment an InfoCard renders. */
 export type InfoCardVariant =
   | "object"
-  | "portrait"
-  | "scene"
+  | "fullBleed"
   | "icon"
   | "tide"
   | "text";
@@ -200,43 +203,28 @@ export interface InfoCardObjectProps extends InfoCardCommonProps {
 }
 
 /**
- * portrait variant — a full-width contained rectangular image across the top of
- * the card (inset from the edges, not full-bleed), with the name, an optional
- * epithet, and the body left-aligned below. Built for the Dreamcaller profile
- * reveal. The image IS its media, so `image` is required.
+ * fullBleed variant — a square hero image with a glass text card laid on TOP of
+ * it: the image fills the whole card (rounded corners), and the shared
+ * liquid-glass text card floats over its lower portion carrying the meta / name
+ * / epithet / body. It is literally "an image, with a text info card placed on
+ * top of it". Built for the Dreamcaller profile reveal and the atlas node
+ * reveals. The image IS its media, so `image` is required.
  */
-export interface InfoCardPortraitProps extends InfoCardCommonProps {
-  variant: "portrait";
-  /** The media the card is built around, as an {@link ArtRef}. Required. */
+export interface InfoCardFullBleedProps extends InfoCardCommonProps {
+  variant: "fullBleed";
+  /** The square hero image the card is built on, as an {@link ArtRef}. Required. */
   image: ArtRef;
-  /** How the media is cropped. Default `"top"`. */
+  /** How the hero image is cropped. Default `"center"`. */
   imageCrop?: ImageCrop;
   /** A named media {@link MediaFilter} (e.g. a spark glow). */
   imageFilter?: MediaFilter;
+  /** Small mono/uppercase overline above the title, on the glass card. */
+  meta?: string;
   /**
    * An epithet under the name — a smaller serif line in white, mirroring the
    * Dreamcaller-select name/epithet pairing. Plain text; resolve before display.
    */
   subtitle?: string;
-}
-
-/**
- * scene variant — a full-bleed scene banner across the top with a character
- * figure composited on top of it (centered, standing on the banner floor), the
- * title + body below. The scene is deemphasized behind the figure so the
- * character reads as the subject. Both the scene `image` and the `figure` are
- * required — the variant IS a character standing in a place.
- */
-export interface InfoCardSceneProps extends InfoCardCommonProps {
-  variant: "scene";
-  /** The scene / background art (banner), as an {@link ArtRef}. Required. */
-  image: ArtRef;
-  /** The character figure composited on top of the scene, as an {@link ArtRef}. Required. */
-  figure: ArtRef;
-  /** How the scene is cropped. Default `"center"`. */
-  imageCrop?: ImageCrop;
-  /** Small mono/uppercase overline above the title. */
-  meta?: string;
 }
 
 /**
@@ -292,8 +280,7 @@ export interface InfoCardTextProps extends InfoCardCommonProps {
  */
 export type InfoCardProps =
   | InfoCardObjectProps
-  | InfoCardPortraitProps
-  | InfoCardSceneProps
+  | InfoCardFullBleedProps
   | InfoCardIconProps
   | InfoCardTideProps
   | InfoCardTextProps;
@@ -303,7 +290,7 @@ export type InfoCardProps =
    ================================================================ */
 /**
  * InfoCard — the one press-to-reveal information card. Its media treatment
- * varies (object / icon / tide / text) on one fixed liquid-glass shell (no
+ * varies (object / fullBleed / icon / tide / text) on one fixed liquid-glass shell (no
  * caret, one GroupPanel material + type scale). The placement/timing engine is
  * attached as statics:
  * `InfoCard.PressPopover / PressInfo / usePressReveal / anchorRect /
@@ -391,26 +378,44 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
     );
   }
 
-  /* --- portrait: a full-width contained rectangular image across the top
-     (inset from the card edges), name + optional epithet + body left-aligned
-     below. The image sits on the card's own glass as a rounded rectangle with
-     a hairline inset ring, never bleeding to the shell edge. --- */
-  if (props.variant === "portrait") {
-    const { image, imageCrop = "top", imageFilter, subtitle } = props;
+  /* --- fullBleed: a square hero image that fills the whole card, with the
+     shared liquid-glass text card laid on TOP of it — floating over the lower
+     portion, inset from the image edges, so it reads as "a text info card
+     placed on top of an image". The glass backdrop-filter samples the image
+     behind it, blurring it through the card exactly like the popover shell. The
+     image layer clips itself to the popover radius (and lifts off the scene with
+     the hero shadow); the glass card is a sibling so its own drop shadow is not
+     clipped. A long body simply grows the card taller and the image grows with
+     it, so the image always fills behind the card. --- */
+  if (props.variant === "fullBleed") {
+    const { image, imageCrop = "center", imageFilter, meta, subtitle } = props;
+    const Meta = meta ? (
+      <div style={{ ...tMeta, marginBottom: 7 }}>{meta}</div>
+    ) : null;
     return (
-      <div style={{ ...shell, padding: `${String(PADY)}px ${String(PADX)}px` }}>
+      <div
+        style={{
+          position: "relative",
+          width: CARD_W,
+          // A square hero by default; grows only if the glass card is taller
+          // than the square, in which case the image layer grows with it.
+          minHeight: CARD_W,
+          boxSizing: "border-box",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "flex-end",
+          padding: FULL_BLEED_INSET,
+        }}
+      >
         <div
           style={{
-            width: "100%",
-            height: 150,
-            marginBottom: 12,
-            overflow: "hidden",
-            // Match the shell's own corner radius so the inset image and the
-            // card read as concentric rounded rectangles, not two mismatched
-            // radii.
+            position: "absolute",
+            inset: 0,
             borderRadius: token("--radius-popover"),
-            // faithfully-copied inset hairline highlight for the media frame.
-            boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.08)",
+            overflow: "hidden",
+            // Lift the hero image off the scene, plus the faithfully-copied
+            // inset hairline highlight shared by the other media frames.
+            boxShadow: `${token("--shadow-lg")}, inset 0 0 0 1px rgba(255,255,255,0.08)`,
           }}
         >
           <img
@@ -418,6 +423,8 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
             alt=""
             draggable={false}
             style={{
+              position: "absolute",
+              inset: 0,
               width: "100%",
               height: "100%",
               objectFit: "cover",
@@ -427,96 +434,29 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
             }}
           />
         </div>
-        <div style={{ ...tHeadline, marginBottom: subtitle ? 2 : body ? 7 : 0 }}>
-          {titleContent}
-        </div>
-        {subtitle !== undefined && subtitle !== "" && (
-          <div style={{ ...tEpithet, marginBottom: body ? 7 : 0 }}>{subtitle}</div>
-        )}
-        {body != null && <div style={{ ...tBody }}>{renderRichText(body)}</div>}
-      </div>
-    );
-  }
-
-  /* --- scene: a scene banner across the top with a character figure composited
-     on top (centered, standing on the banner floor). The scene is darkened and
-     scrimmed so the figure reads as the subject, then dissolves into the glass
-     fill; the title/body sit on the card's own material below. --- */
-  if (props.variant === "scene") {
-    const { image, figure, imageCrop = "center", meta } = props;
-    const Meta = meta ? (
-      <div style={{ ...tMeta, marginBottom: 7 }}>{meta}</div>
-    ) : null;
-    return (
-      <div style={{ ...shell }}>
         <div
           style={{
+            ...glassSurfaceStyle(),
+            background: INFO_CARD_GLASS_BACKGROUND,
             position: "relative",
-            width: "100%",
-            height: 210,
-            overflow: "hidden",
-          }}
-        >
-          <img
-            src={resolveArtRef(image)}
-            alt=""
-            draggable={false}
-            style={{
-              position: "absolute",
-              inset: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: resolveImageCrop(imageCrop),
-              userSelect: "none",
-              // Deemphasize the scene so the foreground figure reads as the subject.
-              filter: "brightness(0.6) saturate(0.92)",
-            }}
-          />
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              // A soft vignette darkens the scene toward the edges, and the
-              // bottom dissolves into the card's own translucent glass fill.
-              background: `radial-gradient(125% 92% at 50% 26%, rgba(10,6,18,0.12), rgba(10,6,18,0.58) 72%), linear-gradient(to bottom, rgba(34,26,49,0) 44%, rgba(34,26,49,0.72) 80%, ${INFO_CARD_GLASS_FILL} 100%)`,
-            }}
-          />
-          <img
-            src={resolveArtRef(figure)}
-            alt=""
-            draggable={false}
-            style={{
-              position: "absolute",
-              left: "50%",
-              bottom: 0,
-              transform: "translateX(-50%)",
-              height: "100%",
-              width: "auto",
-              maxWidth: "none",
-              objectFit: "contain",
-              objectPosition: "bottom",
-              userSelect: "none",
-              // Lift the figure off the scene, then fade its base into the glass.
-              filter:
-                "drop-shadow(0 10px 18px rgba(0,0,0,0.55)) drop-shadow(0 0 22px rgba(124,77,255,0.28))",
-              WebkitMaskImage:
-                "linear-gradient(180deg, #000 86%, transparent 99%)",
-              maskImage: "linear-gradient(180deg, #000 86%, transparent 99%)",
-            }}
-          />
-        </div>
-        <div
-          style={{
-            position: "relative",
-            marginTop: -16,
-            padding: "0 16px 16px",
+            padding: `${String(PADY)}px ${String(PADX)}px`,
+            boxSizing: "border-box",
+            textAlign: "left",
+            // Same wrapping reset as the shell so on-image copy always wraps to
+            // the card width no matter what the trigger inherits down.
+            whiteSpace: "normal",
+            overflowWrap: "break-word",
           }}
         >
           {Meta}
-          <div style={{ ...tHeadline, marginBottom: body ? 7 : 0 }}>
+          <div style={{ ...tHeadline, marginBottom: subtitle ? 2 : body ? 7 : 0 }}>
             {titleContent}
           </div>
+          {subtitle !== undefined && subtitle !== "" && (
+            <div style={{ ...tEpithet, marginBottom: body ? 7 : 0 }}>
+              {subtitle}
+            </div>
+          )}
           {body != null && <div style={{ ...tBody }}>{renderRichText(body)}</div>}
         </div>
       </div>

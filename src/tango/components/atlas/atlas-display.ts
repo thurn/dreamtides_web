@@ -50,12 +50,6 @@ export const STARTER_FLAG_ICON_CLASS = "fa-solid fa-flag";
 export const BOSS_DREAMSCAPE_ID = "limbo";
 
 /**
- * The Dream Guide id for the boss's character figure (Apollyon), composited on
- * the Limbo scene in the boss reveal via {@link artRef.dreamGuide}.
- */
-export const BOSS_FIGURE_ID = "apollyon";
-
-/**
  * The Layer-VII final dream. The atlas always presents the boss node as Limbo,
  * guarded by Apollyon, independent of which dreamscape the generator assigned
  * the boss node for its battle. Copy is player-facing flavour for the boss

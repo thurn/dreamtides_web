@@ -6,22 +6,21 @@
 
 Components · Live demo & interactive props: `/tango#/info-card`
 
-The one press-to-reveal information card. Its media treatment varies by content — object, portrait, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract.
+The one press-to-reveal information card. Its media treatment varies by content — object, full-bleed, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract.
 
 ## Props
 
 | Prop | Type | Required | Default | Description |
 | --- | --- | --- | --- | --- |
-| `variant` | `"object" \| "text" \| "icon" \| "portrait" \| "scene" \| "tide"` | no | — | Which media treatment. Omit — or pass 'text' — for the text variant. |
-| `image` | `ArtRef` | yes | — | The media the card is built around, as an {@link ArtRef}. Required. The scene / background art (banner), as an {@link ArtRef}. Required. |
-| `imageCrop` | `ImageCrop` = `"top" \| "center"` | no | — | How the media is cropped. Default `"top"`. How the scene is cropped. Default `"center"`. |
+| `variant` | `"object" \| "text" \| "icon" \| "fullBleed" \| "tide"` | no | — | Which media treatment. Omit — or pass 'text' — for the text variant. |
+| `image` | `ArtRef` | yes | — | The media the card is built around, as an {@link ArtRef}. Required. The square hero image the card is built on, as an {@link ArtRef}. Required. |
+| `imageCrop` | `ImageCrop` = `"top" \| "center"` | no | — | How the media is cropped. Default `"top"`. How the hero image is cropped. Default `"center"`. |
 | `imageFilter` | `MediaFilter` = `"dreamsign-portrait" \| "dreamsign-portrait-bane" \| "spark-glow" \| "energy-glow"` | no | — | A named media {@link MediaFilter} (e.g. a drop-shadow for a transparent object). A named media {@link MediaFilter} (e.g. a spark glow). |
 | `frame` | `boolean` | no | — | true = framed portrait, false = contained transparent object. Default false. |
 | `title` | `string` | no | — | The card's headline. Plain text — resolve names before display. |
 | `body` | `RichText` | no | — | The reveal copy, as a {@link RichText} value (plain / rules / note / stack). |
+| `meta` | `string` | no | — | Small mono/uppercase overline above the title, on the glass card. Small mono/uppercase overline above the title. |
 | `subtitle` | `string` | no | — | An epithet under the name — a smaller serif line in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. An epithet under the name — a smaller serif subtitle in white, mirroring the Dreamcaller-select name/epithet pairing. Plain text; resolve before display. |
-| `figure` | `ArtRef` | yes | — | The character figure composited on top of the scene, as an {@link ArtRef}. Required. |
-| `meta` | `string` | no | — | Small mono/uppercase overline above the title. |
 | `glyph` | `Glyph` | yes | — | The {@link Glyph} the disc renders. Required. |
 | `tide` | `Tide` = `"ember" \| "valor" \| "vision" \| "wild" \| "shadow"` | yes | — | Which of the five tides. Fixes the disc color/mark and the alignment label. |
 | `leadGlyph` | `Glyph` | no | — | A small leading {@link Glyph}. |
@@ -79,31 +78,17 @@ A media object with `image` (an `ArtRef`); set `frame` for a framed portrait, om
 />
 ```
 
-### Portrait variant
+### Full-bleed variant
 
-A full-width contained rectangular image across the top (inset, not full-bleed), with the name, an optional `subtitle` epithet, and the body below. Used for the Dreamcaller profile reveal.
+A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the meta / name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Used for the Dreamcaller profile reveal and the atlas node reveals.
 
 ```tsx
 <InfoCard
-  variant="portrait"
+  variant="fullBleed"
   image={artRef.dreamcaller("0025")}
   title="Threxan"
   subtitle="the Resounding Wrath"
   body={richText.rules("At the start of your first turn, draw a card.")}
-/>
-```
-
-### Scene variant
-
-A character `figure` composited on top of a scene `image` (both `ArtRef`s), centered and standing on the banner floor, with the scene deemphasized behind them — a character in a place. Used for the atlas node reveals (a Dream Guide over their dreamscape, Apollyon over Limbo).
-
-```tsx
-<InfoCard
-  variant="scene"
-  image={artRef.dreamscapeScene("frostforge")}
-  figure={artRef.dreamGuide("durgan_forgehammer")}
-  title="Durgan Forgehammer"
-  body={richText.plain("Durgan can transfigure any card in your deck.")}
 />
 ```
 

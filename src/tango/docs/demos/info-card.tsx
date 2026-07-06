@@ -6,12 +6,12 @@
 //
 // The media props are seeded so that EVERY variant renders real content the
 // moment the reader switches the `variant` control: `image` is a real
-// Dreamcaller `ArtRef` (drives the object / portrait media) and `glyph` is a
+// Dreamcaller `ArtRef` (drives the object / fullBleed media) and `glyph` is a
 // named `Glyph` (drives the icon-disc variant), the same production art the
 // full-screen mockup uses — the text default still leads with `leadGlyph`.
 //
 // InfoCardProps is a discriminated union on `variant` — each media variant
-// requires the media it renders (object / portrait require `image`, icon
+// requires the media it renders (object / fullBleed require `image`, icon
 // requires `glyph`) — so the demo seeds `image`, `frame` and `glyph` in
 // defaultArgs and every variant the reader selects renders a complete card. The
 // raw component
@@ -30,7 +30,7 @@ export const infoCardDemo: TangoComponent = {
   id: "info-card",
   title: "Info Card",
   blurb:
-    "The one press-to-reveal information card. Its media treatment varies by content — object, portrait, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract.",
+    "The one press-to-reveal information card. Its media treatment varies by content — object, full-bleed, icon, tide, or text — over a single fixed liquid-glass shell and reveal contract.",
   group: "Components",
   docName: "InfoCard",
   Component: InfoCard,
@@ -72,25 +72,14 @@ import { GLYPHS } from "src/tango/primitives/glyph";
 />`,
     },
     {
-      label: "Portrait variant",
-      note: "A full-width contained rectangular image across the top (inset, not full-bleed), with the name, an optional `subtitle` epithet, and the body below. Used for the Dreamcaller profile reveal.",
+      label: "Full-bleed variant",
+      note: "A square hero `image` filling the whole card, with the shared glass text card laid on TOP of it — the meta / name / optional `subtitle` epithet / body float over the lower image. It is literally an image with a text info card placed on top. Used for the Dreamcaller profile reveal and the atlas node reveals.",
       code: `<InfoCard
-  variant="portrait"
+  variant="fullBleed"
   image={artRef.dreamcaller("0025")}
   title="Threxan"
   subtitle="the Resounding Wrath"
   body={richText.rules("At the start of your first turn, draw a card.")}
-/>`,
-    },
-    {
-      label: "Scene variant",
-      note: "A character `figure` composited on top of a scene `image` (both `ArtRef`s), centered and standing on the banner floor, with the scene deemphasized behind them — a character in a place. Used for the atlas node reveals (a Dream Guide over their dreamscape, Apollyon over Limbo).",
-      code: `<InfoCard
-  variant="scene"
-  image={artRef.dreamscapeScene("frostforge")}
-  figure={artRef.dreamGuide("durgan_forgehammer")}
-  title="Durgan Forgehammer"
-  body={richText.plain("Durgan can transfigure any card in your deck.")}
 />`,
     },
     {
@@ -137,15 +126,12 @@ import { GLYPHS } from "src/tango/primitives/glyph";
       meta: "Tide",
       title: "Singular Storm",
       leadGlyph: GLYPHS.water,
-      // Real media so switching `variant` to object / portrait / icon renders
+      // Real media so switching `variant` to object / fullBleed / icon renders
       // genuine art rather than an empty frame. `image` is a real Dreamcaller
       // portrait, `frame` gives the object variant its framed treatment, and
       // `glyph` fills the icon-disc variant.
       image: artRef.dreamcaller("0025"),
       frame: true,
-      // Seeds the scene variant's foreground figure so switching `variant` to
-      // scene composites a real character over the banner rather than nothing.
-      figure: artRef.dreamGuide("apollyon"),
       glyph: glyph("bxf bx-store-alt-2"),
       // Seeds the tide-disc variant so switching `variant` to tide renders a
       // real colored disc + alignment label rather than an empty card.

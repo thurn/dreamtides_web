@@ -2,7 +2,7 @@
 // each reveal one of InfoCard's media variants through the shared press /
 // hover reveal engine (InfoCard.PressInfo + the variants on one shell).
 // Each trigger anchors its card to the full-viewport stageRef so the cards clamp
-// against the real screen edges. The portrait and object media resolve from a
+// against the real screen edges. The full-bleed and object media resolve from a
 // real asset in `public/` (a Dreamcaller portrait); the icon and text variants
 // use tokenized glyphs, and the epithet trigger shows the text variant's
 // name/epithet pairing.
@@ -123,11 +123,11 @@ export function InfoCardMockup() {
         <Trigger
           stageRef={stageRef}
           label="Dreamcaller"
-          variant="portrait"
+          variant="fullBleed"
           glyph="bxf bx-user-circle"
           card={
             <InfoCard
-              variant="portrait"
+              variant="fullBleed"
               image={artRef.dreamcaller("0025")}
               title="Threxan"
               subtitle="the Resounding Wrath"
