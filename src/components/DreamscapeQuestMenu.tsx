@@ -3,9 +3,9 @@
 // legacy bottom HUD (the persistent bar is re-homed into the Tango
 // `QuestStatusBar`), so the HUD's utility actions — deck viewer, glossary, pool
 // viewer, save/load, and the debug tools — are re-homed here: a floating
-// hamburger in the top-left corner that drops a solid-surface menu, styled from
-// Tango tokens and pressed through the shared `Pressable` feedback. The atlas
-// screen additionally supplies its debug "Regenerate Atlas" action here.
+// top-left trigger that drops a solid-surface menu, styled from Tango tokens and
+// pressed through the shared `Pressable` feedback. The atlas screen additionally
+// supplies its debug "Regenerate Atlas" action here.
 //
 // It is App-shell chrome (mounted beside the screen router, like the legacy
 // HUD), so it owns its own open/submenu/save state and wires the App's overlay
@@ -26,7 +26,10 @@ import type { QuestState } from "../types/quest";
 import { Pressable } from "../tango/primitives/Pressable";
 import { token } from "../tango/primitives/tokens";
 import { useIsDesktop } from "../tango/screens/use-is-desktop";
-import { glassIconButtonChrome } from "../tango/components/controls/control-treatment";
+import {
+  glassIconButtonChrome,
+  glassTrack,
+} from "../tango/components/controls/control-treatment";
 
 /** The App-shell overlay handlers the menu triggers. */
 interface DreamscapeQuestMenuProps {
@@ -96,8 +99,8 @@ function MenuRow({
 }
 
 /**
- * The dreamscape's top-left utility menu. Renders the hamburger trigger and,
- * while open, the dropdown of quest actions (with a Load-Quest submenu).
+ * The dreamscape's top-left utility menu. Renders the screen-appropriate trigger
+ * and, while open, the dropdown of quest actions (with a Load-Quest submenu).
  */
 export function DreamscapeQuestMenu({
   onOpenDeckViewer,
@@ -112,12 +115,12 @@ export function DreamscapeQuestMenu({
 }: DreamscapeQuestMenuProps) {
   const { state } = useQuest();
   const isDesktop = useIsDesktop();
-  // Trigger sizing. The button clears the 44px touch floor on mobile and grows
-  // again on desktop to sit alongside the larger dreamscape chrome; the edge
-  // inset keeps it clear of the screen corner (more so on desktop, where there
-  // is no safe-area inset doing that job).
-  const menuBtnSize = isDesktop ? 56 : 48;
-  const menuGlyphSize = isDesktop ? 30 : 26;
+  // Trigger sizing. The icon button clears the 44px touch floor on mobile; on
+  // desktop, the labeled trigger sits alongside the larger dreamscape chrome.
+  // The edge inset keeps it clear of the screen corner (more so on desktop,
+  // where there is no safe-area inset doing that job).
+  const menuBtnSize = 48;
+  const menuGlyphSize = isDesktop ? 18 : 26;
   const menuEdgeInset = isDesktop ? 22 : 18;
   const [open, setOpen] = useState(false);
   const [menuView, setMenuView] = useState<MenuView>("root");
@@ -275,20 +278,26 @@ export function DreamscapeQuestMenu({
         aria-expanded={open}
         data-testid="dreamscape-menu-button"
         style={{
-          width: menuBtnSize,
+          width: isDesktop ? "auto" : menuBtnSize,
           height: menuBtnSize,
-          display: "grid",
-          placeItems: "center",
-          color: token("--text-primary"),
+          display: "inline-flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 8,
+          padding: isDesktop ? "0 14px" : 0,
+          color: token("--text-on-accent"),
+          font: isDesktop ? token("--t-body") : undefined,
           fontSize: menuGlyphSize,
           cursor: "pointer",
-          // The shared glass icon-button surface — a fully-round liquid-glass
-          // disc, matching the deck viewer's close control and glass filter/sort
-          // controls, on the dreamscape and while elevated over the deck viewer.
-          ...glassIconButtonChrome(),
+          // Mobile keeps the compact circular icon affordance. Desktop uses the
+          // same glass material as a labeled control with an 8px corner radius.
+          ...(isDesktop
+            ? { ...glassTrack(), borderRadius: token("--radius-popover") }
+            : glassIconButtonChrome()),
         }}
       >
-        <i className="bxf bx-menu" aria-hidden="true" />
+        <i className={isDesktop ? "bxf bx-cog" : "bxf bx-menu"} aria-hidden="true" />
+        {isDesktop && <span>Menu</span>}
       </Pressable>
 
       {open && (

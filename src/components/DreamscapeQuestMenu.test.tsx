@@ -47,6 +47,14 @@ function renderMenu() {
   );
 }
 
+function mockDesktop(matches: boolean): void {
+  window.matchMedia = vi.fn().mockReturnValue({
+    matches,
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+  });
+}
+
 beforeEach(() => {
   vi.clearAllMocks();
   (
@@ -54,11 +62,7 @@ beforeEach(() => {
       IS_REACT_ACT_ENVIRONMENT?: boolean;
     }
   ).IS_REACT_ACT_ENVIRONMENT = true;
-  window.matchMedia = vi.fn().mockReturnValue({
-    matches: false,
-    addEventListener: vi.fn(),
-    removeEventListener: vi.fn(),
-  });
+  mockDesktop(false);
   vi.mocked(useQuest).mockReturnValue({
     state: {},
   } as ReturnType<typeof useQuest>);
@@ -69,7 +73,23 @@ afterEach(() => {
 });
 
 describe("DreamscapeQuestMenu", () => {
-  it("shows the build Git SHA from the hamburger menu", () => {
+  it("renders a labeled gear menu trigger on desktop", () => {
+    mockDesktop(true);
+    const { container, root } = renderMenu();
+
+    const menuButton = container.querySelector<HTMLButtonElement>(
+      '[data-testid="dreamscape-menu-button"]',
+    );
+
+    expect(menuButton?.textContent).toBe("Menu");
+    expect(menuButton?.querySelector("i")?.className).toBe("bxf bx-cog");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("shows the build Git SHA from the menu", () => {
     const { container, root } = renderMenu();
 
     const menuButton = container.querySelector<HTMLButtonElement>(
