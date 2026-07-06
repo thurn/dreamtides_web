@@ -1,5 +1,7 @@
 import type { QuestContent } from "../data/quest-content";
 import type { QuestState, SiteState, SiteType } from "../types/quest";
+import type { SiteGenerationContext } from "../atlas/atlas-generator";
+import { regenerateAtlasForProgress } from "../atlas/atlas-generator";
 import { createDefaultState } from "../state/quest-context";
 import { createDreamsign } from "../data/dreamsigns";
 import { createQaQuestFoundation } from "./start-in-battle-state";
@@ -56,19 +58,94 @@ const DREAMCALLER_SELECT_SCENE: QaScene = {
 };
 
 /**
- * The Dream Atlas resting screen, generated with a real boss node and its
- * per-run Apollyon incarnation. Hovering the boss node shows the incarnation
- * preview card — the screen that is otherwise only reachable after completing
- * the starter dreamscape's full battle.
+ * Builds the between-dreamscapes atlas resting screen at a given progress depth.
+ *
+ * `layer` is the 0-indexed atlas layer the player's available frontier should sit
+ * on — i.e. the layer of the dreamscapes they are currently choosing between.
+ * Reaching layer N means N dreamscapes have been completed (the starter at layer
+ * 0 plus N-1 interior dreamscapes), so the scene is built by replaying N real
+ * dreamscape completions through {@link regenerateAtlasForProgress}: the same
+ * generate-then-`advanceAtlas` code path a battle victory drives, never a
+ * hand-faked layout. The run is then parked on the resting atlas state exactly as
+ * `battle-completion-bridge` leaves it after a win — `screen: atlas`,
+ * `currentDreamscape: null`, and `completionLevel` matching the depth.
+ *
+ * Because the atlas is advanced for real, the frontier always shows one layer
+ * ahead (the reveal-two-layers-ahead rule fires on each advance), so the scene
+ * never reproduces the impossible layer-0 resting view where the next layer is
+ * still unrevealed. Layer 0 is deliberately not offered: the player is always
+ * inside the starter dreamscape at that depth and never rests on the atlas there.
+ */
+function atlasLayerSceneState(layer: number): QaScene["build"] {
+  return (questContent) => {
+    const foundation = createQaQuestFoundation(questContent);
+    if (foundation === null) {
+      return null;
+    }
+
+    // No dreamscape modifiers are active on a QA jump-in, so the site-generation
+    // context is empty — matching a fresh run's atlas generation.
+    const context: SiteGenerationContext = {};
+    const atlas = regenerateAtlasForProgress(
+      layer,
+      context,
+      {
+        dreamscapes: questContent.dreamscapes,
+        atlasConfig: questContent.atlasConfig,
+        dreamsignPoolIds: foundation.state.remainingDreamsignPool,
+        apollyonIncarnations: questContent.apollyonIncarnations,
+      },
+      { logEvents: true },
+    );
+
+    return {
+      ...foundation.state,
+      atlas,
+      completionLevel: layer,
+      currentDreamscape: null,
+      screen: { type: "atlas" },
+      activeSiteId: null,
+    };
+  };
+}
+
+/**
+ * The Dream Atlas resting screen at the first real frontier, reached after
+ * completing the starter dreamscape. The atlas UI labels this "Layer II" (the
+ * column-II dreamscapes are the choices), and it is the same screen as
+ * `?goto=atlas2`. Shows the layer-II dreamscape choices, the layer-III nodes
+ * revealed ahead, and the boss node with its per-run Apollyon incarnation —
+ * hovering the boss node shows the incarnation preview card. This is a genuinely
+ * reachable resting state (the player has seen one layer ahead), unlike a
+ * layer-I view. Deeper frontiers are reachable via `atlas3`…`atlas7`.
  */
 const ATLAS_SCENE: QaScene = {
   id: "atlas",
   label: "Dream Atlas",
   description:
-    "The between-dreamscapes atlas with a generated boss node and Apollyon " +
-    "incarnation, parked on the atlas screen for boss-preview QA.",
-  build: (questContent) => createQaQuestFoundation(questContent)?.state ?? null,
+    "The between-dreamscapes atlas at the first frontier the UI labels " +
+    '"Layer II" (after the starter dreamscape), with the boss node and Apollyon ' +
+    "incarnation, for atlas UI and boss-preview QA.",
+  build: atlasLayerSceneState(1),
 };
+
+/**
+ * Registers a `?goto=atlasN` scene parked on the atlas resting screen the UI
+ * labels "Layer N". The UI numbers its seven columns I–VII (1-indexed), so the
+ * displayed "Layer N" is the 0-indexed frontier `N - 1`. Layer I (the starter)
+ * is never a resting frontier, so the numbered scenes start at `atlas2`.
+ */
+function atlasLayerScene(displayLayer: number): QaScene {
+  return {
+    id: `atlas${String(displayLayer)}`,
+    label: `Dream Atlas (Layer ${String(displayLayer)})`,
+    description:
+      `The between-dreamscapes atlas the UI labels "Layer ${String(displayLayer)}", ` +
+      `with the available frontier on that column, built by replaying real ` +
+      `dreamscape completions for atlas UI QA at that depth.`,
+    build: atlasLayerSceneState(displayLayer - 1),
+  };
+}
 
 /**
  * Builds the inside-a-dreamscape overview parked on the starter dreamscape,
@@ -262,6 +339,16 @@ function siteScene(
 export const QA_SCENES: readonly QaScene[] = [
   DREAMCALLER_SELECT_SCENE,
   ATLAS_SCENE,
+  // Atlas resting screen at each reachable frontier, numbered by the UI's
+  // "Layer N" column label (columns I–VII). Column I is the starter you begin
+  // in and is never a resting frontier, so the numbered scenes run Layer II
+  // through Layer VII (VII is the boss-only frontier).
+  atlasLayerScene(2),
+  atlasLayerScene(3),
+  atlasLayerScene(4),
+  atlasLayerScene(5),
+  atlasLayerScene(6),
+  atlasLayerScene(7),
   DREAMSCAPE_SCENE,
   DECK_VIEWER_SCENE,
   siteScene("transfiguration", "Transfiguration", "Transfiguration"),

@@ -126,4 +126,73 @@ describe('the "atlas" QA scene', () => {
     expect(incarnationId).toBeTruthy();
     expect(incarnations.map((i) => i.id)).toContain(incarnationId);
   });
+
+  it("parks on the layer-1 frontier, a genuinely reachable resting state", () => {
+    const state = buildQaScene("atlas", makeQuestContent());
+    // "atlas" is the first real resting screen (one dreamscape completed), so
+    // the completion level and frontier depth are both 1.
+    expect(state?.completionLevel).toBe(1);
+    const available = Object.values(state?.atlas.nodes ?? {}).filter(
+      (node) => node.state === "available",
+    );
+    expect(available.length).toBeGreaterThan(0);
+    expect(available.every((node) => node.layer === 1)).toBe(true);
+  });
+});
+
+describe("the atlas layer QA scenes", () => {
+  // `atlasN` is numbered by the UI's 1-indexed "Layer N" column label, so it
+  // parks the frontier on 0-indexed layer N-1. Column I (the starter) is never
+  // a resting frontier, so the numbered scenes run Layer II through Layer VII.
+  const displayLayers = [2, 3, 4, 5, 6, 7];
+
+  for (const displayLayer of displayLayers) {
+    const frontierLayer = displayLayer - 1;
+    it(`atlas${String(displayLayer)} parks on the atlas with the frontier on the "Layer ${String(displayLayer)}" column`, () => {
+      const state = buildQaScene(`atlas${String(displayLayer)}`, makeQuestContent());
+
+      expect(state).not.toBeNull();
+      expect(state?.screen.type).toBe("atlas");
+      expect(state?.currentDreamscape).toBeNull();
+      expect(state?.activeSiteId).toBeNull();
+      // Reaching the column-N frontier means N-1 dreamscapes were completed.
+      expect(state?.completionLevel).toBe(frontierLayer);
+
+      const nodes = Object.values(state?.atlas.nodes ?? {});
+      const completed = nodes.filter((node) => node.state === "completed");
+      expect(completed.length).toBe(frontierLayer);
+
+      // The available frontier sits on the 0-indexed layer the UI shows as N.
+      const available = nodes.filter((node) => node.state === "available");
+      expect(available.length).toBeGreaterThan(0);
+      expect(available.every((node) => node.layer === frontierLayer)).toBe(true);
+    });
+  }
+
+  it("never leaves an available node whose next layer is still unrevealed", () => {
+    // The impossible layer-0 resting view the old scene produced showed the
+    // next layer as an unseen dream. Replaying real completions guarantees the
+    // reveal-two-layers-ahead rule has fired, so every choice the player can
+    // make already shows one layer ahead.
+    for (const displayLayer of displayLayers) {
+      const state = buildQaScene(`atlas${String(displayLayer)}`, makeQuestContent());
+      const nodes = state?.atlas.nodes ?? {};
+      const available = Object.values(nodes).filter(
+        (node) => node.state === "available",
+      );
+      for (const node of available) {
+        for (const forwardId of node.forwardIds) {
+          expect(nodes[forwardId]?.state).not.toBe("unrevealed");
+        }
+      }
+    }
+  });
+
+  it("registers an atlasN scene for every reachable frontier column", () => {
+    for (const displayLayer of displayLayers) {
+      expect(findQaScene(`atlas${String(displayLayer)}`)).not.toBeNull();
+    }
+    // Layer I (the starter) is never a resting frontier.
+    expect(findQaScene("atlas1")).toBeNull();
+  });
 });
