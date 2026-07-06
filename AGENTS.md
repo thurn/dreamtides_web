@@ -13,6 +13,9 @@ game design data is subject to change at any time.
 If you encounter a pre-existing issue, please describe it in ./pre-existing-issues.txt
 and include this as part of your commit. 
 
+When analyzing images, assume your perception of color is incorrect, prefer to
+directly measure it.
+
 # Logging
 
 Quest logs live in logs/quest-log.jsonl
