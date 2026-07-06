@@ -112,25 +112,3 @@ export function controlChrome(): ControlChrome {
 export function glassIconButtonChrome(): CSSProperties {
   return { ...glassTrack(), borderRadius: token("--radius-pill") };
 }
-
-/**
- * The neutral corner-button material for labeled app-shell chrome. It keeps the
- * frosted glass blur, rim, and elevation of the circular icon button, but uses a
- * desaturated olive-gray fill so the wider labeled control reads like compact
- * menu chrome at desktop scale.
- */
-export function neutralGlassButtonChrome(): CSSProperties {
-  return {
-    background:
-      "linear-gradient(150deg, rgba(255,255,255,0.14), rgba(255,255,255,0) 44%), rgba(92,91,77,0.76)",
-    backdropFilter: "blur(18px) saturate(1.12)",
-    WebkitBackdropFilter: "blur(18px) saturate(1.12)",
-    border: "1px solid rgba(238,232,188,0.22)",
-    boxShadow: [
-      "inset 0 1px 1px rgba(255,255,255,0.24)",
-      "inset 0 -12px 24px rgba(32,30,22,0.18)",
-      "0 8px 24px rgba(20,18,12,0.28)",
-    ].join(", "),
-    borderRadius: token("--radius-popover"),
-  };
-}

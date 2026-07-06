@@ -26,10 +26,7 @@ import type { QuestState } from "../types/quest";
 import { Pressable } from "../tango/primitives/Pressable";
 import { token } from "../tango/primitives/tokens";
 import { useIsDesktop } from "../tango/screens/use-is-desktop";
-import {
-  glassIconButtonChrome,
-  neutralGlassButtonChrome,
-} from "../tango/components/controls/control-treatment";
+import { glassIconButtonChrome } from "../tango/components/controls/control-treatment";
 
 /** The App-shell overlay handlers the menu triggers. */
 interface DreamscapeQuestMenuProps {
@@ -115,12 +112,15 @@ export function DreamscapeQuestMenu({
 }: DreamscapeQuestMenuProps) {
   const { state } = useQuest();
   const isDesktop = useIsDesktop();
-  // Trigger sizing. The icon button clears the 44px touch floor on mobile; on
-  // desktop, the labeled trigger sits alongside the larger dreamscape chrome.
-  // The edge inset keeps it clear of the screen corner (more so on desktop,
-  // where there is no safe-area inset doing that job).
+  // Trigger sizing. On mobile it is a compact circular glass icon button that
+  // clears the 44px touch floor and anchors the top-left corner. On desktop it
+  // is a bare, containerless gear glyph anchored top-right: no plate or
+  // background, sized large, and made legible directly on the scene art by the
+  // on-media outline dilation (rung 1 of the legibility ladder). The edge inset
+  // keeps it clear of the screen corner (more so on desktop, where there is no
+  // safe-area inset doing that job).
   const menuBtnSize = 48;
-  const menuGlyphSize = isDesktop ? 18 : 26;
+  const menuGlyphSize = isDesktop ? 36 : 26;
   const menuEdgeInset = isDesktop ? 22 : 18;
   const [open, setOpen] = useState(false);
   const [menuView, setMenuView] = useState<MenuView>("root");
@@ -241,7 +241,9 @@ export function DreamscapeQuestMenu({
 
   const panelStyle = {
     position: "absolute",
-    left: 0,
+    // Anchor the dropdown under whichever corner the trigger occupies so it opens
+    // inward and never off the screen edge (right corner on desktop, left on mobile).
+    ...(isDesktop ? { right: 0 } : { left: 0 }),
     top: "calc(100% + 6px)",
     zIndex: 62,
     width: 220,
@@ -262,7 +264,11 @@ export function DreamscapeQuestMenu({
       style={{
         position: "fixed",
         top: `max(env(safe-area-inset-top), ${String(menuEdgeInset)}px)`,
-        left: `max(env(safe-area-inset-left), ${String(menuEdgeInset)}px)`,
+        // Desktop anchors the bare gear to the top-right corner; mobile keeps the
+        // circular icon button in the top-left.
+        ...(isDesktop
+          ? { right: `max(env(safe-area-inset-right), ${String(menuEdgeInset)}px)` }
+          : { left: `max(env(safe-area-inset-left), ${String(menuEdgeInset)}px)` }),
         // Above the deck-viewer overlay (z 60) when it is open, so the menu stays
         // reachable from on top of it; the default corner chrome level otherwise.
         zIndex: elevated ? 65 : 60,
@@ -278,25 +284,24 @@ export function DreamscapeQuestMenu({
         aria-expanded={open}
         data-testid="dreamscape-menu-button"
         style={{
-          width: isDesktop ? "auto" : menuBtnSize,
+          width: menuBtnSize,
           height: menuBtnSize,
           display: "inline-flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: 8,
-          padding: isDesktop ? "0 14px" : 0,
+          padding: 0,
           color: token("--text-on-accent"),
-          font: isDesktop ? token("--t-body") : undefined,
           fontSize: menuGlyphSize,
           cursor: "pointer",
-          // Mobile uses the compact circular icon affordance. Desktop uses a
-          // neutral glass surface with an 8px corner radius and a gray-olive
-          // read at the larger labeled size.
-          ...(isDesktop ? neutralGlassButtonChrome() : glassIconButtonChrome()),
+          // Mobile uses the compact circular glass icon affordance. Desktop is a
+          // bare gear with no container: the white glyph earns its legibility on
+          // scene art from the on-media outline dilation, not a plate.
+          ...(isDesktop
+            ? { textShadow: token("--text-outline-media") }
+            : glassIconButtonChrome()),
         }}
       >
         <i className={isDesktop ? "bxf bx-cog" : "bxf bx-menu"} aria-hidden="true" />
-        {isDesktop && <span>Menu</span>}
       </Pressable>
 
       {open && (
@@ -345,7 +350,7 @@ export function DreamscapeQuestMenu({
           data-testid="dreamscape-menu-status"
           style={{
             position: "absolute",
-            left: 0,
+            ...(isDesktop ? { right: 0 } : { left: 0 }),
             top: "calc(100% + 6px)",
             zIndex: 62,
             maxWidth: 260,

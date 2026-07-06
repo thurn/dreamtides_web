@@ -73,7 +73,7 @@ afterEach(() => {
 });
 
 describe("DreamscapeQuestMenu", () => {
-  it("renders a labeled gear menu trigger on desktop", () => {
+  it("renders a bare gear menu trigger on desktop", () => {
     mockDesktop(true);
     const { container, root } = renderMenu();
 
@@ -81,8 +81,23 @@ describe("DreamscapeQuestMenu", () => {
       '[data-testid="dreamscape-menu-button"]',
     );
 
-    expect(menuButton?.textContent).toBe("Menu");
+    // The desktop trigger is the containerless gear glyph alone — no label.
+    expect(menuButton?.textContent).toBe("");
     expect(menuButton?.querySelector("i")?.className).toBe("bxf bx-cog");
+
+    act(() => {
+      root.unmount();
+    });
+  });
+
+  it("renders the hamburger menu trigger on mobile", () => {
+    const { container, root } = renderMenu();
+
+    const menuButton = container.querySelector<HTMLButtonElement>(
+      '[data-testid="dreamscape-menu-button"]',
+    );
+
+    expect(menuButton?.querySelector("i")?.className).toBe("bxf bx-menu");
 
     act(() => {
       root.unmount();
