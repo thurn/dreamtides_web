@@ -489,9 +489,13 @@ const DEFAULT_CONTROL_TREATMENT: ControlTreatment = "accent";
 
 /**
  * The deck's filter + sort controls: a type filter (All / Characters / Events)
- * and a sort dropdown, both wearing the chosen control `treatment`. `structure`
- * chooses the layout — 'stacked' gives the filter its own full-width row above
- * the sort dropdown; 'inline' sets the filter and the sort side by side.
+ * and a sort dropdown, both wearing the chosen control `treatment`.
+ *
+ * The sprite treatment is button-shaped, so it expresses BOTH controls as sprite
+ * dropdown buttons ("Show ▾", "Sort ▾") sitting in a row — a sprite deck has no
+ * segmented slider. The other treatments use a segmented type filter plus a sort
+ * dropdown, laid out by `structure`: 'stacked' gives the filter its own
+ * full-width row above the sort dropdown; 'inline' sets them side by side.
  */
 function DeckControls({
   filterSort,
@@ -504,6 +508,59 @@ function DeckControls({
   treatment: ControlTreatment;
   structure: ControlStructure;
 }) {
+  const sort = (
+    <Select
+      eyebrow="Sort"
+      leadingGlyph={GLYPHS.sort}
+      treatment={treatment}
+      align={treatment === "sprite" ? "start" : "end"}
+      ariaLabel={`Sort: ${deckSortLabel(filterSort.sort)}`}
+      options={DECK_SORT_OPTIONS.map((option) => ({
+        value: option.value,
+        label: option.label,
+      }))}
+      value={filterSort.sort}
+      onChange={(value) =>
+        onFilterSortChange({ ...filterSort, sort: value as DeckSortId })
+      }
+    />
+  );
+
+  // The sprite treatment is buttons-with-dropdowns: the type filter becomes a
+  // dropdown button too, and the two buttons share a wrapping row.
+  if (treatment === "sprite") {
+    return (
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          alignItems: "center",
+          gap: token("--space-3"),
+        }}
+      >
+        <Select
+          eyebrow="Show"
+          leadingGlyph={GLYPHS.filter}
+          treatment={treatment}
+          align="start"
+          ariaLabel={`Show: ${filterSort.typeFilter}`}
+          options={DECK_TYPE_FILTER_OPTIONS.map((option) => ({
+            value: option.value,
+            label: option.label,
+          }))}
+          value={filterSort.typeFilter}
+          onChange={(value) =>
+            onFilterSortChange({
+              ...filterSort,
+              typeFilter: value as DeckTypeFilter,
+            })
+          }
+        />
+        {sort}
+      </div>
+    );
+  }
+
   const typeFilter = (
     <SegmentedControl
       full={structure === "stacked"}
@@ -518,24 +575,6 @@ function DeckControls({
           ...filterSort,
           typeFilter: value as DeckTypeFilter,
         })
-      }
-    />
-  );
-
-  const sort = (
-    <Select
-      eyebrow="Sort"
-      leadingGlyph={GLYPHS.sort}
-      treatment={treatment}
-      align="end"
-      ariaLabel={`Sort: ${deckSortLabel(filterSort.sort)}`}
-      options={DECK_SORT_OPTIONS.map((option) => ({
-        value: option.value,
-        label: option.label,
-      }))}
-      value={filterSort.sort}
-      onChange={(value) =>
-        onFilterSortChange({ ...filterSort, sort: value as DeckSortId })
       }
     />
   );

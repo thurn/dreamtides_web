@@ -17,15 +17,18 @@
 
 import type { CSSProperties } from "react";
 import buttonGray from "../../assets/Button_Gray.png";
+import type { TangoColor } from "../../primitives/color";
 import { token } from "../../primitives/tokens";
 
 /**
  * The closed set of control-surface materials. Each is a distinct answer to
  * "how should a filter/sort control read over scene art":
  *
- *  - `sprite`  — an ornate beveled gray metal frame (a CSS 9-patch of the RPG
- *                button sprite) around a dark control interior. The most
- *                tactile, game-object treatment.
+ *  - `sprite`  — the ornate beveled gray RPG button sprite (a filled CSS 9-patch)
+ *                worn as a solid button surface, with flat light text sitting
+ *                directly on the metal. The most tactile, game-object treatment.
+ *                In the deck viewer it drives dropdown buttons rather than a
+ *                segmented slider — a sprite button that opens a menu.
  *  - `flat`    — a solid raised fill with a hairline edge. The plainest,
  *                highest-contrast treatment; reads as flat modern UI.
  *  - `glass`   — a liquid-glass pane that blurs and refracts the scene behind
@@ -77,10 +80,28 @@ export interface ControlChrome {
   segmentInactive: CSSProperties;
   /**
    * Resting surface for a single-surface control (a Select trigger) — the same
-   * material as the track for the track-based treatments, and the outlined pill
-   * for `outline`, which has no track. Carries its own border radius.
+   * material as the track for the track-based treatments, the outlined pill for
+   * `outline`, and the filled sprite button for `sprite`. Carries its own border
+   * radius.
    */
   trigger: CSSProperties;
+  /**
+   * Horizontal padding override for a Select trigger, when the surface material
+   * needs different breathing room than the size default (e.g. the sprite
+   * button's bevel already insets its content). Omitted for treatments that use
+   * the size default.
+   */
+  triggerPadding?: string;
+  /**
+   * Text color + optional shadow applied to the WHOLE Select trigger content
+   * (eyebrow, value, glyphs inherit it) when the surface needs one flat ink —
+   * the sprite button paints its label in light ink with a shadow over the
+   * metal. Omitted for treatments whose trigger text follows the per-part token
+   * colors (muted eyebrow, primary value).
+   */
+  triggerText?: CSSProperties;
+  /** Fill color for the Select trigger's leading glyph and chevron. */
+  triggerGlyphColor: TangoColor;
 }
 
 /** The liquid-glass track shared by the `glass` and `accent` treatments. */
@@ -114,11 +135,38 @@ function accentActive(): CSSProperties {
 /** Border-image slice matching Button_Gray.png's (742x256) bevel + chamfer. */
 const SPRITE_SLICE = 56;
 /**
- * Frame thickness (px) drawn from the gray sprite around the control interior.
- * Kept thin so a short control bar keeps enough interior height for legible
- * segments while the beveled corners still read as metal.
+ * Bevel thickness (px) of the sprite button's frame — the border region where
+ * the chamfered metal edge is drawn, with the sprite's center slice filling
+ * behind the label. Matches Button's small size (a 42px-tall sprite button), so
+ * a control-height sprite button reads as a member of the same button family.
  */
-const SPRITE_BORDER_WIDTH = 9;
+const SPRITE_BORDER_WIDTH = 13;
+
+/**
+ * The gray RPG sprite drawn as a FILLED 9-patch button surface: the beveled
+ * metal frame in the border region, the sprite's center slice filling behind
+ * the label (`fill`). This is the sprite button both a Select trigger and a
+ * selected segment wear — flat text sits directly on the metal, no dark overlay.
+ */
+function spriteButton(): CSSProperties {
+  return {
+    background: "transparent",
+    borderStyle: "solid",
+    borderWidth: SPRITE_BORDER_WIDTH,
+    borderColor: "transparent",
+    borderImageSource: `url(${buttonGray})`,
+    borderImageSlice: `${String(SPRITE_SLICE)} fill`,
+    borderImageWidth: `${String(SPRITE_BORDER_WIDTH)}px`,
+    borderImageRepeat: "stretch",
+    boxSizing: "border-box",
+  };
+}
+
+/** Flat light ink with a dark shadow — the sprite button's label over metal. */
+const SPRITE_TEXT: CSSProperties = {
+  color: token("--text-on-accent"),
+  textShadow: "0 1px 3px rgba(20, 2, 38, 0.85)",
+};
 
 /**
  * Resolve a control treatment to its concrete appearance. The ONE place each
@@ -127,33 +175,24 @@ const SPRITE_BORDER_WIDTH = 9;
  */
 export function controlChrome(treatment: ControlTreatment): ControlChrome {
   switch (treatment) {
-    case "sprite": {
-      const track: CSSProperties = {
-        // Only the ornate gray frame is drawn from the sprite (no `fill`); the
-        // interior is a dark chrome fill so light segment text stays legible
-        // inside the metal frame.
-        background: token("--surface-glass-strong"),
-        borderStyle: "solid",
-        borderWidth: SPRITE_BORDER_WIDTH,
-        borderColor: "transparent",
-        borderImageSource: `url(${buttonGray})`,
-        borderImageSlice: String(SPRITE_SLICE),
-        borderImageWidth: `${String(SPRITE_BORDER_WIDTH)}px`,
-        borderImageRepeat: "stretch",
-        borderRadius: token("--radius-control"),
-        boxSizing: "border-box",
-      };
+    case "sprite":
       return {
-        track,
-        trigger: track,
-        trackPadding: 2,
-        segmentGap: 2,
+        // The sprite treatment is button-shaped, not a slider: it has no track
+        // frame. A SegmentedControl on this treatment paints only its SELECTED
+        // segment as a sprite button (unselected segments are flat text), and a
+        // Select trigger is a sprite button — the deck viewer uses the latter.
+        track: {},
+        trigger: spriteButton(),
+        triggerPadding: "0 12px",
+        triggerText: SPRITE_TEXT,
+        triggerGlyphColor: "text-on-accent",
+        trackPadding: 0,
+        segmentGap: 4,
         segmentRadius: token("--radius-inset"),
         segmentBase: {},
-        segmentActive: accentActive(),
+        segmentActive: { ...spriteButton(), ...SPRITE_TEXT },
         segmentInactive: { color: token("--text-secondary") },
       };
-    }
     case "flat": {
       const track: CSSProperties = {
         background: token("--surface-raised"),
@@ -164,6 +203,7 @@ export function controlChrome(treatment: ControlTreatment): ControlChrome {
       return {
         track,
         trigger: track,
+        triggerGlyphColor: "text-secondary",
         trackPadding: 4,
         segmentGap: 2,
         segmentRadius: token("--radius-inset"),
@@ -180,6 +220,7 @@ export function controlChrome(treatment: ControlTreatment): ControlChrome {
       return {
         track,
         trigger: track,
+        triggerGlyphColor: "text-secondary",
         trackPadding: 4,
         segmentGap: 2,
         segmentRadius: token("--radius-inset"),
@@ -202,6 +243,7 @@ export function controlChrome(treatment: ControlTreatment): ControlChrome {
       return {
         track,
         trigger: track,
+        triggerGlyphColor: "text-secondary",
         trackPadding: 3,
         segmentGap: 2,
         segmentRadius: token("--radius-pill"),
@@ -223,6 +265,7 @@ export function controlChrome(treatment: ControlTreatment): ControlChrome {
           background: "transparent",
           borderRadius: token("--radius-pill"),
         },
+        triggerGlyphColor: "text-secondary",
         trackPadding: 0,
         segmentGap: 6,
         segmentRadius: token("--radius-pill"),

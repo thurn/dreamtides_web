@@ -193,7 +193,7 @@ export function Select({
           gap: 8,
           width: full ? "100%" : "auto",
           height: spec.height,
-          padding: spec.padding,
+          padding: chrome.triggerPadding ?? spec.padding,
           boxSizing: "border-box",
           font: spec.font,
           color: token("--text-primary"),
@@ -208,10 +208,17 @@ export function Select({
               : "none",
           transition: `transform ${token("--dur-fast")} ${token("--ease-out")}`,
           ...chrome.trigger,
+          // A treatment with one flat ink (the sprite button) paints the whole
+          // label, so it wins over the per-part token colors below via inherit.
+          ...chrome.triggerText,
         }}
       >
         {leadingGlyph !== undefined && (
-          <GlowIcon iconClass={leadingGlyph} color="text-secondary" size="1.1em" />
+          <GlowIcon
+            iconClass={leadingGlyph}
+            color={chrome.triggerGlyphColor}
+            size="1.1em"
+          />
         )}
         {eyebrow !== undefined && (
           <span
@@ -219,16 +226,30 @@ export function Select({
               font: token("--t-eyebrow"),
               letterSpacing: "0.12em",
               textTransform: "uppercase",
-              color: token("--text-muted"),
+              // Inherit the flat ink when the treatment sets one; else the
+              // muted eyebrow color.
+              color:
+                chrome.triggerText !== undefined
+                  ? "inherit"
+                  : token("--text-muted"),
             }}
           >
             {eyebrow}
           </span>
         )}
-        <span style={{ color: token("--text-primary") }}>{label}</span>
+        <span
+          style={{
+            color:
+              chrome.triggerText !== undefined
+                ? "inherit"
+                : token("--text-primary"),
+          }}
+        >
+          {label}
+        </span>
         <GlowIcon
           iconClass={GLYPHS.chevronDown}
-          color="text-secondary"
+          color={chrome.triggerGlyphColor}
           size="1.1em"
         />
       </button>
