@@ -29,7 +29,7 @@ export const infoCardDemo: TangoComponent = {
   id: "info-card",
   title: "Info Card",
   blurb:
-    "The one press-to-reveal information card. Its media treatment varies by content — object, hero, icon, or text — over a single fixed shell and reveal contract.",
+    "The one press-to-reveal information card. Its media treatment varies by content — object, hero, icon, or text — over a single fixed liquid-glass shell and reveal contract.",
   group: "Components",
   docName: "InfoCard",
   Component: InfoCard,

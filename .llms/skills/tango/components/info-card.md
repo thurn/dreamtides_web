@@ -6,7 +6,7 @@
 
 Components · Live demo & interactive props: `/tango#/info-card`
 
-The one press-to-reveal information card. Its media treatment varies by content — object, hero, icon, or text — over a single fixed shell and reveal contract.
+The one press-to-reveal information card. Its media treatment varies by content — object, hero, icon, or text — over a single fixed liquid-glass shell and reveal contract.
 
 ## Props
 

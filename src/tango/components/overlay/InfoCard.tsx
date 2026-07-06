@@ -3,11 +3,11 @@
 // dreamsign abilities, site descriptions, essence — renders through this single
 // component so the vocabulary is identical everywhere.
 //
-// The shell is fixed and shared (a clean solid ground, not a scrim):
+// The shell is fixed and shared (a liquid-glass pane, not a scrim):
 //   - no colored border, no arrow / caret pointing back at the origin
-//   - one solid surface        — --surface-raised
+//   - one glass material       — GroupPanel's translucent chrome recipe
 //   - one corner radius         — --radius-popover
-//   - one shadow                — --shadow-lg
+//   - one shadow/rim treatment  — GroupPanel's layered glass edge
 //   - one type scale            — headline (serif) / body (rules) / meta (mono)
 // Only the MEDIA treatment varies by content, via `variant`:
 //   - object — a centered framed portrait OR contained transparent object
@@ -48,6 +48,7 @@ import {
   resolveMediaFilter,
 } from "../../primitives/media";
 import { renderRichText, type RichText } from "../card/rich-text";
+import { groupPanelStyle } from "../controls/GroupPanel";
 import { tideVisual, tideAlignmentLabel, type Tide } from "../hud/tide-spec";
 
 /* ---- faithfully-copied layout literals from the design source (not tokens:
@@ -58,6 +59,7 @@ const GAP_PX = 14; // uniform distance from the pressed object
 const CLICK_WINDOW_MS = 300; // release within this → still counts as a tap/click
 const PADX = 15;
 const PADY = 14;
+const HERO_GLASS_FILL = "rgba(18,14,28,0.58)";
 
 /** Screen inset (px): the popover is clamped to never come within this of any
  * viewport edge. Exported for the clamp tests. */
@@ -84,6 +86,7 @@ export function setRevealDelay(ms: number): void {
 
 /* ---- the shared shell + type scale (the coherent vocabulary) ---- */
 const shell: React.CSSProperties = {
+  ...groupPanelStyle(),
   width: CARD_W,
   boxSizing: "border-box",
   textAlign: "left",
@@ -98,9 +101,6 @@ const shell: React.CSSProperties = {
   // inside rich text and are unaffected.
   whiteSpace: "normal",
   overflowWrap: "break-word",
-  background: token("--surface-raised"), // solid, no transparency, no scrim
-  borderRadius: token("--radius-popover"),
-  boxShadow: token("--shadow-lg"), // no border
 };
 const tHeadline: React.CSSProperties = {
   margin: 0,
@@ -254,7 +254,7 @@ export type InfoCardProps =
    ================================================================ */
 /**
  * InfoCard — the one press-to-reveal information card. Four media variants on
- * one fixed shell (solid surface, no border/caret, one radius + shadow + type
+ * one fixed liquid-glass shell (no caret, one GroupPanel material + type
  * scale). The placement/timing engine is attached as statics:
  * `InfoCard.PressPopover / PressInfo / usePressReveal / anchorRect /
  * setRevealDelay / SITE_DISC`.
@@ -342,7 +342,7 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
   }
 
   /* --- hero: full-bleed media banner across the top, text at the bottom. A
-     base gradient dissolves the media into the solid surface so the title/body
+     base gradient dissolves the media into the glass fill so the title/body
      sit on the card's own material, not a scrim over the scene. --- */
   if (props.variant === "hero") {
     const { image, imageCrop = "top", imageFilter, meta } = props;
@@ -381,8 +381,9 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
               right: 0,
               bottom: -1,
               height: 120,
-              // faithfully-copied dissolve gradient into the raised surface
-              background: `linear-gradient(to bottom, rgba(34,26,49,0) 0%, rgba(34,26,49,0.7) 60%, ${token("--surface-raised")} 100%)`,
+              // The hero image fades into the same translucent chrome fill as
+              // the GroupPanel glass recipe, preserving the liquid material.
+              background: `linear-gradient(to bottom, rgba(34,26,49,0) 0%, rgba(34,26,49,0.7) 60%, ${HERO_GLASS_FILL} 100%)`,
             }}
           />
         </div>
@@ -391,7 +392,6 @@ function InfoCardComponent(props: InfoCardProps): React.ReactElement {
             position: "relative",
             marginTop: -16,
             padding: "0 16px 16px",
-            background: token("--surface-raised"),
           }}
         >
           {Meta}
@@ -758,8 +758,8 @@ export function PressPopover({
     // `.tango` re-establishes the design-system token scope. The popover portals
     // OUT of its trigger's subtree (into a screen root or `document.body`), which
     // in the production app is not under a `.tango` ancestor, so without this the
-    // InfoCard shell's `--surface-raised` / `--radius-popover` / `--shadow-lg` /
-    // `--text-*` tokens resolve to nothing and the card renders with no surface.
+    // InfoCard shell's glass, radius, and text tokens resolve to nothing and
+    // the card renders without its intended surface.
     // The class only declares custom properties, so it adds no styling of its own.
     <div
       ref={ref}

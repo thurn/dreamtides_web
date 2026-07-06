@@ -15,15 +15,35 @@
 //      screen. Bug class guarded: a popover clipped off any viewport edge near
 //      a corner/edge anchor.
 
+import * as React from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
+import { groupPanelStyle } from "../controls/GroupPanel";
 import {
   CLICK_WINDOW,
   computePopoverPosition,
   EDGE,
   GAP,
+  InfoCard,
   isHold,
   type AnchorRect,
 } from "./InfoCard";
+
+describe("InfoCard shell treatment", () => {
+  it("uses the shared GroupPanel liquid-glass material", () => {
+    const html = renderToStaticMarkup(
+      React.createElement(InfoCard, { title: "Essence" }),
+    );
+    const glass = groupPanelStyle();
+
+    expect(html).toContain(`background:${String(glass.background)}`);
+    expect(html).toContain(
+      `-webkit-backdrop-filter:${String(glass.WebkitBackdropFilter)}`,
+    );
+    expect(html).toContain(`backdrop-filter:${String(glass.backdropFilter)}`);
+    expect(html).toContain(`box-shadow:${String(glass.boxShadow)}`);
+  });
+});
 
 describe("isHold — tap vs hold discrimination", () => {
   const W = CLICK_WINDOW; // the engine default click window (ms)

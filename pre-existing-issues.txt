@@ -156,3 +156,10 @@ Tango mobile dreamscape redesign — follow-ups / known items
      `fontVariantNumeric`, drawing the same warning for `font`.
    Both are cosmetic (dev-mode only, no runtime effect). Fix by splitting the
    shorthand into longhand properties on the offending elements.
+Pre-existing: npm audit reports dependency vulnerabilities
+==========================================================
+
+Running `npm install` in a fresh worktree reports 15 vulnerabilities in the
+current dependency tree: 2 low, 6 moderate, and 7 high. The install succeeds,
+but the audit output recommends `npm audit fix` for non-breaking updates and
+`npm audit fix --force` for the remaining breaking-change path.
