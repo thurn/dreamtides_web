@@ -46,7 +46,6 @@
       "description": "End y, in the atlas svg's coordinate space."
     }
   ],
-  "AtlasEdgeDefs": [],
   "AtlasNode": [
     {
       "name": "view",

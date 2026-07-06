@@ -20,14 +20,12 @@ The connector between two Atlas nodes, drawn inside the map's SVG. Its treatment
 
 ## Usage
 
-An atlas connector line. Each edge reads its stroke from the shared gradients in `AtlasEdgeDefs`, so render one `AtlasEdgeDefs` per `<svg>` and one `AtlasEdge` per connection, with the `kind` picking the treatment (traveled / open / dim / locked).
+An atlas connector line. Render one `AtlasEdge` per connection inside the map's `<svg>`, with the `kind` picking the treatment (traveled / open / dim / locked). Each edge carries its own gradient anchored to its endpoints, so it paints at any orientation — horizontal, vertical, or diagonal.
 
 ```tsx
 import { AtlasEdge } from "src/tango/components/atlas/AtlasEdge";
-import { AtlasEdgeDefs } from "src/tango/components/atlas/AtlasEdgeDefs";
 
 <svg className="dream-atlas">
-  <AtlasEdgeDefs />
-  <AtlasEdge kind="open" x1={140} y1={40} x2={452} y2={18} />
+  <AtlasEdge kind="open" x1={140} y1={40} x2={452} y2={40} />
 </svg>
 ```

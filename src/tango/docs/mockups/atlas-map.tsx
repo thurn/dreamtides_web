@@ -16,7 +16,6 @@ import type { DreamscapeNode } from "../../../types/quest";
 import { LayerName } from "../../../types/layer-name";
 import { AtlasNode, type AtlasNodeView } from "../../components/atlas/AtlasNode";
 import { AtlasEdge, type AtlasEdgeKind } from "../../components/atlas/AtlasEdge";
-import { AtlasEdgeDefs } from "../../components/atlas/AtlasEdgeDefs";
 import { artRef } from "../../primitives/art";
 import { glyph } from "../../primitives/glyph";
 import { token } from "../../primitives/tokens";
@@ -299,7 +298,6 @@ export function AtlasMapMockup() {
           width={CANVAS_W}
           height={CANVAS_H}
         >
-          <AtlasEdgeDefs />
           {EDGE_SPECS.map((edge) => {
             const from = NODE_BY_KEY.get(edge.from);
             const to = NODE_BY_KEY.get(edge.to);

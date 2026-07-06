@@ -1,8 +1,8 @@
 /*
  * Dream Atlas node + edge styles, owned by the Tango design system. Extracted
- * from the local atlas screen (`src/atlas/atlas.css`) so `AtlasNode`,
- * `AtlasEdge`, and `AtlasEdgeDefs` carry their own presentation and render
- * identically in the /tango doc site and in the live atlas screen.
+ * from the local atlas screen (`src/atlas/atlas.css`) so `AtlasNode` and
+ * `AtlasEdge` carry their own presentation and render identically in the /tango
+ * doc site and in the live atlas screen.
  *
  * Everything is scoped under `.dream-atlas` (the atlas screen's root) so the
  * generic class names (.node, .edge, ...) never collide with the rest of the
@@ -34,13 +34,14 @@
   stroke-linecap: round;
 }
 .dream-atlas .edge-traveled {
-  stroke: url(#dream-atlas-gold);
+  /* Stroke is a per-edge userSpaceOnUse gradient set inline by AtlasEdge so it
+     survives horizontal/vertical orientations; see AtlasEdge.tsx. */
   stroke-width: 5;
   stroke-linecap: round;
   filter: drop-shadow(0 0 6px rgba(251, 191, 36, 0.55));
 }
 .dream-atlas .edge-open {
-  stroke: url(#dream-atlas-openg);
+  /* Stroke is a per-edge userSpaceOnUse gradient set inline by AtlasEdge. */
   stroke-width: 4;
   stroke-linecap: round;
   filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.6));
