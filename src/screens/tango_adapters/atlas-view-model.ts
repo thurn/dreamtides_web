@@ -56,12 +56,27 @@ export const ATLAS_STAGE_HEIGHT = 1920;
  *   draws larger nodes so that, once the smaller mobile fit-scale is applied,
  *   the on-screen node and its badges stay comfortably above the 48px touch
  *   floor; the starter and boss read a touch larger than a regular node.
+ * - `edgeAnchorHorizontal` overrides `contentRect.left` / `.right` with
+ *   device-edge-aware bounds derived from the node radius: the widest row's
+ *   outermost nodes are pushed out until their outer edge sits just inside the
+ *   stage edge, so the full viewport width is used and the horizontal slack
+ *   lands as gaps *between* the nodes instead of as wasted side margin. The
+ *   mobile atlas uses this so a full five-node row spreads across the whole
+ *   phone width rather than crowding into the middle.
  */
 export interface AtlasLayoutProfile {
   contentRect: { top: number; bottom: number; left: number; right: number };
   nodeSize: number;
   anchorNodeSize: number;
+  edgeAnchorHorizontal?: boolean;
 }
+
+/**
+ * Stage-space breathing room left between an edge-anchored outermost node's
+ * outer edge and the stage edge, so the node reads as anchored *to* the device
+ * edge without appearing clipped by it.
+ */
+const EDGE_ANCHOR_INSET = 10;
 
 /** Desktop: smaller nodes spread across a wide content rectangle. */
 export const ATLAS_LAYOUT_DESKTOP: AtlasLayoutProfile = {
@@ -71,11 +86,13 @@ export const ATLAS_LAYOUT_DESKTOP: AtlasLayoutProfile = {
 };
 
 /** Mobile: larger nodes drawn together, so icons stay legible once the narrow
- * portrait viewport scales the whole stage down. */
+ * portrait viewport scales the whole stage down; the widest row is anchored to
+ * the device edges so same-layer nodes get real gaps instead of touching. */
 export const ATLAS_LAYOUT_MOBILE: AtlasLayoutProfile = {
   contentRect: { top: 250, bottom: 1630, left: 165, right: 915 },
   nodeSize: 200,
   anchorNodeSize: 224,
+  edgeAnchorHorizontal: true,
 };
 
 /** Picks the layout profile for the viewport class. */
@@ -101,7 +118,17 @@ export function resolveAtlasNodeGeometry(
   atlas: DreamAtlas,
   profile: AtlasLayoutProfile = ATLAS_LAYOUT_DESKTOP,
 ): Map<string, NodeGeometry> {
-  const { contentRect, nodeSize, anchorNodeSize } = profile;
+  const { nodeSize, anchorNodeSize } = profile;
+  // Edge-aware horizontal bounds: push the widest row's outermost node centres
+  // out to a node radius (plus a small inset) from the stage edge, so their
+  // outer edges sit just inside the device edge and the full width is used.
+  const contentRect = profile.edgeAnchorHorizontal
+    ? {
+        ...profile.contentRect,
+        left: nodeSize / 2 + EDGE_ANCHOR_INSET,
+        right: ATLAS_STAGE_WIDTH - (nodeSize / 2 + EDGE_ANCHOR_INSET),
+      }
+    : profile.contentRect;
   const positioned = Object.values(atlas.nodes).filter((node) =>
     Boolean(node.position),
   );
